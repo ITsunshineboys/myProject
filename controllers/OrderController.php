@@ -627,6 +627,7 @@ class OrderController extends Controller
                     ->one();
                 if ($order){
                     echo "success";
+                    exit;
                 }
                 $res=GoodsOrder::Alipaylinenotifydatabase($arr,$post);
                 if ($res==true){
@@ -640,7 +641,6 @@ class OrderController extends Controller
 //            echo "fail";  //请不要修改或删除
 //        }
     }
-
 
 
     public function actionAlipaygetnotify(){

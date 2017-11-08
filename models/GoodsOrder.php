@@ -239,7 +239,7 @@ class GoodsOrder extends ActiveRecord
      * @param $post
      * @return bool
      */
-    public static function Alipaylinenotifydatabase($arr,$post)
+   public static function Alipaylinenotifydatabase($arr,$post)
     {
         $goods_id=$arr[0];
         $goods_num=$arr[1];
@@ -265,8 +265,11 @@ class GoodsOrder extends ActiveRecord
             return false;
         }
         $time=time();
+
+
         $tran = Yii::$app->db->beginTransaction();
         try{
+
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
             $goods_order->amount_order=$post['total_amount']*100;
@@ -293,24 +296,25 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-            $res2=Yii::$app->db->createCommand()->insert(self::ORDER_GOODS_LIST,[
-                'order_no'=>$post['out_trade_no'],
-                'goods_id'   =>$goods['id'],
-                'goods_number'=>$goods_num,
-                'create_time'=>strtotime($post['gmt_create']),
-                'goods_name'=>$goods['title'],
-                'goods_price'=>$goods['platform_price'],
-                'sku'=>$goods['sku'],
-                'market_price'=>$goods['market_price'],
-                'supplier_price'=>$goods['supplier_price'],
-                'shipping_type'=>$goods['delivery_method'],
-                'order_status'=>0,
-                'shipping_status'=>0,
-                'customer_service'=>0,
-                'is_unusual'=>0,
-                'freight'=>$freight*100,
-                'cover_image'=>$goods['cover_image']
-            ])->execute();
+            $OrderGoods=new OrderGoods();
+            $OrderGoods->order_no=$post['out_trade_no'];
+            $OrderGoods->goods_id=$goods['id'];
+            $OrderGoods->goods_number=$goods_num;
+            $OrderGoods->create_time=strtotime($post['gmt_create']);
+            $OrderGoods->goods_name=$goods['title'];
+            $OrderGoods->goods_price=$goods['platform_price'];
+            $OrderGoods->sku=$goods['sku'];
+            $OrderGoods->market_price=$goods['market_price'];
+            $OrderGoods->supplier_price=$goods['supplier_price'];
+            $OrderGoods->shipping_type=$goods['delivery_method'];
+            $OrderGoods->cover_image=$goods['cover_image'];
+            $OrderGoods->order_status=0;
+            $OrderGoods->shipping_status=0;
+            $OrderGoods->customer_service=0;
+            $OrderGoods->is_unusual=0;
+            $OrderGoods->freight=$freight*100;
+            $res2=$OrderGoods->save(false);
+
             if (!$res2){
                 $tran->rollBack();
                 return false;
@@ -340,22 +344,21 @@ class GoodsOrder extends ActiveRecord
                 $GoodsStat->sold_number=$goods_num;
                 $GoodsStat->amount_sold=$post['total_amount']*100;
                 $GoodsStat->create_date=$date;
-                if ($GoodsStat->save(false))
+                if (!$GoodsStat->save(false))
                 {
                     $tran->rollBack();
                     return false;
                 }
             }else{
+
                 $GoodsStat->sold_number+=$goods_num;
                 $GoodsStat->amount_sold+=$post['total_amount']*100;
-                if ($GoodsStat->save(false))
+                if (!$GoodsStat->save(false))
                 {
                     $tran->rollBack();
                     return false;
                 }
             }
-
-
             $tran->commit();
             return true;
         }catch (Exception $e) {
