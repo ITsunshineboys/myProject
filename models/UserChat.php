@@ -326,9 +326,10 @@ class UserChat extends \yii\db\ActiveRecord
         foreach ($data['chat_record'] as &$v){
             $time=StringService::startEndDate('today');
             $send_time=date('Y-m-d',$v['send_time']);
+            var_dump($send_time);
             if($send_time>=$time[0] && $send_time<=$time[1]){
                 $v['send_time']=date('H:i',$v['send_time']);
-                var_dump($v['send_time']);
+
             }else{
                 $v['send_time']=$send_time;
             }
