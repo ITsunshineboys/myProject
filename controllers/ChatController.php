@@ -319,6 +319,13 @@ class ChatController extends Controller
             ]);
         }
         $filepath=FileService::upload();
+        if(is_numeric($filepath)){
+            $code=$filepath;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
 
             return Json::encode([
