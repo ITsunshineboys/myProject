@@ -324,7 +324,6 @@ class UserChat extends \yii\db\ActiveRecord
             $data['user']['hx_name']=$hx['username'];
         }
         $data['chat_record']=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$recipient_id) or (send_uid=$recipient_id and to_uid=$uid)) and ((send_role_id=$recipient_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$recipient_role_id))")->queryAll();
-        var_dump(count($data['chat_record']));die;
         foreach ($data['chat_record'] as &$v){
             $send_time=date('Y-m-d',$v['send_time']);
             if($send_time==date('Y-m-d',time())){
