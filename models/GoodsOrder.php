@@ -269,7 +269,7 @@ class GoodsOrder extends ActiveRecord
         try{
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
-            $goods_order->amount_order=$post['total_amount'];
+            $goods_order->amount_order=$post['total_amount']*100;
             $goods_order->supplier_id=$supplier_id;
             $goods_order->invoice_id=$invoice_id;
             $goods_order->pay_status=1;
@@ -311,10 +311,10 @@ class GoodsOrder extends ActiveRecord
                 'freight'=>$freight*100,
                 'cover_image'=>$goods['cover_image']
             ])->execute();
-                if (!$res2){
-                    $tran->rollBack();
-                    return false;
-                }
+            if (!$res2){
+                $tran->rollBack();
+                return false;
+            }
             $time=time();
             $month=date('Ym',$time);
             $supplier=Supplier::find()
@@ -328,7 +328,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
                 ->where(['supplier_id'=>$supplier_id])
@@ -355,6 +354,8 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
+
+
             $tran->commit();
             return true;
         }catch (Exception $e) {
@@ -375,6 +376,7 @@ class GoodsOrder extends ActiveRecord
    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
     {
 
+        $sort='';
         if ($sort_time=='' && $sort_money==2)
         {
             $sort="  (z.goods_price*z.goods_number) desc";
@@ -390,6 +392,10 @@ class GoodsOrder extends ActiveRecord
         if (!$sort_money && $sort_time==1)
         {
             $sort='a.create_time asc';
+        }
+         if (!$sort)
+        {
+            $sort=' a.create_time desc';
         }
         $offset = ($page - 1) * $size;
         $OrderList = (new Query())

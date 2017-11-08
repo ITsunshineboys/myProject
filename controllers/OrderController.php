@@ -611,14 +611,14 @@ class OrderController extends Controller
   /**
      * 支付宝线下店商城异步返回操作
      */
-    public function actionAlipaylinenotify(){
+   public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
 //        $alipaySevice=$model->Alipaylinenotify();
 //        $result = $alipaySevice->check($post);
 //        if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS'){
-                $arr=explode('&',urldecode($post['passback_params']));
+                $arr=urldecode($post['passback_params']);
                 $order_no=$post['out_trade_no'];
                 $order=GoodsOrder::find()
                     ->select('order_no')

@@ -986,7 +986,7 @@ class MallController extends Controller
         $code = GoodsRecommend::sort($idArr);
 
         return Json::encode([
-            'code' => 200,
+            'code' => $code,
             'msg' => 200 == $code ? 'OK' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
