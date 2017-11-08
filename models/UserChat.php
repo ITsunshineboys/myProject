@@ -259,7 +259,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->status=0;
                 $chat_record->send_time = time();
                 $chat_record->type = 'audio';
-                if (!$chat_record->save()) {
+                if (!$chat_record->save(false)) {
                     $trans->rollBack();
                     return $code = 500;
                 }
@@ -271,6 +271,7 @@ class UserChat extends \yii\db\ActiveRecord
             return 200;
 
         } catch (Exception $e) {
+            var_dump($e);
             $trans->rollBack();
             return $code = 500;
 
