@@ -1,6 +1,6 @@
 let commodity_detail=angular.module("commodity_detail_on_module",[]);
 // onlineGoodDetail();
-commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$stateParams,$state) {
+commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
     let gooddetail = $stateParams.onlinegood;
     let good_partdetail;
     let logistics;
@@ -25,9 +25,9 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$s
     $scope.platform_price = gooddetail.platform_price; //平台价格
     $scope.market_price = gooddetail.market_price; //市场价格
     $scope.left_number = gooddetail.left_number; //库存
-    $scope.purchase_price_decoration_company = gooddetail.purchase_price_decoration_company; //装修公司采购价
-    $scope.purchase_price_manager = gooddetail.purchase_price_manager; //项目经理采购价
-    $scope.purchase_price_designer = gooddetail.purchase_price_designer; //设计师采购价
+    $scope.purchase_price_decoration_company = !gooddetail.purchase_price_decoration_company&&!gooddetail.purchase_price_manager&&!gooddetail.purchase_price_designer?'':gooddetail.purchase_price_decoration_company; //装修公司采购价
+    $scope.purchase_price_manager = !gooddetail.purchase_price_decoration_company&&!gooddetail.purchase_price_manager&&!gooddetail.purchase_price_designer?'':gooddetail.purchase_price_manager; //项目经理采购价
+    $scope.purchase_price_designer = !gooddetail.purchase_price_decoration_company&&!gooddetail.purchase_price_manager&&!gooddetail.purchase_price_designer?'':gooddetail.purchase_price_designer; //设计师采购价
     $scope.after_sale_services_desc = gooddetail.after_sale_services_desc;//售后保障
     $scope.qr_code = gooddetail.qr_code; //二维码
     $scope.alljudgefalse = false;
