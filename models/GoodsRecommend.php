@@ -158,6 +158,9 @@ class GoodsRecommend extends ActiveRecord
      */
     public static function secondAll($districtCode)
     {
+        return self::_secondAll($districtCode, self::$appFields);
+
+        /*
         $key = self::CACHE_KEY_SECOND;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
@@ -169,6 +172,7 @@ class GoodsRecommend extends ActiveRecord
         }
 
         return $recommendGoods;
+        */
     }
 
     /**
