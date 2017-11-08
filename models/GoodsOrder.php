@@ -269,7 +269,7 @@ class GoodsOrder extends ActiveRecord
         try{
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
-            $goods_order->amount_order=$post['total_amount'];
+            $goods_order->amount_order=$post['total_amount']*100;
             $goods_order->supplier_id=$supplier_id;
             $goods_order->invoice_id=$invoice_id;
             $goods_order->pay_status=1;
@@ -311,10 +311,10 @@ class GoodsOrder extends ActiveRecord
                 'freight'=>$freight*100,
                 'cover_image'=>$goods['cover_image']
             ])->execute();
-                if (!$res2){
-                    $tran->rollBack();
-                    return false;
-                }
+            if (!$res2){
+                $tran->rollBack();
+                return false;
+            }
             $time=time();
             $month=date('Ym',$time);
             $supplier=Supplier::find()
@@ -328,7 +328,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
                 ->where(['supplier_id'=>$supplier_id])
@@ -355,6 +354,8 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
+
+
             $tran->commit();
             return true;
         }catch (Exception $e) {
