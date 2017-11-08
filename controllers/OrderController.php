@@ -769,6 +769,7 @@ class OrderController extends Controller
                 'order_no'=> Yii::$app->session['order_no'],
                 'buyer_message'=> Yii::$app->session['buyer_message']
             );
+            var_dump($orders);exit;
             $openid=(new PayService())->GetOpenid();
             $model=new Wxpay();
             $data=$model->Wxlineapipay($orders,$openid);
