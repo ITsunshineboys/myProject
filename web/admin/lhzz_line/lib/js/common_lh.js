@@ -2,8 +2,8 @@
 // const baseUrl = 'http://v1.cdlhzz.cn:888';
 let baseUrl = (function () {
 
-    // return location.origin;
-    return 'http://test.cdlhzz.cn'
+    return location.origin;
+    //return 'http://test.cdlhzz.cn'
 })();
 /**
  * ajax请求
