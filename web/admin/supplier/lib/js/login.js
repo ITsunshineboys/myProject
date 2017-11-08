@@ -1,5 +1,5 @@
 let app = angular.module("app",[]);
-app.controller("login_ctrl",function ($scope,$http) {
+app.controller("login_ctrl",function ($scope,$http,$document) {
     let baseUrl = (function () {
         return '';
     })();
@@ -121,11 +121,11 @@ app.controller("login_ctrl",function ($scope,$http) {
         $scope.show_prompt=false;//验证码提示字
     };
     //Enter 键盘事件
-    // $document.bind("keypress", function(event) {
-    //     $scope.$apply(function (){
-    //         if(event.keyCode == 13){
-    //             $scope.supplier_login();
-    //         }
-    //     })
-    // });
+    $document.bind("keypress", function(event) {
+        $scope.$apply(function (){
+            if(event.keyCode == 13){
+                $scope.supplier_login();
+            }
+        })
+    });
   });
