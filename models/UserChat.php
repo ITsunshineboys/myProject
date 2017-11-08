@@ -271,7 +271,6 @@ class UserChat extends \yii\db\ActiveRecord
             return 200;
 
         } catch (Exception $e) {
-            var_dump($e);
             $trans->rollBack();
             return $code = 500;
 
