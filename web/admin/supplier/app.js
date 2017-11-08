@@ -2,7 +2,7 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
     "shopoffline_Module", "systemoffline_Module", "wait_online_Module", "commodity_manage",
     "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
   /*三阶段王杰---开始*/
-    "supplier_index", "login","shop_decoration_module","supplier_wallet_module",
+    "supplier_index","shop_decoration_module","supplier_wallet_module",
     "intelligent_directive","shop_data_module","wallet_detail_module","income_pay_module",
     "set_password_module","waitsend_detail_module","goods_detail_module",
   /*三阶段王杰---结束*/
@@ -20,16 +20,12 @@ const app = angular.module("app", ["ui.router", "shop_style", "freight_template"
 
 //路由拦截
 app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/home");
     $httpProvider.defaults.withCredentials = true;
     $stateProvider
     /*--------------三阶段开始----王杰-----------------*/
-        .state("login", {   //登录
-            url: "/login",
-            templateUrl: "pages/login/login.html"
-        })
-        .state("supplier_index", {   //首页
-            url: "/supplier_index",
+        .state("home", {   //首页
+            url: "/home",
             templateUrl: "pages/supplier_index/supplier_index.html"
         })
         .state("shop_data", {   //店铺数据
