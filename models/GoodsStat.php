@@ -129,6 +129,10 @@ class GoodsStat extends ActiveRecord
                     . substr($goodsStat['create_date'], 4, 2) . '-'
                     . substr($goodsStat['create_date'], 6);
             }
+
+            if (isset($goodsStat['amount_sold'])) {
+                $goodsStat['amount_sold'] = StringService::formatPrice($goodsStat['amount_sold'] / 100);
+            }
         }
 
         return [
