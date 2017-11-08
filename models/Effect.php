@@ -15,7 +15,7 @@ class Effect extends ActiveRecord
 {
     const  SUP_BANK_CARD='effect';
     const TYPE_STATUS_YES = 1;
-    const TYPE_STATUS_NO = 0;
+    const TYPE_STATUS_NO = 3;
     const STATUS_STAIRWAY_YES = 1;
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_EXTRA = [];
@@ -78,7 +78,15 @@ class Effect extends ActiveRecord
             ->all();
         return $detail;
     }
-    /**
+    public static  function  chinanum($num){
+    $china=array('零','一','二','三','四','五','六','七','八','九');
+    $arr=str_split($num);
+    for($i=0;$i<count($arr);$i++){
+       return $china[$arr[$i]];
+    }
+}
+
+/**
      * 生成新的样板间
      * @param $post
      * @return int
@@ -97,7 +105,7 @@ class Effect extends ActiveRecord
 
         $province=District::findByCode($post['province_code'])->name;
         $city=District::findByCode($post['city_code'])->name;
-        if($post['district_code']){
+        if(isset($post['district_code'])){
             $district=District::findByCode($post['district_code'])->name;
 
         }else{
@@ -111,12 +119,12 @@ class Effect extends ActiveRecord
         }
         $tran=\Yii::$app->db->beginTransaction();
         try{
-            if(!$post['particulars']){
-                $particulars=$post['bedroom']{'室'}.$post['sittingRoom_diningRoom']{'厅'};
+            if(!isset($post['district_code'])){
+                $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅';
             }else{
                 $particulars=$post['particulars'];
             }
-            if(!$post['district_code']){
+            if(!isset($post['district_code'])){
                 $district_code=null;
             }else{
                 $district_code=$post['district_code'];
