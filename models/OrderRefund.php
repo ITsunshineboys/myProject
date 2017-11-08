@@ -81,7 +81,7 @@ class OrderRefund extends ActiveRecord
                 $refund_type='已退至顾客钱包';
                 break;
         }
-
+        $data=[];
         $unshipped=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
             ->asArray()
@@ -165,7 +165,6 @@ class OrderRefund extends ActiveRecord
                 'list'=>$arr1
             ];
         }
-
         $unreceived=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
             ->asArray()
