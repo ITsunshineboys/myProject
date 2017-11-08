@@ -510,7 +510,7 @@ class GoodsRecommend extends ActiveRecord
 
         foreach ($recommendList as $recommend) {
             $recommend->sorting_number = array_search($recommend->id, $idArr) + 1;
-            if (!$recommend->save()) {
+            if (!$recommend->save()) {print_r($recommend->errors);
                 $transaction->rollBack();
 
                 $code = 500;
