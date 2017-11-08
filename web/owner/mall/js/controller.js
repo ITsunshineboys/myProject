@@ -3,16 +3,16 @@ angular.module('all_controller',[])
         /*主页操作*/
         sessionStorage.clear();
         //主页推荐
-        $http.get(url + '/owner/homepage').then(function (response) {
+        $http.get('/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
             console.log(response)
         }, function (error) {
             console.log(error)
         })
         // 微信事宜
-        _ajax.get('/order/get-open-id',{},function (res) {
-            alert(JSON.stringify(res))
-        })
+        // _ajax.get('/order/get-open-id',{},function (res) {
+        //     alert(JSON.stringify(res))
+        // })
     })
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
         $scope.ctrlScope = $scope
@@ -58,6 +58,7 @@ angular.module('all_controller',[])
         $scope.is_delete_btn = false //切换编辑状态
         if(!!sessionStorage.getItem('materials')){
             $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
+            console.log($scope.all_goods)
             for(let [key,value] of $scope.all_goods.entries()){
                 value['cost'] = value['totalMoney']
             }
@@ -215,12 +216,14 @@ angular.module('all_controller',[])
                 $state.go('nodata.basics_decoration')
                 $scope.cur_header = '基础装修'
                 $scope.inner_header = '基础装修'
+                $scope.cur_project = 0
             } else if (item.title == '主要材料') {
                 $state.go('nodata.main_material')
                 $scope.replaced_goods = []//被替换的商品
                 $scope.goods_replaced = []//替换的商品
                 $scope.cur_header = '主材料'
                 $scope.inner_header = '主材料'
+                $scope.cur_project = 1
             } else {
                 $state.go('nodata.other_material')
                 $scope.cur_header = item.title
@@ -229,6 +232,7 @@ angular.module('all_controller',[])
                 $scope.goods_replaced = []//替换的商品
                 $scope.all_delete_goods = []//其他材料删除的材料
                 $scope.all_add_goods = []
+                $scope.cur_project = 2
 
             }
             $scope.have_header = true
@@ -236,20 +240,18 @@ angular.module('all_controller',[])
             $scope.cur_all_goods = angular.copy($scope.all_goods)
         }
         if($rootScope.curState_name == 'nodata.basics_decoration'){
-            $scope.cur_project = 0
             $scope.is_city = false
             $scope.is_edit = false
         }else if($rootScope.curState_name == 'nodata.main_material'){
-            $scope.cur_project = 1
             $scope.is_city = false
             $scope.is_edit = false
         }else if($rootScope.curState_name == 'nodata.other_material'){
-            $scope.cur_project = 2
             $scope.is_city = false
             $scope.is_edit = true
         }
         //模态框详情
         $scope.get_basic_details = function (item, three_level_name, three_level_id) {
+            console.log(item)
             $scope.cur_goods_detail = item
             $scope.cur_second_level = $scope.cur_header
             $scope.cur_three_level = three_level_name
@@ -511,6 +513,9 @@ angular.module('all_controller',[])
         //智能报价无资料返回
         $scope.returnPrev = function () {
             console.log($rootScope.curState_name)
+            console.log($scope.inner_header)
+            console.log($scope.cur_status)
+            console.log($scope.cur_project)
             if($rootScope.curState_name == 'nodata.product_detail'){
                 $scope.have_header = true
             }else if($rootScope.curState_name == 'nodata.all_goods'){
@@ -534,7 +539,7 @@ angular.module('all_controller',[])
                 $scope.is_edit = false
                 $scope.is_city = true
                 $scope.all_goods = $scope.cur_all_goods
-                $rootScope.fromState_name = 'nodata.house_list'
+                $rootScope.fromState_name = !!sessionStorage.getItem('materials')?'modelRoom':'nodata.house_list'
             }else if($rootScope.curState_name == 'nodata.house_list'){
                 $scope.have_header = false
                 $rootScope.fromState_name = 'home'
