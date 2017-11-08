@@ -89,7 +89,7 @@ class SmValidationService
             return;
         }
 
-        $templateData = ['product' => $this->_signName];
+        $templateData = [];
 
         if (in_array($this->_data['type'], self::VALIDATION_CODE_TEMPLATES)) {
             // generate validation code
@@ -102,6 +102,7 @@ class SmValidationService
                 $cache->set($flgKey, 1);
             }
 
+            $templateData['product'] = $this->_signName;
             $templateData['code'] = $validationCode;
         }
 
