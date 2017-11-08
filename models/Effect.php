@@ -97,7 +97,12 @@ class Effect extends ActiveRecord
 
         $province=District::findByCode($post['province_code'])->name;
         $city=District::findByCode($post['city_code'])->name;
-        $district=District::findByCode($post['district_code'])->name;
+        if($post['district_code']){
+            $district=District::findByCode($post['district_code'])->name;
+
+        }else{
+            $district=null;
+        }
 
         if($post['stair_id']==1){
             $post['stairway']=StairsDetails::find()->where(['id'=>$post['stairway']])->one()->id;
@@ -106,6 +111,16 @@ class Effect extends ActiveRecord
         }
         $tran=\Yii::$app->db->beginTransaction();
         try{
+            if(!$post['particulars']){
+                $particulars=$post['bedroom']{'室'}.$post['sittingRoom_diningRoom']{'厅'};
+            }else{
+                $particulars=$post['particulars'];
+            }
+            if(!$post['district_code']){
+                $district_code=null;
+            }else{
+                $district_code=$post['district_code'];
+            }
             $res = \Yii::$app->db->createCommand()->insert(self::SUP_BANK_CARD,[
                 'bedroom'       => $post['bedroom'],
                 'sittingRoom_diningRoom' => $post['sittingRoom_diningRoom'],
@@ -119,10 +134,10 @@ class Effect extends ActiveRecord
                 'city'          => $city,
                 'city_code'     => $post['city_code'],
                 'district'      => $district,
-                'district_code' => $post['district_code'],
+                'district_code' => $district_code,
                 'toponymy'      => $post['toponymy'],
                 'street'        => $post['street'],
-                'particulars'   => $post['particulars'],
+                'particulars'   => $particulars,
                 'stairway'      => $post['stairway'],
                 'add_time'      => time(),
                 'type'          => self::TYPE_STATUS_NO,
