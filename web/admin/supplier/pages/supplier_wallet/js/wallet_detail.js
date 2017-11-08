@@ -1,18 +1,11 @@
 angular.module('wallet_detail_module',[])
-.controller('wallet_detail_ctrl',function ($scope,$http,$state,$stateParams) {
+.controller('wallet_detail_ctrl',function ($scope,$http,$state,$stateParams,_ajax) {
   console.log($stateParams.transaction_no);//交易单号
   $scope.wallet_detail=[];
-  $http.get(baseUrl+'/supplier-cash/get-cash',{
-    params:{
-        transaction_no:$stateParams.transaction_no
-    }
-  }).then(function (res) {
-    console.log(res);
-    $scope.wallet_detail=res.data.data;
-    console.log($scope.wallet_detail);
-  },function (err) {
-    console.log(err);
-  });
+  _ajax.get('/supplier-cash/get-cash',{transaction_no:$stateParams.transaction_no},function (res) {
+      console.log(res);
+      $scope.wallet_detail=res.data;
+  })
   //判断返回哪个页面
     $scope.wallet_back=function () {
         if(!!$stateParams.income){      //----------> 收支详情

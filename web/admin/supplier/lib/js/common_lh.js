@@ -33,7 +33,7 @@ app.service('_ajax', function ($http, $state) {
             let res = response.data;
             if (res.code === 403) {
                 $state.go('login')
-            } else if (res.code === 200) {
+            } else if (res.code === 200 || res.code === 1002) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
@@ -58,7 +58,7 @@ app.service('_ajax', function ($http, $state) {
             let res = response.data;
             if (res.code === 403) {
                 $state.go('login')
-            } else if (res.code === 200) {
+            } else if (res.code === 200 || res.code === 1002) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }

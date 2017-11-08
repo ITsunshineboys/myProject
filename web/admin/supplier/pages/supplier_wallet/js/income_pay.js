@@ -1,12 +1,6 @@
 angular.module('income_pay_module',[])
-.controller('income_pay_ctrl',function ($scope,$http,$state) {
+.controller('income_pay_ctrl',function ($scope,$http,$state,_ajax) {
   $scope.myng=$scope;
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
     /*分页配置*/
     $scope.wjConfig = {
         showJump: true,
@@ -15,18 +9,6 @@ angular.module('income_pay_module',[])
         onChange: function () {
             tablePages();
         }
-    }
-    let tablePages=function () {
-        $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
-        $http.get(baseUrl+'/withdrawals/find-supplier-access-detail-list',{
-            params:$scope.params
-        }).then(function (res) {
-            console.log(res);
-            $scope.income_pay_list=res.data.data.list;
-            $scope.wjConfig.totalItems = res.data.data.count;
-        },function (err) {
-            console.log(err);
-        })
     };
     $scope.params = {
         page: 1,                        // 当前页数
@@ -37,6 +19,14 @@ angular.module('income_pay_module',[])
         type: '7',                      // 类型选择
         sort_time:'2'                   //默认降序
     };
+    let tablePages=function () {
+        $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
+        _ajax.get('/withdrawals/find-supplier-access-detail-list',$scope.params,function (res) {
+            $scope.income_pay_list=res.data.list;
+            $scope.wjConfig.totalItems = res.data.count;
+        });
+    };
+
   $scope.income_pay_list=[];
   //状态
   $scope.status_arr=[
@@ -50,9 +40,9 @@ angular.module('income_pay_module',[])
     ];
   $scope.params.type=$scope.status_arr[0].id;//类型选择 默认全部
   //时间类型
-  $http.get(baseUrl+'/site/time-types').then(function (response) {
-    $scope.time = response.data.data.time_types;
-  });
+  _ajax.get('/site/time-types',{},function (res) {
+      $scope.time = res.data.time_types;
+  })
   //监听时间和类型
     $scope.time_status_change=function () {
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
@@ -87,20 +77,16 @@ angular.module('income_pay_module',[])
   //详情，如果是货款、扣款、充值状态就请求接口并弹出模态框，否则就跳转页面
     $scope.show_click=function (transaction_no,access_type,income) {
         if(access_type=='货款'||access_type=='扣款'||access_type=='充值'){
-            $http.post(baseUrl+'/withdrawals/supplier-access-detail',{
-                transaction_no:transaction_no
-            },config).then(function (res) {
+            _ajax.post('/withdrawals/supplier-access-detail',{transaction_no:transaction_no},function (res) {
                 console.log(res);
                 $('#detail_modal').modal('show');
-                $scope.detail_list=res.data.data;
+                $scope.detail_list=res.data;
                 for(let value of $scope.detail_list){
                     if(value.name=='扣款金额' || value.name=='货款金额'){
                         $scope.money_flag=true;
                     }
                 }
-            },function (err) {
-                console.log(err);
-            })
+            });
         }else{
             $scope.detail_modal_flag="";
             setTimeout(function () {

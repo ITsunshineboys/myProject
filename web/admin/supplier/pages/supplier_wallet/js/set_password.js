@@ -1,28 +1,19 @@
 angular.module('set_password_module',[])
-.controller('set_password_ctrl',function ($scope,$http,$state,$stateParams,$timeout,$location,$anchorScroll,$window) {
+.controller('set_password_ctrl',function ($scope,$http,$state,$stateParams,$timeout,$location,$anchorScroll,$window,_ajax) {
   $scope.myng=$scope;
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
   //判断 first or unfirst
-  $http.post(baseUrl+'/withdrawals/check-isset-pay-pwd',{},config).then(function (res) {
-    console.log(res);
-    $scope.pw_key=res.data.data.key;
-    $scope.mobile=res.data.data.mobile.toString();
-    $scope.head_m=$scope.mobile.substring(0,3)
-    $scope.foot_m=$scope.mobile.substring(7)
-
-    if(res.data.data.type=='unfirst'){
-      $scope.show_unfirst=true;
-    }else{
-      $scope.show_first=true;
-    }
-  },function (err) {
-    console.log(err);
-  });
+  _ajax.post('/withdrawals/check-isset-pay-pwd',{},function (res) {
+      console.log(res);
+      $scope.pw_key=res.data.key;
+      $scope.mobile=res.data.mobile.toString();
+      $scope.head_m=$scope.mobile.substring(0,3)
+      $scope.foot_m=$scope.mobile.substring(7)
+      if(res.data.type=='unfirst'){
+          $scope.show_unfirst=true;
+      }else{
+          $scope.show_first=true;
+      }
+  })
   //获取验证码
   $scope.Countdown=60;
   $scope.show_send=true;//发送按钮、倒计时
@@ -41,24 +32,20 @@ angular.module('set_password_module',[])
         }
       });
     },1000);
-    $http.post(baseUrl+'/withdrawals/send-pay-code',{},config).then(function (res) {
-      console.log(res);
-    },function (err) {
-      console.log(err);
+    _ajax.post('/withdrawals/send-pay-code',{},function (res) {
+        console.log(res);
     })
   };
   $scope.confirm_btn=function (valid,error) {
     if($scope.show_first==true){
       if(valid && $scope.new_pw==$scope.again_pw && !$scope.pw_flag){
         $('#save_modal').modal('show');
-        $http.post(baseUrl+'/withdrawals/set-pay-pwd',{
-          key:$scope.pw_key,
-          pay_pwd_first:$scope.new_pw,
-          pay_pwd_secend:$scope.again_pw
-        },config).then(function (res) {
-          console.log(res);
-        },function (err) {
-          console.log(err);
+        _ajax.post('/withdrawals/set-pay-pwd',{
+            key:$scope.pw_key,
+            pay_pwd_first:$scope.new_pw,
+            pay_pwd_secend:$scope.again_pw
+        },function (res) {
+
         })
       }else{
         $scope.submitted=true;
@@ -67,20 +54,20 @@ angular.module('set_password_module',[])
       $scope.new_pw!=$scope.again_pw?$scope.pw_flag=true:$scope.pw_flag=false;
     }else{
       if(valid){
-        $http.post(baseUrl+'/withdrawals/set-pay-pwd',{
-          key:$scope.pw_key,
-          pay_pwd:$scope.new_pw,
-          sms_code:$scope.v_code
-        },config).then(function (res) {
-          console.log(res);
-          if(res.data.code == 200){
-            $('#save_modal').modal('show');
-            $scope.show_prompt=false;
-          }else if(res.data.code == 1002){
-            $scope.show_prompt=true;
-          }
-        },function (err) {
-          console.log(err);
+        _ajax.post('/withdrawals/set-pay-pwd',{
+            key:$scope.pw_key,
+            pay_pwd:$scope.new_pw,
+            sms_code:$scope.v_code
+        },function (res) {
+            console.log(res);
+            if(res.code == 200){
+                $('#save_modal').modal('show');
+                $scope.show_prompt=false;
+            }else if(res.code == 1002){
+                $scope.show_prompt=true;
+            }else if(res.code == 403){
+                $state.go('login')
+            }
         })
       }else{
         $scope.submitted=true;
