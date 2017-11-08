@@ -164,8 +164,6 @@ class OrderRefund extends ActiveRecord
                 'order_type'=>'退款详情-待发货',
                 'list'=>$arr1
             ];
-        }else{
-            $data[]=[];
         }
 
         $unreceived=OrderRefund::find()
