@@ -318,7 +318,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $filepath=FileService::upload();
+        $filepath=UserChat::upload();
         if(is_numeric($filepath)){
             $code=$filepath;
             return Json::encode([

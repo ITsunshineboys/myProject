@@ -71,7 +71,6 @@ class FileService
         $model->file = UploadedFile::getInstance($model, 'file');
 
         $code = 1000;
-
         if (!$model->file || !$model->file->extension) {
             return $code;
         }

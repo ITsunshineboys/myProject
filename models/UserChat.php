@@ -342,5 +342,38 @@ class UserChat extends \yii\db\ActiveRecord
         }
         return $data;
     }
+
+    public static function upload()
+    {
+        $model = new UploadForm;
+        $model->file = UploadedFile::getInstance($model, 'file');
+
+        $code = 1000;
+        if (!$model->file || !$model->file->extension) {
+            return $code;
+        }
+
+        $ymdDirs = FileService::makeYmdDirs();
+        if (!$ymdDirs) {
+            $code = 500;
+            return $code;
+        }
+
+        $directory = \Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/' . $ymdDirs;
+
+        $filename = FileService::generateFilename($directory);
+        if ($filename === false) {
+            $code = 500;
+            return $code;
+        }
+
+        $file = $filename . '.' . $model->file->extension;
+        if (!$model->file->saveAs($directory . '/' . $file)) {
+            $code = 500;
+            return $code;
+        }
+
+        return UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
+    }
 }
 
