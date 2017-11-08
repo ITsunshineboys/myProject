@@ -1064,7 +1064,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                             'second_name': value2.title,
                                             'three_name': value3.title,
                                             'good_code': value3.good_id,
-                                            'good_quantity': value3.good_quantity
+                                            'good_quantity': value3.good_quantity,
+                                            'three_id':value3.id
                                         })
                                         // value['all_goods'] = goods
                                     }
@@ -1208,7 +1209,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                                 'second_name': value2.title,
                                                 'three_name': value3.title,
                                                 'good_code': value3.good_id,
-                                                'good_quantity': value3.good_quantity
+                                                'good_quantity': value3.good_quantity,
+                                                'three_id':value3.id
                                             })
                                             value['all_goods'] = goods
                                         } else {
@@ -1221,7 +1223,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                                 'second_name': value2.title,
                                                 'three_name': value3.title,
                                                 'good_code': value3.good_id,
-                                                'good_quantity': value3.good_quantity
+                                                'good_quantity': value3.good_quantity,
+                                                'three_id':value3.id
                                             })
                                             value['all_goods'] = goods
                                         }
