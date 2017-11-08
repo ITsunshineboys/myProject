@@ -1719,8 +1719,11 @@ angular.module('all_controller',[])
         }
         //请求杂工数据
         $scope.go_handyman_options = function () {
+            console.log(JSON.parse(sessionStorage.getItem('materials')))
+            console.log($scope.all_goods)
             if(!!sessionStorage.getItem('cur_goods')){
                 $scope.cur_goods = JSON.parse(sessionStorage.getItem('cur_goods'))
+                console.log($scope.cur_goods)
             }
             if(!!sessionStorage.getItem('worker')){
                 $scope.all_worker = JSON.parse(sessionStorage.getItem('worker'))
@@ -1729,42 +1732,69 @@ angular.module('all_controller',[])
                 $scope.all_backman = JSON.parse(sessionStorage.getItem('backman'))
                 console.log($scope.all_backman)
             }
+            $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
+            $scope.all_goodsTemp = angular.copy($scope.all_goods);
             //清理杂项原始数据
-            if ($scope.cur_goods != undefined && $scope.cur_worker != undefined) {
+            if ($scope.cur_goods != undefined) {
                 for (let [key, value] of $scope.all_goods.entries()) {
                     for (let [key1, value1] of value.second_level.entries()) {
                         for (let [key2, value2] of value1.three_level.entries()) {
                             for (let [key3, value3] of value2.goods_detail.entries()) {
                                 for (let [key4, value4] of $scope.cur_goods.entries()) {
-                                    if (value4.path.split(',')[0] == value.id && value4.path.split(',')[1] == value1.id && value4.path.split(',')[2]
-                                        == value2.id && value4.id == value3.id) {
-                                        value3.quantity -= value4.quantity
-                                        value3.cost -= value4.cost
-                                        value1.cost -= value4.cost
-                                        value.cost -= value4.cost
-                                        if (value3.cost == 0) {
-                                            value2.goods_detail.splice(key3, 1)
+                                    if(!!sessionStorage.getItem('materials')){
+                                        console.log(value3)
+                                        console.log(value4)
+                                        if(value4.id == value3.goods_id){
+                                            value3.quantity -= value4.quantity
+                                            value3.cost -= value4.cost
+                                            value1.cost -= value4.cost
+                                            value.cost -= value4.cost
+                                            // if (value3.cost == 0) {
+                                            //     value2.goods_detail.splice(key3, 1)
+                                            //     console.log(value2.goods_detail)
+                                            // }
+                                            // if (value2.goods_detail.length == 0) {
+                                            //     value1.three_level.splice(key2, 1)
+                                            // }
+                                            // if (value1.three_level.length == 0) {
+                                            //     value.second_level.splice(key1, 1)
+                                            // }
                                         }
-                                        if (value2.goods_detail.length == 0) {
-                                            value1.three_level.splice(key2, 1)
-                                        }
-                                        if (value1.three_level.length == 0) {
-                                            value.second_level.splice(key1, 1)
+                                    }else{
+                                        if (value4.path.split(',')[0] == value.id && value4.path.split(',')[1] == value1.id && value4.path.split(',')[2]
+                                            == value2.id&&value4.id == value3.id) {
+                                            value3.quantity -= value4.quantity
+                                            value3.cost -= value4.cost
+                                            value1.cost -= value4.cost
+                                            value.cost -= value4.cost
+                                            // if (value3.cost == 0) {
+                                            //     value2.goods_detail.splice(key3, 1)
+                                            //     console.log(value2.goods_detail)
+                                            // }
+                                            // if (value2.goods_detail.length == 0) {
+                                            //     value1.three_level.splice(key2, 1)
+                                            // }
+                                            // if (value1.three_level.length == 0) {
+                                            //     value.second_level.splice(key1, 1)
+                                            // }
                                         }
                                     }
                                 }
-                                for (let [key, value] of $scope.all_workers.entries()) {
-                                    if (value.worker_kind == $scope.cur_worker.worker_kind) {
-                                        value.price -= $scope.cur_worker.price
-                                    }
-                                    if (value.price == 0) {
-                                        $scope.all_workers.splice(key, 1)
+                                    for (let [key, value] of $scope.all_workers.entries()) {
+                                        if($scope.cur_worker != undefined){
+                                        if (value.worker_kind == $scope.cur_worker.worker_kind) {
+                                            value.price -= $scope.cur_worker.price
+                                        }
+                                        if (value.price == 0) {
+                                            $scope.all_workers.splice(key, 1)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+                console.log($scope.all_goods)
             }
             if(!!sessionStorage.getItem('backman')){
                 for(let [key,value] of $scope.all_backman.entries()){
@@ -1774,7 +1804,7 @@ angular.module('all_controller',[])
                         value.backman_value = $scope.twenty_four_dismantle
                     }else if(value.backman_option == '补烂'){
                         value.backman_value = $scope.repair
-                    }else if(value.backman_option == '12墙新建'){
+                    }else if(value.backman_option == '12墙新建(含双面抹灰)'){
                         value.backman_value = $scope.twelve_new_construction
                     }else if(value.backman_option == '24墙新建(含双面抹灰)'){
                         value.backman_value =  $scope.twenty_four_new_construction
@@ -1791,13 +1821,17 @@ angular.module('all_controller',[])
                 console.log($scope.all_workers)
                 get_all_price()
                 $scope.cur_header = '智能报价'
-                let index = $scope.all_worker.findIndex(function (item) {
-                    return item.worker_kind == '杂工'
-                })
-                $scope.all_worker[index].worker_price = 0
-                sessionStorage.setItem('worker',JSON.stringify($scope.all_worker))
-                sessionStorage.removeItem('cur_goods')
-                $state.go('nodata.house_list')
+                if(!!sessionStorage.getItem('materials')){
+                    let index = $scope.all_worker.findIndex(function (item) {
+                        return item.worker_kind == '杂工'
+                    })
+                    $scope.all_worker[index].worker_price = 0
+                    sessionStorage.setItem('worker',JSON.stringify($scope.all_worker))
+                    sessionStorage.removeItem('cur_goods')
+                    $state.go('modelRoom')
+                }else{
+                    $state.go('nodata.house_list')
+                }
             } else {
                 $http.post(url+'/owner/handyman', {
                     'province': 510000,
@@ -1884,9 +1918,16 @@ angular.module('all_controller',[])
                                             value2.goods_detail.push(cur_obj)
                                         } else {
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
-                                                if (value3.id == value4.id) {
-                                                    value4.cost += value3.cost
-                                                    value4.quantity += value3.quantity
+                                                if(!!sessionStorage.getItem('materials')){
+                                                    if (value3.id == value4.goods_id) {
+                                                        value4.cost += value3.cost
+                                                        value4.quantity += value3.quantity
+                                                    }
+                                                }else{
+                                                    if (value3.id == value4.id) {
+                                                        value4.cost += value3.cost
+                                                        value4.quantity += value3.quantity
+                                                    }
                                                 }
                                             }
                                         }
@@ -1925,7 +1966,7 @@ angular.module('all_controller',[])
                                     for(let [key2,value2] of value1.three_level.entries()){
                                         for(let [key3,value3] of value2.goods_detail.entries()){
                                             for(let [key4,value4] of arr.entries()){
-                                                if(value.id == value4.id){
+                                                if(value.id == value4.id&&value3.quantity!=0){
                                                     if(value3.goods_id == undefined){
                                                         value4.goods.push({
                                                             cost:value3.cost,
