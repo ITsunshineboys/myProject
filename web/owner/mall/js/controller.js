@@ -1,6 +1,7 @@
 angular.module('all_controller',[])
-    .controller("indexCtrl", ["$scope", "$http", "_ajax", function ($scope, $http, _ajax) {
+    .controller("indexCtrl", ["$scope", "$http", "_ajax", function ($rootScope, $scope, _ajax) {
         // 微信事宜
+        $rootScope.isWxOpen = false;
         _ajax.get('/order/iswxlogin', "", function (res) {
             if (res.msg === "微信内打开") {
                 if (getUrlParams('code') === "" && sessionStorage.getItem("code") === null) {
@@ -9,6 +10,7 @@ angular.module('all_controller',[])
                         location.href = res.data
                     })
                 } else {
+                    $rootScope.isWxOpen = true;
                     let code = getUrlParams('code');
                     sessionStorage.setItem('code', code);
                 }

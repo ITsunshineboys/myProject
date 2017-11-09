@@ -1,4 +1,4 @@
-app.controller('depositCtrl', ['$scope', '$state', '_ajax', function ($scope, $state, _ajax) {
+app.controller('depositCtrl', ['$scope', '$state', '_ajax', function ($rootScope, $scope, $state, _ajax) {
     let payParams = JSON.parse(sessionStorage.getItem('payParams'));
     console.log(payParams, '请求参数');
     $scope.isShow = false;
@@ -22,8 +22,15 @@ app.controller('depositCtrl', ['$scope', '$state', '_ajax', function ($scope, $s
         payParams.name = $scope.user.name;
         payParams.phone = $scope.user.phone;
         // $state.go('pay_success');
-        _ajax.post('/order/effect-earnst-alipay-sub', payParams, function (res) {
-            angular.element('body').append(res);
-        })
+        if ($rootScope.isWxOpen) {
+            payParams.wxpayCode = sessionStorage.getItem('code');
+            _ajax.post('/order/wxpay-effect-earnst-sub', payParams, function (res) {
+                console.log(res);
+            })
+        } else {
+            _ajax.post('/order/effect-earnst-alipay-sub', payParams, function (res) {
+                angular.element('body').append(res);
+            })
+        }
     }
 }]);
