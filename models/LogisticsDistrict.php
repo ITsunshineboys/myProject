@@ -176,13 +176,40 @@ class LogisticsDistrict extends ActiveRecord
      * @param $template_id
      * @return bool
      */
-       public static function is_apply($districtcode, $template_id){
-        $district=LogisticsDistrict::find()
+     public static function is_apply($districtcode, $template_id){
+       $district=LogisticsDistrict::find()
             ->where(['template_id'=>$template_id])
             ->andWhere(['district_code'=>$districtcode])
             ->one();
         if (!$district)
         {
+            $pro=substr($districtcode,0,2);
+            if (LogisticsDistrict::find()
+                ->where(['template_id'=>$template_id])
+                ->andWhere(['district_code'=>$pro.'0000'])
+                ->one())
+            {
+                $code=200;
+                return $code;
+            }
+            $ci=substr($districtcode,2,2);
+            if (LogisticsDistrict::find()
+                ->where(['template_id'=>$template_id])
+                ->andWhere(['district_code'=>$pro.$ci.'00'])
+                ->one())
+            {
+                $code=200;
+                return $code;
+            }
+            $dis=substr($districtcode,4,2);
+            if (LogisticsDistrict::find()
+                ->where(['template_id'=>$template_id])
+                ->andWhere(['district_code'=>$pro.$ci.$dis])
+                ->one())
+            {
+                $code=200;
+                return $code;
+            }
             $code=1000;
             return $code;
         }else{
