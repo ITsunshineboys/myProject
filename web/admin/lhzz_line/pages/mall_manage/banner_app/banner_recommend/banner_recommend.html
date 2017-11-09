@@ -120,9 +120,9 @@
                     <td ng-if="show_13&&item.sku!='0'">{{item.market_price}}</td>
                     <td ng-if="show_13&&item.sku=='0'">—</td>
                     <td ng-if="show_14">
-                        <a href="" ng-if="item.status=='停用'" ng-click="start_use(item)" data-toggle="modal" data-target="#solo_begin_modal">启用</a>
+                        <a href="" ng-if="item.status=='停用'" ng-click="start_use(item)" data-toggle="modal" data-target="{{solo_begin_modal}}">启用</a>
                         <a href="" ng-if="item.status=='启用'" ng-click="stop_use(item)" data-toggle="modal" data-target="#solo_stop_modal">停用</a>
-                        <a href="" data-toggle="modal" data-target="#recommend_shop_modal_edit" ng-click="shop_edit_item(item)">编辑</a>
+                        <a href="" data-toggle="modal" data-target="{{recommend_shop_modal_edit}}" ng-click="shop_edit_item(item)">编辑</a>
                         <a href="" data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">详情</a>
                         <a href="" data-toggle="modal" data-target="#recommend_modal_disable_del" ng-click="shop_del(item)">删除</a>
                     </td>
@@ -657,6 +657,24 @@
             </div>
         </div>
         <!--单个启用模态框 结束-->
+        <!--请先上架商品模态框 开始-->
+        <div class="modal fade modelCenter" id="please_up_shops" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        该商品已下架，请先上架商品后再进行操作
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--请先上架商品模态框  结束-->
     </div>
  </section>
 </div>

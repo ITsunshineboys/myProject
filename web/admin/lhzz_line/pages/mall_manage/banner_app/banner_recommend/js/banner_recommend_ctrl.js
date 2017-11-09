@@ -360,30 +360,35 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
     $scope.edit_item=item;
     console.log("点击编辑获取");
     console.log($scope.edit_item);
-    $scope.variable_modal="";//默认modal为空
-    $scope.img_flag='';//清空 “格式不正确”
-    //判断是否启用的选取状态
-    if($scope.edit_item.status=='停用'){
-      $scope.shop_edit_check=0;
+    if(item.goods_status==2){
+      $scope.recommend_shop_modal_edit='#recommend_shop_modal_edit';
+        $scope.variable_modal="";//默认modal为空
+        $scope.img_flag='';//清空 “格式不正确”
+        //判断是否启用的选取状态
+        if($scope.edit_item.status=='停用'){
+            $scope.shop_edit_check=0;
+        }else{
+            $scope.shop_edit_check=1;
+        }
+        //-------商家编辑--------
+        if($scope.edit_item.from_type=='商家'){
+            $scope.upload_img_src='';
+            $scope.shop_edit_sku=$scope.edit_item.sku;//编号
+            $scope.recommend_shop_edit_title=$scope.edit_item.title;//标题
+            $scope.recommend_shop_edit_url=$scope.edit_item.url; //商品链接
+            $scope.recommend_shop_edit_img=$scope.edit_item.image;//图片
+        }
+        //-----链接编辑------
+        if($scope.edit_item.from_type=='链接'){
+            $scope.upload_link_img_src='';
+            $scope.link_edit_url=$scope.edit_item.url; //商品链接
+            $scope.link_edit_title=$scope.edit_item.title;//标题
+            $scope.link_edit_subtitle=$scope.edit_item.description;//副标题
+            $scope.link_edit_price=$scope.edit_item.show_price; //平台价格
+            $scope.link_edit_img=$scope.edit_item.image;//图片
+        }
     }else{
-      $scope.shop_edit_check=1;
-    }
-    //-------商家编辑--------
-    if($scope.edit_item.from_type=='商家'){
-      $scope.upload_img_src='';
-      $scope.shop_edit_sku=$scope.edit_item.sku;//编号
-      $scope.recommend_shop_edit_title=$scope.edit_item.title;//标题
-      $scope.recommend_shop_edit_url=$scope.edit_item.url; //商品链接
-      $scope.recommend_shop_edit_img=$scope.edit_item.image;//图片
-    }
-    //-----链接编辑------
-    if($scope.edit_item.from_type=='链接'){
-      $scope.upload_link_img_src='';
-      $scope.link_edit_url=$scope.edit_item.url; //商品链接
-      $scope.link_edit_title=$scope.edit_item.title;//标题
-      $scope.link_edit_subtitle=$scope.edit_item.description;//副标题
-      $scope.link_edit_price=$scope.edit_item.show_price; //平台价格
-      $scope.link_edit_img=$scope.edit_item.image;//图片
+      $scope.recommend_shop_modal_edit='#please_up_shops';
     }
   };
 
@@ -585,7 +590,14 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
   };
   //单个启用
   $scope.start_use=function (item) {
-    $scope.stop_use_item=item;
+    console.log(item);
+    if(item.goods_status===2){
+        $scope.stop_use_item=item;
+        $scope.solo_begin_modal='#solo_begin_modal'
+    }else{
+        $scope.solo_begin_modal='#please_up_shops';
+    }
+
   };
   //单个启用确认按钮
   $scope.sole_begin_btn=function () {
