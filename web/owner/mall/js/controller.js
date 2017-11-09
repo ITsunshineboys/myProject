@@ -1,6 +1,9 @@
 angular.module('all_controller',[])
     .controller("indexCtrl", ["$scope","_ajax", function ($scope, _ajax) {
-
+        // 微信事宜
+        _ajax.get("http://test.cdlhzz.cn/order/find-open-id", {}, function (res) {
+            alert(res);
+        })
     }])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
         /*主页操作*/
@@ -12,8 +15,6 @@ angular.module('all_controller',[])
         }, function (error) {
             console.log(error)
         })
-        // 微信事宜
-
     })
     .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
         $scope.ctrlScope = $scope
