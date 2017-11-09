@@ -23,7 +23,12 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         toponymy: $stateParams.toponymy,    // 小区名称
         street: $stateParams.street         // 街道地址
     };
-    sessionStorage.setItem("huxingParams", JSON.stringify($scope.params));
+    let huxingParams = {
+        region_code: $stateParams.region_code,
+        toponymy: $stateParams.toponymy,
+        street: $stateParams.street
+    };
+    sessionStorage.setItem("huxingParams", JSON.stringify(huxingParams));
 
     let params = {
         toponymy: $scope.params.toponymy,    // 小区名称

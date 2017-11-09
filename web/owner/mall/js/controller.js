@@ -5,7 +5,7 @@ angular.module('all_controller',[])
         if (code === null || code === "" || code === undefined) {
             let url = location.href;
             _ajax.post('http://test.cdlhzz.cn/order/find-open-id', {url: url}, function (res) {
-                console.log(res);
+                location.href = res.data
             })
         }
 
