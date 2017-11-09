@@ -30,7 +30,7 @@
                 <div class="shu_house_2"></div>
                 <h1>房屋信息</h1>
                 <span class="house_span">房屋面积</span>
-                <input type="number" required placeholder="请输入1-180的面积" name="area" style="color: #4a4a4a;"
+                <input type="number" required placeholder="请输入1-180的面积" name="area" style="color: #4a4a4a;" maxlength="8"
                        ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
                         ng-model="area"/>
 
@@ -135,8 +135,8 @@
             <!--飘窗-->
             <div class="bay_window">
                 <span class="bay_span">飘窗</span>
-                <input type="text" required placeholder="0" name="window" ng-pattern="/^([0-9]|1[0-9]|20)$/"
-                       ng-blur="change4=area_news.window.$invalid" class="input_windin" maxlength="2"
+                <input type="text" required placeholder="0" name="window" ng-pattern="/^(([0-9]|1[0-9])(.\d{1,2})?|20(.00)?)$/"
+                       ng-blur="change4=area_news.window.$invalid" class="input_windin" maxlength="6"
                        ng-model="window"/>
                 <span class="bay_square">m</span>
                 <p class="error_tips window_tips" ng-if="area_news.window.$invalid&&(submitted||change4)">
