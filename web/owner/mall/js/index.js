@@ -10,7 +10,6 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                     location.href = res.data
                 })
             } else {
-                $rootScope.isWxOpen = false;
                 let code = getUrlParams('code');
                 sessionStorage.setItem('code', code);
             }
