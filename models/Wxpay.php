@@ -76,7 +76,7 @@ class Wxpay  extends ActiveRecord
          * @param $money
          * @return \app\services\json数据，可直接填入js函数作为参数1
          */
-       public static  function effect_earnstsubmit($id,$wxpayCode)
+       public static  function effect_earnstsubmit($id,$openId)
         {
             ini_set('date.timezone','Asia/Shanghai');
             //打印输出数组信息
@@ -88,12 +88,6 @@ class Wxpay  extends ActiveRecord
             }
             //、获取用户openid
             $tools = new PayService();
-            $openId = $tools->getOpenidFromMp($wxpayCode);
-            if (!$openId)
-            {
-                $code=1000;
-                return $code;
-            }
             $input = new WxPayUnifiedOrder();
             $attach=$id;
             $total_amount=0.01;

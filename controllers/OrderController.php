@@ -679,8 +679,8 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $wxpayCode=$request->post('wxpayCode', '');
-        if (!$wxpayCode)
+        $openId=$request->post('wxpayCode', '');
+        if (!$openId)
         {
             $code=1000;
             return json_encode([
@@ -688,7 +688,7 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $res=Wxpay::effect_earnstsubmit($id,$wxpayCode);
+        $res=Wxpay::effect_earnstsubmit($id,$openId);
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
