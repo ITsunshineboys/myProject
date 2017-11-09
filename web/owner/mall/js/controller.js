@@ -1,15 +1,19 @@
 angular.module('all_controller',[])
     .controller("indexCtrl", ["$scope", "$http", "_ajax", function ($scope, $http, _ajax) {
         // 微信事宜
-        if (getUrlParams('code') === "" && sessionStorage.getItem("code") === null) {
-            let url = location.href;
-            _ajax.post('/order/find-open-id', {url: url}, function (res) {
-                location.href = res.data
-            })
-        } else {
-            let code = getUrlParams('code');
-            sessionStorage.setItem('code', code);
-        }
+        _ajax.get('/order/iswxlogin', "", function (res) {
+            if (res.msg === "微信内打开") {
+                if (getUrlParams('code') === "" && sessionStorage.getItem("code") === null) {
+                    let url = location.href;
+                    _ajax.post('/order/find-open-id', {url: url}, function (res) {
+                        location.href = res.data
+                    })
+                } else {
+                    let code = getUrlParams('code');
+                    sessionStorage.setItem('code', code);
+                }
+            }
+        });
     }])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
         /*主页操作*/
