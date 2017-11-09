@@ -4100,7 +4100,7 @@ class OrderController extends Controller
                 $tools = new PayService();
                 if (!isset($_GET['code'])){
                     //触发微信返回code码
-                     $baseUrl = urlencode('http://test.cdlhzz.cn/owner/mall/index.html');
+                     $baseUrl = urlencode('http://test.cdlhzz.cn/owner/mall/index.html#!/nodata/nodata_house_list');
                     $url = $tools->__CreateOauthUrlForCode($baseUrl);
                     $code=200;
                     return Json::encode([
