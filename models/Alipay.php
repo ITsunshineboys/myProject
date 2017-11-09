@@ -64,7 +64,7 @@ class Alipay extends  ActiveRecord
   public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
     {
         $notify_url="http://".$_SERVER['SERVER_NAME']."/order/alipayeffect_earnstnotify";
-        $return_url="http://".$_SERVER['SERVER_NAME']."/line/effect_earnstsuccess_pay";
+        $return_url="http://".$_SERVER['SERVER_NAME']."/owner/mall/index.html#!/pay_success";
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $id=Effect::addneweffect($post);
          if (!$id)
