@@ -3,6 +3,9 @@ angular.module('all_controller',[])
         // 微信事宜
         $http.get("http://test.cdlhzz.cn/order/find-open-id").then(function (res) {
             alert(JSON.stringify(res.data));
+            $http.get(res.data.data).then(function (response) {
+                alert(JSON.stringify(response.data));
+            })
         })
     }])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
