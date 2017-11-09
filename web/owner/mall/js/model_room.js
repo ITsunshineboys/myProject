@@ -18,17 +18,11 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     $scope.demand = {           // 特殊要求
         text: ""
     };
-    if (sessionStorage.getItem("huxingParams") === null) {
-        $scope.params = {
-            code: $stateParams.region_code,            // 区编码
-            toponymy: $stateParams.toponymy,    // 小区名称
-            street: $stateParams.street         // 街道地址
-        };
-        sessionStorage.setItem("huxingParams", JSON.stringify($scope.params));
-    } else {
-        $scope.params = JSON.parse(sessionStorage.getItem("huxingParams"));
-    }
-
+    $scope.params = {
+        code: $stateParams.region_code,            // 区编码
+        toponymy: $stateParams.toponymy,    // 小区名称
+        street: $stateParams.street         // 街道地址
+    };
     let params = {
         toponymy: $scope.params.toponymy,    // 小区名称
         particulars: "",                    // 厅室名称
