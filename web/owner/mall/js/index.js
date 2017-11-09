@@ -5,7 +5,8 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
     sessionStorage.removeItem("worker");
     // 微信事宜
     $rootScope.isWxOpen = false;
-    _ajax.get(baseUrl + '/order/iswxlogin', "", function (res) {
+    console.log(baseUrl);
+    _ajax.get('/order/iswxlogin', "", function (res) {
         if (res.code === 200) { // 是微信浏览器打开
             let data = res.data;
             let wxConfig = {
@@ -29,12 +30,12 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
             if (sessionStorage.getItem("openId") === null) {
                 if (getUrlParams('code') === "") {
                     let url = location.href;
-                    _ajax.post(baseUrl + '/order/find-open-id', {url: url}, function (res) {
+                    _ajax.post('/order/find-open-id', {url: url}, function (res) {
                         location.href = res.data
                     })
                 } else {
                     let code = getUrlParams('code');
-                    _ajax.post(baseUrl + '/order/get-open-id', {code: code}, function (res) {
+                    _ajax.post('/order/get-open-id', {code: code}, function (res) {
                         let openId = res.data;
                         sessionStorage.setItem('openId', openId);
                     })
