@@ -4358,16 +4358,15 @@ class OrderController extends Controller
 
 
 
-      public  function  actionWxTest()
+    public  function  actionWxTest()
     {
-        $openid=(new PayService())->GetOpenid();
-        $res=(new Wxpay())->WxBuy($openid);
+
+        $res=(new Wxpay())->WxBuy();
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
             'data' => $res
         ]);
     }
-
 
 }
