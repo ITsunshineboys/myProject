@@ -650,11 +650,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->one();
 
         $renovation_infos=[];
-        if($worker_order['status']==self::WORKER_ORDER_PREPARE || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_TOYI ){
+        $data=[];
+        $work_result=[];
+        if($worker_order['status']==self::WORKER_ORDER_NOT_BEGIN ){
             $data['time']=date('Y-m-d',time());
-            $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+            $data['status']=self::USER_WORKER_ORDER_STATUS[$worker_order['status']];
             $data['renovation_infos']=$renovation_infos;
-            return $data;
         }elseif($worker_order['status']==self::WORKER_ORDER_ING ){
             $days=explode(',',$worker_order['days']);
             if(in_array($today_time,$days)){
@@ -679,6 +680,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $data['view']['status']='休息';
                 $work_result['result']=self::worksresult($order_no,$worker_info);
             }
+
         }elseif($worker_order['status']==self::WORKER_ORDER_DONE) {
             $days = explode(',', $worker_order['days']);
             if (in_array($today_time, $days)) {
@@ -688,10 +690,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     ->where(['uid' => $uid])
                     ->one();
                 $data['view']['status'] = self::USER_WORKER_ORDER_STATUS[$worker_order['status']];
-               $work_result['result']=self::worksresult($order_no,$worker_info);
+                $work_result['result'] = self::worksresult($order_no, $worker_info);
+
             }
         }
-        return array_merge($data, $work_result);
+        return array_merge($data,$work_result);
     }
 
 
