@@ -324,6 +324,7 @@ class GoodsRecommendSupplier extends ActiveRecord
                         $recommend['purchase_price_decoration_company'] = $goods->purchase_price_decoration_company;
                         $recommend['purchase_price_manager'] = $goods->purchase_price_manager;
                         $recommend['purchase_price_designer'] = $goods->purchase_price_designer;
+                        $recommend['goods_status'] = $goods->status;
                     }
                 }
             }
