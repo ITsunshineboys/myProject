@@ -11,7 +11,7 @@
     position: fixed;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
 }
 .icon_color{
     color: #FFFFFF;

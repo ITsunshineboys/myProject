@@ -794,18 +794,38 @@ class OrderController extends Controller
     public function actionWxpayeffect_earnstnotify(){
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $res=(new wxpay())->Orderlinewxpaynotify($msg);
+        $res=Wxpay::NotifyProcess($msg);
         if ($res==true){
-            $arr=explode('&',$msg['attach']);
+            $id=$msg['attach'];
 //             if ($msg['total_fee'] !=8900){
 //                    exit;
 //             }
-            $result=GoodsOrder::Wxpayeffect_earnstnotify($arr,$msg);
-            if ($result==true){
+
+            $effect=Effect::findOne($id);
+            if (!$effect)
+            {
                 return true;
-            }else{
-                return false;
+                exit;
             }
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $earnst=EffectEarnst::find()
+                    ->where(['effect_id'=>$id])
+                    ->one();
+                $earnst->status=1;
+                if (!$earnst->save(false))
+                {
+                    return false;
+                    exit;
+                }
+            }catch (Exception $e){
+                $tran->rollBack();
+                return false;
+                exit;
+            }
+            $tran->commit();
+            return true;
+
         }else{
             return false;
         }
