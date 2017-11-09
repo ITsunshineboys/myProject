@@ -4100,14 +4100,13 @@ class OrderController extends Controller
                 $tools = new PayService();
                 if (!isset($_GET['code'])){
                     //触发微信返回code码
-                    $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+                     $baseUrl = urlencode('http://test.cdlhzz.cn/owner/mall/index.html');
                     $url = $tools->__CreateOauthUrlForCode($baseUrl);
-                    $content=Wxpay::curl($url,false,0);
                     $code=200;
                     return Json::encode([
                         'code' => $code,
                         'msg'  => 'ok',
-                        'data' =>$content
+                        'data' =>$url
                     ]);
                 } else {
                     //获取code码，以获取openid
