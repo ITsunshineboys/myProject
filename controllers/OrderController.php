@@ -657,32 +657,37 @@ class OrderController extends Controller
      * 微信样板间支付
      * @return string
      */
-    public function actionWxpayEffectEarnstSub(){
-        $request=Yii::$app->request;
-        // $effect_id = trim($request->post('effect_id', ''), '');
-        // $name = trim($request->post('name', ''), '');
-        // $phone = trim($request->post('phone', ''), '');
-        // $money=0.01;
-        // if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
-        //     $code=1000;
-        //     return Json::encode([
-        //         'code' => $code,
-        //         'msg'  => Yii::$app->params['errorCodes'][$code],
-        //         'data' => null
-        //     ]);
-        // }
-        // if ( !$name  ||!$phone || !$effect_id){
-        //     $code=1000;
-        //     return Json::encode([
-        //         'code' => $code,
-        //         'msg'  => Yii::$app->params['errorCodes'][$code]
-        //     ]);
-        // }\
-        $money=0.01;
-        $effect_id=1;
-        $name='何友志';
-        $phone='13880414513';
-        $res=Wxpay::effect_earnstsubmit($effect_id,$name,$phone,$money);
+   public function actionWxpayEffectEarnstSub(){
+        $request = \Yii::$app->request;
+        $post=$request->post();
+        $code=1000;
+        $phone  = $request->post('phone', '');
+        if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $out_trade_no =self::Setorder_no();
+        $id=Effect::addneweffect($post);
+        if (!$id)
+        {
+            $code=1000;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $wxpayCode=$request->post('wxpayCode', '');
+        if (!$wxpayCode)
+        {
+            $code=1000;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=Wxpay::effect_earnstsubmit($id,$wxpayCode);
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',

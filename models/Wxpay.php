@@ -76,7 +76,7 @@ class Wxpay  extends ActiveRecord
          * @param $money
          * @return \app\services\json数据，可直接填入js函数作为参数1
          */
-        public static  function effect_earnstsubmit($effect_id,$name,$phone,$money)
+       public static  function effect_earnstsubmit($id,$wxpayCode)
         {
             ini_set('date.timezone','Asia/Shanghai');
             //打印输出数组信息
@@ -88,24 +88,30 @@ class Wxpay  extends ActiveRecord
             }
             //、获取用户openid
             $tools = new PayService();
-            $openId = $tools->GetOpenid();
+            $openId = $tools->getOpenidFromMp($wxpayCode);
+            if (!$openId)
+            {
+                $code=1000;
+                return $code;
+            }
             $input = new WxPayUnifiedOrder();
-            $attach=$effect_id.'&'.$name.'&'.$phone;
-            $input->SetBody('样板间申请费');
+            $attach=$id;
+            $total_amount=0.01;
+            $input->SetBody(self::EFFECT_BODY);
             $input->SetAttach($attach);
             $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-            $input->SetTotal_fee($money*100);
+            $input->SetTotal_fee($total_amount*100);
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("goods");
-            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
+            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME']."/order/orderlinewxpaynotify");
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            $editAddress = $tools->GetEditAddressParameters();
-            return $jsApiParameters;
+            return  $jsApiParameters;
         }
+
 
 
        public  function WxBuy($openid){
