@@ -120,10 +120,8 @@ commodity_detail_down.controller("commodity_detail_down_ctrl",function ($scope,$
     }
 
     $scope.saveGoodDetail = function (val,error) {
-        console.log($scope.offline_reason)
         if(val&&!$scope.price_flag){
             $scope.savemodal = "#savesuremodal"
-            // console.log($scope.price_flag)
             let url = baseUrl+"/mall/goods-edit-lhzz";
             let data = {
                 id:+goodid,
