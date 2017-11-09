@@ -3,9 +3,9 @@
     <!--顶部导航-->
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
-        <h6>商城管理</h6>
-        <h6>> 商家管理</h6>
-        <h6>> 商家管理 </h6>
+        <h6 ui-sref="merchant_index">商城管理</h6>
+        <h6 ui-sref="store_mag">> 商家管理</h6>
+        <h6>> 添加商家 </h6>
     </div>
 
     <form name="storeform"  novalidate>
@@ -121,7 +121,7 @@
                 <div class="company_type">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>法人名称</span>
-                    <input type="text" placeholder="请输入法人名称" ng-model="params.legal_person" name="legalperson" id="legalperson" required ng-pattern="/^[A-Za-z\u4e00-\u9fa5]+$/" ng-blur="legalname=!!storeform.legalperson.$error"  ng-class={'tored':(storeform.legalperson.$invalid&&alljudgefalse)||(storeform.legalperson.$error.required&&legalname)||storeform.legalperson.$error.pattern}>
+                    <input type="text" placeholder="请输入法人名称" ng-model="params.legal_person" name="legalperson" id="legalperson" required ng-pattern="/^[\u0391-\uFFE5A-Za-z]+$/" ng-blur="legalname=!!storeform.legalperson.$error"  ng-class={'tored':(storeform.legalperson.$invalid&&alljudgefalse)||(storeform.legalperson.$error.required&&legalname)||storeform.legalperson.$error.pattern}>
                     <p ng-if="storeform.legalperson.$error.pattern">
                         <span class="glyphicon glyphicon-asterisk red_mark"></span>
                         <span class="warningred">名称不符合规范，请重新输入</span>
