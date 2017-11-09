@@ -1272,7 +1272,7 @@ class GoodsOrder extends ActiveRecord
     public static  function judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight)
     {
         $goods=Goods::find()->select('platform_price,market_price,supplier_price')->where(['id'=>$goods_id])->asArray()->one();
-        $money=(float)$goods['platform_price']*$goods_num+(float)$return_insurance*100+(float)$freight*100;
+        $money=(float)$goods['platform_price']*$goods_num+(float)$return_insurance*100+(float)($freight*100);
         echo $money;exit;
         if ($money==$total_amount*100){
             return true;
