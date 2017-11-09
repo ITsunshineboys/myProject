@@ -978,9 +978,6 @@ class User extends ActiveRecord implements IdentityInterface
     public static function checkIdentityExisting($identityNo)
     {
         $res = self::find()->where(['identity_no' => $identityNo])->exists();
-        if (YII_DEBUG) {
-            StringService::writeLog('debug_checkIdentityExisting', $identityNo . $res);
-        }
         return $res;
     }
 
