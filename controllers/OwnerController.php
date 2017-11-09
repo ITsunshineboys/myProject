@@ -324,7 +324,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        
+
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
         $a = BasisDecorationService::L($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
