@@ -32,18 +32,37 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     $scope.front_warning = false;    //身份证正面错误提示
     $scope.back_warning = false;     //身份证背面错误提示
 
-    // test();
-    // function test() {
-    //     let url = baseUrl+"/mall/user-add";
-    //     let data = {
-    //        mobile:13881237458,
-    //        password:'123456'
-    //     };
-    //     $http.post(url, data, config).then(function (res) {
-    //         console.log(res)
-    //         // $scope.suremodal = '#suremodal';
-    //     })
-    // }
+    // getMoble();
+    test();
+    function getMoble() {
+        var prefixArray = new Array("130", "131", "132", "133", "135", "137", "138", "170", "187", "189");
+        var i = parseInt(10 * Math.random());
+        var prefix = prefixArray[i];
+
+        for (var j = 0; j < 8; j++) {
+            prefix = prefix + Math.floor(Math.random() * 10);
+        }
+
+        var x = document.getElementsByName("mobile_tel");
+        for (var i = 0; i < x.length; i++) {
+            var o = x[i];
+            o.value = prefix;
+        }
+       return prefix;
+    }
+
+
+    function test() {
+        let url = baseUrl+"/mall/user-add";
+        let data = {
+           mobile:getMoble(),
+           password:'123456'
+        };
+        $http.post(url, data, config).then(function (res) {
+            console.log(res)
+            // $scope.suremodal = '#suremodal';
+        })
+    }
 
     // 参数
     $scope.params = {
