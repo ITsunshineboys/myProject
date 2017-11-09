@@ -20,7 +20,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     };
     if (sessionStorage.getItem("huxingParams") === null) {
         $scope.params = {
-            code: $stateParams.code,            // 区编码
+            code: $stateParams.region_code,            // 区编码
             toponymy: $stateParams.toponymy,    // 小区名称
             street: $stateParams.street         // 街道地址
         };

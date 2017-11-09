@@ -24,7 +24,7 @@
             <ul>
                 <li class="animated fadeInUp" ng-repeat="item in recommend_list | orderBy:'sort'"
                 ng-style="{animationDelay:($index==0)?'0s':(($index==1)?'0.15s':'0.3s')}" >
-                    <a ui-sref="modelRoom({code: item.district_code, toponymy: item.toponymy, street: item.street})">
+                    <a ui-sref="modelRoom({region_code: item.district_code, toponymy: item.toponymy, street: item.street})">
                         <!--<span>10.1万</span>-->
                         <!--<h1>今日花园</h1>-->
                         <!--<p>60m<sup>2</sup> 一室一厅一卫 齐家风格 现代简约</p>-->

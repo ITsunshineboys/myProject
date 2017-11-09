@@ -59,7 +59,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                 css:'css/movefurniture.css'
             })
             .state('modelRoom',{ // 样板间
-                url:'/quotation?code&toponymy&street',
+                url:'/quotation?region_code&toponymy&street',
                 templateUrl:'model_room.html',
                 css: ['css/model_room.css', 'zui-1.7.0-dist/dist/css/zui.min.css'],
                 controller: 'modelRoomCtrl'
