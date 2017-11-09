@@ -326,7 +326,6 @@ class OwnerController extends Controller
         }
 
         //人工总费用
-//        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
@@ -405,7 +404,7 @@ class OwnerController extends Controller
         }
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
@@ -475,8 +474,8 @@ class OwnerController extends Controller
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterway'], $post['city']);
 
-        //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'], $waterway_labor,$worker_kind_details);
+        //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'], $waterway_labor['univalence'],$worker_kind_details['quantity']);
         $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
 
         //材料总费用
