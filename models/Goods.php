@@ -948,7 +948,7 @@ class Goods extends ActiveRecord
 
     public static function assortList($all, $city = 510100)
     {
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image";
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name";
         $all_goods = self::find()
             ->select($select)
             ->asArray()
