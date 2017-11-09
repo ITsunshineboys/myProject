@@ -89,7 +89,7 @@ class EventHandleService
             // db failed
             case $events['db']['failed']:
                 Yii::$app->on($events['db']['failed'], function () use ($data, $events) {
-                    StringService::writeLog($events['db']['failed'], $data['sql'], $data['table']);
+                    StringService::writeLog($data['table'], $data['sql']);
                 });
                 break;
 

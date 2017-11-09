@@ -603,7 +603,6 @@ class MallController extends Controller
 
         $recommend->delete_time = time();
         if (!$recommend->save()) {
-            StringService::writeLog(GoodsRecommend::tableName(), json_encode($recommend->errors));
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -1431,10 +1430,6 @@ class MallController extends Controller
         $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
 
         $total = (int)GoodsCategory::find()->where($where)->asArray()->count();
-        if (YII_DEBUG) {
-            $logFile = $total == 0 ? 'cat_list_admin_zero' : 'cat_list_admin';
-            StringService::writeLog($logFile, $where, '', Logger::LEVEL_INFO);
-        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
