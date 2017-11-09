@@ -448,8 +448,8 @@ class Goods extends ActiveRecord
         return self::find()
             ->asArray()
             ->select($select)
-            ->where(['and',['goods.status'=>self::STATUS_ONLINE],['in', 'goods.sku', $sku]])
-            ->leftJoin('goods_brand','goods_brand.id = goods.brand_id')
+            ->where(['and', ['goods.status' => self::STATUS_ONLINE], ['in', 'goods.sku', $sku]])
+            ->leftJoin('goods_brand', 'goods_brand.id = goods.brand_id')
             ->all();
     }
 
@@ -1357,6 +1357,21 @@ class Goods extends ActiveRecord
         );
 
         return $this;
+    }
+
+    /**
+     * Do some ops after updated goods model
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if (isset($changedAttributes['status']) && $changedAttributes['status'] == self::STATUS_ONLINE) {
+            GoodsRecommend::updateAll(['status' => GoodsRecommend::STATUS_OFFLINE], ['sku' => $this->sku]);
+            GoodsRecommendSupplier::updateAll(['status' => GoodsRecommendSupplier::STATUS_OFFLINE], ['sku' => $this->sku]);
+        }
     }
 
     public function getOrders()
