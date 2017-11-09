@@ -4077,7 +4077,7 @@ class OrderController extends Controller
             }
 
 
-            
+
            public function  actionFindOpenId()
             {
         //        $code = $_GET["code"];
@@ -4102,11 +4102,12 @@ class OrderController extends Controller
                     //触发微信返回code码
                     $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
                     $url = $tools->__CreateOauthUrlForCode($baseUrl);
+                    $content=Wxpay::curl($url,false,0);
                     $code=200;
                     return Json::encode([
                         'code' => $code,
                         'msg'  => 'ok',
-                        'data' =>$url
+                        'data' =>$content
                     ]);
                 } else {
                     //获取code码，以获取openid
