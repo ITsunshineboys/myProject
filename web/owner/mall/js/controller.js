@@ -77,16 +77,19 @@ angular.module('all_controller',[])
             }
             if($rootScope.curState_name == 'nodata.basics_decoration'){
                 $scope.cur_item = $scope.all_goods[0]
-                $scope.cur_header = $scope.cur_item.title
+                $scope.cur_project = 0
+                $scope.cur_header = $scope.inner_header = $scope.cur_item.title
             }else if($rootScope.curState_name == 'nodata.main_material'){
                 $scope.cur_item = $scope.all_goods[1]
-                $scope.cur_header = $scope.cur_item.title
+                $scope.cur_project = 1
+                $scope.cur_header = $scope.inner_header = $scope.cur_item.title
             }else if($rootScope.curState_name == 'nodata.house_list'){
                 $scope.all_goods = []
                 sessionStorage.removeItem('materials')
-            }else{
+            }else if($rootScope.curState_name == 'nodata.other_material'){
                 $scope.cur_item = $scope.all_goods[$stateParams.index]
-                $scope.cur_header = $scope.cur_item.title
+                $scope.cur_project = 2
+                $scope.cur_header = $scope.inner_header = $scope.cur_item.title
             }
             console.log($scope.cur_item)
         }
@@ -563,7 +566,7 @@ angular.module('all_controller',[])
                 $scope.have_header = false
                 $rootScope.fromState_name = 'home'
             }
-            if(!!sessionStorage.getItem('huxingParams')){
+            if(!!sessionStorage.getItem('huxingParams')&&($rootScope.curState_name == 'nodata.main_material'||$rootScope.curState_name == 'nodata.basics_decoration'||$rootScope.curState_name == 'nodata.other_material')){
                 $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
             }else{
                 $rootScope.goPrev()
