@@ -1,11 +1,12 @@
 angular.module('all_controller',[])
     .controller("indexCtrl", ["$scope", "$http", "_ajax", function ($scope, $http, _ajax) {
         // 微信事宜
+        console.log(location.search);
         let code = sessionStorage.getItem("code");
         if (code === null || code === "" || code === undefined) {
             let url = location.href;
             _ajax.post('http://test.cdlhzz.cn/order/find-open-id', {url: url}, function (res) {
-                location.href = res.data
+                // location.href = res.data
             })
         }
 
