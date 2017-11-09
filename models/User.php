@@ -970,14 +970,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Check if identity card no unique
+     * Check if identity card no existing
      *
      * @param string $identityNo identity card no
      * @return bool
      */
-    public static function checkIdentityNoUnique($identityNo)
+    public static function checkIdentityExisting($identityNo)
     {
-        return !self::find()->where(['identity_no' => $identityNo])->exists();
+        return self::find()->where(['identity_no' => $identityNo])->exists();
     }
 
     /**
