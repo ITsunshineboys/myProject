@@ -135,7 +135,7 @@ class BasisDecorationService
     ];
 
     /**
-     * 人工费
+     *   防水  水路  强电  弱电 人工费
      * @param string $points
      * @param array $labor
      * @return float
