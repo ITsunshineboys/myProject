@@ -120,7 +120,6 @@ class Wxpay  extends ActiveRecord
         //、获取用户openid
         $tools = new PayService();
         $openId = $openid;
-        echo $openId;exit;
         //②、统一下单
         $input = new WxPayUnifiedOrder();
         $attach='123';
