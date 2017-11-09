@@ -197,7 +197,7 @@ class WorkerController extends Controller
 
         $request = \Yii::$app->request;
         //智管工地 status (0,4,5)
-        $status = (int)$request->get('status',self::SITE_STATUS_WORKER);
+        $status = (int)$request->get('status',self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         if ($status
@@ -277,13 +277,13 @@ class WorkerController extends Controller
         }
 
         $request = \Yii::$app->request;
-        //智管工地 status (3,4,5)
+        //智管工地 status (0,4,5)
         $status = (int)$request->get('status', self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         if ($status
             && $status != self::STATUS_ALL
-            && !array_key_exists($status, WorkerOrder::WORKER_ORDER_STATUS)
+            && !array_key_exists($status, WorkerOrder::USER_WORKER_ORDER_STATUS)
         ) {
             $code = 1000;
             return Json::encode([
