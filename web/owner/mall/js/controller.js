@@ -4,13 +4,14 @@ angular.module('all_controller',[])
         $rootScope.isWxOpen = false;
         _ajax.get(baseUrl + '/order/iswxlogin', "", function (res) {
             if (res.msg === "微信内打开") {
+                $rootScope.isWxOpen = true;
                 if (getUrlParams('code') === "" && sessionStorage.getItem("code") === null) {
                     let url = location.href;
                     _ajax.post(baseUrl + '/order/find-open-id', {url: url}, function (res) {
                         location.href = res.data
                     })
                 } else {
-                    $rootScope.isWxOpen = true;
+                    $rootScope.isWxOpen = false;
                     let code = getUrlParams('code');
                     sessionStorage.setItem('code', code);
                 }
