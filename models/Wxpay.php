@@ -13,7 +13,7 @@ use vendor\wxpay\lib\log;
 use vendor\wxpay\lib\CLogFileHandler;
 use app\services\PayService;
 use yii\db\ActiveRecord;
-
+use yii\helpers\Json;
 
 class Wxpay  extends ActiveRecord
 {
