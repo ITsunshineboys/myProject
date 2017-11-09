@@ -181,6 +181,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
 
     /*登录账户判断*/
     $scope.accountCheck = function () {
+        $scope.show_account_warning = false;
         $scope.defaultshow = false;
         $http({
             method: "get",
