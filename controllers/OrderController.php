@@ -569,7 +569,7 @@ class OrderController extends Controller
         $pay_name='线上支付-支付宝支付';
         $invoice_id=trim($request->post('invoice_id'),' ');
         $supplier_id=trim($request->post('supplier_id'),' ');
-        $freight=trim($request->post('freight'),'0');
+        $freight=trim($request->post('freight'));
         $return_insurance=trim($request->post('return_insurance'),' ');
         $buyer_message=trim($request->post('buyer_message','0'));
         //商品描述，可空
