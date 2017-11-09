@@ -23,6 +23,8 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         toponymy: $stateParams.toponymy,    // 小区名称
         street: $stateParams.street         // 街道地址
     };
+    sessionStorage.setItem("huxingParams", JSON.stringify($scope.params));
+
     let params = {
         toponymy: $scope.params.toponymy,    // 小区名称
         particulars: "",                    // 厅室名称
@@ -384,7 +386,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 };
 
                 for (let obj of $scope.materials) {    // 遍历材料
-                    for(let o of obj.goods) {
+                    for (let o of obj.goods) {
                         let tempObj = {
                             one_title: o.goods_first,
                             two_title: o.goods_second,
