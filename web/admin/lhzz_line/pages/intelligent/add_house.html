@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="all_btn">
-                    <button ng-click="delete_house(item)" class="cur_delete" ng-if="$index!=0"><i class="glyphicon glyphicon-minus"></i></button>
+                    <button ng-click="delete_house1(item)" class="cur_delete" ng-if="$index!=0"><i class="glyphicon glyphicon-minus"></i></button>
                     <button class="remove btn_up" ng-if="!$first" ng-click="house_sort(item,'up')"><i class="glyphicon glyphicon-arrow-up"></i>上移</button>
                     <button class="remove btn_down" ng-if="house_informations.length!=1&&!$last" ng-click="house_sort(item,'down')"><i class="glyphicon glyphicon-arrow-down"></i>下移</button>
                     <a ng-click="go_to_edit(item,$index)">编辑</a>

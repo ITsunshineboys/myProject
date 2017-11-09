@@ -559,7 +559,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
         }
         //删除小区户型
-        $scope.delete_house = function (item) {
+        $scope.delete_house1 = function (item) {
             console.log(item)
             $scope.house_informations.splice($scope.house_informations.indexOf(item), 1)
             if (item.id != undefined) {
