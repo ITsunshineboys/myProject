@@ -301,7 +301,7 @@ class EffectController extends Controller
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword = trim(Yii::$app->request->get('keyword', ''));
 
-        $where = '1';
+        $where = 'status ='.self::STATUST_ON;
         if(!$keyword){
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));

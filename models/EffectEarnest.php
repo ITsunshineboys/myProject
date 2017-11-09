@@ -31,7 +31,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
         'phone',
         'earnest',
         'remark',
-        'transaction_no'
+        'transaction_no',
+        'status'
 
     ];
     /**
