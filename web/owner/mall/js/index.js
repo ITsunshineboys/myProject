@@ -2,7 +2,8 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "$http", "_ajax", function 
     // 微信事宜
     $rootScope.isWxOpen = false;
     _ajax.get(baseUrl + '/order/iswxlogin', "", function (res) {
-        if (res.code === 200) {
+        if (res.code == 200) {
+            console.log(1);
             $rootScope.isWxOpen = true;
             if (getUrlParams('code') === "" && sessionStorage.getItem("code") === null) {
                 let url = location.href;
