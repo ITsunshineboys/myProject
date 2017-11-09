@@ -100,7 +100,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.house_name = ''//小区名称
         $scope.all_num = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"]//中文排序
         let all_level = ['白银', '黄金', '钻石']
-        let arr = []
         //默认登录状态(后期会删除)
         $http.post('/site/login', {
             'username': 13551201821,
@@ -112,64 +111,68 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         })
 
         //获取案例需要添加的商品编号和数量
-        $http.get('/quote/assort-goods-list').then(function (response) {
-            console.log(response)
-            // $scope.auxiliary_materials = []
-            //整合一级
-            for (let [key, value] of response.data.list.entries()) {
-                for (let [key1, value1] of response.data.classify.entries()) {
-                    let cur_obj = {id: value1.id, title: value1.title, second_level: []}
-                    if (value.path.split(',')[0] === value1.id && JSON.stringify(arr)
-                            .indexOf(JSON.stringify(cur_obj)) === -1) {
-                        arr.push(cur_obj)
-                    }
-                }
-            }
-            //整合二级
-            for (let [key, value] of response.data.list.entries()) {
-                for (let [key1, value1] of arr.entries()) {
-                    for (let [key2, value2] of response.data.classify.entries()) {
-                        if (value.path.split(',')[0] === value1.id && value.pid === value2.id && JSON.stringify(value1.second_level).indexOf(JSON.stringify({
-                                id: value2.id,
-                                title: value2.title,
-                                three_level: []
-                            })) === -1) {
-                            value1.second_level.push({id: value2.id, title: value2.title, three_level: []})
+        function get_case_goods(){
+            let arr = []
+            $http.get('/quote/assort-goods-list').then(function (response) {
+                console.log(response)
+                // $scope.auxiliary_materials = []
+                //整合一级
+                for (let [key, value] of response.data.list.entries()) {
+                    for (let [key1, value1] of response.data.classify.entries()) {
+                        let cur_obj = {id: value1.id, title: value1.title, second_level: []}
+                        if (value.path.split(',')[0] === value1.id && JSON.stringify(arr)
+                                .indexOf(JSON.stringify(cur_obj)) === -1) {
+                            arr.push(cur_obj)
                         }
                     }
                 }
-            }
-            //整合三级
-            for (let [key, value] of response.data.list.entries()) {
-                for (let [key1, value1] of arr.entries()) {
-                    for (let [key2, value2] of value1.second_level.entries()) {
-                        if (value.pid === value2.id && JSON.stringify(value2.three_level).indexOf(JSON.stringify({
-                                id: value.id,
-                                title: value.title,
-                                path: value.path,
-                                good_id: '',
-                                good_quantity: ''
-                            })) === -1) {
-                            value2.three_level.push({
-                                id: value.id,
-                                title: value.title,
-                                path: value.path,
-                                good_id: '',
-                                good_quantity: ''
-                            })
+                //整合二级
+                for (let [key, value] of response.data.list.entries()) {
+                    for (let [key1, value1] of arr.entries()) {
+                        for (let [key2, value2] of response.data.classify.entries()) {
+                            if (value.path.split(',')[0] === value1.id && value.pid === value2.id && JSON.stringify(value1.second_level).indexOf(JSON.stringify({
+                                    id: value2.id,
+                                    title: value2.title,
+                                    three_level: []
+                                })) === -1) {
+                                value1.second_level.push({id: value2.id, title: value2.title, three_level: []})
+                            }
                         }
                     }
                 }
-            }
-            console.log(arr)
-            $scope.all_materials = arr.sort(function (prev, next) {
-                return +prev.id - next.id
+                //整合三级
+                for (let [key, value] of response.data.list.entries()) {
+                    for (let [key1, value1] of arr.entries()) {
+                        for (let [key2, value2] of value1.second_level.entries()) {
+                            if (value.pid === value2.id && JSON.stringify(value2.three_level).indexOf(JSON.stringify({
+                                    id: value.id,
+                                    title: value.title,
+                                    path: value.path,
+                                    good_id: '',
+                                    good_quantity: ''
+                                })) === -1) {
+                                value2.three_level.push({
+                                    id: value.id,
+                                    title: value.title,
+                                    path: value.path,
+                                    good_id: '',
+                                    good_quantity: ''
+                                })
+                            }
+                        }
+                    }
+                }
+                console.log(arr)
+                $scope.all_materials = arr.sort(function (prev, next) {
+                    return +prev.id - next.id
+                })
+                $scope.all_materials_copy = angular.copy($scope.all_materials)
+                console.log($scope.all_materials)
+            }, function (error) {
+                console.log(error)
             })
-            $scope.all_materials_copy = angular.copy($scope.all_materials)
-            console.log($scope.all_materials)
-        }, function (error) {
-            console.log(error)
-        })
+        }
+        get_case_goods()
         //案例页工人
         $http.get('/quote/labor-list').then(function (response) {
             console.log(response)
@@ -994,6 +997,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $http.post('/quote/assort-goods-add', {
                 'assort': $scope.check_item
             }, config).then(function (response) {
+                get_case_goods()
                 let all_modal = function ($scope, $uibModalInstance) {
                     $scope.cur_title = '保存成功'
                     $scope.common_house = function () {
@@ -1563,6 +1567,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.delete_house_list = []
             $scope.delete_drawing_list = []
             $scope.is_add = 0
+            console.log($scope.all_materials_copy)
             $scope.all_materials_copy1 = angular.copy($scope.all_materials_copy)
             $scope.house_informations = []
             $scope.drawing_informations = []

@@ -97,6 +97,7 @@ class Addressadd extends  ActiveRecord
         $array  = self::find()->select('id,mobile,consignee,region,district')->where(['id' => $addressid])->limit(1)->asArray()->all();
         if ($array){
             foreach ($array as $k=>$v){
+                $array[$k]['adCode']=$array[$k]['district'];
                 $array[$k]['district']=LogisticsDistrict::getdistrict($array[$k]['district']);
             }
             return $array;

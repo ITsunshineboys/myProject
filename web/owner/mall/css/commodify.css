@@ -479,7 +479,7 @@ section{
 .model_content{
     width: 32rem!important;
     height: 58rem!important;
-    margin-top: -28px;
+    /*margin-top: -28px;*/
     margin-left: -2.2rem;
 
 }
@@ -491,19 +491,19 @@ section{
     font-size: 1.4rem;
 }
 .footer_size{
-    margin-left: -100px!important;
+    /*margin-left: -100px!important;*/
     width: 31.6rem;
     position: absolute;
-    top: 49.1rem;
+    top: 49.5rem;
     left: -.1rem;
 }
 .footer_size button{
-    width: 13.7rem;
+    width: 14rem;
     height: 4rem;
     font-size: 1.2rem
 }
 .btn_brand{
-    margin-left: -20px;
+    margin-left: -3rem;
     background-color: white;
     color: #6C6C6C;
     border: 1px solid #999;
