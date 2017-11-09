@@ -121,7 +121,7 @@
                 <div class="company_type">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>法人名称</span>
-                    <input type="text" placeholder="请输入法人名称" ng-model="params.legal_person" name="legalperson" id="legalperson" required ng-pattern="/^[A-Za-z\u4e00-\u9fa5]+$/" ng-blur="legalname=!!storeform.legalperson.$error"  ng-class={'tored':(storeform.legalperson.$invalid&&alljudgefalse)||(storeform.legalperson.$error.required&&legalname)||storeform.legalperson.$error.pattern}>
+                    <input type="text" placeholder="请输入法人名称" ng-model="params.legal_person" name="legalperson" id="legalperson" required ng-pattern="/^[\u0391-\uFFE5A-Za-z]+$/" ng-blur="legalname=!!storeform.legalperson.$error"  ng-class={'tored':(storeform.legalperson.$invalid&&alljudgefalse)||(storeform.legalperson.$error.required&&legalname)||storeform.legalperson.$error.pattern}>
                     <p ng-if="storeform.legalperson.$error.pattern">
                         <span class="glyphicon glyphicon-asterisk red_mark"></span>
                         <span class="warningred">名称不符合规范，请重新输入</span>
