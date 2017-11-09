@@ -1,7 +1,5 @@
 angular.module('all_controller',[])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
-        /*主页操作*/
-        sessionStorage.clear();
         //主页推荐
         $http.get(baseUrl + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data

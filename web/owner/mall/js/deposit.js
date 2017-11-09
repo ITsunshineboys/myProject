@@ -23,7 +23,7 @@ app.controller('depositCtrl', ['$rootScope', '$scope', '$state', '_ajax', functi
         payParams.phone = $scope.user.phone;
         // $state.go('pay_success');
         if ($rootScope.isWxOpen) {
-            payParams.wxpayCode = sessionStorage.getItem('code');
+            payParams.wxpayCode = sessionStorage.getItem('openId');
             _ajax.post('/order/wxpay-effect-earnst-sub', payParams, function (res) {
                 console.log(res);
             })
