@@ -1409,7 +1409,6 @@ class OwnerController extends Controller
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
-            var_dump($stairs);exit;
             if ($assort_material == null) {
                 $code = 1061;
                 return Json::encode([
@@ -1428,6 +1427,7 @@ class OwnerController extends Controller
         } else {
             $condition_stairs = null;
         }
+        var_dump($condition_stairs);exit;
         $material[][] = BasisDecorationService::profitMargin($condition_stairs);
 
         //无计算公式
