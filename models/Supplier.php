@@ -264,7 +264,7 @@ class Supplier extends ActiveRecord
                 $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
                 $userRole->reviewer_uid = $operator->id;
 
-                $supplier->status = self::STATUS_ONLINE;
+                $supplier->status = self::STATUS_OFFLINE;
                 if (!$supplier->save()) {
                     $transaction->rollBack();
 
