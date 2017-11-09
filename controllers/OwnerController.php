@@ -1428,7 +1428,7 @@ class OwnerController extends Controller
             $condition_stairs = null;
         }
         var_dump($condition_stairs);exit;
-        $material[][] = BasisDecorationService::profitMargin($condition_stairs);
+//        $material[][] = BasisDecorationService::profitMargin($condition_stairs);
 
         //无计算公式
         foreach ($without_assort as $one_without_assort){
