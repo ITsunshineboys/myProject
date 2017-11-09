@@ -1425,20 +1425,21 @@ class MallController extends Controller
             }
         }
 
-        if (YII_DEBUG) {
-            StringService::writeLog('cat_list_admin', $where);
-        }
-
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
 
+        $total = (int)GoodsCategory::find()->where($where)->asArray()->count();
+        if (YII_DEBUG) {
+            $logFile = $total == 0 ? 'cat_list_admin_zero' : 'cat_list_admin';
+            StringService::writeLog($logFile, $where);
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
                 'category_list_admin' => [
-                    'total' => (int)GoodsCategory::find()->where($where)->asArray()->count(),
-                    'details' => GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy)
+                    'total' => $total,
+                    'details' => $total > 0 ? GoodsCategory::pagination($where, GoodsCategory::$adminFields, $page, $size, $orderBy) : []
                 ]
             ],
         ]);
