@@ -37,6 +37,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\db\Query;
+use yii\log\Logger;
 
 class MallController extends Controller
 {
@@ -1431,7 +1432,7 @@ class MallController extends Controller
         $total = (int)GoodsCategory::find()->where($where)->asArray()->count();
         if (YII_DEBUG) {
             $logFile = $total == 0 ? 'cat_list_admin_zero' : 'cat_list_admin';
-            StringService::writeLog($logFile, $where);
+            StringService::writeLog($logFile, $where, '', Logger::LEVEL_INFO);
         }
         return Json::encode([
             'code' => 200,
