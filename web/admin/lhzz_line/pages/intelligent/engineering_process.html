@@ -41,7 +41,7 @@
                 </li>
             </ul>
         </div>
-        <div class="from-group" ng-class="{'submit':cur_item_project == '木作'}">
+        <div class="from-group" ng-class="{'submit':cur_item_project != '木作'}">
             <button class="remove" type="button" ng-click="get_engineering_process(engineering_process.$valid,engineering_process.$error)">确认</button>
             <button type="button" ng-click="return_engineering()">返回</button>
         </div>
