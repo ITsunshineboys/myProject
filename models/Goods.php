@@ -911,7 +911,7 @@ class Goods extends ActiveRecord
     public static function findByCategory($condition)
     {
         if ($condition) {
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path";
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,supplier.shop_name,goods.cover_image";
             $goods = self::find()
                 ->asArray()
                 ->select($select)
@@ -920,6 +920,7 @@ class Goods extends ActiveRecord
                 ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
                 ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
                 ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+                ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
                 ->where(['gc.title' => $condition])
                 ->all();
 
@@ -955,6 +956,7 @@ class Goods extends ActiveRecord
             ->leftJoin('goods_category as gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
             ->where(['and', ['logistics_district.district_code' => $city], ['in', 'gc.title', $all], ['goods.status' => self::STATUS_ONLINE]])
             ->all();
         return $all_goods;
