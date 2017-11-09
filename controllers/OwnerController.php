@@ -402,8 +402,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        var_dump($workers['univalence']);exit;
+        
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
