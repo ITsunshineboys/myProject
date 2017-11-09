@@ -301,12 +301,18 @@ angular.module("all_controller", ['ngCookies'])
             $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
                 ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
 
+            // 排序请求
             $http({
                 method: 'get',
                 url:'http://test.cdlhzz.cn/mall/category-goods',
                 params:{
                     category_id:+$scope.id,
-                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
+                    "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3'),
+                    platform_price_min:+$scope.price_min*100,
+                    platform_price_max:+$scope.price_max*100,
+                    brand_id:+$scope.check_brand_id,
+                    style_id:+$scope.check_style_id,
+                    series_id:+$scope.check_series_id,
                 }
             }).then(function successCallback(response) {
                 console.log(response);
@@ -333,7 +339,12 @@ angular.module("all_controller", ['ngCookies'])
                 url:'http://test.cdlhzz.cn/mall/category-goods',
                 params:{
                     category_id:+$scope.id,
-                    "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3')
+                    "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3'),
+                    platform_price_min:+$scope.price_min*100,
+                    platform_price_max:+$scope.price_max*100,
+                    brand_id:+$scope.check_brand_id,
+                    style_id:+$scope.check_style_id,
+                    series_id:+$scope.check_series_id,
                 }
             }).then(function successCallback(response) {
                 console.log(response);
@@ -341,7 +352,21 @@ angular.module("all_controller", ['ngCookies'])
             });
         };
 
-
+        // 销量排序
+        $scope.filterSales = function () {
+            $http({
+                method:"get",
+                url:'http://test.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
+                params:{
+                    "sort[]":"sold_number:4"
+                }
+            }).then(function successCallback (response) {
+                console.log(response);
+                $scope.detailsList = response.data.data.category_goods;
+            },function (error) {
+                console.log(error);
+            });
+        };
 
         //风格  系类 品牌 接数据调用
         $http({
@@ -374,6 +399,31 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.show_series = false;
             }
         });
+        // 监听最低价和最高价的值
+        $scope.getBlur = function () {
+            let max = '';
+            if($scope.price_max == '' || $scope.price_min == ''){
+                $scope.price_max = $scope.price_max;
+                $scope.price_min = $scope.price_min;
+            }else {
+                if(+$scope.price_max < +$scope.price_min){
+                    max = $scope.price_max;
+                    $scope.price_max = $scope.price_min;
+                    $scope.price_min = max
+                }
+            }
+        };
+        // $scope.getBlurMax = function () {
+        //     if($scope.price_max > $scope.price_min){
+        //         $scope.price_max = $scope.price_min
+        //     }
+        //     console.log($scope.price_max);
+        //     console.log($scope.price_min);
+        // };
+
+
+
+
 
         $scope.check_style_id = '';
         $scope.check_brand_id = '';
@@ -977,12 +1027,9 @@ angular.module("all_controller", ['ngCookies'])
             let invoiceInfo = JSON.parse(sessionStorage.getItem('invoiceInfo'));
             console.log(invoiceInfo);
             $scope.invoice_id =  invoiceInfo.invoice_id;
-            $scope.invoice_content =  invoiceInfo.invoice_content;
-            $scope.invoicer_card =  invoiceInfo.invoicer_card;
-
+            $scope.invoice_name =  invoiceInfo.invoice_content;
+            $scope.invoice_number =  invoiceInfo.invoicer_card;
         }
-
-
     })
 
     //确认订单
@@ -996,8 +1043,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
         $scope.address_id  = $stateParams.address_id;//地址ID
-        console.log($scope.invoice_id);
-        console.log($scope.supplier_id);
         if($stateParams.show_address !== ''){
             console.log(12345456);
             // $scope.show_address = $stateParams.show_address;
@@ -1102,6 +1147,7 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.numModel = '#harvestNum_modal';
                 $scope.flagContent = '请填写完整信息'
             }
+
             if(rag.test($scope.harvestNum) && !$scope.harvestNum == '' && ! $scope.harvestName == '' && !$scope.harvestAddress == ''){
                 // 添加收货地址
                 $scope.addressCode = document.getElementById("value1").value;
@@ -1129,7 +1175,7 @@ angular.module("all_controller", ['ngCookies'])
             }else {
                 $('#delivery_address').modal('hide');
                 $('#harvestNum_modal').modal('hide');
-                // 获取订单收货信息
+                // 获取订单收货信息地址
                 $http({
                     method: 'get',
                     url: 'http://test.cdlhzz.cn/order/getaddress',
@@ -1137,7 +1183,9 @@ angular.module("all_controller", ['ngCookies'])
                         address_id:+$scope.address_id
                     }
                 }).then(function successCallback(response) {
-                    console.log(response.data.data[0]);
+                    console.log(response);
+                    $scope.adCode = response.data.data[0].adCode;
+                    console.log($scope.adCode);
                     let adressObj = { // 保存
                         show_harvest: true,
                         show_address: false,
@@ -1147,7 +1195,8 @@ angular.module("all_controller", ['ngCookies'])
                         address: response.data.data[0].region,
                         prove:document.getElementById("demo1").value.split('—')[0],
                         prove_city:document.getElementById("demo1").value.split('—')[1],
-                        prove_city_qu:document.getElementById("demo1").value.split('—')[2]
+                        prove_city_qu:document.getElementById("demo1").value.split('—')[2],
+                        adCode:response.data.data[0].adCode
                         // code:document.getElementById("value1").value
 
                     };
@@ -1158,9 +1207,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.mobile = response.data.data[0].mobile;
                     $scope.districtMore = response.data.data[0].district;
                     $scope.regionMore = response.data.data[0].region;
-
-                    console.log($scope.consigneeName);
-                    console.log($scope.mobile)
+                    $scope.adCode = response.data.data[0].adCode;
                 });
             }
         };
@@ -1174,6 +1221,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.mobile = adressInfo.phone;   ///收货人电话
             $scope.districtMore = adressInfo.city; //收货人城市
             $scope.regionMore = adressInfo.address; //收货人地址
+            $scope.adCode   = adressInfo.adCode;
         }
         if (sessionStorage.getItem('shopInfo') != null) {
             //获取 商品信息
@@ -1235,7 +1283,7 @@ angular.module("all_controller", ['ngCookies'])
                 //判断收货地址是否在配送范围内
                 $http.post('http://test.cdlhzz.cn/order/judegaddress',{
                     goods_id:+$scope.mall_id,
-                    districtcode:$scope.districtMore
+                    districtcode:$scope.adCode
                 },config).then(function (response) {
                     // alert(JSON.stringify(response));
                     console.log(response);

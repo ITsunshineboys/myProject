@@ -138,7 +138,7 @@
                         <span>购买数量</span>
                         <div class="input_div">
                             <img ng-click="reduceNumber()" src="images/mall_subtract_reduce.png" class="reduce" alt=""/>
-                            <input class="pic_more" placeholder="1" ng-change="getQuantity()" ng-model="shopNum">
+                            <input class="pic_more" placeholder="1" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*" ng-change="getQuantity()" ng-model="shopNum">
                             <img src="images/mall_add_subtract.png" alt=""/>
                             <img ng-click="addNumber()" src="images/mall_add_box.png" class="add" alt=""/>
                         </div>

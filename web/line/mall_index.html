@@ -49,7 +49,10 @@
                     <!--ui-sref="product_details({id:n.id,title:n.title,description:n.description,-->
                     <!--platform_price:n.platform_price,url:n.url})"-->
                     <a  ng-click="getProduct(n)">
-                        <img src="{{baseUrl + '/'+n.image}}" alt=""/>
+                        <div class="img_box">
+                            <img src="{{baseUrl + '/'+n.image}}" alt=""/>
+                        </div>
+
                         <div class="title2">{{n.title}}</div>
                         <div class="describe2">{{n.description}}</div>
                         <div class="price2">¥ {{n.platform_price}}</div>

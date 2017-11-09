@@ -124,7 +124,7 @@ header div img{
     position: relative;
 }
 
-.more_details ul li span:nth-child(2){
+.more_details ul li>span:nth-child(2){
     color: #959292;
     position: absolute;
     right: 2.2rem;
@@ -132,7 +132,7 @@ header div img{
 .more_details ul li span:nth-child(1){
     margin-left: 1.5rem;
 }
-.show_in span:nth-child(2){
+.show_in>span:nth-child(2){
     position: absolute;
     right: 1.6rem!important;
 }
@@ -402,5 +402,8 @@ header div img{
 }
 .agreement_span{
     color:#3F51B5 ;
+}
+.agreement_span>span+span:before{
+    content: '-';
 }
 

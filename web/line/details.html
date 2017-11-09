@@ -18,7 +18,7 @@
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-            <li >销量优先</li>
+            <li  ng-click="filterSales ()">销量优先</li>
             <li >
                 价格
                 <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png"   ng-click="filterPraise ()" alt=""/>
@@ -28,7 +28,7 @@
                 <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png" ng-click ="filterPicUp ()" alt=""/>
             </li>
             <li>
-                <a href="javascript:void(0);" data-toggle="modal" data-target="#myModal">
+                <a class="font_color" href="javascript:void(0);" data-toggle="modal" data-target="#myModal">
                     筛选
                     <img class="filter_nor" src="images/mall_filter_normal.png" alt=""/>
                 </a>
@@ -111,9 +111,9 @@
                                         <span class="style_size">价格选择</span>
                                     </div>
                                     <div class="price_range">
-                                        <input type="text" placeholder="最低价" ng-model="price_min" maxlength="8"  pattern="[1-9]\d*"/> &nbsp; &nbsp;
+                                        <input type="text" placeholder="最低价" ng-model="price_min" ng-blur="getBlur ()" maxlength="8" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/> &nbsp; &nbsp;
                                         <span> ———</span>
-                                        <input type="text" placeholder="最高价" ng-model="price_max" maxlength="8" pattern="[1-9]\d*"/>
+                                        <input type="text" placeholder="最高价" ng-model="price_max" ng-blur="getBlur ()"maxlength="8" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/>
                                     </div>
 
 
