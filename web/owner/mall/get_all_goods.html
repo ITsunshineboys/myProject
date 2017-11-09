@@ -2,12 +2,17 @@
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-            <li ng-click="sort('comment_number')" >销量优先</li>
-            <li ng-click="sort('platform_price')">价格
-                <img src="images/down_arrow.png" alt="">
+            <li ng-click="sort('sold_number')" ng-class="{'filter_color':(platform_status == 0&&rate_status == 0)}">销量优先</li>
+            <li ng-click="sort('platform_price')" ng-class="{'filter_color':(platform_status != 0&&rate_status == 0)}">价格
+                <img src="images/down.png" alt="" ng-if="platform_status == 1">
+                <img src="images/up.png" alt="" ng-if="platform_status == 2">
+                <img src="images/no_color.png" alt="" ng-if="platform_status == 0">
             </li>
-            <li ng-click="sort('favourable_comment_rate')">好评率
-                <img src="images/down_arrow.png" alt=""></li>
+            <li ng-click="sort('favourable_comment_rate')" ng-class="{'filter_color':(platform_status == 0&&rate_status != 0)}">好评率
+                <img src="images/down.png" alt="" ng-if="rate_status == 1">
+                <img src="images/up.png" alt="" ng-if="rate_status == 2">
+                <img src="images/no_color.png" alt="" ng-if="rate_status == 0">
+            </li>
             <li data-toggle="modal" data-target="#myModal8">筛选
                 <img src="images/filter.png" alt="">
             </li>
@@ -102,7 +107,7 @@
                                     </div>
                                     <div class="well">
                                         <ul>
-                                            <li ng-repeat="item in all_goods_brands.splice(0,6) ">
+                                            <li ng-repeat="item in all_goods_brands ">
                                                 {{item.name}}
                                             </li>
                                         </ul>

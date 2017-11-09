@@ -51,6 +51,8 @@ angular.module('all_controller',[])
         $scope.cur_project = 0//0为基础装修 1为主要材料 2是其他材料 3三级分类页
         $scope.cur_operate = '编辑'//其他材料编辑两种状态 编辑/完成
         $scope.is_delete_btn = false //切换编辑状态
+        $scope.platform_status = 0//价格状态
+        $scope.rate_status = 0
         if(!!sessionStorage.getItem('materials')){
             $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
             console.log($scope.all_goods)
@@ -328,7 +330,8 @@ angular.module('all_controller',[])
                 params: {
                     category_id: $scope.cur_three_id,
                     style_id: $scope.cur_goods_detail.style_id,
-                    series_id: $scope.cur_goods_detail.series_id
+                    series_id: $scope.cur_goods_detail.series_id,
+                    'sort[]':'sold_number:3'
                 }
             }).then(function (response) {
                 console.log(response)
@@ -672,6 +675,7 @@ angular.module('all_controller',[])
             $http.get(baseUrl+'/mall/category-goods', {
                 params: {
                     category_id: item.id,
+                    'sort[]':'sold_number:3'
                 }
             }).then(function (response) {
                 console.log(response)
@@ -718,6 +722,60 @@ angular.module('all_controller',[])
                     $state.go('nodata.all_goods')
                 }, 300)
             }, function (error) {
+                console.log(error)
+            })
+        }
+        //商品排序
+        $scope.sort = function (str) {
+            console.log($scope.platform_status)
+            if(str == 'sold_number'){
+                $scope.platform_status = 0
+                $scope.rate_status = 0
+            }else if(str == 'platform_price'){
+                if($scope.platform_status == 0||$scope.platform_status == 2){
+                    $scope.platform_status = 1
+                }else if($scope.platform_status == 1){
+                    $scope.platform_status = 2
+                }
+                $scope.rate_status = 0
+            }else if(str == 'favourable_comment_rate'){
+                if($scope.rate_status == 0||$scope.rate_status == 2){
+                    $scope.rate_status = 1
+                }else if($scope.rate_status == 1){
+                    $scope.rate_status = 2
+                }
+                $scope.platform_status = 0
+            }
+            $http.get(baseUrl+'/mall/category-goods', {
+                params: {
+                    category_id: $scope.cur_three_id,
+                    'sort[]':str+($scope.platform_status==0?($scope.rate_status==0?'':($scope.rate_status==1?':3':':4')):($scope.platform_status==1?':3':':4'))
+                }
+            }).then(function (res) {
+                console.log(res)
+                $scope.cur_replace_material = []
+                for (let [key, value] of res.data.data.category_goods.entries()) {
+                    $scope.cur_replace_material.push({
+                        id: value.id,
+                        image: value.cover_image,
+                        cost: +value.platform_price,
+                        // name: $scope.cur_goods_detail.name,
+                        favourable_comment_rate: value.favourable_comment_rate,
+                        sold_number: value.sold_number,
+                        platform_price: value.platform_price,
+                        profit_rate: value.profit_rate,
+                        purchase_price_decoration_company: value.purchase_price_decoration_company,
+                        quantity: 1,
+                        // path:item.path,
+                        // series_id: $scope.cur_goods_detail.series_id,
+                        // style_id: $scope.cur_goods_detail.style_id,
+                        subtitle: value.subtitle,
+                        supplier_price: value.supplier_price,
+                        title: value.title
+                        // shop_name: value.shop_name
+                    })
+                }
+            },function (error) {
                 console.log(error)
             })
         }
