@@ -4078,29 +4078,23 @@ class OrderController extends Controller
 
 
 
-           public function  actionFindOpenId()
+   public function  actionFindOpenId()
             {
-        //        $code = $_GET["code"];
-        //        if (!$code)
-        //        {
-        //            $code=1000;
-        //            return Json::encode([
-        //                'code' => $code,
-        //                'msg'  => Yii::$app->params['errorCodes'][$code]
-        //            ]);
-        //        }
-        //
-        //        $openid = $tools->getOpenidFromMp($code);
-        //        return Json::encode([
-        //            'code' => 200,
-        //            'msg'  => 'ok',
-        //            'data' =>$openid
-        //        ]);
 
+
+                $url=Yii::$app->request->post('url','');
+                if(!$url)
+                {
+                                $code=1000;
+                                return Json::encode([
+                                    'code' => $code,
+                                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                                ]);
+                }
                 $tools = new PayService();
                 if (!isset($_GET['code'])){
                     //触发微信返回code码
-                     $baseUrl = urlencode('http://test.cdlhzz.cn/owner/mall/index.html#!/nodata/nodata_house_list');
+                    $baseUrl = urlencode($url);
                     $url = $tools->__CreateOauthUrlForCode($baseUrl);
                     $code=200;
                     return Json::encode([
