@@ -28,6 +28,7 @@ class WorkerController extends Controller
     const VIEWS_PARENT=0;
     const STATUS_JDED=2;
     const SITE_STATUS=[2,3,4,5];
+    const SITE_STATUS_WORKER=[0,4,5];
     /**
      * @inheritdoc
      */
@@ -195,13 +196,13 @@ class WorkerController extends Controller
         }
 
         $request = \Yii::$app->request;
-        //智管工地 status (3,4,5)
-        $status = (int)$request->get('status',self::STATUS_ALL);
+        //智管工地 status (0,4,5)
+        $status = (int)$request->get('status',self::SITE_STATUS_WORKER);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         if ($status
             && $status != self::STATUS_ALL
-            && !array_key_exists($status, WorkerOrder::WORKER_ORDER_STATUS)
+            && !array_key_exists($status, WorkerOrder::USER_WORKER_ORDER_STATUS)
         ) {
             $code = 1000;
             return Json::encode([
@@ -312,7 +313,7 @@ class WorkerController extends Controller
         }
 
         $request = \Yii::$app->request;
-        //工程订单-业主 status=(1,2,5,6)
+        //工程订单-业主 status=(all 除了3)
         $status = (int)$request->get('status', self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);

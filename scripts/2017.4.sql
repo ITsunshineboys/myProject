@@ -1184,7 +1184,7 @@ CREATE TABLE `worker_order` (
   `con_tel` char(11) NOT NULL COMMENT '联系电话',
   `amount` bigint(20) NOT NULL DEFAULT '0' COMMENT '订单总金额',
   `front_money` bigint(20) NOT NULL DEFAULT '0' COMMENT '订金',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:未开始 1:接单中 2:已接单 3:施工中 4:已完工 5:已取消',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0:未开始 1:接单中 2:已接单 3:申请开工(已接单) 4:施工中 5:已完工 6:已取消',
   `describe` varchar(350) NOT NULL DEFAULT '' COMMENT '订单描述',
   `demand` varchar(300) NOT NULL DEFAULT '' COMMENT '个性需求',
   `reason` varchar(350) NOT NULL DEFAULT '' COMMENT '修改原因',
@@ -1546,7 +1546,7 @@ CREATE TABLE `chat_record` (
   `content` varchar(255) NOT NULL COMMENT '内容',
   `send_time` int(11) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
-  `length` int(11) NOT NULL DEFAULT '0' COMMENT '语音 视频长度',
+
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未读 1:已读',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
