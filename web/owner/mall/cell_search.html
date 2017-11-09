@@ -12,7 +12,7 @@
         <div class="have_data" ng-if="search_data.length">
             <ul class="cell_ul">
                 <li ng-repeat="item in search_data">
-                    <a ui-sref="modelRoom({region_code: item.district_code, toponymy: item.toponymy, street: item.street})">
+                    <a ui-sref="modelRoom({roomCode: item.district_code, toponymy: item.toponymy, street: item.street})">
                     <span class="first_fru">{{item.toponymy}}</span><br/>
                     <span class="second_fru">{{item.site_particulars}}</span>
                     </a>
