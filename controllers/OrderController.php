@@ -4070,15 +4070,20 @@ class OrderController extends Controller
          * 获取openID1-微信
          * @return string
          */
-         public function actionGetOpenId()
+            public function actionGetOpenId()
             {
-                $tools = new PayService();
-                $data=$tools->FindOpenId();
-                return Json::encode([
-                    'code' => 200,
-                    'msg'  => 'ok',
-                    'data' =>$data
-                ]);
+                if (!isset($_GET['code'])){
+                    //触发微信返回code码
+                    $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+                    $url = $this->__CreateOauthUrlForCode($baseUrl);
+                    Header("Location: $url");
+                    exit();
+                } else {
+                    //获取code码，以获取openid
+                    $code = $_GET['code'];
+//                    $openid = $this->getOpenidFromMp($code);
+                    return $code;
+                }
             }
 
 
