@@ -1,19 +1,19 @@
 <section>
     <!--小区信息-->
-    <form name="area_news" novalidate ng-submit="get_goods(area_news.$valid)">
+    <form name="area_news" novalidate ng-submit="get_goods(area_news.$valid,area_news.$error.required)">
         <div class="quarters_small">
             <div class="shu"></div>
             <p>小区信息</p>
             <span class="choose_quarter">小区选择</span>
             <a ng-click="go_search()">
                 <img src="images/mall_searchbar.png" width="40px" height="40px" class="seachr" alt="">
-                <input type="text" name="toponymy" required placeholder="请输入小区"
+                <input type="text" name="toponymy" id="toponymy" required placeholder="请输入小区"
                        ng-blur="change1=area_news.toponymy.$invalid" class="seach" ng-model="ctrlScope.toponymy"/><br/>
             </a>
             <p class="error_tips" ng-if="area_news.toponymy.$invalid&&(submitted||change1)">请输入小区名称</p>
             <div class="address_content">
                 <p class="quarters_adress">小区地址</p>
-                <textarea class="text_all" required rows="3" name="message" cols="44" placeholder="例：金牛区沙西线66号"
+                <textarea class="text_all" required rows="3" id="message" name="message" cols="44" placeholder="例：金牛区沙西线66号"
                           ng-model="ctrlScope.message" maxlength="45" ng-blur="change2=area_news.message.$invalid">
                 </textarea>
                 <span class="text_all_length">{{message.length}}/45</span>
@@ -30,7 +30,7 @@
                 <div class="shu_house_2"></div>
                 <h1>房屋信息</h1>
                 <span class="house_span">房屋面积</span>
-                <input type="number" required placeholder="请输入1-180的面积" name="area" style="color: #4a4a4a;" maxlength="8"
+                <input type="number" required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
                        ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
                         ng-model="area"/>
 
@@ -135,7 +135,7 @@
             <!--飘窗-->
             <div class="bay_window">
                 <span class="bay_span">飘窗</span>
-                <input type="text" required placeholder="0" name="window" ng-pattern="/^(([0-9]|1[0-9])(.\d{1,2})?|20(.00)?)$/"
+                <input type="text" required placeholder="0" id="window" name="window" ng-pattern="/^(([0-9]|1[0-9])(.\d{1,2})?|20(.00)?)$/"
                        ng-blur="change4=area_news.window.$invalid" class="input_windin" maxlength="6"
                        ng-model="window"/>
                 <span class="bay_square">m</span>

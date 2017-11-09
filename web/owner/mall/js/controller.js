@@ -8,7 +8,7 @@ angular.module('all_controller',[])
             console.log(error)
         })
     })
-    .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams) {
+    .controller('nodata_ctrl', function ($q,$scope, $http, $state,$rootScope,$timeout,$stateParams,$anchorScroll,$location,$window) {
         $scope.ctrlScope = $scope
         //post请求配置
         let config = {
@@ -780,7 +780,8 @@ angular.module('all_controller',[])
             })
         }
         //无资料计算
-        $scope.get_goods = function (valid) {
+        $scope.get_goods = function (valid,error) {
+            console.log(error)
             if (valid) {
                 let data = {
                     bedroom: $scope.house_bedroom,//卧室
@@ -1650,6 +1651,15 @@ angular.module('all_controller',[])
 
             } else {
                 $scope.submitted = true
+                for (let [key, value] of error.entries()) {
+                    if (value.$invalid) {
+                        $anchorScroll.yOffset = 300
+                        $location.hash(value.$name)
+                        $anchorScroll()
+                        $window.document.getElementById(value.$name).focus()
+                        break
+                    }
+                }
             }
         }
         //获取价格
