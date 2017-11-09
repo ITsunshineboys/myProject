@@ -351,6 +351,7 @@ class WorkerController extends Controller
         $request = \Yii::$app->request;
 
         $order_id = (int)$request->get('order_id', 0);
+
         if (!$order_id) {
             $code = 1000;
             return Json::encode([
@@ -801,7 +802,7 @@ class WorkerController extends Controller
      */
     public function actionCancelOrder()
     {
-        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_CANCELED);
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_NO);
     }
 
     /**
@@ -811,7 +812,7 @@ class WorkerController extends Controller
      */
     public function actionAcceptOrder()
     {
-        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_PREPARE);
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_READY);
     }
 
     /**
@@ -821,7 +822,7 @@ class WorkerController extends Controller
      */
     public function actionReadyOrder()
     {
-        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_READY);
+        return self::changeOrderStatus(WorkerOrder::WORKER_WORKS_AFTER);
     }
 
     /**
@@ -831,7 +832,7 @@ class WorkerController extends Controller
      */
     public function actionBeginOrder()
     {
-        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_ING);
+        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_NOT_BEGIN);
     }
 
 

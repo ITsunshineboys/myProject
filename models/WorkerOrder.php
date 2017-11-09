@@ -257,7 +257,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
         } else {
             $order = self::find()
-                ->select('id,uid,worker_type_id,worker_id,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location')
+                ->select('id,uid,order_no,worker_type_id,worker_id,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location')
                 ->where(['id' => $order_id])
                 ->one();
             if (!$order) {
@@ -272,8 +272,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function MudorderView($order_id){
-        $mud_item_data=MudWorkerOrder::find()->asArray()->where(['order_id'=>$order_id])->all();
+    public static function MudorderView($order_no){
+        $mud_item_data=MudWorkerOrder::find()->asArray()->where(['order_no'=>$order_no])->all();
 
         foreach ($mud_item_data as &$mud_item){
             $mud_item['worker_item']=WorkerItem::find()
@@ -306,8 +306,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function WaterprooforderView($order_id){
-        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_id'=>$order_id])->all();
+    public static function WaterprooforderView($order_no){
+        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_no'=>$order_no])->all();
         foreach ($water_item_data as &$water_item){
             $water_item['worker_item']=WorkerItem::find()
                 ->where(['id'=>$water_item['worker_item_id']])
@@ -334,16 +334,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         $worker_type_id = $order->worker_type_id;
         $type=WorkerType::getparenttype($worker_type_id);
-
         switch ($type){
             case '泥工':
-                $data=self::MudorderView($order->id);
+                $data=self::MudorderView($order->order_no);
                 break;
             case '防水工':
-                $data=self::WaterprooforderView($order->id);
+                $data=self::WaterprooforderView($order->order_no);
                 break;
             case '油漆工':
-                $data=self::painterorderView($order->id);
+                $data=self::painterorderView($order->order_no);
         }
 
 //        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
@@ -487,21 +486,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->where(['id' => $order->worker_id])
                 ->asArray()
                 ->one();
-            //工人特长
-//            $skill_ids = $worker['skill_ids'];
-//            $skills = [];
-//            if ($skill_ids) {
-//                $skill_ids = explode(',', $skill_ids);
-//                $skill_all = WorkerSkill::find()
-//                    ->where(['id' => $skill_ids])->all();
-//
-//                foreach ($skill_all as $skill) {
-//                    $skills[] = $skill['skill'];
-//                }
-//            }
-//            unset($worker['skill_ids']);
-//            $worker['skills'] = $skills;
-
             $worker['mobile'] = User::find()
                 ->select('mobile')
                 ->where(['id' => $worker['uid']])
@@ -520,30 +504,27 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     $worker['info']='工人申请开工';
                     break;
                 case 4:
-                    $worker['info']='你已同意开工';
-                    break;
-                case 5:
                     $worker['info']='工人施工中';
                     break;
-                case 6:
+                case 5:
                     $worker['info']='工人已完成';
                     break;
             }
             $worker=array_merge($worker,$rank);
 
 
-        }elseif($order->status==0){
+        }elseif($order->status==6){
             $worker['info']='你已取消订单';
         }elseif($order->status==1){
             $worker['info']='等待工人接单中';
         }
 
         $order_no = self::getOrderNoById($order_id);
-        $works_id = 0;
-        if ($order->status == self::WORKER_ORDER_DONE) {
-            //得到worker_works_id
-            $works_id = self::getWorksIdByOrderNo($order_no);
-        }
+//        $works_id = 0;
+//        if ($order->status == self::WORKER_ORDER_DONE) {
+//            //得到worker_works_id
+//            $works_id = self::getWorksIdByOrderNo($order_no);
+//        }
         $order_img = self::getOrderImg($order_no);
         $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
 
@@ -552,7 +533,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'worker_items' => $worker_items,
             'order_img' => $order_img,
             'worker' => $worker,
-            'works_id' => $works_id
         ];
     }
     /**
@@ -686,7 +666,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     ->where(['uid'=>$uid])
                     ->one();
                 $data['view']['time']=date('Y-m-d',time());
-                $data['view']['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $data['view']['status']=self::USER_WORKER_ORDER_STATUS[$worker_order['status']];
                 $data['view']['worker_info']=$worker_info;
                 $work_result['result']=self::worksresult($order_no,$worker_info);
             }else{
@@ -707,7 +687,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     ->asArray()
                     ->where(['uid' => $uid])
                     ->one();
-                $data['view']['status'] = self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $data['view']['status'] = self::USER_WORKER_ORDER_STATUS[$worker_order['status']];
                $work_result['result']=self::worksresult($order_no,$worker_info);
             }
         }
