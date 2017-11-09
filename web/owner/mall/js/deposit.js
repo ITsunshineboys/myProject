@@ -1,4 +1,4 @@
-app.controller('depositCtrl', ['$scope', '$state', '_ajax', function ($rootScope, $scope, $state, _ajax) {
+app.controller('depositCtrl', ['$rootScope', '$scope', '$state', '_ajax', function ($rootScope, $scope, $state, _ajax) {
     let payParams = JSON.parse(sessionStorage.getItem('payParams'));
     console.log(payParams, '请求参数');
     $scope.isShow = false;
