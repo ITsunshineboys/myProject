@@ -4076,44 +4076,50 @@ class OrderController extends Controller
                 ]);
             }
 
-           /**
-         * 获取openID2-微信
-         * @return string
-         */
-    public function  actionFindOpenId()
-    {
 
-//        $code = $_GET["code"];
-//        if (!$code)
-//        {
-//            $code=1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg'  => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//
-//        $openid = $tools->getOpenidFromMp($code);
-//        return Json::encode([
-//            'code' => 200,
-//            'msg'  => 'ok',
-//            'data' =>$openid
-//        ]);
+            
+           public function  actionFindOpenId()
+            {
+        //        $code = $_GET["code"];
+        //        if (!$code)
+        //        {
+        //            $code=1000;
+        //            return Json::encode([
+        //                'code' => $code,
+        //                'msg'  => Yii::$app->params['errorCodes'][$code]
+        //            ]);
+        //        }
+        //
+        //        $openid = $tools->getOpenidFromMp($code);
+        //        return Json::encode([
+        //            'code' => 200,
+        //            'msg'  => 'ok',
+        //            'data' =>$openid
+        //        ]);
 
-        $tools = new PayService();
-        if (!isset($_GET['code'])){
-            //触发微信返回code码
-            $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
-            $url = $tools->__CreateOauthUrlForCode($baseUrl);
-            Header("Location: $url");
-            exit();
-        } else {
-            //获取code码，以获取openid
-            $code = $_GET['code'];
-            $openid = $tools->getOpenidFromMp($code);
-            return $openid;
-        }
-    }
+                $tools = new PayService();
+                if (!isset($_GET['code'])){
+                    //触发微信返回code码
+                    $baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+                    $url = $tools->__CreateOauthUrlForCode($baseUrl);
+                    $code=200;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => 'ok',
+                        'data' =>$url
+                    ]);
+                } else {
+                    //获取code码，以获取openid
+                    $code = $_GET['code'];
+                    $openid = $tools->getOpenidFromMp($code);
+                    $code=200;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => 'ok',
+                        'data' =>$openid
+                    ]);
+                }
+            }
  
         /**
          * 提醒发货接口
