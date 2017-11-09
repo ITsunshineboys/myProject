@@ -29,19 +29,19 @@
             <input type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)}" ng-blur="des_blur=!!form.des_name.$error"/>
             <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
         </div>
-            <div class="class_name" ng-if="detail_brand!=''">
+            <div class="class_name" ng-if="brands_arr.length>0">
                 <span>选择品牌</span>
                 <select ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr">
                 </select>
             </div>
             <!--选择系列-->
-            <div class="class_name" ng-if="detail_ser!=''">
+            <div class="class_name" ng-if="series_arr.length>0">
                 <span>选择系列</span>
                 <select ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr">
                 </select>
             </div>
             <!--选择风格-->
-            <div class="class_name" ng-if="detail_style!=''">
+            <div class="class_name" ng-if="styles_arr.length>0">
                 <span>选择风格</span>
                 <select ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr">
                 </select>
@@ -162,7 +162,7 @@
             <span style="color:#E84E40;margin-left:85px" ng-if="logistics_null==true">*物流模板为空，请先添加物流模板</span>
             <select ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics">
             </select>
-            <p style="color:#E84E40;margin:10px 0 0 145px" ng-if="logistics_red==true">*此物流模板已被删除，请选择新的模板</p>
+            <p style="color:#E84E40;margin:10px 0 0 145px" ng-if="logistics_red==true">*上一个物流模板已被删除，请选择新的模板</p>
             <div class="template_div" ng-if="logistics_status==true">
                 <span class="margin_r">快递方式</span>
                 <span>{{logistics_method}}</span>
