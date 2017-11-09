@@ -590,7 +590,6 @@ class OrderController extends Controller
         $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
         if ($iscorrect_money!=true)
         {
-            echo 1;exit;
             $c=1000;
             return Json::encode([
                 'code' =>  $c,
