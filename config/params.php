@@ -151,6 +151,18 @@ return [
             'templateId' => 'SMS_92765021',
             'signName' => '修改手机号验证码',
         ],
+        'gotOrder' => [
+            'templateId' => 'SMS_109425248',
+            'signName' => '收到订单',
+        ],
+        'homeDelivery' => [
+            'templateId' => 'SMS_109420262',
+            'signName' => '送货上门',
+        ],
+        'courierDelivery' => [
+            'templateId' => 'SMS_109345282',
+            'signName' => '快递发货',
+        ],
     ],
     'timeTypes' => [
         'all' => '全部时间',
