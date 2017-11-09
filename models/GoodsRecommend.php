@@ -315,6 +315,7 @@ class GoodsRecommend extends ActiveRecord
                         $recommend['market_price'] = $goods->market_price;
                         $recommend['supplier_price'] = $goods->supplier_price;
                         $recommend['left_number'] = $goods->left_number;
+                        $recommend['goods_status'] = $goods->status;
                     }
                 }
             }
