@@ -6,6 +6,7 @@ use app\models\Addressadd;
 use app\models\CommentImage;
 use app\models\CommentReply;
 use app\models\EffectEarnst;
+use app\models\Effect;
 use app\models\GoodsComment;
 use app\models\GoodsAttr;
 use app\models\GoodsBrand;
