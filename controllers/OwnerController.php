@@ -325,6 +325,10 @@ class OwnerController extends Controller
             ]);
         }
 
+
+        var_dump($points['count']);
+        var_dump($workers['univalence']);
+        var_dump($worker_kind_details['quantity']);
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
         $a = BasisDecorationService::L($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
