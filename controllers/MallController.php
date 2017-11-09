@@ -603,6 +603,7 @@ class MallController extends Controller
 
         $recommend->delete_time = time();
         if (!$recommend->save()) {
+            StringService::writeLog(GoodsRecommend::tableName(), $recommend->id);
             $code = 500;
             return Json::encode([
                 'code' => $code,
