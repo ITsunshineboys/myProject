@@ -32,7 +32,7 @@
     font-size: 0.9rem;
     border-radius: 1.2rem;
     position: absolute;
-    top: 0.85rem;
+    top: 0.87rem;
     left:5rem;
     padding-left: 2.5rem;
     background-image: url("../images/mall_popup_search.png");
@@ -349,4 +349,16 @@ Pagination Styles
     margin-top: 0.4em;
     color:#D9AD65;
 }
+.swiper-pagination-bullet {
+    width: .8rem;
+    height: .8rem;
+    display: inline-block;
+    border-radius: 100%;
+    background: #8c8c8c;
+    opacity: .2;
+}
 
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #D9AD65;
+}
