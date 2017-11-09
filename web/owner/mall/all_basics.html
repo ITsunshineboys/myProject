@@ -24,27 +24,27 @@
                     <ul class="wall_ul">
                         <li>
                             <span class="check_word">12墙拆除</span>
-                            <input type="text" name="twelve_dismantle" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_span" ng-model="ctrlScope.twelve_dismantle"/>
+                            <input type="text" name="twelve_dismantle" maxlength="8" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_span" ng-model="ctrlScope.twelve_dismantle"/>
                             <span class="handyman_sec">m <sup>2</sup></span>
                             <p class="error_tips" ng-if="handyman_options.twelve_dismantle.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
                         </li>
                         <li>
                             <span class="check_word">24墙拆除</span>
-                            <input type="text" name="twenty_four_dismantle" placeholder="请输入数值" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                            <input type="text" name="twenty_four_dismantle" maxlength="8" placeholder="请输入数值" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
                                    ng-model="ctrlScope.twenty_four_dismantle"/>
                             <span class="handyman_sec">m <sup>2</sup></span>
                             <p class="error_tips" ng-if="handyman_options.twenty_four_dismantle.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
                         </li>
                         <li>
                             <span class="check_word" id="bulan">补烂</span>
-                            <input type="text" name="repair" placeholder="请输入数值" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" ng-model="ctrlScope.repair"/>
+                            <input type="text" name="repair" placeholder="请输入数值" maxlength="8" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" ng-model="ctrlScope.repair"/>
                             <span class="handyman_sec">m&nbsp;&ensp;</span>
                             <p class="error_tips" ng-if="handyman_options.repair.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
                         </li>
                         <li>
                             <span class="check_word">12墙新建</span>
                             <span class="two-sided">(含双面抹灰)</span>
-                            <input type="text" name="twelve_new_construction" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_input"
+                            <input type="text" name="twelve_new_construction" maxlength="8" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_input"
                                    ng-model="ctrlScope.twelve_new_construction"/>
                             <span class="handyman_sec">m <sup>2</sup></span>
                             <p class="error_tips big_error" ng-if="handyman_options.twelve_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
@@ -52,7 +52,7 @@
                         <li>
                             <span class="check_word">24墙新建</span>
                             <span class="two-sided">(含双面抹灰)</span>
-                            <input type="text" name="twenty_four_new_construction" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_input"
+                            <input type="text" name="twenty_four_new_construction" maxlength="8" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_input"
                                    ng-model="ctrlScope.twenty_four_new_construction"/>
                             <span class="handyman_sec">m <sup>2</sup></span>
                             <p class="error_tips big_error" ng-if="handyman_options.twenty_four_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>

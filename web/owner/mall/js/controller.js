@@ -31,7 +31,7 @@ angular.module('all_controller',[])
         $scope.highCrtl = 2.8//层高
         $scope.window = 0//飘窗
         $scope.choose_stairs = 0 //有无楼梯，默认无楼梯
-        $scope.nowStairs = 0//楼梯结构,，默认无楼梯结构
+        $scope.nowStairs = {'id':0,'attribute':''}//楼梯结构,，默认无楼梯结构
         $scope.have_header = true//有无头部
         $scope.all_goods = []//生成材料
         $scope.all_workers = []//工种以及费用
@@ -58,6 +58,7 @@ angular.module('all_controller',[])
             console.log($scope.all_goods)
             for(let [key,value] of $scope.all_goods.entries()){
                 value['cost'] = value['totalMoney']
+                value['count'] = value.goods.length
             }
             if($rootScope.curState_name == 'nodata.basics_decoration'){
                 $scope.cur_item = $scope.all_goods[0]
@@ -95,7 +96,7 @@ angular.module('all_controller',[])
         }
         //切换楼梯结构
         $scope.toggleStairs = function (item) {
-            $scope.nowStairs = +item.id
+            $scope.nowStairs = item
         }
         //切换系列
         $scope.toggleSeries = function (item) {
@@ -738,7 +739,7 @@ angular.module('all_controller',[])
                     province: 510000,   //省编码
                     city: 510100,      // 市编码
                     stairway_id: $scope.choose_stairs,//有无楼梯
-                    stairs: $scope.nowStairs//楼梯结构
+                    stairs: $scope.nowStairs.attribute//楼梯结构
                 }
                 let data1 = angular.copy(data)
                 $scope.all_goods = angular.copy($scope.stair)
@@ -2070,7 +2071,7 @@ angular.module('all_controller',[])
                 style:$scope.cur_style.id,//风格
                 street:$scope.message,//小区地址
                 stairway:$scope.choose_stairs,//是否有楼梯
-                stair_id:$scope.nowStairs,//楼梯结构
+                stair_id:$scope.nowStairs.id,//楼梯结构
                 original_price:$scope.all_price,//原价
                 sale_price:$scope.discount_price//折扣价
             }

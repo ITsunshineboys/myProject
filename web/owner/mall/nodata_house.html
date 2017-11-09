@@ -146,13 +146,13 @@
             <!--楼梯有无-->
             <div class="choose_stairs">
                 <span class="choose_span">楼梯选择</span>
-                <label ng-click="ctrlScope.choose_stairs = 1;ctrlScope.nowStairs = 1">
+                <label ng-click="ctrlScope.choose_stairs = 1;ctrlScope.nowStairs = stairs_details[0]">
                     <input type="radio" ng-checked="choose_stairs==1" name="have_stairs"/>
                     <span></span>
                     <span class="have">有</span>
                     <img id='img_size_1' src="images/mall_list_radio.png" alt=""/>
                 </label>
-                <label ng-click="ctrlScope.choose_stairs = 0;ctrlScope.nowStairs = 0">
+                <label ng-click="ctrlScope.choose_stairs = 0;ctrlScope.nowStairs = {'id':0,'attribute':''}">
                     <input type="radio" ng-checked="choose_stairs == 0" name="have_stairs"/>
                     <span></span>
                     <span class="no">无</span>
@@ -165,7 +165,7 @@
                 <ul>
                     <li ng-repeat="item in stairs_details" ng-click="toggleStairs(item)">
                         <label ng-click="">
-                            <input type="radio" name="stairs" ng-checked="nowStairs==+item.id"/>
+                            <input type="radio" name="stairs" ng-checked="ctrlScope.nowStairs.id==+item.id"/>
                             <span></span>
                             <span>{{item.attribute}}</span>
                             <img src="images/mall_list_radio.png" alt=""/>

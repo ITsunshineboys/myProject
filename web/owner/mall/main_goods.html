@@ -25,7 +25,7 @@
             <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
             <button ng-click="save()">保存</button>
         </div>
-        <div class="footer_fill"></div>
+        <div class="footer_fill" ng-show="cur_item.count>6"></div>
 
 
         <!-- Modal -->
