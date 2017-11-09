@@ -280,3 +280,17 @@ hr{
     margin-left: 87px;
 }
 
+
+.default_company_type span:last-child{
+    margin-left: 60px;
+}
+
+.default_cla_pic{
+    margin-top: 24px;
+}
+
+.default_cla_pic img{
+    vertical-align: top;
+    margin-left: 20px;
+}
+
