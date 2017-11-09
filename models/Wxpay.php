@@ -103,7 +103,7 @@ class Wxpay  extends ActiveRecord
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            return  $jsApiParameters;
+            return  Json::decode($jsApiParameters);
         }
 
 
@@ -119,7 +119,6 @@ class Wxpay  extends ActiveRecord
         //、获取用户openid
         $tools = new PayService();
         $openId=$tools->GetOpenid();
-       var_dump($openId);exit;
         //②、统一下单
         $input = new WxPayUnifiedOrder();
         $attach='123';
@@ -135,7 +134,6 @@ class Wxpay  extends ActiveRecord
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
-        var_dump($jsApiParameters);exit;
 //        return $jsApiParameters;
         echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
  function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://test.cdlhzz.cn/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://test.cdlhzz.cn/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='http://test.cdlhzz.cn/line/#!/order_commodity';};});}
