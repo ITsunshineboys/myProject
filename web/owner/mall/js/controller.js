@@ -3,7 +3,7 @@ angular.module('all_controller',[])
         // 微信事宜
         $rootScope.isWxOpen = false;
         _ajax.get(baseUrl + '/order/iswxlogin', "", function (res) {
-            if (res.msg === "微信内打开") {
+            if (res.code === 200) {
                 $rootScope.isWxOpen = true;
                 if (getUrlParams('code') === "" && sessionStorage.getItem("code") === null) {
                     let url = location.href;
