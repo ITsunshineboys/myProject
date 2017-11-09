@@ -559,13 +559,17 @@ angular.module('all_controller',[])
                 $scope.have_header = false
                 $rootScope.fromState_name = 'home'
             }
-            $rootScope.goPrev()
+            if(!!sessionStorage.getItem('huxingParams')){
+                $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
+            }else{
+                $rootScope.goPrev()
+            }
         }
         //直接返回
-        $scope.returnIntelligent = function () {
-           $scope.all_goods = $scope.cur_all_goods
-            $state.go('nodata.house_list')
-        }
+        // $scope.returnIntelligent = function () {
+        //    $scope.all_goods = $scope.cur_all_goods
+        //     $state.go('nodata.house_list')
+        // }
         // 保存返回
         $scope.save = function () {
             console.log($scope.all_goods)
@@ -611,7 +615,7 @@ angular.module('all_controller',[])
                 }
                 console.log(arr)
                 sessionStorage.setItem('materials',JSON.stringify(arr))
-                $state.go('modelRoom')
+                $state.go('modelRoom',JSON.parse(sessionStorage.getItem('huxingParams')))
             }else{
                 $state.go('nodata.house_list')
             }
@@ -1690,7 +1694,11 @@ angular.module('all_controller',[])
         $scope.cancel = function () {
             $scope.toponymy = $scope.cur_toponymy
             $scope.have_header = true
-            $rootScope.goPrev()
+            if(!!sessionStorage.getItem('huxingParams')){
+                $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
+            }else{
+                $rootScope.goPrev()
+            }
         }
         // 跳转到无资料
         $scope.go_nodata = function () {
@@ -2038,7 +2046,9 @@ angular.module('all_controller',[])
                             }
                             console.log(arr)
                             sessionStorage.setItem('materials',JSON.stringify(arr))
-                        $state.go('modelRoom')
+                        if(!!sessionStorage.getItem('huxingParams')){
+                            $state.go('modelRoom',JSON.parse(sessionStorage.getItem('huxingParams')))
+                        }
                     }else{
                         $scope.cur_header = '智能报价'
                         get_all_price()

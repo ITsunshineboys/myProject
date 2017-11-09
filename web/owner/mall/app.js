@@ -133,7 +133,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
             $rootScope.fromState_name = fromState.name;
             $rootScope.curState_name = toState.name
         });
-        $rootScope.goPrev = function () {
-            $state.go($rootScope.fromState_name)
+        $rootScope.goPrev = function (obj) {
+            $state.go($rootScope.fromState_name,obj)
         }
     }]);
