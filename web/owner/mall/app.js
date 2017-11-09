@@ -59,7 +59,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                 css:'css/movefurniture.css'
             })
             .state('modelRoom',{ // 样板间
-                url:'/quotation?region_code&toponymy&street',
+                url:'/quotation?roomCode&toponymy&street',
                 templateUrl:'model_room.html',
                 css: ['css/model_room.css', 'zui-1.7.0-dist/dist/css/zui.min.css'],
                 controller: 'modelRoomCtrl'
@@ -89,7 +89,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                 let res = response.data;
                 if (res.code === 403) {
                     $state.go('login')
-                } else if (res.code === 200) {
+                } else if (res.code === 200 || res.code === 201) {
                     if (typeof callback === 'function') {
                         callback(res)
                     }

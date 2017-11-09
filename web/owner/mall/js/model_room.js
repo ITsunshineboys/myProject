@@ -19,12 +19,12 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         text: ""
     };
     $scope.params = {
-        code: $stateParams.region_code,            // 区编码
+        code: $stateParams.roomCode,            // 区编码
         toponymy: $stateParams.toponymy,    // 小区名称
         street: $stateParams.street         // 街道地址
     };
     let huxingParams = {
-        region_code: $stateParams.region_code,
+        roomCode: $stateParams.roomCode,
         toponymy: $stateParams.toponymy,
         street: $stateParams.street
     };
