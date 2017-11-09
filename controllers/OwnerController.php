@@ -402,7 +402,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        
+
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
@@ -552,7 +552,8 @@ class OwnerController extends Controller
         }
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = ceil($total_area / $worker_kind_details['quantity']) * $waterproof_labor['univalence'];
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$waterproof_labor['univalence'],$worker_kind_details['quantity']);
+//        $labor_all_cost['price'] = ceil($total_area / $worker_kind_details['quantity']) * $waterproof_labor['univalence'];
         $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
 
         //材料总费用

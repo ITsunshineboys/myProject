@@ -141,12 +141,6 @@ class BasisDecorationService
      * @return float
      *
      */
-//    public static function  laborFormula($points,$labor,$worker_kind_details)
-//    {
-//        //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-//        return ceil(($points / $worker_kind_details['quantity'])) * $labor['univalence'];
-//    }
-
     public static function laborFormula($points,$labor,$day_points)
     {
         $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
