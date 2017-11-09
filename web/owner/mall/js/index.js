@@ -1,5 +1,8 @@
 app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootScope, $scope, _ajax) {
-    sessionStorage.clear();
+    sessionStorage.removeItem("huxingParams");
+    sessionStorage.removeItem("backman");
+    sessionStorage.removeItem("roomPicture");
+    sessionStorage.removeItem("worker");
     // 微信事宜
     $rootScope.isWxOpen = false;
     _ajax.get(baseUrl + '/order/iswxlogin', "", function (res) {
