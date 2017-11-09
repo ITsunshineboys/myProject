@@ -1409,6 +1409,7 @@ class OwnerController extends Controller
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
+            var_dump($stairs);exit;
             if ($assort_material == null) {
                 $code = 1061;
                 return Json::encode([

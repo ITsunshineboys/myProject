@@ -432,17 +432,17 @@ class WorkerManagementController extends Controller
         if (empty($status)){
 
             // 状态搜索
-            if (empty($status)){
-                $where = [];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
+//            if (empty($status)){
+//                $where = [];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
 
             // 时间搜索
-            if (empty($min_time) && empty($max_time)){
-                $where = 'create_time >='. $min_time .' and create_time <=' . $max_time;
+            if (!empty($min_time) && !empty($max_time)){
+                $where = ['and',['<=','worker_order.create_time',$min_time], ['<=','worker_order.create_time',$max_time]];
                 $worker_order = WorkerOrder::orderList($where,$size,$page);
                 return Json::encode([
                     'list' => $worker_order
