@@ -327,6 +327,10 @@ class OwnerController extends Controller
 
         //人工总费用
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers,$worker_kind_details);
+        $a = BasisDecorationService::L($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
+        var_dump($labor_all_cost);
+        var_dump($a);
+        exit;
         $labor_all_cost['worker_kind'] = $workers['worker_kind'];
 
         //材料总费用
@@ -1676,11 +1680,8 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $goods = Goods::find()->select('sku')->where(['in',['id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->asArray()->all();
-        $goods_attr = GoodsAttr::find()->where(['in',['goods_id'],[1,3,4,210,212,220,222,224,226,228,229,255,259,281,295,296,297,309,310,314]])->asArray()->all();
-        var_dump($goods);
-        var_dump($goods_attr);
-        exit;
+        $a = BasisDecorationService::L(10,10,10);
+        var_dump($a);
     }
 
 }

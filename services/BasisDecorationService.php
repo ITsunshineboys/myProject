@@ -16,6 +16,11 @@ class BasisDecorationService
     const BRICK_UNITS = 1000;
     const GOODS_PRICE_UNITS = 100;
 
+    const DEFAULT_VALUE = [
+      'value1' => 0,
+      'value2' => 1,
+    ];
+
     /**
      * goods name
      */
@@ -140,6 +145,16 @@ class BasisDecorationService
     {
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
         return ceil(($points / $worker_kind_details['quantity'])) * $labor['univalence'];
+    }
+
+    public static function L($points,$labor,$day_points)
+    {
+        $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+        $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value1'];
+        $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
+
+        //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
+        return (int)ceil(($p / $d) * $l);
     }
 
     /**
