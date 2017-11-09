@@ -148,7 +148,7 @@ class PayService
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,FALSE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0"
+        if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0" 
             && WxPayConfig::CURL_PROXY_PORT != 0){
             curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
             curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
