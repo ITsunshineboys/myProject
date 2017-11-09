@@ -11,14 +11,9 @@ use yii\db\Query;
  * This is the model class for table "worker_order_item".
  *
  * @property integer $id
- * @property integer $worker_order_id
- * @property integer $worker_item_id
- * @property integer $worker_craft_id
- * @property string $area
- * @property string $status
- * @property string $length
- * @property string $count
- * @property string $electricity
+ * @property integer $worker_order_no
+ * @property integer $worker_item_ids
+ * @property integer $worker_type_id
  *
  */
 class WorkerOrderItem extends \yii\db\ActiveRecord
@@ -51,26 +46,10 @@ class WorkerOrderItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['worker_order_id', 'worker_item_id', 'worker_craft_id', 'area', 'status', 'electricity', 'count'], 'integer'],
+            [['worker_order_no', 'worker_type_id'], 'required'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'worker_order_id' => '工单id',
-            'worker_item_id' => '工人条目id',
-            'worker_craft_id' => '工艺id',
-            'area' => '面积,单位: dm^2',
-            'status' => '0: 否，1：是',
-            'electricity' => '（水电：0:弱电,1:强电）',
-            'count' => '(水电：个数)',
-        ];
-    }
     /**
      * @param $item_id
      * @return array|null
