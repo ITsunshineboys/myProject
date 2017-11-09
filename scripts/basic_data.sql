@@ -2,18 +2,6 @@
 *智能报价基础数据
 */
 
-CREATE TABLE `labor_cost` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `province` varchar(20) DEFAULT NULL,
-  `province_code` varchar(20) DEFAULT NULL COMMENT '省份编码',
-  `city` varchar(20) DEFAULT NULL,
-  `city_code` varchar(20) DEFAULT NULL COMMENT '市编码',
-  `univalence` bigint(10) NOT NULL COMMENT '工人单价',
-  `worker_kind` varchar(20) DEFAULT NULL COMMENT '工人种类',
-  `rank` varchar(20) DEFAULT NULL COMMENT '工人级别',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of labor_cost
 -- ----------------------------
@@ -23,16 +11,6 @@ INSERT INTO `labor_cost` VALUES ('3', '四川省', '510000', '成都市', '51010
 INSERT INTO `labor_cost` VALUES ('4', '四川省', '510000', '成都市', '510100', '500', '油漆工', '白银');
 INSERT INTO `labor_cost` VALUES ('5', '四川省', '510000', '成都市', '510100', '300', '泥瓦工', '白银');
 INSERT INTO `labor_cost` VALUES ('6', '四川省', '510000', '成都市', '510100', '220', '杂工', '白银');
-
-
-
-CREATE TABLE `worker_craft_norm` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `labor_cost_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT '0' COMMENT '每天完成的数量',
-  `worker_kind_details` varchar(20) DEFAULT NULL COMMENT '工种详情',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of worker_craft_norm
@@ -55,17 +33,6 @@ INSERT INTO `worker_craft_norm` VALUES ('15', '6', '10', '新建12墙面积');
 INSERT INTO `worker_craft_norm` VALUES ('16', '6', '30', '拆除24墙面积');
 INSERT INTO `worker_craft_norm` VALUES ('17', '6', '40', '拆除12墙面积');
 INSERT INTO `worker_craft_norm` VALUES ('18', '6', '15', '补烂长度');
-
-
-CREATE TABLE `engineering_standard_craft` (
-  `id` int(11) NOT NULL,
-  `district_code` int(10) DEFAULT NULL COMMENT '城市编码',
-  `project` varchar(20) DEFAULT NULL COMMENT '项目名称',
-  `material` float(10,2) DEFAULT NULL COMMENT '用料',
-  `project_details` varchar(20) DEFAULT NULL COMMENT '项目详情',
-  `units` varchar(10) DEFAULT NULL COMMENT '单价',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of engineering_standard_craft
@@ -102,23 +69,6 @@ INSERT INTO `engineering_standard_craft` VALUES ('30', '510100', '杂工', '3.00
 INSERT INTO `engineering_standard_craft` VALUES ('31', '510100', '杂工', '2.00', '补烂河沙用量', 'kg');
 INSERT INTO `engineering_standard_craft` VALUES ('32', '510100', '木作', '2.50', '平顶面积石膏板', '张');
 
-
-CREATE TABLE `series` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `series` varchar(50) DEFAULT '' COMMENT '系列',
-  `intro` varchar(255) DEFAULT '' COMMENT '系列介绍',
-  `theme` varchar(50) DEFAULT '' COMMENT '系列主题',
-  `modelling_length_coefficient` float(10,1) DEFAULT NULL COMMENT '造型长度系数',
-  `modelling_day_coefficient` float(10,1) DEFAULT NULL COMMENT '造型天数系数',
-  `flat_area_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶面积系数',
-  `flat_day_coefficient` float(10,1) DEFAULT NULL COMMENT '平顶天数系数',
-  `category_id` int(11) DEFAULT '0' COMMENT '分类id',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
-  `creation_time` int(11) DEFAULT NULL,
-  `series_grade` int(5) DEFAULT NULL COMMENT '系列等级',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of series
 -- ----------------------------
@@ -127,23 +77,6 @@ INSERT INTO `series` VALUES ('2', '享家', '适合6-10年收入，对质量与�
 INSERT INTO `series` VALUES ('3', '享家+', '适合7-12年收入,对质量与生活品质有更加细致的追求', '品牌,小资,奢享', '1.2', '1.2', '1.0', '1.2', '0', '1', '1499052178', '3');
 INSERT INTO `series` VALUES ('4', '智家', '高收入人群追求智能科技生活', '品牌,小资,智能化', '1.2', '1.2', '1.0', '1.2', '0', '1', '1499052178', '4');
 INSERT INTO `series` VALUES ('5', '智家+', '高收入人群追求智能科技美好生活', '品牌,小资,智能化', '1.2', '1.2', '1.0', '1.2', '0', '1', '1499052178', '5');
-
-
-CREATE TABLE `style` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `style` varchar(50) DEFAULT '' COMMENT '风格',
-  `intro` varchar(255) DEFAULT '' COMMENT '风格介绍',
-  `theme` varchar(50) DEFAULT '' COMMENT '风格主题',
-  `modelling_length_coefficient` float(10,1) DEFAULT '0.0' COMMENT '造型长度系数',
-  `modelling_day_coefficient` float(10,1) DEFAULT '0.0' COMMENT '造型天数系数',
-  `flat_area_coefficient` float(10,1) DEFAULT '0.0' COMMENT '平顶面积系数',
-  `flat_day_coefficient` float(10,1) DEFAULT '0.0' COMMENT '平顶天数系数',
-  `category_id` int(11) DEFAULT NULL COMMENT '分类id',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: 已停用 1: 已启用',
-  `creation_time` int(11) DEFAULT NULL,
-  `images` varchar(255) DEFAULT NULL COMMENT '图片',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of style
@@ -154,16 +87,6 @@ INSERT INTO `style` VALUES ('3', '美式田园', '推崇回归自然、结合自
 INSERT INTO `style` VALUES ('4', '欧式', '以古典柱式为中心的风格。欧式的居室有的不只是豪华大气，更多的是惬意的浪漫', '豪华大气,惬意,浪漫', '1.0', '1.3', '1.0', '1.1', null, '1', '1499066027', 'uploads/2017/08/28/1503908814.png,uploads/2017/08/28/1503910502.png,uploads/2017/08/28/1503908199.png');
 INSERT INTO `style` VALUES ('5', '日式', '日式风格又称和风、和式风格，是来源于日本的装修和装饰风格，是东方风格中独树一帜的代表', '淡雅节制,深邃禅意', '1.0', '1.3', '1.0', '1.1', null, '1', null, 'uploads/2017/08/28/1503910234.png,uploads/2017/08/28/1503915188.png,uploads/2017/08/28/1503907109.png');
 
-
-CREATE TABLE `engineering_standard_carpentry_coefficient` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `project` varchar(10) DEFAULT NULL COMMENT '项目名称',
-  `value` float(10,2) DEFAULT NULL COMMENT '值',
-  `coefficient` int(5) DEFAULT NULL COMMENT '系数',
-  `series_or_style` tinyint(4) DEFAULT NULL COMMENT '0-系数，1-风格',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of engineering_standard_carpentry_coefficient
 -- ----------------------------
@@ -173,28 +96,12 @@ INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('3', '齐家', 
 INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('4', '现代简约', '1.00', '1', '1');
 INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('5', '现代简约', '1.10', '2', '1');
 
-
-CREATE TABLE `engineering_standard_carpentry_craft` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL COMMENT '名称',
-  `value` float(11,2) DEFAULT NULL COMMENT '值',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of engineering_standard_carpentry_craft
 -- ----------------------------
 INSERT INTO `engineering_standard_carpentry_craft` VALUES ('1', '龙骨', '2.50');
 INSERT INTO `engineering_standard_carpentry_craft` VALUES ('2', '丝杆', '2.50');
 INSERT INTO `engineering_standard_carpentry_craft` VALUES ('3', '石膏板', '2.95');
-
-
-CREATE TABLE `coefficient_management` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `classify` varchar(5) DEFAULT NULL COMMENT '分类',
-  `coefficient` float(10,2) DEFAULT '1.00' COMMENT '系数值',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of coefficient_management
@@ -208,13 +115,6 @@ INSERT INTO `coefficient_management` VALUES ('6', '软装配套', '0.70');
 INSERT INTO `coefficient_management` VALUES ('7', '智能配套', '0.70');
 INSERT INTO `coefficient_management` VALUES ('8', '生活配套', '0.70');
 
-
-CREATE TABLE `stairs_details` (
-  `id` int(11) NOT NULL,
-  `attribute` varchar(20) DEFAULT NULL COMMENT '属性',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of stairs_details
 -- ----------------------------
@@ -223,18 +123,6 @@ INSERT INTO `stairs_details` VALUES ('2', '钢木构造');
 INSERT INTO `stairs_details` VALUES ('3', '纯木构造');
 INSERT INTO `stairs_details` VALUES ('4', '纯刚构造');
 INSERT INTO `stairs_details` VALUES ('5', '玻璃金属');
-
-
-CREATE TABLE `assort_goods` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(20) DEFAULT NULL COMMENT '商品名称',
-  `category_id` int(10) DEFAULT NULL COMMENT '分类id',
-  `pid` int(10) DEFAULT NULL COMMENT '分类的父类id',
-  `path` varchar(20) DEFAULT NULL COMMENT '关系',
-  `state` tinyint(4) DEFAULT '0' COMMENT '0-案例商品管理，1-商品管理',
-  `quantity` int(11) DEFAULT NULL COMMENT '数量',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of assort_goods
@@ -257,19 +145,6 @@ INSERT INTO `assort_goods` VALUES ('69', '水槽', '146', '145', '144,145,146,',
 INSERT INTO `assort_goods` VALUES ('70', '纸巾盒', '158', '157', '144,157,158,', '0', null);
 INSERT INTO `assort_goods` VALUES ('71', '欧松板', '11', '9', '1,9,11,', '0', null);
 
-
-
-CREATE TABLE `decoration_message` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `decoration_add_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL COMMENT '数量',
-  `style_id` int(11) DEFAULT NULL,
-  `series_id` int(11) DEFAULT NULL,
-  `min_area` int(11) DEFAULT NULL,
-  `max_area` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 -- ----------------------------
 -- Records of decoration_message
 -- ----------------------------
@@ -277,18 +152,6 @@ INSERT INTO `decoration_message` VALUES ('1', '1', '20', null, '1', null, null);
 INSERT INTO `decoration_message` VALUES ('2', '2', '12', '1', null, null, null);
 INSERT INTO `decoration_message` VALUES ('3', '3', '12', null, null, '60', '69');
 INSERT INTO `decoration_message` VALUES ('4', '4', '12', '1', null, null, null);
-
-
-
-CREATE TABLE `points` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(20) DEFAULT NULL COMMENT '名称',
-  `pid` int(10) DEFAULT '0' COMMENT '弱电点位',
-  `count` int(11) DEFAULT NULL,
-  `level` tinyint(1) DEFAULT NULL COMMENT '等级',
-  `differentiate` tinyint(1) DEFAULT '0' COMMENT '0-固定，1-新添加',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of points
