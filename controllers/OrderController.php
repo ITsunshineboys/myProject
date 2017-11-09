@@ -1155,8 +1155,7 @@ class OrderController extends Controller
             ]);
         }
         $template_id=Goods::find()->select('logistics_template_id')->where(['id'=>$goods_id])->asArray()->one()['logistics_template_id'];
-        $model=new LogisticsDistrict();
-        $data=$model->is_apply($districtcode,$template_id);
+        $data=LogisticsDistrict::is_apply($districtcode,$template_id);
         if ($data==200){
             return Json::encode([
                 'code' => 200,

@@ -176,30 +176,18 @@ class LogisticsDistrict extends ActiveRecord
      * @param $template_id
      * @return bool
      */
-    public function is_apply($districtcode, $template_id){
-        $code=Yii::$app->params['districts'][0];
-        $query=new Query();
-        $array  = $query
-            ->from('logistics_template AS a')
-            ->select('a.id,b.district_code')
-            ->leftJoin('logistics_district AS b', 'b.template_id = a.id')
-            ->where(['a.id' =>$template_id])
-            ->all();
-        if ($array){
-            $a=0;
-            foreach ($array AS $k =>$v ){
-                if ($array[$k]['district_code']==$districtcode){
-                    $a=1;
-                }
-            }
-            if ($a==1){
-                $code=200;
-            }else{
-                $code=1000;
-            }
-        }else{
+       public static function is_apply($districtcode, $template_id){
+        $district=LogisticsDistrict::find()
+            ->where(['template_id'=>$template_id])
+            ->andWhere(['district_code'=>$districtcode])
+            ->one();
+        if (!$district)
+        {
             $code=1000;
+            return $code;
+        }else{
+            $code=200;
+            return $code;
         }
-        return  $code;
     }
 }
