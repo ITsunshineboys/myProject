@@ -871,7 +871,63 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //            return false;
 //        }
 //    }
+    /**
+     * 快捷下单
+     * @param $uid
+     * @param array $array
+     * @return int
+     */
+    public static function addorderFastinfo($uid,array $array){
 
+        $worker_order = new self();
+        $worker_order->uid = $uid;
+        $worker_order->worker_type_id = $array['worker_type_id'];
+        $worker_order->order_no = GoodsOrder::SetOrderNo();
+        $worker_order->create_time = time();
+        $worker_order->map_location = $array['map_location'];
+        $worker_order->address = $array['address'];
+        $worker_order->con_people = $array['con_people'];
+        $worker_order->con_tel = $array['con_tel'];
+        $worker_order->amount = $array['amount'] * 100;
+        $worker_order->front_money = $array['front_money'] * 100;
+        $worker_order->status=self::WORKER_ORDER_PREPARE;
+        if(isset($array['demand'])){
+            $worker_order->demand = $array['demand'];
+        }
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$worker_order->save(false)) {
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $worker_order_img = new WorkerOrderImg();
+            $order_no = $worker_order_img->worker_order_no = $worker_order->order_no;
+            $rest = self::saveorderimgs($array['images'], $order_no);
+            if ($rest == false) {
+                $transaction->rollBack();
+                $code = 500;
+                return $code;
+            }
+            $worker_order_item=new WorkerOrderItem();
+            $worker_item_ids=implode(',',$array['worker_item_id']);
+            $worker_order_item->worker_item_ids=$worker_item_ids;
+            $worker_order_item->worker_type_id=$array['worker_type_id'];
+            $worker_order_item->worker_order_no=$order_no;
+            if(!$worker_order_item->save(false)){
+                $transaction->rollBack();
+                $code=500;
+                return $code;
+            }
+            $code=200;
+            $transaction->commit();
+            return $code;
+        }catch (Exception $e){
+            $transaction->rollBack();
+            $code = 500;
+            return $code;
+        }
+    }
     /**
      * 生成订单
      * @param $uid

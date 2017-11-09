@@ -259,6 +259,58 @@ class FindworkerController extends Controller{
              'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
          ]);
     }
+    /**
+     * 快捷下单 获取装修内容
+     * @return string
+     */
+    public function actionGetSubsetItem(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+         $worker_type_id=(int)\Yii::$app->request->get('worker_type_id');
+        if(!$worker_type_id ){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $data['worker_type']=WorkerType::find()->where(['id'=>$worker_type_id])->select('worker_name,id')->one();
+        $data['item']=WorkerType::find()->asArray()->where(['pid'=>$worker_type_id])->select('worker_name,id')->all();
+
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+    }
+    /**
+     * 用户快捷下单
+     * @return string
+     */
+    public function actionFastGenerateOrder(){
+        $user_id = \Yii::$app->user->identity;
+        $code=1052;
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' =>\ Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $post=\Yii::$app->request->post();
+        $code=WorkerOrder::addorderFastinfo($user_id->getId(),$post);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
+        ]);
+
+    }
 
     /**
      *add home images
