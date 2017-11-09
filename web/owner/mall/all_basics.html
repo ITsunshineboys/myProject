@@ -58,14 +58,14 @@
                             <p class="error_tips big_error" ng-if="handyman_options.twenty_four_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
                         </li>
                         <li>
-                            <input type="radio" name="building_scrap" id="yes" ng-checked="building_scrap"
-                                   ng-click="building_scrap = true" class="zagong_check zagong_radio"/>
+                            <input type="radio" name="building_scrap" id="yes" ng-checked="!!building_scrap"
+                                   ng-click="ctrlScope.building_scrap = true" class="zagong_check zagong_radio"/>
                             <img src="images/mall_list_radio.png" alt=""/>
                             <label class="jianzha" for="yes">小区有建渣</label>
                         </li>
                         <li style="border: 0!important;">
                             <input type="radio" name="building_scrap" id="no" ng-checked="!building_scrap"
-                                   ng-click="building_scrap = false" class="zagong_check zagong_radio"/>
+                                   ng-click="ctrlScope.building_scrap = false" class="zagong_check zagong_radio"/>
                             <img src="images/mall_list_radio.png" alt=""/>
                             <label class="jianzha" for="no">小区无建渣</label>
                         </li>

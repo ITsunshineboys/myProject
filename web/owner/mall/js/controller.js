@@ -1733,8 +1733,9 @@ angular.module('all_controller',[])
                 $scope.all_backman = JSON.parse(sessionStorage.getItem('backman'))
                 console.log($scope.all_backman)
             }
-            $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
-            $scope.all_goodsTemp = angular.copy($scope.all_goods);
+            if(!!sessionStorage.getItem('materials')){
+                $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
+            }
             //清理杂项原始数据
             if ($scope.cur_goods != undefined) {
                 for (let [key, value] of $scope.all_goods.entries()) {
@@ -1768,16 +1769,16 @@ angular.module('all_controller',[])
                                             value3.cost -= value4.cost
                                             value1.cost -= value4.cost
                                             value.cost -= value4.cost
-                                            // if (value3.cost == 0) {
-                                            //     value2.goods_detail.splice(key3, 1)
-                                            //     console.log(value2.goods_detail)
-                                            // }
-                                            // if (value2.goods_detail.length == 0) {
-                                            //     value1.three_level.splice(key2, 1)
-                                            // }
-                                            // if (value1.three_level.length == 0) {
-                                            //     value.second_level.splice(key1, 1)
-                                            // }
+                                            if (value3.cost == 0) {
+                                                value2.goods_detail.splice(key3, 1)
+                                                console.log(value2.goods_detail)
+                                            }
+                                            if (value2.goods_detail.length == 0) {
+                                                value1.three_level.splice(key2, 1)
+                                            }
+                                            if (value1.three_level.length == 0) {
+                                                value.second_level.splice(key1, 1)
+                                            }
                                         }
                                     }
                                 }
@@ -1813,6 +1814,7 @@ angular.module('all_controller',[])
                         value.backman_value = $scope.building_scrap
                     }
                 }
+                console.log($scope.all_backman)
                 sessionStorage.setItem('backman',JSON.stringify($scope.all_backman))
             }
             //保存并请求杂项数据
@@ -1829,6 +1831,44 @@ angular.module('all_controller',[])
                     $scope.all_worker[index].worker_price = 0
                     sessionStorage.setItem('worker',JSON.stringify($scope.all_worker))
                     sessionStorage.removeItem('cur_goods')
+                    let arr = []
+                    for(let [key,value] of $scope.all_goods.entries()){
+                        arr.push({
+                            id:value.id,
+                            title:value.title,
+                            goods:[]
+                        })
+                    }
+                    for(let [key,value] of $scope.all_goods.entries()){
+                        for(let [key1,value1] of value.second_level.entries()){
+                            for(let [key2,value2] of value1.three_level.entries()){
+                                for(let [key3,value3] of value2.goods_detail.entries()){
+                                    for(let [key4,value4] of arr.entries()){
+                                        if(value3.quantity!=0){
+                                            if(value.id == value4.id&&value3.quantity!=0){
+                                                if(value3.goods_id == undefined){
+                                                    value4.goods.push({
+                                                        cost:value3.cost,
+                                                        goods_id:value3.id,
+                                                        name:value3.name,
+                                                        id:value2.id,
+                                                        goods_three:value2.title,
+                                                        goods_second:value1.title,
+                                                        goods_first:value.title,
+                                                        quantity:value3.quantity
+                                                    })
+                                                }else{
+                                                    value4.goods.push(value3)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    console.log(arr)
+                    sessionStorage.setItem('materials',JSON.stringify(arr))
                     $state.go('modelRoom')
                 }else{
                     $state.go('nodata.house_list')
@@ -1858,6 +1898,7 @@ angular.module('all_controller',[])
                             let cur_obj = {id: value.id, title: value.title, cost: 0, second_level: []}
                             let cur_title = {title: value.title}
                             console.log(value1.cost)
+                            console.log($scope.all_goods)
                             if (value1.path.split(',')[0] == value.id && value1.cost != 0 && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
                                 $scope.all_goods.push(cur_obj)
                             }
@@ -1875,6 +1916,7 @@ angular.module('all_controller',[])
                                 }
                             }
                     }
+                    console.log(1111)
                     //整合三级
                     for (let [key, value] of  $scope.all_goods.entries()) {
                         for (let [key1, value1] of value.second_level.entries()) {
