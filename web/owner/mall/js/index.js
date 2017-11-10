@@ -23,13 +23,13 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 // 分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: 'Demo', // 分享标题
-                    link: location.hostname + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    link: location.protocol + '//' + location.host + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: '', // 分享图标
                 });
                 // 分享给朋友
                 wx.onMenuShareAppMessage({
                     title: 'Demo', // 分享标题
-                    desc: location.protocol + '//' + location.host + location.pathname + location.hash, // 分享描述
+                    desc: "", // 分享描述
                     link: location.protocol + '//' + location.host + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: '' // 分享图标
                 });
@@ -37,21 +37,21 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wx.onMenuShareQQ({
                     title: '', // 分享标题
                     desc: '', // 分享描述
-                    link: location.hostname + location.pathname + location.hash, // 分享链接
+                    link: location.protocol + '//' + location.host + location.pathname + location.hash, // 分享链接
                     imgUrl: '' // 分享图标
                 });
                 // 腾讯微博
                 wx.onMenuShareWeibo({
                     title: '', // 分享标题
                     desc: '', // 分享描述
-                    link: location.hostname + location.pathname + location.hash, // 分享链接
+                    link: location.protocol + '//' + location.host + location.pathname + location.hash, // 分享链接
                     imgUrl: '' // 分享图标
                 });
                 // 分享到QQ空间
                 wx.onMenuShareQZone({
                     title: '', // 分享标题
                     desc: '', // 分享描述
-                    link: location.hostname + location.pathname + location.hash, // 分享链接
+                    link: location.protocol + '//' + location.host + location.pathname + location.hash, // 分享链接
                     imgUrl: '' // 分享图标
                 });
             });
