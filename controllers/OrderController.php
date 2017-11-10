@@ -2271,7 +2271,6 @@ class OrderController extends Controller
         }else{
             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
-                ->andWhere(['sku'=>$postData['sku']])
                 ->all();
             foreach ($record as $rec)
             {
