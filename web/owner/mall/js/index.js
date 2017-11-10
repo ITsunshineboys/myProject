@@ -26,7 +26,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 // 分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: '', // 分享标题
-                    link: window.location.host + window.location.pathname + window.location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    link: window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: '', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -45,7 +45,6 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                     success: function () {
                         // 用户确认分享后执行的回调函数
-                        alert(window.location.host + window.location.pathname + window.location.hash)
                     },
                     cancel: function () {
                         // 用户取消分享后执行的回调函数
@@ -55,7 +54,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wx.onMenuShareQQ({
                     title: '', // 分享标题
                     desc: '', // 分享描述
-                    link: '', // 分享链接
+                    link: window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash, // 分享链接
                     imgUrl: '', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -68,7 +67,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wx.onMenuShareWeibo({
                     title: '', // 分享标题
                     desc: '', // 分享描述
-                    link: '', // 分享链接
+                    link: window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash, // 分享链接
                     imgUrl: '', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
@@ -81,7 +80,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wx.onMenuShareQZone({
                     title: '', // 分享标题
                     desc: '', // 分享描述
-                    link: '', // 分享链接
+                    link: window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash, // 分享链接
                     imgUrl: '', // 分享图标
                     success: function () {
                         // 用户确认分享后执行的回调函数
