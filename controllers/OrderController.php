@@ -795,10 +795,11 @@ class OrderController extends Controller
    public function actionWxpayeffect_earnstnotify(){
         //获取通知的数据
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $data=json_encode(simplexml_load_string($xml));
+        $data=json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+
         //如果返回成功则验证签名
         $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>$data
+            'content'=>$data['return_code']
         ])->execute();
         if ($res4)
         {
