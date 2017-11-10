@@ -59,7 +59,7 @@
                 <span>封面图</span>
                 <img ng-src="{{'/' + data.cover_image}}">
             </div>
-            <img ng-repeat="obj in data.goods_image" ng-src="{{obj.image}}">
+            <img ng-repeat="obj in data.goods_image" ng-src="{{'/' + obj.image}}">
         </div>
     </div>
     <div class="row table-style">
