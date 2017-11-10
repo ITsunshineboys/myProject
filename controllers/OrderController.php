@@ -3544,6 +3544,7 @@ class OrderController extends Controller
                     $access->access_type=7;
                     $access->access_money=$total_amount*100;
                     $access->create_time=time();
+                    $access->order_no=$orders;
                     $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
                     $res3=$access->save(false);
                     if ( !$res3){
