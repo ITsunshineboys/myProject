@@ -142,8 +142,8 @@ class GoodsOrder extends ActiveRecord
         '退货',
         '换货',
     ];
-     const REMIND_SEND_GOODS='remind_send_goods_';
-
+    const REMIND_SEND_GOODS='remind_send_goods_';
+    const STATUS_DESC_DETAILS=1;
 
 
     /**
