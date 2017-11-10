@@ -14,6 +14,7 @@ use app\models\WorkerOrder;
 use app\models\WorkerRank;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -425,6 +426,7 @@ class WorkerManagementController extends Controller
         $size = (int)trim(\Yii::$app->request->post('size',self::DEFAULT_SIZE));
 
         // 全部订单
+        $time =trim(\Yii::$app->request->post('time',''));
         $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time','')));
         $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time','')));
         $worker = trim(\Yii::$app->request->post('worker',''));
@@ -440,72 +442,77 @@ class WorkerManagementController extends Controller
 //                ]);
 //            }
 
-            // 时间搜索
-            if (!empty($min_time) && !empty($max_time)){
-                $where = ['and',['<=','worker_order.create_time',$min_time], ['<=','worker_order.create_time',$max_time]];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
+            if ($time)
+            {
+                $time = StringService::startEndDate($time);
 
-            //  工种搜索
-            if (empty($worker)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
             }
-
-            // 其它搜索
-            if (empty($other)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
+//            // 时间搜索
+//            if (!empty($min_time) && !empty($max_time)){
+//                $where = ['and',['<=','worker_order.create_time',$min_time], ['<=','worker_order.create_time',$max_time]];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
+//
+//            //  工种搜索
+//            if (empty($worker)){
+//                $where = ['worker_type_id',$worker];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
+//
+//            // 其它搜索
+//            if (empty($other)){
+//                $where = ['worker_type_id',$worker];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
         }
 
-        if ($status == WorkerOrder::WORKER_ORDER_NOT_BEGIN){
-
-            // 状态搜索
-            if ($status == WorkerOrder::WORKER_ORDER_NOT_BEGIN){
-                $where = [];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
-
-            // 时间搜索
-            if (empty($min_time) && empty($max_time)){
-                $where = 'create_time >='. $min_time .' and create_time <=' . $max_time;
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
-
-            //  工种搜索
-            if (empty($worker)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
-
-            // 其它搜索
-            if (empty($other)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
-        }
+//        if ($status == WorkerOrder::WORKER_ORDER_NOT_BEGIN){
+//
+//            // 状态搜索
+//            if ($status == WorkerOrder::WORKER_ORDER_NOT_BEGIN){
+//                $where = [];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
+//
+//            // 时间搜索
+//            if (empty($min_time) && empty($max_time)){
+//                $where = 'create_time >='. $min_time .' and create_time <=' . $max_time;
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
+//
+//            //  工种搜索
+//            if (empty($worker)){
+//                $where = ['worker_type_id',$worker];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
+//
+//            // 其它搜索
+//            if (empty($other)){
+//                $where = ['worker_type_id',$worker];
+//                $worker_order = WorkerOrder::orderList($where,$size,$page);
+//                return Json::encode([
+//                    'list' => $worker_order
+//                ]);
+//            }
+//        }
 
     }
 }
