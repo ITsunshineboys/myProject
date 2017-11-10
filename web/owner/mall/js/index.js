@@ -1,8 +1,6 @@
 app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootScope, $scope, _ajax) {
     $rootScope.$on("$locationChangeSuccess", function () {
-        console.log("page change");
         $scope.wxShareUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash;
-        console.log($scope.wxShareUrl);
         wxConfig($scope.wxShareUrl);
     });
     // 微信事宜
