@@ -795,7 +795,7 @@ class OrderController extends Controller
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
         $res1=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>Json::encode($msg)
+                'content'=>$msg
             ])->execute();
             if ($res1)
             {
@@ -803,7 +803,7 @@ class OrderController extends Controller
             }
         $res=Wxpay::NotifyProcess($msg);
          $res3=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>Json::encode($res)
+            'content'=>$res
         ])->execute();
            if ($res3)
             {
@@ -816,7 +816,7 @@ class OrderController extends Controller
 //                    exit;
 //             }
             $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>Json::encode($msg)
+                'content'=>$msg
             ])->execute();
             if ($res2)
             {
