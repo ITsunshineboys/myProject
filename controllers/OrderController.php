@@ -833,7 +833,7 @@ class OrderController extends Controller
                     ->all();
                 if ($list)
                 {
-                    foreach ($list as &$delList)
+                   foreach ($list as &$delList)
                     {
                         $effect_id=$delList->effect_id;
                         $res=$delList->delete();
@@ -842,32 +842,43 @@ class OrderController extends Controller
                             $tran->rollBack();
                             return false;
                         };
-                         $effect=Effect::find()->where(['id'=>$effect_id])->one();
-                         var_dump($effect);exit;
-                        $res1=$effect->delete();
-                        if (!$res1)
+                        $effect=Effect::find()->where(['id'=>$effect_id])->one();
+                        if ($effect)
                         {
-                            $tran->rollBack();
-                            return false;
-                        };
+                            $res1=$effect->delete();
+                            if (!$res1)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                        }
+
                         $effect_material=EffectMaterial::find()
                             ->where(['effect_id'=>$effect_id])
                             ->one();
-                        $res2=$effect_material->delete();
-                        if (!$res2)
+                        if ($effect_material)
                         {
-                            $tran->rollBack();
-                            return false;
-                        };
+                            $res2=$effect_material->delete();
+                            if (!$res2)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                        }
+
                         $EffectPicture=EffectPicture::find()
                             ->where(['effect_id'=>$effect_id])
                             ->one();
-                        $res3=$EffectPicture->delete();
-                        if (!$res3)
+                        if ($EffectPicture)
                         {
-                            $tran->rollBack();
-                            return false;
-                        };
+                            $res3=$EffectPicture->delete();
+                            if (!$res3)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                        }
+
                     }
                 }
             }catch (Exception $e){
