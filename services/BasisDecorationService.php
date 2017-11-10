@@ -1868,6 +1868,11 @@ class BasisDecorationService
                     break;
             }
         }
+
+        if (!$wire && !$spool && !$bottom){
+            return false;
+        }
+
         $material ['total_cost'] = $material_price['total_cost'];
         $material ['material'] [] = BasisDecorationService::profitMargin($wire);
         $material ['material'] []= BasisDecorationService::profitMargin($spool);
