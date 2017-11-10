@@ -843,6 +843,7 @@ class OrderController extends Controller
                             return false;
                         };
                          $effect=Effect::find()->where(['id'=>$effect_id])->one();
+                         var_dump($effect);exit;
                         $res1=$effect->delete();
                         if (!$res1)
                         {
