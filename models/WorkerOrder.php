@@ -991,7 +991,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     $res=self::savepainteritem($data,$worker_order->order_no);
                     break;
                 case '杂工';
-                    $res=self::savecarpentryitem($data,$worker_order->order_no);
+                    $res=self::savebackmanitem($data,$worker_order->order_no);
                     break;
             }
             if(!$res){
@@ -1136,7 +1136,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
     }
 
-
+    /**
+     * 保存木工条目信息
+     * @param array $array
+     * @param $order_no
+     * @return bool
+     */
     public static function savecarpentryitem(array $array,$order_no){
             foreach ($array as $v){
                 foreach ($v as &$data) {
@@ -1158,6 +1163,49 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     ])->execute();
                 }
             }
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+    /**
+     * 保存杂工条目信息
+     * @param array $array
+     * @param $order_no
+     * @return bool
+     */
+    public static function savebackmanitem(array $array,$order_no){
+        foreach ($array as $v){
+            foreach ($v as &$data) {
+                if(!$data['craft_id']){
+                    $data['craft_id']=0;
+                }
+                if(!$data['area']){
+                    $data['area']=0;
+                }
+                if(!$data['stack']){
+                    $data['stack']=0;
+                }
+                if(!$data['length']){
+                    $data['length']=0;
+                }
+                $res = \Yii::$app->db->createCommand()->insert('backman_worker_order', [
+                    'order_no' => $order_no,
+                    'worker_item_id' => $data['item_id'],
+                    'worker_craft_id' => $data['craft_id'],
+                    'area' => $data['area'],
+                    'length' => $data['length'],
+                    'stack' => $data['stack'],
+                ])->execute();
+            }
+        }
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
 
     }
     /**
