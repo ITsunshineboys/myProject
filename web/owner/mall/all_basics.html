@@ -77,7 +77,7 @@
     <div class="preservation">
         <span>合计：</span>
         <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
-        <button ng-click="go_handyman_options()">保存</button>
+        <button ng-click="go_handyman_options(handyman_options.$valid)">保存</button>
     </div>
     </form>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

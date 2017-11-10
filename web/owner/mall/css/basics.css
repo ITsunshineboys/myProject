@@ -210,11 +210,11 @@ header div i{
     /*margin-top: 1rem;*/
     position: absolute;
     right: 3.5rem;
-    top: 1.5rem;
+    top: 1.8rem;
     padding-left: 1rem;
 }
 .sheet_material li{
-    height: 6rem;
+    /*height: 6rem;*/
     line-height: 6rem;
     position: relative;
 }
@@ -253,15 +253,17 @@ header div i{
     position: relative;
 }
 .error_tips{
-    position: absolute;
-    bottom:.5rem;
+    /*position: absolute;*/
+    /*bottom:.5rem;*/
     font-size:1rem;
     color: #F55122;
     line-height:0;
+    margin-top:1rem;
+    margin-bottom:1rem;
 }
-.big_error{
-    bottom:0;
-}
+/*.big_error{*/
+    /*bottom:0;*/
+/*}*/
 .handyman_input{
     width:12rem;
     position: relative;
