@@ -955,37 +955,32 @@ class OrderController extends Controller
     /**
      *微信线下支付异步操作
      */
-      public function actionOrderlinewxpaynotify(){
+    public function actionOrderlinewxpaynotify(){
         //获取通知的数据
         $xml = file_get_contents("php://input");;
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
-        $arr=Json::decode($data);
-        if ($arr['result_code']=='SUCCESS')
+        $msg=Json::decode($data);
+        if ($msg['result_code']=='SUCCESS')
         {
 
-            // $res = \Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            //     'content'=>$data
-            // ])->execute();
-            // if(!$res){
-            //     return false;
-            // }
-           $transaction_id=$arr['transaction_id'];
-           $result = Wxpay::Queryorder($transaction_id);
-           if (!$result)
-           {
-               return false;
-           }
-           $list=explode('&',$arr['attach']);
-           $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$list[8]])->asArray()->one();
-           if ($order){
-               return true;
-           }
-           $result=GoodsOrder::Wxpaylinenotifydatabase($list,$arr);
-           if ($result==true){
-               return true;
-           }else{
-               return false;
-           }
+//            $transaction_id=$arr['transaction_id'];
+//            $result = Wxpay::Queryorder($transaction_id);
+//            if (!$result)
+//            {
+//                return false;
+//            }
+            $arr=explode('&',$msg['attach']);
+            $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$arr[8]])->asArray()->one();
+            if ($order){
+                return true;
+            }
+            $msg['total_fee']=1;
+            $result=GoodsOrder::Wxpaylinenotifydatabase($arr,$msg);
+            if ($result==true){
+                return true;
+            }else{
+                return false;
+            }
         }else{
             return false;
         }
