@@ -833,7 +833,7 @@ class OrderController extends Controller
                     ->all();
                 if ($list)
                 {
-                    foreach ($list as &$delList)
+                    foreach ($list as &$delList) 
                     {
                         $effect_id=$delList->effect_id;
                         if (!$delList->delete())
