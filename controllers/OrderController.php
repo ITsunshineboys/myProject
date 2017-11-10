@@ -797,34 +797,34 @@ class OrderController extends Controller
      */
     public function actionWxpayeffect_earnstnotify(){ 
         //获取通知的数据
-        // $xml = file_get_contents("php://input");;
-        // $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
-        // $arr=Json::decode($data);
-        // if ($arr['result_code']=='SUCCESS')
-        // {
-        //     $transaction_id=$arr['transaction_id'];
+        $xml = file_get_contents("php://input");;
+        $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $arr=Json::decode($data);
+        if ($arr['result_code']=='SUCCESS')
+        {
+            $transaction_id=$arr['transaction_id'];
 
-        //     $result = Wxpay::Queryorder($transaction_id);
-        //     if (!$result)
-        //     {
-        //         return false;
-        //     } 
+            $result = Wxpay::Queryorder($transaction_id);
+            if (!$result)
+            {
+                return false;
+            } 
            // if ($arr['total_fee']!=8900)
            // {
            //     return false;
            // }
-            // $id=$arr['attach'];
+            $id=$arr['attach'];
             $tran = Yii::$app->db->beginTransaction();
             try{
-                // $earnst=EffectEarnest::find()
-                //     ->where(['effect_id'=>$id])
-                //     ->one();
-                // $earnst->status=1;
-                // if (!$earnst->save(false))
-                // {
-                //     $tran->rollBack();
-                //     return false;
-                // }
+                $earnst=EffectEarnest::find()
+                    ->where(['effect_id'=>$id])
+                    ->one();
+                $earnst->status=1;
+                if (!$earnst->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
 
                 $time=(time()-60*60*24);
                 $list=EffectEarnest::find()
@@ -887,9 +887,9 @@ class OrderController extends Controller
             }
             $tran->commit();
             return true;
-        // }else{
-        //     return false;
-        // }
+        }else{
+            return false;
+        }
     }
 
     /**
