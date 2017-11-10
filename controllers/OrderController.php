@@ -802,13 +802,13 @@ class OrderController extends Controller
         $arr=Json::decode($data);
         if ($arr['result_code']=='SUCCESS')
         {
-            $transaction_id=$arr['transaction_id'];
+            // $transaction_id=$arr['transaction_id'];
 
-            $result = Wxpay::Queryorder($transaction_id);
-            if (!$result)
-            {
-                return false;
-            }
+            // $result = Wxpay::Queryorder($transaction_id);
+            // if (!$result)
+            // {
+            //     return false;
+            // }
            // if ($arr['total_fee']!=8900)
            // {
            //     return false;
