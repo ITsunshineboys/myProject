@@ -1916,7 +1916,12 @@ class OrderController extends Controller
                     }
                 $registration_id=$supplier_user->registration_id;
                 $push=new Jpush();
-                $extras = [];//推送附加字段的类型
+                $extras =[
+                    'role_id'=>6,
+                    'order_no'=>$order_no,
+                    'sku'=>$sku,
+                    'type'=>GoodsOrder::STATUS_DESC_DETAILS,
+                ];//推送附加字段的类型
                 $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='已取消订单';
