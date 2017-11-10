@@ -5,7 +5,7 @@ use app\models\OrderPlatForm;
 use app\models\Addressadd;
 use app\models\CommentImage;
 use app\models\CommentReply;
-use app\models\EffectEarnst;
+use app\models\EffectEarnest;
 use app\models\Effect;
 use app\models\GoodsComment;
 use app\models\GoodsAttr;
@@ -495,7 +495,7 @@ class OrderController extends Controller
 
 
     public function actionGetEffectlist(){
-        $effect=EffectEarnst::find()
+        $effect=EffectEarnest::find()
             ->asArray()
             ->orderBy('create_time desc')
             ->all();
@@ -533,7 +533,7 @@ class OrderController extends Controller
                 }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
-                    $earnst=EffectEarnst::find()
+                    $earnst=EffectEarnest::find()
                         ->where(['effect_id'=>$id])
                         ->one();
                     $earnst->status=1;
@@ -814,7 +814,7 @@ class OrderController extends Controller
             $id=$arr['attach'];
             $tran = Yii::$app->db->beginTransaction();
             try{
-                $earnst=EffectEarnst::find()
+                $earnst=EffectEarnest::find()
                     ->where(['effect_id'=>$id])
                     ->one();
                 $earnst->status=1;
