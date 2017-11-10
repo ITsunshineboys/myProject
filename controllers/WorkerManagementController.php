@@ -478,8 +478,50 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    /**
+     * 工程订单状态和备注
+     * @return string
+     */
     public function actionWorkerOrderStatus()
     {
-            
+        $status_id = (int)trim(\Yii::$app->request->post('status_id',''));
+
+        //  取消订单
+        if ($status_id){
+            $edit_status = WorkerOrder::findOne(['id'=>$status_id]);
+            $edit_status->status =  WorkerOrder::WORKER_ORDER_NO;
+            if (!$edit_status->save()){
+                $code = 1000;
+                return Json::encode([
+                   'code' => $code,
+                   'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
+        }
+
+        //  备注消息
+        $comment_id = (int)trim(\Yii::$app->request->post('comment_id',''));
+        if ($comment_id){
+            $edit_status = WorkerOrder::findOne(['id'=>$comment_id]);
+            $edit_status->describe = trim(\Yii::$app->request->post('comment',''));
+            if (!$edit_status->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
+        }
+
     }
 }
