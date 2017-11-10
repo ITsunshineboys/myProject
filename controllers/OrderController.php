@@ -842,7 +842,7 @@ class OrderController extends Controller
                             $tran->rollBack();
                             return false;
                         };
-                        $effect=Effect::findOne($effect_id);
+                         $effect=Effect::find()->where(['id'=>$effect_id])->one();
                         $res1=$effect->delete();
                         if (!$res1)
                         {
