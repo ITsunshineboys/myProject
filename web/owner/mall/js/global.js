@@ -1,5 +1,5 @@
-const baseUrl = "http://test.cdlhzz.cn";
-// const baseUrl = "";
+// const baseUrl = "http://test.cdlhzz.cn";
+const baseUrl = "";
 
 /**
  * 获取 url 地址中的参数

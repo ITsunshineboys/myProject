@@ -49,11 +49,10 @@ header button{
     width:30px;
 }
 .coefficient_manage .submit{
-    margin-top:100px;
     position: absolute;
     bottom: 50px;
 }
-.coefficient_manage .submit button{
+.coefficient_manage .from-group button{
     width:70px;
     height: 32px;
     font-size:12px;

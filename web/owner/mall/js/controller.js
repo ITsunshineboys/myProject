@@ -22,6 +22,15 @@ angular.module('all_controller',[])
                 return $.param(data)
             }
         }
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            console.log($rootScope.curState_name)
+            console.log($rootScope.fromState_name)
+            if($rootScope.curState_name == 'modelRoom'&&$rootScope.fromState_name =='nodata.basics_decoration' ){
+                $state.go('modelRoom')
+            }
+            // $state.go('home')
+        });
         $scope.baseUrl = 'http://test.cdlhzz.cn/'
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
