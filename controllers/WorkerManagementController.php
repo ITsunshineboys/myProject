@@ -420,7 +420,7 @@ class WorkerManagementController extends Controller
     /**
      * 工程订单列表
      */
-    public function actionWorkerOrderList()
+    public function actionWorkOrderList()
     {
 
         $page     = (int)trim(\Yii::$app->request->post('page', self::DEFAULT_PAGE));
@@ -460,7 +460,7 @@ class WorkerManagementController extends Controller
             case $status && $timeType = 'custom' && !$worker  && !$other:
                 $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
                 $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
-                $where =  $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status;
+                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status;
                 break;
 
             case !$status && !$timeType && $worker  && !$other:
@@ -472,12 +472,13 @@ class WorkerManagementController extends Controller
                 break;
 
             case !$status && !$timeType  && !$worker  && $other:
-                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no '%{$other}%'";
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%'";
                 break;
 
             case $status && !$timeType && !$worker  && $other:
-                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no '%{$other}%' and worker_order.status = " .$status;
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%' and worker_order.status = " .$status;
                 break;
+
         }
 
         $worker_order = WorkerOrder::orderList($where, $size, $page);
