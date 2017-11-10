@@ -62,7 +62,8 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 			method: "get",
 			url: baseUrl+"/mall/categories-manage-admin",
 		}).then(function (res) {
-			for (let key in res.data.data.categories) {
+            console.log(res);
+            for (let key in res.data.data.categories) {
 				$scope.idarr.push(res.data.data.categories[key].title)
 				$http({
 					method: "get",
