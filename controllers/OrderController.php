@@ -2281,7 +2281,6 @@ class OrderController extends Controller
                 }
             }
         }
-          var_dump($record->toArray());exit;
         $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
         $data=GoodsOrder::GetOrderDetailsData($arr,$user);
         $code=200;
