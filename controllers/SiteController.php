@@ -182,7 +182,9 @@ class SiteController extends Controller
                     ],
                 ]);
 
-                if ($user->hx_pwd_date != date('Ymd')) {
+                if ($user->hx_pwd_date != date('Ymd')
+                    || (!empty($postData[$modelName]['registration_id']) && $postData[$modelName]['registration_id'] != $user->registration_id)
+                ) {
                     $events = Yii::$app->params['events'];
                     $event = $events['async'];
                     $data = [
