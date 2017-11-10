@@ -6,7 +6,8 @@
  * Time: 上午 11:52
  */
 namespace app\models;
-use yii\db\ActiveRecord;
+use Yii\db\ActiveRecord;
+use Yii;
 
 class BankBranch extends ActiveRecord
 {
