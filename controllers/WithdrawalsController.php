@@ -1456,7 +1456,6 @@ class WithdrawalsController extends Controller
             ->where(['transaction_no'=>$transaction_no])
             ->asArray()
             ->one();
-            var_dump($access);exit;
         if (!$access)
         {
             $code=1000;
@@ -1599,46 +1598,51 @@ class WithdrawalsController extends Controller
                 ];
                 break;
             case 7:
-                $orders=explode(',',$access['order_no']);
-                foreach ($orders as $order)
+                 $orders=explode(',',$access['order_no']);
+                if ($orders)
                 {
-                    $goodsOrder=GoodsOrder::find()
-                        ->select('pay_name')
-                        ->where(['order_no'=>$order])
-                        ->one();
-                    $pay_name=$goodsOrder->pay_name;
-                    $orderGoods=OrderGoods::find()
-                        ->select('goods_name')
-                        ->where(['order_no'=>$order])
-                        ->asArray()
-                        ->all();
-                    foreach ($orderGoods as $orderGood)
+                    foreach ($orders as $order)
                     {
-                         $goods_name[]=   $orderGood['goods_name'];
+                        $goodsOrder=GoodsOrder::find()
+                            ->select('pay_name')
+                            ->where(['order_no'=>$order])
+                            ->one();
+                        $pay_name=$goodsOrder->pay_name;
+                        $orderGoods=OrderGoods::find()
+                            ->select('goods_name')
+                            ->where(['order_no'=>$order])
+                            ->asArray()
+                            ->all();
+                        foreach ($orderGoods as $orderGood)
+                        {
+                            $goods_name[]=   $orderGood['goods_name'];
+                        }
                     }
-                }
-                if (count($goods_name)>1)
-                {
-                    $title=$goods_name[0]."...";
+                    if (count($goods_name)>1)
+                    {
+                        $title=$goods_name[0]."...";
+                    }else{
+                        $title=$goods_name[0];
+                    }
+                    $list[]=[
+                        'name'=>'支付类型',
+                        'value'=>$pay_name
+                    ];
+                    $list[]=[
+                        'name'=>'商品名称',
+                        'value'=>$title
+                    ];
+                    $list[]=[
+                        'name'=>'时间',
+                        'value'=>$access['create_time']
+                    ];
+                    $list[]=[
+                        'name'=>'交易单号',
+                        'value'=>$transaction_no
+                    ];
                 }else{
-                    $title=$goods_name[0];
+                    $list[]=[];
                 }
-                $list[]=[
-                    'name'=>'支付类型',
-                    'value'=>$pay_name
-                ];
-                $list[]=[
-                    'name'=>'商品名称',
-                    'value'=>$title
-                ];
-                $list[]=[
-                    'name'=>'时间',
-                    'value'=>$access['create_time']
-                ];
-                $list[]=[
-                    'name'=>'交易单号',
-                    'value'=>$transaction_no
-                ];
                 break;
         }
         $code=200;
