@@ -12,6 +12,10 @@ return [
     'offsetGeneral' => 10000,
     'ownerRoleId' => 7,
     'supplierRoleId' => 6,
+    'decorationCompanyRoleId' => 5,
+    'managerRoleId' => 4,
+    'designerRoleId' => 3,
+    'workerRoleId' => 2,
     'lhzzRoleId' => 1,
     'maxRolesNumber' => 2,
     'errorCodes' => [
