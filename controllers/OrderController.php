@@ -801,11 +801,11 @@ class OrderController extends Controller
         {
             $transaction_id=$arr['transaction_id'];
 
-            $result = Wxpay::Queryorder($transaction_id);
-            if (!$result)
-            {
-                return false;
-            }
+            // $result = Wxpay::Queryorder($transaction_id);
+            // if (!$result)
+            // {
+            //     return false;
+            // }
 //            if ($arr['total_fee']!=8900)
 //            {
 //                return false;
