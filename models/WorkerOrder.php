@@ -1016,8 +1016,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function saveMuditem(array $array,$order_no)
     {
         foreach ($array as &$v) {
-            if(!isset($v['guarantee']) || !isset($v['chip'])){
+            if(!isset($v['guarantee'])){
                 $v['guarantee']=0;
+
+            }
+            if(!isset($v['chip'])){
                 $v['chip']=0;
             }
                 $res= \Yii::$app->db->createCommand()->insert('mud_worker_order',[
@@ -1045,12 +1048,25 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function savehydropoweritem(array $array,$order_no){
         foreach ($array as &$v) {
                 foreach ($v as &$data){
+                    if(!$data['craft_id']){
+                        $data['craft_id']=0;
+                    }
+                    if(!$data['length']){
+                        $data['length']=0;
+                    }
+                    if(!$data['electricity']){
+                        $data['electricity']=null;
+                    }
+                    if(!$data['count']){
+                        $data['count']=0;
+                    }
                     $res= \Yii::$app->db->createCommand()->insert('hydropower_worker_order',[
                         'order_no'=>$order_no,
                         'worker_item_id'=>$data['item_id'],
                         'worker_craft_id'=>$data['craft_id'],
                         'length'=>$data['length'],
-                        'electricity'=>$data['electricity']
+                        'electricity'=>$data['electricity'],
+                        'count'=>$data['count']
                     ])->execute();
                 }
         }
@@ -1094,6 +1110,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function savepainteritem(array $array,$order_no){
         foreach ($array as &$v) {
             foreach ($v as &$data) {
+                if(!$data['craft_id']){
+                    $data['craft_id']=0;
+                }
+                if(!$data['area']){
+                    $data['area']=0;
+                }
+                if(!$data['brand']){
+                    $data['brand']=0;
+                }
+
                 $res = \Yii::$app->db->createCommand()->insert('painter_worker_order', [
                     'order_no' => $order_no,
                     'worker_item_id' => $data['item_id'],
@@ -1110,6 +1136,30 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
     }
 
+
+    public static function savecarpentryitem(array $array,$order_no){
+            foreach ($array as $v){
+                foreach ($v as &$data) {
+                    if(!$data['craft_id']){
+                        $data['craft_id']=0;
+                    }
+                    if(!$data['count']){
+                        $data['count']=0;
+                    }
+                    if(!$data['length']){
+                        $data['length']=0;
+                    }
+                    $res = \Yii::$app->db->createCommand()->insert('carpentry_worker_order', [
+                        'order_no' => $order_no,
+                        'worker_item_id' => $data['item_id'],
+                        'worker_craft_id' => $data['craft_id'],
+                        'count' => $data['count'],
+                        'length' => $data['length'],
+                    ])->execute();
+                }
+            }
+
+    }
     /**
      * 刷新订单随机
      * @return array|null|\yii\db\ActiveRecord

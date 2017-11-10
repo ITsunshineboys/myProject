@@ -378,18 +378,27 @@ class ChatController extends Controller
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
                   $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
+                  if($v['count']==0){
+                      $v['status']=1;
+                  }
                   break;
               case self::OWNER_ROLE:
                   $v['nickname']=User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
+                  if($v['count']==0){
+                      $v['status']=1;
+                  }
                   break;
               case self::WORKER_ROLE:
                   $v['nickname']='工人-'.User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
                   $v['count']=count($all);
+                  if($v['count']==0){
+                      $v['status']=1;
+                  }
 
 
           }
