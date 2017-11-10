@@ -420,78 +420,69 @@ class WorkerManagementController extends Controller
     /**
      * 工程订单列表
      */
-    public function actionWorkOrderList()
+    public function actionWorkerOrderList()
     {
 
-        $page   = (int)trim(\Yii::$app->request->post('page', self::DEFAULT_PAGE));
-        $size   = (int)trim(\Yii::$app->request->post('size', self::DEFAULT_SIZE));
+        $page     = (int)trim(\Yii::$app->request->post('page', self::DEFAULT_PAGE));
+        $size     = (int)trim(\Yii::$app->request->post('size', self::DEFAULT_SIZE));
 
-
-        $status = (int)trim(\Yii::$app->request->post('status', ''));
-        $time     = trim(\Yii::$app->request->post('time', ''));
-        $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
-        $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
+        $status   = (int)trim(\Yii::$app->request->post('status', ''));
+        $timeType = trim(\Yii::$app->request->post('time', ''));
         $worker   = trim(\Yii::$app->request->post('worker', ''));
         $other    = trim(\Yii::$app->request->post('other', ''));
 
-        // 状态搜索
+        switch ($status || $timeType  || $worker || $other)
+        {
+            case !$status && !$timeType  && !$worker  && !$other:
+                $where = "";
+                break;
 
-        if (!$status && !$time  && !$min_time && !$worker  && !$other){
-            $where        = [];
-            $worker_order = WorkerOrder::orderList($where, $size, $page);
-            return Json::encode([
-                'list' => $worker_order
-            ]);
+            case $status && !$timeType && !$worker  && !$other:
+                $where = 'worker_order.status = ' . $status;
+                break;
+
+            case !$status && $timeType && !$worker  && !$other:
+                $times = StringService::startEndDate($timeType);
+                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <= ".strtotime($times['1']);
+                break;
+
+            case $status && $timeType && !$worker  && !$other:
+                $times = StringService::startEndDate($timeType);
+                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <=".strtotime($times['1']). " and worker_order.status = ".$status;
+                break;
+
+            case !$status && $timeType = 'custom' && !$worker  && !$other:
+                $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
+                $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
+                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time;
+                break;
+
+            case $status && $timeType = 'custom' && !$worker  && !$other:
+                $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
+                $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
+                $where =  $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status;
+                break;
+
+            case !$status && !$timeType && $worker  && !$other:
+                $where = "worker_order.worker_type_id = " .$worker;
+                break;
+
+            case $status && !$timeType && $worker  && !$other:
+                $where = "worker_order.worker_type_id = " .$worker."worker_order.status = ".$status;
+                break;
+
+            case !$status && !$timeType  && !$worker  && $other:
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no '%{$other}%'";
+                break;
+
+            case $status && !$timeType && !$worker  && $other:
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no '%{$other}%' and worker_order.status = " .$status;
+                break;
         }
 
-        if ($status && !$time  && !$min_time && !$worker  && !$other) {
-            $where        = 'worker_order.status = ' . $status;
-            $worker_order = WorkerOrder::orderList($where, $size, $page);
-            return Json::encode([
-                'list' => $worker_order
-            ]);
-        }
-
-
-
-        // 期间搜索
-        if ($time) {
-            $times        = StringService::startEndDate($time);
-            $where        = ['and', ['>=', 'worker_order.create_time', strtotime($times['0'])], ['<=', 'worker_order.create_time', strtotime($times['1'])]];
-            $worker_order = WorkerOrder::orderList($where, $size, $page);
-            return Json::encode([
-                'list' => $worker_order
-            ]);
-        }
-
-
-        // 时间搜索
-        if ($min_time && $max_time) {
-            $where        = ['and', ['>=', 'worker_order.create_time', $min_time], ['<=', 'worker_order.create_time', $max_time]];
-            $worker_order = WorkerOrder::orderList($where, $size, $page);
-            return Json::encode([
-                'list' => $worker_order
-            ]);
-        }
-
-
-        //  工种搜索
-        if ($worker) {
-            $where        = ['worker_type_id', $worker];
-            $worker_order = WorkerOrder::orderList($where, $size, $page);
-            return Json::encode([
-                'list' => $worker_order
-            ]);
-        }
-
-
-        // 其它搜索
-        if ($other) {
-            $where        = ['worker_type_id', $worker];
-            $worker_order = WorkerOrder::orderList($where, $size, $page);
-            return Json::encode([
-                'list' => $worker_order
-            ]);
-        }
+        $worker_order = WorkerOrder::orderList($where, $size, $page);
+        return Json::encode([
+            'list' => $worker_order
+        ]);
     }
 }
