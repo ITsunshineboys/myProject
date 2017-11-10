@@ -3,7 +3,7 @@
 <div ng-controller="details_ctrl">
     <header>
         <div>
-            <a ng-click="getRetrnUp ()" >
+            <a class="public_return_black" ng-click="getRetrnUp ()" >
                 <!--ng-click="goPrev({'pid':pid,'id':id,'commentThree':commentThree})"-->
                 <img src="images/mall_nav_return.png" class="left_retrun"  alt=""/>
             </a>
@@ -12,20 +12,23 @@
             <a ui-sref="commodity_search({'search_flag_details':search_flag_details,'id':id})">
                 <input type="text" placeholder="请输入想购买的商品" />
             </a>
-            <img src="images/mall_home.png" ng-click="getHome()" class="mall_home" alt=""/>
+            <a class="public_return_black" ng-click="getHome()">
+                <img src="images/mall_home.png"  class="mall_home" alt=""/>
+            </a>
+
         </div>
     </header>
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-            <li  ng-click="filterSales ()">销量优先</li>
-            <li >
+            <li ng-click="filterSales ()">销量优先</li>
+            <li ng-click="filterPraise ()">
                 价格
-                <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png"   ng-click="filterPraise ()" alt=""/>
+                <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png" alt=""/>
             </li>
-            <li >
+            <li ng-click ="filterPicUp ()">
                 好评率
-                <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png" ng-click ="filterPicUp ()" alt=""/>
+                <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png" alt=""/>
             </li>
             <li>
                 <a class="font_color" href="javascript:void(0);" data-toggle="modal" data-target="#myModal">
@@ -46,7 +49,7 @@
                         <p class="comment_two">{{item.subtitle}}</p>
                         <span class="comment_span">销量数：{{item.sold_number}}&nbsp;&nbsp;</span>
                         <span class="comment_span_two">{{item.favourable_comment_rate}}%好评</span>
-                        <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
+                        <p style="margin-top: .4rem;color: #F59C22" class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
                     </div>
                 </div>
             </div>
@@ -55,12 +58,12 @@
             <span>暂无符合条件的商品</span>
         </div>
         <!--筛选框-->
-        <div class="popup_screen">
+        <div class="popup_screen ">
             <div class="style_popup">
                 <!-- Modal 弹框-->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
+                <div class="modal fade screen_model" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document" >
+                        <div class="modal-content" >
                             <!--风格 -->
                             <div class="modal-body">
                                 <div class="style_screen" >
@@ -78,7 +81,7 @@
                                             <div class="well">
                                                 <ul class="item_li">
                                                     <li ng-repeat="item in styles" ng-class="{'changeColor':check_index_series == $index}" ng-click="changeState ($index,item)">
-                                                       {{item.style}}
+                                                        {{item.style}}
                                                     </li>
                                                 </ul>
                                             </div>
@@ -108,7 +111,7 @@
 
                                     <!--价格区间-->
                                     <div class="header_font">
-                                        <span class="style_size">价格选择</span>
+                                        <span class="style_size">价格区间</span>
                                     </div>
                                     <div class="price_range">
                                         <input type="text" placeholder="最低价" ng-model="price_min" ng-blur="getBlur ()" maxlength="8" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/> &nbsp; &nbsp;
@@ -128,8 +131,8 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="all_brand_btn">
-                                        <span data-toggle="modal" data-target="#myModal_brand">
+                                    <div data-toggle="modal" data-target="#myModal_brand" class="all_brand_btn">
+                                        <span>
                                             查看全部品牌 
                                             <img src="images/left_com.png" alt=""/>
                                         </span>
@@ -138,7 +141,6 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-
                                 <button type="button" ng-click="getNull ()" class="btn btn-default reset_btn" >重置</button>
                                 <button type="button" ng-click="getMoreData ()" class="btn reset_btn last_btn"  data-dismiss="modal">完成</button>
                             </div>
@@ -147,7 +149,7 @@
                 </div>
                 <!--  模态框   品牌-->
                 <!-- Modal -->
-                <div class="modal fade" id="myModal_brand">
+                <div class="modal fade" id="myModal_brand" >
                     <div class="modal-dialog">
                         <div class="modal-content model_content">
                             <div class="modal-header">
@@ -163,10 +165,11 @@
                                         {{n.name}}
                                     </li>
                                 </ul>
-                                <div class="modal-footer footer_size">
-                                    <button type="button" class="btn btn_brand"  data-dismiss="modal" >返回</button>
-                                    <button type="button" class="btn btn_brandRight" data-dismiss="modal">确定</button>
-                                </div>
+
+                            </div>
+                            <div class="modal-footer footer_size">
+                                <button type="button" class="btn btn_brand"  data-dismiss="modal" >返回</button>
+                                <button type="button" class="btn btn_brandRight" data-dismiss="modal">确定</button>
                             </div>
                         </div>
                     </div>

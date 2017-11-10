@@ -118,8 +118,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 controller: "cut_net_ctrl",
                 params:{}
             })
-    }])
-
+    }]);
     // .run(["$rootScope","$state",function ($rootScope,$state) {
     //     $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
     //         document.body.scrollTop = document.documentElement.scrollTop = 0;

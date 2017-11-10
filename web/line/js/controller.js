@@ -1424,3 +1424,4 @@ angular.module("all_controller", ['ngCookies'])
 
     });
 
+
