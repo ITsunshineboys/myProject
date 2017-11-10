@@ -494,9 +494,10 @@ class OrderController extends Controller
     }
 
 
-      public function actionGetEffectlist(){
+    public function actionGetEffectlist(){
         $effect=EffectEarnst::find()
             ->asArray()
+            ->orderBy('create_time desc')
             ->all();
         foreach ($effect as $k  =>$v)
         {
