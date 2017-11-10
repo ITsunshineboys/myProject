@@ -1614,7 +1614,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->leftJoin('worker_type','worker_type.id = worker_order.id')
             ->offset($offset)
             ->limit($size)
-            ->groupBy('order_no')
+            ->groupBy('worker_order.order_no')
             ->asArray()
             ->all();
 
