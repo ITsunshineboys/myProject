@@ -10,7 +10,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
     }
 
     $scope.storeid = $stateParams.id;
-    let sortway = "online_time"; //默认按上架时间降序排列
+    let sortway = "publish_time"; //默认按创建时间降序排列
     let checkId;
     /*默认参数配置*/
     $scope.params = {
@@ -48,7 +48,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
         /*本月销量默认排序*/
         $scope.time_ascorder = false;
         $scope.time_desorder = true;
-        $scope.params['sort[]'] == 'online_time:3'
+        $scope.params['sort[]'] == 'publish_time:3'
     }
 
 
@@ -102,9 +102,9 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
         $scope.pageConfig.currentPage = 1;
         $scope.volumn_ascorder = false;
         $scope.volumn_desorder = false;
-        sortway = 'online_time';
-        $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
-        if($scope.params['sort[]']=='online_time:3'){
+        sortway = 'publish_time';
+        $scope.params['sort[]'] = $scope.params['sort[]'] == 'publish_time:3' ? 'publish_time:4' : 'publish_time:3';
+        if($scope.params['sort[]']=='publish_time:3'){
             $scope.time_desorder = true;
             $scope.time_ascorder = false;
         }else{
@@ -225,7 +225,7 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
             url: baseUrl+"/mall/goods-list-admin",
             params: $scope.params,
         }).then(function (res) {
-            console.log(res);
+            console.log('等待上架'+res);
             $scope.tabledetail = res.data.data.goods_list_admin.details;
             $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
         })

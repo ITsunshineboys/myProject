@@ -102,7 +102,7 @@
         <div class="company_type login_account">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>登录账户</span>
-            <input type="text" placeholder="请输入电话号码" name="accountnum" ng-model="params.mobile" ng-blur="!(storeform.accountnum.$invalid&&alljudgefalse||showwarning||storeform.accountnum.$error.pattern)?accountCheck():''" required ng-pattern="/^1[3|4|5|7|8][0-9]{9}$/" ng-class={'tored':storeform.accountnum.$invalid&&alljudgefalse||showwarning||storeform.accountnum.$error.pattern}>
+            <input type="text" placeholder="请输入电话号码" name="accountnum" maxlength=11 ng-model="params.mobile" ng-blur="!(storeform.accountnum.$invalid&&alljudgefalse||showwarning||storeform.accountnum.$error.pattern)?accountCheck():''" required ng-pattern="/^1[3|4|5|7|8][0-9]{9}$/" ng-class={'tored':storeform.accountnum.$invalid&&alljudgefalse||showwarning||storeform.accountnum.$error.pattern}>
             <p ng-if="show_account_warning">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span ng-bind="account_warning" class="warningred"></span>
@@ -132,7 +132,7 @@
                 <div class="company_type">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     <span>法人身份证号</span>
-                    <input type="text" placeholder="请输入身份证号" id="idcard" ng-model="params.identity_card_no" name="idcard" required ng-pattern="/(^[0-9]{15}$)|(^[0-9]{18}$)|(^[0-9]{17}([0-9]|X|x)$)/" ng-blur="id_card=!!storeform.idcard.$error" ng-class={'tored':(storeform.idcard.$invalid&&alljudgefalse)||(storeform.idcard.$error.required&&id_card)||(storeform.idcard.$error.pattern)}>
+                    <input type="text" placeholder="请输入身份证号" id="idcard" maxlength=18 ng-model="params.identity_card_no" name="idcard" required ng-pattern="/(^[0-9]{15}$)|(^[0-9]{18}$)|(^[0-9]{17}([0-9]|X|x)$)/" ng-blur="id_card=!!storeform.idcard.$error" ng-class={'tored':(storeform.idcard.$invalid&&alljudgefalse)||(storeform.idcard.$error.required&&id_card)||(storeform.idcard.$error.pattern)}>
                     <p ng-if="storeform.idcard.$error.pattern">
                         <span class="glyphicon glyphicon-asterisk red_mark"></span>
                         <span class="warningred">请输入正确的身份证号</span>
