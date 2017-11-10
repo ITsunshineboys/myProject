@@ -794,7 +794,7 @@ class OrderController extends Controller
      */
    public function actionWxpayeffect_earnstnotify(){
         //获取通知的数据
-        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $xml = file_get_contents("php://input");;
         $data=json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
 
         //如果返回成功则验证签名
