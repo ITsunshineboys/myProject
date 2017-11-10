@@ -963,29 +963,29 @@ class OrderController extends Controller
         if ($arr['result_code']=='SUCCESS')
         {
 
-            $res = \Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>$data
-            ])->execute();
-            if(!$res){
-                return false;
-            }
-//            $transaction_id=$arr['transaction_id'];
-//            $result = Wxpay::Queryorder($transaction_id);
-//            if (!$result)
-//            {
-//                return false;
-//            }
-//            $list=explode('&',$arr['attach']);
-//            $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$list[8]])->asArray()->one();
-//            if ($order){
-//                return true;
-//            }
-//            $result=GoodsOrder::Wxpaylinenotifydatabase($list,$arr);
-//            if ($result==true){
-//                return true;
-//            }else{
-//                return false;
-//            }
+            // $res = \Yii::$app->db->createCommand()->insert('alipayreturntest',[
+            //     'content'=>$data
+            // ])->execute();
+            // if(!$res){
+            //     return false;
+            // }
+           $transaction_id=$arr['transaction_id'];
+           $result = Wxpay::Queryorder($transaction_id);
+           if (!$result)
+           {
+               return false;
+           }
+           $list=explode('&',$arr['attach']);
+           $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$list[8]])->asArray()->one();
+           if ($order){
+               return true;
+           }
+           $result=GoodsOrder::Wxpaylinenotifydatabase($list,$arr);
+           if ($result==true){
+               return true;
+           }else{
+               return false;
+           }
         }else{
             return false;
         }
