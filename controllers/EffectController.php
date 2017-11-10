@@ -21,8 +21,8 @@ class EffectController extends Controller
     const STATUST_ON=1;
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
-        'effect/effect-list',
-        'effect/effect-view',
+        'effect-list',
+        'effect-view',
     ];
 
     /**
