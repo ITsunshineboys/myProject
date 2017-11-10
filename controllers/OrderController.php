@@ -809,10 +809,10 @@ class OrderController extends Controller
             {
                 return false;
             } 
-           if ($arr['total_fee']!=8900)
-           {
-               return false;
-           }
+           // if ($arr['total_fee']!=8900)
+           // {
+           //     return false;
+           // }
             $id=$arr['attach'];
             $tran = Yii::$app->db->beginTransaction();
             try{
