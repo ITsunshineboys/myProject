@@ -30,9 +30,9 @@
                 <div class="shu_house_2"></div>
                 <h1>房屋信息</h1>
                 <span class="house_span">房屋面积</span>
-                <input type="text" pattern="[0-9]*"  required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
+                <input type="text"   required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
                        ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
-                        ng-model="area"/>
+                        ng-model="ctrlScope.area"/>
 
                 <span class="p">m<sup>2</sup></span>
                 <p class="error_tips" ng-if="area_news.area.$invalid&&(submitted||change3)">房屋面积1～180m²，可精确到小数点后两位</p>
@@ -137,7 +137,7 @@
                 <span class="bay_span">飘窗</span>
                 <input type="text" required placeholder="0" id="window" name="window" ng-pattern="/^(([0-9]|1[0-9])(.\d{1,2})?|20(.00)?)$/"
                        ng-blur="change4=area_news.window.$invalid" class="input_windin" maxlength="6"
-                       ng-model="window"/>
+                       ng-model="ctrlScope.window"/>
                 <span class="bay_square">m</span>
                 <p class="error_tips window_tips" ng-if="area_news.window.$invalid&&(submitted||change4)">
                     飘窗长度9～20m，可精确到小数点后两位</p>

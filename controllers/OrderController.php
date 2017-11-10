@@ -791,40 +791,66 @@ class OrderController extends Controller
      * wxpay nityfy apply Deposit database
      * @return bool
      */
-    public function actionWxpayeffect_earnstnotify(){
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+   public function actionWxpayeffect_earnstnotify(){
+        $request = \Yii::$app->request;
+        $postStr = $request->post();
+        $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+            'content'=> Json::encode($postStr)
+        ])->execute();
+        if ($res4)
+        {
+            return true;
+        }
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $res1=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'=>Json::encode($msg)
+            ])->execute();
+            if ($res1)
+            {
+                return true;
+            }
         $res=Wxpay::NotifyProcess($msg);
+         $res3=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+            'content'=>$res
+        ])->execute();
+           if ($res3)
+            {
+                return true;
+            }
+       
         if ($res==true){
             $id=$msg['attach'];
 //             if ($msg['total_fee'] !=8900){
 //                    exit;
 //             }
-
-            $effect=Effect::findOne($id);
-            if (!$effect)
+            $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'=>Json::encode($msg)
+            ])->execute();
+            if ($res2)
             {
                 return true;
-                exit;
             }
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $earnst=EffectEarnst::find()
-                    ->where(['effect_id'=>$id])
-                    ->one();
-                $earnst->status=1;
-                if (!$earnst->save(false))
-                {
-                    return false;
-                    exit;
-                }
-            }catch (Exception $e){
-                $tran->rollBack();
-                return false;
-                exit;
-            }
-            $tran->commit();
-            return true;
+//            $effect=Effect::findOne($id);
+//            if (!$effect)
+//            {
+//                return true;
+//            }
+//            $tran = Yii::$app->db->beginTransaction();
+//            try{
+//                $earnst=EffectEarnst::find()
+//                    ->where(['effect_id'=>$id])
+//                    ->one();
+//                $earnst->status=1;
+//                if (!$earnst->save(false))
+//                {
+//                    return false;
+//                }
+//            }catch (Exception $e){
+//                $tran->rollBack();
+//                return false;
+//            }
+//            $tran->commit();
+//            return true;
 
         }else{
             return false;

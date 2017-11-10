@@ -1,6 +1,7 @@
 angular.module('all_controller',[])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
         //主页推荐
+        let baseUrl = ''
         $http.get(baseUrl + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
             console.log(response)
@@ -18,6 +19,7 @@ angular.module('all_controller',[])
             }
         }
         $scope.baseUrl = 'http://test.cdlhzz.cn/'
+        let baseUrl = ''
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
@@ -155,9 +157,9 @@ angular.module('all_controller',[])
         $scope.$watch('toponymy', function (newVal, oldVal) {
             $scope.show_material = false
         })
-        // $scope.$watch('message', function (newVal, oldVal) {
-        //     $scope.show_material = false
-        // })
+        $scope.$watch('message', function (newVal, oldVal) {
+            $scope.show_material = false
+        })
         $scope.$watch('area', function (newVal, oldVal) {
             $scope.show_material = false
         })
@@ -1656,7 +1658,7 @@ angular.module('all_controller',[])
                         $anchorScroll.yOffset = 300
                         $location.hash(value.$name)
                         $anchorScroll()
-                        $window.document.getElementById(value.$name).focus()
+                        // $window.document.getElementById(value.$name).focus()
                         break
                     }
                 }

@@ -202,12 +202,15 @@ header div i{
 }
 .handyman_span{
     width:12rem;
-    margin-left:9.5rem;
+    /*margin-left:8.5rem;*/
     border: 1px solid #C2C2C2;
     height: 2.6rem;
     border-radius: .5rem;
     line-height: 2.6rem;
     /*margin-top: 1rem;*/
+    position: absolute;
+    right: 3.5rem;
+    top: 1.5rem;
     padding-left: 1rem;
 }
 .sheet_material li{
@@ -217,16 +220,16 @@ header div i{
 }
 .handyman_sec{
     position: absolute;
-    right:3.5rem;
+    right:4.5rem;
 }
 
 #zagong{
     transform: rotate(90deg);
 }
 .two-sided{
-    position: relative;
+    position: absolute;
     top: 2rem;
-    left: -4.5rem;
+    left: .5rem;
     color:#C2C2C2 ;
     font-size: 1rem;
 }
