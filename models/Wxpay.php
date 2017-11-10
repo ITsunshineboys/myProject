@@ -173,7 +173,7 @@ class Wxpay  extends ActiveRecord
 </script>";
         }
 
-        private static function Queryorder($transaction_id)
+        public static function Queryorder($transaction_id)
         {
             $input = new WxPayOrderQuery();
             $input->SetTransaction_id($transaction_id);

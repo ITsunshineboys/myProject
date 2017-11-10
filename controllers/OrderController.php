@@ -792,17 +792,46 @@ class OrderController extends Controller
      * wxpay nityfy apply Deposit database
      * @return bool
      */
-   public function actionWxpayeffect_earnstnotify(){
+    public function actionWxpayeffect_earnstnotify(){
+        //获取通知的数据
         $xml = file_get_contents("php://input");;
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
-        $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>$data
-            ])->execute();
-            if ($res4)
+        $arr=Json::decode($data);
+        if ($arr['result_code']=='SUCCESS')
+        {
+            $transaction_id=$arr['transaction_id'];
+
+            $result = Wxpay::Queryorder($transaction_id);
+            if (!$result)
             {
-                return true;
+                return false;
             }
+//            if ($arr['total_fee']!=8900)
+//            {
+//                return false;
+//            }
+            $id=$arr['attach'];
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $earnst=EffectEarnst::find()
+                    ->where(['effect_id'=>$id])
+                    ->one();
+                $earnst->status=1;
+                if (!$earnst->save(false))
+                {
+                    return false;
+                }
+            }catch (Exception $e){
+                $tran->rollBack();
+                return false;
+            }
+            $tran->commit();
+            return true;
+        }else{
+            return false;
+        }
     }
+
     /**
      *微信线下支付异步操作
      */
