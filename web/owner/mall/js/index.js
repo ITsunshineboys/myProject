@@ -13,7 +13,9 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
             wx.ready(function () {
+                wxConfig();
                 $rootScope.$on("$stateChangeStart", function () {
+                    console.log("page change");
                     wxConfig()
                 });
             });
