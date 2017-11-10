@@ -2272,7 +2272,7 @@ class OrderController extends Controller
             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
                 ->all();
-            foreach ($record as $rec)
+            foreach ($record as &$rec)
             {
                 if ($rec)
                 {
