@@ -190,15 +190,9 @@ class SiteController extends Controller
                     ],
                 ]);
 
-<<<<<<< HEAD
-                if ($user->hx_pwd_date != date('Ymd')
-                    || (!empty($postData[$modelName]['registration_id']) && $postData[$modelName]['registration_id'] != $user->registration_id)
-                ) {
-=======
                 $user->hx_pwd_date != date('Ymd') && $needResetHxPwd = true;
                 empty(Yii::$app->session[User::LOGIN_ORIGIN_APP]) && $needResetHxPwd = false;
                 if ($needResetHxPwd) {
->>>>>>> master
                     $events = Yii::$app->params['events'];
                     $event = $events['async'];
                     $data = [
