@@ -3330,6 +3330,9 @@ class MallController extends Controller
         }
 
         if (!$model->validate()) {
+            if (YII_DEBUG) {
+                StringService::writeLog(Goods::tableName(), json_encode($model->errors));
+            }
             $code = 1000;
             return Json::encode([
                 'code' => $code,
