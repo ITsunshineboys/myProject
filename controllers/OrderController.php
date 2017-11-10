@@ -459,7 +459,7 @@ class OrderController extends Controller
                 'data'=>Wxpay::GetWxJsSign()
             ]);
         }
-    }
+    } 
     /**
      * 智能报价-样板间支付定金提交
      * @return string
