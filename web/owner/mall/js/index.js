@@ -17,13 +17,9 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 timestamp: data.timestamp, // 必填，生成签名的时间戳
                 nonceStr: data.nonceStr, // 必填，生成签名的随机串
                 signature: data.signature,// 必填，签名，见附录1
-                jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "chooseWXPay", "hideAllNonBaseMenuItem", "showMenuItems"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
             wx.ready(function () {
-                wx.hideAllNonBaseMenuItem();    // 隐藏所有非基础类功能
-                wx.showMenuItems({  // 显示指定功能
-                    menuList: ["menuItem:share:appMessage", "menuItem:share:timeline"]
-                });
                 // 分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: 'Demo', // 分享标题
@@ -35,6 +31,27 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                     title: 'Demo', // 分享标题
                     desc: '', // 分享描述
                     link: location.hostname + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: '' // 分享图标
+                });
+                // 分享到QQ
+                wx.onMenuShareQQ({
+                    title: '', // 分享标题
+                    desc: '', // 分享描述
+                    link: location.hostname + location.pathname + location.hash, // 分享链接
+                    imgUrl: '' // 分享图标
+                });
+                // 腾讯微博
+                wx.onMenuShareWeibo({
+                    title: '', // 分享标题
+                    desc: '', // 分享描述
+                    link: location.hostname + location.pathname + location.hash, // 分享链接
+                    imgUrl: '' // 分享图标
+                });
+                // 分享到QQ空间
+                wx.onMenuShareQZone({
+                    title: '', // 分享标题
+                    desc: '', // 分享描述
+                    link: location.hostname + location.pathname + location.hash, // 分享链接
                     imgUrl: '' // 分享图标
                 });
             });
