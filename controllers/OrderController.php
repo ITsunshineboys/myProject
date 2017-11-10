@@ -826,7 +826,7 @@ class OrderController extends Controller
                     return false;
                 }
 
-                $time=(time()-60*60*2);
+                $time=(time()-60*60*6);
                 $list=EffectEarnest::find()
                     ->where("  create_time < {$time} ")
                     ->andWhere(['status'=>0])
