@@ -282,7 +282,14 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $filepath=FileService::upload();
+        $filepath=UserChat::upload();
+        if(is_numeric($filepath)){
+            $code=$filepath;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
         return Json::encode([
             'code'=>$code,
