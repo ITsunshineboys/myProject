@@ -1,3 +1,8 @@
+::-webkit-input-placeholder { color:#b1b1b2; }
+::-moz-placeholder { color:#b1b1b2; } /* firefox 19+ */
+:-ms-input-placeholder { color:#b1b1b2; } /* ie */
+input:-moz-placeholder { color:#b1b1b2; }
+
 .header_cell{
     height: 4rem;
     background-color: white;
@@ -10,9 +15,10 @@
     margin-top: 1rem;
     border: 1px solid #C2C2C2;
     border-radius: 1.2rem;
-    padding-left: 3em;
-    font-size: 1rem;
+    padding-left: 2.3em;
+    font-size: 1.2rem;
     margin-left: 1.5rem;
+    color: #666;
 }
 .header_cell img{
     position: absolute;
@@ -20,10 +26,12 @@
     top: 1.8rem;
 }
 .header_cell a{
-    margin-left: 1rem;
-    font-size: 1.2rem;
-    color:#4A4A4A;
+    margin-left: 1.2rem;
+    font-size: 1.4rem;
+    color:#666;
     text-decoration: none;
+    position: absolute;
+    top: 1.4rem;
 }
 .header_i{
     color: #d0d0d0;
@@ -31,19 +39,22 @@
     left:2.2rem;
     top:1.6rem;
 }
+.cell_ul{
+    margin-top: 1.4rem;
+    margin-left: 1.2rem;
+}
 .cell_ul li{
-    padding-left: 2rem;
-    border-bottom: 1px solid #C2C2C2;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 1.2rem;
+    padding-top: 1.2rem;
 }
 .second_fru {
     color: #C2C2C2;
     font-size: 1rem;
 }
 .first_fru {
-    font-size: 1.2rem;
-    color: #4A4A4A;
+    font-size: 1.4rem;
+    color: #666;
 }
 
 .have_data{
@@ -55,8 +66,8 @@
     /*display: none;*/
 }
 .no_data span{
-    font-size: 1.3rem;
-    color: #B8B6B6;
+    font-size: 1.4rem;
+    color: #b1b1b1;
 }
 .no_data a{
     position: relative;
