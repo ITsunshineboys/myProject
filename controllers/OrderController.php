@@ -826,45 +826,45 @@ class OrderController extends Controller
                     return false;
                 }
 
-                $time=time()-60*60*24;
+                $time=(time()-60*60*24);
                 $list=EffectEarnest::find()
                     ->where("create_time<={$time}")
                     ->andWhere(['status'=>0])
                     ->all();
-                if ($list)
-                {
-                    foreach ($list as &$delList)
-                    {
-                        $effect_id=$delList->effect_id;
-                        if (!$delList->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $effect=Effect::findOne($effect_id);
-                        if (!$effect->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $effect_material=EffectMaterial::find()
-                            ->where(['effect_id'=>$effect_id])
-                            ->one();
-                        if (!$effect_material->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $EffectPicture=EffectPicture::find()
-                            ->where(['effect_id'=>$effect_id])
-                            ->one();
-                        if (!$EffectPicture->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                    }
-                }
+                // if ($list)
+                // {
+                //     foreach ($list as &$delList)
+                //     {
+                //         $effect_id=$delList->effect_id;
+                //         if (!$delList->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //         $effect=Effect::findOne($effect_id);
+                //         if (!$effect->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //         $effect_material=EffectMaterial::find()
+                //             ->where(['effect_id'=>$effect_id])
+                //             ->one();
+                //         if (!$effect_material->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //         $EffectPicture=EffectPicture::find()
+                //             ->where(['effect_id'=>$effect_id])
+                //             ->one();
+                //         if (!$EffectPicture->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //     }
+                // }
             }catch (Exception $e){
                 $tran->rollBack();
                 return false;
