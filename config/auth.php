@@ -9,6 +9,7 @@
 return [
     // common
     'site/time-types' => [1, 2, 3, 4, 5, 6, 7],
+    'site/upload' => [1, 2, 3, 4, 5, 6, 7],
 
     // recommend
     'mall/recommend-admin-index' => [1],
