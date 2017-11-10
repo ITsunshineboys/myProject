@@ -28,6 +28,7 @@ use yii\db\Exception;
  * @property integer $worker_type_id
  * @property string $describe
  * @property string $demand
+ * @property string $type
  * @property string $days
  */
 class WorkerOrder extends \yii\db\ActiveRecord
@@ -924,7 +925,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function addorderinfo($uid,array $array)
 
     {
-
         $worker_order = new self();
         $worker_order->uid = $uid;
         $worker_order->worker_type_id = $array['worker_type_id'];
@@ -940,6 +940,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->amount = $array['amount'] * 100;
         $worker_order->front_money = $array['front_money'] * 100;
         $worker_order->status=self::WORKER_ORDER_PREPARE;
+        $worker_order->type=self::WORKER_ORDER_PREPARE;
         $days = self::dataeveryday($start_time, $end_time);
         $worker_order->days = $days;
         if (isset($describe)) {
@@ -965,7 +966,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             $type=WorkerType::getparenttype($array['worker_type_id']);
             if(!$type){
-                return null;
+                return 1000;
             }
             $ks=array_keys($array);
             foreach ($ks as $k=>$key){
@@ -1014,30 +1015,44 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     public static function saveMuditem(array $array,$order_no)
     {
-
-        $mud_order = new MudWorkerOrder();
-
-        foreach ($array as $attributes) {
-
-            $_model = clone $mud_order;
-            $_model->order_no = $order_no;
-
-            foreach (array_keys($attributes) as &$k) {
-//
-                if (preg_match('/(item_id)/', $k, $m)) {
-                    $_model->worker_item_id = $attributes[$k];
-                }
-             if (preg_match('/(craft)/', $k, $m)) {
-                   $_model->worker_craft_id = $attributes[$k];
-               }
-                if (preg_match('/(area)/', $k, $m)) {
-                    $_model->area = $attributes[$k];
-                }
-               if (preg_match('/(guarantee)/', $k, $m)) {
-                    $_model->guarantee = $attributes[$k];
-                }
+        foreach ($array as &$v) {
+            if(!isset($v['guarantee']) || !isset($v['chip'])){
+                $v['guarantee']=0;
+                $v['chip']=0;
             }
-            $res = $_model->save(false);
+                $res= \Yii::$app->db->createCommand()->insert('mud_worker_order',[
+                    'order_no'=>$order_no,
+                    'worker_item_id'=>$v['item_id'],
+                    'worker_craft_id'=>$v['craft_id'],
+                    'area'=>$v['area'],
+                    'guarantee'=>$v['guarantee'],
+                    'chip'=>$v['chip']
+                ])->execute();
+
+        }
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    /**
+     *保存水电工条目信息
+     * @param array $array
+     * @param $order_no
+     * @return bool
+     */
+    public static function savehydropoweritem(array $array,$order_no){
+        foreach ($array as &$v) {
+                foreach ($v as &$data){
+                    $res= \Yii::$app->db->createCommand()->insert('hydropower_worker_order',[
+                        'order_no'=>$order_no,
+                        'worker_item_id'=>$data['item_id'],
+                        'worker_craft_id'=>$data['craft_id'],
+                        'length'=>$data['length'],
+                        'electricity'=>$data['electricity']
+                    ])->execute();
+                }
         }
         if (!$res) {
             return false;
@@ -1053,29 +1068,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return bool
      */
     public static function savewaterproofitme(array $array,$order_no){
-        $mud_order = new WaterproofWorkerOrder();
+        foreach ($array as &$v) {
+            $res= \Yii::$app->db->createCommand()->insert('waterproof_worker_order',[
+                'order_no'=>$order_no,
+                'worker_item_id'=>$v['item_id'],
+                'worker_craft_id'=>$v['craft_id'],
+                'area'=>$v['area'],
+                'brand'=>$v['brand'],
+            ])->execute();
 
-        foreach ($array as $attributes) {
-
-            $_model = clone $mud_order;
-            $_model->order_no = $order_no;
-
-            foreach (array_keys($attributes) as &$k) {
-//
-                if (preg_match('/(item_id)/', $k, $m)) {
-                    $_model->worker_item_id = $attributes[$k];
-                }
-                if (preg_match('/(craft)/', $k, $m)) {
-                    $_model->worker_craft_id = $attributes[$k];
-                }
-                if (preg_match('/(area)/', $k, $m)) {
-                    $_model->area = $attributes[$k];
-                }
-                if (preg_match('/(brand)/', $k, $m)) {
-                    $_model->brand = $attributes[$k];
-                }
-            }
-            $res = $_model->save(false);
         }
         if (!$res) {
             return false;
@@ -1091,28 +1092,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return bool
      */
     public static function savepainteritem(array $array,$order_no){
-            $painter =new PaintWorkerOrder();
-            foreach ($array as $attributes) {
-
-                $_model = clone $painter;
-                $_model->order_no = $order_no;
-                foreach (array_keys($attributes) as &$k) {
-//
-                    if (preg_match('/(item_id)/', $k, $m)) {
-                        $_model->worker_item_id = $attributes[$k];
-                    }
-                    if (preg_match('/(craft)/', $k, $m)) {
-                        $_model->worker_craft_id = $attributes[$k];
-                    }
-                    if (preg_match('/(area)/', $k, $m)) {
-                        $_model->area = $attributes[$k];
-                    }
-                    if (preg_match('/(brand)/', $k, $m)) {
-                        $_model->brand = $attributes[$k];
-                    }
-                }
-                $res = $_model->save(false);
+        foreach ($array as &$v) {
+            foreach ($v as &$data) {
+                $res = \Yii::$app->db->createCommand()->insert('painter_worker_order', [
+                    'order_no' => $order_no,
+                    'worker_item_id' => $data['item_id'],
+                    'worker_craft_id' => $data['craft_id'],
+                    'area' => $data['area'],
+                    'brand' => $data['brand'],
+                ])->execute();
             }
+        }
         if (!$res) {
             return false;
         } else {
