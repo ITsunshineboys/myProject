@@ -33,7 +33,6 @@ use app\models\Express;
 use app\models\Goods;
 use app\models\Supplier;
 use app\models\LogisticsDistrict;
-use app\models\EffectEarnst;
 use app\models\Lhzz;
 use app\services\PayService;
 use app\services\StringService;
