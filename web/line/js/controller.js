@@ -237,6 +237,11 @@ angular.module("all_controller", ['ngCookies'])
     .controller("details_ctrl", function ($rootScope,$scope,$http ,$state,$stateParams) {
         $rootScope.baseUrl = baseUrl;
         let flag = $stateParams.flag;
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            $('.modal-backdrop').remove()
+            $('body').removeClass('modal-open')
+        });
         $scope.getRetrnUp = function () {
             if(flag == 0){
                 history.go(-2)
@@ -492,6 +497,11 @@ angular.module("all_controller", ['ngCookies'])
     .controller("product_details_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
         $rootScope.baseUrl = baseUrl;
         let vm = $scope.vm = {};
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            $('.modal-backdrop').remove()
+            $('body').removeClass('modal-open')
+        });
         let mySwiper = new Swiper("#swiperList", {
             autoplay: 3000,
             loop: true,
@@ -701,6 +711,11 @@ angular.module("all_controller", ['ngCookies'])
     .controller("shop_front_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
         $rootScope.baseUrl = baseUrl;
         let vm = $scope.vm = {};
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open')
+        });
         //轮播变量
         let mySwiper = new Swiper("#swiperList", {
             autoplay: 3000,
@@ -854,6 +869,11 @@ angular.module("all_controller", ['ngCookies'])
     //发票信息
     .controller('invoice_ctrl',function($rootScope,$scope,$http,$state,$stateParams){
         $rootScope.baseUrl = baseUrl;
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            $('.modal-backdrop').remove()
+            $('body').removeClass('modal-open')
+        });
         $scope.harvestAddress  = $stateParams.harvestAddress;
         $scope.harvestName     = $stateParams.harvestName;
         $scope.harvestNum      = $stateParams.harvestNum;
@@ -1035,6 +1055,11 @@ angular.module("all_controller", ['ngCookies'])
     //确认订单
     .controller('order_commodity_ctrl',function ($rootScope,$scope,$http,$state,$stateParams,$cookieStore,$cookies) {
         $rootScope.baseUrl = baseUrl;
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            $('.modal-backdrop').remove()
+            $('body').removeClass('modal-open')
+        });
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -1376,6 +1401,11 @@ angular.module("all_controller", ['ngCookies'])
     // 支付成功
     .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams,$interval){
         $rootScope.baseUrl = baseUrl;
+        window.addEventListener("hashchange", function() {
+            // 注册返回按键事件
+            $('.modal-backdrop').remove()
+            $('body').removeClass('modal-open')
+        });
         $scope.timeOut = 5;
         $interval(function () {
             if($scope.timeOut!=0)  {
@@ -1391,5 +1421,6 @@ angular.module("all_controller", ['ngCookies'])
     //断网提示
     .controller('cut_net_ctrl',function($rootScope,$scope,$http,$state,$stateParams){
         $rootScope.baseUrl = baseUrl;
+
     });
 
