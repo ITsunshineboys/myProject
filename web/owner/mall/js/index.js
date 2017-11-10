@@ -1,4 +1,9 @@
 app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootScope, $scope, _ajax) {
+    $rootScope.$on("$locationChangeSuccess", function () {
+        console.log("page change");
+        $scope.wxShareUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash;
+        console.log($scope.wxShareUrl);
+    });
     // 微信事宜
     $rootScope.isWxOpen = false;
     _ajax.get('/order/iswxlogin', "", function (res) {
@@ -13,11 +18,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
             wx.ready(function () {
-                wxConfig();
-                $rootScope.$on("$stateChangeStart", function () {
-                    console.log("page change");
-                    wxConfig()
-                });
+                wxConfig($scope.wxShareUrl);
             });
             $rootScope.isWxOpen = true;
             if (sessionStorage.getItem("openId") === null) {
