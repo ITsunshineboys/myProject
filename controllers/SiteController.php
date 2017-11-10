@@ -169,7 +169,15 @@ class SiteController extends Controller
                 }
 
                 $user = Yii::$app->user->identity;
-                !empty($postData[$modelName]['registration_id']) && $user->registration_id = $postData[$modelName]['registration_id'];
+
+                $needResetHxPwd = false;
+                if (!empty($postData[$modelName]['registration_id'])) {
+                    if ($postData[$modelName]['registration_id'] != $user->registration_id) {
+                        $needResetHxPwd = true;
+                    }
+                    $user->registration_id = $postData[$modelName]['registration_id'];
+                }
+
                 $user->afterLogin();
 
                 echo Json::encode([
@@ -182,9 +190,8 @@ class SiteController extends Controller
                     ],
                 ]);
 
-                if ($user->hx_pwd_date != date('Ymd')
-                    || (!empty($postData[$modelName]['registration_id']) && $postData[$modelName]['registration_id'] != $user->registration_id)
-                ) {
+                $user->hx_pwd_date != date('Ymd') && $needResetHxPwd = true;
+                if ($needResetHxPwd) {
                     $events = Yii::$app->params['events'];
                     $event = $events['async'];
                     $data = [
