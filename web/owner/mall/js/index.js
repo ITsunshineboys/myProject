@@ -2,6 +2,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
     // 微信事宜
     $rootScope.isWxOpen = false;
     _ajax.get('/order/iswxlogin', "", function (res) {
+        alert(res.code);
         if (res.code === 200) { // 是微信浏览器打开
             let data = res.data;
             let wxConfig = {
