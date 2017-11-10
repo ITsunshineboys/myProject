@@ -191,6 +191,7 @@ class SiteController extends Controller
                 ]);
 
                 $user->hx_pwd_date != date('Ymd') && $needResetHxPwd = true;
+                empty(Yii::$app->session[self::LOGIN_ORIGIN_APP]) && $needResetHxPwd = false;
                 if ($needResetHxPwd) {
                     $events = Yii::$app->params['events'];
                     $event = $events['async'];
