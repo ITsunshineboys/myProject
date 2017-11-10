@@ -24,12 +24,8 @@ angular.module('all_controller',[])
         }
         window.addEventListener("hashchange", function() {
             // 注册返回按键事件
-            console.log($rootScope.curState_name)
-            console.log($rootScope.fromState_name)
-            if($rootScope.curState_name == 'modelRoom'&&$rootScope.fromState_name =='nodata.basics_decoration' ){
-                $state.go('modelRoom')
-            }
-            // $state.go('home')
+            $('.modal-backdrop').remove()
+            $('body').removeClass('modal-open')
         });
         $scope.baseUrl = 'http://test.cdlhzz.cn/'
         $scope.special_request = ''//特殊要求
