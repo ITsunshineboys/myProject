@@ -2,8 +2,8 @@
     <header>
         <div>
             <i class="glyphicon glyphicon-home"></i>
-            <span class="shop_manage">商城管理</span>
-            <span class="shop_manage" ui-sref="commodity_manage({id:storeid})">>商品管理</span>
+            <span class="shop_manage" ui-sref="merchant_index">商城管理</span>
+            <span class="shop_manage" ui-sref="commodity.deleted({id:storeid})">>商品管理</span>
             <span class="commodity_manage">>商品详情</span>
             <img ng-src="pages/mall_manage/merchant_manage/commodity_manage/images/user.png" alt=""/>
         </div>
@@ -52,11 +52,11 @@
         <div class="margin_top picarr">
             <span>上传图片</span>
             <div class="margin_left inline_block img_size coverimg">
-                <img src="{{baseUrl + '/'+ cover_image}}" alt="">
+                <img ng-src="{{baseUrl + '/'+ cover_image}}" alt="">
                 <div id="coverimg_span">封面图</div>
             </div>
             <div class="inline_block img_size" ng-repeat="item in images track by $index" style="margin-left: 10px">
-                <img src="{{baseUrl + '/'+ item}}" alt="">
+                <img ng-src="{{baseUrl + '/'+ item}}" alt="">
             </div>
         </div>
         <!--价格/库存-->
@@ -186,7 +186,7 @@
         </div>
         <!--操作-->
         <div class="btn_margin_top">
-            <span class="btn_size" ui-sref="commodity_manage({id:storeid})">返回</span>
+            <span class="btn_size" ui-sref="commodity.deleted({id:storeid})">返回</span>
         </div>
     </section>
 </div>
