@@ -524,4 +524,9 @@ class WorkerManagementController extends Controller
         }
 
     }
+
+    public function actionWorkerOrderDetails()
+    {
+        $id = (int)trim(\Yii::$app->request->get('id',''));
+    }
 }
