@@ -1,11 +1,6 @@
 app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootScope, $scope, _ajax) {
-    sessionStorage.removeItem("huxingParams");
-    sessionStorage.removeItem("backman");
-    sessionStorage.removeItem("roomPicture");
-    sessionStorage.removeItem("worker");
     // 微信事宜
     $rootScope.isWxOpen = false;
-    console.log(baseUrl);
     _ajax.get('/order/iswxlogin', "", function (res) {
         if (res.code === 200) { // 是微信浏览器打开
             let data = res.data;
@@ -24,7 +19,11 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 signature: data.signature,// 必填，签名，见附录1
                 jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
-
+            wx.ready(function () {
+                wx.showMenuItems({
+                    menuList: ["menuItem:share:appMessage", "menuItem:share:timeline", "menuItem:refresh", "menuItem:favorite"]
+                })
+            });
             $rootScope.isWxOpen = true;
 
             if (sessionStorage.getItem("openId") === null) {

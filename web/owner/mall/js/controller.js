@@ -1,7 +1,11 @@
 angular.module('all_controller',[])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
+        sessionStorage.removeItem("huxingParams");
+        sessionStorage.removeItem("backman");
+        sessionStorage.removeItem("roomPicture");
+        sessionStorage.removeItem("worker");
+        sessionStorage.removeItem("materials");
         //主页推荐
-        let baseUrl = ''
         $http.get(baseUrl + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
             console.log(response)
@@ -19,7 +23,6 @@ angular.module('all_controller',[])
             }
         }
         $scope.baseUrl = 'http://test.cdlhzz.cn/'
-        let baseUrl = ''
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
