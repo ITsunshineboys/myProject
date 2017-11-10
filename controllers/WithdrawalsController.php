@@ -1456,6 +1456,7 @@ class WithdrawalsController extends Controller
             ->where(['transaction_no'=>$transaction_no])
             ->asArray()
             ->one();
+            var_dump($access);exit;
         if (!$access)
         {
             $code=1000;
