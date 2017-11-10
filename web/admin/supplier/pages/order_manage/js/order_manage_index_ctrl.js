@@ -441,6 +441,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
 
     //时间类型
     $http.get(baseUrl+'/site/time-types').then(function (response) {
+        console.log(response)
         $scope.time = response.data.data.time_types;
         $scope.wjparams.time_type = response.data.data.time_types[0].value;//待发货
     });
