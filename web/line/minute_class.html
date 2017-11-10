@@ -1,203 +1,206 @@
 <link rel="stylesheet" href="css/minute_class.css"/>
 <div ng-app="app"  ng-controller="minute_class_ctrl" class="back">
-<div class="main" >
-    <div class="search_box">
-        <a ui-sref="home">
-        <img src="images/mall_nav_return.png" class="back_left" alt=""/>
-        </a>
-        <img src="images/mall_search.png" class="search_header" alt=""/>
-        <a ui-sref="commodity_search({'pid':pid,'search_flag':search_flag})">
-            <input  class="search" placeholder="请输入你想购买的商品"/>
-        </a>
-    </div>
-    <div class="category_box 1 tab1">
-        <!--左侧数据-->
-        <ul class="categorys">
-            <li class="categorys_li" ng-repeat=" item in star" ng-click="getTitle (item)">
-                <a ng-class="{'cur_category':(pid==item.id)}">{{item.title}}</a>
-            </li>
-        </ul>
+    <div class="main" >
+        <div class="search_box">
+            <a class="public_return_black" ui-sref="home">
+                <img src="images/mall_nav_return.png" alt=""/>
+            </a>
+            <img src="images/mall_search.png" class="search_header" alt=""/>
+            <a ui-sref="commodity_search({'pid':pid,'search_flag':search_flag})">
+                <input  class="search" placeholder="请输入你想购买的商品"/>
+            </a>
+        </div>
+        <div class="line"></div>
+        <div class="category_box 1 tab1">
+            <!--左侧数据-->
+            <ul class="categorys">
+                <li class="categorys_li" ng-repeat=" item in star" ng-click="getTitle (item)">
+                    <a ng-class="{'cur_category':(pid==item.id)}">{{item.title}}</a>
+                </li>
+            </ul>
 
-        <!--右侧数据-->
-        <div class="categorys_content">
-            <div class="tab2 11">
-                <div class="tab_title" ng-repeat="item in details">
-                    <div class="hor_line"></div> <div class="title_two">{{item.title}}</div> <div class="hor_line"></div>
+            <!--右侧数据-->
+            <div class="categorys_content">
+                <div class="tab2 11">
+                    <div class="tab_title" ng-repeat="item in details">
+                        <div class="hor_line"></div> <div class="title_two">{{item.title}}</div> <div class="hor_line"></div>
                         <div class="sort">
                             <ul class="comment_li">
                                 <!--ng-click="getComment(item1.id)"-->
-                                <li  ng-repeat="item1 in commentThree[item.id] " >
+                                <li  ng-repeat="item1 in commentThree[item.id]" class="animated fadeIn">
                                     <a ui-sref="details({id:item1.id,pid:pid})">
-                                        <img src="{{baseUrl + '/'+item1.icon}}" id="img_three" alt=""/><br/>
+                                        <div class="img_box">
+                                            <img src="{{baseUrl + '/'+item1.icon}}" id="img_three" alt=""/>
+                                        </div>
                                         <div class="font_class">{{item1.title}}</div>
                                     </a>
                                 </li>
                             </ul>
                         </div>
+                    </div>
                 </div>
-            </div>
-            <!--<div class="tab2 22 ">-->
+                <!--<div class="tab2 22 ">-->
                 <!--<div class="tab_title"><span>－</span> 固定家具 <span>－</span></div>-->
                 <!--<div class="sort">-->
-                    <!--<ul >-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<ul >-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                    <!--</ul>-->
+                <!--</ul>-->
                 <!--</div>-->
 
-            <!--</div>-->
-            <!--<div class="tab2 33">-->
+                <!--</div>-->
+                <!--<div class="tab2 33">-->
                 <!--<div class="tab_title"><span>－</span> 移动家具 <span>－</span></div>-->
                 <!--<div class="sort">-->
-                    <!--<ul >-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<ul >-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                    <!--</ul>-->
+                <!--</ul>-->
                 <!--</div>-->
 
-            <!--</div>-->
-            <!--<div class="tab2 44">-->
+                <!--</div>-->
+                <!--<div class="tab2 44">-->
                 <!--<div class="tab_title"><span>－</span> 家电配套 <span>－</span></div>-->
                 <!--<div class="sort">-->
-                    <!--<ul >-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<ul >-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                    <!--</ul>-->
+                <!--</ul>-->
                 <!--</div>-->
 
-            <!--</div>-->
-            <!--<div class="tab2 55">-->
+                <!--</div>-->
+                <!--<div class="tab2 55">-->
                 <!--<div class="tab_title"><span>－</span> 软装家居 <span>－</span></div>-->
                 <!--<div class="sort">-->
-                    <!--<ul >-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li> <li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<ul >-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li> <li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                    <!--</ul>-->
+                <!--</ul>-->
                 <!--</div>-->
 
-            <!--</div>-->
-            <!--<div class="tab2 66">-->
+                <!--</div>-->
+                <!--<div class="tab2 66">-->
                 <!--<div class="tab_title"><span>－</span> 智能家居 <span>－</span></div>-->
                 <!--<div class="sort">-->
-                    <!--<ul >-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>  <li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<ul >-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>  <li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                    <!--</ul>-->
+                <!--</ul>-->
                 <!--</div>-->
 
-            <!--</div>-->
-            <!--<div class="tab2 77">-->
+                <!--</div>-->
+                <!--<div class="tab2 77">-->
                 <!--<div class="tab_title"><span>－</span> 生活家居 <span>－</span></div>-->
                 <!--<div class="sort">-->
-                    <!--<ul >-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#">-->
-                                <!--<img src="images/material.png" alt=""/><br/>-->
-                                <!--<div class="font_class">产品一</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
+                <!--<ul >-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                <!--<a href="#">-->
+                <!--<img src="images/material.png" alt=""/><br/>-->
+                <!--<div class="font_class">产品一</div>-->
+                <!--</a>-->
+                <!--</li>-->
 
-                    <!--</ul>-->
+                <!--</ul>-->
                 <!--</div>-->
-            <!--</div>-->
+                <!--</div>-->
+            </div>
         </div>
     </div>
-</div>
 
 </div>

@@ -2,8 +2,15 @@ body{
     width: auto;
     height: 100%;
 }
-.back{
-    background-color: #F6F6F6;
+.animated.fadeIn{
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+}
+.line{
+    width: 100%;
+    height: 1rem;
+    background-color: #f6f6f6;
+    margin-top: 4rem;
 }
 .main{
     width: auto;
@@ -11,71 +18,83 @@ body{
     /*background-color: lightgreen;*/
 }
 .search_box{
-    width: auto;
-    height: 4.1rem;
-    padding: 0 1.2rem;
+    width: 100%;
+    height: 4rem;
     /*background-color: #53A7F3;*/
-    position: relative;
+    position: fixed;
     background-color: white;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
 }
 .search_box .search{
-    width: 24.3rem;
-    height: 2.4rem;
-    line-height: 2.4rem;
-    font-size: 1.2rem;
-    border-radius: 1.2rem;
-    position: absolute;
-    top: 0.85rem;
-    left:3.5rem;
-    padding-left: 2.4rem;
-    border: 1px solid #c7c7c7;
+    width: 27.6rem;
+    height: 2.6rem;
+    border-radius: 2rem;
+    font-size: 1.3rem;
+    margin-top: 0.7rem;
+    margin-left: 3.2rem;
+    padding-left: 3rem;
+    border: 2px solid #e5e5e5;
+    color: #666;
 }
 .search_header{
     position: absolute;
+    left: 4.3rem;
     top: 1.5rem;
-    left: 4rem;
-    z-index: 100;
 
 }
-.back_left{
-    position: relative;
-    top: 1.5rem;
+.public_return_black{
+    width: 4rem;
+    height: 4rem;
+    display: inline-block;
+    position: absolute;
+}
+
+.public_return_black img{
+    position: absolute;
+    top: 1.3rem;
+    left: 1.2rem;
+    color: #999;
 }
 /*����*/
 .category_box{
     margin-top: 1rem;
+    padding-top: 2rem;
+    background: #fff;
 }
 a{
     color: #B8B6B6;
 }
 .categorys{
-    float: left;
-    /*overflow: hidden;*/
+    position: fixed;
+    overflow: hidden;
     width: 10rem;
     height: 100%;
     margin: 0;
-    padding: 0;
+    padding-left: 1.2rem;
     list-style: none;
-    /*border-right: 0.1rem solid red;*/
+    border-right: 2px solid #dcdcdc;
     /*background-color: #01BEFF;*/
-    border-right: 1px solid #CDD3D7!important;
+    background-color: #fff;
 }
 .categorys >li{
-    width: 10rem;
     height: auto;
     background-color: #ECB84B;
 }
 .categorys >li>a{
     float: left;
+    padding-left: 0.8rem;
     width: 10rem;
-    height:3rem;
-    text-align: center;
+    text-align: left;
     position: relative;
-    line-height: 3rem;
     font-size: 1.4rem;
     background-color: #fff;
     color: #B8B6B6;
     text-decoration: none!important;
+    margin-bottom: 3rem;
+    transition: all .15s linear;
 }
 /*.categorys >li a:hover,.categorys >li a:active{*/
 /*/!*text-decoration:none;*!/*/
@@ -91,27 +110,36 @@ a{
 .cur_category{
     /*height: 3.5rem!important;*/
     /*line-height: 3.5rem!important;*/
-    color:#6B83FC!important;
+    color:#333!important;
+    font-size: 1.6rem !important;
+    padding-left: 1.2rem;
+    border-left: .4rem solid #333;
 }
 .categorys_content{
     width: 21.9rem;
     height: auto;
     min-height:10rem;
-    float: left;
+    margin-left: 10rem;
     font-size: 12px;
     background-color: #fff;
 }
 .comment_li {
     width: 5rem;
-    border-left: 1px solid  #CDD3D7;
+    margin-top: 1rem;
 }
 .font_class{
     font-size: 1rem;
-    color: #6C6C6C;
+    color: #999;
+}
+.img_box{
+    width: 5.3rem;
+    height: 5.3rem;
+    border-radius: 0.2rem;
+    overflow: hidden;
 }
 #img_three{
-    width: 4rem;
-    height: 4rem;
+    width: 100%;
+    height: 100%;
 }
 .hor_line{
     background-color:#CDD3D7;
@@ -122,13 +150,13 @@ a{
 }
 .title_two{
     display: inline-block;
-    font-size: 1.3rem;
-    color: #4A4A4A;
+    font-size: 1.4rem;
+    color: #666;
     line-height: 16px;
     margin: 0 1rem;
 }
 .categorys_content .tab2 .tab_title{
-    line-height: 4rem;
+    line-height: 3rem;
     text-align: center;
     color:#545454;
     /*background-color: rgba(91, 192, 222, 0.48);*/
@@ -141,26 +169,18 @@ a{
     width: 100%;
     height: auto;
     overflow: hidden;
+    padding-left: 1.4rem;
 }
 .categorys_content .tab2 .sort ul li{
     width: 33.3%;
     text-align: center;
     float: left;
+    padding-right: 1.2rem;
     /*background-color: #5bc0de;*/
 }
 .categorys_content .tab2 .sort ul li a{
-    display: inline-block;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box; /* Firefox */
-    -webkit-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    -ms-box-sizing: border-box;
     width:100%;
-    border-right: 0.5rem solid #fff;
-    border-left: 0.5rem solid #fff;
-    border-top:0.5rem solid #fff;
     color:#333;
-    /*border:1rem solid red;*/
 }
 .categorys_content .tab2 .sort ul li a img{
     width: 5rem;
