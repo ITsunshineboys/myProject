@@ -794,7 +794,22 @@ class OrderController extends Controller
    public function actionWxpayeffect_earnstnotify(){
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $res1=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'=>Json::encode($msg)
+            ])->execute();
+            if ($res1)
+            {
+                return true;
+            }
         $res=Wxpay::NotifyProcess($msg);
+         $res3=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+            'content'=>Json::encode($res)
+        ])->execute();
+           if ($res3)
+            {
+                return true;
+            }
+       
         if ($res==true){
             $id=$msg['attach'];
 //             if ($msg['total_fee'] !=8900){
