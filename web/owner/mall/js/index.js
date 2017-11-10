@@ -56,18 +56,15 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 });
             });
             $rootScope.isWxOpen = true;
-            alert("openID:" + sessionStorage.getItem("openId"));
             if (sessionStorage.getItem("openId") === null) {
                 if (getUrlParams('code') === "") {
                     let url = location.href;
                     _ajax.post('/order/find-open-id', {url: url}, function (res) {
-                        alert("获取CODE");
                         location.href = res.data
                     })
                 } else {
                     let code = getUrlParams('code');
                     _ajax.post('/order/get-open-id', {code: code}, function (res) {
-                        alert("获取openID");
                         let openId = res.data;
                         sessionStorage.setItem('openId', openId);
                     })
