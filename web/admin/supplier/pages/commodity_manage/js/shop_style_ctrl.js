@@ -40,9 +40,9 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.goods_select_value=[];//下拉框的值
       $scope.pass_attrs_name=[];//名称
       $scope.pass_attrs_value=[];//值
-        $scope.attr_name=[]
-        $scope.attr_value=[]
-        $scope.goods_select_name=[]
+      $scope.attr_name=[]
+      $scope.attr_value=[]
+      $scope.goods_select_attrs_value=[];//下拉框值
 
     $scope.goods_select_value_pass=[];//传值的下拉框值
         //大后台添加的属性
@@ -57,24 +57,18 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
                     $scope.goods_input_attrs.push(value);
                 }
             }
-            $scope.goods_select_attrs_value=[];
+
             //循环输入框名称和值
             for(let [key,value] of $scope.goods_input_attrs.entries()){
                 $scope.attr_name.push(value.name);
                 $scope.attr_value.push(value.value);
             }
-            //循环下拉框的名称和值
+            //循环下拉框的值
             for(let [key,value] of $scope.goods_select_attrs.entries()){
-                $scope.goods_select_name.push(value.name);//名称
-                $scope.goods_select_attrs_value.push(value.value)
+                $scope.goods_select_attrs_value.push(value.value);//下拉框的值
             }
             console.log($scope.goods_select_attrs_value[0])
             console.log($scope.goods_select_attrs_value[1])
-            for(let[key,value] of $scope.goods_select_attrs_value.entries()){
-               for(let[key1,value1] of value.entries()){
-                   $scope.sel_value=value1;
-               }
-            }
         })
 
       /*----------------自己添加的属性--------------------*/

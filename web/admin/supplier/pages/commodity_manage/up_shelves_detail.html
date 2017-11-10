@@ -65,8 +65,8 @@
             <!--下拉框-->
             <div ng-repeat="item in goods_select_attrs">
                 <img src="pages/commodity_manage/image/red.png" alt=""/>
-                <span style="display: inline-block;width: 140px" ng-model="myng.goods_select_name">{{goods_select_name}}</span>
-                <select style="margin-left: 35px" ng-model="myng.goods_select_model" ng-options="item for item in goods_select_value"></select>
+                <span style="display: inline-block;width: 140px">{{item.name}}</span>
+                <select style="margin-left: 35px" ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
                 <span class="unit">{{item.unit}}</span>
                 <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
             </div>
