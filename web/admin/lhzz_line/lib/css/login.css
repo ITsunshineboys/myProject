@@ -1,89 +1,55 @@
 html,body{
+  margin: 0;
+  padding: 0;
   width: 100%;
   height: 100%;
 }
-.login_out{
-  width: auto;
-  height:100%;
-  min-height: 00px;
-  display: flex;
-  justify-content:center;
-  align-items:Center;
-  background-color: #4598FE;
-}
-.login_box{
-  width: 500px;
-  height: 300px;
-  /*background-color: aqua;*/
-}
-.login_box>div{
-  margin-top: 10px;
-}
-.login_box .login_title{
-  height: 60px;
-  text-align: center;
-  /*border: 1px solid red;*/
-}
-.login_box .login_title>div{
-  font-size: 30px;
-}
-.warm{
-  font-size: 12px;
-  color:red;
-}
-.role_box>#select1{
-  width: 206px;
-  height: 32px;
-  position: relative;
-  z-index: 1;
-  font-size: 18px;
-  /*padding-left: 20px;*/
-  border:1px solid #A9A9A9;
 
-  /*letter-spacing:2px;*/
-  appearance:none;
-  cursor: pointer;
-  -moz-appearance:none;
-  -webkit-appearance:none;
-  background-image: url("../images/select4.png") ;
-  background-position: right;
-  background-repeat: no-repeat;
-  padding-right: 25px;
-  color:#474747;
+.content{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
 }
-.login_box .name_box ,.login_box .psw_box,.login_box .role_box {
-  margin-left: 115px;
-}
-.login_box .name_box >input,.login_box .psw_box >input{
-  width:200px;
-  height: 26px;
-  line-height: 30px;
-}
-.name1{
-  width:50px;
-  height: 32px;
-  font-size: 15px;
-  line-height:32px;
-  display:inline-block;
-  text-align: justify;
-  vertical-align:top;
-  /*background-color: chartreuse;*/
-}
-.name1::after{
-  content:"";
+.txt_left{
+  margin-right: 10px;
   display: inline-block;
-  width:100%;
-  overflow:hidden;
-  height:0;
+  width: 50px;
 }
-.login{
-  width: 200px;
+.select{
+  width: 245px;
   height: 35px;
-  line-height: 35px;
-  margin-left: 182px;
+  border-radius: 3px;
+  border: 1px solid #666F80;
+  padding-left: 5px
+}
+.enter_input{
+  width: 238px;
+  height: 35px;
+  border-radius: 3px;
+  border: 1px solid #666F80;
+  padding-left:5px;
+  outline: 0;
+}
+.margin_top{
+  margin-top: 40px;
+}
+.login_btn{
+  width: 245px;
+  height: 35px;
+  border: 1px solid #487AF8;
+  border-radius: 3px;
+  background-color: #F2F4FF;
+  color: #487AF8;
   text-align: center;
-  background-color:#ECB84B;
-  border-radius: 35px;
-  cursor: pointer;
-  color:#fff;
+  line-height: 35px;
+  float: right;
+  margin-top: 30px;
+}
+.border_red{
+  border: 1px solid #E51C23;
+}
+.error_red{
+  margin: 10px 0 0 88px;
+  color: #E51C23;
 }

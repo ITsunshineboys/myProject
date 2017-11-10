@@ -9,7 +9,7 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
         }
     }
     $scope.storeid = $stateParams.id;
-    let sortway = "online_time"; //默认按上架时间降序排列
+    let sortway = "offline_time"; //默认按上架时间降序排列
     let tempoffgoodid;  //单个商品id
     /*默认参数配置*/
     $scope.params = {
@@ -47,7 +47,7 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
         /*本月销量默认排序*/
         $scope.time_ascorder = false;
         $scope.time_desorder = true;
-        $scope.params['sort[]'] == 'online_time:3'
+        $scope.params['sort[]'] == 'offline_time:3'
     }
 
 
@@ -101,9 +101,9 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
         $scope.pageConfig.currentPage = 1;
         $scope.volumn_ascorder = false;
         $scope.volumn_desorder = false;
-        sortway = 'online_time';
-        $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
-        if($scope.params['sort[]']=='online_time:3'){
+        sortway = 'offline_time';
+        $scope.params['sort[]'] = $scope.params['sort[]'] == 'offline_time:3' ? 'offline_time:4' : 'offline_time:3';
+        if($scope.params['sort[]']=='offline_time:3'){
             $scope.time_desorder = true;
             $scope.time_ascorder = false;
         }else{

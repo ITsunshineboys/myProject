@@ -96,7 +96,7 @@
                 <td ng-if="show_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="show_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="show_8">¥{{item.purchase_price_designer}}</td><!--string-to-number2-->
-                <td ng-if="show_9"><input type="text" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
+                <td ng-if="show_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="show_10">{{item.sold_number}}</td>
                 <td ng-if="show_11" class="green">{{item.status}}</td>
                 <td ng-if="show_12">{{item.online_time}}</td>
@@ -114,8 +114,6 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">选择添加商品的分类</h4>
                 </div>
                 <div class="modal-body">
@@ -149,11 +147,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" ng-click="shop_style_go()"
-                            data-dismiss="{{add_confirm_modal}}">确定
-                    </button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="shop_add_close()">取消
-                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="shop_style_go()" data-dismiss="{{add_confirm_modal}}">确定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="shop_add_close()">取消</button>
                 </div>
             </div>
         </div>
@@ -171,10 +166,10 @@
                     是否确认下架{{table.roles.length}}个商品
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
                             ng-click="all_off_shelf_confirm()">确认
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
@@ -192,10 +187,10 @@
                     是否确认下架1个商品?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="offline_solo_btn()">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="offline_solo_btn()">
                         确认
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
@@ -300,18 +295,14 @@
                 <td ng-if="down_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="down_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="down_8">¥{{item.purchase_price_designer}}</td>
-                <td ng-if="down_9"><input type="text" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
+                <td ng-if="down_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="down_10">{{item.sold_number}}</td>
                 <td ng-if="down_11" class="red">{{item.status}}</td>
                 <td ng-if="down_12">{{item.offline_time}}</td>
                 <td ng-if="down_13">{{item.operator}}</td>
                 <td ng-if="down_14"><img class="img_cover_size" ng-src="{{baseUrl + '/'+ item.cover_image}}" alt=""></td>
-                <td ng-if="down_15" class="blue reason_width" ng-show="item.operator =='系统下架'"
-                    ng-click="reason_click(item.offline_reason)" data-toggle="modal"
-                    data-target="#down_shelves_reason_modal">{{item.offline_reason}}
-                </td>
-                <td ng-if="down_15" class="blue reason_width" ng-show="item.operator !='系统下架'">{{item.offline_reason}}
-                </td>
+                <td ng-if="down_15" class="blue reason_width" ng-show="item.operator =='系统下架'" ng-click="reason_click(item.offline_reason)" data-toggle="modal" data-target="#down_shelves_reason_modal">{{item.offline_reason}}</td>
+                <td ng-if="down_15" class="blue reason_width" ng-show="item.operator !='系统下架'">{{item.offline_reason}}</td>
                 <td ng-if="down_16" ng-show="item.operator =='系统下架'" class="blue" ui-sref="system_offline({item:item})">查看</td>
                 <td ng-if="down_16" ng-show="item.operator !='系统下架'" class="blue" ui-sref="up_shelves_detail({item:item,flag:1})">编辑</td>
                 <td ng-if="down_17" class="blue" ng-show="item.operator !='系统下架'">
@@ -360,10 +351,10 @@
                     <span>是否确认上架1个商品？</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
                             ng-click="all_on_shelf_confirm()">确认
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
@@ -381,9 +372,9 @@
                     <span>是否确认删除{{batch_del.length}}个商品?</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="off_del_confirm()">确认
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="off_del_confirm()">确认
                     </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>

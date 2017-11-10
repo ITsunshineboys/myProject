@@ -9,6 +9,7 @@
 namespace app\services;
 
 use app\models\User;
+use app\models\RolePermission;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -31,16 +32,17 @@ class AuthService extends AccessControl
             || !empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])
         ) {
             $path = Yii::$app->controller->id . '/' . $action->id;
-            if (isset(Yii::$app->params['auth'][$path])) {
+            if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_ADMIN])) {
                 if (!$user->checkAdminLogin()
-                    || !in_array($user->login_role_id, Yii::$app->params['auth'][$path])
+                    || !in_array($path, RolePermission::rolePermissions($user->login_role_id))
                 ) {
                     if ($this->denyCallback !== null) {
                         call_user_func($this->denyCallback, $denyCode, $action);
                     }
-
                     return false;
                 }
+
+                return true;
             }
 
             if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])) {
@@ -48,12 +50,11 @@ class AuthService extends AccessControl
                     if ($this->denyCallback !== null) {
                         call_user_func($this->denyCallback, $denyCode, $action);
                     }
-
                     return false;
                 }
-            }
 
-            return true;
+                return true;
+            }
         } else {
             $code = User::checkKickedout() ? $kickedOutcode : $denyCode;
             if (YII_DEBUG && $code == $kickedOutcode) {

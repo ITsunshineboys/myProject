@@ -20,6 +20,10 @@ system_offline.controller("system_offline",function ($scope,$http,$stateParams,$
       console.log(res);
       $scope.detail_arr=res.data.goods_view;
   })
+  _ajax.get('/mall/goods-attrs-admin',{goods_id:+$scope.detail_item.id},function (res) {
+      $scope.detail_attrs=res.data.goods_attrs_admin;
+      console.log(res);
+  })
 
   /*------------------------------物流模板-------------------------------------*/
   _ajax.get('/mall/logistics-templates-supplier',{},function (res) {

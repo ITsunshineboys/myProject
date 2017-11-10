@@ -1598,46 +1598,50 @@ class WithdrawalsController extends Controller
                 ];
                 break;
             case 7:
-                $orders=explode(',',$access['order_no']);
-                foreach ($orders as $order)
+                 
+                if ($access['order_no'])
                 {
-                    $goodsOrder=GoodsOrder::find()
-                        ->select('pay_name')
-                        ->where(['order_no'=>$order])
-                        ->one();
-                    $pay_name=$goodsOrder->pay_name;
-                    $orderGoods=OrderGoods::find()
-                        ->select('goods_name')
-                        ->where(['order_no'=>$order])
-                        ->asArray()
-                        ->all();
-                    foreach ($orderGoods as $orderGood)
+                    $orders=explode(',',$access['order_no']);
+                    foreach ($orders as $order)
                     {
-                         $goods_name[]=   $orderGood['goods_name'];
+                        $goodsOrder=GoodsOrder::find()
+                            ->select('pay_name')
+                            ->where(['order_no'=>$order])
+                            ->one();
+                        $pay_name=$goodsOrder->pay_name;
+                        $orderGoods=OrderGoods::find()
+                            ->select('goods_name')
+                            ->where(['order_no'=>$order])
+                            ->asArray()
+                            ->all();
+                        foreach ($orderGoods as $orderGood)
+                        {
+                            $goods_name[]=   $orderGood['goods_name'];
+                        }
                     }
+                    if (count($goods_name)>1)
+                    {
+                        $title=$goods_name[0]."...";
+                    }else{
+                        $title=$goods_name[0];
+                    }
+                    $list[]=[
+                        'name'=>'支付类型',
+                        'value'=>$pay_name
+                    ];
+                    $list[]=[
+                        'name'=>'商品名称',
+                        'value'=>$title
+                    ];
+                    $list[]=[
+                        'name'=>'时间',
+                        'value'=>$access['create_time']
+                    ];
+                    $list[]=[
+                        'name'=>'交易单号',
+                        'value'=>$transaction_no
+                    ];
                 }
-                if (count($goods_name)>1)
-                {
-                    $title=$goods_name[0]."...";
-                }else{
-                    $title=$goods_name[0];
-                }
-                $list[]=[
-                    'name'=>'支付类型',
-                    'value'=>$pay_name
-                ];
-                $list[]=[
-                    'name'=>'商品名称',
-                    'value'=>$title
-                ];
-                $list[]=[
-                    'name'=>'时间',
-                    'value'=>$access['create_time']
-                ];
-                $list[]=[
-                    'name'=>'交易单号',
-                    'value'=>$transaction_no
-                ];
                 break;
         }
         $code=200;
@@ -1754,10 +1758,10 @@ class WithdrawalsController extends Controller
                 ]);
             }else{
                 $code=1000;
-                return Json::encode([
+                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+                    'msg' => '银行卡格式不对'
+                 ]);
             }
         }else{
             $code=1000;

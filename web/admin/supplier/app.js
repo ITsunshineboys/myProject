@@ -25,7 +25,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     /*--------------三阶段开始----王杰-----------------*/
         .state("home", {   //首页
             url: "/home",
-            templateUrl: "pages/supplier_index/supplier_index.html"
+            templateUrl: "pages/home/home.html"
         })
         .state("shop_data", {   //店铺数据
             url: "/shop_data",

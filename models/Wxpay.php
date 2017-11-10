@@ -19,8 +19,8 @@ class Wxpay  extends ActiveRecord
 {
 
 
-    const  EFFECT_NOTIFY_URL='http://test.cdlhzz.cn/order/wxpayeffect_earnstnotify';
-    const  LINEPAY_NOTIFY_URL='http://test.cdlhzz.cn/order/orderlinewxpaynotify';
+    const  EFFECT_NOTIFY_URL='/order/wxpayeffect_earnstnotify';
+    const  LINEPAY_NOTIFY_URL='/order/orderlinewxpaynotify';
     const  EFFECT_BODY='样板间申请费';
     const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
     const  ACCESS_TOKEN='access_token';
@@ -49,6 +49,7 @@ class Wxpay  extends ActiveRecord
         $openId = $openid;
         //②、统一下单
         $input = new WxPayUnifiedOrder();
+        $orders['return_insurance']=0;
         $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
         $input->SetBody($orders['body']);
         $input->SetAttach($attach);
@@ -57,7 +58,7 @@ class Wxpay  extends ActiveRecord
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
-        $input->SetNotify_url(self::LINEPAY_NOTIFY_URL);
+        $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::LINEPAY_NOTIFY_URL);
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
@@ -98,7 +99,7 @@ class Wxpay  extends ActiveRecord
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("goods");
-            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME']."/order/orderlinewxpaynotify");
+            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
@@ -173,7 +174,7 @@ class Wxpay  extends ActiveRecord
 </script>";
         }
 
-        private static function Queryorder($transaction_id)
+        public static function Queryorder($transaction_id)
         {
             $input = new WxPayOrderQuery();
             $input->SetTransaction_id($transaction_id);

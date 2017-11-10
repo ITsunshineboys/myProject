@@ -135,26 +135,20 @@ class BasisDecorationService
     ];
 
     /**
-     * 人工费
+     *   防水  水路  强电  弱电 人工费
      * @param string $points
      * @param array $labor
      * @return float
      *
      */
-    public static function  laborFormula($points,$labor,$worker_kind_details)
-    {
-        //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        return ceil(($points / $worker_kind_details['quantity'])) * $labor['univalence'];
-    }
-
-    public static function L($points,$labor,$day_points)
+    public static function laborFormula($points,$labor,$day_points)
     {
         $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
         $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value1'];
         $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
 
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        return (int)ceil(($p / $d) * $l);
+        return (int)ceil(($p / $d)) * $l;
     }
 
     /**
@@ -1874,6 +1868,11 @@ class BasisDecorationService
                     break;
             }
         }
+
+        if (!$wire && !$spool && !$bottom){
+            return false;
+        }
+
         $material ['total_cost'] = $material_price['total_cost'];
         $material ['material'] [] = BasisDecorationService::profitMargin($wire);
         $material ['material'] []= BasisDecorationService::profitMargin($spool);
@@ -1902,6 +1901,9 @@ class BasisDecorationService
                     $pvc[] = $one_waterway_current;
                     break;
             }
+        }
+        if (!$ppr && !$pvc){
+            return false;
         }
         $material ['total_cost'][] = $material_price['total_cost'];
         $material ['material'][] = BasisDecorationService::profitMargin($ppr);

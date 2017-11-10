@@ -5,8 +5,10 @@ use app\models\OrderPlatForm;
 use app\models\Addressadd;
 use app\models\CommentImage;
 use app\models\CommentReply;
-use app\models\EffectEarnst;
 use app\models\Effect;
+use app\models\EffectEarnest;
+use app\models\EffectMaterial;
+use app\models\EffectPicture;
 use app\models\GoodsComment;
 use app\models\GoodsAttr;
 use app\models\GoodsBrand;
@@ -47,6 +49,7 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use app\models\UserNewsRecord;
 use Yii;
+use vendor\wxpay\lib\WxPayResults;
  
 
 class OrderController extends Controller
@@ -458,7 +461,7 @@ class OrderController extends Controller
                 'data'=>Wxpay::GetWxJsSign()
             ]);
         }
-    }
+    } 
     /**
      * 智能报价-样板间支付定金提交
      * @return string
@@ -493,9 +496,10 @@ class OrderController extends Controller
     }
 
 
-      public function actionGetEffectlist(){
-        $effect=EffectEarnst::find()
+    public function actionGetEffectlist(){
+        $effect=EffectEarnest::find()
             ->asArray()
+            ->orderBy('create_time desc')
             ->all();
         foreach ($effect as $k  =>$v)
         {
@@ -531,7 +535,7 @@ class OrderController extends Controller
                 }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
-                    $earnst=EffectEarnst::find()
+                    $earnst=EffectEarnest::find()
                         ->where(['effect_id'=>$id])
                         ->one();
                     $earnst->status=1;
@@ -540,6 +544,66 @@ class OrderController extends Controller
                         echo 'fail';
                         exit;
                     }
+
+                    $time=(time()-60*60*6);
+                    $list=EffectEarnest::find()
+                        ->where("create_time<={$time}")
+                        ->andWhere(['status'=>0])
+                        ->all();
+                    if ($list)
+                    {
+                        foreach ($list as &$delList)
+                        {
+                            $effect_id=$delList->effect_id;
+                            $res=$delList->delete();
+                            if (!$res)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                            $effect=Effect::find()->where(['id'=>$effect_id])->one();
+                            if ($effect)
+                            {
+                                $res1=$effect->delete();
+                                if (!$res1)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    exit;
+                                };
+                            }
+
+                            $effect_material=EffectMaterial::find()
+                                ->where(['effect_id'=>$effect_id])
+                                ->one();
+                            if ($effect_material)
+                            {
+                                $res2=$effect_material->delete();
+                                if (!$res2)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    exit;
+                                };
+                            }
+
+                            $EffectPicture=EffectPicture::find()
+                                ->where(['effect_id'=>$effect_id])
+                                ->one();
+                            if ($EffectPicture)
+                            {
+                                $res3=$EffectPicture->delete();
+                                if (!$res3)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    exit;
+                                };
+                            }
+
+                        }
+                    }
+
                 }catch (Exception $e){
                     $tran->rollBack();
                     echo 'fail';
@@ -791,42 +855,129 @@ class OrderController extends Controller
      * wxpay nityfy apply Deposit database
      * @return bool
      */
-    public function actionWxpayeffect_earnstnotify(){
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $res=(new wxpay())->Orderlinewxpaynotify($msg);
-        if ($res==true){
-            $arr=explode('&',$msg['attach']);
-//             if ($msg['total_fee'] !=8900){
-//                    exit;
-//             }
-            $result=GoodsOrder::Wxpayeffect_earnstnotify($arr,$msg);
-            if ($result==true){
-                return true;
-            }else{
+    public function actionWxpayeffect_earnstnotify(){ 
+        //获取通知的数据
+        $xml = file_get_contents("php://input");;
+        $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $arr=Json::decode($data);
+        if ($arr['result_code']=='SUCCESS')
+        {
+            $transaction_id=$arr['transaction_id'];
+
+            $result = Wxpay::Queryorder($transaction_id);
+            if (!$result)
+            {
+                return false;
+            } 
+           // if ($arr['total_fee']!=8900)
+           // {
+           //     return false;
+           // }
+            $id=$arr['attach'];
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $earnst=EffectEarnest::find()
+                    ->where(['effect_id'=>$id])
+                    ->one();
+                $earnst->status=1;
+                if (!$earnst->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+
+                $time=(time()-60*60*6);
+                $list=EffectEarnest::find()
+                    ->where("  create_time < {$time} ")
+                    ->andWhere(['status'=>0])
+                    ->all();
+                if ($list)
+                {
+                   foreach ($list as &$delList)
+                    {
+                        $effect_id=$delList->effect_id;
+                        $res=$delList->delete();
+                        if (!$res)
+                        {
+                            $tran->rollBack();
+                            return false;
+                        };
+                        $effect=Effect::find()->where(['id'=>$effect_id])->one();
+                        if ($effect)
+                        {
+                            $res1=$effect->delete();
+                            if (!$res1)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                        }
+
+                        $effect_material=EffectMaterial::find()
+                            ->where(['effect_id'=>$effect_id])
+                            ->one();
+                        if ($effect_material)
+                        {
+                            $res2=$effect_material->delete();
+                            if (!$res2)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                        }
+
+                        $EffectPicture=EffectPicture::find()
+                            ->where(['effect_id'=>$effect_id])
+                            ->one();
+                        if ($EffectPicture)
+                        {
+                            $res3=$EffectPicture->delete();
+                            if (!$res3)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                        }
+
+                    }
+                }
+            }catch (Exception $e){
+                $tran->rollBack();
                 return false;
             }
+            $tran->commit();
+            return true;
         }else{
             return false;
         }
     }
+
     /**
      *微信线下支付异步操作
      */
     public function actionOrderlinewxpaynotify(){
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-        $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $res=Wxpay::NotifyProcess($msg);
-        if ($res==true){
-            $msg= Yii::$app->request->post();
+        //获取通知的数据
+        $xml = file_get_contents("php://input");;
+        $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $msg=Json::decode($data);
+        if ($msg['result_code']=='SUCCESS')
+        {
+
+//            $transaction_id=$arr['transaction_id'];
+//            $result = Wxpay::Queryorder($transaction_id);
+//            if (!$result)
+//            {
+//                return false;
+//            }
             $arr=explode('&',$msg['attach']);
             $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$arr[8]])->asArray()->one();
             if ($order){
                 return true;
             }
+            $msg['total_fee']=1;
             $result=GoodsOrder::Wxpaylinenotifydatabase($arr,$msg);
             if ($result==true){
-              return true;
+                return true;
             }else{
                 return false;
             }
@@ -1765,7 +1916,12 @@ class OrderController extends Controller
                     }
                 $registration_id=$supplier_user->registration_id;
                 $push=new Jpush();
-                $extras = [];//推送附加字段的类型
+                $extras =[
+                    'role_id'=>6,
+                    'order_no'=>$order_no,
+                    'sku'=>$sku,
+                    'type'=>GoodsOrder::STATUS_DESC_DETAILS,
+                ];//推送附加字段的类型
                 $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='已取消订单';
@@ -3388,6 +3544,7 @@ class OrderController extends Controller
                     $access->access_type=7;
                     $access->access_money=$total_amount*100;
                     $access->create_time=time();
+                    $access->order_no=$orders;
                     $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
                     $res3=$access->save(false);
                     if ( !$res3){
@@ -4209,7 +4366,12 @@ class OrderController extends Controller
                 }
                 $registration_id=$supplier_user->registration_id;
                 $push=new Jpush();
-                $extras = [];//推送附加字段的类型
+                $extras = [
+                    'role_id'=>6,
+                    'order_no'=>$order_no,
+                    'sku'=>$sku,
+                    'type'=>GoodsOrder::STATUS_DESC_DETAILS,
+                ];//推送附加字段的类型
                 $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='请尽快发货';

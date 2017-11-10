@@ -142,8 +142,8 @@ class GoodsOrder extends ActiveRecord
         '退货',
         '换货',
     ];
-     const REMIND_SEND_GOODS='remind_send_goods_';
-
+    const REMIND_SEND_GOODS='remind_send_goods_';
+    const STATUS_DESC_DETAILS=1;
 
 
     /**
@@ -360,11 +360,18 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $tran->commit();
-            return true;
         }catch (Exception $e) {
             $tran->rollBack();
             return false;
         }
+        $sms['mobile']=$address->mobile;
+        $sms['type']='gotOrder';
+        $sms['goods_title']=$goods['title'];
+        $sms['order_no']=$post['out_trade_no'];
+        $sms['recipient']=$address->consignee;
+        $sms['phone_number']=$address->mobile;
+        new SmValidationService($sms);
+        return true;
     }
 
    /**
@@ -602,9 +609,9 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
-            return false;
-        }
+        // if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
+        //     return false;
+        // }
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (! $address  || !$invoice){
@@ -614,7 +621,6 @@ class GoodsOrder extends ActiveRecord
         $tran = Yii::$app->db->beginTransaction();
         try{
 
-            $goods_order=new self();
             $goods_order=new self();
             $goods_order->order_no=$order_no;
             $goods_order->amount_order=$msg['total_fee'];
@@ -2104,6 +2110,7 @@ class GoodsOrder extends ActiveRecord
             $access->access_money=$postData['total_amount']*100;
             $access->create_time=time();
             $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+            $access->order_no=$orders;
             $res3=$access->save(false);
             if ( !$res3){
                 $tran->rollBack();

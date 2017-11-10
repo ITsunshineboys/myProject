@@ -7,7 +7,6 @@ var app = angular.module("app", ["ng.ueditor", "intelligent_directive", "ui.rout
     "addseriesModule",
     "seriesdetailModule", "addstyleModule", "choose_styleModule", "styledetailModule",
     "storedetailModule", "merchant_details",
-
     "intelligent_index", 'angularCSS', 'intelligent_directive', 'apply_case', 'distribution', 'mall_finance',
 
     //  王杰 开始
@@ -25,24 +24,16 @@ var app = angular.module("app", ["ng.ueditor", "intelligent_directive", "ui.rout
     "edit_attribute_module",
     "account_index_module",
     "add_user_module",
-    //第三次需求开始
-    "login_module",
-
     "checklist-model",
-    //第三次需求结束
     //王杰 结束
 ]);
 /*路由拦截*/
 app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     $httpProvider.defaults.withCredentials = true;
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/home");
     $stateProvider
 
     /*---------------------------王杰开始--------------------------------------*/
-        .state("login", {   //登录
-            url: "/login",
-            templateUrl: "pages/login/login.html"
-        })
         .state("banner_recommend", {   //APP推荐-banner
             url: "/banner_recommend",
             templateUrl: "pages/mall_manage/banner_app/banner_recommend/banner_recommend.html"

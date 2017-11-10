@@ -113,7 +113,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
   $scope.goods_select_value=[];//下拉框的值
   $scope.pass_attrs_name=[];//名称
   $scope.pass_attrs_value=[];//值
-
+  $scope.goods_select_attrs_value=[]
   /*大后台属性值获取*/
   _ajax.get('/mall/goods-attrs-admin',{goods_id:+$scope.goods_id},function (res) {
       console.log(res);
@@ -133,9 +133,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
       }
       //循环下拉框的value
       for(let [key,value] of $scope.goods_select_attrs.entries()){
-          $scope.goods_select_name=value.name;//名称
-          $scope.goods_select_value=value.value;//下拉框
-          $scope.goods_select_model=$scope.goods_select_value[0];
+          $scope.goods_select_attrs_value.push(value.value);//下拉框的值
       }
   })
   /*----------------自己添加的属性--------------------*/
@@ -271,10 +269,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
 
   /*--------------编辑保存按钮----------------------*/
   $scope.edit_confirm=function (valid,error) {
-      console.log(valid)
-      console.log($scope.upload_cover_src)
-      console.log($scope.logistics_status)
-      console.log(!$scope.price_flag)
+
     if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag){
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];
@@ -350,8 +345,10 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
         }
       }
       if($scope.goods_select_attrs[0]!=undefined){
-        $scope.pass_attrs_name.push($scope.goods_select_name);
-        $scope.pass_attrs_value.push($scope.goods_select_model);
+          for(let[key,value] of $scope.goods_select_attrs.entries()){
+              $scope.pass_attrs_name.push(value.name);
+              $scope.pass_attrs_value.push(value.value[0]);
+          }
       }
       console.log($scope.pass_attrs_name);
       console.log($scope.pass_attrs_value);

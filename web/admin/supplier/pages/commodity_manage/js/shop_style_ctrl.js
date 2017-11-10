@@ -40,6 +40,11 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.goods_select_value=[];//下拉框的值
       $scope.pass_attrs_name=[];//名称
       $scope.pass_attrs_value=[];//值
+      $scope.attr_name=[]
+      $scope.attr_value=[]
+      $scope.goods_select_attrs_value=[];//下拉框值
+
+    $scope.goods_select_value_pass=[];//传值的下拉框值
         //大后台添加的属性
         _ajax.get('/mall/category-attrs',{category_id:+$scope.category_id},function (res) {
             console.log(res);
@@ -52,18 +57,20 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
                     $scope.goods_input_attrs.push(value);
                 }
             }
-            //循环添加名称和值
+
+            //循环输入框名称和值
             for(let [key,value] of $scope.goods_input_attrs.entries()){
-                $scope.attr_name=value.name;
-                $scope.attr_value=value.value;
+                $scope.attr_name.push(value.name);
+                $scope.attr_value.push(value.value);
             }
-            //循环下拉框的value
+            //循环下拉框的值
             for(let [key,value] of $scope.goods_select_attrs.entries()){
-                $scope.goods_select_name=value.name;//名称
-                $scope.goods_select_value=value.value;//下拉框
-                $scope.goods_select_model=$scope.goods_select_value[0];
+                $scope.goods_select_attrs_value.push(value.value);//下拉框的值
             }
+            console.log($scope.goods_select_attrs_value[0])
+            console.log($scope.goods_select_attrs_value[1])
         })
+
       /*----------------自己添加的属性--------------------*/
       $scope.own_attrs_arr=[];//自定义数组
       //添加属性
@@ -77,7 +84,15 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
         console.log(index);
         $scope.own_attrs_arr.splice(index,1);
       };
-
+      $scope.own_input_change=function (input_value) {
+          for(let[key,value1] of $scope.goods_all_attrs.entries()){
+                  if(input_value==value1.name){
+                    $scope.own_submitted=true;
+                  }else{
+                    $scope.own_submitted=false;
+                  }
+          }
+      }
       /*----------------上传封面图-----------------------*/
       $scope.upload_cover_src='';
       $scope.data = {
@@ -230,7 +245,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
     }
 
     /*判断必填项，全部ok，调用添加接口*/
-    if(valid && $scope.upload_cover_src && !$scope.price_flag){
+    if(valid && $scope.upload_cover_src && !$scope.price_flag &&!$scope.own_submitted){
       $scope.success_variable='#on_shelves_add_success';
       /*循环自己添加的属性*/
       for(let[key,value] of $scope.own_attrs_arr.entries()){
@@ -239,12 +254,17 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       }
       /*判断是默认属性是 下拉框还是普通文本框*/
       if($scope.goods_input_attrs[0]!=undefined){
-        $scope.pass_attrs_name.push($scope.attr_name);
-        $scope.pass_attrs_value.push($scope.attr_value);
+        for(let[key,value] of $scope.goods_input_attrs.entries()){
+            $scope.pass_attrs_name.push(value.name)
+            $scope.pass_attrs_value.push(value.value);
+        }
       }
+      //下拉框
       if($scope.goods_select_attrs[0]!=undefined){
-        $scope.pass_attrs_name.push($scope.goods_select_name);
-        $scope.pass_attrs_value.push($scope.goods_select_model);
+          for(let[key,value] of $scope.goods_select_attrs.entries()){
+              $scope.pass_attrs_name.push(value.name);
+              $scope.pass_attrs_value.push(value.value[0]);
+          }
       }
       /*判断风格和系列是否存在，如果不存在，值传0*/
       $scope.series_model==undefined?$scope.series_model=0:$scope.series_model=parseInt($scope.series_model);
@@ -256,6 +276,8 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       if($scope.pass_attrs_value[0]==undefined){
         $scope.pass_attrs_value=[];
       }
+      console.log($scope.pass_attrs_name)
+      console.log($scope.pass_attrs_value)
       _ajax.post('/mall/goods-add',{
           category_id:+$scope.category_id,      //三级分类id
           title:$scope.goods_name,              //名称

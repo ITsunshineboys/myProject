@@ -57,9 +57,9 @@
         <div class="col-xs-10 img-list">
             <div class="cover-map">
                 <span>封面图</span>
-                <img ng-src="{{data.cover_image}}">
+                <img ng-src="{{'/' + data.cover_image}}">
             </div>
-            <img ng-repeat="obj in data.goods_image" ng-src="{{obj.image}}">
+            <img ng-repeat="obj in data.goods_image" ng-src="{{'/' + obj.image}}">
         </div>
     </div>
     <div class="row table-style">
@@ -155,7 +155,7 @@
     <div class="row">
         <div class="col-xs-2">线下商城二维码</div>
         <div class="col-xs-10">
-            <img ng-src="{{data.qrcode}}">
+            <img ng-src="{{'/' + data.qrcode}}">
         </div>
     </div>
     <div class="row">

@@ -21,6 +21,7 @@ use yii\db\Query;
  */
 class EffectEarnest extends \yii\db\ActiveRecord
 {
+    const STATUS_PAYED=1;
     const INSET_EARNST = 8900;
     const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_EXTRA = [];
@@ -31,7 +32,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
         'phone',
         'earnest',
         'remark',
-        'transaction_no'
+        'transaction_no',
+        'status'
 
     ];
     /**
@@ -130,7 +132,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      */
     public static function getallapply(){
 
-        return $sum=(new Query())->from('effect_earnest')->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where(['status'=>self::STATUS_PAYED])->count('*');
     }
 
 
@@ -142,7 +144,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
     public static function gettodayapply(){
         $today=self::getToday();
 
-        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->andWhere(['status'=>self::STATUS_PAYED])->count('*');
     }
 
     /**
@@ -154,7 +156,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
         $today=self::getToday();
 
-        $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->sum("earnest");
+        $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->andWhere(['status'=>self::STATUS_PAYED])->sum("earnest");
         return sprintf('%.2f',(float)$sum*0.01);
     }
 
@@ -165,7 +167,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      */
     public static function getallearnest(){
 
-        $sum=(new Query())->from('effect_earnest')->sum("earnest");
+        $sum=(new Query())->from('effect_earnest')->andWhere(['status'=>self::STATUS_PAYED])->sum("earnest");
         return sprintf('%.2f',(float)$sum*0.01);
     }
 }

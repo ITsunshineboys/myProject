@@ -46,13 +46,14 @@
                 <li>属性设置</li>
                 <li class="margin_left">属性名称</li>
                 <li class="margin_left_120">属性内容</li>
-                <li class="margin_left_280">单位</li>
+                <li class="margin_left_120">单位</li>
             </ul>
 
-            <ul class="otherul" ng-repeat="item in detail_arr.attrs">
+            <ul class="otherul" ng-repeat="item in detail_attrs">
                 <li class="margin_left">{{item.name}}</li>
-                <li class="margin_left_120">{{item.value}}</li>
-
+                <li class="margin_left_120" ng-if="!item.selected">{{item.value}}</li>
+                <li class="margin_left_120">{{item.selected}}</li>
+                <li class="margin_left_120">{{item.unit}}</li>
             </ul>
 
         </div>

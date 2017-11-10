@@ -14,6 +14,7 @@ use app\models\WorkerOrder;
 use app\models\WorkerRank;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -25,6 +26,7 @@ class WorkerManagementController extends Controller
     const ORDER_STATUS_ACCOMPLISH = 5;
     const DEFAULT_PAGE = 1;
     const DEFAULT_SIZE = 12;
+
     /**
      * @inheritdoc
      */
@@ -81,19 +83,19 @@ class WorkerManagementController extends Controller
         //工人订单
         $worker_order = WorkerOrder::find()->groupBy('order_no')->count('id');
         //工人总金额
-        $worker_price = WorkerOrder::find()->select('amount')->where(['status'=>self::ORDER_STATUS_ACCOMPLISH])->all();
-        $cost = 0;
-        foreach ($worker_price as $one_cost){
+        $worker_price = WorkerOrder::find()->select('amount')->where(['status' => self::ORDER_STATUS_ACCOMPLISH])->all();
+        $cost         = 0;
+        foreach ($worker_price as $one_cost) {
             $cost += $one_cost['amount'];
         }
 
         return Json::encode([
-           'code' => 200,
-           'msg' => 'ok',
+            'code' => 200,
+            'msg' => 'ok',
             'data' => [
                 'worker_count' => $worker_count,
                 'worker_order' => $worker_order,
-                'worker_cost' => sprintf("%.2f",(float)$cost * 0.01),
+                'worker_cost' => sprintf("%.2f", (float)$cost * 0.01),
             ]
         ]);
     }
@@ -104,13 +106,13 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerTypeList()
     {
-        $id = (int)trim(\Yii::$app->request->get('id',''));
-        $status = trim(\Yii::$app->request->get('status',''));
-        $del_id = (int)trim(\Yii::$app->request->get('del_id',''));
+        $id     = (int)trim(\Yii::$app->request->get('id', ''));
+        $status = trim(\Yii::$app->request->get('status', ''));
+        $del_id = (int)trim(\Yii::$app->request->get('del_id', ''));
 
         //  状态修改
-        if ($status != null){
-            $worker_type = (new WorkerType())->findOne(['id'=>$id]);
+        if ($status != null) {
+            $worker_type         = (new WorkerType())->findOne(['id' => $id]);
             $worker_type->status = $status;
             if (!$worker_type->save()) {
                 $code = 1000;
@@ -122,18 +124,18 @@ class WorkerManagementController extends Controller
         }
 
         //  删除功能
-        if ($del_id != null){
-            $where = 'worker_type.id = '.$del_id;
-            $del_ = WorkerType::findByListOne($where);
-            if ($del_ != null){
+        if ($del_id != null) {
+            $where = 'worker_type.id = ' . $del_id;
+            $del_  = WorkerType::findByListOne($where);
+            if ($del_ != null) {
                 $code = 1069;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             } else {
-                (new WorkerType())->deleteAll(['id'=>$del_id]);
-                (new WorkerRank())->deleteAll(['worker_type_id'=>$del_id]);
+                (new WorkerType())->deleteAll(['id' => $del_id]);
+                (new WorkerRank())->deleteAll(['worker_type_id' => $del_id]);
             }
         }
         return Json::encode([
@@ -149,34 +151,34 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerTypeAdd()
     {
-       $worker_type =  new  WorkerType();
-       $worker_type->worker_name = \Yii::$app->request->post('worker','');
-       $worker_type->establish_time = time();
-       $worker_type->status = WorkerType::PARENT;
-       if (!$worker_type->save()){
-           $code = 1000;
-           return Json::encode([
-              'code' => $code,
-              'msg' => \Yii::$app->params['errorCodes'][$code],
-           ]);
-       }
-        $id = $worker_type->attributes['id'];
-       $post = \Yii::$app->request->post();
-       foreach ($post['rank'] as $one_post){
-           $worker_rank = (new WorkerRank())->ByInsert($id,$one_post['rank'],$one_post['min'],$one_post['max']);
-       }
-       if (!$worker_rank){
-           $code = 1000;
-           return Json::encode([
-               'code' => $code,
-               'msg' => \Yii::$app->params['errorCodes'][$code],
-           ]);
-       }
+        $worker_type                 = new  WorkerType();
+        $worker_type->worker_name    = \Yii::$app->request->post('worker', '');
+        $worker_type->establish_time = time();
+        $worker_type->status         = WorkerType::PARENT;
+        if (!$worker_type->save()) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $id   = $worker_type->attributes['id'];
+        $post = \Yii::$app->request->post();
+        foreach ($post['rank'] as $one_post) {
+            $worker_rank = (new WorkerRank())->ByInsert($id, $one_post['rank'], $one_post['min'], $one_post['max']);
+        }
+        if (!$worker_rank) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
-       return Json::encode([
-          'code' => 200,
-          'msg' => 'OK',
-       ]);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
 
     }
 
@@ -188,20 +190,20 @@ class WorkerManagementController extends Controller
     {
         $post = \Yii::$app->request->post();
         //  修改工种类型
-        if (isset($post['edit'])){
-            $worker = WorkerType::findOne(['id'=>$post['edit']['id']]);
+        if (isset($post['edit'])) {
+            $worker              = WorkerType::findOne(['id' => $post['edit']['id']]);
             $worker->worker_name = $post['edit']['worker_name'];
-            if (!$worker->save()){
+            if (!$worker->save()) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-            foreach ($post['edit']['level'] as $one_post){
-               $rank = (new WorkerRank())->ByUpdate($one_post);
+            foreach ($post['edit']['level'] as $one_post) {
+                $rank = (new WorkerRank())->ByUpdate($one_post);
             }
-            if (!$rank){
+            if (!$rank) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -211,12 +213,12 @@ class WorkerManagementController extends Controller
         }
 
         //  添加工种类型
-        if (isset($post['add'])){
-            $worker_type =  new  WorkerType();
-            $worker_type->worker_name = $post['add']['worker'];
+        if (isset($post['add'])) {
+            $worker_type                 = new  WorkerType();
+            $worker_type->worker_name    = $post['add']['worker'];
             $worker_type->establish_time = time();
-            $worker_type->status = WorkerType::PARENT;
-            if (!$worker_type->save()){
+            $worker_type->status         = WorkerType::PARENT;
+            if (!$worker_type->save()) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -224,10 +226,10 @@ class WorkerManagementController extends Controller
                 ]);
             }
             $id = $worker_type->attributes['id'];
-            foreach ($post['add']['rank'] as $one_post){
-                $worker_rank = (new WorkerRank())->ByInsert($id,$one_post['rank'],$one_post['min'],$one_post['max']);
+            foreach ($post['add']['rank'] as $one_post) {
+                $worker_rank = (new WorkerRank())->ByInsert($id, $one_post['rank'], $one_post['min'], $one_post['max']);
             }
-            if (!$worker_rank){
+            if (!$worker_rank) {
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -237,8 +239,8 @@ class WorkerManagementController extends Controller
         }
 
         return Json::encode([
-           'code' => 200,
-           'msg' => 'OK',
+            'code' => 200,
+            'msg' => 'OK',
         ]);
     }
 
@@ -248,17 +250,17 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerList()
     {
-        $worker_ = trim(\Yii::$app->request->get('id',''));
+        $worker_     = trim(\Yii::$app->request->get('id', ''));
         $worker_type = WorkerType::find()
             ->select('id,worker_name')
-            ->where(['and',['status'=>1],['pid'=>0]])
+            ->where(['and', ['status' => 1], ['pid' => 0]])
             ->asArray()
             ->all();
 
-        if ($worker_ != null){
+        if ($worker_ != null) {
             $worker_rank = WorkerRank::find()
                 ->select('id,rank_name')
-                ->where(['worker_type_id'=>$worker_])
+                ->where(['worker_type_id' => $worker_])
                 ->asArray()
                 ->all();
 
@@ -339,7 +341,7 @@ class WorkerManagementController extends Controller
     public function actionWorkerAdd()
     {
         // 身份证号码验证
-        $identity_no = trim(\Yii::$app->request->post('identity_no',''));
+        $identity_no = trim(\Yii::$app->request->post('identity_no', ''));
         if (!preg_match('/^([\d]{17}[xX\d]|[\d]{15})$/', $identity_no)) {
             $code = 1072;
             return json_encode([
@@ -350,8 +352,8 @@ class WorkerManagementController extends Controller
         }
 
         // 检测是否注册
-        $identity_no_ = User::find()->where(['identity_no'=>$identity_no])->one();
-        if ($identity_no_){
+        $identity_no_ = User::find()->where(['identity_no' => $identity_no])->one();
+        if ($identity_no_) {
             $code = 1073;
             return json_encode([
                 'code' => $code,
@@ -362,17 +364,17 @@ class WorkerManagementController extends Controller
 
 
         $transaction = \Yii::$app->db->beginTransaction();
-        $uid = User::find()
-            ->where(['mobile'=>(int)trim(\Yii::$app->request->post('phone',''))])
+        $uid         = User::find()
+            ->where(['mobile' => (int)trim(\Yii::$app->request->post('phone', ''))])
             ->one();
-        try{
-            $worker = new Worker();
-            $worker->uid = $uid->id;
-            $worker->worker_type_id = (int)trim(\Yii::$app->request->post('worker_type_id',''));
-            $worker->province_code = (int)trim(\Yii::$app->request->post('province',''));
-            $worker->city_code = (int)trim(\Yii::$app->request->post('city',''));
-            $worker->level = (int)trim(\Yii::$app->request->post('worker_rank_id',''));
-            $worker->create_time = time();
+        try {
+            $worker                 = new Worker();
+            $worker->uid            = $uid->id;
+            $worker->worker_type_id = (int)trim(\Yii::$app->request->post('worker_type_id', ''));
+            $worker->province_code  = (int)trim(\Yii::$app->request->post('province', ''));
+            $worker->city_code      = (int)trim(\Yii::$app->request->post('city', ''));
+            $worker->level          = (int)trim(\Yii::$app->request->post('worker_rank_id', ''));
+            $worker->create_time    = time();
 
             if (!$worker->save()) {
                 $transaction->rollBack();
@@ -384,12 +386,12 @@ class WorkerManagementController extends Controller
                 ]);
             }
 
-            $uid->legal_person = trim(\Yii::$app->request->post('legal_person',''));
-            $uid->identity_no = $identity_no;
-            $uid->identity_card_front_image = trim(\Yii::$app->request->post('front_image',''));
-            $uid->identity_card_back_image = trim(\Yii::$app->request->post('back_image',''));
+            $uid->legal_person              = trim(\Yii::$app->request->post('legal_person', ''));
+            $uid->identity_no               = $identity_no;
+            $uid->identity_card_front_image = trim(\Yii::$app->request->post('front_image', ''));
+            $uid->identity_card_back_image  = trim(\Yii::$app->request->post('back_image', ''));
 
-            if (!$uid->save()){
+            if (!$uid->save()) {
                 $transaction->rollBack();
                 $code = 1000;
                 return json_encode([
@@ -400,12 +402,12 @@ class WorkerManagementController extends Controller
 
             $transaction->commit();
             return Json::encode([
-                'code' =>  200,
-                'msg' =>  'ok',
+                'code' => 200,
+                'msg' => 'ok',
             ]);
 
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $transaction->rollBack();
             $code = 1000;
             return json_encode([
@@ -418,93 +420,107 @@ class WorkerManagementController extends Controller
     /**
      * 工程订单列表
      */
-    public function actionWorkOrderList()
+    public function actionWorkerOrderList()
     {
-        $status = (int)trim(\Yii::$app->request->post('status',''));
-        $page = (int)trim(\Yii::$app->request->post('page',self::DEFAULT_PAGE));
-        $size = (int)trim(\Yii::$app->request->post('size',self::DEFAULT_SIZE));
 
-        // 全部订单
-        $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time','')));
-        $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time','')));
-        $worker = trim(\Yii::$app->request->post('worker',''));
-        $other = trim(\Yii::$app->request->post('other',''));
-        if (empty($status)){
+        $page     = (int)trim(\Yii::$app->request->post('page', self::DEFAULT_PAGE));
+        $size     = (int)trim(\Yii::$app->request->post('size', self::DEFAULT_SIZE));
 
-            // 状态搜索
-//            if (empty($status)){
-//                $where = [];
-//                $worker_order = WorkerOrder::orderList($where,$size,$page);
-//                return Json::encode([
-//                    'list' => $worker_order
-//                ]);
-//            }
+        $status   = (int)trim(\Yii::$app->request->post('status', ''));
+        $timeType = trim(\Yii::$app->request->post('time', ''));
+        $worker   = trim(\Yii::$app->request->post('worker', ''));
+        $other    = trim(\Yii::$app->request->post('other', ''));
 
-            // 时间搜索
-            if (!empty($min_time) && !empty($max_time)){
-                $where = ['and',['<=','worker_order.create_time',$min_time], ['<=','worker_order.create_time',$max_time]];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
+        switch ($status || $timeType  || $worker || $other)
+        {
+            case !$status && !$timeType  && !$worker  && !$other:
+                $where = "";
+                break;
+            case $status && !$timeType && !$worker  && !$other:
+                $where = 'worker_order.status = ' . $status;
+                break;
+            case !$status && $timeType && !$worker  && !$other:
+                $times = StringService::startEndDate($timeType);
+                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <= ".strtotime($times['1']);
+                break;
+            case $status && $timeType && !$worker  && !$other:
+                $times = StringService::startEndDate($timeType);
+                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <=".strtotime($times['1']). " and worker_order.status = ".$status;
+                break;
+            case !$status && $timeType = 'custom' && !$worker  && !$other:
+                $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
+                $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
+                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time;
+                break;
+            case $status && $timeType = 'custom' && !$worker  && !$other:
+                $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
+                $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
+                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status;
+                break;
+            case !$status && !$timeType && $worker  && !$other:
+                $where = "worker_order.worker_type_id = " .$worker;
+                break;
+            case $status && !$timeType && $worker  && !$other:
+                $where = "worker_order.worker_type_id = " .$worker."worker_order.status = ".$status;
+                break;
+            case !$status && !$timeType  && !$worker  && $other:
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%'";
+                break;
+            case $status && !$timeType && !$worker  && $other:
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%' and worker_order.status = " .$status;
+                break;
 
-            //  工种搜索
-            if (empty($worker)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
-
-            // 其它搜索
-            if (empty($other)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
         }
 
-        if ($status == WorkerOrder::WORKER_ORDER_NOT_BEGIN){
+        $worker_order = WorkerOrder::orderList($where, $size, $page);
+        return Json::encode([
+            'list' => $worker_order
+        ]);
+    }
 
-            // 状态搜索
-            if ($status == WorkerOrder::WORKER_ORDER_NOT_BEGIN){
-                $where = [];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
+    /**
+     * 工程订单状态和备注
+     * @return string
+     */
+    public function actionWorkerOrderStatus()
+    {
+        $status_id = (int)trim(\Yii::$app->request->post('status_id',''));
+
+        //  取消订单
+        if ($status_id){
+            $edit_status = WorkerOrder::findOne(['id'=>$status_id]);
+            $edit_status->status =  WorkerOrder::WORKER_ORDER_NO;
+            if (!$edit_status->save()){
+                $code = 1000;
                 return Json::encode([
-                    'list' => $worker_order
+                   'code' => $code,
+                   'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            // 时间搜索
-            if (empty($min_time) && empty($max_time)){
-                $where = 'create_time >='. $min_time .' and create_time <=' . $max_time;
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
+        }
+
+        //  备注消息
+        $comment_id = (int)trim(\Yii::$app->request->post('comment_id',''));
+        if ($comment_id){
+            $edit_status = WorkerOrder::findOne(['id'=>$comment_id]);
+            $edit_status->describe = trim(\Yii::$app->request->post('comment',''));
+            if (!$edit_status->save()){
+                $code = 1000;
                 return Json::encode([
-                    'list' => $worker_order
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
 
-            //  工种搜索
-            if (empty($worker)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
-
-            // 其它搜索
-            if (empty($other)){
-                $where = ['worker_type_id',$worker];
-                $worker_order = WorkerOrder::orderList($where,$size,$page);
-                return Json::encode([
-                    'list' => $worker_order
-                ]);
-            }
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
         }
 
     }
