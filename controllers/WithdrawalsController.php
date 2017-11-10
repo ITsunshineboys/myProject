@@ -1754,10 +1754,10 @@ class WithdrawalsController extends Controller
                 ]);
             }else{
                 $code=1000;
-                return Json::encode([
+                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+                    'msg' => '银行卡格式不对'
+                 ]);
             }
         }else{
             $code=1000;
