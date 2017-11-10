@@ -793,6 +793,13 @@ class OrderController extends Controller
      */
    public function actionWxpayeffect_earnstnotify(){
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+            'content'=>$postStr
+        ])->execute();
+        if ($res4)
+        {
+            return true;
+        }
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
         $res1=Yii::$app->db->createCommand()->insert('alipayreturntest',[
                 'content'=>$msg
