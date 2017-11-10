@@ -2262,11 +2262,14 @@ class OrderController extends Controller
             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
                 ->andWhere(['sku'=>$postData['sku']])
-                ->one();
-            if ($record) 
+                ->all();
+            foreach ($record as &$rec)
             {
-                $record->status=1;
-                $record->save(false);
+                if ($rec)
+                {
+                    $rec->status=1;
+                    $rec->save(false);
+                }
             }
         }else{
             $record=UserNewsRecord::find()
