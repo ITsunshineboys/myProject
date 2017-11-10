@@ -792,9 +792,10 @@ class OrderController extends Controller
      * @return bool
      */
    public function actionWxpayeffect_earnstnotify(){
-        $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+        $request = \Yii::$app->request;
+        $postStr = $request->post();
         $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-           'content'=>'123123'
+            'content'=> Json::encode($postStr)
         ])->execute();
         if ($res4)
         {
@@ -802,7 +803,7 @@ class OrderController extends Controller
         }
         $msg = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
         $res1=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>$msg
+                'content'=>Json::encode($msg)
             ])->execute();
             if ($res1)
             {
@@ -823,7 +824,7 @@ class OrderController extends Controller
 //                    exit;
 //             }
             $res2=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>$msg
+                'content'=>Json::encode($msg)
             ])->execute();
             if ($res2)
             {
