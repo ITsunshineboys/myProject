@@ -20,6 +20,9 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
             wx.ready(function () {
+                alert(location.host);
+                alert(location.pathname);
+                alert(location.hash);
                 // 分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: 'Demo', // 分享标题
