@@ -29,7 +29,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 // 分享给朋友
                 wx.onMenuShareAppMessage({
                     title: 'Demo', // 分享标题
-                    desc: '', // 分享描述
+                    desc: location.hostname + location.pathname + location.hash, // 分享描述
                     link: location.hostname + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                     imgUrl: '' // 分享图标
                 });
