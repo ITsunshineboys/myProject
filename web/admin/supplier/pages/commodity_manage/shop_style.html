@@ -59,24 +59,25 @@
                 <div ng-repeat="item in goods_input_attrs">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span style="display: inline-block;width: 15px">&nbsp;</span>
-                    <span class="name_width" ng-model="myng.attr_name">{{attr_name}}</span>
-                    <input class="content_width" ng-model="myng.attr_value" type="text" string-to-number2 maxlength="10" placeholder="请输入属性内容" id="attr_name" name="attr_name" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" required ng-class="{'border_red':(form.attr_name.$invalid && submitted)||(form.attr_name.$error.required && attrs_blur)}" ng-blur="attrs_blur=!!form.attr_name.$error"/>
+                    <span class="name_width">{{item.name}}</span>
+                    <input class="content_width" ng-model="item.value" type="text" string-to-number2 maxlength="10" placeholder="请输入属性内容" id="attr_name" name="attr_name" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " required ng-class="{'border_red':(form.attr_name.$invalid && submitted)||(form.attr_name.$error.required && attrs_blur)}" ng-blur="attrs_blur=!!form.attr_name.$error"/>
                     <span class="dw_width">{{item.unit}}</span>
-                    <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                    <span>*属性内容限1～10个字符</span>
                 </div>
                 <!--下拉框-->
                 <div ng-repeat="item in goods_select_attrs">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span style="display: inline-block;width: 15px">&nbsp;</span>
-                    <span class="name_width" ng-model="myng.goods_select_name">{{goods_select_name}}</span>
-                    <select class="content_width class_name_input" ng-model="myng.goods_select_model" ng-options="item for item in goods_select_value"></select>
+                    <span class="name_width">{{item.name}}</span>
+                    <select class="content_width class_name_input"  ng-model="item.value[0]" ng-options="items for items in goods_select_attrs_value[$index]"></select>
                     <span class="dw_width">{{item.unit}}</span>
-                    <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                    <span>*属性内容限1～10个字符</span>
                 </div>
+
                 <div class="new_attr" ng-repeat="item in own_attrs_arr track by $index">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span  class="glyphicon glyphicon-minus" ng-click="del_own_attrs($index)"></span>
-                    <input class="name_width" type="text" maxlength="6" placeholder="请输入属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'border_red':form.{{item.name_model}}.$invalid &&submitted||(form.{{item.name_model}}.$error.required && submitted)}"/>
+                    <input class="name_width" type="text" maxlength="6" ng-change="own_input_change(item.name)" placeholder="请勿输入重复属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'border_red':form.{{item.name_model}}.$invalid &&submitted||(form.{{item.name_model}}.$error.required && submitted) ||own_submitted}"/>
                     <input class="content_width" type="text" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'border_red':form.{{item.value_model}}.$invalid &&submitted||(form.{{item.value_model}}.$error.required && submitted)}"/>
                     <span class="dw_width">&nbsp;</span>
                     <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
@@ -132,10 +133,10 @@
                 <p></p>
                 <br/>
                 <div>
-                    <input type="number" string-to-number2 onkeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" placeholder="￥10" ng-model="supplier_price" ng-change="my_supplier_price()" id="supplier_price" name="supplier_price" required ng-class="{'border_red':(form.supplier_price.$invalid && submitted)||(form.supplier_price.$error.required && supplier_blur) || price_flag}" ng-blur="supplier_blur=!!form.supplier_price.$error"/>
-                    <input type="number" string-to-number2 onkeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" placeholder="￥20" ng-model="platform_price" ng-change="my_platform_price()" id="platform_price" name="platform_price" required ng-class="{'border_red':(form.platform_price.$invalid && submitted)||(form.platform_price.$error.required && plat_blur) || price_flag}" ng-blur="plat_blur=!!form.platform_price.$error"/>
-                    <input type="number" string-to-number2 onkeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" placeholder="￥30" ng-model="market_price"   ng-change="my_market_price()" id="market_price" name="market_price" required ng-class="{'border_red':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}" ng-blur="market_blur=!!form.market_price.$error"/>
-                    <input type="number" string-to-number2 onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" placeholder="5" ng-model="left_number" id="left_number" name="left_number" required ng-class="{'border_red':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
+                    <input type="number" string-to-number2 onkeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" ng-model="supplier_price" ng-change="my_supplier_price()" id="supplier_price" name="supplier_price" required ng-class="{'border_red':(form.supplier_price.$invalid && submitted)||(form.supplier_price.$error.required && supplier_blur) || price_flag}" ng-blur="supplier_blur=!!form.supplier_price.$error"/>
+                    <input type="number" string-to-number2 onkeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" ng-model="platform_price" ng-change="my_platform_price()" id="platform_price" name="platform_price" required ng-class="{'border_red':(form.platform_price.$invalid && submitted)||(form.platform_price.$error.required && plat_blur) || price_flag}" ng-blur="plat_blur=!!form.platform_price.$error"/>
+                    <input type="number" string-to-number2 onkeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" ng-model="market_price"   ng-change="my_market_price()" id="market_price" name="market_price" required ng-class="{'border_red':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}" ng-blur="market_blur=!!form.market_price.$error"/>
+                    <input type="number" string-to-number2 onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" ng-model="left_number" id="left_number" name="left_number" required ng-class="{'border_red':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
                 </div>
                 <div class="price_" style="margin-left: 150px;margin-top: 10px; font-size: 12px; color: #ABABAB">*价格，供货价≤平台价≤市场价</div>
             </div>
