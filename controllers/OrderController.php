@@ -802,17 +802,17 @@ class OrderController extends Controller
         $arr=Json::decode($data);
         if ($arr['result_code']=='SUCCESS')
         {
-            // $transaction_id=$arr['transaction_id'];
+            $transaction_id=$arr['transaction_id'];
 
-            // $result = Wxpay::Queryorder($transaction_id);
-            // if (!$result)
-            // {
-            //     return false;
-            // } 
-           // if ($arr['total_fee']!=8900)
-           // {
-           //     return false;
-           // }
+            $result = Wxpay::Queryorder($transaction_id);
+            if (!$result)
+            {
+                return false;
+            } 
+           if ($arr['total_fee']!=8900)
+           {
+               return false;
+           }
             $id=$arr['attach'];
             $tran = Yii::$app->db->beginTransaction();
             try{
@@ -827,44 +827,44 @@ class OrderController extends Controller
                 }
 
                 $time=(time()-60*60*24);
-                $list=EffectEarnest::find()
-                    ->where("create_time<={$time}")
-                    ->andWhere(['status'=>0])
-                    ->all();
-                if ($list)
-                {
-                    foreach ($list as &$delList)
-                    {
-                        $effect_id=$delList->effect_id;
-                        if (!$delList->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $effect=Effect::findOne($effect_id);
-                        if (!$effect->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $effect_material=EffectMaterial::find()
-                            ->where(['effect_id'=>$effect_id])
-                            ->one();
-                        if (!$effect_material->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $EffectPicture=EffectPicture::find()
-                            ->where(['effect_id'=>$effect_id])
-                            ->one();
-                        if (!$EffectPicture->delete())
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                    }
-                }
+                // $list=EffectEarnest::find()
+                //     ->where("create_time<={$time}")
+                //     ->andWhere(['status'=>0])
+                //     ->all();
+                // if ($list)
+                // {
+                //     foreach ($list as &$delList)
+                //     {
+                //         $effect_id=$delList->effect_id;
+                //         if (!$delList->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //         $effect=Effect::findOne($effect_id);
+                //         if (!$effect->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //         $effect_material=EffectMaterial::find()
+                //             ->where(['effect_id'=>$effect_id])
+                //             ->one();
+                //         if (!$effect_material->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //         $EffectPicture=EffectPicture::find()
+                //             ->where(['effect_id'=>$effect_id])
+                //             ->one();
+                //         if (!$EffectPicture->delete())
+                //         {
+                //             $tran->rollBack();
+                //             return false;
+                //         };
+                //     }
+                // }
             }catch (Exception $e){
                 $tran->rollBack();
                 return false;
