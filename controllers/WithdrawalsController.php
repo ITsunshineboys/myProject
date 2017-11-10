@@ -1641,8 +1641,6 @@ class WithdrawalsController extends Controller
                         'name'=>'交易单号',
                         'value'=>$transaction_no
                     ];
-                }else{
-                    $list[]=[];
                 }
                 break;
         }
