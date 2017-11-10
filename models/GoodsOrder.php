@@ -2103,6 +2103,7 @@ class GoodsOrder extends ActiveRecord
             $access->access_money=$postData['total_amount']*100;
             $access->create_time=time();
             $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+            $access->order_no=$orders;
             $res3=$access->save(false);
             if ( !$res3){
                 $tran->rollBack();
