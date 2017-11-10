@@ -826,11 +826,11 @@ class OrderController extends Controller
                     return false;
                 }
 
-                $time=(time()-60*60*24);
-                $list=EffectEarnest::find()
-                    ->where("create_time<={$time}")
-                    ->andWhere(['status'=>0])
-                    ->all();
+                // $time=(time()-60*60*24);
+                // $list=EffectEarnest::find()
+                //     ->where("create_time<={$time}")
+                //     ->andWhere(['status'=>0])
+                //     ->all();
                 // if ($list)
                 // {
                 //     foreach ($list as &$delList)
