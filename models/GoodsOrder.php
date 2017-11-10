@@ -602,9 +602,9 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
-            return false;
-        }
+        // if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
+        //     return false;
+        // }
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (! $address  || !$invoice){
@@ -614,7 +614,6 @@ class GoodsOrder extends ActiveRecord
         $tran = Yii::$app->db->beginTransaction();
         try{
 
-            $goods_order=new self();
             $goods_order=new self();
             $goods_order->order_no=$order_no;
             $goods_order->amount_order=$msg['total_fee'];
