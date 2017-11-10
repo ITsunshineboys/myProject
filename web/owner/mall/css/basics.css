@@ -202,12 +202,15 @@ header div i{
 }
 .handyman_span{
     width:12rem;
-    margin-left:8.5rem;
+    /*margin-left:8.5rem;*/
     border: 1px solid #C2C2C2;
     height: 2.6rem;
     border-radius: .5rem;
     line-height: 2.6rem;
     /*margin-top: 1rem;*/
+    position: absolute;
+    right: 3.5rem;
+    top: 1.5rem;
     padding-left: 1rem;
 }
 .sheet_material li{
