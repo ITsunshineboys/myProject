@@ -544,6 +544,66 @@ class OrderController extends Controller
                         echo 'fail';
                         exit;
                     }
+
+                    $time=(time()-60*60*6);
+                    $list=EffectEarnest::find()
+                        ->where("create_time<={$time}")
+                        ->andWhere(['status'=>0])
+                        ->all();
+                    if ($list)
+                    {
+                        foreach ($list as &$delList)
+                        {
+                            $effect_id=$delList->effect_id;
+                            $res=$delList->delete();
+                            if (!$res)
+                            {
+                                $tran->rollBack();
+                                return false;
+                            };
+                            $effect=Effect::find()->where(['id'=>$effect_id])->one();
+                            if ($effect)
+                            {
+                                $res1=$effect->delete();
+                                if (!$res1)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    exit;
+                                };
+                            }
+
+                            $effect_material=EffectMaterial::find()
+                                ->where(['effect_id'=>$effect_id])
+                                ->one();
+                            if ($effect_material)
+                            {
+                                $res2=$effect_material->delete();
+                                if (!$res2)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    exit;
+                                };
+                            }
+
+                            $EffectPicture=EffectPicture::find()
+                                ->where(['effect_id'=>$effect_id])
+                                ->one();
+                            if ($EffectPicture)
+                            {
+                                $res3=$EffectPicture->delete();
+                                if (!$res3)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    exit;
+                                };
+                            }
+
+                        }
+                    }
+
                 }catch (Exception $e){
                     $tran->rollBack();
                     echo 'fail';
