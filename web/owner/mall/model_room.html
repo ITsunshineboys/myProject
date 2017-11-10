@@ -150,7 +150,11 @@
             <!--辅材-->
             <div class="column">
                 <div class="box" ng-repeat="obj in materials" ng-if="$even == true" ng-click="editMaterial($index)">
-                    <h1 class="title_p">
+                    <h1 class="title_p" ng-if="obj.title == '辅材'">
+                        基础装修
+                        <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
+                    </h1>
+                    <h1 class="title_p" ng-if="obj.title != '辅材'">
                         {{obj.title}}
                         <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
                     </h1>
