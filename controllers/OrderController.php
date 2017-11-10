@@ -793,25 +793,15 @@ class OrderController extends Controller
      * @return bool
      */
    public function actionWxpayeffect_earnstnotify(){
-       $xml = file_get_contents("php://input");;
-        if ($xml)
-        {
-            $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>$xml
+        $xml = file_get_contents("php://input");;
+        $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'=>$data
             ])->execute();
             if ($res4)
             {
                 return true;
             }
-        }else{
-            $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-                'content'=>'2'
-            ])->execute();
-            if ($res4)
-            {
-                return true;
-            }
-        }
     }
     /**
      *微信线下支付异步操作
