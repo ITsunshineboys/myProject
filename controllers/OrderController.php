@@ -793,17 +793,24 @@ class OrderController extends Controller
      * @return bool
      */
    public function actionWxpayeffect_earnstnotify(){
-        //获取通知的数据
-        $xml = file_get_contents("php://input");;
-        $data=json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-
-        //如果返回成功则验证签名
-        $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=>$data['return_code']
-        ])->execute();
-        if ($res4)
+       $xml = file_get_contents("php://input");;
+        if ($xml)
         {
-            return true;
+            $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'=>$xml
+            ])->execute();
+            if ($res4)
+            {
+                return true;
+            }
+        }else{
+            $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
+                'content'=>'2'
+            ])->execute();
+            if ($res4)
+            {
+                return true;
+            }
         }
     }
     /**
