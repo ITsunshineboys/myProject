@@ -182,7 +182,9 @@ class SiteController extends Controller
                     ],
                 ]);
 
-                if ($user->hx_pwd_date != date('Ymd')) {
+                if ($user->hx_pwd_date != date('Ymd')
+                    || (!empty($postData[$modelName]['registration_id']) && $postData[$modelName]['registration_id'] != $user->registration_id)
+                ) {
                     $events = Yii::$app->params['events'];
                     $event = $events['async'];
                     $data = [
@@ -614,13 +616,13 @@ class SiteController extends Controller
     public function actionResetPasswordCheck()
     {
         $res = Yii::$app->user->identity->checkDailyResetPwdCnt();
-        $code=200;
-        if (!$res){
-            $code=1024;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+        $code = 200;
+        if (!$res) {
+            $code = 1024;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
         }
         return Json::encode([
             'code' => $code,
@@ -658,7 +660,6 @@ class SiteController extends Controller
             ]);
         }
 
-        
 
         $codeValidationRes = SmValidationService::validCode($user->mobile, $postData['validation_code']);
         if ($codeValidationRes !== true) {
@@ -1154,7 +1155,7 @@ class SiteController extends Controller
             $pay_password = $model->select('pay_password')->where(['uid' => $user->id])->asArray()->one()['pay_password'];
         }
         $data['type'] = empty($pay_password) ? 'first' : 'unfirst';
-        $data['key']=empty($pay_password)? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword'.$user->id.date('Y-m-d',time())):\Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword'.$user->id.date('Y-m-d',time()));
+        $data['key'] = empty($pay_password) ? \Yii::$app->getSecurity()->generatePasswordHash('firstsetpaypassword' . $user->id . date('Y-m-d', time())) : \Yii::$app->getSecurity()->generatePasswordHash('unfirstsetpaypassword' . $user->id . date('Y-m-d', time()));
         $users = User::find()->where(['id' => $user->id])->select('mobile')->one();
         $data['mobile'] = $users['mobile'];
         return Json::encode([
@@ -1323,7 +1324,7 @@ class SiteController extends Controller
         $cache = Yii::$app->cache;
         $cacheData = 'ResetmobileSmscode' . $user->id . date('Y-m-d H', time());
         $data = $cache->set(User::CACHE_PREFIX_GET_MOBILE . $user->id, $cacheData, 60 * 60);
-        if ($data == true) { 
+        if ($data == true) {
             $code = 200;
             return Json::encode(
                 [
@@ -1435,7 +1436,8 @@ class SiteController extends Controller
      * add receive user address
      * @return string
      */
-    public function actionAddReceiveAddress(){
+    public function actionAddReceiveAddress()
+    {
         $user = Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1444,32 +1446,32 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $district_code=trim($request->post('district_code',''));
-        $region=trim($request->post('region',''));
-        $consignee=trim($request->post('consignee',''));
-        $mobile=trim($request->post('mobile',''));
-        if (!$district_code || !$region || !$consignee || !$mobile){
-            $code=1000;
+        $request = Yii::$app->request;
+        $district_code = trim($request->post('district_code', ''));
+        $region = trim($request->post('region', ''));
+        $consignee = trim($request->post('consignee', ''));
+        $mobile = trim($request->post('mobile', ''));
+        if (!$district_code || !$region || !$consignee || !$mobile) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=Addressadd::UserAddressAdd($district_code,$region,$consignee,$mobile,$user->id);
-        if ($code == 200){
+        $code = Addressadd::UserAddressAdd($district_code, $region, $consignee, $mobile, $user->id);
+        if ($code == 200) {
             return Json::encode([
                 'code' => $code,
-                'msg' =>'ok'
+                'msg' => 'ok'
             ]);
-        }else{
+        } else {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }
-    
+
     /**
      * get receive  address by user  and  default
      * @return string
@@ -1484,16 +1486,15 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $addressList=Addressadd::find()->where(['uid'=>$user->id])->all();
-        foreach ($addressList as $k =>$v)
-        {
-            $addressList[$k]['district']=LogisticsDistrict::getdistrict($addressList[$k]['district']);
+        $addressList = Addressadd::find()->where(['uid' => $user->id])->all();
+        foreach ($addressList as $k => $v) {
+            $addressList[$k]['district'] = LogisticsDistrict::getdistrict($addressList[$k]['district']);
         }
-        $code=200;
+        $code = 200;
         return Json::encode([
             'code' => $code,
-            'msg' =>'ok',
-            'data'=>$addressList
+            'msg' => 'ok',
+            'data' => $addressList
         ]);
     }
 
@@ -1501,7 +1502,8 @@ class SiteController extends Controller
      * select default address
      * @return string
      */
-    public function actionSetDefaultAddress(){
+    public function actionSetDefaultAddress()
+    {
         $user = Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1510,22 +1512,22 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $address_id=trim($request->post('address_id',''));
-        if (!$address_id){
-            $code=1000;
+        $request = Yii::$app->request;
+        $address_id = trim($request->post('address_id', ''));
+        if (!$address_id) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=Addressadd::SetDefaultAddress($address_id,$user);
-        if ($code == 200){
+        $code = Addressadd::SetDefaultAddress($address_id, $user);
+        if ($code == 200) {
             return Json::encode([
                 'code' => $code,
-                'msg' =>'ok'
+                'msg' => 'ok'
             ]);
-        }else{
+        } else {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1546,27 +1548,26 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $address_id=trim($request->post('address_id',''));
-        $consignee=trim($request->post('consignee',''));
-        $district_code=trim($request->post('district_code'));
-        $mobile=trim($request->post('mobile',''));
-        $region=trim($request->post('region',''));
-        if (!$consignee || !$address_id  || !$district_code || !$mobile || !$region)
-        {
-            $code=1000;
+        $request = Yii::$app->request;
+        $address_id = trim($request->post('address_id', ''));
+        $consignee = trim($request->post('consignee', ''));
+        $district_code = trim($request->post('district_code'));
+        $mobile = trim($request->post('mobile', ''));
+        $region = trim($request->post('region', ''));
+        if (!$consignee || !$address_id || !$district_code || !$mobile || !$region) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=Addressadd::updateAddress($consignee,$address_id,$district_code,$mobile,$region);
-        if ($code == 200){
+        $code = Addressadd::updateAddress($consignee, $address_id, $district_code, $mobile, $region);
+        if ($code == 200) {
             return Json::encode([
                 'code' => $code,
-                'msg' =>'ok'
+                'msg' => 'ok'
             ]);
-        }else{
+        } else {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1579,7 +1580,8 @@ class SiteController extends Controller
      *  get user invoice list
      * @return string
      */
-    public function actionGetInvoice(){
+    public function actionGetInvoice()
+    {
         $user = Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1588,12 +1590,12 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $invoiceList=Invoice::find()->where(['uid'=>$user->id])->all();
-        $code=200;
+        $invoiceList = Invoice::find()->where(['uid' => $user->id])->all();
+        $code = 200;
         return Json::encode([
             'code' => $code,
-            'msg' =>'ok',
-            'data'=>$invoiceList
+            'msg' => 'ok',
+            'data' => $invoiceList
         ]);
     }
 
@@ -1611,33 +1613,33 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $invoice_type=trim($request->post('invoice_type',''));
-        $invoice_header_type=trim($request->post('invoice_header_type',''));
-        $invoice_header=trim($request->post('invoice_header',''));
-        $invoicer_card =trim($request->post('invoicer_card'));
-        $invoice_content=trim($request->post('invoice_content',''));
-        if ($invoicer_card){
+        $request = Yii::$app->request;
+        $invoice_type = trim($request->post('invoice_type', ''));
+        $invoice_header_type = trim($request->post('invoice_header_type', ''));
+        $invoice_header = trim($request->post('invoice_header', ''));
+        $invoicer_card = trim($request->post('invoicer_card'));
+        $invoice_content = trim($request->post('invoice_content', ''));
+        if ($invoicer_card) {
             $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
-            if ($isMatched==false){
-                $code=1000;
+            if ($isMatched == false) {
+                $code = 1000;
                 return Json::encode([
                     'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'msg' => Yii::$app->params['errorCodes'][$code],
                     'data' => null
                 ]);
             }
         }
-        $code=Invoice::AddUserInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card,$user);
-        if ($code==200){
+        $code = Invoice::AddUserInvoice($invoice_type, $invoice_header_type, $invoice_header, $invoice_content, $invoicer_card, $user);
+        if ($code == 200) {
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok'
             ]);
-        }else{
+        } else {
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'msg' => Yii::$app->params['errorCodes'][$code],
                 'data' => null
             ]);
         }
@@ -1657,37 +1659,37 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $invoice_id=trim($request->post('invoice_id',''));
-        if (!$invoice_id)
-        {
-            $code=1000;
+        $request = Yii::$app->request;
+        $invoice_id = trim($request->post('invoice_id', ''));
+        if (!$invoice_id) {
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'msg' => Yii::$app->params['errorCodes'][$code],
                 'data' => null
             ]);
         }
-        $code=Invoice::setDefaultInvoice($invoice_id,$user);
-        if ($code==200){
+        $code = Invoice::setDefaultInvoice($invoice_id, $user);
+        if ($code == 200) {
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok'
             ]);
-        }else{
+        } else {
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'msg' => Yii::$app->params['errorCodes'][$code],
                 'data' => null
             ]);
         }
     }
 
-     /**
+    /**
      *  update invoice by user
      * @return string
      */
-    public function actionUpdateInvoice(){
+    public function actionUpdateInvoice()
+    {
         $user = Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -1696,60 +1698,58 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $invoice_id=trim($request->post('invoice_id',''));
-        $invoice_type=trim($request->post('invoice_type',''));
-        $invoice_header_type=trim($request->post('invoice_header_type',''));
-        $invoice_header=trim($request->post('invoice_header',''));
-        $invoicer_card =trim($request->post('invoicer_card'));
-        $invoice_content=trim($request->post('invoice_content',''));
-        if ($invoicer_card){
+        $request = Yii::$app->request;
+        $invoice_id = trim($request->post('invoice_id', ''));
+        $invoice_type = trim($request->post('invoice_type', ''));
+        $invoice_header_type = trim($request->post('invoice_header_type', ''));
+        $invoice_header = trim($request->post('invoice_header', ''));
+        $invoicer_card = trim($request->post('invoicer_card'));
+        $invoice_content = trim($request->post('invoice_content', ''));
+        if ($invoicer_card) {
             $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
-            if ($isMatched==false){
-                $code=1000;
+            if ($isMatched == false) {
+                $code = 1000;
                 return Json::encode([
                     'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'msg' => Yii::$app->params['errorCodes'][$code],
                     'data' => null
                 ]);
             }
         }
-        $code=Invoice::updateUserInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card,$user,$invoice_id);
-        if ($code==200){
+        $code = Invoice::updateUserInvoice($invoice_type, $invoice_header_type, $invoice_header, $invoice_content, $invoicer_card, $user, $invoice_id);
+        if ($code == 200) {
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok'
             ]);
-        }else{
+        } else {
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'msg' => Yii::$app->params['errorCodes'][$code],
                 'data' => null
             ]);
         }
     }
 
 
+    public function actionCheckSignature()
+    {
 
-      public function actionCheckSignature()
-        {
+        $signature = Yii::$app->request->get('signature');
+        $timestamp = Yii::$app->request->get('timestamp');
+        $nonce = Yii::$app->request->get('nonce');
+        $echostr = Yii::$app->request->get('echostr');
+        //        $tmpArr = array($timestamp, $nonce);
+        //        sort($tmpArr, SORT_STRING);
+        //        $tmpStr = implode( $tmpArr );
+        //        $tmpStr = sha1( $tmpStr );
+        if ($signature) {
 
-            $signature = Yii::$app->request->get('signature');
-            $timestamp = Yii::$app->request->get('timestamp');
-            $nonce = Yii::$app->request->get('nonce');
-            $echostr= Yii::$app->request->get('echostr');
-    //        $tmpArr = array($timestamp, $nonce);
-    //        sort($tmpArr, SORT_STRING);
-    //        $tmpStr = implode( $tmpArr );
-    //        $tmpStr = sha1( $tmpStr );
-            if( $signature ){
-
-                echo  $echostr;
-            }else{
-                return false;
-            }
+            echo $echostr;
+        } else {
+            return false;
         }
-
+    }
 
 
 }
