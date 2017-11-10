@@ -1598,10 +1598,10 @@ class WithdrawalsController extends Controller
                 ];
                 break;
             case 7:
-            var_dump($access['order_no']);exit;
-                 $orders=explode(',',$access['order_no']);
-                if ($orders)
+                 
+                if ($access['order_no'])
                 {
+                    $orders=explode(',',$access['order_no']);
                     foreach ($orders as $order)
                     {
                         $goodsOrder=GoodsOrder::find()
