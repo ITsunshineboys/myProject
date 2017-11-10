@@ -660,7 +660,6 @@ class OrderController extends Controller
      * @return string
      */
    public function actionWxpayEffectEarnstSub(){
-     echo  "http://".$_SERVER['SERVER_NAME'].Wxpay::EFFECT_NOTIFY_URL;exit;
         $request = \Yii::$app->request;
         $post=$request->post();
         $code=1000;
