@@ -1,8 +1,7 @@
 //const baseUrl = 'http://test.cdlhzz.cn';
 // const baseUrl = 'http://v1.cdlhzz.cn:888';
 let baseUrl = (function () {
-    // return '';
-    return 'http://test.cdlhzz.cn'
+    return '';
 })();
 /**
  * ajax请求
@@ -19,7 +18,7 @@ app.service('_ajax', function ($http, $state) {
         }).then(function (response) {
             let res = response.data;
             if (res.code === 403) {
-                $state.go('login')
+                window.location.href="login.html";
             } else if (res.code === 200) {
                 if (typeof callback === 'function') {
                     callback(res)
@@ -44,7 +43,7 @@ app.service('_ajax', function ($http, $state) {
         }).then(function (response) {
             let res = response.data;
             if (res.code === 403) {
-                $state.go('login')
+                window.location.href="login.html";
             } else if (res.code === 200) {
                 if (typeof callback === 'function') {
                     callback(res)
