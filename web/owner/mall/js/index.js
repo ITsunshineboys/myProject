@@ -1,10 +1,4 @@
 app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootScope, $scope, _ajax) {
-    $rootScope.$on("$stateChangeStart", function () {
-        console.log('页面被切换了');
-        wx.ready(function () {
-            wxConfig()
-        });
-    });
     // 微信事宜
     $rootScope.isWxOpen = false;
     _ajax.get('/order/iswxlogin', "", function (res) {
@@ -17,6 +11,11 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 nonceStr: data.nonceStr, // 必填，生成签名的随机串
                 signature: data.signature,// 必填，签名，见附录1
                 jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone", "chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+            wx.ready(function () {
+                $rootScope.$on("$stateChangeStart", function () {
+                    wxConfig()
+                });
             });
             $rootScope.isWxOpen = true;
             if (sessionStorage.getItem("openId") === null) {
