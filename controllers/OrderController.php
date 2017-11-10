@@ -793,7 +793,7 @@ class OrderController extends Controller
      * wxpay nityfy apply Deposit database
      * @return bool
      */
-    public function actionWxpayeffect_earnstnotify(){
+    public function actionWxpayeffect_earnstnotify(){ 
         //获取通知的数据
         $xml = file_get_contents("php://input");;
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
