@@ -20,9 +20,22 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "chooseWXPay", "hideAllNonBaseMenuItem", "showMenuItems"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             });
             wx.ready(function () {
-                wx.hideAllNonBaseMenuItem();
-                wx.showMenuItems({
+                wx.hideAllNonBaseMenuItem();    // 隐藏所有非基础类功能
+                wx.showMenuItems({  // 显示指定功能
                     menuList: ["menuItem:share:appMessage", "menuItem:share:timeline"]
+                });
+                // 分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: 'Demo', // 分享标题
+                    link: location.hostname + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: '', // 分享图标
+                });
+                // 分享给朋友
+                wx.onMenuShareAppMessage({
+                    title: 'Demo', // 分享标题
+                    desc: '', // 分享描述
+                    link: location.hostname + location.pathname + location.hash, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                    imgUrl: '' // 分享图标
                 });
             });
             $rootScope.isWxOpen = true;
