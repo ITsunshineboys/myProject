@@ -26,6 +26,38 @@ angular.module('all_controller',[])
             // 注册返回按键事件
             $('.modal-backdrop').remove()
             $('body').removeClass('modal-open')
+            console.log($rootScope.curState_name)
+            if($rootScope.curState_name == 'nodata.house_list'){
+                $scope.have_header = true
+                $scope.cur_header = '智能报价'
+                $scope.is_city = true
+                $scope.is_edit = false
+            }else if($rootScope.curState_name == 'nodata.main_material'){
+                $scope.have_header = true
+                $scope.cur_header = '主材料'
+                $scope.is_city = false
+                $scope.is_edit = false
+            }else if($rootScope.curState_name == 'nodata.basics_decoration'){
+                $scope.have_header = true
+                $scope.cur_header = '基础装修'
+                $scope.is_city = false
+                $scope.is_edit = false
+            }else if($rootScope.curState_name == 'nodata.other_material'){
+                $scope.have_header = true
+                $scope.cur_header = $scope.inner_header
+                $scope.is_city = false
+                $scope.is_edit = true
+            }else if($rootScope.curState_name == 'nodata.all_goods'){
+                $scope.have_header = true
+                $scope.cur_header = $scope.cur_three_level
+                $scope.is_city = false
+                $scope.is_edit = false
+            }else if($rootScope.curState_name == 'nodata.second_level'){
+                $scope.have_header = true
+                $scope.cur_header = $scope.inner_first_level
+                $scope.is_city = false
+                $scope.is_edit = false
+            }
         });
         $scope.baseUrl = 'http://test.cdlhzz.cn/'
         $scope.special_request = ''//特殊要求
@@ -792,6 +824,7 @@ angular.module('all_controller',[])
         //无资料计算
         $scope.get_goods = function (valid,error) {
             console.log(error)
+            console.log($scope.nowStairs)
             if (valid) {
                 let data = {
                     bedroom: $scope.house_bedroom,//卧室
