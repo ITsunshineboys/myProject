@@ -78,6 +78,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
 
     }])
     .service('_ajax', function ($http, $state) {
+        let baseUrl = ''
         this.get = function (url, params, callback) {
             $http({
                 method: 'GET',

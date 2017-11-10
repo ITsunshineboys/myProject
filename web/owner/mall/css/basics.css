@@ -224,9 +224,9 @@ header div i{
     transform: rotate(90deg);
 }
 .two-sided{
-    position: relative;
+    position: absolute;
     top: 2rem;
-    left: -4.5rem;
+    left: .5rem;
     color:#C2C2C2 ;
     font-size: 1rem;
 }
