@@ -833,16 +833,18 @@ class OrderController extends Controller
                     ->all();
                 if ($list)
                 {
-                    foreach ($list as &$delList) 
+                    foreach ($list as &$delList)
                     {
                         $effect_id=$delList->effect_id;
-                        if (!$delList->delete())
+                        $res=$delList->delete();
+                        if (!$res)
                         {
                             $tran->rollBack();
                             return false;
                         };
                         $effect=Effect::findOne($effect_id);
-                        if (!$effect->delete())
+                        $res1=$effect->delete();
+                        if (!$res1)
                         {
                             $tran->rollBack();
                             return false;
@@ -850,7 +852,8 @@ class OrderController extends Controller
                         $effect_material=EffectMaterial::find()
                             ->where(['effect_id'=>$effect_id])
                             ->one();
-                        if (!$effect_material->delete())
+                        $res2=$effect_material->delete();
+                        if (!$res2)
                         {
                             $tran->rollBack();
                             return false;
@@ -858,7 +861,8 @@ class OrderController extends Controller
                         $EffectPicture=EffectPicture::find()
                             ->where(['effect_id'=>$effect_id])
                             ->one();
-                        if (!$EffectPicture->delete())
+                        $res3=$EffectPicture->delete();
+                        if (!$res3)
                         {
                             $tran->rollBack();
                             return false;
