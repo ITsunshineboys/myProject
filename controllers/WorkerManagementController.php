@@ -420,7 +420,7 @@ class WorkerManagementController extends Controller
     /**
      * 工程订单列表
      */
-    public function actionWorkOrderList()
+    public function actionWorkerOrderList()
     {
 
         $page     = (int)trim(\Yii::$app->request->post('page', self::DEFAULT_PAGE));
@@ -436,45 +436,36 @@ class WorkerManagementController extends Controller
             case !$status && !$timeType  && !$worker  && !$other:
                 $where = "";
                 break;
-
             case $status && !$timeType && !$worker  && !$other:
                 $where = 'worker_order.status = ' . $status;
                 break;
-
             case !$status && $timeType && !$worker  && !$other:
                 $times = StringService::startEndDate($timeType);
                 $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <= ".strtotime($times['1']);
                 break;
-
             case $status && $timeType && !$worker  && !$other:
                 $times = StringService::startEndDate($timeType);
                 $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <=".strtotime($times['1']). " and worker_order.status = ".$status;
                 break;
-
             case !$status && $timeType = 'custom' && !$worker  && !$other:
                 $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
                 $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
                 $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time;
                 break;
-
             case $status && $timeType = 'custom' && !$worker  && !$other:
                 $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
                 $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
                 $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status;
                 break;
-
             case !$status && !$timeType && $worker  && !$other:
                 $where = "worker_order.worker_type_id = " .$worker;
                 break;
-
             case $status && !$timeType && $worker  && !$other:
                 $where = "worker_order.worker_type_id = " .$worker."worker_order.status = ".$status;
                 break;
-
             case !$status && !$timeType  && !$worker  && $other:
                 $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%'";
                 break;
-
             case $status && !$timeType && !$worker  && $other:
                 $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%' and worker_order.status = " .$status;
                 break;
@@ -485,5 +476,10 @@ class WorkerManagementController extends Controller
         return Json::encode([
             'list' => $worker_order
         ]);
+    }
+
+    public function actionWorkerOrderStatus()
+    {
+            
     }
 }
