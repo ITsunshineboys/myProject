@@ -27,8 +27,8 @@
     <!--分类开始-->
     <div class="classify-box animated fadeInUp" >
         <ul class="classify-ul">
-            <li ng-repeat="n in message" >
-                <a ui-sref="minute_class({'pid':n.id ,'title':n.title})" >
+            <li ng-repeat="n in message" ui-sref="minute_class({'pid':n.id ,'title':n.title})">
+                <a >
                     <img src="{{baseUrl + '/'+n.icon}}" alt=""/><br/>
                     <!--<img src="images/material.png" alt=""/><br/>-->
                 <!--<img src="{{n.icon}}" alt=""/><br/>-->
