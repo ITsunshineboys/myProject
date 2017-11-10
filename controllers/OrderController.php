@@ -797,7 +797,7 @@ class OrderController extends Controller
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         //如果返回成功则验证签名
 
-        $result = WxPayResults::Init($xml);
+        $result = Json::encode($xml);
         $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
             'content'=> Json::encode($result)
         ])->execute();
