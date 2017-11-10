@@ -47,6 +47,7 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use app\models\UserNewsRecord;
 use Yii;
+use vendor\wxpay\lib\WxPayResults;
  
 
 class OrderController extends Controller
@@ -792,10 +793,13 @@ class OrderController extends Controller
      * @return bool
      */
    public function actionWxpayeffect_earnstnotify(){
-        $request = \Yii::$app->request;
-        $postStr = $request->post();
+        //获取通知的数据
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        //如果返回成功则验证签名
+
+        $result = WxPayResults::Init($xml);
         $res4=Yii::$app->db->createCommand()->insert('alipayreturntest',[
-            'content'=> Json::encode($postStr)
+            'content'=> Json::encode($result)
         ])->execute();
         if ($res4)
         {
