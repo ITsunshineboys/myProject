@@ -2332,7 +2332,6 @@ class GoodsOrder extends ActiveRecord
                 $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
                 $shop_name=$sup->shop_name;
                  $GoodsOrder[$k]['shop_name']=$shop_name;
-                 echo $GoodsOrder[$k]['shop_name'];exit;
                  if ($role=='user') 
                 {
                     $GoodsOrder[$k]['uid']=$sup->uid;
