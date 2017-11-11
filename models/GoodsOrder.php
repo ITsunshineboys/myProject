@@ -2330,6 +2330,9 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
                 $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
+                if (!$sup) {
+                    echo 1;exit;
+                }
                 $shop_name=$sup->shop_name;
                  $GoodsOrder[$k]['shop_name']=$shop_name;
                  if ($role=='user') 
