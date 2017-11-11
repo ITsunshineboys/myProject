@@ -59,7 +59,7 @@ class WithdrawalsController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
