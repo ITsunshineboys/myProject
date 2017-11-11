@@ -14,6 +14,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use app\services\AuthService;
 
 class SupplierCashController extends Controller
 {
