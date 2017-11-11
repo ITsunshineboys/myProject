@@ -105,7 +105,10 @@ class Distribution extends ActiveRecord
         {
             $parents=['mobile'=>$parent->mobile,'time'=>date('Y-m-d H:i',$data->applydis_time)];
         }else{
-            $parents=[];
+            $parents=[
+                'mobile'=>'',
+                'time'=>''
+            ];
         }
         return [
             'binding_count'=>$son_count,
