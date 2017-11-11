@@ -4572,15 +4572,46 @@ class OrderController extends Controller
 
 
 
-    public  function  actionWxTest()
+   /**
+     * app购买商品
+     * @return string
+     */
+    public function actionAppBuyGoods()
     {
-
-        $res=(new Wxpay())->WxBuy();
-        return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok',
-            'data' => $res
-        ]);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $suppliers=$request->post('suppliers');
+        $total_amount=$request->post('total_amount');
+        $address_id=$request->post('address_id');
+        $pay_way=$request->post('pay_way');
+        if(!$suppliers  ||  !$total_amount ||!$address_id ||!$pay_way)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
+        if ($code==200)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg'  => 'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
 
 }

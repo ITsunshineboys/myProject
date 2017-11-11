@@ -2902,6 +2902,126 @@ class GoodsOrder extends ActiveRecord
    }
 
 
+       /**
+     * @param $user
+     * @param $address_id
+     * @param $suppliers
+     * @param $total_amount
+     * @param $pay_way
+     * @return int
+     */
+    public static  function AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way)
+    {
+        //1:余额支付  2：支付宝app支付  3：微信APP支付
+        switch ($pay_way)
+        {
+            case 1:
+                $pay_name='余额支付';
+                break;
+            case 2:
+                $pay_name='支付宝app支付';
+                break;
+            case 3:
+                $pay_name='微信APP支付';
+                break;
+        }
+        $address=Addressadd::findOne($address_id);
+        if (!$address)
+        {
+            $code=1000;
+            return $code;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        $role_money=GoodsOrder::GetRoleMoney($user->last_role_id_app);
+        $time=time();
+        try{
+            $total=0;
+            foreach ($suppliers as  &$supplier)
+            {
+                $order_no=GoodsOrder::SetOrderNo();
+                $money=0;
+                $count=count($supplier['goods']);
+                if ($count==0)
+                {
+                    $count=1;
+                }
+
+                $freight=$supplier['freight']/$count;
+
+                foreach ($supplier['goods'] as &$goods)
+                {
+                    $Goods=Goods::find()
+                        ->where(['id'=>$goods['goods_id']])
+                        ->asArray()
+                        ->one();
+                    $OrderGoods=new OrderGoods();
+                    $OrderGoods->order_no=$order_no;
+                    $OrderGoods->goods_number=$goods['goods_num'];
+                    $OrderGoods->goods_name=$Goods['title'];
+                    $OrderGoods->goods_price=$Goods["{$role_money}"];
+                    $OrderGoods->sku=$Goods['sku'];
+                    $OrderGoods->market_price=$Goods['market_price'];
+                    $OrderGoods->supplier_price=$Goods['supplier_price'];
+                    $OrderGoods->order_status=0;
+                    $OrderGoods->shipping_status=0;
+                    $OrderGoods->customer_service=0;
+                    $OrderGoods->is_unusual=0;
+                    $OrderGoods->freight=$freight;
+                    $OrderGoods->cover_image=$Goods['cover_image'];
+                    $OrderGoods->create_time=$time;
+                    if (!$OrderGoods->save(false))
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $money+=($Goods["{$role_money}"]*$goods['goods_num']);
+                }
+                $total+=($supplier['freight']*100+$money);
+                $GoodsOrder=new GoodsOrder();
+                $GoodsOrder->order_no=$order_no;
+                $GoodsOrder->amount_order=$supplier['freight']*100+$money;
+                $GoodsOrder->supplier_id=$supplier['suppier_id'];
+                $GoodsOrder->pay_status=0;
+                $GoodsOrder->user_id=$user->id;
+                $GoodsOrder->pay_name=$pay_name;
+                $GoodsOrder->create_time=$time;
+                $GoodsOrder->order_refer=GoodsOrder::REFUND_HANDLE_STATUS_DISAGREE;
+                $GoodsOrder->return_insurance=0;
+                $GoodsOrder->role_id=$user->last_role_id_app;
+                $GoodsOrder->buyer_message=$supplier['buyer_message'];
+                $GoodsOrder->consignee=$address->consignee;
+                $GoodsOrder->district_code=$address->district;
+                $GoodsOrder->region=$address->region;
+                $GoodsOrder->consignee_mobile=$address->mobile;
+                $invoice=Invoice::findOne($supplier['invoice_id']);
+                $GoodsOrder->invoice_type=$invoice->invoice_type;
+                $GoodsOrder->invoice_header_type=$invoice->invoice_header_type;
+                $GoodsOrder->invoice_header=$invoice->invoice_header;
+                $GoodsOrder->invoicer_card=$invoice->invoicer_card;
+                $GoodsOrder->invoice_content=$invoice->invoice_content;
+                if (!$GoodsOrder->save(false))
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }
+            if ($total!=$total_amount*100)
+            {
+                $code=1000;
+                $tran->rollBack();
+                return $code;
+            }
+            $code=200;
+            $tran->commit();
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
 
 
 
