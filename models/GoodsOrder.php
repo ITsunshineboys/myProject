@@ -2322,28 +2322,27 @@ class GoodsOrder extends ActiveRecord
                 ->asArray()
                 ->all();
 
+
             foreach ($GoodsOrder AS $k =>$v){
-                 $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
-                if (!$sup) {
-                    unset($GoodsOrder[$k]);
-                }else
-                {
-                    $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01); 
+                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
                 $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
                 $GoodsOrder[$k]['user_name']=$user->nickname;
                 $GoodsOrder[$k]['status']='待付款';
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
-                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
-                 if ($role=='user') 
+                $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
+
+                $GoodsOrder[$k]['shop_name']=$sup->shop_name;
+                if ($role=='user')
                 {
                     $GoodsOrder[$k]['uid']=$sup->uid;
-                    $GoodsOrder[$k]['to_role_id']=6; 
+                    $GoodsOrder[$k]['to_role_id']=6;
                 }else{
                     $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
                     $GoodsOrder[$k]['to_role_id']=$GoodsOrder[$k]['role_id'];
                 }
+
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
@@ -2366,9 +2365,6 @@ class GoodsOrder extends ActiveRecord
                     unset($GoodsOrder[$k]['supplier_id']);
                     $arr[]=$GoodsOrder[$k];
                 }
-                }
-                
-
             }
         }
         foreach ($arr as $key => $row)

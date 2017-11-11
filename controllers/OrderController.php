@@ -4614,4 +4614,22 @@ class OrderController extends Controller
         }
     }
 
+    public function  actionDelData()
+    {
+        $GoodsOrder=GoodsOrder::find()
+            ->where(['supplier_id'=>1])
+            ->all();
+        foreach ($GoodsOrder as &$goodsorder)
+        {
+           $order_no= $goodsorder->order_no;
+           $goodsorder->delete();
+           $orderGoods=OrderGoods::find()->where(['order_no'=>$order_no])->all();
+           foreach ($orderGoods as &$list)
+           {
+               $list->delete();
+           }
+
+        }
+    }
+
 }
