@@ -2329,10 +2329,9 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['status']='待付款';
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
-                echo $GoodsOrder[$k]['supplier_id'];
                 $sup=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one();
-                 var_dump($sup->shop_name);exit;
                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
+                echo $GoodsOrder[$k]['shop_name'];exit;
                  if ($role=='user')
                 {
                     $GoodsOrder[$k]['uid']=$sup->uid;
