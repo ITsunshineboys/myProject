@@ -8,9 +8,13 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     }
     $scope.iswarning = false;
     $scope.iswarningcontent = false;
+
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
+
+
+    console.log($scope.propattrs);
     let namesarr = [];
     /*属性名称数组*/
     let valuesarr = [];
@@ -93,48 +97,30 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
 
     /*保存属性*/
     $scope.saveProp = function () {
+        console.log(4564564);
         namesarr = [];
         valuesarr = [];
         typesarr = [];
         unitsarr = [];
-        // console.log($scope.propid)
-        /*category_id*/
-
         // names 获取当前的所有name
         for (let i = 0; i < $scope.propattrs.length; i++) {
             namesarr.push($scope.propattrs[i].name);
             valuesarr.push($scope.propattrs[i].value);
             typesarr.push($scope.propattrs[i].addition_type);
-            unitsarr.push($scope.propattrs[i].cur_unit);
+            unitsarr.push($scope.propattrs[i].cur_unit.unit);
         }
 
-
-        // console.log(unitsarr)
-
-
-        // sort[]=a:3&sort[]=b:4
-        // params:{"sort[]":"id:3"}
-        // {"names[]":"长&宽&高"}
-
-        //values
-        // {"values[]":'10,20,30'}
-
-        // units
-        // {"units[]":'1&2&3'}
-        // addition_types[]
-        // {'addition_types[]':'0&1&0'}
-
-
-        // let url = baseUrl+"/mall/goods-attr-add";
-        // let data = {
-        //     id: $scope.onsaleclassid,
-        //     title: $scope.class_name,
-        //     pid: pid,
-        //     icon: $scope.classicon || $stateParams.iconpath
-        // };
-        //     $http.post(url,data,config).then(function (res) {
-        //         // console.log(res)
-        //     })
+        let url = baseUrl+"/mall/goods-attr-add";
+        let data = {
+            category_id: $scope.propid,
+            "names[]": namesarr,
+            "values[]": valuesarr,
+            "units[]":unitsarr,
+            "addition_types[]":typesarr
+        };
+            $http.post(url,data,config).then(function (res) {
+                console.log(res)
+            })
     }
 
 });

@@ -1,0 +1,9 @@
+<div class="login" flex="dir:top">
+    <div class="tel" flex="main:left">
+        <p flex-box="0">+86</p>
+        <input flex-box="1" placeholder="请输入手机号" ng-model="vm.cur_tel" type="text">
+    </div>
+    <div class="btn">
+    <button ng-disabled="cur_tel==''" ng-click="get_true_tel()">下一步</button>
+    </div>
+</div>

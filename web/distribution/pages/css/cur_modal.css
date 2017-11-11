@@ -1,0 +1,27 @@
+.cur_modal{
+    top:6rem!important;
+}
+.cur_modal .modal-dialog{
+    width:6.67rem!important;
+    border-radius:.16rem!important;
+}
+.cur_modal .modal-body{
+    padding-top: 1.07rem;
+    padding-bottom: .8rem;
+    text-align: center;
+    border-bottom:2px solid #CDD3D7 ;
+}
+.cur_modal .modal-body p:first-child{
+    font-size: 32px;
+    color: #666666;
+}
+.cur_modal .modal-body p:last-child{
+    font-size: 28px;
+    color: #000000;
+}
+.cur_modal .modal-footer{
+    padding: .43rem 0;
+    text-align: center;
+    font-size: 32px;
+    color: #222222;
+}

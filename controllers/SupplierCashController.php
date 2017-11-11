@@ -28,7 +28,8 @@ class SupplierCashController extends Controller
         'order-list-today',
         'cash-list-today',
         'cash-action-detail',
-        'cash-deal'
+        'cash-deal',
+        'mall-view'
     ];
 
 
@@ -67,7 +68,7 @@ class SupplierCashController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
@@ -85,10 +86,6 @@ class SupplierCashController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post',],
-                    'reset-password' => ['post',],
-                    'upload' => ['post',],
-                    'upload-delete' => ['post',]
                 ],
             ],
         ];

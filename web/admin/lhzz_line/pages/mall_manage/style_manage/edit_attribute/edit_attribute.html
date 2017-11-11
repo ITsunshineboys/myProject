@@ -29,7 +29,7 @@
                     <td>单位</td>
                 </tr>
 
-                <!--属性添加-->
+                <form name="attr_form" novalidate action="">
                 <tr ng-repeat="item in propattrs">
                     <td>&nbsp;</td>
                     <td class="padding_right">
@@ -37,17 +37,18 @@
                           <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
                            <i class="glyphicon glyphicon-minus" ng-click=deleteTr($index)></i>
                         </span>
-                        <input type="text" class="input_one" ng-model="item.name" ng-blur=checkname(item.name,$index) ng-class={warningred:$index==temp&&iswarning==true}>
+                        <input type="text" class="input_one" ng-model="item.name" maxlength=6 required ng-blur=checkname(item.name,$index) ng-class={warningred:$index==temp&&iswarning==true}>
                     </td>
                     <td class="padding_right">
-                        <input type="text" class="normal_input" ng-model="item.value" disabled=disabled ng-show="item.addition_type==0">
-                        <input type="text" class="normal_input" ng-model="item.value" ng-show="item.addition_type==1" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
+                        <input type="text" class="normal_input" ng-model="item.value" disabled=disabled ng-if="item.addition_type==0">
+                        <input type="text" class="normal_input" ng-model="item.value" ng-if="item.addition_type==1" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
                     </td>
                     <td class="padding_right">
                         <select name="" class="select_css" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit" ng-change=aiya(item.cur_unit.unit)></select>
                         <span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
                     </td>
                 </tr>
+                </form>
             </table>
         </div>
         <!--保存 返回-->

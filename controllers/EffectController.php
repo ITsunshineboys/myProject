@@ -5,8 +5,8 @@ use app\models\Effect;
 use app\models\EffectEarnest;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use app\services\AuthService;
 use yii\db\Query;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -21,14 +21,8 @@ class EffectController extends Controller
     const STATUST_ON=1;
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
-        'logout',
-        'roles',
-        'reset-password',
-        'roles-status',
-        'time-types',
-        'upload',
-        'upload-delete',
-        'review-statuses',
+        'effect-list',
+        'effect-view',
     ];
 
     /**
@@ -38,7 +32,7 @@ class EffectController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
@@ -56,10 +50,6 @@ class EffectController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post',],
-                    'reset-password' => ['post',],
-                    'upload' => ['post',],
-                    'upload-delete' => ['post',]
                 ],
             ],
         ];

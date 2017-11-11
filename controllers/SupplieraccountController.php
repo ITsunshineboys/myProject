@@ -30,14 +30,14 @@ class SupplieraccountController extends  Controller{
     const STATUS_WJD=1;
     const STATUS_CG=3;
     const ACCESS_LOGGED_IN_USER = [
-        'logout',
-        'roles',
-        'reset-password',
-        'roles-status',
-        'time-types',
-        'upload',
-        'upload-delete',
-        'review-statuses',
+        'account-list',
+        'account-view',
+        'apply-freeze',
+        'freeze-money',
+        'freeze-list',
+        'account-thaw',
+        'cashed-list',
+        'cashed-view',
     ];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
@@ -49,7 +49,7 @@ class SupplieraccountController extends  Controller{
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
@@ -67,10 +67,6 @@ class SupplieraccountController extends  Controller{
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post',],
-                    'reset-password' => ['post',],
-                    'upload' => ['post',],
-                    'upload-delete' => ['post',]
                 ],
             ],
         ];
