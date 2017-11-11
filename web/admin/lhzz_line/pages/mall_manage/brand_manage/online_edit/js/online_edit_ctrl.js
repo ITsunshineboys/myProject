@@ -11,7 +11,6 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   $scope.myng=$scope;
   $scope.now_edit_list=[];
   $scope.now_edit_list=$stateParams.item;//当前那条数据
-  $scope.index=$stateParams.index;//当前那条数据的索引
   console.log($scope.now_edit_list);
   $scope.online_time_flag=$stateParams.online_time_flag;//排序的类型
   /*===============进入页面显示的数据==================*/
@@ -20,20 +19,6 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   $scope.upload_logo_src=$scope.now_edit_list.logo;//LOGO
   $scope.online_people=$scope.now_edit_list.applicant;//操作人员
   $scope.online_time=$scope.now_edit_list.online_time;//下架时间
-  //下架数据列表  size的设置是为了获取所有数据
-  $scope.cycle_arr=[];
-  $http.get(baseUrl+'/mall/brand-list-admin', {
-    params: {
-      status:1,
-      size:9999,
-      'sort[]':$scope.online_time_flag
-    }}).then(function (res) {
-      console.log(res);
-    $scope.cycle_arr=res.data.data.brand_list_admin.details;
-  },function (err) {
-    console.log(err);
-  });
-
   /*===========================上传图片开始===============================*/
   //上传商标注册证
   $scope.data = {
@@ -225,14 +210,10 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   $scope.edit_ok_v='';//模态框
   $scope.ids_arr=[];//三级分类
   //确认按钮
+    $scope.edit_title_red=false;
   $scope.save_btn=function (valid,error) {
-    console.log(valid);
-    let brand_obj = JSON.stringify({"name":""+$scope.brand_on_name_model});//序列化！！！
-    for(let [key,value] of $scope.cycle_arr.entries()){
-      if(valid && $scope.item_check.length>=1 && ((value.name==$scope.brand_on_name_model && key==$scope.index) || (JSON.stringify($scope.cycle_arr).indexOf(brand_obj.slice(1,brand_obj.length-1))==-1))){
-        //名称和索引相同，代表用户进入没有修改名称，可进行下一步操作
-        //名称和索引都不相同，也可以修改
-        $scope.edit_ok_v='#edit_ok_modal';//弹出模态框
+    console.log($scope.now_edit_list.id);
+      if(valid && $scope.item_check.length>=1){
         $scope.ids_arr=[];
         for(let [key,value] of $scope.item_check.entries()){
           if(value.complete){
@@ -250,18 +231,21 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
         },config).then(function (res) {
           console.log(res);
           console.log('修改成功');
+          if(res.data.code==200){
+            $('#edit_ok_modal').modal('show');
+          }else{
+              $scope.edit_title_red=true;
+              $anchorScroll.yOffset = 150;
+              $location.hash('brand_title');
+              $anchorScroll();
+              $window.document.getElementById('brand_title').focus();
+          }
         },function (err) {
           console.log(err);
         });
-        $scope.edit_title_red=false;
-        return
       }else{
-        $scope.submitted=true
+          $scope.submitted=true;
       }
-      if(value.name==$scope.brand_on_name_model && key!=$scope.index){  //名称有重复，提示文字
-        $scope.edit_title_red=true;
-      }
-
       if(!valid){					//名称输入框为空， 文本框变红，并跳转到对于的位置
         $scope.submitted = true;
         if(value.$invalid=true){
@@ -282,18 +266,8 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
       }else{
         $scope.sort_check='';
       }
-    }
+
   };
-  /*实时判断输入的内容，是否有重复的名称*/
-  $scope.$watch('brand_on_name_model',function (newVal,oldVal) {
-    for(let [key,value] of $scope.cycle_arr.entries()) {
-      if (newVal == value.name  && key!=$scope.index) {
-        return $scope.edit_title_red=true;
-      }else{
-        $scope.edit_title_red=false;
-      }
-    }
-  });
   /*下架*/
   $scope.down_shelver_ok=function () {
     console.log($scope.now_edit_list.id)

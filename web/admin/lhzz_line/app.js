@@ -60,13 +60,13 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             /*品牌管理-已上架编辑*/
             url: "/online_edit",
             templateUrl: "pages/mall_manage/brand_manage/online_edit/online_edit.html",
-            params: {item: '', index: '', online_time_flag: ''}
+            params: {on_shelves_list: ''}
         })
         .state("offline_edit", {
             /*品牌管理-已下架编辑*/
             url: "/offline_edit",
             templateUrl: "pages/mall_manage/brand_manage/offline_edit/offline_edit.html",
-            params: {down_shelves_list: '', index: '', online_time_flag: ''}
+            params: {down_shelves_list: ''}
         })
         .state("add_brand", {
             /*品牌管理-添加品牌*/

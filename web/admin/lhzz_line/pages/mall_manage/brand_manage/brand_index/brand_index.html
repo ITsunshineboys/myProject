@@ -50,7 +50,7 @@
                     <td>{{item.online_time}}</td>
                     <td>{{item.applicant}}</td>
                     <td class="green">{{item.status}}</td>
-                    <td class="blue" ui-sref="online_edit({item:item,index:$index,online_time_flag:params['sort[]']})">编辑</td>
+                    <td class="blue" ui-sref="online_edit({on_shelves_list:item})">编辑</td>
                     <td class="blue" data-toggle="modal" data-target="#on_shelves_down_reason_modal" ng-click="down_shelver_btn(item.id)">下架</td>
                 </tr>
             </table>
@@ -121,7 +121,7 @@
                     <td class="red">{{item.status}}</td>
                     <td ng-if="item.offline_reason!=''"><span class="gay_input" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >{{item.offline_reason}}</span></td>
                     <td ng-if="item.offline_reason==''"><span class="gay_input" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >点击输入</span></td>
-                    <td class="blue" ui-sref="offline_edit({down_shelves_list:item,index:$index,online_time_flag:params['sort[]']})">编辑</td>
+                    <td class="blue" ui-sref="offline_edit({down_shelves_list:item})">编辑</td>
                     <td class="blue" data-toggle="modal" data-target="#solo_on_shelves_modal" ng-click="on_shelver_btn(item.id)">上架</td>
                 </tr>
             </table>
