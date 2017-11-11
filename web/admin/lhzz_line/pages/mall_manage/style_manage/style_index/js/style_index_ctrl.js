@@ -13,6 +13,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             tablePages();
         }
     };
+
     let tablePages=function () {
         $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
         $http.get(baseUrl+'/mall/style-time-sort',{
@@ -25,6 +26,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             console.log(err);
         })
     };
+
     $scope.params = {
         page: 1,                        // 当前页数
         sort:0
@@ -97,6 +99,15 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         $scope.showseries = false;
         $scope.showstyle = false;
         $scope.showattr = true;
+        firstClass();
+        $scope.attr_params = {
+            pid: 0,   //父分类id
+            page: 1,  //当前页数
+            'sort[]': "attr_op_time:3" //排序规则 默认按最后操作时间降序排列
+        }
+        $scope.pageConfig.currentPage = 1;
+        tableList();
+
     };
     /************************系列开始*******************************/
 
@@ -260,7 +271,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         return $scope.attr_params['sort[]'].split(':')[1]
     }
 
-    firstClass();
+
     /*分类选择一级下拉框*/
     function firstClass() {
         $http({
@@ -283,33 +294,6 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             $scope.dropdown.secselect = response.data.data.categories[0].id;
         })
     }
-
-
-    // /*分类选择下拉框*/
-    // /*分类选择一级下拉框*/
-    // $scope.firstClass = (function () {
-    //     $http({
-    //         method: "get",
-    //         url: baseUrl+"/mall/categories-manage-admin",
-    //     }).then(function (response) {
-    //         $scope.firstclass = response.data.data.categories;
-    //         $scope.firstselect = response.data.data.categories[0].id;
-    //     })
-    // })()
-    //
-    // /*分类选择二级下拉框*/
-    // $scope.subClass = function (obj) {
-    //     console.log(obj)
-    //     $http({
-    //         method: "get",
-    //         url: baseUrl+"/mall/categories-manage-admin",
-    //         params: {pid: obj}
-    //     }).then(function (response) {
-    //         $scope.secondclass = response.data.data.categories;
-    //         $scope.secselect = response.data.data.categories[0].id;
-    //     })
-    // }
-
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
@@ -353,97 +337,9 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             url: baseUrl+"/mall/goods-attr-list-admin",
             params: $scope.attr_params,
         }).then(function (res) {
-            console.log(res);
             $scope.pageConfig.totalItems = res.data.data.goods_attr_list_admin.total;
             $scope.listdata = res.data.data.goods_attr_list_admin.details;
         })
     }
-
-    // /*属性管理table*/
-    // $scope.allproperties = (function () {
-    //     $http({
-    //         method: "get",
-    //         url: baseUrl+"/mall/goods-attr-list-admin",
-    //         params: {"sort[]": "attr_op_time:3"}
-    //     }).then(function (res) {
-    //         $scope.proptable = res.data.data.goods_attr_list_admin.details;
-    //     })
-    // })()
-    //
-    // /*属性分类选择*/
-    // $scope.$watch('firstselect', function (newVal,oldVal) {
-    //     $scope.handledesorder = true;
-    //     $scope.handleascorder = false;
-    //     if (!$scope.secselect) {
-    //         $http.get(baseUrl+'/mall/goods-attr-list-admin', {
-    //             params: {pid: +newVal},
-    //         }).then(function (res) {
-    //             console.log('属性管理分类选择第一个下拉框')
-    //             console.log(res);
-    //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
-    //         }, function (err) {
-    //             console.log(err);
-    //         })
-    //     } else {
-    //         return;
-    //     }
-    //     ;
-    // })
-    //
-    // $scope.$watch('secselect', function (newVal,oldVal) {
-    //     $scope.handledesorder = true;
-    //     $scope.handleascorder = false;
-    //     if (newVal != 0) {
-    //         $http.get(baseUrl+'/mall/goods-attr-list-admin', {
-    //             params: {pid: +newVal},
-    //         }).then(function (res) {
-    //             console.log(res);
-    //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
-    //         }, function (err) {
-    //             console.log(err);
-    //         })
-    //     } else {
-    //         $http.get(baseUrl+'/mall/goods-attr-list-admin', {
-    //             params: {pid: +$scope.firstselect},
-    //         }).then(function (res) {
-    //             $scope.proptable = res.data.data.goods_attr_list_admin.details;
-    //         }, function (err) {
-    //             console.log(err);
-    //         })
-    //     }
-    // });
-    //
-    //
-    // /*操作时间降序*/
-    // $scope.handleDesorder = () => {
-    //     $scope.handledesorder = true;
-    //     $scope.handleascorder = false;
-    //     sortTime(3);
-    // }
-    //
-    //
-    // /*操作时间升序*/
-    // $scope.handleAsorder = () => {
-    //     $scope.handledesorder = false;
-    //     $scope.handleascorder = true;
-    //     sortTime(4);
-    // }
-    //
-    // /*排序公共方法*/
-    // function sortTime(sortmethod) {
-    //     $scope.firstselect == 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //第一个下拉框为全部
-    //     $scope.firstselect != 0 && !$scope.secselect ? $scope.pid = $scope.firstselect : false; //二级下拉为全部
-    //     $scope.firstselect != 0 && $scope.secselect ? $scope.pid = $scope.secselect : false; //两个都不为全部
-    //     sortparam = 'attr_op_time:' + sortmethod;
-    //     $http({
-    //         method: "get",
-    //         params: {"sort[]": sortparam, pid: $scope.pid || 0},
-    //         url: baseUrl+"/mall/goods-attr-list-admin",
-    //     }).then(function (res) {
-    //         $scope.proptable = res.data.data.goods_attr_list_admin.details;
-    //     })
-    // }
-    /**/
-
     /*********************************属性结束*******************************/
 });
