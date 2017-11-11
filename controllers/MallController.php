@@ -5288,11 +5288,7 @@ class MallController extends Controller
             $query->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)]);
             $query->andWhere(['or', ['like', 'shop_no', $keyword], ['like', 'shop_name', $keyword]]);
         }
-
-        if (YII_DEBUG) {
-            StringService::writeLog('test', json_encode($orderBy));
-            StringService::writeLog('test', ModelService::getSqlByQuery($query));
-        }
+        
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
