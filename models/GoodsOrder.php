@@ -2331,7 +2331,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['handle']='';
                 echo $GoodsOrder[$k]['supplier_id'];
                 $sup=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one();
-                 var_dump($sup);exit;
+                 var_dump($sup->shop_name);exit;
                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
                  if ($role=='user')
                 {
