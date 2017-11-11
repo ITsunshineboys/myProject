@@ -15,6 +15,7 @@ use app\models\WorkerRank;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -449,40 +450,40 @@ class WorkerManagementController extends Controller
         switch ($status || $timeType  || $worker || $other)
         {
             case !$status && !$timeType  && !$worker  && !$other:
-                $where = "";
+                $where = "is_old = 0";
                 break;
             case $status && !$timeType && !$worker  && !$other:
-                $where = 'worker_order.status = ' . $status;
+                $where = 'worker_order.status = ' . $status .' and is_old = 0';
                 break;
             case !$status && $timeType && !$worker  && !$other:
                 $times = StringService::startEndDate($timeType);
-                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <= ".strtotime($times['1']);
+                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <= ".strtotime($times['1']).' and is_old = 0';
                 break;
             case $status && $timeType && !$worker  && !$other:
                 $times = StringService::startEndDate($timeType);
-                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <=".strtotime($times['1']). " and worker_order.status = ".$status;
+                $where = "worker_order.create_time >=".strtotime($times['0'])." and worker_order.create_time <=".strtotime($times['1']). " and worker_order.status = ".$status.'and is_old = 0';
                 break;
             case !$status && $timeType = 'custom' && !$worker  && !$other:
                 $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
                 $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
-                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time;
+                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time.' and is_old = 0';
                 break;
             case $status && $timeType = 'custom' && !$worker  && !$other:
                 $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
                 $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
-                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status;
+                $where = "worker_order.create_time >=".$min_time." and worker_order.create_time <=".$max_time." and worker_order.status = ".$status.' and is_old = 0';
                 break;
             case !$status && !$timeType && $worker  && !$other:
-                $where = "worker_order.worker_type_id = " .$worker;
+                $where = "worker_order.worker_type_id = " .$worker.' and is_old = 0';
                 break;
             case $status && !$timeType && $worker  && !$other:
-                $where = "worker_order.worker_type_id = " .$worker."worker_order.status = ".$status;
+                $where = "worker_order.worker_type_id = " .$worker."worker_order.status = ".$status.' and is_old = 0';
                 break;
             case !$status && !$timeType  && !$worker  && $other:
-                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%'";
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%' and is_old = 0'";
                 break;
             case $status && !$timeType && !$worker  && $other:
-                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%' and worker_order.status = " .$status;
+                $where = " worker_order.con_tel like '%{$other}%'  or worker_order.con_people like '%{$other}%' or worker_order.order_no like '%{$other}%  or user.aite_cube_no like '%{$other}%' and worker_order.status = " .$status.' and is_old = 0';
                 break;
 
         }
@@ -493,30 +494,73 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    public function actionWorkerOrderStatusList()
+    {
+        $order_no = (int)trim(\Yii::$app->request->get('order_no'));
+        $where = "order_no = ".$order_no ." and is_old = 0";
+        $worker = WorkerOrder::find()->select('amount')->where($where)->One();
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'OK',
+            'data' => sprintf('%.2f',$worker['amount'] * 0.01)
+        ]);
+    }
+
     /**
      * 工程订单状态和备注
      * @return string
      */
     public function actionWorkerOrderStatus()
     {
-        $status_id = (int)trim(\Yii::$app->request->post('status_id',''));
-
+        $amount = trim(\Yii::$app->request->post('amount',''));
         //  取消订单
-        if ($status_id){
-            $edit_status = WorkerOrder::findOne(['id'=>$status_id]);
-            $edit_status->status =  WorkerOrder::WORKER_ORDER_NO;
-            if (!$edit_status->save()){
-                $code = 1000;
+        if ($amount){
+            $user_price = trim(\Yii::$app->request->post('user_price',''));
+            $worker_price = trim(\Yii::$app->request->post('worker_price',''));
+
+            if (($user_price + $worker_price) > $amount) {
                 return Json::encode([
-                   'code' => $code,
-                   'msg' => \Yii::$app->params['errorCodes'][$code],
+                   'code' => 1050,
+                   'msg' => '退还业主金额和工人金额之和超过了订单金额',
                 ]);
             }
 
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-            ]);
+            $tr = \Yii::$app->db->beginTransaction();
+            try{
+                $id = (int)trim(\Yii::$app->request->post('id',''));
+
+                if ($user_price && $worker_price){
+                    $worker_order = WorkerOrder::findOne(['id'=>$id]);
+                    $user = User::findOne(['id'=>$worker_order['uid']]);
+                    $user->balance = $user['balance'] + $user_price;
+                    if (!$user->save()){
+                        $tr->rollBack();
+                    }
+
+                    $worker = Worker::findOne(['id'=>$worker_order['worker_id']]);
+                    $worker_info = User::findOne(['id'=>$worker['uid']]);
+                    $worker_info->balance = $worker_info['balance'] + $worker_price;
+                    if (!$worker_info->save()){
+                        $tr->rollBack();
+                    }
+
+                    $edit_status = WorkerOrder::findOne(['id'=>$id]);
+                    $edit_status->amount = $user_price + $worker_price;
+                    $edit_status->status =  WorkerOrder::WORKER_ORDER_NO;
+                    if (!$edit_status->save()){
+                        $tr->rollBack();
+                    }
+                }
+
+                $tr->commit();
+                return Json::encode([
+                    'code' => 200,
+                    'msg' => 'ok',
+                ]);
+            }catch (Exception $e) {
+                $tr->rollBack();
+            }
+
         }
 
         //  备注消息
