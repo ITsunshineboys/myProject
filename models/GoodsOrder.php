@@ -712,11 +712,21 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $tran->commit();
-            return true;
         }catch (Exception $e) {
             $tran->rollBack();
             return false;
         }
+
+        $sms['mobile']=$address->mobile;
+        $sms['type']='gotOrder';
+        $sms['goods_title']=$goods['title'];
+        $sms['order_no']=$order_no;
+        $sms['recipient']=$address->consignee;
+        $sms['phone_number']=$address->mobile;
+        new SmValidationService($sms);
+        return true;
+
+
 
     }
 
