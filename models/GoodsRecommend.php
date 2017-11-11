@@ -147,7 +147,21 @@ class GoodsRecommend extends ActiveRecord
         $page <= 0 && $page = 1;
         $size <= 0 && $size = self::PAGE_SIZE_DEFAULT;
         $offset = ($page - 1) * $size;
-        return array_slice(self::secondAll($districtCode), $offset, $size);
+
+        return self::find()
+            ->select(self::$appFields)
+            ->where([
+                'delete_time' => 0,
+                'type' => self::RECOMMEND_GOODS_TYPE_SECOND,
+                'status' => self::STATUS_ONLINE,
+                'district_code' => $districtCode])
+            ->orderBy(['sorting_number' => SORT_ASC])
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+
+//        return array_slice(self::secondAll($districtCode), $offset, $size);
     }
 
     /**
