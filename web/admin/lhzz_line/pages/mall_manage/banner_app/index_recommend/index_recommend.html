@@ -57,7 +57,7 @@
                     <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_3" ng-click="show_all(show_3)">名称</li>
                     <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_4" ng-click="show_all(show_4)">来源商家</li>
                     <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_5" ng-click="show_all(show_5)">上架浏览</li>
-                    <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_6" ng-click="show_all(show_6)">上架销量</li>
+                    <!--<li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_6" ng-click="show_all(show_6)">上架销量</li>-->
                     <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_7" ng-click="show_all(show_7)">是否启用</li>
                     <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_8" ng-click="show_all(show_8)">创建时间</li>
                     <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_9" ng-click="show_all(show_9)">图片</li>
@@ -81,16 +81,10 @@
                 <td ng-if="show_2">商品编号</td>
                 <td ng-if="show_3">名称</td>
                 <td ng-if="show_4">来源商家</td>
-                <td ng-if="show_5">
-                    <span>上架浏览</span>
-                </td>
-                <td ng-if="show_6" style="padding: 0 5px">
-                    <span>上架销量</span>
-                </td>
+                <td ng-if="show_5"><span>上架浏览</span></td>
+                <!--<td ng-if="show_6" style="padding: 0 5px"><span>上架销量</span></td>-->
                 <td ng-if="show_7">是否启用</td>
-                <td ng-if="show_8">
-                    <span>创建时间</span>
-                </td>
+                <td ng-if="show_8"><span>创建时间</span></td>
                 <td ng-if="show_9">图片</td>
                 <td ng-if="show_10">库存</td>
                 <td ng-if="show_11">供货价格</td>
@@ -103,10 +97,10 @@
                 <td ><input type="checkbox" ng-checked="selectAll" ng-model="item.state"></td>
                 <td ng-if="show_1">{{item.from_type}}</td>
                 <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
-                <td ng-if="show_3" class="ellipsis ellipsis_name" data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">{{item.title}}</td>
+                <td ng-if="show_3" class="ellipsis ellipsis_name">{{item.title}}</td>
                 <td ng-if="show_4"><a href="" >{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
                 <td ng-if="show_5">{{item.viewed_number}}</td>
-                <td ng-if="show_6">{{item.sold_number}}</td>
+                <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
                 <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
                 <td ng-if="show_8" ng-click="recommend_sort(item)">{{item.create_time}}</td>
                 <td ng-if="show_9"><img id="show_img_size" ng-src="{{baseUrl + '/'+ item.image}}"></td>
@@ -540,29 +534,37 @@
                     <div class="details_big_div">
                         <div class="details_div">
                             <span>库存：</span>
-                            <span>121</span>
+                            <span>{{shop_details_viewed_left}}</span>
                         </div>
-                        <div class="details_div">
-                            <span>上架销量：</span>
-                            <span class="blue">{{shop_details_sold_number}}</span>
-                        </div>
-                    </div>
-                    <div class="details_big_div">
+                        <!--<div class="details_div">-->
+                            <!--<span>上架销量：</span>-->
+                            <!--<span class="blue">{{shop_details_sold_number}}</span>-->
+                        <!--</div>-->
                         <div class="details_div">
                             <span>供货价格：</span>
                             <span>{{shop_details_supplier_price}}</span>
                         </div>
+                    </div>
+                    <div class="details_big_div">
+                        <!--<div class="details_div">-->
+                            <!--<span>供货价格：</span>-->
+                            <!--<span>{{shop_details_supplier_price}}</span>-->
+                        <!--</div>-->
                         <div class="details_div">
                             <span>平台价格：</span>
                             <span>{{shop_details_platform_price}}</span>
                         </div>
-                    </div>
-                    <div class="details_big_div">
                         <div class="details_div">
                             <span>市场价格：</span>
                             <span>{{shop_details_market_price}}</span>
                         </div>
                     </div>
+                    <!--<div class="details_big_div">-->
+                        <!--<div class="details_div">-->
+                            <!--<span>市场价格：</span>-->
+                            <!--<span>{{shop_details_market_price}}</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="modal_txt_one modal_img_box">
                         <span>图片：</span>
                         <img id="shop_details_img" ng-src="{{baseUrl + '/'+ shop_details_img}}" >

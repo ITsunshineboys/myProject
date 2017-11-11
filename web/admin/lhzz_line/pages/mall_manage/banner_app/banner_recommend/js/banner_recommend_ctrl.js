@@ -497,7 +497,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
     $scope.shop_datails=item;
     console.log($scope.shop_datails);
     if($scope.shop_datails.from_type=='商家'){
-      console.log($scope.shop_datails);
       $scope.shop_details_title=$scope.shop_datails.title; //标题
       $scope.shop_details_subtitle=$scope.shop_datails.description;//副标题
       $scope.shop_details_types=$scope.shop_datails.from_type; //类型
@@ -510,6 +509,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
       $scope.shop_details_market_price=$scope.shop_datails.market_price;  //市场价格
       $scope.shop_details_img=$scope.shop_datails.image;//图片
       $scope.shop_details_viewed_number=$scope.shop_datails.viewed_number;//上架浏览
+      $scope.shop_details_viewed_left=$scope.shop_datails.left_number;//库存
       $scope.shop_details_sold_number=$scope.shop_datails.sold_number;//上架销量
     }
     //链接
@@ -524,7 +524,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
       $scope.link_details_viewed_number=$scope.shop_datails.viewed_number;//浏览
       $scope.link_details_img=$scope.shop_datails.image;//图片
     }
-  } ;
+  };
 
   /**
    *--------------------------

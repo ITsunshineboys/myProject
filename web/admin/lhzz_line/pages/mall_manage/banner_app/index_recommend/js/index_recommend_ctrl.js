@@ -518,6 +518,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
       $scope.shop_details_market_price=$scope.shop_datails.market_price;  //市场价格
       $scope.shop_details_img=$scope.shop_datails.image;//图片
       $scope.shop_details_viewed_number=$scope.shop_datails.viewed_number;//上架浏览
+      $scope.shop_details_viewed_left=$scope.shop_datails.left_number;//库存
       $scope.shop_details_sold_number=$scope.shop_datails.sold_number;//上架销量
     }
     //链接
