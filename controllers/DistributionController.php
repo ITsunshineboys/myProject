@@ -128,29 +128,7 @@ class DistributionController extends Controller
             $sms['mobile']=$mobile;
             $sms['type']='register';
         }
-        try {
-            new SmValidationService($sms);
-        } catch (\InvalidArgumentException $e) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        } catch (ServerErrorHttpException $e) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }catch (\Exception $e) {
-            $code = 1020;
-            if ($code == $e->getCode()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-        }
+        new SmValidationService($sms);
         $code=200;
         $session['distribution_mobile']=$mobile;
         return Json::encode(
