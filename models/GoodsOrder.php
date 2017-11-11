@@ -2330,6 +2330,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
                 $sup=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one();
+                var_dump($sup->toArray());die;
                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
                  if ($role=='user')
                 {
@@ -2449,7 +2450,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
             $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
             $supplier=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one();
-            $arr[$k]['shop_name']=$supplier->nickname;
+            $arr[$k]['shop_name']=$supplier->shop_name;
             if ($role=='user')
             {
 
