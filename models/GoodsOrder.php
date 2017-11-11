@@ -1141,45 +1141,79 @@ class GoodsOrder extends ActiveRecord
                     }
             }
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
-            $content = "订单号{$order_no},{$OrderGoods->goods_name}";
-            $record=new UserNewsRecord();
-            $record->uid=$user->id;
-            $record->role_id=$GoodsOrder->role_id;
-            $record->title='您的订单已发货';
-            $record->content=$content;
-            $record->send_time=time();
-            $record->order_no=$order_no;
-            $record->sku=$sku;
-            if (!$record->save(false))
+            if($GoodsOrder->order_refer==1)
             {
-                $code=500;
-                $trans->rollBack();
-                return $code;
+                if ($shipping_type==1)
+                {
+                    $sms['mobile']=$GoodsOrder->consignee_mobile;
+                    $sms['type']='homeDelivery';
+                    $sms['goods_title']=$OrderGoods->goods_name;
+                    $sms['order_no']=$GoodsOrder->order_no;
+                    $sms['recipient']=$GoodsOrder->consignee;
+                    $sms['phone_number']=$GoodsOrder->consignee_mobile;
+                }else{
+                    $sms['mobile']=$GoodsOrder->consignee_mobile;
+                    $sms['type']='courierDelivery';
+                    $sms['goods_title']=$OrderGoods->goods_name;
+                    $sms['order_no']=$GoodsOrder->order_no;
+                    $sms['recipient']=$GoodsOrder->consignee;
+                    $sms['phone_number']=$GoodsOrder->consignee_mobile;
+                    if (!$waybillname)
+                    {
+                        $waybillname='未知';
+                    }
+                    $sms['express']=$waybillname;
+                    $sms['tracking_no']=$waybillnumber;
+                    new SmValidationService($sms);
+                }
+
+
+
+
+            }else{
+                $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
+
+                $content = "订单号{$order_no},{$OrderGoods->goods_name}";
+                $record=new UserNewsRecord();
+                $record->uid=$user->id;
+                $record->role_id=$GoodsOrder->role_id;
+                $record->title='您的订单已发货';
+                $record->content=$content;
+                $record->send_time=time();
+                $record->order_no=$order_no;
+                $record->sku=$sku;
+                if (!$record->save(false))
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $registration_id=User::find()
+                    ->where(['id'=>GoodsOrder::find()
+                        ->select('user_id')
+                        ->where(['order_no'=>$order_no])
+                        ->asArray()
+                        ->one()['user_id']
+                    ])
+                    ->one()->registration_id;
+                $push=new Jpush();
+                $extras = [];//推送附加字段的类型
+                $m_time = '86400';//离线保留时间
+                $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+                $title='订单发货了!';
+                $content = '你的订单已经发货,点击详情查看!';
+                $result = $push->push($receive,$title,$content,$extras, $m_time);
+                if (!$result)
+                {
+                    $code=1000;
+                    $trans->rollBack();
+                    return $code;
+                }
             }
         } catch (Exception $e) {
             $trans->rollBack();
             $code=500;
             return $code;
-        }
-        $registration_id=User::find()
-            ->where(['id'=>GoodsOrder::find()
-                ->select('user_id')
-                ->where(['order_no'=>$order_no])
-                ->asArray()
-                ->one()['user_id']
-            ])
-            ->one()->registration_id;
-        $push=new Jpush();
-        $extras = [];//推送附加字段的类型
-        $m_time = '86400';//离线保留时间
-        $receive = ['registration_id'=>[$registration_id]];//设备的id标识
-        $title='订单发货了!';
-        $content = '你的订单已经发货,点击详情查看!';
-        $result = $push->push($receive,$title,$content,$extras, $m_time);
-        if (!$result)
-        {
-            $trans->rollBack();
         }
         $trans->commit();
          $code=200;
