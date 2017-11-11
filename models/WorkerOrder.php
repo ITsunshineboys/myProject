@@ -273,8 +273,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function MudorderView($order_no){
-        $mud_item_data=MudWorkerOrder::find()->asArray()->where(['order_no'=>$order_no])->all();
+    public static function MudorderView($order_id){
+        $mud_item_data=MudWorkerOrder::find()->asArray()->where(['order_id'=>$order_id])->all();
 
         foreach ($mud_item_data as &$mud_item){
             $mud_item['worker_item']=WorkerItem::find()
@@ -307,8 +307,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function WaterprooforderView($order_no){
-        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_no'=>$order_no])->all();
+    public static function WaterprooforderView($order_id){
+        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_'=>$order_id])->all();
         foreach ($water_item_data as &$water_item){
             $water_item['worker_item']=WorkerItem::find()
                 ->where(['id'=>$water_item['worker_item_id']])
@@ -337,13 +337,13 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $type=WorkerType::getparenttype($worker_type_id);
         switch ($type){
             case '泥工':
-                $data=self::MudorderView($order->order_no);
+                $data=self::MudorderView($order->id);
                 break;
             case '防水工':
-                $data=self::WaterprooforderView($order->order_no);
+                $data=self::WaterprooforderView($order->id);
                 break;
             case '油漆工':
-                $data=self::painterorderView($order->order_no);
+                $data=self::painterorderView($order->id);
         }
 
 //        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
@@ -1720,7 +1720,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
         ];
     }
 
-
+    /**工人修改订单
+     * @param $array
+     * @return int
+     */
     public static function UpdateOrder($array){
         $order=WorkerOrder::find()->asArray()->where(['id'=>$array['order_id'],'is_old'=>0])->one();
         //修改泥作订单表的内容
@@ -1748,8 +1751,20 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 case '泥工':
                     $items_res=self::saveMuditem($array['items'],$last_id);
                     break;
-                case '防水共':
+                case '防水工':
                     $items_res=self::savewaterproofitme($array['items'],$last_id);
+                    break;
+                case '油漆工':
+                    $items_res=self::savepainteritem($array['items'],$last_id);
+                    break;
+                case '水电工':
+                    $items_res=self::savehydropoweritem($array['items'],$last_id);
+                    break;
+                case '木工':
+                    $items_res=self::savecarpentryitem($array['items'],$last_id);
+                    break;
+                case '杂工':
+                    $items_res=self::savebackmanitem($array['items'],$last_id);
                     break;
             }
             if(!$items_res){
