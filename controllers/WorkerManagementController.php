@@ -535,6 +535,12 @@ class WorkerManagementController extends Controller
                     $user->balance = $user['balance'] + $user_price;
                     if (!$user->save()){
                         $tr->rollBack();
+                        $code = 1000;
+                        return json_encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+
+                        ]);
                     }
 
                     $worker = Worker::findOne(['id'=>$worker_order['worker_id']]);
@@ -542,6 +548,12 @@ class WorkerManagementController extends Controller
                     $worker_info->balance = $worker_info['balance'] + $worker_price;
                     if (!$worker_info->save()){
                         $tr->rollBack();
+                        $code = 1000;
+                        return json_encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+
+                        ]);
                     }
 
                     $edit_status = WorkerOrder::findOne(['id'=>$id]);
@@ -549,6 +561,12 @@ class WorkerManagementController extends Controller
                     $edit_status->status =  WorkerOrder::WORKER_ORDER_NO;
                     if (!$edit_status->save()){
                         $tr->rollBack();
+                        $code = 1000;
+                        return json_encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+
+                        ]);
                     }
                 }
 
@@ -581,7 +599,6 @@ class WorkerManagementController extends Controller
                 'msg' => 'ok',
             ]);
         }
-
     }
 
     public function actionWorkerOrderDetails()
