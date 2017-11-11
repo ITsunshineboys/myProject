@@ -50,6 +50,7 @@ use yii\web\Controller;
 use app\models\UserNewsRecord;
 use Yii;
 use vendor\wxpay\lib\WxPayResults;
+use app\services\AuthService;
  
 
 class OrderController extends Controller
