@@ -5272,8 +5272,8 @@ class MallController extends Controller
         }
 
         if ($sort) {
-            if (stripos($orderBy, Supplier::FIELD_SALES_VOLUMN_MONTH) !== -1
-                || stripos($orderBy, Supplier::FIELD_SALES_AMOUNT_MONTH) !== -1
+            if (stripos($orderBy, Supplier::FIELD_SALES_VOLUMN_MONTH) !== false
+                || stripos($orderBy, Supplier::FIELD_SALES_AMOUNT_MONTH) !== false
             ) {
                 $orderBy = 'month DESC,' . $orderBy;
             }
