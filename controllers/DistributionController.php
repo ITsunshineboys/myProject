@@ -19,6 +19,8 @@ use yii\web\ServerErrorHttpException;
 
 use app\services\SmValidationService;
 use app\services\StringService;
+use app\services\AuthService;
+ 
 
 class DistributionController extends Controller
 {
