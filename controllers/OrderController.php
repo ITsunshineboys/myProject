@@ -840,6 +840,34 @@ class OrderController extends Controller
                 'order_no'=> Yii::$app->session['order_no'],
                 'buyer_message'=> Yii::$app->session['buyer_message']
             );
+            if ($orders==[])
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
+            if (!$invoice)
+            {
+                $address=Addressadd::findOne(Yii::$app->session['address_id']);
+                $in=new Invoice();
+                $in->invoice_type=1;
+                $in->invoice_header_type=1;
+                $in->invoice_header=$address->consignee;
+                $in->invoice_content='明细';
+                $res=$in->save(false);
+                if (!$res)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $orders['invoice_id']=$in->id;
+            }
             $openid=(new PayService())->GetOpenid();
             $model=new Wxpay();
             $data=$model->Wxlineapipay($orders,$openid);
