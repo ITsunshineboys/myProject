@@ -69,6 +69,11 @@ class RolePermission extends ActiveRecord
      */
     public static function rolePermissions($roleId)
     {
+        return array_map(function ($value) {
+            return $value['controller'] . '/' . $value['action'];
+        }, self::find()->select(['controller', 'action'])->where(['role_id' => $roleId])->asArray()->all());
+
+        /*
         $cache = Yii::$app->cache;
         $cacheKey = self::CACHE_KEY_PREFIX_ROLE_PERMISSIONS . $roleId;
         $rolePermissions = $cache->get($cacheKey);
@@ -78,9 +83,7 @@ class RolePermission extends ActiveRecord
             }, self::find()->select(['controller', 'action'])->where(['role_id' => $roleId])->asArray()->all());
             $cache->set($cacheKey, $rolePermissions);
         }
-        if (YII_DEBUG) {
-            StringService::writeLog('role_permissions', json_encode($rolePermissions), '', Logger::LEVEL_INFO);
-        }
         return $rolePermissions;
+        */
     }
 }
