@@ -143,6 +143,12 @@ class GoodsOrder extends ActiveRecord
         '换货',
     ];
     const REMIND_SEND_GOODS='remind_send_goods_';
+    const PLAT_MONEY='platform_price';
+    const WORKER_MONEY='platform_price';
+    const MANAGER_MONEY='purchase_price_manager';
+    const DESIGNER_MONEY='purchase_price_designer';
+    const COMPANEY_MONEY='purchase_price_decoration_company';
+    const SUPPLIER_MONEY='supplier_price';
     const STATUS_DESC_DETAILS=1;
 
 
