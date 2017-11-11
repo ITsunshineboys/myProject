@@ -2932,7 +2932,7 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
         $tran = Yii::$app->db->beginTransaction();
-        $role_money=GoodsOrder::GetRoleMoney($user->last_role_id_app);
+        $role_money=self::GetRoleMoney($user->last_role_id_app);
         $time=time();
         try{
             $total=0;
