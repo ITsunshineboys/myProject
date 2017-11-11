@@ -308,7 +308,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function WaterprooforderView($order_id){
-        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_'=>$order_id])->all();
+        $water_item_data=WaterproofWorkerOrder::find()->asArray()->where(['order_id'=>$order_id])->all();
         foreach ($water_item_data as &$water_item){
             $water_item['worker_item']=WorkerItem::find()
                 ->where(['id'=>$water_item['worker_item_id']])
