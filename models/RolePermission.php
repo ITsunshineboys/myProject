@@ -8,8 +8,10 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
+use yii\log\Logger;
 
 class RolePermission extends ActiveRecord
 {
@@ -75,6 +77,9 @@ class RolePermission extends ActiveRecord
                 return $value['controller'] . '/' . $value['action'];
             }, self::find()->select(['controller', 'action'])->where(['role_id' => $roleId])->asArray()->all());
             $cache->set($cacheKey, $rolePermissions);
+        }
+        if (YII_DEBUG) {
+            StringService::writeLog('role_permissions', json_encode($rolePermissions), '', Logger::LEVEL_INFO);
         }
         return $rolePermissions;
     }
