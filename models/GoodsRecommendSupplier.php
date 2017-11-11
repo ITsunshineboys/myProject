@@ -317,13 +317,13 @@ class GoodsRecommendSupplier extends ActiveRecord
                 if (!empty($recommend['sku'])) {
                     $goods = Goods::find()->where(['sku' => $recommend['sku']])->one();
                     if ($goods) {
-                        $recommend['platform_price'] = $goods->platform_price;
-                        $recommend['market_price'] = $goods->market_price;
-                        $recommend['supplier_price'] = $goods->supplier_price;
+                        $recommend['platform_price'] = StringService::formatPrice($goods->platform_price / 100);
+                        $recommend['market_price'] = StringService::formatPrice($goods->market_price / 100);
+                        $recommend['supplier_price'] = StringService::formatPrice($goods->supplier_price / 100);
                         $recommend['left_number'] = $goods->left_number;
-                        $recommend['purchase_price_decoration_company'] = $goods->purchase_price_decoration_company;
-                        $recommend['purchase_price_manager'] = $goods->purchase_price_manager;
-                        $recommend['purchase_price_designer'] = $goods->purchase_price_designer;
+                        $recommend['purchase_price_decoration_company'] = StringService::formatPrice($goods->purchase_price_decoration_company / 100);
+                        $recommend['purchase_price_manager'] = StringService::formatPrice($goods->purchase_price_manager / 100);
+                        $recommend['purchase_price_designer'] = StringService::formatPrice($goods->purchase_price_designer / 100);
                         $recommend['goods_status'] = $goods->status;
                     }
                 }

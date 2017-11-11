@@ -311,9 +311,9 @@ class GoodsRecommend extends ActiveRecord
                     $goods = Goods::find()->where(['sku' => $recommend['sku']])->one();
                     $recommend['platform_price'] = $recommend['market_price'] = $recommend['supplier_price'] = $recommend['left_number'] = 0;
                     if ($goods) {
-                        $recommend['platform_price'] = $goods->platform_price;
-                        $recommend['market_price'] = $goods->market_price;
-                        $recommend['supplier_price'] = $goods->supplier_price;
+                        $recommend['platform_price'] = StringService::formatPrice($goods->platform_price / 100);
+                        $recommend['market_price'] = StringService::formatPrice($goods->market_price / 100);
+                        $recommend['supplier_price'] = StringService::formatPrice($goods->supplier_price / 100);
                         $recommend['left_number'] = $goods->left_number;
                         $recommend['goods_status'] = $goods->status;
                     }
