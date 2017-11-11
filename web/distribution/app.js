@@ -18,6 +18,11 @@ app.config(function ($stateProvider,$urlRouterProvider) {
             templateUrl:'pages/verification.html',
             css:['pages/css/index.css','pages/css/login.css']
         })
+        .state('personal_center',{
+            url:'/personal_center',
+            templateUrl:'pages/personal_center.html',
+            css:'pages/css/personal_center.css'
+        })
 })
     .service('_ajax', function ($http, $state) {
         let baseUrl = ''
@@ -27,19 +32,17 @@ app.config(function ($stateProvider,$urlRouterProvider) {
                 url: baseUrl + url,
                 params: params
             }).then(function (response) {
+                console.log(res)
                 let res = response.data;
                 if (res.code === 403) {
                     $state.go('login')
-                } else if (res.code === 200 || res.code === 201) {
+                } else {
                     if (typeof callback === 'function') {
                         callback(res)
                     }
-                } else {
-                    alert(res.msg)
                 }
             }, function (response) {
                 console.log(response);
-                alert(response.statusText)
             })
         };
         this.post = function (url, params, callback) {
@@ -53,18 +56,16 @@ app.config(function ($stateProvider,$urlRouterProvider) {
                 }
             }).then(function (response) {
                 let res = response.data;
+                console.log(res)
                 if (res.code === 403) {
                     $state.go('login')
-                } else if (res.code === 200 || res.code === 1068 || res.code === undefined) {
+                } else {
                     if (typeof callback === 'function') {
                         callback(res)
                     }
-                } else {
-                    alert(res.msg)
                 }
             }, function (response) {
                 console.log(response);
-                alert(response.statusText)
             })
         }
     })
