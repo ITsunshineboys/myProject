@@ -23,9 +23,6 @@ class AuthService extends AccessControl
 
         $user = Yii::$app->user->identity;
         if (!$user) {
-            if (YII_DEBUG) {
-                StringService::writeLog('auth', 'not user', '', Logger::LEVEL_INFO);
-            }
             if ($this->denyCallback !== null) {
                 call_user_func($this->denyCallback, $denyCode, $action);
             }
@@ -36,14 +33,7 @@ class AuthService extends AccessControl
             || !empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])
         ) {
             $path = Yii::$app->controller->id . '/' . $action->id;
-            if (YII_DEBUG) {
-                StringService::writeLog('auth', $path, '', Logger::LEVEL_INFO);
-            }
             if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_ADMIN])) {
-                if (YII_DEBUG) {
-                    StringService::writeLog('auth', var_export($user->checkAdminLogin(),  true), '', Logger::LEVEL_INFO);
-                    StringService::writeLog('auth', var_export(RolePermission::rolePermissions($user->login_role_id),  true), '', Logger::LEVEL_INFO);
-                }
                 if (!$user->checkAdminLogin()
                     || !in_array($path, RolePermission::rolePermissions($user->login_role_id))
                 ) {
