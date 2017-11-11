@@ -2621,7 +2621,7 @@ class GoodsOrder extends ActiveRecord
            a.invoice_content,
            z.cover_image,
            z.is_unusual');
-       if(array_key_exists('sku', $postData)){
+        if($postData==''){
            $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id,'z.sku'=>$postData['sku']])
                ->all();
        }else{
