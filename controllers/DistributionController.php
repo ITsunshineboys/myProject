@@ -123,7 +123,7 @@ class DistributionController extends Controller
         if($user)
         {
             $sms['mobile']=$mobile;
-            $sms['type']='register';
+            $sms['type']='resetMobile';
         }else{
             $sms['mobile']=$mobile;
             $sms['type']='register';
