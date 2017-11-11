@@ -135,6 +135,16 @@ class MallController extends Controller
         'supplier-list',
         'categories-have-style-series',
         'categories-style-series-reset',
+        'series-list',
+        'series-time-sort',
+        'series-add',
+        'series-edit',
+        'series-status',
+        'style-list' ,
+        'style-time-sort',
+        'style-add',
+        'style-edit',
+        'style-status',
     ];
 
     /**

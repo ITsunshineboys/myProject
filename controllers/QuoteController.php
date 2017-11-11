@@ -42,6 +42,61 @@ use yii\web\Controller;
 
 class QuoteController extends Controller
 {
+
+    /**
+     * Actions accessed by logged-in users
+     */
+    const ACCESS_LOGGED_IN_USER = [
+        'labor-cost-list',
+        'labor-cost-edit-list',
+        'labor-cost-edit',
+        'project-norm-list',
+        'project-norm-edit-list',
+        'project-norm-edit' ,
+        'project-norm-woodwork-list',
+        'project-norm-woodwork-edit' ,
+        'coefficient-list',
+        'coefficient-add',
+        'plot-list',
+        'labor-list',
+        'series-and-style',
+        'plot-add' ,
+        'plot-edit-view',
+        'plot-edit',
+        'plot-del',
+        'assort-goods',
+        'assort-goods-list',
+        'assort-goods-add',
+        'homepage-list',
+        'homepage-sort',
+        'homepage-district',
+        'homepage-toponymy',
+        'homepage-street',
+        'homepage-case',
+        'homepage-add',
+        'homepage-status',
+        'homepage-edit',
+        'homepage-delete',
+        'apartment-area-list',
+        'apartment-area',
+        'decoration-list',
+        'decoration-add-classify',
+        'house-type-list',
+        'decoration-message-list',
+        'decoration-add',
+        'decoration-del' ,
+        'decoration-edit-list' ,
+        'decoration-edit' ,
+        'commonality-list' ,
+        'commonality-title',
+        'commonality-title-add',
+        'commonality-title-two-add',
+        'commonality-else-list',
+        'commonality-else-edit',
+        'goods-management-list',
+        'goods-management-add' ,
+    ];
+
     const CATEGORY_LEVEL = 3;
     /**
      * @inheritdoc

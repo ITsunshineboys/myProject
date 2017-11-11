@@ -28,6 +28,21 @@ class WorkerManagementController extends Controller
     const DEFAULT_SIZE = 12;
 
     /**
+     * Actions accessed by logged-in users
+     */
+    const ACCESS_LOGGED_IN_USER = [
+        'homepage-list',
+        'worker-type-list',
+        'worker-type-add',
+        'worker-type-edit',
+        'worker-list',
+        'worker-phone',
+        'worker-add',
+        'worker-order-list' ,
+        'workerOrderStatus',
+    ];
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
