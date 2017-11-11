@@ -2321,6 +2321,7 @@ class GoodsOrder extends ActiveRecord
                 ->where($where)
                 ->asArray()
                 ->all();
+                  var_dump($GoodsOrder);exit;
             foreach ($GoodsOrder AS $k =>$v){
                 $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01); 
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
