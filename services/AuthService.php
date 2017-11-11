@@ -23,6 +23,9 @@ class AuthService extends AccessControl
 
         $user = Yii::$app->user->identity;
         if (!$user) {
+            if (YII_DEBUG) {
+                StringService::writeLog('auth', 'not user', '', Logger::LEVEL_INFO);
+            }
             if ($this->denyCallback !== null) {
                 call_user_func($this->denyCallback, $denyCode, $action);
             }
