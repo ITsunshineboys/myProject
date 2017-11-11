@@ -181,33 +181,40 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
 
     /*登录账户判断*/
     $scope.accountCheck = function () {
-        $scope.show_account_warning = false;
         $scope.defaultshow = false;
-        $http({
-            method: "get",
-            url: baseUrl + "/mall/check-role-get-identity",
-            params: {mobile: Number($scope.params.mobile)}
-        }).then(function (res) {
-            console.log(res);
-            if (res.data.code == 1011 || res.data.code == 1010) {
-                //已注册的商家和未成为平台用户
-                $scope.show_account_warning = true;
-                $scope.account_warning = res.data.msg;
-            } else if (res.data.code == 200) {
-                $scope.result = res.data.data;
-                $scope.defaultshow = true;
-                $scope.show_account_warning = false;
-                /*未实名认证的商家*/
-                if (!$scope.result.identity.identity_no) {
-                    $scope.with_au = false;
-                } else {
-                    /*已实名认证的商家*/
-                    $scope.with_au = true;
-                    $scope._frontpath = picprefix + $scope.result.identity.identity_card_front_image;
-                    $scope._backpath = picprefix + $scope.result.identity.identity_card_front_image;
+        if(pattern.test($scope.params.mobile)){
+            $http({
+                method: "get",
+                url: baseUrl + "/mall/check-role-get-identity",
+                params: {mobile: Number($scope.params.mobile)}
+            }).then(function (res) {
+                console.log(res);
+                if (res.data.code == 1011 || res.data.code == 1010) {
+                    //已注册的商家和未成为平台用户
+                    $scope.showwarning = true;
+                    $scope.show_account_warning = true;
+                    $scope.account_warning = res.data.msg;
+                } else if (res.data.code == 200) {
+                    $scope.showwarning = false;
+                    $scope.result = res.data.data;
+                    $scope.defaultshow = true;
+                    $scope.show_account_warning = false;
+                    /*未实名认证的商家*/
+                    if (!$scope.result.identity.identity_no) {
+                        $scope.with_au = false;
+                    } else {
+                        /*已实名认证的商家*/
+                        $scope.with_au = true;
+                        $scope._frontpath = picprefix + $scope.result.identity.identity_card_front_image;
+                        $scope._backpath = picprefix + $scope.result.identity.identity_card_front_image;
+                    }
                 }
-            }
-        })
+            })
+        }else{
+            $scope.showwarning = true;
+            $scope.show_account_warning = true;
+            $scope.account_warning = '请输入正确的11位手机号'
+        }
     }
 
 
@@ -261,6 +268,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     }
 
 
+    /*确认添加商家*/
     $scope.sureAddStore = function (val, error) {
         $scope.licence_warning = false;  //营业执照格式错误提示
         $scope.front_warning = false;    //身份证正面错误提示
@@ -287,32 +295,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 let url = baseUrl + "/mall/supplier-add";
                 let data = $scope.params;
                 $http.post(url, data, config).then(function (res) {
-                    console.log(res);
-                    switch (Number(res.data.code)) {
-                        case 1010:
-                            $scope.show_account_warning = true;
-                            $scope.account_warning = res.data.msg;
-                            break;
-                        case 1011:
-                            $scope.show_account_warning = true;
-                            $scope.account_warning = res.data.msg;
-                            break;
-                        case 1028:
-                            $scope.storename_repeat = true;
-                            $scope.storename_repeatInfo = res.data.msg;
-                            break;
-                        case 1029:
-                            $scope.registercode_repeat = true;
-                            $scope.registercode_repeatInfo = res.data.msg;
-                        case 1030:
-                            $scope.companyname_repeat = true;
-                            $scope.companyname_repeatInfo = res.data.msg;
-                        case 200:
-                            $("#suremodal").modal("show");
-                            break;
-                        default:
-                            return;
-                    }
+                    wrongBack(Number(res.data.code),res.data.msg);
                 })
                 /*已认证的情况*/
             } else if ($scope.with_au && val && $scope.licencepath != picpath) {
@@ -323,31 +306,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 let url = baseUrl + "/mall/supplier-add";
                 let data = $scope.params;
                 $http.post(url, data, config).then(function (res) {
-                    switch (Number(res.data.code)) {
-                        case 1010:
-                            $scope.show_account_warning = true;
-                            $scope.account_warning = res.data.msg;
-                            break;
-                        case 1011:
-                            $scope.show_account_warning = true;
-                            $scope.account_warning = res.data.msg;
-                            break;
-                        case 1028:
-                            $scope.storename_repeat = true;
-                            $scope.storename_repeatInfo = res.data.msg;
-                            break;
-                        case 1029:
-                            $scope.registercode_repeat = true;
-                            $scope.registercode_repeatInfo = res.data.msg;
-                        case 1030:
-                            $scope.companyname_repeat = true;
-                            $scope.companyname_repeatInfo = res.data.msg;
-                        case 200:
-                            $("#suremodal").modal("show");
-                            break;
-                        default:
-                            return;
-                    }
+                    wrongBack(Number(res.data.code),res.data.msg);
                 })
             }
         } else {
@@ -363,6 +322,50 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 }
             }
         }
+    }
+    
+
+    //重复判断
+    function wrongBack(obj,msg) {
+        switch (Number(obj)) {
+            case 1010:
+                $scope.show_account_warning = true;
+                $scope.account_warning = msg;
+                break;
+            case 1011:
+                $scope.show_account_warning = true;
+                $scope.account_warning = msg;
+                break;
+            case 1028:
+                $scope.storename_repeat = true;
+                $scope.storename_repeatInfo = msg;
+                wrongScroll('storename');
+                break;
+            case 1029:
+                $scope.registercode_repeat = true;
+                $scope.registercode_repeatInfo = msg;
+                wrongScroll('registercode');
+                break;
+            case 1030:
+                $scope.companyname_repeat = true;
+                $scope.companyname_repeatInfo = msg;
+                wrongScroll('companyname');
+                break;
+            case 200:
+                $("#suremodal").modal("show");
+                break;
+            default:
+                return;
+        }
+    }
+
+
+    //名称判断错误回滚
+    function wrongScroll(obj) {
+        $anchorScroll.yOffset = 150;
+        $location.hash(obj);
+        $anchorScroll();
+        $window.document.getElementById(obj).focus();
     }
 
 
