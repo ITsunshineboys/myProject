@@ -874,7 +874,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->con_tel = $array['con_tel'];
         $worker_order->amount = $array['amount'] * 100;
         $worker_order->front_money = $array['front_money'] * 100;
-        $worker_order->status=self::WORKER_ORDER_PREPARE;
+        $worker_order->status=self::WORKER_ORDER_NOT_BEGIN;
         if(isset($array['demand'])){
             $worker_order->demand = $array['demand'];
         }
@@ -976,22 +976,22 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
             switch ($type){
                 case '泥工';
-                    $res=self::saveMuditem($data,$worker_order->order_no);
+                    $res=self::saveMuditem($data,$worker_order->id);
                     break;
                 case '水电工';
-                    $res=self::savehydropoweritem($data,$worker_order->order_no);
+                    $res=self::savehydropoweritem($data,$worker_order->id);
                     break;
                 case '木工';
-                    $res=self::savecarpentryitem($data,$worker_order->order_no);
+                    $res=self::savecarpentryitem($data,$worker_order->id);
                     break;
                 case '防水工';
-                    $res=self::savewaterproofitme($data,$worker_order->order_no);
+                    $res=self::savewaterproofitme($data,$worker_order->id);
                     break;
                 case '油漆工';
-                    $res=self::savepainteritem($data,$worker_order->order_no);
+                    $res=self::savepainteritem($data,$worker_order->id);
                     break;
                 case '杂工';
-                    $res=self::savebackmanitem($data,$worker_order->order_no);
+                    $res=self::savebackmanitem($data,$worker_order->id);
                     break;
             }
             if(!$res){
@@ -1013,7 +1013,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_id
      * @return bool
      */
-    public static function saveMuditem(array $array,$order_no)
+    public static function saveMuditem(array $array,$order_id)
     {
         foreach ($array as &$v) {
             if(!isset($v['guarantee'])){
@@ -1024,7 +1024,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $v['chip']=0;
             }
                 $res= \Yii::$app->db->createCommand()->insert('mud_worker_order',[
-                    'order_no'=>$order_no,
+                    'order_id'=>$order_id,
                     'worker_item_id'=>$v['item_id'],
                     'worker_craft_id'=>$v['craft_id'],
                     'area'=>$v['area'],
@@ -1045,7 +1045,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_no
      * @return bool
      */
-    public static function savehydropoweritem(array $array,$order_no){
+    public static function savehydropoweritem(array $array,$order_id){
         foreach ($array as &$v) {
                 foreach ($v as &$data){
                     if(!$data['craft_id']){
@@ -1061,7 +1061,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                         $data['count']=0;
                     }
                     $res= \Yii::$app->db->createCommand()->insert('hydropower_worker_order',[
-                        'order_no'=>$order_no,
+                        'order_id'=>$order_id,
                         'worker_item_id'=>$data['item_id'],
                         'worker_craft_id'=>$data['craft_id'],
                         'length'=>$data['length'],
@@ -1083,10 +1083,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_no
      * @return bool
      */
-    public static function savewaterproofitme(array $array,$order_no){
+    public static function savewaterproofitme(array $array,$order_id){
         foreach ($array as &$v) {
             $res= \Yii::$app->db->createCommand()->insert('waterproof_worker_order',[
-                'order_no'=>$order_no,
+                'order_id'=>$order_id,
                 'worker_item_id'=>$v['item_id'],
                 'worker_craft_id'=>$v['craft_id'],
                 'area'=>$v['area'],
@@ -1107,7 +1107,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_no
      * @return bool
      */
-    public static function savepainteritem(array $array,$order_no){
+    public static function savepainteritem(array $array,$order_id){
         foreach ($array as &$v) {
             foreach ($v as &$data) {
                 if(!$data['craft_id']){
@@ -1121,7 +1121,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 }
 
                 $res = \Yii::$app->db->createCommand()->insert('painter_worker_order', [
-                    'order_no' => $order_no,
+                    'order_id' => $order_id,
                     'worker_item_id' => $data['item_id'],
                     'worker_craft_id' => $data['craft_id'],
                     'area' => $data['area'],
@@ -1142,7 +1142,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_no
      * @return bool
      */
-    public static function savecarpentryitem(array $array,$order_no){
+    public static function savecarpentryitem(array $array,$order_id){
             foreach ($array as $v){
                 foreach ($v as &$data) {
                     if(!$data['craft_id']){
@@ -1155,7 +1155,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                         $data['length']=0;
                     }
                     $res = \Yii::$app->db->createCommand()->insert('carpentry_worker_order', [
-                        'order_no' => $order_no,
+                        'order_id' => $order_id,
                         'worker_item_id' => $data['item_id'],
                         'worker_craft_id' => $data['craft_id'],
                         'count' => $data['count'],
@@ -1176,7 +1176,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $order_no
      * @return bool
      */
-    public static function savebackmanitem(array $array,$order_no){
+    public static function savebackmanitem(array $array,$order_id){
         foreach ($array as $v){
             foreach ($v as &$data) {
                 if(!$data['craft_id']){
@@ -1192,7 +1192,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     $data['length']=0;
                 }
                 $res = \Yii::$app->db->createCommand()->insert('backman_worker_order', [
-                    'order_no' => $order_no,
+                    'order_id' => $order_id,
                     'worker_item_id' => $data['item_id'],
                     'worker_craft_id' => $data['craft_id'],
                     'area' => $data['area'],
@@ -1718,5 +1718,98 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'size'  => $size,
             'details' => $details
         ];
+    }
+
+
+    public static function UpdateOrder($array){
+        $order=WorkerOrder::find()->asArray()->where(['id'=>$array['order_id'],'is_old'=>0])->one();
+        //修改泥作订单表的内容
+        //修改建议工期
+
+
+        $tran=Yii::$app->db->beginTransaction();
+        try{
+            //修改旧数据
+            $res_edit_old=WorkerOrder::find()->where(['id'=>$array['order_id'],'is_old'=>0])->one();
+            $res_edit_old->is_old=1;
+            if(!$res_edit_old->update(false)){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            };
+            $last_id=self::editorderinset($order,$array);
+            if(!$last_id){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            //修改items数据
+            switch (WorkerType::gettype($array['worker_type_id'])){
+                case '泥工':
+                    $items_res=self::saveMuditem($array['items'],$last_id);
+                    break;
+                case '防水共':
+                    $items_res=self::savewaterproofitme($array['items'],$last_id);
+                    break;
+            }
+            if(!$items_res){
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $tran->commit();
+            return 200;
+
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+
+
+
+    }
+
+    public static function editorderinset($order_info,$edit_info){
+
+        if(isset($edit_info['need_time'])){
+            $need_time=$edit_info['need_time'];
+        }else{
+            $need_time=$order_info['need_time'];
+        }
+        //修改订单金额
+        if(isset($edit_info['amount'])){
+            $amount=$edit_info['amount'];
+            $reason=$edit_info['reason'];
+        }else{
+            $amount=$order_info['amount'];
+            $reason='';
+        }
+        $worker_order=new WorkerOrder();
+        $worker_order->uid= $order_info['uid'];
+        $worker_order->worker_type_id = $order_info['worker_type_id'];
+        $worker_order->worker_id = $order_info['worker_id'];
+        $worker_order->order_no =$order_info['order_no'];
+        $worker_order->create_time = $order_info['create_time'];
+        $worker_order->modify_time=time();
+        $worker_order->need_time=$need_time;
+        $worker_order->start_time=$order_info['start_time'];
+        $worker_order->end_time=$order_info['end_time'];
+        $worker_order->days=$order_info['days'];
+        $worker_order->map_location = $order_info['map_location'];
+        $worker_order->address = $order_info['address'];
+        $worker_order->con_people = $order_info['con_people'];
+        $worker_order->con_tel = $order_info['con_tel'];
+        $worker_order->amount = $amount;
+        $worker_order->reason=$reason;
+        $worker_order->front_money = $order_info['front_money'];
+        $worker_order->type = $order_info['type'];
+        $worker_order->status = $order_info['status'];
+        $worker_order->is_old = self::WORKER_ORDER_NOT_BEGIN;
+
+        if(!$worker_order->save(false)){
+            return false;
+        }
+        return Yii::$app->db->lastInsertID;
     }
 }

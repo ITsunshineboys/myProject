@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "mud_worker_order".
@@ -35,6 +36,5 @@ class MudWorkerOrder extends \yii\db\ActiveRecord
             [['worker_item_id', 'worker_craft_id', 'area', 'guarantee', 'chip'], 'integer'],
         ];
     }
-
 
 }

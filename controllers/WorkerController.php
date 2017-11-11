@@ -3,11 +3,13 @@
 namespace app\controllers;
 
 use app\models\LaborCost;
+use app\models\MudWorkerOrder;
 use app\models\User;
 use app\models\Worker;
 use app\models\WorkerCraft;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
+use app\models\WorkerType;
 use app\models\WorkerWorks;
 use app\models\WorkerWorksReview;
 use app\services\ExceptionHandleService;
@@ -571,194 +573,15 @@ class WorkerController extends Controller
             if (!is_int($user)) {
                 return $user;
             }
-            $request = \Yii::$app->request;
+        $post=\Yii::$app->request->post();
 
-            //TODO 传值的格式暂定 $post[order_id, items, new_amount, reason, days]
-            //TODO 其中 items[   [id, craft_id, area], [id, area] ...]   work_days[day1, day2, day3, day...]
-
-            $order_id = (int)$request->post('order_id', 0);
-            $items = $request->post('items', '');
-            $new_amount = (int)$request->post('new_amount', 0);
-            $reason = trim($request->post('reason', ''));
-            $need_time = (int)$request->post('need_time', '');
-            $days = (int)$request->post('days', '');
-
-            if (!$order_id
-                || ($days && $need_time != count(explode(',', $days)))
-            ) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-            $query = WorkerOrder::find()
-                ->where(['id' => $order_id]);
-
-            $order_old = $query
-                ->asArray()
-                ->orderBy(['id' => SORT_DESC])
-                ->one();
-
-            if ($order_old == null) {
-                $code = 1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-            //得到之前的数据
-            $data = $order_old;
-            //分两种情况，
-            //a. 没有修改过  新建一条数据         //b. 修改过的  修改第二条
-            if ($query->count() == 1) {
-                $order_new = new WorkerOrder();
-                unset($data['id']);
-            } else {
-                $order_new = WorkerOrder::find()->where(['id' => $order_id])->orderBy(['id' => SORT_DESC])->one();
-            }
-
-
-            //alter amount data
-            if ($new_amount) {
-                if (!$reason) {
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $data['amount'] = $new_amount * 100;
-                $data['reason'] = $reason;
-            }
-
-            //alter work_days data  修改工作时间表  新加一条数据， 旧的改变is_old状态为1
-            if ($need_time && $need_time != $order_old['need_time']) {
-                $data['need_time'] = $need_time;
-            }
-
-            if ($days) {
-                $data['days'] = $days;
-                $days_arr = explode(',', $days);
-                $data['start_time'] = strtotime($days_arr[0]);
-                $data['end_time'] = strtotime($days_arr[count($days_arr)-1]);
-            }
-
-            $data['is_old'] = 0;
-            $data['modify_time'] = time();
-
-            $trans = \Yii::$app->db->beginTransaction();
-            try {
-                WorkerOrder::updateAll(['is_old' => 1], ['order_no' => $order_old['order_no']]);
-                $order_new->setAttributes($data, false);
-                $order_new->save(false);
-                $trans->commit();
-            } catch (Exception $e) {
-                $trans->rollBack();
-                $code = 1051;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-            $order_id_new = (int)$order_new->id;
-            $new_items = [];
-
-            //worker_order_item表对应订单号的全部 数据查出来   $old_items
-            $old_items = WorkerOrderItem::find()
-                ->where(['worker_order_id' => $order_old['id']])
-                ->asArray()
-                ->all();
-
-            if ($old_items) {
-                foreach ($old_items as &$old_item) {
-                    unset($old_item['id']);
-                    $old_item['worker_order_id'] = $order_id_new;
-                    $new_items[] = $old_item;
-                }
-            }
-
-            $new_item_finals = [];
-
-            //改变数据
-            if ($items) {
-                if (!is_array($items)) {
-                    $code = 1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-
-                $new_item_adds = [];
-                $item_exists = [];
-
-                //需要改动的内容
-                foreach ($items as $item) {
-                    if (!isset($item['id'])) {
-                        $code = 1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-                    //todo 还有其他字段需要加进来
-                    foreach ($new_items as &$new_item) {
-                        if ($item['id'] == $new_item['worker_item_id']) {
-                            isset($item['craft_id']) && $new_item['worker_craft_id'] = $item['craft_id'];
-                            isset($item['area']) && $new_item['area'] = $item['area'];
-                            isset($item['status']) && $new_item['status'] = $item['status'];
-                            isset($item['electricity']) && $new_item['electricity'] = $item['electricity'];
-                            isset($item['count']) && $new_item['count'] = $item['count'];
-                        }
-                        $item_exists[] = $new_item['worker_item_id'];
-                    }
-                }
-
-                //直接添加的内容
-                foreach ($items as $item) {
-                    if (!in_array($item['id'], $item_exists)) {
-                        $new_item_add['worker_order_id'] = $order_id_new;
-                        $new_item_add['worker_item_id'] = $item['id'];
-                        isset($item['craft_id']) && $new_item_add['worker_craft_id'] = $item['craft_id'];
-                        isset($item['area']) && $new_item_add['area'] = $item['area'];
-                        isset($item['status']) && $new_item_add['status'] = $item['status'];
-                        isset($item['electricity']) && $new_item_add['electricity'] = $item['electricity'];
-                        isset($item['count']) && $new_item_add['count'] = $item['count'];
-                        $new_item_adds[] = $new_item_add;
-                    }
-                }
-
-                $new_item_finals = array_merge($new_items, $new_item_adds);
-
-            }
-
-            $worker_order_item = new WorkerOrderItem();
-            foreach ($new_item_finals as $new_item_final) {
-                $trans = \Yii::$app->db->beginTransaction();
-                $new_worker_order_item = clone $worker_order_item;
-                $new_worker_order_item->setAttributes($new_item_final, false);
-                if (!$new_worker_order_item->save(false)) {
-                    $trans->rollBack();
-                }
-                $trans->commit();
-            }
-
-            $code = 200;
+            $code=WorkerOrder::UpdateOrder($post);
             return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
+                'code'=>$code,
+                'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
             ]);
-        }
 
-        $code = 1050;
-        return Json::encode([
-            'code' => $code,
-            'msg' => \Yii::$app->params['errorCodes'][$code]
-        ]);
+        }
     }
 
     /**
