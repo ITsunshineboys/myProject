@@ -3,7 +3,9 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     cascadeData();
     const picpath = 'pages/mall_manage/merchant_manage/add_store/images/default.png'
     const picprefix = baseUrl + "/";
-    const pattern = /^1[3|4|5|7|8][0-9]{9}$/;
+    const phone_pattern = /^1[3|4|5|7|8][0-9]{9}$/;
+    const legal_pattern=/^[\u0391-\uFFE5A-Za-z]+$/;
+    const id_pattern = /(^[0-9]{15}$)|(^[0-9]{18}$)|(^[0-9]{17}([0-9]|X|x)$)/;
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -31,6 +33,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     $scope.licence_warning = false;  //营业执照格式错误提示
     $scope.front_warning = false;    //身份证正面错误提示
     $scope.back_warning = false;     //身份证背面错误提示
+    $scope.legalwarning = false;     //法人名称错误提示
 
     // getMoble();
     test();
@@ -182,7 +185,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     /*登录账户判断*/
     $scope.accountCheck = function () {
         $scope.defaultshow = false;
-        if(pattern.test($scope.params.mobile)){
+        if(phone_pattern.test($scope.params.mobile)){
             $http({
                 method: "get",
                 url: baseUrl + "/mall/check-role-get-identity",
@@ -214,6 +217,24 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
             $scope.showwarning = true;
             $scope.show_account_warning = true;
             $scope.account_warning = '请输入正确的11位手机号'
+        }
+    }
+
+    /*法人名称规范判断*/
+    $scope.legalCheck = function () {
+        if((!(legal_pattern.test($scope.params.legal_person)))||(!$scope.params.legal_person)){
+            $scope.legalwarning = true;
+        }else{
+            $scope.legalwarning = false;
+        }
+    }
+
+    /*身份证号判断*/
+    $scope.idCheck = function () {
+        if((!(id_pattern.test($scope.params.identity_card_no)))||(!$scope.params.identity_card_no)){
+            $scope.idwarning = true;
+        }else{
+            $scope.idwarning = false;
         }
     }
 
@@ -291,14 +312,14 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
 
         if (val) {
             /*未认证的情况*/
-            if ((!$scope.with_au) && val && !($scope.licencepath == picpath || $scope.frontpath == picpath || $scope.backpath == picpath)) {
+            if ((!$scope.with_au) && val && (!($scope.licencepath == picpath || $scope.frontpath == picpath || $scope.backpath == picpath))&&(!$scope.legalwarning)&&(!$scope.idwarning)&&(!$scope.showwarning)) {
                 let url = baseUrl + "/mall/supplier-add";
                 let data = $scope.params;
                 $http.post(url, data, config).then(function (res) {
                     wrongBack(Number(res.data.code),res.data.msg);
                 })
                 /*已认证的情况*/
-            } else if ($scope.with_au && val && $scope.licencepath != picpath) {
+            } else if ($scope.with_au && val && $scope.licencepath != picpath&&(!$scope.showwarning)) {
                 $scope.params.legal_person = '';
                 $scope.identity_card_no = '';
                 $scope.identity_card_front_image = '';
