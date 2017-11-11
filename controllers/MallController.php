@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\BrandApplicationImage;
 use app\models\BrandCategory;
+use app\models\District;
 use app\models\GoodsBrand;
 use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
@@ -2657,6 +2658,12 @@ class MallController extends Controller
         unset($logisticsTemplate->supplier_id);
 //        unset($logisticsTemplate->name);
         unset($logisticsTemplate->status);
+
+        $districtCodesPro = [];
+        foreach ($districtCodes as $districtCode) {
+            $districtCodesPro[] = District::findByCode($districtCode)->pid;
+        }
+        $logisticsTemplate->district_codes_parent = $districtCodesPro;
 
         return Json::encode([
             'code' => 200,
