@@ -12,6 +12,7 @@ use app\models\User;
 use app\models\RolePermission;
 use Yii;
 use yii\filters\AccessControl;
+use yii\log\Logger;
 
 class AuthService extends AccessControl
 {
@@ -32,7 +33,14 @@ class AuthService extends AccessControl
             || !empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])
         ) {
             $path = Yii::$app->controller->id . '/' . $action->id;
+            if (YII_DEBUG) {
+                StringService::writeLog('auth', $path, '', Logger::LEVEL_INFO);
+            }
             if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_ADMIN])) {
+                if (YII_DEBUG) {
+                    StringService::writeLog('auth', var_export($user->checkAdminLogin(),  true), '', Logger::LEVEL_INFO);
+                    StringService::writeLog('auth', var_export(RolePermission::rolePermissions($user->login_role_id),  true), '', Logger::LEVEL_INFO);
+                }
                 if (!$user->checkAdminLogin()
                     || !in_array($path, RolePermission::rolePermissions($user->login_role_id))
                 ) {
