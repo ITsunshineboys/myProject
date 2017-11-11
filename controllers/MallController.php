@@ -5158,7 +5158,7 @@ class MallController extends Controller
                 $endTime && $where .= " and create_time <= {$endTime}";
             }
         } else {
-            $where .= " and (aite_cube_no like '%{$keyword}%' or nickname like '%{$keyword}%')";
+            $where .= " and (mobile like '%{$keyword}%' or nickname like '%{$keyword}%')";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
