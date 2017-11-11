@@ -1,0 +1,89 @@
+.personal_center  .avatar{
+    width: 100%;
+    height: 5.58rem;
+    background: #000;
+    color: #fff;
+}
+.personal_center  .avatar > div{
+    width: 100%;
+    position: relative;
+}
+.personal_center  .avatar > div p{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-bottom: .16rem;
+}
+.personal_center  .avatar > p{
+    width: 100%;
+    height: 1.01rem;
+    text-align:center;
+    font-size:36px;
+    font-family: PingFangSC-Medium;
+}
+.personal_center  .avatar > ul{
+    width:100% ;
+    height: 1.76rem;
+}
+.personal_center  .avatar > ul li{
+    padding: .37rem;
+}
+.personal_center  .avatar > ul li p:first-child{
+    font-size:28px;
+    font-family: PingFangSC-Semibold;
+    margin-bottom:.13rem;
+}
+.personal_center  .avatar > ul li p:last-child{
+    font-size:22px;
+    font-family:PingFangSC-Medium;
+}
+.personal_center .bind_tel{
+    padding:.29rem .37rem 0;
+    margin-top: .27rem;
+    font-family: PingFangSC-Regular;
+    width: 100%;
+    background: #fff;
+}
+.personal_center .bind_tel span{
+    font-size: 36px;
+    color: #666;
+    width: 100%;
+    border-left: .11rem solid #222;
+    padding-left: .13rem;
+    margin-bottom: .35rem;
+}
+.personal_center .bind_tel ul{
+    width:100%;
+}
+.personal_center .bind_tel li{
+    width: 100%;
+    padding: .43rem 0;
+}
+.personal_center .bind_tel li p:first-child{
+    text-align: left;
+    width: 50%;
+    font-size: 32px;
+    color: #666;
+}
+.personal_center .bind_tel li p:last-child{
+    text-align: right;
+    width: 50%;
+    font-size: 28px;
+    color: #959292;
+}
+.personal_center .bind_tel button{
+    width: 100%;
+    font-size: 36px;
+    font-family: PingFangSC-Regular;
+    height: 1.28rem;
+    border: none;
+    background: none;
+    background: #222;
+    border-radius:.16rem;
+    color: #fff;
+}
+.personal_center .get_border{
+    border:.05rem solid #E9EDEE;
+}

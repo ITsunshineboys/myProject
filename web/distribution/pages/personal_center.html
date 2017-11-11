@@ -1,0 +1,45 @@
+<div flex="dir:top" class="personal_center" style="background: #F6F6F6;">
+    <div flex="main:top dir:top" class="avatar">
+        <div flex-box="1"><p>111</p></div>
+        <p flex-box="0">{{all_data.mobile}}</p>
+        <ul flex-box="0" flex="main:left box:mean">
+            <li>
+                <p>{{all_data.binding_count}}</p>
+                <p>绑定人数</p>
+            </li>
+            <li>
+                <p>{{all_data.order_count}}</p>
+                <p>关联订单数</p>
+            </li>
+            <li>
+                <p>{{all_data.order_money | currency:'￥'}}</p>
+                <p>关联消费金额</p>
+            </li>
+            <li>
+                <p>{{all_data.MyProfit | currency:'￥'}}</p>
+                <p>我的收益</p>
+            </li>
+        </ul>
+    </div>
+    <div class="bind_tel" flex="main:top dir:top" ng-if="all_data.parent.length === undefined">
+        <span>我绑定的手机号</span>
+        <ul flex-box="0">
+            <li flex="main:left box-mean">
+                <p>{{all_data.parent.mobile}}</p>
+                <p>{{all_data.parent.time}}</p>
+            </li>
+        </ul>
+    </div>
+    <div class="bind_tel" ng-if="all_data.parent.length === 0">
+        <button ng-click="go_bind_tel()">点击绑定</button>
+    </div>
+    <div class="bind_tel" flex="main:top dir:top" ng-if="all_data.son.length>0">
+        <span>绑定我的手机号</span>
+        <ul flex-box="0">
+            <li flex="main:left box-mean" ng-repeat="item in all_data.son">
+                <p>{{item.mobile}}</p>
+                <p>{{item.time}}</p>
+            </li>
+        </ul>
+    </div>
+</div>
