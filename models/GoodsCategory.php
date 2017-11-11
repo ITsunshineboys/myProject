@@ -568,7 +568,7 @@ class GoodsCategory extends ActiveRecord
         $all = self::find()
             ->asArray()
             ->select($select)
-            ->where(['in', 'level', $level])
+            ->where(['and',['review_status'=>2],['in', 'level', $level]])
             ->all();
         return $all;
     }
