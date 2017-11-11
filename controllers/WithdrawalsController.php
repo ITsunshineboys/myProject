@@ -36,14 +36,20 @@ class WithdrawalsController extends Controller
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
-        'logout',
-        'roles',
-        'reset-password',
-        'roles-status',
-        'time-types',
-        'upload',
-        'upload-delete',
-        'review-statuses',
+        'find-balance',
+        'check-isset-pay-pwd',
+        'send-pay-code',
+        'set-pay-pwd',
+        'find-supplier-balance',
+        'supplier-withdrawals-apply',
+        'find-supplier-freeze-list',
+        'supplier-access-detail',
+        'find-supplier-access-detail-list',
+        'check-cash-money',
+        'check-supplier-pay-pwd',
+        'set-bank-card',
+        'find-bank-card',
+        'find-balance',
     ];
 
     /**
@@ -71,10 +77,6 @@ class WithdrawalsController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post',],
-                    'reset-password' => ['post',],
-                    'upload' => ['post',],
-                    'upload-delete' => ['post',]
                 ],
             ],
         ];
