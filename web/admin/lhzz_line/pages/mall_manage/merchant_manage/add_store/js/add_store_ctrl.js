@@ -317,6 +317,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 let url = baseUrl + "/mall/supplier-add";
                 let data = $scope.params;
                 $http.post(url, data, config).then(function (res) {
+                    console.log(res);
                     wrongBack(Number(res.data.code),res.data.msg);
                 })
                 /*已认证的情况*/
@@ -376,6 +377,11 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
             case 200:
                 console.log('成功添加');
                 $("#suremodal").modal("show");
+                break;
+            case 1038:
+                $scope.idwarning = true;
+                $scope.id_repeatInfo = msg;
+                wrongScroll('idcard');
                 break;
             default:
                 return;

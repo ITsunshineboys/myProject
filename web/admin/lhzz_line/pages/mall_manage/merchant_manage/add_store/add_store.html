@@ -86,7 +86,7 @@
             <span class="each_title">上传营业执照</span>
             <div class="upload_pic">
                 <img ng-src="{{licencepath}}"  alt="" id="cla_pic_uploadpic" class="picstyle">
-                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
                 <div class="upload">
                     <button type="button" ngf-pattern="image/*" ng-change="licenseUpload(data.filefirst)"  ngf-select="" ngf-multiple="false" ng-model="data.filefirst" id="upload_btn">上传</button>
                 </div>
@@ -130,7 +130,7 @@
                     <input type="text" placeholder="请输入身份证号" id="idcard" maxlength=18 ng-model="params.identity_card_no" name="idcard" required  ng-blur="idCheck()" ng-class={'tored':(storeform.idcard.$invalid&&alljudgefalse)||(storeform.idcard.$error.required&&alljudgefalse)||idwarning}>
                     <p ng-if="idwarning">
                         <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                        <span class="warningred">请输入正确的身份证号</span>
+                        <span class="warningred" ng-bind="id_repeatInfo"></span>
                     </p>
                 </div>
 
@@ -140,7 +140,7 @@
                     <span class="each_title">上传法人身份证正面</span>
                     <div class="upload_pic">
                         <img ng-src="{{frontpath}}" alt="" id="idfront" class="picstyle">
-                        <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                        <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
                         <div class="upload">
                             <button type="button" ngf-pattern="image/*" ng-change="frontUpload(data.filefront)"  ngf-select="" ngf-multiple="false" ng-model="data.filefront" id="upload_btn">上传</button>
                         </div>
@@ -158,7 +158,7 @@
                     <span class="each_title">上传法人身份证背面</span>
                     <div class="upload_pic">
                         <img  ng-src="{{backpath}}" alt="" id="idback" class="picstyle">
-                        <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+                        <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
                         <div class="upload">
                             <button type="button" ngf-pattern="image/*" ng-change="backUpload(data.fileback)"  ngf-select="" ngf-multiple="false" ng-model="data.fileback" id="upload_btn">上传</button>
                         </div>
@@ -192,7 +192,7 @@
                 <!--法人身份证正面-->
                 <div class="default_cla_pic">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="each_title">上传法人身份证正面</span>
+                <span class="each_title">法人身份证正面</span>
                 <div class="upload_pic">
                     <img ng-src="{{_front.path}}" alt="" class="picstyle">
                 </div>
@@ -202,7 +202,7 @@
                 <!--法人身份证背面-->
                 <div class="default_cla_pic">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="each_title">上传法人身份证背面</span>
+                <span class="each_title">法人身份证背面</span>
                 <div class="upload_pic">
                     <img  ng-src="{{_backpath}}" alt="" class="picstyle">
                 </div>
