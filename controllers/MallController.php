@@ -5262,6 +5262,13 @@ class MallController extends Controller
         }
 
         $sort = Yii::$app->request->get('sort', []);
+        if (count($sort) > 1) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $model = new Supplier;
         $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
         if ($orderBy === false) {
@@ -5272,10 +5279,9 @@ class MallController extends Controller
         }
 
         if ($sort) {
-            if (stripos($orderBy, Supplier::FIELD_SALES_VOLUMN_MONTH) !== false
-                || stripos($orderBy, Supplier::FIELD_SALES_AMOUNT_MONTH) !== false
-            ) {
-                $orderBy = 'month DESC,' . $orderBy;
+            list($field, $direction) = explode(' ', $orderBy);
+            if (in_array($field, [Supplier::FIELD_SALES_AMOUNT_MONTH, Supplier::FIELD_SALES_VOLUMN_MONTH])) {
+                $orderBy = 'month ' . $direction . ',' . $orderBy;
             }
         }
 
