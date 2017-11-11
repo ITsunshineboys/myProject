@@ -2663,7 +2663,7 @@ class MallController extends Controller
         foreach ($districtCodes as $districtCode) {
             $districtCodesPro[] = District::findByCode($districtCode)->pid;
         }
-        $logisticsTemplate->district_codes_parent = $districtCodesPro;
+        $logisticsTemplate->district_codes_parent = array_unique($districtCodesPro);
 
         return Json::encode([
             'code' => 200,
