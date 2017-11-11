@@ -648,6 +648,27 @@ class OrderController extends Controller
                 'data' => null
             ]);
         }
+
+        $invoice=Invoice::findOne($invoice_id);
+        if (!$invoice)
+        {
+            $address=Addressadd::findOne($address_id);
+            $in=new Invoice();
+            $in->invoice_type=1;
+            $in->invoice_header_type=1;
+            $in->invoice_header=$address->consignee;
+            $in->invoice_content='明细';
+            $res=$in->save(false);
+            if (!$res)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $invoice_id=$in->id;
+        }
         if (!$freight)
         {
             $freight=0;
