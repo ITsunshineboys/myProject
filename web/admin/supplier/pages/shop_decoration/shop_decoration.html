@@ -39,7 +39,7 @@
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_2" ng-click="show_all(show_2)">商品编号</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_3" ng-click="show_all(show_3)">名称</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_4" ng-click="show_all(show_4)">上架浏览</li>
-                            <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_5" ng-click="show_all(show_5)">上架销量</li>
+                            <!--<li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_5" ng-click="show_all(show_5)">上架销量</li>-->
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_6" ng-click="show_all(show_6)">创建时间</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_7" ng-click="show_all(show_7)">图片</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_8" ng-click="show_all(show_8)">库存</li>
@@ -57,7 +57,7 @@
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_2" ng-click="show_all(rec_2)">商品编号</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_3" ng-click="show_all(rec_3)">名称</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_4" ng-click="show_all(rec_4)">上架浏览</li>
-                            <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_5" ng-click="show_all(rec_5)">上架销量</li>
+                            <!--<li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_5" ng-click="show_all(rec_5)">上架销量</li>-->
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_6" ng-click="show_all(rec_6)">创建时间</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_7" ng-click="show_all(rec_7)">图片</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_8" ng-click="show_all(rec_8)">库存</li>
@@ -82,7 +82,7 @@
                     <th ng-if="show_2">商品编号</th>
                     <th ng-if="show_3">名称</th>
                     <th ng-if="show_4">上架浏览</th>
-                    <th ng-if="show_5">上架销量</th>
+                    <!--<th ng-if="show_5">上架销量</th>-->
                     <th ng-if="show_6">创建时间</th>
                     <th ng-if="show_7">图片</th>
                     <th ng-if="show_8">库存</th>
@@ -100,7 +100,7 @@
                     <th ng-if="rec_2">商品编号</th>
                     <th ng-if="rec_3">名称</th>
                     <th ng-if="rec_4">上架浏览</th>
-                    <th ng-if="rec_5">上架销量</th>
+                    <!--<th ng-if="rec_5">上架销量</th>-->
                     <th ng-if="rec_6">创建时间</th>
                     <th ng-if="rec_7">图片</th>
                     <th ng-if="rec_8">库存</th>
@@ -120,7 +120,7 @@
                     <td ng-if="show_2">{{item.sku}}</td>
                     <td ng-if="show_3">{{item.title}}</td>
                     <td ng-if="show_4">{{item.viewed_number}}</td>
-                    <td ng-if="show_5">{{item.sold_number}}</td>
+                    <!--<td ng-if="show_5">{{item.sold_number}}</td>-->
                     <td ng-if="show_6">{{item.create_time}}</td>
                     <td ng-if="show_7"><img class="img_size" ng-src="{{baseUrl + '/'+ item.image}}" alt=""></td>
                     <td ng-if="show_8">{{item.left_number}}</td>
@@ -142,7 +142,7 @@
                     <td ng-if="rec_2">{{item.sku}}</td>
                     <td ng-if="rec_3">{{item.title}}</td>
                     <td ng-if="rec_4">{{item.viewed_number}}</td>
-                    <td ng-if="rec_5">{{item.sold_number}}</td>
+                    <!--<td ng-if="rec_5">{{item.sold_number}}</td>-->
                     <td ng-if="rec_6">{{item.create_time}}</td>
                     <td ng-if="rec_7"><img class="img_size" ng-src="{{baseUrl + '/'+ item.image}}" alt=""></td>
                     <td ng-if="rec_8">{{item.left_number}}</td>
@@ -174,12 +174,12 @@
                                 <h4 class="modal-title" ng-if="r_show_table_flag">添加推荐</h4>
                             </div>
                             <div class="modal-body">
-                                <div  id="shop_num_null"  ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && banner_add_num_blur) ">
-                                    <span style="margin-left: 10px; font-weight: bold">商品编号不能为空</span>
+                                <div  id="shop_num_null"  ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && banner_add_num_blur) ||banner_num_error ">
+                                    <span style="margin-left: 10px; font-weight: bold">{{shop_sku_error}}</span>
                                 </div>
-                                <div  id="shop_num_null3" ng-if="banner_num_error">
-                                    <span style="margin-left: 10px; font-weight: bold">商品编号错误，请重新输入</span>
-                                </div>
+                                <!--<div  id="shop_num_null3" ng-if="banner_num_error">-->
+                                    <!--<span style="margin-left: 10px; font-weight: bold">商品编号错误，请重新输入</span>-->
+                                <!--</div>-->
                                 <div class="modal_txt_one">
                                     <i class="red">*</i>
                                     <span >商品编号</span>
@@ -207,7 +207,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button ng-click="banner_add_btn(shop_form.$valid)" data-dismiss="{{myng.variable_add_modal}}"  type="button" class="btn btn-primary">确认</button>
+                                <button ng-click="banner_add_btn(shop_form.$valid)" type="button" class="btn btn-primary">确认</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="banner_clear_add()">取消</button>
                             </div>
                         </form>
@@ -229,16 +229,13 @@
                                 <h4 class="modal-title" ng-if="r_show_table_flag">编辑推荐</h4>
                             </div>
                             <div class="modal-body">
-                                <div  id="shop_num_null2" ng-if="(banner_edit_form.banner_edit_num.$invalid &&submitted)||(banner_edit_form.banner_edit_num.$error.required && banner_edit_num_blur)">
-                                    <span style="margin-left: 10px; font-weight: bold">商品编号不能为空</span>
-                                </div>
-                                <div  id="shop_num_null4" ng-if="banner_edit_num_error">
-                                    <span style="margin-left: 10px; font-weight: bold">商品编号错误，请重新输入</span>
+                                <div  id="shop_num_null2" ng-if="(banner_edit_form.banner_edit_num.$invalid &&submitted)||(banner_edit_form.banner_edit_num.$error.required && banner_edit_num_blur)||banner_edit_num_error">
+                                    <span style="margin-left: 10px; font-weight: bold">{{shop_edit_sku_error}}</span>
                                 </div>
                                 <div class="modal_txt_one">
                                     <i class="red">*</i>
                                     <span >商品编号</span>
-                                    <input class="form_input" type="text" ng-change="banner_edit_change_sku(banner_edit_sku)" ng-model="banner_edit_sku" name="banner_edit_num" required ng-blur="banner_edit_num_blur=!!banner_edit_form.banner_edit_num.$error"/><span  style="position: relative; z-index: 9999" ng-click="banner_get_sku(1)">获取</span>
+                                    <input class="form_input" type="text"  ng-model="banner_edit_sku" name="banner_edit_num" required ng-blur="banner_edit_num_blur=!!banner_edit_form.banner_edit_num.$error"/><span  style="position: relative; z-index: 9999" ng-click="banner_get_sku(1)">获取</span>
                                 </div>
                                 <div class="modal_txt_one modal_txt_two">
                                     <i class="red">*</i>
@@ -262,7 +259,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button ng-click="banner_edit_btn(banner_edit_form.$valid)" data-dismiss="{{variable_edit_modal}}"  type="button" class="btn btn-primary">确认</button>
+                                <button ng-click="banner_edit_btn(banner_edit_form.$valid)"  type="button" class="btn btn-primary">确认</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="banner_clear_edit()">取消</button>
                             </div>
                         </form>

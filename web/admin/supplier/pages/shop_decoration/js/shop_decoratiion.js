@@ -113,7 +113,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
             $scope.banner_add_title='';
             $scope.banner_add_url='';
          }else if(res.data.code==403){
-            $state.go('login');
+            window.location.href='login.html';
           }
       },function (err) {
         console.log(err);
@@ -145,7 +145,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
             $scope.banner_edit_title='';
             $scope.banner_edit_url='';
           }else if(res.data.code==403){
-            $state.go('login')
+              window.location.href='login.html';
           }
          }
       ,function (err) {
@@ -177,30 +177,22 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   };
 
   //Banner - 添加确认按钮
-  $scope.$watch('banner_add_sku',function (newVal,oldVal) { //监听sku输入框，如果为空时，编码错误提示消除
-    console.log(newVal);
-    if(newVal==undefined || newVal==''){
-      $scope.banner_num_error=false;
-    }
-  });
+  // $scope.$watch('banner_add_sku',function (newVal,oldVal) { //监听sku输入框，如果为空时，编码错误提示消除
+  //   console.log(newVal);
+  //   if(newVal==undefined || newVal==''){
+  //     $scope.banner_num_error=false;
+  //   }
+  // });
+    $scope.shop_sku_error='商品编号不能为空';
   $scope.banner_add_btn = function (valid) {
-    //如果有提示编码不能为空，消除提示编码错误
-    if($scope.submitted){
-      $scope.banner_num_error=false;
+      console.log(valid)
+    if($scope.banner_add_title==''){
+        $scope.banner_num_error=true;
+        $scope.shop_sku_error='商品编号错误，请重新添加';
+    }else{
+        $scope.banner_num_error=false;
     }
-    //输出正确编号，点击获取后，改变之前输入的编号，导致编号和内容不符
-    if($scope.banner_add_sku!=$scope.add_pass_sku && $scope.add_pass_sku!=undefined){
-      $scope.banner_num_error=true;
-      $scope.banner_add_title='';
-      $scope.banner_add_url='';
-    }
-    //只输入编号，不点击获取，直接点确定
-    if($scope.banner_add_title==''&&$scope.banner_add_sku!=''&&$scope.banner_add_sku!=undefined){
-      $scope.banner_num_error=true;
-    }
-
-    if(valid && $scope.banner_add_img_src && !$scope.banner_num_error){
-      $scope.variable_add_modal='modal';
+    if(valid && $scope.banner_add_img_src &&!$scope.banner_num_error){
       if($scope.b_show_table_flag){
           $scope.pass_type=0;
       }else{
@@ -214,10 +206,19 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
           type:+$scope.pass_type,
           sku:+$scope.banner_add_sku
       },function (res) {
-          $scope.judgment();
+          console.log(res);
+          if(res.code==200){
+              $('#banner_add_modal').modal('hide');
+              $scope.judgment();
+          }else{
+              $scope.banner_num_error=true;
+              $scope.shop_sku_error='商品编号错误，请重新添加';
+          }
       })
-    }else{
-      $scope.submitted=true;
+    }
+    if(!valid){
+        $scope.submitted=true;
+        $scope.shop_sku_error='商品编号不能为空';
     }
     if(!$scope.banner_add_img_src){
       $scope.banner_add_img_flag='请上传图片';
@@ -236,7 +237,6 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     $scope.banner_add_num_blur=false;
     $scope.banner_edit_num_error=false;
     $scope.banner_edit_change_error=false;
-    console.log($scope.banner_edit_num_error)
   };
 
   //Banner -  编辑上传图片
@@ -262,7 +262,6 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
   };
   //Banner - 点击编辑按钮
   $scope.banner_edit=function (id,sku,title,url,image) {
-    $scope.variable_edit_modal='';
     $scope.banner_edit_num_error=false;
     $scope.banner_edit_id=id;
     $scope.banner_edit_sku=sku;
@@ -272,40 +271,24 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
     $scope.banner_edit_img_src=image;
   };
   //Banner - 编辑确认按钮
-  $scope.banner_edit_change_sku=function (sku) {
-    if(sku==undefined || sku==''){
-      $scope.banner_edit_num_error=false;
-    }
-    if(sku!=$scope.banner_edit_click_sku){
-      $scope.banner_edit_change_error=true;
-    }else{
-      $scope.banner_edit_change_error=false;
-    }
-  };
+  // $scope.banner_edit_change_sku=function (sku) {
+  //     console.log(sku);
+  //   if(sku==undefined || sku==''){
+  //     $scope.banner_edit_num_error=false;
+  //   }
+  //   if(sku!=$scope.banner_edit_click_sku){
+  //     $scope.banner_edit_change_error=true;
+  //   }else{
+  //     $scope.banner_edit_change_error=false;
+  //   }
+  // };
   $scope.banner_edit_btn=function (valid) {
-    //如果有提示编码不能为空，消除提示编码错误
-    if($scope.banner_edit_change_error){
-      $scope.banner_edit_num_error=true;
-      $scope.banner_edit_title='';
-      $scope.banner_edit_url='';
-    }else{
-      $scope.banner_edit_num_error=false;
+    if(!valid){
+        console.log(123123)
+        $scope.submitted=true;
+        $scope.shop_edit_sku_error='商品编号不能为空';
     }
-    //输出正确编号，点击获取后，改变之前输入的编号，导致编号和内容不符
-    if($scope.banner_edit_sku!=$scope.edit_pass_sku && $scope.banner_edit_sku!='' && $scope.banner_edit_sku!=undefined && $scope.edit_pass_sku!=undefined){
-      $scope.banner_edit_num_error=true;
-      $scope.banner_edit_title='';
-      $scope.banner_edit_url='';
-    }
-    if($scope.banner_edit_sku==$scope.edit_pass_sku ){
-      $scope.banner_edit_num_error=false;
-    }
-    if($scope.submitted){
-      $scope.banner_edit_num_error=false;
-    }
-
-    if(valid && $scope.banner_edit_img_src && !$scope.banner_edit_num_error && !$scope.banner_edit_change_error){
-      $scope.variable_edit_modal='modal';
+    if(valid && $scope.banner_edit_img_src){
       if($scope.b_show_table_flag){
         $scope.edit_pass_type=0
       }else{
@@ -319,8 +302,16 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
           from_type:'1',
           type:+$scope.edit_pass_type,
           sku:+$scope.banner_edit_sku
-      },function (res) {
-          $scope.judgment();
+      },function (res){
+          console.log(res);
+          if(res.code==200){
+            $('#banner_edit_modal').modal('hide');
+            $scope.judgment();
+          }else{
+              $scope.banner_edit_num_error=true;
+              $scope.shop_edit_sku_error='商品编号错误，请重新添加';
+          }
+
       })
     }
   };
