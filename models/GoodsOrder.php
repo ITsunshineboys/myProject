@@ -2901,6 +2901,42 @@ class GoodsOrder extends ActiveRecord
        return $arr;
    }
 
+    /**
+     * 获取角色购买商品价格
+     * @param $role
+     * @return string
+     */
+    public static function  GetRoleMoney($role)
+    {
+            switch ($role)
+            {
+                case 2:
+                    //工人
+                    $data=self::WORKER_MONEY;
+                    break;
+                case 3:
+                    //设计师
+                    $data=self::DESIGNER_MONEY;
+                    break;
+                case 4:
+                    //项目经理
+                    $data=self::MANAGER_MONEY;
+                    break;
+                case 5:
+                    //装修公司
+                    $data=self::COMPANEY_MONEY;
+                    break;
+                case 6:
+                    //供应商
+                    $data=self::SUPPLIER_MONEY;
+                    break;
+                case 7:
+                    //业主
+                    $data=self::PLAT_MONEY;
+                    break;
+            }
+            return $data;
+    }
 
        /**
      * @param $user
