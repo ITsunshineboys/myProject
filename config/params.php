@@ -134,7 +134,7 @@ return [
             'rule' => 'fourDigits',
         ],
         'maxSendNumPerDay' => 5,
-        'signName' => '领航装饰设计',
+        'signName' => '艾特生活',
         'register' => [
             'templateId' => 'SMS_26070129',
             'signName' => '用户注册验证码',
