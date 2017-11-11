@@ -2316,8 +2316,8 @@ class GoodsOrder extends ActiveRecord
                     $where='pay_status=0  and user_id='.$user->id;
                     break;
             }
-            $GoodsOrder=self::find()
-                ->select('order_no,create_time,user_id,role_id,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
+             $GoodsOrder=self::find()
+                ->select('user_id,role_id,order_no,create_time,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
                 ->where($where)
                 ->asArray()
                 ->all();
@@ -2329,9 +2329,15 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['status']='待付款';
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
-                $sup=Supplier::find()->where(['id'=>$GoodsOrder[$k]['supplier_id']])->one(); 
-
-                $GoodsOrder[$k]['shop_name']='';
+                $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
+                if(!$sup)
+                {
+                    echo 1;
+                   var_dump($sup);
+                }else{
+                    echo 2;
+                }exit;
+                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
                  if ($role=='user') 
                 {
                     $GoodsOrder[$k]['uid']=$sup->uid;
