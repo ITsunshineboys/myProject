@@ -1,9 +1,9 @@
 <!--<div ng-controller="all_modal">-->
 <div class="modal-body">
-    <p>手机输入不正确</p>
-    <p>请重新输入</p>
+    <p>{{big_word}}</p>
+    <p ng-if="is_small">请重新输入</p>
 </div>
 <div class="modal-footer" ng-click="common_house()">
-    确认
+    {{btn_word}}
 </div>
 <!--</div>-->

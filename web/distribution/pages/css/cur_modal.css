@@ -1,9 +1,11 @@
 .cur_modal{
     top:6rem!important;
+    font-family:PingFangSC-Regular;
 }
 .cur_modal .modal-dialog{
     width:6.67rem!important;
     border-radius:.16rem!important;
+    margin:auto!important;
 }
 .cur_modal .modal-body{
     padding-top: 1.07rem;
@@ -17,7 +19,7 @@
 }
 .cur_modal .modal-body p:last-child{
     font-size: 28px;
-    color: #000000;
+    color: #999;
 }
 .cur_modal .modal-footer{
     padding: .43rem 0;
