@@ -285,7 +285,7 @@ class GoodsRecommend extends ActiveRecord
         ) {
             foreach ($recommendList as &$recommend) {
                 $hasViewedNumber && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
-                $hasSoldNumber && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
+//                $hasSoldNumber && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
 
                 if (isset($recommend['create_time'])) {
                     if (!empty($recommend['create_time'])) {
