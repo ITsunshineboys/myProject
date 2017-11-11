@@ -1064,7 +1064,7 @@ class GoodsCategory extends ActiveRecord
         return self::find()
             ->asArray()
             ->select('id,title')
-            ->where(['and',['level'=>1]])
+            ->where(['and',['level'=>1],['review_status'=>2]])
             ->all();
     }
 
