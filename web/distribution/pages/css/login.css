@@ -1,5 +1,6 @@
 .login{
     font-family:PingFangSC-Regular;
+    width:100%;
 }
 .login .tel{
     padding:.37rem 0 ;
@@ -7,6 +8,7 @@
     font-size: 32px;
     background: #fff;
     margin-bottom: .8rem;
+    width:100%;
 }
 .login .tel p{
     width: 16.8%;
