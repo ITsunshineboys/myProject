@@ -2322,7 +2322,7 @@ class GoodsOrder extends ActiveRecord
                 ->asArray()
                 ->all();
             foreach ($GoodsOrder AS $k =>$v){
-                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
+                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01); 
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
                 $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
                 $GoodsOrder[$k]['user_name']=$user->nickname;
