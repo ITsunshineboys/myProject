@@ -3007,12 +3007,12 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
-            if ($total!=$total_amount*100)
-            {
-                $code=1000;
-                $tran->rollBack();
-                return $code;
-            }
+            // if ($total!=$total_amount*100)
+            // {
+            //     $code=1000;
+            //     $tran->rollBack();
+            //     return $code;
+            // }
             $code=200;
             $tran->commit();
             return $code;
