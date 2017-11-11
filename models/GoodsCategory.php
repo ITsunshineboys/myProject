@@ -568,7 +568,7 @@ class GoodsCategory extends ActiveRecord
         $all = self::find()
             ->asArray()
             ->select($select)
-            ->where(['and',['review_status'=>2],['in', 'level', $level]])
+            ->where(['and',['deleted'=>0],['in', 'level', $level]])
             ->all();
         return $all;
     }
@@ -1064,7 +1064,7 @@ class GoodsCategory extends ActiveRecord
         return self::find()
             ->asArray()
             ->select('id,title')
-            ->where(['and',['level'=>1],['review_status'=>2]])
+            ->where(['and',['level'=>1],['deleted'=>0]])
             ->all();
     }
 
