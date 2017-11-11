@@ -193,7 +193,8 @@ store_mag.controller("store_mag", function ($scope, $http) {
             url: baseUrl+"/mall/supplier-list",
             params: $scope.params,
         }).then(function (res) {
-            // console.log(res)
+            console.log('商城列表数据');
+            console.log(res)
             $scope.pageConfig.totalItems = res.data.data.supplier_list.total;
             $scope.stores = res.data.data.supplier_list.details;
         })

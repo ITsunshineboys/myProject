@@ -256,7 +256,6 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 $scope.front_warning = true;
                 $scope.frontpath = 'pages/mall_manage/merchant_manage/add_store/images/default.png';
             } else {
-                // $scope.
                 $scope.params.identity_card_front_image = response.data.data.file_path;
                 $scope.front_warning = false;
                 $scope.frontpath = picprefix + response.data.data.file_path;
@@ -375,6 +374,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 wrongScroll('companyname');
                 break;
             case 200:
+                console.log('成功添加');
                 $("#suremodal").modal("show");
                 break;
             default:
