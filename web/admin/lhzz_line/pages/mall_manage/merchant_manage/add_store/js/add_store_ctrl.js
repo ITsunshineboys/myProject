@@ -185,6 +185,8 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     /*登录账户判断*/
     $scope.accountCheck = function () {
         $scope.defaultshow = false;
+        $scope.legalwarning = false;
+        $scope.idwarning = false;
         if(phone_pattern.test($scope.params.mobile)){
             $http({
                 method: "get",
