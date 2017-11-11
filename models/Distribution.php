@@ -101,21 +101,33 @@ class Distribution extends ActiveRecord
             $goodsOrder_money=GoodsOrder::switchMoney($goodsOrder_online_money+$goodsOrder_line_money);
         }
 
-        if ($parent)
+         if ($parent)
         {
-            $parents=['mobile'=>$parent->mobile,'time'=>date('Y-m-d H:i',$data->applydis_time)];
+            $parents=[
+                'mobile'=>$parent->mobile,
+                'time'=>date('Y-m-d H:i',$data->applydis_time)
+            ];
+            return
+                [
+                    'binding_count'=>$son_count,
+                    'order_count'=>$goodsOrder_count,
+                    'order_money'=>$goodsOrder_money,
+                    'MyProfit'=>GoodsOrder::switchMoney($data['profit']*0.01),
+                    'mobile' => $mobile,
+                    'parent' => $parents,
+                    'son'=>$son
+                ];
         }else{
-            $parents=array();
+            [
+                'binding_count'=>$son_count,
+                'order_count'=>$goodsOrder_count,
+                'order_money'=>$goodsOrder_money,
+                'MyProfit'=>GoodsOrder::switchMoney($data['profit']*0.01),
+                'mobile' => $mobile,
+                'parent' => [],
+                'son'=>$son
+            ];
         }
-        return [
-            'binding_count'=>$son_count,
-            'order_count'=>$goodsOrder_count,
-            'order_money'=>$goodsOrder_money,
-            'MyProfit'=>GoodsOrder::switchMoney($data['profit']*0.01),
-            'mobile' => $mobile,
-            'parent' => $parents,
-            'son'=>$son
-        ];
     }
     /**
      *
