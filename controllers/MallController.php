@@ -141,7 +141,7 @@ class MallController extends Controller
         'series-add',
         'series-edit',
         'series-status',
-        'style-list' ,
+        'style-list',
         'style-time-sort',
         'style-add',
         'style-edit',
@@ -5271,6 +5271,14 @@ class MallController extends Controller
             ]);
         }
 
+        if ($sort) {
+            if (stripos($orderBy, Supplier::FIELD_SALES_VOLUMN_MONTH) !== -1
+                || stripos($orderBy, Supplier::FIELD_SALES_AMOUNT_MONTH) !== -1
+            ) {
+                $orderBy = 'month DESC,' . $orderBy;
+            }
+        }
+
         $query = new Query;
         if (!$keyword) {
             if ($shopType != Yii::$app->params['value_all']) {
@@ -5288,7 +5296,7 @@ class MallController extends Controller
             $query->andWhere(['in', 'status', array_keys(Supplier::STATUSES_ONLINE_OFFLINE)]);
             $query->andWhere(['or', ['like', 'shop_no', $keyword], ['like', 'shop_name', $keyword]]);
         }
-        
+
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',

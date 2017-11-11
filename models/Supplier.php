@@ -158,6 +158,8 @@ class Supplier extends ActiveRecord
     const ERROR_CODE_SAME_SHOP_NAME = 1028;
     const ERROR_CODE_SAME_LICENCE = 1029;
     const ERROR_CODE_SAME_NAME = 1030;
+    const FIELD_SALES_VOLUMN_MONTH = 'sales_volumn_month';
+    const FIELD_SALES_AMOUNT_MONTH = 'sales_amount_month';
 
     /**
      * @return string 返回该AR类关联的数据表名
