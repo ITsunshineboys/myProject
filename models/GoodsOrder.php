@@ -2334,7 +2334,7 @@ class GoodsOrder extends ActiveRecord
                  if ($role=='user')
                 {
                     $GoodsOrder[$k]['uid']=$sup->uid;
-                    $GoodsOrder[$k]['to_role_id']=6;
+                    $GoodsOrder[$k]['to_role_id']=6; 
                 }else{
                     $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
                     $GoodsOrder[$k]['to_role_id']=$GoodsOrder[$k]['role_id'];
