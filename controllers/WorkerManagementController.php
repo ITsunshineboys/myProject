@@ -40,7 +40,8 @@ class WorkerManagementController extends Controller
         'worker-phone',
         'worker-add',
         'worker-order-list' ,
-        'workerOrderStatus',
+        'worker-order-status',
+        'worker-order-status-list'
     ];
 
     /**
@@ -494,6 +495,10 @@ class WorkerManagementController extends Controller
         ]);
     }
 
+    /**
+     * 工程订单状态修改列表
+     * @return string
+     */
     public function actionWorkerOrderStatusList()
     {
         $order_no = (int)trim(\Yii::$app->request->get('order_no'));
@@ -604,5 +609,8 @@ class WorkerManagementController extends Controller
     public function actionWorkerOrderDetails()
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
+        $worker_order = WorkerOrder::getUserWorkerOrderDetail($id);
+        return Json::encode($worker_order);
+        var_dump($worker_order);exit;
     }
 }

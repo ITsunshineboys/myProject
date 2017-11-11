@@ -105,37 +105,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'uid' => '用户id',
-            'worker_id' => '工人id',
-            'worker_type_id' => '工人类型id',
-            'order_no' => '工单号',
-            'create_time' => '创建时间',
-            'modify_time' => '修改时间',
-            'start_time' => '开始时间',
-            'end_time' => '结束时间',
-            'need_time' => '工期(天数)',
-            'days' => '工作的具体日期',
-            'map_location' => '地图定位',
-            'address' => '施工详细地址',
-            'con_people' => '联系人',
-            'con_tel' => '联系电话',
-            'amount' => '订单总金额',
-            'front_money' => '订金',
-            'status' => '0: 已取消(完成)，1：未开始(接单中)，2：未开始(已接单)，3: 未开始(申请开工)，4：施工中，5：已完工(完成)',
-            'describe' => '订单描述',
-            'is_old' => '是否旧数据，0：不是，  1：是',
-            'demand' => '个性需求',
-            'reason' => '修改原因',
-        ];
-    }
-
-    /**
      * 工人智管工地列表-工人
      * @param $uid
      * @param $status
