@@ -2321,21 +2321,21 @@ class GoodsOrder extends ActiveRecord
                 ->where($where)
                 ->asArray()
                 ->all();
-                  var_dump($GoodsOrder);exit;
+
             foreach ($GoodsOrder AS $k =>$v){
-                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01); 
+                 $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
+                if (!$sup) {
+                    unset($GoodsOrder[$k]);
+                }else
+                {
+                    $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01); 
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
                 $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
                 $GoodsOrder[$k]['user_name']=$user->nickname;
                 $GoodsOrder[$k]['status']='待付款';
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
-                $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
-                if (!$sup) {
-                    echo 1;exit;
-                }
-                $shop_name=$sup->shop_name;
-                 $GoodsOrder[$k]['shop_name']=$shop_name;
+                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
                  if ($role=='user') 
                 {
                     $GoodsOrder[$k]['uid']=$sup->uid;
@@ -2366,6 +2366,8 @@ class GoodsOrder extends ActiveRecord
                     unset($GoodsOrder[$k]['supplier_id']);
                     $arr[]=$GoodsOrder[$k];
                 }
+                }
+                
 
             }
         }
