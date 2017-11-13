@@ -923,7 +923,26 @@ angular.module('all_controller', [])
                     $scope.cur_brand_arr.push(cur_item.id)
                     $scope.params.brand_id = $scope.cur_brand_arr.join(',')
                 }
+            }else if(item == 4){
+                let index = $scope.cur_brand_copy.findIndex(function (item) {
+                    return item ===cur_item.id
+                })
+                if(index != -1){
+                    $scope.cur_brand_copy.splice(index,1)
+                }else{
+                    $scope.cur_brand_copy.push(cur_item.id)
+                }
             }
+        }
+        //跳转内层模态框
+        $scope.go_inner_data = function () {
+            $scope.cur_brand_copy = angular.copy($scope.cur_brand_arr)
+            $scope.all_brand_copy = angular.copy($scope.all_goods_brands)
+        }
+        //保存内层数据
+        $scope.save_inner_data = function () {
+            $scope.cur_brand_arr = $scope.cur_brand_copy
+            $scope.params.brand_id = $scope.cur_brand_arr.join(',')
         }
         //完成筛选
         $scope.complete_filter = function () {
@@ -931,6 +950,21 @@ angular.module('all_controller', [])
             $scope.params.platform_price_max = $scope.price_max*100
             tablePages()
         }
+        //筛选关键字
+        $scope.$watch('keyword',function (newVal,oldVal) {
+            console.log(newVal)
+            if(newVal!=''){
+                let arr = []
+                for(let [key,value] of $scope.all_goods_brands.entries()){
+                    if(value.name.indexOf(newVal)!= -1){
+                        arr.push(value)
+                    }
+                }
+                $scope.all_goods_brands = arr
+            }else{
+                $scope.all_goods_brands = $scope.all_brand_copy
+            }
+        })
         //无资料计算
         $scope.get_goods = function (valid, error) {
             console.log(error)
