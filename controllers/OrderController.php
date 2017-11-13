@@ -675,6 +675,7 @@ class OrderController extends Controller
         }
         $return_insurance=0;
         $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
+        echo $iscorrect_money;exit;
         if (!$iscorrect_money)
         {
             $c=1000;
