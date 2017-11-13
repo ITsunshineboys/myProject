@@ -1,5 +1,5 @@
 let edit_attribute = angular.module("edit_attribute_module", []);
-edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $stateParams) {
+edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $stateParams,$state) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -25,7 +25,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     /*单位数组*/
 
     /*单位默认*/
-    $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'MM'}, {unit: 'M'}, {unit: 'kg'}]
+    $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'MM'}, {unit: 'M'}, {unit:'kg'},{unit:'M²'}]
     for (let [key, value] of $scope.propattrs.entries()) {
         for (let [key1, value1] of $scope.unitarrs.entries()) {
             if (value.unit == value1.unit) {
@@ -39,8 +39,9 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     $scope.generalAdd = function () {
         let obj = {
             name: '',
-            unit: '',
+            unit: '无',
             value: '',
+            cur_unit:{"unit":"无"},
             addition_type: '0'
         }
         $scope.propattrs.push(obj);
@@ -50,8 +51,9 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     $scope.selectAdd = function () {
         let obj = {
             name: '',
-            unit: '',
+            unit: '无',
             value: '',
+            cur_unit:{"unit":"无"},
             addition_type: '1'
         }
         $scope.propattrs.push(obj);
@@ -95,9 +97,10 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         }
     }
 
+    let unit_value_arr = [];
+
     /*保存属性*/
     $scope.saveProp = function () {
-        console.log(4564564);
         namesarr = [];
         valuesarr = [];
         typesarr = [];
@@ -110,17 +113,55 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             unitsarr.push($scope.propattrs[i].cur_unit.unit);
         }
 
+        // console.log(unitsarr);
+
+        for(let i=0;i<unitsarr.length;i++){
+            switch (unitsarr[i]){
+                case "无":
+                    unit_value_arr.push(0);
+                    break;
+                case "L":
+                    unit_value_arr.push(1);
+                    break;
+                case "M":
+                    unit_value_arr.push(2);
+                    break;
+                case "M²":
+                    unit_value_arr.push(3);
+                    break;
+                case "kg":
+                    unit_value_arr.push(4);
+                    break;
+                case "MM":
+                    unit_value_arr.push(5);
+                    break;
+            }
+        }
+
+
         let url = baseUrl+"/mall/goods-attr-add";
         let data = {
-            category_id: $scope.propid,
+            category_id: +$scope.propid,
             "names[]": namesarr,
             "values[]": valuesarr,
-            "units[]":unitsarr,
+            "units[]":unit_value_arr,
             "addition_types[]":typesarr
         };
             $http.post(url,data,config).then(function (res) {
-                console.log(res)
+                if(res.data.code==200){
+                    console.log(res);
+                    $("#success_modal").modal("show");
+                }
             })
     }
+
+
+    /*确认保存成功*/
+    $scope.modalBack = () => {
+        setTimeout(()=>{
+            $state.go('style_index',{showattr:true})
+        },200)
+    }
+
 
 });

@@ -44,8 +44,9 @@
                         <input type="text" class="normal_input" ng-model="item.value" ng-if="item.addition_type==1" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
                     </td>
                     <td class="padding_right">
-                        <select name="" class="select_css" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit" ng-change=aiya(item.cur_unit.unit)></select>
+                        <select name="" class="select_css" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit"></select>
                         <span class="attr_font">*属性名称限1~6个字，属性内容以逗号隔开</span>
+                        <!--ng-change=aiya(item.cur_unit.unit)-->
                     </td>
                 </tr>
                 </form>
@@ -56,5 +57,30 @@
             <span class="bg_blue" ng-click=saveProp()>保存</span>
             <span ui-sref='style_index({showattr:true})'>返回</span>
         </div>
+
+
+        <!-- 弹窗-保存成功 -->
+        <div class="modal customer_modal detail_modal fade" tabindex="-1" role="dialog" id="success_modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row form_box">
+                            <span class="col-md-12 form_txt">保存成功</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="modalBack()" data-dismiss="modal" >确认</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+
+
     </section>
 </div>

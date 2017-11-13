@@ -49,7 +49,41 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     $scope.handledesorder = true; //排序初始值
     $scope.handleascorder = false; //排序初始值
 
+
+
+    /*分页配置*/
+    $scope.pageConfig = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            tableList();
+        }
+    }
+
+    /*分类选择下拉框初始化*/
+    $scope.dropdown = {
+        firstselect: 0,
+        secselect: 0
+    }
+
+    /*分类选择一级下拉框*/
+    function firstClass() {
+        console.log('no no no ');
+        $http({
+            method: "get",
+            url: baseUrl+"/mall/categories-manage-admin",
+        }).then((response) => {
+            $scope.firstclass = response.data.data.categories;
+            $scope.dropdown.firstselect = response.data.data.categories[0].id;
+        })
+    }
+
+
+
+
     $scope.changeTabbar = (function () {
+        console.log($stateParams)
         if ($stateParams.showstyle) {
             $scope.showseries = false;
             $scope.showstyle = true;
@@ -58,6 +92,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
             $scope.showseries = false;
             $scope.showstyle = false;
             $scope.showattr = true;
+            firstClass();
         } else {
             $scope.showseries = true;
             $scope.showstyle = false;
@@ -94,21 +129,24 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
         $scope.Config.currentPage=1;
         tablePages();
     };
+
     //属性
     $scope.changeToattr = function () {
         $scope.showseries = false;
         $scope.showstyle = false;
         $scope.showattr = true;
-        firstClass();
         $scope.attr_params = {
             pid: 0,   //父分类id
             page: 1,  //当前页数
             'sort[]': "attr_op_time:3" //排序规则 默认按最后操作时间降序排列
         }
         $scope.pageConfig.currentPage = 1;
+        firstClass()
         tableList();
 
     };
+
+
     /************************系列开始*******************************/
 
 //	系列——展示数据
@@ -242,21 +280,8 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     /*********************************风格结束*******************************/
 
     /*********************************属性开始*******************************/
-    /*分类选择下拉框初始化*/
-    $scope.dropdown = {
-        firstselect: 0,
-        secselect: 0
-    }
 
-    /*分页配置*/
-    $scope.pageConfig = {
-        showJump: true,
-        itemsPerPage: 12,
-        currentPage: 1,
-        onChange: function () {
-            tableList();
-        }
-    }
+
 
 
     /*默认参数*/
@@ -272,16 +297,7 @@ style_index.controller("style_index", function ($scope, $http, $stateParams) {
     }
 
 
-    /*分类选择一级下拉框*/
-    function firstClass() {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-        }).then((response) => {
-            $scope.firstclass = response.data.data.categories;
-            $scope.dropdown.firstselect = response.data.data.categories[0].id;
-        })
-    }
+
 
     /*分类选择二级下拉框*/
     function subClass(obj) {
