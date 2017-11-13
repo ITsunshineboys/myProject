@@ -265,7 +265,7 @@ class WorkerManagementController extends Controller
      *  添加工人列表
      * @return string
      */
-    public function actionWorkerList()
+    public function actionAddWorkerList()
     {
         $worker_     = trim(\Yii::$app->request->get('id', ''));
         $worker_type = WorkerType::find()
@@ -305,7 +305,7 @@ class WorkerManagementController extends Controller
      * 添加工人 手机号验证
      * @return string
      */
-    public function actionWorkerPhone()
+    public function actionAddWorkerPhone()
     {
         $phone = (int)trim(\Yii::$app->request->post('phone', ''));
         //  手机号是否正确
@@ -355,7 +355,7 @@ class WorkerManagementController extends Controller
      * 添加工人 保存页面
      * @return string
      */
-    public function actionWorkerAdd()
+    public function actionAddWorkerAdd()
     {
         // 身份证号码验证
         $identity_no = trim(\Yii::$app->request->post('identity_no', ''));
@@ -606,10 +606,19 @@ class WorkerManagementController extends Controller
         }
     }
 
+    /**
+     * 工程订单详情列表
+     * @return string
+     */
     public function actionWorkerOrderDetails()
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
         $worker_order = WorkerOrder::MangeOrderView($id);
         return Json::encode($worker_order);
+    }
+
+    public function actionWorkerList()
+    {
+        
     }
 }
