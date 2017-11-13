@@ -1640,7 +1640,7 @@ class OrderController extends Controller
         $sku=trim($request->post('sku',''));
         if (!$order_no  || !$sku) {
 
-            $code=1000;
+            $code=1000; 
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
