@@ -1,13 +1,13 @@
 <link rel="stylesheet" href="css/invoice.css"/>
 <div ng-controller="invoice_ctrl">
-   <header>
-       <div>
-           <a href="javascript:history.go(-1)">
-           <img src="images/mall_nav_return.png" alt="" ng-click="getOrderPre()">
-           </a>
-           <span>发票信息</span>
-       </div>
-   </header>
+    <header>
+        <div>
+            <a href="javascript:history.go(-1)">
+                <img src="images/mall_nav_return.png" alt="" ng-click="getOrderPre()">
+            </a>
+            <span>发票信息</span>
+        </div>
+    </header>
     <section>
         <div class="bag_div"></div>
         <div class="invoice_style">
@@ -23,11 +23,11 @@
             <div class="invoice_radio">
                 <label ng-click="choosePersonal ()">
                     <input type="radio" name="invoice_radio"  checked>
-                     个人
+                    个人
                 </label>
                 <label ng-click="chooseCompany ()">
-                     <input type="radio" name="invoice_radio">
-                      单位
+                    <input type="radio" name="invoice_radio">
+                    单位
                 </label>
             </div>
             <!--s输入框-->

@@ -1,32 +1,41 @@
 header{
-    height: 3.8rem;
-    line-height: 3.8rem;
-}
-header div span{
+    height: 4rem;
+    line-height: 4rem;
     text-align: center;
+}
+header a{
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+header a img{
+    position: absolute;
+    top: 1.3rem;
+    left: 1.2rem;
+    color: #999;
+}
+header span{
     font-size: 1.5rem;
-    color: #4A4A4A;
-    margin-left:11rem;
-    vertical-align: top;
+    color: #666;
+    display: inline-block;
+    line-height: 4rem;
 }
-header div img{
-    margin-left: 1.5rem;
-}
+
 .address_map{
-    /*line-height: 4rem;*/
-    /*height: 6rem;*/
-    padding-bottom: 1rem;
     position: relative;
+    padding: 1.6rem 1.2rem;
 }
 .address_map img:nth-child(1){
-    margin-left: 1.5rem;
-    margin-top: .3rem;
+    position: absolute;
+    top: 2rem;
 }
 .img_harvest{
     position: absolute;
-    right: 1.5rem;
-    top:.7rem;
-    width: .7rem;
+    right: 1.2rem;
+    top: 2rem;
 }
 #img_harvest{
     position: absolute;
@@ -37,9 +46,9 @@ header div img{
 }
 .delivery_address{
     font-size: 1.4rem;
-    color: #53A8F4;
+    color: #333;
     vertical-align: top;
-    margin-left: 1rem;
+    margin-left: 1.2rem;
 }
 .address_content{
     display: inline-block;
@@ -63,131 +72,166 @@ header div img{
     margin-bottom: 3rem;
 }
 .inoc_title{
-    height: 3.4rem;
-    border-bottom: 1px solid #E9EDEE;
-    line-height: 3.4rem;
+    border-bottom: 1px solid #dcdcdc;
+    padding: .8rem 1.2rem;
 }
-.inoc_title img{
+.inoc_title .img_box{
     width: 1.8rem;
     height: 1.8rem;
-    vertical-align: middle;
-    margin-left: 1.4rem;
+    overflow: hidden;
+    border-radius: .2rem;
+    display: inline-block;
 }
-.inoc_title span{
+.inoc_title img{
+    width: 100%;
+    height: 100%;
+}
+.inoc_title .shop_name{
     margin-left: 1rem;
     color: #4A4A4A;
     font-size: 1.2rem;
-    vertical-align: middle;
+    display: inline-block;
+    margin-top: .1rem;
+    color: #666;
 }
 .address_commodity{
-    height: 10rem;
-    /*line-height: 10rem;*/
-
+    padding: 1.2rem;
 }
-.address_commodity img{
-    padding-top: 1.5rem;
+.address_commodity .img_box{
     width: 7.5rem;
     height: 7.5rem;
-    margin-left: 1.5rem;
-    vertical-align: top;
+    overflow: hidden;
+    border-radius: .3rem;
+}
+.address_commodity .img_box img{
 }
 .left_commodity{
     display: inline-block;
     margin-left: 1.5rem;
     vertical-align: top;
-    padding-top: 1.5rem;
+    height: 7.5rem;
+    position: relative;
 }
 .left_commodity p:nth-child(1){
     font-size: 1.4rem;
-    color: #4A4A4A;
+    color: #666;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 20.5rem;
 }
 .left_commodity p:nth-child(2){
-    font-size: 1.3rem;
-    color: #959292;
-
+    font-size: 1.2rem;
+    color: #999;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 20.5rem;
 }
-.left_commodity span:nth-child(3){
-    font-size: 1.3rem;
-    color: #F59C22;
+.left_commodity div{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20.5rem;
 }
-.left_commodity span:nth-child(4){
+.left_commodity div span:nth-child(1){
+    font-size: 1.4rem;
+    color: #D9AD65;
+}
+.left_commodity div span:nth-child(2){
     font-size: 1.1rem;
-    color: #6C6C6C;
-    margin-left: 11rem;
+    color: #999;
+    line-height: 2rem;
+}
+.more_details ul{
+    padding: 0 1.2rem;
 }
 .more_details ul li{
-    height: 4rem;
-    line-height: 4rem;
-    font-size: 1.3rem;
-    color: #4A4A4A;
-    border-bottom: 1px solid #E9EDEE;
+    font-size: 1.4rem;
+    color: #666;
+    border-bottom: 1px solid #dcdcdc;
     position: relative;
+    padding: 1.2rem 0;
 }
 
 .more_details ul li>span:nth-child(2){
-    color: #959292;
+    color: #999;
     position: absolute;
-    right: 2.2rem;
+    right: 1.2rem;
+    font-size: 1.2rem;
+    top: 1.4rem;
 }
-.more_details ul li span:nth-child(1){
-    margin-left: 1.5rem;
+.more_details ul li>span:nth-child(1){
+    right: 2.2rem;
+    font-size: 1.4rem;
 }
 .show_in>span:nth-child(2){
     position: absolute;
-    right: 1.6rem!important;
+    right: 3rem!important;
+    top: 1.3rem;
 }
 .more_details ul li img{
     color: #959292;
     position: absolute;
-    right: 2.2rem;
+    right: 1.2rem;
+    top: 1.6rem;
 }
-.more_details ul li input{
+.more_details ul li.leave_mes{
+    height: 8rem;
+    border-bottom: none;
+}
+.more_details ul li textarea{
     border: 0;
     position: absolute;
-    right: .5rem;
+    right: 1.2rem;
     /*padding-left: 5rem;*/
+    font-size: 1.2rem;
+    top: 1.4rem;
+    width: 20.5rem;
+    height: 6rem;
+    text-align: right;
+}
+.commodity_pic ul{
+    padding: 0 1.2rem;
 }
 .commodity_pic ul li{
-    height: 3.5rem;
-    line-height: 3.5rem;
-    font-size: 1.3rem;
-    color: #6C6C6C;
+    padding: 1.2rem 0;
+    font-size: 1.4rem;
+    color: #999;
     position: relative;
+    border-bottom: 1px solid #dcdcdc;
 }
 .commodity_pic{
-    border-bottom: 1px solid #E9EDEE;
+
 }
 .commodity_pic ul li span:nth-child(1){
-    margin-left: 1.5rem;
+
 }
 .commodity_pic_num{
     text-decoration: line-through;
-    color: #959292;
+    color: #999;
 }
 .commodity_pic_r{
-    color: #F59C22;
+    color: #D9AD65;
 }
 .commodity_pic ul li span:nth-child(2){
     position: absolute;
-    right: 2rem;
+    right: 0;
+    font-size: 1.2rem;
+    top: 1.3rem;
 }
 .need_required{
-    height: 4rem;
-    line-height: 4rem;
-    position: relative;
-    bottom: .5rem;
-}
-.need_required span:nth-child(2){
-    position: absolute;
-    right: 2rem;
-    color: #F55122;
-    font-size: 1.2rem;
+    padding: 1.2rem;
 }
 .need_required span:nth-child(1){
-    position: absolute;
-    right: 8rem;
-    font-size: 1.3rem;
+    color: #D9AD65;
+    font-size: 1.4rem;
 }
+.need_required span:nth-child(2){
+    font-size: 1.4rem;
+    color: #666;
+}
+
 /*section{*/
 /*position: relative;*/
 /*}*/
@@ -198,37 +242,40 @@ header div img{
     position: fixed;
     background-color: white;
     bottom: 0;
+    box-shadow: 0 -1px 1px rgba(0,0,0,.2);
 }
 .go_play div{
     float: left;
     margin-top: 1rem;
 }
 .go_play span:nth-child(1){
-    color: #6C6C6C;
-    font-size: 1.3rem;
+    color: #999;
+    font-size: 1.2rem;
     margin-left: 1.5rem;
     vertical-align: middle;
 }
 .go_play span:nth-child(2){
-    font-size: 1.3rem;
-    color: #F55122;
+    font-size: 1.6rem;
+    color: #D9AD65;
     vertical-align: middle;
 }
 .go_play button{
     width: 8.5rem;
-    height: 3.8rem;
+    height: 4rem;
     /*line-height: 4rem;*/
-    background-color: #F55122;
+    background-color: #D9AD65;
     font-size: 1.4rem;
     color: white;
     float: right;
-    /*margin-left: 13.1rem;*/
-    margin-top: 0.2rem;
+    border: 1px solid #D9AD65;
 }
 #address_body{
     width: 32rem!important;
     height: 58rem!important;
     margin-top: -.3rem;
+}
+#address_body .modal-body{
+    padding: 0;
 }
 #two_address{
     width: 32rem!important;
@@ -236,47 +283,54 @@ header div img{
 }
 #address_header{
     height:4rem;
-    line-height: 3rem;
-    vertical-align: middle;
+    line-height: 4rem;
+    text-align: center;
 }
-#address_header img{
-    margin-left: 1.4rem;
+#address_header a{
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#address_header a img{
+    position: absolute;
+    left: 1.2rem;
+    top: 1.4rem;
 }
 #address_header span{
-    vertical-align: middle;
-    margin-left: 10rem;
     font-size: 1.5rem;
-    color: #4A4A4A;
+    color: #666;
 }
 .input-group{
-    width: 32rem;
-    height: 4rem;
-    line-height: 4rem;
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 1px solid #dcdcdc;
     position: relative;
+    padding: 1.2rem;
+    width: 100%;
 }
 .input-group span{
     font-size:1.4rem;
-    color: #4A4A4A;
-    margin-left: 1.4rem;
+    color: #666;
 }
 .shu{
     height: 1.8rem;
-    width: .2rem;
-    background-color: #E9EDEE;
+    width: 2px;
+    background-color: #dcdcdc;
     display: inline-block;
     position: absolute;
     left: 9rem;
-    top:1.2rem;
+    top:1.3rem;
 }
 .input-group input{
     width: 20rem;
-    height: 4rem;
+    height: 4.3rem;
     font-size: 1.4rem;
     border: 0;
     padding-left: 1rem;
     position: absolute;
     left: 10rem;
+    top: 0;
 }
 /*.address_more{*/
 /*position: absolute;*/
@@ -291,7 +345,7 @@ header div img{
     height: 4rem;
     line-height: 4rem;
     color: white;
-    background-color: #53A8F4;
+    background-color: #333;
     border-radius: .6rem;
     margin-left: 1rem;
     font-size: 1.5rem;
@@ -300,24 +354,34 @@ header div img{
 }
 /*协议模态框*/
 #agreement_body{
-    width: 32rem;
-    margin-top: -1rem;
+    width: 100%;
+    margin: 0;
 }
 #agreement{
-    height: 58rem;
+    height: 57rem;
 }
 #agreement_header {
     height: 4rem;
-    line-height: 4rem;
+    padding: 0;
+    text-align: center;
 }
 #agreement_header span{
-    text-align: center;
+    line-height: 4rem;
     font-size: 1.5rem;
-    vertical-align: middle;
-    margin-left: 10.5rem;
+    color: #666;
 }
-#agreement_header img{
-    vertical-align: middle;
+#agreement_header a{
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#agreement_header a img{
+    position: absolute;
+    left: 1.2rem;
+    top: 1.2rem;
 }
 .agreement_div{
     font-size: 1.3rem;
@@ -340,10 +404,10 @@ header div img{
 }
 #num_modal p{
     font-size: 1.4rem;
-    color: #4A4A4A;
+    color: #333;
 }
 #num_modal button{
-    color: #53A8F4;
+    color: #333;
     background-color: white;
     width: 20.5rem;
     height: 2.8rem;
@@ -369,9 +433,9 @@ header div img{
     padding: 0;
 }
 .xian{
-    background-color:#E9EDEE;
+    background-color:#dcdcdc;
     width: 21rem;
-    height: .2rem;
+    height: 2px;
     margin-top: 1.2rem;
 }
 
@@ -392,12 +456,16 @@ header div img{
 /*协议/*/
 .agreement{
     font-size: 1.2rem;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
+    text-align: center;
+    background-color: #f6f6f6;
+    padding: 1.2rem 0;
+    color: #666;
 }
 .agreement input{
-    width: 1.1rem;
-    height: 1.1rem;
-    margin-left: 1.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.6rem;
     /*background-color: #0a67fb;*/
 }
 .agreement_span{

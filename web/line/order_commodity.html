@@ -2,21 +2,19 @@
 <link rel="stylesheet" href="css/LArea.min.css"/>
 <div ng-controller="order_commodity_ctrl" ng-cloak>
     <header>
-        <div>
-            <a href="javascript:history.go(-1)">
-                <img src="images/mall_nav_return.png" alt="">
-            </a>
-            <!--ng-click="getProduct_details()"-->
+        <a href="javascript:history.go(-1)">
+            <img src="images/mall_nav_return.png" alt="">
+        </a>
+        <!--ng-click="getProduct_details()"-->
 
-            <span>确认订单</span>
-        </div>
+        <span>确认订单</span>
     </header>
     <section>
         <div class="address_map" data-toggle="modal" ng-click="getHarvestMadel()" data-target="{{harvestMadel}}" >
             <div ng-show="show_address">
                 <img src="images/mall_location_blue.png" alt="">
                 <span class="delivery_address" >填写收货地址</span>
-                <img src="images/left_com.png" class="img_harvest" alt="">
+                <img src="images/list_arrow.png" class="img_harvest" alt="">
             </div>
 
             <div  ng-show="show_harvest">
@@ -31,23 +29,28 @@
                 <img src="images/left_com.png" id="img_harvest" alt="">
             </div>
 
-
-
         </div>
         <!--商品详情展示-->
         <div class="bag_div"></div>
         <div class="address_shop" >
-            <div class="inoc_title">
-                <img src="{{baseUrl + '/'+icon}}" alt="">
-                <span>{{shop_name}}</span>
+            <div class="inoc_title clearfix">
+                <div class="img_box pull-left">
+                    <img src="{{baseUrl + '/'+icon}}" alt="">
+                </div>
+                <div class="shop_name pull-left">{{shop_name}}</div>
             </div>
-            <div class="address_commodity">
-                <img src="{{baseUrl + '/'+cover_image}}" alt="">
-                <div class="left_commodity">
-                    <p>{{title}}</p>
+            <div class="address_commodity clearfix">
+                <div class="img_box pull-left">
+                    <img src="{{baseUrl + '/'+cover_image}}" alt="">
+                </div>
+                <div class="left_commodity pull-left">
+                    <p class="good_title">{{title}}</p>
                     <p>{{subtitle}}</p>
-                    <span>￥{{platform_price}}</span>
-                    <span>x {{goods_num}}</span>
+                    <div class="clearfix">
+                        <span class="pull-left">￥{{platform_price}}</span>
+                        <span class="pull-right">x {{goods_num}}</span>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -64,17 +67,17 @@
 
                     <span>发票信息</span>
                     <!--{{invoice_header}}-->
-                    <span class="agreement_span">
-                        <span>明细</span>
-                        <span ng-if="invoice_content!= undefined">{{invoice_content}}</span>&nbsp; 〉</span>
+                    <span class="agreement_span">明细</span>
+                    <span ng-if="invoice_content!= undefined">{{invoice_content}}</span>
+                    <img src="images/list_arrow.png">
                 </li>
                 <li>
                     <span>付款方式</span>
                     <span>在线支付</span>
                 </li>
-                <li>
+                <li class="leave_mes">
                     <span>买家留言</span>
-                    <input type="text" maxlength="30" placeholder="选填：对本次交易的说明" ng-model="leaveMessage">
+                    <textarea type="text" maxlength="30" placeholder="选填：对本次交易的说明" ng-model="leaveMessage"></textarea>
                 </li>
             </ul>
         </div>
@@ -97,13 +100,13 @@
             </ul>
         </div>
         <!--需要付款-->
-        <div class="need_required">
-            <span>需付款：</span>
-            <span>￥{{allCost}}</span>
+        <div class="need_required clearfix">
+            <span class="pull-right">￥{{allCost}}</span>
+            <span class="pull-right">需付款：</span>
         </div>
         <!--<div class="bag_div " id=" bottom_div"></div>-->
         <div class="agreement">
-            <input type="checkbox" name="1" ng-click="chooseCheck()" ng-checked="check_agressment">
+            <input type="checkbox" checked="checked" name="1" ng-click="chooseCheck()" ng-checked="check_agressment">
             <span>已同意</span>
             <span class="agreement_span" data-toggle="modal"  data-target="#agreement_model">《商城购买协议》</span>
         </div>
@@ -122,11 +125,13 @@
             <div class="modal-dialog" role="document" id="address_body">
                 <div class="modal-content" id="two_address">
                     <div class="modal-header" id="address_header">
-                        <img src="images/mall_nav_return.png" alt="" data-dismiss="modal">
+                        <a href="" data-dismiss="modal">
+                            <img src="images/mall_nav_return.png" alt="">
+                        </a>
                         <span class="modal-title" >编辑收货地址</span>
                     </div>
                     <div class="bag_div"></div>
-                    <div class="modal-body"  >
+                    <div class="modal-body">
                         <!--表格填写-->
                         <div class="input-group">
                             <span>收货人</span>
@@ -185,7 +190,9 @@
             <div class="modal-dialog" role="document" id="agreement_body">
                 <div class="modal-content" id="agreement">
                     <div class="modal-header" id="agreement_header">
-                        <img src="images/mall_nav_return.png" alt="" data-dismiss="modal">
+                        <a data-dismiss="modal">
+                            <img src="images/mall_nav_return.png" alt="" >
+                        </a>
                         <span class="modal_title" >商城购买协议</span>
                     </div>
                     <div class="agreement_div">

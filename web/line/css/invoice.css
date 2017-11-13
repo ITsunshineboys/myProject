@@ -1,15 +1,29 @@
+body{
+    background-color: #f6f6f6;
+}
+
 header{
     height: 4rem;
     line-height: 4rem;
+    text-align: center;
 }
-header div img{
-    margin-left: 1.4rem;
+header div a{
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4rem;
+    height: 4rem;
+}
+header div a img{
+    position: absolute;
+    top: 1.3rem;
+    left: 1.2rem;
 }
 header div span{
-    margin-left: 11rem;
     font-size: 1.5rem;
-    color: #4A4A4A;
-    vertical-align: middle;
+    line-height: 4rem;
+    color: #333;
 }
 .bag_div{
     background-color: #F6F6F6;
@@ -19,17 +33,18 @@ header div span{
 .invoice_style{
     height: 8.5rem;
     padding-top: 1rem;
+    background-color: #fff;
 }
 .invoice_style span{
-    font-size: 1.5rem;
-    color: #4A4A4A;
+    font-size: 1.6rem;
+    color: #666;
     margin-left: .7rem;
     vertical-align: top;
     margin-top: 2rem;
 }
 .invoice_style button{
-    background: #53A8F4;
-    border: 1px solid #53A8F4;
+    background: #333;
+    border: 1px solid #333;
     border-radius: .5rem;
     width: 7.4rem;
     height: 2.3rem;
@@ -40,19 +55,20 @@ header div span{
 }
 .shu{
     height: 1.5rem;
-    width: .3rem;
-    background-color:#53A8F4;
+    width: .4rem;
+    background-color:#333;
     display: inline-block;
-    margin-left: 1.4rem;
+    margin-left: 1.2rem;
     margin-top: .3rem;
 }
 .invoice_body{
     padding-top: 1rem;
     padding-bottom: 1.2rem;
+    background-color: #fff;
 }
 .invoice_rise{
-    font-size: 1.5rem;
-    color: #4A4A4A;
+    font-size: 1.6rem;
+    color: #666;
     margin-left: .7rem;
     vertical-align: top;
     margin-top: 2rem;
@@ -89,7 +105,8 @@ header div span{
     color: #B8B6B6;
 }
 .invoice_detailed{
-    margin-top: 1rem;
+    background-color: #fff;
+    padding: 1.2rem 0;
 }
 .invoice_detailed label{
     margin-left: 1.4rem;
@@ -98,11 +115,11 @@ header div span{
     color: rgba(85, 85, 85, 0.84);
 }
 .invoice_detailed span{
-    color: #4A4A4A;
+    color: #666;
     margin-left: .7rem;
     vertical-align: top;
     margin-top: 2rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
 }
 .invoice_detailed label input{
     width:1.3rem;
@@ -115,8 +132,8 @@ header div span{
     width: 29rem;
     height: 4rem;
     line-height: 4rem;
-    background: #53A8F4;
-    border: 1px solid #53A8F4;
+    background: #333;
+    border: 1px solid #333;
     font-size:1.4rem;
     outline: none;
     color: white;
@@ -140,7 +157,7 @@ header div span{
     color: #4A4A4A;
 }
 #num_modal button{
-    color: #53A8F4;
+    color: #333;
     background-color: white;
     width: 20.5rem;
     height: 2.8rem;
@@ -153,6 +170,6 @@ header div span{
 .xian{
     background-color:#E9EDEE;
     width: 21rem;
-    height: .2rem;
+    height: 2px;
     margin-top: 1.2rem;
 }
