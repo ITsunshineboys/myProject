@@ -4,6 +4,7 @@ namespace app\models;
 
 use app\controllers\WorkerController;
 use app\services\ModelService;
+use Fixtures\Prophecy\WithTypehintedVariadicArgument;
 use Yii;
 use yii\data\Pagination;
 use yii\db\Exception;
@@ -38,6 +39,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
     const ORDER_OLD = 1;
     const ORDER_NEW = 0;
 
+    const WORKER_TYPE=[
+        self::ORDER_NEW=>'精准型',
+        self::ORDER_OLD=>'快捷型'
+    ];
 
     const WORKER_ORDER_NOT_BEGIN = 0;
     const WORKER_ORDER_PREPARE = 1;
@@ -216,26 +221,21 @@ class WorkerOrder extends \yii\db\ActiveRecord
      */
     private static function getOrderDetail($order_id)
     {
-        if (is_array($order_id)) {
-            $return = [];
-            $orders = self::find()->where(['id' => $order_id])->all();
-            if ($orders) {
-                return 1000;
-            }
-            foreach ($orders as $order) {
-                $return[] = self::dealOrder($order);
-            }
-        } else {
             $order = self::find()
-                ->select('id,uid,order_no,worker_type_id,worker_id,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location')
+                ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type')
                 ->where(['id' => $order_id])
                 ->one();
+
             if (!$order) {
                 return 1000;
             }
-            $return = self::dealOrder($order);
-        }
-        return $return;
+            if($order->type==self::ORDER_OLD){
+                $return=self::orderFastView($order);
+            }elseif($order->type==self::ORDER_NEW){
+                $return = self::dealOrder($order);
+            }
+
+            return $return;
     }
     /**
      * 泥作条目详情
@@ -252,15 +252,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->one()['title'];
 
             $mud_item['worker_item_craft']=WorkerCraft::getcraftitle($mud_item['worker_craft_id'])['craft'];
-            if($mud_item['worker_item_craft']==null){
+            if($mud_item['worker_item_craft']==0){
                 unset($mud_item['worker_item_craft']);
             }
-            if($mud_item['guarantee']==null){
+            if($mud_item['guarantee']==0){
                 unset($mud_item['guarantee']);
             }else{
                 $mud_item['guarantee']='是';
             }
-            if($mud_item['chip']==null){
+            if($mud_item['chip']==0){
                 unset($mud_item['chip']);
             }
             unset($mud_item['order_id']);
@@ -880,6 +880,26 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $code = 500;
             return $code;
         }
+    }
+
+    public static function orderFastView($order){
+            $fasts_order=WorkerFastOrder::find()->asArray()->where(['worker_order_id'=>$order->id])->all();
+            foreach ($fasts_order as &$fast){
+
+                $fast['worker_items']=WorkerType::find()->asArray()->select('worker_name')->where("id in ({$fast['worker_item_ids']})")->all();
+               $fast['worker_type']=WorkerType::find()->asArray()->select('worker_name')->where(['id'=>$fast['worker_type_id']])->one();
+            }
+        $order->worker_type_id=WorkerType::getparenttype($order->worker_type_id);
+        $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
+        $order->modify_time && $order->modify_time = date('Y-m-d H:i', $order->modify_time);
+        $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
+        $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
+//        状态是0的时候有取消时间和取消原因
+//        $order->cancel_time && $order->cancel_time = date('Y-m-d H:i', $order->cancel_time);
+        $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
+        $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
+
+           return [$order,$fasts_order];
     }
     /**
      * 生成订单
@@ -1666,6 +1686,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $details = self::find()
             ->select($select)
             ->where($where)
+            ->andWhere(['is_old'=>0])
             ->leftJoin('worker','worker.id = worker_order.worker_id')
             ->leftJoin('user','user.id = worker.uid')
             ->leftJoin('worker_type','worker_type.id = worker_order.id')
@@ -1795,5 +1816,57 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return false;
         }
         return Yii::$app->db->lastInsertID;
+    }
+    /**
+     * 大后台工程订单详情
+     * @param $order_id
+     * @return array|int
+     */
+    public static function MangeOrderView($order_id)
+    {
+        $order_detail = self::getOrderDetail($order_id);
+
+        if (is_int($order_detail)) {
+            return 1000;
+        }
+
+        list($order, $worker_items) = $order_detail;
+        $order->type=self::WORKER_TYPE[$order->type];
+
+        //TODO  调整历史单独分出来(对应订单)  好评率
+        $worker = [];
+        //只要有工人id,便显示工人信息
+
+        if ($order->worker_id) {
+            $worker = Worker::find()
+                ->select('id,uid,nickname,icon,level,worker_type_id')
+                ->where(['id' => $order->worker_id])
+                ->asArray()
+                ->one();
+            $worker['mobile'] = User::find()
+                ->select('mobile')
+                ->where(['id' => $worker['uid']])
+                ->one()['mobile'];
+            $worker['worker_type_id'] = WorkerType::getparenttype($worker['worker_type_id']);
+            $worker['aite_cube_no']=User::find()->asArray()->where(['id'=>$worker['uid']])->select('aite_cube_no')->one()['aite_cube_no'];
+            $rank = WorkerRank::find()
+                ->asArray()
+                ->where(['id' => $worker['level']])
+                ->select('rank_name')
+                ->one();
+
+            $worker = array_merge($worker, $rank);
+            $order_no = self::getOrderNoById($order_id);
+
+            $order_img = WorkerOrderImg::find()->asArray()->where(['worker_order_no' => $order_no])->all();
+            $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+
+            return [
+                'order' => $order,
+                'worker_items' => $worker_items,
+                'order_img' => $order_img,
+                'worker' => $worker,
+            ];
+        }
     }
 }
