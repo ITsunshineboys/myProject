@@ -1188,8 +1188,8 @@ CREATE TABLE `worker_order` (
   `describe` varchar(350) NOT NULL DEFAULT '' COMMENT '订单描述',
   `demand` varchar(300) NOT NULL DEFAULT '' COMMENT '个性需求',
   `reason` varchar(350) NOT NULL DEFAULT '' COMMENT '修改原因',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:快捷下单 1：非快捷下单',
-  `is_old` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否旧数据，0：不是，  1：是',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:精准型 1:快捷型',
+  `is_old` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否旧数据，0:不是，  1:是',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
