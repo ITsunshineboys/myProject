@@ -609,8 +609,7 @@ class WorkerManagementController extends Controller
     public function actionWorkerOrderDetails()
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
-        $worker_order = WorkerOrder::getUserWorkerOrderDetail($id);
+        $worker_order = WorkerOrder::MangeOrderView($id);
         return Json::encode($worker_order);
-        var_dump($worker_order);exit;
     }
 }

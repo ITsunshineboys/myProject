@@ -641,7 +641,6 @@ class OrderController extends Controller
         //商品描述，可空
         $body = trim($request->post('body'),' ');
         if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id ){
-            echo 1;exit;
             $c=1000;
             return Json::encode([
                 'code' =>  $c,
@@ -662,7 +661,6 @@ class OrderController extends Controller
             $res=$in->save(false);
             if (!$res)
             {
-                echo 2;exit;
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -677,9 +675,8 @@ class OrderController extends Controller
         }
         $return_insurance=0;
         $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
-        if ($iscorrect_money!=true)
+        if (!$iscorrect_money)
         {
-            echo 3;exit;
             $c=1000;
             return Json::encode([
                 'code' =>  $c,

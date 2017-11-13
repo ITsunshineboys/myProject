@@ -221,7 +221,7 @@ class FindworkerController extends Controller{
         }
         $data['worker_type']=WorkerType::getparenttype($post['worker_type_id']);
         $data['worker_type_id']=$post['worker_type_id'];
-        $data['home_infos']=WorkerOrderItem::getWorkeitem($post['worker_type_id'],$post);
+        $data['home_infos']=WorkerItem::getWorkeitem($post['worker_type_id'],$post);
         if(is_numeric($data['home_infos'])){
             $code=$data['home_infos'];
             return Json::encode([
