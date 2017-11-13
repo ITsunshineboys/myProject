@@ -1,4 +1,3 @@
-/*ͷ����ʼ*/
 header{
     height: 60px;
     line-height: 60px;
@@ -19,8 +18,6 @@ header{
 header img{
     margin-left:80%;
 }
-/*ͷ������*/
-
 section{
     padding-left: 40px;
 }
@@ -58,11 +55,10 @@ section{
 }
 .distribution_div{
     width: 567px;
-    height: 208px;
     border: 1px solid #ABABAB;
     margin-left: 145px;
     margin-top: 20px;
-    padding-top: 20px;
+    padding: 20px 5px;
 }
 .distribution_div span:nth-child(3){
     margin-left:35px;
@@ -72,6 +68,9 @@ section{
 }
 .distribution_div input{
     margin-left:65px;
+}
+.distribution_div > div {
+    margin-top: 10px;
 }
 .left_way{
     margin-left: 26px!important;

@@ -1,4 +1,4 @@
-const app = angular.module("app", ["ui.router", "shop_style", "freight_template", "template_details",
+const app = angular.module("app", ["ui.router", "shop_style", "freight_template",
     "shopoffline_Module", "systemoffline_Module", "wait_online_Module", "commodity_manage",
     "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
   /*三阶段王杰---开始*/
@@ -155,9 +155,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             //controller: "shop_style_ctrl"
         })
         .state("template_details", {   //商品管理物流模板详情
-            url: "/template_details",
-            templateUrl: "pages/commodity_manage/template_details.html",
-            params: {id: 'id', name: 'name'}
+            url: "/template_details?id&name",
+            templateUrl: "pages/commodity_manage/template_details.html"
         })
 
         .state("up_shelves_detail", {   //商品管理==>已上架商品详情
