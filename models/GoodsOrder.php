@@ -789,8 +789,7 @@ class GoodsOrder extends ActiveRecord
         $pagination = new Pagination(['totalCount'=> $count ,'pageSize'=>15,'pageSizeParam'=>false]);
         $data=$array->offset($pagination->offset)->limit($pagination->limit)->all();
         foreach ($data as $k => $v){
-            $model=new LogisticsDistrict();
-            $data[$k]['district']=$model->getdistrict($data[$k]['district']);
+            $data[$k]['district']=LogisticsDistrict::getdistrict($data[$k]['district']);
             $data[$k]['paytime']=StringService::timeconversion($data[$k]['paytime']);
             $data[$k]['create_time']= StringService::timeconversion($data[$k]['create_time']);
         }

@@ -120,7 +120,7 @@ class LogisticsDistrict extends ActiveRecord
      * @param $districtcode
      * @return mixed
      */
-    public function getdistrict($districtcode){
+    public static function getdistrict($districtcode){
         $pro=substr($districtcode,0,2);
         $ci=substr($districtcode,2,2);
         $dis=substr($districtcode,4,2);
