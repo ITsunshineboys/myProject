@@ -42,6 +42,12 @@
                 }
                 $rootScope.goPrev()
             }
+            $scope.$watch('cur_tel',function (newVal,oldVal) {
+                $interval.cancel($scope.timer)
+                $scope.countdown = 0
+                $scope.first_click = 0
+                sessionStorage.setItem('basic_data',JSON.stringify({header_word:$scope.header_word,countdown:$scope.countdown,first_click:$scope.first_click}))
+            })
             //验证手机号
             $scope.get_true_tel = function () {
                 let all_modal = function ($scope, $uibModalInstance) {

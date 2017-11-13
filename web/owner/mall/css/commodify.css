@@ -67,197 +67,15 @@ header div i{
     color: #53A8F4;
 }
 /*头部结束*/
-
-section{
-    margin-top: 4rem;
-    background-color: #F6F6F6;
+a:focus, a:hover{
+    color: #b1b1b1;
+    text-decoration: none;
 }
 
-
-.search_box{
-    height: 4.1rem;
-    background-color: white;
-    border: 1px solid #666;
-}
-.memo_pad{
-    margin-top: 20px;
-    background-color: white;
-    height:3rem;
-    line-height:3rem ;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-around;
-}
-.memo_pad ul {
-    padding-left: 0;
-}
-.memo_pad li{
-    font-size: 1.3rem;
-    color: #B8B6B6;
-    /*margin-left: 3rem;*/
-}
-.sort{
-    color:#A9A9A9 ;
-}
-.filter_col{
-    color:#53A8F4;
-}
-.mall_list{
-    background-color: white;
-    /*height: 12rem;*/
-}
-.flex_div{
-    position: relative;
-
-    /*top:1rem;*/
-}
-.item_commodity{
-    position: relative;
-    top: .8rem;
-    border-bottom: 1px solid #eaeaea;
-}
-.item_commodity div{
-    display: inline-block;
-}
-.item_commodity_divimg {
-    position: relative;
-    /*margin-left: 1rem;*/
-    /*top:1rem*/
-    left: 1rem;
-    top: 1.8rem;
-}
-.item_commodity_divimg img {
-    /*position: absolute;*/
-    /*top:-3.2rem;*/
-    margin-bottom: 3rem;
-    margin-top: -0.9rem;
-}
-.item_commodity_comment{
-    /*margin-left: 1rem;*/
-    position: absolute;
-    left: 12rem;
-    top: 1rem;
-
-}
-.item_commodity p,span{
-    font-size: 1.3rem;
-}
-.img_item{
-    width: 8.5rem;
-    margin-top: -1.5rem;
-    margin-left: .6rem;
-}
-#myModal8 .modal-dialog{
-    width: 28rem;
-    background-color: white;
-    position: absolute;
-    /*top: -1rem;*/
-    /*border: 1px solid red;*/
-    margin-left: 4rem;
-}
-.style_screen{
-    position: relative;
-}
-.header_font{
-    /*overflow: hidden;*/
-    margin-bottom: 1.2rem;
+.modal-body{
+    padding: 0;
 }
 
-.down_arrow{
-    margin-left: 18rem;
-    /*margin-top: -2rem*/
-    position: absolute;
-
-}
-.well{
-    background-color: white;
-    border: none;
-}
-.well{
-    padding: 0.1rem;
-}
-.well ul li{
-    width: 6rem;
-    height: 2.4rem;
-    border: 1px solid #999;
-    color: #959292;
-    border-radius:0.5rem;
-    display: inline-block;
-    text-align: center;
-    line-height: 2.4rem;
-    font-size: 1rem;
-    margin-left: .2rem;
-    margin-bottom: .7rem;
-    margin-top: .7rem;
-
-
-}
-.price_range{
-    margin: 1.2rem 0;
-}
-.price_range input{
-    width: 6.12rem;
-    height: 3.1rem;
-    font-size: 1rem;
-}
-.all_brand_btn{
-    /*height: 3rem;*/
-    width:24rem;
-    background-color: white;
-    text-align: center;
-    line-height: 3rem;
-    font-size: 1rem;
-    border-top:1px solid #959292;
-}
-.reset_btn{
-    width: 12rem;
-    font-: 1.2rem;
-}
-.modal-footer {
-    padding: 1rem;
-    text-align: center;
-    border-top: 1px solid #e5e5e5;
-}
-.modal_body_height{
-    height: 30rem;
-    /*margin-left: -2rem;*/
-}
-.myModal_brand {
-    width: 30rem;
-    background-color: white;
-    position: absolute;
-    top: -1rem;
-    /*border: 1px solid red;*/
-    /*margin-left: -2rem;*/
-}
-.ui-content{
-    width: 30rem;
-}
-.list_li li{
-    width: 21rem;
-}
-.ui-filterable{
-    width:21rem;
-}
-.back_btn{
-    width: 10rem;
-    margin-left: -4.2rem;
-}
-
-.comment_one{
-    font-size: 1.2rem!important;
-    color: #4A4A4A;
-}
-
-.comment_two{
-    font-size: 1.1rem!important;
-    color: #6C6C6C;
-}
-
-.comment_span,.comment_span_two{
-    font-size: 1rem!important;
-    color: #B8B6B6;
-}
 header div{
     height: 4rem;
     width: auto;
@@ -265,30 +83,40 @@ header div{
     position: relative;
     /*border-bottom:1px solid #999 ;*/
 }
+
+.public_return_black{
+    width: 4rem;
+    height: 4rem;
+    display: inline-block;
+    position: absolute;
+}
 .left_retrun{
-    margin-left: 1rem;
+    position: absolute;
+    top: 1.3rem;
+    left: 1.2rem;
     color: #999;
 }
 .search_details{
     position: absolute;
-    left:4rem;
+    left: 4.3rem;
     top: 1.5rem;
-    width: 1.6rem;
 }
 .mall_home{
-    position: relative;
-    left: 1rem;
+    position: absolute;
+    right: 1.2rem;
     width: 1.6rem;
+    top: 1.2rem;
 }
 header input{
     width:25rem ;
     height: 2.6rem;
     border-radius:2rem ;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
+    margin-top: 0.7rem;
+    margin-left: 3.2rem;
     padding-left: 3rem;
-    margin-top: 1rem;
-    margin-left: 1.5rem;
-    border: 1px solid #e5e5e5;
+    border: 2px solid #e5e5e5;
+    color: #666;
 }
 section{
     background-color: #F6F6F6;
@@ -305,26 +133,33 @@ section{
 }
 .memo_pad{
     background-color: white;
-    height:3rem;
+    height:3.3rem;
     line-height:3rem ;
     margin-bottom: 1rem;
+    margin-top:4rem;
 }
 .memo_pad ul {
     padding-left: 0;
 }
 .memo_pad li{
     font-size: 1.4rem;
-    margin-left: 2.6rem;
-    color: #B8B6B6;
+    margin-right: -4px;
+    color: #b1b1b1;
     display: inline-block;
+    width: 25%;
+    padding-left: 1.2rem;
+    position: relative;
+}
+.memo_pad li img{
+    vertical-align: initial;
 }
 .up_down{
-    width: 1rem;
-    height: 1.5rem;
+
 }
 .filter_nor{
-    width: 1.4rem;
-    height: 1.7rem;
+    position: absolute;
+    right: 0;
+    top: .8rem;
 }
 .sort{
     color:#A9A9A9 ;
@@ -341,55 +176,78 @@ section{
 }
 .item_commodity{
     position: relative;
-    top: .8rem;
-    border: 1px solid #E9EDEE;
+    border-bottom: 1px solid #E9EDEE;
+    padding: 1.2rem;
 }
 .item_commodity div{
     display: inline-block;
+    width: 10rem;
+    height: 10rem;
 }
 .item_commodity_divimg {
-    position: relative;
-    /*margin-left: 1rem;*/
-    /*top:1rem*/
-    left: 1rem;
-    top: 1rem;
+
 }
 .item_commodity_divimg img {
-    /*position: absolute;*/
-    /*top:-3.2rem;*/
-    margin-bottom: 3rem;
-    margin-top: .1rem;
+    width: 100%;
+    height: 100%;
 }
 .item_commodity_comment{
     /*margin-left: 1rem;*/
+    width: 15rem!important;
     position: absolute;
     left: 12rem;
     top: 1rem;
 
 }
-.item_commodity p,span{
+
+.item_commodity_comment .comment_one{
+    font-size: 1.4rem;
+    color: #666;
+}
+
+.item_commodity_comment .comment_two{
     font-size: 1.2rem;
+    color: #999;
+    margin-bottom: 1.2rem;
+}
+.item_commodity_comment .comment_span,.item_commodity_comment .comment_span_two {
+    font-size: 1rem;
+    color: #999;
+}
+.item_commodity_comment .comment_span_three{
+    font-size: 1.2rem;
+    color: #D9AD65;
+}
+
+.item_commodity p,span{
+
 }
 .img_item{
-    width: 9rem;
-    margin-top: -1.2rem;
-    margin-left: .6rem;
 }
 #myModal8 .modal-dialog{
     width: 28rem;
     background-color: white;
     position: absolute;
-    /*top: -1rem;*/
     /*border: 1px solid red;*/
-    margin-left: 4rem;
+    right: 0;
+    margin: 0;
 }
 .style_screen{
     position: relative;
-    height: 51.8rem;
+    /*height: 51rem;*/
+    height: 100%;
+
+}
+.font_color{
+    color: #b1b1b1;
+    position: absolute;
+    bottom: -1rem;
+    right: 1.2rem;
+    padding-right: 1.7rem;
 }
 .style_size{
-    font-size: 1.3rem;
-    color: #4A4A4A;
+    font-size: 1.4rem;
+    color: #666;
     margin-left: 1rem;
 }
 .down_list{
@@ -397,7 +255,12 @@ section{
 }
 .header_font{
     /*overflow: hidden;*/
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
+    margin-top: 1.6rem;
+    color: #666;
+    font-size: 1.4rem;
+    padding-left: 1.2rem;
+
 }
 
 .down_arrow{
@@ -406,8 +269,8 @@ section{
 
 }
 .changeColor{
-    color: red!important;
-    border-color: red!important;
+    color: #333!important;
+    border-color: #333!important;
 
 }
 .well{
@@ -416,105 +279,122 @@ section{
 }
 .well{
     padding: 0.1rem;
+    border-bottom: 2px solid #dcdcdc;
+    margin-bottom: 0;
 }
 .well ul{
-    margin-left: 1rem;
+    margin-left: 1.2rem;
+    margin-bottom: 1.2rem;
 }
 .well ul li{
-    width: 5.5rem;
+    width: 5.7rem;
     height: 2.4rem;
-    border: 1px solid #999;
-    color: #959292;
-    border-radius:0.5rem;
+    border: 2px solid #999;
+    color: #999;
+    border-radius:.3rem;
     display: inline-block;
     text-align: center;
-    line-height: 2.4rem;
+    line-height: 2.3rem;
     font-size: 1.1rem;
-    margin-left: .5rem;
+    margin-right: .7rem;
     margin-bottom: .7rem;
-    margin-top: .7rem;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .price_range{
-    margin: 1.2rem 0;
+
 }
 .price_range input{
     width: 5.5rem;
     height: 3rem;
     font-size: 1.1rem;
-    border: 1px solid #B8B6B6;
-    margin-left: 1rem;
+    border: 2px solid #999;
+    margin-left: 1.2rem;
     padding-left: 1rem;
+    border-radius: .3rem;
 }
 .all_brand_btn{
     /*height: 3rem;*/
-    width:32rem;
     background-color: white;
     text-align: center;
     line-height: 3rem;
     font-size: 1rem;
-    border-top:1px solid #E9EDEE;
-    border-bottom: 1px solid #E9EDEE;
+    border-bottom: 2px solid #dcdcdc;
     padding-top: .5rem;
     padding-bottom: .5rem;
 }
 .all_brand_btn span{
     color: #959292;
     font-size: 1.2rem;
-    margin-left: -5rem;
+}
+.all_brand_btn span img{
+    vertical-align: initial;
 }
 .reset_btn{
-    width: 13.2rem;
+    width: 50%;
     font-size: 1.2rem;
-    height: 4rem;
-    color: #4A4A4A;
+    height: 3.6rem;
+    color: #666;
+    float:left;
+}
+.modal-footer .btn+.btn{
+    margin-left: 0;
 }
 .last_btn{
-    background-color: #53A8F4;
+    background-color: #333;
     color: white;
+    float: left;
 }
 .modal-footer {
     padding: 0;
     border-top: 1px solid #e5e5e5;
 }
 .model_content{
-    width: 32rem!important;
-    height: 58rem!important;
+    /*width: 32rem!important;*/
+    /*height: 58rem!important;*/
     /*margin-top: -28px;*/
-    margin-left: -2.2rem;
+    /*margin-left: 2.2rem;*/
 
 }
+#myModal_brand {
+    margin-left: 4.1rem;
+}
+#myModal_brand  .modal-body{
+    margin-bottom: 3.6rem;
+    overflow: hidden;
+}
+
 .modal-body{
     position: relative;
 }
 .brand_content{
     margin-left: -3rem;
     font-size: 1.4rem;
+    color: #666;
+    margin-top: 1.2rem;
 }
 .footer_size{
-    /*margin-left: -100px!important;*/
-    width: 31.6rem;
+
+    width: 32rem;
     position: absolute;
-    top: 49.5rem;
-    left: -.1rem;
+
 }
 .footer_size button{
-    width: 14rem;
-    height: 4rem;
+    width:49.7%;
+    height: 3.8rem;
     font-size: 1.2rem
 }
 .btn_brand{
-    margin-left: -3rem;
     background-color: white;
     color: #6C6C6C;
     border: 1px solid #999;
 }
 .btn_brandRight{
-    margin-left: -20px;
-    background-color: #53A8F4;
+    background-color: #333;
     color: white;
 }
 .modal-footer {
-    padding: 15px;
     border-top: none;
 }
 .back_btn{
@@ -525,23 +405,27 @@ section{
 .brands_more{
 
 }
-.brands_more ul{
+.brands_more {
 
 }
-.brands_more ul li {
+.brands_more  li {
     list-style: none;
-    width: 5.5rem;
+    width: 25rem;
     height: 2.4rem;
-    border: 1px solid #999;
+    /*border: 1px solid #999;*/
     color: #959292;
-    border-radius:0.5rem;
+    /*border-radius:0.5rem;*/
     display: inline-block;
-    text-align: center;
-    line-height: 2.4rem;
-    font-size: 1.1rem;
-    margin-left: .5rem;
-    margin-bottom: .7rem;
-    margin-top: .7rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    font-size: 1.4rem;
+    margin-left: 1.2rem;
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+    border-bottom: 2px solid #dcdcdc;
+
 }
 .nullGoods{
     text-align: center;
@@ -552,7 +436,50 @@ section{
     font-size: 1.4rem;
     color: #9b9b9b;
 }
-.filter_color{
-    color: #53A7F3!important;
+.div_search{
+    width: 32rem;
+    position: relative;
+}
+.brand_search{
+    width: 25.4rem;
+    height: 3rem;
+    border-radius: 2rem;
+    border: 1px solid #9b9b9b;
+    font-size: 1.3rem;
+    padding-left: 1.2rem;
+    margin-left: 1.2rem;
+}
+.img_search{
+    position: absolute;
+    right: 7rem;
+    top:1rem;
+}
+.screen_model .modal-dialog,
+.screen_model .modal-content ,
+#myModal_brand .modal-dialog,
+#myModal_brand .modal-content
+{
+    height: 100%;
+    overflow-y: auto;
+}
+.screen_model .modal-footer,
+#myModal_brand .modal-footer
+{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+.screen_model .modal-body,
+#myModal_brand .modal-body
+{
+    margin-bottom: 3.6rem;
+}
+@media (min-width: 768px){
+    #myModal_brand .modal-dialog {
+        width: 28rem;
+        margin: 0;
+        top:0;
+        left: 0;
+    }
 }
 
