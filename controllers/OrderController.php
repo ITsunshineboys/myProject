@@ -1360,6 +1360,7 @@ class OrderController extends Controller
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'supplier');
+
         $code=200;
         return Json::encode([
             'code'=>$code,
