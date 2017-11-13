@@ -12,6 +12,7 @@ header{
   border-bottom: 1px solid #E6E9F0 ;
 }
 .shop_manage{
+  cursor: pointer;
   color: #2F3033;
   line-height: 14px;
   font-weight: bold;
@@ -108,6 +109,10 @@ hr{
 }
 .city_left{
   margin-right: 20px;
+}
+.city_see{
+  color:#5677FC;
+  cursor: pointer;
 }
 /*公共样式结束*/
 .coverimg{
