@@ -1237,8 +1237,7 @@ class OrderController extends Controller
                 'msg' => '收货地址不存在'
             ]);
         }
-        $model=new LogisticsDistrict();
-        $address['district']=$model->getdistrict($address['district']);
+        $address['district']=LogisticsDistrict::getdistrict($address['district']);
         $invoice=Invoice::find()->where(['id'=>$invoice_id])->asArray()->one();
         if (!$invoice){
             $code = 500;
@@ -2227,18 +2226,7 @@ class OrderController extends Controller
 
 
 
-    /**
-     * @return string
-     */
-    public function actionGetordergoodslist(){
-        $data= OrderGoods::find()->asArray()->all();
-        $code=200;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok',
-            'data'=>['balance'=>$data]
-        ]);
-    }
+
 
    /**
      * 余额支付
@@ -2283,7 +2271,7 @@ class OrderController extends Controller
     }
 
     /**
-     *获取订单详情
+     * 获取订单详情
      * @return string
      */
     public function  actionUserOrderDetails(){
@@ -2364,7 +2352,6 @@ class OrderController extends Controller
                 ]);
             }
         }
-
         $code=GoodsComment::addComment($postData,$user,$uploadsData);
         if($code==200)
         {
