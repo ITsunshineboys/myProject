@@ -61,7 +61,7 @@
                                         <div class="collapse" id="collapseExample_comment">
                                             <div class="well">
                                                 <ul class="item_li">
-                                                    <li ng-repeat="item in all_goods_style" ng-class="{'changeColor':cur_style_index == $index}" ng-click="all_change(1,$index,item)">
+                                                    <li ng-repeat="item in all_goods_style" ng-class="{'changeColor':cur_style_arr.indexOf(item.id) != -1}" ng-click="all_change(1,item)">
                                                         {{item.style}}
                                                     </li>
                                                 </ul>
@@ -81,7 +81,7 @@
                                         <div class="collapse" id="collapseExample">
                                             <div class="well">
                                                 <ul>
-                                                    <li ng-repeat="item in all_goods_series" ng-class="{'changeColor':cur_series_index == $index}" ng-click="all_change(2,$index,item)">
+                                                    <li ng-repeat="item in all_goods_series" ng-class="{'changeColor':cur_series_arr.indexOf(item.id) != -1}" ng-click="all_change(2,item)">
                                                         {{item.series}}
                                                     </li>
                                                 </ul>
@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="well">
                                         <ul>
-                                            <li ng-repeat="item in all_goods_brands | limitTo:8 "  ng-class="{'changeColor':cur_brand_index == $index}" ng-click="all_change(3,$index,item)">
+                                            <li ng-repeat="item in all_goods_brands | limitTo:8 "  ng-class="{'changeColor':cur_brand_arr.indexOf(item.id) != -1}" ng-click="all_change(3,item)">
                                                 {{item.name}}
                                             </li>
                                         </ul>
@@ -142,14 +142,14 @@
                                     <img class="img_search" src="images/mall_search.png" alt="">
                                 </div>
                                 <ul class="brands_more">
-                                    <li ng-repeat="item in all_goods_brands" ng-class="{'changeColor':cur_brand_index == $index}" style="border: none;border-bottom: 2px solid #999;" ng-click="all_change(3,$index,item)">
+                                    <li ng-repeat="item in all_goods_brands" ng-class="{'changeColor':cur_brand_arr.indexOf(item.id) != -1}" style="border: none;border-bottom: 2px solid #999;" ng-click="all_change(3,item)">
                                         {{item.name}}
-                                        <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="cur_brand_index == $index">
+                                        <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="cur_brand_arr.indexOf(item.id) != -1">
                                     </li>
                                 </ul>
 
                             </div>
-                            <div class="modal-footer footer_size">
+                            <div class="modal-footer footer_size"
                                 <button type="button" class="btn btn_brand"  data-dismiss="modal" >返回</button>
                                 <button type="button" class="btn btn_brandRight" data-dismiss="modal">确定</button>
                             </div>

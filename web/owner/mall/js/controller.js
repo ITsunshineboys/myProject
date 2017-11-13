@@ -449,9 +449,9 @@ angular.module('all_controller', [])
             // $scope.cur_project = 1
             // $scope.cur_replace_material = []//所有可以替换的商品
             $scope.params.category_id = $scope.cur_three_id
-            $scope.cur_series_index = -1
-            $scope.cur_style_index = -1
-            $scope.cur_brand_index = -1
+            $scope.cur_series_arr = []
+            $scope.cur_style_arr = []
+            $scope.cur_brand_arr = []
             $scope.platform_status = 0
             $scope.rate_status = 0
             $scope.params.platform_price_min = ''
@@ -816,9 +816,9 @@ angular.module('all_controller', [])
             $scope.rate_status = 0
             $scope.params.category_id = item.id
             $scope.params['sort[]'] = 'sold_number:3'
-            $scope.cur_series_index = -1
-            $scope.cur_style_index = -1
-            $scope.cur_brand_index = -1
+            $scope.cur_series_arr = []
+            $scope.cur_style_arr = []
+            $scope.cur_brand_arr = []
             $scope.price_min = ''
             $scope.price_max = ''
             $scope.params.platform_price_min = ''
@@ -830,9 +830,9 @@ angular.module('all_controller', [])
         }
         //重置筛选
         $scope.reset_filter = function () {
-            $scope.cur_series_index = -1
-            $scope.cur_style_index = -1
-            $scope.cur_brand_index = -1
+            $scope.cur_series_arr = []
+            $scope.cur_style_arr = []
+            $scope.cur_brand_arr = []
             $scope.price_min = ''
             $scope.price_max = ''
             $scope.params.platform_price_min = ''
@@ -889,30 +889,39 @@ angular.module('all_controller', [])
             }
         }
         //改变风格系列以及品牌
-        $scope.all_change = function (item,$index,cur_item) {
+        $scope.all_change = function (item,cur_item) {
             if(item == 1){
-                if($scope.cur_style_index == $index){
-                    $scope.cur_style_index = -1
-                    $scope.params.style_id = ''
+                let index = $scope.cur_style_arr.findIndex(function (item) {
+                    return item ===cur_item.id
+                })
+                if(index != -1){
+                    $scope.cur_style_arr.splice(index,1)
+                    $scope.params.style_id = $scope.cur_style_arr.join(',')
                 }else{
-                    $scope.cur_style_index = $index
-                    $scope.params.style_id = cur_item.id
+                    $scope.cur_style_arr.push(cur_item.id)
+                    $scope.params.style_id = $scope.cur_style_arr.join(',')
                 }
             }else if(item == 2){
-                if($scope.cur_series_index == $index){
-                    $scope.cur_series_index = -1
-                    $scope.params.series_id = ''
+                let index = $scope.cur_series_arr.findIndex(function (item) {
+                    return item ===cur_item.id
+                })
+                if(index != -1){
+                    $scope.cur_series_arr.splice(index,1)
+                    $scope.params.series_id = $scope.cur_series_arr.join(',')
                 }else{
-                    $scope.cur_series_index = $index
-                    $scope.params.series_id = cur_item.id
+                    $scope.cur_series_arr.push(cur_item.id)
+                    $scope.params.series_id = $scope.cur_series_arr.join(',')
                 }
             }else if(item == 3){
-                if($scope.cur_brand_index == $index){
-                    $scope.cur_brand_index = -1
-                    $scope.params.brand_id = ''
+                let index = $scope.cur_brand_arr.findIndex(function (item) {
+                    return item ===cur_item.id
+                })
+                if(index != -1){
+                    $scope.cur_brand_arr.splice(index,1)
+                    $scope.params.brand_id = $scope.cur_brand_arr.join(',')
                 }else{
-                    $scope.cur_brand_index = $index
-                    $scope.params.brand_id = cur_item.id
+                    $scope.cur_brand_arr.push(cur_item.id)
+                    $scope.params.brand_id = $scope.cur_brand_arr.join(',')
                 }
             }
         }

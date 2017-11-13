@@ -1,7 +1,7 @@
 let app = angular.module("app",[]);
 app.controller("login_ctrl",function ($scope,$http,$document) {
     let baseUrl = (function () {
-        return '';
+        return ''
     })();
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
