@@ -73,38 +73,6 @@ class Worker extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'uid' => 'Uid',
-            'project_manager_id' => '项目经理id',
-            'province_code' => '省份编码',
-            'city_code' => '市编码',
-            'nickname' => '工人名字',
-            'icon' => '头像',
-            'follower_number' => '关注人数',
-            'comprehensive_score' => '综合评分',
-            'feedback' => '好评率',
-            'order_total' => '总接单数',
-            'order_done' => '完成订单数',
-            'level' => '工人级别',
-            'create_time' => '注册时间',
-            'signature' => '个性签名',
-            'balance' => '余额, unit: fen',
-            'pay_password' => '支付密码',
-            'address' => '详细地址',
-            'status' => '接单状态: 1,接单 0,不接单',
-            'worker_type_id' => '工种id(只能选pid为0的)',
-            'skill_ids' => '特长的id',
-            'work_year' => '工龄：单位(年)',
-            'availableamount' => '可用余额',
-        ];
-    }
-
-    /**
      * Get total number of workers
      *
      * @return int
@@ -302,5 +270,34 @@ class Worker extends \yii\db\ActiveRecord
             ->sum('amount');
         $income=sprintf('%.2f',(float)$income*0.01);
         return $income;
+    }
+
+    public static function findByCode($where = [],$size,$page)
+    {
+        $offset = ($page - 1) * $size;
+
+        $select = 'worker.order_total,worker.create_time,worker.status,user.legal_person,user.mobile,user.aite_cube_no,worker_type.worker_name';
+        $details = self::find()
+            ->select($select)
+            ->where($where)
+            ->leftJoin('user','user.id = worker.uid')
+            ->leftJoin('worker_type','worker_type.id = worker.worker_type_id')
+            ->offset($offset)
+            ->limit($size)
+            ->groupBy('user.mobile')
+            ->asArray()
+            ->all();
+
+
+        foreach ($details as &$one_details){
+            $one_details['create_time'] = date('Y-m-d H:i',$one_details['create_time']);
+        }
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'page'  => $page,
+            'size'  => $size,
+            'details' => $details
+        ];
     }
 }

@@ -617,8 +617,46 @@ class WorkerManagementController extends Controller
         return Json::encode($worker_order);
     }
 
+
     public function actionWorkerList()
     {
-        
+        $code = (int)trim(\Yii::$app->request->get('code',''));
+        $size = (int)trim(\Yii::$app->request->get('size',self::DEFAULT_SIZE));
+        $page = (int)trim(\Yii::$app->request->get('page',self::DEFAULT_PAGE));
+        $status   = (int)trim(\Yii::$app->request->post('status', ''));
+        $timeType = trim(\Yii::$app->request->post('time', ''));
+        $worker   = trim(\Yii::$app->request->post('worker', ''));
+        $other    = trim(\Yii::$app->request->post('other', ''));
+
+
+        switch ($code || $status || $timeType || $worker || $other){
+            case $code && !$status && !$timeType && !$worker && !$other:
+                $where = "worker.city_code = ".$code;
+                break;
+            case !$code && $status && !$timeType && !$worker && !$other:
+                $where = "worker.status = ".$status;
+                break;
+            case !$code && !$status && $timeType && !$worker && !$other:
+                $times = StringService::startEndDate($timeType);
+                $where = "worker.create_time >= ".strtotime($times['0']) . "and worker.create_time <=".strtotime($times['1']);
+                break;
+            case !$code && !$status && $timeType == 'custom' && !$worker && !$other:
+                $min_time = strtotime((int)trim(\Yii::$app->request->post('min_time', '')));
+                $max_time = strtotime((int)trim(\Yii::$app->request->post('max_time', '')));
+                $where = "worker.create_time >= ".$min_time . "and worker.create_time <=".$max_time;
+                break;
+            case !$code && !$status && !$timeType && $worker && !$other:
+                $where = "worker_type.worker_name = ".$worker;
+                break;
+            case !$code && !$status && !$timeType && !$worker && $other:
+                $where = " user.mobile like '%{$other}%'  or user.aite_cube like '%{$other}%' or user.legal_person like '%{$other}%'";
+                break;
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'list' => Worker::findByCode($where,$size,$page),
+        ]);
     }
 }
