@@ -54,11 +54,13 @@ class OrderAfterSale extends ActiveRecord
     public  static  function UserApplyAfterSale($postData,$user,$uploadsData)
     {
         if(!array_key_exists('type', $postData) || !array_key_exists('description', $postData) || !array_key_exists('order_no', $postData) || !array_key_exists('sku', $postData)){
+            echo 1;
             $code=1000;
             return $code;
         }
         if (!array_key_exists($postData['type'], self::AFTER_SALE_SERVICES))
         {
+            echo 2;
             $code=1000;
             return $code;
         }
@@ -74,6 +76,7 @@ class OrderAfterSale extends ActiveRecord
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
         if (!$OrderGoods){
+            echo 3;
             $code=1000;
             return $code;
         }
