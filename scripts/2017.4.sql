@@ -1473,13 +1473,14 @@ CREATE TABLE `point_category` (
 
 CREATE TABLE `project_view` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `points_id` int(11) DEFAULT NULL,
   `project` varchar(100) NOT NULL DEFAULT '' COMMENT '项目名称',
   `parent_project` varchar(100) NOT NULL COMMENT '父级项目名称',
-  `apartment_id` int(11) NOT NULL DEFAULT '0' COMMENT '户型id',
-  `project_vule` int(11) NOT NULL COMMENT '项目值',
+  `apartment_area_id` int(11) NOT NULL DEFAULT '0' COMMENT '户型id',
+  `project_value` int(11) NOT NULL COMMENT '项目值',
   `unit` varchar(20) NOT NULL COMMENT '单位',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='项目详细表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目详细表';
 
 -- 9.25 start
 
