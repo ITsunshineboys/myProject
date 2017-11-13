@@ -3793,18 +3793,18 @@ class MallController extends Controller
             ]);
         }
 
-        $cacheKey = Goods::GOODS_QR_PREFIX . $id;
-        $cache = Yii::$app->cache;
-        $data = $cache->get($cacheKey);
-        if ($data) {
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'OK',
-                'data' => [
-                    'goods_view' => $data,
-                ],
-            ]);
-        }
+//        $cacheKey = Goods::GOODS_QR_PREFIX . $id;
+//        $cache = Yii::$app->cache;
+//        $data = $cache->get($cacheKey);
+//        if ($data) {
+//            return Json::encode([
+//                'code' => 200,
+//                'msg' => 'OK',
+//                'data' => [
+//                    'goods_view' => $data,
+//                ],
+//            ]);
+//        }
 
         $where['id'] = $id;
 //        $where['status'] = Goods::STATUS_ONLINE;
@@ -3821,7 +3821,7 @@ class MallController extends Controller
         }
 
         $data = $goods->view(Yii::$app->request->userIP);
-        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
+//        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
