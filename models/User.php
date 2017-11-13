@@ -1026,6 +1026,7 @@ class User extends ActiveRecord implements IdentityInterface
                 $success = true;
                 break;
             }
+            usleep(10);
         }
 
         if (!$success) {
@@ -1061,6 +1062,7 @@ class User extends ActiveRecord implements IdentityInterface
                 $success = true;
                 break;
             }
+            usleep(10);
         }
 
         if (!$success) {
