@@ -33,7 +33,7 @@ class Alipay extends  ActiveRecord
      * @param $buyer_message
      * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
      */
-    public function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
+    public static function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
         $notify_url="http://".$_SERVER['SERVER_NAME']."/order/alipaylinenotify";
         $return_url="http://".$_SERVER['SERVER_NAME']."/line/#!/pay_success";
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
@@ -54,12 +54,12 @@ class Alipay extends  ActiveRecord
         return $result;
     }
 
-   /**
+    /**
      * 样板间提交定金
-     * @param $effect_id
-     * @param $name
+     * @param $post
      * @param $phone
      * @param $out_trade_no
+     * @return bool
      */
   public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
     {

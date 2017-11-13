@@ -685,8 +685,7 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$c]
             ]);
         }
-        $model=new Alipay();
-        $res=$model->Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
+        $res=Alipay::Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
         if ($res)
             {
                 $c=200;
@@ -703,9 +702,9 @@ class OrderController extends Controller
    public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
-//        $alipaySevice=$model->Alipaylinenotify();
-//        $result = $alipaySevice->check($post);
-//        if ($result){
+        $alipaySevice=$model->Alipaylinenotify();
+        $result = $alipaySevice->check($post);
+        if ($result){
             if ($post['trade_status'] == 'TRADE_SUCCESS'){
                 $arr=explode('&',$post['passback_params']);
                 $order_no=$post['out_trade_no'];
@@ -725,13 +724,17 @@ class OrderController extends Controller
                     echo "fail";
                 }
             }
-//        }else{
-//            //验证失败
-//            echo "fail";  //请不要修改或删除
-//        }
+        }else{
+            //验证失败
+            echo "fail";  //请不要修改或删除
+        }
     }
 
 
+    /**
+     * 获取支付测试数据
+     * @return string
+     */
     public function actionAlipaygetnotify(){
         $data=(new Query())->from('alipayreturntest')->all();
         return Json::encode([
