@@ -188,8 +188,6 @@ class BasisDecorationService
             }
         }
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-        var_dump($goods);
-        var_dump($ids);exit;
         if ($ids == null){
             $code = 1061;
             return Json::encode([
