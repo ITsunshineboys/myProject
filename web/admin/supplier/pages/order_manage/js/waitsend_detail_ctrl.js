@@ -150,7 +150,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
               sku:$scope.sku,
               waybillnumber:$scope.track_input_model
           },function (res) {
-              if(res.data.code==200){
+              if(res.code==200){
                   console.log(res);
                   $('#change_track_modal').modal('hide');
                   $scope.shipping_way=res.data.shipping_way;
@@ -189,7 +189,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
                       waybillnumber:$scope.delivery_input_model
                   },function (res) {
                       console.log(res);
-                      if(res.data.code==200){
+                      if(res.code==200){
                           $('#track_confirm_modal').modal('hide');
                           setTimeout(function () {
                               $state.go('order_manage',{wait_send_flag:true});
