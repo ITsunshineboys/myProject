@@ -8,21 +8,15 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     }
     $scope.iswarning = false;
     $scope.iswarningcontent = false;
-
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
 
-
-    console.log($scope.propattrs);
-    let namesarr = [];
-    /*属性名称数组*/
-    let valuesarr = [];
-    /*属性内容数组*/
-    let typesarr = [];
-    /*type数组*/
-    let unitsarr = [];
-    /*单位数组*/
+    let namesarr = []; //属性名称数组
+    let valuesarr = [];//属性内容数组
+    let typesarr = [];//type数组
+    let unitsarr = [];//单位数组
+    let unit_value_arr = [];//单位真值数组
 
     /*单位默认*/
     $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'MM'}, {unit: 'M'}, {unit:'kg'},{unit:'M²'}]
@@ -39,9 +33,8 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     $scope.generalAdd = function () {
         let obj = {
             name: '',
-            unit: '无',
             value: '',
-            cur_unit:{"unit":"无"},
+            cur_unit:$scope.unitarrs[0],
             addition_type: '0'
         }
         $scope.propattrs.push(obj);
@@ -51,9 +44,8 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     $scope.selectAdd = function () {
         let obj = {
             name: '',
-            unit: '无',
             value: '',
-            cur_unit:{"unit":"无"},
+            cur_unit:$scope.unitarrs[0],
             addition_type: '1'
         }
         $scope.propattrs.push(obj);
@@ -97,7 +89,8 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         }
     }
 
-    let unit_value_arr = [];
+
+    // ng-blur="judge=!!storeform.storename.$invalid" ng-class={'tored':storeform.storename.$invalid&&alljudgefalse||storeform.storename.$error.required&&judge}
 
     /*保存属性*/
     $scope.saveProp = function () {
@@ -105,6 +98,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         valuesarr = [];
         typesarr = [];
         unitsarr = [];
+        unit_value_arr = [];
         // names 获取当前的所有name
         for (let i = 0; i < $scope.propattrs.length; i++) {
             namesarr.push($scope.propattrs[i].name);
@@ -112,8 +106,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             typesarr.push($scope.propattrs[i].addition_type);
             unitsarr.push($scope.propattrs[i].cur_unit.unit);
         }
-
-        // console.log(unitsarr);
 
         for(let i=0;i<unitsarr.length;i++){
             switch (unitsarr[i]){
@@ -138,7 +130,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             }
         }
 
-
         let url = baseUrl+"/mall/goods-attr-add";
         let data = {
             category_id: +$scope.propid,
@@ -154,7 +145,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
                 }
             })
     }
-
 
     /*确认保存成功*/
     $scope.modalBack = () => {
