@@ -1403,7 +1403,7 @@ angular.module("all_controller", ['ngCookies'])
         $rootScope.baseUrl = baseUrl;
         window.addEventListener("hashchange", function() {
             // 注册返回按键事件
-            $('.modal-backdrop').remove()
+            $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
         $scope.timeOut = 5;
