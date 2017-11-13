@@ -66,15 +66,7 @@
             </table>
 
         <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in history_list" ng-click="choosePage(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="Next()">下一页</li>
-            <li id="jumpto"><input type="text" ng-model="topage"></li>
-            <li ng-click="choosePage(topage)">跳转</li>
-        </ul>
+        <tm-pagination conf="Config"></tm-pagination>
         <!--分页结束-->
     </section>
 
@@ -191,17 +183,11 @@
 
                 </tr>
             </table>
+
         <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="Previous()">上一页</li>  <!-- ng-click="choosePage(page)"  ng-class="{active:isActivePage(page)}"-->
-            <li class="pagenum" ng-repeat="page in history_list_colse" ng-click="choosePageColse(page)" ng-class="{active:isActivePage(page)}">{{page}}</li>
-            <!--<li id="omit" ng-show="allpages>5">...</li>-->
-            <!--<li ng-if="allpages>5" ng-click="choosePage(allpages)" ng-class="{active:isActivePage(allpages)}">{{allpages}}</li>-->
-            <li ng-click="Next()">下一页</li>
-            <li id="jumpt"><input type="text" ng-model="topage"></li>
-            <li ng-click="choosePageColse(topage)">跳转</li>
-        </ul>
+        <tm-pagination conf="Config"></tm-pagination>
         <!--分页结束-->
+
     </section>
 
     <!--关闭原因 模态框-->

@@ -1,193 +1,200 @@
 <link rel="stylesheet" href="css/shop_front.css"/>
 <div ng-controller="shop_front_ctrl" class="back">
-     <header>
-         <div>
-             <a href="javascript:history.go(-1)">
-                 <!--ui-sref="product_details({id:id,mall_id:mall_id,datailsShop:datailsShop})"-->
-                 <img  src="images/mall_nav_return.png" class="back_return" alt=""/>
-             </a>
+    <header>
+        <a href="javascript:history.go(-1)" class="back_return" >
+            <!--ui-sref="product_details({id:id,mall_id:mall_id,datailsShop:datailsShop})"-->
+            <img  src="images/mall_nav_return.png" alt=""/>
+        </a>
 
-             <span>店铺首页</span>
-             <img src="images/mall_home.png" ng-click="getHome()" class="back_home" alt=""/>
-         </div>
-     </header>
-<section>
-    <!--头部-->
-    <div class="header_shop">
-        <img src="{{baseUrl + '/'+icon}}" id="shop_img_header" alt=""/>
-        <span>{{shop_name}}</span>
-        <!--<div>-->
+        <span>店铺首页</span>
+        <a href=" ng-click="getHome()" class="back_home" >
+        <img src="images/mall_home.png" alt=""/>
+        </a>
+    </header>
+    <section>
+        <!--头部-->
+        <div class="header_shop clearfix">
+            <div class="pull-left shop_img">
+                <img src="{{baseUrl + '/'+icon}}" id="shop_img_header" alt=""/>
+            </div>
+            <div class="pull-left shop_name">{{shop_name}}</div>
+            <!--<div>-->
             <!--<p class="num">{{follower_number}}</p>-->
             <!--<p class="fan_count">粉丝数</p>-->
-        <!--</div>-->
-    </div>
-   <!--tab切换-->
-    <div class="section_div">
-        <div>
-            <ul class="nav nav-tabs list_tab" ng-init="vm.activeTab=1">
-                <li ng-class="{active:vm.activeTab == 2}">
-                    <a href="javascript:;" ng-click="vm.activeTab = 1">店铺首页</a>
-                    <span ng-class="{line_com:vm.activeTab==1}" ></span>
-                </li>
-                <li ng-class="{active: vm.activeTab == 1}">
-                    <a href="javascript:;" ng-click="vm.activeTab = 2">全部商品</a>
-                    <span ng-class="{line_com:vm.activeTab==2}" ></span>
-                </li>
-            </ul>
-            <div class="tab-content tab-bordered">
-                <div class="tab-panel" ng-show="vm.activeTab == 1">
-                    <!--banner图开始-->
-                    <div class="device">
-                        <div >
-                            <div class="carousel">
-                                <div id='swiperList' class="swiper-container" >
-                                    <div class="swiper-wrapper">
-                                        <div class="swiper-slide"  ng-repeat=" n in swiperList" >
-                                            <img src="{{baseUrl + '/'+n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
+            <!--</div>-->
+        </div>
+        <!--tab切换-->
+        <div class="section_div">
+            <div>
+                <ul class="nav nav-tabs list_tab" ng-init="vm.activeTab=1">
+                    <li ng-class="{active:vm.activeTab == 2}">
+                        <a href="javascript:;" ng-click="vm.activeTab = 1">店铺首页</a>
+                        <span ng-class="{line_com:vm.activeTab==1}" ></span>
+                    </li>
+                    <li ng-class="{active: vm.activeTab == 1}">
+                        <a href="javascript:;" ng-click="vm.activeTab = 2">全部商品</a>
+                        <span ng-class="{line_com:vm.activeTab==2}" ></span>
+                    </li>
+                </ul>
+                <div class="tab-content tab-bordered">
+                    <div class="tab-panel" ng-show="vm.activeTab == 1">
+                        <!--banner图开始-->
+                        <div class="device">
+                            <div >
+                                <div class="carousel">
+                                    <div id='swiperList' class="swiper-container" >
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide"  ng-repeat=" n in swiperList" >
+                                                <img src="{{baseUrl + '/'+n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
+                                            </div>
                                         </div>
+                                        <!-- 如果需要分页器 -->
+                                        <div class="swiper-pagination size_div"></div>
                                     </div>
-                                    <!-- 如果需要分页器 -->
-                                    <div class="swiper-pagination size_div"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--推荐开始-->
+                        <div class="recommend_box">
+                            <!--推荐数据列表-->
+                            <div class="recommend2_box">
+                                <ul >
+                                    <li ng-repeat="n in recommendList" >
+                                        <a ng-click="getProductMore(n)">
+                                            <div class="img_box">
+                                                <img src="{{baseUrl + '/'+n.image}}" alt=""/>
+                                            </div>
+                                            <div class="title2">{{n.title}}</div>
+                                            <div class="describe2">{{n.description}}</div>
+                                            <div class="price2">¥{{n.show_price}}</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--全部商品-->
+                    <div class="tab-panel" ng-show="vm.activeTab == 2">
+                        <!--筛选-->
+                        <div class="memo_pad">
+                            <ul>
+                                <li >销量优先</li>
+                                <li ng-click="filterPraise ()" alt=""/>
+                                价格
+                                <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png">
+                                <!--mall_filter_sort.png-->
+                                <!--<img class="up_down" src="images/down.png"  ng-show= good_pic_down ng-click="filterPicDown ()" alt=""/>-->
+                                </li>
+                                <li ng-click ="filterPicUp ()" alt=""/>
+                                好评率
+                                <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png">
+                                <!--<img class="up_down" src="images/down.png"  ng-show= praise_down ng-click ="filterSalesDown ()" alt=""/>-->
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!--商品展示列表-->
+                        <div class="line"></div>
+                        <div class="mall_list">
+                            <div class="flex_div" >
+                                <div class="item_commodity clearfix"  ng-repeat="n in supplier_goods" ng-click="allGetProdouct(n)">
+                                    <div class="item_commodity_divimg pull-left">
+                                        <img src="{{baseUrl + '/'+n.cover_image}}" alt="" class="img_item " />
+                                    </div>
+                                    <div class="item_commodity_comment pull-left">
+                                        <p class="comment_one">{{n.title}}</p>
+                                        <p class="comment_two">{{n.subtitle}}</p>
+                                        <span class="comment_span">销量数：{{n.sold_number}}&nbsp;&nbsp;</span>
+                                        <span class="comment_span_two">{{n.favourable_comment_rate}}%好评</span>
+                                        <p class="comment_span_three">{{n.platform_price | currency : '￥'}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--推荐开始-->
-                    <div class="recommend_box">
-                        <!--推荐数据列表-->
-                        <div class="recommend2_box">
+                </div>
+            </div>
+        </div>
+        <div style="width: 32rem;height: 1rem;background-color: #F6F6F6"></div>
+        <!--店铺介绍-->
+        <div data-toggle="modal" data-target="#shop_introduction" class="shop_profile">
+            <span>店铺简介</span>
+        </div>
+
+
+        <!-- Modal  店铺简介 -->
+        <div class="modal fade" id="shop_introduction" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" id="shop_profile">
+                <div class="modal-content" id="shop_body">
+                    <div class="modal-header" id="shop_header">
+                        <div class="back_return">
+                            <img src="images/mall_nav_return.png" data-dismiss="modal"  class="shop_back_return" alt=""/>
+                        </div>
+                        <span class="modal-title" id="shop_title">店铺简介</span>
+                        <div class="back_home">
+                            <img src="images/mall_home.png" data-dismiss="modal" ng-click="getHome()" class="shop_back_home" alt=""/>
+                        </div>
+                    </div>
+                    <div class="modal-body" >
+                        <!--头部-->
+                        <div class="header_shop">
+                            <img src="{{baseUrl + '/'+t_icon}}" alt="" class="shop_img"/>
+                            <span>{{t_shop_name}}</span>
+                            <!--<div>-->
+                            <!--<p class="num">12k</p>-->
+                            <!--<p class="fan_count">粉丝数</p>-->
+                            <!--</div>-->
+                        </div>
+                        <div class="bag_div"></div>
+                        <!--展示一-->
+                        <div class="comment_show">
                             <ul >
-                                <li ng-repeat="n in recommendList" >
-                                    <a ng-click="getProductMore(n)">
-                                        <img src="{{baseUrl + '/'+n.image}}" alt=""/>
-                                        <div class="title2">{{n.title}}</div>
-                                        <div class="describe2">{{n.description}}</div>
-                                        <div class="price2">¥{{n.show_price}}</div>
-                                    </a>
+                                <li >
+                                    <span>店铺号</span>
+                                    <span>{{shop_no}}</span>
+                                </li>
+                                <li>
+                                    <span>开店时间</span>
+                                    <span>{{open_shop_time}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--展示二-->
+                        <div class="bag_div"></div>
+                        <div class="comment_show">
+                            <ul>
+                                <li>
+                                    <span>综合评分</span>
+                                    <span>{{comprehensive_score}}</span>
+                                </li>
+                                <li>
+                                    <span>店家服务</span>
+                                    <span>{{store_service_score}}</span>
+                                </li>
+                                <li>
+                                    <span>物流速度</span>
+                                    <span>{{logistics_speed_score}}</span>
+                                </li>
+                                <li>
+                                    <span>配送员服务</span>
+                                    <span>{{delivery_service_score}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--展示三-->
+                        <div class="bag_div"></div>
+                        <div class="comment_show">
+                            <ul>
+                                <li>
+                                    <span>资质</span>
+                                    <span class="num_left">质保金</span>
+                                    <span class="color_span">{{quality_guarantee_deposit}}</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <!--全部商品-->
-                <div class="tab-panel" ng-show="vm.activeTab == 2">
-                    <!--筛选-->
-                    <div class="memo_pad">
-                        <ul>
-                        <li >销量优先</li>
-                        <li>
-                            价格
-                            <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png"   ng-click="filterPraise ()" alt=""/>
-                            <!--mall_filter_sort.png-->
-                            <!--<img class="up_down" src="images/down.png"  ng-show= good_pic_down ng-click="filterPicDown ()" alt=""/>-->
-                        </li>
-                        <li >
-                            好评率
-                            <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png" ng-click ="filterPicUp ()" alt=""/>
-                            <!--<img class="up_down" src="images/down.png"  ng-show= praise_down ng-click ="filterSalesDown ()" alt=""/>-->
-                        </li>
-                        </ul>
-                    </div>
-
-                    <!--商品展示列表-->
-                    <div class="mall_list">
-                        <div class="flex_div" >
-                            <div class="item_commodity"  ng-repeat="n in supplier_goods" ng-click="allGetProdouct(n)">
-                                <div class="item_commodity_divimg">
-                                    <img src="{{baseUrl + '/'+n.cover_image}}" alt="" class="img_item " />
-                                </div>
-                                <div class="item_commodity_comment">
-                                    <p class="comment_one">{{n.title}}</p>
-                                    <p class="comment_two">{{n.subtitle}}</p>
-                                    <span class="comment_span">销量数：{{n.sold_number}}&nbsp;&nbsp;</span>
-                                    <span class="comment_span_two">{{n.favourable_comment_rate}}%好评</span>
-                                    <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">{{n.platform_price | currency : '￥'}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
-    <div style="width: 32rem;height: 1rem;background-color: #F6F6F6"></div>
-    <!--店铺介绍-->
-    <div class="shop_profile">
-        <a data-toggle="modal" data-target="#shop_introduction">
-            <span>店铺简介</span>
-        </a>
-    </div>
-
-
-    <!-- Modal  店铺简介 -->
-    <div class="modal fade" id="shop_introduction" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document" id="shop_profile">
-            <div class="modal-content" id="shop_body">
-                <div class="modal-header" id="shop_header">
-                    <img src="images/mall_nav_return.png" data-dismiss="modal"  class="shop_back_return" alt=""/>
-                    <span class="modal-title" id="shop_title">店铺简介</span>
-                    <img src="images/mall_home.png" data-dismiss="modal" ng-click="getHome()" class="shop_back_home" alt=""/>
-                </div>
-                <div class="modal-body" >
-                    <!--头部-->
-                    <div class="header_shop">
-                        <img src="{{baseUrl + '/'+t_icon}}" alt="" class="shop_img"/>
-                        <span>{{t_shop_name}}</span>
-                        <!--<div>-->
-                            <!--<p class="num">12k</p>-->
-                            <!--<p class="fan_count">粉丝数</p>-->
-                        <!--</div>-->
-                    </div>
-                    <div class="bag_div"></div>
-                    <!--展示一-->
-                    <div class="comment_show">
-                        <ul >
-                            <li >
-                                <span>店铺号</span>
-                                <span>{{shop_no}}</span>
-                            </li>
-                            <li>
-                                <span>开店时间</span>
-                                <span>{{open_shop_time}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--展示二-->
-                    <div class="bag_div"></div>
-                    <div class="comment_show">
-                        <ul>
-                            <li>
-                                <span>综合评分</span>
-                                <span>{{comprehensive_score}}</span>
-                            </li>
-                            <li>
-                                <span>店家服务</span>
-                                <span>{{store_service_score}}</span>
-                            </li>
-                            <li>
-                                <span>物流速度</span>
-                                <span>{{logistics_speed_score}}</span>
-                            </li>
-                            <li>
-                                <span>配送员服务</span>
-                                <span>{{delivery_service_score}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--展示三-->
-                    <div class="bag_div"></div>
-                    <div class="comment_show">
-                        <ul>
-                            <li>
-                                <span>资质</span>
-                                <span class="num_left">质保金</span>
-                                <span class="color_span">{{quality_guarantee_deposit}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 </div>

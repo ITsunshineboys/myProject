@@ -123,6 +123,7 @@ section{
 }
 .item_commodity_comment{
     /*margin-left: 1rem;*/
+    width: 15rem!important;
     position: absolute;
     left: 12rem;
     top: 1rem;

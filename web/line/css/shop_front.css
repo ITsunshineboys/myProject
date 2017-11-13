@@ -1,43 +1,80 @@
-.back{
-    background-color: #F6F6F6;
+body{
+    background-color: #f6f6f6;
 }
 header{
-    height:3.8rem;
+    height:4rem;
+    width: 100%;
     background-color: white;
-    line-height: 3.8rem;
-}
-.back_return{
-    margin-left: 1rem;
-}
-header div span{
-    font-size:1.5rem;
-    color: #4A4A4A;
-    margin-left: 11.5rem;
     position: relative;
-    top: .3rem;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+    color: #999;
+}
+
+
+.back_return{
+    width: 4rem;
+    height: 4rem;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.back_return img{
+    position: absolute;
+    top:1.2rem;
+    left: 1.2rem;
+}
+header span{
+    font-size:1.5rem;
+    color: #666;
+    display: inline-block;
+    line-height: 4rem;
 }
 .back_home{
-    margin-left: 9rem;
-    height: 2rem;
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.back_home img{
+    position: absolute;
+    top:1.2rem;
+    right: 1.2rem;
 }
 .header_shop{
     width: 32rem;
-    height: 7rem;
     background-color: white;
-    padding-left: 1rem;
-    padding-top: 1rem;
+    padding: 1.2rem;
     position: relative;
+    margin-top: 4rem;
 }
 #shop_img_header{
     width: 4rem;
     height: 4rem;
 }
-.header_shop div{
-    display: inline-block;
-    color: #959292;
-    font-size: 1.3rem;
-    position: absolute;
-    right: 2rem;
+.shop_img{
+    width: 3rem;
+    height: 3rem;
+    overflow: hidden;
+    border-radius: .2rem;
+}
+.shop_img img{
+    width: 100%;
+    height: 100%;
+}
+.shop_name{
+    font-size: 1.4rem;
+    color: #999;
+    margin-left: .7rem;
+    margin-top: 1rem;
 }
 .num{
     margin-left: .7rem;
@@ -55,13 +92,13 @@ header div span{
     display: block;
     width: 4.2rem;
     height: .3rem;
-    background-color: #53A8F4;
+    background-color: #333;
     margin-left: 5.7rem;
     margin-top: .2rem;
 
 }
 .tab-content{
-    margin-top: .2rem;
+
 }
 .list_tab {
     /*margin-bottom: 1.5rem;*/
@@ -73,12 +110,12 @@ header div span{
     background-color: white;
 }
 .list_tab li a{
-    color: #53A8F4;
+    color: #333;
     font-size: 1.4rem;
     background-color: white;
 }
 .active{
-    color: #53A8F4 ;
+    color: #333 ;
 }
 .nav>li>a:focus, .nav>li>a:hover {
     text-decoration: none;
@@ -112,22 +149,24 @@ header div span{
     height:12rem;
 }
 .tab-bordered{
-    background-color: white;
+
 }
 .section_div{
     margin-top: 1rem;
-    background-color: white;
-
+}
+.line{
+    width: 100%;
+    height: 1rem;
+    background: #f6f6f6;
 }
 .nav-tabs {
-     border-bottom: none;
+    border-bottom: none;
+    background-color: #fff;
 }
 /*�Ƽ���ʼ*/
 .recommend_box{
     width: auto;
     height: auto;
-    padding: 0 0.5rem;
-    margin-top: 1rem;
     background-color: #fff;
     margin-bottom: 3rem;
 }
@@ -202,7 +241,7 @@ header div span{
     /*height: 23.5rem;*/
     overflow: hidden;
     clear: both;
-    margin-top: 1rem;
+    padding: 1.2rem 0;
 }
 .recommend2_box ul{
     width: 100%;
@@ -210,17 +249,9 @@ header div span{
     padding: 0;
 }
 .recommend2_box ul>li{
-    width: 50%;
-    height: auto;
+    width: 48%;
     float: left;
-    box-sizing:border-box;
-    -moz-box-sizing:border-box;   /* Firefox */
-    -webkit-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    border-right: 0.5rem solid #fff;
-    border-left: 0.5rem solid #fff;
-    border-bottom: 0.7rem solid #fff;
+    padding-left: 1.2rem;
 }
 .recommend2_box ul li a{
     text-decoration: none;
@@ -232,8 +263,8 @@ header div span{
 .recommend2_box ul>li a .title2{
     font-size: 1.4rem;
     line-height: 1.4rem;
-    margin-top: 0.3rem;
-    color: #6C6C6C;
+    margin-top: 0.6rem;
+    color: #666;
     display:block;
     white-space:nowrap;
     overflow:hidden;
@@ -241,7 +272,7 @@ header div span{
 
 }
 .recommend2_box ul>li a .describe2{
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.2rem;
     margin-top: 0.3rem;
     color:#B8B6B6;
@@ -253,22 +284,31 @@ header div span{
 .recommend2_box ul>li a .price2{
     font-size: 1.4rem;
     line-height: 1.4rem;
-    margin-top: 0.3em;
-    color:#F56A22
+    margin-top: 0.6rem;
+    color:#D9AD65
+}
+.recommend2_box .img_box{
+    width:100%;
+    height: 13rem;
+    overflow: hidden;
+}
+.recommend2_box .img_box img{
+    width: 100%;
+    height: 100%;
 }
 .nav-tabs>li>a {
-     border: none;
+    border: none;
 }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
-     border: none;
+    border: none;
 }
 /*����*/
 
 /*ȫ����Ʒ��ʼ*/
 .memo_pad{
     background-color: white;
-    height:3rem;
-    line-height:3rem;
+    height: 4rem;
+    line-height: 4rem;
     /*margin-bottom: 1rem;*/
 }
 .memo_pad ul {
@@ -277,17 +317,16 @@ header div span{
 .memo_pad li{
     font-size: 1.4rem;
     margin-left: 5.5rem;
-    color: #B8B6B6;
+    color: #999;
     display: inline-block;
 }
 .memo_pad li img{
-    width: .9rem;
+    vertical-align: initial;
 }
 
 /*��Ʒչʾ*/
 .up_down{
-    width: 1rem;
-    height: 1.4rem;
+
 }
 .mall_list{
     background-color: white;
@@ -299,40 +338,47 @@ header div span{
 }
 .item_commodity{
     position: relative;
-    top: .8rem;
-    border: 1px solid #E9EDEE;
+    border-bottom: 1px solid #E9EDEE;
+    padding: 1.2rem;
 }
 .item_commodity div{
     display: inline-block;
 }
 .item_commodity_divimg {
     position: relative;
-    /*margin-left: 1rem;*/
-    /*top:1rem*/
-    left: 1rem;
-    top: 1rem;
+    border-radius: .2rem;
+    width: 7rem;
+    height: 7rem;
+    overflow: hidden;
 }
 .item_commodity_divimg img {
-    /*position: absolute;*/
-    /*top:-3.2rem;*/
-    margin-bottom: 3rem;
-    margin-top: .1rem;
+    width: 100%;
+    height: 100%
 }
 .item_commodity_comment{
-    /*margin-left: 1rem;*/
-    position: absolute;
-    left: 12rem;
-    top: 1rem;
-
+    margin-left: 1rem;
 }
-.item_commodity p,span{
+.comment_one{
     font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 0;
 }
-.img_item{
-    width: 9rem;
-    height: 9rem;
-    margin-top: -1.2rem;
-    margin-left: .6rem;
+.comment_two{
+    font-size: 1rem;
+    color: #999;
+    margin-bottom: .8rem;
+}
+.comment_span{
+    font-size: .9rem;
+    color: #999;
+}
+.comment_span_two{
+    font-size: .9rem;
+    color: #999;
+}
+.comment_span_three{
+    font-size: 1.2rem;
+    color: #D9AD65;
 }
 .shop_profile{
     height: 4rem;
@@ -361,16 +407,17 @@ header div span{
     margin-top: -1rem;
 }
 #shop_header{
-    height: 4.2rem;
+    height: 4rem;
+    text-align: center;
+    line-height: 3.7rem;
 }
 #shop_title{
-    color: #4A4A4A;
+    color: #666;
     font-size: 1.4rem;
-    margin-left: 11rem;
     line-height: 3rem;
 }
 .shop_back_return{
-    margin-left: 1rem;
+
 }
 .shop_back_home{
     margin-left: 8.8rem;
@@ -381,13 +428,16 @@ header div span{
     width: 32rem;
     height: 1rem
 }
+.comment_show ul{
+    margin-bottom: 0;
+}
 
 .comment_show ul li{
     list-style: none;
     height:4.1rem;
     line-height: 4.1rem;
     font-size: 1.3rem;
-    color: #4A4A4A;
+    color: #666;
     position: relative;
     border: 1px solid #E9EDEE;
 
@@ -395,10 +445,10 @@ header div span{
 }
 .comment_show ul li span:nth-child(2){
     position: absolute;
-    right: 2rem;
+    right: 1.2rem;
 }
 .comment_show ul li span:nth-child(1){
-    margin-left: 1.5rem;
+    margin-left: 1.2rem;
 }
 .color_span{
     color:#F59C22;
