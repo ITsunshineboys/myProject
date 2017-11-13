@@ -16,6 +16,7 @@ use app\models\GoodsImage;
 use app\models\GoodsStat;
 use app\models\Jpush;
 use app\models\GoodsCategory;
+use app\models\Role;
 use app\models\Series;
 use app\models\ShippingCart;
 use app\models\Style;
@@ -2345,7 +2346,7 @@ class OrderController extends Controller
     }
 
    /**
-     * user add comment
+     * 用户去评论
      * @return string
      */
     public function actionCommentSub(){
@@ -3618,6 +3619,11 @@ class OrderController extends Controller
         }
     }
 
+
+    /**
+     * 获取订单数量
+     * @return string
+     */
    public  function  actionGetOrderNum()
     {
         $user = Yii::$app->user->identity;
@@ -3752,7 +3758,9 @@ class OrderController extends Controller
                     'after_sale'=>$data
                 ]
             ]);
-        }   /**
+        }
+
+    /**
      * 删除评论操作
      * @return string
      */
@@ -3870,7 +3878,8 @@ class OrderController extends Controller
 
 
 
-            /**
+         /**
+         * 已删除评论列表
          * @return string
          */
         public  function  actionDeleteCommentList()
@@ -4027,6 +4036,10 @@ class OrderController extends Controller
 
         }
 
+        /**
+         * 订单详情-商品详情
+         * @return string
+         */
         public  function  actionGoodsView()
         {
             $user = Yii::$app->user->identity;
@@ -4180,7 +4193,7 @@ class OrderController extends Controller
         }
 
 
-            /**
+    /**
      * 售后发货
      * @return string
      */
@@ -4554,7 +4567,6 @@ class OrderController extends Controller
         {
             $carts[]=$list['id'];
         }
-        echo $_SERVER['SERVER_NAME'];exit;
         $code=ShippingCart::DelShippingCartData($carts);
         if ($code==200)
         {
