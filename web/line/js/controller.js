@@ -1399,15 +1399,10 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     // 支付成功
-    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams,$interval){
+    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams){
         $rootScope.baseUrl = baseUrl;
-        window.addEventListener("hashchange", function() {
-            // 注册返回按键事件
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open')
-        });
         $scope.timeOut = 5;
-        $interval(function () {
+        setTimeout(function () {
             if($scope.timeOut!=0)  {
                 $scope.timeOut --;
             }else {
