@@ -707,4 +707,9 @@ class WorkerManagementController extends Controller
             ]);
         }
     }
+
+    public function actionWorkerDetails()
+    {
+            
+    }
 }
