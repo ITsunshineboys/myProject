@@ -1332,7 +1332,7 @@ class GoodsOrder extends ActiveRecord
         $total=$total_amount*100;
        if ($money != $total)
        {
-           echo 123;die
+           echo 123;die;
        }else{
            echo 234;die;
        }
