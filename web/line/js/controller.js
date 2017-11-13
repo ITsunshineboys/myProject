@@ -1399,16 +1399,20 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     // 支付成功
-    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams){
+    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams,$interval,$on){
         $rootScope.baseUrl = baseUrl;
         $scope.timeOut = 5;
-        setTimeout(function () {
-            if($scope.timeOut!=0)  {
-                $scope.timeOut --;
-            }else {
-                $state.go('home')
-            }
-        },1000)
+        $scope.setTimeDown = function () {
+            $interval(function () {
+                if($scope.timeOut!=0){
+                    $scope.timeOut --;
+                }else {
+                    clearInterval($scope.setTimeDown)
+                    $state.go('home');
+                }
+            },1000)
+        };
+        $scope.setTimeDown();
 
 
     })
