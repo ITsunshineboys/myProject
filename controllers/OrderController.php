@@ -4600,6 +4600,7 @@ class OrderController extends Controller
             ]);
         }
         $code=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
+        var_dump($code);
         if ($code==200)
         {
             return Json::encode([
