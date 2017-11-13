@@ -1,14 +1,7 @@
 ;
 let brand_index = angular.module("brand_index_module",[]);
-brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$stateParams) {
+brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$stateParams,_ajax) {
   $scope.myng=$scope;
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
     /*品牌审核开始*/
     $scope.on_shelves_list=[];
     $scope.down_shelves_list=[];
@@ -30,19 +23,15 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     }
     let tablePages=function () {
         $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
-        $http.get(baseUrl+'/mall/brand-list-admin',{
-            params:$scope.params
-        }).then(function (res) {
+        _ajax.get('/mall/brand-list-admin',$scope.params,function (res) {
             console.log(res);
             if($scope.on_flag==true){  //--------------已上架
-                $scope.on_shelves_list=res.data.data.brand_list_admin.details;
-                $scope.wjConfig.totalItems = res.data.data.brand_list_admin.total;
+                $scope.on_shelves_list=res.data.brand_list_admin.details;
+                $scope.wjConfig.totalItems = res.data.brand_list_admin.total;
             }else if($scope.down_flag==true){
-                $scope.down_shelves_list=res.data.data.brand_list_admin.details;
-                $scope.wjConfig.totalItems = res.data.data.brand_list_admin.total;
+                $scope.down_shelves_list=res.data.brand_list_admin.details;
+                $scope.wjConfig.totalItems = res.data.brand_list_admin.total;
             }
-        },function (err) {
-            console.log(err);
         })
     };
     $scope.params = {
@@ -155,15 +144,11 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
 
 
   /*分类选择一级下拉框*/
-  $scope.firstClass = (function () {
-    $http({
-      method: "get",
-      url: baseUrl+"/mall/categories-manage-admin",
-    }).then(function (response) {
-      $scope.firstclass = response.data.data.categories;
-      $scope.firstselect = response.data.data.categories[0].id;
-    })
-  })();
+  _ajax.get('/mall/categories-manage-admin',{},function (res) {
+      console.log(res);
+      $scope.firstclass = res.data.categories;
+      $scope.firstselect = res.data.categories[0].id;
+  })
   //监听一级，返回数据
   $scope.$watch('firstselect',function (newVal,oldVal) {
       $scope.down_two=newVal;
@@ -174,15 +159,10 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   /*分类选择二级下拉框*/
   $scope.secondclass=[];//二级分类数组
   $scope.subClass = function (pid) {
-    console.log(pid);
-    $http({
-      method: "get",
-      url: baseUrl+"/mall/categories-manage-admin",
-      params: {pid: pid}
-    }).then(function (response) {
-      $scope.secondclass = response.data.data.categories;
-      $scope.secselect = response.data.data.categories[0].id;
-    });
+    _ajax.get('/mall/categories-manage-admin',{pid: pid},function (res) {
+        $scope.secondclass = res.data.categories;
+        $scope.secselect = res.data.categories[0].id;
+    })
   };
     //监听二级
     $scope.$watch('secselect',function (newVal,oldVal) {
@@ -198,13 +178,9 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   /*分类选择三级下拉框*/
   $scope.three_class=[];//二级分类数组
   $scope.three_Class = function (pid) {
-    $http({
-      method: "get",
-      url: baseUrl+"/mall/categories-manage-admin",
-      params: {pid: pid}
-    }).then(function (response) {
-      $scope.three_class = response.data.data.categories;
-      $scope.three_select = response.data.data.categories[0].id;
+    _ajax.get('/mall/categories-manage-admin',{pid: pid},function (res) {
+        $scope.three_class = res.data.categories;
+        $scope.three_select = res.data.categories[0].id;
     })
   };
     //监听三级
@@ -217,10 +193,6 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
       $scope.table.roles=[];//清空全选状态
       tablePages();
     });
-  // $scope.last_Class=function (pid) {
-  //     $scope.params.pid=pid;
-  //     tablePages();
-  // }
 
   /*==============================已上架===================================*/
   //时间排序
@@ -257,17 +229,13 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //批量下架确认按钮
   $scope.down_shelver_ok=function () {
-    let url=baseUrl+'/mall/brand-disable-batch';
-    $http.post(url,{
-      ids:$scope.table.roles.join(','),
-      offline_reason:$scope.sole_down_shelves_reason
-    },config).then(function (res) {
-      console.log(res);
-      $scope.table.roles=[];//清空全选状态
-      $scope.wjConfig.currentPage=1;//返回第一页
-      tablePages();
-    },function (err) {
-      console.log(err)
+    _ajax.post('/mall/brand-disable-batch',{
+        ids:$scope.table.roles.join(','),
+        offline_reason:$scope.sole_down_shelves_reason
+    },function (res) {
+        $scope.table.roles=[];//清空全选状态
+        $scope.wjConfig.currentPage=1;//返回第一页
+        tablePages();
     })
   };
 
@@ -275,17 +243,13 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   $scope.down_shelver_btn=function (id) {
     $scope.sole_down_shelves_reason='';
     $scope.down_shelver_ok=function () {
-      let url=baseUrl+'/mall/brand-status-toggle';
-      $http.post(url,{
-        id:+id,
-        offline_reason:$scope.sole_down_shelves_reason
-      },config).then(function (res) {
-        console.log(res);
-        $scope.table.roles=[];//清空全选状态
-        $scope.wjConfig.currentPage=1;//返回第一页
-        tablePages();
-      },function (err) {
-        console.log(err)
+      _ajax.post('/mall/brand-status-toggle',{
+          id:+id,
+          offline_reason:$scope.sole_down_shelves_reason
+      },function (res) {
+          $scope.table.roles=[];//清空全选状态
+          $scope.wjConfig.currentPage=1;//返回第一页
+          tablePages();
       })
     }
   };
@@ -302,32 +266,20 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //批量上架确认按钮
   $scope.on_shelver_ok=function () {
-    let url=baseUrl+'/mall/brand-enable-batch';
-    $http.post(url,{
-      ids:$scope.table.roles.join(',')
-    },config).then(function (res) {
-      console.log(res);
-      $scope.table.roles=[];//清空全选状态
-      $scope.wjConfig.currentPage=1;//返回第一页
-      tablePages();
-    },function (err) {
-      console.log(err)
+    _ajax.post('/mall/brand-enable-batch',{ids:$scope.table.roles.join(',')},function (res) {
+        $scope.table.roles=[];//清空全选状态
+        $scope.wjConfig.currentPage=1;//返回第一页
+        tablePages();
     })
   };
   //
   //单个上架
   $scope.on_shelver_btn=function (id) {
     $scope.sole_on_shelver_ok=function () {
-      let url=baseUrl+'/mall/brand-enable-batch';
-      $http.post(url,{
-        ids:id
-      },config).then(function (res) {
-        console.log(res);
-        $scope.table.roles=[];//清空全选状态
-        $scope.wjConfig.currentPage=1;//返回第一页
-        tablePages();
-      },function (err) {
-        console.log(err)
+      _ajax.post('/mall/brand-enable-batch',{ids:id},function (res) {
+          $scope.table.roles=[];//清空全选状态
+          $scope.wjConfig.currentPage=1;//返回第一页
+          tablePages();
       })
     }
   };
@@ -339,15 +291,13 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //确定按钮
   $scope.down_reason_btn=function () {
-    $scope.page=1;
-    let url=baseUrl+'/mall/brand-offline-reason-reset';
-    $http.post(url,{
-      id:$scope.down_id,
-      offline_reason:$scope.down_reason
-    },config).then(function (res) {
+    _ajax.post('/mall/brand-offline-reason-reset',{
+        id:$scope.down_id,
+        offline_reason:$scope.down_reason
+    },function (res) {
         $scope.table.roles=[];//清空全选状态
         tablePages();
-    });
+    })
   };
 
   /*==============================品牌使用审核==================================*/
@@ -362,14 +312,9 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     };
     let brand_Pages=function () {
         $scope.brand_params.page=$scope.brand_Config.currentPage;//点击页数，传对应的参数
-        $http.get(baseUrl+'/mall/brand-application-review-list',{
-            params:$scope.brand_params
-        }).then(function (res) {
-            console.log(res);
-            $scope.brand_review_list=res.data.data.brand_application_review_list.details;
-            $scope.brand_Config.totalItems = res.data.data.brand_application_review_list.total;
-        },function (err) {
-            console.log(err);
+        _ajax.get('/mall/brand-application-review-list',$scope.brand_params,function (res) {
+            $scope.brand_review_list=res.data.brand_application_review_list.details;
+            $scope.brand_Config.totalItems = res.data.brand_application_review_list.total;
         })
     };
     $scope.brand_params = {
@@ -382,21 +327,14 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     };
 
     //判断有多少个申请
-    $http.get(baseUrl+'/mall/brand-application-review-list',{
-        params:{
-            size:99999
-        }
-    }).then(function (res) {
-        console.log(res);
+    _ajax.get('/mall/brand-application-review-list',{size:99999},function (res) {
         /*判断多少个申请个数*/
         $scope.application_num=[];
-        for(let [key,value] of res.data.data.brand_application_review_list.details.entries()){
+        for(let [key,value] of res.data.brand_application_review_list.details.entries()){
             if(value.review_status=='0'){
                 $scope.application_num.push(value);
             }
         }
-    },function (err) {
-        console.log(err);
     });
 
   //获取审核类型
@@ -452,13 +390,11 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
   };
   //审核备注模态框，确认按钮
   $scope.review_btn=function () {
-    $http.post(baseUrl+'/mall/brand-application-review-note-reset',{
-      id:+$scope.review_id,
-      review_note:$scope.check_review
-    },config).then(function (res) {
-      console.log('审核备注返回');
-      console.log(res);
-      brand_Pages();
-    });
+    _ajax.post('/mall/brand-application-review-note-reset',{
+        id:+$scope.review_id,
+        review_note:$scope.check_review
+    },function (res) {
+        brand_Pages();
+    })
   };
 });
