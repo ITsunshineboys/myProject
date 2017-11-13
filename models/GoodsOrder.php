@@ -1330,10 +1330,12 @@ class GoodsOrder extends ActiveRecord
         $goods=Goods::find()->select('platform_price,market_price,supplier_price')->where(['id'=>$goods_id])->asArray()->one();
         $money=$goods['platform_price']*$goods_num+$return_insurance*100+($freight*100);
      
-        if ($money==$total_amount*100){
+         if ((float)$money==(float)($total_amount*100)){
+            echo 1;die;
             return true;
         }else
         {
+            echo 2;die;
             return false;
         }
     }
