@@ -435,6 +435,7 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['unusual']='退款失败';
 
             }
+            $arr[$k]['handle']='';
             switch ($type)
             {
                 case 'supplier':
