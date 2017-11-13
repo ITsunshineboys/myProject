@@ -433,6 +433,7 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['unusual']='无异常';
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
+
             }
             switch ($type)
             {
