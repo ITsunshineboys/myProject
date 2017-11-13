@@ -142,8 +142,9 @@
                                     <img class="img_search" src="images/mall_search.png" alt="">
                                 </div>
                                 <ul class="brands_more">
-                                    <li ng-repeat="item in all_goods_brands">
+                                    <li ng-repeat="item in all_goods_brands" ng-class="{'changeColor':cur_brand_index == $index}" style="border: none;border-bottom: 2px solid #999;" ng-click="all_change(3,$index,item)">
                                         {{item.name}}
+                                        <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="cur_brand_index == $index">
                                     </li>
                                 </ul>
 
@@ -157,124 +158,5 @@
                 </div>
             </div>
         </div>
-        <!--<div class="popup_screen">-->
-            <!--<div class="style_popup">-->
-                <!--&lt;!&ndash; Modal 弹框&ndash;&gt;-->
-                <!--<div class="modal fade" id="myModal8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
-                    <!--<div class="modal-dialog" role="document" style="margin-top: 1rem!important;">-->
-                        <!--<div class="modal-content">-->
-                            <!--&lt;!&ndash;风格 &ndash;&gt;-->
-                            <!--<div class="modal-body">-->
-                                <!--<div class="style_screen" >-->
-                                    <!--&lt;!&ndash;f风格选择？&ndash;&gt;-->
-                                    <!--<div ng-if= 'all_goods_style.length!=0'>-->
-                                        <!--<div class="header_font">-->
-                                            <!--<span class="style_size">风格选择</span>-->
-                                            <!--<span class="down_arrow"  data-toggle="collapse" href="#collapseExample_comment" aria-expanded="true" aria-controls="collapseExample_comment">-->
-                                          <!--<img src="images/mall_list.png" class="down_list" alt=""/>-->
-                                        <!--</span>-->
-                                        <!--</div>-->
-
-                                        <!--&lt;!&ndash;x下拉面板&ndash;&gt;-->
-                                        <!--<div class="collapse" id="collapseExample_comment">-->
-                                            <!--<div class="well">-->
-                                                <!--<ul class="item_li">-->
-                                                    <!--<li ng-repeat="item in all_goods_style" ng-class="{'changeColor':cur_style_index == $index}" ng-click="all_change(1,$index,item)">-->
-                                                        <!--{{item.style}}-->
-                                                    <!--</li>-->
-                                                <!--</ul>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-
-                                    <!--&lt;!&ndash;系列选择&ndash;&gt;-->
-                                    <!--<div ng-show= 'all_goods_series.length!=0'>-->
-                                        <!--<div class="header_font">-->
-                                            <!--<span class="style_size">系列选择</span>-->
-                                            <!--<span class="down_arrow"  data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">-->
-                                          <!--<img src="images/mall_list.png" class="down_list" alt=""/>-->
-                                        <!--</span>-->
-                                        <!--</div>-->
-                                        <!--&lt;!&ndash;x下拉面板&ndash;&gt;-->
-                                        <!--<div class="collapse" id="collapseExample">-->
-                                            <!--<div class="well">-->
-                                                <!--<ul>-->
-                                                    <!--<li ng-repeat="item in all_goods_series" ng-class="{'changeColor':cur_series_index == $index}" ng-click="all_change(2,$index,item)">-->
-                                                        <!--{{item.series}}-->
-                                                    <!--</li>-->
-                                                <!--</ul>`-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-
-
-                                    <!--&lt;!&ndash;价格区间&ndash;&gt;-->
-                                    <!--<div class="header_font">-->
-                                        <!--<span class="style_size">价格选择</span>-->
-                                    <!--</div>-->
-                                    <!--<div class="price_range">-->
-                                        <!--<input type="text" placeholder="最低价" ng-model="ctrlScope.price_min" maxlength="8" ng-blur="get_price(1)"  pattern="[1-9]\d*"/> &nbsp; &nbsp;-->
-                                        <!--<span> ———</span>-->
-                                        <!--<input type="text" placeholder="最高价" ng-model="ctrlScope.price_max" maxlength="8" ng-blur="get_price(2)" pattern="[1-9]\d*"/>-->
-                                    <!--</div>-->
-
-
-                                    <!--&lt;!&ndash;品牌选择&ndash;&gt;-->
-                                    <!--<div class="header_font">-->
-                                        <!--<span class="style_size">品牌选择</span>-->
-                                    <!--</div>-->
-                                    <!--<div class="well">-->
-                                        <!--<ul>-->
-                                            <!--<li ng-repeat="item in all_goods_brands | limitTo:8" ng-class="{'changeColor':cur_brand_index == $index}" ng-click="all_change(3,$index,item)">-->
-                                                <!--{{item.name}}-->
-                                            <!--</li>-->
-                                        <!--</ul>-->
-                                    <!--</div>-->
-                                    <!--<div class="all_brand_btn">-->
-                                        <!--<span data-toggle="modal" data-target="#myModal_brand">-->
-                                            <!--查看全部品牌-->
-                                            <!--<img src="images/left_com.png" alt=""/>-->
-                                        <!--</span>-->
-                                    <!--</div>-->
-
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="modal-footer">-->
-
-                                <!--<button type="button" class="btn btn-default reset_btn" ng-click="reset_filter()">重置</button>-->
-                                <!--<button type="button"  class="btn reset_btn last_btn"  data-dismiss="modal" ng-click="complete_filter()">完成</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--&lt;!&ndash;  模态框   品牌&ndash;&gt;-->
-                <!--&lt;!&ndash; Modal &ndash;&gt;-->
-                <!--<div class="modal fade" id="myModal_brand">-->
-                    <!--<div class="modal-dialog" style="margin-top: 1rem!important;">-->
-                        <!--<div class="modal-content model_content">-->
-                            <!--<div class="modal-header">-->
-                                <!--<h4 class="modal-title text-center brand_content">品牌选择</h4>-->
-                            <!--</div>-->
-                            <!--<div class="modal-body">-->
-                                <!--<div class="style_screen"></div>-->
-                                <!--&lt;!&ndash;<div class="div_search">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<input class="brand_search" type="text" placeholder="请输入品牌...">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<img class="img_search" src="images/mall_search.png" alt="">&ndash;&gt;-->
-                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<ul class="brands_more">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<li ng-repeat="n in brands">&ndash;&gt;-->
-                                        <!--&lt;!&ndash;{{item.name}}&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</li>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</ul>&ndash;&gt;-->
-                            <!--</div>-->
-                                <!--<div class="modal-footer footer_size">-->
-                                    <!--<button type="button" class="btn btn_brand"  data-dismiss="modal" >返回</button>-->
-                                    <!--<button type="button" class="btn btn_brandRight" data-dismiss="modal">确定</button>-->
-                                <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
     </section>
 </div>

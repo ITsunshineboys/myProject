@@ -269,8 +269,8 @@ section{
 
 }
 .changeColor{
-    color: #333!important;
-    border-color: #333!important;
+    color: #222!important;
+    border-color: #222!important;
 
 }
 .well{
@@ -290,7 +290,7 @@ section{
     width: 5.7rem;
     height: 2.4rem;
     border: 2px solid #999;
-    color: #999;
+    color: #666;
     border-radius:.3rem;
     display: inline-block;
     text-align: center;
@@ -425,7 +425,12 @@ section{
     padding-top: 1rem;
     padding-bottom: 3rem;
     border-bottom: 2px solid #dcdcdc;
-
+    position: relative;
+}
+.brands_more li img{
+    position: absolute;
+    right: 0;
+    top: 2rem;
 }
 .nullGoods{
     text-align: center;
