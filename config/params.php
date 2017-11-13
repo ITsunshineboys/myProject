@@ -3,7 +3,7 @@
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 $auth = require(__DIR__ . '/auth.php');
-//$paramsOnline = require(__DIR__ . '/params_online.php');
+$paramsOnline = require(__DIR__ . '/params_online.php');
 
 return [
     'adminEmail' => 'admin@example.com',
@@ -63,7 +63,6 @@ return [
         1039 => '商品编码错误，请重新添加',
         1040 => '该手机号还未注册商家，请联系客服400-3948-398',
         1041 => '当前银行卡与实名认证用户不匹配，请更换银行卡',
-        1042 => '请填写采购价后上架商品',
         1050 => '请求方式错误',
         1051 => '失败',
         1052 => '未登录',
@@ -237,5 +236,5 @@ return [
             '支持',
         ],
     ],
-//    'online' => $paramsOnline,
+    'online' => $paramsOnline,
 ];
