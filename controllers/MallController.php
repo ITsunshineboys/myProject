@@ -2597,7 +2597,7 @@ class MallController extends Controller
         if (YII_DEBUG) {
             StringService::writeLog('test', json_encode($districtCodesArr) . '|' . json_encode($districtCodesArrOld), 'LogisticsTemplateEdit');
         }
-        if (StringService::checkArrayIdentity($districtCodesArr, $districtCodesArrOld)) {
+        if (!StringService::checkArrayIdentity($districtCodesArr, $districtCodesArrOld)) {
             $deletedNum = LogisticsDistrict::deleteAll(
                 [
                     'template_id' => $logisticsTemplate->id,
