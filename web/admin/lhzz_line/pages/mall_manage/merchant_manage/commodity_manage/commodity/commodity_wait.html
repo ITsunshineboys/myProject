@@ -61,11 +61,10 @@
                     <i class="glyphicon glyphicon-triangle-bottom" ng-class="{'active':time_desorder}"></i>
                 </span>
             </td>
-            <td ng-if="menu_list[12].value">操作人员</td>
-            <td ng-if="menu_list[13].value">图片</td>
-            <td ng-if="menu_list[14].value">审核备注</td>
-            <td ng-if="menu_list[15].value">详情</td>
-            <td ng-if="menu_list[16].value">操作</td>
+            <td ng-if="menu_list[12].value">图片</td>
+            <td ng-if="menu_list[13].value">审核备注</td>
+            <td ng-if="menu_list[14].value">详情</td>
+            <td ng-if="menu_list[15].value">操作</td>
         </tr>
         <tr class="table_content" ng-repeat="item in tabledetail track by $index">
             <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
@@ -74,23 +73,28 @@
             <td ng-if="menu_list[2].value">{{item.supplier_price | currency:"¥"}}</td>
             <td ng-if="menu_list[3].value">{{item.market_price | currency:"¥"}}</td>
             <td ng-if="menu_list[4].value">{{item.platform_price | currency:"¥"}}</td>
-            <td ng-if="menu_list[5].value">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
-            <td ng-if="menu_list[6].value">{{item.purchase_price_manager | currency:"¥"}}</td>
-            <td ng-if="menu_list[7].value"> {{item.purchase_price_designer | currency:"¥"}}</td>
+            <td ng-if="menu_list[5].value&&item.purchase_price_decoration_company!=0.00">{{item.purchase_price_manager | currency:"¥"}}</td>
+            <td ng-if="menu_list[5].value&&item.purchase_price_decoration_company==0.00">&nbsp;</td>
+
+            <td ng-if="menu_list[6].value&&item.purchase_price_manager!=0.00">{{item.purchase_price_manager | currency:"¥"}}</td>
+            <td ng-if="menu_list[6].value&&item.purchase_price_manager==0.00">&nbsp;</td>
+
+            <td ng-if="menu_list[7].value&&item.purchase_price_designer!=0.00"> {{item.purchase_price_designer | currency:"¥"}}</td>
+            <td ng-if="menu_list[7].value&&item.purchase_price_designer==0.00">&nbsp;</td>
+
             <td ng-if="menu_list[8].value">{{item.left_number}}</td>
             <td ng-if="menu_list[9].value">{{item.sold_number}}</td>
             <td ng-if="menu_list[10].value" class="blue">{{item.status}}</td>
             <td ng-if="menu_list[11].value">{{item.publish_time}}</td>
-            <td ng-if="menu_list[12].value">{{item.operator}}</td>
-            <td ng-if="menu_list[13].value"><img class="goodpic" id="img_size"
+            <td ng-if="menu_list[12].value"><img class="goodpic" id="img_size"
                                                  ng-src="{{baseUrl + '/'+ item.cover_image}}"
                                                  alt=""></td>
 
-            <td ng-if="menu_list[14].value" data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span
+            <td ng-if="menu_list[13].value" data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span
                     class="check_border wait_check" ng-bind="item.reason||'点击输入'"
                     ng-click="checkReason(item.id,item.reason)"></span></td>
-            <td ng-if="menu_list[15].value" class="blue" ui-sref="commodity_detail_wait({waitgood:item,storeid:storeid})">编辑</td>
-            <td ng-if="menu_list[16].value" class="blue"data-toggle="modal" data-target="#waitup_shelves_modal" ng-click="waitToOnline(item.id)">上架
+            <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail_wait({waitgood:item,storeid:storeid})">编辑</td>
+            <td ng-if="menu_list[15].value" class="blue"data-toggle="modal" data-target="#waitup_shelves_modal" ng-click="waitToOnline(item.id)">上架
             </td>
         </tr>
     </table>
