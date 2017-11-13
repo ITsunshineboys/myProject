@@ -439,12 +439,14 @@ class GoodsOrder extends ActiveRecord
             switch ($type)
             {
                 case 'supplier':
+                    echo 1;exit;
                     if($arr[$k]['status']=='待发货')
                     {
                         $arr[$k]['handle']='发货';
                     }
                     break;
                 case 'lhzz':
+                    echo 2;exit;
                     if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
                         $arr[$k]['handle']='平台介入';
                     }
