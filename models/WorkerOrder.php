@@ -222,16 +222,17 @@ class WorkerOrder extends \yii\db\ActiveRecord
     private static function getOrderDetail($order_id)
     {
             $order = self::find()
-                ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type')
+                ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,start_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type')
+                ->asArray()
                 ->where(['id' => $order_id])
                 ->one();
 
             if (!$order) {
                 return 1000;
             }
-            if($order->type==self::ORDER_OLD){
+            if($order['type']==self::ORDER_OLD){
                 $return=self::orderFastView($order);
-            }elseif($order->type==self::ORDER_NEW){
+            }elseif($order['type']==self::ORDER_NEW){
                 $return = self::dealOrder($order);
             }
 
@@ -302,43 +303,35 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
     private static function dealOrder($order)
     {
-        $worker_type_id = $order->worker_type_id;
+
+        $worker_type_id = $order['worker_type_id'];
         $type=WorkerType::getparenttype($worker_type_id);
         switch ($type){
             case '泥工':
-                $data=self::MudorderView($order->id);
+                $data=self::MudorderView($order['id']);
                 break;
             case '防水工':
-                $data=self::WaterprooforderView($order->id);
+                $data=self::WaterprooforderView($order['id']);
                 break;
             case '油漆工':
-                $data=self::painterorderView($order->id);
+                $data=self::painterorderView($order['id']);
                 break;
             case '水电工':
                 $data=self::HydropowerorderView($order->id);
                 break;
         }
 
-//        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
-//        $worker_items = [];
-//        foreach ($worker_type_items as $worker_type_item) {
-//            $worker_item_id = $worker_type_item->worker_item_id;
-//            $worker_item = WorkerItem::find()
-//                ->where(['id' => $worker_item_id])
-//                ->select(['id', 'title'])
-//                ->asArray()->one();
-//            $worker_items[] = $worker_item;
-//        }
-        $order->worker_type_id=WorkerType::getparenttype($order->worker_type_id);
-        $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
-        $order->modify_time && $order->modify_time = date('Y-m-d H:i', $order->modify_time);
-        $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
-        $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
+        $order['worker_type_id']=WorkerType::getparenttype($order['worker_type_id']);
+        $order['create_time'] && $order['create_time']= date('Y-m-d H:i', $order['create_time']);
+        $order['modify_time'] && $order['modify_time']  = date('Y-m-d H:i', $order['modify_time']);
+        $order['start_time'] && $order['start_time'] = date('Y-m-d H:i', $order['start_time']);
+        $order['end_time'] && $order['end_time'] = date('Y-m-d H:i', $order['end_time']);
 //        状态是0的时候有取消时间和取消原因
 //        $order->cancel_time && $order->cancel_time = date('Y-m-d H:i', $order->cancel_time);
-        $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
-        $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
-        return [$order, $data];
+        $order['amount'] && $order['amount'] = sprintf('%.2f', (float)$order['amount'] / 100);
+        $order['front_money'] && $order['front_money'] = sprintf('%.2f', (float)$order['front_money'] / 100);
+
+        return [$order,$data];
     }
 
     /**
@@ -454,10 +447,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker = [];
         //只要有工人id,便显示工人信息
 
-        if ($order->worker_id) {
+        if ($order['worker_id']) {
             $worker = Worker::find()
                 ->select('id,uid,nickname,icon,order_done,level,worker_type_id,skill_ids')
-                ->where(['id' => $order->worker_id])
+                ->where(['id' => $order['worker_id']])
                 ->asArray()
                 ->one();
             $worker['mobile'] = User::find()
@@ -470,7 +463,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->where(['id'=>$worker['level']])
                 ->select('rank_name')
                 ->one();
-            switch ($order->status){
+            switch ($order['status']){
                 case 2:
                     $worker['info']='工人已接单';
                     break;
@@ -487,9 +480,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $worker=array_merge($worker,$rank);
 
 
-        }elseif($order->status==6){
+        }elseif($order['status']==6){
             $worker['info']='你已取消订单';
-        }elseif($order->status==1){
+        }elseif($order['status']==1){
             $worker['info']='等待工人接单中';
         }
 
@@ -500,7 +493,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
 //            $works_id = self::getWorksIdByOrderNo($order_no);
 //        }
         $order_img = self::getOrderImg($order_no);
-        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+        $order['status'] = self::USER_WORKER_ORDER_STATUS[$order['status']];
 
         return [
             'order' => $order,
@@ -522,7 +515,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         list($order, $worker_items) = $order_detail;
         $order_no = self::getOrderNoById($order_id);
         $order_img = self::getOrderImg($order_no);
-        $order->status = self::USER_WORKER_ORDER_STATUS[$order->status];
+        $order['status'] = self::USER_WORKER_ORDER_STATUS[$order['status']];
 
         return [
             'order' => $order,
@@ -671,7 +664,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return array_merge($data,$work_result);
     }
 
-
+    /**
+     * @param $order_no
+     * @param $worker_info
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function worksresult($order_no,$worker_info){
         $data= WorkResult::find()
             ->asArray()
@@ -692,6 +689,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $data;
     }
+    /**
+     * @param $order_no
+     * @param int $page_size
+     * @param int $page
+     * @return array
+     */
     public static function getOrderImg($order_no, $page_size = self::IMG_PAGE_SIZE_DEFAULT, $page = 1)
     {
         $query = WorkerOrderImg::find()
@@ -885,23 +888,31 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return $code;
         }
     }
-
+    /**
+     * 快捷下单详情
+     * @param $order
+     * @return array
+     */
     public static function orderFastView($order){
-            $fasts_order=WorkerFastOrder::find()->asArray()->where(['worker_order_id'=>$order->id])->all();
+            $fasts_order=WorkerFastOrder::find()->asArray()->where(['worker_order_id'=>$order['id']])->all();
             foreach ($fasts_order as &$fast){
 
                 $fast['worker_items']=WorkerType::find()->asArray()->select('worker_name')->where("id in ({$fast['worker_item_ids']})")->all();
                $fast['worker_type']=WorkerType::find()->asArray()->select('worker_name')->where(['id'=>$fast['worker_type_id']])->one();
+               unset($fast['worker_order_id']);
+               unset($fast['worker_item_ids']);
+               unset($fast['worker_type_id']);
+               unset($fast['id']);
             }
-        $order->worker_type_id=WorkerType::getparenttype($order->worker_type_id);
-        $order->create_time && $order->create_time = date('Y-m-d H:i', $order->create_time);
-        $order->modify_time && $order->modify_time = date('Y-m-d H:i', $order->modify_time);
-        $order->start_time && $order->start_time = date('Y-m-d H:i', $order->start_time);
-        $order->end_time && $order->end_time = date('Y-m-d H:i', $order->end_time);
+        $order['worker_type_id']=WorkerType::getparenttype($order['worker_type_id']);
+        $order['create_time'] && $order['create_time']= date('Y-m-d H:i', $order['create_time']);
+        $order['modify_time'] && $order['modify_time']  = date('Y-m-d H:i', $order['modify_time']);
+        $order['start_time'] && $order['start_time'] = date('Y-m-d H:i', $order['start_time']);
+        $order['end_time'] && $order['end_time'] = date('Y-m-d H:i', $order['end_time']);
 //        状态是0的时候有取消时间和取消原因
 //        $order->cancel_time && $order->cancel_time = date('Y-m-d H:i', $order->cancel_time);
-        $order->amount && $order->amount = sprintf('%.2f', (float)$order->amount / 100);
-        $order->front_money && $order->front_money = sprintf('%.2f', (float)$order->front_money / 100);
+        $order['amount'] && $order['amount'] = sprintf('%.2f', (float)$order['amount'] / 100);
+        $order['front_money'] && $order['front_money'] = sprintf('%.2f', (float)$order['front_money'] / 100);
 
            return [$order,$fasts_order];
     }
@@ -1288,16 +1299,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $infos=[];
             foreach ($data as $k=>&$v){
                 $order = self::find()
-                    ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type,reason')
+                    ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,start_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type,reason')
+                    ->asArray()
                     ->where(['id' => $v['id']])
                     ->one();
-                if($order->type==self::ORDER_OLD){
+                if($order['type']==self::ORDER_OLD){
                     $return=self::orderFastView($order);
-                }elseif($order->type==self::ORDER_NEW){
+                }elseif($order['type']==self::ORDER_NEW){
                     $return = self::dealOrder($order);
                 }
-                $infos[]['order_info']=$return;
+                $infos[$k]['order_info']=$return[0];
+                $infos[$k]['order_info']['order_items']=$return[1];
             }
+
             return $infos;
 
         }else{
