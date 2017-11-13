@@ -617,7 +617,10 @@ class WorkerManagementController extends Controller
         return Json::encode($worker_order);
     }
 
-
+    /**
+     * 工人列表 列表
+     * @return string
+     */
     public function actionWorkerList()
     {
         $code = (int)trim(\Yii::$app->request->get('code',''));
@@ -658,5 +661,50 @@ class WorkerManagementController extends Controller
             'msg' => 'ok',
             'list' => Worker::findByCode($where,$size,$page),
         ]);
+    }
+
+    /**
+     * 工人列表 状态和备注修改
+     * @return string
+     */
+    public function actionWorkerStatus()
+    {
+        $id = (int)trim(\Yii::$app->request->post('id',''));
+
+        $worker = Worker::findOne(['id'=>$id]);
+
+        $status = (int)trim(\Yii::$app->request->post('status',''));
+        $comment = (int)trim(\Yii::$app->request->post('comment',''));
+        if ($status) {
+            $worker->status = $status;
+            if (!$worker->save()){
+                $code = 1000;
+                return Json::encode([
+                   'code' => $code,
+                   'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            return Json::encode([
+               'code' => 200,
+               'msg' => 'ok',
+            ]);
+        }
+
+        if ($comment) {
+            $worker->comment = $comment;
+            if (!$worker->save()){
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
+        }
     }
 }
