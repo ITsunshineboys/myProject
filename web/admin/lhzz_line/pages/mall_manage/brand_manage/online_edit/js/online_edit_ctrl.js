@@ -10,7 +10,7 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   };
   $scope.myng=$scope;
   $scope.now_edit_list=[];
-  $scope.now_edit_list=$stateParams.item;//当前那条数据
+  $scope.now_edit_list=$stateParams.on_shelves_list;//当前那条数据
   console.log($scope.now_edit_list);
   $scope.online_time_flag=$stateParams.online_time_flag;//排序的类型
   /*===============进入页面显示的数据==================*/

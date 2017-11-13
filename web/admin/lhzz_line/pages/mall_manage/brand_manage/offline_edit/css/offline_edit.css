@@ -13,16 +13,13 @@
 
 .topnav h6 {
     float: left;
-    font-size: 14px;
     line-height: 36px;
     margin-left: 5px;
-    font-family: PingFangSC-Semibold;
-    font-size: 14px;
     color: #2F3033;
 }
 
-.topnav h6:nth-child(2){
-    font-weight: bold;
+.topnav h6:nth-child(4){
+    font-weight: normal;
 }
 
 .topnav h6:last-child{
