@@ -4824,6 +4824,9 @@ class MallController extends Controller
             ]);
         }
 
+        if (YII_DEBUG) {
+            StringService::writeLog('test', date('H:i:s'), 'categories-level3', Logger::LEVEL_INFO);
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
