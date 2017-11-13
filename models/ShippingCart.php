@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Exception;
 use yii\db\Query;
 
 /**
@@ -108,5 +109,43 @@ class ShippingCart extends \yii\db\ActiveRecord
             ];
         }
         return $mix;
+    }
+
+
+    /**
+     * 删除购物车商品
+     * @param array $carts
+     * @return int
+     */
+    public static function DelShippingCartData($carts = [])
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            foreach ($carts as &$cart)
+            {
+                $ca=self::findOne($cart);
+                if (!$ca)
+                {
+                    $code=1000;
+                    $tran->rollBack();
+                    return $code;
+                }
+                $res=$ca->delete();
+                if (!$res)
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+
     }
 }

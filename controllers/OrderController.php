@@ -4351,7 +4351,7 @@ class OrderController extends Controller
         }
 
 
-  /**
+    /**
      * 计算运费
      * @return string
      */
@@ -4436,7 +4436,11 @@ class OrderController extends Controller
     }
 
 
-       public  function  actionDelInvalidGoods()
+    /**
+     * 删除购物车列表
+     * @return string
+     */
+    public  function  actionDelInvalidGoods()
     {
         $user = Yii::$app->user->identity;
         if (!$user){
