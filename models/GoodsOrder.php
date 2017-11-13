@@ -389,7 +389,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sort_money
      * @return array
      */
-   public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money)
+   public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$type)
     {
 
         $sort='';
@@ -435,9 +435,21 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
-                $arr[$k]['handle']='平台介入';
+            switch ($type)
+            {
+                case 'supplier':
+                    if($arr[$k]['status']=='待发货')
+                    {
+                        $arr[$k]['handle']='发货';
+                    }
+                    break;
+                case 'lhzz':
+                    if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+                        $arr[$k]['handle']='平台介入';
+                    }
+                    break;
             }
+
             $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
             $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
