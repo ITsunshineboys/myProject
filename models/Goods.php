@@ -30,6 +30,7 @@ class Goods extends ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_EDIT_LHZZ = 'edit_lhzz';
     const SCENARIO_REVIEW = 'review';
+    const SCENARIO_TOGGLE = 'toggle';
     const PROFIT_RATE_PRECISION = 100000;
     const DEFAULT_CITY = 510100;
     const PROFIT_RATE_ATTRS = [
@@ -988,6 +989,7 @@ class Goods extends ActiveRecord
             [['category_id', 'brand_id', 'supplier_price', 'platform_price', 'market_price', 'purchase_price_decoration_company', 'purchase_price_manager', 'purchase_price_designer', 'left_number', 'logistics_template_id', 'style_id', 'series_id'], 'number', 'min' => 0],
             ['supplier_price', 'validateSupplierPrice', 'on' => [self::SCENARIO_REVIEW, self::SCENARIO_EDIT_LHZZ]],
             ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_ADD, self::SCENARIO_EDIT]],
+            ['platform_price', 'validatePlatformPrice', 'on' => [self::SCENARIO_TOGGLE]],
             ['after_sale_services', 'validateAfterSaleServices'],
             [['category_id'], 'validateCategoryId'],
             [['brand_id'], 'validateBrandId'],
