@@ -1630,7 +1630,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
    /**
      * 获取物流信息
      * @return string
@@ -1647,7 +1646,15 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         if($sku =='-1')
         {
             $shipping_type=0;
@@ -1683,7 +1690,8 @@ class OrderController extends Controller
                     'shipping_type'=>$shipping_type,
                     'waybillname'=>'暂无物流信息',
                     'waybillnumber'=>'0',
-                    'order_no'=>$order_no
+                    'order_no'=>$order_no,
+                    'mobile'=>$GoodsOrder->consignee_mobile
                 ]
             ]);
         }
@@ -1705,7 +1713,7 @@ class OrderController extends Controller
         }
         if ($shipping_type==1)
         {
-            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+
             $supplier=Supplier::find()
                 ->select('nickname')
                 ->where(['id'=>$GoodsOrder->supplier_id])
@@ -1722,7 +1730,8 @@ class OrderController extends Controller
                 'shipping_type'=>$shipping_type,
                 'waybillname'=>$waybillname,
                 'waybillnumber'=>$express['waybillnumber'],
-                'order_no'=>$order_no
+                'order_no'=>$order_no,
+                'mobile'=>$GoodsOrder->consignee_mobile
             ],
         ]);
     }
