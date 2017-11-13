@@ -126,102 +126,6 @@ class OrderController extends Controller
     }
 
     /**
-     * 获取库存
-     * @return string
-     */
-    public function actionLinestocknum(){
-        $request = Yii::$app->request;
-        if ($request->isPost) {
-            $goods_id = trim($request->post('goods_id',''),'');
-            $data=Goods::find()->select('left_number')->where(['id'=>$goods_id])->one();
-            return Json::encode([
-                'code' => 200,
-                'msg' => '返回库存量',
-                'data' => ['number'=>$data['left_number']]
-            ]);
-        }else{
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '请求方式错误',
-                'data' => 0
-            ]);
-        }
-
-    }
-
-
-
-    /**
-     * 获取商品id
-     * @return string
-     */
-    public function actionLineGobuy(){
-        $request = Yii::$app->request;
-        if ($request->isPost) {
-            $goods_id = trim($request->post('goods_id',''),'');
-            $goods_num = trim($request->post('goods_num',''),'');
-        }else{
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => 0
-            ]);
-        }
-    }
-    /**
-     * @return string
-     */
-    public  function   actionGetDistrict()
-    {
-        //获取一级
-        $data=Yii::$app->params['districts'];
-        $one=$data[0][86];
-        foreach ($one as $k =>$v)
-        {
-            $datas[$k]['id']=$k;
-            $datas[$k]['name']=$one[$k];
-            $datas[$k]['child']=array();
-
-            if (array_key_exists($k, $data[0]))
-            {
-                $datas[$k]['child']=$data[0][$k];
-                foreach ($datas[$k]['child'] as $key =>$val)
-                {
-                    $datas[$k]['child'][$key]=array();
-
-                    $datas[$k]['child'][$key]['id']=$key;
-
-                        $datas[$k]['child'][$key]['name']=$val;
-
-
-                    if (array_key_exists($key, $data[0]))
-                    {
-
-                        $datas[$k]['child'][$key]['child']=$data[0][$key];
-                        foreach ($datas[$k]['child'][$key]['child'] as $ke =>$va)
-                        {
-                            $datas[$k]['child'][$key]['child'][$ke]=array();
-                            $datas[$k]['child'][$key]['child'][$ke]['id']=$ke;
-                            $datas[$k]['child'][$key]['child'][$ke]['name']=$va;
-                        }
-                    }else{
-                        $datas[$k]['child'][$key]['child']=[];
-                    }
-                }
-            }else{
-                $datas[$k]['child']=[];
-            }
-
-        }
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data'=>$datas
-        ]);
-    }
-    /**
      * 获取省份
      * @return string
      */
@@ -547,7 +451,6 @@ class OrderController extends Controller
                         echo 'fail';
                         exit;
                     }
-
                     $time=(time()-60*60*6);
                     $list=EffectEarnest::find()
                         ->where("create_time<={$time}")
@@ -603,7 +506,6 @@ class OrderController extends Controller
                                     exit;
                                 };
                             }
-
                         }
                     }
 
@@ -4611,15 +4513,6 @@ class OrderController extends Controller
         }
     }
 
-    public function  actionDelData()
-    {
-        $goods=Goods::find()->where(['sku'=>'5296'])->one();
-        return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok',
-            'data' =>$goods
-        ]);
-      
-    }
+
 
 }
