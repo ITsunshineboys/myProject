@@ -11,6 +11,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
+    $scope.btnclick = true;
 
     let namesarr = []; //属性名称数组
     let valuesarr = [];//属性内容数组
@@ -107,6 +108,9 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             unitsarr.push($scope.propattrs[i].cur_unit.unit);
         }
 
+
+        console.log(valuesarr)
+
         for(let i=0;i<unitsarr.length;i++){
             switch (unitsarr[i]){
                 case "无":
@@ -139,8 +143,12 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             "addition_types[]":typesarr
         };
             $http.post(url,data,config).then(function (res) {
+                console.log(res);
                 if(res.data.code==200){
-                    console.log(res);
+                    $scope.btnclick = true;
+                    $("#success_modal").modal("show");
+                }else if(res.data.code==1009){
+                    $scope.btnclick = false;
                     $("#success_modal").modal("show");
                 }
             })

@@ -24,9 +24,12 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($scope,$
     $scope.platform_price = gooddetail.platform_price; //平台价格
     $scope.market_price = gooddetail.market_price; //市场价格
     $scope.left_number = gooddetail.left_number; //库存
-    $scope.purchase_price_decoration_company = !gooddetail.purchase_price_decoration_company&&!gooddetail.purchase_price_manager&&!gooddetail.purchase_price_designer?'':gooddetail.purchase_price_decoration_company; //装修公司采购价
-    $scope.purchase_price_manager = !gooddetail.purchase_price_decoration_company&&!gooddetail.purchase_price_manager&&!gooddetail.purchase_price_designer?'':gooddetail.purchase_price_manager; //项目经理采购价
-    $scope.purchase_price_designer = !gooddetail.purchase_price_decoration_company&&!gooddetail.purchase_price_manager&&!gooddetail.purchase_price_designer?'':gooddetail.purchase_price_designer; //设计师采购价
+    let price_a = Number(gooddetail.purchase_price_decoration_company); //装修公司采购价
+    let price_b = Number(gooddetail.purchase_price_manager);            //项目经理采购价
+    let price_c = Number(gooddetail.purchase_price_designer);           //设计师采购价
+    $scope.purchase_price_decoration_company = !price_a&&! price_b&&!price_c?'':price_a; //装修公司采购价
+    $scope.purchase_price_manager = !price_a&&! price_b&&!price_c?'':price_b //项目经理采购价
+    $scope.purchase_price_designer = !price_a&&! price_b&&!price_c?'':price_c ; //设计师采购价
     $scope.after_sale_services_desc = gooddetail.after_sale_services_desc;//售后保障
     $scope.qr_code = gooddetail.qr_code; //二维码
     $scope.reason = gooddetail.reason; //审核备注
