@@ -709,7 +709,26 @@ class WorkerManagementController extends Controller
     }
 
     public function actionWorkerDetails()
-    {
-            
+{
+    $id = (int)trim(\Yii::$app->request->get('id',''));
+    $status = trim(\Yii::$app->request->get('status',''));
+    switch ($status){
+        case $status == 'basic':     // 基本信息
+            break;
+        case $status == 'role':    // 角色信息
+            break;
+        case $status == 'production':    // 作品信息
+            break;
+        case $status == 'engineering':    // 工程订单
+            break;
+        case $status == 'construction_site':    // 工地信息
+            break;
+
     }
+
+
+
+
+
+}
 }
