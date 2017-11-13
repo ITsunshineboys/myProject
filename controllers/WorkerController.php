@@ -584,39 +584,60 @@ class WorkerController extends Controller
         }
     }
 
-    /**
-     * 得到 订单历史记录
-     *
-     * @return int|string
-     */
-    public function actionGetOrderHistory()
-    {
+    public function actionChangeHistory(){
         $user = self::userIdentity();
         if (!is_int($user)) {
             return $user;
         }
-
-        $request = \Yii::$app->request;
-
-        $order_no = (int)$request->get('order_no', 0);
-
-        $code = 1000;
-
-        $order = WorkerOrder::getOrderHistory($user, $order_no);
-
-        if (!$order_no || !$order) {
+        $code=1000;
+        $order_no = (int)\Yii::$app->request->get('order_no', 0);
+        if(!$order_no){
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
+       $data= WorkerOrder::getOrderHistory($user,$order_no);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'data' => $order
+            'data'=>$data
         ]);
     }
+
+//    /**
+//     * 得到 订单历史记录
+//     *
+//     * @return int|string
+//     */
+//    public function actionGetOrderHistory()
+//    {
+//        $user = self::userIdentity();
+//        if (!is_int($user)) {
+//            return $user;
+//        }
+//
+//        $request = \Yii::$app->request;
+//
+//        $order_no = (int)$request->get('order_no', 0);
+//
+//        $code = 1000;
+//
+//        $order = WorkerOrder::getOrderHistory($user, $order_no);
+//
+//        if (!$order_no || !$order) {
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//
+//        return Json::encode([
+//            'code' => 200,
+//            'msg' => 'ok',
+//            'data' => $order
+//        ]);
+//    }
 
     /**
      * 取消订单

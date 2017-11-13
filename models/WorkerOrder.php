@@ -313,6 +313,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 break;
             case '油漆工':
                 $data=self::painterorderView($order->id);
+                break;
+            case '水电工':
+                $data=self::HydropowerorderView($order->id);
+                break;
         }
 
 //        $worker_type_items = WorkerTypeItem::find()->where(['worker_type_id' => $worker_type_id])->all();
@@ -349,8 +353,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
 
         $query = self::find()
-        ->select(['id','uid','create_time', 'amount', 'status', 'worker_id','worker_type_id'])
-        ->where(['uid' => $uid])
+        ->select(['id','uid','order_no','create_time', 'amount', 'status', 'worker_id','worker_type_id'])
+        ->where(['uid' => $uid,'is_old'=>self::ORDER_NEW])
         ->orderBy('create_time Desc');
         if ($status != WorkerController::STATUS_ALL) {
             if($status==self::WORKER_ORDER_READY){
@@ -398,8 +402,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->one()['id'];
 
         $query = self::find()
-            ->select(['id','create_time', 'amount', 'status', 'worker_id'])
-            ->Where(['worker_id'=>$worker_id]);
+            ->select(['id','order_no','create_time', 'amount', 'status', 'worker_id'])
+            ->Where(['worker_id'=>$worker_id,'is_old'=>self::ORDER_NEW]);
         if ($status != WorkerController::STATUS_ALL) {
             if($status==self::WORKER_ORDER_READY){
                 $status=[
@@ -862,11 +866,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $code = 500;
                 return $code;
             }
-            $worker_order_item=new WorkerOrderItem();
+            $worker_order_item=new WorkerFastOrder();
             $worker_item_ids=implode(',',$array['worker_item_id']);
             $worker_order_item->worker_item_ids=$worker_item_ids;
             $worker_order_item->worker_type_id=$array['worker_type_id'];
-            $worker_order_item->worker_order_no=$order_no;
+            $worker_order_item->worker_order_id=$worker_order->id;
             if(!$worker_order_item->save(false)){
                 $transaction->rollBack();
                 $code=500;
@@ -1268,22 +1272,39 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return null;
     }
 
+    /**
+     * 获取历史修改订单
+     * @param $uid
+     * @param $order_no
+     * @return array|bool
+     */
     public static function getOrderHistory($uid, $order_no)
     {
         $data = WorkerOrder::find()
             ->where(['uid' => $uid, 'order_no' => $order_no, 'is_old' => self::IS_OLD])
             ->asArray()
-            ->orderBy(['id' => SORT_DESC])
-            ->one();
+            ->all();
+        if($data){
+            $infos=[];
+            foreach ($data as $k=>&$v){
+                $order = self::find()
+                    ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type,reason')
+                    ->where(['id' => $v['id']])
+                    ->one();
+                if($order->type==self::ORDER_OLD){
+                    $return=self::orderFastView($order);
+                }elseif($order->type==self::ORDER_NEW){
+                    $return = self::dealOrder($order);
+                }
+                $infos[]['order_info']=$return;
+            }
+            return $infos;
 
-        if ($data) {
-            $data['status'] = self::USER_WORKER_ORDER_STATUS[$data['status']];
-            return $data;
+        }else{
+           return false;
         }
 
-        return false;
     }
-
     /**
      * 新工人作品
      *
@@ -1715,57 +1736,76 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return int
      */
     public static function UpdateOrder($array){
+
+
         $order=WorkerOrder::find()->asArray()->where(['id'=>$array['order_id'],'is_old'=>0])->one();
+
         //修改泥作订单表的内容
         //修改建议工期
-
-
         $tran=Yii::$app->db->beginTransaction();
         try{
+
             //修改旧数据
             $res_edit_old=WorkerOrder::find()->where(['id'=>$array['order_id'],'is_old'=>0])->one();
             $res_edit_old->is_old=1;
+            $res_edit_old->modify_time=time();
+            $res_edit_old->$array['reason'];
             if(!$res_edit_old->update(false)){
                 $tran->rollBack();
                 $code=500;
                 return $code;
             };
+
             $last_id=self::editorderinset($order,$array);
             if(!$last_id){
                 $tran->rollBack();
                 $code=500;
                 return $code;
             }
-            //修改items数据
-            switch (WorkerType::gettype($array['worker_type_id'])){
-                case '泥工':
-                    $items_res=self::saveMuditem($array['items'],$last_id);
-                    break;
-                case '防水工':
-                    $items_res=self::savewaterproofitme($array['items'],$last_id);
-                    break;
-                case '油漆工':
-                    $items_res=self::savepainteritem($array['items'],$last_id);
-                    break;
-                case '水电工':
-                    $items_res=self::savehydropoweritem($array['items'],$last_id);
-                    break;
-                case '木工':
-                    $items_res=self::savecarpentryitem($array['items'],$last_id);
-                    break;
-                case '杂工':
-                    $items_res=self::savebackmanitem($array['items'],$last_id);
-                    break;
-            }
-            if(!$items_res){
-                $tran->rollBack();
-                $code=500;
-                return $code;
+            if($order['type']==self::ORDER_NEW){
+                //精准型 修改items数据->新增一条数据
+                switch (WorkerType::gettype($array['worker_type_id'])){
+                    case '泥工':
+                        $items_res=self::saveMuditem($array['items'],$last_id);
+                        break;
+                    case '防水工':
+                        $items_res=self::savewaterproofitme($array['items'],$last_id);
+                        break;
+                    case '油漆工':
+                        $items_res=self::savepainteritem($array['items'],$last_id);
+                        break;
+                    case '水电工':
+                        $items_res=self::savehydropoweritem($array['items'],$last_id);
+                        break;
+                    case '木工':
+                        $items_res=self::savecarpentryitem($array['items'],$last_id);
+                        break;
+                    case '杂工':
+                        $items_res=self::savebackmanitem($array['items'],$last_id);
+                        break;
+                }
+                if(!$items_res){
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }else{
+                $worker_order_item=new WorkerFastOrder();
+                $worker_item_ids=implode(',',$array['worker_item_id']);
+                $worker_order_item->worker_item_ids=$worker_item_ids;
+                $worker_order_item->worker_type_id=$array['worker_type_id'];
+                $worker_order_item->worker_order_id=$last_id;
+                if(!$worker_order_item->save(false)){
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
             }
             $tran->commit();
             return 200;
 
         }catch (Exception $e){
+            var_dump($e);
             $tran->rollBack();
             $code=500;
             return $code;
@@ -1774,7 +1814,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
 
 
     }
-
+    /**
+     * 工人修改订单->新增一条数据
+     * @param $order_info
+     * @param $edit_info
+     * @return bool|string
+     */
     public static function editorderinset($order_info,$edit_info){
 
         if(isset($edit_info['need_time'])){
