@@ -1,6 +1,6 @@
 ;
 let add_brand = angular.module("addbrandModule",['ngFileUpload']);
-add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$anchorScroll,$window) {
+add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$anchorScroll,$window,_ajax) {
   $scope.myng=$scope;
   //POST请求的响应头
   let config = {
@@ -9,19 +9,7 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
       return $.param(data)
     }
   };
-//下架列表
-  $scope.cycle_arr=[];
-  $http.get(baseUrl+'/mall/brand-list-admin', {
-    params:{
-      status:0,
-      size:999999
-    }
-  }).then(function (res) {
-    console.log("已下架后台列表");
-    $scope.cycle_arr=res.data.data.brand_list_admin.details;
-  },function (err) {
-    console.log(err);
-  });
+
 
 	//上传商标注册证
   $scope.upload_img_src='';
@@ -79,99 +67,75 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
   //系列分类
   $scope.item_check = [];
   //获取一级
-  $http({
-    method: 'get',
-    url: baseUrl+'/mall/categories'
-  }).then(function successCallback(response) {
-    $scope.details = response.data.data.categories;
-    $scope.oneColor= $scope.details[0];
-    // console.log(response);
-    // console.log($scope.details)
-  });
+  _ajax.get('/mall/categories',{},function (res) {
+      $scope.details = res.data.categories;
+      $scope.oneColor= $scope.details[0];
+  })
   //获取二级
-  $http({
-    method: 'get',
-    url: baseUrl+'/mall/categories?pid=1'
-  }).then(function successCallback(response) {
-    $scope.second = response.data.data.categories;
-    $scope.twoColor= $scope.second[0];
-    // console.log($scope.second)
-  });
+  _ajax.get('/mall/categories?pid=1',{},function (res) {
+      $scope.second = res.data.categories;
+      $scope.twoColor= $scope.second[0];
+  })
   //获取三级
-  $http({
-    method: 'get',
-    url: baseUrl+'/mall/categories?pid=2'
-  }).then(function successCallback(response) {
-      // console.log(response)
-    $scope.three = response.data.data.categories;
-    for(let [key,value] of $scope.three.entries()){
-      if($scope.item_check.length == 0){
-        value['complete'] = false
-      }else{
-        for(let [key1,value1] of $scope.item_check.entries()){
-          if(value.id == value1.id){
-            value.complete = true
+  _ajax.get('/mall/categories?pid=2',{},function (res) {
+      $scope.three = res.data.categories;
+      for(let [key,value] of $scope.three.entries()){
+          if($scope.item_check.length == 0){
+              value['complete'] = false
+          }else{
+              for(let [key1,value1] of $scope.item_check.entries()){
+                  if(value.id == value1.id){
+                      value.complete = true
+                  }
+              }
           }
-        }
       }
-    }
-  });
+  })
   //点击一级 获取相对应的二级
   $scope.getMore = function (n) {
     $scope.oneColor = n;
-    $http({
-      method: 'get',
-      url: baseUrl+'/mall/categories?pid='+ n.id
-    }).then(function successCallback(response) {
-      $scope.second = response.data.data.categories;
-      //console.log(response.data.data.categories[0].id);
-      console.log(response);
-      $scope.twoColor = $scope.second[0];
-      $http({
-        method: 'get',
-        url: baseUrl+'/mall/categories?pid='+ $scope.second[0].id
-      }).then(function successCallback(response) {
-        $scope.three = response.data.data.categories;
-        //console.log(response.data.data.categories[0].id);
-        for(let [key,value] of $scope.three.entries()){
-          if($scope.item_check.length == 0){
-            value['complete'] = false
-          }else{
-            for(let [key1,value1] of $scope.item_check.entries()){
-              if(value.id == value1.id){
-                value.complete = true
-              }
+    _ajax.get('/mall/categories',{pid:n.id},function (res) {
+        console.log(res);
+        $scope.second = res.data.categories;
+        $scope.twoColor = $scope.second[0];
+        _ajax.get('/mall/categories',{pid:$scope.second[0].id},function (res) {
+            $scope.three = res.data.categories;
+            for(let [key,value] of $scope.three.entries()){
+                if($scope.item_check.length == 0){
+                    value['complete'] = false
+                }else{
+                    for(let [key1,value1] of $scope.item_check.entries()){
+                        if(value.id == value1.id){
+                            value.complete = true
+                        }
+                    }
+                }
             }
-          }
-        }
-      });
-    });
+        })
+    })
   };
   //点击二级 获取相对应的三级
   $scope.getMoreThree = function (n) {
     $scope.id=n;
     $scope.twoColor = n;
-    $http({
-      method: 'get',
-      url: baseUrl+'/mall/categories?pid='+ n.id
-    }).then(function successCallback(response) {
-      $scope.three = response.data.data.categories;
-      for(let [key,value] of $scope.three.entries()){
-        if($scope.item_check.length == 0){
-          value['complete'] = false
-        }else{
-          for(let [key1,value1] of $scope.item_check.entries()){
-            if(value.id == value1.id){
-              value.complete = true
+    _ajax.get('/mall/categories',{pid:n.id},function (res) {
+        $scope.three = res.data.categories;
+        for(let [key,value] of $scope.three.entries()){
+            if($scope.item_check.length == 0){
+                value['complete'] = false
+            }else{
+                for(let [key1,value1] of $scope.item_check.entries()){
+                    if(value.id == value1.id){
+                        value.complete = true
+                    }
+                }
             }
-          }
         }
-      }
     });
   };
   //添加拥有系列的三级
   $scope.check_item = function(item){
-
+      $scope.add_three=0;
       for(let[key,value] of $scope.item_check.entries()){
           if(item.id==value.id){
               $scope.item_check.splice(key,1);
@@ -180,16 +144,10 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
           }else{
               $scope.add_three=0
           }
-          console.log($scope.add_three);
       }
       if($scope.add_three!=1){
           $scope.item_check.push(item);
       }
-    // if(item.complete){
-    //   $scope.item_check.push(item);
-    // }else{
-    //   $scope.item_check.splice($scope.item_check.indexOf(item),1)
-    // }
     //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';
@@ -206,8 +164,6 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
           }
       }
       $scope.item_check.splice($scope.item_check.indexOf(item),1);
-    //item.complete = false;
-    //$scope.item_check.splice($scope.item_check.indexOf(item),1);
     //分类提示文字
     if($scope.item_check.length<1){
       $scope.sort_check='请至少选择一个分类';
@@ -219,9 +175,31 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
   //确定按钮
   $scope.brand_name_flag=false;//默认品牌名称提示文字 不显示
   $scope.add_brand_ok=function (valid,error) {
-    let brand_obj = JSON.stringify({"name":""+$scope.brand_name_model});//序列化！！！
-      if(valid && JSON.stringify($scope.cycle_arr).indexOf(brand_obj.slice(1,brand_obj.length-1))==-1 && $scope.upload_img_src && $scope.upload_logo_src && $scope.item_check.length>=1){
-        $scope.add_modal_v='modal';
+      if(valid &&  $scope.upload_img_src && $scope.upload_logo_src && $scope.item_check.length>=1){
+          for(let [key,value] of $scope.item_check.entries()){
+              if(value.complete){
+                  delete value.complete
+              }
+              $scope.ids_arr.push($scope.item_check[key].id)
+          }
+          console.log($scope.ids_arr);
+          _ajax.post('/mall/brand-add',{
+              name:$scope.brand_name_model,
+              certificate:$scope.upload_img_src,
+              logo:$scope.upload_logo_src,
+              category_ids:$scope.ids_arr.join(',')
+          },function (res) {
+              console.log(res);
+              if(res.code==200){
+                $('#down_add_modal').modal('show');
+              }else{
+                  $scope.brand_name_flag=true;
+                  $anchorScroll.yOffset = 150;
+                  $location.hash('brand_title');
+                  $anchorScroll();
+                  $window.document.getElementById('brand_title').focus();
+              }
+          })
       }
       if(!valid){
         $scope.submitted = true;
@@ -250,43 +228,12 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
       $scope.sort_check='';
     }
   };
-  //监听品牌名称 是否重复
-  $scope.$watch('brand_name_model',function (newVal,oldVal) {
-    for(let [key,value] of $scope.cycle_arr.entries()){
-      if($scope.brand_name_model === value.name){
-        $scope.brand_name_flag=true;
-        break;
-      }else{
-        $scope.brand_name_flag=false;
-      }
-    }
-  });
 
   //模态框确认按钮
 	$scope.ids_arr=[];
   $scope.saveonline=function () {
     setTimeout(function () {
       $state.go('brand_index',{down_flag:true});//跳转主页
-      for(let [key,value] of $scope.item_check.entries()){
-        if(value.complete){
-          delete value.complete
-        }
-        $scope.ids_arr.push($scope.item_check[key].id)
-      }
-      console.log($scope.ids_arr);
-      let url=baseUrl+'/mall/brand-add';
-      $http.post(url,{
-        name:$scope.brand_name_model,
-        certificate:$scope.upload_img_src,
-        logo:$scope.upload_logo_src,
-        category_ids:$scope.ids_arr.join(',')
-      },config).then(function (res) {
-        console.log("添加成功")
-        console.log(res);
-      },function (err) {
-        console.log(err);
-      });
     },300)
   }
-  console.log($scope.brand_name_flag)
 });

@@ -1,6 +1,6 @@
 ;
 let online_edit = angular.module("onlineeditModule",['ngFileUpload']);
-online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
+online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
   //POST请求的响应头
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -74,96 +74,75 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   /*===========================系列分类开始==============================*/
   $scope.item_check = [];
   //获取一级
-  $http({
-    method: 'get',
-    url: baseUrl+'/mall/categories'
-  }).then(function successCallback(response) {
-    $scope.details = response.data.data.categories;
-    $scope.oneColor = $scope.details[0];
-  });
-
+  _ajax.get('/mall/categories',{},function (res) {
+      $scope.details = res.data.categories;
+      $scope.oneColor = $scope.details[0];
+  })
   //获取二级
-  $http({
-    method: 'get',
-    url: baseUrl+'/mall/categories?pid=1'
-  }).then(function successCallback(response) {
-    $scope.second = response.data.data.categories;
-    $scope.twoColor= $scope.second[0];
-    // console.log($scope.second)
-  });
+  _ajax.get('/mall/categories',{pid:1},function (res) {
+      $scope.second = res.data.categories;
+      $scope.twoColor= $scope.second[0];
+  })
   //获取三级
   $scope.three=[];
-  $http({
-    method: 'get',
-    url: baseUrl+'/mall/categories?pid=2'
-  }).then(function successCallback(response) {
-    // console.log(response)
-    $scope.three = response.data.data.categories;
-    for(let [key,value] of $scope.three.entries()){
-      if($scope.item_check.length == 0){
-        value['complete'] = false
-      }else{
-        for(let [key1,value1] of $scope.item_check.entries()){
-          if(value.id == value1.id){
-            value.complete = true
+  _ajax.get('/mall/categories',{pid:2},function (res) {
+      $scope.three = res.data.categories;
+      for(let [key,value] of $scope.three.entries()){
+          if($scope.item_check.length == 0){
+              value['complete'] = false
+          }else{
+              for(let [key1,value1] of $scope.item_check.entries()){
+                  if(value.id == value1.id){
+                      value.complete = true
+                  }
+              }
           }
-        }
       }
-    }
   });
   //点击一级 获取相对应的二级
   $scope.getMore = function (n) {
     $scope.oneColor = n;
-    $http({
-      method: 'get',
-      url: baseUrl+'/mall/categories?pid='+ n.id
-    }).then(function successCallback(response) {
-      $scope.second = response.data.data.categories;
-      $scope.twoColor = $scope.second[0];
-      $http({
-        method: 'get',
-        url: baseUrl+'/mall/categories?pid='+ $scope.second[0].id
-      }).then(function successCallback(response) {
-        $scope.three = response.data.data.categories;
-        //console.log(response.data.data.categories[0].id);
-        for(let [key,value] of $scope.three.entries()){
-          if($scope.item_check.length == 0){
-            value['complete'] = false
-          }else{
-            for(let [key1,value1] of $scope.item_check.entries()){
-              if(value.id == value1.id){
-                value.complete = true
-              }
+    _ajax.get('/mall/categories',{pid:n.id},function (res) {
+        $scope.second = res.data.categories;
+        $scope.twoColor = $scope.second[0];
+        _ajax.get('/mall/categories',{pid:+ $scope.second[0].id},function (res) {
+            $scope.three = res.data.categories;
+            for(let [key,value] of $scope.three.entries()){
+                if($scope.item_check.length == 0){
+                    value['complete'] = false
+                }else{
+                    for(let [key1,value1] of $scope.item_check.entries()){
+                        if(value.id == value1.id){
+                            value.complete = true
+                        }
+                    }
+                }
             }
-          }
-        }
-      });
-    });
+        })
+    })
   };
   //点击二级 获取相对应的三级
   $scope.getMoreThree = function (n) {
     $scope.id=n;
     $scope.twoColor = n;
-    $http({
-      method: 'get',
-      url: baseUrl+'/mall/categories?pid='+ n.id
-    }).then(function successCallback(response) {
-      $scope.three = response.data.data.categories;
-      for(let [key,value] of $scope.three.entries()){
-        if($scope.item_check.length == 0){
-          value['complete'] = false
-        }else{
-          for(let [key1,value1] of $scope.item_check.entries()){
-            if(value.id == value1.id){
-              value.complete = true
+    _ajax.get('/mall/categories',{pid:n.id},function (res) {
+        $scope.three = res.data.categories;
+        for(let [key,value] of $scope.three.entries()){
+            if($scope.item_check.length == 0){
+                value['complete'] = false
+            }else{
+                for(let [key1,value1] of $scope.item_check.entries()){
+                    if(value.id == value1.id){
+                        value.complete = true
+                    }
+                }
             }
-          }
         }
-      }
     });
   };
   //添加拥有系列的三级
   $scope.check_item = function(item){
+      $scope.add_three=0;
       for(let[key,value] of $scope.item_check.entries()){
           if(item.id==value.id){
               $scope.item_check.splice(key,1);
@@ -222,30 +201,28 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
           $scope.ids_arr.push($scope.item_check[key].id)
         }
         console.log($scope.ids_arr);
-        $http.post(baseUrl+'/mall/brand-edit',{
-          id:$scope.now_edit_list.id,
-          name:$scope.brand_on_name_model,
-          certificate:$scope.upload_img_src,
-          logo:$scope.upload_logo_src,
-          category_ids:$scope.ids_arr.join(',')
-        },config).then(function (res) {
+        _ajax.post('/mall/brand-edit',{
+            id:$scope.now_edit_list.id,
+            name:$scope.brand_on_name_model,
+            certificate:$scope.upload_img_src,
+            logo:$scope.upload_logo_src,
+            category_ids:$scope.ids_arr.join(',')
+        },function (res) {
           console.log(res);
-          console.log('修改成功');
-          if(res.data.code==200){
-            $('#edit_ok_modal').modal('show');
-          }else{
-              $scope.edit_title_red=true;
-              $anchorScroll.yOffset = 150;
-              $location.hash('brand_title');
-              $anchorScroll();
-              $window.document.getElementById('brand_title').focus();
-          }
-        },function (err) {
-          console.log(err);
-        });
+            if(res.code==200){
+                $('#edit_ok_modal').modal('show');
+            }else{
+                $scope.edit_title_red=true;
+                $anchorScroll.yOffset = 150;
+                $location.hash('brand_title');
+                $anchorScroll();
+                $window.document.getElementById('brand_title').focus();
+            }
+        })
       }else{
           $scope.submitted=true;
-      }
+      };
+
       if(!valid){					//名称输入框为空， 文本框变红，并跳转到对于的位置
         $scope.submitted = true;
         if(value.$invalid=true){
@@ -270,16 +247,13 @@ online_edit.controller("onlineedit",function ($scope,$http,$stateParams,$state,U
   };
   /*下架*/
   $scope.down_shelver_ok=function () {
-    console.log($scope.now_edit_list.id)
-    $http.post(baseUrl+'/mall/brand-status-toggle',{
-      id:$scope.now_edit_list.id,
-      offline_reason:$scope.edit_down_shelves_reason
-    },config).then(function (res) {
-      setTimeout(function () {
-        $state.go('brand_index');//跳转主页
-      },300)
-    },function (err) {
-      console.log(err);
+    _ajax.post('/mall/brand-status-toggle',{
+        id:$scope.now_edit_list.id,
+        offline_reason:$scope.edit_down_shelves_reason
+    },function (res) {
+        setTimeout(function () {
+            $state.go('brand_index');//跳转主页
+        },300)
     })
   };
   /*编辑成功*/

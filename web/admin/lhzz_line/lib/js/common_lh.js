@@ -19,7 +19,7 @@ app.service('_ajax', function ($http, $state) {
             let res = response.data;
             if (res.code === 403) {
                 window.location.href="login.html";
-            } else if (res.code === 200) {
+            } else if (res.code === 200 ||res.code == 1007) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
@@ -44,7 +44,7 @@ app.service('_ajax', function ($http, $state) {
             let res = response.data;
             if (res.code === 403) {
                 window.location.href="login.html";
-            } else if (res.code === 200) {
+            } else if (res.code === 200 || res.code == 1007) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
