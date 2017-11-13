@@ -173,9 +173,11 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
   };
 
   //确定按钮
+  $scope.ids_arr=[];
   $scope.brand_name_flag=false;//默认品牌名称提示文字 不显示
   $scope.add_brand_ok=function (valid,error) {
-      if(valid &&  $scope.upload_img_src && $scope.upload_logo_src && $scope.item_check.length>=1){
+      if(valid && $scope.upload_img_src && $scope.upload_logo_src && $scope.item_check.length>=1){
+          $scope.ids_arr=[];
           for(let [key,value] of $scope.item_check.entries()){
               if(value.complete){
                   delete value.complete
@@ -230,7 +232,6 @@ add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$
   };
 
   //模态框确认按钮
-	$scope.ids_arr=[];
   $scope.saveonline=function () {
     setTimeout(function () {
       $state.go('brand_index',{down_flag:true});//跳转主页
