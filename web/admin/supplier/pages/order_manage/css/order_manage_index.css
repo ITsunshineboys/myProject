@@ -251,11 +251,33 @@ table .sortpic .glyphicon-triangle-bottom {
     margin-right: 20px;
 }
 
-
 .active{
     color: #1B7CEE!important;
 }
 
+.track_red{
+    color: red;
+}
+.track_span{
+    color: #666F80;
+    font-size: 16px;
+}
+.track_p{
+    border: 1px solid red;
+    margin-bottom: 10px;
+    height: 32px;
+    line-height: 32px;
+    background-color: #FFF2F2;
+    color: #E82A2A;
+    width: 518px;
+    border-radius: 3px;
+}
+.delivery_input{
+    width: 440px;
+    height: 32px;
+    border: 1px solid #E6E9F0;
+    border-radius: 3px;
+}
 .dl_active4{
     background-color: #E6E9F0!important;
 }

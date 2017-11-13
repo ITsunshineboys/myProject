@@ -1,140 +1,111 @@
 ;
 let waitsend_detail = angular.module("waitsend_detail_module", []);
-waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $stateParams,$state) {
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
+waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $stateParams,$state,_ajax) {
   $scope.myng=$scope;
   $scope.tabflag=$stateParams.tabflag;
-    //$scope.wait_receive=$stateParams.wait_receive;//待收货页面进入
+  console.log($scope.tabflag)
     //详情数据
-    $http.post(baseUrl+'/order/getsupplierorderdetails',{
-        order_no:$stateParams.order_no,
-        sku:$stateParams.sku
-    },config).then(function (res) {
-        console.log(res);
-        $scope.item=res.data.data;
-        console.log($scope.item)
-        //是否是异常订单
-        $scope.is_unusual=$scope.item.is_unusual;
-        //订单详情
-        $scope.order_no=$scope.item.goods_data.order_no;//订单号
-        $scope.shipping_type=$scope.item.goods_data.shipping_type;//判断送货方式，0为快递 1为送货上门
-        $scope.status=$scope.item.goods_data.status;//订单状态
-        $scope.username=$scope.item.goods_data.username;//用户名
-        $scope.amount_order=$scope.item.goods_data.amount_order;//总金额
-        $scope.role=$scope.item.goods_data.role;//总金额后面的价格（实时变化）
-        $scope.goods_price=$scope.item.goods_data.goods_price;//goods_price
-        $scope.freight=$scope.item.goods_data.freight;//运费
-        $scope.supplier_price=$scope.item.goods_data.supplier_price;//供货价格
-        $scope.market_price=$scope.item.goods_data.market_price;//市场价
-        $scope.goods_number=$scope.item.goods_data.goods_number;//商品个数
-        $scope.pay_name=$scope.item.goods_data.pay_name;//付款方式
-        $scope.create_time=$scope.item.goods_data.create_time;//下单时间
-        $scope.paytime=$scope.item.goods_data.paytime;//付款时间
-        $scope.shipping_way=$scope.item.goods_data.shipping_way;//配送方式
-        //商品详情
-        $scope.goods_name=$scope.item.goods_value.goods_name;//商品名称
-        $scope.sku=$scope.item.goods_data.sku;//商品编号
-        //$scope.goods_id=$stateParams.item.goods_value.goods_id;//商品编号
-        $scope.attr=$scope.item.goods_value.attr[0];
-
-
-
-        //收货详情
-        $scope.consignee=$scope.item.receive_details.consignee;//收货人
-        $scope.district=$scope.item.receive_details.district;//收获地址
-        $scope.consignee_mobile=$scope.item.receive_details.consignee_mobile;//收货人电话
-        $scope.buyer_message=$scope.item.receive_details.buyer_message;//留言
-        $scope.invoice_header_type=$scope.item.receive_details.invoice_header_type;//发票类型
-        $scope.invoice_header=$scope.item.receive_details.invoice_header;//抬头
-        $scope.invoicer_card=$scope.item.receive_details.invoicer_card;//纳税人识别码
-        $scope.invoice_content=$scope.item.receive_details.invoice_content;//发票内容
-
-        for(let[key,value] of $scope.attr.entries()){
-            if(value.unit==0){
-                value.unit=''
-            }else if(value.unit==1){
-                value.unit='L'
-            }else if(value.unit==2){
-                value.unit='M'
-            }else if(value.unit==3){
-                value.unit='M²'
-            }else if(value.unit==4){
-                value.unit='Kg'
-            }else if(value.unit==5){
-                value.unit='MM'
-            }
-        }
-
-        //异常
-        $http.post(baseUrl+'/order/find-unusual-list',{
-            order_no:$scope.order_no,
-            sku:+$scope.sku
-        },config).then(function (res) {
-            console.log(res);
-            $scope.is_unusual_list_msg=res.data.data;
-        },function (err) {
-            console.log(err);
-        })
-        /*物流页面传值*/
-        $scope.express_params = {
-            order_no: $scope.item.goods_data.order_no,
-            sku: $scope.item.goods_data.sku,
-            statename: "waitsend_detail",
-            tabflag:$stateParams.tabflag
-        }
-    },function (err) {
-        console.log(err);
-    });
-
-
-
-
+  _ajax.post('/order/getsupplierorderdetails',{
+      order_no:$stateParams.order_no,
+      sku:$stateParams.sku
+  },function (res) {
+      $scope.item=res.data;
+      console.log($scope.item)
+      //是否是异常订单
+      $scope.is_unusual=$scope.item.is_unusual;
+      //订单详情
+      $scope.order_no=$scope.item.goods_data.order_no;//订单号
+      $scope.shipping_type=$scope.item.goods_data.shipping_type;//判断送货方式，0为快递 1为送货上门
+      $scope.status=$scope.item.goods_data.status;//订单状态
+      $scope.username=$scope.item.goods_data.username;//用户名
+      $scope.amount_order=$scope.item.goods_data.amount_order;//总金额
+      $scope.role=$scope.item.goods_data.role;//总金额后面的价格（实时变化）
+      $scope.goods_price=$scope.item.goods_data.goods_price;//goods_price
+      $scope.freight=$scope.item.goods_data.freight;//运费
+      $scope.supplier_price=$scope.item.goods_data.supplier_price;//供货价格
+      $scope.market_price=$scope.item.goods_data.market_price;//市场价
+      $scope.goods_number=$scope.item.goods_data.goods_number;//商品个数
+      $scope.pay_name=$scope.item.goods_data.pay_name;//付款方式
+      $scope.create_time=$scope.item.goods_data.create_time;//下单时间
+      $scope.paytime=$scope.item.goods_data.paytime;//付款时间
+      $scope.shipping_way=$scope.item.goods_data.shipping_way;//配送方式
+      //商品详情
+      $scope.goods_name=$scope.item.goods_value.goods_name;//商品名称
+      $scope.sku=$scope.item.goods_data.sku;//商品编号
+      //$scope.goods_id=$stateParams.item.goods_value.goods_id;//商品编号
+      $scope.attr=$scope.item.goods_value.attr[0];
+      //收货详情
+      $scope.consignee=$scope.item.receive_details.consignee;//收货人
+      $scope.district=$scope.item.receive_details.district;//收获地址
+      $scope.consignee_mobile=$scope.item.receive_details.consignee_mobile;//收货人电话
+      $scope.buyer_message=$scope.item.receive_details.buyer_message;//留言
+      $scope.invoice_header_type=$scope.item.receive_details.invoice_header_type;//发票类型
+      $scope.invoice_header=$scope.item.receive_details.invoice_header;//抬头
+      $scope.invoicer_card=$scope.item.receive_details.invoicer_card;//纳税人识别码
+      $scope.invoice_content=$scope.item.receive_details.invoice_content;//发票内容
+      for(let[key,value] of $scope.attr.entries()){
+          if(value.unit==0){
+              value.unit=''
+          }else if(value.unit==1){
+              value.unit='L'
+          }else if(value.unit==2){
+              value.unit='M'
+          }else if(value.unit==3){
+              value.unit='M²'
+          }else if(value.unit==4){
+              value.unit='Kg'
+          }else if(value.unit==5){
+              value.unit='MM'
+          }
+      }
+      //异常
+      _ajax.post('/order/find-unusual-list',{
+          order_no:$scope.order_no,
+          sku:+$scope.sku
+      },function (res) {
+          $scope.is_unusual_list_msg=res.data;
+      })
+      /*物流页面传值*/
+      $scope.express_params = {
+          order_no: $scope.item.goods_data.order_no,
+          sku: $scope.item.goods_data.sku,
+          statename: "waitsend_detail",
+          tabflag:$stateParams.tabflag
+      }
+  })
 
   // 同意按钮
     $scope.agree_confirm=function () {
     console.log($scope.order_no)
     console.log($scope.sku)
-        $http.post(baseUrl+'/order/refund-handle',{
-            order_no:$scope.order_no,
-            sku:$scope.sku,
-            handle:1
-        },config).then(function (res) {
-            console.log(res);
-            setTimeout(function () {
-                $state.go('order_manage',{wait_send_flag:true});
-            },300)
-        },function (err) {
-            console.log(err);
-        })
+    _ajax.post('/order/refund-handle',{
+        order_no:$scope.order_no,
+        sku:$scope.sku,
+        handle:1
+    },function (res) {
+        console.log(res);
+        setTimeout(function () {
+            $state.go('order_manage',{wait_send_flag:true});
+        },300)
+     })
     }
     //驳回确认按钮
     $scope.turn_down_confirm=function () {
-        $http.post(baseUrl+'/order/refund-handle',{
-            order_no:$scope.order_no,
-            sku:$scope.sku,
-            handle:2,
-            handle_reason:$scope.turn_down_txt
-        },config).then(function (res) {
-            console.log(res);
-            $scope.is_unusual=0;//驳回后按钮组变化为----》发货
-            $scope.is_unusual_flag=true;
-            $http.post(baseUrl+'/order/find-unusual-list',{
-                order_no:$scope.order_no,
-                sku:+$scope.sku
-            },config).then(function (res) {
-                console.log(res);
-                $scope.is_unusual_list_msg=res.data.data;
-            },function (err) {
-                console.log(err);
-            })
-        },function (err) {
-            console.log(err);
-        })
+      _ajax.post('/order/refund-handle',{
+          order_no:$scope.order_no,
+          sku:$scope.sku,
+          handle:2,
+          handle_reason:$scope.turn_down_txt
+      },function (res) {
+          $scope.is_unusual=0;//驳回后按钮组变化为----》发货
+          $scope.is_unusual_flag=true;
+          _ajax.post('/order/find-unusual-list',{
+              order_no:$scope.order_no,
+              sku:+$scope.sku
+          },function (res) {
+              $scope.is_unusual_list_msg=res.data;
+          })
+      })
     };
     //显示隐藏待发货异常记录
     $scope.unshipped_ul_flag=true;
@@ -174,22 +145,20 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
     $scope.track_change_flag=false;
     $scope.change_track_btn=function () {
         if(!!$scope.track_input_model){
-            $http.post(baseUrl+'/order/expressupdate',{
-                order_no:$scope.order_no,
-                sku:$scope.sku,
-                waybillnumber:$scope.track_input_model
-            },config).then(function (res) {
-                console.log(res);
-                if(res.data.code==200){
-                    $('#change_track_modal').modal('hide');
-                    $scope.shipping_way=res.data.data.shipping_way;
-                }else{
-                    $scope.track_change_flag=true;
-                    $scope.track_change_font='快递单号错误，请重新输入';
-                }
-            },function (err) {
-                console.log(err);
-            })
+          _ajax.post('/order/expressupdate',{
+              order_no:$scope.order_no,
+              sku:$scope.sku,
+              waybillnumber:$scope.track_input_model
+          },function (res) {
+              if(res.data.code==200){
+                  console.log(res);
+                  $('#change_track_modal').modal('hide');
+                  $scope.shipping_way=res.data.shipping_way;
+              }else{
+                  $scope.track_change_flag=true;
+                  $scope.track_change_font='快递单号错误，请重新输入';
+              }
+          })
         }else{
             $scope.track_change_flag=true;
             $scope.track_change_font='快递单号不能为空';
@@ -213,25 +182,23 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
             //快递发货确认按钮
             $scope.track_confirm_btn = function () {
                 if(!!$scope.delivery_input_model){
-                    $http.post(baseUrl+'/order/supplierdelivery',{
-                        order_no:$scope.item.goods_data.order_no,
-                        sku:$scope.item.goods_data.sku,
-                        shipping_type:'0',
-                        waybillnumber:$scope.delivery_input_model
-                    },config).then(function (res) {
-                        console.log(res);
-                        if(res.data.code==200){
-                            $('#track_confirm_modal').modal('hide');
-                            setTimeout(function () {
-                                $state.go('order_manage',{wait_send_flag:true});
-                            },300)
-                        }else if(res.data.code==1000){
-                            $scope.track_flag=true;
-                            $scope.track_font='快递单号错误，请重新输入';//快递单号-显示
-                        }
-                    },function (err) {
-                        console.log(err);
-                    })
+                  _ajax.post('/order/supplierdelivery',{
+                      order_no:$scope.item.goods_data.order_no,
+                      sku:$scope.item.goods_data.sku,
+                      shipping_type:'0',
+                      waybillnumber:$scope.delivery_input_model
+                  },function (res) {
+                      console.log(res);
+                      if(res.data.code==200){
+                          $('#track_confirm_modal').modal('hide');
+                          setTimeout(function () {
+                              $state.go('order_manage',{wait_send_flag:true});
+                          },300)
+                      }else if(res.data.code==1000){
+                          $scope.track_flag=true;
+                          $scope.track_font='快递单号错误，请重新输入';//快递单号-显示
+                      }
+                  })
                 }else{
                     $scope.track_flag=true;
                     $scope.track_font='快递单号不能为空';
@@ -239,19 +206,17 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
             };
             //正常发货
             $scope.ship_confirm_btn=function () {
-                $http.post(baseUrl+'/order/supplierdelivery',{
-                    order_no:$scope.item.goods_data.order_no,
-                    sku:$scope.item.goods_data.sku,
-                    shipping_type:'1',
-                },config).then(function (res) {
-                    console.log(res);
-                    $('#wait_send_confirm_modal').modal('hide');
-                    setTimeout(function () {
-                        $state.go('order_manage',{wait_send_flag:true});
-                    },300)
-                },function (err) {
-                    console.log(err);
-                })
+              _ajax.post('/order/supplierdelivery',{
+                  order_no:$scope.item.goods_data.order_no,
+                  sku:$scope.item.goods_data.sku,
+                  shipping_type:'1',
+              },function (res) {
+                  console.log(res);
+                  $('#wait_send_confirm_modal').modal('hide');
+                  setTimeout(function () {
+                      $state.go('order_manage',{wait_send_flag:true});
+                  },300)
+              })
             }
             //取消按钮
             $scope.btn_dismiss=function () {

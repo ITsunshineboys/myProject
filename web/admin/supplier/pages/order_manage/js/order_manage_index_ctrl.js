@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/15/015.
  */
 let ordermanage = angular.module("ordermanageModule", []);
-ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams, $state) {
+ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams, $state,_ajax) {
     let time_type;
     let tabflag;
     let allTableInit = {
@@ -408,18 +408,14 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
     }
     let tablePages=function () {
         $scope.wjparams.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
-        $http.get(baseUrl+'/order/find-supplier-order-list',{
-            params:$scope.wjparams
-        }).then(function (res) {
+        _ajax.get('/order/find-supplier-order-list',$scope.wjparams,function (res) {
             console.log(res);
             if($scope.waitsend_flag==true){
-                $scope.waitsend_list=res.data.data.details;
+                $scope.waitsend_list=res.data.details;
             }else{
-                $scope.wait_receive_list=res.data.data.details;
+                $scope.wait_receive_list=res.data.details;
             }
-            $scope.wjConfig.totalItems = res.data.data.count;
-        },function (err) {
-            console.log(err);
+            $scope.wjConfig.totalItems = res.data.count;
         })
     };
     $scope.wjparams = {
@@ -433,18 +429,11 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         sort_time:'2',                  //时间默认降序
     };
 
-    if($stateParams.wait_send_flag){
-        $scope.tabChange('waitsend_flag');
-    }else if($stateParams.wait_receive_flag){
-        $scope.tabChange('waitreceive_flag');
-    }
-
     //时间类型
-    $http.get(baseUrl+'/site/time-types').then(function (response) {
-        console.log(response)
-        $scope.time = response.data.data.time_types;
-        $scope.wjparams.time_type = response.data.data.time_types[0].value;//待发货
-    });
+    _ajax.get('/site/time-types',{},function (res) {
+        $scope.time = res.data.time_types;
+        $scope.wjparams.time_type = res.data.time_types[0].value;//待发货
+    })
     //监听时间类型
     $scope.wait_send_type=function () {
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
@@ -466,10 +455,10 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         $scope.wjparams.keyword=$scope.w_search;
         console.log($scope.w_search)
         //初始化"全部时间"
-        $http.get(baseUrl+'/site/time-types').then(function (response) {
-            $scope.time = response.data.data.time_types;
-            $scope.wjparams.time_type = response.data.data.time_types[0].value;//待发货
-        });
+        _ajax.get('/site/time-types',{},function (res) {
+            $scope.time = res.data.time_types;
+            $scope.wjparams.time_type = res.data.time_types[0].value;//待发货
+        })
         //恢复到默认图片
         $scope.sort_money_img='lib/images/arrow_default.png';
         $scope.sort_time_img='lib/images/arrow_down.png';
@@ -509,18 +498,6 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         }
         tablePages();
     }
-    //跳转详情页
-    // $scope.wait_send_detail=function (order_no,sku,wait_receive) {
-    //     $http.post(baseUrl+'/order/getsupplierorderdetails',{
-    //         order_no:order_no,
-    //         sku:sku
-    //     },config).then(function (res) {
-    //         $scope.waitsend_detail_list=res.data.data;
-    //         $state.go('waitsend_detail',{item:$scope.waitsend_detail_list,sku:sku,wait_receive:wait_receive})
-    //     },function (err) {
-    //         console.log(err);
-    //     });
-    // };
     //发货按钮,判断弹出的模态框
     $scope.track_flag=false;
     $scope.wait_send_ship=function (shipping_type,order_no,sku) {
@@ -538,37 +515,31 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
     };
     //直接发货确认按钮
     $scope.ship_confirm_btn=function () {
-        $http.post(baseUrl+'/order/supplierdelivery',{
+        _ajax.post('/order/supplierdelivery',{
             order_no:$scope.wait_send_order_no,
             sku:$scope.wait_send_sku,
             shipping_type:1
-        },config).then(function (res) {
-            console.log(res);
+        },function (res) {
             tablePages();
-        },function (err) {
-            console.log(err);
         })
     }
     //快递单号发货模态框 确认按钮
     $scope.track_confirm_btn=function () {
         if(!!$scope.delivery_input_model){
-            $http.post(baseUrl+'/order/supplierdelivery',{
+            _ajax.post('/order/supplierdelivery',{
                 order_no:$scope.wait_send_order_no,
                 sku:$scope.wait_send_sku,
                 shipping_type:0,
                 waybillnumber:$scope.delivery_input_model
-            },config).then(function (res) {
-                console.log(res);
-                if(res.data.code!=200){
+            },function (res) {
+                if(res.code!=200){
                     $scope.track_flag=true;
                     $scope.track_font='快递单号错误，请重新输入';
-                }else if(res.data.code==200){
+                }else if(res.code==200){
                     $scope.track_flag=false;
                     $('#track_confirm_modal').modal('hide');
                     tablePages();
                 }
-            },function (err) {
-                console.log(err);
             })
         }else{
             $scope.track_flag=true;
