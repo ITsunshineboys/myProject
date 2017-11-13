@@ -12,7 +12,7 @@ let baseUrl = (function () {
  * @param params       请求参数
  * @param callback     回调函数
  */
-app.service('_ajax', function ($http, $state) {
+app.service('_ajax', function ($http) {
     this.get = function (url, params, callback) {
         $http({
             method: 'GET',
@@ -21,8 +21,7 @@ app.service('_ajax', function ($http, $state) {
         }).then(function (response) {
             let res = response.data;
             if (res.code === 403) {
-                // $state.go('login')
-                // window.location.href="login.html"
+                window.location.href="login.html"
             } else if (res.code === 200 ||res.code === 1000||res.code === 1001|| res.code === 1002|| res.code === 1010|| res.code === 1020|| res.code === 1039|| res.code === 1040) {
                 if (typeof callback === 'function') {
                     callback(res)
@@ -47,8 +46,7 @@ app.service('_ajax', function ($http, $state) {
         }).then(function (response) {
             let res = response.data;
             if (res.code === 403) {
-                // $state.go('login')
-                // window.location.href="login.html"
+                window.location.href="login.html"
             } else if (res.code === 200 ||res.code === 1000||res.code === 1001|| res.code === 1002|| res.code === 1010|| res.code === 1020|| res.code === 1039|| res.code === 1040) {
                 if (typeof callback === 'function') {
                     callback(res)
