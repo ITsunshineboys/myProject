@@ -479,7 +479,8 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $out_trade_no =self::Setorder_no();
+        $out_trade_no =GoodsOrder::SetOrderNo();
+
         $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
            if (!$res)
         {
@@ -626,7 +627,7 @@ class OrderController extends Controller
     public function actionAlipaylinesubmit(){
         $request=Yii::$app->request;
         //商户订单号，商户网站订单系统中唯一订单号，必填
-        $out_trade_no =self::Setorder_no();
+        $out_trade_no =GoodsOrder::SetOrderNo();
         $subject=trim($request->post('goods_name'),' ');
         //付款金额，必填
         $total_amount =trim($request->post('order_price'),' ');
@@ -756,7 +757,7 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $out_trade_no =self::Setorder_no();
+        $out_trade_no =GoodsOrder::SetOrderNo();
         $id=Effect::addneweffect($post);
         if (!$id)
         {
@@ -811,7 +812,7 @@ class OrderController extends Controller
         {
             $freight=0;
         }
-        $order_no =self::Setorder_no();
+        $order_no =GoodsOrder::SetOrderNo();
         //商品描述，可空
         $body =self::WXPAY_LINE_GOODS.'-'.$subject;
         $orders=array(
@@ -1850,7 +1851,7 @@ class OrderController extends Controller
         ]);
     }
     //判断用户是否登陆
-    private function userIdentity()
+    public  static function userIdentity()
     {
         $user = \Yii::$app->user->identity;
         if (!$user) {
@@ -1863,7 +1864,7 @@ class OrderController extends Controller
         return $user->getId();
     }
 
-    private function lhzzidentity($user)
+    public static function lhzzidentity($user)
     {
         $lhzz=Lhzz::find()->select('id')->where(['uid'=>$user])->one();
         if (!$lhzz){
@@ -1874,13 +1875,6 @@ class OrderController extends Controller
             ]);
         }
         return $lhzz['id'];
-    }
-
-    private function Setorder_no(){
-        do {
-            $code=date('md',time()).'1'.rand(10000,99999);
-        } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
-        return $code;
     }
 
 
@@ -2005,6 +1999,7 @@ class OrderController extends Controller
                ]);
            }
     }
+
   /**
      * get refund list
      * by order_no and sku
@@ -2861,7 +2856,7 @@ class OrderController extends Controller
      */
     public function actionAddTestOrderData(){
         $request=Yii::$app->request;
-        $order_no=self::Setorder_no();
+        $order_no=GoodsOrder::SetOrderNo();
         $goods_id=$request->post('goods_id');
         $goods_num=$request->post('goods_num');
         $mobile=$request->post('mobile');
