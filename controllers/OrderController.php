@@ -741,7 +741,7 @@ class OrderController extends Controller
             'body'=>$body,
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message,
-            'total_amount'=>$total_amount*100
+            'total_amount'=>$total_amount
         );
         $url=(new PayService())->GetOrderOpenid($orders);
         $code=200;
