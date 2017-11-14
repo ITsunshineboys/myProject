@@ -65,7 +65,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     });
 
     // 楼梯、系列和风格数据
-    _ajax.post("/owner/series-and-style", {}, function (res) {
+    _ajax.get("/owner/series-and-style", {}, function (res) {
         console.log(res, "楼梯、风格和系列");
         let data = res.data;
         $scope.stairsList = data.show.stairs_details;
