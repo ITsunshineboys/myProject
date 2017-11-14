@@ -669,6 +669,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+            
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();

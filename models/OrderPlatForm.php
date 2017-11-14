@@ -60,6 +60,7 @@ class OrderPlatForm extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
+
                 $OrderGoods=OrderGoods::find()
                     ->where(['order_no'=>$order_no])
                     ->andWhere(['sku'=>$sku])
@@ -87,6 +88,7 @@ class OrderPlatForm extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
+                //减少销量，减少销售额，增加库存
                 $trans->commit();
                 $code=200;
                 return $code;
