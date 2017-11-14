@@ -1810,6 +1810,6 @@ class QuoteController extends Controller
 
     public function actionTest()
     {
-        return WorksData::find()->where(['goods_code'=>111111])->one();
+        return WorksData::findAll([]);
     }
 }
