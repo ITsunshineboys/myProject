@@ -788,6 +788,7 @@ class QuoteController extends Controller
                                 $three_category_id = $goods['three_id'];
                                 $works_data = (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
                             }
+                            var_dump($works_data);exit;
                             if (!$works_data){
                                 $transaction->rollBack();
                                 return $code;
