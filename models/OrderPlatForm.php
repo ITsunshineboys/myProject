@@ -1,7 +1,6 @@
 <?php
 
 namespace app\models;
-use app\admin\controller\Users;
 use Yii;
 use yii\db\Exception;
 use yii\db\ActiveRecord;
@@ -54,7 +53,7 @@ class OrderPlatForm extends ActiveRecord
                 $OrderPlatForm->refund_result=2;
                 $OrderPlatForm->refund_type=2;
                 $OrderPlatForm->refund_time=$time;
-                $res=$OrderPlatForm->save();
+                $res=$OrderPlatForm->save(false);
                 if (!$res){
                     $code=500;
                     $trans->rollBack();
