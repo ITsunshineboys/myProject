@@ -270,7 +270,7 @@ class OwnerController extends Controller
      */
     public function actionWeakCurrent()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         //人工价格
         $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
         if ($workers == null){
@@ -349,7 +349,7 @@ class OwnerController extends Controller
      */
     public function actionStrongCurrent()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         //人工价格
         $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
         if ($workers == null){
@@ -427,7 +427,7 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
         if ($waterway_labor == null){
@@ -498,7 +498,7 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         //人工价格
         $_select = 'id,univalence,worker_kind';
         $__select = 'quantity,worker_kind_details';
@@ -585,7 +585,7 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         $_select = 'id,univalence,worker_kind';
         $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker'],$_select);
         if ($labor_cost == null){
@@ -699,7 +699,7 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         //工人一天单价
         $_select = 'id,univalence,worker_kind';
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters'],$_select);
@@ -913,7 +913,7 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
-        $post = \Yii::$app->request->post();
+        $post = \Yii::$app->request->get();
         //工人一天单价
         $_select = 'id,univalence,worker_kind';
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason'],$_select);
@@ -1356,7 +1356,7 @@ class OwnerController extends Controller
      */
     public function actionAssortFacility()
     {
-        $post = Yii::$app->request->post();
+        $post = Yii::$app->request->get();
 
         $assort_material = MaterialPropertyClassify::findByStatus();
         if ($assort_material == null) {
