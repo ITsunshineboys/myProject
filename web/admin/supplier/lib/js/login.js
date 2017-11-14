@@ -1,7 +1,7 @@
 let app = angular.module("app",[]);
 app.controller("login_ctrl",function ($scope,$http,$document) {
     let baseUrl = (function () {
-        // return 'http://test.cdlhzz.cn';
+        //return 'http://test.cdlhzz.cn';
         return '';
     })();
     const config = {
@@ -28,7 +28,7 @@ app.controller("login_ctrl",function ($scope,$http,$document) {
               window.location.href='index.html';
           }else{
               $scope.error_flag=true;
-          $scope.error_flag_txt='*用户名或密码不正确';
+              $scope.error_flag_txt=res.data.msg;
           }
       })
     };
