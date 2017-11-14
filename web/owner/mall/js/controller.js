@@ -14,6 +14,7 @@ angular.module('all_controller', [])
         })
     })
     .controller('nodata_ctrl', function ($q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
+        console.log(JSON.parse(sessionStorage.getItem('materials')))
         $scope.ctrlScope = $scope
         //post请求配置
         let config = {
