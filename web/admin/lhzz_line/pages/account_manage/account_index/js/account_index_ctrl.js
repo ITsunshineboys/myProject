@@ -12,6 +12,15 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
       tablePages();
   };
   $scope.close=function () {
+      //关闭状态 选择时间排顺序  选择自定义 显示开始结束框
+      _ajax.get('/site/time-types',{},function (response) {
+          $scope.timeClose = response.data.time_types;
+          $scope.selectValueClose = response.data.time_types[0];
+          $scope.params.status = 0;
+          $scope.params.time_type = $scope.selectValueClose.value;
+          console.log(response);
+          tablePages();
+      });
       $scope.close_flag=true;
       $scope.normal_flag=false;
       $scope.params.status = 0;
@@ -34,6 +43,12 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
         $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/user-list',$scope.params,function (response) {
             console.log(response);
+            if($scope.close_flag==true){
+                $scope.account_colse = response.data.user_list.details;
+            }
+            if($scope.normal_flag==true){
+                $scope.account = response.data.user_list.details;
+            }
             $scope.account = response.data.user_list.details;
             $scope.Config.totalItems = response.data.user_list.total;
             for(let [key,value] of $scope.account.entries()){
@@ -130,34 +145,6 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
                 $scope.params.status= 1;
                 tablePages();
        });
-     // $http({
-     //   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-     //   transformRequest: function (data) {
-     //     return $.param(data)
-     //   },
-     //   method: 'post',
-     //   url: baseUrl+'/mall/user-disable-batch',
-     //   data:{
-     //       user_ids: $scope.nemArr,
-     //       remark:$scope.more
-     //   }
-     // }).then(function successCallback(response) {
-     //   console.log(response);
-     //   $http({
-     //     method: 'get',
-     //     url: baseUrl+'/mall/user-list',
-     //     params:{
-     //         status:1
-     //     }
-     //   }).then(function successCallback(response) {
-     //     $scope.account = response.data.data.user_list.details;
-     //     for(let [key,value] of $scope.account.entries()){
-     //         value['names'] = value.role_names.join(',')
-     //     }
-     //     console.log(response);
-     //     console.log($scope.account);
-     //   });
-
    };
 
 
@@ -169,26 +156,9 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
       $scope.params.status = 1;
       tablePages();
   });
-  // console.log($scope.search_text);
-  // $http.get(baseUrl+'/site/time-types').then(function (response) {
-  //   $scope.time = response.data.data.time_types;
-  //   $scope.selectValue = response.data.data.time_types[0];
-  //   $http.get(baseUrl+'/mall/user-list', {
-  //     params: {
-  //       'time_type': $scope.selectValue.value,
-  //       'status':1
-  //     }
-  //   }).then(function (response) {
-  //     $scope.account = response.data.data.user_list.details;
-  //   }, function (error) {
-  //     console.log(error)
-  //   })
-  // }, function (error) {
-  //     console.log(error)
-  // });
+
   //============监听下拉框值的变化===========
   $scope.$watch('selectValue',function(newVal,oldVal){
-      console.log(newVal.value);
       if(!!newVal){
         $scope.params.status = 1;
         $scope.params.time_type = newVal.value;
@@ -221,24 +191,6 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
 
 
   //切换关闭的内容  第二部分
-  // //获取账户管理列表 关闭状态
-  //   _ajax.get('/mall/user-list',$scope.params,function () {
-  //       $scope.params.status = 0;
-  //   });
-  // $http({
-  //   method: 'get',
-  //   url: baseUrl+'/mall/user-list',
-  //   params:{
-  //     status:0
-  //   }
-  // }).then(function successCallback(response) {
-  //   $scope.account_colse = response.data.data.user_list.details;
-  //   for(let [key,value] of $scope.account_colse.entries()){
-  //     value['names'] = value.role_names.join(',')
-  //   }
-  //   console.log(response);
-  //   console.log($scope.account_colse);
-  // });
 
   //获取关闭原因
   $scope.getRemark = function (item) {
@@ -255,40 +207,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
       },function (response) {
           $scope.params.status = 0;
           tablePages();
-          // $scope.account_colse = response.data.data.user_list.details;
-          // for(let [key,value] of $scope.account_colse.entries()){
-          //     value['names'] = value.role_names.join(',')
-          // }
       });
-      // $http({
-      //   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      //   transformRequest: function (data) {
-      //     return $.param(data)
-      //   },
-      //   method: 'POST',
-      //   url: baseUrl+'/mall/user-status-toggle',
-      //   data:{
-      //     user_id:item.id,
-      //     remark:item.status_remark
-      //   }
-      // }).then(function successCallback(response) {
-      //   $http({
-      //     method: 'get',
-      //     url: baseUrl+'/mall/user-list',
-      //     params:{
-      //       status:0
-      //     }
-      //   }).then(function successCallback(response) {
-      //     $scope.account_colse = response.data.data.user_list.details;
-      //     for(let [key,value] of $scope.account_colse.entries()){
-      //       value['names'] = value.role_names.join(',')
-      //     }
-      //     console.log(response);
-      //     console.log($scope.account_colse);
-      //   });
-      //   console.log(response);
-      //   //console.log($scope.account_colse);
-      // });
     };
   };
 
@@ -320,125 +239,61 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     },function (response) {
         $scope.params.status = 0;
         tablePages();
-        // $scope.account_colse = response.data.data.user_list.details;
-        //     for(let [key,value] of $scope.account.entries()){
-        //       value['names'] = value.role_names.join(',')
-        //     }
+
     })
-    // $http({
-    //   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    //   transformRequest: function (data) {
-    //     return $.param(data)
-    //   },
-    //   method: 'post',
-    //   url: baseUrl+'/mall/user-enable-batch',
-    //   data:{
-    //     user_ids: $scope.nemArr
-    //   }
-    // }).then(function successCallback(response) {
-    //   console.log(response);
-    //   $http({
-    //     method: 'get',
-    //     url: baseUrl+'/mall/user-list',
-    //     params:{
-    //       status:0
-    //     }
-    //   }).then(function successCallback(response) {
-    //     $scope.account_colse = response.data.data.user_list.details;
-    //     for(let [key,value] of $scope.account.entries()){
-    //       value['names'] = value.role_names.join(',')
-    //     }
-    //     console.log(response);
-    //     console.log($scope.account);
-    //   });
-    // });
+
   };
 
-  //关闭状态 选择时间排顺序  选择自定义 显示开始结束框
-    _ajax.get('/site/time-types',{},function (response) {
-        $scope.timeClose = response.data.time_types;
-        $scope.selectValueClose = response.data.time_types[0];
-        $scope.params.status = 0;
-        $scope.params.time_type = $scope.selectValueClose.value;
-        tablePages();
-    })
-  // $http.get(baseUrl+'/site/time-types').then(function (response) {
-  //   $scope.timeClose = response.data.data.time_types;
-  //   $scope.selectValueClose = response.data.data.time_types[0];
-  //   // console.log($scope.selectValue.value)
-  //   $http.get(baseUrl+'/mall/user-list', {
-  //     params: {
-  //       'time_type': $scope.selectValueClose.value,
-  //       'status':0
-  //     }
-  //   }).then(function (response) {
-  //     $scope.account_colse = response.data.data.user_list.details;
-  //   }, function (error) {
-  //     console.log(error)
-  //   })
-  // }, function (error) {
-  //   console.log(error)
-  // });
-  //============监听下拉框值的变化===========
-  $scope.$watch('selectValueClose',function(newVal,oldVal){
-    if(!!newVal) {
-        $scope.params.status = 0;
-        $scope.params.time_type = newVal.value;
-        tablePages();
-        // $http.get(baseUrl+'/mall/user-list', {
-        //   params: {
-        //     'time_type': newVal.value,
-        //     'status':0
-        //   }
-        // }).then(function (response) {
-        //
-        //   console.log(response);
-        //   $scope.account_colse = response.data.data.user_list.details;
-    }
+    // if ($scope.close_flag == true) {
+        $scope.$watch('selectValueClose',function(newVal,oldVal){
+            if(!!newVal) {
+                $scope.params.status = 0;
+                $scope.params.time_type = newVal.value;
+                tablePages();
+            }
 
-  });
-  //监听开始时间
-  $scope.mm = $scope;
-  $scope.myng = $scope;
-  $scope.$watch('begin_time_more',function (newVal,oldVal) {
-    console.log(1111);
-    $scope.page=1;//默认第一页
-    if(newVal!=undefined && newVal !='' && $scope.begin_time_more!=undefined && $scope.end_time_more!=undefined) {
-        console.log("测试判断");
-        $scope.params.status = 0;
-        $scope.params.time_type = custom;
-        $scope.params.end_time = $scope.end_time_more;
-        $scope.params.start_time = newVal;
-        tablePages();
-    }
-  });
-  //监听结束时间
-  $scope.$watch('end_time_more',function (newVal,oldVal) {
-    $scope.page = 1;//默认第一页
-    if (newVal != undefined && newVal != '' && $scope.begin_time_more != undefined && $scope.end_time_more != undefined) {
-        $scope.params.status = 0;
-        $scope.params.time_type = custom;
-        $scope.params.end_time = newVal;
-        $scope.params.start_time = $scope.begin_time_more;
-        tablePages();
+        });
+        //监听开始时间
+        $scope.mm = $scope;
+        $scope.myng = $scope;
+        $scope.$watch('begin_time_more',function (newVal,oldVal) {
+            console.log(1111);
+            $scope.page=1;//默认第一页
+            if(newVal!=undefined && newVal !='' && $scope.begin_time_more!=undefined && $scope.end_time_more!=undefined) {
+                $scope.params.status = 0;
+                $scope.params.time_type = 'custom';
+                $scope.params.end_time = $scope.end_time_more;
+                $scope.params.start_time = newVal;
+                tablePages();
+            }
+        });
+        //监听结束时间
+        $scope.$watch('end_time_more',function (newVal,oldVal) {
+            $scope.page = 1;//默认第一页
+            if (newVal != undefined && newVal != '' && $scope.begin_time_more != undefined && $scope.end_time_more != undefined) {
+                $scope.params.status = 0;
+                $scope.params.time_type = 'custom';
+                $scope.params.end_time = newVal;
+                $scope.params.start_time = $scope.begin_time_more;
+                tablePages();
 
-    }
-  });
+            }
+        });
 
 
-  //关闭状态下 点击搜索
-  $scope.getSearchClose = function () {
-    console.log($scope.name_num);
-      $scope.params.status = 0;
-      $scope.params.keyword = $scope.name_num;
-      tablePages();
-  };
-  //监听搜索的内容为空时，恢复初始状态
-  $scope.$watch("name_num",function (newVal,oldVal) {
-    console.log(22222);
-     if (newVal == "") {
-         $scope.params.status = 0;
-         tablePages();
-     }
-  })
+        //关闭状态下 点击搜索
+        $scope.getSearchClose = function () {
+            console.log($scope.name_num);
+            $scope.params.status = 0;
+            $scope.params.keyword = $scope.name_num;
+            tablePages();
+        };
+        //监听搜索的内容为空时，恢复初始状态
+        $scope.$watch("name_num",function (newVal,oldVal) {
+            if (newVal == "") {
+                $scope.params.status = 0;
+                tablePages();
+            }
+        })
+    // }
 });
