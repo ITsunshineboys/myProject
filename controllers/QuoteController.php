@@ -671,6 +671,7 @@ class QuoteController extends Controller
             //添加功能
             try {
                 if (!isset($house['id'])) {
+                    echo 222;exit;
                     if ($house['is_ordinary'] != 1) {
                         //普通户型添加
                         $bedroom                = $house['cur_room'];
@@ -732,6 +733,7 @@ class QuoteController extends Controller
                         }
                         $transaction->commit();
                     } else {
+                        echo 111;exit;
                         // 案例添加
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -778,7 +780,6 @@ class QuoteController extends Controller
                         }
 
                         if (!empty($house['all_goods'])){
-                            echo 111;
                             foreach ($house['all_goods'] as $goods) {
                                 $goods_id       = $effect_id;
                                 $goods_first    = $goods['first_name'];
@@ -789,7 +790,6 @@ class QuoteController extends Controller
                                 $three_category_id = $goods['three_id'];
                                 $works_data = (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
                             }
-                            var_dump($works_data);exit;
                             if (!$works_data){
                                 $transaction->rollBack();
                                 return $code;
