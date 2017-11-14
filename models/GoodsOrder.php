@@ -16,7 +16,6 @@ use app\services\SmValidationService;
 use app\services\ModelService;
 class GoodsOrder extends ActiveRecord
 {
-
     const PAY_STATUS_UNPAID = 0;
     const PAY_STATUS_PAID = 1;
     const PAY_STATUS_REFUNDED = 2;
@@ -69,7 +68,7 @@ class GoodsOrder extends ActiveRecord
         self::ORDER_TYPE_DESC_CUSTOMER_SERVICE=>self::ORDER_TYPE_CUSTOMER_SERVICE,
         self::ORDER_TYPE_DESC_UNCOMMENT=>self::ORDER_TYPE_UNCOMMENT
     ];
-   const FIELDS_ORDERLIST_ADMIN = [
+    const FIELDS_ORDERLIST_ADMIN = [
         'a.order_no',
         'a.id',
         'z.customer_service',

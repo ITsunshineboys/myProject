@@ -224,7 +224,11 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 case 'Goods':
                     $data[]=[
                         'name'=>'货款金额',
-                        'value'=>GoodsOrder::switchMoney($accessDetail['access_money']*0.01)
+                        'value'=>GoodsOrder::switchMoney($OrderGoods['goods_price']*0.01)
+                    ];
+                    $data[]=[
+                        'name'=>"运费金额",
+                        'value'=>GoodsOrder::switchMoney($accessDetail['freight']*0.01)
                     ];
                     break;
             }
@@ -283,6 +287,13 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 'name'=>'收货地址',
                 'value'=>LogisticsDistrict::getdistrict($GoodsOrder['district_code']).$GoodsOrder['region']
             ];
+           if ($type=='Goods')
+           {
+               $data[]=[
+                   'name'=>'到账账户',
+                   'value'=>'账户余额'
+               ];
+           }
             return $data;
     }
 }
