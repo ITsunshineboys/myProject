@@ -206,6 +206,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
 
             if (!$GoodsOrder || !$OrderGoods)
             {
+                echo 3;exit;
                 $code=1000;
                 return $code;
             }

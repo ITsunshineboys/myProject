@@ -280,11 +280,11 @@ class OrderController extends Controller
         }
     }
 
-     /**
-     * 无登录app-获取商品信息
-     * @return string
-     */
-    public function actionGetgoodsdata(){
+         /**
+         * 无登录app-获取商品信息
+         * @return string
+         */
+        public function actionGetgoodsdata(){
             $request = Yii::$app->request;
             $goods_id=trim($request->post('goods_id'));
             $goods_num=trim($request->post('goods_num'));
@@ -299,7 +299,6 @@ class OrderController extends Controller
                         'msg'  => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-
             }
             $data=GoodsOrder::getlinegoodsdata($goods_id,$goods_num);
            if (is_numeric($data))
