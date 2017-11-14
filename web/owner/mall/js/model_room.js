@@ -41,7 +41,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     };
 
     // 样板间信息
-    _ajax.post("/owner/case-list", $scope.params, function (res) {
+    _ajax.get("/owner/case-list", $scope.params, function (res) {
         console.log(res, "样板间");
         let data = res.data;
         $scope.huxing = data;
