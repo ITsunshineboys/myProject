@@ -11,6 +11,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         finish_flag: finishInit,
         cancel_flag: cancelInit,
     }
+    $scope.show_comment = true;
     $scope.myng=$scope;
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -18,6 +19,20 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             return $.param(data)
         }
     };
+
+    function totalNumber() {
+        console.log('数组获取');
+        $http({
+            method: "get",
+            url: baseUrl+"/order/get-order-num",
+        }).then((res) => {
+            console.log(res);
+            $scope.listcount = res.data.data;
+        })
+    }
+
+
+
     /*选项卡数字获取*/
     $http({
         method: "get",
@@ -170,7 +185,6 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             {name: '绑定手机', value: false},
             {name: '订单状态', value: true},
             {name: '异常', value: false},
-            {name: '评论', value: false},
             {name: '详情', value: true},
             {name: '操作', value: false}
         ]
@@ -520,7 +534,11 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             sku:$scope.wait_send_sku,
             shipping_type:1
         },function (res) {
+            console.log("发货成功");
             tablePages();
+            tableList();
+            totalNumber();
+
         })
     }
     //快递单号发货模态框 确认按钮
@@ -536,9 +554,13 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
                     $scope.track_flag=true;
                     $scope.track_font='快递单号错误，请重新输入';
                 }else if(res.code==200){
+                    console.log("快递单号发货成功");
                     $scope.track_flag=false;
                     $('#track_confirm_modal').modal('hide');
                     tablePages();
+                    tableList();
+                    // totalNumber();
+
                 }
             })
         }else{
@@ -547,6 +569,9 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         }
 
     }
+
+
+
 
     /*------------------------待发货结束-----------------------------------*/
 

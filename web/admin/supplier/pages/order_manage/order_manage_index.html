@@ -110,12 +110,14 @@
                     <td ng-if="menu_list[5].value" ng-bind="item.consignee"></td>
                     <td ng-if="menu_list[6].value" ng-bind="item.mobile"></td>
                     <td ng-if="menu_list[7].value" ng-bind="item.status"></td>
-                    <td ng-if="menu_list[8].value" ng-bind="item.unusual=='无异常'?'':item.unusual"></td>
+                    <td ng-if="menu_list[8].value" ng-bind="item.unusual" ng-class={txt_red:item.unusual!='无异常'}></td>
                     <td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>
+                    <!--<td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>-->
                     <td ng-if="menu_list[10].value" class="view"
                         ng-click=viewDetail(item.order_no,item.sku,item.status)>查看
                     </td>
-                    <td ng-if="menu_list[11].value" ng-bind="item.handle"></td>
+                    <td ng-if="menu_list[11].value&&item.handle=='发货'" ng-bind="item.handle" class="font_blue" ng-click="wait_send_ship(item.shipping_type,item.order_no,item.sku)"></td>
+                    <td ng-if="menu_list[11].value&&!item.handle" ng-bind="item.handle"></td>
                 </tr>
             </table>
             <tm-pagination conf="pageConfig"></tm-pagination>
