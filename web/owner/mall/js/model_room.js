@@ -302,7 +302,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         $scope.preferential = 0;        // 优惠价
         let workerMoney = 0;            // 工人费用
         if (sessionStorage.getItem("materials") === null) {
-            _ajax.post("/owner/case-particulars", params, function (res) {
+            _ajax.get("/owner/case-particulars", params, function (res) {
                 console.log(res, "材料");
                 let data = res.data;
                 sessionStorage.setItem("backman", JSON.stringify(data.backman_data));
@@ -356,14 +356,14 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 }
 
                 // 系数
-                _ajax.post("/owner/coefficient", params, function (res) {
+                _ajax.get("/owner/coefficient", params, function (res) {
                     let data = res.data;
                     $scope.price += parseFloat(data.total_prices);
                     $scope.preferential += parseFloat(data.special_offer);
                 });
 
                 // 运费
-                _ajax.post("/order/calculation-freight", freightParams, function (res) {
+                _ajax.get("/order/calculation-freight", freightParams, function (res) {
                     let data = res.data;
                     $scope.price += parseFloat(data);
                     $scope.preferential += parseFloat(data);
