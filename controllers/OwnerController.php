@@ -1530,9 +1530,9 @@ class OwnerController extends Controller
      * @return string
      */
     public function actionCaseList(){
-        $code     = trim(Yii::$app->request->post('code',''));
-        $street   = trim(Yii::$app->request->post('street',''));
-        $toponymy = trim(Yii::$app->request->post('toponymy',''));
+        $code     = trim(Yii::$app->request->get('code',''));
+        $street   = trim(Yii::$app->request->get('street',''));
+        $toponymy = trim(Yii::$app->request->get('toponymy',''));
 
         $effect = Effect::findByCode($code,$street,$toponymy);
         if ($effect == null) {
