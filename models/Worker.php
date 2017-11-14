@@ -300,4 +300,17 @@ class Worker extends \yii\db\ActiveRecord
             'details' => $details
         ];
     }
+
+    public static function basicMessage($select = [],$where = [])
+    {
+        $message = self::find()
+            ->select($select)
+            ->where($where)
+            ->leftJoin('user','user.id = worker.uid')
+            ->leftJoin('user_role','user_role.user_id = user.id')
+            ->asArray()
+            ->one();
+
+        return $message;
+    }
 }
