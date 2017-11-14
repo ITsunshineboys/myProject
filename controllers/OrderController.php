@@ -777,6 +777,7 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
+
             if ($orders==[])
             {
                 $code=1000;
