@@ -25,7 +25,8 @@ use app\models\LogisticsTemplate;
 use app\models\UploadForm;
 use app\models\OrderAfterSale;
 use app\models\OrderGoods;
-use app\models\OrderRefund; 
+use app\models\OrderRefund;
+use app\models\UserAccessdetail;
 use app\models\UserRole;
 use app\models\Wxpay;
 use app\models\User;
@@ -4525,6 +4526,88 @@ class OrderController extends Controller
             ]);
         }
     }
+
+
+    /**
+     *
+     * 测试收货
+     * @return int|string
+     */
+    public function  actionTestConfirmReceipt()
+    {
+        $request=Yii::$app->request;
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
+        $orderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        $goodsOrder=GoodsOrder::find()
+            ->where(['order_no'=>$order_no])
+            ->one();
+        $supplier=Supplier::findOne($goodsOrder->supplier_id);
+        if (!$goodsOrder || !$supplier || !$goodsOrder)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $orderGoods->order_status=1;
+            $orderGoods->shipping_status=2;
+            $res=$orderGoods->save(false);
+            if (!$res)
+            {
+                $tran->rollBack();
+            }
+            $transaction_no=GoodsOrder::SetTransactionNo($supplier->shop_no);
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$supplier->uid;
+            $supplier_accessdetail->role_id=6;
+            $supplier_accessdetail->access_type=6;
+            $supplier_accessdetail->access_money=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
+            $supplier_accessdetail->order_no=$order_no;
+            $supplier_accessdetail->sku=$sku;
+            $supplier_accessdetail->create_time=time();
+            $supplier_accessdetail->transaction_no=$transaction_no;
+            $res2=$supplier_accessdetail->save(false);
+            if (!$res2)
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $supplier->availableamount+=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
+            $supplier->balance+=$orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number;
+            $res3=$supplier->save(false);
+            if (!$res3)
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+
+            $tran->commit();
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => 'ok'
+            ]);
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+    }
+
+
+
 
 
 

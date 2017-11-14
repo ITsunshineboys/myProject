@@ -1483,7 +1483,6 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['complete_time']=0;
             $data[$k]['RemainingTime']=0;
             if ($data[$k]['status']=='待收货'){
-
                     $express=Express::find()
                         ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                         ->one();
@@ -1521,6 +1520,10 @@ class GoodsOrder extends ActiveRecord
                 }else{
                     $data[$k]['send_time']=$express->create_time;
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+                    if ($data[$k]['RemainingTime']<0)
+                    {
+                        $data[$k]['RemainingTime']=0;
+                    }
                     $data[$k]['complete_time']=$express->receive_time;
                 }
                  $data[$k]['is_unusual']=0;
@@ -3077,7 +3080,7 @@ class GoodsOrder extends ActiveRecord
             $code=200;
             $tran->commit();
             return $code;
-        }catch (Exception $e){
+        }catch (yii\db\Exception $e){
             $tran->rollBack();
             $code=500;
             return $code;
