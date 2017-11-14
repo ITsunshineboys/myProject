@@ -844,7 +844,6 @@ class WithdrawalsController extends Controller
             $transaction_no=$request->get('transaction_no');
             if (!$transaction_no)
             {
-                echo 1;exit;
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -860,7 +859,6 @@ class WithdrawalsController extends Controller
             ->one();
             if (!$accessDetail){
                 $code=1000;
-                echo 2;exit;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
