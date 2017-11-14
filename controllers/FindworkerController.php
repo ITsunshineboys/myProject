@@ -80,6 +80,13 @@ class FindworkerController extends Controller{
     {
         $parents = WorkerType::parent();
         $data=WorkerType::getworkertype($parents);
+        if(!$data){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
             $parent=[];
             for ($i=0;$i<count($data);$i++){
                 $parent[]=[
@@ -97,35 +104,35 @@ class FindworkerController extends Controller{
 
     }
 
-    /**
-     *
-     *根据工种类型获取具体条目
-     *@return string
-     */
-
-    public function actionGetHomeItem(){
-
-        $code=1000;
-        $request=new Request();
-        $worker_type_id=trim($request->get('worker_type_id',''),'');
-        if(!$worker_type_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-         $data=WorkerItem::getparent($worker_type_id);
-               return Json::encode([
-                   'code'=>200,
-                   'msg'=>'ok',
-                   'data'=>[
-                       'worker_type_id'=>$worker_type_id,
-                       'worker_type'=>WorkerType::gettype($worker_type_id),
-                       'item'=>$data
-                   ]
-               ]);
-
-         }
+//    /**
+//     *
+//     *根据工种类型获取具体条目
+//     *@return string
+//     */
+//
+//    public function actionGetHomeItem(){
+//
+//        $code=1000;
+//        $request=new Request();
+//        $worker_type_id=trim($request->get('worker_type_id',''),'');
+//        if(!$worker_type_id){
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//         $data=WorkerItem::getparent($worker_type_id);
+//               return Json::encode([
+//                   'code'=>200,
+//                   'msg'=>'ok',
+//                   'data'=>[
+//                       'worker_type_id'=>$worker_type_id,
+//                       'worker_type'=>WorkerType::gettype($worker_type_id),
+//                       'item'=>$data
+//                   ]
+//               ]);
+//
+//         }
 
     /**
      *根据厅室获取所有工艺
