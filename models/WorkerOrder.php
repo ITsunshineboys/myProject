@@ -297,7 +297,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $water_item_data;
     }
 
-    //TODO 水电工详情
+    /**
+     * 水电条目详情
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function HydropowerorderView($order_id){
         $hydropos=HydropowerWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
         foreach ($hydropos as &$hydropo){
@@ -322,7 +326,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $hydropos;
         }
 
-    //TODO  油漆工的详情
+    /**
+     * 油漆条目详情
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function PainterorderView($order_id){
         $paints=PaintWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
         foreach ($paints as &$paint){
@@ -345,7 +353,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $paints;
     }
-    //TODO 木工的详情
+    /**
+     * 木工条目详情
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function CarpentryView($order_id){
         $carpentrys=CarpentryWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
         foreach ($carpentrys as &$carpentry){
@@ -373,9 +385,38 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
         return $carpentrys;
     }
-    //TODO　杂工的详情
+    /**
+     * 杂工条目详情
+     * @param $order_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function BackmanView($order_id){
-
+        $backmans=BackmanWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
+        foreach ($backmans as &$backman){
+            $backman['worker_item']=WorkerItem::find()
+                ->where(['id'=>$backman['worker_item_id']])
+                ->asArray()
+                ->one()['title'];
+            $backman['worker_item_craft']=WorkerCraft::getcraftitle($backman['worker_craft_id'])['craft'];
+            $backman['stack']=$backman['stack']==1?'是':'否';
+            if($backman['worker_item_craft']==0){
+                unset($backman['worker_item_craft']);
+            }
+            if($backman['length']==0){
+                unset($backman['length']);
+            }
+            if($backman['area']==0){
+                unset($backman['area']);
+            }
+            if(!isset($backman['stack'])){
+                unset($backman['stack']);
+            }
+            unset($backman['order_id']);
+            unset($backman['id']);
+            unset($backman['worker_item_id']);
+            unset($backman['worker_craft_id']);
+        }
+        return $backmans;
     }
 
     private static function dealOrder($order)
@@ -1268,16 +1309,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function savebackmanitem(array $array,$order_id){
         foreach ($array as $v){
             foreach ($v as &$data) {
-                if(!$data['craft_id']){
+                if(!isset($data['craft_id'])){
                     $data['craft_id']=0;
                 }
-                if(!$data['area']){
+                if(!isset($data['area'])){
                     $data['area']=0;
                 }
-                if(!$data['stack']){
+                if(!isset($data['stack'])){
                     $data['stack']=0;
                 }
-                if(!$data['length']){
+                if(!isset($data['length'])){
                     $data['length']=0;
                 }
                 $res = \Yii::$app->db->createCommand()->insert('backman_worker_order', [
