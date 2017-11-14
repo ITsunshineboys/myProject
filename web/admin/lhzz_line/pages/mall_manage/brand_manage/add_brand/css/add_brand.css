@@ -169,7 +169,14 @@ ul{
     display: inline-block;
     margin-top: 11px;
 }
-
+.right_div{
+    display: inline-block;
+    vertical-align: top;
+}
+.left_div{
+    margin-left: 33px;
+    display: inline-block;
+}
 .ulright ul{
     display: inline-block;
     width: 160px;

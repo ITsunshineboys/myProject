@@ -110,6 +110,9 @@ section{
 .menu_right{
   float: right;
 }
+.sort_choose{
+  margin-right: 15px;
+}
 /*操作结束*/
 
 /*表格开始*/
@@ -223,4 +226,14 @@ table tr{
 .active{
   background:#487af8!important;
   color: white!important;
+}
+.down_roles{
+  margin-bottom: 20px;
+}
+.down_rea{
+  vertical-align: top;
+}
+.apply{
+  color: #666F80;
+  font-weight: bold;
 }

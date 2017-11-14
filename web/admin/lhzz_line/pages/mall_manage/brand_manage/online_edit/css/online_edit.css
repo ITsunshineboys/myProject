@@ -223,3 +223,6 @@ ul{
     border:1px solid red!important;
     outline: 0;
 }
+.down_rea{
+    vertical-align: top;
+}

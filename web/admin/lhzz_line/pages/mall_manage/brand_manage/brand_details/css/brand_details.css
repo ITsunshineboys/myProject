@@ -59,7 +59,8 @@ hr{
 }
 .shop_img span{
     color: #666F80;
-    font-size: 14px;
+    display: inline-block;
+    min-width:56px;
 }
 .shop_img img{
     width: 310px;

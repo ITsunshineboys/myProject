@@ -21,7 +21,7 @@
         <div>
             <button class="btn btn-default btn_right"  ng-click="checkAll()">全选</button>
             <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</button>
-            <span style="margin-right: 15px;">分类选择</span>
+            <span class="sort_choose">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
             <select name="" class="time_select" ng-if="firstselect!=0" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
             <select name="" class="time_select" ng-if="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
@@ -65,8 +65,8 @@
                     <h4 class="modal-title">下架原因</h4>
                 </div>
                 <div class="modal-body">
-                    <div ng-if="table.roles.length>0" style="margin-bottom: 20px">下架{{table.roles.length}}个品牌</div>
-                    <span style="vertical-align: top">下架原因（选填）</span>
+                    <div ng-if="table.roles.length>0" class="down_roles">下架{{table.roles.length}}个品牌</div>
+                    <span class="down_rea">下架原因（选填）</span>
                     <textarea  ng-model="sole_down_shelves_reason" placeholder="请填写下架原因" cols="50" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
@@ -86,7 +86,7 @@
             <button class="btn btn-default btn_right" ui-sref="add_brand"><i class="glyphicon glyphicon-plus"></i>添加</button>
             <button class="btn btn-default btn_right" ng-click="checkAll()">全选</button>
             <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</button>
-            <span style="margin-right:15px;">分类选择</span>
+            <span class="sort_choose">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)">
             </select>
             <select name="" class="time_select" ng-show="firstselect!=0" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)">
@@ -190,7 +190,7 @@
                     <h4 class="modal-title">下架原因</h4>
                 </div>
                 <div class="modal-body">
-                    <span style="vertical-align: top">下架原因（选填）</span>
+                    <span class="down_rea">下架原因（选填）</span>
                     <textarea name="" placeholder="请填写下架原因" cols="30" rows="10" ng-model="down_reason"></textarea>
                 </div>
                 <div class="modal-footer">
@@ -208,7 +208,7 @@
         <!--申请-->
         <div class="inline_block">
             <i class="glyphicon glyphicon-th-large"></i>
-            <span style="color: #666F80;font-weight: bold">{{application_num.length}}个申请</span>
+            <span class="apply">{{application_num.length}}个申请</span>
         </div>
         <!--时间-->
         <div class="inline_block">
@@ -269,7 +269,7 @@
                     <h4 class="modal-title">审核备注</h4>
                 </div>
                 <div class="modal-body">
-                    <span style="vertical-align: top">说明（选填）</span>
+                    <span class="down_rea">说明（选填）</span>
                     <textarea ng-model="check_review" placeholder="请填写审核不通过/通过原因" cols="30" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
