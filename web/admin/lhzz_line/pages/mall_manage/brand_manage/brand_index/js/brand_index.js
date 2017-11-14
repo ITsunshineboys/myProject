@@ -327,14 +327,10 @@ brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$statePa
     };
 
     //判断有多少个申请
-    _ajax.get('/mall/brand-application-review-list',{size:99999},function (res) {
+    _ajax.get('/mall/brand-application-review-list',{review_status:0},function (res) {
+        console.log(res);
         /*判断多少个申请个数*/
-        $scope.application_num=[];
-        for(let [key,value] of res.data.brand_application_review_list.details.entries()){
-            if(value.review_status=='0'){
-                $scope.application_num.push(value);
-            }
-        }
+        $scope.application_num=res.data.brand_application_review_list.total;
     });
 
   //获取审核类型
