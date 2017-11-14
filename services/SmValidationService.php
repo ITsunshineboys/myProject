@@ -67,21 +67,12 @@ class SmValidationService
         $this->_validationCodeMethod = $validationCodeMethod;
         $this->_appKey = $smParams['appKey'];
         $this->_appSecret = $smParams['appSecret'];
-        $this->_signName = '领航装饰设计';
+        $this->_signName = $smParams['signName'];
         $this->_templateId = $smParams[$data['type']]['templateId'];
         $this->_interval = $smParams['interval'];
         $this->_validationCodeExpire = $smParams['validationCode']['expire'];
         $this->_mobile = $data['mobile'];
         $this->_data = $data;
-//        var_dump($this->_validationCodeMethod);
-//        var_dump($this->_appKey);
-//        var_dump( $this->_appSecret);
-//        var_dump($this->_signName);
-//        var_dump($this->_templateId);
-//        var_dump($this->_interval);
-//        var_dump($this->_validationCodeExpire);
-//        var_dump($this->_mobile);
-//        var_dump($this->_data);exit;
         $this->send();
     }
 
@@ -119,6 +110,7 @@ class SmValidationService
             'app_key' => $this->_appKey,
             'app_secret' => $this->_appSecret,
         ];
+
         $client = new Client(new App($config));
         $req = new AlibabaAliqinFcSmsNumSend;
         $req
@@ -126,6 +118,7 @@ class SmValidationService
             ->setSmsParam(array_merge($templateData, $this->_data)) // 模版数据
             ->setSmsFreeSignName($this->_signName) // 短信签名
             ->setSmsTemplateCode($this->_templateId); // 短信模版ID
+
         $res = $client->execute($req);
 
         $this->_setSendNum();
