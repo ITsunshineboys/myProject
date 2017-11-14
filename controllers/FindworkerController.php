@@ -531,7 +531,7 @@ class FindworkerController extends Controller{
         return Json::encode([
            'code'=>200,
            'msg'=>'ok',
-            'data'=>WorkerType::find()->where(['pid'=>self::PARENT,'status'=>1])->asArray()->all()
+            'data'=>WorkerType::find()->where(['pid'=>self::PARENT,'status'=>self::STATUS_SINGLE])->asArray()->all()
         ]);
     }
     /**
