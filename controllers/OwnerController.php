@@ -273,32 +273,18 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->get();
         //人工价格
         $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
-        if ($workers == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if ($workers != null){
+            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
+        } else {
+            $worker_kind_details['quantity'] = WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
         }
 
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
 
         //      点位 和 材料查询
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne('count',$points_where);
         if ($points == null){
-            $code = 1058;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            $points['count'] = Points::DEFAULT_POINTS;
         }
 
         //查询弱电所需要材料

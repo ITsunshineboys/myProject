@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
 class Points extends ActiveRecord
 {
     const TABLE_NAME = 'points';
-    const TABLE_COLUMNS = "";
+    const DEFAULT_POINTS = 48;
     /**
      * @return string 返回该AR类关联的数据表名
      */
