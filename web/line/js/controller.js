@@ -317,7 +317,7 @@ angular.module("all_controller", ['ngCookies'])
                 }, function (error) {
                     console.log(error)
                 })
-                $('#myModal').modal('hide');
+                // $('#myModal').modal('hide');
                 // $timeout(function () {
                 //     $scope.have_header = true;
                 //     $scope.is_city = false;
@@ -485,7 +485,7 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.all_goods_brands = $scope.all_brand_copy
             }
         });
-
+        //
         $(document).mouseup(function(e){
             var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
             if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
@@ -822,6 +822,10 @@ angular.module("all_controller", ['ngCookies'])
             }
 
         });
+        $scope.getOtherApp = function () {
+            console.log(111);
+            window.location = 'http://test.cdlhzz.cn/owner/mall/#!/nodata/cell_search'
+        }
         // 购买数量=======点击加减
         $scope.shopNum = 1;
         $scope.addNumber = function () { //点击==>加
@@ -1198,8 +1202,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.jumpOrder = function () {
                         let invoiceObj = { // 保存
                             invoice_id: $scope.invoice_id,
-                            invoice_content: $scope.invoice_name
-
+                            invoice_content: $scope.invoice_names
                         };
                         sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                         setTimeout(function () {
@@ -1278,6 +1281,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.invoice_name =  invoiceInfo.invoice_content;
             $scope.invoice_number =  invoiceInfo.invoicer_card;
         }
+
     })
 
     //确认订单
@@ -1347,10 +1351,14 @@ angular.module("all_controller", ['ngCookies'])
             // 判断三级 =========== 初始化  ===========
         };
         //订单信息===>获取商品的信息
-        $http.get('http://test.cdlhzz.cn/order/getgoodsdata',{
-            goods_id:+$scope.mall_id,
-            goods_num:+$scope.shopNum
-        },config).then(function (response) {
+        $http({
+            method: 'get',
+            url: 'http://test.cdlhzz.cn/order/getgoodsdata',
+            params:{
+                goods_id:+$scope.mall_id,
+                goods_num:+$scope.shopNum
+            }
+        }).then(function (response) {
             console.log(response);
             $scope.title =  response.data.data.title;
             $scope.subtitle =  response.data.data.subtitle;
