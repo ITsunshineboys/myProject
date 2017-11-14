@@ -270,6 +270,15 @@ h3 {
     display: inline-block;
     width: 80px;
 }
+.h3_display{
+    display: inline-block;
+}
+.ver_top{
+    vertical-align: top;
+}
+.track_red{
+    color: red;
+}
 
 .dl_active4{
     background-color: #E6E9F0!important;

@@ -28,7 +28,7 @@
                     <div class="margin_top">
                         <span>验证码：</span>
                         <input type="text" ng-class="{'border_red':forget_v_code_flag}" class='enter_input' ng-model='forget_v_code' placeholder="请输入验证码">
-                        <span class='send' ng-if="show_send" ng-click='send_click()'>发送</span>
+                        <button class="btn btn-info" ng-if="show_send" ng-click='send_click()'>发送</button>
                         <span ng-if="!show_send">{{Countdown}}s</span>
                         <p class='prompt_txt'>{{forget_v_txt}}</p>
                     </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" ng-click="forget_pw_confirm()">确认</button>
-                    <button class="btn btn-primary" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
             <img src="lib/images/logo.png" class="img_logo" alt="">
             <!--选择登录身份-->
             <div>
-                <select name="" id="" ng-model="rolo_value" class="select" ng-options="item.id as item.value for item in login_rolo"></select>
+                <select ng-model="rolo_value" class="select" ng-options="item.id as item.value for item in login_rolo"></select>
             </div>
             <!--手机号-->
             <div class="margin_top">

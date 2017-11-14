@@ -3,7 +3,7 @@
     <!--头部开始-->
     <div class="header clearfix">
         <i class="glyphicon glyphicon-shopping-cart"></i>
-        <a class="crumbs" style="font-weight: bold" ui-sref="supplier_wallet">钱包</a>
+        <a class="crumbs wallet_bold" ui-sref="supplier_wallet">钱包</a>
         <a class="crumbs crumbs_on">&gt;收支明细</a>
         <img class="pull-right" src="lib/images/user.png" alt="">
         <!--<a class="pull-right">退出</a>-->
@@ -17,15 +17,15 @@
             <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
             <input ng-if="params.time_type=='custom'" id="end_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
             <!--类型-->
-            <span style="margin-right: 10px">类型选择</span>
+            <span class="type_right">类型选择</span>
             <select ng-model="params.type" class="time_select" ng-change="status_change()" ng-options="items.id as items.value for items in status_arr"></select>
             <!--搜索-->
             <div class="search_box">
                 <div class="search_div">
-                    <input type="text" placeholder="搜索订单号或交易单号" ng-model="income_search" style="outline: 0">
+                    <input type="text" class="outline_z" placeholder="搜索订单号或交易单号" ng-model="income_search">
                     <i class="glyphicon glyphicon-search search_logo"></i>
                 </div>
-                <button class="btn btn-default search_btn" style="margin-left: 30px" ng-click="search_click()">搜索</button>
+                <button class="btn btn-default search_btn" ng-click="search_click()">搜索</button>
             </div>
         </div>
         <!-- 表格 -->
@@ -63,7 +63,7 @@
                     </div>
                     <div class="modal-body body_font">
                         <div ng-repeat="item in detail_list">
-                            <span style="display:inline-block;width: 90px ">{{item.name}}：</span>
+                            <span class="modal_txt">{{item.name}}：</span>
                             <span ng-class="{'orange_color':$index==1}">{{item.value}}</span>
                         </div>
                     </div>

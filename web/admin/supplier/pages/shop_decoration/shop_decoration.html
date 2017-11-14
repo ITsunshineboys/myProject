@@ -174,15 +174,12 @@
                             </div>
                             <div class="modal-body">
                                 <div  id="shop_num_null"  ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && banner_add_num_blur) ||banner_num_error ">
-                                    <span style="margin-left: 10px; font-weight: bold">{{shop_sku_error}}</span>
+                                    <span class="shop_left">{{shop_sku_error}}</span>
                                 </div>
-                                <!--<div  id="shop_num_null3" ng-if="banner_num_error">-->
-                                    <!--<span style="margin-left: 10px; font-weight: bold">商品编号错误，请重新输入</span>-->
-                                <!--</div>-->
                                 <div class="modal_txt_one">
                                     <i class="red">*</i>
                                     <span >商品编号</span>
-                                    <input class="form_input" name="shop_num_name" required ng-blur="banner_add_num_blur=!!shop_form.shop_num_name.$error" id="shop_add_num_input"  type="text" ng-model="banner_add_sku"/><span id="shop_get" style="position: relative; z-index: 9999" ng-click="banner_get_sku(0)">获取</span>
+                                    <input class="form_input" name="shop_num_name" required ng-blur="banner_add_num_blur=!!shop_form.shop_num_name.$error" id="shop_add_num_input"  type="text" ng-model="banner_add_sku"/><span id="shop_get" class="shop_get_sku" ng-click="banner_get_sku(0)">获取</span>
                                 </div>
                                 <div class="modal_txt_one modal_txt_two">
                                     <i class="red">*</i>
@@ -199,7 +196,7 @@
                                     <span> 图片</span>
                                     <img id="modal_img"  ng-if="!!banner_add_img_src" ng-src="{{baseUrl + '/'+ banner_add_img_src}}"/>
                                     <img id="modal_img2" ng-if="!banner_add_img_src" src="lib/images/default.png"/>
-                                    <p style="color:red;margin:10px 0 0 78px" ng-if="!!banner_add_img_flag">{{banner_add_img_flag}}</p>
+                                    <p class="modal_red" ng-if="!!banner_add_img_flag">{{banner_add_img_flag}}</p>
                                     <div class="modal_img_btn">
                                         <span ngf-pattern="image/*" ng-change="banner_add_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
                                     </div>
@@ -229,12 +226,12 @@
                             </div>
                             <div class="modal-body">
                                 <div  id="shop_num_null2" ng-if="(banner_edit_form.banner_edit_num.$invalid &&submitted)||(banner_edit_form.banner_edit_num.$error.required && banner_edit_num_blur)||banner_edit_num_error">
-                                    <span style="margin-left: 10px; font-weight: bold">{{shop_edit_sku_error}}</span>
+                                    <span class="shop_left">{{shop_edit_sku_error}}</span>
                                 </div>
                                 <div class="modal_txt_one">
                                     <i class="red">*</i>
                                     <span >商品编号</span>
-                                    <input class="form_input" type="text"  ng-model="banner_edit_sku" name="banner_edit_num" required ng-blur="banner_edit_num_blur=!!banner_edit_form.banner_edit_num.$error"/><span  style="position: relative; z-index: 9999" ng-click="banner_get_sku(1)">获取</span>
+                                    <input class="form_input" type="text"  ng-model="banner_edit_sku" name="banner_edit_num" required ng-blur="banner_edit_num_blur=!!banner_edit_form.banner_edit_num.$error"/><span  class="shop_get_sku" ng-click="banner_get_sku(1)">获取</span>
                                 </div>
                                 <div class="modal_txt_one modal_txt_two">
                                     <i class="red">*</i>
@@ -251,7 +248,7 @@
                                     <span> 图片</span>
                                     <img id="edit_modal_img1"  ng-if="!!banner_edit_img_src" ng-src="{{baseUrl + '/'+ banner_edit_img_src}}"/>
                                     <img id="edit_modal_img2" ng-if="!banner_edit_img_src" src="lib/images/default.png"/>
-                                    <p style="color:red;margin:10px 0 0 78px" ng-if="!!banner_edit_img_flag">{{banner_edit_img_flag}}</p>
+                                    <p class="modal_red" ng-if="!!banner_edit_img_flag">{{banner_edit_img_flag}}</p>
                                     <div class="modal_img_btn">
                                         <span ngf-pattern="image/*" ng-change="banner_edit_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
                                     </div>
@@ -301,7 +298,7 @@
                             </div>
                             <div class="row form_box">
                                 <div class="col-md-12 form_txt">
-                                    <div class="col-md-12 form_txt" style="padding-left: 0">图片：</div>
+                                    <div class="col-md-12 form_txt txt_left">图片：</div>
                                     <img  class='detail_img_size' ng-src="{{baseUrl + '/'+ banner_detail_image}}" alt="">
                                 </div>
                             </div>

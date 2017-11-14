@@ -154,12 +154,12 @@
                         </div>
                     </div>
                 </div>
-                <div style="float: right">
+                <div class="search_float">
                     <div class="searchbox">
                         <input type="text" ng-model="myng.w_search" placeholder="搜索订单号或商品名称">
                         <span class="glyphicon glyphicon-search search"></span>
                     </div>
-                    <button style="margin-right: 30px" ng-click="wait_send_search_btn()">搜索</button>
+                    <button class="search_rgiht" ng-click="wait_send_search_btn()">搜索</button>
                 </div>
             </div>
 
@@ -187,7 +187,7 @@
                     <td ng-if="waitsend_6">{{item.user_name}}</td>
                     <td ng-if="waitsend_7">{{item.mobile}}</td>
                     <td ng-if="waitsend_8">{{item.status}}</td>
-                    <td ng-if="waitsend_9" ng-show="item.unusual !='无异常'" style="color: #FF5722">{{item.unusual}}</td>
+                    <td ng-if="waitsend_9" ng-show="item.unusual !='无异常'" class="txt_red">{{item.unusual}}</td>
                     <td ng-if="waitsend_9" ng-show="item.unusual=='无异常'">&nbsp;</td>
                     <td ng-if="waitsend_10">{{item.comment_grade}}</td>
                     <td ng-if="waitsend_11" class="font_blue" ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</td>
@@ -268,12 +268,12 @@
                         </div>
                     </div>
                 </div>
-                <div style="float: right">
+                <div class="search_float">
                     <div class="searchbox">
                         <input type="text" ng-model="myng.w_search" placeholder="搜索订单号或商品名称">
                         <span class="glyphicon glyphicon-search search"></span>
                     </div>
-                    <button style="margin-right: 30px" ng-click="wait_send_search_btn()">搜索</button>
+                    <button class="search_rgiht" ng-click="wait_send_search_btn()">搜索</button>
                 </div>
             </div>
 
@@ -301,7 +301,7 @@
                     <td ng-if="waitreceive_6">{{item.user_name}}</td>
                     <td ng-if="waitreceive_7">{{item.mobile}}</td>
                     <td ng-if="waitreceive_8">{{item.status}}</td>
-                    <td ng-if="waitreceive_9" ng-show="item.unusual!='无异常'" style="color: #FF5722">{{item.unusual}}</td>
+                    <td ng-if="waitreceive_9" ng-show="item.unusual!='无异常'" class="txt_red">{{item.unusual}}</td>
                     <td ng-if="waitreceive_9" ng-show="item.unusual=='无异常'">&nbsp;</td>
                     <td ng-if="waitreceive_10">{{item.comment_grade}}</td>
                     <td ng-if="waitreceive_11" class="font_blue" ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</td>

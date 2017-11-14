@@ -3,7 +3,7 @@
     <!--头部开始-->
     <div class="header clearfix">
         <i class="glyphicon glyphicon-shopping-cart"></i>
-        <a class="crumbs" style="font-weight: bold">钱包</a>
+        <a class="crumbs wallet_bold">钱包</a>
         <img class="pull-right" src="lib/images/user.png" alt="">
         <!--<a class="pull-right">退出</a>-->
 
@@ -21,11 +21,11 @@
             </select>
             <input ng-if="params.time_type=='custom'" id="start_time"  ng-model="params.time_start" ng-change="time_change()" max-date="{{params.time_end}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
             <input ng-if="params.time_type=='custom'" id="stop_time"   ng-model="params.time_end" ng-change="time_change()"  min-date="{{params.time_start}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
-            <span style="margin-right: 10px">状态选择</span>
+            <span class="status_choose">状态选择</span>
             <select ng-model="params.status" class="time_select" ng-change="time_change()" ng-options="items.id as items.value for items in status_arr"></select>
         </div>
         <!-- 表格 -->
-        <table class="table table-responsive" style="width: 100%;table-layout: fixed">
+        <table class="table table-responsive table_css">
             <thead>
             <tr>
                 <th>申请时间</th>

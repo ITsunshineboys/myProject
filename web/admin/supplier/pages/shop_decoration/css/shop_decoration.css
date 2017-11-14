@@ -136,6 +136,22 @@ section{
   left: 50%;
   transform: translate(-50%,-50%)
 }
+
+.shop_left{
+  margin-left: 10px;
+  font-weight: bold;
+}
+.shop_get_sku{
+  position: relative;
+  z-index: 9999;
+}
+.modal_red{
+  color:red;
+  margin:10px 0 0 78px;
+}
+.txt_left{
+  padding-left: 0;
+}
 .dl_active6{
   background-color: #E6E9F0!important;
 }

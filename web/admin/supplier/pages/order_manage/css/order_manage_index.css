@@ -279,6 +279,15 @@ table .sortpic .glyphicon-triangle-bottom {
     border: 1px solid #E6E9F0;
     border-radius: 3px;
 }
+.txt_red{
+    color: #FF5722;
+}
+.search_float{
+    float: right;
+}
+.search_rgiht{
+    margin-right: 30px;
+}
 .dl_active4{
     background-color: #E6E9F0!important;
 }

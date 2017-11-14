@@ -188,7 +188,7 @@
         <div class="unusual_detail" ng-if="item.order_type=='unshipped'"    ng-repeat="item in is_unusual_list_msg">
             <hr>
             <div >
-                <h3 style="display: inline-block">异常记录-待发货</h3>
+                <h3 class="h3_display">异常记录-待发货</h3>
                 <i class="glyphicon glyphicon-chevron-up arrow_class" ng-if="unshipped_img_flag_up" ng-click="arrow_unshipped()"></i>
                 <i class="glyphicon glyphicon-chevron-down arrow_class" ng-if="unshipped_img_flag_down" ng-click="arrow_unshipped()"></i>
             </div>
@@ -205,7 +205,7 @@
         <div class="unusual_detail" ng-if="item.order_type=='unreceived'" ng-repeat="item in is_unusual_list_msg">
             <hr>
             <div >
-                <h3 style="display: inline-block">异常记录-待收货</h3>
+                <h3 class="h3_display">异常记录-待收货</h3>
                 <i class="glyphicon glyphicon-chevron-up arrow_class" ng-if='unreceived_img_flag_up' ng-click="arrow_unreceived()"></i>
                 <i class="glyphicon glyphicon-chevron-down arrow_class" ng-if='unreceived_img_flag_down' ng-click="arrow_unreceived()"></i>
             </div>
@@ -243,7 +243,7 @@
                     </div>
                     <div class="modal-body body_font">
                         <span class="">驳回原因（选填）</span>
-                        <textarea style="vertical-align: top" placeholder="请填写驳回原因" cols="30" rows="10" ng-model='turn_down_txt'></textarea>
+                        <textarea class="ver_top" placeholder="请填写驳回原因" cols="30" rows="10" ng-model='turn_down_txt'></textarea>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" data-dismiss="modal" ng-click='turn_down_confirm()'>确认</button>
@@ -278,7 +278,7 @@
                     </div>
                     <div class="modal-body body_font">
                         <p class='track_p' ng-if='track_change_flag'>{{track_change_font}}</p>
-                        <span class='track_span' style="color: red">*</span>
+                        <span class='track_span track_red'>*</span>
                         <span class='track_span'>快递单号</span>
                         <input type="text" class="delivery_input" ng-model="track_input_model">
                     </div>

@@ -53,7 +53,16 @@ section{
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.status_choose{
+  margin-right: 10px
+}
+.table_css{
+  width: 100%;
+  table-layout: fixed;
+}
+.wallet_bold{
+  font-weight: bold!important;
+}
 .dl_active9{
   background-color: #E6E9F0!important;
 }

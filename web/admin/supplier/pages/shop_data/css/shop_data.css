@@ -40,6 +40,9 @@ section{
   border: 1px solid #BFC0C2;
   border-radius: 3px;
 }
+.msg_blod{
+  font-weight: bold;
+}
 .dl_active5{
   background-color: #E6E9F0!important;
 }
