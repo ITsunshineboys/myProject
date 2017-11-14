@@ -709,26 +709,24 @@ class WorkerManagementController extends Controller
     }
 
     public function actionWorkerDetails()
-{
-    $id = (int)trim(\Yii::$app->request->get('id',''));
-    $status = trim(\Yii::$app->request->get('status',''));
-    switch ($status){
-        case $status == 'basic':     // 基本信息
-            break;
-        case $status == 'role':    // 角色信息
-            break;
-        case $status == 'production':    // 作品信息
-            break;
-        case $status == 'engineering':    // 工程订单
-            break;
-        case $status == 'construction_site':    // 工地信息
-            break;
+    {
+        $id = (int)trim(\Yii::$app->request->get('id',''));
+        $status = trim(\Yii::$app->request->get('status',''));
+        switch ($status){
+            case $status == 'basic':     // 基本信息
+                $where = "worker.id = ".$id." and worker.status = 1 and user_role.review_status = 2";
+                $select = "worker.icon,worker.province_code,worker.city_code,worker.native_place,worker.status,user.aite_cube_no,user.username,user.create_time,user_role.review_time";
+                $worker = Worker::
+                break;
+            case $status == 'role':    // 角色信息
+                break;
+            case $status == 'production':    // 作品信息
+                break;
+            case $status == 'engineering':    // 工程订单
+                break;
+            case $status == 'construction_site':    // 工地信息
+                break;
 
+        }
     }
-
-
-
-
-
-}
 }
