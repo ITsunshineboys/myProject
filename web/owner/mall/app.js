@@ -108,6 +108,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                     return $.param(data);
                 }
             }).then(function (response) {
+                console.log(response)
                 let res = response.data;
                 if (res.code === 403) {
                     $state.go('login')

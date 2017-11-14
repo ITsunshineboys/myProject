@@ -438,13 +438,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 console.log(item)
                 $scope.cur_series = $scope.cur_all_series[0]//当前案例图纸系列
                 for (let [key, value] of $scope.cur_all_series.entries()) {
-                    if (value.id == item.series) {
+                    if (value.id == item.series.id) {
                         $scope.cur_series = value
                     }
                 }
                 $scope.cur_style = $scope.cur_all_style[0]//当前案例图纸风格
                 for (let [key, value] of $scope.cur_all_style.entries()) {
-                    if (value.id == item.style) {
+                    if (value.id == item.style.id) {
                         $scope.cur_style = value
                     }
                 }
