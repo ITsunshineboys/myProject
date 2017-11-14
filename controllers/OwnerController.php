@@ -280,6 +280,8 @@ class OwnerController extends Controller
             }
         } else {
             $worker_kind_details['quantity'] = WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
+            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / 100;
+            $workers['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
 
 
@@ -348,6 +350,8 @@ class OwnerController extends Controller
             }
         } else{
             $worker_kind_details['quantity'] = WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
+            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / 100;
+            $workers['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
 
 
@@ -416,6 +420,8 @@ class OwnerController extends Controller
             }
         } else {
             $worker_kind_details['quantity'] = WorkerCraftNorm::WATERWAY_DAY_POINTS;
+            $waterway_labor['univalence'] = LaborCost::WEAK_CURRENT_PRICE / 100;
+            $waterway_labor['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
 
 

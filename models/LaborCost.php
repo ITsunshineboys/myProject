@@ -30,6 +30,7 @@ class LaborCost extends ActiveRecord
             'waterway'=>'水路'
         ];
 
+    const WEAK_CURRENT_PRICE = 30000;
     /**
      * @return string 返回该AR类关联的数据表名
      */
