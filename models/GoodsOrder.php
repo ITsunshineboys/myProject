@@ -662,6 +662,13 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
+            $Goods=Goods::findOne($goods_id);
+            $Goods->left_number-=$goods_num;
+            if ($Goods->save(false))
+            {
+                $tran->rollBack();
+                return false;
+            }
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
