@@ -1291,7 +1291,8 @@ class OwnerController extends Controller
      */
     public function actionCoefficient()
     {
-        $post = Yii::$app->request->get();
+        $post = Yii::$app->request->get('list','');
+        var_dump($post);exit;
         $coefficient = CoefficientManagement::find()->all();
         if ($coefficient == null) {
             $code = 1064;
