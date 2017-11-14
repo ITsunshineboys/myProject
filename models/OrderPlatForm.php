@@ -65,7 +65,7 @@ class OrderPlatForm extends ActiveRecord
                     ->andWhere(['sku'=>$sku])
                     ->one();
                 $OrderGoods->order_status=2;
-                $res2=$OrderGoods->save();
+                $res2=$OrderGoods->save(false);
                 if (!$res2){
                     $code=500;
                     $trans->rollBack();
@@ -73,7 +73,7 @@ class OrderPlatForm extends ActiveRecord
                 }
                 $UserAccessDetail=new UserAccessdetail();
                 $UserAccessDetail->access_type=2;
-                $UserAccessDetail->access_money=($OrderGoods->supplier_price*$OrderGoods->goods_number);
+                $UserAccessDetail->access_money=($OrderGoods->supplier_price*$OrderGoods->goods_number)+$OrderGoods->freight;
                 $UserAccessDetail->create_time=time();
                 $UserAccessDetail->order_no=$order_no;
                 $UserAccessDetail->sku=$sku;
