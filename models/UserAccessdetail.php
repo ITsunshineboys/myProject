@@ -206,7 +206,6 @@ class UserAccessdetail extends \yii\db\ActiveRecord
 
             if (!$GoodsOrder || !$OrderGoods)
             {
-                echo 3;exit;
                 $code=1000;
                 return $code;
             }
@@ -230,7 +229,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                     ];
                     $data[]=[
                         'name'=>"运费金额",
-                        'value'=>GoodsOrder::switchMoney($accessDetail['freight']*0.01)
+                        'value'=>GoodsOrder::switchMoney($OrderGoods['freight']*0.01)
                     ];
                     break;
             }
