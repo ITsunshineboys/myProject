@@ -38,6 +38,12 @@ class OrderPlatForm extends ActiveRecord
      */
     public static  function  platformhandle2($order_no,$handle_type,$reason,$sku)
     {
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            if (!$GoodsOrder || $GoodsOrder->order_refer!=1)
+            {
+                $code=1000;
+                return $code;
+            }
             $time=time();
             $trans = \Yii::$app->db->beginTransaction();
             try {
@@ -61,6 +67,19 @@ class OrderPlatForm extends ActiveRecord
                 $OrderGoods->order_status=2;
                 $res2=$OrderGoods->save();
                 if (!$res2){
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $UserAccessDetail=new UserAccessdetail();
+                $UserAccessDetail->access_type=2;
+                $UserAccessDetail->access_money=($OrderGoods->supplier_price*$OrderGoods->goods_number);
+                $UserAccessDetail->create_time=time();
+                $UserAccessDetail->order_no=$order_no;
+                $UserAccessDetail->sku=$sku;
+                $UserAccessDetail->transaction_no=GoodsOrder::SetTransactionNo($GoodsOrder->consignee_mobile);
+                if (!$UserAccessDetail->save(false))
+                {
                     $code=500;
                     $trans->rollBack();
                     return $code;
@@ -155,7 +174,7 @@ class OrderPlatForm extends ActiveRecord
             $supplier_accessdetail=new UserAccessdetail();
             $supplier_accessdetail->uid=$user->id;
             $supplier_accessdetail->role_id=6;
-            $supplier_accessdetail->access_type=4;
+            $supplier_accessdetail->access_type=2;
             $supplier_accessdetail->access_money=$reduce_money;
             $supplier_accessdetail->order_no=$order_no;
             $supplier_accessdetail->sku=$sku;
