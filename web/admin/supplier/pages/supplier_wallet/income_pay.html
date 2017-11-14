@@ -63,8 +63,9 @@
                     </div>
                     <div class="modal-body body_font">
                         <div ng-repeat="item in detail_list">
+
                             <span class="modal_txt">{{item.name}}：</span>
-                            <span ng-class="{'orange_color':$index==1||$index==2}">{{item.value}}</span>
+                            <span ng-class="{'orange_color':item.name=='货款金额'||item.name=='运费金额'||item.name=='扣款金额'}">{{item.value}}</span>
                         </div>
                     </div>
                     <div class="modal-footer">
