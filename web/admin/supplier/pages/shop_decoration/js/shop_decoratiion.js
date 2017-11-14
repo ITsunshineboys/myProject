@@ -103,6 +103,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
                   $scope.banner_num_error=true;
                   $scope.banner_add_title='';
                   $scope.banner_add_url='';
+                  $scope.shop_sku_error='商品编号错误，请重新添加';
               }else{
                   $scope.banner_num_error=false;
                   $scope.banner_add_title=res.data.data.detail.title;
@@ -112,6 +113,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
             $scope.banner_num_error=true;
             $scope.banner_add_title='';
             $scope.banner_add_url='';
+            $scope.shop_sku_error='商品编号错误，请重新添加';
          }else if(res.data.code==403){
             window.location.href='login.html';
           }
@@ -129,12 +131,14 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
           sku:+$scope.banner_edit_sku
         }
       }).then(function (res) {
+          console.log(res);
           if(res.data.code==200){
               if(res.data.data.detail.length===0){
                   //Banner - sku错误提示
                   $scope.banner_edit_num_error=true;
                   $scope.banner_edit_title='';
                   $scope.banner_edit_url='';
+                  $scope.shop_edit_sku_error='商品编号错误，请重新添加';
               }else{
                   $scope.banner_edit_num_error=false;
                   $scope.banner_edit_title=res.data.data.detail.title;
@@ -144,6 +148,7 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
             $scope.banner_edit_num_error=true;
             $scope.banner_edit_title='';
             $scope.banner_edit_url='';
+            $scope.shop_edit_sku_error='商品编号错误，请重新添加';
           }else if(res.data.code==403){
               window.location.href='login.html';
           }
@@ -192,23 +197,36 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
       }else{
         $scope.pass_type=2;
       }
-      _ajax.post('/mall/recommend-add-supplier',{
-          url:$scope.banner_add_url,
-          title:$scope.banner_add_title,
-          image:$scope.banner_add_img_src,
-          from_type:'1',
-          type:+$scope.pass_type,
+      _ajax.get('/mall/goods-by-sku',{
           sku:+$scope.banner_add_sku
       },function (res) {
-          console.log(res);
-          if(res.code==200){
-              $('#banner_add_modal').modal('hide');
-              $scope.judgment();
-          }else{
+          console.log(res)
+          if($scope.banner_add_url!=res.data.detail.url){
               $scope.banner_num_error=true;
               $scope.shop_sku_error='商品编号错误，请重新添加';
+              $scope.banner_add_title='';
+              $scope.banner_add_url='';
+          }else{
+              $scope.banner_num_error=false;
+              _ajax.post('/mall/recommend-add-supplier',{
+                  url:$scope.banner_add_url,
+                  title:$scope.banner_add_title,
+                  image:$scope.banner_add_img_src,
+                  from_type:'1',
+                  type:+$scope.pass_type,
+                  sku:+$scope.banner_add_sku
+              },function (res) {
+                  console.log(res);
+                  if(res.code==200){
+                      $('#banner_add_modal').modal('hide');
+                      $scope.judgment();
+                  }else{
+                      $scope.banner_num_error=true;
+                      $scope.shop_sku_error='商品编号错误，请重新添加';
+                  }
+              })
           }
-      })
+      });
     }
     if(!valid){
         $scope.submitted=true;
@@ -277,25 +295,36 @@ let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngD
       }else{
         $scope.edit_pass_type=2
       }
-      _ajax.post('/mall/recommend-edit-supplier',{
-          id:+$scope.banner_edit_id,
-          url:$scope.banner_edit_url,
-          title:$scope.banner_edit_title,
-          image:$scope.banner_edit_img_src,
-          from_type:'1',
-          type:+$scope.edit_pass_type,
-          sku:+$scope.banner_edit_sku
-      },function (res){
-          console.log(res);
-          if(res.code==200){
-            $('#banner_edit_modal').modal('hide');
-            $scope.judgment();
-          }else{
-              $scope.banner_edit_num_error=true;
-              $scope.shop_edit_sku_error='商品编号错误，请重新添加';
-          }
-
-      })
+        _ajax.get('/mall/goods-by-sku',{
+            sku:+$scope.banner_edit_sku
+        },function (res) {
+            if(res.data.detail.url!=$scope.banner_edit_url){
+                $scope.banner_edit_num_error=true;
+                $scope.shop_edit_sku_error='商品编号错误，请重新添加';
+                $scope.banner_edit_title='';
+                $scope.banner_edit_url='';
+            }else{
+                $scope.banner_edit_num_error=false;
+                _ajax.post('/mall/recommend-edit-supplier',{
+                    id:+$scope.banner_edit_id,
+                    url:$scope.banner_edit_url,
+                    title:$scope.banner_edit_title,
+                    image:$scope.banner_edit_img_src,
+                    from_type:'1',
+                    type:+$scope.edit_pass_type,
+                    sku:+$scope.banner_edit_sku
+                },function (res){
+                    console.log(res);
+                    if(res.code==200){
+                        $('#banner_edit_modal').modal('hide');
+                        $scope.judgment();
+                    }else{
+                        $scope.banner_edit_num_error=true;
+                        $scope.shop_edit_sku_error='商品编号错误，请重新添加';
+                    }
+                })
+            }
+        });
     }
   };
 
