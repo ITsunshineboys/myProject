@@ -1599,7 +1599,6 @@ class OwnerController extends Controller
 
         $effect_where = 'effect_id = '.$effect['id'];
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
-        var_dump($data);exit;
         $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where([])->all();
         $worker_data = WorksWorkerData::find()->select([])->where([])->all();
 
