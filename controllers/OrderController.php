@@ -285,16 +285,21 @@ class OrderController extends Controller
      * @return string
      */
     public function actionGetgoodsdata(){
-        $request = Yii::$app->request;
-        if ($request->isPost) {
+            $request = Yii::$app->request;
             $goods_id=trim($request->post('goods_id'));
             $goods_num=trim($request->post('goods_num'));
             if (!$goods_id || !$goods_num){
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
+                $goods_id=$request->get('goods_id');
+                $goods_num=$request->get('goods_num');
+                if (!$goods_id || !$goods_num)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+
             }
             $data=GoodsOrder::getlinegoodsdata($goods_id,$goods_num);
            if (is_numeric($data))
@@ -311,13 +316,7 @@ class OrderController extends Controller
                    'data'=>$data
                ]);
            }
-        }else{
-            $code=1050;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+
     }
 
     /**
