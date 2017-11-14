@@ -88,11 +88,6 @@ applybrand.controller("applybrand_ctrl", function ($scope, $rootScope, $state, U
         _ajax.post('/mall/brand-application-add', $scope.params, function (res) {
             $('#sure_addbrand').modal('show')
         })
-
-
-        // console.log($scope.licensed);
-        // console.log($scope.licensedArray);
-        // console.log($scope.params);
     };
 
     // 图片上传
@@ -221,5 +216,4 @@ applybrand.controller("applybrand_ctrl", function ($scope, $rootScope, $state, U
             $scope[name][idx].isNull = boolean
         }
     }
-
 });

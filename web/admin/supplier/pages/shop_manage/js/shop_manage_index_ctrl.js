@@ -115,7 +115,6 @@ shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $state
     function authorizeList() {
         $scope.authorizeParams.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/brand-application-list-admin', $scope.authorizeParams, function (res) {
-            console.log(res);
             let data = res.data;
             $scope.pageConfig.totalItems = data.brand_application_list_admin.total;
             $scope.authList = data.brand_application_list_admin.details;

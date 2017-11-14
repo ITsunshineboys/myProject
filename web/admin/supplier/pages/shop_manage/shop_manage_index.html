@@ -195,9 +195,9 @@
                         <td>{{obj.create_time}}</td>
                         <td>{{obj.authorization_start}} 至 {{obj.authorization_end}}</td>
                         <td>
-                            <span class="status-green" ng-if="obj.review_status == '通过'">{{obj.review_status}}</span>
-                            <span class="status-red" ng-if="obj.review_status == '不通过'">{{obj.review_status}}</span>
-                            <span class="status-blue" ng-if="obj.review_status == '待审核'">{{obj.review_status}}</span>
+                            <span class="status-blue" ng-if="obj.review_status == 0">等待审核</span>
+                            <span class="status-red" ng-if="obj.review_status == 1">审核不通过</span>
+                            <span class="status-green" ng-if="obj.review_status == 2">审核通过</span>
                         </td>
                         <td>
                             <a href="javascript: void (0);" ng-if="obj.review_note != ''" ng-click="showInfo(obj.review_note)">{{obj.review_note}}</a>
