@@ -86,7 +86,6 @@ class PayService
             Yii::$app->session['body']=$orders['body'];
             Yii::$app->session['order_no']=$orders['order_no'];
             Yii::$app->session['buyer_message']=$orders['buyer_message'];
-            Yii::$app->session['total_amount']=$orders['total_amount'];
             //触发微信返回code码
             $baseUrl = urlencode("http://test.cdlhzz.cn/order/wx-line-pay");
             $url = $this->__CreateOauthUrlForCode($baseUrl);
