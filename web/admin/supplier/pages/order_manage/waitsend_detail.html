@@ -86,7 +86,7 @@
             </div>
 
             <!--配送方式-->
-            <div class="shipping_type" ng-if="tabflag=='waitreceive_flag'">
+            <div class="shipping_type" ng-if="shipping_way!=''">
                 <span>配送方式</span>
                 <span class='shipping_way' ng-if="shipping_way!='送货上门'" ui-sref="express({express_params})">{{shipping_way}}</span>
                 <span class='shipping_way' ng-if="shipping_way=='送货上门'" ui-sref="express({express_params})">{{shipping_way}}</span>
