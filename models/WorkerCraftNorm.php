@@ -13,6 +13,7 @@ class WorkerCraftNorm extends ActiveRecord
 {
     const SELECT_FIND = 'quantity,worker_kind_details';
     const WEAK_CURRENT_DAY_POINTS = 5;
+    const STRONG_CURRENT_DAY_POINTS = 5;
     /**
      * @inheritdoc
      */
