@@ -96,12 +96,7 @@ angular.module('all_controller', [])
             style_id: '',
             series_id: ''
         };
-        $scope.getHouseList = function () {
-            $scope.Config.currentPage = 1
-            $scope.params.toponymy = ''
-            $scope.search_txt = ''
-            tablePages()
-        }
+
         window.addEventListener("hashchange", function () {
             // 注册返回按键事件
             $('.modal-backdrop').remove()
@@ -955,9 +950,11 @@ angular.module('all_controller', [])
             console.log(newVal)
             if(newVal!=''){
                 let arr = []
-                for(let [key,value] of $scope.all_goods_brands.entries()){
-                    if(value.name.indexOf(newVal)!= -1){
-                        arr.push(value)
+                if(!!$scope.all_goods_brands){
+                    for(let [key,value] of $scope.all_goods_brands.entries()){
+                        if(value.name.indexOf(newVal)!= -1){
+                            arr.push(value)
+                        }
                     }
                 }
                 $scope.all_goods_brands = arr
@@ -965,6 +962,16 @@ angular.module('all_controller', [])
                 $scope.all_goods_brands = $scope.all_brand_copy
             }
         })
+        // if($rootScope.curState_name == 'nodata.all_goods'){
+            $(document).mouseup(function(e){
+                var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
+                if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+                    if($rootScope.curState_name == 'nodata.all_goods'){
+                        tablePages()
+                    }
+                }
+            });
+        // }
         //无资料计算
         $scope.get_goods = function (valid, error) {
             console.log(error)
