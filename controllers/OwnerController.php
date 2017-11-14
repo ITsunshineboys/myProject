@@ -1292,7 +1292,7 @@ class OwnerController extends Controller
     public function actionCoefficient()
     {
         $post = Yii::$app->request->get('list','');
-        $a = Json::decode($post);
+        $a = array(Json::decode($post));
         var_dump($a);exit;
         $coefficient = CoefficientManagement::find()->all();
         if ($coefficient == null) {

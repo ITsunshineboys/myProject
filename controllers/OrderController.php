@@ -740,7 +740,8 @@ class OrderController extends Controller
             'return_insurance'=>$return_insurance,
             'body'=>$body,
             'order_no'=>$order_no,
-            'buyer_message'=>$buyer_message
+            'buyer_message'=>$buyer_message,
+            'total_amount'=>$total_amount*100
         );
         $url=(new PayService())->GetOrderOpenid($orders);
         $code=200;
@@ -773,7 +774,8 @@ class OrderController extends Controller
                 'return_insurance'=> Yii::$app->session['return_insurance'],
                 'body'=> Yii::$app->session['body'],
                 'order_no'=> Yii::$app->session['order_no'],
-                'buyer_message'=> Yii::$app->session['buyer_message']
+                'buyer_message'=> Yii::$app->session['buyer_message'],
+                'total_amount'=> Yii::$app->session['total_amount']
             );
             if ($orders==[])
             {
