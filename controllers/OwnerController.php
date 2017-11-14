@@ -1584,11 +1584,10 @@ class OwnerController extends Controller
                     'data'=> $effect
                 ]);
             }
-        }
-        elseif
-        ($stairway == self::TYPE_VALUE) {
+        } elseif ($stairway == self::TYPE_VALUE) {
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
             $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
+            var_dump($effect);
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
@@ -1599,33 +1598,36 @@ class OwnerController extends Controller
             }
         }
 
-        $effect_where = 'effect_id = '.$effect['id'];
-        $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
-        if ($data == null) {
-            $code = 1067;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '信息有误',
-            ]);
-        }
+//        $effect_where = 'effect_id = '.$effect['id'];
+        $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where([])->all();
+//        if ($data == null) {
+//            $code = 1067;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => '信息有误',
+//            ]);
+//        }
 
-        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where($effect_where)->all();
-        if ($backman_data == null) {
-            $code = 1067;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '信息有误',
-            ]);
-        }
+        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where([])->all();
+//        if ($backman_data == null) {
+//            $code = 1067;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => '信息有误',
+//            ]);
+//        }
 
-        $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
-        if ($worker_data == null) {
-            $code = 1067;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '信息有误',
-            ]);
-        }
+        $worker_data = WorksWorkerData::find()->select([])->where([])->all();
+//        if ($worker_data == null) {
+//            $code = 1067;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => '信息有误',
+//            ]);
+//        }
+        var_dump($data);
+        var_dump($backman_data);
+        var_dump($worker_data);
 
         if ($data != null) {
             foreach ($data as $one_goods) {

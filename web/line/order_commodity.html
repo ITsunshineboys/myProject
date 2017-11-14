@@ -67,8 +67,10 @@
 
                     <span>发票信息</span>
                     <!--{{invoice_header}}-->
-                    <span class="agreement_span">明细</span>
-                    <span ng-if="invoice_content!= undefined">{{invoice_content}}</span>
+                        <p id="agreement_span">明细
+                            <span id="agreement_invoice_span" ng-if="invoice_content!= undefined">-{{invoice_content}}</span>
+                        </p>
+
                     <img src="images/list_arrow.png">
                 </li>
                 <li>

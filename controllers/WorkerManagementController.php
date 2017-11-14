@@ -715,10 +715,12 @@ class WorkerManagementController extends Controller
         switch ($status){
             case $status == 'basic':     // 基本信息
                 $where = "worker.id = ".$id." and worker.status = 1 and user_role.review_status = 2";
-                $select = "worker.icon,worker.province_code,worker.city_code,worker.native_place,worker.status,user.aite_cube_no,user.username,user.create_time,user_role.review_time";
-                $worker = Worker::
+                $select = "worker.icon,worker.native_place,worker.status,user.mobile,user.aite_cube_no,user.username,user.create_time,user_role.review_time";
+                $worker = Worker::basicMessage($select,$where);
                 break;
             case $status == 'role':    // 角色信息
+                $where = "";
+                $select = "";
                 break;
             case $status == 'production':    // 作品信息
                 break;
@@ -728,5 +730,6 @@ class WorkerManagementController extends Controller
                 break;
 
         }
+        var_dump($worker);exit;
     }
 }
