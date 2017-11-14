@@ -101,7 +101,7 @@ class Role extends ActiveRecord
     }
 
     /**
-     * 
+     *
      * [CheckUserRole description]
      * @param [type] $role [description]
      */

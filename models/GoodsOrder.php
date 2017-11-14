@@ -11,18 +11,12 @@ use yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
 use yii\data\Pagination;
-use app\models\LogisticsDistrict;
-use app\models\Goods;
 use app\services\StringService;
 use app\services\SmValidationService;
 use app\services\ModelService;
-
 class GoodsOrder extends ActiveRecord
 {
-    const SUPPLIER='supplier';
-    const ORDER_PLATFORM_HANDLE='order_platform_handle';
-    const EXPRESS='express';
-    const ORDER_GOODS_LIST='order_goodslist';
+
     const PAY_STATUS_UNPAID = 0;
     const PAY_STATUS_PAID = 1;
     const PAY_STATUS_REFUNDED = 2;
@@ -786,7 +780,7 @@ class GoodsOrder extends ActiveRecord
                a.role_id,
                z.is_unusual';
         $array=self::getorderlist()
-            ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
+            ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
             ->select($select)
             ->where(['a.order_no'=>$order_no,'z.sku'=>$sku])
             ->all();
@@ -874,7 +868,7 @@ class GoodsOrder extends ActiveRecord
             $time=time();
             $pay_term=(strtotime($output['create_time'])+24*60*60);
             if (($pay_term-$time)<0){
-                $res=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
+                $res=Yii::$app->db->createCommand()->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$output['order_no'].' and sku='.$output['sku'])->execute();
                 $output['pay_term']=0;
                 $output['status']='已取消';
             }else{
@@ -895,7 +889,11 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function  findshipping_type($order_no,$sku)
     {
-        $data=(new Query())->from(self::ORDER_GOODS_LIST)->select('shipping_type')->where(['order_no'=>$order_no,'sku'=>$sku])->one()['shipping_type'];
+        $data=OrderGoods::find()
+            ->select('shipping_type')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->one()['shipping_type'];
         if (!$data){
             $data=0;
         }
@@ -1143,7 +1141,7 @@ class GoodsOrder extends ActiveRecord
      */
     public static  function Getplatformdetail($order_no,$sku){
         $res=(new Query())
-            ->from(self::ORDER_PLATFORM_HANDLE)
+            ->from(OrderPlatForm::tableName())
             ->where(['order_no'=>$order_no])
             ->andWhere(['sku'=>$sku])
             ->one();
@@ -1367,7 +1365,7 @@ class GoodsOrder extends ActiveRecord
                 if (($pay_term-$time)<=0){
                     $res=Yii::$app->db
                         ->createCommand()
-                        ->update(self::ORDER_GOODS_LIST, ['order_status' => 2],'order_no='.$data[$k]['order_no'].' and sku='.$data[$k]['sku'])
+                        ->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$data[$k]['order_no'].' and sku='.$data[$k]['sku'])
                         ->execute();
                     $data[$k]['status']='已取消';
                 }else{
@@ -1398,7 +1396,7 @@ class GoodsOrder extends ActiveRecord
         $role_number=$supplier->shop_no;
         $transaction_no= self::SetTransactionNo($role_number);
         try {
-            $res1=Yii::$app->db->createCommand()->update(self::ORDER_GOODS_LIST, ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            $res1=Yii::$app->db->createCommand()->update(OrderGoods::tableName(), ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
             if (!$res1)
             {
                 $trans->rollBack();
@@ -1429,7 +1427,9 @@ class GoodsOrder extends ActiveRecord
     }
     private static function getorderlist()
     {
-        $getorderlist  =(new Query())->from('goods_order AS a')->leftJoin(self::ORDER_GOODS_LIST.' AS z','z.order_no = a.order_no');
+        $getorderlist  =(new Query())
+            ->from('goods_order AS a')
+            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no');
         return $getorderlist;
     }
     /**
@@ -2415,7 +2415,7 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**获取订单详情信息1
+    /**获取订单详情信息
      * @param $postData
      * @param $user
      * @return array|mixed|null
@@ -2423,7 +2423,7 @@ class GoodsOrder extends ActiveRecord
    public  static  function  FindUserOrderDetails($postData,$user)
    {
        $array=self::getorderlist()
-           ->leftJoin(self::EXPRESS.' AS b','b.order_no =a.order_no and b.sku=z.sku')
+           ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
            ->select('
            a.pay_name,
            a.supplier_id,

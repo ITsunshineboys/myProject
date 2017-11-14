@@ -7,7 +7,6 @@
  */
 
 namespace app\models;
-use think\Exception;
 use yii\db\ActiveRecord;
 use Yii;
 
@@ -78,8 +77,6 @@ class OrderGoods extends ActiveRecord
                 $supplier_accessdetail->create_time=time();
                 $supplier_accessdetail->transaction_no=$transaction_no;
                 $res2=$supplier_accessdetail->save(false);
-
-
                 if (!$res2)
                 {
                     $tran->rollBack();
