@@ -154,7 +154,7 @@ section{
 }
 .img_item{
 }
-#myModal .modal-dialog{
+#myModal8 .modal-dialog{
     width: 28rem;
     background-color: white;
     position: absolute;
@@ -355,6 +355,7 @@ section{
     padding-top: 1rem;
     padding-bottom: 3rem;
     border-bottom: 2px solid #dcdcdc;
+    position: relative;
 
 }
 .nullGoods{
@@ -411,4 +412,9 @@ section{
         top:0;
         left: 0;
     }
+}
+.brands_more li img{
+    position: absolute;
+    right: 1.5rem;
+    top:2rem;
 }
