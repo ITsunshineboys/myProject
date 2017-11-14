@@ -297,10 +297,44 @@ class WorkerOrder extends \yii\db\ActiveRecord
         return $water_item_data;
     }
 
+    //TODO 水电工详情
+    public static function HydropowerorderView($order_id){
+        $hydropos=HydropowerWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
+        foreach ($hydropos as &$hydropo){
+            $hydropo['worker_item']=WorkerItem::find()
+                ->where(['id'=>$hydropo['worker_item_id']])
+                ->asArray()
+                ->one()['title'];
+
+            $hydropo['worker_item_craft']=WorkerCraft::getcraftitle($hydropo['worker_craft_id'])['craft'];
+            $hydropo['electricity']=$hydropo['electricity']==1?'强电':'弱电';
+            if($hydropo['worker_item_craft']==0){
+                unset($hydropo['worker_item_craft']);
+            }
+            if($hydropo['electricity']==null){
+                unset($hydropo['electricity']);
+            }
+            unset($hydropo['order_id']);
+            unset($hydropo['id']);
+            unset($hydropo['worker_item_id']);
+            unset($hydropo['worker_craft_id']);
+            }
+        return $hydropos;
+        }
+
     //TODO  油漆工的详情
-    public static function painterorderView(){
+    public static function painterorderView($order_id){
 
     }
+    //TODO 木工的详情
+    public static function carpentryView($order_id){
+
+    }
+    //TODO　杂工的详情
+    public static function backmanView($order_id){
+
+    }
+
     private static function dealOrder($order)
     {
 
@@ -314,10 +348,16 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $data=self::WaterprooforderView($order['id']);
                 break;
             case '油漆工':
-                $data=self::painterorderView($order['id']);
+                $data=self::PainterorderView($order['id']);
                 break;
             case '水电工':
-                $data=self::HydropowerorderView($order->id);
+                $data=self::HydropowerorderView($order['id']);
+                break;
+            case '木工':
+                $data=self::carpentryView($order['id']);
+                break;
+            case '杂工':
+                $data=self::backmanView($order['id']);
                 break;
         }
 
