@@ -1,9 +1,6 @@
-// const baseUrl = baseUrl+'';
-// const baseUrl = 'http://v1.cdlhzz.cn:888';
-
-// 传参：通过url的get参数stage来获取，不传则使用默认的开发域名
 let baseUrl = (function () {
-    return ''
+    // return 'http://test.cdlhzz.cn';
+     return '';
 })();
 
 /**

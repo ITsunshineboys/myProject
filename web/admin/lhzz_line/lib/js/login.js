@@ -1,4 +1,3 @@
-;
 let app1= angular.module("app",[]);
 app1.controller('login_ctrl',function ($scope,$http,$document) {
     let baseUrl = (function () {
