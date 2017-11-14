@@ -52,6 +52,7 @@ angular.module('all_controller', [])
                         profit_rate: value.profit_rate,
                         purchase_price_decoration_company: value.purchase_price_decoration_company,
                         quantity: 1,
+                        path:$scope.cur_three_item.path,
                         series_id: !!$scope.cur_goods_detail?$scope.cur_goods_detail.series_id:'',
                         style_id: !!$scope.cur_goods_detail?$scope.cur_goods_detail.style_id:'',
                         subtitle: value.subtitle,
@@ -75,14 +76,6 @@ angular.module('all_controller', [])
                 }, function (error) {
                     console.log(error)
                 })
-                $('#myModal').modal('hide')
-                $timeout(function () {
-                    $scope.have_header = true
-                    $scope.is_city = false
-                    $scope.is_edit = false
-                    $scope.cur_header = $scope.cur_three_level || item.title
-                    $state.go('nodata.all_goods')
-                }, 300)
             }, function (err) {
                 console.log(err);
             })
@@ -471,6 +464,14 @@ angular.module('all_controller', [])
             // $scope.params.style_id = $scope.cur_goods_detail.style_id
             $scope.params['sort[]'] = 'sold_number:3'
             tablePages()
+            $('#myModal').modal('hide')
+            $timeout(function () {
+                $scope.have_header = true
+                $scope.is_city = false
+                $scope.is_edit = false
+                $scope.cur_header = $scope.cur_three_level || item.title
+                $state.go('nodata.all_goods')
+            }, 300)
             // $http.get(baseUrl + '/mall/category-goods', {
             //     params: {
             //         category_id: $scope.cur_three_id,
@@ -818,6 +819,7 @@ angular.module('all_controller', [])
         $scope.go_cur_goods = function (item) {
             $scope.cur_three_level = item.title
             $scope.cur_three_id = item.id
+            $scope.cur_three_item = item
             $scope.platform_status = 0
             $scope.rate_status = 0
             $scope.params.category_id = item.id
@@ -833,6 +835,14 @@ angular.module('all_controller', [])
             $scope.params.style_id = ''
             $scope.params.series_id = ''
             tablePages()
+            $('#myModal').modal('hide')
+            $timeout(function () {
+                $scope.have_header = true
+                $scope.is_city = false
+                $scope.is_edit = false
+                $scope.cur_header = $scope.cur_three_level || item.title
+                $state.go('nodata.all_goods')
+            }, 300)
         }
         //重置筛选
         $scope.reset_filter = function () {
@@ -1224,9 +1234,7 @@ angular.module('all_controller', [])
                     // })
                     //水路
                     $http.get(baseUrl + '/owner/waterway', {
-                        parmas:{
-                            waterway:data
-                        }
+                        params:data
                     }).then(function (response) {
                         console.log('水路')
                         console.log(response)
@@ -1911,11 +1919,9 @@ angular.module('all_controller', [])
                     }
                 }
             }
-            $q.all([$http.get(baseUrl + '/order/calculation-freight', {
-                params:{
+            $q.all([$http.post(baseUrl + '/order/calculation-freight', {
                     goods: arr
-                }
-            }).then(function (res) {
+            },config).then(function (res) {
                 console.log(res)
                 $scope.all_price += +res.data.data
                 $scope.discount_price += +res.data.data
