@@ -925,14 +925,18 @@ class OrderController extends Controller
         $msg=Json::decode($data);
         if ($msg['result_code']=='SUCCESS')
         {
-//            $transaction_id=$arr['transaction_id'];
-//            $result = Wxpay::Queryorder($transaction_id);
-//            if (!$result)
-//            {
-//                return false;
-//            }
+            $transaction_id=$msg['transaction_id'];
+            $result = Wxpay::Queryorder($transaction_id);
+            if (!$result)
+            {
+                return false;
+            }
             $arr=explode('&',$msg['attach']);
-            $order=GoodsOrder::find()->select('order_no')->where(['order_no'=>$arr[8]])->asArray()->one();
+            $order=GoodsOrder::find()
+                ->select('order_no')
+                ->where(['order_no'=>$arr[8]])
+                ->asArray()
+                ->one();
             if ($order){
                 return true;
             }
@@ -1254,15 +1258,19 @@ class OrderController extends Controller
      */
     public function actionJudegaddress(){
         $request=Yii::$app->request;
-        $districtcode=trim(htmlspecialchars($request->post('districtcode','')),'');
-        $goods_id=trim(htmlspecialchars($request->post('goods_id','')),'');
+        $districtcode=trim($request->post('districtcode',''));
+        $goods_id=trim($request->post('goods_id',''));
         if (!$districtcode || !$goods_id){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
-            ]);
+            $districtcode=trim($request->get('districtcode',''));
+            $goods_id=trim($request->get('goods_id',''));
+            if (!$districtcode || !$goods_id) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                    'data' => null
+                ]);
+            }
         }
         $template_id=Goods::find()->select('logistics_template_id')->where(['id'=>$goods_id])->asArray()->one()['logistics_template_id'];
         $data=LogisticsDistrict::is_apply($districtcode,$template_id);
