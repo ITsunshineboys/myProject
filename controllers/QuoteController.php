@@ -1810,6 +1810,6 @@ class QuoteController extends Controller
 
     public function actionTest()
     {
-        return WorksData::findById(1);
+        var_dump(WorksData::findById(1));exit;
     }
 }
