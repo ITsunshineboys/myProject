@@ -1009,7 +1009,9 @@ angular.module('all_controller', [])
                     value['second_level'] = []
                 }
                 //弱电
-                $q.all([$http.post(baseUrl + '/owner/weak-current', data, config).then(function (response) {
+                $q.all([$http.get(baseUrl + '/owner/weak-current',{
+                    params:data
+                }).then(function (response) {
                     console.log('弱电')
                     console.log(response)
                     //整合一级
@@ -1115,7 +1117,9 @@ angular.module('all_controller', [])
                     //     console.log(error)
                     // })
                     //强电
-                    $http.post(baseUrl + '/owner/strong-current', data, config).then(function (response) {
+                    $http.get(baseUrl + '/owner/strong-current', {
+                          params:data
+                        }).then(function (response) {
                         console.log('强电')
                         console.log(response)
                         //整合一级
@@ -1219,7 +1223,11 @@ angular.module('all_controller', [])
                     //     console.log(error)
                     // })
                     //水路
-                    $http.post(baseUrl + '/owner/waterway', data, config).then(function (response) {
+                    $http.get(baseUrl + '/owner/waterway', {
+                        parmas:{
+                            waterway:data
+                        }
+                    }).then(function (response) {
                         console.log('水路')
                         console.log(response)
                         //整合一级
@@ -1323,7 +1331,9 @@ angular.module('all_controller', [])
                     //     console.log(error)
                     // })
                     //防水
-                    $http.post(baseUrl + '/owner/waterproof', data, config).then(function (response) {
+                    $http.get(baseUrl + '/owner/waterproof', {
+                        params:data
+                    }).then(function (response) {
                         console.log('防水')
                         console.log(response)
                         //整合一级
@@ -1429,7 +1439,9 @@ angular.module('all_controller', [])
                     //     console.log(error)
                     // })
                     //木作
-                    $http.post(baseUrl + '/owner/carpentry', data, config).then(function (response) {
+                    $http.get(baseUrl + '/owner/carpentry', {
+                        params:data
+                    }).then(function (response) {
                         console.log('木作')
                         console.log(response)
                         //整合一级
@@ -1533,7 +1545,9 @@ angular.module('all_controller', [])
                     //     console.log(error)
                     // })
                     //乳胶漆
-                    $http.post(baseUrl + '/owner/coating', data, config).then(function (response) {
+                    $http.get(baseUrl + '/owner/coating', {
+                        params:data
+                    }).then(function (response) {
                         console.log('乳胶漆')
                         console.log(response)
                         //整合一级
@@ -1633,11 +1647,10 @@ angular.module('all_controller', [])
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
-                    //     function (error) {
-                    //     console.log(error)
-                    // })
                     //主要材料以及其他
-                    $http.post(baseUrl + '/owner/assort-facility', data, config).then(function (response) {
+                    $http.get(baseUrl + '/owner/assort-facility', {
+                        params:data
+                    }).then(function (response) {
                         console.log('主要材料及其他')
                         console.log(response)
                         for (let [key, value] of response.data.data.goods.entries()) {
@@ -1752,7 +1765,9 @@ angular.module('all_controller', [])
                     })]).then(function () {//计算总费用
                     $q.all([
                         //泥作
-                        $http.post(baseUrl + '/owner/mud-make', data1, config).then(function (response) {
+                        $http.get(baseUrl + '/owner/mud-make', {
+                            params:data1
+                        }).then(function (response) {
                             console.log('泥作')
                             console.log(response)
                             //整合一级
@@ -1896,17 +1911,21 @@ angular.module('all_controller', [])
                     }
                 }
             }
-            $q.all([$http.post(baseUrl + '/order/calculation-freight', {
-                goods: arr
-            }, config).then(function (res) {
+            $q.all([$http.get(baseUrl + '/order/calculation-freight', {
+                params:{
+                    goods: arr
+                }
+            }).then(function (res) {
                 console.log(res)
                 $scope.all_price += +res.data.data
                 $scope.discount_price += +res.data.data
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
-            }), $http.post(baseUrl + '/owner/coefficient', {
-                list: arr1
-            }, config).then(function (res) {
+            }), $http.get(baseUrl + '/owner/coefficient', {
+                params:{
+                    list: arr1
+                }
+            }).then(function (res) {
                 console.log(res)
                 $scope.all_price += +res.data.data.total_prices
                 $scope.discount_price += +res.data.data.special_offer
@@ -1938,8 +1957,10 @@ angular.module('all_controller', [])
         $scope.$watch('toponymy', function (newVal, oldVal) {
             console.log(newVal)
             if (newVal != '') {
-                $http.post(baseUrl + '/owner/search', {
-                    str: newVal
+                $http.get(baseUrl + '/owner/search', {
+                    params:{
+                        str: newVal
+                    }
                 }, config).then(function (response) {
                     console.log(response)
                     $scope.cur_all_house = response.data.data.list_effect
