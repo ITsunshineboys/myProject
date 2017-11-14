@@ -74,47 +74,34 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 
 
 
-	/*获取所有分类名称*/
-	$scope.alltitles = (function () {
-		$http({
-			method: "get",
-			url: baseUrl+"/mall/categories-manage-admin",
-		}).then(function (res) {
-			for (let key in res.data.data.categories) {
-				$scope.idarr.push(res.data.data.categories[key].title)
-				$http({
-					method: "get",
-					url: baseUrl+"/mall/categories-manage-admin",
-					params: {pid: res.data.data.categories[key].id}
-				}).then(function (res) {
-					for (let key in res.data.data.categories) {
-						$scope.idarr.push(res.data.data.categories[key].title)
-					}
-				})
-			}
-		})
-	})()
+	// /*获取所有分类名称*/
+	// $scope.alltitles = (function () {
+	// 	$http({
+	// 		method: "get",
+	// 		url: baseUrl+"/mall/categories-manage-admin",
+	// 	}).then(function (res) {
+	// 		for (let key in res.data.data.categories) {
+	// 			$scope.idarr.push(res.data.data.categories[key].title)
+	// 			$http({
+	// 				method: "get",
+	// 				url: baseUrl+"/mall/categories-manage-admin",
+	// 				params: {pid: res.data.data.categories[key].id}
+	// 			}).then(function (res) {
+	// 				for (let key in res.data.data.categories) {
+	// 					$scope.idarr.push(res.data.data.categories[key].title)
+	// 				}
+	// 			})
+	// 		}
+	// 	})
+	// })()
 
 	/*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
 		if (!pattern.test($scope.class_name)||$scope.class_name=='') {
 			$scope.tishi = "您的输入不满足条件,请重新输入"
 			$scope.showtishi = true;
-		} else {
-			for (let i = 0; i < $scope.idarr.length; i++) {
-				if ($scope.class_name == $scope.idarr[i]) {
-					if ($scope.class_name == $scope.onsaleclasstitle) {
-						$scope.showtishi = false;
-						break;
-					} else {
-						$scope.tishi = "分类名称不能重复，请重新输入";
-						$scope.showtishi = true;
-						break;
-					}
-				} else {
-					$scope.showtishi = false;
-				}
-			}
+		}else{
+            $scope.showtishi = false;
 		}
 	}
 
@@ -189,7 +176,18 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 
 	/*保存编辑*/
 	$scope.saveclass = function () {
-		$scope.addClassName();
+		// $scope.addClassName();
+        if (!pattern.test($scope.class_name)||$scope.class_name=='') {
+            $scope.tishi = "您的输入不满足条件,请重新输入"
+            $scope.showtishi = true;
+            return;
+        }
+
+		if($scope.iconpath == 'pages/mall_manage/class_manage/offsale_edit/images/default.png'){
+            $scope.picwarning = true;
+            return;
+		}
+
 		if($scope.showtishi==false&&$scope.picwarning==false){
 			if($scope.finalpatharr.length==3){
 				pid = $scope.secselect;
@@ -202,10 +200,17 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 			let url = baseUrl+"/mall/category-edit";
 			let data =  {id:+$scope.onsaleclassid,title:$scope.class_name,pid:+pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.offlinedes,offline_reason:$scope.offlinereason};
 			$http.post(url,data,config).then(function (res) {
-				// console.log(res)
+                // console.log(res);
+                $("#save_tishi").modal("show");
+				if(res.data.code==200){
+                    $scope.save_msg="保存成功"
+                    $scope.success_flag = true;
+				}else if(res.data.code==1006){
+                    $scope.save_msg = res.data.msg;
+					$scope.success_flag = false;
+				}
 			})
-			$scope.savemodal = '#save_tishi'
-			$scope.savesuccess = true;
+
 		}
 	}
 

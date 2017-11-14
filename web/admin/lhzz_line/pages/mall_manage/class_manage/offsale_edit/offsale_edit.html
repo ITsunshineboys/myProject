@@ -3,9 +3,11 @@
     <!--顶部导航-->
     <div class="topnav">
         <span class="glyphicon glyphicon-certificate"></span>
-        <h6>商城管理 ></h6>
-        <h6 ui-sref="fenleiguanli">分类管理</h6>
+        <h6 ui-sref="merchant_index">商城管理 ></h6>
+        <h6 ui-sref="fenleiguanli({offsale_flag:true})">分类管理</h6>
         <h6>> 分类详情 </h6>
+
+
     </div>
 
     <!--分类详情-->
@@ -79,7 +81,7 @@
         </div>
 
         <div class="btn_sure">
-            <button data-toggle="modal" data-target={{savemodal}} ng-click="saveclass()">保存</button>
+            <button ng-click="saveclass()">保存</button>
             <button ui-sref="fenleiguanli({offsale_flag:'true'})">返回</button>
         </div>
 
@@ -93,11 +95,12 @@
                         </h4>
                     </div>
                     <div class="modal-body" id="save_body">
-                        <h6 id="tishi_wenzi">保存成功</h6>
+                        <h6 id="tishi_wenzi">{{save_msg}}</h6>
                     </div>
 
                     <div class="btn_modal_two">
-                        <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()">确认</button>
+                        <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
+                        <button id="caozuo_sure" data-dismiss="modal" ng-if="!success_flag">确认</button>
                     </div>
                 </div>
             </div>

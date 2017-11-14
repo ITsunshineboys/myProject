@@ -56,44 +56,14 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
         //是否开启字数统计
         wordCount:false
     }
-	/*获取所有分类名称*/
-	$scope.alltitles = (function () {
-		$http({
-			method: "get",
-			url: baseUrl+"/mall/categories-manage-admin",
-		}).then(function (res) {
-            console.log(res);
-            for (let key in res.data.data.categories) {
-				$scope.idarr.push(res.data.data.categories[key].title)
-				$http({
-					method: "get",
-					url: baseUrl+"/mall/categories-manage-admin",
-					params: {pid: res.data.data.categories[key].id}
-				}).then(function (res) {
-					for (let key in res.data.data.categories) {
-						$scope.idarr.push(res.data.data.categories[key].title)
-					}
-				})
-			}
-		})
-	})()
-
 
 	/*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
-		if (!pattern.test($scope.class_name)||$scope.class_name=='') {
+        if (!pattern.test($scope.class_name)||!$scope.class_name) {
 			$scope.tishi = "您的输入不满足条件,请重新输入"
 			$scope.showtishi = true;
-		} else {
-			for (let i = 0; i < $scope.idarr.length; i++) {
-				if ($scope.class_name == $scope.idarr[i]) {
-						$scope.tishi = "分类名称不能重复，请重新输入";
-						$scope.showtishi = true;
-						break;
-				} else {
-					$scope.showtishi = false;
-				}
-			}
+		}else{
+            $scope.showtishi = false;
 		}
 	}
 
@@ -153,10 +123,20 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 
 	/*确认添加分类*/
 	$scope.sureaddclass = function () {
-		$scope.addClassName();
-		if($scope.iconpath =='pages/mall_manage/class_manage/add_class/images/default.png'){
-			$scope.picwarningtext = '请上传图片';
+        console.log($scope.iconpath);
+        if (!pattern.test($scope.class_name)||!$scope.class_name) {
+            $scope.tishi = "您的输入不满足条件,请重新输入"
+            $scope.showtishi = true;
+            return;
+        }
+
+
+
+
+        if($scope.iconpath =='pages/mall_manage/class_manage/add_class/images/default.png'){
+			$scope.picwarningtext = '上传图片格式不正确或尺寸不匹配，请重新上传';
 			$scope.picwarning = true;
+			return;
 		}
 
 		if($scope.showtishi==false&&$scope.picwarning==false&&$scope.classicon!=''){
@@ -171,16 +151,23 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state) {
 			let url = baseUrl+"/mall/category-add";
 			let data =  {title:$scope.class_name,pid:pid,icon:$scope.classicon,description:$scope.addclassdes};
 			$http.post(url,data,config).then(function (res) {
-				// console.log(res)
+                // console.log(res);
+                $("#save_tishi").modal("show");
+                if(res.data.code==200){
+                    $scope.save_msg="保存成功"
+                    $scope.success_flag = true;
+                }else if(res.data.code==1006){
+                    $scope.save_msg = res.data.msg;
+                    $scope.success_flag = false;
+                }
 			})
-			$scope.savemodal = '#save_tishi'
 		}
 	}
 
 	//*保存模态框确认*/
 	$scope.suresave = function () {
 		setTimeout(function () {
-			$state.go("fenleiguanli");
+			$state.go("fenleiguanli",{offsale_flag:true});
 		},200)
 	}
 
