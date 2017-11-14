@@ -31,7 +31,9 @@
             <div class="distribution_div">
                 <img src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>服务地区选择</span>
-                <span class="city_more">{{selectCity.join('，')}}</span>
+                <span class="city_more">
+                    <span ng-repeat="value in selectCity | limitTo: 3">{{value}}</span>
+                </span>
                 <a href="javascript: void(0);" ng-click="editCity()"><span>编辑</span></a>
                 <div ng-show="params.delivery_method == 0">
                     <span class="left_way">收费方式</span>

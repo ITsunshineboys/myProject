@@ -42,8 +42,8 @@ shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $state
             let data = res.data;
             result = data.supplier_view_admin;
             $scope.result = data.supplier_view_admin;
-            year = String(Number(result.create_time.substring(0, 4)) + 1);
-            timearr = result.create_time.split('-');
+            let year = String(Number(result.create_time.substring(0, 4)) + 1);
+            let timearr = result.create_time.split('-');
             timearr.splice(0, 1, year);
             $scope.onemoreyear = timearr.join('-');//资质日期加一年
             $scope.iconpath = picprefix + result.icon;
