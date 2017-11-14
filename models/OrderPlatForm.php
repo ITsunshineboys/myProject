@@ -99,7 +99,7 @@ class OrderPlatForm extends ActiveRecord
                     $GoodsStat=new GoodsStat();
                     $GoodsStat->supplier_id=$supplier->id;
                     $GoodsStat->sold_number=$OrderGoods->goods_number;
-                    $GoodsStat->amount_sold=($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight;
+                    $GoodsStat->amount_sold=(($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight);
                     $GoodsStat->create_date=$date;
                     if (!$GoodsStat->save(false))
                     {
@@ -110,7 +110,7 @@ class OrderPlatForm extends ActiveRecord
                 }else{
 
                     $GoodsStat->sold_number-=$OrderGoods->goods_number;
-                    $GoodsStat->amount_sold-=($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight;
+                    $GoodsStat->amount_sold-=(($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight);
                     if (!$GoodsStat->save(false))
                     {
                         $code=500;
