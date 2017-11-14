@@ -2,8 +2,8 @@
 
 namespace app\models;
 use Yii;
-use yii\db\Exception;
-use yii\db\ActiveRecord;
+use Yii\db\Exception;
+use Yii\db\ActiveRecord;
 use yii\db\query;
 use app\services\ModelService;
 
@@ -43,6 +43,7 @@ class OrderPlatForm extends ActiveRecord
                 $code=1000;
                 return $code;
             }
+            $supplier=Supplier::findOne($GoodsOrder->supplier_id);
             $time=time();
             $trans = \Yii::$app->db->beginTransaction();
             try {
@@ -71,6 +72,8 @@ class OrderPlatForm extends ActiveRecord
                     return $code;
                 }
                 $UserAccessDetail=new UserAccessdetail();
+                $UserAccessDetail->uid=$supplier->uid;
+                $UserAccessDetail->role_id=6;
                 $UserAccessDetail->access_type=2;
                 $UserAccessDetail->access_money=($OrderGoods->supplier_price*$OrderGoods->goods_number)+$OrderGoods->freight;
                 $UserAccessDetail->create_time=time();
