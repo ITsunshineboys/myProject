@@ -944,6 +944,11 @@ class QuoteController extends Controller
                                     $worker_kind  = $worker['worker_kind'];
                                     $worker_price = $worker['price'];
                                     (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
+                                } else {
+                                    $worker_id    = $house['id'];
+                                    $worker_kind  = $worker['worker_kind'];
+                                    $worker_price = $worker['price'];
+                                    $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                                 }
                             }
                         }
@@ -956,6 +961,11 @@ class QuoteController extends Controller
                                     $backman_option = $backman['name'];
                                     $backman_value  = $backman['num'];
                                     (new WorksBackmanData())->plotEdit($backman_id, $backman_option, $backman_value);
+                                } else {
+                                    $backman_id     = $house['id'];
+                                    $backman_option = $backman['name'];
+                                    $backman_value  = $backman['num'];
+                                    (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
                                 }
                             }
                         }
