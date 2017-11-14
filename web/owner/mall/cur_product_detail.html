@@ -71,6 +71,8 @@
                             <ul>
                                 <li><span>产品编码</span><span class="comment_num">{{cur_params.code}}</span></li>
                                 <li><span>产品品牌</span><span class="comment_num">{{check_goods.name}}</span></li>
+                                <li ng-if="cur_params.series_name != ''"><span>系列</span><span class="comment_num">{{cur_params.series_name}}</span></li>
+                                <li ng-if="cur_params.style_name != ''"><span>风格</span><span class="comment_num">{{cur_params.style_name}}</span></li>
                                 <li ng-repeat="item in cur_params.attrs"><span>{{item.name}}</span><span class="comment_num">{{item.value}}</span></li>
                             </ul>
                         </div>
@@ -121,57 +123,33 @@
     <div class="modal fade" id="myModal_sec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class=" t-header">
-                    <h1 class="modal-title" id="myModalLabel">售后</h1>
-                </div>
                 <div class="modal-body-comment">
-                    <div class="service_comment">
-                        <ul>
-                            <li>
-                                <img src="images/right.png" alt=""/>
-                                <span>上门维修</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                            </li>
-                            <li>
-                                <img src="images/right.png" alt=""/>
-                                <span>上门换货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                            </li>
-                            <li>
-                                <img src="images/right.png" alt=""/>
-                                <span>上门退货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                            </li>
-                            <li>
-                                <img src="images/right.png" alt=""/>
-                                <span>换货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                            </li>
-                            <li>
-                                <img src="images/right.png" alt=""/>
-                                <span>退货</span>
-                                <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="t-header-two">
+                    <div ng-if="aftermarket.length!=0">
+                    <div class="t-header-two" >
                         <h1>保障</h1>
                     </div>
                     <div class="service_comment">
                         <ul>
-                            <li>
+                            <li ng-repeat="item in aftermarket">
                                 <img src="images/right.png" alt=""/>
-                                <span>提供发票</span>
-                                <p>在购买后，会提供相应的发票</p>
-                            </li>
-                            <li>
-                                <img src="images/right.png" alt=""/>
-                                <span>上门安装</span>
-                                <p>在购买商品后，商家会上门安装</p>
+                                <span>{{item}}</span>
                             </li>
                         </ul>
                     </div>
-
+                    </div>
+                    <div ng-if="protection.length!=0">
+                    <div class="t-header-two" >
+                        <h1>保障</h1>
+                    </div>
+                    <div class="service_comment">
+                        <ul>
+                            <li ng-repeat="item in protection">
+                                <img src="images/right.png" alt=""/>
+                                <span>{{item}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
                 </div>
                 <div class="modal-footer-btn">
                     <button type="button" class="btn btn_color"  data-dismiss="modal">完成</button>
