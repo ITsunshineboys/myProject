@@ -71,6 +71,7 @@ class OrderPlatForm extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
+                
                 var_dump($supplier);exit;
                 $UserAccessDetail=new UserAccessdetail();
                 $UserAccessDetail->uid=$supplier->uid;
