@@ -1609,10 +1609,15 @@ class OwnerController extends Controller
             $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name,goods.cover_image";
             $goods  = Goods::findBySkuAll($sku, $select);
             if ($goods == null) {
-                $code = 1061;
                 return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'code' => 200,
+                    'msg' => 'ok',
+                    'data' => [
+                        'images' => $effect,
+                        'goods' => $data,
+                        'backman_data' => $backman_data,
+                        'worker_data' => $worker_data,
+                    ]
                 ]);
             }
             foreach ($data as &$case_works_datum) {
