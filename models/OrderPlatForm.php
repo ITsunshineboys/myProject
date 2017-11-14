@@ -88,7 +88,45 @@ class OrderPlatForm extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
-                //减少销量，减少销售额，增加库存
+                //减少销量，减少销售额，增加库存.减少商品销量
+                $date=date('Ymd',time());
+                $GoodsStat=GoodsStat::find()
+                    ->where(['supplier_id'=>$supplier->id])
+                    ->andWhere(['create_date'=>$date])
+                    ->one();
+                if (!$GoodsStat)
+                {
+                    $GoodsStat=new GoodsStat();
+                    $GoodsStat->supplier_id=$supplier->id;
+                    $GoodsStat->sold_number=$OrderGoods->goods_number;
+                    $GoodsStat->amount_sold=($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight;
+                    $GoodsStat->create_date=$date;
+                    if (!$GoodsStat->save(false))
+                    {
+                        $code=500;
+                        $trans->rollBack();
+                        return $code;
+                    }
+                }else{
+
+                    $GoodsStat->sold_number-=$OrderGoods->goods_number;
+                    $GoodsStat->amount_sold-=($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight;
+                    if (!$GoodsStat->save(false))
+                    {
+                        $code=500;
+                        $trans->rollBack();
+                        return $code;
+                    }
+                }
+                $Goods=Goods::find()->where(['sku'=>$sku])->one();
+                $Goods->left_number+=$OrderGoods->goods_number;
+                $Goods->sold_number-=$OrderGoods->goods_number;
+                if (!$Goods->save(false))
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
                 $trans->commit();
                 $code=200;
                 return $code;
