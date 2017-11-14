@@ -103,6 +103,12 @@ class OrderPlatForm extends ActiveRecord
      */
     public static function platformHandleCloseOrderRefundToUser($order_no,$handle_type,$reason,$sku)
     {
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder || $GoodsOrder->order_refer!=2)
+        {
+            $code=1000;
+            return $code;
+        }
         $time=time();
         $tran=\Yii::$app->db->beginTransaction();
         try{
