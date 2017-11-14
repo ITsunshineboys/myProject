@@ -1417,7 +1417,24 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return false;
             }
-            $supplier->save(false);
+           if (!$supplier->save(false))
+           {
+               $trans->rollBack();
+                return false;
+           };
+            $express=Express::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            if ($express)
+            {
+                $express->receive_time=time();
+                if (!$express->save(false))
+                {
+                    $trans->rollBack();
+                    return false;
+                }
+            }
+
             $trans->commit();
         } catch (\Exception $e) {
             $trans->rollBack();

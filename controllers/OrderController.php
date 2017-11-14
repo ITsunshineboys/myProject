@@ -1,6 +1,7 @@
 <?php
  
 namespace app\controllers;
+use Yii;
 use app\models\OrderPlatForm;
 use app\models\Addressadd;
 use app\models\CommentImage;
@@ -27,7 +28,6 @@ use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderRefund;
 use app\models\UserAccessdetail;
-use app\models\UserRole;
 use app\models\Wxpay;
 use app\models\User;
 use app\models\Alipay;
@@ -38,23 +38,18 @@ use app\models\Goods;
 use app\models\Supplier;
 use app\models\LogisticsDistrict;
 use app\models\Lhzz;
+use app\models\UserNewsRecord;
 use app\services\PayService;
 use app\services\StringService;
 use app\services\FileService;
 use app\services\ExceptionHandleService;
 use yii\db\Query;
 use yii\db\Exception;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
-use app\models\UserNewsRecord;
-use Yii;
-use vendor\wxpay\lib\WxPayResults;
 use app\services\AuthService;
- 
-
 class OrderController extends Controller
 {
 
@@ -66,14 +61,30 @@ class OrderController extends Controller
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
-        'logout',
-        'roles',
-        'reset-password',
-        'roles-status',
-        'time-types',
-        'upload',
-        'upload-delete',
-        'review-statuses',
+        'getsupplierorderdetails',
+        'expressupdate',
+        'supplierdelivery',
+        'getexpress',
+        'getplatformdetail',
+        'getorderdetailsall',
+        'platformhandlesubmit',
+        'find-order-list',
+        'find-supplier-order-list',
+        'find-unusual-list',
+        'find-unusual-list-lhzz',
+        'get-comment',
+        'comment-reply',
+        'supplier-after-sale-handle',
+        'refund-handle',
+        'supplier-delete-comment',
+        'delete-comment-list',
+        'delete-comment-details',
+        'goods-view',
+        'find-refund-detail',
+        'after-sale-supplier-send-man',
+        'after-sale-supplier-confirm',
+        'after-sale-delivery',
+        'find-shipping-cart-list',
     ];
 
     /**
@@ -83,7 +94,7 @@ class OrderController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AuthService::className(),
                 'denyCallback' => function ($rule, $action) {
                     $code = 403;
                     new ExceptionHandleService($code);
@@ -102,9 +113,6 @@ class OrderController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post',],
-                    'reset-password' => ['post',],
-                    'upload' => ['post',],
-                    'upload-delete' => ['post',]
                 ],
             ],
         ];
@@ -821,7 +829,6 @@ class OrderController extends Controller
         if ($arr['result_code']=='SUCCESS')
         {
             $transaction_id=$arr['transaction_id'];
-
             $result = Wxpay::Queryorder($transaction_id);
             if (!$result)
             {
@@ -920,7 +927,6 @@ class OrderController extends Controller
         $msg=Json::decode($data);
         if ($msg['result_code']=='SUCCESS')
         {
-
 //            $transaction_id=$arr['transaction_id'];
 //            $result = Wxpay::Queryorder($transaction_id);
 //            if (!$result)
@@ -943,13 +949,7 @@ class OrderController extends Controller
             return false;
         }
     }
-
-
-
-
-
-
- /**
+    /**
      * find order type
      * @return string
      */
@@ -990,9 +990,6 @@ class OrderController extends Controller
         $type=trim($request->get('type','all'));
         $supplier_id=trim($request->get('supplier_id'));
         $where=GoodsOrder::GetTypeWhere($type);
-
-
-
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
                 $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -4588,7 +4585,17 @@ class OrderController extends Controller
                 $code=500;
                 return $code;
             }
-
+            $express=Express::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            if ($express)
+            {
+                $express->receive_time=time();
+                if (!$express->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }
             $tran->commit();
             $code=200;
             return Json::encode([
@@ -4603,7 +4610,6 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
     }
 
 

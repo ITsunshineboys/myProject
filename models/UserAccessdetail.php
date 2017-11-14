@@ -214,6 +214,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 'name'=>'商品名称',
                 'value'=>$OrderGoods['goods_name']
             ];
+
             switch ($type){
                 case 'Debit':
                     $data[]=[

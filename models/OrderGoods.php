@@ -92,10 +92,23 @@ class OrderGoods extends ActiveRecord
                     $code=500;
                     return $code;
                 }
+                $express=Express::find()
+                    ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+                    ->one();
+                if ($express)
+                {
+                    $express->receive_time=time();
+                    if (!$express->save(false))
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                }
                 $code=200;
                 $tran->commit();
                 return $code;
-            }catch (Exception $e)
+            }catch (\Exception $e)
             {
                 $tran->rollBack();
                 $code=500;

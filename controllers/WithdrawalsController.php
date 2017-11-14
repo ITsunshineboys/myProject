@@ -819,6 +819,7 @@ class WithdrawalsController extends Controller
      */
     public function  actionSupplierAccessDetail()
     {
+
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
