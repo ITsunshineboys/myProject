@@ -356,7 +356,7 @@ class OwnerController extends Controller
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
         if (!$points){
-            $points['count'] = Points::STRONG_CURRENT__POINTS;
+            $points['count'] = Points::STRONG_CURRENT_POINTS;
         }
 
         //查询弱电所需要材料
@@ -409,32 +409,22 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->get();
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
-        if ($waterway_labor == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if ($waterway_labor != null){
+            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
+            if (!$worker_kind_details){
+                $worker_kind_details['quantity'] = WorkerCraftNorm::WATERWAY_DAY_POINTS;
+            }
+        } else {
+            $worker_kind_details['quantity'] = WorkerCraftNorm::WATERWAY_DAY_POINTS;
         }
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
 
         //强电点位
         $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
-        if ($points == null){
-            $code = 1058;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if (!$points){
+            $points['count'] = Points::WATERWAY_POINTS;
         }
 
         //查询弱电所需要材料
