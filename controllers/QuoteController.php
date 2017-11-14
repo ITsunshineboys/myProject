@@ -778,6 +778,7 @@ class QuoteController extends Controller
                         }
 
                         if (!empty($house['all_goods'])){
+                            echo 111;
                             foreach ($house['all_goods'] as $goods) {
                                 $goods_id       = $effect_id;
                                 $goods_first    = $goods['first_name'];
