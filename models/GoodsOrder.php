@@ -599,6 +599,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+            //关闭
             $OrderGoods=new OrderGoods();
             $OrderGoods->order_no=$order_no;
             $OrderGoods->goods_id=$goods['id'];
