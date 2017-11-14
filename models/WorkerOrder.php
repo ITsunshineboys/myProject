@@ -1296,7 +1296,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
         if($data){
-            $infos=[];
             foreach ($data as $k=>&$v){
                 $order = self::find()
                     ->select('id,uid,order_no,worker_type_id,worker_id,describe,demand,create_time,modify_time,start_time,end_time,need_time,amount,front_money,status,con_people,con_tel,address,map_location,type,reason')
