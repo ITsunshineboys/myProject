@@ -76,7 +76,7 @@ class OrderPlatForm extends ActiveRecord
                 $UserAccessDetail->uid=$supplier->uid;
                 $UserAccessDetail->role_id=6;
                 $UserAccessDetail->access_type=2;
-                $UserAccessDetail->access_money=($OrderGoods->supplier_price*$OrderGoods->goods_number)+$OrderGoods->freight;
+                $UserAccessDetail->access_money=($OrderGoods->supplier_price*$OrderGoods->goods_number);
                 $UserAccessDetail->create_time=time();
                 $UserAccessDetail->order_no=$order_no;
                 $UserAccessDetail->sku=$sku;
