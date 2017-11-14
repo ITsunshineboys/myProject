@@ -41,7 +41,7 @@
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格效果图</span>
             <div class="pic_right">
-                <div class="img_list" ng-repeat="item in upload_img_arr" style="width: 138px;height: 138px;">
+                <div class="img_list" ng-repeat="item in upload_img_arr">
                     <img ng-src="{{baseUrl + '/'+ item}}" class="logo">
                     <div class="img_times" ng-click="del_img(item)">&times;</div>
                 </div>

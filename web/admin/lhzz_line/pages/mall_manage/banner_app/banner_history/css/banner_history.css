@@ -81,6 +81,9 @@ table{
   line-height: 14px;
   /*padding: 0 22px;*/
 }
+.table{
+  table-layout:fixed;
+}
 .table>tbody > tr > td{
   vertical-align: middle;
 }

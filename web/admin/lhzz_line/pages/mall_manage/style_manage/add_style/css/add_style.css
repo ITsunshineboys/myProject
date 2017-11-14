@@ -225,6 +225,8 @@ p{
     display: inline-block;
     margin-right: 10px;
     position: relative;
+    width: 138px;
+    height: 138px;
 }
 .img_times{
     width: 100%;

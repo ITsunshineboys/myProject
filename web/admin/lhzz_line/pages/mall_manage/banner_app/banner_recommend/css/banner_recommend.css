@@ -66,6 +66,14 @@ section{
   width: 30px;
   height: 30px;
 }
+.shop_left{
+  margin-left: 10px;
+  font-weight: bold;
+}
+.shop_get_sku{
+  position: relative;
+  z-index: 9999
+}
 .img_sort_size{
   width: 10px;
   height: 16px;
@@ -328,6 +336,10 @@ input[type="checkbox"]{
   max-width: 240px!important;
   max-height: 140px!important;
   border: 1px solid #ccc;
+}
+.modal_red{
+  color:red;
+  margin:10px 0 0 70px;
 }
 .clear{
   clear: both;

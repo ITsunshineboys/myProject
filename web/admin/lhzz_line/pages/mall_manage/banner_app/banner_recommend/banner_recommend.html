@@ -162,12 +162,12 @@
                                 <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_link_modal_add" ng-click="clear_add_content()">链接</span>
                             </div>
                             <div  id="shop_num_null" ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && num_blur)">
-                                <span style="margin-left: 10px; font-weight: bold">商品编号不能为空</span>
+                                <span class="shop_left">商品编号不能为空</span>
                             </div>
                             <div class="modal_txt_one">
                                 <i class="red">*</i>
                                 <span >商品编号</span>
-                                <input name="shop_num_name" required ng-blur="num_blur=!!shop_form.shop_num_name.$error" id="shop_add_num_input"   type="text" ng-model="shop_model"/><span id="shop_get" style="position: relative; z-index: 9999" ng-click="recommend_shop_add_get()">获取</span>
+                                <input name="shop_num_name" required ng-blur="num_blur=!!shop_form.shop_num_name.$error" id="shop_add_num_input"   type="text" ng-model="shop_model"/><span id="shop_get" class="shop_get_sku" ng-click="recommend_shop_add_get()">获取</span>
                             </div>
                             <div class="modal_txt_one modal_txt_two">
                                 <i class="red">*</i>
@@ -190,7 +190,7 @@
                                 <span> 图片</span>
                                 <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{baseUrl + '/'+ upload_img_src}}"/>
                                 <img id="modal_img2" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
-                                <p style="color:red;margin:10px 0 0 70px" ng-if="!!img_flag">{{img_flag}}</p>
+                                <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
                                 <div class="modal_img_btn">
                                     <span ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
                                 </div>
@@ -243,7 +243,7 @@
                                 <span><i class="red">*</i> 图片</span>
                                 <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{baseUrl + '/'+ upload_link_img_src}}"/>
                                 <img id="modal_link_img2" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
-                                <p style="color:red;margin:10px 0 0 70px" ng-if="!!img_link_flag">{{img_link_flag}}</p>
+                                <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
                                 <div class="modal_img_btn">
                                     <span ngf-pattern="image/*" ng-change="upload_link(data_link.file)"  ngf-select="" ngf-multiple="false" ng-model="data_link.file">上传</span>
                                 </div>
@@ -370,7 +370,7 @@
                         <!--商家-->
                         <div class="modal-body" ng-if="edit_item.from_type=='商家'">
                             <div id="shop_num_null2" ng-if="(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)">
-                                <span style="margin-left: 10px; font-weight: bold">商品编号不能为空</span>
+                                <span class="shop_left">商品编号不能为空</span>
                             </div>
                             <div class="modal_txt_one">
                                 <i class="red">*</i>
@@ -397,7 +397,7 @@
                                 <span><i class="red">*</i>图片</span>
                                 <img id="modal_edit_img"  ng-if="!upload_img_src" ng-src="{{baseUrl + '/'+ myng.recommend_shop_edit_img}}"/>
                                 <img id="modal_edit_img2" ng-if="!!upload_img_src" ngf-src="data.file" />
-                                <p style="color:red;margin:10px 0 0 70px" ng-if="!!img_flag">{{img_flag}}</p>
+                                <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
                                 <div class="modal_img_btn">
                                     <span ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
                                 </div>
@@ -425,7 +425,7 @@
                                 <span><i class="red">*</i>图片</span>
                                 <img id="modal_edit_link_img"  ng-if="!upload_link_img_src" ng-src="{{baseUrl + '/'+ myng.link_edit_img}}" />
                                 <img id="modal_edit_link_img2" ng-if="!!upload_link_img_src" ngf-src="data.file" />
-                                <p style="color:red;margin:10px 0 0 70px" ng-if="!!img_link_flag">{{img_link_flag}}</p>
+                                <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
                                 <div class="modal_img_btn">
                                     <span ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
                                 </div>
