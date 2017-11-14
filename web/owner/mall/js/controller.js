@@ -407,12 +407,23 @@ angular.module('all_controller', [])
                     $scope.check_goods['name'] = response.data.data.goods_view.brand_name
                 }
                 $scope.sale_services = response.data.data.goods_view.after_sale_services
+                $scope.aftermarket = []
+                $scope.protection = []
+                for(let [key,value] of $scope.sale_services.entries()){
+                    if(value == '提供发票'||value == '上门安装'){
+                        $scope.protection.push(value)
+                    }else{
+                        $scope.aftermarket.push(value)
+                    }
+                }
                 $scope.supplier = response.data.data.goods_view.supplier
                 $scope.cur_params = {
                     code: response.data.data.goods_view.sku,
                     title: response.data.data.goods_view.title,
                     attrs: response.data.data.goods_view.attrs,
-                    left_number: response.data.data.goods_view.left_number
+                    left_number: response.data.data.goods_view.left_number,
+                    series_name: response.data.data.goods_view.series_name,
+                    style_name: response.data.data.goods_view.style_name
                 }
                 $('#myModal').modal('hide')
                 $timeout(function () {
@@ -962,7 +973,6 @@ angular.module('all_controller', [])
                 $scope.all_goods_brands = $scope.all_brand_copy
             }
         })
-        // if($rootScope.curState_name == 'nodata.all_goods'){
             $(document).mouseup(function(e){
                 var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
                 if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
@@ -970,8 +980,7 @@ angular.module('all_controller', [])
                         tablePages()
                     }
                 }
-            });
-        // }
+            })
         //无资料计算
         $scope.get_goods = function (valid, error) {
             console.log(error)

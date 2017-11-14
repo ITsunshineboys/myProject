@@ -323,15 +323,58 @@ class WorkerOrder extends \yii\db\ActiveRecord
         }
 
     //TODO  油漆工的详情
-    public static function painterorderView($order_id){
+    public static function PainterorderView($order_id){
+        $paints=PaintWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
+        foreach ($paints as &$paint){
+            $paint['worker_item']=WorkerItem::find()
+                ->where(['id'=>$paint['worker_item_id']])
+                ->asArray()
+                ->one()['title'];
 
+            $paint['worker_item_craft']=WorkerCraft::getcraftitle($paint['worker_craft_id'])['craft'];
+            if($paint['worker_item_craft']==0){
+                unset($paint['worker_item_craft']);
+            }
+            if($paint['brand']==0){
+                unset($paint['brand']);
+            }
+            unset($paint['order_id']);
+            unset($paint['id']);
+            unset($paint['worker_item_id']);
+            unset($paint['worker_craft_id']);
+        }
+        return $paints;
     }
     //TODO 木工的详情
-    public static function carpentryView($order_id){
-
+    public static function CarpentryView($order_id){
+        $carpentrys=CarpentryWorkerOrder::find()->where(['order_id'=>$order_id])->asArray()->all();
+        foreach ($carpentrys as &$carpentry){
+            $carpentry['worker_item']=WorkerItem::find()
+                ->where(['id'=>$carpentry['worker_item_id']])
+                ->asArray()
+                ->one()['title'];
+            $carpentry['worker_item_craft']=WorkerCraft::getcraftitle($carpentry['worker_craft_id'])['craft'];
+            if($carpentry['worker_item_craft']==0){
+                unset($carpentry['worker_item_craft']);
+            }
+            if($carpentry['count']==0){
+                unset($carpentry['count']);
+            }
+            if($carpentry['length']==0){
+                unset($carpentry['length']);
+            }
+            if($carpentry['area']==0){
+                unset($carpentry['area']);
+            }
+            unset($carpentry['order_id']);
+            unset($carpentry['id']);
+            unset($carpentry['worker_item_id']);
+            unset($carpentry['worker_craft_id']);
+        }
+        return $carpentrys;
     }
     //TODO　杂工的详情
-    public static function backmanView($order_id){
+    public static function BackmanView($order_id){
 
     }
 
@@ -354,10 +397,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $data=self::HydropowerorderView($order['id']);
                 break;
             case '木工':
-                $data=self::carpentryView($order['id']);
+                $data=self::CarpentryView($order['id']);
                 break;
             case '杂工':
-                $data=self::backmanView($order['id']);
+                $data=self::BackmanView($order['id']);
                 break;
         }
 
@@ -984,7 +1027,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker_order->amount = $array['amount'] * 100;
         $worker_order->front_money = $array['front_money'] * 100;
         $worker_order->status=self::WORKER_ORDER_PREPARE;
-        $worker_order->type=self::WORKER_ORDER_PREPARE;
+        $worker_order->type=self::WORKER_ORDER_NOT_BEGIN;
         $days = self::dataeveryday($start_time, $end_time);
         $worker_order->days = $days;
         if (isset($describe)) {
@@ -1046,6 +1089,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $transaction->commit();
             return 200;
         } catch (Exception $e) {
+            var_dump($e);die;
             $transaction->rollBack();
             return 500;
         }
@@ -1152,19 +1196,19 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @return bool
      */
     public static function savepainteritem(array $array,$order_id){
-        foreach ($array as &$v) {
+        foreach ($array as $v) {
             foreach ($v as &$data) {
-                if(!$data['craft_id']){
+                if(!isset($data['craft_id'])){
                     $data['craft_id']=0;
                 }
-                if(!$data['area']){
+                if(!isset($data['area'])){
                     $data['area']=0;
                 }
-                if(!$data['brand']){
+                if(!isset($data['brand'])){
                     $data['brand']=0;
                 }
 
-                $res = \Yii::$app->db->createCommand()->insert('painter_worker_order', [
+                $res = \Yii::$app->db->createCommand()->insert('paint_worker_order', [
                     'order_id' => $order_id,
                     'worker_item_id' => $data['item_id'],
                     'worker_craft_id' => $data['craft_id'],
@@ -1189,13 +1233,13 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function savecarpentryitem(array $array,$order_id){
             foreach ($array as $v){
                 foreach ($v as &$data) {
-                    if(!$data['craft_id']){
+                    if(!isset($data['craft_id'])){
                         $data['craft_id']=0;
                     }
-                    if(!$data['count']){
+                    if(!isset($data['count'])){
                         $data['count']=0;
                     }
-                    if(!$data['length']){
+                    if(!isset($data['length'])){
                         $data['length']=0;
                     }
                     $res = \Yii::$app->db->createCommand()->insert('carpentry_worker_order', [
@@ -1203,6 +1247,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                         'worker_item_id' => $data['item_id'],
                         'worker_craft_id' => $data['craft_id'],
                         'count' => $data['count'],
+                        'area'=>$data['area'],
                         'length' => $data['length'],
                     ])->execute();
                 }
