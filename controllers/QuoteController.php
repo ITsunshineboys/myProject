@@ -1807,4 +1807,9 @@ class QuoteController extends Controller
            'msg'=>'ok',
         ]);
     }
+
+    public function actionTest()
+    {
+        return WorksData::findOne(['goods_code'=>111111]);
+    }
 }
