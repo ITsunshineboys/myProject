@@ -925,16 +925,14 @@ class QuoteController extends Controller
                                     $three_category_id = $goods['three_id'];
                                     (new WorksData())->plotEdit($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
                                 } else {
-                                    echo 111;exit;
-                                        $goods_id       = $effect_id;
+                                        $goods_id       = $house['id'];
                                         $goods_first    = $goods['first_name'];
                                         $goods_second   = $goods['second_name'];
                                         $goods_three    = $goods['three_name'];
                                         $goods_code     = $goods['good_code'];
                                         $goods_quantity = $goods['good_quantity'];
                                         $three_category_id = $goods['three_id'];
-                                        $works_data = (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
-
+                                        (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
                                 }
                             }
                         }
