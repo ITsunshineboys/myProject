@@ -664,7 +664,7 @@ class GoodsOrder extends ActiveRecord
             }
             $Goods=Goods::findOne($goods_id);
             $Goods->left_number-=$goods_num;
-            if ($Goods->save(false))
+            if (!$Goods->save(false))
             {
                 $tran->rollBack();
                 return false;
