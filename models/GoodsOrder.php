@@ -206,38 +206,6 @@ class GoodsOrder extends ActiveRecord
             return $data;
         }
 
-    /**
-     * [Alipayeffect_earnstnotifydatabase description]
-     * @param [type] $arr  [description]
-     * @param [type] $post [description]
-     */
-    public static function Alipayeffect_earnstnotifydatabase($arr,$post)
-    {
-        $effect_id=$arr[0];
-        $name=$arr[1];
-        $phone=$arr[2];
-        $trans = \Yii::$app->db->beginTransaction();
-        $e=1;
-        $time=time();
-         try {
-            $effect_earnst = new EffectEarnst();
-            $effect_earnst->effect_id=$effect_id;
-            $effect_earnst->name=$name;
-            $effect_earnst->phone=$phone;
-            $effect_earnst->earnest=$post['total_amount']*100;
-            $effect_earnst->create_time=$time;
-            $res=$effect_earnst->save();
-            if (!$res){
-                $trans->rollBack();
-                return false;
-            }
-            $trans->commit();
-            return true;
-        } catch (Exception $e) {
-            $trans->rollBack();
-            return false;
-        }
-    }
 
     /**
      * 支付宝线下商城数据库操作
@@ -366,7 +334,7 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $tran->commit();
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             $tran->rollBack();
             return false;
         }
@@ -572,36 +540,7 @@ class GoodsOrder extends ActiveRecord
         ];
     }
 
-    /**
-     * 微信样板间申请异步操作
-     * @param $arr
-     * @param $msg
-     * @return Exception|\Exception|int
-     */
-     public  static function Wxpayeffect_earnstnotify($arr,$msg)
-     {
-         $effect_id=$arr[0];
-         $name=$arr[1];
-         $phone=$arr[2];
-         $trans = \Yii::$app->db->beginTransaction();
-         $e=1;
-         $time=time();
-         try {
-             $effect_earnst = new EffectEarnst();
-             $effect_earnst->setAttributes([
-                 'effect_id' =>$effect_id,
-                 'name'      =>$name,
-                 'phone'     =>$phone,
-                 'earnest'   =>$msg['total_fee'],
-                 'create_time'      =>$time
-             ]);
-             $effect_earnst->save();
-         } catch (Exception $e) {
-             $trans->rollBack();
-         }
-         $trans->commit(); 
-         return $e;
-     }
+
 
     /**
      * 微信线下商城数据库操作
@@ -731,7 +670,7 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $tran->commit();
-        }catch (Exception $e) {
+        }catch (\Exception $e) {
             $tran->rollBack();
             return false;
         }
@@ -793,116 +732,8 @@ class GoodsOrder extends ActiveRecord
                 return $array;
         }
 
-    /**
-     *大后台订单详情-获取订单详情
-     */
-    public function Getorderdetailsall($order_id){
-        $array= self::getorderlist()->leftJoin('goods AS b','b.id = z.goods_id')->leftJoin('user_address AS c','a.address_id=c.id')->leftJoin('invoice AS d','a.invoice_id= d.id')->select('a.order_no,a.supplier_id,a.order_status,a.pay_status,a.paytime,a.shipping_status,a.customer_service,a.user_id,a.create_time,a.order_refer,a.comment,b.supplier_price,b.platform_price,b.market_price,b.purchase_price_decoration_company,b.logistics_template_id,b.purchase_price_designer,a.return_insurance,a.freight,c.address_name,c.consignee,c.mobile,c.district,c.region,d.invoice_header,d.invoice_content')->where(['a.id'=>$order_id]);
-        $count=$array->count();
-        $pagination = new Pagination(['totalCount'=> $count ,'pageSize'=>15,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)->limit($pagination->limit)->all();
-        foreach ($data as $k => $v){
-            $data[$k]['district']=LogisticsDistrict::getdistrict($data[$k]['district']);
-            $data[$k]['paytime']=StringService::timeconversion($data[$k]['paytime']);
-            $data[$k]['create_time']= StringService::timeconversion($data[$k]['create_time']);
-        }
-        return $data;
-    }
-    /**
-     *
-     * 获取大后台售后订单
-     */
-    public static function Getallcustomerserviceorderdata($page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['z.order_status'=>1])->andwhere('z.customer_service!=0');
-        $data=self::gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
 
 
-    /**
-     * 获取商家后台全部订单
-     * @param $supplier_id
-     * @param $page_size
-     * @param $page
-     * @param $time_type
-     * @param $time_start
-     * @param $time_end
-     * @param $search
-     * @param $sort_money
-     * @param $sort_time
-     * @return array
-     */
-    public static function Businessgetallorderlist($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id]);
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-
-
-    /**
-     *  获取商家后台待付款
-     * @param $supplier_id
-     * @param $pagesize
-     * @return array
-     */
-    public static function Businessgetunpaidorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>0,'z.order_status'=>0]);
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-
-    /**
-     * 获取商家后台未发货订单
-     * @param $supplier_id
-     * @param $pagesize
-     * @return array
-     */
-    public static  function Businessgetnotshippedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>0]);
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-    /**
-     * 商家后台待收货订单
-     */
-    public static function  Businessgetnotreceivedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>0,'z.shipping_status'=>1]);
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-    /**
-     * 获取商家后台已完成列表
-     */
-    public static function Businessgetcompletedorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'a.pay_status'=>1,'z.order_status'=>1,'z.shipping_status'=>1,'z.customer_service'=>0]);
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-
-
-    /**
-     * 获取商家后台已取消
-     * @param $supplier_id
-     * @param $pagesize
-     * @return array
-     */
-    public static function Businessgetcanceledorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>2]);
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
-
-    /**
-     * 获取售后服务订单
-     * @param $supplier_id
-     * @param $pagesize
-     * @return array
-     */
-    public static function  Businessgetcustomerserviceorder($supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $array=self::getorderlist()->where(['a.supplier_id'=>$supplier_id,'z.order_status'=>1])->andwhere('z.customer_service!=0');
-        $data=self::Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time);
-        return $data;
-    }
      /**
      * @param $order_no
      * @param $sku
@@ -1591,7 +1422,7 @@ class GoodsOrder extends ActiveRecord
             }
             $supplier->save(false);
             $trans->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $trans->rollBack();
             return false;
         }
