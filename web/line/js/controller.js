@@ -1347,7 +1347,7 @@ angular.module("all_controller", ['ngCookies'])
             // 判断三级 =========== 初始化  ===========
         };
         //订单信息===>获取商品的信息
-        $http.post('http://test.cdlhzz.cn/order/getgoodsdata',{
+        $http.get('http://test.cdlhzz.cn/order/getgoodsdata',{
             goods_id:+$scope.mall_id,
             goods_num:+$scope.shopNum
         },config).then(function (response) {
@@ -1632,10 +1632,10 @@ angular.module("all_controller", ['ngCookies'])
         $scope.timeOut = 5;
         $scope.setTimeDown = function () {
             $interval(function () {
-                if($scope.timeOut!=0){
+                if(+$scope.timeOut!=0){
                     $scope.timeOut --;
-                }else {
-                    clearInterval($scope.setTimeDown)
+                }else{
+                    clearInterval($scope.setTimeDown);
                     $state.go('home');
                 }
             },1000)
