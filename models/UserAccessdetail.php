@@ -225,7 +225,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 case 'Goods':
                     $data[]=[
                         'name'=>'货款金额',
-                        'value'=>GoodsOrder::switchMoney($OrderGoods['supplier_price']*0.01)
+                        'value'=>GoodsOrder::switchMoney($OrderGoods['supplier_price']*0.01*$OrderGoods['goods_number'])
                     ];
                     $data[]=[
                         'name'=>"运费金额",
