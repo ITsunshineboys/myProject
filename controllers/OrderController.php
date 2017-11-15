@@ -798,7 +798,7 @@ class OrderController extends Controller
                 {
                     if (!$address)
                     {
-                        var_dump( var_dump($orders));exit;
+                         var_dump($orders);exit;
                         $code=1000;
                         return Json::encode([
                             'code' => $code,
