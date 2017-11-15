@@ -787,18 +787,16 @@ class OrderController extends Controller
                 || !Yii::$app->session['total_amount']
             )
             {
-                var_dump($orders);exit;
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-                $address=Invoice::findOne(Yii::$app->session['invoice_id']);
+                $address=Addressadd::findOne(Yii::$app->session['address_id']);
                 {
                     if (!$address)
                     {
-                         var_dump($orders);exit;
                         $code=1000;
                         return Json::encode([
                             'code' => $code,
