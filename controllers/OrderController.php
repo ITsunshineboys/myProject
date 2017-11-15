@@ -1380,7 +1380,13 @@ class OrderController extends Controller
             $startTime = explode(' ', $startTime)[0];
             $endTime = explode(' ', $endTime)[0];
         }
-                    $where .=" and supplier_id={$supplier->id}";
+
+        if ($timeType=='today')
+        {
+            $startTime=date('Y-m-d',time());
+            $endTime=date('Y-m-d',time()+24*60*60);
+        }
+        $where .=" and supplier_id={$supplier->id}";
                 if ($startTime) {
                     $startTime = (int)strtotime($startTime);
                     $startTime && $where .= " and   a.create_time >= {$startTime}";
@@ -1389,7 +1395,6 @@ class OrderController extends Controller
                     $endTime = (int)strtotime($endTime);
                     $endTime && $where .= " and a.create_time <= {$endTime}";
                 }
-
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'supplier');
