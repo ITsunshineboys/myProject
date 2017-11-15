@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <title>艾特生活-大后台</title>
     <link rel="shortcut icon" type="image/x-icon" href="lib/images/logo_16x.ico">
+    <link rel="stylesheet" type="text/css" href="lib/iconfont/iconfont.css">
     <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" href="lib/css/font-awesome.min.css">
     <link rel="stylesheet" href="lib/data_js/need/laydate.css">
@@ -20,39 +21,39 @@
         <img src="lib/images/logo.png" alt=""/>
     </div>
     <dl >
-        <dt ui-sref="home"><i class="glyphicon glyphicon-home"></i> 首页</dt>
+        <dt ui-sref="home"><i class="iconfont icon-shouye"></i> 首页</dt>
     </dl>
     <dl>
-        <dt ui-sref="merchant_index"><i class="glyphicon glyphicon-home"></i> 商城管理</dt>
-        <dd ui-sref="banner_recommend"><a>APP搜索位-banner管理</a></dd>
+        <dt ui-sref="merchant_index"><i class="iconfont icon-shangchengguanli"></i> 商城管理</dt>
+        <dd><a ui-sref="banner_recommend">APP搜索位-banner管理</a></dd>
         <dd><a ui-sref="search">搜索页面</a></dd>
-        <dd ui-sref="store_mag"><a>商家管理</a></dd>
+        <dd><a ui-sref="store_mag">商家管理</a></dd>
         <dd><a ui-sref="mall_data">商城数据</a></dd>
-        <dd ui-sref="brand_index"><a href="">品牌管理</a></dd>
+        <dd><a ui-sref="brand_index">品牌管理</a></dd>
         <dd><a ui-sref="fenleiguanli">分类管理</a></dd>
-        <dd><a href="">新品牌/新分类审核</a></dd>
-        <dd><a href="">商家入驻审核</a></dd>
-        <dd ui-sref="style_index"><a href="">系列/风格/属性管理</a></dd>
+        <dd><a href="javascript:void (0);">新品牌/新分类审核</a></dd>
+        <dd><a href="javascript:void (0);">商家入驻审核</a></dd>
+        <dd><a ui-sref="style_index">系列/风格/属性管理</a></dd>
     </dl>
 
     <dl>
-        <dt  ui-sref="intelligent.intelligent_index"><i class="glyphicon glyphicon-home"></i> 智能报价</dt>
+        <dt  ui-sref="intelligent.intelligent_index"><i class="iconfont icon-baojia"></i> 智能报价</dt>
     </dl>
 
     <dl>
-        <dt  class="on"><i class="glyphicon glyphicon-home"></i> 财务中心</dt>
-        <dd ui-sref="mall_finance.index"><a href="" class="dd_on">商城财务</a></dd>
-        <dd ><a href="#" >提现业务</a></dd>
+        <dt class="on"><i class="iconfont icon-caiwu"></i> 财务中心</dt>
+        <dd><a class="dd_on" ui-sref="mall_finance.index">商城财务</a></dd>
+        <dd><a href="javascript:void (0);" >提现业务</a></dd>
     </dl>
 
     <dl>
-        <dt ui-sref="account_index"><i class="glyphicon glyphicon-home"></i> 账户管理</dt>
+        <dt ui-sref="account_index"><i class="iconfont icon-zhanghuguanli"></i> 账户管理</dt>
     </dl>
     <dl>
-        <dt ui-sref="distribution.index"><i class="glyphicon glyphicon-home"></i>分销</dt>
+        <dt ui-sref="distribution.index"><i class="iconfont icon-fenxiao"></i>分销</dt>
     </dl>
     <dl>
-        <dt ui-sref="apply_case.index"><i class="glyphicon glyphicon-home"></i> 申请样板间</dt>
+        <dt ui-sref="apply_case.index"><i class="iconfont icon-yangbanjian"></i> 申请样板间</dt>
     </dl>
 </div>
 <!--左侧导航栏结束-->
@@ -60,7 +61,6 @@
 <!--右侧内容页面容器结束-->
 <div id="content" ui-view></div>
 <!--右侧内容页面容器结束-->
-
 
 <!--公用-->
 <script src="lib/js/jquery-3.1.1.js"></script>
