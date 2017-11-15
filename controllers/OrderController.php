@@ -702,7 +702,7 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $subject=trim($request->get('goods_name'));
         //付款金额，必填
-        $total_amount =(int)trim($request->get('order_price'));
+        $total_amount =trim($request->get('order_price'));
         $goods_id=trim($request->get('goods_id'));
         $goods_num=trim($request->get('goods_num'));
         $address_id=trim($request->get('address_id'));
@@ -760,7 +760,6 @@ class OrderController extends Controller
          */
         public function  actionWxLinePay()
         {
-
             $orders=array(
                 'address_id'=> Yii::$app->session['address_id'],
                 'invoice_id'=> Yii::$app->session['invoice_id'],
@@ -777,6 +776,7 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
+
 
             if ($orders==[])
             {
