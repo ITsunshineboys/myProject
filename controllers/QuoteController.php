@@ -1570,16 +1570,29 @@ class QuoteController extends Controller
                     $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
                     break;
                 case isset($one_post['series']):
-                    $columns = ['series_id','quantity','decoration_add_id'];
-                    $dm = DecorationMessage::findByInsert($one_post,$columns);
+                    $dm = \Yii::$app->db->createCommand()
+                        ->insert(DecorationMessage::tableName(), [
+                            'series_id' => $one_post['series'],
+                            'quantity' => $one_post['quantity'],
+                            'decoration_add_id' => $post['id'],
+                        ])->execute();
                     break;
                 case isset($one_post['style']):
-                    $columns = ['style_id','quantity','decoration_add_id'];
-                    $dm = DecorationMessage::findByInsert($one_post,$columns);
+                    $dm = \Yii::$app->db->createCommand()
+                        ->insert(DecorationMessage::tableName(), [
+                            'style_id' => $one_post['style'],
+                            'quantity' => $one_post['quantity'],
+                            'decoration_add_id' => $post['id'],
+                        ])->execute();
                     break;
                 case isset($one_post['min_area']):
-                    $columns = ['min_area','max_area','quantity','decoration_add_id'];
-                    $dm = DecorationMessage::findByInsert($one_post,$columns);
+                    $dm = \Yii::$app->db->createCommand()
+                        ->insert(DecorationMessage::tableName(), [
+                            'min_area' => $one_post['min_area'],
+                            'max_area' => $one_post['max_area'],
+                            'quantity' => $one_post['quantity'],
+                            'decoration_add_id' => $post['id'],
+                        ])->execute();
                     break;
             }
         }
