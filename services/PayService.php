@@ -72,7 +72,6 @@ class PayService
      */
     public function GetOrderOpenid($orders)
     {
-            var_dump($orders);exit;
             Yii::$app->session['address_id']=$orders['address_id'];
             Yii::$app->session['invoice_id']=$orders['invoice_id'];
             Yii::$app->session['goods_id']=$orders['goods_id'];

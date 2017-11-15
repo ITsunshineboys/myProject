@@ -792,7 +792,6 @@ class OrderController extends Controller
                 || !Yii::$app->session['total_amount']
             )
             {
-                var_dump($orders);exit;
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
