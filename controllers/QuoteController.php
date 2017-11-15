@@ -1778,17 +1778,18 @@ class QuoteController extends Controller
 
                 }
 
-                foreach ($else['area'] as $one_else){
-                    if (isset($one_else['id'])){
-                        Apartment::findByUpdate($one_else['value'],$one_else['id']);
-                    }
+                if (isset($else['area'])){
+                    foreach ($else['area'] as $one_else){
+                        if (isset($one_else['id'])){
+                            Apartment::findByUpdate($one_else['value'],$one_else['id']);
+                        }
 
-                    if (isset($one_else['min_area'])) {
+                        if (isset($one_else['min_area'])) {
 
-                        Apartment::findByInsert($one_else);
+                            Apartment::findByInsert($one_else);
+                        }
                     }
                 }
-
             };
             return Json::encode([
                 'code' => 200,
