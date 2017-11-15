@@ -274,7 +274,7 @@ class SupplierCashManager extends ActiveRecord
             ->where(['g.pay_status' => 1]);
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-        if ($time_start && $time_end && $time_end > $time_start) {
+        if ($time_start && $time_end && $time_end >= $time_start) {
 
             $query->andWhere(['between', 'g.paytime', $time_start, $time_end]);
         } elseif ($time_start) {
