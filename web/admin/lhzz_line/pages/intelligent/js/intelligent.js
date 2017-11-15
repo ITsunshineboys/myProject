@@ -3820,7 +3820,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $http.post('/quote/commonality-else-edit',{
                     else:[{
                         value:arr,
-                        apartment_area:arr1
+                        area:arr1
                     }]
                 },config).then(function (res) {
                    console.log(res)

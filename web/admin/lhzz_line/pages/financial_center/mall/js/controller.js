@@ -241,6 +241,17 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages4()
             }
         }
+        //返回前一页
+        $scope.go_prev = function () {
+            if($rootScope.curState_name == 'mall_finance.account_detail'){
+                $rootScope.fromState_name = 'mall_finance.account'
+                $scope.four_title = ''
+                $scope.five_title = ''
+                $scope.six_title = ''
+            }else if($rootScope.curState_name == 'mall_finance.account_detail'){
+                
+            }
+        }
         //post请求配置
         const config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
