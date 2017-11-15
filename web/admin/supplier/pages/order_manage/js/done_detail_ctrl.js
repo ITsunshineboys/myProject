@@ -100,8 +100,6 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
             sku: $stateParams.sku
         };
         $http.post(url, data, config).then(function (res) {
-
-            console.log(res);
             /*判断有无评论*/
             if (res.data.data.length === 0) {
                 $scope.showcomment = false;
