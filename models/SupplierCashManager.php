@@ -342,7 +342,7 @@ class SupplierCashManager extends ActiveRecord
             }
 
         if (isset($search) && trim($search) == $search) {
-            $query->andFilterWhere(['like', 'g.uid', $search])
+            $query->andFilterWhere(['like', 's.shop_no', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
         }
 
