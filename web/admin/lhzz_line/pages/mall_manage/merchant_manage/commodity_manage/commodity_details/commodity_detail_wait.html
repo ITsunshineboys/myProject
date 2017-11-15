@@ -10,194 +10,208 @@
     </header>
     <section>
         <form name="gooddetail">
-        <!--商品分类-->
-        <div class="margin_top">
-            <span>商品分类</span>
-            <span class="margin_left" ng-bind="category_title"></span>
-        </div>
-        <!--商品名称-->
-        <div class="margin_top">
-            <span>商品名称</span>
-            <span class="margin_left" ng-bind="title"></span>
-        </div>
-        <!--商品特色-->
-        <div class="margin_top">
-            <span>商品特色</span>
-            <span class="margin_left" ng-bind="subtitle"></span>
-        </div>
-        <!--选择品牌-->
-        <div class="margin_top">
-            <span>选择品牌</span>
-            <span class="margin_left" ng-bind="brand_name"></span>
-        </div>
-        <!--商品属性-->
-        <div class="margin_top">
-            <span>商品属性</span>
-            <div class="margin_left inline_block goodattrs">
-                <div ng-repeat="item in attrs">
-                    <span ng-bind="item.name"></span>
-                    <span class="margin_left" ng-bind="item.value"></span>
-                </div>
-                <div>
-                    <span>风格</span>
-                    <span class="margin_left" ng-bind="style_name"></span>
-                </div>
-                <div>
-                    <span>系列</span>
-                    <span class="margin_left" ng-bind="series_name"></span>
-                </div>
+            <!--商品分类-->
+            <div class="margin_top">
+                <span>商品分类</span>
+                <span class="margin_left" ng-bind="category_title"></span>
             </div>
-        </div>
-        <hr>
-        <!--上传图片-->
-        <div class="margin_top  picarr">
-            <span>上传图片</span>
-            <div class="margin_left inline_block img_size coverimg">
-                <img ng-src="{{baseUrl + '/'+ cover_image}}" alt="">
-                <div id="coverimg_span">封面图</div>
+            <!--商品名称-->
+            <div class="margin_top">
+                <span>商品名称</span>
+                <span class="margin_left" ng-bind="title"></span>
             </div>
-            <div class="inline_block img_size" ng-repeat="item in images track by $index" style="margin-left: 10px">
-                <img ng-src="{{baseUrl + '/'+ item}}" alt="">
+            <!--商品特色-->
+            <div class="margin_top">
+                <span>商品特色</span>
+                <span class="margin_left" ng-bind="subtitle"></span>
             </div>
-        </div>
-        <!--价格/库存-->
-        <div class="margin_top">
-            <span>价格/库存</span>
-            <div class="margin_left inline_block">
-                <div>
-                    <span class="font_size">供货价格</span>
-                    <span class="font_size">平台价格</span>
-                    <span class="font_size">市场价格</span>
-                    <span class="font_size">库存</span>
-                </div>
-                <hr>
-                <div class="margin_top">
-                    <span class="font_size">{{supplier_price | currency:"¥"}}</span>
-                    <span class="font_size">{{platform_price | currency:"¥"}}</span>
-                    <span class="font_size">{{market_price | currency:"¥"}}</span>
-                    <span class="font_size">{{left_number}}</span>
-                </div>
+            <!--选择品牌-->
+            <div class="margin_top">
+                <span>选择品牌</span>
+                <span class="margin_left" ng-bind="brand_name"></span>
             </div>
-        </div>
-        <!--采购价-->
-        <div class="margin_top">
-            <span>采购价</span>
-            <div style="text-indent: 1.5rem" class="margin_left inline_block">
-                <div>
-                    <span class="">装修公司采购价</span>
-                    <span class="purchase_left">项目经理采购价</span>
-                    <span class="purchase_left">设计师采购价</span>
-                </div>
-                <hr>
-                <div class="margin_top">
-                    <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png" alt="">
-                    <input type="text" class="purchase_input" id="decoration" name="decoration" ng-model="purchase_price_decoration_company" required ng-change="decorationPrice()" ng-blur="decoration=!!gooddetail.decoration.$error" ng-class={'warning':(gooddetail.decoration.$invalid&&alljudgefalse)||(gooddetail.decoration.$error.required&&decoration)||price_flag}>
-                    <input type="text" class="purchase_input" id="manager" name="manager" ng-model="purchase_price_manager" required ng-change="managerPrice()" ng-blur="manager=!!gooddetail.manager.$error" ng-class={'warning':(gooddetail.manager.$invalid&&alljudgefalse)||(gooddetail.manager.$error.required&&manager)||price_flag}>
-                    <input type="text" class="purchase_input" id="designer" name="designer" ng-model="purchase_price_designer" required ng-change="designerPrice()" ng-blur="manager=!!gooddetail.designer.$error" ng-class={'warning':(gooddetail.designer.$invalid&&alljudgefalse)||(gooddetail.designer.$error.required&&manager)||price_flag}>
-                </div>
-                <p style="margin-top: 10px">*价格，供货价≤装修公司采购价≤项目经理采购价/设计师采购价≤平台价≤市场价</p>
+            <!--系列-->
+            <div class="margin_top">
+                <span>系列</span>
+                <span class="margin_left_style" ng-bind="series_name"></span>
             </div>
-        </div>
-        <!--物流模块-->
-        <div class="margin_top">
-            <span>商品物流</span>
-            <div class="margin_left inline_block">
-                <div>
-                    <span ng-bind="name"></span>
-                </div>
-                <div class="margin_top">
-                    <span>快递方式</span>
-                    <span class="margin_left" ng-bind="delivery_method"></span>
-                </div>
-                <div class="margin_top">
-                    <span>城市选择</span>
-                    <span class="margin_left" ng-bind="district_names"></span>
-                    <span style="color:#5677FC" ng-show="alldistricts.length > 3" data-toggle="modal" data-target="#showdistricts">查看</span>
-                </div>
-                <div class="margin_top">
-                    <span>是否包邮</span>
-                    <span class="margin_left">不包邮</span>
-                </div>
-                <div class="margin_top">
-                    <span>收费金额</span>
-                    <div class="margin_left inline_block">
-                        <p>默认1件商品：¥{{delivery_cost_default}}</p>
-                        <p>每增加1件商品，运费增加：¥{{delivery_cost_delta}}</p>
+            <!--风格-->
+            <div class="margin_top">
+                <span>风格</span>
+                <span class="margin_left_style" ng-bind="style_name"></span>
+            </div>
+            <!--商品属性-->
+            <div class="margin_top">
+                <span>商品属性</span>
+                <div class="margin_left inline_block goodattrs">
+                    <div ng-repeat="item in attrs">
+                        <span ng-bind="item.name"></span>
+                        <span class="margin_left" ng-bind="item.value"></span>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--地区提示模态框-->
-        <div class="modal fade" id="showdistricts" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog">
-                <div class="modal-content" id="save_content">
-                    <div class="modal-header" id="save_header">
-                        <h4 class="modal-title" id="tishi">
-                            已选择地区
-                        </h4>
+            <hr>
+            <!--上传图片-->
+            <div class="margin_top  picarr">
+                <span>上传图片</span>
+                <div class="margin_left inline_block img_size coverimg">
+                    <img ng-src="{{baseUrl + '/'+ cover_image}}" alt="">
+                    <div id="coverimg_span">封面图</div>
+                </div>
+                <div class="inline_block img_size" ng-repeat="item in images track by $index" style="margin-left: 10px">
+                    <img ng-src="{{baseUrl + '/'+ item}}" alt="">
+                </div>
+            </div>
+            <!--价格/库存-->
+            <div class="margin_top">
+                <span>价格/库存</span>
+                <div class="margin_left inline_block">
+                    <div>
+                        <span class="font_size">供货价格</span>
+                        <span class="font_size">平台价格</span>
+                        <span class="font_size">市场价格</span>
+                        <span class="font_size">库存</span>
                     </div>
-                    <div class="modal-body" id="save_body">
-                        <span ng-repeat="item in alldistricts" class='eachdistrict'>{{item}}</span>
+                    <hr>
+                    <div class="margin_top">
+                        <span class="font_size">{{supplier_price | currency:"¥"}}</span>
+                        <span class="font_size">{{platform_price | currency:"¥"}}</span>
+                        <span class="font_size">{{market_price | currency:"¥"}}</span>
+                        <span class="font_size">{{left_number}}</span>
+                    </div>
+                </div>
+            </div>
+            <!--采购价-->
+            <div class="margin_top">
+                <span>采购价</span>
+                <div style="text-indent: 1.5rem" class="margin_left inline_block">
+                    <div>
+                        <span class="">装修公司采购价</span>
+                        <span class="purchase_left">项目经理采购价</span>
+                        <span class="purchase_left">设计师采购价</span>
+                    </div>
+                    <hr>
+                    <div class="margin_top">
+                        <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
+                             alt="">
+                        <input type="text" class="purchase_input" id="decoration" name="decoration"
+                               ng-model="purchase_price_decoration_company" required ng-change="decorationPrice()"
+                               ng-blur="decoration=!!gooddetail.decoration.$error"
+                               ng-class={'warning':(gooddetail.decoration.$invalid&&alljudgefalse)||(gooddetail.decoration.$error.required&&decoration)||price_flag}>
+                        <input type="text" class="purchase_input" id="manager" name="manager"
+                               ng-model="purchase_price_manager" required ng-change="managerPrice()"
+                               ng-blur="manager=!!gooddetail.manager.$error"
+                               ng-class={'warning':(gooddetail.manager.$invalid&&alljudgefalse)||(gooddetail.manager.$error.required&&manager)||price_flag}>
+                        <input type="text" class="purchase_input" id="designer" name="designer"
+                               ng-model="purchase_price_designer" required ng-change="designerPrice()"
+                               ng-blur="manager=!!gooddetail.designer.$error"
+                               ng-class={'warning':(gooddetail.designer.$invalid&&alljudgefalse)||(gooddetail.designer.$error.required&&manager)||price_flag}>
+                    </div>
+                    <p style="margin-top: 10px">*价格，供货价≤装修公司采购价≤项目经理采购价/设计师采购价≤平台价≤市场价</p>
+                </div>
+            </div>
+            <!--物流模块-->
+            <div class="margin_top">
+                <span>商品物流</span>
+                <div class="margin_left inline_block">
+                    <div>
+                        <span ng-bind="name"></span>
+                    </div>
+                    <div class="margin_top">
+                        <span>快递方式</span>
+                        <span class="margin_left" ng-bind="delivery_method"></span>
+                    </div>
+                    <div class="margin_top">
+                        <span>城市选择</span>
+                        <span class="margin_left" ng-bind="district_names"></span>
+                        <span style="color:#5677FC" ng-show="alldistricts.length > 3" data-toggle="modal"
+                              data-target="#showdistricts">查看</span>
+                    </div>
+                    <div class="margin_top">
+                        <span>是否包邮</span>
+                        <span class="margin_left">不包邮</span>
+                    </div>
+                    <div class="margin_top">
+                        <span>收费金额</span>
+                        <div class="margin_left inline_block">
+                            <p>默认1件商品：¥{{delivery_cost_default}}</p>
+                            <p>每增加1件商品，运费增加：¥{{delivery_cost_delta}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--地区提示模态框-->
+            <div class="modal fade" id="showdistricts" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="save_content">
+                        <div class="modal-header" id="save_header">
+                            <h4 class="modal-title" id="tishi">
+                                已选择地区
+                            </h4>
+                        </div>
+                        <div class="modal-body" id="save_body">
+                            <span ng-repeat="item in alldistricts" class='eachdistrict'>{{item}}</span>
+                        </div>
+
+                        <div class="btn_modal_two">
+                            <button id="caozuo_sure" data-dismiss="modal" ng-click=sureCloseStore()>确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!--售后-->
+            <div class="margin_top" ng-show="afterServiceShow()">
+                <span>售后</span>
+                <div class="margin_left inline_block" style="margin-top:-15px;margin-left: 110px">
+                    <div class="margin_top" ng-repeat="item in after_sale_services_desc">
+                        <p ng-show="afterserviceTest(item)">{{item}}</p>
+                    </div>
+                </div>
+            </div>
+            <!--保障-->
+            <div class="margin_top">
+                <span>保障</span>
+                <div class="margin_left inline_block" style="margin-left: 110px">
+                    <div ng-repeat="item in after_sale_services_desc">
+                        <p ng-show="safeguardTest(item)">{{item}}</p>
                     </div>
 
-                    <div class="btn_modal_two">
-                        <button id="caozuo_sure" data-dismiss="modal" ng-click=sureCloseStore()>确认</button>
+                </div>
+            </div>
+            <hr>
+            <!--线下商城二维码-->
+            <div class="margin_top">
+                <span>线下商城二维码</span>
+                <div style="text-indent:4rem" class="inline_block">
+                    <img style="width: 170px;height: 170px;" ng-src="{{baseUrl + '/'+ qr_code}}" alt="">
+                </div>
+            </div>
+            <hr>
+            <!--详细描述-->
+            <div class="margin_top">
+                <span>详细描述</span>
+                <div class="margin_left inline_block">
+                    <!--<div class="description_size"></div>-->
+                    <div>
+                        <p ng-bind="description"></p>
                     </div>
+                    <!--<div class="description_size description_size_min"></div>-->
                 </div>
             </div>
-        </div>
-        <hr>
-        <!--售后-->
-        <div class="margin_top" ng-show="afterServiceShow()">
-            <span>售后</span>
-            <div class="margin_left inline_block" style="margin-top:-15px;margin-left: 110px">
-                <div class="margin_top" ng-repeat="item in after_sale_services_desc">
-                    <p ng-show="afterserviceTest(item)">{{item}}</p>
+            <!--审核备注-->
+            <div class="margin_top">
+                <span>审核备注</span>
+                <div style="text-indent:8.3rem" class="inline_block">
+                    <textarea name="" id="" cols="102" rows="10" placeholder="请输入等待上架原因" ng-model="reason"></textarea>
                 </div>
             </div>
-        </div>
-        <!--保障-->
-        <div class="margin_top">
-            <span>保障</span>
-            <div class="margin_left inline_block" style="margin-left: 110px">
-                <div ng-repeat="item in after_sale_services_desc">
-                    <p ng-show="safeguardTest(item)">{{item}}</p>
-                </div>
-
+            <!--操作-->
+            <div class="btn_margin_top">
+                <span class="btn_size blue" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)"
+                      data-toggle="modal" data-target={{savemodal}}>保存</span>
+                <span class="btn_size" ui-sref="commodity.wait({id:storeid})">返回</span>
             </div>
-        </div>
-        <hr>
-        <!--线下商城二维码-->
-        <div class="margin_top">
-            <span >线下商城二维码</span>
-            <div style="text-indent:4rem" class="inline_block">
-                <img style="width: 170px;height: 170px;" ng-src="{{baseUrl + '/'+ qr_code}}" alt="">
-            </div>
-        </div>
-        <hr>
-        <!--详细描述-->
-        <div class="margin_top">
-            <span>详细描述</span>
-            <div class="margin_left inline_block">
-                <!--<div class="description_size"></div>-->
-                <div>
-                    <p ng-bind="description"></p>
-                </div>
-                <!--<div class="description_size description_size_min"></div>-->
-            </div>
-        </div>
-        <!--审核备注-->
-        <div class="margin_top">
-            <span >审核备注</span>
-            <div style="text-indent:8.3rem" class="inline_block">
-                <textarea name="" id="" cols="102" rows="10" placeholder="请输入等待上架原因" ng-model="reason"></textarea>
-            </div>
-        </div>
-        <!--操作-->
-        <div class="btn_margin_top">
-            <span class="btn_size blue" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)" data-toggle="modal" data-target={{savemodal}}>保存</span>
-            <span class="btn_size" ui-sref="commodity.wait({id:storeid})">返回</span>
-        </div>
         </form>
     </section>
 

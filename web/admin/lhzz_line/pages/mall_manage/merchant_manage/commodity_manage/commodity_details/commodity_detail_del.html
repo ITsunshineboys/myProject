@@ -29,6 +29,16 @@
             <span>选择品牌</span>
             <span class="margin_left" ng-bind="brand_name"></span>
         </div>
+        <!--系列-->
+        <div class="margin_top">
+            <span>系列</span>
+            <span class="margin_left_style" ng-bind="series_name"></span>
+        </div>
+        <!--风格-->
+        <div class="margin_top">
+            <span>风格</span>
+            <span class="margin_left_style" ng-bind="style_name"></span>
+        </div>
         <!--商品属性-->
         <div class="margin_top">
             <span>商品属性</span>
@@ -36,14 +46,6 @@
                 <div ng-repeat="item in attrs">
                     <span ng-bind="item.name"></span>
                     <span class="margin_left" ng-bind="item.value"></span>
-                </div>
-                <div>
-                    <span>风格</span>
-                    <span class="margin_left" ng-bind="style_name"></span>
-                </div>
-                <div>
-                    <span>系列</span>
-                    <span class="margin_left" ng-bind="series_name"></span>
                 </div>
             </div>
         </div>
