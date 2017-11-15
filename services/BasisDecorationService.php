@@ -170,6 +170,9 @@ class BasisDecorationService
                     break;
             }
         }
+
+
+
         $goods_id = [];
         foreach ($goods as $one) {
             switch ($one) {
@@ -298,23 +301,14 @@ class BasisDecorationService
      * @param int $quantity
      * @return float
      */
-    public static  function waterproofArea($arr,$house_area,$quantity = 1)
+    public static  function waterproofArea($area,$height,$house_area,$quantity = 1)
     {
-        $area = [];
-        $height = [];
-        foreach ($arr as $one) {
-            if($one['project_particulars'] == self::HOUSE_MESSAGE['kitchen_area'] || $one['project_particulars'] == self::HOUSE_MESSAGE['toilet_area']) {
-                $area = $one;
-            }
-            if ($one['project_particulars'] == self::HOUSE_MESSAGE['kitchen_waterproof'] || $one['project_particulars'] == self::HOUSE_MESSAGE['toilet_waterproof']) {
-                $height = $one;
-            }
-        }
+
 //            厨房地面面积：【x】%×（房屋面积)
-        $ground = $area['project_value'] * $house_area;
+        $ground = $area * $house_area;
 //            厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
         $sqrt = sqrt($ground);
-        $wall_space = $sqrt * $height['project_value'] * self::WALL_SPACE * $quantity;
+        $wall_space = $sqrt * $height * self::WALL_SPACE * $quantity;
 //            厨房防水面积：厨房地面积+厨房墙面积
         $all_area = $ground + $wall_space;
         $total_area = round($all_area,2);

@@ -350,7 +350,7 @@ class OwnerController extends Controller
             }
         } else{
             $worker_kind_details['quantity'] = WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
-            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / 100;
+            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / LaborCost::PRICE_CONVERT;
             $workers['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
 
@@ -420,7 +420,7 @@ class OwnerController extends Controller
             }
         } else {
             $worker_kind_details['quantity'] = WorkerCraftNorm::WATERWAY_DAY_POINTS;
-            $waterway_labor['univalence'] = LaborCost::WEAK_CURRENT_PRICE / 100;
+            $waterway_labor['univalence'] = LaborCost::WEAK_CURRENT_PRICE / LaborCost::PRICE_CONVERT;
             $waterway_labor['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
 
@@ -479,20 +479,16 @@ class OwnerController extends Controller
         $__select = 'quantity,worker_kind_details';
         $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker'],$_select);
         if ($waterproof_labor == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area'],$__select);
+            if (!$worker_kind_details){
+                $worker_kind_details['quantity'] = WorkerCraftNorm::WATERPROOF_DAY_AREA;
+            }
+        } else {
+            $worker_kind_details['quantity'] = WorkerCraftNorm::WATERPROOF_DAY_AREA;
+            $waterproof_labor['univalence']  = LaborCost::WATERPROOF_PRICE / LaborCost::PRICE_CONVERT;
+            $waterproof_labor['worker_kind'] = self::WORK_CATEGORY['waterproof_worker'];
         }
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area'],$__select);
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
 
         //防水所需材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
@@ -509,12 +505,54 @@ class OwnerController extends Controller
 
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
-        $kitchen_area = BasisDecorationService::waterproofArea($kitchen, $post['area'], $post['kitchen']);
+        if (!$kitchen){
+            $area = EngineeringUniversalCriterion::KITCHEN_AREA;
+            $height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+        } else {
+            foreach ($kitchen as $one_kitchen){
+                if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
+                    $area = $one_kitchen['project_value'];
+                } else {
+                    $area = EngineeringUniversalCriterion::KITCHEN_AREA;
+                }
+
+                if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
+                    $height = $one_kitchen['project_value'];
+                } else {
+                    $height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+                }
+            }
+        }
+        $kitchen_area = BasisDecorationService::waterproofArea($area,$height, $post['area'], $post['kitchen']);
+
+
+
         //卫生间
         $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
-        $toilet_area = BasisDecorationService::waterproofArea($toilet, $post['area'], $post['toilet']);
+        if (!$toilet){
+            $_area = EngineeringUniversalCriterion::TOILET_AREA;
+            $_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
+        } else {
+            foreach ($toilet as $one_toilet){
+                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
+                    $_area = $one_toilet['project_value'];
+                } else {
+                    $_area = EngineeringUniversalCriterion::TOILET_AREA;
+                }
+
+                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
+                    $_height = $one_toilet['project_value'];
+                } else {
+                    $_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
+                }
+            }
+        }
+        $toilet_area = BasisDecorationService::waterproofArea($_area,$_height, $post['area'], $post['toilet']);
+
+
         //总面积
         $total_area = $kitchen_area + $toilet_area;
+
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterproof'], $post['city']);
@@ -525,6 +563,8 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$waterproof_labor['univalence'],$worker_kind_details['quantity']);

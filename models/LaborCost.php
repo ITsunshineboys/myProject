@@ -31,6 +31,7 @@ class LaborCost extends ActiveRecord
         ];
 
     const WEAK_CURRENT_PRICE = 30000;
+    const WATERPROOF_PRICE = 35000;
     const PRICE_CONVERT = 100;
     /**
      * @return string 返回该AR类关联的数据表名
