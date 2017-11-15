@@ -546,7 +546,6 @@ class GoodsOrder extends ActiveRecord
             ->limit($size)
             ->all();
         $arr=self::getorderstatus($OrderList);
-        var_dump($arr);exit;
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
             if ($arr[$k]['is_unusual']==1){
