@@ -677,7 +677,6 @@ class GoodsOrder extends ActiveRecord
             $tran->rollBack();
             return false;
         }
-
         $sms['mobile']=$address->mobile;
         $sms['type']='gotOrder';
         $sms['goods_title']=$goods['title'];
