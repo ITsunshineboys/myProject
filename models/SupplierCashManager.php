@@ -271,7 +271,8 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::GOODS_ORDER . ' g')
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
-            ->where(['g.pay_status' => 1]);
+            ->where(['g.pay_status' => 1])
+            ->orderBy('g.paytime Desc');
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end >= $time_start) {
