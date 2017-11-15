@@ -508,7 +508,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
         $timeType = trim(Yii::$app->request->get('time_type', ''));
-        $where=" status=".self::STATUS_CG ." and role_id=".Supplier::ROLE_SUPPLIER ;
+        $where=" status=2 and role_id=".Supplier::ROLE_SUPPLIER ;
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -541,7 +541,6 @@ class SupplieraccountController extends  Controller{
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
-
         $paginationData = UserCashregister::pagination($uid,$where, UserCashregister::FIELDS_ADMIN, $page, $size);
         return json_encode([
             'code'=>200,

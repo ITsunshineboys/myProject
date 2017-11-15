@@ -572,6 +572,7 @@ class WithdrawalsController extends Controller
         }
         $userBankInfo=UserBankInfo::find()
             ->where(['uid'=>$user->id,'role_id'=>6])
+            ->andWhere(['selected'=>1])
             ->one();
         if (!$userBankInfo)
         {
