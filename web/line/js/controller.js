@@ -1568,8 +1568,8 @@ angular.module("all_controller", ['ngCookies'])
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
                                 // 微信接口 === 调用
-                                alert(sessionStorage.getItem('address_id'))
-                                alert(JSON.stringify(sessionStorage.getItem('address_id')))
+                                // alert(sessionStorage.getItem('address_id'))
+                                // alert(JSON.stringify(sessionStorage.getItem('address_id')))
                                 $http({     //获取openid 的地址
                                     method: 'get',
                                     url: 'http://test.cdlhzz.cn/order/lineplaceorder',

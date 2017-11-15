@@ -17,6 +17,20 @@
     top: 0.7rem;
     left: 0.8rem;
 }
+.home_header{
+    position: fixed;
+    right: 1rem;
+    top:1.2rem;
+    z-index:100;
+    width: 3rem;
+    height: 3rem;
+    /*background: rgba(0,0,0,0.7);*/
+    border-radius: 3rem;
+}
+.home_header img{
+    width: 2.4rem;
+    height: 2.4rem;
+}
 .main{
     width: auto;
     height: auto;
