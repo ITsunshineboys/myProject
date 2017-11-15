@@ -266,10 +266,10 @@ class Effect extends ActiveRecord
 
         }
 
+        $material_grop=self::array_group_by($material,'first_cate_id');
 
+        $data['material']=$material_grop;
         return [$data,$material];
-
-
 
     }
 
