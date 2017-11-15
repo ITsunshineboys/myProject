@@ -90,6 +90,7 @@ h4 {
 }
 .btn_back{
     position: absolute;
+    bottom: 5rem;
     display: inline;
 }
 .btn_back button{
