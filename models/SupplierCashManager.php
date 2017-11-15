@@ -323,7 +323,7 @@ class SupplierCashManager extends ActiveRecord
     {
             $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
-                ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
+                ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where(['g.role_id' => self::ROLE_ID])
             ->orderBy('g.apply_time Desc');
