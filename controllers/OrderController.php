@@ -1124,8 +1124,9 @@ class OrderController extends Controller
      */
     public function actionGetorderdetailsall(){
         $request=Yii::$app->request;
-        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
-        if(!$order_no){
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
+        if(!$order_no|| !$sku){
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -1133,7 +1134,7 @@ class OrderController extends Controller
             ]);
         }
         //获取订单信息
-        $order_information=(new GoodsOrder())->Getorderinformation($order_no);
+        $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
         if (!$order_information) {
             $code = 500;
             return Json::encode([
@@ -1147,7 +1148,7 @@ class OrderController extends Controller
         $goods_attr_id=$order_information['goods_attr_id'];
         $order_no=$order_information['order_no'];
         $sku=explode('+',$order_information['sku']);
-        $ordergoodsinformation=(new GoodsOrder())->Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
+        $ordergoodsinformation=GoodsOrder::Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
         if (!$ordergoodsinformation){
             $code = 500;
             return Json::encode([
@@ -1183,6 +1184,7 @@ class OrderController extends Controller
         $receive_details['invoice_header_type']=$invoice['invoice_header_type'];
         $receive_details['invoice_content']=$invoice['invoice_content'];
         $receive_details['invoicer_card'] = $invoice['invoicer_card'];
+        $receive_details['buyer_message']=$order_information['buyer_message'];
         switch ($invoice['invoice_header_type']){
             case 1:
                 $receive_details['invoice_header_type']='个人';
