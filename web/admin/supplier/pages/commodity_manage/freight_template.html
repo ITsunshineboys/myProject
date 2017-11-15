@@ -16,7 +16,7 @@
             <span>模板名称</span>
             <input type="text" name="textContent" placeholder="请输入模板名称"
                    maxlength="10"
-                   ng-model="textContent" required/>
+                   ng-model="params.name" required/>
             <span>*限1～10个字符，不含特殊字符</span>
             <br/>
             <span class="span_left" ng-show="airHidden == false">*不能为空</span>
@@ -26,35 +26,37 @@
         <!--配送方式-->
         <div class="distribution">
             <span>配送方式</span>
-            <input type="radio" name="radio" ng-click="changeView (way)" ng-checked="test == 0 "  ng-model="way" value="0"/>
+            <input type="radio" name="radio" ng-click="params.delivery_method = 0" ng-checked="params.delivery_method == 0 " ng-model="params.delivery_method"/>
             <span>快递物流</span>
-            <input type="radio" name="radio" ng-click="changeViewMore (way)" ng-checked="test == 1" ng-model="way" value="1"/>
+            <input type="radio" name="radio" ng-click="params.delivery_method = 1" ng-checked="params.delivery_method == 1"  ng-model="params.delivery_method"/>
             <span>送货上门</span>
             <div class="distribution_div">
                 <img src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>服务地区选择</span>
-                <span>{{chooseCity}}</span>
+                <span class="city_more">
+                    <span ng-repeat="value in selectCity | limitTo: 3">{{value}}</span>
+                </span>
                 <a data-toggle="modal" data-target="#detate_modal"><span>编辑</span></a>
                 <br/><br/>
-                <div ng-show="test==0">
+                <div ng-show="params.delivery_method == 0">
                     <span class="left_way">收费方式</span>
-                    <input type="radio" name="a" ng-click="changeStatus ()"  ng-checked="hidden_way"/>
+                    <input type="radio" name="a" ng-click="hidden_way = true"  ng-checked="hidden_way"/>
                     <span class="input_span">不包邮</span>
-                    <input type="radio" name="a" ng-click="changeStatusHidden ()" ng-checked="!hidden_way"/>
+                    <input type="radio" name="a" ng-click="hidden_way = false" ng-checked="!hidden_way"/>
                     <span class="input_span">包邮</span>
                     <div  class="charge" ng-show="hidden_way">
                         <img src="pages/commodity_manage/image/red.png" alt=""/>
                         <span>默认运费</span>
-                        <input type="text" ng-model="cost"  placeholder="{{costView}}"/>
-                        <span>元</span>
-                        <input type="text" ng-model="num" placeholder="{{numView}}"/>
+                        <input type="text" ng-model="params.delivery_number_default" />
                         <span>件</span>
+                        <input type="text" ng-model="params.delivery_cost_default"  />
+                        <span>元</span>
                         <br/><br/>
                         <img src="pages/commodity_manage/image/red.png" alt=""/>
                         <span>每增加</span>
-                        <input type="text" class="input_left" ng-model="dete" placeholder="{{detaeView}}"/>
+                        <input type="text" class="input_left" ng-model="params.delivery_number_delta" />
                         <span>件</span>
-                        <input type="text" class="input_left1" ng-model="ber" placeholder="{{berView}}"/>
+                        <input type="text" class="input_left1" ng-model="params.delivery_cost_delta" />
                         <span>元</span>
                     </div>
                 </div>
@@ -71,18 +73,16 @@
                         </div>
                         <div class="modal-body">
                             <ul class="city_ul">
-                                <li ng-repeat="n in province">
-                                    <input type="checkbox" ng-model="changeStatus"  ng-checked="n.flag"/>
-                                    <span>{{n.name}}</span>
-                                    <img src="pages/commodity_manage/image/down_red.png"
-                                         data-toggle="modal" data-target="#sed_modal"
-                                         ng-click="getMoreCity (n)" alt=""/>
+                                <li ng-repeat="obj in cityList">
+                                    <input type="checkbox" ng-checked="obj.isChecked" ng-click="provincesFun(obj)"/>
+                                    <span>{{obj.name}}</span>
+                                    <img src="pages/commodity_manage/image/down_red.png" ng-click="getMoreCity(obj)"/>
                                 </li>
                             </ul>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default"  data-dismiss="modal" ng-click="addCity ()" >确认</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                            <button class="btn btn-default" data-dismiss="modal" ng-click="addCity()">确认</button>
+                            <button class="btn btn-primary" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </div>
@@ -98,15 +98,16 @@
                         </div>
                         <div class="modal-body">
                             <ul class="sec_ul">
-                                <li ng-repeat=" n in city" >
-                                    <input type="checkbox" ng-checked="n.flag" ng-click="getSecondId (n)"/>
-                                    <span>{{n.name}}</span>
+                                <li ng-repeat=" obj in city">
+                                    <input type="checkbox" ng-checked="obj.isChecked"
+                                           ng-click="cityFun(obj)"/>
+                                    <span>{{obj.name}}</span>
                                 </li>
                             </ul>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" ng-click="getCity ()" data-dismiss="modal">确认</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                            <button class="btn btn-default" ng-click="getCity()">确认</button>
+                            <button class="btn btn-primary" data-dismiss="modal">取消</button>
                         </div>
                     </div>
                 </div>

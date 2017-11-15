@@ -130,12 +130,12 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.wait_flag = true;
             $scope.logistics_flag = false;
             /*初始化已下架的搜索*/
-            // $scope.wjConfig.currentPage = 1; //页数跳转到第一页
-            // $scope.down_search_value = '';//清空输入框值
+            $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+            $scope.down_search_value = '';//清空输入框值
             // $scope.params.keyword = '';
-            // $scope.params['sort[]'] = 'offline_time:3';
-            // $scope.params.status = 0;
-            // tablePages();
+            $scope.params['sort[]'] = 'publish_time:3';
+            $scope.params.status = 1;
+            tablePagesWait()
         }
         /*---------------点击TAB  开始---------------------*/
         //已上架
@@ -176,6 +176,9 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.on_flag = false;
             $scope.down_flag = false;
             $scope.logistics_flag = false;
+            $scope.params.status = 1;
+            $scope.params['sort[]'] = 'publish_time:3'
+            tablePagesWait()
         };
         //物流模块
         $scope.logistics = function () {
@@ -570,15 +573,12 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         let tablePagesWait = function () {
             $scope.paramsWait.page = $scope.ConfigWait.currentPage;//点击页数，传对应的参数
-            $http.get(baseUrl+'/mall/goods-list-admin', {
-                params: $scope.paramsWait
-            }).then(function (res) {
+            _ajax.get('/mall/goods-list-admin', $scope.paramsWait,function (res) {
                 console.log(res);
-                $scope.wait_list_arr = res.data.data.goods_list_admin.details;
-                $scope.ConfigWait.totalItems = res.data.data.goods_list_admin.total
-            }, function (err) {
-                console.log(err);
-            })
+                $scope.wait_list_arr = res.data.goods_list_admin.details;
+                $scope.ConfigWait.totalItems = res.data.goods_list_admin.total
+            });
+
         };
         $scope.paramsWait = {
             status: 1,                       //状态
@@ -604,22 +604,22 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         $scope.myng = $scope;
         $scope.wait_list_arr = [];
-        $http.get(baseUrl+'/mall/goods-list-admin', {
-                params: {
-                    status: 1
-                }
-            }
-        ).then(function (res) {
-            console.log('等待上架');
-            console.log(res);
-            $scope.wait_list_arr = res.data.data.goods_list_admin.details;
+
 
             //查看获取审核备注
+             $scope.waiteModel = '';
             $scope.getRest = function (item) {
-                $scope.reset = item
-            }
+                $scope.reset = item;
+                if ($scope.reset == '') {
+                    $scope.waiteModel = ''
+                }else {
+                    $scope.waiteModel = '#wait_shelves_remarks_modal'
+                }
+
+            };
 
             /*----------------搜索---------------*/
+
             $scope.wait_search_btn = function () {
                 $scope.paramsWait.keyword = $scope.wait_search_content;
                 tablePagesWait()
@@ -627,17 +627,8 @@ let commodity_manage = angular.module("commodity_manage", [])
             //监听搜索框的值为空时，返回最初的值
             $scope.$watch("off_search_content", function (newVal, oldVal) {
                 if (newVal == "") {
-                    $http.get(baseUrl+'/mall/goods-list-admin', {
-                            params: {
-                                status: 1
-                            }
-                        }
-                    ).then(function (res) {
-                        console.log('等待上架');
-                        console.log(res);
-                        $scope.wait_list_arr = res.data.data.goods_list_admin.details;
-
-                    })
+                    $scope.paramsWait.status = 1;
+                    tablePagesWait()
                 }
             });
 
@@ -646,17 +637,10 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.sort_status = 'publish_time:3';
                 $scope.on_time_flag = false;
                 $scope.down_time_flag = true;
-                $scope.page = 1;
-                $http.get(baseUrl+'/mall/goods-list-admin', {
-                    params: {
-                        status: 1,
-                        page: $scope.page,
-                        'sort[]': $scope.sort_status
-                    }
-                }).then(function (res) {
-                    console.log(res);
-                    $scope.wait_list_arr = res.data.data.goods_list_admin.details;
-                })
+                // $scope.page = 1;
+                $scope.params.status = 1;
+                $scope.params['sort[]'] = 'publish_time:3'
+                tablePagesWait()
             };
             /*============升序==================*/
             $scope.on_time_flag = true;
@@ -665,23 +649,20 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.sort_status = 'publish_time:4';
                 $scope.on_time_flag = true;
                 $scope.down_time_flag = false;
-                $scope.page = 1;
-                $http.get(baseUrl+'/mall/goods-list-admin', {
-                    params: {
-                        status: 1,
-                        page: $scope.page,
-                        'sort[]': $scope.sort_status
-                    }
-                }).then(function (res) {
-                    console.log(res);
-                    $scope.wait_list_arr = res.data.data.goods_list_admin.details;
-                })
+                // $scope.page = 1;
+                $scope.params.status = 1;
+                $scope.params['sort[]'] = 'publish_time:4'
+                tablePagesWait()
             };
-
+        // })
 
             /*--------------------等待下架 结束-------------------------*/
 
-            //物流模板开始
+            //=====================物流模板开始==========================
+
+
+
+
             $http({
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 //transformRequest: function (data) {
@@ -737,7 +718,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                 console.log($scope.id);
                 $state.go('template_details', {'id': $scope.id, 'name': $scope.name})
             }
-        })
+
     })
     .directive('stringToNumber2', function () {
         return {

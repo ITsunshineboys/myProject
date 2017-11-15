@@ -7,7 +7,7 @@ app.controller("template_details_ctrl", ["$scope", "$state", "$stateParams", "$h
     let cityChecked = [];   // 选中的城市
     $scope.cityList = [];  // 省份
     $scope.city = [];   // 城市
-    $scope.selectCity = ''; // 选中的城市
+    $scope.selectCity = []; // 选中的城市
     $scope.packageMail = true; // 默认不包邮
 
     // 物流模板信息
@@ -216,6 +216,14 @@ app.controller("template_details_ctrl", ["$scope", "$state", "$stateParams", "$h
 
     // 保存物流模板详情
     $scope.getReally = function () {
+        if($scope.params.name === ''){
+            alert('请输入模板名称');
+            return
+        }
+        if(cityChecked.length === 0){
+            alert('请选择地区');
+            return
+        }
         if ($scope.params.delivery_method === 0) {
             if ($scope.packageMail) {
                 if ($scope.freight.cost_default === '' || $scope.freight.number_default === '') {
@@ -236,6 +244,11 @@ app.controller("template_details_ctrl", ["$scope", "$state", "$stateParams", "$h
                 $scope.params.delivery_cost_delta = 0;
                 $scope.params.delivery_number_delta = 0;
             }
+        }else {
+            $scope.params.delivery_cost_default = 0;
+            $scope.params.delivery_number_default = 0;
+            $scope.params.delivery_cost_delta = 0;
+            $scope.params.delivery_number_delta = 0;
         }
         $scope.params.district_codes = cityChecked.join(',');
         _ajax.post('/mall/logistics-template-edit', $scope.params, function (res) {

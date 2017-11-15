@@ -480,21 +480,13 @@
                 <td ng-if="wait_13"><img class="img_cover_size" ng-src="{{baseUrl + '/'+ item.cover_image}}"
                                          alt=""></td>
                 <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)"
-                    data-target="#wait_shelves_remarks_modal">{{item.reason}}
+                    data-target={{waiteModel}}>{{item.reason}}
                 </td>
                 <td ng-if="wait_15" class="blue" ui-sref="wait_online({item:item,flag:1})">详情</td>
             </tr>
         </table>
         <!--分页开始-->
-        <ul class="pages">
-            <li ng-click="wait_Previous()">上一页</li>
-            <li class="pagenum" ng-repeat="page in wait_history_list" ng-click="wait_choosePage(page)"
-                ng-class="{active:isActivePage(page)}">{{page}}
-            </li>
-            <li ng-click="wait_Next()">下一页</li>
-            <li class="jumpto"><input type="text" class="size_input" ng-model="wait_topage"></li>
-            <li ng-click="wait_choosePage(wait_topage)">跳转</li>
-        </ul>
+        <tm-pagination conf="ConfigWait"></tm-pagination>
         <!--分页结束-->
     </section>
     <!--审核备注模态框-->

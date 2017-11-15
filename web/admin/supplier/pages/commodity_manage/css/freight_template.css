@@ -50,10 +50,10 @@ section{
 .distribution input{
     margin-left: 85px;
 }
-.distribution span:nth-child(3){
+.distribution>span:nth-child(3){
     margin-left: 10px;
 }
-.distribution span:nth-child(5){
+.distribution>span:nth-child(5){
     margin-left: 10px;
 }
 .distribution_div{
@@ -64,10 +64,10 @@ section{
     margin-top: 20px;
     padding-top: 20px;
 }
-.distribution_div span:nth-child(3){
+.distribution_div>span:nth-child(3){
     margin-left:35px;
 }
-.distribution_div span:nth-child(8){
+.distribution_div>span:nth-child(8){
     margin-left:10px;
 }
 .distribution_div input{
@@ -144,12 +144,12 @@ section{
     width: 120px;
     margin-bottom: 10px;
 }
-.city_more {
-    /*display:block;*/
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
+/*.city_more {*/
+    /*!*display:block;*!*/
+    /*white-space:nowrap;*/
+    /*overflow:hidden;*/
+    /*text-overflow:ellipsis;*/
+/*}*/
 .span_left{
     color: red;
     margin-left:150px;
@@ -160,4 +160,12 @@ section{
 }
 .a_active3{
     color: #5677FC!important;
+}
+
+.city_more > span + span::before {
+    content: "，"
+}
+
+.city_more > span:nth-child(3)::after {
+    content: "... ";
 }
