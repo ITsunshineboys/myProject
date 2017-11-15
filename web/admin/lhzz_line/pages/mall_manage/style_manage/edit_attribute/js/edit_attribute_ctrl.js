@@ -11,6 +11,9 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
+
+
+
     $scope.btnclick = true;
 
     let namesarr = []; //属性名称数组
@@ -90,9 +93,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         }
     }
 
-
-    // ng-blur="judge=!!storeform.storename.$invalid" ng-class={'tored':storeform.storename.$invalid&&alljudgefalse||storeform.storename.$error.required&&judge}
-
     /*保存属性*/
     $scope.saveProp = function () {
         namesarr = [];
@@ -108,8 +108,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             unitsarr.push($scope.propattrs[i].cur_unit.unit);
         }
 
-
-        console.log(valuesarr)
 
         for(let i=0;i<unitsarr.length;i++){
             switch (unitsarr[i]){
