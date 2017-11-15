@@ -41,7 +41,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
             ['Undo','Redo','formatmatch','removeformat', 'Bold','italic','underline','strikethrough','fontborder',
                 'horizontal','fontfamily', 'fontsize','justifyleft', 'justifyright',
                 'justifycenter', 'justifyjustify', 'forecolor',  'backcolor','insertorderedlist', 'insertunorderedlist',
-                'rowspacingtop','rowspacingbottom','attachment','imagecenter','simpleupload', 'time', 'date', 'preview']
+                'rowspacingtop','rowspacingbottom','imagecenter','simpleupload', 'time', 'date', 'preview']
         ],
 
         //初始化编辑器内容

@@ -44,7 +44,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
             ['Undo','Redo','formatmatch','removeformat', 'Bold','italic','underline','strikethrough','fontborder',
                 'horizontal','fontfamily', 'fontsize','justifyleft', 'justifyright',
                 'justifycenter', 'justifyjustify', 'forecolor',  'backcolor','insertorderedlist', 'insertunorderedlist',
-                'rowspacingtop','rowspacingbottom','attachment','imagecenter','simpleupload', 'time', 'date', 'preview']
+                'rowspacingtop','rowspacingbottom','imagecenter','simpleupload', 'time', 'date', 'preview']
         ],
 
         //首行缩进距离,默认是2em
@@ -70,27 +70,6 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
         //是否开启字数统计
         wordCount:false
     }
-	// /*获取所有分类名称*/
-	// $scope.alltitles = (function () {
-	// 	$http({
-	// 		method: "get",
-	// 		url: baseUrl+"/mall/categories-manage-admin",
-	// 	}).then(function (res) {
-	// 		for (let key in res.data.data.categories) {
-	// 			$scope.idarr.push(res.data.data.categories[key].title)
-	// 			$http({
-	// 				method: "get",
-	// 				url: baseUrl+"/mall/categories-manage-admin",
-	// 				params: {pid: res.data.data.categories[key].id}
-	// 			}).then(function (res) {
-	// 				for (let key in res.data.data.categories) {
-	// 					$scope.idarr.push(res.data.data.categories[key].title)
-	// 				}
-	// 			})
-	// 		}
-	// 	})
-	// })()
-
 
 	/*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
