@@ -605,9 +605,9 @@ class OrderController extends Controller
             }
     }
     
-  /**
-     * 支付宝线下店商城异步返回操作
-     */
+    /**
+    * 支付宝线下店商城异步返回操作
+    */
    public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -776,9 +776,21 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
-
-
-            if ($orders==[])
+            if (! Yii::$app->session['address_id']
+                || !Yii::$app->session['invoice_id']
+                || !Yii::$app->session['goods_id']
+                || !Yii::$app->session['goods_num']
+                || !Yii::$app->session['order_price']
+                || !Yii::$app->session['goods_name']
+                || !Yii::$app->session['pay_name']
+                || !Yii::$app->session['supplier_id']
+                || !Yii::$app->session['freight']
+                || !Yii::$app->session['return_insurance']
+                || !Yii::$app->session['body']
+                || !Yii::$app->session['order_no']
+                || !Yii::$app->session['buyer_message']
+                || !Yii::$app->session['total_amount']
+            )
             {
                 $code=1000;
                 return Json::encode([
@@ -786,6 +798,17 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+                $address=Invoice::findOne(Yii::$app->session['invoice_id']);
+                {
+                    if (!$address)
+                    {
+                        $code=1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                }
             $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
             if (!$invoice)
             {
