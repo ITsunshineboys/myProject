@@ -1759,5 +1759,11 @@ class SiteController extends Controller
         }
     }
 
-
+    /**
+     * Get ue config
+     */
+    public function actionConfigUe()
+    {
+        return file_get_contents(Yii::$app->basePath . '/config/config_ue.json');
+    }
 }
