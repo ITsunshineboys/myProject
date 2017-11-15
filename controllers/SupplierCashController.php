@@ -409,6 +409,6 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-        var_dump(UserCashregister::find()->asArray()->where(['status'=>2])->all());
+        var_dump(UserCashregister::find()->asArray()->all());
     }
 }
