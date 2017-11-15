@@ -301,8 +301,16 @@ class Worker extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function basicMessage($select = [],$where = [])
+    /**
+     * 基本信息查询
+     * @param array $select
+     * @param array $where
+     * @return array|null|ActiveRecord
+     */
+    public static function basicMessage($where = [])
     {
+        // 还差一个工号没查询
+        $select = "worker.icon,worker.native_place,worker.status,user.mobile,user.aite_cube_no,user.username,user.create_time,user_role.review_time";
         $message = self::find()
             ->select($select)
             ->where($where)
@@ -310,6 +318,37 @@ class Worker extends \yii\db\ActiveRecord
             ->leftJoin('user_role','user_role.user_id = user.id')
             ->asArray()
             ->one();
+        $message['create_time'] = date('Y-m-d H:i',$message['create_time']);
+        $message['review_time'] = date('Y-m-d H:i',$message['review_time']);
+
+        return $message;
+    }
+
+    public static function roleMessage($where = [])
+    {
+        // 工程质量 服务态度  出勤打卡  没查询
+        $select = "wt.worker_name,wr.rank_name,wg.growth_value,worker.province_code,worker.city_code,ws.skill,ur.review_status,worker.comprehensive_score,worker.feedback";
+
+
+        $message = self::find()
+            ->select($select)
+            ->where($where)
+            ->leftJoin('worker_type as wt','worker.worker_type_id = wt.id')
+            ->leftJoin('worker_rank as wr','wt.id = wr.worker_type_id')
+            ->leftJoin('worker_growth as wg','worker.id = wg.worker_id')
+            ->leftJoin('worker_skill as ws','worker.skill_ids = ws.id')
+            ->leftJoin('user as u','worker.uid = u.id')
+            ->leftJoin('user_role as ur','ur.user_id = u.id')
+            ->asArray()
+            ->one();
+
+
+        $province = District::findByCode($message['province_code']);
+        $city = District::findByCode($message['city_code']);
+        unset($message['province_code']);
+        unset($message['city_code']);
+        $message['province'] = $province->name;
+        $message['city'] = $city->name;
 
         return $message;
     }
