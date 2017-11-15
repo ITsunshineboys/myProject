@@ -33,7 +33,7 @@ class SupplierCashController extends Controller
         'mall-view'
     ];
 
-    const CSASH_STAUT_ALL=-1;
+
     const CASH_STATUS_ING = 1;
     const CASH_STATUS_DONE = 2;
     const CASH_STATUS_FAIL = 3;
@@ -290,7 +290,7 @@ class SupplierCashController extends Controller
         $time_type = trim(htmlspecialchars($request->get('time_type','all ')), '');
         $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->get('status', self::USER_CASH_STATUSES)), '');
+        $status = trim(htmlspecialchars($request->get('status', self::CASH_STATUS_ING)), '');
         $search = trim(htmlspecialchars($request->get('search', '')), '');
         if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
             || ($time_type == 'custom' && $time_end && $time_start > $time_end)
@@ -409,6 +409,6 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-        var_dump(UserCashregister::find()->asArray()->where(['status'=>3])->all());
+        var_dump(UserCashregister::find()->asArray()->where(['status'])->all());
     }
 }
