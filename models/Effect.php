@@ -119,8 +119,8 @@ class Effect extends ActiveRecord
         }
         $tran=\Yii::$app->db->beginTransaction();
         try{
-            if(!isset($post['district_code'])){
-                $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅';
+            if(!isset($post['particulars'])){
+                $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅'.self::chinanum($post['kitchen']).'厨'.self::chinanum($post['toilet']).'卫';
             }else{
                 $particulars=$post['particulars'];
             }
