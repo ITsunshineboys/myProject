@@ -1071,6 +1071,12 @@ class OrderController extends Controller
                         $where .=" and CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
                     }
                 }
+
+            if ($timeType=='today')
+            {
+                $startTime=date('Y-m-d',time());
+                $endTime=date('Y-m-d',time()+24*60*60);
+            }
             if ($type=='all' && !$supplier_id )
             {
                 if ($keyword)
@@ -1084,14 +1090,16 @@ class OrderController extends Controller
                         $endTime && $where .= " and a.create_time <= {$endTime}";
                     }
                 }else{
-                    if ($startTime) {
-                        $startTime = (int)strtotime($startTime);
-                        $startTime && $where .= "a.create_time >= {$startTime}";
-                    }
-                    if ($endTime) {
-                        $endTime = (int)strtotime($endTime);
-                        $endTime && $where .= " and a.create_time <= {$endTime}";
-                    }
+
+
+                        if ($startTime) {
+                            $startTime = (int)strtotime($startTime);
+                            $startTime && $where .= "a.create_time >= {$startTime}";
+                        }
+                        if ($endTime) {
+                            $endTime = (int)strtotime($endTime);
+                            $endTime && $where .= " and a.create_time <= {$endTime}";
+                        }
                 }
             }
             else
@@ -1107,8 +1115,6 @@ class OrderController extends Controller
            }
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
-
-
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'lhzz');
         $code=200;
         return Json::encode([
