@@ -943,7 +943,6 @@ class OrderController extends Controller
             if ($order){
                 return true;
             }
-            $msg['total_fee']=401;
             $result=GoodsOrder::Wxpaylinenotifydatabase($arr,$msg);
             if ($result==true){
                 return true;

@@ -11,6 +11,7 @@ use app\models\User;
 use app\models\UserBankInfo;
 use app\models\UserCashregister;
 use app\models\UserFreezelist;
+use app\services\AuthService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
 use yii\db\Exception;
@@ -38,6 +39,7 @@ class SupplieraccountController extends  Controller{
         'account-thaw',
         'cashed-list',
         'cashed-view',
+        'category',
     ];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
