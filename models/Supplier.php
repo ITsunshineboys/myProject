@@ -502,10 +502,8 @@ class Supplier extends ActiveRecord
             ->leftJoin('user_bankinfo as ub', 'ub.uid=s.uid')
             ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
             ->leftJoin('user_freezelist as sf', 'sf.uid=s.uid')
-            ->andWhere(['ub.role_id' => self::ROLE_SUPPLIER])
-            ->where(['s.id' => $supplier_id,'ub.selected'=>1])
+            ->where(['s.id' => $supplier_id])
             ->one();
-        var_dump($array);die;
 
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_OFFLINE])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
