@@ -53,6 +53,12 @@ html,body{
   float: right;
   margin-top: 30px;
 }
+.logo_txt{
+  font-size: 18px;
+  color:rgba(64,148,246,1);
+  font-weight: bold;
+  margin: 20px 0 40px 0;
+}
 .forget_pw:after{
   content: '';
   display: table;

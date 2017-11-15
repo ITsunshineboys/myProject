@@ -17,6 +17,12 @@ html,body{
   display: inline-block;
   width: 50px;
 }
+.logo_txt{
+  font-size: 18px;
+  color:rgba(64,148,246,1);
+  font-weight: bold;
+  margin: 20px 0 40px 0;
+}
 .select{
   width: 245px;
   height: 35px;

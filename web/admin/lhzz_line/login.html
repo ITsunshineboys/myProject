@@ -11,13 +11,14 @@
 <body>
     <div class="content">
         <img src="lib/images/logo.png">
+        <p class="logo_txt">艾特生活</p>
         <!--手机号-->
         <div class="margin_top">
-            <input type="text" placeholder="请输入账号" class="enter_input"  ng-model="my_username" ng-class="{'border_red':error_flag}">
+            <input type="text" placeholder="账号" class="enter_input"  ng-model="my_username" ng-class="{'border_red':error_flag}">
         </div>
         <!--密码-->
         <div class="margin_top">
-            <input type="password"  placeholder="请输入密码" class="enter_input"  ng-model="my_password" ng-class="{'border_red':error_flag}">
+            <input type="password"  placeholder="密码" class="enter_input"  ng-model="my_password" ng-class="{'border_red':error_flag}">
         </div>
         <p class='error_red' ng-if="error_flag" ng-bind="error_txt"></p>
         <button class="login_btn"  ng-click="login()">登录</button>
