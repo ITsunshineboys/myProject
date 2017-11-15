@@ -271,7 +271,8 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::GOODS_ORDER . ' g')
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
-            ->where(['g.pay_status' => 1]);
+            ->where(['g.pay_status' => 1])
+            ->orderBy('g.paytime Desc');
 
         list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
         if ($time_start && $time_end && $time_end >= $time_start) {
@@ -322,9 +323,9 @@ class SupplierCashManager extends ActiveRecord
     {
             $query = (new Query())
             ->from(self::SUP_CASHREGISTER . ' as g')
-            ->where(['g.role_id' => self::ROLE_ID])
-            ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
+                ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.id')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
+                ->where(['g.role_id' => self::ROLE_ID])
             ->orderBy('g.apply_time Desc');
             if($time_type=='today'){
                 $query->orderBy('g.handle_time Desc');
