@@ -137,7 +137,7 @@ class UserCashregister extends \yii\db\ActiveRecord
             ->leftJoin('supplier as s', 'sc.uid=s.uid')
             ->leftJoin('user_bankinfo as ub', 's.uid=ub.uid')
             ->leftJoin('bankinfo_log as sb','sb.id=ub.log_id')
-            ->where(['sc.id' => $cash_id])
+            ->where(['sc.id' => $cash_id,'sc.status'=>2])
             ->one();
         if ($array) {
             $array['apply_time'] = date('Y-m-d H:i', $array['apply_time']);
