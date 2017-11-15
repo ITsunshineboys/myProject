@@ -110,7 +110,7 @@ class UserCashregister extends \yii\db\ActiveRecord
             ->limit($size)
             ->asArray()
             ->all();
-        var_dump($freezeList);die;
+
         foreach ($freezeList as &$freeze) {
             $freeze['apply_time']=date('Y-m-d H:i',$freeze['apply_time']);
             $freeze['real_money']=sprintf('%.2f',(float)$freeze['real_money']*0.01);
