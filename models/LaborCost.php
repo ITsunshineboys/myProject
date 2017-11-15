@@ -31,6 +31,7 @@ class LaborCost extends ActiveRecord
         ];
 
     const WEAK_CURRENT_PRICE = 30000;
+    const PRICE_CONVERT = 100;
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -76,6 +77,9 @@ class LaborCost extends ActiveRecord
             ->select($select)
             ->where(['and',['city_code' => $arr],['worker_kind'=>$craft],['rank'=>$rank]])
             ->one();
+        foreach ($labors as &$labor){
+            $labor['univalence'] = $labor['univalence'] / self::PRICE_CONVERT;
+        }
         return $labors;
     }
 

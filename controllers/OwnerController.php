@@ -280,7 +280,7 @@ class OwnerController extends Controller
             }
         } else {
             $worker_kind_details['quantity'] = WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
-            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / 100;
+            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / self::PRICE_UNITS;
             $workers['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
 
