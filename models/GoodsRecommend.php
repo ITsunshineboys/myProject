@@ -656,18 +656,19 @@ class GoodsRecommend extends ActiveRecord
      *
      * @param bool $insert
      * @param array $changedAttributes
-     */
+
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
 
         $cache = Yii::$app->cache;
         if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-//            $cache->delete(self::CACHE_KEY_CAROUSEL);
+            $cache->delete(self::CACHE_KEY_CAROUSEL);
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND);
         }
     }
+     */
 
     /**
      * Do some ops before insertion
