@@ -166,6 +166,7 @@ return [
     'supplieraccount/account-thaw'=>[1],
     'supplieraccount/cashed-list'=>[1],
     'supplieraccount/cashed-view'=>[1],
+    'supplieraccount/category'=>[1],
     'supplier-cash/cash-index'=>[1],
     'supplier-cash/order-list-today'=>[1],
     'supplier-cash/cash-list-today'=>[1],
