@@ -234,10 +234,9 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
-            $goods_order->amount_order=$post['total_amount']*100;
+            $goods_order->amount_order=$post['total_amount'];
             $goods_order->supplier_id=$supplier_id;
             $goods_order->invoice_id=$invoice_id;
             $goods_order->pay_status=1;
