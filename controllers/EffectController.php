@@ -326,6 +326,7 @@ class EffectController extends Controller
                     $endTime = (int)(strtotime($endTime)+24*60*60);
 
                 }else{
+
                     $endTime = (int)strtotime($endTime);
                 }
                 $endTime && $where .= " and create_time <= {$endTime}";

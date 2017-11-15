@@ -92,7 +92,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
-
         $offset = ($page - 1) * $size;
         $effectList = self::find()
             ->select($select)
