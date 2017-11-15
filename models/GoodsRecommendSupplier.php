@@ -202,6 +202,8 @@ class GoodsRecommendSupplier extends ActiveRecord
      */
     public static function carousel($supplierId, $districtCode = null)
     {
+        return self::_carousel($supplierId, $districtCode, self::$appFields);
+        /*
         $key = self::CACHE_KEY_CAROUSEL . $supplierId;
         $cache = Yii::$app->cache;
         $recommendGoods = $cache->get($key);
@@ -213,6 +215,7 @@ class GoodsRecommendSupplier extends ActiveRecord
         }
 
         return $recommendGoods;
+        */
     }
 
     /**
@@ -646,7 +649,7 @@ class GoodsRecommendSupplier extends ActiveRecord
      *
      * @param bool $insert
      * @param array $changedAttributes
-     */
+
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
@@ -657,7 +660,7 @@ class GoodsRecommendSupplier extends ActiveRecord
         } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
             $cache->delete(self::CACHE_KEY_SECOND . $this->supplier_id);
         }
-    }
+    }*/
 
     /**
      * Do some ops before insertion
