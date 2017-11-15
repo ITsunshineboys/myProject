@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="lib/css/login.css">
     <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="lib/css/common.css">
-    <title>艾特魔方-登录</title>
+    <title>艾特生活-商家后台</title>
 </head>
 <body>
 <div id="login_ctrl">
@@ -65,16 +65,16 @@
         <div class="content">
             <img src="lib/images/logo.png" class="img_logo" alt="">
             <!--选择登录身份-->
-            <div>
-                <select ng-model="rolo_value" class="select" ng-options="item.id as item.value for item in login_rolo"></select>
-            </div>
+            <!--<div>-->
+                <!--<select ng-model="rolo_value" class="select" ng-options="item.id as item.value for item in login_rolo"></select>-->
+            <!--</div>-->
             <!--手机号-->
             <div class="margin_top">
-                <input type="text" placeholder="请输入手机号" ng-class="{'border_red':error_flag}" class="enter_input" ng-model="phone_number">
+                <input type="text" placeholder="账号" ng-class="{'border_red':error_flag}" class="enter_input" ng-model="phone_number">
             </div>
             <!--密码-->
             <div class="margin_top">
-                <input type="password" placeholder="请输入密码" ng-class="{'border_red':error_flag}" class="enter_input" ng-model="password_number">
+                <input type="password" placeholder="密码" ng-class="{'border_red':error_flag}" class="enter_input" ng-model="password_number">
             </div>
             <!--忘记密码-->
             <!--错误提示-->
@@ -82,7 +82,7 @@
             <!--登录按钮-->
             <button class="login_btn" ng-click="supplier_login()">登录</button>
             <div>
-                <p class="forget_pw" data-toggle='modal' data-target="#forget_pw_modal" ng-click='forget_pw_click()'>忘记密码？</p>
+                <a class="forget_pw" data-toggle='modal' data-target="#forget_pw_modal" ng-click='forget_pw_click()'>忘记密码？</a>
             </div>
         </div>
     </div>

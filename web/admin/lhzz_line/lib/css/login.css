@@ -10,6 +10,7 @@ html,body{
   top:50%;
   left:50%;
   transform: translate(-50%,-50%);
+  text-align: center;
 }
 .txt_left{
   margin-right: 10px;
@@ -45,6 +46,7 @@ html,body{
   line-height: 35px;
   float: right;
   margin-top: 30px;
+  cursor: pointer;
 }
 .border_red{
   border: 1px solid #E51C23;
