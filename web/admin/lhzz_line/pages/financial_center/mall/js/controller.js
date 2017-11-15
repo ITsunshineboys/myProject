@@ -80,7 +80,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.params1.search = ''
             $scope.keyword1 = ''
             if($scope.params1.time_type == 'custom'){
-                if($scope.params1.time_start!=''||$scope1.params.time_end!=''){
+                if($scope.params1.time_start!=''||$scope.params1.time_end!=''){
                     tablePages1()
                 }
             }else{
@@ -467,7 +467,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 $scope.params.search = $scope.keyword
                 $scope.Config.currentPage = 1
                 $scope.params.time_type = 'all'
-                $scope.params.status = 2
+                $scope.params.status = 0
                 tablePages()
             }
         }
