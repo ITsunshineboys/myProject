@@ -396,20 +396,21 @@ header span{
     height: 12rem;
 }
 #num_modal, #address_order_modal{
-    height: 12rem;
+    padding: 1rem;
+    /* height: 12rem; */
     margin-top: 16rem;
-    line-height: 6rem;
+    /* line-height: 6rem; */
     text-align: center;
     border-radius: .6rem;
 }
 #num_modal p{
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #333;
 }
 #num_modal button{
     color: #333;
     background-color: white;
-    width: 20.5rem;
+    /*width: 20.5rem;*/
     height: 2.8rem;
     line-height: 2.8rem;
     border: 0;
@@ -424,7 +425,7 @@ header span{
 #address_order_modal button{
     color: #53A8F4;
     background-color: white;
-    width: 20.5rem;
+    /*width: 20.5rem;*/
     height: 2.8rem;
     line-height: 2.8rem;
     border: 0;
@@ -434,7 +435,7 @@ header span{
 }
 .xian{
     background-color:#dcdcdc;
-    width: 21rem;
+    /*width: 21rem;*/
     height: 2px;
     margin-top: 1.2rem;
 }
