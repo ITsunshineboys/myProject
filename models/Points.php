@@ -12,7 +12,10 @@ use yii\db\ActiveRecord;
 class Points extends ActiveRecord
 {
     const TABLE_NAME = 'points';
-    const DEFAULT_POINTS = 48;
+
+    const WEAK_CURRENT_POINTS = 3;
+    const STRONG_CURRENT_POINTS = 48;
+    const WATERWAY_POINTS = 6;
     /**
      * @return string 返回该AR类关联的数据表名
      */

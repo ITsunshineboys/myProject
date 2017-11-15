@@ -741,7 +741,7 @@ class OrderController extends Controller
             'body'=>$body,
             'order_no'=>$order_no,
             'buyer_message'=>$buyer_message,
-            'total_amount'=>$total_amount*100
+            'total_amount'=>$total_amount
         );
         $url=(new PayService())->GetOrderOpenid($orders);
         $code=200;
@@ -777,6 +777,7 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
+
             if ($orders==[])
             {
                 $code=1000;
@@ -942,7 +943,7 @@ class OrderController extends Controller
             if ($order){
                 return true;
             }
-            $msg['total_fee']=1;
+            $msg['total_fee']=401;
             $result=GoodsOrder::Wxpaylinenotifydatabase($arr,$msg);
             if ($result==true){
                 return true;
