@@ -782,13 +782,12 @@ class OrderController extends Controller
                 || !Yii::$app->session['pay_name']
                 || !Yii::$app->session['supplier_id']
                 || !Yii::$app->session['freight']
-                || !Yii::$app->session['return_insurance']
                 || !Yii::$app->session['body']
                 || !Yii::$app->session['order_no']
-                || !Yii::$app->session['buyer_message']
                 || !Yii::$app->session['total_amount']
             )
             {
+                var_dump($orders);exit;
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
