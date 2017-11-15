@@ -108,7 +108,6 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $log->position=$position;
                     $log->bankbranch=$bankbranch;
                     $log->create_time=$time;
-                    $log->selected=1;
                     $res2=$log->save(false);
                     if (!$res2)
                     {
@@ -132,19 +131,18 @@ class UserBankInfo extends \yii\db\ActiveRecord
                                 return $code;
                             }
                         }
-
                     }
-                    $bankInfo=new self;
-                    $bankInfo->log_id=$log->id;
-                    $bankInfo->uid=$user->id;
-                    $bankInfo->role_id=$role_id;
-                    $bankInfo->selected=1;
-                    $res1=$bankInfo->save(false);
-                    if (!$res1){
-                        $code=500;
-                        $trans->rollBack();
-                        return $code;
-                    }
+                        $bankInfo=new self;
+                        $bankInfo->log_id=$log->id;
+                        $bankInfo->uid=$user->id;
+                        $bankInfo->role_id=$role_id;
+                        $bankInfo->selected=1;
+                        $res1=$bankInfo->save(false);
+                        if (!$res1){
+                            $code=500;
+                            $trans->rollBack();
+                            return $code;
+                        }
                     $trans->commit();
                     $code=200;
                     return $code;
