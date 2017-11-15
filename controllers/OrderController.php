@@ -1362,7 +1362,7 @@ class OrderController extends Controller
             $endTime = trim(Yii::$app->request->get('end_time', ''));
             if (($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ) {
+            ){
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -1372,7 +1372,6 @@ class OrderController extends Controller
         }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
         }
-
 
 //        if ($timeType=='today')
 //        {
@@ -4513,8 +4512,6 @@ class OrderController extends Controller
         }
     }
 
-
-
    /**
      * app购买商品
      * @return string
@@ -4645,41 +4642,32 @@ class OrderController extends Controller
         }
     }
 
-    public function  actionTest()
-    {
-        $user=$user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code=UserNewsRecord::AddNewRecord($user,'123','12315',6,'hello  world','123123','123123',1);
-        echo $code;
-    }
-
-
-    public function actionDelData()
-    {
-        $request=Yii::$app->request;
-        $order_no=$request->post('order_no');
-        $GoodsOrder=GoodsOrder::Find()->where(['order_no'=>$order_no])->all();
-        foreach ($GoodsOrder as &$list)
-        {
-            $list->delete();
-        }
-        $OrderGoods=OrderGoods::find()->where(['order_no'=>$order_no])->all();
-        foreach ($OrderGoods as &$list)
-        {
-            $list->delete();
-        }
-        $UserAccessDetail=UserAccessdetail::find()->where(['order_no'=>$order_no])->all();
-        foreach ($UserAccessDetail as &$list)
-        {
-            $list->delete();
-        }
-    }
+//    public function actionDelData()
+//    {
+//        $request=Yii::$app->request;
+////        $order_no=$request->post('order_no');
+//        $GoodsOrder=GoodsOrder::Find()->where(['order_refer'=>2])->all();
+//        foreach ($GoodsOrder as &$list)
+//        {
+//            $list->delete();
+//            $OrderGoods=OrderGoods::find()->where(['order_no'=>$list->order_no])->all();
+//            foreach ($OrderGoods as &$OrderGood)
+//            {
+//                $OrderGood->delete();
+//            }
+//            $UserAccessDetail=UserAccessdetail::find()->where(['order_no'=>$list->order_no])->all();
+//            foreach ($UserAccessDetail as &$UserAccess)
+//            {
+//                $UserAccess->delete();
+//            }
+//            $express=Express::find()->where(['order_no'=>$list->order_no])->all();
+//            foreach ($express as &$expres)
+//            {
+//                $expres->delete();
+//            }
+//        }
+//
+//    }
 
 
 

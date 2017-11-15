@@ -222,9 +222,9 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-//        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
-//            return false;
-//        }
+        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
+            return false;
+        }
         $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
@@ -323,7 +323,6 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
-
             $Goods=Goods::findOne($goods_id);
             $Goods->left_number-=$goods_num;
             $Goods->sold_number+=$goods_num;

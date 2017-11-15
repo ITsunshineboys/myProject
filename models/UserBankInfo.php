@@ -108,6 +108,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $log->position=$position;
                     $log->bankbranch=$bankbranch;
                     $log->create_time=$time;
+                    $log->selected=1;
                     $res2=$log->save(false);
                     if (!$res2)
                     {
