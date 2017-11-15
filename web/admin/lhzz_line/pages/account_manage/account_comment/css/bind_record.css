@@ -1,4 +1,4 @@
-/*Í·²¿¿ªÊ¼*/
+/*Í·ï¿½ï¿½ï¿½ï¿½Ê¼*/
 header{
     height: 60px;
     line-height: 60px;
@@ -19,9 +19,9 @@ header{
 header img{
     margin-left:72%;
 }
-/*Í·²¿½áÊø*/
+/*Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 
-/*Ö÷ÌåÄÚÈÝ*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 section{
     padding-left: 40px;
 }
@@ -48,8 +48,8 @@ section{
     border-top: none;
 }
 .btn_back{
-    margin-top: 50px;
-    margin-bottom: 40px;
+    position: absolute;
+    bottom: 5rem;
     display: inline;
 }
 .btn_back button{
@@ -60,7 +60,7 @@ section{
     color: #5E6166;
     border: 1px solid #5E6166;
 }
-/*·ÖÒ³´¦Àí*/
+/*ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½*/
 .pages{
     width: 90%;
     margin: 20px auto 0;

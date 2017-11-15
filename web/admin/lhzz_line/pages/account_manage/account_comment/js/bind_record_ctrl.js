@@ -2,7 +2,7 @@
  * Created by xl on 2017/8/10 0010.
  */
 var bind_record= angular.module("bind_record",[])
-    .controller("bind_record_ctrl",function ($scope,$http,$state,$stateParams) {
+    .controller("bind_record_ctrl",function ($scope,$http,$state,$stateParams,_ajax) {
         $scope.id = $stateParams.id;
         $scope.icon = $stateParams.icon;
         $scope.nickname = $stateParams.nickname;
@@ -19,108 +19,52 @@ var bind_record= angular.module("bind_record",[])
         $scope.status_remark = $stateParams.status_remark;
         $scope.status_operator = $stateParams.status_operator;
         $scope.a = $stateParams.a;
-        console.log($scope.a);
-        console.log($scope.id);
-        console.log($scope.status_remark);
-        console.log($scope.status_operator);
-
         $scope.flag = true;
         $scope.strat = false;
 
+
+        /*分页配置*/
+        $scope.Config = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages();
+            }
+        };
+        //獲取賬號过往的绑定记录
+        let tablePages = function () {
+            $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+            _ajax.get('/mall/reset-mobile-logs',$scope.params,function (response) {
+                console.log(response);
+                $scope.past_record = response.data.reset_mobile_logs.details;
+                $scope.Config.totalItems = response.data.reset_mobile_logs.total;
+            })
+        };
+        $scope.params = {
+            user_id:+$scope.id,
+            page: 1,                        // 当前页数
+            "sort[]":"id:4",
+        };
         //降序
         $scope.changePic = function () {
             $scope.flag = false;
             $scope.strat = true;
             console.log(1112);
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/reset-mobile-logs',
-                params:{
-                    "sort[]":"id:3"
-                }
-
-            }).then(function successCallback(response) {
-                $scope.past_record = response.data.data.reset_mobile_logs.details;
-                console.log(response);
-            });
+            $scope.params['sort[]'] = 'id:3';
+            tablePages();
 
         };
         //升序
         $scope.changePicse = function () {
             $scope.strat = false;
             $scope.flag = true;
-            $http({
-                method: 'get',
-                url: baseUrl+'/mall/reset-mobile-logs',
-                params:{
-                    "sort[]":"id:4"
-                }
-            }).then(function successCallback(response) {
-                $scope.past_record = response.data.data.reset_mobile_logs.details;
-                console.log(response);
-            });
+            $scope.params['sort[]'] = 'id:4';
+            tablePages();
         };
 
-        //过往绑定记录开始
-        $http({
-            method: 'get',
-            url: baseUrl+'/mall/reset-mobile-logs',
-            params:{
-                user_id:+$scope.id
-            }
-        }).then(function successCallback(response) {
-            console.log(response);
-            $scope.past_record = response.data.data.reset_mobile_logs.details;
-            /*-----------------------------分页-----------------------*/
-            $scope.history_list_colse=[];
-            $scope.history_all_page=Math.ceil(response.data.data.reset_mobile_logs.total/12);//获取总页数
-            console.log($scope.history_all_page);
-            let all_num=$scope.history_all_page;//循环总页数
-            for(let i=0;i<all_num;i++){
-                $scope.history_list_colse.push(i+1);
-                console.log($scope.history_list_colse)
-            }
-            //点击数字，跳转到多少页
-            $scope.choosePageColse = function (page) {
-                $scope.page=page;
-                // $scope.isActivePage=function (now_page) {
-                console.log($scope.page);
-                // };
-                $http.get(baseUrl+'/mall/reset-mobile-logs',{
-                    params:{
-                        'page':$scope.page
-                    }
-                }).then(function (response) {
-                    console.log(response);
-                    $scope.past_record = response.data.data.reset_mobile_logs.details;
 
-                },function (err) {
-                    console.log(err);
-                });
-            };
-            //显示当前是第几页的样式
-            $scope.isActivePage=function (page) {
-                return $scope.page==page;
-            };
-            //进入页面，默认设置为第一页
-            if($scope.page===undefined){
-                $scope.page=1;
-            }
-            //上一页
-            $scope.Previous=function () {
-                if($scope.page>1){   //当页数大于1时，执行
-                    $scope.page--;
-                    $scope.choosePageColse($scope.page);
-                }
-            };
-            //下一页
-            $scope.Next=function () {
-                if($scope.page < $scope.history_all_page){ //判断是否为最后一页，如果不是，页数+1,
-                    $scope.page++;
-                    $scope.choosePageColse($scope.page);
-                }
-            }
-        });
+        // });
 
         //点击返回保存状态
         $scope.getReturn = function () {

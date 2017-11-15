@@ -1103,7 +1103,7 @@ angular.module("all_controller", ['ngCookies'])
         $rootScope.baseUrl = baseUrl;
         window.addEventListener("hashchange", function() {
             // 注册返回按键事件
-            $('.modal-backdrop').remove()
+            $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
         $scope.harvestAddress  = $stateParams.harvestAddress;
@@ -1289,7 +1289,7 @@ angular.module("all_controller", ['ngCookies'])
         $rootScope.baseUrl = baseUrl;
         window.addEventListener("hashchange", function() {
             // 注册返回按键事件
-            $('.modal-backdrop').remove()
+            $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
         $scope.show_harvest = false;
@@ -1421,7 +1421,8 @@ angular.module("all_controller", ['ngCookies'])
                     region:$scope.harvestAddress
                 },config).then(function (response) {
                     console.log(response);
-                    $scope.address_id = response.data.data.address_id;
+                    sessionStorage.setItem('address_id',response.data.data.address_id);
+                    // $scope.address_id = response.data.data.address_id;
                     console.log($scope.address_id);
                     // alert($scope.address_id)
                 });
@@ -1441,7 +1442,7 @@ angular.module("all_controller", ['ngCookies'])
                     method: 'get',
                     url: 'http://test.cdlhzz.cn/order/getaddress',
                     params:{
-                        address_id:+$scope.address_id
+                        address_id:sessionStorage.getItem('address_id')
                     }
                 }).then(function successCallback(response) {
                     console.log(response);
@@ -1575,7 +1576,7 @@ angular.module("all_controller", ['ngCookies'])
                                         order_price:$scope.allCost,
                                         goods_num:+$scope.shopNum,
                                         goods_id:+$scope.mall_id,
-                                        address_id:+$scope.address_id,
+                                        address_id:+$scope.sessionStorage.getItem('address_id'),
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
@@ -1604,7 +1605,7 @@ angular.module("all_controller", ['ngCookies'])
                                     order_price:+$scope.allCost,
                                     goods_num:+$scope.shopNum,
                                     goods_id:+$scope.mall_id,
-                                    address_id:+$scope.address_id,
+                                    address_id:+sessionStorage.getItem('address_id'),
                                     invoice_id:+$scope.invoice_id,
                                     supplier_id:+$scope.supplier_id,
                                     freight:+$scope.freight,

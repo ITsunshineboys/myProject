@@ -89,8 +89,7 @@ h4 {
 
 }
 .btn_back{
-    margin-top: 50px;
-    margin-bottom: 40px;
+    position: absolute;
     display: inline;
 }
 .btn_back button{

@@ -37,13 +37,31 @@ var change_num= angular.module("change_num",[])
                    method: 'get',
                    url: baseUrl+'/mall/user-list'
                }).then(function successCallback(response) {
+                   console.log(response);
                    $scope.old_num = response.data.data.user_list.details;
-                   if( JSON.stringify( $scope.old_num).indexOf('"mobile":'+$scope.new_num)!=-1) {
-                       $scope.tel_error = '*该手机号已被注册，请重新输入';
-                       $scope.change_success = "";
-                   } else {
-                       $scope.change_success = 'modal'
-                   }
+                   $http({
+                       method: 'get',
+                       url: baseUrl+'/site/check-mobile-registered',
+                       params:{
+                           mobile:$scope.new_num
+                       }
+                   }).then(function successCallback(response) {
+                       console.log(response);
+                       $scope.codeMobile = response.data.code;
+                       console.log($scope.codeMobile);
+                       if( $scope.codeMobile == 1019) {
+                           $scope.tel_error = '*该手机号已被注册，请重新输入';
+                           $scope.change_success = "";
+                       } else {
+                           $scope.change_success = 'modal'
+                       }
+                   })
+                   // if( JSON.stringify( $scope.old_num).indexOf('"mobile":'+$scope.new_num)!=-1) {
+                   //     $scope.tel_error = '*该手机号已被注册，请重新输入';
+                   //     $scope.change_success = "";
+                   // } else {
+                   //     $scope.change_success = 'modal'
+                   // }
                })
            }
        };
