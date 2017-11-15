@@ -269,7 +269,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
 
   /*--------------编辑保存按钮----------------------*/
   $scope.edit_confirm=function (valid,error) {
-
     if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag){
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];
@@ -347,7 +346,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
       if($scope.goods_select_attrs[0]!=undefined){
           for(let[key,value] of $scope.goods_select_attrs.entries()){
               $scope.pass_attrs_name.push(value.name);
-              $scope.pass_attrs_value.push(value.value[0]);
+              $scope.pass_attrs_value.push(value.selected);
           }
       }
       console.log($scope.pass_attrs_name);
