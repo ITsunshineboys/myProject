@@ -7,9 +7,9 @@
  */
 
 namespace app\models;
-
 use app\services\ModelService;
 use yii\db\ActiveRecord;
+use Yii;
 
 class UserNewsRecord extends ActiveRecord
 {
@@ -23,9 +23,52 @@ class UserNewsRecord extends ActiveRecord
         return 'user_news_record';
     }
 
-    public  function  AddNewRecord()
+    /**
+     * @return int
+     */
+    public static function  AddNewRecord($user, $title, $role_id, $content, $order_no, $sku, $type)
     {
-            echo 1;exit;
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $record=new UserNewsRecord();
+            $record->uid=$user->id;
+            $record->role_id=$role_id;
+            $record->title=$title;
+            $record->content=$content;
+            $record->send_time=time();
+            $record->order_no=$order_no;
+            $record->sku=$sku;
+            if (!$record->save(false))
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+            $tran->commit();
+        }catch (\Exception $e){
+            $code=1000;
+            $tran->rollBack();
+            return $code;
+        }
+        $registration_id=$user->registration_id;
+        $push=new Jpush();
+        $extras =[
+            'role_id'=>$role_id,
+            'order_no'=>$order_no,
+            'sku'=>$sku,
+            'type'=>$type,
+        ];
+        //推送附加字段的类型
+        $m_time = '86400';//离线保留时间
+        $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+        $result = $push->push($receive,$title,$content,$extras, $m_time);
+        if (!$result)
+        {
+            $code=1000;
+            return $code;
+        }
+        $code=200;
+        return $code;
     }
 
 

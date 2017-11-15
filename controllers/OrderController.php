@@ -55,8 +55,6 @@ class OrderController extends Controller
 
 
     const WXPAY_LINE_GOODS='线下店商城';
- 
-
     /**
      * Actions accessed by logged-in users
      */
@@ -1909,7 +1907,8 @@ class OrderController extends Controller
                     'order_no'=>$order_no,
                     'sku'=>$sku,
                     'type'=>GoodsOrder::STATUS_DESC_DETAILS,
-                ];//推送附加字段的类型
+                ];
+                //推送附加字段的类型
                 $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='已取消订单';
@@ -1929,7 +1928,7 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user);
+           $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user);
            if ($code ==200){
                return Json::encode([
                    'code' => $code,
@@ -4640,6 +4639,42 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
+        }
+    }
+
+    public function  actionTest()
+    {
+        $user=$user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=UserNewsRecord::AddNewRecord($user,'123','12315',6,'hello  world','123123','123123',1);
+        echo $code;
+    }
+
+
+    public function actionDelData()
+    {
+        $request=Yii::$app->request;
+        $order_no=$request->post('order_no');
+        $GoodsOrder=GoodsOrder::Find()->where(['order_no'=>$order_no])->all();
+        foreach ($GoodsOrder as &$list)
+        {
+            $list->delete();
+        }
+        $OrderGoods=OrderGoods::find()->where(['order_no'=>$order_no])->all();
+        foreach ($OrderGoods as &$list)
+        {
+            $list->delete();
+        }
+        $UserAccessDetail=UserAccessdetail::find()->where(['order_no'=>$order_no])->all();
+        foreach ($UserAccessDetail as &$list)
+        {
+            $list->delete();
         }
     }
 
