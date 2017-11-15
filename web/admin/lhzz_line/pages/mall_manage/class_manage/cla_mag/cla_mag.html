@@ -50,7 +50,8 @@
                         <td>分类名称</td>
                         <td>分类级别</td>
                         <td ng-click=sortTime()>
-                            上架时间
+                            <span ng-if="onsale_flag">上架时间</span>
+                            <span ng-if="offsale_flag">下架时间</span>
                             <span class="sortpic">
                                  <i class="glyphicon glyphicon-triangle-top"
                                     ng-class="{'active':sortStyleFunc() == 4}"></i>

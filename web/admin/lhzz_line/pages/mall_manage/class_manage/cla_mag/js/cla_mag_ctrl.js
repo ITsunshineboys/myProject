@@ -7,8 +7,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         }
     };
 
-    console.log($stateParams.offsale_flag)
-
     let singleoffid;   //单个下架分类id
     let singleonid;    //单个上架分类id
 
@@ -17,7 +15,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         status: 1, //已上架
         pid: 0,   //父分类id
         page: 1,  //当前页数
-        'sort[]': "id:3" //排序规则 默认按创建时间降序排列
+        'sort[]': "online_time:3" //排序规则 默认按上架时间降序排列
     }
     /*全选ID数组*/
     $scope.table = {
@@ -95,11 +93,12 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     function initFunc(obj) {
         $scope.table.roles.length = 0;
         let tab = obj == 'onsale_flag' ? 1 : 0;
+        let sortflag = obj == 'onsale_flag' ? "online_time:3":"offline_time:3"
         $scope.params = {
             status: tab, //已上架
             pid: 0,   //父分类id
             page: 1,  //当前页数
-            'sort[]': "id:3" //排序规则 默认按创建时间降序排列
+            'sort[]': sortflag //排序规则
         }
         $scope.dropdown = {
             firstselect: 0,
@@ -109,9 +108,13 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
     }
 
 
-    // 下单时间排序
+    // 时间排序
     $scope.sortTime = function () {
-        $scope.params['sort[]'] = $scope.params['sort[]'] == 'id:3' ? 'id:4' : 'id:3';
+        if($scope.onsale_flag){
+            $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
+        }else {
+            $scope.params['sort[]'] = $scope.params['sort[]'] == 'offline_time:3' ? 'offline_time:4' : 'offline_time:3';
+        }
         $scope.table.roles.length = 0;
         $scope.pageConfig.currentPage = 1;
         tableList();
@@ -120,7 +123,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
-        $scope.params['sort[]'] = 'id:3';      // 下单时间排序
+        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
         subClass(value);
         $scope.params.pid = value;
         tableList()
@@ -128,7 +131,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
 
 
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
-        $scope.params['sort[]'] = 'id:3';      // 下单时间排序
+        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
         if (value == oldValue) {
             return
         }
