@@ -21,7 +21,7 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
     };
 
     function totalNumber() {
-        console.log('数组获取');
+        console.log('数字获取');
         $http({
             method: "get",
             url: baseUrl+"/order/get-order-num",
@@ -534,7 +534,6 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
             sku:$scope.wait_send_sku,
             shipping_type:1
         },function (res) {
-            console.log("发货成功");
             tablePages();
             tableList();
             totalNumber();
@@ -554,12 +553,11 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
                     $scope.track_flag=true;
                     $scope.track_font='快递单号错误，请重新输入';
                 }else if(res.code==200){
-                    console.log("快递单号发货成功");
                     $scope.track_flag=false;
                     $('#track_confirm_modal').modal('hide');
                     tablePages();
                     tableList();
-                    // totalNumber();
+                    totalNumber();
 
                 }
             })
