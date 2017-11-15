@@ -724,7 +724,7 @@ class OrderController extends Controller
         }
         $order_no =GoodsOrder::SetOrderNo();
         //商品描述，可空
-        $body =self::WXPAY_LINE_GOODS.'-'.$subject;
+        $body =$subject;
         $orders=array(
             'address_id'=>$address_id,
             'invoice_id'=>$invoice_id,
@@ -1468,10 +1468,10 @@ class OrderController extends Controller
                 switch ($order_information['role_id'])
                 {
                     case 7:
-                        $goods_data['role']='平台采购价';
+                        $goods_data['role']='平台价';
                         break;
                     case 6:
-                        $goods_data['role']='供应商采购价格';
+                        $goods_data['role']='供应商采购价';
                         break;
                     case 5:
                         $goods_data['role']='装修公司采购价';
