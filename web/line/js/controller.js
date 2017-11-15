@@ -1554,7 +1554,7 @@ angular.module("all_controller", ['ngCookies'])
                         console.log(123456);
                         $('#order_address_modal').modal('show');
                         // $scope.order_address_model = '#order_address_modal';
-                        $scope.order_order = '不在配送范围内，请重新填写'
+                        $scope.order_order = '该商品不在配送范围内，请重新填写'
                     }
                     if($scope.code == 200){
                         console.log('成功');

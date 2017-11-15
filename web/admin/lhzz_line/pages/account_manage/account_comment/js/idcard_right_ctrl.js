@@ -2,7 +2,7 @@
  * Created by xl on 2017/8/10 0010.
  */
 var idcard_right= angular.module("idcard_right",[])
-    .controller("idcard_right_ctrl",function ($scope,$http,$state,$stateParams) {
+    .controller("card_right_ctrl",function ($scope,$http,$state,$stateParams) {
         $scope.id = $stateParams.id;
         $scope.icon = $stateParams.icon;
         $scope.nickname = $stateParams.nickname;

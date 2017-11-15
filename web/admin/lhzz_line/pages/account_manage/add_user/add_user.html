@@ -15,6 +15,7 @@
             <span class="title">新手机号</span>
             <div class="inline_block">
                 <input type="text" placeholder="请输入新手机号"  name="new_num"
+                       onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"
                        class="input_style"  ng-blur="getBlur()" ng-model="new_num" maxlength="11" >
                 <div>
 
@@ -50,7 +51,7 @@
             <span class="margin_left">*6-25个字符，包含大小写字母、数字</span>
         </div>
 
-        <span class="btn_style" data-toggle="modal" data-target="#ok_modal" ng-click="changeNum ()">确定</span>
+        <span class="btn_style" data-toggle="modal" data-target="{{add_model}}" ng-click="changeNum ()">确定</span>
         <span class="btn_style" ui-sref="account_index" ng-click="cancel()">取消</span>
         <!--添加成功-->
         <div class="modal fade" id="ok_modal" data-backdrop="static" data-keyboard="false">
@@ -61,7 +62,7 @@
                         <h4 class="modal-title">提示</h4>
                     </div>
                     <div class="modal-body" style="height: 100px;">
-                        <span>添加成功</span>
+                        <span>{{comment}}</span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="getBack ()">确定</button>

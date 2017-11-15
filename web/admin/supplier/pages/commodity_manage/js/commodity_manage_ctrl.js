@@ -110,6 +110,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             tablePages();
         }
         //已下架
+
         if ($stateParams.down_flag == true) {
             $scope.on_flag = false;
             $scope.down_flag = true;
@@ -130,12 +131,28 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.wait_flag = true;
             $scope.logistics_flag = false;
             /*初始化已下架的搜索*/
-            $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+            $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
             $scope.down_search_value = '';//清空输入框值
             // $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
             $scope.params.status = 1;
-            tablePagesWait()
+            tablePages()
+        }
+        //物流模板
+        $scope.logistics_flag = $stateParams.logistics_flag;
+        console.log($scope.logistics_flag);
+        if ($stateParams.logistics_flag == true) {
+            $scope.on_flag = false;
+            $scope.down_flag = false;
+            $scope.wait_flag = false;
+            $scope.logistics_flag = true;
+            /*初始化已下架的搜索*/
+            // $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+            // $scope.down_search_value = '';//清空输入框值
+            // // $scope.params.keyword = '';
+            // $scope.params['sort[]'] = 'publish_time:3';
+            // $scope.params.status = 1;
+            // tablePages()
         }
         /*---------------点击TAB  开始---------------------*/
         //已上架
@@ -171,6 +188,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             tablePages();
         };
         //等待下架
+
         $scope.wait_shelves = function () {
             $scope.wait_flag = true;
             $scope.on_flag = false;
@@ -716,7 +734,7 @@ let commodity_manage = angular.module("commodity_manage", [])
                 $scope.id = item.id;
                 $scope.name = item.name;
                 console.log($scope.id);
-                $state.go('template_details', {'id': $scope.id, 'name': $scope.name})
+                $state.go('template_details', {'id': $scope.id, 'name': $scope.name,'wait_flag':true})
             }
 
     })
