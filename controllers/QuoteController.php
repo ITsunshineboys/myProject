@@ -1545,6 +1545,7 @@ class QuoteController extends Controller
     public function actionDecorationEdit()
     {
         $post = \Yii::$app->request->post();
+        var_dump($post);exit;
         $decoration_add = DecorationAdd::findOne($post['id']);
         $decoration_add->correlation_message = $post['message'];
         $decoration_add->sku           = $post['code'];
