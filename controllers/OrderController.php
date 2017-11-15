@@ -1371,16 +1371,14 @@ class OrderController extends Controller
             }
         }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[1];
         }
 
 
-        if ($timeType=='today')
-        {
-            $startTime=date('Y-m-d',time());
-            $endTime=date('Y-m-d',time()+24*60*60);
-        }
+//        if ($timeType=='today')
+//        {
+//            $startTime=date('Y-m-d',time());
+//            $endTime=date('Y-m-d',time()+24*60*60);
+//        }
         $where .=" and supplier_id={$supplier->id}";
                 if ($startTime) {
                     $startTime = (int)strtotime($startTime);
