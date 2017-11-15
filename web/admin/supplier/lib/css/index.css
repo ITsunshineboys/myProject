@@ -1,87 +1,91 @@
-/*��������ʼ*/
-html,body{
+html, body {
     height: 100%;
     width: 100%;
 }
-.nav_box{
+
+.nav_box {
     width: 200px;
-    height:100% !important;
-    overflow:visible !important;
-    position:fixed;
-    left:0;
-    top:0;
+    height: 100% !important;
+    overflow: visible !important;
+    position: fixed;
+    left: 0;
+    top: 0;
     z-index: 200;
     background-color: #F5F7FA;
 }
-.nav_box .logo{
+
+.nav_box .logo {
     width: auto;
     height: 150px;
     text-align: center;
     line-height: 150px;
 }
+
 .nav_box dl {
     height: auto;
     margin: 0;
 }
-.nav_box dl a{
+
+.nav_box dl a {
     color: #ABABAB;
 }
-.nav_box dt{
+
+.nav_box dt {
     height: 40px;
-    padding-left:14px;
-    padding-right:10px;
-    font-size:16px;
-    position:relative;
-    line-height:40px;
-    cursor:pointer;
+    padding-left: 14px;
+    padding-right: 10px;
+    font-size: 16px;
+    position: relative;
+    line-height: 40px;
+    cursor: pointer;
     background-color: #F5F7FA;;
 }
 
+.dl_active {
+    background-color: #E6E9F0 !important;
+}
 
-.dl_active{
-    background-color: #E6E9F0!important;
+.a_active {
+    color: #5677FC !important;
 }
-.a_active{
-    color: #5677FC!important;
-}
-.nav_box dt>a:hover{
+
+.nav_box dt > a:hover {
     color: #5677FC;
 }
-.nav_box dd{
+
+.nav_box dd {
     margin: 0;
     height: 30px;
     position: relative;
     line-height: 30px;
-    background-color:#F5F7FA;
-    padding-left:44px;
+    background-color: #F5F7FA;
+    padding-left: 44px;
 
 }
-.nav_box dd:hover{
+
+.nav_box dd:hover {
     background-color: #E6E9F0;
     transition: all .3s linear;
 
 }
 
-.nav_box dd a{
+.nav_box dd a {
     color: #ABABAB;
     font-size: 16px;
-    line-height:20px;
+    line-height: 20px;
 }
-/*.nav_box dd .dd_on {*/
-    /*color: #5677FC;*/
-/*}*/
-.nav_box dd:hover a{
-    color: #5677FC;
-    /*transition: all .3s linear;*/
-}
-.nav_box dt img{
-    position:absolute;
-    left:15px;top:15px;
-}
-/*��������ʽ����*/
 
-/*�Ҳ�·���л���С*/
-#content{
-    margin-left: 200px!important;
+.nav_box dd:hover a {
+    color: #5677FC;
+}
+
+.nav_box dt img {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+}
+
+#content {
+    margin-left: 200px !important;
     height: 100%;
 }
