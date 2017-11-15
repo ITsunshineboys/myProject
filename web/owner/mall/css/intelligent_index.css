@@ -5,76 +5,71 @@
 .ng-scope{
     background: #f6f6f6;
 }
-header div img{
+.header img{
     width: 100%;
 }
 
 .intelligent_div{
-    font-size: 1.2rem;
-    /*border: 1px solid #C2C2C2;*/
-    width: 29.5rem;
-    height:11rem;
-    margin-left: 1.2rem;
+    font-size: 1.4rem;
+    padding: 0 1.2rem;
     position: relative;
     top:-5.5rem;
+}
+.intelligent_div_box{
+    padding: 2rem;
+    border-radius: .3rem;
     background: #FFFFFF;
-    box-shadow: 0 20px 60px rgba(0,101,218,0.2);
-    border-radius: px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
 }
 .intelligent_div a{
     text-decoration: none;
+    display: block;
 }
 .font{
-    position: absolute;
-    right: 4.7rem;
-    top: 2rem;
-    color: #53A8F4 ;
+    color: #333;
 }
 .intel{
-    color: #666F80;
-    position: absolute;
-    left: 2rem;
-    top: 2rem;
-    line-height: 1.3rem;
+    color: #666;
 }
 a{
     text-decoration: none!important;
 }
 
 .address{
-    position: relative;
-    color: #53A8F4;
-    left: 25.1rem;
-    top:0.7rem;
-    line-height: 1.3rem;
-    /*top: 1rem;*/
+    color: #333;
+    display: inline-block;
+}
+.adress_img{
+    display: inline-block;
+    margin-top: -0.1rem;
 }
 .intelligent_div button{
-    width: 25.7rem;
-    height: 4rem;
-    background-color: #53A8F4 ;
+    width: 100%;
+    background-color: #D9AD65 ;
     position: relative;
-    top:5rem;
     border-radius: 3rem;
     color: white;
-    left: -.7rem;
-    outline: none;
-    font-size: 1.2rem;
-    border:none;
+    border: none;
+    padding: 1rem 4rem;
+    font-size: 1.4rem;
+    margin-top: 2rem;
 }
 .exhibition{
      margin-top: -3rem;
 }
+.exhibition ul{
+    padding-left: 0;
+    padding: 0 1.2rem;
+}
 .exhibition ul li {
-    margin-left: .6rem;
-    width: 29.5rem;
-    /*margin-bottom: 2rem;*/
-    position: relative;
+    width: 100%;
+    margin-bottom: 1.6rem;
+    overflow: hidden;
+    border-radius: .3rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
 }
 .exhibition ul li img{
-    width: 29.5rem;
-    /*box-shadow: 0 12px 24px rgba(0,0,0,0.1);*/
-    border-radius: 2px;
+    width: 100%;
 }
 .exhibition span{
     display: block;

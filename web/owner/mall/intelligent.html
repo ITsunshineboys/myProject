@@ -1,21 +1,22 @@
 <div class="font_f" ng-controller="intelligent_index_ctrl">
-    <header>
-        <div>
-            <img src="images/home_top.png" alt="" />
-        </div>
-    </header>
+    <div class="header">
+        <img src="images/home_top.png" alt="" />
+    </div>
 
     <section>
-        <div class="intelligent_div">
-            <span class="intel">智能报价</span>
-            <a ui-sref="city_choose">
-                <i class="icon icon-map-marker icon-3x font"></i>
-                <span class="address">成都</span>
-            </a>
-            <a ui-sref="nodata.house_list">
-                <button>计算我的房屋报价</button>
-            </a>
-
+       <div class="intelligent_div">
+            <div class="intelligent_div_box">
+                <div class="clearfix">
+                    <div class="intel pull-left">智能报价</div>
+                    <a ui-sref="city_choose" class="pull-right">
+                        <img class="adress_img" src="images/index_local.png"/>
+                        <span class="address">成都</span>
+                    </a>
+                </div>
+                <a class="two_box" ui-sref="nodata.house_list">
+                    <button>计算我的房屋报价</button>
+                </a>
+            </div>
         </div>
 
         <!--展示页面-->
