@@ -605,8 +605,8 @@ class OrderController extends Controller
     }
     
     /**
-    * 支付宝线下店商城异步返回操作
-    */
+     * 支付宝线下店商城异步返回操作
+     */
    public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -637,7 +637,6 @@ class OrderController extends Controller
             echo "fail";  //请不要修改或删除
         }
     }
-
 
     /**
      * 获取支付测试数据
@@ -1030,7 +1029,7 @@ class OrderController extends Controller
             }else{
                 list($startTime, $endTime) = StringService::startEndDate($timeType);
                 $startTime = explode(' ', $startTime)[0];
-                $endTime = explode(' ', $endTime)[0];
+                $endTime = explode(' ', $endTime)[1];
             }
         if($type=='all')
         {
@@ -1072,11 +1071,6 @@ class OrderController extends Controller
                     }
                 }
 
-            if ($timeType=='today')
-            {
-                $startTime=date('Y-m-d',time());
-                $endTime=date('Y-m-d',time()+24*60*60);
-            }
             if ($type=='all' && !$supplier_id )
             {
                 if ($keyword)
@@ -1090,8 +1084,6 @@ class OrderController extends Controller
                         $endTime && $where .= " and a.create_time <= {$endTime}";
                     }
                 }else{
-
-
                         if ($startTime) {
                             $startTime = (int)strtotime($startTime);
                             $startTime && $where .= "a.create_time >= {$startTime}";
@@ -1101,9 +1093,7 @@ class OrderController extends Controller
                             $endTime && $where .= " and a.create_time <= {$endTime}";
                         }
                 }
-            }
-            else
-                {
+            }else{
                 if ($startTime) {
                     $startTime = (int)strtotime($startTime);
                     $startTime && $where .= " and   a.create_time >= {$startTime}";
@@ -1398,7 +1388,6 @@ class OrderController extends Controller
         $sort_money=trim($request->get('sort_money'));
         $sort_time=trim($request->get('sort_time'));
         $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'supplier');
-
         $code=200;
         return Json::encode([
             'code'=>$code,
