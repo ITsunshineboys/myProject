@@ -149,7 +149,7 @@ class OrderController extends Controller
      */
     public  function  actionGetcity(){
         $request=Yii::$app->request;
-        $code=trim(htmlspecialchars($request->post('code','')),'');
+        $code=trim($request->post('code',''));
         if (!$code){
             $c=1000;
             return Json::encode([
@@ -374,7 +374,8 @@ class OrderController extends Controller
                 'data'=>Wxpay::GetWxJsSign()
             ]);
         }
-    } 
+    }
+
     /**
      * 智能报价-样板间支付定金提交
      * @return string
@@ -391,7 +392,6 @@ class OrderController extends Controller
             ]);
         }
         $out_trade_no =GoodsOrder::SetOrderNo();
-
         $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
            if (!$res)
         {
@@ -410,6 +410,9 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
     public function actionGetEffectlist(){
         $effect=EffectEarnest::find()
             ->asArray()
@@ -499,7 +502,6 @@ class OrderController extends Controller
                                     exit;
                                 };
                             }
-
                             $EffectPicture=EffectPicture::find()
                                 ->where(['effect_id'=>$effect_id])
                                 ->one();
@@ -515,7 +517,6 @@ class OrderController extends Controller
                             }
                         }
                     }
-
                 }catch (Exception $e){
                     $tran->rollBack();
                     echo 'fail';
@@ -695,7 +696,7 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
-  /**
+    /**
      *提交订单-线下店商城-微信支付
      */
     public function  actionLineplaceorder(){
@@ -754,7 +755,7 @@ class OrderController extends Controller
 
 
 
-           /**
+         /**
          * 获取openID2-微信
          * @return string
          */
@@ -777,7 +778,6 @@ class OrderController extends Controller
                 'total_amount'=> Yii::$app->session['total_amount']
             );
             if (! Yii::$app->session['address_id']
-                || !Yii::$app->session['invoice_id']
                 || !Yii::$app->session['goods_id']
                 || !Yii::$app->session['goods_num']
                 || !Yii::$app->session['order_price']
@@ -1863,7 +1863,7 @@ class OrderController extends Controller
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                    $trans = \Yii::$app->db->beginTransaction();
+                $trans = \Yii::$app->db->beginTransaction();
                 $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}";
                     try {
                         $goods->order_status=2;

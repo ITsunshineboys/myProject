@@ -23,5 +23,10 @@ class UserNewsRecord extends ActiveRecord
         return 'user_news_record';
     }
 
+    public  function  AddNewRecord()
+    {
+            echo 1;exit;
+    }
+
 
 }

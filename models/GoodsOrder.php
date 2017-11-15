@@ -1350,7 +1350,6 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
-
                };
             if ($data[$k]['status']=='已完成')
             {
@@ -1721,7 +1720,6 @@ class GoodsOrder extends ActiveRecord
             ->andWhere(['sku'=>$sku])
             ->andWhere('handle = 0')
             ->one();
-
         $time=time();
         $trans = \Yii::$app->db->beginTransaction();
         try {
