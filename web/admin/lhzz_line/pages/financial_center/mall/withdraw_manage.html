@@ -5,10 +5,10 @@
             <select ng-model="params.time_type" ng-options="item.str as item.name for item in time_type" ng-change="getWithdraw()" class="form-control"></select>
         </div>
         <div class="col-md-2">
-            <input ng-if="params.time_type == 'custom'" ng-model="params.time_start" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-model="params.time_start" max-date="{{params.time_end}}" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
         </div>
         <div class="col-md-2">
-            <input ng-if="params.time_type == 'custom'" ng-model="params.time_end" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-model="params.time_end" min-date="{{params.time_start}}" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
         </div>
         <p class="col-md-1 text-right" style="margin: 8px 0 12px !important;">状态选择</p>
         <div class="col-md-2">
