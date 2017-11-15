@@ -232,8 +232,6 @@ class GoodsOrder extends ActiveRecord
             return false;
         }
         $time=time();
-
-
         $tran = Yii::$app->db->beginTransaction();
         try{
 
@@ -326,6 +324,15 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
+
+            $Goods=Goods::findOne($goods_id);
+            $Goods->left_number-=$goods_num;
+            $Goods->sold_number+=$goods_num;
+            if (!$Goods->save(false))
+            {
+                $tran->rollBack();
+                return false;
+            }
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
@@ -339,6 +346,162 @@ class GoodsOrder extends ActiveRecord
         $sms['phone_number']=$address->mobile;
         new SmValidationService($sms);
         return true;
+    }
+
+
+    /**
+     * 微信线下商城数据库操作
+     * @param $arr
+     * @param $msg
+     * @return bool
+     */
+    public static function  Wxpaylinenotifydatabase($arr,$msg)
+    {
+
+        $goods_id=$arr[0];
+        $goods_num=$arr[1];
+        $address_id=$arr[2];
+        $pay_name=$arr[3];
+        $invoice_id=$arr[4];
+        $supplier_id=$arr[5];
+        $freight=$arr[6];
+        $return_insurance=$arr[7];
+        $order_no=$arr[8];
+        $buyer_message=$arr[9];
+        $client_ip=StringService::getClientIP();
+        $goods=(new Query())
+            ->from(Goods::tableName().' as a')
+            ->where(['a.id'=>$goods_id])
+            ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
+            ->one();
+        // if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
+        //     return false;
+        // }
+        $address=Addressadd::findOne($address_id);
+        $invoice=Invoice::findOne($invoice_id);
+        if (! $address  || !$invoice){
+            return false;
+        }
+        $time=time();
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+
+            $goods_order=new self();
+            $goods_order->order_no=$order_no;
+            $goods_order->amount_order=$msg['total_fee'];
+            $goods_order->supplier_id=$supplier_id;
+            $goods_order->invoice_id=$invoice_id;
+            $goods_order->address_id=$address_id;
+            $goods_order->pay_status=1;
+            $goods_order->create_time=$time;
+            $goods_order->paytime=$time;
+            $goods_order->order_refer=1;
+            $goods_order->return_insurance=$return_insurance*100;
+            $goods_order->pay_name=$pay_name;
+            $goods_order->buyer_message=$buyer_message;
+            $goods_order->consignee=$address->consignee;
+            $goods_order->district_code=$address->district;
+            $goods_order->region=$address->region;
+            $goods_order->consignee_mobile=$address->mobile;
+            $goods_order->invoice_type=$invoice->invoice_type;
+            $goods_order->invoice_header_type=$invoice->invoice_header_type;
+            $goods_order->invoicer_card=$invoice->invoicer_card;
+            $goods_order->invoice_header=$invoice->invoice_header;
+            $goods_order->invoice_content=$invoice->invoice_content;
+            $res1=$goods_order->save(false);
+            if (!$res1){
+                $tran->rollBack();
+                return false;
+            }
+            //关闭
+            $OrderGoods=new OrderGoods();
+            $OrderGoods->order_no=$order_no;
+            $OrderGoods->goods_id=$goods['id'];
+            $OrderGoods->goods_number=$goods_num;
+            $OrderGoods->create_time=time();
+            $OrderGoods->goods_name=$goods['title'];
+            $OrderGoods->goods_price=$goods['platform_price'];
+            $OrderGoods->sku=$goods['sku'];
+            $OrderGoods->market_price=$goods['market_price'];
+            $OrderGoods->supplier_price=$goods['supplier_price'];
+            $OrderGoods->shipping_type=$goods['delivery_method'];
+            $OrderGoods->cover_image=$goods['cover_image'];
+            $OrderGoods->order_status=0;
+            $OrderGoods->shipping_status=0;
+            $OrderGoods->customer_service=0;
+            $OrderGoods->is_unusual=0;
+            $OrderGoods->freight=$freight*100;
+            $res2=$OrderGoods->save(false);
+
+            if (!$res2){
+                $tran->rollBack();
+                return false;
+            }
+            $time=time();
+            $month=date('Ym',$time);
+            $supplier=Supplier::find()
+                ->where(['id'=>$goods['supplier_id']])
+                ->one();
+            $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
+            $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
+            $supplier->month=$month;
+            $res3=$supplier->save(false);
+            if (!$res3){
+                $tran->rollBack();
+                return false;
+            }
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$supplier_id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$supplier_id;
+                $GoodsStat->sold_number=$goods_num;
+                $GoodsStat->amount_sold=$msg['total_fee'];
+                $GoodsStat->create_date=$date;
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }else{
+
+                $GoodsStat->sold_number+=$goods_num;
+                $GoodsStat->amount_sold+=$msg['total_fee'];
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+            $Goods=Goods::findOne($goods_id);
+            $Goods->left_number-=$goods_num;
+            $Goods->sold_number+=$goods_num;
+            if (!$Goods->save(false))
+            {
+                $tran->rollBack();
+                return false;
+            }
+
+            $tran->commit();
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return false;
+        }
+        $sms['mobile']=$address->mobile;
+        $sms['type']='gotOrder';
+        $sms['goods_title']=$goods['title'];
+        $sms['order_no']=$order_no;
+        $sms['recipient']=$address->consignee;
+        $sms['phone_number']=$address->mobile;
+        new SmValidationService($sms);
+        return true;
+
+
+
     }
 
    /**
@@ -535,161 +698,7 @@ class GoodsOrder extends ActiveRecord
 
 
 
-    /**
-     * 微信线下商城数据库操作
-     * @param $arr
-     * @param $msg
-     * @return bool
-     */
-    public static function  Wxpaylinenotifydatabase($arr,$msg)
-    {
 
-        $goods_id=$arr[0];
-        $goods_num=$arr[1];
-        $address_id=$arr[2];
-        $pay_name=$arr[3];
-        $invoice_id=$arr[4];
-        $supplier_id=$arr[5];
-        $freight=$arr[6];
-        $return_insurance=$arr[7];
-        $order_no=$arr[8];
-        $buyer_message=$arr[9];
-        $client_ip=StringService::getClientIP();
-        $goods=(new Query())
-            ->from(Goods::tableName().' as a')
-            ->where(['a.id'=>$goods_id])
-            ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
-            ->one();
-        // if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
-        //     return false;
-        // }
-        $address=Addressadd::findOne($address_id);
-        $invoice=Invoice::findOne($invoice_id);
-        if (! $address  || !$invoice){
-            return false;
-        }
-        $time=time();
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-
-            $goods_order=new self();
-            $goods_order->order_no=$order_no;
-            $goods_order->amount_order=$msg['total_fee'];
-            $goods_order->supplier_id=$supplier_id;
-            $goods_order->invoice_id=$invoice_id;
-            $goods_order->address_id=$address_id;
-            $goods_order->pay_status=1;
-            $goods_order->create_time=$time;
-            $goods_order->paytime=$time;
-            $goods_order->order_refer=1;
-            $goods_order->return_insurance=$return_insurance*100;
-            $goods_order->pay_name=$pay_name;
-            $goods_order->buyer_message=$buyer_message;
-            $goods_order->consignee=$address->consignee;
-            $goods_order->district_code=$address->district;
-            $goods_order->region=$address->region;
-            $goods_order->consignee_mobile=$address->mobile;
-            $goods_order->invoice_type=$invoice->invoice_type;
-            $goods_order->invoice_header_type=$invoice->invoice_header_type;
-            $goods_order->invoicer_card=$invoice->invoicer_card;
-            $goods_order->invoice_header=$invoice->invoice_header;
-            $goods_order->invoice_content=$invoice->invoice_content;
-            $res1=$goods_order->save(false);
-            if (!$res1){
-                $tran->rollBack();
-                return false;
-            }
-            //关闭
-            $OrderGoods=new OrderGoods();
-            $OrderGoods->order_no=$order_no;
-            $OrderGoods->goods_id=$goods['id'];
-            $OrderGoods->goods_number=$goods_num;
-            $OrderGoods->create_time=time();
-            $OrderGoods->goods_name=$goods['title'];
-            $OrderGoods->goods_price=$goods['platform_price'];
-            $OrderGoods->sku=$goods['sku'];
-            $OrderGoods->market_price=$goods['market_price'];
-            $OrderGoods->supplier_price=$goods['supplier_price'];
-            $OrderGoods->shipping_type=$goods['delivery_method'];
-            $OrderGoods->cover_image=$goods['cover_image'];
-            $OrderGoods->order_status=0;
-            $OrderGoods->shipping_status=0;
-            $OrderGoods->customer_service=0;
-            $OrderGoods->is_unusual=0;
-            $OrderGoods->freight=$freight*100;
-            $res2=$OrderGoods->save(false);
-
-            if (!$res2){
-                $tran->rollBack();
-                return false;
-            }
-            $time=time();
-            $month=date('Ym',$time);
-            $supplier=Supplier::find()
-                ->where(['id'=>$goods['supplier_id']])
-                ->one();
-            $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
-            $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
-            $supplier->month=$month;
-            $res3=$supplier->save(false);
-            if (!$res3){
-                $tran->rollBack();
-                return false;
-            }
-            $date=date('Ymd',time());
-            $GoodsStat=GoodsStat::find()
-                ->where(['supplier_id'=>$supplier_id])
-                ->andWhere(['create_date'=>$date])
-                ->one();
-            if (!$GoodsStat)
-            {
-                $GoodsStat=new GoodsStat();
-                $GoodsStat->supplier_id=$supplier_id;
-                $GoodsStat->sold_number=$goods_num;
-                $GoodsStat->amount_sold=$msg['total_fee'];
-                $GoodsStat->create_date=$date;
-                if (!$GoodsStat->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
-            }else{
-
-                $GoodsStat->sold_number+=$goods_num;
-                $GoodsStat->amount_sold+=$msg['total_fee'];
-                if (!$GoodsStat->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
-            }
-            $Goods=Goods::findOne($goods_id);
-            $Goods->left_number-=$goods_num;
-            $Goods->sold_number+=$goods_num;
-            if (!$Goods->save(false))
-            {
-                $tran->rollBack();
-                return false;
-            }
-            
-            $tran->commit();
-        }catch (\Exception $e) {
-            $tran->rollBack();
-            return false;
-        }
-
-        $sms['mobile']=$address->mobile;
-        $sms['type']='gotOrder';
-        $sms['goods_title']=$goods['title'];
-        $sms['order_no']=$order_no;
-        $sms['recipient']=$address->consignee;
-        $sms['phone_number']=$address->mobile;
-        new SmValidationService($sms);
-        return true;
-
-
-
-    }
 
 
 

@@ -605,9 +605,9 @@ class OrderController extends Controller
             }
     }
     
-  /**
-     * 支付宝线下店商城异步返回操作
-     */
+    /**
+    * 支付宝线下店商城异步返回操作
+    */
    public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -702,7 +702,7 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $subject=trim($request->get('goods_name'));
         //付款金额，必填
-        $total_amount =(int)trim($request->get('order_price'));
+        $total_amount =trim($request->get('order_price'));
         $goods_id=trim($request->get('goods_id'));
         $goods_num=trim($request->get('goods_num'));
         $address_id=trim($request->get('address_id'));
@@ -760,7 +760,6 @@ class OrderController extends Controller
          */
         public function  actionWxLinePay()
         {
-
             $orders=array(
                 'address_id'=> Yii::$app->session['address_id'],
                 'invoice_id'=> Yii::$app->session['invoice_id'],
@@ -777,15 +776,40 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
-
-            if ($orders==[])
+            if (! Yii::$app->session['address_id']
+                || !Yii::$app->session['invoice_id']
+                || !Yii::$app->session['goods_id']
+                || !Yii::$app->session['goods_num']
+                || !Yii::$app->session['order_price']
+                || !Yii::$app->session['goods_name']
+                || !Yii::$app->session['pay_name']
+                || !Yii::$app->session['supplier_id']
+                || !Yii::$app->session['freight']
+                || !Yii::$app->session['return_insurance']
+                || !Yii::$app->session['body']
+                || !Yii::$app->session['order_no']
+                || !Yii::$app->session['buyer_message']
+                || !Yii::$app->session['total_amount']
+            )
             {
+                var_dump($orders);exit;
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+                $address=Invoice::findOne(Yii::$app->session['invoice_id']);
+                {
+                    if (!$address)
+                    {
+                        $code=1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                }
             $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
             if (!$invoice)
             {
@@ -943,7 +967,6 @@ class OrderController extends Controller
             if ($order){
                 return true;
             }
-            $msg['total_fee']=401;
             $result=GoodsOrder::Wxpaylinenotifydatabase($arr,$msg);
             if ($result==true){
                 return true;
