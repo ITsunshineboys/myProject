@@ -6,6 +6,9 @@ angular.module('mall_finance', ['ui.bootstrap'])
         $scope.five_title = ''
         $scope.six_title = ''
         $scope.ctrlScope = $scope
+        $scope.keyword = ''
+        $scope.keyword1 = ''
+        $scope.keyword2 = ''
         //提现部分
         /*分页配置*/
         $scope.Config = {
@@ -193,11 +196,49 @@ angular.module('mall_finance', ['ui.bootstrap'])
         $scope.getFreeze = function () {
             $scope.Config3.currentPage = 1
             if($scope.params3.time_type == 'custom'){
-                if($scope.params3.start_time!=''||$scope1.params.end_time!=''){
+                if($scope.params3.start_time!=''||$scope.params3.end_time!=''){
                     tablePages3()
                 }
             }else{
                 tablePages3()
+            }
+        }
+        //提现金额列表
+        /*分页配置*/
+        $scope.Config4 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages4();
+            }
+        }
+        let tablePages4=function () {
+            $scope.params4.page=$scope.Config4.currentPage;//点击页数，传对应的参数
+            $http.get('/supplieraccount/cashed-list',{
+                params:$scope.params4
+            }).then(function (res) {
+                console.log(res)
+                $scope.withdraw_list = res.data.data.list
+                $scope.Config4.totalItems = res.data.data.count
+            },function (error) {
+                console.log(error)
+            })
+        };
+        $scope.params4 = {
+            time_type:'all',
+            start_time:'',
+            end_time:'',
+            supplier_id:''
+        };
+        $scope.getWithdrawList = function () {
+            $scope.Config4.currentPage = 1
+            if($scope.params4.time_type == 'custom'){
+                if($scope.params4.start_time!=''||$scope.params4.end_time!=''){
+                    tablePages4()
+                }
+            }else{
+                tablePages4()
             }
         }
         //post请求配置
@@ -578,16 +619,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.five_title = '提现列表'
             $scope.six_title = ''
             $scope.cur_time_type = $scope.time_type[0]
-            $http.get('/supplieraccount/cashed-list',{
-                params:{
-                    supplier_id:$scope.cur_account_detail.id
-                }
-            }).then(function (res) {
-                console.log(res)
-                $state.go('mall_finance.withdraw_list')
-            },function (error) {
-                console.log(error)
-            })
+            $scope.params4.supplier_id = $scope.cur_account_detail.id
+            tablePages4()
+            $state.go('mall_finance.withdraw_list')
+
         }
         //跳转冻结金额列表
         $scope.go_freeze_list = function () {
@@ -642,11 +677,20 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         //跳转提现详情页
         $scope.go_withdraw_detail = function (item) {
+            console.log(item)
             $scope.three_title = '账户管理'
             $scope.four_title = '详情'
             $scope.five_title = '提现列表'
             $scope.six_title='详情'
-            $state.go('mall_finance.withdraw_detail')
+            $http.get('/supplieraccount/cashed-view',{
+                params:{
+                    'id':item.id
+                }
+            }).then(function (res) {
+                console.log(res)
+                $scope.withdraw_detail = res.data.data
+                $state.go('mall_finance.withdraw_detail')
+            })
         }
         //跳转入账列表
         $scope.go_recorded_detail = function () {
