@@ -1545,6 +1545,7 @@ class QuoteController extends Controller
     public function actionDecorationEdit()
     {
         $post = \Yii::$app->request->post();
+        var_dump($post);exit;
         $decoration_add = DecorationAdd::findOne($post['id']);
         $decoration_add->correlation_message = $post['message'];
         $decoration_add->sku           = $post['code'];
@@ -1565,20 +1566,32 @@ class QuoteController extends Controller
         }
 
         foreach ($post['add'] as $one_post){
-            if (isset($one_post['id'])) {
-                DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
-            } else {
-                if (isset($one_post['series'])){
+            switch ($one_post){
+                case isset($one_post['id']):
+                    $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
+                    break;
+                case isset($one_post['series']):
                     $columns = ['series_id','quantity','decoration_add_id'];
-                    DecorationMessage::findByInsert($one_post,$columns);
-                } elseif (isset($one_post['style'])){
+                    $dm = DecorationMessage::findByInsert($one_post,$columns);
+                    break;
+                case isset($one_post['style']):
                     $columns = ['style_id','quantity','decoration_add_id'];
-                    DecorationMessage::findByInsert($one_post,$columns);
-                } elseif (isset($one_post['min_area'])){
+                    $dm = DecorationMessage::findByInsert($one_post,$columns);
+                    break;
+                case isset($one_post['min_area']):
                     $columns = ['min_area','max_area','quantity','decoration_add_id'];
-                    DecorationMessage::findByInsert($one_post,$columns);
-                }
+                    $dm = DecorationMessage::findByInsert($one_post,$columns);
+                    break;
             }
+        }
+
+        if (!$dm){
+            $code = 1000;
+            return Json::encode([
+               'code' =>  $code,
+               'msg'  =>  \Yii::$app->params['errorCodes'][$code],
+
+            ]);
         }
 
         return Json::encode([
