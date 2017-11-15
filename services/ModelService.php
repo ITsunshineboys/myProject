@@ -227,13 +227,13 @@ class ModelService
             $time_end && $time_end = strtotime($time_end);
 
             if ($time_start && $time_start == $time_end) {
-//                return StringService::startEndDate('today', 1);
-//            }
-//        } else {
+                return StringService::startEndDate('today', 1);
+            }
+        } else {
                 return StringService::startEndDate($time_type, 1);
             }
             return [$time_start, $time_end];
-        }
+        
     }
 
     /**
