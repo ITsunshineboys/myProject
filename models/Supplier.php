@@ -505,6 +505,7 @@ class Supplier extends ActiveRecord
             ->andWhere(['ub.role_id' => self::ROLE_SUPPLIER])
             ->where(['s.id' => $supplier_id,'ub.selected'=>1])
             ->one();
+        var_dump($array);die;
 
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_OFFLINE])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_CASHED])->sum('cash_money');
