@@ -188,7 +188,6 @@ class SupplierCashManager extends ActiveRecord
             ->andwhere('paytime >= ' . $today[0])
             ->andWhere('paytime <= ' . $today[1])
             ->sum('amount_order');
-        var_dump($data);die;
         if ($data == null) {
             return 0;
         }
