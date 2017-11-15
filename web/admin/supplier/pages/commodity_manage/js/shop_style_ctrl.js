@@ -57,7 +57,6 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
                     $scope.goods_input_attrs.push(value);
                 }
             }
-
             //循环输入框名称和值
             for(let [key,value] of $scope.goods_input_attrs.entries()){
                 $scope.attr_name.push(value.name);
@@ -66,9 +65,8 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
             //循环下拉框的值
             for(let [key,value] of $scope.goods_select_attrs.entries()){
                 $scope.goods_select_attrs_value.push(value.value);//下拉框的值
+                value.value=value.value[0]
             }
-            console.log($scope.goods_select_attrs_value[0])
-            console.log($scope.goods_select_attrs_value[1])
         })
 
       /*----------------自己添加的属性--------------------*/
@@ -189,7 +187,6 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
               })
           });
       })
-
   /*-----------------添加按钮-----------------------*/
   $scope.add_goods_confirm=function (valid,error) {
     $scope.after_sale_services=[];
@@ -233,7 +230,6 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
     }else if($scope.replacement_check===false){
       del_correspond(6);
     }
-
     //不勾选的状态删除对应项
     function del_correspond(num){
       let del_index=$scope.after_sale_services.findIndex(function(value,index,arr) {
@@ -263,7 +259,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       if($scope.goods_select_attrs[0]!=undefined){
           for(let[key,value] of $scope.goods_select_attrs.entries()){
               $scope.pass_attrs_name.push(value.name);
-              $scope.pass_attrs_value.push(value.value[0]);
+              $scope.pass_attrs_value.push(value.value);
           }
       }
       /*判断风格和系列是否存在，如果不存在，值传0*/
