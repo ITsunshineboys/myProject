@@ -708,6 +708,12 @@ class WorkerManagementController extends Controller
         }
     }
 
+    /**
+     *
+     * 工人列表 详情
+     *
+     * @return string
+     */
     public function actionWorkerDetails()
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
@@ -729,6 +735,11 @@ class WorkerManagementController extends Controller
                 break;
 
         }
-        var_dump($worker);exit;
+        return Json::encode([
+           'code' => 200,
+           'msg' => 'ok',
+           'data' => $worker,
+        ]);
     }
+    
 }
