@@ -2,37 +2,52 @@
     <div class="row">
         <h3 class="col-md-12">业主信息</h3>
         <p class="col-md-2">姓名</p>
-        <p class="col-md-10">{{case_detail.name}}</p>
+        <p class="col-md-10">{{particulars_view.name}}</p>
         <p class="col-md-2">手机号</p>
-        <p class="col-md-10">{{case_detail.phone}}</p>
+        <p class="col-md-10">{{particulars_view.phone}}</p>
         <p class="col-md-2">申请时间</p>
-        <p class="col-md-10">{{case_detail.create_time}}</p>
+        <p class="col-md-10">{{particulars_view.create_time}}</p>
         <p class="col-md-2">申请金额</p>
-        <p class="col-md-10">{{case_detail.earnest}}</p>
+        <p class="col-md-10">{{particulars_view.earnest}}</p>
     </div>
     <div class="row">
         <h3 class="col-md-12">户型信息</h3>
         <p class="col-md-2">小区名称</p>
-        <p class="col-md-10">{{case_detail.toponymy}}111</p>
+        <p class="col-md-10">{{particulars_view.toponymy}}111</p>
         <p class="col-md-2">小区地址</p>
-        <p class="col-md-10">{{case_detail.address}}111</p>
+        <p class="col-md-10">{{particulars_view.address}}111</p>
         <p class="col-md-2">户型名称</p>
-        <p class="col-md-10">{{case_detail.particulars}}111</p>
+        <p class="col-md-10">{{particulars_view.particulars}}111</p>
         <p class="col-md-2">层高</p>
-        <p class="col-md-10">{{case_detail.high}}111</p>
+        <p class="col-md-10">{{particulars_view.high}}111</p>
         <p class="col-md-2">飘窗</p>
-        <p class="col-md-10">{{case_detail.window}}111</p>
+        <p class="col-md-10">{{particulars_view.window}}111</p>
         <p class="col-md-2">楼梯选择</p>
-        <p class="col-md-10">{{case_detail.stairway}}111</p>
+        <p class="col-md-10">{{particulars_view.stairway}}111</p>
         <p class="col-md-2">系列</p>
-        <p class="col-md-10">{{case_detail.series}}111</p>
+        <p class="col-md-10">{{particulars_view.series}}111</p>
         <p class="col-md-2">风格</p>
-        <p class="col-md-10">{{case_detail.style}}111</p>
+        <p class="col-md-10">{{particulars_view.style}}111</p>
+    </div>
+    <div class="row" id="accordion2">
+        <h3 class="col-md-12">材料信息</h3>
+        <div class="col-md-12" ng-repeat="item in material">
+            <p class="col-md-6">{{item[0]}}</p>
+            <p class="col-md-6" style="text-align: right;" ng-if="item[2].index == $index&&item[2].cur_index == 0" ng-click="item[2].cur_index = 1" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-down" ></i></p>
+            <p class="col-md-6" style="text-align: right;" ng-if="item[2].index == $index&&item[2].cur_index == 1" ng-click="item[2].cur_index = 0" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-up" ></i></p>
+            <div class="col-md-12 materials" ng-repeat="item1 in item[1]" id="cur_index{{$parent.$index}}" ng-if="item[2].index == $parent.$index&&item[2].cur_index == 1">
+                <p class="col-md-2">{{item1.cate_level3}}</p>
+                <p class="col-md-2">{{item1.brand}}</p>
+                <p class="col-md-2">总价：{{item1.price}}</p>
+                <p class="col-md-2">数量:{{item1.count}}</p>
+                <p class="col-md-2" style="color: #5677FC;">详情</p>
+            </div>
+        </div>
     </div>
     <div class="row" style="border: none;height: 300px;">
         <p class="col-md-2">备注</p>
-        <p class="col-md-10">
-            <textarea  placeholder="请填写备注事项" style="border-radius: 10px;padding: 10px;" cols="120" rows="8" ng-model="case_detail.remark"></textarea>
+        <p class="col-md-10" style="margin-top: 40px;">
+            <textarea  placeholder="请填写备注事项" style="border-radius: 10px;padding: 10px;" cols="120" rows="8" ng-model="particulars_view.remark"></textarea>
         </p>
     </div>
     <div class="from-group submit">

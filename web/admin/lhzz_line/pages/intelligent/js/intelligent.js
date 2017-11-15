@@ -8,6 +8,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 return $.param(data)
             }
         };
+        alert(111)
         //添加小区部分
         /*分页配置*/
         $scope.Config = {

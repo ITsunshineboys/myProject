@@ -176,21 +176,7 @@ angular.module('apply_case',[])
                     remark:$scope.cur_item.remark
                 },config).then(function (response) {
                     console.log(response)
-                    $http.get('/effect/effect-list',{
-                        params:{
-                            time_type:$scope.cur_time_type.str,
-                            page:$scope.cur_page
-                        }
-                    }).then(function (response) {
-                        console.log(response)
-                        $scope.cur_today_apply = response.data.data.today_apply
-                        $scope.cur_today_earnest = response.data.data.today_earnest
-                        $scope.cur_all_apply = response.data.data.all_apply
-                        $scope.cur_all_earnest = response.data.data.all_earnest
-                        $scope.apply_list = response.data.data['0'].list
-                    },function (error) {
-                        console.log(error)
-                    })
+                    tablePages()
                 },function (error) {
                     console.log(error)
                 })
@@ -198,21 +184,9 @@ angular.module('apply_case',[])
             //搜索手机号或姓名
             $scope.update_keyword = function () {
                 // $scope.cur_time_type = $scope.time_type[0]
-                $http.get('/effect/effect-list',{
-                    params:{
-                        keyword:$scope.keyword
-                    }
-                }).then(function (response) {
-                    console.log(response)
-                    $scope.cur_today_apply = response.data.data.today_apply
-                    $scope.cur_today_earnest = response.data.data.today_earnest
-                    $scope.cur_all_apply = response.data.data.all_apply
-                    $scope.cur_all_earnest = response.data.data.all_earnest
-                    $scope.apply_list = response.data.data['0'].list
-                    $scope.cur_page = response.data.data['0'].page
-                },function (error) {
-                    console.log(error)
-                })
+                $scope.params.time_type = 'all'
+                $scope.params.keyword = $scope.keyword
+                tablePages()
             }
             //查看详情
             //获取详情
@@ -222,7 +196,12 @@ angular.module('apply_case',[])
                         id:item.id
                 },config).then(function (response) {
                     console.log(response)
-                    $scope.case_detail = response.data.data
+                    $scope.particulars_view = response.data.data.particulars_view
+                    $scope.material = Object.entries(response.data.data.material)
+                    for(let [key,value] of $scope.material.entries()){
+                        value[2] = {index:key,cur_index:0}
+                    }
+                    console.log($scope.material)
                     $state.go('apply_case.case_detail')
                 },function (error) {
                     console.log(error)
@@ -232,26 +211,10 @@ angular.module('apply_case',[])
             $scope.save_remark = function () {
                 $http.post('/effect/effect-view',{
                     id:$scope.cur_item.id,
-                    remark:$scope.case_detail.remark
+                    remark:$scope.particulars_view.remark
                 },config).then(function (response) {
                     console.log(response)
-                    $http.get('/effect/effect-list',{
-                        params:{
-                            time_type:$scope.cur_time_type.str,
-                            page:$scope.cur_page
-                        }
-                    }).then(function (response) {
-                        console.log(response)
-                        $scope.cur_today_apply = response.data.data.today_apply
-                        $scope.cur_today_earnest = response.data.data.today_earnest
-                        $scope.cur_all_apply = response.data.data.all_apply
-                        $scope.cur_all_earnest = response.data.data.all_earnest
-                        $scope.apply_list = response.data.data['0'].list
-                        $scope.second_title =  '详情'
-                        $state.go('apply_case.index')
-                    },function (error) {
-                        console.log(error)
-                    })
+                    tablePages()
                 },function (error) {
                     console.log(error)
                 })
