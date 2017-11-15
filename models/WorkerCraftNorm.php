@@ -16,6 +16,8 @@ class WorkerCraftNorm extends ActiveRecord
     const STRONG_CURRENT_DAY_POINTS = 5;
     const WATERWAY_DAY_POINTS = 6;
     const WATERPROOF_DAY_AREA = 30;
+    const CARPENTRY_DAY_MODELLING = 10;
+    const CARPENTRY_DAY_FLAT = 10;
 
     /**
      * @inheritdoc

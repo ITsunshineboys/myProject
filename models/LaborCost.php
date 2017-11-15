@@ -30,8 +30,9 @@ class LaborCost extends ActiveRecord
             'waterway'=>'水路'
         ];
 
-    const WEAK_CURRENT_PRICE = 30000;
-    const WATERPROOF_PRICE = 35000;
+    const WEAK_CURRENT_PRICE = 300;
+    const WATERPROOF_PRICE = 350;
+    const CARPENTRY_PRICE = 240;
     const PRICE_CONVERT = 100;
     /**
      * @return string 返回该AR类关联的数据表名

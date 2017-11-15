@@ -275,22 +275,16 @@ class OwnerController extends Controller
         $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
         if ($workers != null){
             $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
-            if (!$worker_kind_details){
-                $worker_kind_details['quantity'] = WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
-            }
-        } else {
-            $worker_kind_details['quantity'] = WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
-            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / self::PRICE_UNITS;
-            $workers['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
+        $worker_price = !isset($workers['univalence']) ? $workers['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
+        $worker_day_price = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] :WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
 
 
         //      点位 和 材料查询
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne('count',$points_where);
-        if ($points == null){
-            $points['count'] = Points::WEAK_CURRENT_POINTS;
-        }
+        $weak_current_points = !isset($points['count']) ? $points['count'] : Points::WEAK_CURRENT_POINTS;
+
 
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
@@ -317,8 +311,8 @@ class OwnerController extends Controller
         }
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
-        $labor_all_cost['worker_kind'] = $workers['worker_kind'];
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_current_points, $worker_price ,$worker_day_price);
+        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
@@ -345,23 +339,17 @@ class OwnerController extends Controller
         $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
         if ($workers != null){
             $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
-            if (!$worker_kind_details){
-                $worker_kind_details['quantity'] = WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
-            }
-        } else{
-            $worker_kind_details['quantity'] = WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
-            $workers['univalence'] = LaborCost::WEAK_CURRENT_PRICE / LaborCost::PRICE_CONVERT;
-            $workers['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
+        $strong_current_price = !isset($workers['univalence']) ? $workers['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
+        $strong_current_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
 
 
         //强电点位
         $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
-        if (!$points){
-            $points['count'] = Points::STRONG_CURRENT_POINTS;
-        }
+        $_points = !isset($points['count']) ? $points['count'] : Points::STRONG_CURRENT_POINTS;
+
 
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name';
@@ -387,8 +375,8 @@ class OwnerController extends Controller
         }
 
         //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'],$workers['univalence'],$worker_kind_details['quantity']);
-        $labor_all_cost['worker_kind'] = $workers['worker_kind'];
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($_points,$strong_current_price,$strong_current_day_points);
+        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $strong_current, $craft);
@@ -415,23 +403,17 @@ class OwnerController extends Controller
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
         if ($waterway_labor != null){
             $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
-            if (!$worker_kind_details){
-                $worker_kind_details['quantity'] = WorkerCraftNorm::WATERWAY_DAY_POINTS;
-            }
-        } else {
-            $worker_kind_details['quantity'] = WorkerCraftNorm::WATERWAY_DAY_POINTS;
-            $waterway_labor['univalence'] = LaborCost::WEAK_CURRENT_PRICE / LaborCost::PRICE_CONVERT;
-            $waterway_labor['worker_kind'] = self::WORK_CATEGORY['plumber'];
         }
+        $worker_price = !isset($waterway_labor['univalence']) ? $waterway_labor['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
+        $worker_ady_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERWAY_DAY_POINTS;
 
 
         //强电点位
         $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne($points_select,$points_where);
-        if (!$points){
-            $points['count'] = Points::WATERWAY_POINTS;
-        }
+        $_points = !isset($points['count']) ? $points['count'] : Points::WATERWAY_POINTS;
+
 
         //查询弱电所需要材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
@@ -450,8 +432,8 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterway'], $post['city']);
 
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($points['count'], $waterway_labor['univalence'],$worker_kind_details['quantity']);
-        $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($_points,$worker_price,$worker_ady_points);
+        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($points['count'], $waterway_current, $craft);
@@ -478,16 +460,12 @@ class OwnerController extends Controller
         $_select = 'id,univalence,worker_kind';
         $__select = 'quantity,worker_kind_details';
         $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker'],$_select);
-        if ($waterproof_labor == null){
+        if ($waterproof_labor){
             $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area'],$__select);
-            if (!$worker_kind_details){
-                $worker_kind_details['quantity'] = WorkerCraftNorm::WATERPROOF_DAY_AREA;
-            }
-        } else {
-            $worker_kind_details['quantity'] = WorkerCraftNorm::WATERPROOF_DAY_AREA;
-            $waterproof_labor['univalence']  = LaborCost::WATERPROOF_PRICE / LaborCost::PRICE_CONVERT;
-            $waterproof_labor['worker_kind'] = self::WORK_CATEGORY['waterproof_worker'];
         }
+        $worker_price = !isset($waterproof_labor['univalence']) ? $waterproof_labor['univalence'] : LaborCost::WATERPROOF_PRICE;
+        $worker_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERPROOF_DAY_AREA;
+
 
 
         //防水所需材料
@@ -505,51 +483,39 @@ class OwnerController extends Controller
 
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
-        if (!$kitchen){
-            $area = EngineeringUniversalCriterion::KITCHEN_AREA;
-            $height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
-        } else {
+        if ($kitchen){
             foreach ($kitchen as $one_kitchen){
                 if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
                     $area = $one_kitchen['project_value'];
-                } else {
-                    $area = EngineeringUniversalCriterion::KITCHEN_AREA;
                 }
 
                 if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
                     $height = $one_kitchen['project_value'];
-                } else {
-                    $height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
                 }
             }
         }
-        $kitchen_area = BasisDecorationService::waterproofArea($area,$height, $post['area'], $post['kitchen']);
+        $_kitchen_area = !isset($area) ? $area : EngineeringUniversalCriterion::KITCHEN_AREA;
+        $_kitchen_height = !isset($height) ? $height : EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+        $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
 
 
 
         //卫生间
         $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
-        if (!$toilet){
-            $_area = EngineeringUniversalCriterion::TOILET_AREA;
-            $_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
-        } else {
+        if ($toilet){
             foreach ($toilet as $one_toilet){
                 if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
                     $_area = $one_toilet['project_value'];
-                } else {
-                    $_area = EngineeringUniversalCriterion::TOILET_AREA;
                 }
 
                 if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
                     $_height = $one_toilet['project_value'];
-                } else {
-                    $_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
                 }
             }
         }
-        $toilet_area = BasisDecorationService::waterproofArea($_area,$_height, $post['area'], $post['toilet']);
-
-
+        $_toilet_area = !isset($_area) ? $_area : EngineeringUniversalCriterion::TOILET_AREA;
+        $_toilet_height = !isset($_height) ? $_height : EngineeringUniversalCriterion::TOILET_HEIGHT;
+        $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
         $total_area = $kitchen_area + $toilet_area;
 
@@ -567,9 +533,9 @@ class OwnerController extends Controller
 
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$waterproof_labor['univalence'],$worker_kind_details['quantity']);
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$worker_price,$worker_day_points);
 //        $labor_all_cost['price'] = ceil($total_area / $worker_kind_details['quantity']) * $waterproof_labor['univalence'];
-        $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
+        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['waterproof_worker'];
 
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
@@ -603,31 +569,24 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->get();
         $_select = 'id,univalence,worker_kind';
         $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker'],$_select);
-        if ($labor_cost == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($worker_kind_details as $one_labor) {
-            switch ($one_labor) {
-                case $one_labor['worker_kind_details'] == self::WORKMANSHIP['flat_area']:
-                    $flat = $one_labor['quantity'];
-                    break;
-                case $one_labor['worker_kind_details'] == self::WORKMANSHIP['modelling_length']:
-                    $modelling = $one_labor['quantity'];
-                    break;
+        if ($labor_cost){
+            $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
+            foreach ($worker_kind_details as $one_labor) {
+                switch ($one_labor) {
+                    case $one_labor['worker_kind_details'] == self::WORKMANSHIP['flat_area']:
+                        $flat = $one_labor['quantity'];
+                        break;
+                    case $one_labor['worker_kind_details'] == self::WORKMANSHIP['modelling_length']:
+                        $modelling = $one_labor['quantity'];
+                        break;
+                }
             }
         }
+        $worker_price = !isset($labor_cost['univalence']) ? $labor_cost['univalence'] : LaborCost::CARPENTRY_PRICE;
+        $_flat = !isset($flat) ? $flat :WorkerCraftNorm::CARPENTRY_DAY_FLAT;
+        $_modelling = !isset($modelling) ? $modelling :WorkerCraftNorm::CARPENTRY_DAY_MODELLING;
+
+
         $series_all = Series::find()->asArray()->all();
         if ($series_all == null){
             $code = 1000;
@@ -636,6 +595,8 @@ class OwnerController extends Controller
                 'msg' => '系列不能为空',
             ]);
         }
+
+
         $style_all = Style::find()->asArray()->all();
         if ($style_all == null){
             $code = 1000;
@@ -657,12 +618,12 @@ class OwnerController extends Controller
         // 造型长度
         $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
         //造型天数
-        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $modelling, $series_all, $style_all, $post['series']);
+        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $_modelling, $series_all, $style_all, $post['series']);
         //平顶天数
-        $flat_day = BasisDecorationService::flatDay($carpentry_add, $flat, $series_all, $style_all, $post['series']);
+        $flat_day = BasisDecorationService::flatDay($carpentry_add, $_flat, $series_all, $style_all, $post['series']);
 
         //人工费
-        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1, $labor_cost['univalence']);
+        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
 
         //材料
