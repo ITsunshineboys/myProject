@@ -1576,7 +1576,7 @@ angular.module("all_controller", ['ngCookies'])
                                         order_price:$scope.allCost,
                                         goods_num:+$scope.shopNum,
                                         goods_id:+$scope.mall_id,
-                                        address_id:+$scope.sessionStorage.getItem('address_id'),
+                                        address_id:sessionStorage.getItem('address_id'),
                                         invoice_id:+$scope.invoice_id,
                                         supplier_id:+$scope.supplier_id,
                                         freight:+$scope.freight,
