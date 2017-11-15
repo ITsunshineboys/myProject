@@ -546,6 +546,7 @@ class GoodsOrder extends ActiveRecord
             ->limit($size)
             ->all();
         $arr=self::getorderstatus($OrderList);
+        var_dump($arr);exit;
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
             if ($arr[$k]['is_unusual']==1){
@@ -554,7 +555,6 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['unusual']='无异常';
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
-
             }
             $arr[$k]['handle']='';
             switch ($type)
@@ -588,7 +588,7 @@ class GoodsOrder extends ActiveRecord
             switch ($arr[$k]['role_id'])
             {
                 case 7:
-                    $arr[$k]['role_id']='平台采购价';
+                    $arr[$k]['role_id']='平台价';
                     break;
                 case 6:
                     $arr[$k]['role_id']='供应商采购价格';
