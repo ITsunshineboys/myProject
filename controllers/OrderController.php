@@ -1029,7 +1029,7 @@ class OrderController extends Controller
             }else{
                 list($startTime, $endTime) = StringService::startEndDate($timeType);
                 $startTime = explode(' ', $startTime)[0];
-                $endTime = explode(' ', $endTime)[1];
+                $endTime = explode(' ', $endTime)[0];
             }
         if($type=='all')
         {
@@ -1071,6 +1071,11 @@ class OrderController extends Controller
                     }
                 }
 
+            if ($timeType=='today')
+            {
+                $startTime=date('Y-m-d',time());
+                $endTime=date('Y-m-d',time()+24*60*60);
+            }
             if ($type=='all' && !$supplier_id )
             {
                 if ($keyword)
