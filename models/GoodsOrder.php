@@ -368,7 +368,7 @@ class GoodsOrder extends ActiveRecord
         $return_insurance=$arr[7];
         $order_no=$arr[8];
         $buyer_message=$arr[9];
-        $client_ip=StringService::getClientIP();
+//        $client_ip=StringService::getClientIP();
         $goods=(new Query())
             ->from(Goods::tableName().' as a')
             ->where(['a.id'=>$goods_id])
@@ -432,7 +432,6 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->is_unusual=0;
             $OrderGoods->freight=$freight*100;
             $res2=$OrderGoods->save(false);
-
             if (!$res2){
                 $tran->rollBack();
                 return false;
@@ -468,7 +467,6 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }else{
-
                 $GoodsStat->sold_number+=$goods_num;
                 $GoodsStat->amount_sold+=$msg['total_fee'];
                 if (!$GoodsStat->save(false))
@@ -485,7 +483,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
