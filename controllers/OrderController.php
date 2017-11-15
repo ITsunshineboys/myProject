@@ -776,6 +776,7 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
+            var_dump($orders);exit;
             if (! Yii::$app->session['address_id']
                 || !Yii::$app->session['invoice_id']
                 || !Yii::$app->session['goods_id']
