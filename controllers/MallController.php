@@ -4877,7 +4877,15 @@ class MallController extends Controller
      */
     public function actionUserIdentity()
     {
-        $user = Yii::$app->user->identity;
+        $code = 1000;
+        $userId = (int)Yii::$app->request->get('user_id');
+        $user = User::findOne($userId);
+        if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         return Json::encode([
             'code' => 200,
