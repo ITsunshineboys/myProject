@@ -127,8 +127,8 @@ class SupplierCashManager extends ActiveRecord
             $arr['real_money'] = sprintf('%.2f', (float)$arr['real_money'] / 100);
             $arr['lost_money'] = sprintf('%.2f', $arr['cash_money'] - $arr['real_money']);
         } else {
-            $arr['lost_money'] = sprintf('%.2f', 0);
-            $arr['real_money'] = sprintf('%.2f', 0);
+            $arr['lost_money'] = null;
+            $arr['real_money'] = null;
         }
 
         $arr['status'] = SupplierCashController::USER_CASH_STATUSES[$arr['status']];
