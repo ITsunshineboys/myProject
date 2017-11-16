@@ -152,7 +152,7 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $timeType = trim(htmlspecialchars($request->get('time_type', 'all')), '');;
+        $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');;
         $status = (int)$request->get('status', '');
         $where = "uid=$user and role_id=6";
         $code=1000;
