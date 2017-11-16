@@ -401,7 +401,8 @@ class QuoteController extends Controller
                     $effect = Effect::pagination($where,$page,$size);
                 } else {
                     $timeType = StringService::startEndDate($min_time);
-                    $where = "add_time =" . $timeType[0] ." and add_time =". $timeType[1] ." AND city_code = ".$post;
+                    var_dump($timeType);exit;
+                    $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 }
 
