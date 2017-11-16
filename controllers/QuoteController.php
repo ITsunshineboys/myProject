@@ -375,11 +375,6 @@ class QuoteController extends Controller
         $min_time = (\Yii::$app->request->get('min'));
         $max_time = (\Yii::$app->request->get('max'));
         $toponymy = \Yii::$app->request->get('toponymy');
-        var_dump($post);
-        var_dump($min_time);
-        var_dump($max_time);
-        var_dump($toponymy);exit;
-
 
         switch ($post && $min_time && $max_time && $toponymy){
 //            case $post && !$min_time && !$max_time && !$toponymy:
@@ -399,7 +394,7 @@ class QuoteController extends Controller
 //                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
 //                $effect = Effect::pagination($where,$page,$size);
 //                break;
-            case  $post && $min_time && $max_time && !$toponymy:
+            case  $post != null && $min_time!= null && $max_time!= null && $toponymy == null:
                 if (strtotime($min_time) == strtotime($max_time)){
                     $timeType = StringService::startEndDate('today');
                     $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
