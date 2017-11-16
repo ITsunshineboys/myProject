@@ -213,7 +213,9 @@ var shop_style= angular.module("freight_template",[])
             }
             $scope.params.district_codes = cityChecked.join(',');
             _ajax.post('/mall/logistics-template-add', $scope.params, function (res) {
-                $state.go('commodity_manage')
+                _alert('提示', '保存成功！', function(){
+                    $state.go('commodity_manage',{logistics_flag:true})
+                })
             });
         };
 

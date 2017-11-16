@@ -696,30 +696,29 @@ class DistributionController extends Controller
                     ];
                     $total_amount+=$UserOrder['amount_order']*0.01;
                 }
+            }
 
-                $consigneeOrders=GoodsOrder::find()
-                    ->select('order_no,amount_order,paytime,remarks')
-                    ->where(['consignee_mobile'=>$subset['mobile'],'order_refer'=>1])
-                    ->asArray()
-                    ->all();
-                foreach ($consigneeOrders as &$consigneeOrder)
-                {
-                    $list[]=[
-                        'mobile'=>$user->mobile,
-                        'order_no'=>$consigneeOrder['order_no'],
-                        'amount_order'=>GoodsOrder::switchMoney($consigneeOrder['amount_order']*0.01),
-                        'create_time'=>date('Y-m-d H:i',$consigneeOrder['paytime']),
-                        'remarks'=>$consigneeOrder['remarks']
-                    ];
-                    $total_amount+=$consigneeOrder['amount_order']*0.01;
-                }
+            $consigneeOrders=GoodsOrder::find()
+                ->select('order_no,amount_order,paytime,remarks')
+                ->where(['consignee_mobile'=>$subset['mobile'],'order_refer'=>1])
+                ->asArray()
+                ->all();
+            foreach ($consigneeOrders as &$consigneeOrder)
+            {
+                $list[]=[
+                    'mobile'=>$subset['mobile'],
+                    'order_no'=>$consigneeOrder['order_no'],
+                    'amount_order'=>GoodsOrder::switchMoney($consigneeOrder['amount_order']*0.01),
+                    'create_time'=>date('Y-m-d H:i',$consigneeOrder['paytime']),
+                    'remarks'=>$consigneeOrder['remarks']
+                ];
+                $total_amount+=$consigneeOrder['amount_order']*0.01;
             }
         }
         $page=trim($request->get('page',1));
         $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
         $total_amount=GoodsOrder::switchMoney($total_amount);
         $total_orders=count($list);
-
         if ($list!=[]){
             foreach ($list as $key => $row)
             {

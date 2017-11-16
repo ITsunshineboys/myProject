@@ -1645,22 +1645,17 @@ angular.module("all_controller", ['ngCookies'])
     })
 
     // 支付成功
-    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams,$interval,$on){
+    .controller('pay_success_ctrl',function($rootScope,$scope,$http,$state,$stateParams,$interval){
         $rootScope.baseUrl = baseUrl;
-        $scope.timeOut = 5;
-        $scope.setTimeDown = function () {
-            $interval(function () {
-                if(+$scope.timeOut!=0){
-                    $scope.timeOut --;
-                }else{
-                    clearInterval($scope.setTimeDown);
-                    $state.go('home');
-                }
-            },1000)
-        };
-        $scope.setTimeDown();
-
-
+        // pay_success
+        $scope.timeOutNum = 5;
+        let setTimeDown = setInterval(function () {
+            $scope.$apply(function(){$scope.timeOutNum--});
+            if($scope.timeOutNum == 0) {
+                clearInterval(setTimeDown);
+                $state.go('home');
+            }
+        },1000);
     })
 
     //断网提示
