@@ -313,7 +313,7 @@ class GoodsRecommendSupplier extends ActiveRecord
                 isset($recommend['status']) && $recommend['status'] = self::$statuses[$recommend['status']];
 
                 if (isset($recommend['platform_price'])) {
-                    $recommend['show_price'] = $recommend['platform_price'];
+                    $recommend['show_price'] = StringService::formatPrice($recommend['platform_price'] / 100);
                     unset($recommend['platform_price']);
                 }
 
