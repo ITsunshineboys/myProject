@@ -702,6 +702,7 @@ class DistributionController extends Controller
                     ->where(['consignee_mobile'=>$subset['mobile'],'order_refer'=>1])
                     ->asArray()
                     ->all();
+                var_dump($consigneeOrders);
                 foreach ($consigneeOrders as &$consigneeOrder)
                 {
                     $list[]=[
@@ -715,11 +716,11 @@ class DistributionController extends Controller
                 }
             }
         }
+        exit;
         $page=trim($request->get('page',1));
         $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
         $total_amount=GoodsOrder::switchMoney($total_amount);
         $total_orders=count($list);
-
         if ($list!=[]){
             foreach ($list as $key => $row)
             {
