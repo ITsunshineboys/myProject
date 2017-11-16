@@ -3,16 +3,16 @@
         <div class="all">
                 <h1>基本信息</h1>
             <div class="form-group">
-                <label class="col-md-2 col-sm-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区名称</label>
-                <div class="col-md-3 col-sm-3">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区名称</label>
+                <div class="col-md-3">
                 <input type="text" name="districtName" ng-class="{'error':(submitForm.districtName.$invalid&&submitted) ||
                 (submitForm.districtName.$error.required&&change)}" ng-blur="change=!!submitForm.districtName.$error"
                        ng-model="ctrlScope.house_name" class="form-control" required maxlength="14">
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 col-sm-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区地址</label>
-                <div class="col-md-3 col-sm-3">
+                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区地址</label>
+                <div class="col-md-3">
                     <label>选择区县</label>
                     <select ng-model="ctrlScope.cur_house_county" class="form-control" ng-options="item.name for item in house_county"></select>
                     <!--<input type="text" class="form-control">-->
@@ -24,9 +24,9 @@
             </div>
         </div>
         <div class="all">
-            <div class="house_msg_header form-group">
-            <h1 class="col-md-5 col-sm-5">房屋信息</h1>
-                <div class="house_msg_btn col-md-3 col-sm-3">
+            <div class="house_msg_header">
+            <h1>房屋信息</h1>
+                <div class="house_msg_btn">
                     <button ng-click="add_ordinary_house()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
                     <button ng-click="add_case()"><i class="glyphicon glyphicon-plus"></i>案例添加</button>
                 </div>
