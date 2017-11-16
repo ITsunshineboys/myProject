@@ -55,11 +55,11 @@ class WxPayJsApiPay extends WxPayDataBase
     }
     public function SetPartnerid($value)
     {
-        return $this->values['mch_id'];
+        return $this->values['mch_id']= $value;
     }
     public function SetPrepayid($value)
     {
-        return $this->values['prepay_id'];
+        return $this->values['prepay_id']= $value;
     }
     /**
      * 判断支付时间戳是否存在
