@@ -1483,7 +1483,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         'province_code': $scope.cur_province,
                         'city_code': $scope.cur_city,
                         'house_name': $scope.house_name,
-                        'cur_county_id': $scope.cur_house_county,
+                        'cur_county_id': {id:$scope.cur_house_county.id,name:$scope.cur_house_county.name},
                         'address': $scope.address,
                         'house_informations': arr
                     }, config).then(function (response) {
@@ -1504,7 +1504,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         'province_code': $scope.cur_province,
                         'city_code': $scope.cur_city,
                         'house_name': $scope.house_name,
-                        'cur_county_id': $scope.cur_house_county,
+                        'cur_county_id': {id:$scope.cur_house_county.id,name:$scope.cur_house_county.name},
                         'address': $scope.address,
                         'house_informations': arr,
                         'delete_house': $scope.delete_house_list,
