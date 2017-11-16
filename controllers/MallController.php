@@ -890,6 +890,7 @@ class MallController extends Controller
     {
         $recommend = new GoodsRecommend;
         $recommend->attributes = Yii::$app->request->post();
+        $recommend->platform_price *= 100;
         $recommend->district_code = trim(Yii::$app->request->post('district_code', ''));
 
         $code = 1000;
