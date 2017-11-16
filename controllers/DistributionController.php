@@ -117,11 +117,12 @@ class DistributionController extends Controller
         if($user)
         {
             $sms['mobile']=$mobile;
-            $sms['type']='LoginMobile';
+            $sms['type']='loginDistribution';
         }else{
             $sms['mobile']=$mobile;
             $sms['type']='register';
         }
+
         try {
             new SmValidationService($sms);
         } catch (\InvalidArgumentException $e) {
