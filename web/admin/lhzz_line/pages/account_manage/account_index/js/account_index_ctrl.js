@@ -290,6 +290,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
                 tablePages();
             }
         });
+
         //监听结束时间
         $scope.$watch('end_time_more',function (newVal,oldVal) {
             $scope.page = 1;//默认第一页
