@@ -10,7 +10,7 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
         }
     };
 
-    let reg = /^(([1-9]+)|([0-9]+\.[0-9]{1,2}))$/; //金额正则
+    let reg = /^\d+(\.\d{1,2})?$/; //金额正则
     $scope.psdwarning = false;
     $scope.moneywarning = false;
     $scope.alljudgefalse = false;
@@ -28,10 +28,23 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
     }
 
 
+       // $scope.moneyCheck = () => {
+    //     if(!(reg.test($scope.money_num)&&$scope.money_num>0)){
+    //         $scope.money_num = '';
+    //     }
+    // }
+    //
+
+
+
+
 
     /*确认提现*/
     $scope.sureWithdraw = function (val, error) {
         $scope.test = false;
+        $scope.moneywarning = false;
+        $scope.psdwarning = false;
+        $scope.test2 = false;
         /*默认的情况*/
         if (!val) {
             $scope.alljudgefalse = true;
@@ -48,24 +61,21 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
             return;
         }
 
-        // if(!reg.test(Number($scope.money_num))){
-        //     $scope.test = true;
-        //     return;
-        // }
+        if(reg.test($scope.money_num)&&Number($scope.money_num)>0){
             let url = baseUrl+"/withdrawals/supplier-withdrawals-apply";
             let data = {money: +$scope.money_num, pay_pwd: +$scope.password};
             $http.post(url, data, config).then(function (res) {
-                $scope.moneywarning = false;
-                $scope.psdwarning = false;
                 switch (res.data.code)
                 {
                     case 1055:
                         $scope.psdwarning = true;
                         $scope.psdwrong = res.data.msg;
+                        $scope.test2 = true;
                         break;
                     case 1054:
                         $scope.moneywarning = true;
                         $scope.moneywrong = res.data.msg;
+                        $scope.test = true;
                         break;
                     case 1000:
                         $scope.failwarning = "您尚未绑定银行卡";
@@ -79,6 +89,11 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
                         break;
                 }
             })
+        }else{
+            $scope.moneywarning = true;
+            $scope.moneywrong = '您的输入不正确，请重新输入';
+            $scope.test = true;
+        }
     }
 
 
