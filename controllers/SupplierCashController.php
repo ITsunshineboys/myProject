@@ -290,7 +290,7 @@ class SupplierCashController extends Controller
         $time_type = trim(htmlspecialchars($request->get('time_type','')), '');
         $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->get('status', \Yii::$app->params['value_all'])), '');
+        $status = trim(htmlspecialchars($request->get('status','')), '');
         $search = trim(htmlspecialchars($request->get('search', '')), '');
         if (($time_type == 'custom' && $time_end && $time_start > $time_end)
         ) {
