@@ -1,10 +1,12 @@
 <div class="back">
     <section>
-        <div class="list_comment">
-            <ul class="ul_item">
-                <li class="li_item" ng-repeat="item in all_three_level" ng-click="go_cur_goods(item)">
-                        <img ng-src="{{baseUrl + item.icon}}" alt=""/><br/>
-                        <span>{{item.title}}</span>
+        <div class="container-fluid list_comment">
+            <ul class="row">
+                <li class="col-xs-4" ng-repeat="item in all_three_level" ng-click="go_cur_goods(item)">
+                    <div class="img_box">
+                        <img ng-src="{{baseUrl + item.icon}}" alt=""/>
+                    </div>
+                    <div class="img_txt">{{item.title}}</div>
                 </li>
             </ul>
         </div>
