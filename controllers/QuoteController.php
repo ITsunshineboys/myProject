@@ -396,6 +396,9 @@ class QuoteController extends Controller
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
+                var_dump($min_time);
+                var_dump($max_time);
+                exit;
                 if ($min_time < $max_time){
                     $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
