@@ -332,14 +332,23 @@ class SupplierCashManager extends ActiveRecord
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-            list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-            if ($time_start && $time_end && $time_end >= $time_start) {
-                $query->andWhere(['between', 'g.apply_time', $time_start, $time_end]);
-            } elseif ($time_start) {
+            list($time_start, $time_end) = StringService::startEndDate($time_type);
+            $time_start = explode(' ', $time_start)[0];
+            $time_end = explode(' ', $time_end)[0];
+
+            if ($time_start) {
                 $query->andWhere(['>=', 'g.apply_time', $time_start]);
-            } elseif ($time_end) {
-                $query->andWhere(['<=', 'g.apply_time', $time_end]);
             }
+            if ($time_end) {
+                    if ($time_end=='today')
+                    {
+                        $time_end = (int)(strtotime($time_end)+24*60*60);
+
+                    }else{
+                        $time_end = (int)strtotime($time_end);
+                    }
+                    $query->andWhere(['<=','g.apply_time',$time_end]);
+                }
 
         if (isset($search) && trim($search) == $search) {
             $query->andFilterWhere(['like', 's.shop_no', $search])

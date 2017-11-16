@@ -302,7 +302,7 @@ class SupplierCashController extends Controller
             ]);
         }
 
-        $data = SupplierCashManager::getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
+        $data = SupplierCashManager::getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search,$time_type);
 
         return Json::encode([
             'code' => 200,
