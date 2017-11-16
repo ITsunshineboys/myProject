@@ -122,6 +122,7 @@ class DistributionController extends Controller
             $sms['mobile']=$mobile;
             $sms['type']='register';
         }
+
         try {
             new SmValidationService($sms);
         } catch (\InvalidArgumentException $e) {
