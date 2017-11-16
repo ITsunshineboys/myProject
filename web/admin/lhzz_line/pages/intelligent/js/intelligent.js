@@ -32,15 +32,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         };
         $scope.params = {
             post:'',
-            city:'',
             min:'',
             max:'',
             toponymy:''
         };
-        $scope.getHouseList = function () {
+        $scope.getHouseList = function (item) {
             $scope.Config.currentPage = 1
             $scope.params.toponymy = ''
             $scope.search_txt = ''
+            if(item == 1){
+                $scope.params.post = $scope.county[0].id
+            }else{
+                $scope.params.min = ''
+                $scope.params.max = ''
+            }
             tablePages()
         }
         //添加材料项部分
@@ -285,7 +290,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.county = arr2
             $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
             $scope.cur_county = angular.copy($scope.county)[0]
-            $scope.params.city = $scope.county[0].id
             $scope.params.post = $scope.county[0].id
             tablePages()
         }, function (error) {
@@ -311,7 +315,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.county = arr2
                 $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
-                $scope.params.city = $scope.county[0].id
                 $scope.params.post = $scope.county[0].id
                 tablePages()
             }, function (error) {
@@ -330,19 +333,25 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.county = arr2
                 $scope.county.unshift({'id': item.id, 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
-                $scope.params.city = $scope.county[0].id
                 $scope.params.post = $scope.county[0].id
                 tablePages()
             })
         }
         //输入小区名模糊筛选小区
         $scope.search_house = function () {
-            $scope.start_time = ''
-            $scope.end_time = ''
+            $scope.params.max = ''
+            $scope.params.min = ''
             $scope.Config.currentPage = 1
+            $scope.params.post = $scope.county[0].id
             $scope.params.toponymy = $scope.search_txt
             tablePages()
         }
+        $scope.$watch('search_txt',function (newVal,oldVal) {
+            if(newVal==''){
+                $scope.params.toponymy = newVal
+                tablePages()
+            }
+        })
 
         //页面跳转
         //跳转小区列表页
