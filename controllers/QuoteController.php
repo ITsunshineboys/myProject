@@ -35,6 +35,7 @@ use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -395,8 +396,15 @@ class QuoteController extends Controller
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
-                $where = "add_time >=" . $min_time ." or add_time <=". $max_time." AND city_code = ".$post;
-                $effect = Effect::pagination($where,$page,$size);
+                if ($min_time < $max_time){
+                    $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                } else {
+                    $timeType = StringService::startEndDate($min_time);
+                    $where = "add_time =" . $timeType[0] ." and add_time =". $timeType[1] ." AND city_code = ".$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                }
+
                 break;
             case  $post && !$min_time && !$max_time && $toponymy:
                 $where = "toponymy like ". $toponymy ." and city_code = ".$post;
