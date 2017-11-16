@@ -13,6 +13,7 @@ use app\models\UserCashregister;
 use app\models\UserFreezelist;
 use app\services\AuthService;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use app\services\StringService;
 use yii\db\Exception;
 use yii\db\Query;
@@ -348,6 +349,9 @@ class SupplieraccountController extends  Controller{
                             'msg' => Yii::$app->params['errorCodes'][$code],
                         ]);
                     }
+                    if($startTime==$endTime){
+                        list($startTime, $endTime) =ModelService::timeDeal($startTime);
+                    }
                 } else {
                     list($startTime, $endTime) = StringService::startEndDate($timeType);
 
@@ -519,6 +523,9 @@ class SupplieraccountController extends  Controller{
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
+            }
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
             }
         } else {
             list($startTime, $endTime) = StringService::startEndDate($timeType);
