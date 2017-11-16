@@ -452,10 +452,10 @@ button.close{
 }
 .add{
     position: absolute;
-    right: .8rem;
-    top: -.1rem;
-    font-size: 1.8rem;
-    color: #fff;
+    right: .6rem;
+    top: -.5rem;
+    font-size: 2.7rem;
+    color: #333;
     font-weight: 100;
 }
 .pic_more{
@@ -690,4 +690,36 @@ button.close{
 }
 .nav-tabs>li>a:hover {
     border: none!important;
+}
+#goods_model_sm , #goods_model_body{
+    width: 25rem;
+    height: 10rem;
+    margin-top: 15rem;
+    margin-left: 4rem;
+    border-radius: .7rem;
+}
+.xian{
+    background-color:#dcdcdc;
+    /*width: 21rem;*/
+    height: 2px;
+    margin-top: 1.2rem;
+}
+#goods_model_body p{
+    font-size: 1.4rem;
+    color: #222;
+    padding: 1rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+#goods_model_body button{
+    color: #222;
+    background-color: white;
+    /*width: 20.5rem;*/
+    border: none;
+    font-size: 1.4rem;
+    outline: none;
+    padding: 0;
+    margin-left: 10.7rem;
+    margin-top: .8rem;
 }

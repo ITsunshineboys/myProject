@@ -743,6 +743,7 @@ angular.module("all_controller", ['ngCookies'])
         // $scope.description=$stateParams.description;
         // $scope.platform_price=$stateParams.platform_price;
         $scope.mall_id = $stateParams.mall_id;
+        $scope.shop_goods = '';
         console.log( $scope.mall_id);
         console.log( $scope.id);
 
@@ -766,6 +767,11 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.showPrompt = true;
                 $scope.myModal = '';
                 $scope.myModal_sec = ''
+            }
+            if($scope.datailsShop.left_number == 0){
+                $scope.shop_goods = '#goods_model';
+            }else {
+                $scope.shop_goods = '#myModal';
             }
 
             console.log($scope.status);
@@ -836,10 +842,10 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
         $scope.reduceNumber = function () { //点击==>减
-            if($scope.shopNum > 0){
+            if($scope.shopNum > 1){
                 $scope.shopNum--
             }else {
-                $scope.shopNum = 0;
+                $scope.shopNum = 1;
             }
         };
         // 监听购买数量输入是否大于库存

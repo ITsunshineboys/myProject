@@ -205,9 +205,22 @@
                 </div>
             </div>
         </div>
+
+
+        <!--判断商品库存是否为0   模态框-->
+        <div class="modal fade " id="goods_model" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" id="goods_model_sm" role="document">
+                <div class="modal-content" id="goods_model_body">
+                    <p>改商品库存不足，请选择其他商品</p>
+                    <div class="xian"></div>
+                    <button class="btn_num" data-dismiss="modal">确认</button>
+                </div>
+            </div>
+        </div>
         <div class="foot_tab">
             <button class="matching" ng-click="getOtherApp()">匹配小区</button>
-            <button class="add" ng-class="{'bg_btn':status == 0}" ng-disabled="status == 0" data-toggle="modal" data-target="#myModal">立即购买</button>
+            <button class="add" ng-class="{'bg_btn':status == 0}" ng-disabled="status == 0" data-toggle="modal" data-target="{{shop_goods}}">立即购买</button>
+            <!--//#myModal-->
         </div>
 
     </div>
