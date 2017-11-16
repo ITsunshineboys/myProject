@@ -337,7 +337,7 @@ class SupplierCashManager extends ActiveRecord
         }
 
         if($time_type=='custom'){
-            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) || $time_start > $time_end)
+            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
                     ) {
                 $code = 1000;
                 return $code;
