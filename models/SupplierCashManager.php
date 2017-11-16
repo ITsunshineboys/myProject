@@ -337,33 +337,30 @@ class SupplierCashManager extends ActiveRecord
         }
 
         if($time_type=='custom'){
-            if (($time_start && !StringService::checkDate($time_start))
-                        || ($time_end && !StringService::checkDate($time_end) || $time_start > $time_end)
+            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) || $time_start > $time_end)
                     ) {
-                        $code = 1000;
-                        return $code;
-                    } else {
-                        list($startTime, $endTime) = StringService::startEndDate($time_type);
-                        $time_start = explode(' ', $startTime)[0];
-                        $time_end = explode(' ', $endTime)[0];
-                    }
-                    if ($time_start) {
-                        $time_start = strtotime($time_start);
-                        $query->andWhere(['>=', 'g.apply_time', $time_start]);
+                $code = 1000;
+                return $code;
+            }
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($time_type);
+            $time_start = explode(' ', $startTime)[0];
+            $time_end = explode(' ', $endTime)[0];
+            if ($time_start) {
+                $time_start = strtotime($time_start);
+                $query->andWhere(['>=', 'g.apply_time', $time_start]);
 
-                    }
-                    if ($time_end) {
-                        if ($time_type == 'today') {
-                            $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
-
-                        } else {
-                            $time_end = (int)strtotime($time_end);
-                        }
-                        $query->andWhere(['<=', 'g.apply_time', $time_end]);
-                    }
+            }
+            if ($time_end) {
+                if ($time_type == 'today') {
+                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
+                } else {
+                    $time_end = (int)strtotime($time_end);
                 }
-
-        if(isset($search)){
+                $query->andWhere(['<=', 'g.apply_time', $time_end]);
+            }
+                }
+            if(isset($search)){
                 $query->andFilterWhere(['like', 's.shop_no', $search])->orFilterWhere(['like', 's.shop_name', $search]);
             }
 
