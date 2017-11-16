@@ -1277,7 +1277,7 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
             switch ($data[$k]['order_refer']){
                 case 1:
-                    $data[$k]['user_name']='无登录用户';
+                    $data[$k]['user_name']='线下店购买用户';
                     break;
                 case 2:
                     $data[$k]['user_name']=User::find()
