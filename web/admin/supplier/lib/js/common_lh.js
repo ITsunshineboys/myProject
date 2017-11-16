@@ -1,6 +1,6 @@
 let baseUrl = (function () {
     //return 'http://test.cdlhzz.cn';
-      return '';
+    return '';
 })();
 
 /**
@@ -340,7 +340,12 @@ app.service('_ajax', function ($http) {
                 });
             }
         };
-    });
+    })
+    .filter("toHtml", ["$sce", function ($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        }
+    }]);
 
 /**
  * 确认模态框

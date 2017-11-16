@@ -6,7 +6,7 @@ system_offline.controller("system_offline",function ($scope,$http,$stateParams,$
 	$scope.detail_arr=[];//详情数组
   	$scope.logistics_templates_supplier=[];//物流模板类型数组
 	$scope.detail_txt=$scope.detail_item.description;//详情描述
-
+    console.log($scope.detail_txt)
 	console.log($scope.detail_item.after_sale_services_desc)
 	$scope.detail_item_sale_ser=$scope.detail_item.after_sale_services_desc
   	$scope.sale_services_flag=false;

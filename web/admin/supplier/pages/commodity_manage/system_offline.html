@@ -167,9 +167,8 @@
         <!--详情描述-->
         <div class="detail">
             <span>详情描述</span>
-            <div class="sec">{{detail_txt}}</div>
+            <div class="sec" ng-bind-html="detail_txt | toHtml"></div>
         </div>
-
         <div class="done_stuff">
             <span>下架原因</span>
             <span class="sec">{{detail_item.offline_reason}}</span>
