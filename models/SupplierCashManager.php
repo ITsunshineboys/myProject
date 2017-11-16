@@ -337,6 +337,7 @@ class SupplierCashManager extends ActiveRecord
         }
 
         if($time_type=='custom'){
+
             if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
                     ) {
                 $code = 1000;
@@ -346,9 +347,7 @@ class SupplierCashManager extends ActiveRecord
 //
 //            }
         } else {
-            list($startTime, $endTime) = StringService::startEndDate($time_type);
-            $time_start = explode(' ', $startTime)[0];
-            $time_end = explode(' ', $endTime)[0];
+            list($time_start, $time_end) = StringService::startEndDate($time_type);
             if ($time_start) {
                 $time_start = strtotime($time_start);
                 $query->andWhere(['>=', 'g.handle_time', $time_start]);
