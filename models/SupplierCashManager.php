@@ -222,7 +222,7 @@ class SupplierCashManager extends ActiveRecord
         $today = $this->getToday();
         $data = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['status' => SupplierCashController::ACCESS_TYPE_CASH_DONE, 'role_id' => self::ROLE_ID])
+            ->where(['status' => SupplierCashController::ACCESS_TYPE_CHARGE, 'role_id' => self::ROLE_ID])
             ->andwhere('handle_time >= ' . $today[0])
             ->andWhere('handle_time <= ' . $today[1])
             ->sum('cash_money');
