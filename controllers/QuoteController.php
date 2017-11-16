@@ -375,6 +375,10 @@ class QuoteController extends Controller
         $min_time = (\Yii::$app->request->get('min'));
         $max_time = (\Yii::$app->request->get('max'));
         $toponymy = \Yii::$app->request->get('toponymy');
+        var_dump($post);
+        var_dump($min_time);
+        var_dump($max_time);
+        var_dump($toponymy);exit;
 
 
         switch ($post && $min_time && $max_time && $toponymy){
