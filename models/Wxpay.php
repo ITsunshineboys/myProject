@@ -254,4 +254,35 @@ class Wxpay  extends ActiveRecord
         curl_close( $ch );
         return $response;
     }
+
+
+    public  static function OrderAppPay($orderAmount,$orders=[])
+    {
+        ini_set('date.timezone','Asia/Shanghai');
+        //打印输出数组信息
+        function printf_info($data)
+        {
+            foreach($data as $key=>$value){
+                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+            }
+        }
+        //、获取用户openid
+        $tools = new PayService();
+        $input = new WxPayUnifiedOrder();
+        $attach=$id;
+        $total_amount=0.01;
+        $input->SetBody(self::EFFECT_BODY);
+        $input->SetAttach($attach);
+        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetTotal_fee($total_amount*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("goods");
+        $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
+        $input->SetTrade_type("APP");
+        $input->SetOpenid($openId);
+        $order = WxPayApi::unifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+        return  Json::decode($jsApiParameters);
+    }
 }
