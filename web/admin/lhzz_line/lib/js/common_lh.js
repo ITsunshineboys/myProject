@@ -1,8 +1,8 @@
 //const baseUrl = 'http://test.cdlhzz.cn';
 // const baseUrl = 'http://v1.cdlhzz.cn:888';
 let baseUrl = (function () {
-    return 'http://test.cdlhzz.cn';
-    // return '';
+    // return 'http://test.cdlhzz.cn';
+    return '';
 })();
 /**
  * ajax请求
@@ -19,8 +19,8 @@ app.service('_ajax', function ($http, $state) {
         }).then(function (response) {
             let res = response.data;
             if (res.code === 403) {
-                window.location.href="login.html";
-            } else if (res.code === 200 ||res.code == 1007) {
+                window.location.href = "login.html";
+            } else if (res.code === 200 || res.code == 1007) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
@@ -44,7 +44,7 @@ app.service('_ajax', function ($http, $state) {
         }).then(function (response) {
             let res = response.data;
             if (res.code === 403) {
-                window.location.href="login.html";
+                window.location.href = "login.html";
             } else if (res.code === 200 || res.code == 1007) {
                 if (typeof callback === 'function') {
                     callback(res)
@@ -339,6 +339,69 @@ app.service('_ajax', function ($http, $state) {
                         updateStars();
                     }
                 });
+            }
+        };
+    })
+    .directive('ngcLayDate', function ($timeout) {
+        return {
+            require: '?ngModel',
+            restrict: 'A',
+            scope: {
+                ngModel: '=',
+                maxDate: '@',
+                minDate: '@'
+            },
+            link: function (scope, element, attr, ngModel) {
+                let _date = null, _config = {};
+                // 渲染模板完成后执行
+                $timeout(function () {
+                    // 初始化参数
+                    _config = {
+                        elem: '#' + attr.id,
+                        format: attr.format != undefined && attr.format != '' ? attr.format : 'YYYY-MM-DD',
+                        max: attr.hasOwnProperty('maxDate') ? attr.maxDate : '',
+                        min: attr.hasOwnProperty('minDate') ? attr.minDate : '',
+                        choose: function (data) {
+                            scope.$apply(setViewValue);
+                        },
+                        clear: function () {
+                            ngModel.$setViewValue(null);
+                        }
+                    };
+                    // 初始化
+                    _date = laydate(_config);
+
+                    // 监听日期最大值
+                    if (attr.hasOwnProperty('maxDate')) {
+                        attr.$observe('maxDate', function (val) {
+                            _config.max = val;
+                        })
+                    }
+                    // 监听日期最小值
+                    if (attr.hasOwnProperty('minDate')) {
+                        attr.$observe('minDate', function (val) {
+                            _config.min = val;
+                        })
+                    }
+
+                    // 模型值同步到视图上
+                    ngModel.$render = function () {
+                        element.val(ngModel.$viewValue || '');
+                    };
+
+                    // 监听元素上的事件
+                    element.on('blur keyup change', function () {
+                        scope.$apply(setViewValue);
+                    });
+
+                    setViewValue();
+
+                    // 更新模型上的视图值
+                    function setViewValue() {
+                        let val = element.val();
+                        ngModel.$setViewValue(val);
+                    }
+                }, 0);
             }
         };
     });

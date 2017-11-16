@@ -179,12 +179,14 @@
                                     <td ng-bind="item.brand_name"></td>
                                     <td ng-bind="item.create_time"></td>
                                     <td>{{item.authorization_start}} 至 {{item.authorization_end}}</td>
-                                    <td ng-bind="item.review_status"></td>
-                                    <td ng-if="!item.review_note"><span ng-bind="item.review_note"
-                                                                        class="review_note"></span></td>
+                                    <td ng-bind="item.review_status_desc"></td>
+                                    <td ng-if="!item.review_note">
+                                        <span ng-bind="item.review_note" class="review_note"></span>
+                                    </td>
                                     <td ng-if="item.review_note" data-toggle="modal" data-target=".bs-example-modal-md"
-                                        ng-click="showNote(item.review_note)"><span ng-bind="item.review_note"
-                                                                                    class="review_note"></span></td>
+                                        ng-click="showNote(item.review_note)">
+                                        <span ng-bind="item.review_note" class="review_note"></span>
+                                    </td>
                                     <td><a ui-sref="merchant_details({itemdetail:item,store:store})">查看</a></td>
                                 </tr>
                             </table>
