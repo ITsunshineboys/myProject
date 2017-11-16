@@ -681,20 +681,23 @@ let commodity_manage = angular.module("commodity_manage", [])
 
 
 
-
-            $http({
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                //transformRequest: function (data) {
-                //  return $.param(data)
-                //},
-                method: 'POST',
-                url: baseUrl+'/mall/logistics-templates-supplier'
-            }).then(function successCallback(response) {
-                console.log(response);
-                $scope.contentMore = response.data.data.logistics_templates_supplier;
-                console.log($scope.contentMore);
-
-            });
+             _ajax.post('/mall/logistics-templates-supplier',{},function (response) {
+                 console.log(response);
+                 $scope.contentMore = response.data.logistics_templates_supplier;
+             });
+            // $http({
+        //     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        //     //transformRequest: function (data) {
+        //     //  return $.param(data)
+        //     //},
+        //     method: 'POST',
+        //     url: baseUrl+'/mall/logistics-templates-supplier'
+        // }).then(function successCallback(response) {
+        //     console.log(response);
+        //     $scope.contentMore = response.data.data.logistics_templates_supplier;
+        //     console.log($scope.contentMore);
+        //
+        // });
 
             //删除获取ID
             $scope.getId = function (item) {

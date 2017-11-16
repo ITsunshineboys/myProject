@@ -252,7 +252,9 @@ app.controller("template_details_ctrl", ["$scope", "$state", "$stateParams", "$h
         }
         $scope.params.district_codes = cityChecked.join(',');
         _ajax.post('/mall/logistics-template-edit', $scope.params, function (res) {
-            $state.go('commodity_manage')
+            _alert('提示', '保存成功！', function(){
+                $state.go('commodity_manage',{logistics_flag:true})
+            })
         });
     };
 
