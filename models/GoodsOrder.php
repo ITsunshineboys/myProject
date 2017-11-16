@@ -1281,7 +1281,7 @@ class GoodsOrder extends ActiveRecord
                     break;
                 case 2:
                     $data[$k]['user_name']=User::find()
-                        ->select('username')
+                        ->select('nickname')
                         ->where(['id'=>$data[$k]['user_id']])
                         ->asArray()
                         ->one()['nickname'];
