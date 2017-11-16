@@ -171,7 +171,7 @@
                         $uibModalInstance.close()
                     }
                 }
-                all_modal2.$inject = ['$scope', '$uibModalInstance']
+                all_modal.$inject = ['$scope', '$uibModalInstance']
                 if($scope.all_data.son.length == 0){
                     $state.go('index.bind_tel')
                 }else{
