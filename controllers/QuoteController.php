@@ -372,44 +372,43 @@ class QuoteController extends Controller
 
         //   市区搜索
         $post = \Yii::$app->request->get('post');
-        $min_time = (int)strtotime(\Yii::$app->request->get('min'));
-        $max_time = (int)strtotime(\Yii::$app->request->get('max'));
+        $min_time = (\Yii::$app->request->get('min'));
+        $max_time = (\Yii::$app->request->get('max'));
         $toponymy = \Yii::$app->request->get('toponymy');
-        var_dump($min_time);
-        var_dump($max_time);
 
-        if ($post && !$min_time && !$max_time && !$toponymy){
-            echo '失去';
-            if (substr($post, 4) == 00) {
-                $where = 'city_code = '.$post;
-                $effect = Effect::pagination($where,$page,$size);
-            } else {
-                $where = 'district_code = '.$post;
-                $effect = Effect::pagination($where,$page,$size);
-            }
-        } elseif ($post && $min_time && !$max_time && !$toponymy){
-            echo '最小时间';
-            $where = "add_time >=" . $min_time . " AND city_code = ".$post;
-            $effect = Effect::pagination($where,$page,$size);
-        } elseif ($post && !$min_time && $max_time && !$toponymy){
-            echo '最大时间';
-            $where = " add_time <=". $max_time." AND city_code = ".$post;
-            $effect = Effect::pagination($where,$page,$size);
-        } elseif ($post && $min_time && $max_time && !$toponymy){
-            echo 'shijian';
-            if ($min_time < $max_time){
-                $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
-                $effect = Effect::pagination($where,$page,$size);
-            } else {
-                $timeType = StringService::startEndDate($min_time);
-                $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
-                $effect = Effect::pagination($where,$page,$size);
-            }
-        } elseif ($post && !$min_time && !$max_time && $toponymy){
 
-            echo '小区';
-            $where = "toponymy like %".$toponymy."% and city_code = ".$post;
-            $effect = Effect::pagination($where,$page,$size);
+        switch ($post && $min_time && $max_time && $toponymy){
+            case $post && !$min_time && !$max_time && !$toponymy:
+                if (substr($post, 4) == 00) {
+                    $where = 'city_code = '.$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                } else {
+                    $where = 'district_code = '.$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                }
+                break;
+            case $post && $min_time && !$max_time && !$toponymy:
+                $where = "add_time >=" . strtotime($min_time) . " AND city_code = ".$post;
+                $effect = Effect::pagination($where,$page,$size);
+                break;
+            case $post && !$min_time && $max_time && !$toponymy:
+                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
+                $effect = Effect::pagination($where,$page,$size);
+                break;
+            case  $post && $min_time && $max_time && !$toponymy:
+                if ($min_time < $max_time){
+                    $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                } else {
+                    $timeType = StringService::startEndDate('today');
+                    $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                }
+                break;
+            case  $post && !$min_time && !$max_time && $toponymy:
+                $where = "toponymy like %".$toponymy."% and city_code = ".$post;
+                $effect = Effect::pagination($where,$page,$size);
+                break;
         }
 
         return Json::encode([
