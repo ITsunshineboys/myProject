@@ -93,7 +93,12 @@ class OrderGoods extends ActiveRecord
                     return $code;
                 }
                 $express=Express::find()
-                    ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+                    ->where(
+                        [
+                            'order_no'=>$postData['order_no'],
+                            'sku'=>$postData['sku']
+                        ]
+                    )
                     ->one();
                 if ($express)
                 {

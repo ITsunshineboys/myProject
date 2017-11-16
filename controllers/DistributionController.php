@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-
 use app\models\Distribution;
 use app\models\GoodsOrder;
 use app\models\Supplier;
@@ -14,12 +13,9 @@ use yii\helpers\Json;
 use yii\db\Exception;
 use app\services\ExceptionHandleService;
 use yii\web\ServerErrorHttpException;
-
 use app\services\SmValidationService;
 use app\services\StringService;
 use app\services\AuthService;
- 
-
 class DistributionController extends Controller
 {
 
@@ -81,7 +77,6 @@ class DistributionController extends Controller
             ],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -97,6 +92,7 @@ class DistributionController extends Controller
             ],
         ];
     }
+
 
      /**
      * 输入手机号获取验证码
@@ -322,6 +318,7 @@ class DistributionController extends Controller
         $tran = Yii::$app->db->beginTransaction();
         try{
             $Distribution->parent_id=(int)$user->id;
+            $Distribution->applydis_time=time();
             $res=$Distribution->save(false);
             if (!$res)
             {

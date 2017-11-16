@@ -2099,13 +2099,12 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                 }
-                if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
-                {
-                    $code=1000;
-                    $tran->rollBack();
-                    return $code;
-                }
-
+                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                    {
+                        $code=1000;
+                        $tran->rollBack();
+                        return $code;
+                    }
                     $order_money=$GoodsOrder->amount_order;
                     $GoodsOrder->pay_status=1;
                     $res=$GoodsOrder->save(false);
@@ -2136,13 +2135,10 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-
-
-
             }
 
             $tran->commit();
-        }catch (Exception $e){
+        }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return $code;
