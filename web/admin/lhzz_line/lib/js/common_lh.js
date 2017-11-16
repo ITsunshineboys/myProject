@@ -3,6 +3,7 @@
 let baseUrl = (function () {
     return 'http://test.cdlhzz.cn';
     // return '';
+
 })();
 /**
  * ajax请求
@@ -404,6 +405,45 @@ app.service('_ajax', function ($http, $state) {
                 }, 0);
             }
         };
+    })
+    /**
+     * 面包屑
+     * crumbConf    为一个数组例子如下
+     *
+     * [{
+     *  name: '',       各级面包屑名称
+     *  icon: '',       图标，一级才写
+     *  link: '',       各级面包屑跳转地址，同 ui-sref 的地址，最后一级不写；；若 link: -1 则为history.back() 跳转
+     *  params: {}      跳转地址所带参数，有参数才写
+     * }]
+     */
+    .directive('breadcrumb', function ($state) {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<ol class="breadcrumb">' +
+            '<li ng-repeat="obj in crumbConf">' +
+            '<i class="iconfont" ng-if="$index == 0" ng-class="obj.icon"></i>' +
+            '<a ng-if="!$last" href="javascript:void (0);" ng-bind="obj.name" ng-click="goToPage(obj.link, obj.params)"></a>' +
+            '<span ng-if="$last" ng-bind="obj.name"></span>' +
+            '</li></ol>',
+            scope: {
+                crumbConf: '='
+            },
+            link: function (scope) {
+                scope.goToPage = function (url, params) {
+                    if (url === -1) {
+                        window.history.back()
+                    } else {
+                        if (params === undefined) {
+                            $state.go(url)
+                        } else {
+                            $state.go(url, params)
+                        }
+                    }
+                }
+            }
+        }
     });
 
 /**

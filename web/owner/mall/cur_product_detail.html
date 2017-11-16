@@ -1,8 +1,8 @@
 <div class="main_body">
-    <a class="header" ng-click="returnPrev()"><img src="images/mall_nav_return.png" alt=""></a>
+    <a class="header" ng-click="returnPrev()"><img src="images/nav_return_white.png" alt=""></a>
     <div class="main">
         <div class="details_banner">
-            <img width="100%" height="100%" ng-src="http://test.cdlhzz.cn:888/{{cur_goods_detail.image}}" alt=""/>
+            <img ng-src="http://test.cdlhzz.cn:888/{{cur_goods_detail.image}}" alt=""/>
         </div>
         <div class="intro_box">
             <div class="product_name">
@@ -13,7 +13,7 @@
         </div>
         <!--下拉选择数量-->
         <div class="standard" ng-if="!!cur_status" data-toggle="modal" data-target="#myModal">
-            <div>选择数量</div>
+            <div class="standard_txt">选择数量</div>
             <div>
                 <img src="images/left_more.png" class="img_size" alt="">
             </div>
@@ -29,9 +29,11 @@
         </div>
         <!--商铺头部-->
         <div class="shop_header">
-            <div class="shop_header_child">
-                <img style="width: 3rem;height: 3rem;padding-left: 0;" ng-src="http://test.cdlhzz.cn:888/{{supplier.icon}}" alt=""/>
-                <span>{{supplier.shop_name}}</span>
+            <div class="shop_header_child clearfix">
+                <div class="img_box pull-left">
+                    <img ng-src="http://test.cdlhzz.cn:888/{{supplier.icon}}" alt=""/>
+                </div>
+                <span class="pull-left">{{supplier.shop_name}}</span>
             </div>
             <div class="shop_number">
                 <ul>
@@ -87,10 +89,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <p type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">
-                        <img src="images/close.png" alt="">
-                    </span>
-                    </p>
+                    <p type="button" class="close" data-dismiss="modal" aria-label="Close">x</p>
                 </div>
                 <div class="modal-body">
                     <div class="add_cart">
@@ -102,9 +101,9 @@
                     </div>
 
 
-                    <div class="sl">
-                        <span>购买数量</span>
-                        <div class="input_div">
+                    <div class="sl clearfix">
+                        <span class="pull-left">购买数量</span>
+                        <div class="input_div pull-right">
                             <input class="min am-btn" ng-click="operate('check_goods',0,1,'quantity')" name="" type="button" value="-" />
                             <input class="text_box" name="" ng-blur="check_goods.quantity==''?check_goods.quantity=1:''" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" type="text" ng-model="check_goods.quantity" style="width:40px;border: none;" />
                             <input class="add am-btn" ng-click="operate('check_goods',1,cur_params.left_number,'quantity')" name="" type="button" value="+" />
@@ -143,7 +142,7 @@
                     </div>
                     <div class="service_comment">
                         <ul>
-                            <li ng-repeat="item in protection">
+                            <li class="" ng-repeat="item in protection">
                                 <img src="images/right.png" alt=""/>
                                 <span>{{item}}</span>
                             </li>

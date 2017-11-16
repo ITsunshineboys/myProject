@@ -53,6 +53,14 @@ class WxPayJsApiPay extends WxPayDataBase
     {
         return $this->values['timeStamp'];
     }
+    public function SetPartnerid($value)
+    {
+        return $this->values['partnerid']= $value;
+    }
+    public function SetPrepayid($value)
+    {
+        return $this->values['prepayid']= $value;
+    }
     /**
      * 判断支付时间戳是否存在
      * @return true 或 false
@@ -146,13 +154,23 @@ class WxPayJsApiPay extends WxPayDataBase
     {
         $this->values['paySign'] = $value;
     }
+
+    /**
+     * 获取签名方式
+     * @return 值
+     **/
+    public function SetAppPaySign($value)
+    {
+        $this->values['Sign'] = $value;
+    }
+
     /**
      * 获取签名方式
      * @return 值
      **/
     public function GetPaySign()
     {
-        return $this->values['paySign'];
+        return $this->values['Sign'];
     }
     /**
      * 判断签名方式是否存在

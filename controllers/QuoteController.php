@@ -35,6 +35,7 @@ use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -370,14 +371,13 @@ class QuoteController extends Controller
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
 
-        //   市区搜索
         $post = \Yii::$app->request->get('post');
-        $min_time = (int)strtotime(\Yii::$app->request->get('min'));
-        $max_time = (int)strtotime(\Yii::$app->request->get('max'));
+        $min_time = (\Yii::$app->request->get('min'));
+        $max_time = (\Yii::$app->request->get('max'));
         $toponymy = \Yii::$app->request->get('toponymy');
 
 
-        switch ($post && $min_time && $max_time && $toponymy){
+        switch ($post || $min_time || $max_time || $toponymy){
             case $post && !$min_time && !$max_time && !$toponymy:
                 if (substr($post, 4) == 00) {
                     $where = 'city_code = '.$post;
@@ -388,23 +388,20 @@ class QuoteController extends Controller
                 }
                 break;
             case $post && $min_time && !$max_time && !$toponymy:
-                $where = "add_time >=" . $min_time . " AND city_code = ".$post;
+                $where = "add_time >=" . strtotime($min_time) . " AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case $post && !$min_time && $max_time && !$toponymy:
-                $where = " add_time <=". $max_time." AND city_code = ".$post;
+                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
-            case  $post && $min_time && $max_time && !$toponymy:
-                var_dump($min_time);
-                var_dump($max_time);
-                exit;
-                if ($min_time < $max_time){
-                    $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
+            case  $post  && $min_time && $max_time && !$toponymy:
+                if (strtotime($min_time) == strtotime($max_time)){
+                    $timeType = ModelService::timeDeal($min_time);
+                    $where = "add_time >=" . strtotime($timeType[0]) ." and add_time <=". strtotime($timeType[1]) ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 } else {
-                    $timeType = StringService::startEndDate($min_time);
-                    $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
+                    $where = "add_time >=" . strtotime($min_time) ." and add_time <=". strtotime($max_time) ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 }
                 break;
@@ -904,16 +901,13 @@ class QuoteController extends Controller
                         }
 
                         (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
-                        if (!empty($house['drawing_list'])) {
-                            if (!empty($house['id'])) {
-                                $images_id     = $house['id'];
-                                $effect_images = $house['drawing_list'];
-                                $series_id     = $house['series'];
-                                $style_id      = $house['style'];
-                                $images_user   = '案例图片';
-                                (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-                            }
-                        }
+
+                        $images_id     = $house['drawing_id'];
+                        $effect_images = $house['drawing_list'];
+                        $series_id     = $house['series'];
+                        $style_id      = $house['style'];
+                        $images_user   = '案例图片';
+                        (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
 
                         if (!empty($house['all_goods'])) {
                             foreach ($house['all_goods'] as $goods) {

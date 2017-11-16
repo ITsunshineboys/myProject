@@ -46,7 +46,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.params.min = ''
                 $scope.params.max = ''
             }
-            tablePages()
+            if($scope.params.post != ''){
+                tablePages()
+            }
         }
         //添加材料项部分
         /*分页配置*/
@@ -276,44 +278,47 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 arr.push({'id': key, 'name': value})
             }
             $scope.province = arr
-            $scope.cur_province = $scope.province[22]
-            for (let [key, value] of Object.entries(response.data[0][$scope.cur_province.id])) {
+            $scope.cur_province = $scope.province[22].id
+            $scope.province_name = $scope.province[22].name
+            for (let [key, value] of Object.entries(response.data[0][$scope.cur_province])) {
                 arr1.push({'id': key, 'name': value})
             }
             $scope.city = arr1
-            $scope.cur_city = $scope.city[0]
-            for (let [key, value] of Object.entries(response.data[0][$scope.cur_city.id])) {
+            $scope.cur_city = $scope.city[0].id
+            $scope.city_name = $scope.city[0].name
+            for (let [key, value] of Object.entries(response.data[0][$scope.cur_city])) {
                 arr2.push({'id': key, 'name': value})
             }
             $scope.house_county = angular.copy(arr2)
-            $scope.cur_house_county = $scope.house_county[0]
+            $scope.cur_house_county = $scope.house_county[0].id
             $scope.county = arr2
-            $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
-            $scope.cur_county = angular.copy($scope.county)[0]
+            $scope.county.unshift({'id': $scope.cur_city, 'name': '全市'})
+            $scope.cur_county = angular.copy($scope.county)[0].id
             $scope.params.post = $scope.county[0].id
             tablePages()
         }, function (error) {
             console.log(error)
         })
         //根据省动态获取市、区县
-        $scope.getCity = function (item) {
-            console.log(item)
-            $scope.cur_province = item
+        $scope.getCity = function () {
+            console.log($scope.cur_province)
             $http.get('districts2.json').then(function (response) {
                 let arr1 = []
                 let arr2 = []
-                for (let [key, value] of Object.entries(response.data[0][item.id])) {
+                console.log(response.data[0][$scope.cur_province])
+                for (let [key, value] of Object.entries(response.data[0][$scope.cur_province])) {
                     arr1.push({'id': key, 'name': value})
                 }
                 $scope.city = arr1
-                $scope.cur_city = $scope.city[0]
-                for (let [key, value] of Object.entries(response.data[0][$scope.cur_city.id])) {
+                $scope.cur_city = $scope.city[0].id
+                $scope.city_name = $scope.city[0].name
+                for (let [key, value] of Object.entries(response.data[0][$scope.cur_city])) {
                     arr2.push({'id': key, 'name': value})
                 }
                 $scope.house_county = angular.copy(arr2)
-                $scope.cur_house_county = $scope.house_county[0]
+                $scope.cur_house_county = $scope.house_county[0].id
                 $scope.county = arr2
-                $scope.county.unshift({'id': $scope.cur_city.id, 'name': '全市'})
+                $scope.county.unshift({'id': $scope.cur_city, 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.post = $scope.county[0].id
                 tablePages()
@@ -325,13 +330,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.getCounty = function (item) {
             $http.get('districts2.json').then(function (response) {
                 let arr2 = []
-                for (let [key, value] of Object.entries(response.data[0][item.id])) {
+                for (let [key, value] of Object.entries(response.data[0][$scope.cur_city])) {
                     arr2.push({'id': key, 'name': value})
                 }
                 $scope.house_county = angular.copy(arr2)
-                $scope.cur_house_county = $scope.house_county[0]
+                $scope.cur_house_county = $scope.house_county[0].id
                 $scope.county = arr2
-                $scope.county.unshift({'id': item.id, 'name': '全市'})
+                $scope.county.unshift({'id':$scope.cur_city , 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.post = $scope.county[0].id
                 tablePages()
@@ -1475,10 +1480,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 console.log(arr)
                 if ($scope.is_add) {
                     $http.post('/quote/plot-add', {
-                        'province_code': $scope.cur_province.id,
-                        'city_code': $scope.cur_city.id,
+                        'province_code': $scope.cur_province,
+                        'city_code': $scope.cur_city,
                         'house_name': $scope.house_name,
-                        'cur_county_id': $scope.cur_house_county.id,
+                        'cur_county_id': $scope.cur_house_county,
                         'address': $scope.address,
                         'house_informations': arr
                     }, config).then(function (response) {
@@ -1496,10 +1501,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     })
                 } else {
                     $http.post('/quote/plot-edit', {
-                        'province_code': $scope.cur_province.id,
-                        'city_code': $scope.cur_city.id,
+                        'province_code': $scope.cur_province,
+                        'city_code': $scope.cur_city,
                         'house_name': $scope.house_name,
-                        'cur_county_id': $scope.cur_house_county.id,
+                        'cur_county_id': $scope.cur_house_county,
                         'address': $scope.address,
                         'house_informations': arr,
                         'delete_house': $scope.delete_house_list,
@@ -1794,8 +1799,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.four_title = ''
             $http.get('/quote/labor-cost-edit-list', {
                 params: {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id,
+                    province: $scope.cur_province,
+                    city: $scope.cur_city,
                     worker_kind: item.worker_kind
                 }
             }).then(function (response) {
@@ -1873,8 +1878,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.four_title = ''
             $http.get('/quote/homepage-list', {
                 params: {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id
+                    province: $scope.cur_province,
+                    city: $scope.cur_city
                 }
             }).then(function (response) {
                 console.log(response)
@@ -1897,24 +1902,24 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.is_add_manage = 1
             $http.get('/quote/homepage-district', {
                 params: {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id
+                    province: $scope.cur_province,
+                    city: $scope.cur_city
                 }
             }).then(function (response) {
                 console.log(response)
                 $scope.all_house_city = response.data.list
                 $scope.cur_house_city = $scope.all_house_city[0]
                 $http.post('/quote/homepage-toponymy', {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id,
+                    province: $scope.cur_province,
+                    city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code
                 }, config).then(function (response) {
                     console.log(response)
                     $scope.all_toponymy = response.data.list
                     $scope.cur_toponymy_house = $scope.all_toponymy[0]
                     $http.post('/quote/homepage-street', {
-                        province: $scope.cur_province.id,
-                        city: $scope.cur_city.id,
+                        province: $scope.cur_province,
+                        city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy
                     }, config).then(function (response) {
@@ -1922,8 +1927,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         $scope.all_street = response.data.list
                         $scope.cur_street = $scope.all_street[0]
                         $http.post('/quote/homepage-case', {
-                            province: $scope.cur_province.id,
-                            city: $scope.cur_city.id,
+                            province: $scope.cur_province,
+                            city: $scope.cur_city,
                             district: $scope.cur_house_city.district_code,
                             toponymy: $scope.cur_toponymy_house.toponymy,
                             street: $scope.cur_street.street
@@ -1948,16 +1953,16 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //当修改区县
         $scope.change_county = function (item) {
             $http.post('/quote/homepage-toponymy', {
-                province: $scope.cur_province.id,
-                city: $scope.cur_city.id,
+                province: $scope.cur_province,
+                city: $scope.cur_city,
                 district: item.district_code
             }, config).then(function (response) {
                 console.log(response)
                 $scope.all_toponymy = response.data.list
                 $scope.cur_toponymy_house = $scope.all_toponymy[0]
                 $http.post('/quote/homepage-street', {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id,
+                    province: $scope.cur_province,
+                    city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code,
                     toponymy: $scope.cur_toponymy_house.toponymy
                 }, config).then(function (response) {
@@ -1965,8 +1970,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $scope.all_street = response.data.list
                     $scope.cur_street = $scope.all_street[0]
                     $http.post('/quote/homepage-case', {
-                        province: $scope.cur_province.id,
-                        city: $scope.cur_city.id,
+                        province: $scope.cur_province,
+                        city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy,
                         street: $scope.cur_street.street
@@ -1987,8 +1992,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //当修改小区
         $scope.change_toponymy = function (item) {
             $http.post('/quote/homepage-street', {
-                province: $scope.cur_province.id,
-                city: $scope.cur_city.id,
+                province: $scope.cur_province,
+                city: $scope.cur_city,
                 district: $scope.cur_house_city.district_code,
                 toponymy: item.toponymy
             }, config).then(function (response) {
@@ -1996,8 +2001,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.all_street = response.data.list
                 $scope.cur_street = $scope.all_street[0]
                 $http.post('/quote/homepage-case', {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id,
+                    province: $scope.cur_province,
+                    city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code,
                     toponymy: $scope.cur_toponymy_house.toponymy,
                     street: $scope.cur_street.street
@@ -2015,8 +2020,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //当修改街道
         $scope.change_street = function (item) {
             $http.post('/quote/homepage-case', {
-                province: $scope.cur_province.id,
-                city: $scope.cur_city.id,
+                province: $scope.cur_province,
+                city: $scope.cur_city,
                 district: $scope.cur_house_city.district_code,
                 toponymy: $scope.cur_toponymy_house.toponymy,
                 street: item.street
@@ -2041,8 +2046,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             if (valid && $scope.cur_image != '') {
                 if (!!$scope.is_add_manage) {
                     $http.post('/quote/homepage-add', {
-                        province: $scope.cur_province.id,
-                        city: $scope.cur_city.id,
+                        province: $scope.cur_province,
+                        city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy,
                         street: $scope.cur_street.street,
@@ -2060,8 +2065,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         })
                         $http.get('/quote/homepage-list', {
                             params: {
-                                province: $scope.cur_province.id,
-                                city: $scope.cur_city.id
+                                province: $scope.cur_province,
+                                city: $scope.cur_city
                             }
                         }).then(function (response) {
                             console.log(response)
@@ -2075,8 +2080,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 } else {
                     $http.post('/quote/homepage-edit', {
                         id: $scope.cur_manage_id,
-                        province: $scope.cur_province.id,
-                        city: $scope.cur_city.id,
+                        province: $scope.cur_province,
+                        city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy,
                         street: $scope.cur_street.street,
@@ -2094,8 +2099,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         })
                         $http.get('/quote/homepage-list', {
                             params: {
-                                province: $scope.cur_province.id,
-                                city: $scope.cur_city.id
+                                province: $scope.cur_province,
+                                city: $scope.cur_city
                             }
                         }).then(function (response) {
                             console.log(response)
@@ -2129,8 +2134,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 console.log(response)
                 $http.get('/quote/homepage-list', {
                     params: {
-                        province: $scope.cur_province.id,
-                        city: $scope.cur_city.id
+                        province: $scope.cur_province,
+                        city: $scope.cur_city
                     }
                 }).then(function (response) {
                     console.log(response)
@@ -2153,8 +2158,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.four_title = ''
             $http.get('/quote/homepage-district', {
                 params: {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id
+                    province: $scope.cur_province,
+                    city: $scope.cur_city
                 }
             }).then(function (response) {
                 console.log(response)
@@ -2165,8 +2170,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                 }
                 $http.post('/quote/homepage-toponymy', {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id,
+                    province: $scope.cur_province,
+                    city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code
                 }, config).then(function (response) {
                     console.log(response)
@@ -2177,8 +2182,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         }
                     }
                     $http.post('/quote/homepage-street', {
-                        province: $scope.cur_province.id,
-                        city: $scope.cur_city.id,
+                        province: $scope.cur_province,
+                        city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy
                     }, config).then(function (response) {
@@ -2190,8 +2195,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             }
                         }
                         $http.post('/quote/homepage-case', {
-                            province: $scope.cur_province.id,
-                            city: $scope.cur_city.id,
+                            province: $scope.cur_province,
+                            city: $scope.cur_city,
                             district: $scope.cur_house_city.district_code,
                             toponymy: $scope.cur_toponymy_house.toponymy,
                             street: $scope.cur_street.street
@@ -2251,26 +2256,39 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //删除推荐
         $scope.delete_manage = function (item) {
             console.log(+item.status == 0)
-            if (+item.status == 0) {
-                $http.post('/quote/homepage-delete', {
-                    id: item.id
-                }, config).then(function (response) {
-                    console.log(response)
-                    $http.get('/quote/homepage-list', {
-                        params: {
-                            province: $scope.cur_province.id,
-                            city: $scope.cur_city.id
-                        }
-                    }).then(function (response) {
-                        console.log(response)
-                        $scope.all_manage = response.data.list
-                    }, function (error) {
-                        console.log(error)
-                    })
-                }, function (error) {
-                    console.log(error)
-                })
+            let cur_data = $scope
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.is_cancel = true
+                $scope.cur_title = '是否删除'
+                $scope.common_house = function () {
+                    if (+item.status == 0) {
+                        $http.post('/quote/homepage-delete', {
+                            id: item.id
+                        }, config).then(function (response) {
+                            console.log(response)
+                            $http.get('/quote/homepage-list', {
+                                params: {
+                                    province: cur_data.cur_province,
+                                    city: cur_data.cur_city
+                                }
+                            }).then(function (response) {
+                                console.log(response)
+                                cur_data.all_manage = response.data.list
+                                $uibModalInstance.close()
+                            }, function (error) {
+                                console.log(error)
+                            })
+                        }, function (error) {
+                            console.log(error)
+                        })
+                    }
+                }
             }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
+            $uibModal.open({
+                templateUrl: 'pages/intelligent/cur_model.html',
+                controller: all_modal
+            })
         }
 
         /*工程标准*/
@@ -2297,7 +2315,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.four_title = ''
             $http.get('/quote/project-norm-edit-list', {
                 params: {
-                    city: $scope.cur_city.id,
+                    city: $scope.cur_city,
                     project: item.project
                 }
             }).then(function (response) {
@@ -2978,8 +2996,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             console.log($scope.cur_level_three)
             if ($scope.is_add_material) {
                 data = {
-                    province: $scope.cur_province.id,
-                    city: $scope.cur_city.id,
+                    province: $scope.cur_province,
+                    city: $scope.cur_city,
                     code: $scope.basic_attr.sku,
                     one_name: $scope.cur_level_one1.title,
                     two_name: $scope.cur_level_two1.title,

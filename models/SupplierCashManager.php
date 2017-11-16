@@ -62,8 +62,6 @@ class SupplierCashManager extends ActiveRecord
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
             unset($v['uid'], $v['role_id']);
         }
-
-        $count=UserCashregister::find()->where($where)->count();
         $data = ModelService::pageDeal($arr, $count, $page, $size);
 
         $data['supplier_id'] = Supplier::find()
@@ -299,6 +297,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
+
         $query = (new Query())
                 ->from(self::SUP_CASHREGISTER . ' as g')
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')

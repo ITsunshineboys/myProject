@@ -372,7 +372,6 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
 
     }
 
-
     /*
      查看详情跳转至不同的详情页面
      */

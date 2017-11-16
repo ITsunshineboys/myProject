@@ -191,7 +191,7 @@ CREATE TABLE `goods` (
   `comment_number` int unsigned not null default 0 comment '评价数',
   `viewed_number` int unsigned not null default 0 comment '浏览量',
   `favourable_comment_rate` tinyint unsigned not null default 0 comment '好评率',
-  `description` varchar(255) not null DEFAULT '',
+  `description` text,
   `create_time` int not null DEFAULT 0,
   `offline_time` int not null DEFAULT 0,
   `online_time` int not null DEFAULT 0,

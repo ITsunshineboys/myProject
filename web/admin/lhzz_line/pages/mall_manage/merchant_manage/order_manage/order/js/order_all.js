@@ -15,9 +15,6 @@ app.controller('order_all', ['$scope', '$stateParams', '_ajax', function ($scope
         operation: true     // 操作
     };
 
-    // 商家IDsession
-    sessionStorage.setItem('shopID', $stateParams.id);
-
     // 请求参数
     $scope.params = {
         supplier_id: $stateParams.id,   // 商家ID

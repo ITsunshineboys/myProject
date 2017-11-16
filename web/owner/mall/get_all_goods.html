@@ -21,18 +21,18 @@
         <!--商品展示列表-->
         <div class="mall_list">
             <div class="flex_div" >
-                <div class=" item_commodity"  ng-repeat="item in cur_replace_material"
+                <div class="item_commodity clearfix"  ng-repeat="item in cur_replace_material"
                      ng-click="go_details(item)">
-                    <div class="item_commodity_divimg">
+                    <div class="item_commodity_divimg pull-left">
                         <img ng-src="http://test.cdlhzz.cn/{{item.image}}" alt="" class="img_item " />
                         <!--{{item.cover_image}}-->
                     </div>
-                    <div class="item_commodity_comment">
+                    <div class="item_commodity_comment pull-left">
                         <p class="comment_one">{{item.title}}</p>
                         <p class="comment_two">{{item.subtitle}}</p>
                         <span class="comment_span">销量数：{{item.sold_number}}&nbsp;&nbsp;</span>
                         <span class="comment_span_two">{{item.favourable_comment_rate}}%好评</span>
-                        <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
+                        <p class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
                     </div>
                 </div>
             </div>
@@ -50,11 +50,11 @@
                                 <div class="style_screen" >
                                     <!--f风格选择？-->
                                     <div ng-if="all_goods_style.length!=0">
-                                        <div class="header_font">
+                                        <div class="header_font" data-toggle="collapse" href="#collapseExample_comment" aria-expanded="true" aria-controls="collapseExample_comment">
                                             <span class="style_size">风格选择</span>
-                                            <span class="down_arrow"  data-toggle="collapse" href="#collapseExample_comment" aria-expanded="true" aria-controls="collapseExample_comment">
-                                          <img src="images/mall_list.png" class="down_list" alt=""/>
-                                        </span>
+                                            <span class="down_arrow">
+                                                <img src="images/mall_list.png" class="down_list" alt=""/>
+                                            </span>
                                         </div>
 
                                         <!--x下拉面板-->
@@ -71,9 +71,9 @@
 
                                     <!--系列选择-->
                                     <div ng-if="all_goods_series.length!=0">
-                                        <div class="header_font">
+                                        <div class="header_font" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
                                             <span class="style_size">系列选择</span>
-                                            <span class="down_arrow"  data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                                            <span class="down_arrow">
                                           <img src="images/mall_list.png" class="down_list" alt=""/>
                                         </span>
                                         </div>
@@ -142,7 +142,7 @@
                                     <img class="img_search" src="images/mall_search.png" alt="">
                                 </div>
                                 <ul class="brands_more">
-                                    <li ng-repeat="item in all_goods_brands" ng-class="{'changeColor':cur_brand_copy.indexOf(item.id) != -1}" style="border: none;border-bottom: 2px solid #999;" ng-click="all_change(4,item)">
+                                    <li ng-repeat="item in all_goods_brands" ng-class="{'changeColor':cur_brand_copy.indexOf(item.id) != -1}" ng-click="all_change(4,item)">
                                         {{item.name}}
                                         <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="cur_brand_copy.indexOf(item.id) != -1">
                                     </li>

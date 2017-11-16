@@ -1,6 +1,6 @@
 <div class="ulright">
     <form novalidate name="goods_manage">
-    <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{cur_province.name}}-{{cur_city.name}}</h6>
+    <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
     <ul>
         <li ng-repeat="item in level_one" ng-class="{'cur_select':cur_level_one==item}" ng-click="go_detail(item,1)">{{item.title}}</li>
     </ul>

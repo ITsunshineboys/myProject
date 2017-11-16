@@ -152,7 +152,7 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $timeType = trim(htmlspecialchars($request->get('time_type', 'all')), '');;
+        $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');;
         $status = (int)$request->get('status', '');
         $where = "uid=$user and role_id=6";
         $code=1000;
@@ -359,7 +359,7 @@ class SupplierCashController extends Controller
         $search = trim(htmlspecialchars($request->get('search', '')), '');
         $code = 1000;
 
-        $where = "role_id=6";
+        $where = "g.role_id=6";
         if (!$search) {
             if ($timeType == 'custom') {
                 $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
