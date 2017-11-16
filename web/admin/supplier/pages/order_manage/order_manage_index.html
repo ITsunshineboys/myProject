@@ -44,7 +44,7 @@
                        class="time_interval" type="text" placeholder="结束时间" min-date="{{params.start_time}}">
 
                 <div class="searchbox">
-                    <input type="text" ng-model="myng.keyword">
+                    <input type="text" ng-model="myng.keyword" placeholder="搜索订单号或商品名称">
                     <span class="glyphicon glyphicon-search search"></span>
                 </div>
                 <button ng-click="search()">搜索</button>
@@ -107,7 +107,7 @@
                     <td ng-if="menu_list[2].value" ng-bind="item.goods_name"></td>
                     <td ng-if="menu_list[3].value">{{item.amount_order | currency:"¥"}}</td>
                     <td ng-if="menu_list[4].value" ng-bind="item.create_time"></td>
-                    <td ng-if="menu_list[5].value" ng-bind="item.consignee"></td>
+                    <td ng-if="menu_list[5].value" ng-bind="item.user_name"></td>
                     <td ng-if="menu_list[6].value" ng-bind="item.mobile"></td>
                     <td ng-if="menu_list[7].value" ng-bind="item.status"></td>
                     <td ng-if="menu_list[8].value" ng-bind="item.unusual" ng-class={txt_red:item.unusual!='无异常'}></td>
