@@ -58,6 +58,7 @@ header{
     z-index: 999;
     top: 0;
     left: 0;
+    line-height: 4rem;
 }
 header .return_btn{
     display: block;
