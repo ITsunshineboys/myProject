@@ -1,43 +1,43 @@
 <header flex="box:mean cross:center">
-    <p>
-        <a class="return_btn" ui-sref="home">
-            <img src="images/mall_nav_return.png" class="in_span">
-        </a>
-    </p>
-    <p class="pic_span">智能报价</p>
-    <div class="cur_location">
-        <a href="javascript: void (0);">
-            <i class="icon icon-map-marker icon-3x map"></i>
-            <span>成都</span>
-        </a>
-    </div>
+    <a class="return_btn" ui-sref="home">
+        <img src="images/mall_nav_return.png" class="in_span">
+    </a>
+    <span>智能报价</span>
+    <a class="local clearfix" href="javascript: void(0);">
+        <span class="pull-right">成都</span>
+        <i class="pull-right icon icon-map-marker icon-3x map"></i>
+    </a>
 </header>
 
 <div class="back clearfix">
     <!--小区信息-->
     <div class="background_w clearfix quarters_small animated fadeInUp" style="animation-delay: 0.15s;">
         <div class="shu"></div>
-        <p>小区信息</p>
-        <span class="choose_quarter">小区选择</span>
-        <img src="images/big.png" alt=""/>
-        <a ui-sref="nodata.cell_search({code: params.code, toponymy: params.toponymy, street: params.street})">
-            <input type="text" readonly ng-model="params.toponymy"/><br/>
-        </a>
-        <div class="address_div" flex="box:first">
-            <span class="quarters_adress">小区地址</span>
-            <span class="quarters">{{params.street}}</span>
+        <p class="title">小区信息</p>
+        <div class="list_box clearfix">
+            <div class="sub_title pull-left">小区选择</div>
+            <a ui-sref="nodata.cell_search({code: params.code, toponymy: params.toponymy, street: params.street})" class="input_box pull-left">
+                <input type="text" readonly ng-model="params.toponymy"/>
+                <img src="images/big.png"/>
+            </a>
+        </div>
+        <div class="list_box" flex="box:first">
+            <span class="sub_title">小区地址</span>
+            <span class="info">{{params.street}}</span>
         </div>
     </div>
 
     <!--房屋信息-->
     <div class="background_w housing_information animated fadeInUp" style="animation-delay: 0.3s;">
         <div class="shu"></div>
-        <p>房屋信息</p>
-        <h2>户型选择</h2>
+        <p class="title">房屋信息</p>
         <div class="list_dis">
+            <div class="sub_title">户型选择</div>
             <ul>
                 <li ng-repeat="obj in huxing" class="huxing" ng-class="{'active': activeObj.id === obj.id}" ng-click="huxingFun(obj)">
-                    <img ng-src="{{'http://test.cdlhzz.cn/' + obj.house_image}}"/><br/>
+                    <div>
+                        <img ng-src="{{'http://test.cdlhzz.cn/' + obj.house_image}}"/>
+                    </div>
                     <span>{{obj.particulars}} {{obj.area}}<sup>2</sup></span>
                 </li>
             </ul>
@@ -56,7 +56,7 @@
                     </label>
                     <label>
                         <input type="radio" ng-checked="activeObj.stairway == 0" name="stairway"/>
-                        <span ng-show="activeObj.stairway != 0"></span>
+                        <span ng-show="activeObj.stairway != 0" class="check_img"></span>
                         <img class="checked-active" src="images/mall_list_radio.png" ng-show="activeObj.stairway == 0"/>
                         <span class="no">无</span>
                     </label>
@@ -71,7 +71,7 @@
                     <label>
                         <input type="radio" name="stairs" ng-checked="activeObj.stair_id == item.id" ng-value="item.id"
                                ng-click="stairsFun(item)"/>
-                        <span ng-show="activeObj.stair_id != item.id"></span>
+                        <span ng-show="activeObj.stair_id != item.id" class="check_img"></span>
                         <img class="checked-active" src="images/mall_list_radio.png" ng-show="activeObj.stair_id == item.id"/>
                         <span>{{item.attribute}}</span>
                     </label>
@@ -84,7 +84,7 @@
     <div class="background_w">
         <div class="series clearfix">
             <div class="shu"></div>
-            <p>系列选择</p>
+            <div class="title">系列选择</div>
             <ul>
                 <li ng-repeat="item in seriesList">
                     <label>
@@ -111,7 +111,7 @@
     <div class="background_w">
         <div class="choose_style clearfix">
             <div class="shu"></div>
-            <p>风格选择</p>
+            <div class="title">风格选择</div>
             <ul>
                 <li ng-repeat="item in styleList">
                     <button type="button" ng-class="{'btn_checked':(item.id == activeObj.case_picture[0].style_id)}"
@@ -124,7 +124,7 @@
     <div class="background_w" ng-show="activeObj.type == 1">
         <div class="choose_style clearfix">
             <div class="shu"></div>
-            <p>样板间实图</p>
+            <div class="title">样板间实图</div>
             <div class="carousel">
                 <div id="swiperList" class="swiper-container">
                     <div class="swiper-wrapper">
@@ -144,7 +144,7 @@
     <!--材料选择-->
     <div class="background_w clearfix item_masonry" ng-show="activeObj.type == 1">
         <div class="shu"></div>
-        <p>材料选择</p>
+        <span class="title">材料选择</span>
         <span class="comment_edit">点击以下版块查看详情</span>
         <div id="masonry" class="masonry clearfix">
             <!--辅材-->
@@ -196,7 +196,7 @@
     <!--特殊要求-->
     <div class="background_w clearfix special_requirements" ng-show="activeObj.type == 1">
         <div class="shu"></div>
-        <p>特殊要求</p>
+        <div class="title">特殊要求</div>
         <textarea class="main_text" placeholder="请输入你的要求" ng-model="demand.text"></textarea>
         <span>0/300</span>
     </div>

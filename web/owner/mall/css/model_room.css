@@ -1,11 +1,14 @@
+body{
+    background-color: #F6F6F6 !important;
+}
 input[type="radio"] {
     display: none;
 }
 
 input[type="radio"] + span {
     display: inline-block;
-    width: 1rem;
-    height: 1rem;
+    width: 1.1rem;
+    height: 1.1rem;
     vertical-align: middle;
     border-radius: 50%;
     border: 1px solid #B8B6B6;
@@ -21,109 +24,70 @@ button {
 }
 
 .back {
-    background-color: #F6F6F6;
+    margin-top: 5rem;
 }
 
-/* header start */
-header {
-    width: 32rem;
-    height: 4rem;
-    background-color: white;
-}
 
-header p {
-    margin-bottom: 0;
-}
-
-.return_btn {
-    margin-left: 1rem;
-    color: #53A8F4;
-}
-
-header span {
-    font-size: 1.4rem;
-}
-
-.cur_location {
-    text-align: right;
-    color: #53A8F4;
-}
-
-.cur_location a {
-    display: inline-block;
-    margin-right: 1rem;
-    color: inherit;
-}
-
-.cur_location i {
-    margin-right: .2rem;
-}
-
-.pic_span {
-    text-align: center;
-    font-size: 1.5rem;
-}
-/* header end */
-
+/***********
+小区信息
+************/
+/*小区选择-start*/
 .shu {
     width: .3rem;
     height: 1.5rem;
-    background-color: #53A8F4;
+    background-color: #333;
     position: absolute;
-    left: .9rem;
-    margin-top: 1.35rem;
+    left: 1.2rem;
+    top: 1.7rem;
 }
 
-.shu + p {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    padding-left: 1.6rem;
-    font-size: 1.5rem;
-    color: #4A4A4A;
+.title{
+    padding-left: 1.1rem;
+    font-size: 1.6rem;
+    color: #666;
+    margin: 0;
 }
-
-.quarters_small {
-    width: auto;
-    min-height: 10rem;
-    padding-bottom: 1.5rem;
+.sub_title{
+    font-size: 1.4rem;
+    color: #666;
 }
-
-.choose_quarter {
-    margin-left: 1rem;
-    font-size: 1.3rem;
-    color: #4A4A4A;
+.list_box{
+    margin-top: 1.6rem;
 }
-
-.quarters_small input {
-    padding-left: 2.8rem;
-    width: 22rem;
-    height: 2.7rem;
-    color: #4A4A4A;
-    font-size: 1.2rem;
-    border: 1px solid #C2C2C2;
-    border-radius: 2rem;
-}
-
-.quarters_small img {
-    width: 1.5rem;
+.input_box{
+    margin-left: 1.6rem;
     position: relative;
-    left: 2.5rem;
-    top: -.3rem;
+}
+.input_box input{
+    display: block;
+    padding: .3rem 3rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
+    border-radius: 2rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
 }
 
-.quarters_adress {
-    padding-left: 1rem;
+.input_box img{
+    position: absolute;
+    left: 1.2rem;
+    top: 0.6rem;
 }
+/*小区选择-end*/
 
-.quarters {
-    margin-left: 2rem;
+/*小区地址-start*/
+.list_box .info{
+    font-size: 1.4rem;
+    color: #999;
+    margin-left: 1.6rem;
 }
+/*小区地址-end*/
 
-.quarters_adress,
-.quarters {
-    font-size: 1.3rem;
-    margin-top: 1rem;
-}
+/***********
+房屋信息
+************/
+/*户型选择-start*/
 
 .housing_information {
     margin-top: 1rem;
@@ -139,57 +103,127 @@ header span {
 
 .list_dis {
     padding-bottom: 1rem;
+    padding-top: 1.6rem;
 }
 
 .list_dis ul {
     overflow: auto;
     white-space: nowrap;
+    padding-left: 0;
+    margin-top: 0.3rem;
 }
 
 .list_dis ul li {
     display: inline-block;
-    margin-top: 1rem;
-    margin-left: .5rem;
-    padding: .5rem;
     font-size: 1rem;
     text-align: center;
     list-style: none;
+    margin-right: 1.2rem;
+    color: #999;
 }
 
-.list_dis ul li:first-child {
-    margin-left: .8rem;
+.huxing div{
+    width: 8rem;
+    height: 8rem;
+    overflow: hidden;
+    border-radius: .3rem;
+    border: 2px solid #fff;
+    margin-bottom: .3rem;
 }
 
-.huxing img {
+.huxing div img {
     padding: .2rem;
     margin-bottom: .5rem;
-    width: 6.1rem;
-    border: 2px solid #cccccc;
+    width: 100%;
+    height: 100%;
 }
 
-.huxing.active img {
-    border-color: #53A8F4;
+.huxing.active{
+    color: #333;
 }
 
-.huxing.active {
-    color: #53a8f4;
+.huxing.active div{
+    border: 2px solid #333;
 }
+/*户型选择-end*/
 
+/*层高飘窗-start*/
 .comment_height ul {
-    padding-left: 1rem;
+    padding-left: 0;
 }
 
 .comment_height ul li {
     font-size: 1.3rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    color: #4A4A4A;
-    border-top: 1px solid #C2C2C2;
+    padding: 1.2rem 0;
+    color: #666;
+    border-top: 2px solid #dcdcdc;
 }
 
+.comment_height ul li span{
+    color: #999;
+    margin-left: 1.6rem;
+}
+/*层高飘窗-end*/
+
+/*楼梯选择-start*/
+.comment_height ul li span.choose_span{
+    margin-left: 0;
+    color: #666;
+}
+
+.choose_stairs label{
+    margin-left: 1.6rem;
+}
+.comment_height ul li span.have{
+    margin-left: 0.3rem;
+    font-weight: normal;
+    color: #666;
+}
+
+.comment_height ul li span.no{
+    margin-left: 0.3rem;
+    font-weight: normal;
+    color: #999;
+}
+
+.choose_stairs label img{
+    margin-top: -0.2rem;
+}
+.choose_stairs label .check_img{
+    margin-top: -0.2rem;
+}
+.structure{
+    border: 2px solid #dcdcdc;
+    width: 100%;
+    padding: 1.2rem 1.2rem 0 1.2rem;
+    border-radius: .3rem;
+}
+.structure ul {
+}
+
+.structure ul li {
+    display: inline-block;
+    margin-right: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #6C6C6C;
+}
+
+.structure ul li label {
+    font-weight: 400;
+}
+
+.structure ul li label img{
+    margin-top: -0.2rem;
+}
+
+.structure ul li label .check_img{
+    margin-top: -0.1rem;
+}
+
+/*楼梯选择-end*/
 .tag {
     color: #06CB7E;
-    margin-left: -1.6rem;
     margin-top: 1.2rem;
 }
 
@@ -208,6 +242,7 @@ header span {
 .decoration {
     margin-bottom: 0;
     padding-left: 0;
+    margin-top: 0.8rem;
 }
 
 .decoration li:last-child {
@@ -216,27 +251,29 @@ header span {
 }
 
 .title_p {
-    font-size: 1.1rem;
-    color: #4A4A4A;
+    font-size: 1.2rem;
+    color: #666;
+    font-weight: normal;
 }
 
 .title_p span {
-    color: #6C6C6C;
+    color: #999;
     padding-left: 1rem;
     font-weight: 400 !important;
+    font-size: 1rem;
 }
 
 .pic {
-    font-size: 1.1rem;
-    color: #F59C23;
+    font-size: 1.2rem;
+    color: #D9AD65;
 }
 
 .edit-btn {
     display: block;
-    margin: 1.2rem auto 0;
+    margin: 2rem auto 0.8rem;
     width: 12rem;
     height: 3.2rem;
-    color: #53A8F4;
+    color: #333;
     font-size: 1.2rem;
     text-align: center;
     line-height: 3.2rem;
@@ -250,52 +287,50 @@ header span {
     /*margin-left: 1rem;*/
     color: #888;
     position: relative;
-    border-bottom: 1px solid #f4f4f4;
+    border-bottom: 2px solid #efefef;
     padding-bottom: .4rem;
     padding-top: .4rem;
 }
 
 .decoration li span {
-    font-size: 1.1rem;
-    color: #6C6C6C;
+    font-size: 1rem;
+    color: #999;
+    line-height: 2.2rem;
 }
 
 .decoration li span.brand {
-    color: #b8b6b6;
+    color: #666;
 }
 
 .pic_q {
     position: absolute;
     right: 0;
-    color: #959292;
+    color: #999;
 }
 
 .special_requirements {
-    margin-bottom: 5rem;
+    margin-bottom: 5rem !important;
+    padding: 1.2rem 1.2rem 0 1.2rem !important;
 }
 
 .main_text {
     padding-top: .5rem;
     padding-left: 1rem;
-    margin-left: 1rem;
-    width: 30rem;
+    width: 100%;
     height: 10rem;
     font-size: 1.3rem;
     outline: none;
-    border-radius: 1rem;
-    border: 1px solid #B8B6B6;
+    border-radius: .3rem;
+    border: 2px solid #B8B6B6;
+    margin-top: 1.2rem;
 }
 
 .special_requirements span {
     position: relative;
-    left: 27rem;
+    left: 26rem;
     top: -2rem;
     font-size: 1rem;
     color: #999;
-}
-
-.footer_set {
-    padding-left: 1rem;
 }
 
 .footer_set > p:first-child {
@@ -305,14 +340,14 @@ header span {
 }
 
 .first_span {
-    color: #F55122;
+    color: #D9AD65;
     font-size: 1.6rem;
 }
 
 .second_span {
     margin-left: .8rem;
     font-size: 1.2rem;
-    color: #F59C22;
+    color: #D9AD65;
 }
 
 .three_span {
@@ -321,56 +356,38 @@ header span {
 }
 
 .footer_settlement {
-    position: fixed;
+    position: fixed !important;
     left: 0;
     bottom: 0;
     z-index: 100;
     width: 100%;
     height: 4rem;
+    margin-bottom: 0 !important;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.2)
 }
 
 .primary_btn {
     width: 10rem;
-    height: 100%;
+    height: 4rem;
     font-size: 1.3rem;
     color: #fff;
     text-align: center;
-    background-color: #53A8F4;
-    border: none;
+    background-color: #333;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 2px solid #333;
 }
 
-.structure {
-    border: 1px solid #E5E5E5;
-    width: 30rem;
-    margin-left: 1rem;
-    padding-top: 1rem;
-    margin-top: 1rem;
-    border-radius: .2rem;
-    margin-bottom: 1.7rem;
-
-}
-
-.structure ul {
-    margin-left: -1rem;
-}
-
-.structure ul li {
-    display: inline-block;
-    margin-left: 3rem;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    color: #6C6C6C;
-}
-
-.structure ul li label {
-    font-weight: 400;
+.series ul{
+    padding-left: 0;
+    margin-top: 1.2rem;
 }
 
 .series ul li {
     display: inline-block;
     font-size: 1rem;
-    margin-left: 2rem;
-    padding-top: 1rem;
+    margin-right: 2.2rem;
 }
 
 .series label {
@@ -379,21 +396,18 @@ header span {
 }
 
 .fit {
-    padding-top: 1rem;
+    padding-top: 1.2rem;
 }
 
 .fit h1 {
-    margin-left: 1rem;
     font-size: 1.4rem;
-    color: #6C6C6C;
+    color: #666;
     font-weight: 400;
 }
 
 .fit p {
-    padding-left: 1rem;
-    padding-bottom: 1rem;
     font-size: 1.2rem;
-    color: #959292;
+    color: #999;
 }
 
 .choose_style ul {
@@ -402,6 +416,7 @@ header span {
     padding-bottom: .5rem;
     white-space: nowrap;
     overflow-x: auto;
+    margin-top: 1.2rem;
 }
 
 .choose_style ul li {
@@ -421,11 +436,10 @@ header span {
 }
 
 .carousel {
-    margin-left: 1rem;
-    margin-bottom: 1rem;
-    width: 30rem;
+    width: 100%;
     height: 16rem;
     border: 1px solid #C2C2C2;
+    margin-top: 1.2rem;
 }
 
 .application {
@@ -443,37 +457,23 @@ header span {
     border-radius: .3rem;
 }
 
-.choose_stairs > span,
-.choose_stairs label {
-    vertical-align: middle;
-}
 
-.choose_stairs label {
-    margin-left: 3rem;
-}
-
-.choose_stairs label span {
-    margin-left: .3rem;
-    font-size: 1.3rem;
-    font-weight: 400;
-    vertical-align: middle;
-}
 
 .tag {
-    margin-left: 1.2rem;
     color: #06CB7E;
 }
 
 .tag span {
     display: inline-block;
-    margin-right: 1.2rem;
-    padding: .2rem 1.5rem 0;
+    margin-right: 0.8rem;
+    padding: .2rem 1.2rem 0;
     height: 2rem;
     text-align: center;
     font-size: 1rem;
-    background-color: #F9FEFC;
+    background-color: #fff;
     border-radius: 1.5rem;
-    border: 1px solid #8DE2C1;
+    border: 2px solid #999;
+    color: #333;
 }
 
 .btn_checked {
@@ -482,7 +482,7 @@ header span {
 }
 
 .item_masonry {
-    padding-bottom: 2rem;
+    padding: 1.2rem .8rem 1.2rem 1.2rem !important;
 }
 
 .item_masonry > p {
@@ -492,15 +492,14 @@ header span {
 
 .masonry {
     position: relative;
-    margin-top: 1rem;
-    padding: 1rem;
+    margin-top: 1.2rem;
     background-color: white;
 }
 
 .masonry .column {
     float: left;
-    margin-left: 1rem;
-    width: 14.5rem;
+    width: 14.3rem;
+    margin-right: 0.7rem;
 }
 
 .masonry .column:first-child {
@@ -508,24 +507,22 @@ header span {
 }
 
 .masonry .box {
-    margin-bottom: 1rem;
-    padding: .5rem;
-    border: .1rem solid #E5E5E5;
-    border-radius: 2px;
+    margin-bottom: .7rem;
+    padding: .5rem .8rem;
+    border: 2px solid #E5E5E5;
+    border-radius: .3rem;
 }
 
 .comment_edit {
     color: #B8B6B6;
     font-size: 1rem;
     margin-left: 1rem;
-    vertical-align: middle;
-}
-
-.checked-active {
-    max-width: 1rem;
+    vertical-align: super;
 }
 
 .background_w {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     background-color: #fff;
+    padding: 1.2rem;
+    position: relative;
 }
