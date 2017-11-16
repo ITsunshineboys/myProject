@@ -370,13 +370,13 @@ class QuoteController extends Controller
         $page = (int)\Yii::$app->request->get('page', 1);
         $size = (int)\Yii::$app->request->get('size', Effect::PAGE_SIZE_DEFAULT);
 
-        //   市区搜索
         $post = \Yii::$app->request->get('post');
         $min_time = (\Yii::$app->request->get('min'));
         $max_time = (\Yii::$app->request->get('max'));
         $toponymy = \Yii::$app->request->get('toponymy');
 
-        switch ($post && $min_time && $max_time && $toponymy){
+
+        switch ($post || $min_time || $max_time || $toponymy){
 //            case $post && !$min_time && !$max_time && !$toponymy:
 //                if (substr($post, 4) == 00) {
 //                    $where = 'city_code = '.$post;
@@ -394,7 +394,7 @@ class QuoteController extends Controller
 //                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
 //                $effect = Effect::pagination($where,$page,$size);
 //                break;
-            case  $post != null && $min_time!= null && $max_time!= null && $toponymy == null:
+            case  $post  && $min_time && $max_time && !$toponymy:
                 if (strtotime($min_time) == strtotime($max_time)){
                     $timeType = StringService::startEndDate('today');
                     $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
