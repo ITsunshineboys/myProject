@@ -377,8 +377,6 @@ class DistributionController extends Controller
             }
         }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
         }
         if ($startTime) {
             $startTime = (int)strtotime($startTime);
@@ -470,7 +468,10 @@ class DistributionController extends Controller
             }
         }
         $time=strtotime(date('Y-m-d',time()));
-        $nowday_user=Distribution::find()->asArray()->where('create_time>'.$time)->count();
+        $nowday_user=Distribution::find()
+            ->asArray()
+            ->where('create_time>'.$time)
+            ->count();
         $data['total_add']=$count;
         $data['nowday_add']=$nowday_user;
         return Json::encode([
