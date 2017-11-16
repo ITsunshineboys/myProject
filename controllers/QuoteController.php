@@ -377,8 +377,9 @@ class QuoteController extends Controller
         $toponymy = \Yii::$app->request->get('toponymy');
 
 
-        switch ($post || $min_time || $max_time || $toponymy){
+        switch ($post && $min_time && $max_time && $toponymy){
             case $post && !$min_time && !$max_time && !$toponymy:
+                echo '区';exit;
                 if (substr($post, 4) == 00) {
                     $where = 'city_code = '.$post;
                     $effect = Effect::pagination($where,$page,$size);
@@ -388,15 +389,17 @@ class QuoteController extends Controller
                 }
                 break;
             case $post && $min_time && !$max_time && !$toponymy:
+                echo '最小时间';exit;
                 $where = "add_time >=" . $min_time . " AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case $post && !$min_time && $max_time && !$toponymy:
+                echo '最大时间';exit;
                 $where = " add_time <=". $max_time." AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
-                var_dump($min_time);exit;
+                echo '时间';exit;
                 if ($min_time < $max_time){
                     $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
@@ -406,10 +409,10 @@ class QuoteController extends Controller
                     $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 }
-
                 break;
             case  $post && !$min_time && !$max_time && $toponymy:
-                $where = "toponymy like ". $toponymy ." and city_code = ".$post;
+                echo '小区';exit;
+                $where = "toponymy like %".$toponymy."% and city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
         }
