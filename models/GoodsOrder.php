@@ -859,11 +859,17 @@ class GoodsOrder extends ActiveRecord
             $output['username']=$user['nickname'];
 
             if (empty($output['username'])){
-                $output['username']=(new Query())
+                if ($arr[$k]['order_refer']==1)
+                {
+                    $output['username']='线下店购买用户';
+                    $output['role']='平台';
+                }else{
+                    $output['username']=(new Query())
                     ->from('user_address')
+                    ->select('consignee')
                     ->where(['id'=>$arr[$k]['address_id']])
                     ->one()['consignee'];
-                $output['role']='平台';
+                }
             }else{
                 $output['role']=(new Query())
                     ->from(UserRole::tableName().' as a')
