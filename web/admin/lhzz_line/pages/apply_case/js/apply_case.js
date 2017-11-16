@@ -42,6 +42,8 @@ angular.module('apply_case',[])
             };
             $scope.getApplyCase = function () {
                 $scope.Config.currentPage = 1
+                $scope.params.keyword = ''
+                $scope.keyword = ''
                 if($scope.params.time_type == 'custom'){
                     if($scope.params.start_time!=''||$scope.params.start_time!=''){
                         tablePages()
@@ -49,9 +51,14 @@ angular.module('apply_case',[])
                 }else{
                     tablePages()
                 }
-                $scope.params.keyword = ''
             }
             tablePages()
+            $scope.$watch('keyword',function (newVal,oldVal) {
+                if(newVal == ''){
+                    $scope.params.keyword = newVal
+                    tablePages()
+                }
+            })
             $scope.ctrlScope = $scope
             $scope.keyword = ''
             $scope.time_type = [

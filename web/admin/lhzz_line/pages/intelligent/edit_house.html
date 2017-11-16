@@ -3,8 +3,8 @@
         <div class="all">
             <h1>户型信息</h1>
             <div class="form-group">
-                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
-                <div class="col-md-3">
+                <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
+                <div class="col-md-3 col-sm-3 col-xs-3">
                     <input ng-class="{'error':(curForm.houseName.$invalid&&submitted) || ((curForm.houseName.$error.required || curForm.houseName.$error.pattern)&&change)}"
                            ng-pattern="/^[\d\D]{1,12}$/" ng-blur="change=!!curForm.houseName.$error" autocomplete="off"
                            type="text" id="houseName" name="houseName" required placeholder="请输入户型名称"
@@ -12,8 +12,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
-                <div class="col-md-3">
+                <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
+                <div class="col-md-3 col-sm-3 col-xs-3">
                     <input id=" houseArea" autocomplete="off" type="text" name="houseArea" ng-pattern="/^[1-9]$|^[1-9]\d$|^1[0-7]\d$|^[1-9]\.\d{1,2}$|^[1-9]\d\.\d{1,2}$|^1[0-7]\d.\d{1,2}$|^180$/"
                            required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
                     ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
@@ -21,15 +21,15 @@
                 <span class="unit">m<sup>2</sup></span>
             </div>
             <div class="form-group">
-                <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
-                <div class="col-md-3">
-                    <label for="room" class="col-md-6 left_house_type">
+                <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
+                <div class="col-md-3 col-sm-3 col-xs-3">
+                    <label for="room" class="col-md-6 col-sm-6 col-xs-6 left_house_type">
                         <input id="room" type="text" disabled class="form-control" ng-model="cur_house_information.cur_room">
                         <span>室</span>
                         <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',6,1)"></button>
                         <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',1,0)"></button>
                     </label>
-                    <label for="hall" class="col-md-6 right_house_type">
+                    <label for="hall" class="col-md-6 col-sm-6 col-xs right_house_type">
                         <input id="hall" type="text" disabled class="form-control" ng-model="cur_house_information.cur_hall">
                         <span>厅</span>
                         <button class="glyphicon glyphicon-plus" type="button"  ng-click="change_cur_quantity('cur_house_information.cur_hall',3,1)"></button>

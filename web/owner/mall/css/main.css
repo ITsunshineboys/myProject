@@ -1,75 +1,10 @@
-/*头部开始*/
-header{
-    width: 32rem;
-    height: 4rem;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-}
-header > div{
-    position: relative;
-}
-.return_btn{
-    /*display: inline-block;*/
-    position: absolute;
-    left: 0;
-    /*top:1rem;*/
-    width:3rem;
-    height: 4rem;
-    line-height: 4rem;
-    /*border:2px solid red;*/
-}
-section{
-    margin-top: 1rem;
-}
-header div {
-    line-height: 4rem;
-}
 
-header div span {
-    font-size: 1.4rem;
-}
-.postion_span{
-    color: #53A8F4;
-    font-size: 1.2rem;
-    margin-left: .2rem;
-}
-.cur_location{
-    position: absolute;
-    top: 0;
-    right:1.4rem;
-    height: 4rem;
-    /*lh4rem*/
-}
-.in_span {
-    margin-left: 1rem;
-    color: #53A8F4 ;
-}
-
-.pic_span {
-    /*margin-left: 12.8rem;*/
-    font-size: 1.5rem;
-}
-.pos_span{
-    color:#53A8F4;
-    margin-left: .3rem;
-    font-size: 1.1rem;
-}
-.map {
-    margin-left: 8rem;
-    /*width: 1rem;*/
-    color: #53A8F4;
-}
-header div i{
-    margin-left: 7.8rem;
-    color: #53A8F4;
-}
 /*头部结束*/
 /*大背景色*/
 .main_body{
     background-color: #F6F6F6;
+    margin-top: 4rem;
+    border-top: 1rem solid #f6f6f6;
 }
 /*头部样式*/
 /*header{*/
@@ -89,75 +24,96 @@ header div i{
     /*top:1rem;*/
     /*left:1rem;*/
 /*}*/
+button.close{
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    color: #fff !important;
+    opacity: 1;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
 .fill{
-    height:3.75rem;
-    margin-bottom: .85rem;
+    
 }
 /*分块样式*/
 .detail_block{
     background-color: #fff;
-    margin-bottom:.85rem;
-    padding:1rem 0 0 1.2rem;
+    margin-bottom: 0;
+    padding: 1.2rem 1.2rem 0 1.2rem;
+    border-bottom: 1rem solid #f6f6f6;
 }
+
 .second_title{
-    border-left:.34rem solid #53A8F4;
-    padding-left:.42rem;
-    font-size:1.5rem;
-    margin-bottom:.8rem;
+    border-left: .3rem solid #333;
+    padding-left: .6rem;
+    font-size: 1.5rem;
+    margin-bottom: .8rem;
+    color: #666;
 }
 ul{
     padding-left: 0!important;
+    margin-bottom: 0 !important;
 }
 .main_details{
-    padding-top:1.19rem;
-    padding-bottom:1.28rem;
+    padding: 1.2rem 0;
     position: relative;
     border-bottom:.08rem solid #E9EDEE;
 }
 .wall_span{
-    font-size:1.36rem;
+    font-size: 1.4rem;
     margin-bottom: .77rem;
+    color: #666;
 }
 .wall_brand{
     font-size:1.19rem;
     color: #959292;
 }
 .wall_money{
-    font-size:1.19rem;
-    color: #F59C22;
+    font-size: 1.2rem;
+    color: #D9AD65;
     position: absolute;
-    top:1.19rem;
-    right:1.2rem;
+    top: 1.4rem;
+    right: 0;
 }
 .wall_money img{
-    margin-left:1.2rem;
+    margin-left: 0.6rem;
+    margin-top: -.2rem;
 }
 /*总计保存项*/
 .preservation{
-    width:32rem;
+    width: 100%;
     height: 4rem;
-    padding-left:1.2rem;
-    line-height:4rem;
-    font-size:1.19rem;
+    padding-left: 1.2rem;
+    line-height: 4rem;
+    font-size: 1.2rem;
     overflow: hidden;
     position: fixed;
-    bottom:0;
-    z-index:100;
+    bottom: 0;
+    z-index: 100;
     background-color: #fff;
+    color: #666;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.2);
 }
 .money_col{
-    font-size:1.5rem;
-    color: #F59C22;
+    font-size:1.6rem;
+    color: #D9AD65;
 }
 .preservation button{
-    font-size:1.36rem;
-    width:8.5rem;
-    height:100%;
+    font-size:1.4rem;
+    width:9rem;
+    height:4rem;
     text-align: center;
-    background-color:#F55122;
+    background-color:#333;
     border:none;
     float: right;
     color: #fff;
+    border: 2px solid #333;
 }
 .footer_fill{
     height:4rem;
@@ -185,27 +141,30 @@ ul{
 }
 .good_title{
     position: relative;
-    margin-bottom:.77rem !important;
-    font-size:1.19rem;
+    margin-bottom: 0rem !important;
+    font-size: 1.2rem;
 }
 .comment_span{
-    color: #4a4a4a;
+    font-size: 1.2rem;
+    color: #666;
+    /*margin-left: -8rem;*/
 }
 .comment_se{
-    color: #F59C22;
-    position: absolute;
     right: 0;
+    color: #D9AD65;
+    position: absolute;
+    top: 0;
 }
 .comment_square{
     color: #B8B6B6;
     font-size:1rem;
-    margin-bottom:1.36rem;
+    margin-bottom:1rem;
 
 }
 .comment_p{
-    color: #4a4a4a;
+    color: #666;
     margin-bottom:.25rem;
-    font-size:1.19rem;
+    font-size:1.2rem;
 }
 .text_p{
     font-size:1rem;
@@ -221,20 +180,20 @@ ul{
     font-size:1.19rem!important;
 }
 .go_detail{
-    width:49.72%;
+    width: 49.72%;
     height: 3rem;
-    font-size:1.2rem;
+    font-size: 1.2rem;
     color: #fff;
-    background-color: #53A8F4;
+    background-color: #333;
     display: inline-block;
-    border:none;
+    border: 2px solid #333;
 }
 .go_replace{
-    width:49.72%;
+    width: 49.72%;
     height: 3rem;
-    font-size:1.2rem;
+    font-size: 1.2rem;
     color: #fff;
-    background-color: #F55122;
+    background-color: #D9AD65;
     display: inline-block;
-    border:none;
+    border: 2px solid #D9AD65;
 }

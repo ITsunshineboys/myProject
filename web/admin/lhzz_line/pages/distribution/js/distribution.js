@@ -24,6 +24,8 @@ angular.module('distribution',[])
            }).then(function (res) {
                console.log(res);
                $scope.distribution_list = res.data.data.list
+               $scope.nowday_add = res.data.data.nowday_add
+               $scope.total_add = res.data.data.total_add
                $scope.Config.totalItems = res.data.data.count;
            },function (err) {
                console.log(err);
@@ -109,130 +111,20 @@ angular.module('distribution',[])
            {name:'自定义',str:'custom'}
        ]
        $scope.cur_time_type = $scope.time_type[0]
-       //初始化分销列表
-       // $http.get('/distribution/getdistributionlist',{
-       //     params:{
-       //         page:1,
-       //         time_type:$scope.cur_time_type.str
-       //     }
-       // }).then(function (response) {
-       //     console.log(response)
-       //     $scope.distribution_list = response.data.data.list
-       //     $scope.nowday_add = response.data.data.nowday_add
-       //     $scope.total_add = response.data.data.total_add
-       // },function (error) {
-       //     console.log(error)
-       // })
-       //获取样板间列表
-       //修改全部时间
-       // $scope.$watch('cur_time_type',function (newVal,oldVal) {
-       //     // $scope.keyword = ''
-       //     if(newVal.str!='custom'){
-       //         $http.get('/distribution/getdistributionlist',{
-       //             params:{
-       //                 page:1,
-       //                 time_type:$scope.cur_time_type.str
-       //             }
-       //         }).then(function (response) {
-       //             console.log(response)
-       //             $scope.distribution_list = response.data.data.list
-       //             $scope.nowday_add = response.data.data.nowday_add
-       //             $scope.total_add = response.data.data.total_add
-       //         },function (error) {
-       //             console.log(error)
-       //         })
-       //     }else{
-       //         $scope.start_time = ''
-       //         $scope.end_time = ''
-       //     }
-       // })
-       // //开始时间修改
-       // $scope.$watch('start_time',function (newVal,oldVal) {
-       //     console.log(newVal)
-       //     let obj = ''
-       //     if($scope.end_time == ''){
-       //         obj = {
-       //             page:1,
-       //             time_type:$scope.cur_time_type.str,
-       //             start_time:newVal
-       //         }
-       //     }else{
-       //         if(new Date(newVal).getTime()<new Date($scope.end_time).getTime()) {
-       //             obj = {
-       //                 page:1,
-       //                 time_type: $scope.cur_time_type.str,
-       //                 start_time: newVal,
-       //                 end_time: $scope.end_time
-       //             }
-       //         }
-       //     }
-       //     console.log(obj)
-       //     if(obj!=''){
-       //         $http.get('/distribution/getdistributionlist',{
-       //             params:obj
-       //         }).then(function (response) {
-       //             console.log(response)
-       //             $scope.distribution_list = response.data.data.list
-       //             $scope.nowday_add = response.data.data.nowday_add
-       //             $scope.total_add = response.data.data.total_add
-       //         },function (error) {
-       //             console.log(error)
-       //         })
-       //     }
-       // })
-       // //结束时间修改
-       // $scope.$watch('end_time',function (newVal,oldVal) {
-       //     console.log(newVal)
-       //     let obj = ''
-       //     if($scope.start_time == ''){
-       //         obj = {
-       //             page:1,
-       //             time_type:$scope.cur_time_type.str,
-       //             end_time:newVal
-       //         }
-       //     }else {
-       //         if (new Date(newVal).getTime() > new Date($scope.start_time).getTime()) {
-       //             obj = {
-       //                 page:1,
-       //                 time_type: $scope.cur_time_type.str,
-       //                 start_time: $scope.start_time,
-       //                 end_time: newVal
-       //             }
-       //         }
-       //     }
-       //     console.log(obj)
-       //     if(obj!=''){
-       //         $http.get('/distribution/getdistributionlist',{
-       //             params:obj
-       //         }).then(function (response) {
-       //             console.log(response)
-       //             $scope.distribution_list = response.data.data.list
-       //             $scope.nowday_add = response.data.data.nowday_add
-       //             $scope.total_add = response.data.data.total_add
-       //         },function (error) {
-       //             console.log(error)
-       //         })
-       //     }
-       // })
        //搜索手机号
        $scope.update_keyword = function () {
-           // $scope.cur_time_type = $scope.time_type[0]
-           // $http.get('/distribution/getdistributionlist',{
-           //     params:{
-           //         page:1,
-           //         keyword:$scope.keyword
-           //     }
-           // }).then(function (response) {
-           //     console.log(response)
-           //     $scope.distribution_list = response.data.data.list
-           //     $scope.nowday_add = response.data.data.nowday_add
-           //     $scope.total_add = response.data.data.total_add
-           // },function (error) {
-           //     console.log(error)
-           // })
+           $scope.params.time_type = 'all'
+           $scope.params.start_time = ''
+           $scope.params.end_time = ''
            $scope.params.keyword = $scope.keyword
            tablePages()
        }
+       $scope.$watch('keyword',function (newVal,oldVal) {
+           if(newVal == ''){
+               $scope.params.keyword = newVal
+               tablePages()
+           }
+       })
        //查看分销详情
        $scope.get_detail = function (item) {
            $scope.cur_item = item

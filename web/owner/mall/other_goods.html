@@ -5,9 +5,9 @@
             <ul class="wall_ul">
                 <div class="wall_margin">
                     <li ng-repeat="item in cur_item.second_level">
-                        <div ng-repeat="item1 in item.three_level">
+                        <div class="list_line" ng-repeat="item1 in item.three_level">
                             <div ng-repeat="item2 in item1.goods_detail" data-toggle="{{cur_content}}" data-target="#myModal" ng-click="get_basic_details(item2,item1.title,item1.id)">
-                                <div style="overflow: hidden;border-bottom:1px solid #E9EDEE;padding: 10px;position: relative;" ng-class="{'cur_animate':is_delete_btn}">
+                                <div ng-class="{'cur_animate':is_delete_btn}">
                                     <div class="wall_span_brand">
                                         <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br>
                                         <span class="wall_brand">{{item2.name}}</span>
@@ -21,7 +21,7 @@
                     </li>
                 </div>
             </ul>
-            <p ng-if="cur_item.count==0&&!!is_delete_btn" style="margin-top: 4.26rem;text-align: center;color: #B8B6B6;font-size: 32px;">暂无材料显示</p>
+            <p ng-if="cur_item.count==0&&!!is_delete_btn">暂无材料显示</p>
         </div>
 
         <!--添加材料按钮-->
@@ -31,7 +31,7 @@
                 <span>点击添加装修材料</span>
             </a>
         </div>
-        <div style="height: 5rem;width: 32rem; background-color:white " ng-show="cur_item.count>6"></div>
+        <div ng-show="cur_item.count>6"></div>
         <!--按钮、-->
         <div class="preservation">
             <span>合计：</span>
