@@ -22,7 +22,7 @@
         </ul>
     </div>
     <div class="bind_tel" flex="main:top dir:top" ng-if="all_data.parent.length === undefined">
-        <span>我绑定的手机号</span>
+        <span>我的上级用户</span>
         <ul flex-box="0">
             <li flex="main:left box-mean">
                 <p>{{all_data.parent.mobile}}</p>
@@ -31,10 +31,10 @@
         </ul>
     </div>
     <div class="bind_tel" ng-if="all_data.parent.length === 0">
-        <button ng-click="go_bind_tel()">点击绑定</button>
+        <button ng-click="go_bind_tel()">绑定上级用户</button>
     </div>
     <div class="bind_tel" flex="main:top dir:top" ng-if="all_data.son.length>0">
-        <span>绑定我的手机号</span>
+        <span>我的子级用户</span>
         <ul flex-box="0">
             <li flex="main:left box-mean" ng-repeat="item in all_data.son">
                 <p>{{item.mobile}}</p>

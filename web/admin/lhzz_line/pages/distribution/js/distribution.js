@@ -46,6 +46,8 @@ angular.module('distribution',[])
                    tablePages()
                }
            }else{
+               $scope.params.start_time = ''
+               $scope.params.end_time = ''
                tablePages()
            }
        }

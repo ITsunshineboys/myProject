@@ -47,6 +47,8 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     tablePages()
                 }
             }else{
+                $scope.params.time_start = ''
+                $scope.params.time_end = ''
                 tablePages()
             }
         }
@@ -87,6 +89,8 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     tablePages1()
                 }
             }else{
+                $scope.params1.time_start = ''
+                $scope.params1.time_end = ''
                 tablePages1()
             }
         }

@@ -36,7 +36,7 @@ angular.module('all_controller', [])
         let tablePages = function () {
             console.log($scope.params)
             // $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
-            $http.get('/mall/category-goods', {
+            $http.get(baseUrl + '/mall/category-goods', {
                 params: $scope.params
             }).then(function (res) {
                 console.log(res);
@@ -62,7 +62,7 @@ angular.module('all_controller', [])
                 }
                 // $scope.house_detail = res.data.model.details
                 $scope.Config.totalItems = $scope.cur_replace_material.length
-                $http.get('/mall/category-brands-styles-series', {
+                $http.get(baseUrl + '/mall/category-brands-styles-series', {
                     params: {
                         category_id: $scope.params.category_id,
                     }
@@ -1749,16 +1749,6 @@ angular.module('all_controller', [])
                         }).then(function (response) {
                             console.log('泥作')
                             console.log(response)
-                            //整合一级
-                            // for (let [key, value] of $scope.stair.entries()) {
-                            //     for (let [key1, value1] of response.data.data.mud_make_material.material.entries()) {
-                            //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                            //         let cur_title = {title: value.title}
-                            //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                            //             $scope.all_goods.push(cur_obj)
-                            //         }
-                            //     }
-                            // }
                             //整合二级
                             for (let [key, value] of $scope.level.entries()) {
                                 for (let [key1, value1] of  $scope.all_goods.entries())
@@ -2034,16 +2024,6 @@ angular.module('all_controller', [])
                                                 value3.cost -= value4.cost
                                                 value1.cost -= value4.cost
                                                 value.cost -= value4.cost
-                                                // if (value3.cost == 0) {
-                                                //     value2.goods_detail.splice(key3, 1)
-                                                //     console.log(value2.goods_detail)
-                                                // }
-                                                // if (value2.goods_detail.length == 0) {
-                                                //     value1.three_level.splice(key2, 1)
-                                                // }
-                                                // if (value1.three_level.length == 0) {
-                                                //     value.second_level.splice(key1, 1)
-                                                // }
                                             }
                                         } else {
                                             if (value4.path.split(',')[0] == value.id && value4.path.split(',')[1] == value1.id && value4.path.split(',')[2]
