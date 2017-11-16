@@ -225,12 +225,12 @@
             <button class="btn btn-default back" data-toggle="modal" data-target="#turn_down">驳回</button>
             <button class="btn btn-default back" ng-click="back_list()">返回</button>
         </div>
-        <div ng-if="is_unusual=='0'" ng-hide="tabflag=='waitreceive_flag'"  class="btn_group">
+        <div ng-if="is_unusual=='0'" ng-hide="tabflag=='waitreceive_flag'|| tabflag=='all_flag'"  class="btn_group">
             <button class="btn btn-primary pull-left" ng-click="wait_send_ship()">发货</button>
             <button class="btn btn-default back"  ng-click="back_list()">返回</button>
         </div>
         <!--待收货-->
-        <div ng-if="tabflag=='waitreceive_flag' && is_unusual!='1'" class="btn_group">
+        <div ng-if="tabflag=='waitreceive_flag' || tabflag=='all_flag' && is_unusual!='1'" class="btn_group">
             <button class="btn btn-default"  ng-click="back_list()">返回</button>
         </div>
 
