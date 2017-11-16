@@ -394,7 +394,7 @@ class SupplierCashController extends Controller
             }
 
             if ($status!=0){
-                $where.= " and g.status ={$status} ";
+                $where.= " and g.status =$status ";
             }
         } else {
             $where = " s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%'";
