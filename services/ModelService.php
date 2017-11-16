@@ -220,20 +220,18 @@ class ModelService
      * @param $time_end
      * @return array
      */
-    public static function timeDeal($time_type, $time_start = 0, $time_end = 0)
+    public static function timeDeal($time_start, $time_end )
     {
-        if ($time_type == 'custom') {
-            $time_start && $time_start = strtotime($time_start);
-            $time_end && $time_end = strtotime($time_end);
+            $yearMonthDay = date('Y-m-d');
+            list($year, $month, $day) = explode('-', $yearMonthDay);
+            if ($time_start == $time_end) {
+                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
+                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
 
-            if ($time_start && $time_start == $time_end) {
-                return StringService::startEndDate('today', 1);
+                return [$startTime, $endTime];
             }
-        } else {
-                return StringService::startEndDate($time_type, 1);
-            }
-            return [$time_start, $time_end];
-        
+
+
     }
 
     /**
