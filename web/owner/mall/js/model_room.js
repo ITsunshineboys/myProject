@@ -356,14 +356,14 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 }
 
                 // 系数
-                _ajax.get("/owner/coefficient", params, function (res) {
+                _ajax.post("/owner/coefficient", params, function (res) {
                     let data = res.data;
                     $scope.price += parseFloat(data.total_prices);
                     $scope.preferential += parseFloat(data.special_offer);
                 });
 
                 // 运费
-                _ajax.get("/order/calculation-freight", freightParams, function (res) {
+                _ajax.post("/order/calculation-freight", freightParams, function (res) {
                     let data = res.data;
                     $scope.price += parseFloat(data);
                     $scope.preferential += parseFloat(data);
