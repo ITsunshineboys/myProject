@@ -430,7 +430,6 @@ class DistributionController extends Controller
         }
         $count=Distribution::find()->count();
         $data=Distribution::pagination($where,[],$page,$size,$sort);
-        var_dump($data);exit;
         if ($data['list'])
         {
             foreach ($data['list'] as &$list)
@@ -441,6 +440,7 @@ class DistributionController extends Controller
                     ->where(['parent_id'=>$list['id']])
                     ->asArray()
                     ->all();
+
                 foreach ($son_disList as &$Son_list)
                 {
                     $user=User::find()
@@ -462,7 +462,7 @@ class DistributionController extends Controller
                     }
                     $consigneeOrders=GoodsOrder::find()
                         ->select('order_no,amount_order,paytime,remarks')
-                        ->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1])
+                        ->where(['consignee_mobile'=>$Son_list['mobile'],'order_refer'=>1])
                         ->asArray()
                         ->all();
                     $order_subsetnum+=count($consigneeOrders);
