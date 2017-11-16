@@ -1,6 +1,5 @@
 let shop_style_let= angular.module("shop_style",['ngFileUpload']);
 shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
-      /*POST请求头*/
       $scope.myng=$scope;
       $scope.logistics=[];//物流模块列表
       $scope.goods_all_attrs=[];//所有属性数据
@@ -9,7 +8,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.first_category_title=$stateParams.first_category_title;//一级分类名称
       $scope.second_category_title=$stateParams.second_category_title;//二级分类名称
       $scope.third_category_title=$stateParams.third_category_title;//三级分类名称
-
+      let reg=/^\d+(\.\d{1,2})?$/;
       /*-----------------品牌、系列、风格 获取-----------------*/
       $scope.brands_arr=[];
       $scope.series_arr=[];
@@ -157,16 +156,34 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
 
       //市场价
       $scope.price_flag=false;
-      $scope.my_market_price=function () {
-        (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+      $scope.my_market_price=function (value) {
+        let reg_value=reg.test(value);
+        if(!reg_value) {
+            $scope.price_flag = true;
+        }else{
+            (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+        }
       };
       //平台价
-      $scope.my_platform_price=function () {
-        (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+      $scope.my_platform_price=function (value) {
+        let reg_value=reg.test(value);
+        if(!reg_value) {
+            $scope.price_flag = true;
+        }else{
+            (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+        }
       };
       //供货商价
-      $scope.my_supplier_price=function () {
-        (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+      $scope.my_supplier_price=function (value) {
+          let reg_value=reg.test(value);
+          console.log(value)
+          console.log(reg_value)
+          if(!reg_value) {
+              $scope.price_flag = true;
+              // console.log(111)
+          }else{
+              (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+          }
       };
         /*---------------物流模板--------------------*/
       _ajax.post('/mall/logistics-templates-supplier',{},function (res) {

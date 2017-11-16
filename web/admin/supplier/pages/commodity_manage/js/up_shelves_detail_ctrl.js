@@ -2,13 +2,7 @@ let up_shelves_detail = angular.module("up_shelves_detail_module",['ngFileUpload
 up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
-  /*POST请求头*/
-  const config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
+  let reg=/^\d+(\.\d{1,2})?$/;
   $scope.myng=$scope;
   let goods_item=$stateParams.item;//点击对应的那条数据
   console.log(goods_item);
@@ -211,16 +205,32 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
 
   //市场价
   $scope.price_flag=false;
-  $scope.my_market_price=function () {
-    (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+  $scope.my_market_price=function (value) {
+      let reg_value=reg.test(value);
+      if(!reg_value){
+        $scope.price_flag=true;
+      }else{
+          (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+      }
   };
   //平台价
-  $scope.my_platform_price=function () {
-    (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+  $scope.my_platform_price=function (value) {
+      let reg_value=reg.test(value);
+      if(!reg_value){
+        $scope.price_flag=true;
+      }else{
+          (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+      }
   };
   //供货商价
-  $scope.my_supplier_price=function () {
-    (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+  $scope.my_supplier_price=function (value) {
+      let reg_value=reg.test(value);
+      if(!reg_value){
+          $scope.price_flag=true;
+      }else{
+          (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+      }
+
   };
 
   //售后、保障
