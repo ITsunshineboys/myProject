@@ -514,11 +514,11 @@ class GoodsOrder extends ActiveRecord
         $sort='';
         if ($sort_time=='' && $sort_money==2)
         {
-            $sort="  (z.goods_price*z.goods_number) desc";
+            $sort="  (z.goods_price*z.goods_number+z.freight) desc";
         }
         if (!$sort_time && $sort_money==1)
         {
-            $sort="  (z.goods_price*z.goods_number) asc";
+            $sort="  (z.goods_price*z.goods_number+z.freight) asc";
         }
         if (!$sort_money && $sort_time==2)
         {
