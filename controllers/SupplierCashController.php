@@ -359,6 +359,11 @@ class SupplierCashController extends Controller
         $search = trim(htmlspecialchars($request->get('search', '')), '');
         $code = 1000;
 
+        if ($status==1){
+          $time_s='g.apply_time';
+        }else{
+            $time_s='g.handle_time';
+        }
         $where = "g.role_id=6";
         if (!$search) {
             if ($timeType == 'custom') {
@@ -381,7 +386,7 @@ class SupplierCashController extends Controller
 
             if ($time_start) {
                 $startTime = (int)strtotime($time_start);
-                $startTime && $where .= " and g.handle_time >= {$startTime}";
+                $startTime && $where .= " and {$time_s} >= {$startTime}";
             }
             if ($time_end) {
                 if ($timeType == 'today') {
@@ -390,7 +395,7 @@ class SupplierCashController extends Controller
                 } else {
                     $time_end = (int)strtotime($time_end);
                 }
-                $time_end && $where .= " and g.handle_time <= {$time_end}";
+                $time_end && $where .= " and {$time_s} <= {$time_end}";
             }
 
             if ($status!=0){
