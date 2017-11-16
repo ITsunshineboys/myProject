@@ -266,7 +266,6 @@ class DistributionController extends Controller
         ]);
     }
 
-
      /**
      * 分销绑定手机号
      * @return string
@@ -845,13 +844,11 @@ class DistributionController extends Controller
     public  function actionTestData()
     {
 
- 
-          $data = Yii::$app->db->createCommand('show create table distribution')
-            ->queryOne();
-        ;
-        var_dump($data);
-
-
+        $Distribution=Distribution::find()->all();
+        foreach ($Distribution as &$list)
+        {
+            $list->delete();
+        }
     }
 
 
