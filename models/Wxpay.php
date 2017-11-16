@@ -281,7 +281,7 @@ class Wxpay  extends ActiveRecord
         $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
         $input->SetTrade_type("APP");
         $order = WxPayApi::AppUnifiedOrder($input);
-        $jsApiParameters = $tools->GetJsApiParameters($order);
+        $jsApiParameters = $tools->GetJsApiParametersApp($order);
         return  Json::decode($jsApiParameters);
     }
 }
