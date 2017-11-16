@@ -360,7 +360,8 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
 
   //点击编辑--按钮
   $scope.shop_edit_item=function (item) {
-    if(item.goods_status==2){
+    console.log(item.goods_status)
+    if(item.goods_status==2 || item.goods_status==undefined){
         $scope.recommend_shop_modal_edit='#recommend_shop_modal_edit';
         $scope.edit_item=item;
         $scope.edit_variable_modal="";//默认modal为空
@@ -598,7 +599,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
   };
   //单个启用
   $scope.start_use=function (item) {
-    if(item.goods_status==2){
+    if(item.goods_status==2 ||item.goods_status==undefined){
       $scope.solo_begin_modal='#solo_begin_modal';
       $scope.stop_use_item=item;
     }else{

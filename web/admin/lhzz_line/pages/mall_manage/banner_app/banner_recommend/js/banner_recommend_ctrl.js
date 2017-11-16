@@ -361,7 +361,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
     $scope.edit_item=item;
     console.log("点击编辑获取");
     console.log($scope.edit_item);
-    if(item.goods_status==2){
+    if(item.goods_status==2 ||item.goods_status==undefined){
       $scope.recommend_shop_modal_edit='#recommend_shop_modal_edit';
         $scope.variable_modal="";//默认modal为空
         $scope.img_flag='';//清空 “格式不正确”
@@ -592,7 +592,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
   //单个启用
   $scope.start_use=function (item) {
     console.log(item);
-    if(item.goods_status===2){
+    if(item.goods_status===2||item.goods_status==undefined){
         $scope.stop_use_item=item;
         $scope.solo_begin_modal='#solo_begin_modal'
     }else{
