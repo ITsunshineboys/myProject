@@ -1898,11 +1898,9 @@ angular.module('all_controller', [])
                 $scope.discount_price += +res.data.data
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
-            }), $http.get(baseUrl + '/owner/coefficient', {
-                params:{
+            }), $http.post(baseUrl + '/owner/coefficient', {
                     list: arr1
-                }
-            }).then(function (res) {
+            },config).then(function (res) {
                 console.log(res)
                 $scope.all_price += +res.data.data.total_prices
                 $scope.discount_price += +res.data.data.special_offer

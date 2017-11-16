@@ -3671,8 +3671,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             let arr = []
             if(index == 1){
                 if(item.title!=''){
+                    let obj = {}
+                    if(item.id == undefined){
+                        obj = {
+                            id:$scope.cur_general_count.id,
+                            title:item.title
+                        }
+                    }else{
+                        obj = {
+                            edit_id:item.id,
+                            title:item.title
+                        }
+                    }
                     $http.post('/quote/commonality-title-add',{
-                        one_title:{id:$scope.cur_general_count.id,title:item.title}
+                        one_title:obj
                     },config).then(function (res) {
                         console.log(res)
                         $http.post('/quote/commonality-title',{
