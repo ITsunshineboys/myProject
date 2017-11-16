@@ -831,7 +831,7 @@ angular.module("all_controller", ['ngCookies'])
         $scope.getOtherApp = function () {
             console.log(111);
             window.location = 'http://test.cdlhzz.cn/owner/mall/#!/nodata/cell_search'
-        }
+        };
         // 购买数量=======点击加减
         $scope.shopNum = 1;
         $scope.addNumber = function () { //点击==>加

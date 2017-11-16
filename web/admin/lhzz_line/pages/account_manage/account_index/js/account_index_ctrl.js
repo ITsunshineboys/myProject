@@ -43,6 +43,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
         $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/user-list',$scope.params,function (response) {
             console.log(response);
+            console.log($scope.id);
             if($scope.close_flag==true){
                 $scope.account_colse = response.data.user_list.details;
             }
@@ -243,6 +244,28 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
     })
 
   };
+    // 点击筛选降序
+    $scope.changePicClose = function () {
+        console.log(111);
+        $scope.flag = false;
+        $scope.strat = true;
+        $scope.params["sort[]"] = 'close_time:4';
+        $scope.params.status = 0;
+        tablePages();
+
+    };
+    $scope.changePicseClose = function () {
+        console.log(222);
+        $scope.flag = true;
+        $scope.strat = false;
+        $scope.params["sort[]"] = 'close_time:3';
+        $scope.params.status = 0;
+        tablePages();
+
+    };
+
+
+
 
     // if ($scope.close_flag == true) {
         $scope.$watch('selectValueClose',function(newVal,oldVal){

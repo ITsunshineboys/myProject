@@ -135,6 +135,11 @@ section{
 }
 .search_txt{
   float: right;
+  border: 1px solid #666;
+  padding: .5rem;
+  margin-right: 1.5rem;
+  border-radius: .3rem;
+
 }
 .dropdown-menu > li:hover{
   background-color: #f5f5f5;

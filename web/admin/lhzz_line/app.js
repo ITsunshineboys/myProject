@@ -3,7 +3,7 @@ var app = angular.module("app", ["ng.ueditor", "ui.router", "clamagModule", "ons
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
     "choose_styleModule", "styledetailModule", "storedetailModule", "merchant_details", "intelligent_index",
-    'angularCSS', 'apply_case', 'distribution', 'mall_finance',
+    'angularCSS', 'apply_case', 'distribution', 'mall_finance','idcard_right',
     //  王杰 开始
     "banner_recommend_module",
     "index_recommend_module",
@@ -147,7 +147,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/account_manage/add_user/add_user.html"
         })
         .state("account_comment", {
-            url: "/account_comment",
+            url: "/account_comment?id",
             templateUrl: "pages/account_manage/account_comment/account_comment.html",
             params: {
                 icon: 'icon',
@@ -206,7 +206,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             }
         })
         .state("bind_record", {
-            url: "/bind_record",
+            url: "/bind_record?id",
             templateUrl: "pages/account_manage/account_comment/bind_record.html",
             params: {
                 icon: 'icon',
@@ -264,7 +264,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             }
         })
         .state("idcard_right", {
-            url: "/idcard_right",
+            url: "/idcard_right?id",
             templateUrl: "pages/account_manage/account_comment/idcard_right.html",
             params: {
                 icon: 'icon',

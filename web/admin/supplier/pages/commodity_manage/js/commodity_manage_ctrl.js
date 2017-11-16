@@ -131,7 +131,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.wait_flag = true;
             $scope.logistics_flag = false;
             /*初始化已下架的搜索*/
-            $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
+            // $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
             $scope.down_search_value = '';//清空输入框值
             // $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
@@ -649,10 +649,11 @@ let commodity_manage = angular.module("commodity_manage", [])
                     tablePagesWait()
                 }
             });
-
+        $scope.on_time_flag = true;
+        $scope.down_time_flag = false;
             /*=======降序=====*/
             $scope.wait_time_sort = function () {
-                $scope.sort_status = 'publish_time:3';
+                // $scope.sort_status = 'publish_time:3';
                 $scope.on_time_flag = false;
                 $scope.down_time_flag = true;
                 // $scope.page = 1;
@@ -664,7 +665,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.on_time_flag = true;
             $scope.down_time_flag = false;
             $scope.wait_time_sort = function (status) {
-                $scope.sort_status = 'publish_time:4';
+                // $scope.sort_status = 'publish_time:4';
                 $scope.on_time_flag = true;
                 $scope.down_time_flag = false;
                 // $scope.page = 1;

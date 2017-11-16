@@ -2,8 +2,8 @@
 let app1= angular.module("app",[]);
 app1.controller('login_ctrl',function ($scope,$http,$document) {
     let baseUrl = (function () {
-        //return 'http://test.cdlhzz.cn';
-         return ''
+        return 'http://test.cdlhzz.cn';
+        //  return ''
     })();
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},

@@ -452,9 +452,9 @@
                 <td ng-if="wait_11">状态</td>
                 <td ng-if="wait_12">
                     <span>发布时间</span>
-                    <img ng-click="wait_time_sort()" ng-if="on_time_flag" class="arrow_img_size"
+                    <img ng-click="wait_time_sort()" ng-show=on_time_flag class="arrow_img_size"
                          src="pages/commodity_manage/image/up.png" alt="">
-                    <img ng-click="wait_time_sort()" ng-if="down_time_flag" class="arrow_img_size"
+                    <img ng-click="wait_time_sort()" ng-show=down_time_flag  class="arrow_img_size"
                          src="pages/commodity_manage/image/down.png" alt="">
                 </td>
                 <td ng-if="wait_13">图片</td>

@@ -2,7 +2,7 @@
  * Created by xl on 2017/8/10 0010.
  */
 var idcard_right= angular.module("idcard_right",[])
-    .controller("card_right_ctrl",function ($scope,$http,$state,$stateParams) {
+    .controller("card_right_ctrl",function ($scope,$http,$state,$stateParams,_ajax) {
         $scope.id = $stateParams.id;
         $scope.icon = $stateParams.icon;
         $scope.nickname = $stateParams.nickname;
@@ -28,6 +28,16 @@ var idcard_right= angular.module("idcard_right",[])
         console.log($scope.a);
         console.log($scope.status_remark);
         console.log($scope.review_time);
+        _ajax.get('/mall/user-identity',{user_id:$scope.id},function (response) {
+            console.log(response);
+            $scope.legal_person = response.data.user_identity.legal_person;
+            console.log($scope.legal_person);
+            $scope.identity_no = response.data.user_identity.identity_no;
+            $scope.identity_card_front_image = response.data.user_identity.identity_card_front_image;
+            $scope.identity_card_back_image = response.data.user_identity.identity_card_back_image;
+            $scope.review_status_desc = response.data.user_identity.review_status_desc;
+            $scope.review_time = response.data.user_identity.review_time;
+        });
 
         $scope.getBack = function () {
             $state.go("account_comment",{

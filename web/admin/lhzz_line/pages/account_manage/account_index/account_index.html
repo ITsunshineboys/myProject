@@ -53,7 +53,7 @@
                     <td>{{n.create_time}}</td>
                     <td>{{n.status}}</td>
                     <td>{{n.names}}</td>
-                    <td class="blue" ui-sref="account_comment({icon:n.icon,nickname:n.nickname
+                    <td class="blue" ui-sref="account_comment({id:n.id,icon:n.icon,nickname:n.nickname
                     ,old_nickna:n.old_nickname,district_name:n.district_name,birthday:n.birthday,
                      signature:n.signature,mobile:n.mobile,aite_cube_no:n.aite_cube_no,
                      create_time:n.create_time,names:n.names,review_status_desc:n.review_status_desc,
@@ -139,7 +139,7 @@
             <!--搜索-->
             <span class="menu" ng-click="getSearchClose () ">查询</span>
             <div class="search_box">
-                <input class="search_input" type="text" ng-model="mm.name_num" placeholder="搜索魔方号或昵称">
+                <input class="search_input" type="text" ng-model="mm.name_num" placeholder="搜索昵称或手机号">
                 <span class="glyphicon glyphicon-search search"></span>
             </div>
 
@@ -150,8 +150,12 @@
                     <td>绑定手机号</td>
                     <td>昵称</td>
                     <td>魔方号</td>
-                    <td>注册时间</td>
-                    <td>结束时间</td>
+                    <td>注册时间
+                    </td>
+                    <td>结束时间
+                        <img class="img_size" ng-show= flag ng-click="changePicClose ()"  src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
+                        <img class="img_size" ng-show= strat ng-click="changePicseClose ()"  src="pages/account_manage/account_comment/images/mall_filter_sor.png" alt=""/>
+                    </td>
                     <td>操作人员</td>
                     <td>状态</td>
                     <td>拥有角色</td>

@@ -1,6 +1,7 @@
 var choose_style = angular.module("choose_styleModule",[]);
-choose_style.controller("choose_style",function ($scope,$http,$state) {
+choose_style.controller("choose_style",function ($scope,$stateParams,$http,$state) {
 	$scope.name = "吞吞吐吐";
+	$scope.showstyle = true
 
 	//风格管理
 
@@ -148,9 +149,10 @@ choose_style.controller("choose_style",function ($scope,$http,$state) {
 			console.log(error)
 		})
 	};
+
 	$scope.back_return =function () {
 		setTimeout(function () {
-			$state.go("style_index")
+            $state.go("style_index",{showstyle:true});
 		},300)
 
 	}
