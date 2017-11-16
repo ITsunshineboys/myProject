@@ -330,7 +330,7 @@ class SupplierCashManager extends ActiveRecord
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
                 ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where(['g.role_id' => self::ROLE_ID])
-                ->orderBy('g.apply_time Desc');
+                ->orderBy('g.handle_time Desc');
 
         if ($status) {
             $query->andWhere(['g.status' => $status]);
@@ -351,7 +351,7 @@ class SupplierCashManager extends ActiveRecord
             $time_end = explode(' ', $endTime)[0];
             if ($time_start) {
                 $time_start = strtotime($time_start);
-                $query->andWhere(['>=', 'g.apply_time', $time_start]);
+                $query->andWhere(['>=', 'g.handle_time', $time_start]);
 
             }
             if ($time_end) {
@@ -360,7 +360,7 @@ class SupplierCashManager extends ActiveRecord
                 } else {
                     $time_end = (int)strtotime($time_end);
                 }
-                $query->andWhere(['<=', 'g.apply_time', $time_end]);
+                $query->andWhere(['<=', 'g.handle_time', $time_end]);
             }
                 }
             if(isset($search)){
