@@ -306,6 +306,7 @@ class SupplierCashManager extends ActiveRecord
                 ->orderBy('g.handle_time Desc');
 
         $count = $query->count();
+
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
         $arr = $query->offset($pagination->offset)
             ->limit($pagination->limit)
