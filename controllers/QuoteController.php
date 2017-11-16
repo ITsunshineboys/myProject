@@ -392,11 +392,10 @@ class QuoteController extends Controller
         }
 
         // 时间搜索
-        $city = (int)\Yii::$app->request->get('city');
         $min_time = (int)strtotime(\Yii::$app->request->get('min'));
         $max_time = (int)strtotime(\Yii::$app->request->get('max'));
-        if ($city != null && $min_time != null && $max_time != null){
-            $where = "add_time >= {$min_time} AND add_time <= {$max_time} AND city_code = {$city}";
+        if ($min_time != null && $max_time != null){
+            $where = "add_time >=" . $min_time ." or add_time <=". $max_time." AND city_code = ".$post;
             $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
                 'code' => 200,
@@ -407,8 +406,8 @@ class QuoteController extends Controller
 
         // 模糊搜索
         $toponymy = \Yii::$app->request->get('toponymy');
-        if ($city != null  && $toponymy != null){
-            $where = "toponymy like '%{$toponymy}%' and city_code = {$city}";
+        if ($toponymy != null){
+            $where = "toponymy like ". $toponymy ." and city_code = ".$post;
             $effect = Effect::pagination($where,$page,$size);
             return Json::encode([
                 'code' => 200,

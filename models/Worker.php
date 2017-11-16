@@ -324,6 +324,11 @@ class Worker extends \yii\db\ActiveRecord
         return $message;
     }
 
+    /**
+     * 角色信息 查询
+     * @param array $where
+     * @return array|null|ActiveRecord
+     */
     public static function roleMessage($where = [])
     {
         // 工程质量 服务态度  出勤打卡  没查询
@@ -351,5 +356,20 @@ class Worker extends \yii\db\ActiveRecord
         $message['city'] = $city->name;
 
         return $message;
+    }
+
+    public static function AuditingMessage($select = [],$where=[])
+    {
+        $select = "user.legal_person,user.mobile,user.aite_cube_no,worker.create_time,worker_type.worker_name,user.nickname";
+        $message = self::find()
+            ->select($select)
+            ->where($where)
+            ->leftJoin([])
+            ->leftJoin([])
+            ->leftJoin([])
+            ->leftJoin([])
+            ->leftJoin([])
+            ->leftJoin([])
+            ->all();
     }
 }
