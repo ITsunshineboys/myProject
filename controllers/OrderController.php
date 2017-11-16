@@ -4716,6 +4716,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $orderAmount=123;
 //        $orderAmount=GoodsOrder::CalculationCost($orders);
 //        if ($postData['total_amount']*100  != $orderAmount){
 //            $code=1000;
