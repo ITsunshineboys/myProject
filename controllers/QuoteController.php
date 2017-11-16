@@ -902,8 +902,8 @@ class QuoteController extends Controller
 
                         (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
                         if (!empty($house['drawing_list'])) {
-                            if (!empty($house['id'])) {
-                                $images_id     = $house['id'];
+                            if (!empty($house['drawing_id'])) {
+                                $images_id     = $house['drawing_id'];
                                 $effect_images = $house['drawing_list'];
                                 $series_id     = $house['series'];
                                 $style_id      = $house['style'];
