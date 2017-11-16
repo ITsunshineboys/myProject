@@ -297,6 +297,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
+
         $query = (new Query())
                 ->from(self::SUP_CASHREGISTER . ' as g')
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
