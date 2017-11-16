@@ -205,7 +205,7 @@ class SupplierCashManager extends ActiveRecord
     {
         $data = (new Query())
             ->from(self::SUP_CASHREGISTER)
-            ->where(['status' => SupplierCashController::ACCESS_TYPE_CASH_DONE, 'role_id' => self::ROLE_ID])
+            ->where(['status' => SupplierCashController::ACCESS_TYPE_CHARGE, 'role_id' => self::ROLE_ID])
             ->sum('cash_money');
 
         if ($data == null) {
@@ -342,6 +342,9 @@ class SupplierCashManager extends ActiveRecord
                 $code = 1000;
                 return $code;
             }
+//            if(){
+//
+//            }
         } else {
             list($startTime, $endTime) = StringService::startEndDate($time_type);
             $time_start = explode(' ', $startTime)[0];
