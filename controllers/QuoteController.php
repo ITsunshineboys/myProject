@@ -379,7 +379,7 @@ class QuoteController extends Controller
 
         switch ($post && $min_time && $max_time && $toponymy){
             case $post && !$min_time && !$max_time && !$toponymy:
-                echo '区';exit;
+                echo '区';
                 if (substr($post, 4) == 00) {
                     $where = 'city_code = '.$post;
                     $effect = Effect::pagination($where,$page,$size);
@@ -389,17 +389,17 @@ class QuoteController extends Controller
                 }
                 break;
             case $post && $min_time && !$max_time && !$toponymy:
-                echo '最小时间';exit;
+                echo '最小时间';
                 $where = "add_time >=" . $min_time . " AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case $post && !$min_time && $max_time && !$toponymy:
-                echo '最大时间';exit;
+                echo '最大时间';
                 $where = " add_time <=". $max_time." AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
-                echo '时间';exit;
+                echo '时间';
                 if ($min_time < $max_time){
                     $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
@@ -411,7 +411,7 @@ class QuoteController extends Controller
                 }
                 break;
             case  $post && !$min_time && !$max_time && $toponymy:
-                echo '小区';exit;
+                echo '小区';
                 $where = "toponymy like %".$toponymy."% and city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
