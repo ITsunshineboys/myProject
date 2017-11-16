@@ -430,7 +430,6 @@ class DistributionController extends Controller
         }
         $count=Distribution::find()->count();
         $data=Distribution::pagination($where,[],$page,$size,$sort);
-        var_dump($data);exit;
         if ($data['list'])
         {
             foreach ($data['list'] as &$list)
@@ -441,6 +440,7 @@ class DistributionController extends Controller
                     ->where(['parent_id'=>$list['id']])
                     ->asArray()
                     ->all();
+
                 foreach ($son_disList as &$Son_list)
                 {
                     $user=User::find()
