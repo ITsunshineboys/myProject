@@ -271,17 +271,17 @@ class GoodsCategory extends ActiveRecord
                 }
             }
 
-            if (isset($category['supplier_name'])) {
-                if (!empty($category['supplier_name'])) {
-                    $category['applicant'] = $category['supplier_name'];
-                } else {
-                    if ($category['deleted'] == self::STATUS_ONLINE) {
-                        $category['applicant'] = $category['offline_person'];
-                    } else {
-                        $category['applicant'] = $category['online_person'];
-                    }
-                }
-            }
+//            if (isset($category['supplier_name'])) {
+//                if (!empty($category['supplier_name'])) {
+//                    $category['applicant'] = $category['supplier_name'];
+//                } else {
+//                    if ($category['deleted'] == self::STATUS_ONLINE) {
+//                        $category['applicant'] = $category['offline_person'];
+//                    } else {
+//                        $category['applicant'] = $category['online_person'];
+//                    }
+//                }
+//            }
 
             if (isset($category['deleted'])) {
                 $category['status'] = self::$statuses[1 - $category['deleted']];
