@@ -26,7 +26,7 @@ class UserNewsRecord extends ActiveRecord
     /**
      * @return int
      */
-    public static function  AddNewRecord($user, $title, $role_id, $content, $order_no, $sku, $type)
+    public static function  AddOrderNewRecord($user, $title, $role_id, $content, $order_no, $sku, $type)
     {
         $tran = Yii::$app->db->beginTransaction();
         try{

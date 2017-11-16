@@ -1707,7 +1707,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return int
      */
-    public static function  applyRefund($order_no,$sku,$apply_reason,$user)
+    public static function  applyRefund($order_no,$sku,$apply_reason,$user,$supplier_user)
     {
         $code=self::CheckJurisdiction($order_no,$sku,$user);
         if ($code !=200){
@@ -1742,9 +1742,17 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return $code;
             }
+            $title='申请取消订单';
+            $content="订单号{$order_no},{$order->goods_name}";
+            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,$title,6,$content,$order_no,$sku,self::STATUS_DESC_DETAILS);
+            if (!$code==200)
+            {
+                $trans->rollBack();
+                return $code;
+            }
             if ($refunds){
                 $code=1031;
-                $trans->commit();
+                $trans->rollBack();
                 return $code;
             }else{
                 $order_refund=new OrderRefund();
@@ -1763,8 +1771,7 @@ class GoodsOrder extends ActiveRecord
                 $code=200;
                 return $code;
             }
-
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $trans->rollBack();
             $code=500;
             return $code;

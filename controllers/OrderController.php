@@ -693,6 +693,7 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
+
     /**
      *提交订单-线下店商城-微信支付
      */
@@ -1846,8 +1847,13 @@ class OrderController extends Controller
             ]);
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-        $supplier=Supplier::find()->where(['id'=>$GoodsOrder->supplier_id])->one();
-        $supplier_user=User::find()->where(['id'=>$supplier->uid])->one();
+        $supplier=Supplier::find()
+            ->select('uid')
+            ->where(['id'=>$GoodsOrder->supplier_id])
+            ->one();
+        $supplier_user=User::find()
+            ->where(['id'=>$supplier->uid])
+            ->one();
         if ($GoodsOrder->pay_status==0)
         {
             $OrderGoods=OrderGoods::find()
@@ -1930,7 +1936,7 @@ class OrderController extends Controller
                 ]);
             }
         }
-           $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user);
+           $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user,$supplier_user);
            if ($code ==200){
                return Json::encode([
                    'code' => $code,
@@ -2023,8 +2029,13 @@ class OrderController extends Controller
             }
         }
 
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-        $order=GoodsOrder::find()->select('id')->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])->one();
+        $supplier=Supplier::find()
+            ->where(['uid'=>$user->id])
+            ->one();
+        $order=GoodsOrder::find()
+            ->select('id')
+            ->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])
+            ->one();
         if (!$supplier ){
             $code=1010;
             return Json::encode([
@@ -2142,7 +2153,9 @@ class OrderController extends Controller
                 }
                 break;
             case 'supplier':
-                $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+                $supplier=Supplier::find()
+                    ->where(['uid'=>$user->id])
+                    ->one();
                 if(!$supplier)
                 {
                     $code=1010;

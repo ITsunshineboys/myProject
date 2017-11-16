@@ -31,7 +31,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status)
     {
-        $query = (new \yii\db\Query())
+        $query = (new Query())
             ->from(self::SUP_CASHREGISTER)
             ->orderBy('apply_time Desc')
             ->where(['uid' => $user, 'role_id' => self::ROLE_ID]);
