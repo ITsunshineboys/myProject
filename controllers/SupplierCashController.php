@@ -362,8 +362,8 @@ class SupplierCashController extends Controller
         $where = "g.role_id=6";
         if (!$search) {
             if ($timeType == 'custom') {
-                $time_start = trim(($request->get('time_start', '')), '');
-                $time_end = trim(($request->get('time_end', '')), '');
+                $time_start = trim($request->get('time_start', ''), '');
+                $time_end = trim($request->get('time_end', ''), '');
                 if (($time_start && !StringService::checkDate($time_start))
                     || ($time_end && !StringService::checkDate($time_end))
                 ) {
