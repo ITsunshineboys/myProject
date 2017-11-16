@@ -10,6 +10,7 @@ use app\models\UserBankInfo;
 use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
+use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -38,7 +39,9 @@ class SupplierCashController extends Controller
     const CASH_STATUS_DONE = 2;
     const CASH_STATUS_FAIL = 3;
 
-
+    const CASHING='提现中';
+    const CASHED='已提现';
+    const CASHED_FILD='驳回';
 
     const ACCESS_TYPE_RECHARGE = 1;
     const ACCESS_TYPE_CHARGE = 2;
@@ -51,6 +54,12 @@ class SupplierCashController extends Controller
         self::CASH_STATUS_ING => '提现中',
         self::CASH_STATUS_DONE => '已提现',
         self::CASH_STATUS_FAIL => '驳回'
+    ];
+
+    const USER_CASH_SATE=[
+      self::CASH_STATUS_ING=>self::CASHING,
+      self::ACCESS_TYPE_CHARGE=>self::CASHED,
+      self::ACCESS_TYPE_CASH_DONE=>self::CASHED_FILD,
     ];
 
     const USER_ACCESS_TYPE = [
@@ -111,23 +120,26 @@ class SupplierCashController extends Controller
 
 
     //---------------------------商家后台---------------------------
+
     /**
      * 商家详情
      * @return int|string
      */
-    public function actionMallView(){
+    public function actionMallView()
+    {
         $user = self::userIdentity();
         if (!is_int($user)) {
             return $user;
         }
-        $supplier_id=Supplier::find()->where(['uid'=>$user])->asArray()->one()['id'];
-        $data=Supplier::getsupplierdata($supplier_id,$user);
+        $supplier_id = Supplier::find()->where(['uid' => $user])->asArray()->one()['id'];
+        $data = Supplier::getsupplierdata($supplier_id, $user);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data' => $data,
         ]);
     }
+
     /**
      * 获取商家提现列表
      * @return mixed
@@ -187,15 +199,15 @@ class SupplierCashController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id=Supplier::find()->asArray()->where(['uid'=>$user])->one()['id'];
-        if(!$supplier_id){
-            $code=500;
+        $supplier_id = Supplier::find()->asArray()->where(['uid' => $user])->one()['id'];
+        if (!$supplier_id) {
+            $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data = SupplierCashManager::GetCash($transaction_no,$supplier_id);
+        $data = SupplierCashManager::GetCash($transaction_no, $supplier_id);
 
         return Json::encode([
             'code' => 200,
@@ -247,30 +259,73 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $time_type = trim(htmlspecialchars($request->get('time_type', 'all')), '');
-        $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
-        $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
+        $timeType = trim(htmlspecialchars($request->get('time_type', 'all')), '');
         $search = trim(htmlspecialchars($request->get('search', '')), '');
+        $where = "g.pay_status= 1";
+        $code=1000;
+        if (!$search) {
+            if ($timeType == 'custom') {
+                $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
+                $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
+                if (($time_start && !StringService::checkDate($time_start))
+                    || ($time_end && !StringService::checkDate($time_end))
+                ) {
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if ($time_start == $time_end) {
+                    list($time_start, $time_end) = ModelService::timeDeal($time_start);
+                }
+            } else {
+                list($time_start, $time_end) = StringService::startEndDate($timeType);
+            }
 
-        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
-            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
-        ) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
+            if ($time_start) {
+                $startTime = (int)strtotime($time_start);
+                $startTime && $where .= " and g.paytime >= {$startTime}";
+            }
+            if ($time_end) {
+                if ($timeType == 'today') {
+                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
+
+                } else {
+                    $time_end = (int)strtotime($time_end);
+                }
+                $time_end && $where .= " and g.paytime <= {$time_end}";
+            }
+
+        } else {
+            $where = " s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%' or g.order_no like '%{$search}%";
         }
 
-        $data = SupplierCashManager::getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
 
-        return Json::encode([
+        $paginationData = SupplierCashManager::getOrderList($where,$page, $page_size);
+        return json_encode([
             'code' => 200,
             'msg' => 'ok',
-            'data' => $data
+            'data' => $paginationData
         ]);
+//        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
+//            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
+//        ) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//
+//        $data = SupplierCashManager::getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
+//
+//        return Json::encode([
+//            'code' => 200,
+//            'msg' => 'ok',
+//            'data' => $data
+//        ]);
     }
 
     /**
@@ -285,34 +340,67 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
-        $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $time_type = trim(htmlspecialchars($request->get('time_type','')), '');
-        $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
-        $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->get('status','')), '');
+
+        $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');
+
+        $status = trim(htmlspecialchars($request->get('status', '0')), '');
         $search = trim(htmlspecialchars($request->get('search', '')), '');
-        if (($time_type == 'custom' && $time_end && $time_start > $time_end)
-        ) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
+        $code = 1000;
+
+        $where = "role_id=6";
+        if (!$search) {
+            if ($timeType == 'custom') {
+                $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
+                $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
+                if (($time_start && !StringService::checkDate($time_start))
+                    || ($time_end && !StringService::checkDate($time_end))
+                ) {
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if ($time_start == $time_end) {
+                    list($time_start, $time_end) = ModelService::timeDeal($time_start);
+                }
+            } else {
+                list($time_start, $time_end) = StringService::startEndDate($timeType);
+            }
+
+            if ($time_start) {
+                $startTime = (int)strtotime($time_start);
+                $startTime && $where .= " and g.handle_time >= {$startTime}";
+            }
+            if ($time_end) {
+                if ($timeType == 'today') {
+                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
+
+                } else {
+                    $time_end = (int)strtotime($time_end);
+                }
+                $time_end && $where .= " and g.handle_time <= {$time_end}";
+            }
+
+            if ($status!=0){
+                $where.= " and g.status ={$status} ";
+            }else{
+
+                $keys=implode(',',array_keys(self::USER_CASH_SATE));
+                $where.= " and  g.status in ({$keys}) ";
+
+            }
+        } else {
+            $where = " s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%'";
         }
 
-        $data = SupplierCashManager::getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
-        if(is_numeric($data)){
-            $code=$data;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        return Json::encode([
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+
+        $paginationData = SupplierCashManager::getCashListAll($where,$page, $page_size);
+        return json_encode([
             'code' => 200,
             'msg' => 'ok',
-            'data' => $data
+            'data' => $paginationData
         ]);
     }
 

@@ -222,14 +222,14 @@ class ModelService
      */
     public static function timeDeal($time_start)
     {
-        list($year, $month, $day) = explode('-', $time_start);
+        if($time_start){
+            list($year, $month, $day) = explode('-', $time_start);
             $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
-                $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
+            $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
 
-                return [$startTime, $endTime];
+            return [$startTime, $endTime];
 
-
-
+        }
     }
 
     /**

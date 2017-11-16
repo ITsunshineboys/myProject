@@ -40,20 +40,18 @@ class SupplierCashManager extends ActiveRecord
             ->orderBy('apply_time Desc')
             ->where(['uid' => $user, 'role_id' => self::ROLE_ID]);
         if($time_type=='custom'){
-            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
+            if ((!$time_start && !StringService::checkDate($time_start)) || (!$time_end && !StringService::checkDate($time_end) )
             ) {
                 $code = 1000;
                 return $code;
             }
             if($time_start==$time_end){
-
                 list($time_start,$time_end)=ModelService::timeDeal($time_start);
             }
         } else {
             list($time_start, $time_end) = StringService::startEndDate($time_type);
 
         }
-
         if ($time_start) {
             $time_start=(int)strtotime($time_start);
             $query->andWhere(['>=', 'apply_time', $time_start]);
@@ -287,53 +285,20 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public static function getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search)
+    public static function getOrderList($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $query = (new Query())
+        $offset = ($page - 1) * $size;
+        $arr = (new Query())
             ->from(self::GOODS_ORDER . ' g')
+            ->select(['g.id', 'g.order_no', 'g.paytime', 's.shop_name', 'g.supplier_id', 'o.sku', 'o.goods_name', 'o.sku', 'o.goods_price', 'o.goods_number', 'o.freight'])
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
-            ->where(['g.pay_status' => 1]);
-        if($time_type=='custom'){
-            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
-            ) {
-                $code = 1000;
-                return $code;
-            }
-            if($time_start==$time_end){
-
-                list($time_start,$time_end)=ModelService::timeDeal($time_start);
-            }
-        } else {
-            list($time_start, $time_end) = StringService::startEndDate($time_type);
-
-        }
-
-        if ($time_start) {
-            $time_start=(int)strtotime($time_start);
-            $query->andWhere(['>=', 'g.paytime', $time_start]);
-        }
-        if ($time_end) {
-            if ($time_type == 'today') {
-                $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
-            } else {
-                $end_time = (int)strtotime($time_end);
-            }
-            $query->andWhere(['<=', 'g.paytime', $end_time]);
-        }
-
-        if ($search) {
-            $query->andFilterWhere(['like', 'g.supplier_id', $search])
-                ->orFilterWhere(['like', 's.shop_name', $search])
-                ->orFilterWhere(['like', 'g.order_no', $search]);
-        }
-
-        $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-        $arr = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->select(['g.id', 'g.order_no', 'g.paytime', 's.shop_name', 'g.supplier_id', 'o.sku', 'o.goods_name', 'o.sku', 'o.goods_price', 'o.goods_number', 'o.freight'])
+            ->where($where)
+            ->offset($offset)
+            ->limit($size)
+            ->orderBy('g.paytime Desc')
             ->all();
+
         foreach ($arr as &$v) {
             $v['paytime'] = date('Y-m-d H:i', $v['paytime']);
             $v['amount_order'] = sprintf('%.2f', (float)($v['goods_price'] * $v['goods_number'] + $v['freight']) / 100);
@@ -342,8 +307,8 @@ class SupplierCashManager extends ActiveRecord
             unset($v['goods_number']);
             unset($v['goods_price']);
         }
-
-        return ModelService::pageDeal($arr, $count, $page, $page_size);
+        $count =count($arr);
+        return ModelService::pageDeal($arr, $count, $page, $size);
     }
     public static function pagination(){
 
@@ -360,54 +325,19 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public static function  getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
+    public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-            $query = (new Query())
+
+        $offset = ($page - 1) * $size;
+            $arr = (new Query())
                 ->from(self::SUP_CASHREGISTER . ' as g')
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
                 ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
-                ->where(['g.role_id' => self::ROLE_ID])
-                ->orderBy('g.handle_time Desc');
-
-        if ($status) {
-            $query->andWhere(['g.status' => $status]);
-        }
-
-        if($time_type=='custom'){
-            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
-                    ) {
-                $code = 1000;
-                return $code;
-            }
-            if($time_start==$time_end){
-                list($time_start,$time_end)=ModelService::timeDeal($time_start);
-
-            }
-        } else {
-            list($time_start, $time_end) = StringService::startEndDate($time_type);
-
-        }
-        if ($time_start) {
-                $time_start=(int)strtotime($time_start);
-                $query->andWhere(['>=', 'g.handle_time', $time_start]);
-            }
-            if ($time_end) {
-                if ($time_type == 'today') {
-                    $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
-                } else {
-                    $end_time = (int)strtotime($time_end);
-                }
-                $query->andWhere(['<=', 'g.handle_time', $end_time]);
-            }
-            if(isset($search)){
-                $query->andFilterWhere(['like', 's.shop_no', $search])->orFilterWhere(['like', 's.shop_name', $search]);
-            }
-        $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-
-        $arr = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+                ->where($where)
+                ->offset($offset)
+                ->limit($size)
+                ->orderBy('g.handle_time Desc')
+                ->all();
         foreach ($arr as &$v) {
             if(!$v['handle_time']){
                 $v['handle_time']='-';
@@ -426,6 +356,49 @@ class SupplierCashManager extends ActiveRecord
 
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
         }
+
+        $total = count($arr);
+        return ModelService::pageDeal($arr, $total, $page, $size);
+//        if ($status) {
+//            $query->andWhere(['g.status' => $status]);
+//        }
+//
+//        if($time_type=='custom'){
+//            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
+//                    ) {
+//                $code = 1000;
+//                return $code;
+//            }
+//            if($time_start==$time_end){
+//                list($time_start,$time_end)=ModelService::timeDeal($time_start);
+//
+//            }
+//        } else {
+//            list($time_start, $time_end) = StringService::startEndDate($time_type);
+//
+//        }
+//        if ($time_start) {
+//                $time_start=(int)strtotime($time_start);
+//                $query->andWhere(['>=', 'g.handle_time', $time_start]);
+//            }
+//            if ($time_end) {
+//                if ($time_type == 'today') {
+//                    $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
+//                } else {
+//                    $end_time = (int)strtotime($time_end);
+//                }
+//                $query->andWhere(['<=', 'g.handle_time', $end_time]);
+//            }
+//            if(isset($search)){
+//                $query->andFilterWhere(['like', 's.shop_no', $search])->orFilterWhere(['like', 's.shop_name', $search]);
+//            }
+
+//        $count = $query->count();
+//        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+//
+//        $arr = $query->offset($pagination->offset)
+//            ->limit($pagination->limit)
+//            ->all();
 
         return ModelService::pageDeal($arr, $count, $page, $page_size);
     }
