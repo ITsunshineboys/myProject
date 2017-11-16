@@ -284,6 +284,9 @@ class DistributionController extends Controller
         }
         $mobile=$data[0];
         $create_time=$data[1];
+        $ByBinding=Distribution::find()
+            ->where(['mobile'=>$mobile])
+            ->all();
         $Distribution=Distribution::find()
             ->where(['mobile'=>$mobile,'create_time'=>$create_time])
             ->one();
@@ -292,6 +295,17 @@ class DistributionController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $ByBinding=Distribution::find()
+            ->where(['parent_id'=>$Distribution->id])
+            ->all();
+        if ($ByBinding)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '您已成为首级用户,不能再绑定上级'
             ]);
         }
         $binding_mobile=$request = Yii::$app->request->post('mobile','');
