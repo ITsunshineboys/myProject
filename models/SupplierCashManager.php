@@ -294,13 +294,14 @@ class SupplierCashManager extends ActiveRecord
             $time_end = (int)strtotime($time_end);
         }
         if ($time_start) {
+            $time_start=(int)strtotime($time_start);
             $query->andWhere(['>=', 'g.paytime', $time_start]);
         }
         if ($time_end) {
             if ($time_type == 'today') {
-                $end_time = ($time_end + 24 * 60 * 60);
+                $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
             } else {
-                $end_time =$time_end;
+                $end_time = (int)strtotime($time_end);
             }
             $query->andWhere(['<=', 'g.paytime', $end_time]);
         }
@@ -367,21 +368,22 @@ class SupplierCashManager extends ActiveRecord
                 list($time_start,$time_end)=ModelService::timeDeal($time_start);
                 $time_start = (int)strtotime($time_start);
                 $time_end = (int)strtotime($time_end);
-
             }
         } else {
             list($time_start, $time_end) = StringService::startEndDate($time_type);
             $time_start = (int)strtotime($time_start);
             $time_end = (int)strtotime($time_end);
         }
+
         if ($time_start) {
+                $time_start=(int)strtotime($time_start);
                 $query->andWhere(['>=', 'g.handle_time', $time_start]);
             }
             if ($time_end) {
                 if ($time_type == 'today') {
-                    $end_time = ($time_end + 24 * 60 * 60);
+                    $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
                 } else {
-                    $end_time =$time_end;
+                    $end_time = (int)strtotime($time_end);
                 }
                 $query->andWhere(['<=', 'g.handle_time', $end_time]);
             }
