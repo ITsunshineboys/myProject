@@ -245,6 +245,7 @@ index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload)
         sku:$scope.shop_model
       }
     }).then(function (res) {
+      console.log(res)
       $scope.recommend_shop_url=res.data.data.detail.url; //商品链接
       $scope.recommend_shop_title=res.data.data.detail.title; //商品标题
       $scope.recommend_shop_subtitle=res.data.data.detail.subtitle; //商品副标题

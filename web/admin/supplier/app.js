@@ -1,4 +1,4 @@
-const app = angular.module("app", ["ui.router", "shop_style", "freight_template",
+const app = angular.module("app", ["ui.router", "ng.ueditor","shop_style", "freight_template",
     "shopoffline_Module", "systemoffline_Module", "wait_online_Module", "commodity_manage",
     "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
   /*三阶段王杰---开始*/

@@ -1,5 +1,5 @@
 let shop_style_let= angular.module("shop_style",['ngFileUpload']);
-shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
       $scope.myng=$scope;
       $scope.logistics=[];//物流模块列表
       $scope.goods_all_attrs=[];//所有属性数据
@@ -9,6 +9,9 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
       $scope.second_category_title=$stateParams.second_category_title;//二级分类名称
       $scope.third_category_title=$stateParams.third_category_title;//三级分类名称
       let reg=/^\d+(\.\d{1,2})?$/;
+      $scope.config=$rootScope.config;//富文本编辑器配置
+
+
       /*-----------------品牌、系列、风格 获取-----------------*/
       $scope.brands_arr=[];
       $scope.series_arr=[];
@@ -259,6 +262,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
 
     /*判断必填项，全部ok，调用添加接口*/
     if(valid && $scope.upload_cover_src && !$scope.price_flag &&!$scope.own_submitted){
+      let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.success_variable='#on_shelves_add_success';
       /*循环自己添加的属性*/
       for(let[key,value] of $scope.own_attrs_arr.entries()){
@@ -308,7 +312,7 @@ shop_style_let.controller("shop_style_ctrl",function ($scope,$http,$stateParams,
           left_number:+$scope.left_number,//库存
           logistics_template_id:+$scope.shop_logistics,//物流模板
           after_sale_services:$scope.after_sale_services.join(','),//售后、保障
-          description:$scope.detail_description//描述
+          description:description//描述
       },function (res) {
           console.log('添加成功');
           console.log(res);

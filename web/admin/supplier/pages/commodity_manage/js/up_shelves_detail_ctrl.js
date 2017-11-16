@@ -1,11 +1,12 @@
 let up_shelves_detail = angular.module("up_shelves_detail_module",['ngFileUpload']);
-up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
   let reg=/^\d+(\.\d{1,2})?$/;
   $scope.myng=$scope;
   let goods_item=$stateParams.item;//点击对应的那条数据
   console.log(goods_item);
+    $scope.config=$rootScope.config;//富文本编辑器配置
   if($stateParams.flag==0){
     $scope.show_flag=false;
   }else if($stateParams.flag==1){
@@ -26,7 +27,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
   $scope.purchase_price_designer=goods_item.purchase_price_designer;//设计师采购价
   $scope.logistics_template_id=goods_item.logistics_template_id;//物流id
   $scope.qr_code=goods_item.qr_code;//二维码
-  $scope.detail_description=goods_item.description;//描述
+  $scope.ueditor_value=goods_item.description;//描述
   $scope.after_sale_services=goods_item.after_sale_services;//售后、保障
   $scope.operator=goods_item.operator;//操作人员
   $scope.offline_time=goods_item.offline_time;//下架时间
@@ -280,6 +281,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
   /*--------------编辑保存按钮----------------------*/
   $scope.edit_confirm=function (valid,error) {
     if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag){
+      let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];
       //提供发票
@@ -378,7 +380,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($scope,$http,$st
           logistics_template_id:+$scope.shop_logistics,//物流模板id
           after_sale_services:$scope.after_sale_services.join(','),//售后服务
           left_number:+$scope.left_number,//库存
-          description:$scope.detail_description//描述
+          description:description//描述
       },function (res) {
           console.log(res);
       })

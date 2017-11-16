@@ -239,11 +239,10 @@ input::-webkit-inner-spin-button{
     font-size: 14px;
     color: #666F80;
 }
-.detail div{
-    width: 700px;
-    height:380px ;
-    border: 1px solid #666f80;
-    margin-left: 148px;
+.ueditor_css{
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 90px;
 }
 .btn_back{
     margin-top: 40px;

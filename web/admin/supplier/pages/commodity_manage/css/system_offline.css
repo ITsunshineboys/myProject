@@ -281,6 +281,7 @@ hr{
 
 .sec{
     display: inline-block;
+    vertical-align: top;
     margin-left: 90px;
 }
 

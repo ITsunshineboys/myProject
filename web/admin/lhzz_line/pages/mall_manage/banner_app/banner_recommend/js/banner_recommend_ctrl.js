@@ -13,7 +13,6 @@ banner_recommend.controller("banner_recommend_ctrl",function ($scope,$http,Uploa
   //选择城市开始
   //初始化省市区县;
   $http.get('districts2.json').then(function (response) {
-    // console.log((response.data[0]['86']))
     let arr = [];
     let arr1 = [];
     for(let [key,value] of Object.entries(response.data[0]['86'])){

@@ -218,7 +218,9 @@
         <!--详情描述-->
         <div class="detail">
             <span>详情描述</span>
-            <textarea style="vertical-align: top;margin-left: 85px" cols="30" rows="10" ng-model="detail_description"></textarea>
+            <div class="sec">
+                <div class="ueditor" ng-model="ueditor_value"  config="config" id="editor"></div>
+            </div>
         </div>
             <!--操作人员，下架时间-->
         <div ng-if="show_flag" class="people_time">
