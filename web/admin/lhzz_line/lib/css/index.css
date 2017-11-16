@@ -92,7 +92,6 @@ a:hover {
 
 /*右侧显示*/
 #content {
-    margin-left: 200px !important;
     width: 85%;
     height: 636px;
 }

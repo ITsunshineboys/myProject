@@ -5,7 +5,6 @@ var app = angular.module("app", ["ng.ueditor", "ui.router", "clamagModule", "ons
     "choose_styleModule", "styledetailModule", "storedetailModule", "merchant_details", "intelligent_index",
     'angularCSS', 'apply_case', 'distribution', 'mall_finance',
     //  王杰 开始
-    "index_module",
     "banner_recommend_module",
     "index_recommend_module",
     "banner_history_module",
