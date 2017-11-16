@@ -4891,7 +4891,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'user-identity' => $user->viewIdentityLhzz(),
+                'user_identity' => $user->viewIdentityLhzz(),
             ],
         ]);
     }
