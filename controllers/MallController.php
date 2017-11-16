@@ -871,7 +871,7 @@ class MallController extends Controller
                 'detail' => [
                     'title' => $goods->title,
                     'subtitle' => $goods->subtitle,
-                    'platform_price' => $goods->platform_price,
+                    'platform_price' => StringService::formatPrice($goods->platform_price / 100),
 //                    'url' => Url::to([Goods::GOODS_DETAIL_URL_PREFIX . $goods->id], true),
                     'url' => Goods::GOODS_DETAIL_URL_PREFIX . $goods->id,
                 ],
