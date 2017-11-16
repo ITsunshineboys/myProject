@@ -378,7 +378,7 @@ class GoodsRecommendSupplier extends ActiveRecord
         $deleteTime && $where .= " and create_time <= {$deleteTime}";
         $recommendId = (int)$recommendId;
         $recommendId && $where .= " and recommend_id = {$recommendId}";
-        return (int)GoodsRecommendViewLog::find()->where($where)->asArray()->count();
+        return (int)GoodsRecommendViewLogSupplier::find()->where($where)->asArray()->count();
     }
 
     /**
