@@ -38,10 +38,13 @@ add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state, 
                     }
             })
         }
+
         $scope.getBack = function () {
-            setTimeout(function () {
-                $state.go('account_index')
-            },300)
+            if($scope.codeMobile == 200){
+                setTimeout(function () {
+                    $state.go('account_index')
+                },300)
+            }
         }
         // _ajax.get('/site/check-mobile-registered',$scope.new_num,function (res) {
         //     console.log(res);
