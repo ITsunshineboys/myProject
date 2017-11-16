@@ -37,6 +37,7 @@ class SmValidationService
         'forgetPassword',
         'resetPayPassword',
         'resetMobile',
+        'loginDistribution',
     ];
 
     /**
