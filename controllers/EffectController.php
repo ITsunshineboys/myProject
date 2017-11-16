@@ -309,10 +309,7 @@ class EffectController extends Controller
                     ]);
                 }
                 if($startTime==$endTime){
-
-                    list($time_start,$time_end)=ModelService::timeDeal($startTime);
-                    $startTime = (int)strtotime($time_start);
-                    $endTime = (int)strtotime($time_end);
+                    list($startTime, $endTime) =ModelService::timeDeal($startTime);
                 }
             } else {
 
