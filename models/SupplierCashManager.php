@@ -293,6 +293,7 @@ class SupplierCashManager extends ActiveRecord
             $time_start = (int)strtotime($time_start);
             $time_end = (int)strtotime($time_end);
         }
+
         if ($time_start) {
             $time_start=(int)strtotime($time_start);
             $query->andWhere(['>=', 'g.paytime', $time_start]);
@@ -364,7 +365,6 @@ class SupplierCashManager extends ActiveRecord
                 return $code;
             }
             if($time_start==$time_end){
-
                 list($time_start,$time_end)=ModelService::timeDeal($time_start);
                 $time_start = (int)strtotime($time_start);
                 $time_end = (int)strtotime($time_end);
@@ -373,6 +373,7 @@ class SupplierCashManager extends ActiveRecord
             list($time_start, $time_end) = StringService::startEndDate($time_type);
             $time_start = (int)strtotime($time_start);
             $time_end = (int)strtotime($time_end);
+
         }
 
         if ($time_start) {
