@@ -147,7 +147,7 @@ class PayService
         }
         $jsapi = new WxPayJsApiPay();
         $jsapi->SetAppid($UnifiedOrderResult["appid"]);
-        $jsapi->SetPartnerid(WxPayConfig::APP_MCHID);
+        $jsapi->SetPartnerid($UnifiedOrderResult["mch_id"]);
         $jsapi->SetPrepayid($UnifiedOrderResult['prepay_id']);
         $timeStamp = time();
         $jsapi->SetTimeStamp("$timeStamp");
