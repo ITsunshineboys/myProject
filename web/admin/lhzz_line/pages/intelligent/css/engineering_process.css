@@ -59,6 +59,9 @@ header button{
     position: relative;
     bottom:5px;
 }
+.engineering_process .error{
+    border:1px solid red;
+}
 .engineering_process .bottom_style{
     margin-bottom:30px;
     margin-top:30px;

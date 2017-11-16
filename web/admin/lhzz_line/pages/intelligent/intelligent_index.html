@@ -3,12 +3,12 @@
       <form action="">
         <label>
             选择省份
-            <select ng-model="cur_province" ng-options="item.name for item in province"
-                    ng-change="getCity(cur_province)"></select>
+            <select ng-model="ctrlScope.cur_province" ng-options="item.id as item.name for item in province"
+                    ng-change="getCity()"></select>
         </label>
         <label>
             选择城市
-            <select ng-model="cur_city" ng-options="item.name for item in city" ng-change="getCounty(cur_city)"></select>
+            <select ng-model="ctrlScope.cur_city" ng-options="item.id as item.name for item in city" ng-change="getCounty()"></select>
         </label>
       </form>
     </div>
