@@ -10,6 +10,7 @@ use app\models\GoodsRecommend;
 use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
+use app\models\GoodsRecommendViewLogSupplier;
 use app\models\Series;
 use app\models\Style;
 use app\models\Supplier;
@@ -181,6 +182,7 @@ class MallController extends Controller
                     'recommend-delete' => ['post',],
                     'recommend-status-toggle' => ['post',],
                     'recommend-click-record' => ['post',],
+                    'recommend-click-record-supplier' => ['post',],
                     'recommend-disable-batch' => ['post',],
                     'recommend-add-supplier' => ['post',],
                     'recommend-edit-supplier' => ['post',],
@@ -1022,6 +1024,40 @@ class MallController extends Controller
 //                'msg' => 'OK',
 //            ]);
 //        }
+
+        if (!$recommendViewLog->validate()) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!$recommendViewLog->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
+
+    /**
+     * Log recommend click action(for suppler)
+     *
+     * @return string
+     */
+    public function actionRecommendClickRecordSupplier()
+    {
+        $code = 1000;
+
+        $recommendViewLog = new GoodsRecommendViewLogSupplier;
+        $recommendViewLog->attributes = Yii::$app->request->post();
+        $recommendViewLog->ip = ip2long(Yii::$app->request->userIP);
 
         if (!$recommendViewLog->validate()) {
             return Json::encode([
