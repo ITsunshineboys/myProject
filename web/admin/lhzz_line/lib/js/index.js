@@ -1,10 +1,9 @@
 app.controller("index_ctrl",function ($rootScope,$http) {
-    let crumbsObj = [{
-        icon: 'icon-shouye',
-        link: ''
-    }];
     $rootScope.baseUrl = baseUrl;
-    $rootScope.crumbs = [];
+    $rootScope.crumbs = [{
+        name: '首页',
+        icon: 'icon-shouye'
+    }];
 
     //富文本框配置
     $rootScope.config = {

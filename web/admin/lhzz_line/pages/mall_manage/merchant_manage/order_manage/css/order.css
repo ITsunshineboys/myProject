@@ -1,20 +1,3 @@
-/*顶部导航*/
-header {
-    height: 60px;
-    line-height: 60px;
-    padding-left: 40px;
-    border-bottom: 1px solid #E6E9F0;
-    position: relative;
-}
-
-header img {
-    position: absolute;
-    right: 20px;
-    top: 8px;
-}
-
-/*顶部导航结束*/
-
 section {
     padding-left: 40px;
 }

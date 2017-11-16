@@ -1,4 +1,17 @@
-app.controller('order_details', ['$scope', '$interval', '$state', '$stateParams', '_ajax', function ($scope, $interval, $state, $stateParams, _ajax) {
+app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $interval, $state, $stateParams, _ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '商家管理',
+        link: 'store_mag'
+    }, {
+        name: '订单管理',
+        link: -1
+    }, {
+        name: '订单详情'
+    }];
     let params = {
         order_no: $stateParams.orderNo, // 订单编号
         sku: $stateParams.sku           // 商品编号
