@@ -460,168 +460,192 @@ class QuoteController extends Controller
 //        $user = \Yii::$app->user->identity();
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
-        $district_chinese = District::findByCode((int)$request['cur_county_id']);
+        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
 
-//        $transaction = \Yii::$app->db->beginTransaction();
-//        $code = 500;
+        $transaction = \Yii::$app->db->beginTransaction();
             foreach ($request['house_informations'] as $house) {
                 if ($house['is_ordinary'] != 1) {
-                    //普通户型添加
-                    $bedroom                = $house['cur_room'];
-                    $sittingRoom_diningRoom = $house['cur_hall'];
-                    $toilet                 = $house['cur_toilet'];
-                    $kitchen                = $house['cur_kitchen'];
-                    $window                 = $house['window'];
-                    $area                   = $house['area'];
-                    $high                   = $house['high'];
-                    $province               = $province_chinese['name'];
-                    $province_code          = $request['province_code'];
-                    $city                   = $city_chinese['name'];
-                    $city_code              = $request['city_code'];
-                    $district               = $district_chinese['name'];
-                    $district_code          = $request['cur_county_id'];
-                    $toponymy               = $request['house_name'];
-                    $street                 = $request['address'];
-                    $particulars            = $house['house_type_name'];
-                    $stairway               = $house['have_stair'];
-                    $house_image            = $house['cur_imgSrc'];
-                    $type                   = $house['is_ordinary'];
-                    $sort_id                = $house['sort_id'];
-                    $effect_ = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-//                    if (!$effect_) {
-//                        $transaction->rollBack();
-//                        return $code;
-//                    }
-
-                    $hall_area         = $house['hall_area'];
-                    $hall_perimeter    = $house['hall_girth'];
-                    $bedroom_area      = $house['room_area'];
-                    $bedroom_perimeter = $house['room_girth'];
-                    $toilet_area       = $house['toilet_area'];
-                    $toilet_perimeter  = $house['toilet_girth'];
-                    $kitchen_area      = $house['kitchen_area'];
-                    $kitchen_perimeter = $house['kitchen_girth'];
-                    $modelling_length  = $house['other_length'];
-                    $flat_area         = $house['flattop_area'];
-                    $balcony_area      = $house['balcony_area'];
-                    $effect_id  = \Yii::$app->db->getLastInsertID();
-                    (new DecorationParticulars())->plotAdd($effect_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
-//                    if (!$decoration) {
-//                        $transaction->rollBack();
-//                        return $code;
-//                    }
-
-                    if (!empty($house['drawing_list'])) {
-                        foreach ($house['drawing_list'] as $images) {
-                            $effect_images = $images['all_drawing'];
-                            $series_id     = $images['series'];
-                            $style_id      = $images['style'];
-                            $images_user   = $images['drawing_name'];
-                            (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                    try{
+                        //普通户型添加
+                        $bedroom                = $house['cur_room'];
+                        $sittingRoom_diningRoom = $house['cur_hall'];
+                        $toilet                 = $house['cur_toilet'];
+                        $kitchen                = $house['cur_kitchen'];
+                        $window                 = $house['window'];
+                        $area                   = $house['area'];
+                        $high                   = $house['high'];
+                        $province               = $province_chinese['name'];
+                        $province_code          = $request['province_code'];
+                        $city                   = $city_chinese['name'];
+                        $city_code              = $request['city_code'];
+                        $district               = $district_chinese['name'];
+                        $district_code          = $request['cur_county_id'];
+                        $toponymy               = $request['house_name'];
+                        $street                 = $request['address'];
+                        $particulars            = $house['house_type_name'];
+                        $stairway               = $house['have_stair'];
+                        $house_image            = $house['cur_imgSrc'];
+                        $type                   = $house['is_ordinary'];
+                        $sort_id                = $house['sort_id'];
+                        $effect_                = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+                        if (!$effect_) {
+                            $transaction->rollBack();
+                            return 500;
                         }
-//                        if (!$effect_picture){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
-                    }
-                } else {
-                    // 案例添加
-                    $bedroom                = $house['cur_room'];
-                    $sittingRoom_diningRoom = $house['cur_hall'];
-                    $toilet                 = $house['cur_toilet'];
-                    $kitchen                = $house['cur_kitchen'];
-                    $window                 = $house['window'];
-                    $area                   = $house['area'];
-                    $high                   = $house['high'];
-                    $province               = $province_chinese['name'];
-                    $province_code          = $request['province_code'];
-                    $city                   = $city_chinese['name'];
-                    $city_code              = $request['city_code'];
-                    $district               = $district_chinese['name'];
-                    $district_code          = $request['cur_county_id'];
-                    $toponymy               = $request['house_name'];
-                    $street                 = $request['address'];
-                    $particulars            = $house['house_type_name'];
-                    $stairway               = $house['have_stair'];
-                    $house_image            = $house['cur_imgSrc'];
-                    $type                   = $house['is_ordinary'];
-                    $sort_id                = $house['sort_id'];
-                    if ($stairway != 1) {
-                        $stair_id = 0;
-                    } else {
-                        $stair_id = $house['stair'];
-                    }
 
-                    $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
-//                    if (!$effect){
-//                        $transaction->rollBack();
-//                        return 500;
-//                    }
-
-
-                    $effect_id = \Yii::$app->db->getLastInsertID();
-                    if (!empty($house['drawing_list'])) {
-                        $effect_images = $house['drawing_list'];
-                        $series_id     = $house['series'];
-                        $style_id      = $house['style'];
-                        $images_user   = '案例添加';
-                       (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
-//                        if (!$effect_picture){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
-                    }
-
-                    if (!empty($house['all_goods'])) {
-                        foreach ($house['all_goods'] as $goods) {
-                            $goods_id       = $effect_id;
-                            $goods_first    = $goods['first_name'];
-                            $goods_second   = $goods['second_name'];
-                            $goods_three    = $goods['three_name'];
-                            $goods_code     = $goods['good_code'];
-                            $goods_quantity = $goods['good_quantity'];
-                            $three_category_id = $goods['three_id'];
-                            (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity,$three_category_id);
+                        $hall_area         = $house['hall_area'];
+                        $hall_perimeter    = $house['hall_girth'];
+                        $bedroom_area      = $house['room_area'];
+                        $bedroom_perimeter = $house['room_girth'];
+                        $toilet_area       = $house['toilet_area'];
+                        $toilet_perimeter  = $house['toilet_girth'];
+                        $kitchen_area      = $house['kitchen_area'];
+                        $kitchen_perimeter = $house['kitchen_girth'];
+                        $modelling_length  = $house['other_length'];
+                        $flat_area         = $house['flattop_area'];
+                        $balcony_area      = $house['balcony_area'];
+                        $effect_id         = \Yii::$app->db->getLastInsertID();
+                        $decoration = (new DecorationParticulars())->plotAdd($effect_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
+                        if (!$decoration) {
+                            $transaction->rollBack();
+                            return 500;
                         }
-//                        if (!$works_data){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
-                    }
 
-                    if (!empty($house['worker_list'])) {
-                        foreach ($house['worker_list'] as $worker) {
-                            $worker_id    = $effect_id;
-                            $worker_kind  = $worker['worker_kind'];
-                            $worker_price = $worker['price'];
-                            (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
+                        if (!empty($house['drawing_list'])) {
+                            foreach ($house['drawing_list'] as $images) {
+                                $effect_images = $images['all_drawing'];
+                                $series_id     = $images['series'];
+                                $style_id      = $images['style'];
+                                $images_user   = $images['drawing_name'];
+                                $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                            }
+                            if (!$effect_picture){
+                                $transaction->rollBack();
+                                return 500;
+                            }
                         }
-//                        if (!$works_worker_data){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
+                        $transaction->commit();
+                    }catch (\Exception $e) {
+                        $transaction->rollBack();
+                        return Json::encode([
+                            'code' => 1000,
+                            'msg' => '请求参数错误',
+                        ]);
                     }
+                }
 
-                    foreach ($house['backman_option'] as $backman) {
-                        $backman_id     = $effect_id;
-                        $backman_option = $backman['name'];
-                        $backman_value  = $backman['num'];
-                        (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
-//                        if (!$works_backman_data){
-//                            $transaction->rollBack();
-//                            return $code;
-//                        }
+                // 案列添加
+                if ($house['is_ordinary'] = 1) {
+                    try {
+                        $bedroom                = $house['cur_room'];
+                        $sittingRoom_diningRoom = $house['cur_hall'];
+                        $toilet                 = $house['cur_toilet'];
+                        $kitchen                = $house['cur_kitchen'];
+                        $window                 = $house['window'];
+                        $area                   = $house['area'];
+                        $high                   = $house['high'];
+                        $province               = $province_chinese['name'];
+                        $province_code          = $request['province_code'];
+                        $city                   = $city_chinese['name'];
+                        $city_code              = $request['city_code'];
+                        $district               = $district_chinese['name'];
+                        $district_code          = $request['cur_county_id']['id'];
+                        $toponymy               = $request['house_name'];
+                        $street                 = $request['address'];
+                        $particulars            = $house['house_type_name'];
+                        $stairway               = $house['have_stair'];
+                        $house_image            = $house['cur_imgSrc'];
+                        $type                   = $house['is_ordinary'];
+                        $sort_id                = $house['sort_id'];
+                        if ($stairway != 1) {
+                            $stair_id = 0;
+                        } else {
+                            $stair_id = $house['stair'];
+                        }
+                        $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
+                        if (!$effect) {
+                            $transaction->rollBack();
+                            return 500;
+                        }
+
+                        $effect_id      = \Yii::$app->db->getLastInsertID();
+                        $effect_images  = $house['drawing_list'];
+                        $series_id      = $house['series'];
+                        $style_id       = $house['style'];
+                        $images_user    = '案例添加';
+                        $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                        if (!$effect_picture) {
+                            $transaction->rollBack();
+                            return 500;
+                        }
+
+                        if (!empty($house['all_goods'])) {
+                            foreach ($house['all_goods'] as $goods) {
+                                $goods_id          = $effect_id;
+                                $goods_first       = $goods['first_name'];
+                                $goods_second      = $goods['second_name'];
+                                $goods_three       = $goods['three_name'];
+                                $goods_code        = $goods['good_code'];
+                                $goods_quantity    = $goods['good_quantity'];
+                                $three_category_id = $goods['three_id'];
+                                $works_data        = (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity, $three_category_id);
+                            }
+                            if (!$works_data) {
+                                $transaction->rollBack();
+                                return 500;
+                            }
+                        }
+
+                        if (!empty($house['worker_list'])) {
+                            foreach ($house['worker_list'] as $worker) {
+                                $worker_id         = $effect_id;
+                                $worker_kind       = $worker['worker_kind'];
+                                $worker_price      = $worker['price'];
+                                $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
+                            }
+                            if (!$works_worker_data) {
+                                $transaction->rollBack();
+                                return 500;
+                            }
+                        }
+
+                        if (!empty($house['backman_option'])) {
+                            foreach ($house['backman_option'] as $backman) {
+                                $backman_id         = $effect_id;
+                                $backman_option     = $backman['name'];
+                                $backman_value      = $backman['num'];
+                                $works_backman_data = (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
+                            }
+                            if (!$works_backman_data) {
+                                $transaction->rollBack();
+                                return 500;
+                            }
+                        }
+                        $transaction->commit();
+                    } catch (\Exception $e) {
+                        $transaction->rollBack();
+                        return Json::encode([
+                            'code' => 1000,
+                            'msg' => '请求参数错误',
+                        ]);
                     }
                 }
             }
 
-                if ($effect_ || $effect){
-//                    $transaction->commit();
-                    return Json::encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                ]);
-                }
+
+        if ($effect){
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);}
+    }
+
+    public function actionADD()
+    {
+        $request = \Yii::$app->request->post();
+        $province_chinese = District::findByCode((int)$request['province_code']);
+        $city_chinese = District::findByCode((int)$request['city_code']);
+        $district_chinese = District::findByCode((int)$request['cur_county_id']);
     }
 
     /**
