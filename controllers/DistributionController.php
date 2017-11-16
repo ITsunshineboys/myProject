@@ -540,7 +540,7 @@ class DistributionController extends Controller
             $list=[
                 'myself'=>[
                     'mobile'=>$data['mobile'],
-                    'applydis_time'=>$data['applydis_time']==0?0:date('Y-m-d',$data['applydis_time']),
+                    'applydis_time'=>date('Y-m-d',$data['add_time']),
                 ],
                 'fatherset'=>$fatherset,
                 'subset'=>$subset,
