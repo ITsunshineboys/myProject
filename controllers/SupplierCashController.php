@@ -287,13 +287,12 @@ class SupplierCashController extends Controller
         $request = \Yii::$app->request;
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $time_type = trim(htmlspecialchars($request->get('time_type','all')), '');
+        $time_type = trim(htmlspecialchars($request->get('time_type','')), '');
         $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
         $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
-        $status = trim(htmlspecialchars($request->get('status', self::CASH_STATUS_ING)), '');
+        $status = trim(htmlspecialchars($request->get('status', \Yii::$app->params['value_all'])), '');
         $search = trim(htmlspecialchars($request->get('search', '')), '');
-        if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
-            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
+        if (($time_type == 'custom' && $time_end && $time_start > $time_end)
         ) {
             $code = 1000;
             return Json::encode([
@@ -302,8 +301,14 @@ class SupplierCashController extends Controller
             ]);
         }
 
-        $data = SupplierCashManager::getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search,$time_type);
-
+        $data = SupplierCashManager::getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search);
+        if(is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',

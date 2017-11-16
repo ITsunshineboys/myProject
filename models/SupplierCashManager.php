@@ -18,6 +18,10 @@ class SupplierCashManager extends ActiveRecord
     const  GOODS_ORDER = 'goods_order';
     const  ROLE_ID = 6;
 
+    const FIELDS_ADMIN=[
+
+    ];
+
     /**
      * 查询商家提现列表
      * @param $supplier_id int 商家id
@@ -304,7 +308,9 @@ class SupplierCashManager extends ActiveRecord
 
         return ModelService::pageDeal($arr, $count, $page, $page_size);
     }
+    public static function pagination(){
 
+    }
 
     /**
      * 获取提现列表
@@ -325,16 +331,13 @@ class SupplierCashManager extends ActiveRecord
                 ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where(['g.role_id' => self::ROLE_ID])
                 ->orderBy('g.apply_time Desc');
-            if($time_type=='today'){
-                $query->orderBy('g.handle_time Desc');
-            }
 
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-        if(!isset($search)) {
-                if($time_type=='custom'){
-                    if (($time_start && !StringService::checkDate($time_start))
+
+        if($time_type=='custom'){
+            if (($time_start && !StringService::checkDate($time_start))
                         || ($time_end && !StringService::checkDate($time_end) || $time_start > $time_end)
                     ) {
                         $code = 1000;
@@ -359,10 +362,10 @@ class SupplierCashManager extends ActiveRecord
                         $query->andWhere(['<=', 'g.apply_time', $time_end]);
                     }
                 }
-        }else{
-            $query->andFilterWhere(['like', 's.shop_no', $search])
-                ->orFilterWhere(['like', 's.shop_name', $search]);
-        }
+
+        if(isset($search)){
+                $query->andFilterWhere(['like', 's.shop_no', $search])->orFilterWhere(['like', 's.shop_name', $search]);
+            }
 
 
 //            if ($time_start) {
