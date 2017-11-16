@@ -397,7 +397,7 @@ class QuoteController extends Controller
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
                 if ($min_time < $max_time){
-                    $where = "add_time >=" . $min_time ." and add_time <=". $max_time ." AND city_code = ".$post;
+                    $where = "add_time >=" . strtotime($min_time) ." and add_time <=". strtotime($max_time) ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 } else {
                     $timeType = StringService::startEndDate('today');
