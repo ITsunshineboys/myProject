@@ -205,24 +205,7 @@ class SupplierCashController extends Controller
             'msg' => 'ok',
             'data' => $paginationData
         ]);
-//        if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
-//            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
-//        ) {
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//
-//        $data = SupplierCashManager::getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status);
-//
-//
-//        return Json::encode([
-//            'code' => 200,
-//            'msg' => 'ok',
-//            'data' => $data,
-//        ]);
+
     }
 
     /**
@@ -355,23 +338,6 @@ class SupplierCashController extends Controller
             'msg' => 'ok',
             'data' => $paginationData
         ]);
-//        if (!array_key_exists($time_type, \Yii::$app->params['timeTypes'])
-//            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
-//        ) {
-//            $code = 1000;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => \Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-//
-//        $data = SupplierCashManager::getOrderList($page, $page_size, $time_type, $time_start, $time_end, $search);
-//
-//        return Json::encode([
-//            'code' => 200,
-//            'msg' => 'ok',
-//            'data' => $data
-//        ]);
     }
 
     /**

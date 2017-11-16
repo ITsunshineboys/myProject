@@ -35,52 +35,17 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function getCashList($user,$where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $offset = ($page - 1) * $size;
-        $arr = (new Query())
+
+        $query = (new Query())
             ->from(self::SUP_CASHREGISTER)
             ->where($where)
-            ->offset($offset)
-            ->limit($size)
-            ->orderBy('apply_time Desc')
+            ->orderBy('apply_time Desc');
+
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
             ->all();
-
-//        if($time_type=='custom'){
-//            if ((!$time_start && !StringService::checkDate($time_start)) || (!$time_end && !StringService::checkDate($time_end) )
-//            ) {
-//                $code = 1000;
-//                return $code;
-//            }
-//            if($time_start==$time_end){
-//                list($time_start,$time_end)=ModelService::timeDeal($time_start);
-//            }
-//        } else {
-//            list($time_start, $time_end) = StringService::startEndDate($time_type);
-//
-//        }
-//        if ($time_start) {
-//            $time_start=(int)strtotime($time_start);
-//            $query->andWhere(['>=', 'apply_time', $time_start]);
-//        }
-//        if ($time_end) {
-//            if ($time_type == 'today') {
-//                $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
-//            } else {
-//                $end_time = (int)strtotime($time_end);
-//            }
-//            $query->andWhere(['<=', 'apply_time', $end_time]);
-//        }
-//
-//        if ($status) {
-//           $query->andWhere(['status' => $status]);
-//        }
-//
-//
-//        $count = $query->count();
-//        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-//        $arr = $query->offset($pagination->offset)
-//            ->limit($pagination->limit)
-//            ->all();
-
         foreach ($arr as &$v) {
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
             if ($v['handle_time']) {
@@ -97,7 +62,8 @@ class SupplierCashManager extends ActiveRecord
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
             unset($v['uid'], $v['role_id']);
         }
-        $count=count($arr);
+
+        $count=UserCashregister::find()->where($where)->count();
         $data = ModelService::pageDeal($arr, $count, $page, $size);
 
         $data['supplier_id'] = Supplier::find()
@@ -292,18 +258,20 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function getOrderList($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $offset = ($page - 1) * $size;
-        $arr = (new Query())
+
+        $query = (new Query())
             ->from(self::GOODS_ORDER . ' g')
             ->select(['g.id', 'g.order_no', 'g.paytime', 's.shop_name', 'g.supplier_id', 'o.sku', 'o.goods_name', 'o.sku', 'o.goods_price', 'o.goods_number', 'o.freight'])
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
             ->where($where)
-            ->offset($offset)
-            ->limit($size)
-            ->orderBy('g.paytime Desc')
-            ->all();
+            ->orderBy('g.paytime Desc');
 
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
         foreach ($arr as &$v) {
             $v['paytime'] = date('Y-m-d H:i', $v['paytime']);
             $v['amount_order'] = sprintf('%.2f', (float)($v['goods_price'] * $v['goods_number'] + $v['freight']) / 100);
@@ -332,17 +300,18 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-
-        $offset = ($page - 1) * $size;
-            $arr = (new Query())
+        $query = (new Query())
                 ->from(self::SUP_CASHREGISTER . ' as g')
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
                 ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where($where)
-                ->offset($offset)
-                ->limit($size)
-                ->orderBy('g.handle_time Desc')
-                ->all();
+                ->orderBy('g.handle_time Desc');
+
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
         foreach ($arr as &$v) {
             if(!$v['handle_time']){
                 $v['handle_time']='-';
@@ -362,8 +331,7 @@ class SupplierCashManager extends ActiveRecord
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
         }
 
-        $total = count($arr);
-        return ModelService::pageDeal($arr, $total, $page, $size);
+        return ModelService::pageDeal($arr, $count, $page, $size);
 //        if ($status) {
 //            $query->andWhere(['g.status' => $status]);
 //        }
@@ -405,7 +373,6 @@ class SupplierCashManager extends ActiveRecord
 //            ->limit($pagination->limit)
 //            ->all();
 
-        return ModelService::pageDeal($arr, $count, $page, $page_size);
     }
 
 
