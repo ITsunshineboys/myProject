@@ -515,11 +515,11 @@ class SupplieraccountController extends  Controller{
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
             if (($startTime && !StringService::checkDate($startTime))
-                || ($endTime && !StringService::checkDate($endTime) || $startTime>$endTime)
+                || ($endTime && !StringService::checkDate($endTime))
             ) {
                 return json_encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
             if($startTime==$endTime){

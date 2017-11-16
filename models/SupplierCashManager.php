@@ -62,8 +62,6 @@ class SupplierCashManager extends ActiveRecord
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
             unset($v['uid'], $v['role_id']);
         }
-
-        $count=UserCashregister::find()->where($where)->count();
         $data = ModelService::pageDeal($arr, $count, $page, $size);
 
         $data['supplier_id'] = Supplier::find()
