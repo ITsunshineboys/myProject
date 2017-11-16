@@ -152,31 +152,77 @@ class SupplierCashController extends Controller
         }
 
         $request = \Yii::$app->request;
+        $timeType = trim(htmlspecialchars($request->get('time_type', 'all')), '');;
+        $status = (int)$request->get('status', '');
+        $where = "uid=$user and role_id=6";
+        $code=1000;
+            if ($timeType == 'custom') {
+                $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
+                $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
+                if (($time_start && !StringService::checkDate($time_start))
+                    || ($time_end && !StringService::checkDate($time_end))
+                ) {
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if ($time_start == $time_end) {
+                    list($time_start, $time_end) = ModelService::timeDeal($time_start);
+                }
+            } else {
+                list($time_start, $time_end) = StringService::startEndDate($timeType);
+            }
+
+            if ($time_start) {
+                $startTime = (int)strtotime($time_start);
+                $startTime && $where .= " and apply_time >= {$startTime}";
+            }
+            if ($time_end) {
+                if ($timeType == 'today') {
+                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
+
+                } else {
+                    $time_end = (int)strtotime($time_end);
+                }
+                $time_end && $where .= " and apply_time <= {$time_end}";
+            }
+            if ($status!=0){
+                $where.= " and status ={$status} ";
+            }else{
+
+                $keys=implode(',',array_keys(self::USER_CASH_SATE));
+                $where.= " and  status in ({$keys}) ";
+
+            }
+
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $time_type = trim(htmlspecialchars($request->get('time_type', 'all')), '');
-        $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
-        $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
-        $status = (int)$request->get('status', '');
 
-        if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
-            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
-        ) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        $data = SupplierCashManager::getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status);
-
-
-        return Json::encode([
+        $paginationData = SupplierCashManager::getCashList($user,$where,$page, $page_size);
+        return json_encode([
             'code' => 200,
             'msg' => 'ok',
-            'data' => $data,
+            'data' => $paginationData
         ]);
+//        if (($status && !array_key_exists($status, self::USER_CASH_STATUSES))
+//            || ($time_type == 'custom' && $time_end && $time_start > $time_end)
+//        ) {
+//            $code = 1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//
+//        $data = SupplierCashManager::getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status);
+//
+//
+//        return Json::encode([
+//            'code' => 200,
+//            'msg' => 'ok',
+//            'data' => $data,
+//        ]);
     }
 
     /**

@@ -33,48 +33,53 @@ class SupplierCashManager extends ActiveRecord
      * @param $status int 状态
      * @return array
      */
-    public static function getCashList($user, $page, $page_size, $time_type, $time_start, $time_end, $status)
+    public static function getCashList($user,$where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $query = (new Query())
+        $offset = ($page - 1) * $size;
+        $arr = (new Query())
             ->from(self::SUP_CASHREGISTER)
+            ->where($where)
+            ->offset($offset)
+            ->limit($size)
             ->orderBy('apply_time Desc')
-            ->where(['uid' => $user, 'role_id' => self::ROLE_ID]);
-        if($time_type=='custom'){
-            if ((!$time_start && !StringService::checkDate($time_start)) || (!$time_end && !StringService::checkDate($time_end) )
-            ) {
-                $code = 1000;
-                return $code;
-            }
-            if($time_start==$time_end){
-                list($time_start,$time_end)=ModelService::timeDeal($time_start);
-            }
-        } else {
-            list($time_start, $time_end) = StringService::startEndDate($time_type);
-
-        }
-        if ($time_start) {
-            $time_start=(int)strtotime($time_start);
-            $query->andWhere(['>=', 'apply_time', $time_start]);
-        }
-        if ($time_end) {
-            if ($time_type == 'today') {
-                $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
-            } else {
-                $end_time = (int)strtotime($time_end);
-            }
-            $query->andWhere(['<=', 'apply_time', $end_time]);
-        }
-
-        if ($status) {
-           $query->andWhere(['status' => $status]);
-        }
-
-
-        $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-        $arr = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
             ->all();
+
+//        if($time_type=='custom'){
+//            if ((!$time_start && !StringService::checkDate($time_start)) || (!$time_end && !StringService::checkDate($time_end) )
+//            ) {
+//                $code = 1000;
+//                return $code;
+//            }
+//            if($time_start==$time_end){
+//                list($time_start,$time_end)=ModelService::timeDeal($time_start);
+//            }
+//        } else {
+//            list($time_start, $time_end) = StringService::startEndDate($time_type);
+//
+//        }
+//        if ($time_start) {
+//            $time_start=(int)strtotime($time_start);
+//            $query->andWhere(['>=', 'apply_time', $time_start]);
+//        }
+//        if ($time_end) {
+//            if ($time_type == 'today') {
+//                $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
+//            } else {
+//                $end_time = (int)strtotime($time_end);
+//            }
+//            $query->andWhere(['<=', 'apply_time', $end_time]);
+//        }
+//
+//        if ($status) {
+//           $query->andWhere(['status' => $status]);
+//        }
+//
+//
+//        $count = $query->count();
+//        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
+//        $arr = $query->offset($pagination->offset)
+//            ->limit($pagination->limit)
+//            ->all();
 
         foreach ($arr as &$v) {
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
@@ -92,8 +97,8 @@ class SupplierCashManager extends ActiveRecord
             $v['status'] = SupplierCashController::USER_CASH_STATUSES[$v['status']];
             unset($v['uid'], $v['role_id']);
         }
-
-        $data = ModelService::pageDeal($arr, $count, $page, $page_size);
+        $count=count($arr);
+        $data = ModelService::pageDeal($arr, $count, $page, $size);
 
         $data['supplier_id'] = Supplier::find()
         ->select('id')
