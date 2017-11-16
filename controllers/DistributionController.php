@@ -300,6 +300,7 @@ class DistributionController extends Controller
         $ByBinding=Distribution::find()
             ->where(['parent_id'=>$Distribution->id])
             ->all();
+        
         if ($ByBinding)
         {
             $code=1000;
