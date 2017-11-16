@@ -1,70 +1,6 @@
 /*头部开始*/
 header{
-    width: 32rem;
-    height: 4rem;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-}
-header > div{
-    position: relative;
-}
-.return_btn{
-    /*display: inline-block;*/
-    position: absolute;
-    left: 0;
-    /*top:1rem;*/
-    width:3rem;
-    height: 4rem;
-    line-height: 4rem;
-    /*border:2px solid red;*/
-}
-section{
-    margin-top: 1rem;
-}
-header div {
-    line-height: 4rem;
-}
-
-header div span {
-    font-size: 1.4rem;
-}
-.postion_span{
-    color: #53A8F4;
-    font-size: 1.2rem;
-    margin-left: .2rem;
-}
-.cur_location{
-    position: absolute;
-    top: 0;
-    right:1.4rem;
-    height: 4rem;
-    /*lh4rem*/
-}
-.in_span {
-    margin-left: 1rem;
-    color: #53A8F4 ;
-}
-
-.pic_span {
-    /*margin-left: 12.8rem;*/
-    font-size: 1.5rem;
-}
-.pos_span{
-    color:#53A8F4;
-    margin-left: .3rem;
-    font-size: 1.1rem;
-}
-.map {
-    margin-left: 8rem;
-    /*width: 1rem;*/
-    color: #53A8F4;
-}
-header div i{
-    margin-left: 7.8rem;
-    color: #53A8F4;
+    box-shadow: none !important;
 }
 /*头部结束*/
 a:focus, a:hover{
@@ -133,26 +69,32 @@ section{
 }
 .memo_pad{
     background-color: white;
-    height:3.3rem;
-    line-height:3rem ;
-    margin-bottom: 1rem;
-    margin-top:4rem;
+    padding: 0.8rem 0 0.8rem 1.2rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    z-index: 999;
+    width: 100%;
 }
 .memo_pad ul {
     padding-left: 0;
 }
 .memo_pad li{
     font-size: 1.4rem;
-    margin-right: -4px;
+    margin-right: 0.9rem;
     color: #b1b1b1;
     display: inline-block;
-    width: 25%;
-    padding-left: 1.2rem;
+    padding-right: 1.8rem;
     position: relative;
 }
 .memo_pad li img{
     vertical-align: initial;
 }
+.memo_pad li:last-child{
+    margin-right: 0 ;
+}
+
 .up_down{
 
 }
@@ -169,7 +111,7 @@ section{
 }
 .mall_list{
     background-color: white;
-    /*height: 12rem;*/
+    margin-top: 8.5rem;
 }
 .flex_div{
     position: relative;
@@ -181,8 +123,10 @@ section{
 }
 .item_commodity div{
     display: inline-block;
-    width: 10rem;
-    height: 10rem;
+    width: 8rem;
+    height: 8rem;
+    border-radius: .3rem;
+    overflow: hidden;
 }
 .item_commodity_divimg {
 
@@ -192,23 +136,26 @@ section{
     height: 100%;
 }
 .item_commodity_comment{
-    /*margin-left: 1rem;*/
-    width: 15rem!important;
-    position: absolute;
-    left: 12rem;
-    top: 1rem;
-
+    width: 20.6rem!important;
+    margin-left: 1rem;
 }
 
 .item_commodity_comment .comment_one{
     font-size: 1.4rem;
     color: #666;
+    margin-bottom: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item_commodity_comment .comment_two{
     font-size: 1.2rem;
     color: #999;
     margin-bottom: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .item_commodity_comment .comment_span,.item_commodity_comment .comment_span_two {
     font-size: 1rem;
@@ -217,6 +164,7 @@ section{
 .item_commodity_comment .comment_span_three{
     font-size: 1.2rem;
     color: #D9AD65;
+    margin-top: 0.2rem;
 }
 
 .item_commodity p,span{
@@ -248,7 +196,6 @@ section{
 .style_size{
     font-size: 1.4rem;
     color: #666;
-    margin-left: 1rem;
 }
 .down_list{
     width: 1.2rem;
@@ -290,7 +237,7 @@ section{
     width: 5.7rem;
     height: 2.4rem;
     border: 2px solid #999;
-    color: #666;
+    color: #999;
     border-radius:.3rem;
     display: inline-block;
     text-align: center;
@@ -303,7 +250,8 @@ section{
     overflow: hidden;
 }
 .price_range{
-
+    border-bottom: 2px solid #dcdcdc;
+    padding-bottom: 2rem;
 }
 .price_range input{
     width: 5.5rem;
@@ -369,10 +317,10 @@ section{
     position: relative;
 }
 .brand_content{
-    margin-left: -3rem;
     font-size: 1.4rem;
     color: #666;
     margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
 }
 .footer_size{
 
@@ -444,6 +392,7 @@ section{
 .div_search{
     width: 32rem;
     position: relative;
+    margin-bottom: 1.2rem;
 }
 .brand_search{
     width: 25.4rem;

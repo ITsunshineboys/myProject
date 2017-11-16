@@ -13,9 +13,9 @@
 }
 .main .details_banner{
     width:100%;
-    height: 15.7rem;
+    height: 30.7rem;
     position:relative;
-    background-color: #31b0d5;
+    background-color: #e5e5e5;
 }
 .main .details_banner img{
     width:100%;
@@ -24,32 +24,35 @@
 .main .intro_box {
     width: auto;
     height: auto;
-    padding:1.36rem 0 1.7rem 1.19rem;
+    padding: 1.36rem 0 1.1rem 1.19rem;
     background-color: #fff;
-    margin-bottom:.84rem;
+    margin-bottom: 1rem;
 }
 .main .intro_box .product_name{
-    font-size: 1.5rem;
-    margin-bottom:.66rem;
-    color: #4A4A4A;
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+    color: #666;
 }
 .main .intro_box  .introduce{
-    font-size:1.1rem;
-    color: #6C6C6C;
+    font-size:1rem;
+    color: #999;
     margin-bottom:1rem;
 }
 .main .intro_box  .cost{
-    margin-bottom:0!important;
-    font-size: 1.62rem;
-    color:#F59C22;
+    margin-bottom: 0!important;
+    font-size: 2.2rem;
+    color: #D9AD65;
 }
 .main .standard{
-    /*height: 1.36rem;*/
     position: relative;
     font-size: 1.36rem;
-    padding:1.19rem 0 1.19rem 1.53rem;
     background-color: #fff;
-    border-bottom:.08rem solid #E9EDEE ;
+    padding-left: 1.2rem;
+}
+
+.main .standard .standard_txt{
+    border-bottom: 1px solid #e5e5e5;
+    padding: 1.2rem 1.2rem 1.2rem 0;
 }
 /*.main .standard >div:nth-child(1){*/
     /*position: absolute;*/
@@ -67,7 +70,7 @@
 }
 .main .standard >div:nth-child(2){
     position: absolute;
-    right:1.53rem;
+    right:1.2rem;
     top:1.19rem;
     z-index: 10;
 }
@@ -164,23 +167,32 @@
    font-size: 1.3rem
 }
 .shop_header{
-    height: 12rem;
+    height: 11rem;
     width: auto;
     background-color: white;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 .shop_header_child{
     margin-top: 1rem;
 }
-.shop_header_child img{
-    margin-top: .8rem;
-    margin-left: 1rem;
+.shop_header_child .img_box{
+    width: 3rem;
+    height: 3rem;
+    overflow: hidden;
+    border-radius: .3rem;
+    background: #e5e5e5;
+    display: inline-block;
+    margin: 1.2rem 0 0 1.2rem;
+}
+
+.shop_header_child .img_box img{
+    width: 100%;
+    height: 100%;
 }
 .shop_header_child span{
-    position: relative;
-    top:.8rem;
-    font-size:1.2rem;
+    font-size: 1.2rem;
     margin-left: 1rem;
+    margin-top: 1.8rem;
 }
 .shop_number {
     margin-top: .6rem;
@@ -189,15 +201,16 @@
     margin-top: 2rem;
 }
 .shop_number ul li {
-    width:50%;
+    width: 50%;
     position: relative;
     float: left;
     font-size: 1.2rem;
     text-align: center;
-    /*margin-left: 3rem;*/
+    color: #999;
+    font-size: 1.2rem;
 }
 .shop_number ul li:first-child{
-    border-right:.5px solid #CDD3D7;
+    border-right: 1px solid #e5e5e5;
 }
 .Stroll{
     margin-left:11rem;
@@ -218,10 +231,8 @@
     margin-top: 1rem;
 }
 .num_shop {
-    color: #5677FC;
-    position: absolute;
-    left: calc(50% - 1rem);
-    top: -.5rem;
+    color: #D9AD65;
+    font-size: 1.4rem;
 }
 .line{
     display: inline-block;
@@ -247,10 +258,10 @@
     font-size: 1.2rem;
     padding-left: 1.2rem;
     position: relative;
-    color: #6C6C6C;
+    color: #666;
     height: 4.08rem;
     line-height: 4.08rem;
-    border-bottom: 3px solid #CDD3D7;
+    border-bottom: 2px solid #dcdcdc;
 }
 .comment_num {
     position: absolute;
@@ -268,6 +279,7 @@
     background: #fff;
     z-index: 2;
     text-align: center;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.1);
 }
 .foot_tab .add{
     height: 4rem;
@@ -277,7 +289,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #F55122;
+    background-color: #333;
+    order: 1px solid #333;
 }
 .foot_tab div{
     position: absolute;
@@ -304,54 +317,87 @@
     margin-left: 0!important;
     margin-right: 0!important;
 }
-.modal-header{
-    font-size: 1.2rem;
-    height: 2rem;
-}
 .modal-header p span{
     font-size: 1.2rem;
     margin-left: -2rem;
 }
 .add_cart{
     display: inline-block;
+    width: 8rem;
+    height: 8rem;
+    overflow: hidden;
+    border-radius: .3rem;
+}
+.add_cart img{
+    width: 100%;
+    height: 100%;
 }
 .modal-body span{
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     margin-left: 1rem;
 }
+.sl{
+    padding: 1.6rem 0 0.3rem 0;
+    border-top: 2px solid #e5e5e5;
+    margin-top: 1.2rem;
+}
 .sl input {
-    width: 2rem;
-    height: 2rem;
-    font-size: 1rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.4rem;
+    border: 2px solid #e5e5e5;
+    background: #fff;
+    border-radius: .3rem;
+}
+.sl span{
+    font-size: 1.2rem;
+    margin-top: 0.7rem;
+}
+.modal-body{
+    padding: 1.2rem;
 }
 .input_div{
-    margin-left: 14rem;
     display: inline-block;
 }
 .text_box{
-    margin-left: .4rem;
-}
-.close{
-    font-size: 1.5rem!important;
+    margin-left: 1.3rem;
+    margin-right: 1rem;
 }
 .div_pic{
-    position: relative;
+    
 }
 .pic_data{
     position: absolute;
-    top:-5rem;
-    left: 6rem;
-    color: #F59C22;
+    top: 1rem;
+    left: 9.6rem;
+    color: #D9AD65;
 }
 .shu_pic{
     position: absolute;
-    top:-3rem;
-    left: 6rem;
+    top: 3.2rem;
+    left: 9.6rem;
+    font-size: 1.2rem !important;
+    color: #999;
 }
-.modal-header {
-    min-height: 16.43px;
-    padding: 15px;
-     border-bottom: none;
+.modal-header{
+    min-height: 0 !important;
+    padding: 0 !important;
+    border-bottom: none !important;
+    position: relative;
+}
+.modal-header .close{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 4rem;
+    height: 4rem;
+    color: #333;
+    opacity: 1;
+    font-size: 1.8rem;
+    font-weight: normal;
+    text-align: center;
+    line-height: 4rem;
+    z-index: 999;
 }
 .modal-footer_div{
     border-top:1px solid #999;
@@ -367,7 +413,7 @@
     height: 4rem;
     line-height: 4rem;
     font-size: 1.2rem;
-    background-color:#F55122;
+    background-color:#333;
     color: white;
     border:none;
     width: 100vw;
@@ -375,7 +421,18 @@
 #myModalP{
     width: 20rem;
     margin-left: 5rem;
-    margin-top: 22rem;
+    margin-top: 25rem;
+}
+.modal.in .modal-dialog{
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    margin: 0;
+}
+.modal.fade .modal-dialog{
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
 }
 .modal-body_success{
     padding: 3rem;
@@ -385,8 +442,7 @@
     padding-left: 2rem;
 }
 .service_item{
-    background-color: #fff;
-    margin-bottom:.85rem;
+    
 }
 .service_item ul li {
     display: inline-block;
@@ -399,34 +455,35 @@
     margin-right: 1.5rem;
 }
 .service_item ul li img {
-    width: 2rem;
+    margin-top: -0.2rem;
 }
 .service_item{
-    border-bottom:1px solid #999;
-    padding-bottom: .5rem;
-    border-top:1px solid #999 ;
-    padding-top: .5rem;
+    background: #fff;
+    padding: 1.2rem 0;
 }
 .modal-title {
     font-size: 1.5rem!important;
     text-align: center;
 }
 .myModal_sec, .modal-body-comment{
-    height: 42rem;
+    margin-bottom: 1.6rem;   
 }
 .myModal_sec{
     margin-top: -2rem;
 }
 .modal-body-comment{
-    margin-top: 1rem;
+    
+}
+.service_comment li{
+    padding: 1.2rem 0 .6rem 0;
 }
 .t-header{
     border-bottom: 1px solid #999;
     padding:.1rem 0;
 }
 .t-header-two{
-    border-bottom: 1px solid #999;
-    padding: .1rem 0;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 1rem;
 }
 .t-header-two h1{
     text-align: center;
@@ -436,8 +493,8 @@
     text-align: center;
 }
 .service_comment ul li img{
-    width: 2rem;
-    margin-left: 1rem;
+    margin-top: -0.7rem;
+    margin-left: 1.2rem;
 }
 .service_comment ul li span {
     font-size: 1.3rem;
@@ -451,16 +508,24 @@
 }
 .modal-footer-btn button{
     width: 100%;
-    height: 3rem;
+    height: 4rem;
     color: white;
     font-size: 1.2rem;
+    background: #333;
 }
 .modal {
     position: fixed;
     top: -1rem;
 }
+.nav-tabs{
+    border-bottom: none !important;
+}
+.tab-content{
+    margin-top: 1.2rem;
+}
 .pic_comment{
     background-color: #fff;
+    margin-bottom: 1rem;
 }
 .btn_color{
     background-color: #53A8F4;
@@ -468,16 +533,22 @@
 }
 .nav-tabs > li > a{
     line-height:2rem;
-    border-bottom:none;
-    color:#B8B6B6;
+    border: none !important;
+    color:#999;
+}
+.shop_two ul li:last-child{
+    border-bottom: none;
+}
+hr{
+    border-top: none;
 }
 .active > a{
-    color: #53A8F4!important;
+    color: #333!important;
 }
 .active hr{
-    width:3rem;
-    height:.1rem;
+    width: 3rem;
+    height: .2rem;
     position: relative;
-    bottom:.5rem;
-    background-color: #53A8F4;
+    bottom: .2rem;
+    background-color: #333;
 }
