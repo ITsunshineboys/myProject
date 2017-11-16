@@ -342,6 +342,9 @@ class SupplierCashManager extends ActiveRecord
                 $code = 1000;
                 return $code;
             }
+            if($time_start==$time_end){
+                list($time_start,$time_end)=ModelService::timeDeal($time_type,$time_start,$time_end);
+            }
         } else {
             list($time_start, $time_end) = StringService::startEndDate($time_type);
         }
