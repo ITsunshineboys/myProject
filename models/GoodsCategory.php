@@ -288,12 +288,12 @@ class GoodsCategory extends ActiveRecord
                 unset($category['deleted']);
             }
 
-            if (isset($category['offline_person'])) {
-                unset($category['offline_person']);
-            }
-            if (isset($category['online_person'])) {
-                unset($category['online_person']);
-            }
+//            if (isset($category['offline_person'])) {
+//                unset($category['offline_person']);
+//            }
+//            if (isset($category['online_person'])) {
+//                unset($category['online_person']);
+//            }
 
             if (isset($category['attr_op_time'])) {
                 $category['attr_op_time'] = $category['attr_op_time'] > 0
