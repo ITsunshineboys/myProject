@@ -354,10 +354,8 @@ class SupplierCashManager extends ActiveRecord
             $time_start = (int)strtotime($time_start);
             $time_end = (int)strtotime($time_end);
         }
-
-            if ($time_start) {
+        if ($time_start) {
                 $query->andWhere(['>=', 'g.handle_time', $time_start]);
-
             }
             if ($time_end) {
                 if ($time_type == 'today') {
@@ -370,26 +368,6 @@ class SupplierCashManager extends ActiveRecord
             if(isset($search)){
                 $query->andFilterWhere(['like', 's.shop_no', $search])->orFilterWhere(['like', 's.shop_name', $search]);
             }
-
-
-//            if ($time_start) {
-//
-//            }
-//            if ($time_end) {
-//                    if ($time_end=='today')
-//                    {
-//                        $time_end = (int)(strtotime($time_end)+24*60*60);
-//
-//                    }else{
-//                        $time_end = (int)strtotime($time_end);
-//                    }
-//                    $query->andWhere(['<=','g.apply_time',$time_end]);
-//                }
-//
-//        if (isset($search) && trim($search) == $search) {
-//
-//        }
-
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
 
