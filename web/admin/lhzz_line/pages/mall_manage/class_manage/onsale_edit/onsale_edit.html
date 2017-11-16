@@ -14,9 +14,9 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" ng-model="class_name" ng-blur="addClassName()" maxlength=10>
+            <input type="text" ng-model="item.title" ng-blur="addClassName()" maxlength=10>
             <span>*限1~10个字符</span>
-            <h6 ng-show="showtishi" ng-bind="tishi"></h6>
+            <h6 ng-show="show_class_warning" ng-bind="class_warning"></h6>
         </div>
         <span></span>
         <div class="divider"></div>
@@ -54,7 +54,7 @@
         <div class="cla_des">
             <span class="each_title" id="describclass">分类描述</span>
             <div id="edit_tool">
-                <div class="ueditor" ng-model="onlinedes" config="config"></div>
+                <div class="ueditor" ng-model="item.description" config="config" id="editor"></div>
             </div>
         </div>
         <div class="divider"></div>
@@ -62,12 +62,12 @@
         <div class="info">
             <p>
                 <span>添加人员</span>
-                <span ng-bind="addperson"></span>
+                <span ng-bind="item.online_person"></span>
             </p>
 
             <p>
                 <span>上架时间</span>
-                <span ng-bind="online_time"></span>
+                <span ng-bind="item.online_time"></span>
             </p>
         </div>
 

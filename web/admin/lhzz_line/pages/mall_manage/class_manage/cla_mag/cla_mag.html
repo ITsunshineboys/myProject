@@ -59,7 +59,8 @@
                                     ng-class="{'active':sortStyleFunc() == 3}"></i>
                     </span>
                         </td>
-                        <td>添加人员</td>
+                        <td ng-if="onsale_flag">添加人员</td>
+                        <td ng-if="offsale_flag">操作人员</td>
                         <td>状态</td>
                         <td ng-if="offsale_flag">下架原因</td>
                         <td>详情</td>
@@ -74,11 +75,12 @@
                         <td>{{item.level}}</td>
                         <td ng-if="onsale_flag">{{item.online_time}}</td>
                         <td ng-if="!onsale_flag">{{item.offline_time}}</td>
-                        <td>{{item.applicant}}</td>
+                        <td ng-if="onsale_flag">{{item.online_person}}</td>
+                        <td ng-if="!onsale_flag">{{item.offline_person}}</td>
                         <td class="yesGreen" ng-if="onsale_flag">{{item.status}}</td>
                         <td class="yesred" ng-if="!onsale_flag">{{item.status}}</td>
-                        <td ng-if="onsale_flag" class="edit" ui-sref="onsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level,classtitles:item.titles,classpath:item.path,iconpath:item.icon,addperson:item.applicant,online_time:item.online_time})">编辑</td>
-                        <td ng-if="!onsale_flag" class="edit" ui-sref="offsale_edit({classtitle:item.title,classid:item.id,classlevel:item.level,classtitles:item.titles,classpath:item.path,iconpath:item.icon,addperson:item.applicant,offline_time:item.offline_time,offline_reason:item.offline_reason})">编辑</td>
+                        <td ng-if="onsale_flag" class="edit" ui-sref="onsale_edit({item:item})">编辑</td>
+                        <td ng-if="!onsale_flag" class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
                         <td ng-if="!onsale_flag" id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></td>
                         <td ng-if="onsale_flag" class="xiajia" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
                         <td ng-if="!onsale_flag" class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>

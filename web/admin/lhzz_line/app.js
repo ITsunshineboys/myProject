@@ -313,29 +313,12 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/mall_manage/class_manage/cla_mag/cla_mag.html"
         })
         .state("onsale_edit", {
-            params: {
-                "classtitle": '',
-                "classid": '',
-                "classlevel": '',
-                "classpath": '',
-                "iconpath": '',
-                "addperson": '',
-                "online_time": ''
-            },
+            params: {item:null},
             url: "/onsale_edit",
             templateUrl: "pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
         })
         .state("offsale_edit", {
-            params: {
-                "classtitle": '',
-                "classid": '',
-                "classlevel": '',
-                "classpath": '',
-                "iconpath": '',
-                "addperson": '',
-                "offline_time": '',
-                "offline_reason": null
-            },
+            params: {item: null},
             url: "/offsale_edit",
             templateUrl: "pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
         })

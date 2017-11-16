@@ -3,81 +3,42 @@
  */
 /*已上架 编辑*/
 var onsale_edit = angular.module("onsaleeditModule", ['ngFileUpload']);
-onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$http,Upload) {
-	const picprefix = baseUrl+"/";
-	const config = {
-		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-		transformRequest: function (data) {
-			return $.param(data)
-		}
-	};
-	let pid;
-	let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;
-	$scope.changescope = $scope;
-	$scope.showtishi = false;
-	$scope.idarr = [];
-	$scope.firstclass = []; /*一级下拉框*/
-	$scope.subClass = [];/*二级下拉框*/
-	$scope.offsaleclasslevel = $stateParams.classlevel;
-	$scope.offsaleclassid = $stateParams.classid;
-	$scope.offsaleclasstitle = $stateParams.classtitle;
-	$scope.class_name = $stateParams.classtitle;
-	$scope.onlinetitles = $stateParams.classtitles;
-	$scope.iconpath = picprefix+$stateParams.iconpath; /*图片路径*/
+onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$http,Upload,$rootScope) {
+    const picprefix = baseUrl+"/";
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
+    };
+    let pid;
+    let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;
+
+
+    $scope.changescope = $scope;
+    $scope.show_class_warning = false;
+    $scope.idarr = [];
+    $scope.firstclass = []; /*一级下拉框*/
+    $scope.subClass = [];/*二级下拉框*/
+    $scope.item =  $stateParams.item;
+	$scope.iconpath = picprefix+$stateParams.item.icon; /*图片路径*/
 	$scope.picwarning = false;
 	$scope.savemodal = '';
-	$scope.addperson =  $stateParams.addperson;
-	$scope.online_time = $stateParams.online_time;
-
-
-	let onlinepath = $stateParams.classpath.split(",");
+	let onlinepath = $stateParams.item.path.split(",");
 	onlinepath.splice(onlinepath.length-1,onlinepath.length);
 	$scope.finalpatharr = onlinepath;
 	$scope.offlinereason = '';
-	$scope.toolbar = {
-		toolbars:['bold', 'italic'],
-	}
 
-    $scope.config = {
-        // 定制图标
-        toolbars: [
-            ['Undo','Redo','formatmatch','removeformat', 'Bold','italic','underline','strikethrough','fontborder',
-                'horizontal','fontfamily', 'fontsize','justifyleft', 'justifyright',
-                'justifycenter', 'justifyjustify', 'forecolor',  'backcolor','insertorderedlist', 'insertunorderedlist',
-                'rowspacingtop','rowspacingbottom','imagecenter','simpleupload', 'time', 'date', 'preview']
-        ],
+    $scope.config =  $rootScope.config;
 
-        //首行缩进距离,默认是2em
-        indentValue:'2em',
-        //初始化编辑器宽度,默认1000
-        initialFrameWidth:800,
-        //初始化编辑器高度,默认320
-        initialFrameHeight:320,
-        //编辑器初始化结束后,编辑区域是否是只读的，默认是false
-        readonly : false ,
-        //启用自动保存
-        enableAutoSave: false,
-        //自动保存间隔时间， 单位ms
-        saveInterval:1000,
-        //是否开启初始化时即全屏，默认关闭
-        fullscreen : false,
-        //图片操作的浮层开关，默认打开
-        imagePopup:true,
-        //提交到后台的数据是否包含整个html字符串
-        allHtmlEnabled:false,
-        //是否启用元素路径，默认是显示
-        elementPathEnabled:false,
-        //是否开启字数统计
-        wordCount:false
-    }
 
-	/*分类名称是否存在的判断*/
+        /*分类名称是否存在的判断*/
 	$scope.addClassName = function () {
-		if ((!pattern.test($scope.class_name))||$scope.class_name=='') {
-			$scope.tishi = "您的输入不满足条件,请重新输入"
-			$scope.showtishi = true;
+		if ((!pattern.test($scope.item.title))||$scope.item.title=='') {
+			$scope.class_warning = "您的输入不满足条件,请重新输入"
+			$scope.show_class_warning = true;
 		}else{
-            $scope.showtishi = false;
+            $scope.show_class_warning = false;
 		}
 	}
 
@@ -156,7 +117,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 	/*编辑里的下架*/
 	$scope.sureoffline = function () {
 		let url = baseUrl+"/mall/category-status-toggle";
-		let data =  {id:$scope.offsaleclassid,offline_reason:$scope.offlinereason};
+		let data =  {id:$scope.item.id,offline_reason:$scope.offlinereason};
 		$http.post(url,data,config).then(function (res) {
 			if(res.data.code==200){
                 $scope.offlinereason = '';
@@ -170,13 +131,11 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
         $scope.offlinereason = '';
     }
 
-
 	/*保存编辑*/
 	$scope.saveclass = function () {
-		// console.log($scope.classicon)
-        if (!pattern.test($scope.class_name)||$scope.class_name=='') {
-            $scope.tishi = "您的输入不满足条件,请重新输入"
-            $scope.showtishi = true;
+        if (!pattern.test($scope.item.title)||$scope.item.title=='') {
+            $scope.class_warning = "您的输入不满足条件,请重新输入"
+            $scope.show_class_warning = true;
             return;
         }
 
@@ -186,7 +145,8 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
             return;
         }
 
-		if($scope.showtishi==false&&$scope.picwarning==false){
+		if($scope.show_class_warning==false&&$scope.picwarning==false){
+            let description = UE.getEditor('editor').getContent();
 			if($scope.finalpatharr.length==3){
 				pid = $scope.secselect
 			}else if($scope.finalpatharr.length==2){
@@ -195,7 +155,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 				pid = 0;
 			}
 			let url = baseUrl+"/mall/category-edit";
-			let data =  {id:$scope.offsaleclassid,title:$scope.class_name,pid:pid,icon:$scope.classicon||$stateParams.iconpath,description:$scope.onlinedes};
+			let data =  {id:$scope.item.id,title:$scope.item.title,pid:pid,icon:$scope.classicon||$stateParams.item.icon,description:description};
 			$http.post(url,data,config).then(function (res) {
                 console.log(res);
                 $("#save_tishi").modal("show");
@@ -207,8 +167,6 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
                     $scope.success_flag = false;
                 }
 			})
-			// $scope.savemodal = '#save_tishi'
-			// $scope.savesuccess = true;
 		}
 	}
 
