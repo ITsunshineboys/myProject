@@ -901,16 +901,13 @@ class QuoteController extends Controller
                         }
 
                         (new Effect())->plotEdit($house_id, $bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
-                        if (!empty($house['drawing_list'])) {
-                            if (!empty($house['drawing_id'])) {
-                                $images_id     = $house['drawing_id'];
-                                $effect_images = $house['drawing_list'];
-                                $series_id     = $house['series'];
-                                $style_id      = $house['style'];
-                                $images_user   = '案例图片';
-                                (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-                            }
-                        }
+
+                        $images_id     = $house['drawing_id'];
+                        $effect_images = $house['drawing_list'];
+                        $series_id     = $house['series'];
+                        $style_id      = $house['style'];
+                        $images_user   = '案例图片';
+                        (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
 
                         if (!empty($house['all_goods'])) {
                             foreach ($house['all_goods'] as $goods) {
