@@ -527,8 +527,7 @@ class SupplieraccountController extends  Controller{
             }
         } else {
             list($startTime, $endTime) = StringService::startEndDate($timeType);
-            $startTime = explode(' ', $startTime)[0];
-            $endTime = explode(' ', $endTime)[0];
+
         }
         if ($startTime) {
             $startTime = strtotime($startTime);
