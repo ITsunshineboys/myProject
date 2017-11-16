@@ -168,6 +168,10 @@ return [
             'templateId' => 'SMS_109345282',
             'signName' => '快递发货',
         ],
+        'loginDistribution' => [
+            'templateId' => 'SMS_111200008',
+            'signName' => '登录分销系统',
+        ],
     ],
     'timeTypes' => [
         'all' => '全部时间',
