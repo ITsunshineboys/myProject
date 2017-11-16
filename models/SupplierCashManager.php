@@ -303,9 +303,8 @@ class SupplierCashManager extends ActiveRecord
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
                 ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where($where)
-                ->orderBy('g.handle_time Desc')
-                ->all();
-        var_dump($query);die;
+                ->orderBy('g.handle_time Desc');
+
 
         $count = $query->count();
 
