@@ -260,6 +260,10 @@ class GoodsAttr extends ActiveRecord
     {
         $code = 1000;
 
+        $values = array_map(function ($value) {
+            return str_replace('，', ',', $value);
+        }, $values);
+
         foreach ($names as $i => $name) {
             $goodsAttr = new self;
             $goodsAttr->name = $name;
