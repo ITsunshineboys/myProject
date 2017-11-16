@@ -396,12 +396,12 @@ class QuoteController extends Controller
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
-                if ($min_time < $max_time){
-                    $where = "add_time >=" . strtotime($min_time) ." and add_time <=". strtotime($max_time) ." AND city_code = ".$post;
-                    $effect = Effect::pagination($where,$page,$size);
-                } else {
+                if (strtotime($min_time) == strtotime($max_time)){
                     $timeType = StringService::startEndDate('today');
                     $where = "add_time >=" . $timeType[0] ." and add_time <=". $timeType[1] ." AND city_code = ".$post;
+                    $effect = Effect::pagination($where,$page,$size);
+                } else {
+                    $where = "add_time >=" . strtotime($min_time) ." and add_time <=". strtotime($max_time) ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 }
                 break;
