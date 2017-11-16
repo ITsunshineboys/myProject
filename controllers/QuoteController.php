@@ -378,23 +378,23 @@ class QuoteController extends Controller
 
 
         switch ($post && $min_time && $max_time && $toponymy){
-            case $post && !$min_time && !$max_time && !$toponymy:
-                if (substr($post, 4) == 00) {
-                    $where = 'city_code = '.$post;
-                    $effect = Effect::pagination($where,$page,$size);
-                } else {
-                    $where = 'district_code = '.$post;
-                    $effect = Effect::pagination($where,$page,$size);
-                }
-                break;
-            case $post && $min_time && !$max_time && !$toponymy:
-                $where = "add_time >=" . strtotime($min_time) . " AND city_code = ".$post;
-                $effect = Effect::pagination($where,$page,$size);
-                break;
-            case $post && !$min_time && $max_time && !$toponymy:
-                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
-                $effect = Effect::pagination($where,$page,$size);
-                break;
+//            case $post && !$min_time && !$max_time && !$toponymy:
+//                if (substr($post, 4) == 00) {
+//                    $where = 'city_code = '.$post;
+//                    $effect = Effect::pagination($where,$page,$size);
+//                } else {
+//                    $where = 'district_code = '.$post;
+//                    $effect = Effect::pagination($where,$page,$size);
+//                }
+//                break;
+//            case $post && $min_time && !$max_time && !$toponymy:
+//                $where = "add_time >=" . strtotime($min_time) . " AND city_code = ".$post;
+//                $effect = Effect::pagination($where,$page,$size);
+//                break;
+//            case $post && !$min_time && $max_time && !$toponymy:
+//                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
+//                $effect = Effect::pagination($where,$page,$size);
+//                break;
             case  $post && $min_time && $max_time && !$toponymy:
                 if (strtotime($min_time) == strtotime($max_time)){
                     $timeType = StringService::startEndDate('today');
@@ -405,10 +405,10 @@ class QuoteController extends Controller
                     $effect = Effect::pagination($where,$page,$size);
                 }
                 break;
-            case  $post && !$min_time && !$max_time && $toponymy:
-                $where = "toponymy like %".$toponymy."% and city_code = ".$post;
-                $effect = Effect::pagination($where,$page,$size);
-                break;
+//            case  $post && !$min_time && !$max_time && $toponymy:
+//                $where = "toponymy like %".$toponymy."% and city_code = ".$post;
+//                $effect = Effect::pagination($where,$page,$size);
+//                break;
         }
 
         return Json::encode([
