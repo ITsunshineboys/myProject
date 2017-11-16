@@ -409,7 +409,6 @@ app.service('_ajax', function ($http, $state) {
     /**
      * 面包屑
      * crumbConf    为一个数组例子如下
-     *
      * [{
      *  name: '',       各级面包屑名称
      *  icon: '',       图标，一级才写
