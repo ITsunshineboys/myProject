@@ -202,7 +202,7 @@ class GoodsRecommendSupplier extends ActiveRecord
      */
     public static function carousel($supplierId, $districtCode = null)
     {
-        return self::_carousel($supplierId, $districtCode, self::$appFields);
+        return self::_carousel($supplierId, $districtCode, self::$appFields, ['sorting_number' => SORT_ASC]);
         /*
         $key = self::CACHE_KEY_CAROUSEL . $supplierId;
         $cache = Yii::$app->cache;
