@@ -86,7 +86,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                 let res = response.data;
                 if (res.code === 403) {
                     $state.go('login')
-                } else if (res.code === 200 || res.code === 201) {
+                } else if (res.code === 200 || res.code === 201 || res.code === 1068) {
                     if (typeof callback === 'function') {
                         callback(res)
                     }
@@ -108,7 +108,6 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                     return $.param(data);
                 }
             }).then(function (response) {
-                console.log(response)
                 let res = response.data;
                 if (res.code === 403) {
                     $state.go('login')

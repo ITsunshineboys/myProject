@@ -305,11 +305,11 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             _ajax.get("/owner/case-particulars", params, function (res) {
                 console.log(res, "材料");
                 let data = res.data;
-                sessionStorage.setItem("backman", JSON.stringify(data.backman_data));
                 if (data === null) {
                     $scope.activeObj.type = 0;
                     return;
                 }
+                sessionStorage.setItem("backman", JSON.stringify(data.backman_data));
                 $scope.activeObj.type = 1;
                 $scope.roomPicture = data.images.effect_images;
                 sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
