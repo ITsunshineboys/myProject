@@ -1,9 +1,11 @@
 <div>
     <header>
-        <div class="header_cell">
-            <img src="images/mall_searchbar.png" alt=""/>
-            <input type="text" placeholder="请输入小区名字" ng-model="ctrlScope.toponymy"/>
-            <span><a ng-click="cancel()">取消</a></span>
+        <div class="header_cell clearfix">
+            <div class="pull-left">
+                <img src="images/mall_searchbar.png" alt=""/>
+                <input type="text" placeholder="请输入小区名字" ng-model="ctrlScope.toponymy"/>
+            </div>
+            <a class="pull-right" ng-click="cancel()">取消</a>
         </div>
     </header>
 
@@ -13,8 +15,8 @@
             <ul class="cell_ul">
                 <li ng-repeat="item in search_data">
                     <a ui-sref="modelRoom({roomCode: item.district_code, toponymy: item.toponymy, street: item.street})">
-                    <span class="first_fru">{{item.toponymy}}</span><br/>
-                    <span class="second_fru">{{item.site_particulars}}</span>
+                        <div class="first_fru">{{item.toponymy}}</div>
+                        <div class="second_fru">{{item.site_particulars}}</div>
                     </a>
                 </li>
             </ul>
@@ -22,7 +24,7 @@
 
         <!--无数据显示-->
         <div class="no_data" ng-if="search_data.length==0&&toponymy!=''">
-            <span>无数据</span><br/>
+            <div>无数据</div>
             <a ng-click="go_nodata()">没有我的小区?</a>
         </div>
     </section>

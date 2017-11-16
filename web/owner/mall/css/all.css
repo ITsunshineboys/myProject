@@ -36,9 +36,63 @@ input{
 .fl{
     float: left;
 }
+::-webkit-input-placeholder { color:#b1b1b1; }
+::-moz-placeholder { color:#b1b1b1; } /* firefox 19+ */
+:-ms-input-placeholder { color:#b1b1b1; } /* ie */
+input:-moz-placeholder { color:#b1b1b1; }
 
 /*防止angular js 加载时闪烁*/
 @charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\:form{display:block;}.ng-animate-start{clip:rect(0,auto,auto,0);-ms-zoom:1.0001;}.ng-animate-active{clip:rect(-1px,auto,auto,0);-ms-zoom:1;}
 
 
+/*header start*/
+header{
+    width: 100%;
+    height: 4rem;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #666;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+}
+header .return_btn{
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+header .return_btn img{
+    position: absolute;
+    top: 1.4rem;
+    left: 1.2rem;
+}
 
+header .local{
+    display: block;
+    width: 5rem;
+    height: 4rem;
+    position: absolute;
+    padding-right: 1.2rem;
+    right: 0;
+    top: 0;
+    color: #333;
+}
+header .local i{
+    font-size: 1.4rem;  
+    display: block;
+    margin-top:1.3rem;
+    margin-right: .3rem;
+}
+
+header .local span{
+    font-size: 1.2rem;
+    display: block;
+    margin-top: 1.1rem;
+}
+/*header end*/

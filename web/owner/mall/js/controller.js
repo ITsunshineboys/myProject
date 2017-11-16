@@ -46,14 +46,12 @@ angular.module('all_controller', [])
                         id: value.id,
                         image: value.cover_image,
                         cost: +value.platform_price,
-                        // name: $scope.cur_goods_detail.name,
                         favourable_comment_rate: value.favourable_comment_rate,
                         sold_number: value.sold_number,
                         platform_price: value.platform_price,
                         profit_rate: value.profit_rate,
                         purchase_price_decoration_company: value.purchase_price_decoration_company,
                         quantity: 1,
-                        path:$scope.cur_three_item.path,
                         series_id: !!$scope.cur_goods_detail?$scope.cur_goods_detail.series_id:'',
                         style_id: !!$scope.cur_goods_detail?$scope.cur_goods_detail.style_id:'',
                         subtitle: value.subtitle,
@@ -384,6 +382,7 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
             } else {
                 $scope.check_goods = item
+                $scope.check_goods['path'] = $scope.cur_three_item.path
             }
             console.log($scope.check_goods)
             $http.get(baseUrl + '/mall/goods-view', {
@@ -473,35 +472,6 @@ angular.module('all_controller', [])
                 $scope.cur_header = $scope.cur_three_level || item.title
                 $state.go('nodata.all_goods')
             }, 300)
-            // $http.get(baseUrl + '/mall/category-goods', {
-            //     params: {
-            //         category_id: $scope.cur_three_id,
-            //         style_id: $scope.cur_goods_detail.style_id,
-            //         series_id: $scope.cur_goods_detail.series_id,
-            //         'sort[]': 'sold_number:3'
-            //     }
-            // }).then(function (response) {
-            //     console.log(response)
-            //     for (let [key, value] of response.data.data.category_goods.entries()) {
-            //         $scope.cur_replace_material.push({
-            //             id: value.id,
-            //             image: value.cover_image,
-            //             cost: +value.platform_price,
-            //             // name: $scope.cur_goods_detail.name,
-            //             favourable_comment_rate: value.favourable_comment_rate,
-            //             sold_number: value.sold_number,
-            //             platform_price: value.platform_price,
-            //             profit_rate: value.profit_rate,
-            //             purchase_price_decoration_company: value.purchase_price_decoration_company,
-            //             quantity: 1,
-            //             series_id: $scope.cur_goods_detail.series_id,
-            //             style_id: $scope.cur_goods_detail.style_id,
-            //             subtitle: value.subtitle,
-            //             supplier_price: value.supplier_price,
-            //             title: value.title
-            //             // shop_name: value.shop_name
-            //         })
-            //     }
                 $('#myModal').modal('hide')
                 $timeout(function () {
                     $scope.have_header = true
@@ -560,7 +530,7 @@ angular.module('all_controller', [])
                     console.log($scope.check_goods)
                     $scope.all_add_goods.push($scope.check_goods)
                     for (let [key, value] of $scope.all_goods.entries()) {
-                        if (value.id == $scope.cur_item.id) {
+                        if (value.id == $scope.check_goods.path.split(',')[0]) {
                             value.cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
                             value.count++
                             let second_item = value.second_level.findIndex(function (item) {
@@ -593,7 +563,7 @@ angular.module('all_controller', [])
                                 for (let [key1, value1] of value.second_level.entries()) {
                                     if (value1.id == $scope.check_goods.path.split(',')[1]) {
                                         let three_item = value1.three_level.findIndex(function (item) {
-                                            return item.id == $scope.cur_three_id
+                                            return item.id == $scope.check_goods.path.split(',')[2]
                                         })
                                         if (three_item == -1) {
                                             value1.three_level.push({

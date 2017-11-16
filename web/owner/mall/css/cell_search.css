@@ -1,26 +1,32 @@
+body{
+    background: #f6f6f6;
+}
 .header_cell{
-    height: 4rem;
-    background-color: white;
+    
 }
 .header_cell img{
     position: absolute;
-    top: 1.8rem;
+    top: 1.5rem;
     left: 2.5rem;
     width: 1.2rem;
 }
 .header_cell input{
-    width: 25rem;
+        width: 25.8rem;
     height: 2.7rem;
-    margin-top: 1rem;
-    border: 1px solid #C2C2C2;
-    border-radius: 1.2rem;
-    padding-left: 3em;
-    font-size: 1rem;
-    margin-left: 1.5rem;
+    margin-top: 0.7rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 3rem;
+    padding-left: 3rem;
+    font-size: 1.2rem;
+    margin-left: 1.2rem;
 }
 .header_cell a{
-    margin-left: 1rem;
     font-size: 1.2rem;
+    color: #666;
+    width: 5rem;
+    height: 4rem;
+    display: block;
+    line-height: 4rem;
 }
 .header_i{
     color: #d0d0d0;
@@ -28,11 +34,16 @@
     left:2.2rem;
     top:1.6rem;
 }
+.cell_ul{
+    padding: 0 1.2rem;
+}
 .cell_ul li{
-    padding-left: 2rem;
-    border-bottom: 1px solid #C2C2C2;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
+    border-bottom: 2px solid #dcdcdc;
+}
+.cell_ul li a{
+    width: 100%;
+    display: block;
+    padding: 1.4rem 0;
 }
 .second_fru {
     color: #C2C2C2;
@@ -40,23 +51,33 @@
 }
 .first_fru {
     font-size: 1.2rem;
+    color: #666;
 }
 
 .have_data{
-    /*display: none;*/
+    margin-top: 5rem;
+    background: #fff;
 }
 .no_data{
     text-align: center;
-    padding-top: 4rem;
+    padding-top: 10rem;
     /*display: none;*/
 }
-.no_data span{
+.no_data div{
     font-size: 1.3rem;
     color: #B8B6B6;
 }
 .no_data a{
+    display: block;
     position: relative;
-    top:2rem;
+    top: 2rem;
     font-size: 1.2rem;
     text-decoration: none;
+    border: 2px solid #333;
+    color: #333;
+    border-radius: 3rem;
+    padding: 0.6rem 1.2rem;
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;
 }

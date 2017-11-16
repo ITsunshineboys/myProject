@@ -10,12 +10,12 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
             .state('nodata',{
                 url:'/nodata',
                 templateUrl:'nodata.html',
-                // css:'css/inteligent_nodata.css'
+                css:'css/all.css'
             })
             .state('nodata.house_list',{
                 url:'/nodata_house_list',
                 templateUrl:'nodata_house.html',
-                css:['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css'],
+                css:['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
             })
             .state('nodata.cell_search',{
                 url:'/cell_search',
@@ -30,32 +30,32 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
             .state('nodata.basics_decoration',{ // 基础装修
                 url:'/basics_decoration',
                 templateUrl:'all_basics.html',
-                css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css'],
+                css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
             })
             .state('nodata.main_material',{ // 主要材料
                 url:'/main_material',
                 templateUrl:'main_goods.html',
-                css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css']
+                css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css']
             })
             .state('nodata.other_material',{    // 其他
                 url:'/other_material?index',
                 templateUrl:'other_goods.html',
-                css:'css/other.css'
+                css:['css/other.css','css/all.css']
             })
             .state('nodata.product_detail',{
                 url:'/product_detail',
                 templateUrl:'cur_product_detail.html',
-                css:'css/product_details.css'
+                css:['css/product_details.css','css/all.css']
             })
             .state('nodata.all_goods',{
                 url:'/all_goods',
                 templateUrl:'get_all_goods.html',
-                css:'css/commodify.css'
+                css:['css/commodify.css','css/all.css']
             })
             .state('nodata.second_level',{
                 url:'/second_level',
                 templateUrl:'second_level.html',
-                css:'css/movefurniture.css'
+                css:['css/movefurniture.css','css/all.css']
             })
             .state('modelRoom',{ // 样板间
                 url:'/quotation?roomCode&toponymy&street',

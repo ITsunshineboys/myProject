@@ -3,43 +3,50 @@
     <form name="area_news" novalidate ng-submit="get_goods(area_news.$valid,area_news.$error.required)">
         <div class="quarters_small">
             <div class="shu"></div>
-            <p>小区信息</p>
-            <span class="choose_quarter">小区选择</span>
-            <a ng-click="go_search()">
-                <img src="images/mall_searchbar.png" width="40px" height="40px" class="seachr" alt="">
-                <input type="text" name="toponymy" id="toponymy" required placeholder="请输入小区"
-                       ng-blur="change1=area_news.toponymy.$invalid" class="seach" ng-model="ctrlScope.toponymy"/><br/>
-            </a>
-            <p class="error_tips" ng-if="area_news.toponymy.$invalid&&(submitted||change1)">请输入小区名称</p>
-            <div class="address_content">
-                <p class="quarters_adress">小区地址</p>
-                <textarea class="text_all" required rows="3" id="message" name="message" cols="44" placeholder="例：金牛区沙西线66号"
-                          ng-model="ctrlScope.message" maxlength="45" ng-blur="change2=area_news.message.$invalid">
-                </textarea>
-                <span class="text_all_length">{{message.length}}/45</span>
-                <p></p>
+            <p class="title">小区信息</p>
+            <div class="list_box clearfix">
+                <span class="sub_title pull-left">小区选择</span>
+                <a class="pull-left input_box" ng-click="go_search()">
+                    <img src="images/mall_searchbar.png" alt="">
+                    <input type="text" name="toponymy" id="toponymy" required placeholder="请输入小区"
+                           ng-blur="change1=area_news.toponymy.$invalid" class="seach" ng-model="ctrlScope.toponymy"/><br/>
+                    <p class="error_tips" ng-if="area_news.toponymy.$invalid&&(submitted||change1)">请输入小区名称</p>
+                </a>
             </div>
-            <p class="house_tips" style="margin-top: 0!important;">例：成都市金牛区金沙路西巷32号附29号</p>
-            <p class="error_tips address_tips" ng-if="area_news.message.$invalid&&(submitted||change2)">请输入小区地址</p>
+            <div class="list_box clearfix">
+                <span class="sub_title pull-left">小区地址</span>
+                <div class="right_box pull-left">
+                    <textarea class="text_all" required rows="3" id="message" name="message" cols="44" placeholder="例：金牛区沙西线66号"
+                              ng-model="ctrlScope.message" maxlength="45" ng-blur="change2=area_news.message.$invalid">
+                    </textarea>
+                    <span class="text_all_length">{{message.length}}/45</span>
+                    <p class="error_tips address_tips" ng-if="area_news.message.$invalid&&(submitted||change2)">请输入小区地址</p>
+                </div>s
+            </div>
         </div>
 
         <!--房屋信息-->
         <div class="background_w">
             <div class="house_area">
                 <div class="area"></div>
-                <div class="shu_house_2"></div>
-                <h1>房屋信息</h1>
-                <span class="house_span">房屋面积</span>
-                <input type="text"   required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
-                       ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
-                        ng-model="ctrlScope.area"/>
+                <div class="shu"></div>
+                <div class="title">房屋信息</div>
+                <div class="list_box clearfix">
+                    <span class="sub_title pull-left">房屋面积</span>
+                    <div class="pull-left input_box">
+                        <input type="text"   required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
+                               ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
+                               ng-model="ctrlScope.area"/>
 
-                <span class="p">m<sup>2</sup></span>
-                <p class="error_tips" ng-if="area_news.area.$invalid&&(submitted||change3)">房屋面积1～180m²，可精确到小数点后两位</p>
+                        <span class="p">m<sup>2</sup></span>
+                        <p class="error_tips" ng-if="area_news.area.$invalid&&(submitted||change3)">房屋面积1～180m²，精确到小数点后两位</p>
+                    </div>
+                </div>
             </div>
             <!--户型-->
-            <div class="apartment_layout">
-                <span class="apartment_span">户型</span>
+            <div class="line"></div>
+            <div class="list_box">
+                <span class="sub_title">户型</span>
                 <div>
                     <ul class="apartment_ul">
                         <li>
@@ -88,8 +95,9 @@
             </div>
 
             <!--层高-->
-            <div class="rey">
-                <span class="storey_span">层高</span>
+            <div class="line1"></div>
+            <div class="list_box">
+                <span class="sub_title">层高</span>
                 <ul class="storey_ul">
                     <li>
                         <label ng-click="ctrlScope.highCrtl=2.8">
@@ -133,6 +141,7 @@
             </div>
 
             <!--飘窗-->
+            <div class="line"></div>
             <div class="bay_window">
                 <span class="bay_span">飘窗</span>
                 <input type="text" required placeholder="0" id="window" name="window" ng-pattern="/^(([0-9]|1[0-9])(.\d{1,2})?|20(.00)?)$/"
@@ -144,6 +153,7 @@
             </div>
 
             <!--楼梯有无-->
+            <div class="line"></div>
             <div class="choose_stairs">
                 <span class="choose_span">楼梯选择</span>
                 <label ng-click="ctrlScope.choose_stairs = 1;ctrlScope.nowStairs = stairs_details[0]">
@@ -178,15 +188,15 @@
         <!--系类选择-->
         <div class="background_w">
             <div class="series">
-                <div class="shu_house_1"></div>
-                <h1>系列选择</h1>
+                <div class="shu"></div>
+                <div class="title">系列选择</div>
                 <ul>
                     <li ng-repeat="item in series" ng-cloak ng-click="toggleSeries(item)">
                         <label>
                             <input type="radio" name="series" ng-checked="(item.id==cur_series.id)">
                             <span></span>
                             <span>{{item.series}}</span>
-                            <img src="images/mall_list_radio.png" alt=""/>
+                            <img class="check_img" src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                 </ul>
@@ -203,108 +213,108 @@
                 <p ng-cloak>{{cur_series.intro}}</p>
             </div>
         </div>
-            <div class="background_w">
-                <div class="choose_style">
-                    <div class="shu_house_3"></div>
-                    <h1>风格选择</h1>
-                    <ul>
-                        <li ng-repeat="item in style">
-                            <button type="button" ng-cloak ng-class="{'btn_checked':(item.id==cur_style.id)}"
-                                    ng-click="toggleStyle(item)">{{item.style}}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+        <div class="background_w">
+            <div class="choose_style">
+                <div class="shu"></div>
+                <div class="title">风格选择</div>
+                <ul>
+                    <li ng-repeat="item in style">
+                        <button type="button" ng-cloak ng-class="{'btn_checked':(item.id==cur_style.id)}"
+                                ng-click="toggleStyle(item)">{{item.style}}
+                        </button>
+                    </li>
+                </ul>
             </div>
-        <div>
-        <div class="carousel" swiper style="margin-top: 0;">
-            <div class="swiper-container" style="width: 100%;height: 100%;">
-                <div class="swiper-wrapper" style="width: 100%;height: 100%;">
-                    <div class="swiper-slide" ng-repeat="item in cur_style.images.split(',')" style="width: 100%;height: 100%;">
-                        <img ng-src="{{baseUrl + item}}" style="width: 100%;height: 100%;" alt="">
+        </div>
+        <div class="style_box">
+            <div class="carousel" swiper style="margin-top: 0;">
+                <div class="swiper-container" style="width: 100%;height: 100%;">
+                    <div class="swiper-wrapper" style="width: 100%;height: 100%;">
+                        <div class="swiper-slide" ng-repeat="item in cur_style.images.split(',')" style="width: 100%;height: 100%;">
+                            <img ng-src="{{baseUrl + item}}" style="width: 100%;height: 100%;" alt="">
+                        </div>
                     </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
                 </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
+            </div>
+            <div class="note">
+                <ul>
+                    <li ng-repeat="item in cur_style.theme.split(',')">
+                        <button ng-cloak>{{item}}</button>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="note">
-            <ul>
-                <li ng-repeat="item in cur_style.theme.split(',')">
-                    <button ng-cloak>{{item}}</button>
-                </li>
-            </ul>
+        <div class="btn_vr" ng-if="!show_material">
+            <button type="submit">生成材料</button>
         </div>
-        </div>
-            <div class="btn_vr" ng-if="!show_material">
-                <button type="submit">生成材料</button>
-            </div>
 
 
-            <!--材料选择-->
-            <div ng-if="show_material">
-                <div class="material_choose">
-                    <div class="left_main">
-                        <div class="shu_house_2"></div>
-                        <h1 class="title_span">材料选择</h1>
-                        <div class="basis_decoration">
-                            <div class="grid" water ng-repeat="item in ctrlScope.all_goods" ng-click="go_inner(item)">
-                                <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
-                                <div class="basis_item" id="bottom{{item.id}}">
-                                    <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
-                                            class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
-                                    </p>
-                                    <p ng-if="item.title == '主要材料'" class="basis_title">{{item.title}}<span
-                                            class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
-                                    </p>
-                                    <p ng-if="item.title != '辅材'&&item.title!='主要材料'" class="basis_title">{{item.title}}<span
-                                    class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.count}}项</span>
-                                    </p>
-                                    <p class="pic" ng-if="item.cost != 0">{{item.cost | currency:'￥'}}</p>
-                                    <ul ng-if="item.title == '辅材'||item.title == '主要材料'">
-                                        <li ng-repeat="item1 in item.second_level">
-                                            <span class="cur_title">{{item1.title}}</span>
-                                            <span class="pic_q">{{item1.cost | currency:'￥'}}</span>
-                                        </li>
-                                    </ul>
-                                    <ul ng-if="item.title != '辅材'&&item.title != '主要材料'">
-                                        <div ng-repeat="item1 in item.second_level">
-                                            <div ng-repeat="item2 in item1.three_level">
-                                                <li ng-repeat="item3 in item2.goods_detail">
-                                                    <p class="cur_title">{{item2.title}}</p>
-                                                    <span class="pic_q dark">{{item3.cost | currency:'￥'}}</span>
-                                                    <span class="dark">{{item3.name}}</span>
-                                                </li>
-                                            </div>
+        <!--材料选择-->
+        <div ng-if="show_material">
+            <div class="material_choose">
+                <div class="left_main">
+                    <div class="shu"></div>
+                    <p class="title">材料选择</p>
+                    <div class="basis_decoration">
+                        <div class="grid" water ng-repeat="item in ctrlScope.all_goods" ng-click="go_inner(item)">
+                            <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
+                            <div class="basis_item" id="bottom{{item.id}}">
+                                <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
+                                        class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
+                                </p>
+                                <p ng-if="item.title == '主要材料'" class="basis_title">{{item.title}}<span
+                                        class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
+                                </p>
+                                <p ng-if="item.title != '辅材'&&item.title!='主要材料'" class="basis_title">{{item.title}}<span
+                                        class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.count}}项</span>
+                                </p>
+                                <p class="pic" ng-if="item.cost != 0">{{item.cost | currency:'￥'}}</p>
+                                <ul ng-if="item.title == '辅材'||item.title == '主要材料'">
+                                    <li ng-repeat="item1 in item.second_level">
+                                        <span class="cur_title">{{item1.title}}</span>
+                                        <span class="pic_q">{{item1.cost | currency:'￥'}}</span>
+                                    </li>
+                                </ul>
+                                <ul ng-if="item.title != '辅材'&&item.title != '主要材料'">
+                                    <div ng-repeat="item1 in item.second_level">
+                                        <div ng-repeat="item2 in item1.three_level">
+                                            <li ng-repeat="item3 in item2.goods_detail">
+                                                <p class="cur_title">{{item2.title}}</p>
+                                                <span class="pic_q dark">{{item3.cost | currency:'￥'}}</span>
+                                                <span class="dark">{{item3.name}}</span>
+                                            </li>
                                         </div>
-                                    </ul>
-                                    <p ng-if="item.cost == 0">
+                                    </div>
+                                </ul>
+                                <p ng-if="item.cost == 0">
                                     <button style="font-size: 28px;padding: 1.02rem 3.91rem;background: none;border: 2px dashed #E5E5E5;border-radius: 2rem;color: #53A7F3;">点击编辑</button>
-                                    </p>
-                                </div>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="special_requirements" ng-init="special_request=''">
-                    <div class="shu_house_2"></div>
-                    <p>特殊要求</p>
-                    <textarea class="main_text" maxlength="300" ng-model="ctrlScope.special_request" style="padding-left:.85rem ;padding-top: .85rem;" placeholder="请输入你的要求"></textarea>
-                    <span style="font-size: 36px;">{{special_request.length}}/300</span>
-                </div>
-
-
-                <!--尾部结算-->
-                <div class="footer_settlement">
-                    <div class="footer_set">
-                        <span class="first_span">{{discount_price | currency:'￥'}}</span>
-                        <span class="second_span">{{all_price | currency:'￥'}}</span><br/>
-                        <span class="three_span">未包含施工图费用，8项全场8折</span>
-                    </div>
-                    <!--<button>保存方案</button>-->
-                    <button type="button" class="primary_btn" ng-click="go_apply_case()">申请样板间</button>
-                </div>
             </div>
+
+            <div class="special_requirements" ng-init="special_request=''">
+                <div class="shu"></div>
+                <p class="title">特殊要求</p>
+                <textarea class="main_text" maxlength="300" ng-model="ctrlScope.special_request" style="padding-left:.85rem ;padding-top: .85rem;" placeholder="请输入你的要求"></textarea>
+                <span style="font-size: 36px;">{{special_request.length}}/300</span>
+            </div>
+
+
+            <!--尾部结算-->
+            <div class="footer_settlement">
+                <div class="footer_set">
+                    <span class="first_span">{{discount_price | currency:'￥'}}</span>
+                    <span class="second_span">{{all_price | currency:'￥'}}</span><br/>
+                    <span class="three_span">未包含施工图费用，8项全场8折</span>
+                </div>
+                <!--<button>保存方案</button>-->
+                <button type="button" class="primary_btn" ng-click="go_apply_case()">申请样板间</button>
+            </div>
+        </div>
     </form>
 </section>

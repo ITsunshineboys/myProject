@@ -1,3 +1,6 @@
+body{
+    background-color: #f6f6f6 !important;
+}
 input[disabled]{
     background: none;
 }
@@ -23,6 +26,8 @@ input[type="radio"] + span {
     border-radius: 50%;
     border: 1px solid #B8B6B6;
     background-color: white;
+    margin-top: -0.2rem;
+    margin-left: 0.1rem !important;
 }
 
 /*结束*/
@@ -56,101 +61,124 @@ input[type="checkbox"]:checked + span {
 }
 .background_w{
     background-color: white;
-    padding-bottom: 1.5rem;
+    padding: 1.2rem;
+    position: relative;
+    margin-bottom: 1rem;
 }
 /*头部开始*/
-header{
-    width: 32rem;
-    height: 4rem;
-    background-color: white;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-}
-header > div{
-    position: relative;
-}
-.return_btn{
-    /*display: inline-block;*/
-    position: absolute;
-    left: 0;
-    /*top:1rem;*/
-    width:3rem;
-    height: 4rem;
-    line-height: 4rem;
-    /*border:2px solid red;*/
-}
-section{
-    margin-top: 1rem;
-}
-header div {
-    line-height: 4rem;
-}
 
-header div span {
-    font-size: 1.4rem;
-}
-.postion_span{
-    color: #53A8F4;
-    font-size: 1.2rem;
-    margin-left: .2rem;
-}
-.cur_location{
-    position: absolute;
-    top: 0;
-    right:1.4rem;
-    height: 4rem;
-    /*lh4rem*/
-}
-.in_span {
-    margin-left: 1rem;
-    color: #53A8F4 ;
-}
-
-.pic_span {
-    /*margin-left: 12.8rem;*/
-    font-size: 1.5rem;
-}
-.pos_span{
-    color:#53A8F4;
-    margin-left: .3rem;
-    font-size: 1.1rem;
-}
-.map {
-    margin-left: 8rem;
-    /*width: 1rem;*/
-    color: #53A8F4;
-}
-header div i{
-    margin-left: 7.8rem;
-    color: #53A8F4;
-}
 /*头部结束*/
 
 .quarters_small {
-    border-bottom: 1px solid #C2C2C2;
     padding-bottom: 2rem;
     position: relative;
     /*margin-top: 1rem;*/
     background: white;
     position: relative;
     overflow: hidden;
+    padding: 1.2rem;
 }
 .quarters_small p{
-    margin-top: 1rem;
-    font-size: 1.5rem;
+    
 }
-.shu{
+/*小区选择-start*/
+.line{
+    width: 100%;
+    height: 2px;
+    background-color: #E9EDEE;
+    margin: 1.6rem 0;
+}
+.line1{
+    margin: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #E9EDEE;
+}
+
+.shu {
     width: .3rem;
     height: 1.5rem;
-    background-color:#53A8F4;
+    background-color: #333;
     position: absolute;
-    left: .9rem;
-    top:1.3rem;
-    /*margin: 1.4rem 0 0 1.5rem;*/
-    font-size: 1.5rem;
+    left: 1.2rem;
+    top: 1.7rem;
 }
+.shu_house_2{
+    width: .3rem;
+    height: 1.5rem;
+    background-color: #333;
+    position: absolute;
+    left: 1.2rem;
+    top: 1.7rem; 
+}
+
+.title{
+    padding-left: 1.1rem;
+    font-size: 1.6rem;
+    color: #666;
+    margin: 0;
+}
+.sub_title{
+    font-size: 1.4rem;
+    color: #666;
+}
+.list_box{
+    margin-top: 1.6rem;
+    position: relative;
+}
+.input_box{
+    margin-left: 1.6rem;
+    position: relative;
+}
+.input_box input{
+    display: block;
+    padding: .3rem 3rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
+    border-radius: 2rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
+}
+
+.input_box img{
+    position: absolute;
+    left: 1.2rem;
+    top: 0.6rem;
+}
+/*小区选择-end*/
+
+/*小区地址-start*/
+.list_box .info{
+    font-size: 1.4rem;
+    color: #999;
+    margin-left: 1.6rem;
+}
+.text_all {
+    width:22.3rem;
+    border: 2px solid #E5E5E5;
+    color: #4A4A4A;
+    font-size: 1.4rem;
+    border-radius: .3rem;
+    padding-left: 1.2rem;
+    padding-top: .5rem;
+    padding-right:.5rem;
+    margin-top: -0.5rem;
+}
+.text_all_length {
+    position: absolute;
+    right: 1.2rem;
+    top: 4.7rem;
+    font-size: 1rem;
+    color: #b1b1b1;
+}
+.address_tips{
+    margin-top:1rem;
+}
+.right_box{
+    padding-left: 1.6rem;
+}
+/*小区地址-end*/
 .shu_house{
     width: .3rem;
     height: 1.5rem;
@@ -159,50 +187,10 @@ header div i{
     left: .9rem;
     margin-top: 1.4rem;
 }
-.shu_house_3{
-    width: .3rem;
-    height: 1.5rem;
-    background-color:#53A8F4;
-    position: absolute;
-    left: .9rem;
-    margin-top: .6rem;
-}
-.shu_house_2{
-    width: .3rem;
-    height: 1.5rem;
-    background-color:#53A8F4;
-    position: absolute;
-    left: .9rem;
-    margin-top: 1.4rem;
-}
-.shu_house_4{
-    width: .3rem;
-    height: 1.5rem;
-    background-color: #53A8F4;
-    position: absolute;
-    left: .9rem;
-    margin-top: 1.4rem;
-}
-
-.shu_house_1{
-    width: .3rem;
-    height: 1.5rem;
-    background-color:#53A8F4;
-    position: absolute;
-    left: 1.4rem;
-    margin-top: .6rem;
-}
 .seachr{
     position: absolute;
     left:9rem;
     top:5.7rem;
-}
-.seach{
-    color: #B8B6B6;
-    font-size: 1.3rem!important;
-    border-radius: 1.5rem!important;
-    height: 3rem!important;
-    padding-left: 2.5rem!important;
 }
 .quarters_adress {
     /*padding-left: 1rem;*/
@@ -220,10 +208,7 @@ header div i{
 }
 
 .quarters_small p {
-    padding-left: 1.6rem;
-    font-size: 1.5rem;
-    color: #4A4A4A;
-    margin-bottom: 1rem;
+    
 
 }
 
@@ -234,43 +219,25 @@ header div i{
     color: #4A4A4A!important;
 }
 .quarters_small{
-    position: relative;
-    top: 4rem;
-}
-.quarters_small input {
-    width: 22rem;
-    height: 2.2rem;
-    border: 1px solid #C2C2C2;
-    border-radius: 1rem;
-    padding-left: 2rem;
-    font-size: 1rem;
-    margin-left: 2rem;
-}
-
-.p {
-    font-size: 1.2rem;
-    margin-left: -2.8rem;
-    margin-top: .2rem;
+    margin-top: 5rem;
+    margin-bottom: 1rem;
 }
 
 .house_area {
     /*padding-top: 1rem;*/
     background: white;
-    margin-top: 5rem;
     overflow: hidden;
-    padding-bottom: 2rem;
 }
 .house_area h1{
-    margin: 1.4rem 0 0 1.5rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    color: #666;
 }
-.house_area p{
-    padding-left: 1.6rem;
-    font-size: 1.5rem;
-    color: #4A4A4A;
-    margin-bottom: 1rem;
-    position: relative;
-    top: 1rem;
+.p{
+    position: absolute;
+    right: 1rem;
+    top: .3rem;
+    font-size: 1.2rem;
+    color: #999;
 }
 .house_span {
     font-size: 1.3rem;
@@ -279,14 +246,18 @@ header div i{
 }
 
 .house_area input {
-    width: 21rem;
-    height: 3rem;
-    margin-left: 2rem;
-    margin-top: 1rem;
-    border: 1px solid #C2C2C2;
-    font-size: 1.2rem;
+    display: block;
+    padding: .3rem 1.2rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
     border-radius: .3rem;
-    padding-left:1rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
+}
+
+.house_area p{
+
 }
 
 .apartment_layout {
@@ -310,7 +281,7 @@ header div i{
 }
 
 .apartment_ul {
-    margin-left: 4rem;
+    padding-left: 3.7rem;
     margin-top: -2.5rem;
     /*position: relative;*/
     /*top:2rem;*/
@@ -325,16 +296,18 @@ header div i{
     position: relative;
     border:1px solid #e5e5e5;
     border-radius: 12px;
-    margin-top:.7rem;
+    margin-bottom:1.2rem;
 }
 
 .apartment_ul li input {
     width: 8rem;
     height: 2.8rem;
     margin-bottom: 1rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     padding-left: 4rem;
     border: none;
+    padding-top: 0.4rem;
+    color: #666;
 }
 
 .apartment_ul button {
@@ -350,40 +323,23 @@ header div i{
     position: absolute;
     left: 0.5rem;
     top: .5rem;
-    color: #53A8F4;
+    color: #333;
 }
 
 .btn_right {
     position: absolute;
     right: 0.5rem;
     top: .5rem;
-    color: #53A8F4;
+    color: #333;
 }
 
-.text_all {
-    width:22rem;
-    margin-left: 2rem;
-    margin-top: 1.3rem;
-    border: 1px solid #C2C2C2;
-    color: #4A4A4A;
-    font-size: 1.3rem;
-    border-radius: .3rem;
-    padding-left: 1rem;
-    padding-top: .5rem;
-    padding-right:.5rem;
-}
+
 
 .address_content {
     position: relative;
 }
 
-.text_all_length {
-    position: absolute;
-    right: 2.6rem;
-    bottom: .5rem;
-    font-size: 1rem;
-    color: #B8B6B6;
-}
+
 
 .storey {
     border-top: 1px solid #C2C2C2;
@@ -405,7 +361,6 @@ header div i{
 }
 
 .storey_ul {
-    margin-left: .5rem;
     margin-top:1rem;
 }
 
@@ -413,8 +368,7 @@ header div i{
     display: inline-block;
     list-style: none;
     font-size: 1.2rem;
-    margin-left: .5rem;
-    margin-right:1.53rem;
+    /*margin-right:1.2rem;*/
     font-weight: 400!important;
     color: #4A4A4A;
     position: relative;
@@ -424,7 +378,6 @@ header div i{
      display: inline-block;
      list-style: none;
      font-size: 1.2rem;
-     margin-left: .5rem;
      font-weight: 400!important;
      color: #4A4A4A;
      position: relative;
@@ -432,8 +385,8 @@ header div i{
  }
 input[type='radio'] ~ img{
     position: absolute;
-    top: 14px!important;
-    left: -2px!important;
+    top: .4rem !important;
+    /* left: -2px!important; */
     display: none;
 }
 .storey_ul input[type='radio'] ~ img{
@@ -453,8 +406,8 @@ input[type='radio']:checked ~ img{
 }
 #img_size_1{
     position: absolute;
-    top: 19px!important;
-    left: -2px!important;
+    top: 0.5rem!important;
+    left: 0.1rem !important;
 
 }
 .rey{
@@ -464,56 +417,50 @@ input[type='radio']:checked ~ img{
     padding-bottom: 1rem;
 }
 .storey_txt{
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: 1.1rem;
+    color: #999;
+    margin-left: .4rem;
 }
 /*.ml{*/
 /*margin-left: 1rem;*/
 /*}*/
 .bay_window {
-    border-top: 1px solid #e5e5e5;
-    padding-top: 1rem;
-    padding-bottom: 2rem;
+    
 }
 .input_windin{
     margin-top: .7rem;
 }
 .bay_span {
     font-size: 1.3rem;
-    margin-left: 1rem;
-    color: #4A4A4A;
+    color: #666;
 }
 
 .bay_window input {
-    width: 12rem;
-    height: 3rem;
-    border-radius: .4rem;
-    border: 1px solid #C2C2C2;
-    margin-left: 4.5rem;
-    font-size: 1.2rem;
-    padding-left: 1rem;
+    padding: .3rem 1.2rem;
+    color: #666;
+    font-size: 1.4rem;
+    border: 2px solid #E5E5E5;
+    border-radius: .3rem;
+    width: 22.3rem;
+    margin-top: -0.3rem;
+    margin-left: 3.7rem;
 }
 
 .bay_square {
     margin-left: -2.2rem;
     font-size: 1.2rem;
+    color: #999;
 
 }
 
 .choose_stairs {
-    padding-top: 1rem;
-    border-top: 1px solid #e5e5e5;
-    padding-bottom: 1rem;
     position: relative;
 }
 
 .choose_span {
     position: relative;
     font-size: 1.3rem;
-    margin-left: 1rem;
-    color: #4A4A4A;
-    top:.4rem;
-
+    color: #666;
 }
 
 .choose_stairs label {
@@ -535,39 +482,48 @@ input[type='radio']:checked ~ img{
     left: .2rem;
 }
 
-.structure {
-    border: 1px solid #E5E5E5;
-    width: 29rem;
-    margin-left: 1.5rem;
-    padding-top: 1rem;
-    margin-top: 1rem;
-    border-radius: .2rem;
+.structure{
+    border: 2px solid #dcdcdc;
+    width: 100%;
+    padding: 1.2rem 1.2rem 0 1.2rem;
+    border-radius: .3rem;
+    margin-top: 1.2rem;
+}
+.structure ul {
 }
 
 .structure ul li {
-    font-size: 1.2rem;
     display: inline-block;
-    margin-left: 2.8rem;
+    margin-right: 2rem;
     margin-bottom: 1rem;
-}
-
-.structure ul li span {
+    font-size: 1.2rem;
     color: #6C6C6C;
 }
 
+.structure ul li label {
+    font-weight: 400;
+}
+
+.structure ul li label img{
+    
+}
+
+.structure ul li label .check_img{
+    margin-top: -0.1rem;
+}
+
 .series {
-    padding-top: 1rem;
-    background: white;
-    margin-top: 1rem;
-    position: relative;
-    margin-left: -.5rem;
+   
 }
 ol, ul {
      padding-left: 0;
 }
+.series ul{
+    padding-left: 1rem;
+}
 .series h1{
-    margin: .6rem 0 1.3rem 2rem;
     font-size: 1.5rem;
+    color: #666;
 }
 .series p {
     padding-left: 1.6rem;
@@ -579,9 +535,9 @@ ol, ul {
 
 .series ul li {
     display: inline-block;
-    font-size: 1rem;
-    margin-left: 2rem;
-    padding-top:.2rem;
+    font-size: 1.2rem;
+    margin-right: 1.5rem;
+    padding-top:1.2rem;
     position: relative;
     right:1rem;
     /*padding-top: 1rem;*/
@@ -592,27 +548,30 @@ ol, ul {
     vertical-align: middle;
 }
 
+.check_img{
+    margin-top: 1.2rem;
+}
+
 
 .fit {
     padding-top: 1rem;
 }
 
 .fit h1 {
-    margin-left: 1rem;
+    font-size: 1.4rem;
+    color: #999;
 }
 
 .fit p {
-    padding-left: 1rem;
     font-size: 1.2rem;
     color: #999;
 }
 
 .choose_style {
-    padding-top: 1rem;
-    margin-top: .6rem;
+    
 }
 .choose_style h1{
-    margin: .6rem 0 0 1.5rem;
+    color: #666;
     font-size: 1.5rem;
 }
 [ng-cloak] {
@@ -628,6 +587,10 @@ ol, ul {
     top: 1rem;
 }
 
+.choose_style ul {
+    padding-left: 0;
+}
+
 .choose_style ul li {
     display: inline-block;
 }
@@ -636,12 +599,17 @@ ol, ul {
     background-color: white;
     width:5.6rem;
     height: 2.3rem;
-    font-size: .9rem;
+    font-size: 1.1rem;
     color: #999;
-    border: 1px solid #C2C2C2;
-    margin-left: 0.4rem;
+    border: 2px solid #dcdcdc;
+    margin-right: 0.3rem;
     margin-top: 1rem;
-    border-radius: .5rem !important;
+    border-radius: .3rem !important;
+}
+.style_box{
+    background-color: #fff;
+    padding-top: 1.2rem;
+    margin-top: -1rem;
 }
 
 .carousel {
@@ -658,33 +626,24 @@ ol, ul {
 
 .note ul li {
     display: inline-block;
-    margin-left: .5rem;
-    font-size: 1.1rem;
     margin-bottom: 1rem;
 
 }
 
 .note ul li button {
-    width: 6rem;
-    height: 2rem;
-    background-color: white;
-    border: 1px solid #C2C2C2;
-    font-size: .9rem;
+
 }
 .btn_vr {
-    background-color: white;
-    width: 32rem;
+    padding: 2rem 1.2rem 1.2rem 1.2rem;
     border: none;
 }
 .btn_vr button {
-    width: 30rem;
-    height: 4rem;
-    margin-left: 1rem;
+    width: 100%;
     border-radius: .3rem;
-    background-color: #53A8F4;
+    background-color: #333;
     color: white;
     font-size: 1.2rem;
-
+    padding: 1rem 0;
 }
 
 /*轮播*/
@@ -699,37 +658,37 @@ ol, ul {
 /*系列*/
 .tag {
     padding-top: 1rem;
-    color: #06CB7E;
+    color: #333;
 }
 ol, ul {
      padding-left: 0;
 }
 .tag span {
     display: inline-block;
-    margin-right: -.5rem;
+    margin-right: 0.5rem;
     border-radius: 1.5rem;
-    border: 1px solid #8DE2C1;
+    border: 2px solid #999999;
     text-align: center;
     font-size: .9rem;
-    padding-left: 1.3rem;
-    padding-right: 1.3rem;
-    padding-top: .3rem;
+    padding: .3rem 1.3rem;
     height: 2rem;
-    margin-left: 1rem;
-    background-color: #F9FEFC;
 }
 
 /*风格*/
 .btn_checked {
-    border: 1px solid #53A8F4 !important;
-    color: #53A8F4 !important;
+    border: 2px solid #333 !important;
+    color: #333 !important;
 }
 
 .note button {
+    display: inline-block;
+    margin-right: 0.5rem;
     border-radius: 1.5rem;
-    color: #06CB7E;
-    background-color: #F9FEFC !important;
-    border: 1px solid #8DE2C1 !important;
+    border: 2px solid #999999;
+    text-align: center;
+    font-size: .9rem;
+    padding: .3rem 1.3rem;
+    background: #fff;
 }
 
 button {
@@ -747,6 +706,8 @@ button[disabled]{
     width: 100%;
     background-color: white;
     margin-top: 1rem;
+    position: relative;
+    padding: 1.2rem;
 }
 .title_span{
     margin-left: 1rem;
@@ -763,8 +724,8 @@ button[disabled]{
     border-bottom: 1px solid #C2C2C2;
 }
 .left_main ul {
-    /*border: 1px solid #C2C2C2;*/
-    margin-bottom: 1rem;
+    /* border: 1px solid #C2C2C2; */
+    margin-bottom: 0;
 }
 .right_main ul {
     margin-bottom: 1rem;
@@ -772,8 +733,6 @@ button[disabled]{
 .left_main ul li{
     margin-bottom: .5rem;
     font-size: 1rem;
-    /*border-bottom: 1px solid rgba(222, 222, 224, 0.9);*/
-    margin-left: 1rem;
 }
 .basis_border{
     border-bottom: 1px solid rgba(222, 222, 224, 0.9);
@@ -800,15 +759,13 @@ button[disabled]{
      margin-top: 0.5rem;
 }
 .pic{
-    color:#FFB13D ;
-    font-size: 1.1rem;
-    margin-left: 1rem;
+    color: #D9AD65;
+    font-size: 1.2rem;
+    /* margin-left: 1rem; */
     margin-bottom: 1.2rem;
 }
 .left_main p{
-    padding-left: 1rem;
-    /*padding-top: .5rem;*/
-    font-size: 1rem;
+    
 }
 
 .pic_q{
@@ -869,12 +826,12 @@ button[disabled]{
     /*column-gap: 0;*/
     /*background-color: white;*/
     /*overflow: hidden;*/
-    /*margin-top: 1rem;*/
+    margin-top: 1.2rem;
     position: relative;
 }
 .grid{
     position: absolute;
-    width:47%;
+    width:49%;
     top: 0;
     left:0;
 }
@@ -892,28 +849,38 @@ button[disabled]{
     padding: 0;
 }
 .cur_title{
-    color: #6c6c6c;
+    color: #666;
     font-size:1rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 6rem;
 }
 .dark{
-    color: #B8B6B6;
+    color: #999;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 6rem;
 }
 .basis_item{
-    break-inside: avoid;
+        break-inside: avoid;
     box-sizing: border-box;
-    border: 1px solid #E5E5E5;
-    margin:1rem .4rem;
-    border-radius: 2px;
+    border: 2px solid #E5E5E5;
+    padding: 1rem 1rem 0.3rem 1rem;
+    border-radius: .3rem;
 }
 .basis_title{
-    font-family: PingFangSC-Semibold;
-    font-size: 1.1rem!important;
-    color: #4A4A4A;
+    font-size: 1.2rem!important;
+    color: #666;
     font-weight: bold;
 }
 .basis_title_span{
-    font-size: 1.1rem!important;
-    font-weight: 400!important;
+    font-size: 1rem!important;
+    font-weight: normal !important;
+    color: #999;
 }
 .basis_txt{
     color: #6C6C6C;
@@ -922,45 +889,46 @@ button[disabled]{
 /*样式结束*/
 /*风格样式*/
 .special_requirements{
-    /*margin-left: 1rem;*/
     margin-top: 1rem;
     overflow: hidden;
     background-color: white;
     margin-bottom: 1rem;
-    padding-bottom: 1rem;
+    position: relative;
+    padding: 1.2rem 1.2rem 0 1.2rem;
+    margin-bottom: 5rem;
 }
 .special_requirements p{
-    padding-left: 1.6rem;
-    font-size: 1.5rem;
-    color: #4A4A4A;
-    margin-bottom: 1rem;
-    margin-top:1rem;
+ 
 }
 .main_text{
-    /*margin-top: 1rem;*/
     width: 30rem;
     height: 10rem;
     padding-left: 1rem;
-    margin-left: 1rem;
     font-size: 1.3rem;
-    border-radius: 1rem;
+    border-radius: .3rem;
     outline: none;
-    border: 1px solid #B8B6B6;
+    border: 2px solid #E5E5E5;
+    margin-top: 1.2rem;
 }
 .special_requirements span{
     position: relative;
-    left: 27rem;
-    top:-2rem;
+    left: 26rem;
+    top: -2.2rem;
     font-size: 1rem;
     color: #999;
 }
 /*尾部样式*/
 .footer_settlement{
-    width:100vw;
+    width:100%;
     height:4rem;
     overflow: hidden;
     margin:0!important;
     background-color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.2);
 }
 .footer_set{
     width:calc(100% - 13.6rem);
@@ -969,26 +937,29 @@ button[disabled]{
     height:4rem;
 }
 .first_span{
-    font-size:1.53rem;
-    color: #F55122 ;
+    font-size:1.6rem;
+    color: #D9AD65 ;
 }
 .second_span{
-    font-size:1.19rem;
-    color: #F59C22;
+    font-size:1.2rem;
+    color: #D9AD65;
     text-decoration: line-through;
 }
 .no_data{
     width:12.68rem;
     height: 3.23rem;
     border-radius:4rem;
-    color: #53A8F4;
+    color: #D9AD65;
     font-size: 1.2rem;
     border:1px dotted #E5E5E5 ;
     background: none;
 }
 .three_span{
-    font-size:1rem;
-    color: #B8B6B6;
+    font-size: 1rem;
+    color: #999;
+    position: absolute;
+    bottom: .3rem;
+    left: 1.4rem;
 }
 /*.footer_settlement button:first-of-type{*/
     /*border:none;*/
@@ -1007,8 +978,8 @@ button[disabled]{
     height: 4rem;
     color: #fff;
     font-size:1.2rem;
-    border-left:.08rem solid #CDD3D7;
-    background-color: #53A8F4 ;
+    border-left:1px solid #333;
+    background-color: #333 ;
 }
 .house_tips{
     position: absolute;
@@ -1019,13 +990,8 @@ button[disabled]{
     margin-bottom: 1rem;
 }
 .error_tips{
-    position: relative;
-    left:7.6rem;
-    font-size:1rem!important;
+    font-size:1.2rem!important;
     color: #F55122!important;
-}
-.address_tips{
-    top:2rem;
 }
 .window_tips{
     left:9rem;
