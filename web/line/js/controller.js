@@ -770,6 +770,7 @@ angular.module("all_controller", ['ngCookies'])
             }
             if($scope.datailsShop.left_number == 0){
                 $scope.shop_goods = '#goods_model';
+                $scope.myModal = '';
             }else {
                 $scope.shop_goods = '#myModal';
             }

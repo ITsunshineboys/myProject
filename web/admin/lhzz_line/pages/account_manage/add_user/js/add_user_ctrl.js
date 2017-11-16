@@ -12,29 +12,36 @@ add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state, 
     $scope.comment = '';
     $scope.changeNum = function () {
         if($scope.new_num == '' || $scope.new_password =='' ){
-            $scope.add_model = '#ok_modal';
+            $('#ok_modal').modal('show');
             $scope.comment = '请填写完整信息';
-            return
         }
         if($scope.new_num != '' && $scope.new_password !=''){
-            _ajax.get('/site/check-mobile-registered',$scope.new_num,function (res) {
+            console.log(111);
+            console.log($scope.new_num);
+            _ajax.get('/site/check-mobile-registered',{mobile:$scope.new_num},function (res) {
                     console.log(res);
-                    $scope.codeMobile = res.data.code;
-                    if($scope.codeMobile == 1019) {
-                        $scope.add_model = '#ok_modal';
-                        $scope.comment = '该手机号已被注册，请重新输入';
-                    }else{
+                    $scope.codeMobile = res.code;
+                    if($scope.codeMobile == 200) {
                         _ajax.post('/mall/user-add',{
                             mobile:$scope.new_num,
                             password:$scope.new_password
                         },function (res) {
                             console.log(res);
-                            $scope.add_model = '#ok_modal';
+                            $('#ok_modal').modal('show');
+                            // $scope.add_model = '#ok_modal';
                             $scope.comment = '添加成功';
                         })
 
+                    }else{
+                        $('#ok_modal').modal('show');
+                        $scope.comment = '该手机号已被注册，请重新输入';
                     }
             })
+        }
+        $scope.getBack = function () {
+            setTimeout(function () {
+                $state.go('account_index')
+            },300)
         }
         // _ajax.get('/site/check-mobile-registered',$scope.new_num,function (res) {
         //     console.log(res);

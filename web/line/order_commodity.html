@@ -143,12 +143,12 @@
                         <div class="input-group" >
                             <span>联系电话</span>
                             <div class="shu"></div>
-                            <input type="text"  placeholder="请输入联系电话" maxlength="11" ng-model="harvestNum" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/>
+                            <input type="text"  placeholder="请输入联系电话" readonly="" maxlength="11" ng-model="harvestNum" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/>
                         </div>
                         <div class="input-group" data-toggle="modal" data-target="#three_modal" >
                             <span>所在区域</span>
                             <div class="shu"></div>
-                            <input class="address_more" id="demo1" type="text" readonly="" ng-value="prove_city_more" name="input_area" placeholder="请选择城市"/>
+                            <input class="address_more" id="demo1" type="text" readonly="readonly" ng-value="prove_city_more" name="input_area" placeholder="请选择城市"/>
                             <input class="address_more" id="value1" type="hidden" readonly="" />
                         </div>
                         <div class="input-group">
