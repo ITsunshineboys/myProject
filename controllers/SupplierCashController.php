@@ -353,17 +353,17 @@ class SupplierCashController extends Controller
 
         $request = \Yii::$app->request;
 
-        $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');
+        $timeType = trim($request->get('time_type', ''),'');
 
-        $status = trim(htmlspecialchars($request->get('status', self::USER_CASH_SATE)), '');
-        $search = trim(htmlspecialchars($request->get('search', '')), '');
+        $status = trim($request->get('status', self::USER_CASH_SATE),'');
+        $search = trim($request->get('search', ''), '');
         $code = 1000;
 
         $where = "g.role_id=6";
         if (!$search) {
             if ($timeType == 'custom') {
-                $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
-                $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
+                $time_start = trim(($request->get('time_start', '')), '');
+                $time_end = trim(($request->get('time_end', '')), '');
                 if (($time_start && !StringService::checkDate($time_start))
                     || ($time_end && !StringService::checkDate($time_end))
                 ) {
