@@ -381,58 +381,33 @@ class QuoteController extends Controller
                 if (substr($post, 4) == 00) {
                     $where = 'city_code = '.$post;
                     $effect = Effect::pagination($where,$page,$size);
-                    return Json::encode([
-                        'code' => 200,
-                        'msg' => 'OK',
-                        'model' => $effect
-                    ]);
                 } else {
                     $where = 'district_code = '.$post;
                     $effect = Effect::pagination($where,$page,$size);
-                    return Json::encode([
-                        'code' => 200,
-                        'msg' => 'OK',
-                        'model' => $effect
-                    ]);
                 }
                 break;
             case $post && $min_time && !$max_time && !$toponymy:
                 $where = "add_time >=" . $min_time . " AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'OK',
-                    'model' => $effect
-                ]);
                 break;
             case $post && !$min_time && $max_time && !$toponymy:
                 $where = " add_time <=". $max_time." AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'OK',
-                    'model' => $effect
-                ]);
                 break;
             case  $post && $min_time && $max_time && !$toponymy:
                 $where = "add_time >=" . $min_time ." or add_time <=". $max_time." AND city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'OK',
-                    'model' => $effect
-                ]);
                 break;
             case  $post && !$min_time && !$max_time && $toponymy:
                 $where = "toponymy like ". $toponymy ." and city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'OK',
-                    'model' => $effect
-                ]);
                 break;
         }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'model' => $effect
+        ]);
     }
 
     /**
