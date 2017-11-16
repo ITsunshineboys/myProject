@@ -13,6 +13,7 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$s
             return $.param(data)
         }
     };
+
     $scope.storeid = $stateParams.storeid;
     $scope.offline_reason = '';
     $scope.logistics_template_id = gooddetail.logistics_template_id;//物流编号

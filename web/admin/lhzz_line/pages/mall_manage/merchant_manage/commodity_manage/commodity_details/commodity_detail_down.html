@@ -191,11 +191,7 @@
             <div class="margin_top">
                 <span>详细描述</span>
                 <div class="margin_left inline_block">
-                    <!--<div class="description_size"></div>-->
-                    <div>
-                        <p ng-bind="description"></p>
-                    </div>
-                    <!--<div class="description_size description_size_min"></div>-->
+                    <div class="sec" ng-bind-html="description | toHtml"></div>
                 </div>
             </div>
             <!--下架原因-->

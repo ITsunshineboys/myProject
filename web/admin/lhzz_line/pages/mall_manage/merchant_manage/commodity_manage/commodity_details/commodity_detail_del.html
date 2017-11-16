@@ -181,9 +181,7 @@
         <div class="margin_top">
             <span>详细描述</span>
             <div class="margin_left inline_block">
-                <div>
-                    <p ng-bind="description"></p>
-                </div>
+                <div class="sec" ng-bind-html="description | toHtml"></div>
             </div>
         </div>
         <!--操作-->

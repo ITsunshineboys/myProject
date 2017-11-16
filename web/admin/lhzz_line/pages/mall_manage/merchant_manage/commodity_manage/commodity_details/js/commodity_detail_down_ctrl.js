@@ -15,6 +15,8 @@ commodity_detail_down.controller("commodity_detail_down_ctrl",function ($scope,$
     $scope.storeid = $stateParams.storeid; // 商家id;
     $scope.offlinereason_arr = ['分类下架','品牌下架','库存不足下架','商家下架','闭店下架'];
     $scope.offline_reason = '';
+
+    console.log(gooddetail);
     $scope.logistics_template_id = gooddetail.logistics_template_id;//物流编号
     $scope.category_title = gooddetail.category_title; //商品分类
     $scope.brand_name = gooddetail.brand_name; //品牌名称
