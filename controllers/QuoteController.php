@@ -35,6 +35,7 @@ use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -396,7 +397,7 @@ class QuoteController extends Controller
                 break;
             case  $post  && $min_time && $max_time && !$toponymy:
                 if (strtotime($min_time) == strtotime($max_time)){
-                    $timeType = StringService::startEndDate('today');
+                    $timeType = ModelService::timeDeal($min_time);
                     $where = "add_time >=" . strtotime($timeType[0]) ." and add_time <=". strtotime($timeType[1]) ." AND city_code = ".$post;
                     $effect = Effect::pagination($where,$page,$size);
                 } else {
