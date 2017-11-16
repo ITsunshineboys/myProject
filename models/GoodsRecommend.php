@@ -148,7 +148,7 @@ class GoodsRecommend extends ActiveRecord
         $size <= 0 && $size = self::PAGE_SIZE_DEFAULT;
         $offset = ($page - 1) * $size;
 
-        return self::find()
+        $recommendList = self::find()
             ->select(self::$appFields)
             ->where([
                 'delete_time' => 0,
@@ -161,6 +161,13 @@ class GoodsRecommend extends ActiveRecord
             ->asArray()
             ->all();
 
+        foreach ($recommendList as &$recommend) {
+            if (isset($recommend['platform_price'])) {
+                $recommend['platform_price'] = StringService::formatPrice($recommend['platform_price'] / 100);
+            }
+        }
+
+        return $recommendList;
 //        return array_slice(self::secondAll($districtCode), $offset, $size);
     }
 
@@ -658,16 +665,16 @@ class GoodsRecommend extends ActiveRecord
      * @param array $changedAttributes
 
     public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-
-        $cache = Yii::$app->cache;
-        if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
-            $cache->delete(self::CACHE_KEY_CAROUSEL);
-        } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
-            $cache->delete(self::CACHE_KEY_SECOND);
-        }
-    }
+     * {
+     * parent::afterSave($insert, $changedAttributes);
+     *
+     * $cache = Yii::$app->cache;
+     * if ($this->type == self::RECOMMEND_GOODS_TYPE_CAROUSEL) {
+     * $cache->delete(self::CACHE_KEY_CAROUSEL);
+     * } elseif ($this->type == self::RECOMMEND_GOODS_TYPE_SECOND) {
+     * $cache->delete(self::CACHE_KEY_SECOND);
+     * }
+     * }
      */
 
     /**
