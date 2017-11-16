@@ -462,17 +462,15 @@ class DistributionController extends Controller
                     }
                     $consigneeOrders=GoodsOrder::find()
                         ->select('order_no,amount_order,paytime,remarks')
-                        ->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1])
+                        ->where(['consignee_mobile'=>$Son_list['mobile'],'order_refer'=>1])
                         ->asArray()
                         ->all();
-                    var_dump($consigneeOrders);
                     $order_subsetnum+=count($consigneeOrders);
                     foreach ($consigneeOrders as &$consigneeOrder)
                     {
                         $total_amount+=$consigneeOrder['amount_order']*0.01;
                     }
                 }
-                exit;
                 $list['subset_amount']=GoodsOrder::switchMoney($total_amount);
                 $list['order_subsetnum']=$order_subsetnum;
                 unset($list['profit']);
