@@ -849,7 +849,6 @@ class DistributionController extends Controller
         {
             $list->delete();
         }
-
     }
 
 

@@ -74,7 +74,7 @@ class Distribution extends ActiveRecord
         {
             foreach ($son as &$list)
             {
-                $list['time']=date('y-m-d H:i',$list['applydis_time']);
+                $list['time']=date('Y-m-d H:i',$list['applydis_time']);
                 $goodsOrder_line=GoodsOrder::Find()->where(['consignee_mobile'=>$list['mobile'],'order_refer'=>1]);
                 $goodsOrder_line_data=$goodsOrder_line->asArray()->all();
                 foreach ($goodsOrder_line_data as &$goodsOrder_line_data_list)
