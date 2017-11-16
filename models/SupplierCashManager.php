@@ -39,13 +39,32 @@ class SupplierCashManager extends ActiveRecord
             ->from(self::SUP_CASHREGISTER)
             ->orderBy('apply_time Desc')
             ->where(['uid' => $user, 'role_id' => self::ROLE_ID]);
-        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $query->andWhere(['between', 'apply_time', $time_start, $time_end]);
-        } elseif ($time_start) {
+        if($time_type=='custom'){
+            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
+            ) {
+                $code = 1000;
+                return $code;
+            }
+            if($time_start==$time_end){
+
+                list($time_start,$time_end)=ModelService::timeDeal($time_start);
+            }
+        } else {
+            list($time_start, $time_end) = StringService::startEndDate($time_type);
+
+        }
+
+        if ($time_start) {
+            $time_start=(int)strtotime($time_start);
             $query->andWhere(['>=', 'apply_time', $time_start]);
-        } elseif ($time_end) {
-            $query->andWhere(['<=', 'apply_time', $time_end]);
+        }
+        if ($time_end) {
+            if ($time_type == 'today') {
+                $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
+            } else {
+                $end_time = (int)strtotime($time_end);
+            }
+            $query->andWhere(['<=', 'apply_time', $end_time]);
         }
 
         if ($status) {
