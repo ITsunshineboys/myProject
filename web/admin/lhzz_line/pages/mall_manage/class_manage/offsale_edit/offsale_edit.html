@@ -16,7 +16,7 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" ng-model="item.title" ng-blur="addClassName()" maxlength=10>
+            <input type="text" ng-model="item.title" ng-class="{tored:show_class_warning}" ng-blur="addClassName()" maxlength=10>
             <span>*限1~10个字符</span>
             <h6 ng-if="show_class_warning" ng-bind="class_warning"></h6>
         </div>

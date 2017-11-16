@@ -16,7 +16,7 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" placeholder="请输入名称" ng-model="class_name" ng-blur="addClassName()" maxlength=10>
+            <input type="text" placeholder="请输入名称"  ng-model="class_name" ng-class="{tored:showtishi}" ng-blur="addClassName()" maxlength=10>
             <span>*限1~10个字符,不含特殊字符</span>
             <h6 ng-if="showtishi" ng-bind="tishi"></h6>
         </div>
@@ -59,7 +59,7 @@
         <div class="cla_des">
             <span class="each_title">分类描述</span>
             <div id="edit_tool">
-                <div class="ueditor" ng-model="addclassdes" config="config"></div>
+                <div class="ueditor" ng-model="addclassdes" config="config" id="editor"></div>
             </div>
         </div>
         <div class="divider"></div>
