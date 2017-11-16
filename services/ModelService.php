@@ -220,16 +220,14 @@ class ModelService
      * @param $time_end
      * @return array
      */
-    public static function timeDeal($time_start, $time_end )
+    public static function timeDeal($time_start)
     {
-            $yearMonthDay = date('Y-m-d');
-            list($year, $month, $day) = explode('-', $yearMonthDay);
-            if ($time_start == $time_end) {
-                $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
+        list($year, $month, $day) = explode('-', $time_start);
+            $startTime = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
                 $endTime = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
 
                 return [$startTime, $endTime];
-            }
+
 
 
     }
