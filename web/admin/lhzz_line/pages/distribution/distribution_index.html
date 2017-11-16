@@ -5,10 +5,10 @@
             <select ng-model="params.time_type" ng-change="getDistribution()" ng-options="item.str as item.name for item in time_type" class="form-control"></select>
         </div>
         <div class="col-md-2">
-            <input ng-if="params.time_type == 'custom'" ng-change="getDistribution()" ng-model="params.start_time" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-change="getDistribution()" max-date="{{params.end_time}}" ng-model="params.start_time" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
         </div>
         <div class="col-md-2">
-            <input ng-if="params.time_type == 'custom'" ng-change="getDistribution()" ng-model="params.end_time" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-change="getDistribution()" min-date="{{params.start_time}}" ng-model="params.end_time" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
         </div>
         <button class="pull-right" ng-click="update_keyword()">查询</button>
         <div class="col-md-2 pull-right">
