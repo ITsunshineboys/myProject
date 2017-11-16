@@ -71,6 +71,51 @@ class WxPayApi
         
         return $result;
     }
+
+
+    /**
+     *
+     * 统一下单，WxPayUnifiedOrder中out_trade_no、body、total_fee、trade_type必填
+     * appid、mchid、spbill_create_ip、nonce_str不需要填入
+     * @param WxPayUnifiedOrder $inputObj
+     * @param int $timeOut
+     * @throws WxPayException
+     * @return 成功时返回，其他抛异常
+     */
+    public static function AppUnifiedOrder($inputObj, $timeOut = 6)
+    {
+        $url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        //检测必填参数
+        if(!$inputObj->IsOut_trade_noSet()) {
+            throw new WxPayException("缺少统一支付接口必填参数out_trade_no！");
+        }else if(!$inputObj->IsBodySet()){
+            throw new WxPayException("缺少统一支付接口必填参数body！");
+        }else if(!$inputObj->IsTotal_feeSet()) {
+            throw new WxPayException("缺少统一支付接口必填参数total_fee！");
+        }else if(!$inputObj->IsTrade_typeSet()) {
+            throw new WxPayException("缺少统一支付接口必填参数trade_type！");
+        }
+
+        //异步通知url未设置，则使用配置文件中的url
+        if(!$inputObj->IsNotify_urlSet()){
+            $inputObj->SetNotify_url(WxPayConfig::NOTIFY_URL);//异步通知url
+        }
+
+        $inputObj->SetAppid(WxPayConfig::APP_APPID);//公众账号ID
+        $inputObj->SetMch_id(WxPayConfig::APP_MCHID);//商户号
+        $inputObj->SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);//终端ip
+        //$inputObj->SetSpbill_create_ip("1.1.1.1");
+        $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+
+        //签名
+        $inputObj->SetSign();
+        $xml = $inputObj->ToXml();
+        $startTimeStamp = self::getMillisecond();//请求开始时间
+        $response = self::postXmlCurlByApp($xml, $url, false, $timeOut);
+        $result = WxPayResults::Init($response);
+        self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+        return $result;
+    }
     /**
      *
      * 查询订单，WxPayOrderQuery中out_trade_no、transaction_id至少填一个
@@ -553,6 +598,60 @@ class WxPayApi
             curl_setopt($ch,CURLOPT_SSLCERT, WxPayConfig::SSLCERT_PATH);
             curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
             curl_setopt($ch,CURLOPT_SSLKEY, WxPayConfig::SSLKEY_PATH);
+        }
+        //post提交方式
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        //运行curl
+        $data = curl_exec($ch);
+        //返回结果
+        if($data){
+            curl_close($ch);
+            return $data;
+        } else {
+            $error = curl_errno($ch);
+            curl_close($ch);
+            throw new WxPayException("curl出错，错误码:$error");
+        }
+    }
+
+
+    /**
+     * 以post方式提交xml到对应的接口url
+     *
+     * @param string $xml  需要post的xml数据
+     * @param string $url  url
+     * @param bool $useCert 是否需要证书，默认不需要
+     * @param int $second   url执行超时时间，默认30s
+     * @throws WxPayException
+     */
+    private static function postXmlCurlByApp($xml, $url, $useCert = false, $second = 30)
+    {
+        $ch = curl_init();
+        //设置超时
+        curl_setopt($ch, CURLOPT_TIMEOUT, $second);
+
+        //如果有配置代理这里就设置代理
+        if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0"
+            && WxPayConfig::CURL_PROXY_PORT != 0){
+            curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
+            curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
+        }
+        curl_setopt($ch,CURLOPT_URL, $url);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,TRUE);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);//严格校验
+        //设置header
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        //要求结果为字符串且输出到屏幕上
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+        if($useCert == true){
+            //设置证书
+            //使用证书：cert 与 key 分别属于两个.pem文件
+            curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
+            curl_setopt($ch,CURLOPT_SSLCERT, WxPayConfig::APP_SSLCERT_PATH);
+            curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
+            curl_setopt($ch,CURLOPT_SSLKEY, WxPayConfig::APP_SSLKEY_PATH);
         }
         //post提交方式
         curl_setopt($ch, CURLOPT_POST, TRUE);

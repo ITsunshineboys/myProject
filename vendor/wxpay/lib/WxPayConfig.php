@@ -6,7 +6,6 @@ namespace vendor\wxpay\lib;
 class WxPayConfig
 {
     //=======【基本信息设置】=====================================
-    //
     /**
      * TODO: 修改这里配置为您自己申请的商户信息
      * 微信公众号信息配置
@@ -26,10 +25,10 @@ class WxPayConfig
     const MCHID = '1486972642';
     const KEY = 'ykbJaMV92kt7juyDiRTOx0qiZ05fxtDw';
     const APPSECRET = '4560eeb7b386701ddc7085827f65e40e';
-    const APP_APPID='';
-    const APP_MCHID='';
-    const APP_KEY = '';
-    const APP_APPSECRET = '';
+    const APP_APPID='wxe7184498989a6958';
+    const APP_MCHID='1492503852';
+    const APP_KEY = 'ykbJaMV92kt7juyDiRTOx0qiZ05fxtDw';
+    const APP_APPSECRET = '135d383a0ac0596ec274cc2bdeb3f87c';
 
     //=======【证书路径设置】=====================================
     /**
@@ -40,6 +39,8 @@ class WxPayConfig
      */
     const SSLCERT_PATH = '../cert/apiclient_cert.pem';
     const SSLKEY_PATH = '../cert/apiclient_key.pem';
+    const APP_SSLCERT_PATH = '../cert/app/apiclient_cert.pem';
+    const APP_SSLKEY_PATH = '../cert/app/apiclient_key.pem';
 
     //=======【curl代理设置】===================================
     /**

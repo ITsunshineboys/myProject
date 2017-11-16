@@ -258,7 +258,6 @@ class Wxpay  extends ActiveRecord
 
     public  static function OrderAppPay($orderAmount,$orders)
     {
-
         ini_set('date.timezone','Asia/Shanghai');
         //打印输出数组信息
         function printf_info($data)
@@ -272,16 +271,16 @@ class Wxpay  extends ActiveRecord
         $input = new WxPayUnifiedOrder();
         $attach=base64_encode($orders);
         $total_amount=0.01;
-        $input->SetBody(self::EFFECT_BODY);
+        $input->SetBody('艾特智造-商城订单');
         $input->SetAttach($attach);
-        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetOut_trade_no(WxPayConfig::APP_MCHID.date("YmdHis"));
         $input->SetTotal_fee($total_amount*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
         $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
         $input->SetTrade_type("APP");
-        $order = WxPayApi::unifiedOrder($input);
+        $order = WxPayApi::AppUnifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
         return  Json::decode($jsApiParameters);
     }
