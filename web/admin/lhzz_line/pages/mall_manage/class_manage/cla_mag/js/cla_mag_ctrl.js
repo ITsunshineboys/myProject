@@ -1,5 +1,5 @@
 let cla_mag = angular.module("clamagModule", []);
-cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
+cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -63,16 +63,12 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams) {
         return $scope.params['sort[]'].split(':')[1]
     }
 
-
     firstClass();
     /*分类选择一级下拉框*/
     function firstClass() {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-        }).then((response) => {
-            $scope.firstclass = response.data.data.categories;
-            $scope.dropdown.firstselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+            $scope.firstclass = res.data.categories;
+            $scope.dropdown.firstselect = res.data.categories[0].id;
         })
     }
 
