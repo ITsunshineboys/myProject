@@ -140,11 +140,18 @@ class UserCashregister extends \yii\db\ActiveRecord
             ->where(['sc.id' => $cash_id])
             ->one();
         if ($array) {
+
             $array['apply_time'] = date('Y-m-d H:i', $array['apply_time']);
             $array['handle_time'] = date('Y-m-d H:i', $array['handle_time']);
             $array['cash_money'] = sprintf('%.2f', (float)($array['cash_money']) * 0.01);
             $array['real_money'] = sprintf('%.2f', (float)($array['real_money']) * 0.01);
             $array['cost_money'] = sprintf('%.2f', (float)$array['cash_money'] - $array['real_money']);
+            if($array['cost_money']==0){
+                $array['cost_money']=null;
+            }
+            if($array['real_money']==0){
+                $array['real_money']=null;
+            }
             $array['status'] = self::STATUS_CSED;
             return $array;
         }

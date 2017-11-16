@@ -576,8 +576,7 @@ class SupplieraccountController extends  Controller{
 
             ]);
         }
-        $model=new UserCashregister();
-          $data=$model::getcashviewdata($cash_id);
+          $data=UserCashregister::getcashviewdata($cash_id);
 
         return json_encode([
             'code' => 200,
