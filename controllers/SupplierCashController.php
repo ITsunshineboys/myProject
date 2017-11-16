@@ -395,11 +395,6 @@ class SupplierCashController extends Controller
 
             if ($status!=0){
                 $where.= " and g.status ={$status} ";
-            }else{
-
-                $keys=implode(',',array_keys(self::USER_CASH_SATE));
-                $where.= " and  g.status in ({$keys}) ";
-
             }
         } else {
             $where = " s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%'";
@@ -407,7 +402,6 @@ class SupplierCashController extends Controller
 
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-
         $paginationData = SupplierCashManager::getCashListAll($where,$page, $page_size);
         return json_encode([
             'code' => 200,
