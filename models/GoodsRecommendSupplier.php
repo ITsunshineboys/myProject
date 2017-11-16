@@ -295,7 +295,7 @@ class GoodsRecommendSupplier extends ActiveRecord
         ) {
             foreach ($recommendList as &$recommend) {
                 isset($hasViewedNumber) && $recommend['viewed_number'] = self::viewedNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
-                isset($hasSoldNumber) && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
+//                isset($hasSoldNumber) && $recommend['sold_number'] = self::soldNumber($recommend['create_time'], $recommend['delete_time'], $recommend['id']);
 
                 if (isset($recommend['create_time'])) {
                     if (!empty($recommend['create_time'])) {
@@ -341,25 +341,26 @@ class GoodsRecommendSupplier extends ActiveRecord
      *
      * @param int $createTime banner create time default 0
      * @param int $deleteTime banner delete time default 0
+     * @param int $recommendId recommend id default 0
      * @return int
      */
     public static function viewedNumber($createTime = 0, $deleteTime = 0, $recommendId = 0)
     {
         $createTime = (int)$createTime;
         $deleteTime = (int)$deleteTime;
-        if (!$createTime || !$deleteTime) {
+        if (!$createTime) {
             return 0;
         }
 
-        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
-        $cache = Yii::$app->cache;
-        $viewedNumber = $cache->get($key);
-        if ($viewedNumber === false) {
-            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
-            $cache->set($key, $viewedNumber);
-        }
+//        $key = self::CACHE_KEY_PREFIX_VIEWED_NUMBER . $createTime . '_' . $deleteTime;
+//        $cache = Yii::$app->cache;
+//        $viewedNumber = $cache->get($key);
+//        if ($viewedNumber === false) {
+//            $viewedNumber = self::_viewedNumber($createTime, $deleteTime, $recommendId);
+//            $cache->set($key, $viewedNumber);
+//        }
 
-        return $viewedNumber;
+        return self::_viewedNumber($createTime, $deleteTime, $recommendId);
     }
 
     /**
