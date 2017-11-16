@@ -1670,14 +1670,13 @@ class QuoteController extends Controller
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
-            } else {
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                ]);
             }
-
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
         }
+
 
         if (isset($post['one_title']['edit_id'])){
             $edit_points = $points->findOne(['id'=>$post['one_title']['edit_id']]);
@@ -1688,13 +1687,14 @@ class QuoteController extends Controller
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
-            } else {
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                ]);
             }
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
         }
+
+
         if (isset($post['del_id'])) {
             $points_delete = $points->deleteAll(['and',['differentiate'=>1],['id'=>$post['del_id']]]);
             $points->deleteAll(['and',['differentiate'=>1],['pid'=>$post['del_id']]]);
@@ -1703,12 +1703,11 @@ class QuoteController extends Controller
                     'code'=> 1055,
                     'msg' => '删除失败,请确认'
                 ]);
-            } else {
-                return Json::encode([
-                    'code'=> 200,
-                    'msg' => 'ok',
-                ]);
             }
+            return Json::encode([
+                'code'=> 200,
+                'msg' => 'ok',
+            ]);
         }
     }
 

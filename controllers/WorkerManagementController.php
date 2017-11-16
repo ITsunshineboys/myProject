@@ -741,5 +741,5 @@ class WorkerManagementController extends Controller
            'data' => $worker,
         ]);
     }
-    
+
 }
