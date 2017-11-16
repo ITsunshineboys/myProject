@@ -4683,6 +4683,59 @@ class OrderController extends Controller
 //    }
 
 
+    /**
+     * 去付款微信app支付
+     * @return string
+     */
+    public  function actionAppOrderWxPay()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        if (!array_key_exists('list',$postData)
+            || !array_key_exists('total_amount',$postData))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $orders=explode(',',$postData['list']);
+        if (!is_array($orders))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $orderAmount=GoodsOrder::CalculationCost($orders);
+        if ($postData['total_amount']*100  != $orderAmount){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        };
+        $data=Wxpay::OrderAppPay($orderAmount,$postData['list']);
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
+
+
+
+
 
 
 

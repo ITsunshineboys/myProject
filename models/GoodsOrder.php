@@ -1284,7 +1284,7 @@ class GoodsOrder extends ActiveRecord
                         ->select('username')
                         ->where(['id'=>$data[$k]['user_id']])
                         ->asArray()
-                        ->one()['username'];
+                        ->one()['nickname'];
                     break;
             }
             if ($data[$k]['pay_status']==0 && $data[$k]['order_status']==0){
@@ -1520,59 +1520,6 @@ class GoodsOrder extends ActiveRecord
         return $sort;
     }
 
-    /**
-     * 商家查询
-     * @param $array
-     * @param $supplier_id
-     * @param $page_size
-     * @param $page
-     * @param $time_type
-     * @param $time_start
-     * @param $time_end
-     * @param $search
-     * @param $sort_money
-     * @param $sort_time
-     * @return array
-     */
-    private  static  function Businessgetgettheorderalldata($array,$supplier_id,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time)
-    {
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        self::Business_increase_condition($array,$time_start,$time_end,$search);
-        $sort=self::sort_lhzz_busnessorder($sort_money,$sort_time);
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id,a.order_refer,z.freight,a.return_insurance')
-            ->orderBy($sort)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=self::getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            $arr[$k]['unusual']=self::unusual($arr[$k]['is_unusual']);
-            if($arr[$k]['status']=='待发货'){
-                $arr[$k]['handle']='去发货';
-            }
-            if ($arr[$k]['status']=='售后中'){
-                $arr[$k]['handle']='售后处理';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
-        $sales=Supplier::find()
-            ->select('sales_volumn_month,sales_amount_month')
-            ->where(['id'=>$supplier_id])
-            ->one();
-        $data['sales_volumn_month']=$sales->sales_volumn_month;
-        $data['sales_amount_month']=sprintf('%.2f', (float)$sales->sales_amount_month*0.01);
-        return $data;
-    }
 
     private static  function increase_condition($array,$time_start,$time_end,$search){
         if ($time_start && $time_end && $time_end > $time_start) {
@@ -1607,42 +1554,6 @@ class GoodsOrder extends ActiveRecord
             $sort='a.create_time desc,z.goods_price desc';
         }
         return $sort;
-    }
-
-    private static function gettheorderalldata($array,$page_size,$page,$time_type,$time_start,$time_end,$search,$sort_money,$sort_time){
-        $time_area = ModelService::timeDeal($time_type, $time_start, $time_end);
-        $time_start = $time_area[0];
-        $time_end = $time_area[1];
-        self::increase_condition($array,$time_start,$time_end,$search);
-        $sort=self::sort_lhzz_order($sort_money,$sort_time);
-        $count = $array->count();
-        $pagination = new Pagination(['totalCount' =>$count,'pageSize' => $page_size,'pageSizeParam'=>false]);
-        $data=$array->offset($pagination->offset)
-            ->select('a.order_no,a.id,z.customer_service,a.pay_status,a.address_id,z.order_status,a.create_time,a.user_id,z.shipping_status,a.amount_order,z.goods_name,z.goods_price,z.goods_number,z.is_unusual,z.market_price,z.supplier_price,z.sku,z.order_id,z.comment_id,a.order_refer')
-            ->orderBy($sort)
-            ->limit($pagination->limit)
-            ->all();
-        $arr=self::getorderstatus($data);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
-                $arr[$k]['handle']='平台介入';
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['comment']='';
-        }
-        $data=ModelService::pageDeal($arr, $count, $page, $page_size);
-        return $data;
     }
 
     /**

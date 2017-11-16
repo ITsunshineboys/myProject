@@ -117,7 +117,7 @@ class DistributionController extends Controller
         if($user)
         {
             $sms['mobile']=$mobile;
-            $sms['type']='resetMobile';
+            $sms['type']='LoginMobile';
         }else{
             $sms['mobile']=$mobile;
             $sms['type']='register';
@@ -487,7 +487,7 @@ class DistributionController extends Controller
      */
     public function actionGetdistributiondetail(){
         $request = Yii::$app->request;
-        $mobile= trim(htmlspecialchars($request->post('mobile', '')), '');
+        $mobile= trim($request->post('mobile', ''));
         if (!$mobile)
         {
             $code=1000;
@@ -608,7 +608,7 @@ class DistributionController extends Controller
      */
     public function actionSearchmore(){
         $request = Yii::$app->request;
-        $mobile= trim(htmlspecialchars($request->post('mobile', 'all')), '');
+        $mobile= trim($request->post('mobile', 'all'));
         $data=Distribution::find()->where(['mobile'=>$mobile])->one();
         $subset=Distribution::find()->select('mobile,applydis_time')->where(['parent_id'=>$data['id']])->asArray()->all();
         return Json::encode([
@@ -672,7 +672,6 @@ class DistributionController extends Controller
                     ->where(['user_id'=>$user->id,'order_refer'=>2])
                     ->asArray()
                     ->all();
-
                 foreach ($UserOrders as &$UserOrder)
                 {
                     $list[]=[
@@ -717,7 +716,6 @@ class DistributionController extends Controller
             $count=count($list);
             $total_page=ceil($count/$size);
             $data=array_slice($list, ($page-1)*$size,$size);
-
             return Json::encode([
                 'code' => 200,
                 'msg' =>'ok',
