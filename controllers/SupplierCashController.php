@@ -355,7 +355,7 @@ class SupplierCashController extends Controller
 
         $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');
 
-        $status = trim(htmlspecialchars($request->get('status', '0')), '');
+        $status = trim(htmlspecialchars($request->get('status', self::USER_CASH_SATE)), '');
         $search = trim(htmlspecialchars($request->get('search', '')), '');
         $code = 1000;
 
