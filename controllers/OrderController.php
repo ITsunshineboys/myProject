@@ -4716,14 +4716,14 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $orderAmount=GoodsOrder::CalculationCost($orders);
-        if ($postData['total_amount']*100  != $orderAmount){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        };
+//        $orderAmount=GoodsOrder::CalculationCost($orders);
+//        if ($postData['total_amount']*100  != $orderAmount){
+//            $code=1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        };
         $data=Wxpay::OrderAppPay($orderAmount,$postData['list']);
         $code=200;
         return Json::encode([
