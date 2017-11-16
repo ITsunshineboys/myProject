@@ -275,14 +275,34 @@ class SupplierCashManager extends ActiveRecord
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
             ->where(['g.pay_status' => 1]);
+        if($time_type=='custom'){
+            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
+            ) {
+                $code = 1000;
+                return $code;
+            }
+            if($time_start==$time_end){
 
-        list($time_start, $time_end) = ModelService::timeDeal($time_type, $time_start, $time_end);
-        if ($time_start && $time_end && $time_end >= $time_start) {
-            $query->andWhere(['between', 'g.paytime', $time_start, $time_end]);
-        } elseif ($time_start) {
+                list($time_start,$time_end)=ModelService::timeDeal($time_start);
+                $time_start = (int)strtotime($time_start);
+                $time_end = (int)strtotime($time_end);
+
+            }
+        } else {
+            list($time_start, $time_end) = StringService::startEndDate($time_type);
+            $time_start = (int)strtotime($time_start);
+            $time_end = (int)strtotime($time_end);
+        }
+        if ($time_start) {
             $query->andWhere(['>=', 'g.paytime', $time_start]);
-        } elseif ($time_end) {
-            $query->andWhere(['<=', 'g.paytime', $time_end]);
+        }
+        if ($time_end) {
+            if ($time_type == 'today') {
+                $end_time = ($time_end + 24 * 60 * 60);
+            } else {
+                $end_time =$time_end;
+            }
+            $query->andWhere(['<=', 'g.paytime', $end_time]);
         }
 
         if ($search) {
