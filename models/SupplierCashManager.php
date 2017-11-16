@@ -35,7 +35,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public static function getCashList($user,$where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-
+        var_dump($where);die;
         $query = (new Query())
             ->from(self::SUP_CASHREGISTER)
             ->where($where)
