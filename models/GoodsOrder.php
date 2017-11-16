@@ -1279,6 +1279,7 @@ class GoodsOrder extends ActiveRecord
                 case 1:
                     $data[$k]['user_name']='线下店购买用户';
                     break;
+                    
                 case 2:
                     $data[$k]['user_name']=User::find()
                         ->select('nickname')
