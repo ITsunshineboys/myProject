@@ -393,7 +393,7 @@ class SupplierCashController extends Controller
                 $time_end && $where .= " and g.handle_time <= {$time_end}";
             }
 
-            if (!isset($status)){
+            if ($status!=0){
                 $where.= " and g.status =$status ";
             }
         } else {
