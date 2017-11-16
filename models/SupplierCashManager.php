@@ -280,7 +280,6 @@ class SupplierCashManager extends ActiveRecord
             unset($v['goods_number']);
             unset($v['goods_price']);
         }
-        $count =count($arr);
         return ModelService::pageDeal($arr, $count, $page, $size);
     }
     public static function pagination(){
@@ -332,47 +331,6 @@ class SupplierCashManager extends ActiveRecord
         }
 
         return ModelService::pageDeal($arr, $count, $page, $size);
-//        if ($status) {
-//            $query->andWhere(['g.status' => $status]);
-//        }
-//
-//        if($time_type=='custom'){
-//            if (($time_start && !StringService::checkDate($time_start)) || ($time_end && !StringService::checkDate($time_end) )
-//                    ) {
-//                $code = 1000;
-//                return $code;
-//            }
-//            if($time_start==$time_end){
-//                list($time_start,$time_end)=ModelService::timeDeal($time_start);
-//
-//            }
-//        } else {
-//            list($time_start, $time_end) = StringService::startEndDate($time_type);
-//
-//        }
-//        if ($time_start) {
-//                $time_start=(int)strtotime($time_start);
-//                $query->andWhere(['>=', 'g.handle_time', $time_start]);
-//            }
-//            if ($time_end) {
-//                if ($time_type == 'today') {
-//                    $end_time = ((int)strtotime($time_end) + 24 * 60 * 60);
-//                } else {
-//                    $end_time = (int)strtotime($time_end);
-//                }
-//                $query->andWhere(['<=', 'g.handle_time', $end_time]);
-//            }
-//            if(isset($search)){
-//                $query->andFilterWhere(['like', 's.shop_no', $search])->orFilterWhere(['like', 's.shop_name', $search]);
-//            }
-
-//        $count = $query->count();
-//        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
-//
-//        $arr = $query->offset($pagination->offset)
-//            ->limit($pagination->limit)
-//            ->all();
-
     }
 
 
