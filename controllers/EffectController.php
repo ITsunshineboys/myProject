@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\services\ExceptionHandleService;
+use app\services\ModelService;
 use app\services\StringService;
 use app\services\AuthService;
 use yii\db\Query;
@@ -306,6 +307,12 @@ class EffectController extends Controller
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],
                     ]);
+                }
+                if($startTime==$endTime){
+
+                    list($time_start,$time_end)=ModelService::timeDeal($startTime);
+                    $startTime = (int)strtotime($time_start);
+                    $endTime = (int)strtotime($time_end);
                 }
             } else {
 
