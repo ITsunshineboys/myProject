@@ -320,11 +320,11 @@ class SupplierCashManager extends ActiveRecord
     public static function  getCashListAll($page, $page_size, $time_type, $time_start, $time_end, $status, $search)
     {
             $query = (new Query())
-            ->from(self::SUP_CASHREGISTER . ' as g')
+                ->from(self::SUP_CASHREGISTER . ' as g')
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
-            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
+                ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where(['g.role_id' => self::ROLE_ID])
-            ->orderBy('g.apply_time Desc');
+                ->orderBy('g.apply_time Desc');
             if($time_type=='today'){
                 $query->orderBy('g.handle_time Desc');
             }
@@ -332,28 +332,56 @@ class SupplierCashManager extends ActiveRecord
         if ($status) {
             $query->andWhere(['g.status' => $status]);
         }
-            list($time_start, $time_end) = StringService::startEndDate($time_type);
-            $time_start = explode(' ', $time_start)[0];
-            $time_end = explode(' ', $time_end)[0];
-
-            if ($time_start) {
-                $query->andWhere(['>=', 'g.apply_time', $time_start]);
-            }
-            if ($time_end) {
-                    if ($time_end=='today')
-                    {
-                        $time_end = (int)(strtotime($time_end)+24*60*60);
-
-                    }else{
-                        $time_end = (int)strtotime($time_end);
+        if(!isset($search)) {
+                if($time_type=='custom'){
+                    if (($time_start && !StringService::checkDate($time_start))
+                        || ($time_end && !StringService::checkDate($time_end) || $time_start > $time_end)
+                    ) {
+                        $code = 1000;
+                        return $code;
+                    } else {
+                        list($startTime, $endTime) = StringService::startEndDate($time_type);
+                        $time_start = explode(' ', $startTime)[0];
+                        $time_end = explode(' ', $endTime)[0];
                     }
-                    $query->andWhere(['<=','g.apply_time',$time_end]);
-                }
+                    if ($time_start) {
+                        $time_start = strtotime($time_start);
+                        $query->andWhere(['>=', 'g.apply_time', $time_start]);
 
-        if (isset($search) && trim($search) == $search) {
+                    }
+                    if ($time_end) {
+                        if ($time_type == 'today') {
+                            $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
+
+                        } else {
+                            $time_end = (int)strtotime($time_end);
+                        }
+                        $query->andWhere(['<=', 'g.apply_time', $time_end]);
+                    }
+                }
+        }else{
             $query->andFilterWhere(['like', 's.shop_no', $search])
                 ->orFilterWhere(['like', 's.shop_name', $search]);
         }
+
+
+//            if ($time_start) {
+//
+//            }
+//            if ($time_end) {
+//                    if ($time_end=='today')
+//                    {
+//                        $time_end = (int)(strtotime($time_end)+24*60*60);
+//
+//                    }else{
+//                        $time_end = (int)strtotime($time_end);
+//                    }
+//                    $query->andWhere(['<=','g.apply_time',$time_end]);
+//                }
+//
+//        if (isset($search) && trim($search) == $search) {
+//
+//        }
 
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $page_size, 'pageSizeParam' => false]);
