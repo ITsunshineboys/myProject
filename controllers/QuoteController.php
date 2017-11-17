@@ -174,6 +174,8 @@ class QuoteController extends Controller
         $labor_cost = LaborCost::workerKind($select,$province,$city,$worker_kind);
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'labor_cost'=> $labor_cost,
             'worker_craft_norm'=>$worker_craft_norm
         ]);
@@ -222,6 +224,8 @@ class QuoteController extends Controller
      */
     public function actionProjectNormList(){
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'list'=>EngineeringStandardCraft::findByList(),
         ]);
     }
@@ -234,6 +238,8 @@ class QuoteController extends Controller
         $city = trim(\Yii::$app->request->get('city',''));
         $project = trim(\Yii::$app->request->get('project',''));
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'list'=>EngineeringStandardCraft::findByAll($project,$city),
         ]);
     }
@@ -276,6 +282,8 @@ class QuoteController extends Controller
         $goods['find_specification']   = EngineeringStandardCarpentryCraft::findByAll();
 
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'specification'=>$goods,
             'series'=>$series,
             'style'=>$style,
@@ -338,6 +346,8 @@ class QuoteController extends Controller
     public function actionCoefficientList()
     {
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'coefficient'=>CoefficientManagement::findByAll(),
            'list'=> GoodsCategory::findByHeadTitle(),
         ]);
@@ -664,6 +674,8 @@ class QuoteController extends Controller
         $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'effect'=>$public_message,
         ]);
     }
@@ -1424,6 +1436,8 @@ class QuoteController extends Controller
         }
         $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['0']['id']);
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'goods'=> $goods['0'],
             'goods_attr'=> $goods_attr,
         ]);
@@ -1437,6 +1451,8 @@ class QuoteController extends Controller
     {
         $select = 'min_area,max_area';
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'list'=> ApartmentArea::findByAll($select),
         ]);
     }
@@ -1449,6 +1465,8 @@ class QuoteController extends Controller
     {
         $id = trim(\Yii::$app->request->post('id',''));
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'list'=>DecorationMessage::findAll(['decoration_add_id'=>$id]),
         ]);
     }
@@ -1548,6 +1566,8 @@ class QuoteController extends Controller
         $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['id']);
 
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'decoration_add'=>$sku,
            'decoration_message'=>$decoration_message,
            'goods'=>$goods,
@@ -1638,6 +1658,8 @@ class QuoteController extends Controller
         $select = 'id,title';
         $where  = 'level = 1';
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'post'=> Points::findByPid($select,$where),
         ]);
     }
@@ -1663,6 +1685,8 @@ class QuoteController extends Controller
             $title['two_title'] = Points::findByPid($two_select,$two_where);
         }
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'list' => $title,
             'count' => $count
         ]);
@@ -1776,6 +1800,8 @@ class QuoteController extends Controller
         $where = 'points_id='.$id;
         $area_select = 'id,min_area,max_area,project_name,project_value';
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
             'list' => ProjectView::findByAll($select,$where),
             'area' => Apartment::findByAll($area_select,$where),
             'apartment_area' => ApartmentArea::findCondition([],$where),
@@ -1848,6 +1874,8 @@ class QuoteController extends Controller
         $select = 'title,pid,path,category_id as id,quantity';
         $where = 'state = 1';
         return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
            'list'=> AssortGoods::findByAll($select,$where),
         ]);
     }
