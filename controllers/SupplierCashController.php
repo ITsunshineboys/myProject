@@ -390,12 +390,7 @@ class SupplierCashController extends Controller
                 $startTime && $where .= " and {$time_s} >= {$startTime}";
             }
             if ($time_end) {
-                if ($timeType == 'today') {
-                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
-
-                } else {
-                    $time_end = (int)strtotime($time_end);
-                }
+                $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
                 $time_end && $where .= " and {$time_s} <= {$time_end}";
             }
 
