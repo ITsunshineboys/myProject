@@ -493,10 +493,18 @@ class GoodsOrder extends ActiveRecord
         $sms['recipient']=$address->consignee;
         $sms['phone_number']=$address->mobile;
         new SmValidationService($sms);
+//        $supplier=Supplier::findOne($supplier_id);
+//        $supplier_user=User::findOne($supplier->uid);
+//        $title='新订单';
+//        $role_id=6;
+//        $content="订单号{$order_no},{$goods['title']}";
+//        $sku=$goods['sku'];
+//        $code=UserNewsRecord::AddOrderNewRecord($supplier_user, $title, $role_id, $content, $order_no, $sku, 1);
+//        if (!$code==200)
+//        {
+//            return false;
+//        }
         return true;
-
-
-
     }
 
     /**
