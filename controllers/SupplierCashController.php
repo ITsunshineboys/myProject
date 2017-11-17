@@ -379,13 +379,11 @@ class SupplierCashController extends Controller
                 }
                 if ($time_start == $time_end) {
                     list($time_start, $time_end) = ModelService::timeDeal($time_start);
-                }else{
-                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
                 }
             } else {
                 list($time_start, $time_end) = StringService::startEndDate($timeType);
             }
-
+            var_dump($time_start,$time_end);die;
             if ($time_start) {
                 $startTime = (int)strtotime($time_start);
                 $startTime && $where .= " and {$time_s} >= {$startTime}";
