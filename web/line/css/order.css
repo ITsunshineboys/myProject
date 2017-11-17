@@ -30,7 +30,7 @@ header span{
 }
 .address_map img:nth-child(1){
     position: absolute;
-    top: 2rem;
+    top: 1.9rem;
 }
 .img_harvest{
     position: absolute;
@@ -48,7 +48,7 @@ header span{
     font-size: 1.4rem;
     color: #333;
     vertical-align: top;
-    margin-left: 1.2rem;
+    margin-left: 2rem;
 }
 .address_content{
     display: inline-block;
@@ -144,7 +144,7 @@ header span{
     line-height: 2rem;
 }
 .more_details ul{
-    padding: 0 1.2rem;
+    padding-left: 1.2rem;
 }
 .more_details ul li{
     font-size: 1.4rem;
@@ -192,7 +192,7 @@ header span{
     text-align: right;
 }
 .commodity_pic ul{
-    padding: 0 1.2rem;
+    padding-left: 1.2rem;
 }
 .commodity_pic ul li{
     padding: 1.2rem 0;
@@ -216,7 +216,7 @@ header span{
 }
 .commodity_pic ul li span:nth-child(2){
     position: absolute;
-    right: 0;
+    right:1.2rem;
     font-size: 1.2rem;
     top: 1.3rem;
 }
@@ -410,7 +410,7 @@ header span{
 #num_modal button{
     color: #333;
     background-color: white;
-    /*width: 20.5rem;*/
+    width: 100%;
     height: 2.8rem;
     line-height: 2.8rem;
     border: 0;
@@ -420,10 +420,10 @@ header span{
 }
 #address_order_modal p{
     font-size: 1.4rem;
-    color: #4A4A4A;
+    color: #333;
 }
 #address_order_modal button{
-    color: #53A8F4;
+    color: #333;
     background-color: white;
     /*width: 20.5rem;*/
     height: 2.8rem;
@@ -437,7 +437,10 @@ header span{
     background-color:#dcdcdc;
     /*width: 21rem;*/
     height: 2px;
-    margin-top: 1.2rem;
+    margin: 1.2rem 0;
+}
+.area_btn{
+    color: #333;
 }
 
 /*三级联动模态框*/
@@ -462,13 +465,27 @@ header span{
     background-color: #f6f6f6;
     padding: 1.2rem 0;
     color: #666;
+    line-height: 3rem;
 }
-.agreement input{
+.agreement_box{
+    margin: 0 auto;
+    width: 16.2rem;
+}
+.agreement .input_box{
+    width: 3rem;
+    height: 3rem;
+    display: inline-block;
+    margin-top: 0.1rem;
+}
+.agreement .input_box input{
     width: 1.2rem;
     height: 1.2rem;
     margin-right: 0.6rem;
     /*background-color: #0a67fb;*/
     /*background-color: #0a67fb;*/
+}
+.agreement_span{
+    color: #333;
 }
 .more_details li {
     position: relative;
@@ -484,7 +501,9 @@ header span{
     /*white-space: normal;*/
     /*text-overflow: ellipsis;*/
     color: #666;
-
 }
-
+.input_agrenmt{
+    width: 1rem;
+    height: 1rem;
+}
 

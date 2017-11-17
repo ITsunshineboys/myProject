@@ -83,6 +83,9 @@ section{
 .memo_pad li img{
     vertical-align: initial;
 }
+.filter_img{
+    margin-top: 0.2rem;
+}
 .up_down{
 
 }
@@ -111,42 +114,49 @@ section{
 }
 .item_commodity div{
     display: inline-block;
-    width: 10rem;
-    height: 10rem;
 }
 .item_commodity_divimg {
-
+    width: 8rem;
+    height: 8rem;
+    overflow: hidden;
+    border-radius: .3rem;
 }
 .item_commodity_divimg img {
     width: 100%;
     height: 100%;
 }
 .item_commodity_comment{
-    /*margin-left: 1rem;*/
-    width: 15rem!important;
-    position: absolute;
-    left: 12rem;
-    top: 1rem;
-
+    margin-left: 1rem;
+    vertical-align: bottom;
+    width: 20.2rem;
 }
 
 .item_commodity_comment .comment_one{
     font-size: 1.4rem;
     color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item_commodity_comment .comment_two{
     font-size: 1.2rem;
     color: #999;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .item_commodity_comment .comment_span,.item_commodity_comment .comment_span_two {
     font-size: 1rem;
     color: #999;
+    margin-right: 0.6rem;
 }
 .item_commodity_comment .comment_span_three{
     font-size: 1.2rem;
     color: #D9AD65;
+    margin-top: 0.2rem;
+    margin-bottom: 0;
 }
 
 .item_commodity p,span{
@@ -166,6 +176,7 @@ section{
     position: relative;
     /*height: 51rem;*/
     height: 100%;
+    padding-top: 1.2rem;
 
 }
 .font_color{
@@ -178,23 +189,20 @@ section{
 .style_size{
     font-size: 1.4rem;
     color: #666;
-    margin-left: 1rem;
+    margin-left: 1.2rem;
 }
 .down_list{
     width: 1.2rem;
 }
 .header_font{
-    /*overflow: hidden;*/
-    margin-bottom: 1rem;
-    margin-top: 1.6rem;
     color: #666;
     font-size: 1.4rem;
-    padding-left: 1.2rem;
+    padding: 1.2rem 0;
 
 }
 
 .down_arrow{
-    margin-left: 18rem;
+    right: 1.2rem;
     position: absolute;
 
 }
@@ -221,16 +229,17 @@ section{
     height: 2.4rem;
     border: 2px solid #999;
     color: #999;
-    border-radius:.3rem;
+    border-radius: .3rem;
     display: inline-block;
     text-align: center;
     line-height: 2.3rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-right: .7rem;
     margin-bottom: .7rem;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    padding: 0 0.1rem;
 }
 .price_range{
 
@@ -267,6 +276,7 @@ section{
     height: 3.6rem;
     color: #666;
     float:left;
+    border-radius: 0;
 }
 .modal-footer .btn+.btn{
     margin-left: 0;
@@ -299,10 +309,9 @@ section{
     position: relative;
 }
 .brand_content{
-    margin-left: -3rem;
     font-size: 1.4rem;
     color: #666;
-    margin-top: 1.2rem;
+    margin: 1.2rem 0;
 }
 .footer_size{
 
@@ -311,9 +320,12 @@ section{
 
 }
 .footer_size button{
-    width:49.7%;
-    height: 3.8rem;
-    font-size: 1.2rem
+    width: 50%;
+    font-size: 1.2rem;
+    height: 3.6rem;
+    color: #666;
+    float: left;
+    border-radius: 0;
 }
 .btn_brand{
     background-color: white;
@@ -322,7 +334,7 @@ section{
 }
 .btn_brandRight{
     background-color: #333;
-    color: white;
+    color: white !important;
 }
 .modal-footer {
     border-top: none;
@@ -370,6 +382,7 @@ section{
 .div_search{
     width: 32rem;
     position: relative;
+    margin-bottom: 1.8rem;
 }
 .brand_search{
     width: 25.4rem;
