@@ -464,7 +464,7 @@ class QuoteController extends Controller
 
         $transaction = \Yii::$app->db->beginTransaction();
             foreach ($request['house_informations'] as $house) {
-                if ($house['is_ordinary'] != 1) {
+                if ($house['is_ordinary'] == 0) {
                     try{
                         //普通户型添加
                         $bedroom                = $house['cur_room'];
@@ -479,7 +479,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id'];
+                        $district_code          = $request['cur_county_id']['id'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -488,6 +488,7 @@ class QuoteController extends Controller
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
                         $effect_                = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+
                         if (!$effect_) {
                             $transaction->rollBack();
                             return 500;
@@ -506,6 +507,7 @@ class QuoteController extends Controller
                         $balcony_area      = $house['balcony_area'];
                         $effect_id         = \Yii::$app->db->getLastInsertID();
                         $decoration = (new DecorationParticulars())->plotAdd($effect_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
+
                         if (!$decoration) {
                             $transaction->rollBack();
                             return 500;
@@ -535,7 +537,7 @@ class QuoteController extends Controller
                 }
 
                 // 案列添加
-                if ($house['is_ordinary'] = 1) {
+                if ($house['is_ordinary'] == 1) {
                     try {
                         $bedroom                = $house['cur_room'];
                         $sittingRoom_diningRoom = $house['cur_hall'];
@@ -1087,7 +1089,9 @@ class QuoteController extends Controller
             ->asArray()
             ->all();
         return Json::encode([
-           'list'=> $goods_list,
+            'code'=>200,
+            'msg'=>'ok',
+            'list'=> $goods_list,
             'classify'=>$goods_classify
         ]);
     }
