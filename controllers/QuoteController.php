@@ -1601,27 +1601,27 @@ class QuoteController extends Controller
 //                    break;
                 case isset($one_post['series']) != null:
                     $dm = \Yii::$app->db->createCommand()
-                        ->insert(DecorationMessage::tableName(), [
+                        ->update(DecorationMessage::tableName(), [
                             'series_id' => $one_post['series'],
                             'quantity' => $one_post['quantity'],
                             'decoration_add_id' => $post['id'],
-                        ])->execute();
+                        ],['id'=>$one_post['id']])->execute();
                     break;
                 case isset($one_post['style']) != null:
                     $dm = \Yii::$app->db->createCommand()
-                        ->insert(DecorationMessage::tableName(), [
+                        ->update(DecorationMessage::tableName(), [
                             'style_id' => $one_post['style'],
                             'quantity' => $one_post['quantity'],
-                            'decoration_add_id' => $post['id'],
-                        ])->execute();
+                        ],['id'=>$one_post['id']])->execute();
                     break;
                 case isset($one_post['min_area']) != null:
+                    echo 111;exit;
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
                             'min_area' => $one_post['min_area'],
                             'max_area' => $one_post['max_area'],
                             'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post])->execute();
+                        ],['id'=>$one_post['id']])->execute();
                     break;
             }
         }
