@@ -306,6 +306,8 @@ class SupplierCashController extends Controller
                 }
                 if ($time_start == $time_end) {
                     list($time_start, $time_end) = ModelService::timeDeal($time_start);
+                }else{
+                    $time_start && $time_end .= ' 23:59:59';
                 }
             } else {
                 list($time_start, $time_end) = StringService::startEndDate($timeType);
@@ -316,12 +318,7 @@ class SupplierCashController extends Controller
                 $startTime && $where .= " and g.paytime >= {$startTime}";
             }
             if ($time_end) {
-                if ($timeType == 'today') {
-                    $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
-
-                } else {
-                    $time_end = (int)strtotime($time_end);
-                }
+                $time_end = (int)strtotime($time_end);
                 $time_end && $where .= " and g.paytime <= {$time_end}";
             }
 
@@ -379,6 +376,8 @@ class SupplierCashController extends Controller
                 }
                 if ($time_start == $time_end) {
                     list($time_start, $time_end) = ModelService::timeDeal($time_start);
+                }else{
+                    $time_start && $time_end .= ' 23:59:59';
                 }
 
             } else {
@@ -390,7 +389,7 @@ class SupplierCashController extends Controller
                 $startTime && $where .= " and {$time_s} >= {$startTime}";
             }
             if ($time_end) {
-                $time_end = (int)(strtotime($time_end) + 24 * 60 * 60);
+                $time_end = (int)(strtotime($time_end));
                 $time_end && $where .= " and {$time_s} <= {$time_end}";
             }
 

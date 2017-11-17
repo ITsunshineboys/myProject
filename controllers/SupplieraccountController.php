@@ -351,6 +351,8 @@ class SupplieraccountController extends  Controller{
                     }
                     if($startTime==$endTime){
                         list($startTime, $endTime) =ModelService::timeDeal($startTime);
+                    }else{
+                        $startTime && $startTime .= ' 23:59:59';
                     }
                 } else {
                     list($startTime, $endTime) = StringService::startEndDate($timeType);
@@ -362,7 +364,7 @@ class SupplieraccountController extends  Controller{
                     $startTime && $where .= " and create_time >= {$startTime}";
                 }
                 if ($endTime) {
-                    $endTime = (int)(strtotime($endTime)+24*60*60);
+                    $endTime = (int)(strtotime($endTime));
                     $endTime && $where .= " and create_time <= {$endTime}";
                 }
                 $page = (int)Yii::$app->request->get('page', 1);
@@ -518,6 +520,8 @@ class SupplieraccountController extends  Controller{
             }
             if($startTime==$endTime){
                 list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $startTime && $startTime .= ' 23:59:59';
             }
         } else {
             list($startTime, $endTime) = StringService::startEndDate($timeType);
@@ -528,7 +532,7 @@ class SupplieraccountController extends  Controller{
             $startTime && $where .= " and apply_time >= {$startTime}";
         }
         if ($endTime) {
-                $endTime = (int)(strtotime($endTime)+24*60*60);
+                $endTime = (int)(strtotime($endTime));
             $endTime && $where .= " and apply_time <= {$endTime}";
         }
         $page = (int)Yii::$app->request->get('page', 1);
