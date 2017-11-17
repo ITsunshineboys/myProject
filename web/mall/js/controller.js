@@ -2704,8 +2704,7 @@ angular.module("all_controller", [])
                             'show_cost': good.platform_price * $scope.add_quantity,
                             'show_quantity': parseInt($scope.add_quantity),
                             'id': good.id,
-                            'name': $scope.good_detail.brand_name
-                            ,
+                            'name': $scope.good_detail.brand_name,
                             'platform_price': good.platform_price,
                             'subtitle': good.subtitle,
                             'title': good.title,
