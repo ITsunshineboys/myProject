@@ -1,8 +1,8 @@
 /**
  * Created by xl on 2017/8/10 0010.
  */
-var account_comment= angular.module("account_comment",[])
-    .controller("account_comment_ctrl",function ($scope,$http,$state,$stateParams) {
+var account_comment = angular.module("account_comment", [])
+    .controller("account_comment_ctrl", function ($scope, $http, $state, $stateParams) {
         console.log($stateParams);
         $scope.icon = $stateParams.icon;
         $scope.nickname = $stateParams.nickname;
@@ -42,32 +42,33 @@ var account_comment= angular.module("account_comment",[])
         //    //console.log($scope.second)
         //});
         $scope.goJump = function () {
-            if($scope.review_status_desc == '已认证') {
+            if ($scope.review_status_desc == '已认证') {
                 console.log(11);
                 let id = $stateParams.id
-                $state.go("idcard_right",{id:id})
-            //     $state.go("idcard_right",{'id':$scope.id,'icon':$scope.icon,
-            //         'nickname':$scope.nickname,'old_nickname':$scope.old_nickname,
-            //         'district_name':$scope.district_name,'birthday':$scope.birthday,
-            //         'signature':$scope.signature,'mobile':$scope.mobile,'aite_cube_no':$scope.aite_cube_no,
-            //         'create_time':$scope.create_time,'names':$scope.names,'review_status_desc':$scope.review_status_desc,
-            //         'legal_person':$scope.legal_person,'identity_no':$scope.identity_no
-            //         ,'identity_card_front_imagen':$scope.identity_card_front_image,'identity_card_back_image':
-            //         $scope.identity_card_back_image,'review_time':$scope.review_time,
-            //         'status_remark':$scope.status_remark,'status_operator':$scope.status_operator
-            //         ,'a':$scope.a})
-            // }
+                $state.go("idcard_right", {id: id})
+                //     $state.go("idcard_right",{'id':$scope.id,'icon':$scope.icon,
+                //         'nickname':$scope.nickname,'old_nickname':$scope.old_nickname,
+                //         'district_name':$scope.district_name,'birthday':$scope.birthday,
+                //         'signature':$scope.signature,'mobile':$scope.mobile,'aite_cube_no':$scope.aite_cube_no,
+                //         'create_time':$scope.create_time,'names':$scope.names,'review_status_desc':$scope.review_status_desc,
+                //         'legal_person':$scope.legal_person,'identity_no':$scope.identity_no
+                //         ,'identity_card_front_imagen':$scope.identity_card_front_image,'identity_card_back_image':
+                //         $scope.identity_card_back_image,'review_time':$scope.review_time,
+                //         'status_remark':$scope.status_remark,'status_operator':$scope.status_operator
+                //         ,'a':$scope.a})
+                // }
             }
-            if($scope.review_status_desc == '审核通过') {
+            if ($scope.review_status_desc == '审核通过') {
                 let id = $stateParams.id
-                $state.go("idcard_right",{id:id})
+                $state.go("idcard_right", {id: id})
             }
-            if($scope.review_status_desc == '未认证') {
+            if ($scope.review_status_desc == '未认证') {
                 console.log(222);
 
+            }
         };
         $scope.back_page = function () {
             console.log(11);
             $state.go("account_index")
         }
-    }});
+    });
