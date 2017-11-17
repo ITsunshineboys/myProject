@@ -2814,6 +2814,9 @@ class MallController extends Controller
                 ]);
             }
 
+            $values = array_map(function ($value) {
+                return str_replace('，', ',', $value);
+            }, $values);
             if (!GoodsAttr::validateValues($values, $additionTypes)) {
                 return Json::encode([
                     'code' => $code,
