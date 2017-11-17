@@ -1,4 +1,11 @@
-app.controller('searchCtrl',['$scope', '_ajax', function ($scope, _ajax) {
+app.controller('searchCtrl', ['$rootScope', '$scope', '_ajax', function ($rootScope, $scope, _ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '搜索'
+    }];
     // 筛选器
     $scope.orderFilter = {
         orderNum: true,     // 订单编号
@@ -46,7 +53,7 @@ app.controller('searchCtrl',['$scope', '_ajax', function ($scope, _ajax) {
         _ajax.get('/order/find-order-list', $scope.params, function (res) {
             $scope.pageConfig.totalItems = res.data.count;
             $scope.list = res.data.details;
-            console.log(res,'搜索页面');
+            console.log(res, '搜索页面');
         })
     }
 }]);
