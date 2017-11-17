@@ -962,6 +962,12 @@ angular.module("all_controller", ['ngCookies'])
             observer: true,
             pagination: ".swiper-pagination"
         });
+        let config = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function (data) {
+                return $.param(data)
+            }
+        };
         //获取商品列表
         console.log($stateParams);
         $scope.id  = $stateParams.id;
@@ -999,6 +1005,12 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.recommendList = response.data.data.recommend_second;
+            for( let [key, value] of $scope.recommendList.entries() ){
+                console.log(value.id)
+                $scope.recommend_id = value.id
+            }
+            console.log($scope.recommendList);
+
         });
         $http({   //店铺全部商品列表
             method: 'get',
@@ -1013,19 +1025,18 @@ angular.module("all_controller", ['ngCookies'])
         });
         // 点击推荐商品判断跳转商品详情
         $scope.getProductMore = function (item) {
+
+           //店铺首页推荐列表
             console.log(item);
             $scope.mall_id = item.url.split('=')[1];
             console.log($scope.mall_id);
-            $http({   //店铺首页推荐列表
-                method: 'POST',
-                url: baseUrl+"/recommend-click-record-supplier",
-                data:{
-                    recommend_id:+$scope.mall_id
-                }
-            }).then(function successCallback (response) {
-                console.log(response);
-                $state.go("product_details",{mall_id:$scope.mall_id,datailsShop:$scope.datailsShop});
-            })
+            $http.post('http://test.cdlhzz.cn/mall/recommend-click-record',{
+                recommend_id:+$scope.recommend_id
+            },config).then(function (response){
+                console.log(response)
+            });
+            $state.go("product_details",{mall_id:$scope.mall_id,datailsShop:$scope.datailsShop});
+
         };
         // 点击全部商品跳转到商品详情页面
         $scope.allGetProdouct = function (item) {
