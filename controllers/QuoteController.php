@@ -406,7 +406,7 @@ class QuoteController extends Controller
                 }
                 break;
             case  $post && !$min_time && !$max_time && $toponymy:
-                $where = "toponymy like %".$toponymy."% and city_code = ".$post;
+                $where = "toponymy like %{$toponymy}%and city_code = ".$post;
                 $effect = Effect::pagination($where,$page,$size);
                 break;
         }
