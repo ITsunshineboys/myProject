@@ -1,6 +1,19 @@
 ;
 let brand_check= angular.module("brand_check_module",[]);
-brand_check.controller("brand_check_ctrl",function ($scope,$http,$stateParams,$state) {
+brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$stateParams,$state) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '品牌管理',
+        link: 'brand_index',
+        params:{check_flag:true}
+    }, {
+        name: '品牌详情'
+    }];
+
+
   //POST请求的响应头
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},

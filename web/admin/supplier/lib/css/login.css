@@ -1,21 +1,30 @@
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #BFC0C2; opacity:1; 
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #BFC0C2;opacity:1;
+}
+
+input:-ms-input-placeholder{
+    color: #BFC0C2;opacity:1;
+}
+
+input::-webkit-input-placeholder{
+    color: #BFC0C2;opacity:1;
+}
+
+
 html,body{
   width: 100%;
-  height: 100%;
+  height:100%;
 }
 
 .all_content{
-  position: absolute;
-  z-index: 999;
-  left: 0;
-  width: 100%;
-  height: 100%!important;
+
   background-color: white;
 }
 .content{
-  position: absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%,-50%);
   text-align: center;
 }
 .txt_left{
@@ -31,27 +40,32 @@ html,body{
   padding-left: 5px
 }
 .enter_input{
-  width: 245px;
-  height: 35px;
-  border-radius: 3px;
-  border: 1px solid #666F80;
-  padding-left: 5px;
+  width: 300px;
+  height: 52px;
+  border: 1px solid #e5e5e5;
+  padding-left: 12px;
   outline: 0;
+  border-radius: 6px;
+}
+
+.enter_input_one{
+  border-radius: 6px 6px 0 0;
+}
+.enter_input_two{
+  border-radius: 0 0 6px 6px;
+  margin-top: -1px;
 }
 .margin_top{
   margin-top: 40px;
 }
 .login_btn{
-  width: 245px;
-  height: 35px;
-  border: 1px solid #487AF8;
-  border-radius: 3px;
-  background-color: #F2F4FF;
-  color: #487AF8;
+  width: 300px;
+  height: 45px;
+  border-radius: 6px;
   text-align: center;
-  line-height: 35px;
   float: right;
-  margin-top: 30px;
+  margin-top: 20px;
+  transition: all 0.3s linear;
 }
 .logo_txt{
   font-size: 18px;
@@ -65,7 +79,7 @@ html,body{
   clear: both;
 }
 .forget_pw{
-  color: #487AF8;
+  color: #3F94F6;
   margin-top: 10px;
   float: right;
 }
@@ -96,4 +110,53 @@ html,body{
   margin-top:10px;
   color: #E51C23;
   text-align: left;
+}
+
+.content {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    /*background: rgba(247, 250, 252,0.65);*/
+    padding: 6.2rem;
+    border-radius: 1rem;
+    z-index: 100;
+}
+
+#particles{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f7fafc;
+}
+
+.list_input{
+  position: relative;
+  margin-bottom: 20px;
+}
+.list_input .txt{
+    position: absolute;
+    top: 15px;
+    left: 12px;
+    color: #666;
+    border-right: 1px solid rgba(0,0,0,0.05);
+    width: 58px;
+}
+
+.list_input .repeat_send{
+    position: absolute;
+    top: 15px;
+    right: -17px;
+    color: #666;
+    width: 58px;
+}
+.list_input input{
+      width: 100%;
+      padding-left: 85px;
+}
+.list_input .btn-info{
+  position: absolute;
+    right: 10px;
+    top: 9px;
 }
