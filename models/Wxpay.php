@@ -63,9 +63,10 @@ class Wxpay  extends ActiveRecord
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
-        $orderCommodity="http://".$_SERVER['SERVER_NAME']."/line/#!/order_commodity";
+        $failurl="http://".$_SERVER['SERVER_NAME']."/line/#!/order_commodity";
+        $successurl="http://".$_SERVER['SERVER_NAME']."/line/#!/pay_success";
         echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='http://test.cdlhzz.cn/line/#!/order_commodity';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='http://test.cdlhzz.cn/line/#!/pay_success';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$orderCommodity."';};});}
+ function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$failurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
 </script>";
         exit;
     }
