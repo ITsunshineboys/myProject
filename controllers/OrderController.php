@@ -185,7 +185,8 @@ class OrderController extends Controller
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
-                }else{
+                }else
+                {
                     return Json::encode([
                         'code' => 200,
                         'msg' => 'ok',
@@ -195,7 +196,8 @@ class OrderController extends Controller
                     ]);
                 }
             }
-        }else {
+        }else
+        {
             $code=500;
             return Json::encode([
                 'code' => $code,
@@ -2187,11 +2189,11 @@ class OrderController extends Controller
 
 
 
-   /**
-     * 余额支付
-     * @return string
-     */
-  public  function  actionBalancePay(){
+      /**
+         * 余额支付
+         * @return string
+      */
+      public  function  actionBalancePay(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -2208,7 +2210,8 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false){
+        if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
+        {
             $code=1055;
             return Json::encode([
                 'code'=>$code,
@@ -3872,8 +3875,6 @@ class OrderController extends Controller
                 }
             }else{
                 list($startTime, $endTime) = StringService::startEndDate($timeType);
-                $startTime = explode(' ', $startTime)[0];
-                $endTime = explode(' ', $endTime)[0];
             }
             if ($startTime) {
                 $startTime = (int)strtotime($startTime);
@@ -4564,16 +4565,24 @@ class OrderController extends Controller
         $code=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
         if ($code==200)
         {
-            switch ($pay_way)
-            {
-                case 1:
-                    $data=Alipay::AppBuy($total_amount,$suppliers);
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-            }
+//            switch ($pay_way)
+//            {
+////                case 1:
+////                    $data=GoodsOrder::AppBuy($total_amount,$suppliers);
+////                    break;
+////                case 2:
+////                    $data=Wxpay::AppBuy($total_amount,$suppliers);
+////                    break;
+////                case 3:
+////                    $data=Alipay::AppBuy();
+////                    break;
+//            }
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  =>'ok',
+                'data' =>$data
+            ]);
         }else{
             return Json::encode([
                 'code' => $code,
@@ -4746,15 +4755,4 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
-
-
-
-
-
-
-
-
-
-
 }

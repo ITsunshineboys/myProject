@@ -284,4 +284,10 @@ class Wxpay  extends ActiveRecord
         $jsApiParameters = $tools->GetJsApiParametersApp($order);
         return  Json::decode($jsApiParameters);
     }
+
+    public  static  function  AppBuy($total_amount,$suppliers)
+    {
+        echo 1;
+
+    }
 }
