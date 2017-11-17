@@ -1604,7 +1604,6 @@ class QuoteController extends Controller
                         ->update(DecorationMessage::tableName(), [
                             'series_id' => $one_post['series'],
                             'quantity' => $one_post['quantity'],
-                            'decoration_add_id' => $post['id'],
                         ],['id'=>$one_post['id']])->execute();
                     break;
                 case isset($one_post['style']) != null:
