@@ -146,58 +146,58 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
-         * @return string 返回该AR类关联的数据表名
-         */
+     * @return string 返回该AR类关联的数据表名
+     */
     public static function tableName()
-        {
-            return 'goods_order';
-        }
+    {
+        return 'goods_order';
+    }
     /**
-         * Get total amount order
-         *
-         * @param int $startTime start time
-         * @param int $endTime end time
-         * @param int $supplierId supplier id default 0
-         * @return int
-         */
+     * Get total amount order
+     *
+     * @param int $startTime start time
+     * @param int $endTime end time
+     * @param int $supplierId supplier id default 0
+     * @return int
+     */
     public static function totalAmountOrder($startTime, $endTime, $supplierId = 0)
-        {
-            $query = self::find()
-                ->select('sum(amount_order) as total_amount_order')
-                ->where(['>=', 'create_time', $startTime])
-                ->andWhere(['<=', 'create_time', $endTime]);
-            $supplierId > 0 && $query->andWhere(['supplier_id' => $supplierId]);
-            return (int)$query->asArray()->all()[0]['total_amount_order'];
-        }
+    {
+        $query = self::find()
+            ->select('sum(amount_order) as total_amount_order')
+            ->where(['>=', 'create_time', $startTime])
+            ->andWhere(['<=', 'create_time', $endTime]);
+        $supplierId > 0 && $query->andWhere(['supplier_id' => $supplierId]);
+        return (int)$query->asArray()->all()[0]['total_amount_order'];
+    }
     /**
-         * Get total order number
-         *
-         * @param int $startTime start time
-         * @param int $endTime end time
-         * @param int $supplierId supplier id default 0
-         * @return int
-         */
+     * Get total order number
+     *
+     * @param int $startTime start time
+     * @param int $endTime end time
+     * @param int $supplierId supplier id default 0
+     * @return int
+     */
     public static function totalOrderNumber($startTime, $endTime, $supplierId = 0)
-        {
-            $query = self::find()
-                ->where(['>=', 'create_time', $startTime])
-                ->andWhere(['<=', 'create_time', $endTime]);
-            $supplierId > 0 && $query->andWhere(['supplier_id' => $supplierId]);
+    {
+        $query = self::find()
+            ->where(['>=', 'create_time', $startTime])
+            ->andWhere(['<=', 'create_time', $endTime]);
+        $supplierId > 0 && $query->andWhere(['supplier_id' => $supplierId]);
 
-            return (int)$query->count();
-        }
+        return (int)$query->count();
+    }
 
-        /**
-         * @param $order_no
-         * @return array|null|ActiveRecord
-         */
-        public  static  function  FindByOrderNo($order_no)
-        {
-            $data=self::find()
-                ->where(['order_no'=>$order_no])
-                ->one();
-            return $data;
-        }
+    /**
+     * @param $order_no
+     * @return array|null|ActiveRecord
+     */
+    public  static  function  FindByOrderNo($order_no)
+    {
+        $data=self::find()
+            ->where(['order_no'=>$order_no])
+            ->one();
+        return $data;
+    }
 
 
     /**
@@ -206,7 +206,7 @@ class GoodsOrder extends ActiveRecord
      * @param $post
      * @return bool
      */
-   public static function Alipaylinenotifydatabase($arr,$post)
+    public static function Alipaylinenotifydatabase($arr,$post)
     {
         $goods_id=$arr[0];
         $goods_num=$arr[1];
@@ -499,7 +499,7 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-   /**
+    /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -508,7 +508,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sort_money
      * @return array
      */
-   public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$type)
+    public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$type)
     {
 
         $sort='';
@@ -528,7 +528,7 @@ class GoodsOrder extends ActiveRecord
         {
             $sort='a.create_time asc';
         }
-         if (!$sort)
+        if (!$sort)
         {
             $sort=' a.create_time desc';
         }
@@ -611,7 +611,7 @@ class GoodsOrder extends ActiveRecord
         }
 
         if ($arr){
-           
+
             $count=(new Query())
                 ->from(self::tableName().' AS a')
                 ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
@@ -619,7 +619,7 @@ class GoodsOrder extends ActiveRecord
                 ->select($select)
                 ->where($where)->count();
             $total_page=ceil($count/$size);
-           //            $data=array_slice($arr, ($page-1)*$size,$size);
+            //            $data=array_slice($arr, ($page-1)*$size,$size);
             return [
                 'total_page' =>$total_page,
                 'count'=>$count,
@@ -637,7 +637,7 @@ class GoodsOrder extends ActiveRecord
 
 
 
-     /**
+    /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -698,51 +698,51 @@ class GoodsOrder extends ActiveRecord
 
 
 
-   /**
+    /**
      * @param $goods_id
      * @param $goods_num
      * @return array|bool
      */
     public static  function Getlinegoodsdata($goods_id,$goods_num){
-            $array  =(new Query())
-                ->from(Goods::tableName().' AS a')
-                ->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.market_price,a.cover_image,b.icon,c.name,a.sku')
-                ->leftJoin(Supplier::tableName().' AS b', 'b.id = a.supplier_id')
-                ->leftJoin(GoodsBrand::tableName().' AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])
-                ->where(['a.id'=>$goods_id])
-                ->one();
-                if(!$array)
-                {
-                    $code=1000;
-                    return $code;
-                }
-                $logistics_template=(new Query())
-                    ->from(LogisticsTemplate::tableName())
-                    ->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')
-                    ->where(['status'=>1,'id'=>$array['logistics_template_id']])
-                    ->one();
-                if ($logistics_template['delivery_method']==1){
-                    $array['freight']=0;
-                }else{
-                    if ($goods_num<=$logistics_template['delivery_number_default'])
-                    {
-                        $array['freight']=$logistics_template['delivery_cost_default']*0.01;
-                    }else{
-                        $array['freight']=$logistics_template['delivery_cost_default']*0.01+$logistics_template['delivery_cost_delta']*0.01*($goods_num-$logistics_template['delivery_number_default']);
-                    }
-                }
-                $array['goods_num']=$goods_num;
-                $array['return_insurance']=0.00;
-                $array['platform_price']=self::switchMoney($array['platform_price']*0.01);
-                $array['market_price']=self::switchMoney($array['market_price']*0.01);
-                $array['freight']=self::switchMoney($array['freight']);
-                $array['allCost']=self::switchMoney($array['platform_price']*$goods_num+$array['freight']);
-                return $array;
+        $array  =(new Query())
+            ->from(Goods::tableName().' AS a')
+            ->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.market_price,a.cover_image,b.icon,c.name,a.sku')
+            ->leftJoin(Supplier::tableName().' AS b', 'b.id = a.supplier_id')
+            ->leftJoin(GoodsBrand::tableName().' AS c','c.id = a.brand_id')->where(['a.id' =>$goods_id])
+            ->where(['a.id'=>$goods_id])
+            ->one();
+        if(!$array)
+        {
+            $code=1000;
+            return $code;
         }
+        $logistics_template=(new Query())
+            ->from(LogisticsTemplate::tableName())
+            ->select('supplier_id,delivery_method,delivery_cost_default,delivery_number_default,delivery_cost_delta,delivery_number_delta,status')
+            ->where(['status'=>1,'id'=>$array['logistics_template_id']])
+            ->one();
+        if ($logistics_template['delivery_method']==1){
+            $array['freight']=0;
+        }else{
+            if ($goods_num<=$logistics_template['delivery_number_default'])
+            {
+                $array['freight']=$logistics_template['delivery_cost_default']*0.01;
+            }else{
+                $array['freight']=$logistics_template['delivery_cost_default']*0.01+$logistics_template['delivery_cost_delta']*0.01*($goods_num-$logistics_template['delivery_number_default']);
+            }
+        }
+        $array['goods_num']=$goods_num;
+        $array['return_insurance']=0.00;
+        $array['platform_price']=self::switchMoney($array['platform_price']*0.01);
+        $array['market_price']=self::switchMoney($array['market_price']*0.01);
+        $array['freight']=self::switchMoney($array['freight']);
+        $array['allCost']=self::switchMoney($array['platform_price']*$goods_num+$array['freight']);
+        return $array;
+    }
 
 
 
-     /**
+    /**
      * @param $order_no
      * @param $sku
      * @return array|null
@@ -865,10 +865,10 @@ class GoodsOrder extends ActiveRecord
                     $output['role']='平台';
                 }else{
                     $output['username']=(new Query())
-                    ->from('user_address')
-                    ->select('consignee')
-                    ->where(['id'=>$arr[$k]['address_id']])
-                    ->one()['consignee'];
+                        ->from('user_address')
+                        ->select('consignee')
+                        ->where(['id'=>$arr[$k]['address_id']])
+                        ->one()['consignee'];
                 }
             }else{
                 $output['role']=(new Query())
@@ -894,10 +894,10 @@ class GoodsOrder extends ActiveRecord
             }else{
                 $output['pay_term']=$pay_term-$time;
             }
-         }
-         if ($output['status']=='已取消'){
-             $output['pay_term']=0;
-         }
+        }
+        if ($output['status']=='已取消'){
+            $output['pay_term']=0;
+        }
         return $output;
     }
 
@@ -920,92 +920,92 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-   /**
-    * 去发货
-    * [Supplierdelivery description]
-    * @param [type] $sku           [description]
-    * @param [type] $order_no      [description]
-    * @param [type] $waybillnumber [description]
-    * @param [type] $shipping_type [description]
-    */
-  public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
+    /**
+     * 去发货
+     * [Supplierdelivery description]
+     * @param [type] $sku           [description]
+     * @param [type] $order_no      [description]
+     * @param [type] $waybillnumber [description]
+     * @param [type] $shipping_type [description]
+     */
+    public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
         $create_time=time();
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
         $trans = \Yii::$app->db->beginTransaction();
         try {
             if($shipping_type==1){
-                    $OrderGoods->shipping_type=1;
-                    $OrderGoods->shipping_status=1;
-                    $res1=$OrderGoods->save(false);
-                    if(!$res1)
-                    {
-                        $trans->rollBack();
-                    }
-                    $express=Express::find()
-                        ->where(['sku'=>$sku,'order_no'=>$order_no])
-                        ->one();
-                    if ($express){
-                        $express->waybillname='送货上门';
-                        $express->create_time=$create_time;
-                       $res2 = $express->save(false);
-                    }else{
-                        $express1=new Express();
-                        $express1->sku=$sku;
-                        $express1->order_no=$order_no;
-                        $express1->waybillname='送货上门';
-                        $express1->create_time=$create_time;
-                        $res2=$express1->save(false);
-                    }
-                    if (!$res2)
-                    {
-                        $trans->rollBack();
-                    }
-            }else
+                $OrderGoods->shipping_type=1;
+                $OrderGoods->shipping_status=1;
+                $res1=$OrderGoods->save(false);
+                if(!$res1)
                 {
+                    $trans->rollBack();
+                }
+                $express=Express::find()
+                    ->where(['sku'=>$sku,'order_no'=>$order_no])
+                    ->one();
+                if ($express){
+                    $express->waybillname='送货上门';
+                    $express->create_time=$create_time;
+                    $res2 = $express->save(false);
+                }else{
+                    $express1=new Express();
+                    $express1->sku=$sku;
+                    $express1->order_no=$order_no;
+                    $express1->waybillname='送货上门';
+                    $express1->create_time=$create_time;
+                    $res2=$express1->save(false);
+                }
+                if (!$res2)
+                {
+                    $trans->rollBack();
+                }
+            }else
+            {
 
-                    $waybillname=(new Express())->GetExpressName($waybillnumber);
-                    if (!$waybillname)
-                    {
-                        $waybillname='未知';
-                    }
-                    $express=Express::find()
-                        ->where(['sku'=>$sku,'order_no'=>$order_no])
-                        ->one();
-                    $OrderGoods->shipping_type=0;
-                    $OrderGoods->shipping_status=1;
-                    $res1=$OrderGoods->save(false);
-                    if (!$res1)
+                $waybillname=(new Express())->GetExpressName($waybillnumber);
+                if (!$waybillname)
+                {
+                    $waybillname='未知';
+                }
+                $express=Express::find()
+                    ->where(['sku'=>$sku,'order_no'=>$order_no])
+                    ->one();
+                $OrderGoods->shipping_type=0;
+                $OrderGoods->shipping_status=1;
+                $res1=$OrderGoods->save(false);
+                if (!$res1)
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                if ($express){
+                    $express->waybillname=$waybillname;
+                    $express->waybillnumber=$waybillnumber;
+                    $express->create_time=$create_time;
+                    $res2= $express->save(false);
+                    if (!$res2)
                     {
                         $code=500;
                         $trans->rollBack();
                         return $code;
                     }
-                    if ($express){
-                        $express->waybillname=$waybillname;
-                        $express->waybillnumber=$waybillnumber;
-                        $express->create_time=$create_time;
-                           $res2= $express->save(false);
-                           if (!$res2)
-                           {
-                               $code=500;
-                               $trans->rollBack();
-                               return $code;
-                           }
-                    }else{
-                        $express1=new Express();
-                        $express1->sku=$sku;
-                        $express1->order_no=$order_no;
-                        $express1->waybillname=$waybillname;
-                        $express1->waybillnumber=$waybillnumber;
-                        $express1->create_time=$create_time;
-                        $res2=$express1->save(false);
-                        if (!$res2)
-                        {
-                            $code=500;
-                            $trans->rollBack();
-                            return $code;
-                        }
+                }else{
+                    $express1=new Express();
+                    $express1->sku=$sku;
+                    $express1->order_no=$order_no;
+                    $express1->waybillname=$waybillname;
+                    $express1->waybillnumber=$waybillnumber;
+                    $express1->create_time=$create_time;
+                    $res2=$express1->save(false);
+                    if (!$res2)
+                    {
+                        $code=500;
+                        $trans->rollBack();
+                        return $code;
                     }
+                }
             }
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             if($GoodsOrder->order_refer==1)
@@ -1083,10 +1083,10 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
         $trans->commit();
-         $code=200;
-         return $code;
+        $code=200;
+        return $code;
     }
-   /**
+    /**
      * 获取商品信息
      * @param $goods_name
      * @param $goods_id
@@ -1096,22 +1096,22 @@ class GoodsOrder extends ActiveRecord
      * @return array
      */
     public  static function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
-            $goods=array();
-            $goods['goods_name']=$goods_name;
-            $goods['goods_id']=$goods_id;
-            $attr_id=explode(',',$goods_attr_id);
-            $goods['attr']=array();
-            foreach($attr_id AS $key =>$val){
-                $goods['attr'][$key]=GoodsAttr::find()
-                    ->select('name,value,unit')
-                    ->where(['goods_id'=>$goods['goods_id']])
-                    ->asArray()
-                    ->all();
-            }
-            return $goods;
+        $goods=array();
+        $goods['goods_name']=$goods_name;
+        $goods['goods_id']=$goods_id;
+        $attr_id=explode(',',$goods_attr_id);
+        $goods['attr']=array();
+        foreach($attr_id AS $key =>$val){
+            $goods['attr'][$key]=GoodsAttr::find()
+                ->select('name,value,unit')
+                ->where(['goods_id'=>$goods['goods_id']])
+                ->asArray()
+                ->all();
+        }
+        return $goods;
     }
 
-  /**
+    /**
      * 平台介入
      * @param $order_no
      * @param $handle_type
@@ -1153,7 +1153,7 @@ class GoodsOrder extends ActiveRecord
         return $code;
     }
 
-   /**
+    /**
      * 获取平台介入信息
      * @param $order_no
      * @param $sku
@@ -1190,13 +1190,13 @@ class GoodsOrder extends ActiveRecord
     {
         $goods=Goods::find()->select('platform_price,market_price,supplier_price')->where(['id'=>$goods_id])->asArray()->one();
         $money=$goods['platform_price']*$goods_num+$return_insurance*100+($freight*100);
-       $total=$total_amount;
+        $total=$total_amount;
         if ($money*0.01 != $total)
-       {
-          return false;
-       }else{
-          return true;
-       }
+        {
+            return false;
+        }else{
+            return true;
+        }
     }
 
     /**
@@ -1272,7 +1272,7 @@ class GoodsOrder extends ActiveRecord
         return $res;
 
     }
-   /**
+    /**
      * 获取后台订单状态
      * @param $data
      * @return mixed
@@ -1285,7 +1285,7 @@ class GoodsOrder extends ActiveRecord
                 case 1:
                     $data[$k]['user_name']='线下店购买用户';
                     break;
-                    
+
                 case 2:
                     $data[$k]['user_name']=User::find()
                         ->select('nickname')
@@ -1299,18 +1299,18 @@ class GoodsOrder extends ActiveRecord
             }else{
                 switch ($data[$k]['order_status']){
                     case 0:
-                                switch ($data[$k]['shipping_status']){
-                                    case 0:
-                                        $data[$k]['status']='待发货';
-                                        break;
-                                    case 1:
-                                        $data[$k]['status']='待收货';
-                                        break;
-                                    case 2:
-                                        $data[$k]['status']='已完成';
-                                        break;
-                                }
+                        switch ($data[$k]['shipping_status']){
+                            case 0:
+                                $data[$k]['status']='待发货';
                                 break;
+                            case 1:
+                                $data[$k]['status']='待收货';
+                                break;
+                            case 2:
+                                $data[$k]['status']='已完成';
+                                break;
+                        }
+                        break;
                     case 1:
                         switch($data[$k]['customer_service']){
                             case 0:
@@ -1333,30 +1333,30 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['complete_time']=0;
             $data[$k]['RemainingTime']=0;
             if ($data[$k]['status']=='待收货'){
-                    $express=Express::find()
-                        ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
-                        ->one();
-                    if ($express)
-                    {
-                        $data[$k]['send_time']=$express->create_time;
-                        $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-                        if ($data[$k]['RemainingTime']<=0){
-                            $data[$k]['complete_time']=$express->receive_time;
-                            $data[$k]['status']='已完成';
-                            $data[$k]['is_unusual']=0;
-                            $supplier_id[$k]=self::find()
-                                ->select('supplier_id')
-                                ->where(['order_no'=>$data[$k]['order_no']])
-                                ->asArray()
-                                ->one()['supplier_id'];
-                            $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
-                            $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
-                            if (!$res || $res==false){
-                                return false;
-                            }
+                $express=Express::find()
+                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->one();
+                if ($express)
+                {
+                    $data[$k]['send_time']=$express->create_time;
+                    $data[$k]['RemainingTime']=Express::findRemainingTime($express);
+                    if ($data[$k]['RemainingTime']<=0){
+                        $data[$k]['complete_time']=$express->receive_time;
+                        $data[$k]['status']='已完成';
+                        $data[$k]['is_unusual']=0;
+                        $supplier_id[$k]=self::find()
+                            ->select('supplier_id')
+                            ->where(['order_no'=>$data[$k]['order_no']])
+                            ->asArray()
+                            ->one()['supplier_id'];
+                        $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
+                        $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
+                        if (!$res || $res==false){
+                            return false;
                         }
                     }
-               };
+                }
+            };
             if ($data[$k]['status']=='已完成')
             {
                 $express=Express::find()
@@ -1375,7 +1375,7 @@ class GoodsOrder extends ActiveRecord
                     }
                     $data[$k]['complete_time']=$express->receive_time;
                 }
-                 $data[$k]['is_unusual']=0;
+                $data[$k]['is_unusual']=0;
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
@@ -1400,7 +1400,7 @@ class GoodsOrder extends ActiveRecord
         return $data;
     }
 
-   /**
+    /**
      * @param $order_no
      * @param $sku
      * @param $supplier_id
@@ -1438,11 +1438,11 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return false;
             }
-           if (!$supplier->save(false))
-           {
-               $trans->rollBack();
+            if (!$supplier->save(false))
+            {
+                $trans->rollBack();
                 return false;
-           };
+            };
             $express=Express::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->one();
@@ -1540,12 +1540,12 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-   /**
+    /**
      * @param $sort_money
      * @param $sort_time
      * @return string
      */
-   public static  function sort_lhzz_order($sort_money,$sort_time){
+    public static  function sort_lhzz_order($sort_money,$sort_time){
         if ($sort_time==1 && $sort_money==1){
             $sort='a.create_time asc,z.goods_price asc';
         }else if ($sort_time==1 && $sort_money==2){
@@ -1617,7 +1617,7 @@ class GoodsOrder extends ActiveRecord
         return (int)$query->one()[$retKeyName];
     }
 
- 
+
     /**user apply refund
      * @param $order_no
      * @param $sku
@@ -1697,7 +1697,7 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-   /**
+    /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1706,19 +1706,19 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
     {
-           if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
-           {
-               $code=self::AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
-               return $code;
-           }
-           if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE){
-               $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
-               return $code;
-           }
+        if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
+        {
+            $code=self::AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+            return $code;
+        }
+        if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE){
+            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+            return $code;
+        }
     }
 
 
-   /**
+    /**
      *
      * ordfer_refund 表字段status不启用
      * @param $order_no
@@ -1765,7 +1765,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-   /**
+    /**
      * @param $order_no
      * @param $sku
      * @param $handle
@@ -1836,7 +1836,7 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-     /** check user Jurisdiction
+    /** check user Jurisdiction
      * @param $order_no
      * @param $user
      * @return int
@@ -2017,42 +2017,42 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                 }
-                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
-                    {
-                        $code=1000;
-                        $tran->rollBack();
-                        return $code;
-                    }
-                    $order_money=$GoodsOrder->amount_order;
-                    $GoodsOrder->pay_status=1;
-                    $res=$GoodsOrder->save(false);
-                    if ($user->last_role_id_app==0)
+                if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                {
+                    $code=1000;
+                    $tran->rollBack();
+                    return $code;
+                }
+                $order_money=$GoodsOrder->amount_order;
+                $GoodsOrder->pay_status=1;
+                $res=$GoodsOrder->save(false);
+                if ($user->last_role_id_app==0)
+                {
+                    $user->last_role_id_app=7;
+                    $user=User::find()
+                        ->where(['id'=>$user->id])
+                        ->one();
+                }else{
+                    if ($user->last_role_id_app==7)
                     {
                         $user->last_role_id_app=7;
                         $user=User::find()
                             ->where(['id'=>$user->id])
                             ->one();
                     }else{
-                        if ($user->last_role_id_app==7)
-                        {
-                            $user->last_role_id_app=7;
-                            $user=User::find()
-                                ->where(['id'=>$user->id])
-                                ->one();
-                        }else{
-                           $user=Role::CheckUserRole($user->last_role_id_app)
-                               ->where(['uid'=>$user->id])
-                               ->one();
-                        }
+                        $user=Role::CheckUserRole($user->last_role_id_app)
+                            ->where(['uid'=>$user->id])
+                            ->one();
                     }
-                    $user->balance=($user->balance-$order_money);
-                    $user->availableamount=($user->availableamount-$order_money);
-                    $res2=$user->save(false);
-                    if (!$res || !$res2){
-                        $tran->rollBack();
-                        $code=500;
-                        return $code;
-                    }
+                }
+                $user->balance=($user->balance-$order_money);
+                $user->availableamount=($user->availableamount-$order_money);
+                $res2=$user->save(false);
+                if (!$res || !$res2){
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
             }
 
             $tran->commit();
@@ -2087,7 +2087,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
-     /**分页数据
+    /**分页数据
      * @param array $where
      * @param array $select
      * @param int $page
@@ -2096,7 +2096,7 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return array
      */
-     public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
+    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -2105,7 +2105,7 @@ class GoodsOrder extends ActiveRecord
             ->where($where)
             ->all();
         $arr=self::getorderstatus($OrderList);
-         $arr=self::findOrderData($arr,$user,$role);
+        $arr=self::findOrderData($arr,$user,$role);
         if ($type=='all' || $type=='unpaid')
         {
             switch ($role){
@@ -2116,7 +2116,7 @@ class GoodsOrder extends ActiveRecord
                     $where='pay_status=0  and user_id='.$user->id;
                     break;
             }
-             $GoodsOrder=self::find()
+            $GoodsOrder=self::find()
                 ->select('user_id,role_id,order_no,create_time,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
                 ->where($where)
                 ->asArray()
@@ -2184,7 +2184,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
                 }
             }
-           $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
+            $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
             if($goods->after_sale_services=='0' )
             {
 
@@ -2217,7 +2217,7 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
-     /**
+    /**
      * @param $arr
      * @return mixed
      */
@@ -2341,8 +2341,8 @@ class GoodsOrder extends ActiveRecord
                         if ($arr[$k]['unusual']=='申请退款'){
                             $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
                         }
-                     }
-                break;
+                    }
+                    break;
                 case  self::ORDER_TYPE_DESC_CANCEL:
                     $arr[$k]['status']=self::ORDER_TYPE_CANCEL;
                     break;
@@ -2370,11 +2370,11 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return array|mixed|null
      */
-   public  static  function  FindUserOrderDetails($postData,$user)
-   {
-       $array=self::getorderlist()
-           ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
-           ->select('
+    public  static  function  FindUserOrderDetails($postData,$user)
+    {
+        $array=self::getorderlist()
+            ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
+            ->select('
            a.pay_name,
            a.supplier_id,
            z.order_status,
@@ -2422,202 +2422,202 @@ class GoodsOrder extends ActiveRecord
            z.cover_image,
            z.is_unusual');
         if($postData==''){
-           $array=[];
-           echo 1;die;
-       }else{
-           $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id])
-               ->all();
-       };
-       $arr=self::getorderstatus($array);
-       if(!$arr){
-           echo 2;die;
-           return null;
-       }
-       return $arr;
-   }
+            $array=[];
+        }else{
+            $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id])
+                ->all();
+        };
 
-     /**获取订单详情信息2
+        var_dump($array);
+        $arr=self::getorderstatus($array);
+        if(!$arr){
+            return null;
+        }
+        return $arr;
+    }
+
+    /**获取订单详情信息2
      * @param array $arr
      * @param $user
      * @return mixed
      */
-   public static  function GetOrderDetailsData($arr=[],$user)
-   {
-       $list=[];
-       $supplier_price=0;
-       $market_price=0;
-       $amount_order=0;
-       $goods_num=0;
-       $freight=0;
-       if($arr)
-       {
-           $arr=self::SwitchStatus_desc($arr,$user);
-           foreach ($arr as $k =>$v){
-               $amount_order+=($arr[$k]['goods_price']*$arr[$k]['goods_number'])*0.01;
-               $supplier_price+=$arr[$k]['supplier_price']*0.01;
-               $market_price+=$arr[$k]['market_price']*0.01;
-               $freight+=$arr[$k]['freight']*0.01;
-               $arr[$k]['return_insurance']=self::switchMoney($arr[$k]['return_insurance']*0.01);
-               $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
-               // switch ($arr[$k]['shipping_type']){
-               //     case 0:
-               //         $arr[$k]['shipping_type']='快递物流';
-               //         break;
-               //     case 1:
-               //         $arr[$k]['shipping_type']='送货上门';
-               //         break;
-               // }
-               $list[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
-               $list[$k]['goods_price']=$arr[$k]['goods_price'];
-               if ($arr[$k]['send_time']==0){
-                   $list[$k]['send_time']=$arr[$k]['send_time'];
-               }else{
-                   $list[$k]['send_time']=date('Y-m-d H:i',$arr[$k]['send_time']);
-               }
-               if ($arr[$k]['complete_time']==0){
-                   $list[$k]['complete_time']=$arr[$k]['complete_time'];
-               }else{
-                   $list[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
-               }
-               if ($arr[$k]['RemainingTime']<=0){
-                   $list[$k]['automatic_receive_time']=0;
-               }else{
-                   $list[$k]['automatic_receive_time']=$arr[$k]['RemainingTime'];
-               }
-               $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
-               $list[$k]['goods_id']=$arr[$k]['goods_id'];
-               $list[$k]['sku']=$arr[$k]['sku'];
-               $list[$k]['goods_name']=$arr[$k]['goods_name'];
-               $list[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
-               $list[$k]['waybillname']=$arr[$k]['waybillname'];
-               $list[$k]['shipping_type']=$arr[$k]['shipping_type'];
-               $list[$k]['username']=$user->nickname;
-               if (empty($list[$k]['username'])) {
-                   $list['username'] = $list['consignee'];
-               }
-               $list[$k]['comment_grade']=$arr[$k]['comment_grade'];
-               $list[$k]['cover_image']=$arr[$k]['cover_image'];
-               $list[$k]['goods_number']=$arr[$k]['goods_number'];
-               $refund=OrderRefund::find()
-                   ->where(['order_no'=>$arr[$k]['order_no'],'sku'=>$arr[$k]['sku']])
-                   ->asArray()
-                   ->all();
-               if (!$refund)
-               {
-                   $list[$k]['refund_status']=0;
-                   $list[$k]['apply_refund_time']=0;
-                   $list[$k]['apply_refund_reason']='';
-               }else{
-                   $list[$k]['refund_status']=2;
-                   $list[$k]['apply_refund_time']=0;
-                   $list[$k]['apply_refund_reason']='';
-                   foreach ($refund as &$refundList)
-                   {
-                       if ($refundList['handle']==0){
-                           $list[$k]['refund_status']=1;
-                           $list[$k]['apply_refund_time']=date('Y-m-d H:i',$refundList['create_time']);
-                           $list[$k]['apply_refund_reason']='';
-                       }
-                   }
-                   $after_sale=OrderAfterSale::find()
-                       ->where(['order_no'=>$arr[$k]['order_no'],'sku'=>$arr[$k]['sku']])
-                       ->asArray()
-                       ->all();
-                   if (!$after_sale)
-                   {
-                       $list[$k]['aftersale_status']=0;
-                       $list[$k]['aftersale_type']='';
-                       $list[$k]['apply_aftersale_time']=0;
-                       $list[$k]['apply_aftersale_reason']='';
-                   }else
-                   {
-                       $list[$k]['aftersale_status']=2;
-                       $list[$k]['aftersale_type']='';
-                       $list[$k]['apply_aftersale_time']=0;
-                       $list[$k]['apply_aftersale_reason']='';
-                       foreach ($after_sale as &$afterSale)
-                       {
-                           if ($afterSale['supplier_handle']==0)
-                           {
-                               $list[$k]['aftersale_status']=1;
-                               $list[$k]['aftersale_type']=OrderAfterSale::AFTER_SALE_SERVICES[$afterSale['type']];
-                               $list[$k]['apply_aftersale_time']=$afterSale['create_time'];
-                               $list[$k]['apply_aftersale_reason']=$afterSale['description'];
-                           }
+    public static  function GetOrderDetailsData($arr=[],$user)
+    {
+        $list=[];
+        $supplier_price=0;
+        $market_price=0;
+        $amount_order=0;
+        $goods_num=0;
+        $freight=0;
+        if($arr)
+        {
+            $arr=self::SwitchStatus_desc($arr,$user);
+            foreach ($arr as $k =>$v){
+                $amount_order+=($arr[$k]['goods_price']*$arr[$k]['goods_number'])*0.01;
+                $supplier_price+=$arr[$k]['supplier_price']*0.01;
+                $market_price+=$arr[$k]['market_price']*0.01;
+                $freight+=$arr[$k]['freight']*0.01;
+                $arr[$k]['return_insurance']=self::switchMoney($arr[$k]['return_insurance']*0.01);
+                $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
+                // switch ($arr[$k]['shipping_type']){
+                //     case 0:
+                //         $arr[$k]['shipping_type']='快递物流';
+                //         break;
+                //     case 1:
+                //         $arr[$k]['shipping_type']='送货上门';
+                //         break;
+                // }
+                $list[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
+                $list[$k]['goods_price']=$arr[$k]['goods_price'];
+                if ($arr[$k]['send_time']==0){
+                    $list[$k]['send_time']=$arr[$k]['send_time'];
+                }else{
+                    $list[$k]['send_time']=date('Y-m-d H:i',$arr[$k]['send_time']);
+                }
+                if ($arr[$k]['complete_time']==0){
+                    $list[$k]['complete_time']=$arr[$k]['complete_time'];
+                }else{
+                    $list[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
+                }
+                if ($arr[$k]['RemainingTime']<=0){
+                    $list[$k]['automatic_receive_time']=0;
+                }else{
+                    $list[$k]['automatic_receive_time']=$arr[$k]['RemainingTime'];
+                }
+                $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
+                $list[$k]['goods_id']=$arr[$k]['goods_id'];
+                $list[$k]['sku']=$arr[$k]['sku'];
+                $list[$k]['goods_name']=$arr[$k]['goods_name'];
+                $list[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
+                $list[$k]['waybillname']=$arr[$k]['waybillname'];
+                $list[$k]['shipping_type']=$arr[$k]['shipping_type'];
+                $list[$k]['username']=$user->nickname;
+                if (empty($list[$k]['username'])) {
+                    $list['username'] = $list['consignee'];
+                }
+                $list[$k]['comment_grade']=$arr[$k]['comment_grade'];
+                $list[$k]['cover_image']=$arr[$k]['cover_image'];
+                $list[$k]['goods_number']=$arr[$k]['goods_number'];
+                $refund=OrderRefund::find()
+                    ->where(['order_no'=>$arr[$k]['order_no'],'sku'=>$arr[$k]['sku']])
+                    ->asArray()
+                    ->all();
+                if (!$refund)
+                {
+                    $list[$k]['refund_status']=0;
+                    $list[$k]['apply_refund_time']=0;
+                    $list[$k]['apply_refund_reason']='';
+                }else{
+                    $list[$k]['refund_status']=2;
+                    $list[$k]['apply_refund_time']=0;
+                    $list[$k]['apply_refund_reason']='';
+                    foreach ($refund as &$refundList)
+                    {
+                        if ($refundList['handle']==0){
+                            $list[$k]['refund_status']=1;
+                            $list[$k]['apply_refund_time']=date('Y-m-d H:i',$refundList['create_time']);
+                            $list[$k]['apply_refund_reason']='';
+                        }
+                    }
+                    $after_sale=OrderAfterSale::find()
+                        ->where(['order_no'=>$arr[$k]['order_no'],'sku'=>$arr[$k]['sku']])
+                        ->asArray()
+                        ->all();
+                    if (!$after_sale)
+                    {
+                        $list[$k]['aftersale_status']=0;
+                        $list[$k]['aftersale_type']='';
+                        $list[$k]['apply_aftersale_time']=0;
+                        $list[$k]['apply_aftersale_reason']='';
+                    }else
+                    {
+                        $list[$k]['aftersale_status']=2;
+                        $list[$k]['aftersale_type']='';
+                        $list[$k]['apply_aftersale_time']=0;
+                        $list[$k]['apply_aftersale_reason']='';
+                        foreach ($after_sale as &$afterSale)
+                        {
+                            if ($afterSale['supplier_handle']==0)
+                            {
+                                $list[$k]['aftersale_status']=1;
+                                $list[$k]['aftersale_type']=OrderAfterSale::AFTER_SALE_SERVICES[$afterSale['type']];
+                                $list[$k]['apply_aftersale_time']=$afterSale['create_time'];
+                                $list[$k]['apply_aftersale_reason']=$afterSale['description'];
+                            }
 
-                       }
+                        }
 
-                   }
-               }
+                    }
+                }
 
-           }
-           $output['order_no']=$arr[0]['order_no'];
-           $output['status_code']=$arr[0]['status_code'];
-           $output['status_desc']=$arr[0]['status_desc'];
-           $output['buyer_message']=$arr[0]['buyer_message'];
-           $output['pay_name']=$arr[0]['pay_name'];
-           $output['create_time']=$arr[0]['create_time'];
-           $output['paytime']=date('Y-m-d H:i',$arr[0]['paytime']);
-           $output['pay_term']=$arr[0]['pay_term'];
-           $output['freight']=GoodsOrder::switchMoney($freight);
-           $output['original_price']=GoodsOrder::switchMoney($market_price*$arr[0]['goods_number']);
-           $output['discount_price']=GoodsOrder::switchMoney($amount_order);
-           $output['amount_order']=GoodsOrder::switchMoney($freight+$amount_order);
-           $output['consignee']=$arr[0]['consignee'];
-           $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
-           $output['invoice_information']=$arr[0]['invoice_content'].'-'.$arr[0]['invoice_header'];
-           $output['invoicer_card']=$arr[0]['invoicer_card'];
-           $output['consignee_mobile']=$arr[0]['consignee_mobile'];
-           $output['invoice_header_type']=$arr[0]['invoice_header_type'];
-           if($user->last_role_id_app==6)
-           {
-               $output['uid']=$arr[0]['user_id'];
-               $output['to_role_id']=$arr[0]['role_id'];
-           }else{
-               $output['uid']=Supplier::find()
-                   ->select('uid')
-                   ->where(['id'=>$arr[0]['supplier_id']])
-                   ->asArray()
-                   ->one()['uid'];
-               $output['to_role_id']=6;
-           }
-           $output['list']=$list;
+            }
+            $output['order_no']=$arr[0]['order_no'];
+            $output['status_code']=$arr[0]['status_code'];
+            $output['status_desc']=$arr[0]['status_desc'];
+            $output['buyer_message']=$arr[0]['buyer_message'];
+            $output['pay_name']=$arr[0]['pay_name'];
+            $output['create_time']=$arr[0]['create_time'];
+            $output['paytime']=date('Y-m-d H:i',$arr[0]['paytime']);
+            $output['pay_term']=$arr[0]['pay_term'];
+            $output['freight']=GoodsOrder::switchMoney($freight);
+            $output['original_price']=GoodsOrder::switchMoney($market_price*$arr[0]['goods_number']);
+            $output['discount_price']=GoodsOrder::switchMoney($amount_order);
+            $output['amount_order']=GoodsOrder::switchMoney($freight+$amount_order);
+            $output['consignee']=$arr[0]['consignee'];
+            $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
+            $output['invoice_information']=$arr[0]['invoice_content'].'-'.$arr[0]['invoice_header'];
+            $output['invoicer_card']=$arr[0]['invoicer_card'];
+            $output['consignee_mobile']=$arr[0]['consignee_mobile'];
+            $output['invoice_header_type']=$arr[0]['invoice_header_type'];
+            if($user->last_role_id_app==6)
+            {
+                $output['uid']=$arr[0]['user_id'];
+                $output['to_role_id']=$arr[0]['role_id'];
+            }else{
+                $output['uid']=Supplier::find()
+                    ->select('uid')
+                    ->where(['id'=>$arr[0]['supplier_id']])
+                    ->asArray()
+                    ->one()['uid'];
+                $output['to_role_id']=6;
+            }
+            $output['list']=$list;
 
-           return $output;
-       }else{
-           $arr=[];
-           return $arr;
-       }
+            return $output;
+        }else{
+            $arr=[];
+            return $arr;
+        }
 
 
-   }
+    }
 
-     /**
+    /**
      * 设置平台角色
      * @param array $output
      * @param $arr
      * @return array
      */
-   public function SetUnpaidContinuedTime($output=[],$arr){
-       if (empty($output['username'])){
-           $output['username']=(new Query())
-               ->from('user_address')
-               ->where(['id'=>$arr['address_id']])
-               ->one()['consignee'];
-           $output['role']='平台';
-       }else{
-           $output['role']=(new Query())
-               ->from(UserRole::tableName().' as a')
-               ->select('b.name')
-               ->leftJoin(Role::tableName().' as b','a.role_id=b.id')
-               ->where(['a.user_id'=>$arr['user_id']])
-               ->one()['name'];
-           if (!$output['role']){
-               $output['role']='平台';
-           }
-       }
-       return $output;
-   }
+    public function SetUnpaidContinuedTime($output=[],$arr){
+        if (empty($output['username'])){
+            $output['username']=(new Query())
+                ->from('user_address')
+                ->where(['id'=>$arr['address_id']])
+                ->one()['consignee'];
+            $output['role']='平台';
+        }else{
+            $output['role']=(new Query())
+                ->from(UserRole::tableName().' as a')
+                ->select('b.name')
+                ->leftJoin(Role::tableName().' as b','a.role_id=b.id')
+                ->where(['a.user_id'=>$arr['user_id']])
+                ->one()['name'];
+            if (!$output['role']){
+                $output['role']='平台';
+            }
+        }
+        return $output;
+    }
 
 
 
@@ -2648,76 +2648,76 @@ class GoodsOrder extends ActiveRecord
         }while ( $transaction_no==UserCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
         return $transaction_no;
     }
-   /**
+    /**
      * @param $arr
      * @param $user
      * @return mixed
      */
-   public  static  function  SwitchStatus_desc($arr,$user)
-   {
-       foreach ($arr as $k =>$v)
-       {
-           switch ($arr[$k]['status'])
-           {
-               case self::PAY_STATUS_DESC_UNPAID:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
-                   $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
-                   break;
-               case self::SHIPPING_STATUS_DESC_UNSHIPPED:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
-                   $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
-                   if ( $arr[$k]['is_unusual']==1){
-                       $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
-                   }
-                   break;
-               case  self::ORDER_TYPE_DESC_UNRECEIVED:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
-                       if ($arr[$k]['is_unusual']==1){
-                           $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                           $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
-                   }
-                   if ($user->last_role_id_app==6)
-                   {
-                       $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
-                       $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
-                       if ($arr[$k]['is_unusual']==1){
-                           $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                           $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
-                       }
-                   }
-                   break;
-               case  self::ORDER_TYPE_DESC_CANCEL:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
-                   break;
-               case  '售后中':
-                   $arr[$k]['status_code']='after_saled';
-                   $arr[$k]['status_desc']='售后中';
-                   break;
-               case  '售后结束':
-                   $arr[$k]['status_code']='after_sale_completed';
-                   $arr[$k]['status_desc']='售后完成';
-                   break;
-               case self::ORDER_TYPE_DESC_COMPLETED:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
-                   if (!$arr[$k]['comment_id'])
-                   {
-                       $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
-                       $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                   }
-                   break;
-               case self::ORDER_TYPE_DESC_UNCOMMENT:
-                   $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
-                   $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                   break;
-           }
-           unset($arr[$k]['unusual']);
-       }
-       return $arr;
-   }
+    public  static  function  SwitchStatus_desc($arr,$user)
+    {
+        foreach ($arr as $k =>$v)
+        {
+            switch ($arr[$k]['status'])
+            {
+                case self::PAY_STATUS_DESC_UNPAID:
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
+                    $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
+                    break;
+                case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
+                    $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
+                    if ( $arr[$k]['is_unusual']==1){
+                        $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                    }
+                    break;
+                case  self::ORDER_TYPE_DESC_UNRECEIVED:
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
+                    if ($arr[$k]['is_unusual']==1){
+                        $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                    }
+                    if ($user->last_role_id_app==6)
+                    {
+                        $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
+                        $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
+                        if ($arr[$k]['is_unusual']==1){
+                            $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                            $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                        }
+                    }
+                    break;
+                case  self::ORDER_TYPE_DESC_CANCEL:
+                    $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
+                    break;
+                case  '售后中':
+                    $arr[$k]['status_code']='after_saled';
+                    $arr[$k]['status_desc']='售后中';
+                    break;
+                case  '售后结束':
+                    $arr[$k]['status_code']='after_sale_completed';
+                    $arr[$k]['status_desc']='售后完成';
+                    break;
+                case self::ORDER_TYPE_DESC_COMPLETED:
+                    $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
+                    if (!$arr[$k]['comment_id'])
+                    {
+                        $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                    }
+                    break;
+                case self::ORDER_TYPE_DESC_UNCOMMENT:
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                    break;
+            }
+            unset($arr[$k]['unusual']);
+        }
+        return $arr;
+    }
 
     /**
      * 获取角色购买商品价格
@@ -2726,37 +2726,37 @@ class GoodsOrder extends ActiveRecord
      */
     public static function  GetRoleMoney($role)
     {
-            switch ($role)
-            {
-                case 2:
-                    //工人
-                    $data=self::WORKER_MONEY;
-                    break;
-                case 3:
-                    //设计师
-                    $data=self::DESIGNER_MONEY;
-                    break;
-                case 4:
-                    //项目经理
-                    $data=self::MANAGER_MONEY;
-                    break;
-                case 5:
-                    //装修公司
-                    $data=self::COMPANEY_MONEY;
-                    break;
-                case 6:
-                    //供应商
-                    $data=self::SUPPLIER_MONEY;
-                    break;
-                case 7:
-                    //业主
-                    $data=self::PLAT_MONEY;
-                    break;
-            }
-            return $data;
+        switch ($role)
+        {
+            case 2:
+                //工人
+                $data=self::WORKER_MONEY;
+                break;
+            case 3:
+                //设计师
+                $data=self::DESIGNER_MONEY;
+                break;
+            case 4:
+                //项目经理
+                $data=self::MANAGER_MONEY;
+                break;
+            case 5:
+                //装修公司
+                $data=self::COMPANEY_MONEY;
+                break;
+            case 6:
+                //供应商
+                $data=self::SUPPLIER_MONEY;
+                break;
+            case 7:
+                //业主
+                $data=self::PLAT_MONEY;
+                break;
+        }
+        return $data;
     }
 
-       /**
+    /**
      * @param $user
      * @param $address_id
      * @param $suppliers
