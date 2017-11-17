@@ -678,7 +678,7 @@ class QuoteController extends Controller
 //        $user = \Yii::$app->user->identity();
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
-        $district_chinese = District::findByCode($request['cur_county_id']);
+        $district_chinese = District::findByCode($request['cur_county_id']['id']);
 
         $transaction = \Yii::$app->db->beginTransaction();
         try {
@@ -853,7 +853,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id'];
+                        $district_code          = $request['cur_county_id']['id'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -905,7 +905,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id'];
+                        $district_code          = $request['cur_county_id']['id'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
