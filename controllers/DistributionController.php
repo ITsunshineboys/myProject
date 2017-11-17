@@ -148,7 +148,7 @@ class DistributionController extends Controller
             }
         }
         $code=200;
-        $session['distribution_mobile']=$mobile;
+        $session['distribution_mobile']=base64_encode(base64_encode($mobile));
         return Json::encode(
             [
                 'code'=>$code,
@@ -162,8 +162,9 @@ class DistributionController extends Controller
      * @return string
      */
     public function actionDistributionLogin(){
+
         $session = \Yii::$app->session;
-        $mobile=$session['distribution_mobile'];
+        $mobile=base64_decode(base64_decode($session['distribution_mobile']));
         if (!$mobile)
         {
             $code = 403;
@@ -206,7 +207,7 @@ class DistributionController extends Controller
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $session['distribution_token']=urlencode($mobile.'&'.$time);
+                $session['distribution_token']=base64_encode(base64_encode(urlencode($mobile.'&'.$time)));
                 if (!$session['distribution_token'])
                 {
                     $code=500;
@@ -221,7 +222,7 @@ class DistributionController extends Controller
                     'msg' =>'ok'
                 ]);
             }else{
-                    $session['distribution_token']=urlencode($user->mobile.'&'.$user->create_time);
+                    $session['distribution_token']=base64_encode(base64_encode(urlencode($user->mobile.'&'.$user->create_time)));
                     $code=200;
                     return Json::encode([
                         'code' => $code,
@@ -230,14 +231,13 @@ class DistributionController extends Controller
             }
     }
 
-
     /**
      * 分销个人中心
      * @return string
      */
     public function actionDistributionUserCenter(){
         $session = Yii::$app->session;
-        $data=explode('&', urldecode($session['distribution_token']));
+        $data=explode('&', base64_decode(base64_decode(urldecode($session['distribution_token']))));
         if (!$data)
         {
             $code=1052;
@@ -245,7 +245,6 @@ class DistributionController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
-
         }
         $mobile=$data[0];
         $create_time=$data[1];

@@ -920,9 +920,8 @@ class OrderController extends Controller
                             {
                                 $tran->rollBack();
                                 return false;
-                            };
+                            }
                         }
-
                     }
                 }
             }catch (Exception $e){
@@ -4755,4 +4754,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+
+
 }
