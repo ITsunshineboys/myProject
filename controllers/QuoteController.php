@@ -1623,6 +1623,7 @@ class QuoteController extends Controller
                         ])->execute();
                     break;
                 case isset($one_post['min_area']):
+                    var_dump($one_post);exit;
                     $dm = \Yii::$app->db->createCommand()
                         ->insert(DecorationMessage::tableName(), [
                             'min_area' => $one_post['min_area'],
