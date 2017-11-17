@@ -1,6 +1,12 @@
 // 商城数据
-app.controller('mallDataCtrl', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
-    $scope.isMallData = $stateParams.id == undefined;
+app.controller('mallDataCtrl', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '商城数据'
+    }];
     //请求参数
     $scope.params = {
         time_type: 'all',
@@ -65,8 +71,17 @@ app.controller('mallDataCtrl', ['$scope', '$stateParams', '_ajax', function ($sc
     }
 }])
 // 店铺数据
-    .controller('storeDataCtrl', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
-        $scope.isMallData = $stateParams.id == undefined;
+    .controller('storeDataCtrl', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
+        $rootScope.crumbs = [{
+            name: '商城管理',
+            icon: 'icon-shangchengguanli',
+            link: 'merchant_index'
+        }, {
+            name: '商家管理',
+            link: 'store_mag'
+        }, {
+            name: '店铺数据'
+        }];
         //请求参数
         $scope.params = {
             supplier_id: $stateParams.id,

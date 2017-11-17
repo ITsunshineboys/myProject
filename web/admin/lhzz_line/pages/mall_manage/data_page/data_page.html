@@ -1,16 +1,3 @@
-<!--头部导航开始-->
-<header>
-    <div>
-        <i class="glyphicon glyphicon-home"></i>
-        <a ui-sref="merchant_index">商城管理</a> >
-        <a  ng-if="!isMallData" ui-sref="store_mag">商家管理</a>
-        <span ng-if="!isMallData"> > </span>
-        <span ng-if="isMallData">商城数据</span>
-        <span ng-if="!isMallData" >店铺数据</span>
-        <img src="pages/home/images/user.png"/>
-    </div>
-</header>
-<!--头部导航结束-->
 <section>
     <p class="sales-data">
         <span>销量：{{data.total_sold_number}}</span>

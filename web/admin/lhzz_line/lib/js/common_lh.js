@@ -405,7 +405,9 @@ app.service('_ajax', function ($http, $state) {
      * [{
      *  name: '',       各级面包屑名称
      *  icon: '',       图标，一级才写
-     *  link: '',       各级面包屑跳转地址，同 ui-sref 的地址，最后一级不写；；若 link: -1 则为history.back() 跳转; 若link为函数，则运行函数
+     *  link: '',       各级面包屑跳转地址，同 ui-sref 的地址，最后一级不写；
+     *                  若 link 为负数 则为history.go( 负数 ) 跳转；
+     *                  若link为函数，则运行函数
      *  params: {}      跳转地址所带参数，有参数才写
      * }]
      */
@@ -424,8 +426,8 @@ app.service('_ajax', function ($http, $state) {
             },
             link: function (scope) {
                 scope.goToPage = function (url, params) {
-                    if (url === -1) {
-                        window.history.back()
+                    if (typeof url === 'number') {
+                        window.history.go(url)
                     }else if (typeof url === 'function') {
                         url()
                     } else {

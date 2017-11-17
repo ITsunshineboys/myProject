@@ -1,5 +1,19 @@
-app.controller('comments', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
-    $scope.shopID = $stateParams.id;    // 商家ID
+app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
+    sessionStorage.setItem('shopID', $stateParams.id);
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '商家管理',
+        link: 'store_mag'
+    }, {
+        name: '订单管理',
+        link: 'order.all',
+        params: {id: $stateParams.id}
+    }, {
+        name: '删除评论'
+    }];
     // 分页配置
     $scope.pageConfig = {
         showJump: true,
@@ -79,8 +93,25 @@ app.controller('comments', ['$scope', '$stateParams', '_ajax', function ($scope,
         })
     }
 }])
-    .controller('comments_details', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
-        $scope.shopID = sessionStorage.getItem('shopID');
+    .controller('comments_details', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
+        $rootScope.crumbs = [{
+            name: '商城管理',
+            icon: 'icon-shangchengguanli',
+            link: 'merchant_index'
+        }, {
+            name: '商家管理',
+            link: 'store_mag'
+        }, {
+            name: '订单管理',
+            link: 'order.all',
+            params: {id: sessionStorage.getItem('shopID')}
+        }, {
+            name: '删除评论',
+            link: -1
+        }, {
+            name: '删除评论详情'
+        }];
+
         let params = {
             order_no: $stateParams.orderNo,
             sku: $stateParams.sku

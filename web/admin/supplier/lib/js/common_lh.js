@@ -336,6 +336,48 @@ app.service('_ajax', function ($http) {
             }
         };
     })
+    /**
+     * 面包屑
+     * crumbConf    为一个数组例子如下
+     * [{
+     *  name: '',       各级面包屑名称
+     *  icon: '',       图标，一级才写
+     *  link: '',       各级面包屑跳转地址，同 ui-sref 的地址，最后一级不写；
+     *                  若 link 为负数 则为history.go( 负数 ) 跳转；
+     *                  若link为函数，则运行函数
+     *  params: {}      跳转地址所带参数，有参数才写
+     * }]
+     */
+    .directive('breadcrumb', function ($state) {
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<ol class="breadcrumb">' +
+            '<li ng-repeat="obj in crumbConf">' +
+            '<i class="iconfont" ng-if="$index == 0" ng-class="obj.icon"></i>' +
+            '<a ng-if="!$last" href="javascript:void (0);" ng-bind="obj.name" ng-click="goToPage(obj.link, obj.params)"></a>' +
+            '<span ng-if="$last" ng-bind="obj.name"></span>' +
+            '</li></ol>',
+            scope: {
+                crumbConf: '='
+            },
+            link: function (scope) {
+                scope.goToPage = function (url, params) {
+                    if (typeof url === 'number') {
+                        window.history.go(url)
+                    }else if (typeof url === 'function') {
+                        url()
+                    } else {
+                        if (params === undefined) {
+                            $state.go(url)
+                        } else {
+                            $state.go(url, params)
+                        }
+                    }
+                }
+            }
+        }
+    })
     .filter("toHtml", ["$sce", function ($sce) {
         return function (text) {
             return $sce.trustAsHtml(text);
