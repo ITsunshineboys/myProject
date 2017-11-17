@@ -116,7 +116,6 @@ class DistributionController extends Controller
         $time=time();
         if($user)
         {
-            
             $sms['mobile']=$mobile;
             $sms['type']='loginDistribution';
         }else{
@@ -138,7 +137,8 @@ class DistributionController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             $code = 1020;
             if ($code == $e->getCode()) {
                 return Json::encode([
@@ -357,7 +357,8 @@ class DistributionController extends Controller
     }
 
 
-  /**
+     /**
+     * 分销列表
      * @return string
      */
     public  function  actionGetdistributionlist()
@@ -495,7 +496,7 @@ class DistributionController extends Controller
     }
 
 
- /**
+    /**
      * 分销详情页
      */
     public function actionGetdistributiondetail(){
@@ -554,7 +555,8 @@ class DistributionController extends Controller
     }
 
 
-    /**添加收益
+    /**
+     * 添加收益
      * @return string
      */
     public  function  actionAddProfit()
@@ -631,7 +633,7 @@ class DistributionController extends Controller
         ]);
     }
 
-   /**
+    /**
      * 获取关联订单
      * @return string
      */

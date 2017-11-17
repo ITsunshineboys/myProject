@@ -2277,8 +2277,15 @@ class OrderController extends Controller
                 }
             }
         }
-        $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
-        $data=GoodsOrder::GetOrderDetailsData($arr,$user);
+         $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
+         if($arr)
+         {
+             $data=GoodsOrder::GetOrderDetailsData($arr,$user);
+         }else
+         {
+             $data=[];
+         }
+
         $code=200;
         return Json::encode([
             'code'=>$code,
@@ -4376,7 +4383,8 @@ class OrderController extends Controller
                     'order_no'=>$order_no,
                     'sku'=>$sku,
                     'type'=>GoodsOrder::STATUS_DESC_DETAILS,
-                ];//推送附加字段的类型
+                ];
+                //推送附加字段的类型
                 $m_time = '86400';//离线保留时间
                 $receive = ['registration_id'=>[$registration_id]];//设备的id标识
                 $title='请尽快发货';
@@ -4556,10 +4564,16 @@ class OrderController extends Controller
         $code=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
         if ($code==200)
         {
-            return Json::encode([
-                'code' => $code,
-                'msg'  => 'ok'
-            ]);
+            switch ($pay_way)
+            {
+                case 1:
+                    $data=Alipay::AppBuy($total_amount,$suppliers);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
         }else{
             return Json::encode([
                 'code' => $code,
@@ -4655,7 +4669,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
 //    public function actionDelData()
 //    {
 //        $request=Yii::$app->request;
@@ -4733,6 +4746,9 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+
+
 
 
 
