@@ -7,7 +7,7 @@ angular.module("all_controller", ['ngCookies'])
 
         // 微信事宜
         $rootScope.isWxOpen = false;
-        $http.get('/order/iswxlogin', "", function (res) {
+        $http.get(baseUrl+'/order/iswxlogin').then(function (res) {
             if (res.code === 200) { // 是微信浏览器打开
                 let data = res.data;
                 wx.config({
