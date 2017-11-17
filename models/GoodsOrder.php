@@ -2427,8 +2427,9 @@ class GoodsOrder extends ActiveRecord
             $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id])
                 ->all();
         };
-
-        var_dump($array);
+        if(!$arr){
+            return null;
+        }
         $arr=self::getorderstatus($array);
         if(!$arr){
             return null;
