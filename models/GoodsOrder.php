@@ -2541,17 +2541,12 @@ class GoodsOrder extends ActiveRecord
                         {
                             if ($afterSale['supplier_handle']==0)
                             {
-                                $list[$k]['aftersale_status']=1;
-                                $list[$k]['aftersale_type']=OrderAfterSale::AFTER_SALE_SERVICES[$afterSale['type']];
-                                $list[$k]['apply_aftersale_time']=$afterSale['create_time'];
-                                $list[$k]['apply_aftersale_reason']=$afterSale['description'];
+                                $list[$k]['aftersale_status']=1;                          $list[$k]['aftersale_type']=OrderAfterSale::AFTER_SALE_SERVICES[$afterSale['type']];
+                                $list[$k]['apply_aftersale_time']=$afterSale['create_time'];                            $list[$k]['apply_aftersale_reason']=$afterSale['description'];
                             }
-
                         }
-
                     }
                 }
-
             }
             $output['order_no']=$arr[0]['order_no'];
             $output['status_code']=$arr[0]['status_code'];
@@ -2590,8 +2585,6 @@ class GoodsOrder extends ActiveRecord
             $arr=[];
             return $arr;
         }
-
-
     }
 
     /**

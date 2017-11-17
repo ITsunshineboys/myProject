@@ -3933,7 +3933,6 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-
             $comment=DeletedGoodsComment::find()
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
