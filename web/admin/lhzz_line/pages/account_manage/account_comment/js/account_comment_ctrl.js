@@ -67,6 +67,7 @@ var account_comment= angular.module("account_comment",[])
 
         };
         $scope.back_page = function () {
-            $state.go("account_index",{})
+            console.log(11);
+            $state.go("account_index")
         }
     }});

@@ -1015,8 +1015,17 @@ angular.module("all_controller", ['ngCookies'])
         $scope.getProductMore = function (item) {
             console.log(item);
             $scope.mall_id = item.url.split('=')[1];
-            $state.go("product_details",{mall_id:$scope.mall_id,datailsShop:$scope.datailsShop});
-            console.log( $scope.mall_id)
+            console.log($scope.mall_id);
+            $http({   //店铺首页推荐列表
+                method: 'POST',
+                url: baseUrl+"/recommend-click-record-supplier",
+                data:{
+                    recommend_id:+$scope.mall_id
+                }
+            }).then(function successCallback (response) {
+                console.log(response);
+                $state.go("product_details",{mall_id:$scope.mall_id,datailsShop:$scope.datailsShop});
+            })
         };
         // 点击全部商品跳转到商品详情页面
         $scope.allGetProdouct = function (item) {

@@ -31,7 +31,6 @@ add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state, 
                             // $scope.add_model = '#ok_modal';
                             $scope.comment = '添加成功';
                         })
-
                     }else{
                         $('#ok_modal').modal('show');
                         $scope.comment = '该手机号已被注册，请重新输入';
@@ -52,7 +51,6 @@ add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state, 
         //     if($scope.codeMobile == 1019) {
         //         $scope.flag = true;
         //         $scope.error = "该手机号已被注册，请重新输入";
-        //
         //     }else{
         //         $scope.flag = false;
         //         console.log(11122222);
