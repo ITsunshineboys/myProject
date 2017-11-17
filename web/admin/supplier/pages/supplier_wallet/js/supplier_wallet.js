@@ -1,7 +1,12 @@
 ;
 angular.module('supplier_wallet_module',[])
-.controller('supplier_wallet_ctrl',function ($scope,$http,$state,_ajax) {
-  $scope.myng=$scope;
+.controller('supplier_wallet_ctrl',function ($rootScope,$scope,$http,$state,_ajax) {
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-shangchengguanli'
+    }];
+
+    $scope.myng=$scope;
     /*分页配置*/
     $scope.wjConfig = {
         showJump: true,
