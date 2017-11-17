@@ -157,8 +157,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/account_manage/account_comment/change_num.html",
             params: {
                 icon: 'icon',
-                nickname: 'nickname'
-                ,
+                nickname: 'nickname',
                 old_nickna: 'old_nickname',
                 district_name: 'district_name',
                 birthday: 'birthday',
