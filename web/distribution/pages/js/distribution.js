@@ -162,6 +162,7 @@
             }
             //跳转绑定手机号
             $scope.go_bind_tel = function () {
+                $scope.header_word = '绑定手机号'
                 sessionStorage.setItem('basic_data',JSON.stringify({header_word:$scope.header_word,countdown:$scope.countdown,first_click:$scope.countdown}))
                 let all_modal = function ($scope, $uibModalInstance) {
                     $scope.btn_word = '确认'

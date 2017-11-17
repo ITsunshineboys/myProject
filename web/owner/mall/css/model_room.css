@@ -224,7 +224,6 @@ button {
 /*楼梯选择-end*/
 .tag {
     color: #06CB7E;
-    margin-top: 1.2rem;
 }
 
 .tag span {
@@ -381,13 +380,13 @@ button {
 
 .series ul{
     padding-left: 0;
-    margin-top: 1.2rem;
 }
 
 .series ul li {
     display: inline-block;
     font-size: 1rem;
     margin-right: 2.2rem;
+    padding: 1rem 0;
 }
 
 .series label {
@@ -425,14 +424,14 @@ button {
 }
 
 .choose_style ul li button {
-    margin-left: 1rem;
-    width: 7.5rem;
-    height: 2.4rem;
+    margin-right: 1rem;
+    padding: 0.3rem 1.2rem;
     font-size: 1.2rem;
     color: #6C6C6C;
     background-color: white;
-    border: 1px solid #C2C2C2;
-    border-radius: .5rem !important;
+    border: 2px solid #C2C2C2;
+    border-radius: .3rem !important;
+    min-width: 7rem;
 }
 
 .carousel {
@@ -477,8 +476,8 @@ button {
 }
 
 .btn_checked {
-    border: 1px solid #53A8F4 !important;
-    color: #53A8F4 !important;
+    border: 2px solid #333 !important;
+    color: #333 !important;
 }
 
 .item_masonry {

@@ -391,7 +391,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state('intelligent', {//智能报价头部
             url: '/intelligent/',
             templateUrl: 'pages/intelligent/index.html',
-            css: 'pages/intelligent/css/apply_case_header.css'
+            // css: 'pages/intelligent/css/apply_case_header.css'
         })
         .state('intelligent.intelligent_index', {//智能报价首页
             url: 'index',

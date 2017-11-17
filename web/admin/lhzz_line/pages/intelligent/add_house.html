@@ -14,7 +14,7 @@
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区地址</label>
                 <div class="col-md-3">
                     <label>选择区县</label>
-                    <select ng-model="ctrlScope.cur_house_county" class="form-control" ng-options="item.name for item in house_county"></select>
+                    <select ng-model="ctrlScope.cur_house_county" class="form-control" ng-options="item.id as item.name for item in house_county"></select>
                     <!--<input type="text" class="form-control">-->
                     <label>详细地址</label>
                     <textarea class="form-control" name="address" ng-class="{'error':(submitForm.address.$invalid&&submitted) ||

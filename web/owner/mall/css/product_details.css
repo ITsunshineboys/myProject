@@ -2,10 +2,19 @@
     background-color: #F6F6F6;
 }
 .header{
+    position: fixed;
+    left: 1.19rem;
+    top: 1rem;
+    z-index: 100;
+    width: 2.4rem;
+    height: 2.4rem;
+    background: rgba(0,0,0,0.7);
+    border-radius: 3rem;
+}
+.header img{
     position: absolute;
-    left:1.19rem;
-    top:1rem;
-    z-index:100;
+    top: 0.5rem;
+    left: 0.6rem;
 }
 .main{
     width: auto;

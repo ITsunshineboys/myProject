@@ -71,6 +71,7 @@ button.close{
     text-align: center;
     margin-top: 1rem;
     padding: 1.2rem 0;
+    margin-bottom:6rem;
 }
 .add_material a{
     padding: 1.4rem 2rem 1rem 2rem;
@@ -79,11 +80,10 @@ button.close{
     color: #333;
     vertical-align: middle;
 }
-}
-.add_material span:nth-child(1){
+.add_material .glyphicon{
     font-size: 2rem;
 }
-.add_material span:nth-child(2){
+.add_material span{
     font-size: 1.3rem;
 }
 .sheet_material{
@@ -382,20 +382,20 @@ a:hover{
     font-size:1.19rem!important;
 }
 .go_detail{
-    width: 49.7%;
+    width: 49.6%;
     height: 3rem;
     font-size: 1.2rem;
     color: #fff;
     background-color: #333;
     display: inline-block;
-    border: 2px solid #333;
+    border: none;
 }
 .go_replace{
-    width: 49.7%;
+    width: 49.6%;
     height: 3rem;
     font-size: 1.2rem;
     color: #fff;
     background-color: #D9AD65;
     display: inline-block;
-    border: 2px solid #D9AD65;
+    border: none;
 }

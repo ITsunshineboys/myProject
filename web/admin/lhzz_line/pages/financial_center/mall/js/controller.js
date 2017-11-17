@@ -1,10 +1,13 @@
 angular.module('mall_finance', ['ui.bootstrap'])
-    .controller('mall_finance_ctrl', function ($scope, $http, $state,$uibModal,$location) {
-        $scope.second_title = '商城财务'
-        $scope.three_title = ''
-        $scope.four_title = ''
-        $scope.five_title = ''
-        $scope.six_title = ''
+    .controller('mall_finance_ctrl', function ($scope, $http,$rootScope, $state,_ajax,$uibModal,$location) {
+        $rootScope.crumbs = [
+            {
+                name:'财务中心',
+                icon:'icon-caiwu'
+            },{
+            name:'商城财务'
+            }
+        ]
         $scope.ctrlScope = $scope
         $scope.keyword = ''
         $scope.keyword1 = ''
@@ -21,14 +24,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         let tablePages=function () {
             $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-            $http.get('/supplier-cash/cash-list-today',{
-                params:$scope.params
-            }).then(function (res) {
+            _ajax.get('/supplier-cash/cash-list-today',$scope.params,function (res) {
                 console.log(res);
-                $scope.shop_withdraw_list = res.data.data.list
-                $scope.Config.totalItems = res.data.data.count;
-            },function (err) {
-                console.log(err);
+                $scope.shop_withdraw_list = res.data.list
+                $scope.Config.totalItems = res.data.count;
             })
         };
         $scope.params = {
@@ -64,14 +63,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         let tablePages1=function () {
             $scope.params1.page=$scope.Config1.currentPage;//点击页数，传对应的参数
-            $http.get('/supplier-cash/order-list-today',{
-               params:$scope.params1
-            }).then(function (res) {
+            _ajax.get('/supplier-cash/order-list-today',$scope.params1,function (res) {
                 console.log(res);
-                $scope.recorded_list = res.data.data.list
-                $scope.Config1.totalItems = res.data.data.count
-            },function (err) {
-                console.log(err);
+                $scope.recorded_list = res.data.list
+                $scope.Config1.totalItems = res.data.count
             })
         };
         $scope.params1 = {
@@ -106,14 +101,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         let tablePages2=function () {
             $scope.params2.page=$scope.Config2.currentPage;//点击页数，传对应的参数
-            $http.get('/supplieraccount/account-list',{
-               params:$scope.params2
-            }).then(function (res) {
+            _ajax.get('/supplieraccount/account-list',$scope.params2,function (res) {
                 console.log(res);
-                $scope.account_list = res.data.data.list
-                $scope.Config2.totalItems = res.data.data.count
-            },function (err) {
-                console.log(err);
+                $scope.account_list = res.data.list
+                $scope.Config2.totalItems = res.data.count
             })
         };
         $scope.params2 = {
@@ -129,17 +120,13 @@ angular.module('mall_finance', ['ui.bootstrap'])
             if(num == 1){
                 $scope.params2.category_id = $scope.cur_first_level
                 if($scope.cur_first_level!= 0){
-                    $http.get('/supplieraccount/category', {
-                        params: {
-                            pid: $scope.cur_first_level
-                        }
-                    }).then(function (res) {
+                    _ajax.get('/supplieraccount/category',{
+                        pid: $scope.cur_first_level
+                    },function (res) {
                         console.log(res)
-                        $scope.second_level = res.data.data
+                        $scope.second_level = res.data
                         $scope.second_level.unshift({id: $scope.cur_first_level, title: "全部"})
                         $scope.cur_second_level = $scope.second_level[0].id
-                    }, function (error) {
-                        console.log(error)
                     })
                     $scope.third_level = []
                 }else{
@@ -149,17 +136,13 @@ angular.module('mall_finance', ['ui.bootstrap'])
             }else if(num == 2){
                 $scope.params2.category_id = $scope.cur_second_level
                 if($scope.cur_second_level!=$scope.second_level[0].id){
-                    $http.get('/supplieraccount/category', {
-                        params: {
-                            pid: $scope.cur_second_level
-                        }
-                    }).then(function (res) {
+                    _ajax.get('/supplieraccount/category',{
+                        pid: $scope.cur_second_level
+                    },function (res) {
                         console.log(res)
-                        $scope.third_level = res.data.data
+                        $scope.third_level = res.data
                         $scope.third_level.unshift({id: $scope.cur_second_level, title: "全部"})
                         $scope.cur_third_level = $scope.third_level[0].id
-                    }, function (error) {
-                        console.log(error)
                     })
                 }else{
                     $scope.third_level = []
@@ -181,14 +164,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         let tablePages3=function () {
             $scope.params3.page=$scope.Config3.currentPage;//点击页数，传对应的参数
-            $http.get('/supplieraccount/freeze-list',{
-                params:$scope.params3
-            }).then(function (res) {
+            _ajax.get('/supplieraccount/freeze-list',$scope.params3,function (res) {
                 console.log(res);
-                $scope.freeze_list = res.data.data.list
-                $scope.Config3.totalItems = res.data.data.count
-            },function (err) {
-                console.log(err);
+                $scope.freeze_list = res.data.list
+                $scope.Config3.totalItems = res.data.count
             })
         };
         $scope.params3 = {
@@ -219,14 +198,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         let tablePages4=function () {
             $scope.params4.page=$scope.Config4.currentPage;//点击页数，传对应的参数
-            $http.get('/supplieraccount/cashed-list',{
-                params:$scope.params4
-            }).then(function (res) {
+            _ajax.get('/supplieraccount/cashed-list',$scope.params4,function (res) {
                 console.log(res)
-                $scope.withdraw_list = res.data.data.list
-                $scope.Config4.totalItems = res.data.data.count
-            },function (error) {
-                console.log(error)
+                $scope.withdraw_list = res.data.list
+                $scope.Config4.totalItems = res.data.count
             })
         };
         $scope.params4 = {
@@ -249,29 +224,24 @@ angular.module('mall_finance', ['ui.bootstrap'])
         $scope.go_prev = function () {
             if($rootScope.curState_name == 'mall_finance.account_detail'){
                 $rootScope.fromState_name = 'mall_finance.account'
-                $scope.four_title = ''
-                $scope.five_title = ''
-                $scope.six_title = ''
+                $rootScope.crumbs = [
+                    {
+                        name:'财务中心',
+                        icon:'icon-caiwu'
+                    },{
+                        name:'商城财务',
+                        link:function () {
+                            $state.go('mall_finance.index')
+                            $rootScope.crumbs.splice(2,4)
+                        }
+                    },{
+                    name:'账户管理'
+                    }
+                ]
             }else if($rootScope.curState_name == 'mall_finance.account_detail'){
                 
             }
         }
-        //post请求配置
-        const config = {
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            transformRequest: function (data) {
-                return $.param(data)
-            }
-        };
-        //默认登录状态(后期会删除)
-        $http.post('/site/login', {
-            'username': 13551201821,
-            'password': 'demo123'
-        }, config).then(function (response) {
-            console.log(response)
-        }, function (error) {
-            console.log(error)
-        })
         $scope.time_type = [
             {name: '全部时间', str: 'all'},
             {name: '今天', str: 'today'},
@@ -329,10 +299,20 @@ angular.module('mall_finance', ['ui.bootstrap'])
         })
         //跳转商家提现管理
         $scope.go_withdraw = function (num) {
-            $scope.three_title = '商家提现管理'
-            $scope.four_title = ''
-            $scope.five_title = ''
-            $scope.six_title = ''
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'商家提现管理'
+                }
+            ]
             $scope.cur_index = 1
             if(num == 1){
                 $scope.params.time_type = 'today'
@@ -347,68 +327,39 @@ angular.module('mall_finance', ['ui.bootstrap'])
             tablePages()
             $state.go('mall_finance.withdraw')
         }
-        //跳转二级页面
-        $scope.go_second = function () {
-            $scope.three_title = ''
-            $scope.four_title = ''
-            $scope.five_title = ''
-            $scope.six_title = ''
-            console.log($scope.second_title)
-            if ($scope.second_title == '商城财务') {
-                $state.go('mall_finance.index')
-            }
-        }
-        //跳转三级页面
-        $scope.go_three = function () {
-            $scope.four_title = ''
-            $scope.five_title = ''
-            $scope.six_title = ''
-            if ($scope.three_title == '入账详情') {
-                $state.go('intelligent.add_house')
-            }else if($scope.three_title == '商家提现管理'){
-                $state.go('mall_finance.withdraw')
-            }else if($scope.three_title == '账户管理'){
-                $state.go('mall_finance.account')
-            }
-        }
-        //跳转四级页面
-        $scope.go_four = function () {
-            $scope.five_title = ''
-            $scope.six_title = ''
-            if ($scope.four_title == '商家提现管理详情') {
-                $state.go('mall_finance.withdraw_manage_detail')
-            }else if($scope.four_title == '详情'){
-                $state.go('mall_finance.account_detail')
-            }
-        }
-        //跳转五级页面
-        $scope.go_five = function () {
-            $scope.six_title = ''
-            if ($scope.five_title == '已提现') {
-                $state.go('')
-            }
-        }
         //跳转商家提现管理详情
         $scope.go_withdraw_manageDetail = function (item) {
             console.log(item)
             $scope.cur_status = item.status
             $scope.cur_account_money = ''
             $scope.withdraw_remark = ''
-            $scope.three_title = '商家提现管理'
-            $scope.four_title = '商家提现管理详情'
             $scope.cur_deal_style = $scope.deal_style[0]
-            $scope.five_title = ''
-            $scope.six_title = ''
-            $http.get('/supplier-cash/cash-action-detail',{
-                params:{
-                    transaction_no:item.transaction_no
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'商家提现管理',
+                    link:function () {
+                        $state.go('mall_finance.withdraw')
+                        $rootScope.crumbs.splice(3,3)
+                    }
+                },{
+                name:'商家提现管理详情'
                 }
-            }).then(function (res) {
+            ]
+            _ajax.get('/supplier-cash/cash-action-detail',{
+                transaction_no:item.transaction_no
+            },function (res) {
                 console.log(res)
-                $scope.all_withdraw_detail = res.data.data
+                $scope.all_withdraw_detail = res.data
                 $state.go('mall_finance.withdraw_manage_detail')
-            },function (error) {
-                console.log(error)
             })
         }
         //监听提现金额
@@ -447,14 +398,12 @@ angular.module('mall_finance', ['ui.bootstrap'])
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
             if(valid){
-                $http.post('/supplier-cash/cash-deal',data,config).then(function (res) {
+                _ajax.post('/supplier-cash/cash-deal',data,function (res) {
                     console.log(res)
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
                     })
-                },function (error) {
-                    console.log(error)
                 })
             }
         }
@@ -465,58 +414,33 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.five_title = ''
             $scope.six_title = ''
             $scope.keyword = ''
-            //请求一级分类
-            $http.get('/supplieraccount/category', {
-                params: {
-                    pid: 0
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'账户管理'
                 }
-            }).then(function (res) {
-                console.log(res)
-                $scope.first_level = res.data.data
+            ]
+            //请求一级分类
+            _ajax.get('/supplieraccount/category',{
+                pid: 0
+            },function (res) {
+                $scope.first_level = res.data
                 $scope.first_level.unshift({id: "0", title: "全部"})
                 $scope.cur_first_level = $scope.first_level[0].id
                 $scope.second_level = []
                 $scope.third_level = []
                 tablePages2()
                 $state.go('mall_finance.account')
-            }, function (error) {
-                console.log(error)
             })
         }
-        // 改变店铺类型
-        // $scope.$watch('cur_shop_type',function (newVal,oldVal) {
-        //     if(oldVal!=''){
-        //         $http.get('/supplieraccount/account-list', {
-        //             params: {
-        //                 category_id: $scope.cur_category_id,
-        //                 type_shop: $scope.cur_shop_type.num,
-        //                 status: $scope.cur_shop_status.num
-        //             }
-        //         }).then(function (res) {
-        //             console.log(res)
-        //             $scope.account_list = res.data.data.list
-        //         }, function (error) {
-        //             console.log(error)
-        //         })
-        //     }
-        // })
-        // 改变店铺状态
-        // $scope.$watch('cur_shop_status',function (newVal,oldVal) {
-        //     if(oldVal!=0){
-        //         $http.get('/supplieraccount/account-list', {
-        //             params: {
-        //                 category_id: $scope.cur_category_id,
-        //                 type_shop: $scope.cur_shop_type.num,
-        //                 status: $scope.cur_shop_status.num
-        //             }
-        //         }).then(function (res) {
-        //             console.log(res)
-        //             $scope.account_list = res.data.data.list
-        //         }, function (error) {
-        //             console.log(error)
-        //         })
-        //     }
-        // })
         //提现管理关键词搜索
         $scope.get_withdraw_list = function () {
             if($scope.keyword!=''){
@@ -544,24 +468,61 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.four_title = '详情'
             $scope.five_title = ''
             $scope.six_title = ''
-            $http.get('/supplieraccount/account-view',{
-                params:{
-                    id:item.id
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'账户管理',
+                    link:function () {
+                        $state.go('mall_finance.account')
+                        $rootScope.crumbs.splice(3,3)
+                    }
+                },{
+                name:'详情'
                 }
-            }).then(function (res) {
-                console.log(res)
-                $scope.cur_account_detail = res.data.data
+            ]
+            _ajax.get('/supplieraccount/account-view',{
+                id:item.id
+            },function (res) {
+                $scope.cur_account_detail = res.data
                 $state.go('mall_finance.account_detail')
-            },function (error) {
-                console.log(error)
             })
         }
         // 跳转冻结金额
         $scope.go_freeze_money = function () {
-            $scope.three_title = '账户管理'
-            $scope.four_title = '详情'
-            $scope.five_title = '冻结金额'
-            $scope.six_title = ''
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'账户管理',
+                    link:function () {
+                        $state.go('mall_finance.account')
+                        $rootScope.crumbs.splice(3,3)
+                    }
+                },{
+                    name:'详情',
+                    link:function () {
+                        $state.go('mall_finance.account_detail')
+                        $rootScope.crumbs.splice(4,2)
+                    }
+                },{
+                name:'冻结金额'
+                }
+            ]
             $state.go('mall_finance.freeze_money')
         }
         //监听冻结金额
@@ -581,6 +542,26 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 $scope.cur_title = '冻结成功'
                 $scope.common_house = function () {
                     $uibModalInstance.close()
+                    $rootScope.crumbs = [
+                        {
+                            name:'财务中心',
+                            icon:'icon-caiwu'
+                        },{
+                            name:'商城财务',
+                            link:function () {
+                                $state.go('mall_finance.index')
+                                $rootScope.crumbs.splice(2,4)
+                            }
+                        },{
+                            name:'账户管理',
+                            link:function () {
+                                $state.go('mall_finance.account')
+                                $rootScope.crumbs.splice(3,3)
+                            }
+                        },{
+                            name:'详情'
+                        }
+                    ]
                     $state.go('mall_finance.account_detail')
                 }
             }
@@ -599,28 +580,18 @@ angular.module('mall_finance', ['ui.bootstrap'])
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
             if(valid&&!$scope.overrun){
-                $http.post('/supplieraccount/apply-freeze',obj,config).then(function (res) {
+                _ajax.post('/supplieraccount/apply-freeze',obj,function (res) {
                     console.log(res)
-                    $http.get('/supplieraccount/account-view',{
-                        params:{
-                            id:$scope.cur_account_detail.id
-                        }
-                    }).then(function (res) {
+                    _ajax.get('/supplieraccount/account-view',{
+                        id:$scope.cur_account_detail.id
+                    },function (res) {
                         console.log(res)
                         $scope.cur_account_detail = res.data.data
-                        $scope.three_title = '账户管理'
-                        $scope.four_title = '详情'
-                        $scope.five_title = ''
-                        $scope.six_title = ''
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
                         })
-                    },function (error) {
-                        console.log(error)
                     })
-                },function (error) {
-                    console.log(error)
                 })
             }else{
                 $scope.submitted = true
@@ -629,10 +600,32 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //跳转账户管理提现列表
         $scope.go_withdraw_list = function () {
             $scope.cur_index == 3
-            $scope.three_title = '账户管理'
-            $scope.four_title = '详情'
-            $scope.five_title = '提现列表'
-            $scope.six_title = ''
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'账户管理',
+                    link:function () {
+                        $state.go('mall_finance.account')
+                        $rootScope.crumbs.splice(3,3)
+                    }
+                },{
+                    name:'详情',
+                    link:function () {
+                        $state.go('mall_finance.account_detail')
+                        $rootScope.crumbs.splice(4,2)
+                    }
+                },{
+                    name:'提现列表'
+                }
+            ]
             $scope.cur_time_type = $scope.time_type[0]
             $scope.params4.supplier_id = $scope.cur_account_detail.id
             tablePages4()
@@ -642,10 +635,32 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //跳转冻结金额列表
         $scope.go_freeze_list = function () {
             $scope.cur_index == 2
-            $scope.three_title = '账户管理'
-            $scope.four_title = '详情'
-            $scope.five_title = '冻结金额列表'
-            $scope.six_title = ''
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'账户管理',
+                    link:function () {
+                        $state.go('mall_finance.account')
+                        $rootScope.crumbs.splice(3,3)
+                    }
+                },{
+                    name:'详情',
+                    link:function () {
+                        $state.go('mall_finance.account_detail')
+                        $rootScope.crumbs.splice(4,2)
+                    }
+                },{
+                    name:'冻结金额列表'
+                }
+            ]
             $scope.params3.supplier_id = $scope.cur_account_detail.id
             tablePages3()
             $state.go('mall_finance.freeze_list')
@@ -660,25 +675,17 @@ angular.module('mall_finance', ['ui.bootstrap'])
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '是否确认解冻？'
                 $scope.save_freeze = function () {
-                    $http.get('/supplieraccount/account-thaw',{
-                        params:{
-                            freeze_id:item.id
-                        }
-                    }).then(function (res) {
+                    _ajax.get('/supplieraccount/account-thaw',{
+                        freeze_id:item.id
+                    },function (res) {
                         console.log(res)
-                        $http.get('/supplieraccount/freeze-list',{
-                            params:{
-                                supplier_id:cur.cur_account_detail.id
-                            }
-                        }).then(function (res) {
+                        _ajax.get('/supplieraccount/freeze-list',{
+                            supplier_id:cur.cur_account_detail.id
+                        },function (res) {
                             console.log(res)
-                            cur.freeze_list = res.data.data.list
+                            cur.freeze_list = res.data.list
                             $uibModalInstance.close()
-                        },function (error) {
-                            console.log(error)
                         })
-                    },function (error) {
-                        console.log(error)
                     })
                 }
                 $scope.cancel_freeze = function () {
@@ -693,17 +700,43 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //跳转提现详情页
         $scope.go_withdraw_detail = function (item) {
             console.log(item)
-            $scope.three_title = '账户管理'
-            $scope.four_title = '详情'
-            $scope.five_title = '提现列表'
-            $scope.six_title='详情'
-            $http.get('/supplieraccount/cashed-view',{
-                params:{
-                    'id':item.id
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'账户管理',
+                    link:function () {
+                        $state.go('mall_finance.account')
+                        $rootScope.crumbs.splice(3,3)
+                    }
+                },{
+                    name:'详情',
+                    link:function () {
+                        $state.go('mall_finance.account_detail')
+                        $rootScope.crumbs.splice(4,2)
+                    }
+                },{
+                    name:'提现列表',
+                    link:function () {
+                        $state.go('mmall_finance.withdraw_list')
+                        $rootScope.crumbs.splice(5,1)
+                    }
+                },{
+                name:'详情'
                 }
-            }).then(function (res) {
+            ]
+            _ajax.get('/supplieraccount/cashed-view',{
+                'id':item.id
+            },function (res) {
                 console.log(res)
-                $scope.withdraw_detail = res.data.data
+                $scope.withdraw_detail = res.data
                 $state.go('mall_finance.withdraw_detail')
             })
         }
@@ -713,6 +746,20 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $scope.four_title = ''
             $scope.five_title = ''
             $scope.six_title=''
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'入账详情',
+                }
+            ]
             $scope.cur_index = 0
             $scope.keyword1 = ''
             tablePages1()
@@ -721,8 +768,17 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //入账列表搜索
         $scope.get_recorded_list = function () {
             if($scope.keyword1!=''){
+                $scope.params1.time_type = 'all'
+                $scope.params1.time_end  = ''
+                $scope.params1.time_end = ''
                 $scope.params1.search = $scope.keyword1
                 tablePages1()
             }
         }
+        $scope.$watch('keyword1',function (newVal,oldVal) {
+            if(newVal== ''){
+                $scope.params1.search = newVal
+                tablePages1()
+            }
+        })
     })

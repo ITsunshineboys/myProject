@@ -12,6 +12,7 @@ body{
     margin-top: 4rem;
     background-color: white;
     border-top: 1rem solid #f6f6f6;
+    padding-bottom: 1.8rem;
 }
 .list_comment ul li{
     text-align: center;
