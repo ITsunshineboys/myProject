@@ -1599,7 +1599,7 @@ class QuoteController extends Controller
 //                case $one_post['id']:
 //                    $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
 //                    break;
-                case $one_post['series']:
+                case isset($one_post['series']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->insert(DecorationMessage::tableName(), [
                             'series_id' => $one_post['series'],
@@ -1607,7 +1607,7 @@ class QuoteController extends Controller
                             'decoration_add_id' => $post['id'],
                         ])->execute();
                     break;
-                case $one_post['style']:
+                case isset($one_post['style']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->insert(DecorationMessage::tableName(), [
                             'style_id' => $one_post['style'],
@@ -1615,7 +1615,7 @@ class QuoteController extends Controller
                             'decoration_add_id' => $post['id'],
                         ])->execute();
                     break;
-                case $one_post['min_area']:
+                case isset($one_post['min_area']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
                             'min_area' => $one_post['min_area'],
