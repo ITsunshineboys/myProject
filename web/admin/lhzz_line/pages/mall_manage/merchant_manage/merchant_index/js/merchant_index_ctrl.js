@@ -4,7 +4,13 @@
 /*商城管理 首页*/
 
 var mall_mag = angular.module("mallmagModule",[]);
-mall_mag.controller("mall_mag",function ($scope,$http) {
+mall_mag.controller("mall_mag",function ($scope,$http,$rootScope) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }];
+
     $http({
         method:"get",
         url:baseUrl+"/mall/index-admin",

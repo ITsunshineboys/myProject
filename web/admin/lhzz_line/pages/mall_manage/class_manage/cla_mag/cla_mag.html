@@ -1,13 +1,5 @@
 <link rel="stylesheet" href="pages/mall_manage/class_manage/cla_mag/css/cla_mag.css">
-<div ng-controller="cla_mag_tabbar">
-    <!--顶部导航-->
-    <div class="cla_mag_topnav">
-        <span class="glyphicon glyphicon-certificate"></span>
-        <h6 ui-sref="merchant_index">商城管理 ></h6>
-        <h6>分类管理</h6>
-    </div>
-
-    <div class="cla_mag_tabbar">
+<div ng-controller="cla_mag_tabbar" class="cla_mag_tabbar">
         <div class="cla_mag_tabtitle">
             <span id="onsale_tab" ng-click="tabFunc('onsale_flag')" ng-class="{clickstyle:onsale_flag}">已上架</span>
             <span id="offsale_tab" ng-click="tabFunc('offsale_flag')" ng-class="{clickstyle:offsale_flag}">已下架</span>

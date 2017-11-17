@@ -3,8 +3,20 @@
  */
 /*已上架 编辑*/
 var onsale_edit = angular.module("onsaleeditModule", ['ngFileUpload']);
-onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$http,Upload,$rootScope) {
-    const picprefix = baseUrl+"/";
+onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$http,Upload,$rootScope,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '分类管理',
+        link: 'fenleiguanli',
+        params:{offsale_flag:false}
+    }, {
+        name: '分类详情'
+    }];
+
+	const picprefix = baseUrl+"/";
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -13,23 +25,21 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
     };
     let pid;
     let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;
-
-
-    $scope.changescope = $scope;
+	$scope.changescope = $scope;
     $scope.show_class_warning = false;
+    $scope.picwarning = false;
     $scope.idarr = [];
     $scope.firstclass = []; /*一级下拉框*/
     $scope.subClass = [];/*二级下拉框*/
     $scope.item =  $stateParams.item;
 	$scope.iconpath = picprefix+$stateParams.item.icon; /*图片路径*/
-	$scope.picwarning = false;
 	$scope.savemodal = '';
+	//分类路径处理
 	let onlinepath = $stateParams.item.path.split(",");
 	onlinepath.splice(onlinepath.length-1,onlinepath.length);
 	$scope.finalpatharr = onlinepath;
 	$scope.offlinereason = '';
-
-    $scope.config =  $rootScope.config;
+    $scope.config =  $rootScope.config; //富文本编辑器配置
 
 
         /*分类名称是否存在的判断*/
@@ -44,6 +54,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 
 	/*分类所属 第一个下拉框的值*/
 	$scope.findParentClass =  (function () {
+
 			$http({
 				method: "get",
 				url: baseUrl+"/mall/categories-manage-admin",

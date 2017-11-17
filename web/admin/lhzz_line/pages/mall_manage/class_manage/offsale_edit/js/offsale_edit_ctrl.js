@@ -5,7 +5,19 @@
 
 var offsale_edit = angular.module("offsaleeditModule",['ngFileUpload']);
 offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http,Upload,$rootScope) {
-    const config = {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '分类管理',
+        link: 'fenleiguanli',
+        params:{offsale_flag:true}
+    },{
+        name: '分类详情',
+	}];
+
+	const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)

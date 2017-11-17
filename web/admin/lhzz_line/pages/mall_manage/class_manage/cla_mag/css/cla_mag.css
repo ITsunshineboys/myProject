@@ -2,33 +2,7 @@ ul{
     list-style: none;
 }
 
-/*顶部导航*/
-.cla_mag_topnav {
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px solid #999;
-    overflow: hidden;
-}
-
-.cla_mag_topnav span {
-    float: left;
-    margin: 20px 0 20px 40px;
-}
-
-.cla_mag_topnav h6 {
-    float: left;
-    font-size: 14px;
-    line-height: 36px;
-    margin-left: 5px;
-    font-family: PingFangSC-Semibold;
-    font-size: 14px;
-    color: #2F3033;
-}
-
-.cla_mag_topnav h6:nth-child(2){
-    font-weight: bold;
-}
-
+/*选项卡样式*/
 .cla_mag_tabbar{
     padding-left: 40px;
 }
@@ -72,7 +46,6 @@ ul{
 }
 
 /*按钮组*/
-
 .cla_mag_btngroup{
     padding-top: 40px;
 }
@@ -164,11 +137,7 @@ input[type="checkbox"]{
     cursor: pointer;
 }
 
-/*.sort img{*/
-    /*width: 13px!important;*/
-    /*height: 15px!important;*/
-/*}*/
-
+/*排序按钮样式*/
 table .sortpic {
     display: inline-block;
     margin-top: -4px;
@@ -195,7 +164,6 @@ table .sortpic .glyphicon-triangle-bottom {
 }
 
 /*模态框*/
-
 #xiajia_content,#shuru_content,#piliangxiajia_content{
     width: 635px!important;
     padding-left: 40px!important;

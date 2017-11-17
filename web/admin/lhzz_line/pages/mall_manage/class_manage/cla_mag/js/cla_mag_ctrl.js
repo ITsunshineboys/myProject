@@ -1,11 +1,14 @@
 let cla_mag = angular.module("clamagModule", []);
-cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
+cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$rootScope,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '分类管理',
+        link: 'fenleiguanli',
+        params:{offsale_flag:false}
+    }];
 
     let singleoffid;   //单个下架分类id
     let singleonid;    //单个上架分类id

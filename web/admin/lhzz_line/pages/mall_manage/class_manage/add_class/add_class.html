@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="pages/mall_manage/class_manage/add_class/css/add_class.css">
 <div ng-controller="addClass">
-    <!--顶部导航-->
-    <div class="topnav">
-        <span class="glyphicon glyphicon-certificate"></span>
-        <h6 ui-sref="merchant_index">商城管理 ></h6>
-        <h6 ui-sref="fenleiguanli">分类管理</h6>
-        <h6>> 添加分类 </h6>
-    </div>
+    <!--&lt;!&ndash;顶部导航&ndash;&gt;-->
+    <!--<div class="topnav">-->
+        <!--<span class="glyphicon glyphicon-certificate"></span>-->
+        <!--<h6 ui-sref="merchant_index">商城管理 ></h6>-->
+        <!--<h6 ui-sref="fenleiguanli">分类管理</h6>-->
+        <!--<h6>> 添加分类 </h6>-->
+    <!--</div>-->
 
 
     <div class=class_detail>
@@ -68,7 +68,7 @@
         <div class="btn_sure">
             <!--#save_tishi-->
             <button ng-click="sureaddclass()">确认</button>
-            <button ui-sref="fenleiguanli">返回</button>
+            <button ui-sref="fenleiguanli({offsale_flag:true})">返回</button>
         </div>
 
     </div>

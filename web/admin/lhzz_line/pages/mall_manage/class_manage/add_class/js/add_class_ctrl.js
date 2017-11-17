@@ -4,6 +4,18 @@
 /*已下架 添加分类*/
 var add_class = angular.module("addclassModule",['ngFileUpload']);
 add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '分类管理',
+        link: 'fenleiguanli',
+        params:{offsale_flag:true}
+    }, {
+        name: '添加分类'
+    }];
+
     const picprefix = baseUrl+"/";
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
