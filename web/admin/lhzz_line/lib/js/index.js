@@ -2,7 +2,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax) {
     $rootScope.baseUrl = baseUrl;
 
     $scope.loginOut = function () {
-        _ajax.post('/site/logout', {})
+        _ajax.post('/site/admin-logout', {})
     };
     //富文本框配置
     $rootScope.config = {
