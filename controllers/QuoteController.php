@@ -1585,14 +1585,7 @@ class QuoteController extends Controller
         $decoration_add = DecorationAdd::findOne($post['id']);
         $decoration_add->correlation_message = $post['message'];
         $decoration_add->sku           = $post['code'];
-        if (!$decoration_add->validate()){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
+        var_dump($decoration_add->save());exit;
         if (!$decoration_add->save()){
             $code = 1000;
             return Json::encode([
@@ -1601,12 +1594,13 @@ class QuoteController extends Controller
             ]);
         }
 
+
         foreach ($post['add'] as $one_post){
             switch ($one_post){
-                case isset($one_post['id']):
+                case $one_post['id']:
                     $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
                     break;
-                case isset($one_post['series']):
+                case $one_post['series']:
                     $dm = \Yii::$app->db->createCommand()
                         ->insert(DecorationMessage::tableName(), [
                             'series_id' => $one_post['series'],
@@ -1614,7 +1608,7 @@ class QuoteController extends Controller
                             'decoration_add_id' => $post['id'],
                         ])->execute();
                     break;
-                case isset($one_post['style']):
+                case $one_post['style']:
                     $dm = \Yii::$app->db->createCommand()
                         ->insert(DecorationMessage::tableName(), [
                             'style_id' => $one_post['style'],
@@ -1622,7 +1616,7 @@ class QuoteController extends Controller
                             'decoration_add_id' => $post['id'],
                         ])->execute();
                     break;
-                case isset($one_post['min_area']):
+                case $one_post['min_area']:
                     var_dump($one_post);exit;
                     $dm = \Yii::$app->db->createCommand()
                         ->insert(DecorationMessage::tableName(), [
