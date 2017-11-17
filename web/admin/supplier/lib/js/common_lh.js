@@ -1,8 +1,3 @@
-let baseUrl = (function () {
-    //return 'http://test.cdlhzz.cn';
-    return '';
-})();
-
 /**
  * ajax请求
  * @param url          请求接口
