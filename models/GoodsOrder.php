@@ -2424,10 +2424,11 @@ class GoodsOrder extends ActiveRecord
         if($postData==''){
             $array=[];
         }else{
-            $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id])
+            $array=$array
+                ->where(['a.order_no'=>$postData['order_no']])
                 ->all();
         };
-        if(!$arr){
+        if(!$array){
             return null;
         }
         $arr=self::getorderstatus($array);
