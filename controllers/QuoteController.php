@@ -1897,6 +1897,9 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 测试功能
+     */
     public function actionTest()
     {
         var_dump(WorksData::find()->where(['goods_code'=>111111])->all());exit;

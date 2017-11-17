@@ -425,29 +425,29 @@ class BasisDecorationService
      */
     public static function  carpentryModellingLength($arr,$coefficient_all,$series=1)
     {
-        switch ($series) {
-            case  1:
-                $series = '齐家';
-                break;
-            case  2:
-                $series = '享家';
-                break;
-            case  3:
-                $series = '享家+';
-                break;
-            case  4:
-                $series = '智家';
-                break;
-            case  5:
-                $series = '智家+';
-                break;
-            default:
-                echo "请输入正确1-5的值";
-        }
-
+//        switch ($series) {
+//            case  1:
+//                $series = '齐家';
+//                break;
+//            case  2:
+//                $series = '享家';
+//                break;
+//            case  3:
+//                $series = '享家+';
+//                break;
+//            case  4:
+//                $series = '智家';
+//                break;
+//            case  5:
+//                $series = '智家+';
+//                break;
+//            default:
+//                echo "请输入正确1-5的值";
+//        }
+//        $series_ = Series::find()->select('id,series')->where(['status'=>1])->all();
         $length = $arr['modelling_length'];
         foreach ($coefficient_all as $coefficient_one) {
-            if( $coefficient_one['series'] == $series) {
+            if( $coefficient_one['id'] == $series) {
                 $series_one = $coefficient_one['modelling_length_coefficient'];
             }
         }

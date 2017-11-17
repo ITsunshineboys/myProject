@@ -587,7 +587,7 @@ class OwnerController extends Controller
         $_modelling = !isset($modelling) ? $modelling :WorkerCraftNorm::CARPENTRY_DAY_MODELLING;
 
 
-        $series_all = Series::find()->asArray()->all();
+        $series_all = Series::find()->select('id,series')->where(['status=>1'])->asArray()->all();
         if ($series_all == null){
             $code = 1000;
             return Json::encode([
@@ -597,7 +597,7 @@ class OwnerController extends Controller
         }
 
 
-        $style_all = Style::find()->asArray()->all();
+        $style_all = Style::find()->select('id,style')->where(['status=>1'])->asArray()->all();;
         if ($style_all == null){
             $code = 1000;
             return Json::encode([
