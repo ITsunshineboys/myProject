@@ -2,11 +2,21 @@
  * Created by Administrator on 2017/8/8 0008.
  */
 var comment= angular.module("storedetailModule",[])
-    .controller("storedetail_ctrl",function ($scope,$http,$stateParams) {
+    .controller("storedetail_ctrl",function ($rootScope,$scope,$http,$stateParams) {
         let result;
         let year;
         let timearr;
         const storeid =  $stateParams.store.id
+        $rootScope.crumbs = [{
+            name: '商城管理',
+            icon: 'icon-shangchengguanli',
+            link: 'merchant_index'
+        }, {
+            name: '商家管理',
+            link: 'store_mag',
+        },{
+            name: '商家详情',
+        }];
         $scope.store = $stateParams.store;
         $scope.category_name = $stateParams.store.category_name;
         $scope.type_shop = $stateParams.store.type_shop;

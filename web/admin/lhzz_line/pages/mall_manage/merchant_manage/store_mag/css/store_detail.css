@@ -1,53 +1,53 @@
 /*ͷ����ʼ*/
-header{
-    height: 60px;
-    line-height: 60px;
-    padding-left: 40px;
-    border-bottom: 1px solid #E6E9F0 ;
-}
-.shop_manage{
+.shop_manage {
     font-size: 14px;
     color: #2F3033;
     line-height: 14px;
     font-weight: 700;
 }
-.manage_child{
+
+.manage_child {
     font-size: 14px;
     color: #8D9199;
     line-height: 14px;
 }
-header img{
-    margin-left:72%;
-}
+
 /*ͷ������*/
 
 /*��������*/
-section{
+section {
     padding-left: 40px;
 }
+
 /*�л���ʽ*/
-.pic_comment{
+.pic_comment {
     background-color: #fff;
     margin-bottom: 5rem;
 }
-.img_size{
-    width: 1.1rem!important;
+
+.img_size {
+    width: 1.1rem !important;
 }
-.collect{
-    width: 1.3rem!important;
+
+.collect {
+    width: 1.3rem !important;
 }
-.nav-tabs{
+
+.nav-tabs {
     border: none;
 }
-.pic_tabs{
+
+.pic_tabs {
     margin-bottom: 1rem;
 }
+
 .pic_tabs li a {
-    font-size:14px;
+    font-size: 14px;
     color: #53A8F4;
     padding-top: .5rem;
 }
-.line_com{
+
+.line_com {
     display: block;
     width: 4.2rem;
     height: .2rem;
@@ -55,9 +55,11 @@ section{
     /*margin-left: 5.7rem;*/
     margin-top: .5rem;
 }
-.tab-content{
+
+.tab-content {
     margin-top: .5rem;
 }
+
 .list_tab {
     margin-bottom: 1.5rem;
     margin-left: -23px;
@@ -65,185 +67,222 @@ section{
 
 }
 
-.list_tab li{
+.list_tab li {
     /*width: 16rem;*/
     text-align: center;
     padding-top: .5rem;
     margin-left: 25px;
 }
-.list_tab li a{
+
+.list_tab li a {
     color: #53A8F4;
     font-size: 14px;
 }
+
 .nav > li > a {
     padding: 0;
     color: #666F80;
 }
-.active{
-    color: #53A8F4 ;
+
+.active {
+    color: #53A8F4;
 }
-.nav>li>a:focus, .nav>li>a:hover {
+
+.nav > li > a:focus, .nav > li > a:hover {
     text-decoration: none;
-    background-color:white;
+    background-color: white;
 }
+
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-     border: none;
+    border: none;
 }
+
 .nav-tabs > li > a {
-     border: none;
+    border: none;
 }
+
 /*����*/
 
 /*����������ʽ  ������Ϣ*/
-.shop_name{
+.shop_name {
     margin-bottom: 25px;
 }
-.shop_name span{
+
+.shop_name span {
     color: #666F80;
     font-size: 14px;
 }
-.shop_name span:nth-child(2){
+
+.shop_name span:nth-child(2) {
     margin-left: 85px;
 }
-.shop_num{
+
+.shop_num {
     margin-bottom: 25px;
 }
-.shop_num span{
+
+.shop_num span {
     color: #666F80;
     font-size: 14px;
 }
-.shop_num span:nth-child(2){
+
+.shop_num span:nth-child(2) {
     margin-left: 100px;
 }
-.shop_logo{
+
+.shop_logo {
     margin-bottom: 25px;
-    color:#666F80;
+    color: #666F80;
 }
-.shop_logo img{
+
+.shop_logo img {
     margin-left: 85px;
     width: 120px;
     height: 120px;
     border: 1px solid #ABABAB;
-    vertical-align:text-top;
+    vertical-align: text-top;
 }
-hr{
+
+hr {
     margin-left: 6px;
     width: 90%;
     color: #ABABAB;
 }
-.shop_store{
+
+.shop_store {
     margin-bottom: 25px;
     color: #666F80;
 }
+
 .shop_store ul {
     margin-left: 45px;
     display: inline-block;
-    vertical-align:text-top;
+    vertical-align: text-top;
 }
+
 .shop_store ul li {
     list-style: none;
     margin-bottom: 5px;
 }
-.shop_store ul li span:nth-child(2){
+
+.shop_store ul li span:nth-child(2) {
     margin-left: 50px;
 }
-.shop_store ul li:nth-child(4) span:nth-child(2){
+
+.shop_store ul li:nth-child(4) span:nth-child(2) {
     margin-left: 36px;
 }
-.btn_back{
+
+.btn_back {
     margin-top: 30px;
 }
-.btn_back button{
+
+.btn_back button {
     width: 80px;
     height: 34px;
     background-color: white;
     color: #5E6166;
     border: 1px solid #5E6166;
 }
+
 /*����������ʽ  ��������*/
-.shop_money{
+.shop_money {
     margin-bottom: 25px;
 }
 
-
-.shop_money span:nth-child(2){
-    text-decoration:line-through;
+.shop_money span:nth-child(2) {
+    text-decoration: line-through;
     margin-left: 100px;
 }
-.shop_money span:nth-child(3){
+
+.shop_money span:nth-child(3) {
     color: #E8502E;
     margin-left: 20px;
 }
 
-.offline_store span:nth-child(2){
+.offline_store span:nth-child(2) {
     margin-left: 16px;
 }
 
-.shop_credit{
+.shop_credit {
     margin-bottom: 25px;
-    color:#666F80;
+    color: #666F80;
 }
-.shop_credit span:nth-child(2){
-    margin-left:58px;
+
+.shop_credit span:nth-child(2) {
+    margin-left: 58px;
 }
-.shop_license{
+
+.shop_license {
     margin-bottom: 25px;
-    color:#666F80;
+    color: #666F80;
 }
+
 .shop_license img {
-    width:205px;
+    width: 205px;
     height: 314px;
     border: 1px solid #ABABAB;
     margin-left: 85px;
-    vertical-align:text-top;
+    vertical-align: text-top;
 }
-.shop_card{
+
+.shop_card {
     margin-bottom: 25px;
-    color:#666F80;
+    color: #666F80;
 }
-.shop_card span:nth-child(2){
+
+.shop_card span:nth-child(2) {
     margin-left: 60px;
 }
-.shop_face{
+
+.shop_face {
     margin-bottom: 25px;
-    color:#666F80;
+    color: #666F80;
 }
-.shop_face img{
+
+.shop_face img {
     margin-left: 50px;
     width: 235px;
     height: 150px;
     border: 1px solid #ABABAB;
-    vertical-align:text-top;
+    vertical-align: text-top;
 }
-.table_div table tr{
+
+.table_div table tr {
     border-bottom: 1px solid #ddd;
     height: 35px;
     line-height: 35px;
 }
-.table_div table tr td{
+
+.table_div table tr td {
     /*margin-left: 60px;*/
     color: #7A8599;
     font-size: 14px;
     border-top: none;
     /*border-bottom: 1px solid #ddd;*/
 }
+
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
     border-top: none;
 }
-.modal_size{
+
+.modal_size {
     padding-left: 30px;
     width: 500px;
     height: 350px;
     margin-left: 160px;
     margin-top: 150px;
 }
-.modal_size span{
-    color:#666F80;
+
+.modal_size span {
+    color: #666F80;
 }
-.modal_size span:nth-child(4){
+
+.modal_size span:nth-child(4) {
     margin-left: 100px;
 }
-.modal_size_btn{
+
+.modal_size_btn {
     width: 80px;
     height: 34px;
     background-color: white;
@@ -253,11 +292,11 @@ hr{
     margin-top: 180px;
 }
 
-#storeclass{
-    margin-left: 84px!important;
+#storeclass {
+    margin-left: 84px !important;
 }
 
 /*店铺资质字体颜色*/
-.store_level{
+.store_level {
     color: #666F80;
 }

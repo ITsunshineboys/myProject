@@ -1,17 +1,29 @@
 let edit_attribute = angular.module("edit_attribute_module", []);
-edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $stateParams,$state) {
+edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)
         }
     }
+
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '系列/风格/属性管理',
+        link: 'style_index',
+        params: {showattr: true}
+    }, {
+        name: '属性管理详情'
+    }];
+
     $scope.iswarning = false;
     $scope.iswarningcontent = false;
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
-
 
 
     $scope.btnclick = true;
@@ -23,7 +35,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
     let unit_value_arr = [];//单位真值数组
 
     /*单位默认*/
-    $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'MM'}, {unit: 'M'}, {unit:'kg'},{unit:'M²'}]
+    $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'MM'}, {unit: 'M'}, {unit: 'kg'}, {unit: 'M²'}]
     for (let [key, value] of $scope.propattrs.entries()) {
         for (let [key1, value1] of $scope.unitarrs.entries()) {
             if (value.unit == value1.unit) {
@@ -38,7 +50,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         let obj = {
             name: '',
             value: '',
-            cur_unit:$scope.unitarrs[0],
+            cur_unit: $scope.unitarrs[0],
             addition_type: '0'
         }
         $scope.propattrs.push(obj);
@@ -49,7 +61,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         let obj = {
             name: '',
             value: '',
-            cur_unit:$scope.unitarrs[0],
+            cur_unit: $scope.unitarrs[0],
             addition_type: '1'
         }
         $scope.propattrs.push(obj);
@@ -109,8 +121,8 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
         }
 
 
-        for(let i=0;i<unitsarr.length;i++){
-            switch (unitsarr[i]){
+        for (let i = 0; i < unitsarr.length; i++) {
+            switch (unitsarr[i]) {
                 case "无":
                     unit_value_arr.push(0);
                     break;
@@ -132,31 +144,31 @@ edit_attribute.controller("edit_attribute_ctrl", function ($scope, $http, $state
             }
         }
 
-        let url = baseUrl+"/mall/goods-attr-add";
+        let url = baseUrl + "/mall/goods-attr-add";
         let data = {
             category_id: +$scope.propid,
             "names[]": namesarr,
             "values[]": valuesarr,
-            "units[]":unit_value_arr,
-            "addition_types[]":typesarr
+            "units[]": unit_value_arr,
+            "addition_types[]": typesarr
         };
-            $http.post(url,data,config).then(function (res) {
-                console.log(res);
-                if(res.data.code==200){
-                    $scope.btnclick = true;
-                    $("#success_modal").modal("show");
-                }else if(res.data.code==1009){
-                    $scope.btnclick = false;
-                    $("#success_modal").modal("show");
-                }
-            })
+        $http.post(url, data, config).then(function (res) {
+            console.log(res);
+            if (res.data.code == 200) {
+                $scope.btnclick = true;
+                $("#success_modal").modal("show");
+            } else if (res.data.code == 1009) {
+                $scope.btnclick = false;
+                $("#success_modal").modal("show");
+            }
+        })
     }
 
     /*确认保存成功*/
     $scope.modalBack = () => {
-        setTimeout(()=>{
-            $state.go('style_index',{showattr:true})
-        },200)
+        setTimeout(() => {
+            $state.go('style_index', {showattr: true})
+        }, 200)
     }
 
 

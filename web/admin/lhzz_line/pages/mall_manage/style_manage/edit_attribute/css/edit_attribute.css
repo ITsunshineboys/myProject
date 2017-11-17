@@ -1,104 +1,113 @@
 /*头部开始*/
-header{
-  height: 60px;
-  line-height: 60px;
-  padding-left: 40px;
-  border-bottom: 1px solid #E6E9F0 ;
+.shop_manage {
+    color: #2F3033;
+    line-height: 14px;
+    font-weight: bold;
 }
-.shop_manage{
-  color: #2F3033;
-  line-height: 14px;
-  font-weight: bold;
+
+.commodity_manage {
+    color: #8D9199;
 }
-.commodity_manage{
-  color: #8D9199;
-}
-header img{
-  margin-left:70%;
-}
+
 /*头部结束*/
-section{
-  padding-left: 40px;
-}
-.top_title{
-  padding: 40px 0;
-}
-hr{
-  margin: 0 auto;
-}
-input{
-  height: 30px;
-}
-.add_box{
-  margin-top: 20px;
-}
-.add{
-  color: #5E6166;
-  padding: 5px 10px;
-  border: 1px solid #5E6166;
-  margin-right: 15px;
-  font-size: 12px;
-}
-.margin_left{
-  margin-left: 85px;
-}
-.margin_top{
-  margin-top: 20px;
-}
-.inline_block{
-  display: inline-block;
-  vertical-align: top;
-}
-.padding_right{
-  padding-right: 30px;
-  padding-top: 20px;
-}
-.gay_input{
-  width: 280px;
-  background-color: #E8E6E8;
-  border:1px solid #E8E6E8;
-  border-radius: 3px;
-}
-.normal_input{
-  width: 280px;
-  border:1px solid #E8E6E8;
-  border-radius: 3px;
+section {
+    padding-left: 40px;
 }
 
-.input_one{
-  width: 140px;
-  border-radius: 3px;
-  border:1px solid #666F80
-}
-.select_css{
-  width: 70px;
-  height: 30px;
-  font-size: 12px;
-  color:#666F80;
-  border-radius: 3px;
-  border: 1px solid #666F80;
-}
-.attr_font{
-  color:#ABABAB;
-}
-.bottom{
-  margin-top: 200px;
-}
-.bottom span{
-  display: inline-block;
-  border: 1px solid #ddd;
-  width: 80px;
-  height: 35px;
-  border-radius: 3px;
-  text-align: center;
-  line-height: 35px;
-  cursor: pointer;
-}
-.bg_blue{
-  color: #487AF8;
-  background-color: #F2F4FF;
+.top_title {
+    padding: 40px 0;
 }
 
-.warningred{
-  border:1px solid red;
+hr {
+    margin: 0 auto;
+}
+
+input {
+    height: 30px;
+}
+
+.add_box {
+    margin-top: 20px;
+}
+
+.add {
+    color: #5E6166;
+    padding: 5px 10px;
+    border: 1px solid #5E6166;
+    margin-right: 15px;
+    font-size: 12px;
+}
+
+.margin_left {
+    margin-left: 85px;
+}
+
+.margin_top {
+    margin-top: 20px;
+}
+
+.inline_block {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.padding_right {
+    padding-right: 30px;
+    padding-top: 20px;
+}
+
+.gay_input {
+    width: 280px;
+    background-color: #E8E6E8;
+    border: 1px solid #E8E6E8;
+    border-radius: 3px;
+}
+
+.normal_input {
+    width: 280px;
+    border: 1px solid #E8E6E8;
+    border-radius: 3px;
+}
+
+.input_one {
+    width: 140px;
+    border-radius: 3px;
+    border: 1px solid #666F80
+}
+
+.select_css {
+    width: 70px;
+    height: 30px;
+    font-size: 12px;
+    color: #666F80;
+    border-radius: 3px;
+    border: 1px solid #666F80;
+}
+
+.attr_font {
+    color: #ABABAB;
+}
+
+.bottom {
+    margin-top: 200px;
+}
+
+.bottom span {
+    display: inline-block;
+    border: 1px solid #ddd;
+    width: 80px;
+    height: 35px;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.bg_blue {
+    color: #487AF8;
+    background-color: #F2F4FF;
+}
+
+.warningred {
+    border: 1px solid red;
 }
