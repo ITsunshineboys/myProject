@@ -3908,11 +3908,16 @@ class OrderController extends Controller
             $sku=$request->post('sku','');
             if (!$order_no || !$sku)
             {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+                $order_no=$request->get('order_no','');
+                $sku=$request->get('sku','');
+                if(!$order_no || !$sku)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
             $OrderGoods=OrderGoods::find()
                 ->select('goods_name,sku')
