@@ -21,6 +21,9 @@ class Wxpay  extends ActiveRecord
 
     const  EFFECT_NOTIFY_URL='/order/wxpayeffect_earnstnotify';
     const  LINEPAY_NOTIFY_URL='/order/orderlinewxpaynotify';
+    const  PAY_CANCEL_URL='/line/#!/order_commodity';
+    const  PAY_SUCESS_URL='/line/#!/pay_success';
+    const  PAY_FAIL_URL='/line/#!/order_commodity';
     const  EFFECT_BODY='样板间申请费';
     const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
     const  ACCESS_TOKEN='access_token';
@@ -32,7 +35,7 @@ class Wxpay  extends ActiveRecord
     {
         return 'goods_order';
     }
-  /**
+   /**
      *无登录-微信公众号支付接口
      */
    public function Wxlineapipay($orders,$openid){
@@ -63,10 +66,11 @@ class Wxpay  extends ActiveRecord
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
-        $failurl="http://".$_SERVER['SERVER_NAME']."/line/#!/order_commodity";
-        $successurl="http://".$_SERVER['SERVER_NAME']."/line/#!/pay_success";
+        $failurl="http://".$_SERVER['SERVER_NAME'].self::PAY_FAIL_URL;
+        $cancelurl="http://".$_SERVER['SERVER_NAME'].self::PAY_CANCEL_URL;
+        $successurl="http://".$_SERVER['SERVER_NAME'].self::PAY_SUCESS_URL;
         echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$failurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
+ function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
 </script>";
         exit;
     }
@@ -107,37 +111,12 @@ class Wxpay  extends ActiveRecord
             return  Json::decode($jsApiParameters);
         }
 
-       public static function Wxpay(){
-            ini_set('date.timezone','Asia/Shanghai');
-            //打印输出数组信息
-            function printf_info($data)
-            {
-                foreach($data as $key=>$value){
-                    echo "<font color='#00ff55;'>$key</font> : $value <br/>";
-                }
-            }
-            //①、获取用户openid
-            $tools = new PayService();
-            $openId = $tools->GetOpenid();
-            //②、统一下单
-            $input = new WxPayUnifiedOrder();
-            $input->SetBody("test");
-            $input->SetAttach("test");
-            $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-            $input->SetTotal_fee("1");
-            $input->SetTime_start(date("YmdHis"));
-            $input->SetTime_expire(date("YmdHis", time() + 600));
-            $input->SetGoods_tag("test");
-            $input->SetNotify_url("http://test.cdlhzz.cn/example/notify.php");
-            $input->SetTrade_type("JSAPI");
-            $input->SetOpenid($openId);
-            $order = WxPayApi::unifiedOrder($input);
-            $jsApiParameters = $tools->GetJsApiParameters($order);
-            echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){WeixinJSBridge.log(res.err_msg);alert(res.err_code+res.err_desc+res.err_msg);});}
-</script>";
-        }
 
+        /**
+         * 查询订单
+         * @param $transaction_id
+         * @return bool
+         */
         public static function Queryorder($transaction_id)
         {
             $input = new WxPayOrderQuery();
@@ -153,12 +132,15 @@ class Wxpay  extends ActiveRecord
             return false;
         }
 
-    //重写回调处理函数
+    /**
+     * 重写回调处理函数
+     * @param $data
+     * @return bool
+     */
     public static function NotifyProcess($data)
     {
 
         $notfiyOutput = array();
-
         if(!array_key_exists("transaction_id", $data)){
             return false;
         }
