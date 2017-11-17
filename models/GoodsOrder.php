@@ -2518,7 +2518,7 @@ class GoodsOrder extends ActiveRecord
                         if ($refundList['handle']==0){
                             $list[$k]['refund_status']=1;
                             $list[$k]['apply_refund_time']=date('Y-m-d H:i',$refundList['create_time']);
-                            $list[$k]['apply_refund_reason']='';
+                            $list[$k]['apply_refund_reason']=$refundList['apply_reason'];
                         }
                     }
                     $after_sale=OrderAfterSale::find()
