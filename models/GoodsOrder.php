@@ -2448,6 +2448,7 @@ class GoodsOrder extends ActiveRecord
        $amount_order=0;
        $goods_num=0;
        $freight=0;
+       var_dump($arr);exit;
        $arr=self::SwitchStatus_desc($arr,$user);
        foreach ($arr as $k =>$v){
            $amount_order+=($arr[$k]['goods_price']*$arr[$k]['goods_number'])*0.01;
