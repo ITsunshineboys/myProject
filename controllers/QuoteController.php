@@ -681,7 +681,6 @@ class QuoteController extends Controller
         $district_chinese = District::findByCode($request['cur_county_id']);
 
         $transaction = \Yii::$app->db->beginTransaction();
-        $code = 500;
         try {
             foreach ($request['house_informations'] as $house) {
                 //添加功能
