@@ -249,7 +249,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
         console.log(111);
         $scope.flag = false;
         $scope.strat = true;
-        $scope.params["sort[]"] = 'close_time:4';
+        $scope.params["sort[]"] = 'id:4';
         $scope.params.status = 0;
         tablePages();
 
@@ -258,7 +258,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
         console.log(222);
         $scope.flag = true;
         $scope.strat = false;
-        $scope.params["sort[]"] = 'close_time:3';
+        $scope.params["sort[]"] = 'id:3';
         $scope.params.status = 0;
         tablePages();
 

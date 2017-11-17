@@ -649,30 +649,44 @@ let commodity_manage = angular.module("commodity_manage", [])
                     tablePagesWait()
                 }
             });
-        $scope.on_time_flag = true;
-        $scope.down_time_flag = false;
-            /*=======降序=====*/
-            $scope.wait_time_sort = function () {
-                // $scope.sort_status = 'publish_time:3';
-                $scope.on_time_flag = false;
-                $scope.down_time_flag = true;
-                // $scope.page = 1;
-                $scope.params.status = 1;
-                $scope.params['sort[]'] = 'publish_time:3'
-                tablePagesWait()
-            };
-            /*============升序==================*/
-            $scope.on_time_flag = true;
-            $scope.down_time_flag = false;
-            $scope.wait_time_sort = function (status) {
-                // $scope.sort_status = 'publish_time:4';
-                $scope.on_time_flag = true;
-                $scope.down_time_flag = false;
-                // $scope.page = 1;
-                $scope.params.status = 1;
-                $scope.params['sort[]'] = 'publish_time:4'
-                tablePagesWait()
-            };
+        $scope.wait_time_sort = function () {
+            if ($scope.down_sort_time_img == 'lib/images/arrow_default.png') {
+                $scope.down_sort_time_img = 'lib/images/arrow_down.png';
+                $scope.params['sort[]'] = 'offline_time:3';
+            } else if ($scope.down_sort_time_img == 'lib/images/arrow_down.png') { //------> 升序
+                $scope.down_sort_time_img = 'lib/images/arrow_up.png';
+                $scope.params['sort[]'] = 'offline_time:4';
+            } else {                                                //-------> 降序
+                $scope.down_sort_time_img = 'lib/images/arrow_down.png';
+                $scope.params['sort[]'] = 'offline_time:3';
+            }
+            // $scope.Config.currentPage = 1; //页数跳转到第一页
+            tablePagesWait()
+        }
+        // $scope.on_time_flag = true;
+        // $scope.down_time_flag = false;
+        //     /*=======降序=====*/
+        //     $scope.wait_time_sort = function () {
+        //         // $scope.sort_status = 'publish_time:3';
+        //         $scope.on_time_flag = false;
+        //         $scope.down_time_flag = true;
+        //         // $scope.page = 1;
+        //         $scope.params.status = 1;
+        //         $scope.params['sort[]'] = 'id:3';
+        //         tablePagesWait()
+        //     };
+        //     /*============升序==================*/
+        //     // $scope.on_time_flag = true;
+        //     // $scope.down_time_flag = false;
+        //     $scope.wait_time_sort = function (status) {
+        //         // $scope.sort_status = 'publish_time:4';
+        //         $scope.on_time_flag = true;
+        //         $scope.down_time_flag = false;
+        //         // $scope.page = 1;
+        //         $scope.params.status = 1;
+        //         $scope.params['sort[]'] = 'id:4';
+        //         tablePagesWait()
+        //     };
         // })
 
             /*--------------------等待下架 结束-------------------------*/
