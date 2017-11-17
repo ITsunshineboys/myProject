@@ -12,6 +12,7 @@ use app\models\WorkerOrderItem;
 use app\models\WorkerType;
 use app\models\WorkerWorks;
 use app\models\WorkerWorksReview;
+use app\models\WorkResult;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
@@ -618,15 +619,15 @@ class WorkerController extends Controller
         return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_NO);
     }
 
-    /**
-     * 工人接单改变状态
-     *
-     * @return string
-     */
-    public function actionAcceptOrder()
-    {
-        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_READY);
-    }
+//    /**
+//     * 工人接单改变状态
+//     *
+//     * @return string
+//     */
+//    public function actionAcceptOrder()
+//    {
+//        return self::changeOrderStatus(WorkerOrder::WORKER_ORDER_READY);
+//    }
 
     /**
      * 工人申请开工
@@ -993,8 +994,32 @@ class WorkerController extends Controller
        ]);
 
     }
-    public function actionGrabDetails(){
 
+    /**
+     * 工人更新每天工作进度+上传图片
+     * @return int|string
+     */
+    public function actionUpdateWorks(){
+        $uid = self::userIdentity();
+        if (!is_int($uid)) {
+            return $uid;
+        }
+        $code=1000;
+        $request=\Yii::$app->request;
 
+        $works_des=trim($request->post('works_des',''));
+        $images=$request->post('images',[]);
+        $order_no=trim($request->post('order_no',''));
+        if(!$works_des || !$order_no){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=WorkResult::Insetworks($works_des,$images,$order_no);
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
     }
 }
