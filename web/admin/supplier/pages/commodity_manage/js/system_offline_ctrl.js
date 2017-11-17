@@ -1,6 +1,14 @@
 ;
 let system_offline = angular.module("systemoffline_Module",[]);
-system_offline.controller("system_offline",function ($scope,$http,$stateParams,$state,_ajax) {
+system_offline.controller("system_offline",function ($rootScope,$scope,$http,$stateParams,$state,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商品管理',
+        icon: 'icon-shangchengguanli',
+        link: 'commodity_manage',
+        params:{down_flag:true}
+    }, {
+        name: '商品详情',
+    }];
 	$scope.detail_item=$stateParams.item;
 	console.log($scope.detail_item);
 	$scope.detail_arr=[];//详情数组

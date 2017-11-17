@@ -1,8 +1,3 @@
-html, body {
-    height: 100%;
-    width: 100%;
-}
-
 .nav_box {
     width: 200px;
     height: 100% !important;
@@ -83,9 +78,4 @@ html, body {
     position: absolute;
     left: 15px;
     top: 15px;
-}
-
-#content {
-    margin-left: 200px !important;
-    height: 100%;
 }

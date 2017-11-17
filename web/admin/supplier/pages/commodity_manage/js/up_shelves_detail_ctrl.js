@@ -1,5 +1,21 @@
 let up_shelves_detail = angular.module("up_shelves_detail_module",['ngFileUpload']);
 up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+    console.log($scope.back_cm);
+    /*------------返回按钮----------------*/
+    $scope.back_cm=function () {
+        if($stateParams.flag==0){
+            $state.go('commodity_manage',{on_flag:true})
+        }else if($stateParams.flag==1){
+            $state.go('commodity_manage',{down_flag:true})
+        }
+    };
+    $rootScope.crumbs = [{
+        name: '商品管理',
+        icon: 'icon-shangchengguanli',
+        link: $scope.back_cm
+    }, {
+        name: '商品详情'
+    }];
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
   let reg=/^\d+(\.\d{1,2})?$/;
@@ -402,14 +418,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       }
     }
   };
-  /*------------返回按钮----------------*/
-  $scope.back_cm=function () {
-    if($stateParams.flag==0){
-      $state.go('commodity_manage',{on_flag:true})
-    }else if($stateParams.flag==1){
-      $state.go('commodity_manage',{down_flag:true})
-    }
-  };
+
   /*-----------------------保存成功跳转--------------------------------*/
   $scope.change_go=function () {
     setTimeout(function () {

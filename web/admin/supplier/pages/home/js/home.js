@@ -1,6 +1,6 @@
 ;
 let supplier_index = angular.module("supplier_index",[])
-  .controller("supplier_index_ctrl",function ($scope,$http,$filter,_ajax) {
+  .controller("supplier_index_ctrl",function ($rootScope,$scope,$http,$filter,_ajax) {
         _ajax.get('/mall/supplier-index-admin',{},function (res) {
             $scope.today_amount_order=res.data.supplier_index_admin.today_amount_order;//今日订单金额
             $scope.today_order_number=res.data.supplier_index_admin.today_order_number;//今日订单数
@@ -9,4 +9,9 @@ let supplier_index = angular.module("supplier_index",[])
         })
     $scope.dt1 = new Date();
     $scope.dt2 = $filter("date")($scope.dt1, "yyyy-MM-dd");
+      $rootScope.crumbs = [{
+          name: '首页',
+          icon: 'icon-shangchengguanli',
+      }];
+
   });

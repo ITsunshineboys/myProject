@@ -1,6 +1,10 @@
 ;
 let commodity_manage = angular.module("commodity_manage", [])
-    .controller("commodity_manage_ctrl", function ($scope, $http, $state, $stateParams,_ajax) {
+    .controller("commodity_manage_ctrl", function ($rootScope,$scope, $http, $state, $stateParams,_ajax) {
+        $rootScope.crumbs = [{
+            name: '商品管理',
+            icon: 'icon-shangchengguanli'
+        }];
         $scope.myng = $scope;
         /*POST请求头*/
         const config = {

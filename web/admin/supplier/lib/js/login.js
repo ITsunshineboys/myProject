@@ -82,7 +82,7 @@ app.controller("login_ctrl",function ($scope,$http,$document) {
                     validation_code:$scope.forget_v_code
                 },config).then(function (res) {
                     console.log(res);
-                    if(res.code==200){
+                    if(res.data.code==200){
                         $('#forget_pw_modal').modal('hide');
                         $('#modity_success').modal('show');
                     }else if(res.data.code==1002){
@@ -93,6 +93,8 @@ app.controller("login_ctrl",function ($scope,$http,$document) {
                         $scope.forget_mb_prompt='该手机号还未注册，请联系客服400-3948-398';
                     }else if(res.data.code==1040){
                         $scope.forget_mb_prompt='该手机号还未注册商家，请联系客服400-3948-398';
+                    }else if(res.data.code==1015){
+                        $scope.forget_mb_prompt='该账号已被封号，请联系客服400-3948-398';
                     }else{
                         $scope.forget_mb_prompt='';
                         $scope.forget_v_txt='';

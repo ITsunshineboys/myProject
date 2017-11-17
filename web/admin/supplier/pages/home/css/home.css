@@ -1,19 +1,7 @@
-header{
-  height: 60px;
-  line-height: 60px;
-  padding-left: 40px;
-  border-bottom: 1px solid #E6E9F0 ;
-}
-header img{
-  float: right;
-  margin-top: 7px;
-}
 .content{
-  padding-left: 40px;
+  padding: 40px 0 0 40px;
 }
-.time_box{
-  margin-top: 50px;
-}
+
 .now_time{
   color:#666F80;
 }

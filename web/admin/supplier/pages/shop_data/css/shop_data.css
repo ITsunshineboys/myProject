@@ -1,11 +1,10 @@
 section{
-  padding-left: 40px;
+  padding:40px 0 0 40px;
   width: 95%;
 }
 .nav_ul{
   list-style: none;
   padding-left: 0;
-  margin-top: 40px;
 }
 .nav_ul:after{
   content: '';

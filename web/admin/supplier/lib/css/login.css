@@ -103,7 +103,7 @@ html,body{
 }
 .prompt_txt{
   color:#E51C23;
-  margin: 5px 0 0 60px;
+  margin-top: 5px;
 }
 
 .error_red{

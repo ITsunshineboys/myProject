@@ -3,14 +3,6 @@ body {
     padding: 0;
 }
 
-a {
-    color: black;
-}
-
-a:hover {
-    text-decoration: none !important;
-}
-
 /*导航栏*/
 .nav_box {
     width: 200px;

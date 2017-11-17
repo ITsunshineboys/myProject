@@ -1,37 +1,7 @@
-body{
-    color: #666F80;
-}
-header{
-    height: 60px;
-    line-height: 60px;
-    padding-left: 40px;
-    border-bottom: 1px solid #E6E9F0 ;
-}
-.shop_manage{
-    font-size: 14px;
-    color: #2F3033;
-    line-height: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-.manage_child{
-    font-size: 14px;
-    color: #8D9199;
-    line-height: 14px;
-}
-header img{
-  margin-left:80%;
-}
-
-
 section{
-    padding-left: 40px;
-}
-.class_shop{
-    margin-top: 40px;
+    padding: 40px 0 0 40px;
 }
 .class_shop span{
-    font-size: 14px;
     color: #666f80;
 }
 .class_shop span:nth-child(2){

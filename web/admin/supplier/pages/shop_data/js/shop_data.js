@@ -1,6 +1,11 @@
 angular.module('shop_data_module',[])
-.controller('shop_data_ctrl',function ($scope,$http,_ajax) {
-  $scope.myng=$scope;
+.controller('shop_data_ctrl',function ($rootScope,$scope,$http,_ajax) {
+    $rootScope.crumbs = [{
+        name: '店铺数据',
+        icon: 'icon-shangchengguanli',
+    }];
+
+    $scope.myng=$scope;
   $scope.data_list=[];
     /*分页配置*/
     $scope.wjConfig = {

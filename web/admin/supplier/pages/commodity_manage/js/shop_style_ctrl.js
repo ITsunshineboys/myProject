@@ -1,5 +1,12 @@
 let shop_style_let= angular.module("shop_style",['ngFileUpload']);
 shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商品管理',
+        icon: 'icon-shangchengguanli',
+        link: 'commodity_manage'
+    }, {
+        name: '添加新商品'
+    }];
       $scope.myng=$scope;
       $scope.logistics=[];//物流模块列表
       $scope.goods_all_attrs=[];//所有属性数据

@@ -1,5 +1,5 @@
 const app = angular.module("app", ["ui.router", "ng.ueditor","shop_style", "freight_template",
-    "shopoffline_Module", "systemoffline_Module", "wait_online_Module", "commodity_manage",
+    "systemoffline_Module", "wait_online_Module", "commodity_manage",
     "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
   /*三阶段王杰---开始*/
     "supplier_index","shop_decoration_module","supplier_wallet_module",
@@ -165,11 +165,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/up_shelves_detail",
             templateUrl: "pages/commodity_manage/up_shelves_detail.html",
             params: {item: '', flag: ''}
-        })
-        .state("shop_offline", {
-          /*已下架-商家下架*/
-            url: "/shop_offline",
-            templateUrl: "pages/commodity_manage/shop_offline.html"
         })
         .state("system_offline", {
           /*已下架-系统下架*/
