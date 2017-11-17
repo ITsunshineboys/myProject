@@ -38,6 +38,7 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
             tablePages();
         }
     };
+
     //获取账户管理列表 正常状态
     let tablePages = function () {
         $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
@@ -319,5 +320,10 @@ account_index.controller("account_index_ctrl",function ($scope,$http,$state,$sta
                 tablePages();
             }
         })
-    // }
+
+    // 点击查看
+    $scope.getMore = function (item) {
+       sessionStorage.setItem('comment_account',JSON.stringify(item));
+        $state.go('account_comment')
+    };
 });

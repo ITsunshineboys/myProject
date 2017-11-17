@@ -53,14 +53,15 @@
                     <td>{{n.create_time}}</td>
                     <td>{{n.status}}</td>
                     <td>{{n.names}}</td>
-                    <td class="blue" ui-sref="account_comment({id:n.id,icon:n.icon,nickname:n.nickname
-                    ,old_nickna:n.old_nickname,district_name:n.district_name,birthday:n.birthday,
-                     signature:n.signature,mobile:n.mobile,aite_cube_no:n.aite_cube_no,
-                     create_time:n.create_time,names:n.names,review_status_desc:n.review_status_desc,
-                     status:n.status,id:n.id,legal_person:n.legal_person,identity_no:n.identity_no
-                     ,identity_card_front_imagen:n.identity_card_front_image,identity_card_back_image:
-                     n.identity_card_back_image,review_time:n.review_time,a:false,
-                     })">查看</td>
+                    <td class="blue" ng-click = 'getMore(n)'>查看</td>
+                    <!--ui-sref="account_comment({id:n.id,icon:n.icon,nickname:n.nickname-->
+                    <!--,old_nickna:n.old_nickname,district_name:n.district_name,birthday:n.birthday,-->
+                    <!--signature:n.signature,mobile:n.mobile,aite_cube_no:n.aite_cube_no,-->
+                    <!--create_time:n.create_time,names:n.names,review_status_desc:n.review_status_desc,-->
+                    <!--status:n.status,id:n.id,legal_person:n.legal_person,identity_no:n.identity_no-->
+                    <!--,identity_card_front_imagen:n.identity_card_front_image,identity_card_back_image:-->
+                    <!--n.identity_card_back_image,review_time:n.review_time,a:false,-->
+                    <!--})"-->
                     <td class="blue" data-toggle="modal" data-target="#close_modal" ng-click="getId (n.id)">关闭</td>
                 </tr>
             </table>
@@ -174,15 +175,7 @@
                     <td>{{n.status}}</td>
                     <td>{{n.names}}</td>
                     <td><span id="gay_input" ng-click="getRemark (n)" data-toggle="modal" data-target="#close_reason_modal">{{n.status_remark}}</span></td>
-                    <td class="blue" ui-sref="account_comment({icon:n.icon,nickname:n.nickname
-                    ,old_nickna:n.old_nickname,district_name:n.district_name,birthday:n.birthday,
-                     signature:n.signature,mobile:n.mobile,aite_cube_no:n.aite_cube_no,
-                     create_time:n.create_time,names:n.names,review_status_desc:n.review_status_desc,
-                     status:n.status,id:n.id,legal_person:n.legal_person,identity_no:n.identity_no
-                     ,identity_card_front_imagen:n.identity_card_front_image,identity_card_back_image:
-                     n.identity_card_back_image,review_time:n.review_time,a:true,
-                     status_remark:n.status_remark,status_operator:n.status_operator
-                     })" >查看</td>
+                    <td class="blue" ng-click = 'getMore(n)'>查看</td>
                     <td class="blue" ng-click="getOpen (n)" data-toggle="modal" data-target="#start_modal">开启</td>
 
                 </tr>

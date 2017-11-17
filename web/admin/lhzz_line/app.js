@@ -149,31 +149,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("account_comment", {
             url: "/account_comment?id",
             templateUrl: "pages/account_manage/account_comment/account_comment.html",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            }
+
         })
 
         .state("change_num", {  //更换手机号码
