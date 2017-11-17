@@ -79,7 +79,7 @@ class LaborCost extends ActiveRecord
             ->select($select)
             ->where(['and',['city_code' => $arr],['worker_kind'=>$craft],['rank'=>$rank]])
             ->one();
-        
+
         $labors['univalence'] = $labors['univalence'] / self::PRICE_CONVERT;
 
         return $labors;

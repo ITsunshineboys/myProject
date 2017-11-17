@@ -587,25 +587,6 @@ class OwnerController extends Controller
         $_modelling = !isset($modelling) ? $modelling :WorkerCraftNorm::CARPENTRY_DAY_MODELLING;
 
 
-        $series_all = Series::find()->select('id,series')->where(['status=>1'])->asArray()->all();
-        if ($series_all == null){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '系列不能为空',
-            ]);
-        }
-
-
-        $style_all = Style::find()->select('id,style')->where(['status=>1'])->asArray()->all();;
-        if ($style_all == null){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '风格不能为空',
-            ]);
-        }
-
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
         if ($carpentry_add == null){
             $code = 1000;
@@ -615,12 +596,11 @@ class OwnerController extends Controller
             ]);
         }
 
-        // 造型长度
-        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$series_all,$post['series']);
-        //造型天数
-        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length, $_modelling, $series_all, $style_all, $post['series']);
-        //平顶天数
-        $flat_day = BasisDecorationService::flatDay($carpentry_add, $_flat, $series_all, $style_all, $post['series']);
+        // 造型长度 //造型天数 //平顶天数
+        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$post['series']);
+        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$_modelling,$post['series'],$post['style']);
+        $flat_day = BasisDecorationService::flatDay($carpentry_add, $_flat,$post['series'],$post['style']);
+
 
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
@@ -639,6 +619,7 @@ class OwnerController extends Controller
         $judge = BasisDecorationService::priceConversion($goods);
         $goods_price = BasisDecorationService::judge($judge, $post);
 
+
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['carpentry'], $post['city']);
         if ($craft == null){
@@ -648,6 +629,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);

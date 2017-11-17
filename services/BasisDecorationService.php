@@ -7,6 +7,7 @@
  */
 namespace app\services;
 
+use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\GoodsAttr;
 use yii\helpers\Json;
 
@@ -423,37 +424,25 @@ class BasisDecorationService
      * @param string $series
      * @return mixed
      */
-    public static function  carpentryModellingLength($arr,$coefficient_all,$series=1)
+    public static function  carpentryModellingLength($arr,$series=1)
     {
-//        switch ($series) {
-//            case  1:
-//                $series = '齐家';
-//                break;
-//            case  2:
-//                $series = '享家';
-//                break;
-//            case  3:
-//                $series = '享家+';
-//                break;
-//            case  4:
-//                $series = '智家';
-//                break;
-//            case  5:
-//                $series = '智家+';
-//                break;
-//            default:
-//                echo "请输入正确1-5的值";
-//        }
-//        $series_ = Series::find()->select('id,series')->where(['status'=>1])->all();
+
         $length = $arr['modelling_length'];
-        foreach ($coefficient_all as $coefficient_one) {
-            if( $coefficient_one['id'] == $series) {
-                $series_one = $coefficient_one['modelling_length_coefficient'];
+        $engineering = EngineeringStandardCarpentryCoefficient::find()
+            ->where(['and',['series_or_style'=>0],['coefficient'=>2]])
+            ->asArray()
+            ->all();
+
+        if ($engineering){
+            foreach ($engineering as $engineering_one) {
+                if( $engineering_one['project'] == $series) {
+                    $series_one = $engineering_one['value'];
+                }
             }
         }
 
-        //造型长度 = 木作添加项 *  系数
-        return $series_one * $length;;
+        //造型长度=基本造型长度×系列系数2
+        return $length* $series_one;
     }
 
     /**
@@ -466,93 +455,33 @@ class BasisDecorationService
      * @param int $style
      * @return float|int
      */
-    public static function carpentryModellingDay($modelling,$day_modelling,$series_all,$style_all,$series =1,$style =1)
+    public static function carpentryModellingDay($modelling,$day_modelling,$series =1,$style =1)
     {
-        switch ($series) {
-            case  1:
-                $series = '齐家';
-                break;
-            case  2:
-                $series = '享家';
-                break;
-            case  3:
-                $series = '享家+';
-                break;
-            case  4:
-                $series = '智家';
-                break;
-            case  5:
-                $series = '智家+';
-                break;
-            default:
-                echo "请输入正确1-5的值";
-        }
 
-        switch ($style) {
-            case  1:
-                $style = '美式田园';
-                break;
-            case  2:
-                $style = '欧式';
-                break;
-            case  3:
-                $style = '日式';
-                break;
-            case  4:
-                $style = '现代简约';
-                break;
-            case  5:
-                $style = '中国风';
-                break;
-            default:
-                echo "请输入正确1-5的值";
-        }
-
-        $series_find = [];
-        $enjoy_family = 0;
-        $wisdom_family = 0;
-        foreach ($series_all as $series_one) {
-            switch ($series_one) {
-                case $series_one['series'] == '享家+':
-                    $enjoy_family = $series_one['modelling_day_coefficient'];
-                    break;
-                case $series_one['series'] == '智家':
-                    $wisdom_family = $series_one['modelling_day_coefficient'];
-                    break;
-                case $series_one['series'] == $series:
-                    $series_find = $series_one;
-                    break;
+        $series_ = EngineeringStandardCarpentryCoefficient::find()
+            ->where(['and',['series_or_style'=>0],['coefficient'=>1]])
+            ->asArray()
+            ->all();
+        foreach ($series_ as $one_series){
+            if ($one_series['project'] == $series){
+                $series_one = $one_series['value'];
             }
         }
-        $family = $enjoy_family * $wisdom_family;
 
-        $style_find = [];
-        foreach ($style_all as $style_one) {
-            if($style_one['style'] == $style) {
-                $style_find = $style_one;
+
+        $style_ = EngineeringStandardCarpentryCoefficient::find()
+            ->where(['and',['series_or_style'=>1],['coefficient'=>1]])
+            ->asArray()
+            ->all();
+        foreach ($style_ as $one_style){
+            if ($one_style['project'] == $style){
+                $style_one = $one_style['value'];
             }
         }
-//            齐家，享家：【1】
-//            享家+：【1.2】
-//            智家：享家+×【1.2】
-//            智家+：智家×【1.2】
-        $series_coefficient = 0;
-        switch ($series_find['series']) {
-            case $series_find['series'] == '齐家' || $series_find['series'] == '享家':
-                $series_coefficient = $series_find['modelling_day_coefficient'];
-                break;
-            case $series_find['series'] == '享家+':
-                $series_coefficient = $series_find['modelling_day_coefficient'];
-                break;
-            case $series_find['series'] == '智家':
-                $series_coefficient = $enjoy_family * $series_find['modelling_day_coefficient'];
-                break;
-            case $series_find['series'] == '智家+':
-                $series_coefficient = $family *  $series_find['modelling_day_coefficient'];
-                break;
-        }
+
+
 //            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
-        $modelling_day = $modelling / $day_modelling * $series_coefficient * $style_find['modelling_day_coefficient'];
+        $modelling_day = $modelling / $day_modelling * $series_one * $style_one;
         return $modelling_day;
     }
 
@@ -568,109 +497,33 @@ class BasisDecorationService
      */
     public static function flatDay($area = [],$day_area = '',$series_all = '',$style_all = '',$series = 1,$style = 1)
     {
-        switch ($series) {
-            case  1:
-                $series = '齐家';
-                break;
-            case  2:
-                $series = '享家';
-                break;
-            case  3:
-                $series = '享家+';
-                break;
-            case  4:
-                $series = '智家';
-                break;
-            case  5:
-                $series = '智家+';
-                break;
-            default:
-                echo "请输入正确1-5的值";
-        }
-
-        switch ($style) {
-            case  1:
-                $style = '现代简约';
-                break;
-            case  2:
-                $style = '中国风';
-                break;
-            case  3:
-                $style = '美式田园';
-                break;
-            case  4:
-                $style = '现代简约';
-                break;
-            case  5:
-                $style = '中国风';
-                break;
-            default:
-                echo "请输入正确1-5的值";
-        }
         //平顶面积
         $flat_area = $area['flat_area'];
 
-        $series_find = [];
-        $neat_family = 0;
-        $enjoy_family = 0;
-        $enjoy_family_plus = 0;
-        $wisdom_family = 0;
-        $wisdom_family_plus = 0;
+        $series_ = EngineeringStandardCarpentryCoefficient::find()
+            ->where(['and',['series_or_style'=>0],['coefficient'=>3]])
+            ->asArray()
+            ->all();
+        foreach ($series_ as $one_series){
+            if ($one_series['project'] == $series){
+                $series_one = $one_series['value'];
+            }
+        }
 
-        foreach ($series_all as $series_one) {
-            switch ($series_one) {
-                case $series_one['series'] == $series:
-                    $series_find = $series_one;
-                    break;
-                case $series_one['series'] == '齐家':
-                    $neat_family = $series_one['flat_day_coefficient'];
-                    break;
-                case $series_one['series'] == '享家':
-                    $enjoy_family = $series_one['flat_day_coefficient'];
-                    break;
-                case $series_one['series'] == '享家+':
-                    $enjoy_family_plus = $series_one['flat_day_coefficient'];
-                    break;
-                case $series_one['series'] == '智家':
-                    $wisdom_family = $series_one['flat_day_coefficient'];
-                    break;
-                case $series_one['series'] == '智家+':
-                    $wisdom_family_plus = $series_one['flat_day_coefficient'];
-                    break;
+
+        $style_ = EngineeringStandardCarpentryCoefficient::find()
+            ->where(['and',['series_or_style'=>1],['coefficient'=>2]])
+            ->asArray()
+            ->all();
+        foreach ($style_ as $one_style){
+            if ($one_style['project'] == $style){
+                $style_one = $one_style['value'];
             }
         }
-        $style_find = [];
-        foreach ($style_all as $style_one) {
-            if($style_one['style'] == $style) {
-                $style_find = $style_one;
-            }
-        }
-//            齐家：【1】
-//            享家：齐家×【1.2】
-//            享家+：享家×【1.2】
-//            智家：享家+×【1.2】
-//            智家+：智家×【1.2】
-        $series_coefficient = 0;
-        switch ($series_find['series']) {
-            case $series_find['series'] == '齐家':
-                $series_coefficient = $series_find['flat_day_coefficient'];
-                break;
-            case $series_find['series'] == '享家':
-                $series_coefficient = $neat_family * $series_find['flat_day_coefficient'];
-                break;
-            case $series_find['series'] == '享家+':
-                $series_coefficient = $neat_family * $enjoy_family * $series_find['flat_day_coefficient'];
-                break;
-            case $series_find['series'] == '智家':
-                $series_coefficient = $neat_family * $enjoy_family * $enjoy_family_plus * $series_find['flat_day_coefficient'];
-                break;
-            case $series_find['series'] == '智家+':
-                $series_coefficient = $neat_family * $enjoy_family * $enjoy_family_plus * $wisdom_family * $series_find['flat_day_coefficient'];
-                break;
-        }
+
 
         //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
-        $flat_day = $flat_area / $day_area * $series_coefficient * $style_find['flat_day_coefficient'];
+        $flat_day = $flat_area / $day_area * $series_one * $style_one;
         return $flat_day;
     }
 
