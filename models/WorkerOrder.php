@@ -170,8 +170,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
     public static function getUserOrderList($uid,$status,$page,$page_size){
 
         $query = self::find()
-            ->select(['id','worker_id','create_time', 'amount', 'status','worker_type_id'])
-            ->where(['uid' => $uid])
+            ->select(['id','worker_id','create_time', 'amount', 'status','worker_type_id','order_no'])
+            ->where(['uid' => $uid,'is_old'=>0])
             ->andWhere('worker_id!=0')
         ->orderBy('create_time Desc');
         if ($status == WorkerController::STATUS_ALL) {
@@ -751,7 +751,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $days=explode(',',$worker_order['days']);
             if(in_array($today_time,$days)){
                 $worker_info=Worker::find()
-                    ->select('worker.id,worker.icon,worker.nickname,worker_rank.rank_name,worker_type.worker_type')
+                    ->select('worker.id,worker.icon,worker.nickname,worker_rank.rank_name,worker_type.worker_name')
                     ->leftJoin('worker_type','worker.worker_type_id=worker_type.id')
                     ->leftJoin('worker_rank','worker_rank.id=worker.level')
                     ->asArray()
