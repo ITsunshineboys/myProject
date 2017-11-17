@@ -398,7 +398,6 @@ class DistributionController extends Controller
                 $endTime = (int)strtotime($endTime);
                 $endTime && $where .= " and  create_time <= {$endTime}";
             }
-
         }else
         {
             if ($endTime) {
@@ -454,7 +453,6 @@ class DistributionController extends Controller
                             ->asArray()
                             ->all();
                         $order_subsetnum+=count($UserOrders);
-
                         foreach ($UserOrders as &$UserOrder)
                         {
                             $total_amount+=$UserOrder['amount_order']*0.01;

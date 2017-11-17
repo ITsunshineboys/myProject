@@ -1024,7 +1024,6 @@ class MallController extends Controller
 //                'msg' => 'OK',
 //            ]);
 //        }
-
         if (!$recommendViewLog->validate()) {
             return Json::encode([
                 'code' => $code,
