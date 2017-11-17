@@ -1,5 +1,5 @@
 angular.module('apply_case',[])
-        .controller('apply_case_ctrl',function ($scope,$http,$state) {
+        .controller('apply_case_ctrl',function ($scope,$http,$state,$uibModal) {
             //post请求配置
             const config = {
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -117,12 +117,24 @@ angular.module('apply_case',[])
             }
             //保存备注
             $scope.save_remark = function () {
+                let all_modal = function ($scope, $uibModalInstance) {
+                    $scope.cur_title = '保存成功'
+                    $scope.common_house = function () {
+                        $uibModalInstance.close()
+                        $state.go('apply_case.index')
+                    }
+                }
+                all_modal.$inject = ['$scope', '$uibModalInstance']
                 $http.post('/effect/effect-view',{
                     id:$scope.cur_item.id,
                     remark:$scope.particulars_view.remark
                 },config).then(function (response) {
                     console.log(response)
                     tablePages()
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
                 },function (error) {
                     console.log(error)
                 })

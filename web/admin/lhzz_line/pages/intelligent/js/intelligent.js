@@ -1,5 +1,5 @@
 angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggable'])
-    .controller('intelligent_ctrl', function ($scope, $state, $stateParams, $uibModal, $http, $timeout, Upload, $location, $anchorScroll, $window) {
+    .controller('intelligent_ctrl', function ($scope, $state, $stateParams, $uibModal, $http, $timeout, Upload, $location, $anchorScroll, $window,_ajax) {
         //公共配置以及一些变量初始化
         //post请求配置
         const config = {
@@ -20,14 +20,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         let tablePages=function () {
             $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-            $http.get('/quote/plot-list',{
-                params:$scope.params
-            }).then(function (res) {
-                console.log(res);
-                $scope.house_detail = res.data.model.details
-                $scope.Config.totalItems = res.data.model.total
-            },function (err) {
-                console.log(err);
+            _ajax.get('/quote/plot-list',$scope.params,function (res) {
+                console.log(res)
+                $scope.house_detail = res.model.details
+                $scope.Config.totalItems = res.model.total
             })
         };
         $scope.params = {
@@ -40,6 +36,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.Config.currentPage = 1
             $scope.params.toponymy = ''
             $scope.search_txt = ''
+            console.log($scope.params)
             if(item == 1){
                 $scope.params.post = $scope.county[0].id
             }else{
@@ -62,12 +59,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         let tablePages1=function () {
             $scope.params1.page=$scope.Config1.currentPage;//点击页数，传对应的参数
-            $http.post('/quote/decoration-list',$scope.params1,config).then(function (res) {
-                console.log(res);
-                $scope.material_list = res.data.list.details
-                $scope.Config1.totalItems = res.data.list.total
-            },function (err) {
-                console.log(err);
+            _ajax.post('/quote/decoration-list',$scope.params1,function (res) {
+                $scope.material_list = reslist.details
+                $scope.Config1.totalItems = res.list.total
             })
         };
         $scope.params1 = {};
@@ -92,6 +86,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             },function (err) {
                 console.log(err);
             })
+            // _ajax.get('/quote/homepage-list',$scope.params2,function (res) {
+            //     console.log(res)
+            //     $scope.material_list = res.list.details
+            //     $scope.Config1.totalItems = res.list.total
+            // })
         };
         $scope.params2 = {};
 
@@ -352,7 +351,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             tablePages()
         }
         $scope.$watch('search_txt',function (newVal,oldVal) {
-            if(newVal==''){
+            if(newVal==''&&$scope.params.post!=''){
                 $scope.params.toponymy = newVal
                 tablePages()
             }
