@@ -1615,7 +1615,6 @@ class QuoteController extends Controller
                         ],['id'=>$one_post['id']])->execute();
                     break;
                 case isset($one_post['min_area']) != null:
-                    echo 111;exit;
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
                             'min_area' => $one_post['min_area'],
