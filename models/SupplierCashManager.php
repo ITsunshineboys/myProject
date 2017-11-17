@@ -262,8 +262,7 @@ class SupplierCashManager extends ActiveRecord
             ->select(['g.id', 'g.order_no', 'g.paytime', 's.shop_name', 'g.supplier_id', 'o.sku', 'o.goods_name', 'o.goods_price', 'o.goods_number', 'o.freight'])
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
-            ->where($where)
-            ->orderBy('g.paytime Desc');
+            ->where($where);
 
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
