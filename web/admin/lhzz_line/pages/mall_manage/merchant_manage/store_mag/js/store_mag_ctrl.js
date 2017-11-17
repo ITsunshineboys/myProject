@@ -3,7 +3,15 @@
  */
 /*商家管理*/
 var store_mag = angular.module("storemagModule", []);
-store_mag.controller("store_mag", function ($scope, $http) {
+store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '商家管理',
+    }];
+
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {

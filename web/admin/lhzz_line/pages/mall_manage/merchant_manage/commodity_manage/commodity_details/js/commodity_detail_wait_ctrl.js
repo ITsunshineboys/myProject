@@ -1,5 +1,5 @@
 let commodity_detail_wait=angular.module("commodity_detail_wait_module",[]);
-commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
+commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -12,6 +12,19 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($scope,$
     let goodid = gooddetail.id;
     const afterservice_arr = ['上门维修','上门退货','上门换货','退货','换货'];
     const safeguard_arr = ['提供发票','上门安装'];
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '商家管理',
+        link: 'store_mag',
+    },{
+        name: '商品管理',
+        link: -1,
+    },{
+        name: '商品详情',
+    }];
     $scope.storeid = $stateParams.storeid; //商家id
     $scope.offline_reason = '';
     $scope.logistics_template_id = gooddetail.logistics_template_id;//物流编号

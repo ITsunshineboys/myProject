@@ -1,6 +1,19 @@
 let commodity_detail=angular.module("commodity_detail_on_module",[]);
 // onlineGoodDetail();
-commodity_detail.controller("commodity_detail_on_ctrl",function ($scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
+commodity_detail.controller("commodity_detail_on_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '商家管理',
+        link: 'store_mag',
+    },{
+        name: '商品管理',
+        link: -1,
+    },{
+        name: '商品详情',
+    }];
     let gooddetail = $stateParams.onlinegood;
     let good_partdetail;
     let logistics;

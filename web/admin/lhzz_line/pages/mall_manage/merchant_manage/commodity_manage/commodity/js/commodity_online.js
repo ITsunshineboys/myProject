@@ -2,6 +2,8 @@
  * Created by Administrator on 2017/10/25/025.
  */
 app.controller('commodity_online', ['$scope', '$stateParams','$http', function ($scope, $stateParams,$http) {
+
+
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
