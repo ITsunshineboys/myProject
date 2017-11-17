@@ -139,7 +139,7 @@ return [
     'order/supplier-after-sale-handle' => [6],
     'order/refund-handle' => [6],
     'order/supplier-delete-comment' => [1,6],
-    'order/order/delete-comment-list' => [1,6],
+    'order/delete-comment-list' => [1,6],
     'order/delete-comment-details' => [1,6],
     'order/goods-view' => [1,6],
     'distribution/getdistributionlist' => [1],
