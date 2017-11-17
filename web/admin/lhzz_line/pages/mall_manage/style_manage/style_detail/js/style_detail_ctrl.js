@@ -1,5 +1,16 @@
 let style_detail = angular.module("styledetailModule",[]);
-style_detail.controller("style_detail",function ($scope,$http,$state,$stateParams,Upload) {
+style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,$stateParams,Upload) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '系列/风格/属性管理',
+        link: 'style_index',
+        params:{showstyle:true}
+    }, {
+        name: '风格详情页'
+    }];
 	$scope.myng=$scope;
 	$scope.page=$stateParams.page;//默认页数
   //POST请求的响应头

@@ -13,7 +13,6 @@ brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$sta
         name: '品牌详情'
     }];
 
-
   //POST请求的响应头
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},

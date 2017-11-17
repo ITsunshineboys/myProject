@@ -1,5 +1,12 @@
 let style_index = angular.module("styleindexModule", []);
-style_index.controller("style_index", function ($scope, $http, $stateParams) {
+style_index.controller("style_index", function ($rootScope,$scope, $http, $stateParams) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '系列/风格/属性管理'
+    }];
     $scope.page = $stateParams.page;
     if ($scope.page == '') {
         $scope.page = 1;

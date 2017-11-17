@@ -1,7 +1,16 @@
 ;
 let add_series = angular.module("addseriesModule",[]);
-add_series.controller("add_series",function ($scope,$http,$stateParams,$state) {
-	//$scope.myng=$scope; //解决ng-model 原型继承问题
+add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParams,$state) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '系列/风格/属性管理',
+        link: 'style_index'
+    }, {
+        name: '添加新系列'
+    }];
   //POST请求的响应头
   let config = {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},

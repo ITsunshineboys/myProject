@@ -1,5 +1,15 @@
 let series_detail = angular.module("seriesdetailModule",[]);
-series_detail.controller("series_detail",function ($scope,$http,$state,$stateParams) {
+series_detail.controller("series_detail",function ($rootScope,$scope,$http,$state,$stateParams) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '系列/风格/属性管理',
+        link: 'style_index',
+    }, {
+        name: '系列详情页'
+    }];
   $scope.myng=$scope;
   //POST请求的响应头
   let config = {

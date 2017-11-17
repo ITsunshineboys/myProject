@@ -3,40 +3,10 @@ ul{
     padding: 0;
     list-style: none;
 }
-.topnav {
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px solid #999;
-    overflow: hidden;
-}
-
-.topnav span {
-    float: left;
-    margin: 20px 0 20px 40px;
-}
-
-.topnav h6 {
-    float: left;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 36px;
-    margin-left: 5px;
-    font-family: PingFangSC-Semibold;
-    font-size: 14px;
-    color: #2F3033;
-}
-
-.topnav h6:last-child{
-    color: gray;
-    font-weight: 400;
-}
-
 /*内容*/
 .series_detail_content{
-    padding-top: 50px;
-    padding-left: 40px;
+    padding: 20px 0 0 40px;
     color: #666F80;
-    font-size: 14px;
 }
 
 /*系列名称*/
@@ -70,7 +40,7 @@ ul{
 
 /*创建时间*/
 .create_time{
-    margin-top: 12px;
+    margin-top: 25px;
 }
 
 .create_time span:last-child{
@@ -79,7 +49,7 @@ ul{
 
 /*状态*/
 .state{
-    margin-top: 24px;
+    margin-top: 25px;
 }
 
 .state span:last-child{
@@ -96,7 +66,7 @@ ul{
 
 
 .series_tag{
-    margin-top: 24px;
+    margin-top: 25px;
 }
 
 .tags{
@@ -145,9 +115,9 @@ ul{
 }
 
 /*风格效果图*/
-/*.brand_logo{*/
-    /*margin-top: 20px;*/
-/*}*/
+.brand_logo{
+    margin-top: 25px;
+}
 
 .pic_right {
     margin-left: 72px;
@@ -179,7 +149,7 @@ ul{
 /*系列介绍*/
 .series_intro{
     position: relative;
-    margin-top: 7px;
+    margin-top: 25px;
 }
 
 .series_intro textarea{
@@ -263,7 +233,9 @@ ul{
     height: 100px!important;
 }
 .logo_txt{
-    margin-top: 20px
+    margin-top: 10px;
+    color: #ABABAB;
+    font-size: 12px;
 }
 .img_times{
     width: 100%;

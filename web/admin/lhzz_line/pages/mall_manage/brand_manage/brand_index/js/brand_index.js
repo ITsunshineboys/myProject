@@ -1,6 +1,13 @@
 ;
 let brand_index = angular.module("brand_index_module",[]);
-brand_index.controller("brand_index_ctrl",function ($scope,$http,$state,$stateParams,_ajax) {
+brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '品牌管理',
+    }];
   $scope.myng=$scope;
     /*品牌审核开始*/
     $scope.on_shelves_list=[];

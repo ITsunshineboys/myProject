@@ -1,5 +1,12 @@
 let index_recommend = angular.module("index_recommend_module",['ngFileUpload','ngDraggable']);
-index_recommend.controller("index_recommend_ctrl",function ($scope,$http,Upload) {
+index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$http,Upload) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: 'APP推荐位-推荐管理',
+    }];
   $scope.myng=$scope;//原形继承转换，解决ng-model 无效问题
 //POST请求的响应头
   let config = {

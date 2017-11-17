@@ -1,15 +1,6 @@
 section{
   padding-left: 40px;
 }
-/*头部导航开始*/
-.header_box{
-  height: 60px;
-  border-bottom: 1px solid #cccccc;
-}
-.header_txt{
-  line-height: 60px;
-}
-/*头部导航 结束*/
 
 
 /* 分类菜单开始*/

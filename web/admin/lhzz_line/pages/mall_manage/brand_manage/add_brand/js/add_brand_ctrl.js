@@ -1,6 +1,17 @@
 ;
 let add_brand = angular.module("addbrandModule",['ngFileUpload']);
-add_brand.controller("addbrand",function ($scope,$http,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '品牌管理',
+        link: 'brand_index',
+        params:{down_flag:true}
+    }, {
+        name: '添加品牌'
+    }];
   $scope.myng=$scope;
   //POST请求的响应头
   let config = {

@@ -1,5 +1,15 @@
 let banner_history= angular.module("banner_history_module", []);
-banner_history.controller("banner_history_ctrl", function ($scope, $http) {
+banner_history.controller("banner_history_ctrl", function ($rootScope,$scope, $http) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: 'APP推荐位-banner管理',
+        link: 'banner_recommend',
+    }, {
+        name: '历史数据统计'
+    }];
     $scope.myng=$scope;
     //POST请求的响应头
     let config = {

@@ -1,13 +1,17 @@
 let index_recommend_history = angular.module("index_recommend_history_module", []);
-index_recommend_history.controller("index_recommend_history_ctrl", function ($scope, $http) {
+index_recommend_history.controller("index_recommend_history_ctrl", function ($rootScope,$scope, $http) {
+
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: 'APP推荐位-推荐管理',
+        link: 'index_recommend',
+    }, {
+        name: '历史数据统计'
+    }];
     $scope.myng=$scope;
-    //POST请求的响应头
-    let config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
     $scope.recommendList=[];
     /*分页配置*/
     $scope.Config = {

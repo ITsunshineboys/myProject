@@ -1,19 +1,13 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/style_index/css/style_index.css">
 <div ng-controller="style_index">
-    <!--顶部导航-->
-    <div class="topnav">
-        <span class="glyphicon glyphicon-certificate"></span>
-        <h6 ui-sref="merchant_index">商城管理</h6>
-        <h6>> 系列/风格/属性管理 </h6>
-    </div>
     <!--内容-->
     <div class="style_content">
         <!--选项卡-->
-        <div class="allstyle_tabtitle">
-            <span id="series_mag" ng-click="changeToseries()" ng-class="{clickstyle:showseries}">系列管理</span>
-            <span id="style_mag" ng-click="changeTostyle()" ng-class="{clickstyle:showstyle}">风格管理</span>
-            <span id="attr_mag" ng-click="changeToattr()" ng-class="{clickstyle:showattr}">属性管理</span>
-        </div>
+        <ul class="allstyle_tabtitle">
+            <li id="series_mag" ng-click="changeToseries()" ng-class="{clickstyle:showseries}">系列管理</li>
+            <li ng-click="changeTostyle()" ng-class="{clickstyle:showstyle}">风格管理</li>
+            <li ng-click="changeToattr()" ng-class="{clickstyle:showattr}">属性管理</li>
+        </ul>
         <!--系列管理-->
         <div ng-if="showseries==true" class="series_mag">
             <!--按钮组-->

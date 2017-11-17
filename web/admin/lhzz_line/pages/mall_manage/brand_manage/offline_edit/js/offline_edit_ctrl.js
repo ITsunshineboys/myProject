@@ -1,13 +1,17 @@
 ;
 let offline_edit = angular.module("offlineeditModule",[]);
-offline_edit.controller("offlineedit",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
+offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '品牌管理',
+        link: 'brand_index',
+        params:{down_flag:true}
+    }, {
+        name: '品牌详情'
+    }];
 	$scope.myng=$scope;
     $scope.now_edit_list=[];
 	$scope.now_edit_list=$stateParams.down_shelves_list;//当前那条数据

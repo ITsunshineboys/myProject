@@ -1,5 +1,16 @@
 let add_style = angular.module("addstyleModule",['ngFileUpload']);
-add_style.controller("add_style",function ($scope,$http,$state,$stateParams,Upload) {
+add_style.controller("add_style",function ($rootScope,$scope,$http,$state,$stateParams,Upload) {
+    $rootScope.crumbs = [{
+        name: '商城管理',
+        icon: 'icon-shangchengguanli',
+        link: 'merchant_index'
+    }, {
+        name: '系列/风格/属性管理',
+        link: 'style_index',
+        params:{showstyle:true}
+    }, {
+        name: '添加新风格'
+    }];
   $scope.myng=$scope;
 	//POST请求的响应头
   let config = {
