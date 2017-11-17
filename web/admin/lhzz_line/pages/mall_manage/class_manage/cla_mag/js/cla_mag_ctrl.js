@@ -74,13 +74,9 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
 
     /*分类选择二级下拉框*/
     function subClass(obj) {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-            params: {pid: obj}
-        }).then(function (response) {
-            $scope.secondclass = response.data.data.categories;
-            $scope.dropdown.secselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{pid:obj},function (res) {
+            $scope.secondclass = res.data.categories;
+            $scope.dropdown.secselect = res.data.categories[0].id;
         })
     }
 
@@ -100,6 +96,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
             firstselect: 0,
             secselect: 0
         }
+        $scope.pageConfig.currentPage = 1;
         tableList();
     }
 
@@ -145,13 +142,9 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
     /*列表数据获取*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/category-list-admin",
-            params: $scope.params,
-        }).then(function (res) {
-            $scope.pageConfig.totalItems = res.data.data.category_list_admin.total;
-            $scope.listdata = res.data.data.category_list_admin.details;
+        _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
+            $scope.pageConfig.totalItems = res.data.category_list_admin.total;
+            $scope.listdata = res.data.category_list_admin.details;
         })
     }
 
@@ -173,9 +166,8 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
 
     /*单个确认下架*/
     $scope.sureOffline = function () {
-        let url = baseUrl+"/mall/category-status-toggle";
         let data = {id: singleoffid, offline_reason: $scope.offlinereason};
-        $http.post(url, data, config).then(function (res) {
+        _ajax.post('/mall/category-status-toggle',data,function (res) {
             $scope.offlinereason = '';
             $scope.pageConfig.currentPage = 1;
             tableList();
@@ -190,9 +182,8 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
     /*确认批量下架*/
     $scope.sureBatchOffline = function () {
         let batchoffids = $scope.table.roles.join(',');
-        let url = baseUrl+"/mall/category-disable-batch";
         let data = {ids: batchoffids, offline_reason: $scope.batchoffline_reason};
-        $http.post(url, data, config).then(function (res) {
+        _ajax.post('/mall/category-disable-batch',data,function (res) {
             $scope.batchoffline_reason = '';
             $scope.pageConfig.currentPage = 1;
             tableList()
@@ -215,23 +206,19 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
 
     /*单个确认上架*/
     $scope.sureOnline = function () {
-        let url = baseUrl+"/mall/category-status-toggle";
-        let data = {id: singleonid};
-        $http.post(url, data, config).then(function (res) {
+        _ajax.post('/mall/category-status-toggle',{id: singleonid},function (res) {
             $scope.pageConfig.currentPage = 1;
             tableList();
         })
     }
 
 
-    /*单个取消上架无操作*/
+    /*批量上架*/
     $scope.surepiliangonline = function () {
         $scope.piliangonids = $scope.table.roles.join(',');
-        let url = baseUrl+"/mall/category-enable-batch";
-        let data = {ids: $scope.piliangonids};
-        $http.post(url, data, config).then(function (res) {
+        _ajax.post('/mall/category-enable-batch',{ids: $scope.piliangonids},function (res) {
             $scope.pageConfig.currentPage = 1;
-            tableList()
+            tableList();
         })
     }
 
@@ -242,13 +229,10 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,_ajax
     }
 
     $scope.surereset = function () {
-        let url = baseUrl+"/mall/category-offline-reason-reset";
         let data = {id: $scope.resetid, offline_reason: $scope.original_reason};
-        $http.post(url, data, config).then(function (res) {
-            if(res.data.code==200){
-                $scope.original_reason = '';
-                tableList()
-            }
+        _ajax.post('/mall/category-offline-reason-reset', data,function (res) {
+            $scope.original_reason = '';
+            tableList()
         })
     }
 
