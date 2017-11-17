@@ -315,7 +315,6 @@ class OrderController extends Controller
                    'data'=>$data
                ]);
            }
-
     }
 
     /**
@@ -324,7 +323,6 @@ class OrderController extends Controller
      */
     public function  actionGetinvoicelinedata()
     {
-
         $request = \Yii::$app->request;
         $invoice_id= trim($request->get('invoice_id'));
         if (!$invoice_id)
@@ -777,25 +775,25 @@ class OrderController extends Controller
                 'buyer_message'=> Yii::$app->session['buyer_message'],
                 'total_amount'=> Yii::$app->session['total_amount']
             );
-            if (! Yii::$app->session['address_id']
-                || !Yii::$app->session['goods_id']
-                || !Yii::$app->session['goods_num']
-                || !Yii::$app->session['order_price']
-                || !Yii::$app->session['goods_name']
-                || !Yii::$app->session['pay_name']
-                || !Yii::$app->session['supplier_id']
-                || !Yii::$app->session['freight']
-                || !Yii::$app->session['body']
-                || !Yii::$app->session['order_no']
-                || !Yii::$app->session['total_amount']
-            )
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
+                if (! Yii::$app->session['address_id']
+                    || !Yii::$app->session['goods_id']
+                    || !Yii::$app->session['goods_num']
+                    || !Yii::$app->session['order_price']
+                    || !Yii::$app->session['goods_name']
+                    || !Yii::$app->session['pay_name']
+                    || !Yii::$app->session['supplier_id']
+                    || !Yii::$app->session['freight']
+                    || !Yii::$app->session['body']
+                    || !Yii::$app->session['order_no']
+                    || !Yii::$app->session['total_amount']
+                )
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
                 $address=Addressadd::findOne(Yii::$app->session['address_id']);
                 {
                     if (!$address)
@@ -872,7 +870,6 @@ class OrderController extends Controller
                     $tran->rollBack();
                     return false;
                 }
-
                 $time=(time()-60*60*6);
                 $list=EffectEarnest::find()
                     ->where("  create_time < {$time} ")
@@ -2288,7 +2285,6 @@ class OrderController extends Controller
          {
              $data=[];
          }
-
         $code=200;
         return Json::encode([
             'code'=>$code,

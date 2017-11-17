@@ -2422,14 +2422,15 @@ class GoodsOrder extends ActiveRecord
            z.cover_image,
            z.is_unusual');
         if($postData==''){
-           $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id,'z.sku'=>$postData['sku']])
-               ->all();
+           $array=[];
+           echo 1;die;
        }else{
            $array=$array->where(['a.order_no'=>$postData['order_no'],'a.user_id'=>$user->id])
                ->all();
        };
        $arr=self::getorderstatus($array);
        if(!$arr){
+           echo 2;die;
            return null;
        }
        return $arr;
