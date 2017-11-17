@@ -16,28 +16,15 @@ use app\services\SmValidationService;
 use app\services\ModelService;
 class GoodsOrder extends ActiveRecord
 {
-    const PAY_STATUS_UNPAID = 0;
+
     const PAY_STATUS_PAID = 1;
-    const PAY_STATUS_REFUNDED = 2;
     const PAY_STATUS_DESC_UNPAID = '待付款';
-    const PAY_STATUS_DESC_PAID = '已付款';
-    const PAY_STATUS_DESC_REFUNDED = '已退款';
-    const SHIPPING_STATUS_UNSHIPPED=0;
-    const SHIPPING_STATUS_SHIPPED=1;
-    const SHIPPING_STATUS_SHIPPEDCOMPLETE=2;
     const SHIPPING_STATUS_DESC_UNSHIPPED='待发货';
     const SHIPPING_STATUS_DESC_SHIPPED='已发货';
-    const SHIPPING_STATUS_DESC_SHIPPEDCOMPLETE='已收货';
-    const ORDER_STATUS_UNCOMPLETE=0;
-    const ORDER_STATUS_COMPLETE=1;
     const ORDER_STATUS_CANCEL=2;
-    const ORDER_STATUS_DESC_UNCOMPLETE='未完成';
-    const ORDER_STATUS_DESC_CANCEL='已取消';
     const UNUSUAL_STATUS_REFUND=1;
     const REFUND_HANDLE_STATUS_AGREE=1;
     const REFUND_HANDLE_STATUS_DISAGREE=2;
-    const REFUND_HANDLE_STATUS_DESC_AGREE='同意';
-    const REFUND_HANDLE_STATUS_DESC_DISAGREE='驳回';
     const PAGE_SIZE_DEFAULT = 12;
     const ORDER_TYPE_DESC_ALL='全部';
     const ORDER_TYPE_DESC_UNPAID='待付款';
@@ -125,15 +112,6 @@ class GoodsOrder extends ActiveRecord
         'z.cover_image',
         'z.shipping_type',
         'a.role_id'
-    ];
-    const AFTER_SALE_SERVICES = [
-        '提供发票',
-        '上门安装',
-        '上门维修',
-        '上门退货',
-        '上门换货',
-        '退货',
-        '换货',
     ];
     const REMIND_SEND_GOODS='remind_send_goods_';
     const PLAT_MONEY='platform_price';
