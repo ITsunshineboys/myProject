@@ -72,11 +72,11 @@ INSERT INTO `engineering_standard_craft` VALUES ('32', '510100', '木作', '2.50
 -- ----------------------------
 -- Records of engineering_standard_carpentry_coefficient
 -- ----------------------------
-INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('1', '齐家', '5.00', '1', '0');
-INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('2', '齐家', '1.50', '2', '0');
-INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('3', '齐家', '1.50', '3', '0');
-INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('4', '现代简约', '1.00', '1', '1');
-INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('5', '现代简约', '1.10', '2', '1');
+INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('1', '1', '5.00', '1', '0');
+INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('2', '1', '1.50', '2', '0');
+INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('3', '1', '1.50', '3', '0');
+INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('4', '1', '1.00', '1', '1');
+INSERT INTO `engineering_standard_carpentry_coefficient` VALUES ('5', '1', '1.10', '2', '1');
 
 -- ----------------------------
 -- Records of engineering_standard_carpentry_craft
