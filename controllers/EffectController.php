@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use app\models\Effect;
 use app\models\EffectEarnest;
+use app\models\EffectMaterial;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
@@ -350,7 +351,22 @@ class EffectController extends Controller
 
         ]);
     }
-
+    public function actionAppEffectView(){
+        $code=1000;
+        $effect_enst_id = trim(Yii::$app->request->get('effect_enst_id', ''), '');
+        if(!$effect_enst_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=EffectMaterial::geteffectdata($effect_enst_id);
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok',
+                'data'=>$data
+            ]);
+    }
 
 
     /**
