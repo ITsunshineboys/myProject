@@ -277,13 +277,14 @@ class Effect extends ActiveRecord
         $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')
-            ->select('e.id,e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->select('e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
             ->leftJoin('effect_picture as ep','ea.effect_id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.id'=>$enst_id])->one();
-        if(!$array){
+        $effect_id=EffectEarnest::find()->select('effect_id')->asArray()->one()['effect_id'];
+        if($array==false){
             $data=null;
         }
         if(!isset($array['sale_price'])){
@@ -312,7 +313,7 @@ class Effect extends ActiveRecord
             $array['address']=$array['city'].$array['street'];
         }
         if($array['stairway']){
-            $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$array['id']])->one();
+            $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
         }else{
             $array['stairway']=null;
@@ -329,7 +330,7 @@ class Effect extends ActiveRecord
             ['name'=>'风格','value'=>$array['style']]
         ];
 
-        $material=EffectMaterial::find()->where(['effect_id'=>$array['id']])->asArray()->all();
+        $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
         if(!$material){
             $data['material']=null;
         }
