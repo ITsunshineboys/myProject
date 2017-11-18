@@ -6,6 +6,8 @@ namespace app\controllers;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\models\EffectPicture;
+use app\models\Series;
+use app\models\Style;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
@@ -513,6 +515,8 @@ class SupplierCashController extends Controller
         var_dump(EffectEarnest::find()->asArray()->where(['effect_id'=>331])->one());
         var_dump(Effect::find()->asArray()->where(['id'=>331])->one());
         var_dump(EffectPicture::find()->asArray()->where(['effect_id'=>331])->one());
+        var_dump(Style::find()->asArray()->where(['id'=>3])->one());
+        var_dump(Series::find()->asArray()->where(['id'=>3])->one());
 
 
     }
