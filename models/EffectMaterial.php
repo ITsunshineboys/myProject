@@ -53,6 +53,7 @@ class EffectMaterial extends \yii\db\ActiveRecord
         if(!isset($array['original_price'])){
             $array['original_price']=null;
         }
+        $array['create_time']=date('Y-m-d H:i:s',$array['create_time']);
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         $data['quote']=[
@@ -90,8 +91,7 @@ class EffectMaterial extends \yii\db\ActiveRecord
 
 
 
-        $array['create_time']=date('Y-m-d H:i:s',$array['create_time']);
-        $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
+
 
         $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
         if(!$material){
