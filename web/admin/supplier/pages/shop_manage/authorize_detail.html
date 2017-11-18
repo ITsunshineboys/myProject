@@ -33,7 +33,7 @@
         </div>
         <div class="authorize_byclass" ng-repeat="obj in data.images">
             <span>{{obj.authorization_name}}</span>
-            <img ng-src="{{obj.image}}">
+            <img ng-src="{{'/' + obj.image}}">
         </div>
 
         <hr>
@@ -57,7 +57,7 @@
 
         <div class="apply_user">
             <span>审核状态</span>
-            <span>{{data.review_status}}</span>
+            <span>{{data.review_status_desc}}</span>
         </div>
 
         <div class="apply_user">
