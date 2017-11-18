@@ -495,7 +495,7 @@ class BasisDecorationService
      * @param int $style
      * @return float|int
      */
-    public static function flatDay($area = [],$day_area = '',$series_all = '',$style_all = '',$series = 1,$style = 1)
+    public static function flatDay($area,$day_area,$series = 1,$style = 1)
     {
         //平顶面积
         $flat_area = $area['flat_area'];
