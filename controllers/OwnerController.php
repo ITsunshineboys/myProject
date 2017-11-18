@@ -522,11 +522,11 @@ class OwnerController extends Controller
         $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
         if ($toilet){
             foreach ($toilet as $one_toilet){
-                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
+                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['toilet_area']){
                     $_toilet_area = $one_toilet['project_value'];
                 }
 
-                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
+                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['toilet_waterproof']){
                     $_toilet_height = $one_toilet['project_value'];
                 }
             }
