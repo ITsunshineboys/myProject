@@ -44,15 +44,14 @@ INSERT INTO `engineering_standard_craft` VALUES ('4', '510100', '强电', '10.00
 INSERT INTO `engineering_standard_craft` VALUES ('5', '510100', '水路', '2.00', 'PPR水管', 'M');
 INSERT INTO `engineering_standard_craft` VALUES ('6', '510100', '水路', '2.00', 'PVC管', 'M');
 INSERT INTO `engineering_standard_craft` VALUES ('7', '510100', '防水', '1.25', '防水涂剂', 'KG');
-INSERT INTO `engineering_standard_craft` VALUES ('9', '510100', '木作', '1.50', '龙骨', '跟');
-INSERT INTO `engineering_standard_craft` VALUES ('10', '510100', '木作', '2.00', '丝杆', '根');
-INSERT INTO `engineering_standard_craft` VALUES ('11', '510100', '木作', '2.50', '造型长度石膏板', '张');
+INSERT INTO `engineering_standard_craft` VALUES ('9', '510100', '木作', '1.50', '龙骨做造型长度', '跟');
+INSERT INTO `engineering_standard_craft` VALUES ('10', '510100', '木作', '2.00', '丝杆做造型长度', '根');
+INSERT INTO `engineering_standard_craft` VALUES ('11', '510100', '木作', '2.50', '石膏板造型长度', '张');
 INSERT INTO `engineering_standard_craft` VALUES ('12', '510100', '乳胶漆', '0.33', '腻子', 'KG');
 INSERT INTO `engineering_standard_craft` VALUES ('13', '510100', '乳胶漆', '0.08', '乳胶漆底漆', 'L');
 INSERT INTO `engineering_standard_craft` VALUES ('14', '510100', '乳胶漆', '0.08', '乳胶漆面漆', 'L');
 INSERT INTO `engineering_standard_craft` VALUES ('15', '510100', '乳胶漆', '1.20', '阴角线', 'M');
 INSERT INTO `engineering_standard_craft` VALUES ('16', '510100', '乳胶漆', '3.00', '石膏粉', '元');
-INSERT INTO `engineering_standard_craft` VALUES ('17', '510100', '泥工', '2.40', '贴砖', '高');
 INSERT INTO `engineering_standard_craft` VALUES ('18', '510100', '泥工', '15.00', '水泥', 'kg');
 INSERT INTO `engineering_standard_craft` VALUES ('19', '510100', '泥工', '3.00', '自流平', 'kg');
 INSERT INTO `engineering_standard_craft` VALUES ('20', '510100', '泥工', '3.00', '河沙', 'kg');
@@ -67,7 +66,11 @@ INSERT INTO `engineering_standard_craft` VALUES ('28', '510100', '杂工', '2.00
 INSERT INTO `engineering_standard_craft` VALUES ('29', '510100', '杂工', '3.00', '12墙河沙用量', 'kg');
 INSERT INTO `engineering_standard_craft` VALUES ('30', '510100', '杂工', '3.00', '24墙河沙用量', 'kg');
 INSERT INTO `engineering_standard_craft` VALUES ('31', '510100', '杂工', '2.00', '补烂河沙用量', 'kg');
-INSERT INTO `engineering_standard_craft` VALUES ('32', '510100', '木作', '2.50', '平顶面积石膏板', '张');
+INSERT INTO `engineering_standard_craft` VALUES ('32', '510100', '木作', '2.50', '石膏板平顶面积', '张');
+INSERT INTO `engineering_standard_craft` VALUES ('33', '510100', '木作', '1.00', '电视墙需要天数', '天');
+INSERT INTO `engineering_standard_craft` VALUES ('34', '510100', '木作', '1.00', '电视墙所需石膏板', '张');
+INSERT INTO `engineering_standard_craft` VALUES ('35', '510100', '木作', '1.00', '龙骨做平顶面积', 'M2');
+INSERT INTO `engineering_standard_craft` VALUES ('36', '510100', '木作', '1.00', '丝杆做平顶面积', 'M2');;
 
 -- ----------------------------
 -- Records of engineering_standard_carpentry_coefficient
