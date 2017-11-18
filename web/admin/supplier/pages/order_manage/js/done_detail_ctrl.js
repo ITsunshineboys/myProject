@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/22/022.
  */
 let done_detail = angular.module("done_detailModule", []);
-done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams) {
+done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, $http, $stateParams) {
     let store_service_score;//商家评分
     let logistics_speed_score //物流速度
     let shipping_score;//配送人员服务
@@ -19,6 +19,15 @@ done_detail.controller("done_detail_ctrl", function ($scope, $http, $stateParams
         textcount: $scope.textcount
     }
     $scope.savemodal = '';
+    $rootScope.crumbs = [{
+        name: '订单管理',
+        icon: 'icon-dingdanguanli',
+        link: 'order_manage',
+        params:{tabflag:$stateParams.tabflag}
+    },{
+        name: '订单详情',
+    }];
+
     orderDetail();
     commentDetail();
     $scope.send = true;

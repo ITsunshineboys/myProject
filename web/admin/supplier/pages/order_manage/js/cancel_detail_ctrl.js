@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let cancel_detail = angular.module("cancel_detailModule", []);
-cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $stateParams) {
+cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, $http, $stateParams) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -17,6 +17,15 @@ cancel_detail.controller("cancel_detail_ctrl", function ($scope, $http, $statePa
     $scope.plat_send = true;
     $scope.order_no = $stateParams.order_no; //订单号
     $scope.sku = $stateParams.sku;//商品编号
+    $rootScope.crumbs = [{
+        name: '订单管理',
+        icon: 'icon-dingdanguanli',
+        link: 'order_manage',
+        params:{tabflag:$stateParams.tabflag}
+    },{
+        name: '订单详情',
+    }];
+
     const handle_type = {
         1:'关闭订单退款',
         2:'关闭订单线下退款',

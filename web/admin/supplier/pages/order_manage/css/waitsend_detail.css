@@ -35,12 +35,8 @@ header img {
 
 /*内容开始*/
 section {
-    padding-left: 40px;
+    padding: 40px 0 0 40px;
     color: #666F80;
-}
-
-.order_detail {
-    margin-top: 40px;
 }
 
 h3 {

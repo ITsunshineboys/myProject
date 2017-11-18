@@ -16,7 +16,6 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
     $rootScope.crumbs = [{
         name: '店铺管理',
         icon: 'icon-dianpuguanli',
-        // link: 'merchant_index'
     }];
 
 

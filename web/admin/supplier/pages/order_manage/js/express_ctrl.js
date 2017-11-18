@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/26/026.
  */
 let express = angular.module("expressModule", []);
-express.controller("express_ctrl", function ($scope, $http, $stateParams,$state) {
+express.controller("express_ctrl", function ($rootScope,$scope, $http, $stateParams,$state) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -15,6 +15,7 @@ express.controller("express_ctrl", function ($scope, $http, $stateParams,$state)
     $scope.tabflag = $stateParams.express_params.tabflag; //
     console.log($scope.tabflag+'物流页面跳转flag');
     let statename = $stateParams.express_params.statename;
+
 
 
     /*获取物流信息*/
@@ -41,5 +42,19 @@ express.controller("express_ctrl", function ($scope, $http, $stateParams,$state)
             $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
         }
     }
+
+
+    /*面包屑参数*/
+    $rootScope.crumbs = [{
+        name: '订单管理',
+        icon: 'icon-dingdanguanli',
+        link: 'order_manage',
+        params:{tabflag:$scope.tabflag}
+    },{
+        name: '订单详情',
+        link:  $scope.backPage,
+    },{
+        name: '物流详情'
+    }];
 
 })

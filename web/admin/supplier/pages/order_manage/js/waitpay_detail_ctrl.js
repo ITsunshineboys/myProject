@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/21/021.
  */
 let waitpay_detail = angular.module("waitpay_detailModule", []);
-waitpay_detail.controller("waitpaydetail_ctrl", function ($scope, $http, $stateParams,$interval) {
+waitpay_detail.controller("waitpaydetail_ctrl", function ($rootScope, $scope, $http, $stateParams,$interval) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -16,6 +16,15 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($scope, $http, $stateP
     $scope.order_no = $stateParams.order_no; //订单号
     $scope.sku = $stateParams.sku;//商品编号
     $scope.tabflag = $stateParams.tabflag; //页面跳转
+
+    $rootScope.crumbs = [{
+        name: '订单管理',
+        icon: 'icon-dingdanguanli',
+        link: 'order_manage',
+        params:{tabflag:$stateParams.tabflag}
+    },{
+        name: '订单详情',
+    }];
 
 
     $scope.express_params = {

@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/15/015.
  */
 let ordermanage = angular.module("ordermanageModule", []);
-ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams, $state,_ajax) {
+ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $stateParams, $state,_ajax) {
     let time_type;
     let tabflag;
     let allTableInit = {
@@ -11,6 +11,12 @@ ordermanage.controller("ordermanage_ctrl", function ($scope, $http, $stateParams
         finish_flag: finishInit,
         cancel_flag: cancelInit,
     }
+
+    $rootScope.crumbs = [{
+        name: '订单管理',
+        icon: 'icon-dingdanguanli',
+    }];
+
     $scope.show_comment = true;
     $scope.myng=$scope;
     let config = {
