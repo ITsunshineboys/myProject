@@ -100,5 +100,3 @@
 	})();
 
 }).call(this);
-
-//# sourceMappingURL=angular-ueditor.js.map

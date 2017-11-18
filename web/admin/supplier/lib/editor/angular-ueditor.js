@@ -101,5 +101,3 @@ http://inhu.net
   })();
 
 }).call(this);
-
-//# sourceMappingURL=angular-ueditor.js.map
