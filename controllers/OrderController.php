@@ -1077,14 +1077,14 @@ class OrderController extends Controller
             {
                 if ($keyword)
                 {
-                    if ($startTime) {
-                        $startTime = (int)strtotime($startTime);
-                        $startTime && $where .= " and   a.create_time >= {$startTime}";
-                    }
-                    if ($endTime) {
-                        $endTime = (int)strtotime($endTime);
-                        $endTime && $where .= " and a.create_time <= {$endTime}";
-                    }
+                        if ($startTime) {
+                            $startTime = (int)strtotime($startTime);
+                            $startTime && $where .= " and   a.create_time >= {$startTime}";
+                        }
+                        if ($endTime) {
+                            $endTime = (int)strtotime($endTime);
+                            $endTime && $where .= " and a.create_time <= {$endTime}";
+                        }
                 }else{
                         if ($startTime) {
                             $startTime = (int)strtotime($startTime);
@@ -3856,7 +3856,8 @@ class OrderController extends Controller
             $where="g.supplier_id={$supplier_id}";
             if ($keyword)
             {
-                $where .=" and d.order_no like '%{$keyword}%' or  o.goods_name like '%{$keyword}%'";
+                $where .=" and   CONCAT(d.order_no,o.goods_name) like '%{$keyword}%'";
+//                $where .=" and d.order_no like '%{$keyword}%' or  o.goods_name like '%{$keyword}%'";
             }
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -5050,8 +5051,5 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
-
 
 }

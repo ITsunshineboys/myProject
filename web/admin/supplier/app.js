@@ -68,7 +68,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
 
         /*--------------三阶段开始----芳子-----------------*/
-        .state("supplier_account", {   //商家账户
+        .state("supplier_account", {   //商家账户信息
             url: "/supplier_account",
             templateUrl: "pages/supplier_wallet/supplier_account.html"
         })

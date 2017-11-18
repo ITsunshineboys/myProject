@@ -3,7 +3,7 @@ angular.module('supplier_wallet_module',[])
 .controller('supplier_wallet_ctrl',function ($rootScope,$scope,$http,$state,_ajax) {
     $rootScope.crumbs = [{
         name: '钱包',
-        icon: 'icon-shangchengguanli'
+        icon: 'icon-qianbao'
     }];
 
     $scope.myng=$scope;

@@ -2,13 +2,25 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let edit_card = angular.module("edit_cardModule", []);
-edit_card.controller("edit_card_ctrl", function ($scope,$http,$anchorScroll,$location,$window,$state) {
+edit_card.controller("edit_card_ctrl", function ($rootScope,$scope,$http,$anchorScroll,$location,$window,$state) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)
         }
     };
+
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-qianbao',
+        link: 'supplier_wallet'
+    }, {
+        name: '商家账户信息',
+        link: 'supplier_account'
+    },{
+        name: '添加/修改银行卡'
+    }];
+
     $scope.alljudgefalse = false;
     defaultCard();
 

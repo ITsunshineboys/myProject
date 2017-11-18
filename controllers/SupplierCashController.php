@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use app\models\EffectEarnest;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
@@ -507,6 +508,6 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-//        var_dump(UserCashregister::find()->asArray()->where(['status'])->all());
+        var_dump(EffectEarnest::find()->asArray()->all());
     }
 }

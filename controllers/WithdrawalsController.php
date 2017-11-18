@@ -761,7 +761,8 @@ class WithdrawalsController extends Controller
             $where="role_id=6 and uid={$user->id}";
         }
         if($keyword){
-            $where .=" and order_no like '%{$keyword}%' or transaction_no like '%{$keyword}%'";
+            $where .=" and   CONCAT(order_no,transaction_no) like '%{$keyword}%'";
+//            $where .=" and order_no like '%{$keyword}%' or transaction_no like '%{$keyword}%'";
         }
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));

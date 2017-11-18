@@ -159,6 +159,7 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击轮播图跳转
         $scope.getDetails = function (item) {
+            sessionStorage.setItem('wxflag',true);
             $http.post('http://test.cdlhzz.cn/mall/recommend-click-record',{
                 recommend_id:$scope.carousel_id
             },config).then(function (response) {
@@ -189,6 +190,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         // 点击推荐跳转商品详情
         $scope.getProduct = function (m) {
+            sessionStorage.setItem('wxflag',true);
             console.log(m);
             if(m.from_type == 1){ //商铺类型
                 console.log(11);
@@ -351,7 +353,6 @@ angular.module("all_controller", ['ngCookies'])
             $('body').removeClass('modal-open')
         });
         $scope.getRetrnUp = function () {
-            alert(flag);
             if(flag == 0){
                 history.go(-2)
             }
@@ -819,6 +820,7 @@ angular.module("all_controller", ['ngCookies'])
         // };
         // 点击产品列表商品跳转到产品详情页面
         $scope.getDetailsProduct = function (item) {
+            sessionStorage.setItem('wxflag',true);
             console.log(item);
             console.log(item.id);
             $scope.mall_id = item.id;
@@ -980,6 +982,15 @@ angular.module("all_controller", ['ngCookies'])
             $scope.signature  = response.data.data.signature;
 
         });
+        // 返回
+        $scope.getRetun = function () {
+            if (sessionStorage.getItem('wxflag') == null) {
+                // alert(1111)
+                $state.go('home')
+            }else {
+                history.go(-1);
+            }
+        };
         // 跳转到订单页面
         $scope.getOrder =function () {
             console.log($scope.id);

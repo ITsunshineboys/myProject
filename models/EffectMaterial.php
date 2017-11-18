@@ -45,9 +45,7 @@ class EffectMaterial extends \yii\db\ActiveRecord
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
-            ->where(['ea.effect_id'=>$effect_id])
-            ->one();
-
+            ->where(['ea.effect_id'=>$effect_id])->one();
         if(!isset($array['sale_price'])){
             $array['sale_price']=null;
         }
