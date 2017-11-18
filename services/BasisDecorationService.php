@@ -1163,8 +1163,15 @@ class BasisDecorationService
                 $curtain = $one_goods;
             }
         }
-        $goods_price [] = $light;
-        $goods_price [] = $curtain;
+        $a = isset($light) ? $light :[];
+        $b = isset($curtain) ? $curtain :[];
+        $c = isset($night_table) ? $night_table :[];
+        $d = isset($bath_cabinet) ? $bath_cabinet :[];
+        $e = isset($squatting_pan) ? $squatting_pan :[];
+        $f = isset($closestool) ? $closestool :[];
+
+        $goods_price [] = $a;
+        $goods_price [] = $b;
         return $goods_price;
     }
 
@@ -1289,7 +1296,9 @@ class BasisDecorationService
                     break;
             }
         }
-        return self::profitMargin($materials);
+
+        $a = isset($materials) ? $materials :[];
+        return self::profitMargin($a);
     }
 
     /**
@@ -1516,13 +1525,21 @@ class BasisDecorationService
             }
         }
 
-        $material []  = self::profitMargin($wood_floor);
-        $material []  = self::profitMargin($aluminium_alloy_door);
-        $material []  = self::profitMargin($bath_heater);
-        $material []  = self::profitMargin($ventilator);
-        $material []  = self::profitMargin($ceiling_lamp);
-        $material []  = self::profitMargin($faucet);
-        $material []  = self::profitMargin($marble);
+        $a = isset($wood_floor) ? $wood_floor :[];
+        $z = isset($aluminium_alloy_door) ? $aluminium_alloy_door :[];
+        $b = isset($bath_heater) ? $bath_heater :[];
+        $c = isset($ventilator) ? $ventilator :[];
+        $d = isset($ceiling_lamp) ? $ceiling_lamp :[];
+        $e = isset($faucet) ? $faucet :[];
+        $f = isset($marble) ? $marble :[];
+
+        $material []  = self::profitMargin($a);
+        $material []  = self::profitMargin($z);
+        $material []  = self::profitMargin($b);
+        $material []  = self::profitMargin($c);
+        $material []  = self::profitMargin($d);
+        $material []  = self::profitMargin($e);
+        $material []  = self::profitMargin($f);
         return $material;
     }
 
@@ -1565,9 +1582,14 @@ class BasisDecorationService
                         break;
                 }
             }
-            $material [] = self::profitMargin($sofa);
-            $material [] = self::profitMargin($bed);
-            $material [] = self::profitMargin($night_table);
+
+            $a = isset($sofa) ? $sofa :[];
+            $b = isset($bed) ? $bed :[];
+            $c = isset($night_table) ? $night_table :[];
+
+            $material [] = self::profitMargin($a);
+            $material [] = self::profitMargin($b);
+            $material [] = self::profitMargin($c);
         }
         return $material;
     }
@@ -1634,12 +1656,19 @@ class BasisDecorationService
                     break;
             }
         }
-        
-        $material [] = self::profitMargin($kitchen_ventilator);
-        $material [] = self::profitMargin($stove);
-        $material [] = self::profitMargin($hall_air_conditioner);
-        $material [] = self::profitMargin($bedroom_air_conditioner);
-        $material [] = self::profitMargin($central_air_conditioning);
+
+        $a = isset($kitchen_ventilator) ? $kitchen_ventilator :[];
+        $b = isset($stove) ? $stove :[];
+        $c = isset($hall_air_conditioner) ? $hall_air_conditioner :[];
+        $d = isset($bedroom_air_conditioner) ? $bedroom_air_conditioner :[];
+        $e = isset($central_air_conditioning) ? $central_air_conditioning :[];
+
+
+        $material [] = self::profitMargin($a);
+        $material [] = self::profitMargin($b);
+        $material [] = self::profitMargin($c);
+        $material [] = self::profitMargin($d);
+        $material [] = self::profitMargin($e);
         return $material;
     }
 
@@ -1698,12 +1727,20 @@ class BasisDecorationService
 
             }
         }
-        $material [] = self::profitMargin($mattress);
-        $material [] = self::profitMargin($cut_off);
-        $material [] = self::profitMargin($sprinkler);
-        $material [] = self::profitMargin($bath_cabinet);
-        $material [] = self::profitMargin($squatting_pan);
-        $material [] = self::profitMargin($closestool);
+
+        $a = isset($mattress) ? $mattress :[];
+        $b = isset($cut_off) ? $cut_off :[];
+        $c = isset($sprinkler) ? $sprinkler :[];
+        $d = isset($bath_cabinet) ? $bath_cabinet :[];
+        $e = isset($squatting_pan) ? $squatting_pan :[];
+        $f = isset($closestool) ? $closestool :[];
+
+        $material [] = self::profitMargin($a);
+        $material [] = self::profitMargin($b);
+        $material [] = self::profitMargin($c);
+        $material [] = self::profitMargin($d);
+        $material [] = self::profitMargin($e);
+        $material [] = self::profitMargin($f);
         return $material;
     }
 
@@ -1793,7 +1830,10 @@ class BasisDecorationService
                 $materials[] = $one_goods;
             }
         }
-        return BasisDecorationService::profitMargin($materials);
+
+        $a = isset($materials) ? $materials :[];
+
+        return BasisDecorationService::profitMargin($a);
     }
 
     /**
