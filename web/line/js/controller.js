@@ -985,7 +985,7 @@ angular.module("all_controller", ['ngCookies'])
         // 返回
         $scope.getRetun = function () {
             if (sessionStorage.getItem('wxflag') == null) {
-                alert(1111)
+                // alert(1111)
                 $state.go('home')
             }else {
                 history.go(-1);
