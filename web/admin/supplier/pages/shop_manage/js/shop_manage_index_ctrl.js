@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/18/018.
  */
 let shopmanage = angular.module("shopmanageModule", []);
-shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $stateParams, _ajax, Upload) {
+shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $http, $stateParams, _ajax, Upload) {
     let result;
     let id;
     const picprefix = baseUrl+"/";
@@ -12,6 +12,14 @@ shopmanage.controller("shopmanage_ctrl", function ($scope, $state, $http, $state
             return $.param(data)
         }
     };
+
+    $rootScope.crumbs = [{
+        name: '店铺管理',
+        icon: 'icon-dianpuguanli',
+        // link: 'merchant_index'
+    }];
+
+
     /*选项卡切换方法*/
     $scope.tabFunc = (obj) => {
         $scope.basic_flag = false;
