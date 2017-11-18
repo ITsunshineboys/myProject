@@ -126,7 +126,8 @@ angular.module('all_controller', [])
                 $scope.is_edit = false
             }
         });
-        $scope.baseUrl = 'http://test.cdlhzz.cn/'
+        // $scope.baseUrl = 'http://test.cdlhzz.cn/'
+        $scope.baseUrl = '/'
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
