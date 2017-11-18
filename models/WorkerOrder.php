@@ -1473,7 +1473,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $title = WorkerType::find()
                 ->where(['id' => $worker_type_id])
                 ->one();
-            $title && $title = $title->worker_type;
+            $title && $title = $title->worker_name;
         }
 
         $worker_works = new WorkerWorks();
@@ -1484,12 +1484,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
             'desc' => $desc
         ]);
 
-        $trans = Yii::$app->db->beginTransaction();
         if (!$worker_works->save(false)) {
-            $trans->rollBack();
             return 1000;
         }
-        $trans->commit();
+
         return [200, $worker_works->id];
     }
 
