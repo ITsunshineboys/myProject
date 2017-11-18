@@ -319,7 +319,6 @@ angular.module("all_controller", ['ngCookies'])
                         }
                     }
                 }
-
                 $scope.search_data = arr;
                 console.log(response)
             });
@@ -581,7 +580,7 @@ angular.module("all_controller", ['ngCookies'])
         //筛选关键字
         $scope.$watch('keyword',function (newVal,oldVal) {
             console.log(newVal);
-            if(newVal!=''){
+            if(newVal!='' && newVal != oldVal){
                 let arr = [];
                 if(!!$scope.all_goods_brands){
                     for(let [key,value] of $scope.all_goods_brands.entries()){
@@ -597,14 +596,13 @@ angular.module("all_controller", ['ngCookies'])
             }
         });
         //
-        $(document).mouseup(function(e){
-            var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
-            if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
-                // if($rootScope.curState_name == 'nodata.all_goods'){
-                    tablePages()
-                // }
-            }
-        });
+        // $(document).mouseup(function(e){
+        //     var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
+        //     if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+        //         // if($rootScope.curState_name == 'nodata.all_goods'){
+        //         tablePages()
+        //     }
+        // });
         // //展示数据 默认展示
         // $http({
         //     method:"get",
@@ -1944,7 +1942,6 @@ angular.module("all_controller", ['ngCookies'])
                 scope.$watch('conf.totalItems', function (value, oldValue) {
                     // 在无值或值不相等的时候，去执行onChange事件
                     if (value == undefined && oldValue == undefined) {
-
                         if (conf.onChange) {
                             conf.onChange();
                         }
