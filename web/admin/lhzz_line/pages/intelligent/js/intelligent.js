@@ -249,7 +249,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.county.unshift({'id': $scope.cur_city, 'name': '全市'})
             $scope.cur_county = angular.copy($scope.county)[0].id
             $scope.params.post = $scope.county[0].id
-            tablePages()
         }, function (error) {
             console.log(error)
         })
@@ -275,7 +274,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.county.unshift({'id': $scope.cur_city, 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.post = $scope.county[0].id
-                tablePages()
             }, function (error) {
                 console.log(error)
             })
@@ -293,7 +291,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.county.unshift({'id':$scope.cur_city , 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.post = $scope.county[0].id
-                tablePages()
             })
         }
         //输入小区名模糊筛选小区
@@ -315,6 +312,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //页面跳转
         //跳转小区列表页
         $scope.goHouseList = function () {
+            $scope.params.min = ''
+            $scope.params.max = ''
+            $scope.params.toponymy = ''
+            $scope.Config.currentPage = 1
+            $scope.search_txt = ''
+            tablePages()
             $state.go('intelligent.house_list')
             $rootScope.crumbs = [
                 {

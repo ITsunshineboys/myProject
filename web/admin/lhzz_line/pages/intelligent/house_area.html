@@ -26,6 +26,7 @@
                 </div>
                 <p class="col-md-12" style="color: red;margin-top: 5px;" ng-if="$last&&!!area_tips">{{area_tips}}</p>
             </div>
+            <p class="col-md-7">*0＜X≤180的整数字</p>
         </div>
         <div class="from-group submit" ng-class="{'else_submit':(all_area_range.length<12?true:false)}">
             <button class="remove" type="submit" ng-click="save_area(cur_house_area.$valid)">确认</button>

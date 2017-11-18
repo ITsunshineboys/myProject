@@ -10,6 +10,7 @@
                            type="text" id="houseName" name="houseName" required placeholder="请输入户型名称" minlength="1" maxlength="12"
                            ng-model="cur_house_information.house_type_name" class="form-control">
                 </div>
+                <p class="col-md-6 col-md-offset-1">*限1~12个字符</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 col-sm-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
@@ -18,7 +19,8 @@
                            required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
                            ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0且≤180的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
@@ -111,7 +113,8 @@
                            ng-class="{'error':(curForm.window.$invalid&&submitted) ||(
                            (curForm.window.$error.required || curForm.window.$error.pattern)&&change2)}">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为≤20的数字，精确到小数点后两位</p>
             </div>
         </div>
         <div class="all">
@@ -160,6 +163,7 @@
                                 <div class="col-md-2">
                                     <input type="text" ng-class="{'error': (curForm['quantity{{item3.id}}'].$error.pattern)}" name="quantity{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量" class="form-control" ng-model="item3.good_quantity">
                                 </div>
+                                <p class="col-md-5">*整数</p>
                             </div>
                         </li>
                     </ul>
@@ -174,6 +178,7 @@
                                     <input type="text" placeholder="请输入用人费用" class="form-control" ng-model="item2.price">
                                 </div>
                                 <p class="col-md-2" >元</p>
+                                <p class="col-md-5">*整数</p>
                             </div>
                         </li>
                         <li>

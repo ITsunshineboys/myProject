@@ -30,20 +30,6 @@
                 <button class="remove" ng-click="get_material()">抓取材料</button>
             </p>
         </div>
-        <!--<div class="row">-->
-            <!--<p class="col-md-2">-->
-                <!---->
-            <!--</p>-->
-            <!--<p class="col-md-2">-->
-
-            <!--</p>-->
-            <!--<p class="col-md-2">-->
-                <!---->
-            <!--</p>-->
-            <!--<p class="col-md-6">-->
-                <!--<button class="remove" ng-click="get_material()">抓取材料</button>-->
-            <!--</p>-->
-        <!--</div>-->
         <div style="margin-top: 60px;" ng-if="!!basic_attr">
             <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
                 <p class="col-md-1">商品名称</p>
@@ -106,6 +92,7 @@
                                ng-blur="item.flag = !!material_detail['series'+$index].$error"
                                ng-class="{'error':(material_detail['series'+$index].$invalid&&submitted)||(material_detail['series'+$index].$error.required || material_detail['series'+$index].$error.pattern)&&!!item.flag}">
                     </p>
+                    <p class="col-md-8">*≥0的整数数字</p>
                 </div>
             </div>
         </div>
@@ -124,6 +111,7 @@
                                ng-blur="item.flag = !!material_detail['style'+$index].$error"
                                ng-class="{'error':(material_detail['style'+$index].$invalid&&submitted)||(material_detail['style'+$index].$error.required || material_detail['style'+$index].$error.pattern)&&!!item.flag}">
                     </p>
+                    <p class="col-md-8">*≥0的整数数字</p>
                 </div>
             </div>
         </div>
@@ -142,6 +130,7 @@
                                class="form-control" ng-blur="item.flag = !!material_detail['area'+$index].$error"
                                ng-class="{'error':(material_detail['area'+$index].$invalid&&submitted)||(material_detail['area'+$index].$error.required || material_detail['area'+$index].$error.pattern)&&!!item.flag}">
                     </p>
+                    <p class="col-md-8">*≥0的整数数字</p>
                 </div>
             </div>
         </div>

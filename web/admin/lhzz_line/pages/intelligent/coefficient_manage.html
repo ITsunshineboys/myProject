@@ -20,6 +20,7 @@
                 ((cur_coefficient['name'+$index].$error.required || cur_coefficient['name'+$index].$error.pattern)&&item.flag)}"
                        ng-blur="item.flag=!!cur_coefficient['name'+$index].$error">
             </div>
+            <p class="col-md-7">*0＜X≤1的数字，精确到小数点后两位</p>
         </div>
         <div class="from-group" style="margin-top:100px;">
             <button class="remove" type="submit" ng-click="save_coefficient(cur_coefficient.$valid)">确认</button>

@@ -321,6 +321,11 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     name:'商家提现管理'
                 }
             ]
+            $scope.Config.currentPage = 1
+            $scope.params.search = ''
+            $scope.keyword = ''
+            $scope.params.time_start = ''
+            $scope.params.time_end = ''
             $scope.cur_index = 1
             if(num == 1){
                 $scope.params.time_type = 'today'

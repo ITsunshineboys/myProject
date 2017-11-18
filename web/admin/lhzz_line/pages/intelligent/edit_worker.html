@@ -21,7 +21,8 @@
             <input class="form-control" name="daily_cost" ng-model="daily_cost" type="text" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="change=!!edit_worker.daily_cost.$error"
                 required   ng-class="{'error':(edit_worker.daily_cost.$invalid&&submitted) || ((edit_worker.daily_cost.$error.required || edit_worker.daily_cost.$error.pattern)&&change)}">
         </p>
-        <p class="col-md-8 text-left">元/天</p>
+        <p class="col-md-1 text-left">元/天</p>
+        <p class="col-md-7">*>0的数字，精确到小数点后两位</p>
     </div>
     <div class="row" ng-repeat="item in other_items">
         <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item.worker_kind_details}}</p>
@@ -30,9 +31,11 @@
                    ng-class="{'error':(edit_worker[item.name].$invalid&&submitted) || ((edit_worker[item.name].$error.required || edit_worker[item.name].$error.pattern)&&item.flag)}"
                    ng-model="item.quantity" type="text">
         </p>
-        <p class="col-md-8 text-left" ng-if="item.worker_kind_details.indexOf('长度')!=-1">m/天</p>
-        <p class="col-md-8 text-left" ng-if="item.worker_kind_details.indexOf('面积')!=-1">m<sup>2</sup>/天</p>
-        <p class="col-md-8 text-left" ng-if="item.worker_kind_details.indexOf('长度')==-1&&item.worker_kind_details.indexOf('面积')==-1">个/天</p>
+        <p class="col-md-1 text-left" ng-if="item.worker_kind_details.indexOf('长度')!=-1">m/天</p>
+        <p class="col-md-1 text-left" ng-if="item.worker_kind_details.indexOf('面积')!=-1">m<sup>2</sup>/天</p>
+        <p class="col-md-1 text-left" ng-if="item.worker_kind_details.indexOf('长度')==-1&&item.worker_kind_details.indexOf('面积')==-1">个/天</p>
+        <p class="col-md-7" ng-if="item.worker_kind_details.indexOf('长度')==-1&&item.worker_kind_details.indexOf('面积')==-1">*>0的整数数字</p>
+        <p class="col-md-7" ng-if="item.worker_kind_details.indexOf('长度')!=-1||item.worker_kind_details.indexOf('面积')!=-1">*>0的数字，精确到小数点后两位</p>
     </div>
     </div>
     <div class="from-group submit">

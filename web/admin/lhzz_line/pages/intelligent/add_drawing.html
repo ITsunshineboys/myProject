@@ -9,6 +9,7 @@
                            type="text" name="drawingName" required placeholder="请输入图纸名称"
                            ng-model="ctrlScope.cur_drawing_name" class="form-control">
                 </div>
+                <p class="col-md-7">*限1~12个字符</p>
             </div>
         </div>
         <div class="all">
@@ -19,6 +20,7 @@
                         <select class="form-control" ng-model="ctrlScope.cur_house" ng-options="item.house_type_name for item in cur_all_house">
                         </select>
                     </div>
+                    <p class="col-md-7">*请先添加户型</p>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 text-left">系列选择</label>

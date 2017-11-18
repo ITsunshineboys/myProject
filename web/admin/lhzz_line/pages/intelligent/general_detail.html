@@ -84,6 +84,7 @@
                                            ng-class="{'error':(general_detail['two_count'+item.id+$index].$invalid&&submitted)||(general_detail['two_count'+item.id+$index].$error.required&&!!item1.flag1)}"
                                            ng-model="item1.count" placeholder="请输入数值" class="form-control">
                                 </p>
+                                <p class="col-md-6" ng-if="!!+item1.differentiate||item1.differentiate==undefined">* 名称填写只限中英文，个数数值填写必须为≥1的整数数字</p>
                             </div>
                         </div>
                     </div>

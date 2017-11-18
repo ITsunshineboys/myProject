@@ -10,6 +10,7 @@
                            type="text" id="houseName" name="houseName" required placeholder="请输入户型名称"
                            ng-model="cur_house_information.house_type_name" class="form-control">
                 </div>
+                <p class="col-md-6 col-md-offset-1">*限1~12个字符</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
@@ -18,7 +19,8 @@
                            required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
                     ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0且≤180的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
@@ -105,7 +107,8 @@
                            ng-class="{'error':(curForm.window.$invalid&&submitted) ||(
                            (curForm.window.$error.required || curForm.window.$error.pattern)&&change2)}">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为≤20的数字，精确到小数点后两位</p>
             </div>
         </div>
         <div class="all">
@@ -119,7 +122,8 @@
                            (curForm.hallArea.$error.required || curForm.hallArea.$error.pattern)&&change3)}"
                            ng-model="cur_house_information.hall_area" class="form-control">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>客餐厅及过道周长</label>
@@ -130,7 +134,8 @@
                            (curForm.hallGirth.$error.required || curForm.hallGirth.$error.pattern)&&change4)}"
                            placeholder="请输入长度数值" ng-model="cur_house_information.hall_girth" class="form-control">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>卧室地面积</label>
@@ -141,7 +146,8 @@
                            (curForm.roomArea.$error.required || curForm.roomArea.$error.pattern)&&change5)}"
                            placeholder="请输入面积数值" ng-model="cur_house_information.room_area" class="form-control">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>卧室周长</label>
@@ -152,7 +158,8 @@
                            (curForm.roomGirth.$error.required || curForm.roomGirth.$error.pattern)&&change6)}"
                            placeholder="请输入长度数值" ng-model="cur_house_information.room_girth" class="form-control">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>卫生间地面积</label>
@@ -163,7 +170,8 @@
                            (curForm.toiletArea.$error.required || curForm.toiletArea.$error.pattern)&&change7)}"
                            placeholder="请输入面积数值" ng-model="cur_house_information.toilet_area" class="form-control">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>卫生间周长</label>
@@ -174,7 +182,8 @@
                            (curForm.toiletGirth.$error.required || curForm.toiletGirth.$error.pattern)&&change8)}"
                            placeholder="请输入长度数值" ng-model="cur_house_information.toilet_girth" class="form-control">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>厨房面积</label>
@@ -185,7 +194,8 @@
                            (curForm.kitchenArea.$error.required || curForm.kitchenArea.$error.pattern)&&change9)}"
                            placeholder="请输入面积数值" ng-model="cur_house_information.kitchen_area" class="form-control">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6 ">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>厨房周长</label>
@@ -196,7 +206,8 @@
                            (curForm.kitchenGirth.$error.required || curForm.kitchenGirth.$error.pattern)&&change10)}"
                            placeholder="请输入长度数值" ng-model="cur_house_information.kitchen_girth" class="form-control">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>造型长度</label>
@@ -207,7 +218,8 @@
                            (curForm.otherLength.$error.required || curForm.otherLength.$error.pattern)&&change11)}"
                            placeholder="请输入长度数值" ng-model="cur_house_information.other_length" class="form-control">
                 </div>
-                <span class="unit">m</span>
+                <span class="unit col-md-1">m</span>
+                <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>平顶面积</label>
@@ -218,7 +230,8 @@
                            (curForm.flattopArea.$error.required || curForm.flattopArea.$error.pattern)&&change12)}"
                            placeholder="请输入面积数值" ng-model="cur_house_information.flattop_area" class="form-control">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>阳台面积</label>
@@ -229,7 +242,8 @@
                            (curForm.balconyArea.$error.required || curForm.balconyArea.$error.pattern)&&change13)}"
                            placeholder="请输入面积数值" ng-model="cur_house_information.balcony_area" class="form-control">
                 </div>
-                <span class="unit">m<sup>2</sup></span>
+                <span class="unit col-md-1">m<sup>2</sup></span>
+                <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
         </div>
         <div class="from-group submit">

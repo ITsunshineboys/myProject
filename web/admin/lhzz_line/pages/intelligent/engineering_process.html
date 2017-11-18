@@ -2,15 +2,16 @@
     <form name="engineering_process">
     <div ng-repeat="item in process_list" ng-class="{'bottom_style':process_list.length>1,'last_style':$index==process_list.length-1}">
         <div class="row" ng-repeat="item1 in item">
-        <p class="col-md-2" ng-if="!item1.options"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.project_details}}用量</p>
-        <p class="col-md-2" ng-if="!!item1.options">{{item1.title}}规格</p>
+        <p class="col-md-2" ng-if="!item1.options"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.project_details}}</p>
+        <p class="col-md-2" ng-if="!!item1.options">{{item1.title}}</p>
         <p class="col-md-3 enter">
             <select ng-model="item1.value" class="form-control" ng-options="item2 for item2 in item1.options.split(',')" ng-if="!!item1.options"></select>
             <input ng-if="!item1.options" class="form-control" name="{{item1.name}}" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="item1.flag = !!engineering_process[item1.name].$error" required
                    ng-class="{'error':(engineering_process[item1.name].$invalid&&submitted) || ((engineering_process[item1.name].$error.required || engineering_process[item1.name].$error.pattern)&&item1.flag)}"
                    ng-model="item1.material" type="text">
         </p>
-        <p class="col-md-7 text-left">{{item1.cur_unit.split('2')[0]}}<sup ng-if="item1.cur_unit.indexOf('2')!=-1">2</sup>{{item1.cur_unit.split('2')[1]}}</p>
+        <p class="col-md-1 text-left">{{item1.cur_unit.split('2')[0]}}<sup ng-if="item1.cur_unit.indexOf('2')!=-1">2</sup>{{item1.cur_unit.split('2')[1]}}</p>
+            <p class="col-md-6">*>0的数字，精确到小数点后两位</p>
         </div>
     </div>
         <div ng-repeat="item1 in all_series" ng-if="cur_item_project == '木作'" style="padding-top: 20px;padding-bottom: 20px;border-top: .5px solid #ccc;">
@@ -24,6 +25,7 @@
                                ng-model="item2.value" class="form-control "
                                ng-class="{'error':(engineering_process[item2.name].$invalid&&submitted) || ((engineering_process[item2.name].$error.required || engineering_process[item2.name].$error.pattern)&&item2.flag)}">
                     </p>
+                    <p class="col-md-6 col-md-offset-1">*>0的数字，精确到小数点后两位</p>
                 </li>
             </ul>
         </div>
@@ -38,6 +40,7 @@
                                ng-model="item2.value" class="form-control "
                                ng-class="{'error':(engineering_process[item2.name].$invalid&&submitted) || ((engineering_process[item2.name].$error.required || engineering_process[item2.name].$error.pattern)&&item2.flag)}">
                     </p>
+                    <p class="col-md-6 col-md-offset-1">*>0的数字，精确到小数点后两位</p>
                 </li>
             </ul>
         </div>
