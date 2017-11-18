@@ -1634,10 +1634,7 @@ class BasisDecorationService
                     break;
             }
         }
-        if (!$kitchen_ventilator){
-
-        }
-
+        
         $material [] = self::profitMargin($kitchen_ventilator);
         $material [] = self::profitMargin($stove);
         $material [] = self::profitMargin($hall_air_conditioner);
