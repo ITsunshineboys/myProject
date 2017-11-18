@@ -351,6 +351,7 @@ angular.module("all_controller", ['ngCookies'])
             $('body').removeClass('modal-open')
         });
         $scope.getRetrnUp = function () {
+            alert(flag);
             if(flag == 0){
                 history.go(-2)
             }
