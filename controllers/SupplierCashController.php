@@ -321,7 +321,8 @@ class SupplierCashController extends Controller
             }
 
         } else {
-            $where.= " and  s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%' or g.order_no like '%{$search}%'";
+            $where .=" and CONCAT(s.shop_no,s.shop_name, g.order_no) like '%{$search}%'";
+
         }
 
         $page = (int)$request->get('page', 1);
@@ -395,7 +396,7 @@ class SupplierCashController extends Controller
                 $where.= " and g.status =$status ";
             }
         } else {
-            $where.= " and s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%'";
+            $where.= " and CONCAT(s.shop_no,s.shop_name) like '%{$search}%'";
         }
 
         $page = (int)$request->get('page', 1);
