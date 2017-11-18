@@ -40,9 +40,9 @@ class EffectMaterial extends \yii\db\ActiveRecord
         $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')
-            ->select('e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
+            ->select('e.add_time,e.area,e.toponymy,e.city,e.particulars,e.district,e.street,e.high,e.window,e.stairway,t.style,s.series,ea.*')
             ->leftJoin('effect as e','ea.effect_id=e.id')
-            ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
+            ->leftJoin('effect_picture as ep','ea.effect_id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.effect_id'=>$effect_id])->one();
@@ -52,13 +52,14 @@ class EffectMaterial extends \yii\db\ActiveRecord
         if(!isset($array['original_price'])){
             $array['original_price']=null;
         }
+        $array['add_time']=date('Y-m-d H:i:s',$array['add_time']);
         $array['create_time']=date('Y-m-d H:i:s',$array['create_time']);
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         $data['quote']=[
             [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
             ['name'=>'原价', 'vaule'=>$array['original_price']],
-            ['name'=>'保存时间','value'=>$array['create_time']]
+            ['name'=>'保存时间','value'=>$array['add_time']]
         ];
         $data['user_view']=[
             ['name'=>'电话','value'=>$array['phone']],
