@@ -122,13 +122,16 @@ class ShippingCart extends \yii\db\ActiveRecord
      * @param array $carts
      * @return int
      */
-    public static function DelShippingCartData($carts = [])
+    public static function DelShippingCartData($carts = [],$andWhere = [])
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
             foreach ($carts as &$cart)
             {
-                $ca=self::findOne($cart);
+                $ca=self::find()
+                    ->where(['id'=>$cart])
+                    ->andWhere($andWhere)
+                    ->one();
                 if (!$ca)
                 {
                     $code=1000;

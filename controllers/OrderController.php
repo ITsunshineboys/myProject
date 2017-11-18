@@ -4505,6 +4505,16 @@ class OrderController extends Controller
      */
     public  function  actionDelInvalidGoods()
     {
+        $request=Yii::$app->request;
+        $orders=$request->post('orders');
+        if (!$orders)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -4513,15 +4523,16 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $lists=ShippingCart::find()
-            ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
-            ->asArray()
-            ->all();
-        foreach ($lists as &$list)
-        {
-            $carts[]=$list['id'];
-        }
-        $code=ShippingCart::DelShippingCartData($carts);
+//        $lists=ShippingCart::find()
+//            ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+//            ->asArray()
+//            ->all();
+//        foreach ($lists as &$list)
+//        {
+//            $carts[]=$list['id'];
+//        }
+        $andWhere=['uid'=>$user->id,'role_id'=>$user->last_role_id_app];
+        $code=ShippingCart::DelShippingCartData($orders,$andWhere);
         if ($code==200)
         {
             return Json::encode([
@@ -4868,6 +4879,7 @@ class OrderController extends Controller
 
 
     /**
+     *
      * 订单详情页-获取商品信息
      * @return string
      */
@@ -4926,7 +4938,6 @@ class OrderController extends Controller
         $data=[];
         foreach ($supplier_ids as &$supplier_id)
         {
-
             $sup_goods=[];
             foreach ($Goods as &$Good)
             {
@@ -4962,7 +4973,9 @@ class OrderController extends Controller
             'msg'=>'ok',
             'data'=>$data
         ]);
-
     }
+
+
+
 
 }
