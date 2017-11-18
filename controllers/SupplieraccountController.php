@@ -352,7 +352,7 @@ class SupplieraccountController extends  Controller{
                     if($startTime==$endTime){
                         list($startTime, $endTime) =ModelService::timeDeal($startTime);
                     }else{
-                        $startTime && $startTime .= ' 23:59:59';
+                        $endTime && $endTime .= ' 23:59:59';
                     }
                 } else {
                     list($startTime, $endTime) = StringService::startEndDate($timeType);
@@ -521,7 +521,7 @@ class SupplieraccountController extends  Controller{
             if($startTime==$endTime){
                 list($startTime, $endTime) =ModelService::timeDeal($startTime);
             }else{
-                $startTime && $startTime .= ' 23:59:59';
+                $endTime && $endTime .= ' 23:59:59';
             }
         } else {
             list($startTime, $endTime) = StringService::startEndDate($timeType);

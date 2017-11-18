@@ -311,7 +311,7 @@ class EffectController extends Controller
                 if($startTime==$endTime){
                     list($startTime, $endTime) =ModelService::timeDeal($startTime);
                 }else{
-                    $startTime && $startTime .= ' 23:59:59';
+                    $endTime && $endTime .= ' 23:59:59';
                 }
             } else {
 
