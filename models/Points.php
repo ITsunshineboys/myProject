@@ -43,6 +43,7 @@ class Points extends ActiveRecord
 
     public static function findByOne($select =[],$where = [])
     {
+        var_dump($where);exit;
         return self::find()
             ->asArray()
             ->select($select)
