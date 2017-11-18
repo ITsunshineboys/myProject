@@ -352,10 +352,10 @@ angular.module("all_controller", ['ngCookies'])
         });
         $scope.getRetrnUp = function () {
             if(flag == 0){
-                history.go(-1)
+                history.go(-2)
             }
             else{
-                history.go(-2)
+                history.go(-1)
             }
         };
         $scope.id  = $stateParams.id;
