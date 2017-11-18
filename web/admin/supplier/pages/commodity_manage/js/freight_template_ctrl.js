@@ -2,9 +2,16 @@
  * Created by xl on 2017/8/7 0007.
  */
 var shop_style= angular.module("freight_template",[])
-    .controller("freight_template_ctrl",function ($scope,$http,$state,$stateParams ,$q,_ajax) {
+    .controller("freight_template_ctrl",function ($rootScope,$scope,$http,$state,$stateParams ,$q,_ajax) {
         $scope.hidden_way = true;
         $scope.airHidden = true;
+        $rootScope.crumbs = [{
+            name: '商品管理',
+            icon: 'icon-shangpinguanli',
+            link: 'commodity_manage'
+        },{
+            name:'添加物流模板'
+        }];
         let provincesChecked = [];  // 选中的省份
         let cityChecked = [];   // 选中的城市
         $scope.cityList = [];  // 省份

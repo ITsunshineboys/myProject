@@ -1,7 +1,14 @@
 /**
  * Created by xl on 2017/8/7 0007.
  */
-app.controller("template_details_ctrl", ["$scope", "$state", "$stateParams", "$http", "_ajax", function ($scope, $state, $stateParams, $http, _ajax) {
+app.controller("template_details_ctrl", ['$rootScope',"$scope", "$state", "$stateParams", "$http", "_ajax", function ($rootScope,$scope, $state, $stateParams, $http, _ajax) {
+    $rootScope.crumbs = [{
+        name: '商品管理',
+        icon: 'icon-shangpinguanli',
+        link: 'commodity_manage'
+    },{
+        name:'查看物流模板'
+    }];
     let id = $stateParams.id;
     let provincesChecked = [];  // 选中的省份
     let cityChecked = [];   // 选中的城市

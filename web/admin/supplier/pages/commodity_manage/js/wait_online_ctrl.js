@@ -1,8 +1,15 @@
 var wait_online = angular.module("wait_online_Module",["ngFileUpload"]);
-wait_online.controller("wait_online",function ($scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
+wait_online.controller("wait_online",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
 	$scope.name = "fafafafafafa";
 	$scope.goods_all_attrs=[];//所有属性数据
 	$scope.logistics=[];//物流模块列表
+    $rootScope.crumbs = [{
+        name: '商品管理',
+        icon: 'icon-shangpinguanli',
+        link: 'commodity_manage'
+    },{
+        name: '商品详情',
+    }];
 	const config = {
 		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 		transformRequest: function (data) {
