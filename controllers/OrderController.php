@@ -4500,7 +4500,7 @@ class OrderController extends Controller
 
 
     /**
-     * 删除购物车列表
+     * 清空购物车商品
      * @return string
      */
     public  function  actionDelInvalidGoods()
@@ -4707,7 +4707,7 @@ class OrderController extends Controller
 //    }
 
     /**
-     * 去付款微信app支付
+     * 去付款-微信app支付
      * @return string
      */
     public  function actionAppOrderWxPay()
@@ -4893,7 +4893,16 @@ class OrderController extends Controller
         }
         foreach ($goods as &$good)
         {
-            $Good=Goods::findOne($good['goods_id'])->toArray();
+            $Good=Goods::findOne($good['goods_id']);
+            if (!$Good)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $Good=$Good->toArray();
             $Good['goods_num']=$good['goods_num'];
             $Goods[]=$Good;
         }
