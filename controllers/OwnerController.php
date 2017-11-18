@@ -501,20 +501,20 @@ class OwnerController extends Controller
 
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
-        var_dump($kitchen);exit;
         if ($kitchen){
             foreach ($kitchen as $one_kitchen){
                 if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
-                    $area = $one_kitchen['project_value'];
+                    $_kitchen_area = $one_kitchen['project_value'];
                 }
 
                 if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
-                    $height = $one_kitchen['project_value'];
+                    $_kitchen_height = $one_kitchen['project_value'];
                 }
             }
+        }else{
+            $_kitchen_area = EngineeringUniversalCriterion::KITCHEN_AREA;
+            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         }
-        $_kitchen_area = !isset($area) ? $area : EngineeringUniversalCriterion::KITCHEN_AREA;
-        $_kitchen_height = !isset($height) ? $height : EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
 
 
