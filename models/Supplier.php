@@ -129,7 +129,7 @@ class Supplier extends ActiveRecord
     ];
     const OFFLINE_SHOP_SUPPORT = 1; // 支持线下商店
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
-    const PAGE_SIZE_DEFAULT = 10;
+    const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_ADMIN = [
         'id',
         'shop_no',

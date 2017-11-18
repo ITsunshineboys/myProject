@@ -22,7 +22,7 @@ use yii\db\Query;
 class SupplierCashregister extends \yii\db\ActiveRecord
 {
 
-    const PAGE_SIZE_DEFAULT=10;
+    const PAGE_SIZE_DEFAULT=12;
     const FIELDS_EXTRA=[];
     const FIELDS_ADMIN = [
         'apply_time',
