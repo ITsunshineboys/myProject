@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app"  ng-controller="index_ctrl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>艾特生活-商家后台</title>
+    <link rel="stylesheet" href="lib/iconfont/iconfont.css">
+    <link rel="shortcut icon" type="image/x-icon" href="lib/images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/css/common.css">
+    <link rel="stylesheet" href="lib/css/index.css"/>
+</head>
+<body >
+<!--导航栏开始-->
+<div class="nav_box ">
+    <div class="logo">
+        <img src="lib/images/logo.png" alt=""/>
+    </div>
+    <dl ui-sref="home">
+        <dt class="dl_active1">
+            <a class="a_active1">
+                <i class="iconfont icon-shouye"></i>
+                首页
+            </a>
+        </dt>
+    </dl>
+    <dl ui-sref="shop_manage">
+        <dt class="dl_active2">
+            <a class="a_active2">
+                <i class="iconfont icon-dianpuguanli"></i>
+                店铺管理
+            </a>
+        </dt>
+    </dl>
+    <dl ui-sref="commodity_manage">
+        <dt class="dl_active3">
+            <a class="a_active3">
+                <i class="iconfont icon-shangpinguanli"></i>
+                商品管理
+            </a>
+        </dt>
+    </dl>
+    <dl ui-sref="order_manage">
+        <dt class="dl_active4">
+            <a class="a_active4">
+                <i class="iconfont icon-dingdanguanli"></i>
+                订单管理
+            </a>
+        </dt>
+    </dl>
+    <dl ui-sref="shop_data">
+        <dt class="dl_active5">
+            <a class="a_active5">
+                <i class="iconfont icon-shuju"></i>
+                店铺数据
+            </a>
+        </dt>
+    </dl>
+    <dl ui-sref="shop_decoration">
+        <dt class="dl_active6">
+            <a class="a_active6">
+                <i class="iconfont icon-icon_dianpuzhuangxiu"></i>
+                店铺装修
+            </a>
+        </dt>
+    </dl>
+    <!--<dl>-->
+        <!--<dt class="dl_active7">-->
+            <!--<a class="a_active7">-->
+                <!--<i class="glyphicon glyphicon-home"></i>-->
+                <!--品牌管理-->
+            <!--</a>-->
+        <!--</dt>-->
+    <!--</dl>-->
+    <!--<dl>-->
+        <!--<dt class="dl_active8">-->
+            <!--<a class="a_active8">-->
+                <!--<i class="glyphicon glyphicon-home"></i>-->
+                <!--分类管理-->
+            <!--</a>-->
+        <!--</dt>-->
+    <!--</dl>-->
+    <dl ui-sref="supplier_wallet">
+        <dt class="dl_active9">
+            <a class="a_active9">
+                <i class="iconfont icon-qianbao"></i>
+                钱包
+            </a>
+        </dt>
+    </dl>
+</div>
+<!--导航栏结束-->
+<!--头部导航开始-->
+<header id="header">
+    <breadcrumb crumb-conf="crumbs"></breadcrumb>
+    <button class="iconfont icon-dengchu"></button>
+</header>
+<!--头部导航结束-->
+
+<!--右侧内容页面容器结束-->
+<div id="content" ui-view></div>
+<!--右侧内容页面容器结束-->
+
+<!--公用-->
+<script src="/admin/supplier/??lib/js/baseUrl.js
+,lib/js/jquery-3.1.1.js
+,lib/js/angular.js
+,lib/js/angular-ui-router.js
+,lib/bootstrap-3.3.7-dist/js/bootstrap.min.js
+"></script>
+<script src="/admin/supplier/??lib/js/ng-file-upload.js
+,lib/js/ng-file-upload-shim.js
+,lib/js/ngDraggable.js
+,app.js
+,lib/js/common_lh.js
+"></script>
+<script src="/admin/supplier/??lib/js/index.js
+,lib/editor/ueditor.config.js
+,lib/editor/ueditor.all.js
+,lib/js/angular-ueditor.js
+,lib/data_js/laydate.js
+"></script>
+<script src="/admin/supplier/??lib/js/directive.js
+,lib/js/checklist-model.js
+"></script>
+<!--公用-->
+
+<!--谢力-->
+<script src="pages/commodity_manage/js/freight_template_ctrl.js"></script>
+<!--谢力-->
+
+<!--王杰----- 开始-->
+<script src="pages/commodity_manage/js/shop_style_ctrl.js"></script>
+<script src="pages/commodity_manage/js/system_offline_ctrl.js"></script>
+<script src="pages/commodity_manage/js/wait_online_ctrl.js"></script>
+<script src="pages/commodity_manage/js/commodity_manage_ctrl.js"></script>
+<script src="pages/commodity_manage/js/up_shelves_detail_ctrl.js"></script>
+<script src="pages/home/js/home.js"></script>
+<script src="pages/shop_decoration/js/shop_decoratiion.js"></script>
+<script src="pages/supplier_wallet/js/supplier_wallet.js"></script>
+<script src="pages/shop_data/js/shop_data.js"></script>
+<script src="pages/supplier_wallet/js/wallet_detail.js"></script>
+<script src="pages/supplier_wallet/js/income_pay.js"></script>
+<script src="pages/supplier_wallet/js/set_password.js"></script>
+<script src="pages/order_manage/js/waitsend_detail_ctrl.js"></script>
+<script src="pages/order_manage/js/record_goods_detail.js"></script>
+<!--三阶段王杰----- 结束-->
+
+<!--芳子------开始-->
+<script src="pages/supplier_wallet/js/supplier_account_ctrl.js"></script>       <!--商家账户-->
+<script src="pages/supplier_wallet/js/withdraw_deposit_ctrl.js"></script>       <!--提现-->
+<script src="pages/supplier_wallet/js/edit_card_ctrl.js"></script>              <!--添加/修改银行卡-->
+<script src="pages/supplier_wallet/js/frozen_money_ctrl.js"></script>           <!--冻结余额列表-->
+<script src="pages/order_manage/js/order_manage_index_ctrl.js"></script>        <!--订单管理-->
+<script src="pages/order_manage/js/waitpay_detail_ctrl.js"></script>            <!--待付款详情-->
+<script src="pages/order_manage/js/done_detail_ctrl.js"></script>               <!--已完成订单详情-->
+<script src="pages/order_manage/js/cancel_detail_ctrl.js"></script>             <!--已取消订单详情-->
+<script src="pages/order_manage/js/express_ctrl.js"></script>                   <!--物流-->
+<!--芳子----- 结束-->
+
+<!--lh-->
+<script src="pages/shop_manage/js/shop_manage_index_ctrl.js"></script>          <!--店铺管理-->
+<script src="pages/shop_manage/js/apply_brand_ctrl.js"></script>                <!--申请新品牌-->
+<script src="pages/shop_manage/js/authorize_detail_ctrl.js"></script>           <!--品牌授权详情页-->
+<!--lh-->
+
+<script src="pages/commodity_manage/js/template_details_ctrl.js"></script>
+
+</body>
+</html>
