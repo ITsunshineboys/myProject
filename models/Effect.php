@@ -223,7 +223,7 @@ class Effect extends ActiveRecord
             $data['particulars_view']=null;
         }
         $array['particulars']=mb_substr($array['particulars'],0,4);
-        if($array['district']){
+        if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{
             $array['address']=$array['city'].$array['street'];
@@ -235,7 +235,7 @@ class Effect extends ActiveRecord
         unset($array['city']);
         unset($array['district']);
         unset($array['street']);
-        if($array['stairway']){
+        if(isset($array['stairway'])){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
         }else{
