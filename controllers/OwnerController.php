@@ -1619,7 +1619,7 @@ class OwnerController extends Controller
                         $cost                                      = $one_goods['platform_price'] / BasisDecorationService::GOODS_PRICE_UNITS;
                         $case_works_datum['goods_id']              = $one_goods['id'];
                         $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
-                        $case_works_datum['cost']                  = $cost * $case_works_datum['goods_quantity'];
+                        $case_works_datum['cost']                  = round($cost * $case_works_datum['goods_quantity'],2);
                         $case_works_datum['name']                  = $one_goods['name'];
                         $case_works_datum['quantity']              = $case_works_datum['goods_quantity'];
                         $case_works_datum['image']                 = $one_goods['cover_image'];
