@@ -1806,7 +1806,6 @@ class QuoteController extends Controller
             'apartment_area' => ApartmentArea::findCondition([],$where),
             'else_area'=> ApartmentArea::findByAll('min_area,max_area'),
         ]);
-
     }
 
     /**
@@ -1901,6 +1900,10 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(WorksData::find()->where(['goods_code'=>111111])->all());exit;
+        return Json::encode([
+           'project_view'=> ProjectView::findAll([]),
+            'apartment' => Apartment::findAll([]),
+            'apartment_area' => ApartmentArea::findAll([]),
+        ]);
     }
 }
