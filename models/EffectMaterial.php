@@ -46,6 +46,7 @@ class EffectMaterial extends \yii\db\ActiveRecord
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.effect_id'=>$effect_id])->one();
+        var_dump($array);die;
         $array['particulars']=mb_substr($array['particulars'],0,4);
         if(!isset($array['sale_price'])){
             $array['sale_price']=null;
