@@ -1796,7 +1796,7 @@ class QuoteController extends Controller
     {
         $id = trim(\Yii::$app->request->post('id',''));
         $select = 'id,project,project_value';
-        $where = 'points_id ='.$id;
+        $where = 'points_id  ='.$id;
         $area_select = 'id,min_area,max_area,project_name,project_value';
         return Json::encode([
             'code' => 200,
