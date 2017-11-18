@@ -717,7 +717,7 @@ class OwnerController extends Controller
         }
 
         // 面积比例
-        $points_where = 'title = '.self::AREA_PROPORTION;
+        $points_where = ['title'=>self::AREA_PROPORTION];
         $points = Points::findByOne([],$points_where);
         if ($points == null){
             $code = 1058;

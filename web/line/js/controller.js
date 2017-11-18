@@ -160,7 +160,7 @@ angular.module("all_controller", ['ngCookies'])
         // 点击轮播图跳转
         $scope.getDetails = function (item) {
             sessionStorage.setItem('wxflag',true);
-            $http.post('http://test.cdlhzz.cn/mall/recommend-click-record',{
+            $http.post(baseUrl+'/mall/recommend-click-record',{
                 recommend_id:$scope.carousel_id
             },config).then(function (response) {
                 console.log(response)
@@ -218,7 +218,7 @@ angular.module("all_controller", ['ngCookies'])
         //左侧数据获取
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn/mall/categories'
+            url: baseUrl+'/mall/categories'
         }).then(function successCallback(response) {
             $scope.star = response.data.data.categories;
             console.log(response)
@@ -226,7 +226,7 @@ angular.module("all_controller", ['ngCookies'])
         //首页列表点击分类列表传值id获取数据(一级id查去二级)
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn/mall/categories?pid='+$scope.pid
+            url: baseUrl+'/mall/categories?pid='+$scope.pid
         }).then(function successCallback(response) {
             console.log(response);
             $scope.details = response.data.data.categories;
@@ -237,7 +237,7 @@ angular.module("all_controller", ['ngCookies'])
         //首页列表点击分类列表传值id获取数据(一级id查去三级)
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn/mall/categories-level3?pid=' + $scope.pid
+            url:  baseUrl+'/mall/categories-level3?pid=' + $scope.pid
         }).then(function successCallback(response) {
             let arr= {};
             for(let [key,value] of response.data.categories_level3.entries()){
@@ -257,7 +257,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.pid = item.id;
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn/mall/categories?pid=' + item.id
+                url:  baseUrl+'/mall/categories?pid=' + item.id
             }).then(function successCallback(response) {
                 $scope.details = response.data.data.categories;
                 //console.log(response.data.data.categories[0].id);
@@ -267,7 +267,7 @@ angular.module("all_controller", ['ngCookies'])
             //首页列表点击分类列表传值id获取数据(一级id查去三级)
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn/mall/categories-level3?pid=' + item.id
+                url:  baseUrl+'/mall/categories-level3?pid=' + item.id
             }).then(function successCallback(response) {
                 let arr= {};
                 for(let [key,value] of response.data.categories_level3.entries()){
@@ -972,7 +972,7 @@ angular.module("all_controller", ['ngCookies'])
         // 判断是否是微信浏览器打开 =======是微信浏览器打开 做分享的配置
         $http({   // 判断是否微信浏览器打开
             method: 'get',
-            url: 'http://test.cdlhzz.cn/order/iswxlogin'
+            url:  baseUrl+'/order/iswxlogin'
         }).then(function successCallback(response) {
             console.log(response);
             $scope.codeWX = response.data.code;
@@ -1044,7 +1044,7 @@ angular.module("all_controller", ['ngCookies'])
             ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
         $http({
             method:"get",
-            url:'http://test.cdlhzz.cn/supplier/index?supplier_id='+$scope.supplier_id
+            url: baseUrl+'/supplier/index?supplier_id='+$scope.supplier_id
         }).then(function successCallback (response) {
             console.log(response);
             $scope.swiperList = response.data.data.index.carousel;//轮播图
@@ -1087,7 +1087,7 @@ angular.module("all_controller", ['ngCookies'])
             console.log(item);
             $scope.mall_id = item.url.split('=')[1];
             console.log($scope.mall_id);
-            $http.post('http://test.cdlhzz.cn/mall/recommend-click-record',{
+            $http.post( baseUrl+'/mall/recommend-click-record',{
                 recommend_id:+$scope.recommend_id
             },config).then(function (response){
                 console.log(response)
@@ -1118,7 +1118,7 @@ angular.module("all_controller", ['ngCookies'])
 
             $http({
                 method: 'get',
-                url:'http://test.cdlhzz.cn/supplier/goods',
+                url: baseUrl+'/supplier/goods',
                 params:{
                     supplier_id:+$scope.supplier_id,
                     "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
@@ -1143,7 +1143,7 @@ angular.module("all_controller", ['ngCookies'])
                 ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
             $http({
                 method: 'get',
-                url:'http://test.cdlhzz.cn/supplier/goods',
+                url: baseUrl+'/supplier/goods',
                 params:{
                     supplier_id:+$scope.supplier_id,
                     "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3')
@@ -1272,7 +1272,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.contentInvoice = '保存成功';
                     console.log(222222222222);
                     // 添加发票接口
-                    $http.post('http://test.cdlhzz.cn/order/orderinvoicelineadd',{
+                    $http.post( baseUrl+'/order/orderinvoicelineadd',{
                         invoice_type: 1,
                         invoice_header_type:1,
                         invoice_header:'发票抬头',
@@ -1323,7 +1323,7 @@ angular.module("all_controller", ['ngCookies'])
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '保存成功';
                     // 添加发票接口
-                    $http.post('http://test.cdlhzz.cn/order/orderinvoicelineadd',{
+                    $http.post( baseUrl+'/order/orderinvoicelineadd',{
                         invoice_type: 1,
                         invoice_header_type:2,
                         invoice_header:'发票抬头',
@@ -1437,7 +1437,7 @@ angular.module("all_controller", ['ngCookies'])
         //订单信息===>获取商品的信息
         $http({
             method: 'get',
-            url: 'http://test.cdlhzz.cn/order/getgoodsdata',
+            url: baseUrl+'/order/getgoodsdata',
             params:{
                 goods_id:+$scope.mall_id,
                 goods_num:+$scope.shopNum
@@ -1498,7 +1498,7 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.addressCode = document.getElementById("value1").value;
                 $scope.addressCode = $scope.addressCode.split('—');
                 console.log($scope.addressCode);
-                $http.post('http://test.cdlhzz.cn/order/adduseraddress',{
+                $http.post( baseUrl+'/order/adduseraddress',{
                     mobile:+$scope.harvestNum,
                     consignee:$scope.harvestName,
                     districtcode:$scope.addressCode[2],
@@ -1524,7 +1524,7 @@ angular.module("all_controller", ['ngCookies'])
                 // 获取订单收货信息地址
                 $http({
                     method: 'get',
-                    url: 'http://test.cdlhzz.cn/order/getaddress',
+                    url:  baseUrl+'/order/getaddress',
                     params:{
                         address_id:sessionStorage.getItem('address_id')
                     }
@@ -1589,7 +1589,7 @@ angular.module("all_controller", ['ngCookies'])
         if($scope.invoice_id != undefined){
             $http({
                 method: 'get',
-                url: 'http://test.cdlhzz.cn/order/getinvoicelinedata',
+                url:  baseUrl+'/order/getinvoicelinedata',
                 params:{
                     invoice_id:+$scope.invoice_id
                 }
@@ -1627,7 +1627,7 @@ angular.module("all_controller", ['ngCookies'])
             if($scope.show_harvest == true && $scope.show_address == false ){
 
                 //判断收货地址是否在配送范围内
-                $http.post('http://test.cdlhzz.cn/order/judegaddress',{
+                $http.post( baseUrl+'/order/judegaddress',{
                     goods_id:+$scope.mall_id,
                     districtcode:$scope.adCode
                 },config).then(function (response) {
@@ -1645,7 +1645,7 @@ angular.module("all_controller", ['ngCookies'])
                         // 判断是否微信浏览器打开
                         $http({
                             method: 'get',
-                            url: 'http://test.cdlhzz.cn/order/iswxlogin'
+                            url:  baseUrl+'/order/iswxlogin'
                         }).then(function successCallback(response) {
                             console.log(response);
                             $scope.codeWX = response.data.code;
@@ -1656,7 +1656,7 @@ angular.module("all_controller", ['ngCookies'])
                                 // alert(JSON.stringify(sessionStorage.getItem('address_id')))
                                 $http({     //获取openid 的地址
                                     method: 'get',
-                                    url: 'http://test.cdlhzz.cn/order/lineplaceorder',
+                                    url:  baseUrl+'order/lineplaceorder',
                                     params:{
                                         goods_name: $scope.title,
                                         order_price:$scope.allCost,
@@ -1686,7 +1686,7 @@ angular.module("all_controller", ['ngCookies'])
                                     }
                                 };
                                 // http://test.cdlhzz.cn/
-                                $http.post('http://test.cdlhzz.cn/order/alipaylinesubmit',{
+                                $http.post( baseUrl+'/order/alipaylinesubmit',{
                                     goods_name: $scope.title,
                                     order_price:+$scope.allCost,
                                     goods_num:+$scope.shopNum,

@@ -135,6 +135,17 @@ class BasisDecorationService
         'repair_river_sand_dosage'=>'补烂河沙用量',
     ];
 
+    const CARPENTRY_DETAILS =[
+      'keel_sculpt'=>'龙骨做造型长度',
+      'screw_rod_sculpt'=>'丝杆做造型长度',
+      'plasterboard_sculpt'=>'石膏板造型长度',
+      'plasterboard_area'=>'石膏板平顶面积',
+      'tv_day'=>'电视墙需要天数',
+      'tv_plasterboard'=>'电视墙所需石膏板',
+      'keel_area'=>'龙骨做平顶面积',
+      'screw_rod_area'=>'丝杆做平顶面积',
+    ];
+
     /**
      *   防水  水路  强电  弱电 人工费
      * @param string $points
@@ -536,7 +547,7 @@ class BasisDecorationService
      * @param int $video_wall
      * @return float
      */
-    public static function carpentryPlasterboardCost($modelling_length,$flat_area,$goods,$crafts ,$video_wall = 1)
+    public static function carpentryPlasterboardCost($modelling_length,$flat_area,$goods,$crafts)
     {
         $plasterboard = [];
         foreach ($goods as $goods_price ) {
@@ -547,18 +558,19 @@ class BasisDecorationService
             }
         }
         foreach ($crafts as $craft) {
-            switch ($craft) {
-                case $craft['project_details'] == self::HOUSE_MESSAGE['modelling_length']:
-                    $plasterboard_material = $craft['material'];
-                    break;
-                case $craft['project_details'] == self::HOUSE_MESSAGE['flat_area']:
-                    $area_material = $craft['material'];
-                    break;
-            }
+           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_sculpt']){
+               $plasterboard_sculpt = $craft['material'];
+           }
+           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_area']){
+               $plasterboard_area = $craft['material'];
+           }
+           if ($craft['project_details'] == self::CARPENTRY_DETAILS['tv_plasterboard']){
+               $tv_plasterboard  = $craft['material'];
+           }
         }
 
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $area_material + $video_wall);
+        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_sculpt + $flat_area / $plasterboard_area + $tv_plasterboard);
 
 //            石膏板费用：个数×商品价格
         $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
@@ -583,17 +595,19 @@ class BasisDecorationService
                 }
             }
 
-            $plasterboard_material = 0;
+
             foreach ($crafts as $craft) {
-                if($craft['project_details'] == self::GOODS_NAME['keel']) {
-                    $plasterboard_material = $craft['material'];
+                if($craft['project_details'] == self::CARPENTRY_DETAILS['keel_sculpt']) {
+                    $keel_sculpt = $craft['material'];
+                }
+                if($craft['project_details'] == self::CARPENTRY_DETAILS['keel_area']) {
+                    $keel_area = $craft['material'];
                 }
             }
-
 //          个数=个数1+个数2
 //          个数1：（造型长度÷【1.5m】）
 //          个数2：（平顶面积÷【1.5m²】）
-            $keel_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area /$plasterboard_material);
+            $keel_cost['quantity'] = ceil($modelling_length / $keel_sculpt + $flat_area /$keel_area);
 //          主龙骨费用：个数×商品价格
             $keel_cost['cost'] = $keel_cost['quantity'] * $goods_price['platform_price'];
         }
@@ -617,16 +631,18 @@ class BasisDecorationService
                     $goods_price = $price;
                 }
             }
-            $plasterboard_material = 0;
             foreach ($crafts as $craft) {
-                if($craft['project_details'] == self::GOODS_NAME['lead_screw']) {
-                    $plasterboard_material = $craft['material'];
+                if($craft['project_details'] == self::CARPENTRY_DETAILS['screw_rod_sculpt']) {
+                    $screw_rod_sculpt = $craft['material'];
+                }
+                if($craft['project_details'] == self::CARPENTRY_DETAILS['screw_rod_area']) {
+                    $screw_rod_area = $craft['material'];
                 }
             }
 //            个数=个数1+个数2
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
-            $pole_cost['quantity'] = ceil($modelling_length / $plasterboard_material + $flat_area / $plasterboard_material);
+            $pole_cost['quantity'] = ceil($modelling_length / $screw_rod_sculpt + $flat_area / $screw_rod_area);
 //            丝杆费用：个数×抓取的商品价格
             $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
         }

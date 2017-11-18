@@ -223,7 +223,7 @@ class Effect extends ActiveRecord
             $data['particulars_view']=null;
         }
         $array['particulars']=mb_substr($array['particulars'],0,4);
-        if($array['district']){
+        if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{
             $array['address']=$array['city'].$array['street'];
@@ -235,7 +235,7 @@ class Effect extends ActiveRecord
         unset($array['city']);
         unset($array['district']);
         unset($array['street']);
-        if($array['stairway']){
+        if(isset($array['stairway'])){
             $stairway_cl=(new Query())->from('effect')->select('attribute')->leftJoin('stairs_details','effect.stair_id=stairs_details.id')->where(['effect.id'=>$effect_id])->one();
             $array['stairway']=$stairway_cl['attribute'];
         }else{
@@ -273,7 +273,7 @@ class Effect extends ActiveRecord
 
     }
 
-    public static  function getAppeffectdata($effect_id){
+    public static  function getAppeffectdata($enst_id){
         $data=[];
         $query=new Query();
         $array= $query->from('effect_earnest As ea')
@@ -282,8 +282,9 @@ class Effect extends ActiveRecord
             ->leftJoin('effect_picture as ep','ea.effect_id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
-            ->where(['ea.effect_id'=>$effect_id])->one();
-        if(!$array){
+            ->where(['ea.id'=>$enst_id])->one();
+        $effect_id=EffectEarnest::find()->select('effect_id')->asArray()->one()['effect_id'];
+        if($array==false){
             $data=null;
         }
         if(!isset($array['sale_price'])){
@@ -297,8 +298,8 @@ class Effect extends ActiveRecord
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         $data['quote']=[
-            [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
             ['name'=>'原价', 'vaule'=>$array['original_price']],
+            [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
         $data['user_view']=[
