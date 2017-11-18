@@ -996,14 +996,14 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
-        if (!$lhzz){
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+//        if (!$lhzz){
+//            $code=1010;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $request = Yii::$app->request;
         $page=trim($request->get('page',1));
         $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
@@ -4500,7 +4500,7 @@ class OrderController extends Controller
 
 
     /**
-     * 清空购物车商品
+     * 删除购物车商品
      * @return string
      */
     public  function  actionDelInvalidGoods()
