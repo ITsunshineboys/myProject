@@ -498,6 +498,7 @@ class OwnerController extends Controller
         }
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
+        var_dump($waterproof);exit;
 
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
