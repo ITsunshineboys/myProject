@@ -303,8 +303,8 @@ class Effect extends ActiveRecord
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
         $data['user_view']=[
-            ['name'=>'电话','value'=>$array['phone']],
             ['name'=>'姓名','value'=>$array['name']],
+            ['name'=>'电话','value'=>$array['phone']],
             ['name'=>'申请时间','value'=>$array['create_time']]
         ];
         if($array['district']){
