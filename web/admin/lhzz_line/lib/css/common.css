@@ -2,7 +2,10 @@
 公用组建
 *******************/
 body {
+    margin: 0;
+    padding: 0;
     color: #2F3033;
+    font-family: "微软雅黑", sans-serif;
 }
 
 a {
@@ -420,8 +423,8 @@ Nav tabs
 }
 
 .nav_box .logo {
-    width: 59px;
-    height: 64px;
+    width: auto;
+    text-align: center;
     margin: 50px auto;
 }
 
@@ -436,7 +439,6 @@ Nav tabs
 .nav_box dl dt {
     height: 40px;
     padding-left: 14px;
-    position: relative;
     line-height: 40px;
     cursor: pointer;
     background-color: #F5F7FA;
@@ -452,11 +454,9 @@ Nav tabs
 }
 
 /*子菜单*/
-
 .nav_box dl dd {
-    position: relative;
+    height: 30px;
     background-color: #F5F7FA;
-    padding: 3px 0;
     padding-left: 41px;
     cursor: pointer;
 }
@@ -464,12 +464,13 @@ Nav tabs
 .nav_box dl dd:hover a {
     color: #3F94F6;
     transition: all 0.2s linear;
-
 }
 
 .nav_box dl dd a {
+    display: block;
     color: #ABABAB;
     font-size: 13px;
+    line-height: 30px;
     text-decoration: none;
 }
 
