@@ -51,6 +51,13 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages()
             }
         }
+        $scope.$watch('keyword',function (newVal,oldVal) {
+            if(newVal == ''){
+                $scope.Config.currentPage = 1
+                $scope.params.search = newVal
+                tablePages()
+            }
+        })
         //入账详情
         /*分页配置*/
         $scope.Config1 = {
@@ -287,7 +294,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
         $scope.cur_first_level = ''//当前一级初始化
         $scope.cur_second_level = ''//当前二级初始化
         $scope.cur_third_level = ''//当前三级初始化
-        $scope.keyword = ''//初始化
         $scope.overrun = false//冻结金额是否超额
         $scope.cur_freeze_money = ''//当前冻结金额
         $scope.cur_freeze_remark = ''//当前冻结理由
@@ -779,6 +785,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 }
             ]
             $scope.cur_index = 0
+            $scope.params1.search = ''
+            $scope.params1.time_type = 'today'
+            $scope.params1.time_end = ''
+            $scope.params1.time_start = ''
             $scope.keyword1 = ''
             tablePages1()
             $state.go('mall_finance.recorded_detail')
@@ -786,6 +796,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //入账列表搜索
         $scope.get_recorded_list = function () {
             if($scope.keyword1!=''){
+                $scope.Config1.currentPage = 1
                 $scope.params1.time_type = 'all'
                 $scope.params1.time_end  = ''
                 $scope.params1.time_end = ''
@@ -795,6 +806,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         $scope.$watch('keyword1',function (newVal,oldVal) {
             if(newVal== ''){
+                $scope.Config1.currentPage = 1
                 $scope.params1.search = newVal
                 tablePages1()
             }
