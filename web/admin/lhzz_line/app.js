@@ -438,11 +438,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/intelligent/edit_worker.html',
             css: 'pages/intelligent/css/edit_worker.css'
         })
-        // .state('intelligent.add_worker',{
-        //     url:'add_worker',
-        //     templateUrl:'pages/intelligent/add_worker.html',
-        //     css:'pages/intelligent/css/add_worker.css'
-        // })
         .state('intelligent.home_manage', {//智能报价首页管理
             url: 'home_manage',
             templateUrl: 'pages/intelligent/home_manage.html',
@@ -507,7 +502,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state('apply_case', {
             url: '/apply_case/',
             templateUrl: 'pages/apply_case/index.html'
-            // css:'pages/apply_case/css/apply_case_header.css'
         })
         .state('apply_case.index', {//样板间申请主页
             url: 'index',

@@ -1,20 +1,17 @@
 /*头部样式修改*/
-header{
-    height: 60px;
-    line-height:60px;
-    font-size:14px!important;
-    border-bottom:1px solid #E6E9F0;
-    padding:0 40px;
-    position: relative;
-    text-align: right;
-}
-.header_title{
-    position: absolute;
-    left:0;
-    margin-left:40px;
-}
-/*.remove{*/
-    /*border:1px solid #5677FC;*/
+/*header{*/
+    /*height: 60px;*/
+    /*line-height:60px;*/
+    /*font-size:14px!important;*/
+    /*border-bottom:1px solid #E6E9F0;*/
+    /*padding:0 40px;*/
+    /*position: relative;*/
+    /*text-align: right;*/
+/*}*/
+/*.header_title{*/
+    /*position: absolute;*/
+    /*left:0;*/
+    /*margin-left:40px;*/
 /*}*/
 /*=智能报价主页*/
 .intelligent_index{
