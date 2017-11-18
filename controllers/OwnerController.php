@@ -518,22 +518,22 @@ class OwnerController extends Controller
         $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
 
 
-
         //卫生间
         $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
         if ($toilet){
             foreach ($toilet as $one_toilet){
                 if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
-                    $_area = $one_toilet['project_value'];
+                    $_toilet_area = $one_toilet['project_value'];
                 }
 
                 if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
-                    $_height = $one_toilet['project_value'];
+                    $_toilet_height = $one_toilet['project_value'];
                 }
             }
+        } else{
+            $_toilet_area = EngineeringUniversalCriterion::TOILET_AREA;
+            $_toilet_height  = EngineeringUniversalCriterion::TOILET_HEIGHT;
         }
-        $_toilet_area = !isset($_area) ? $_area : EngineeringUniversalCriterion::TOILET_AREA;
-        $_toilet_height = !isset($_height) ? $_height : EngineeringUniversalCriterion::TOILET_HEIGHT;
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
         $total_area = $kitchen_area + $toilet_area;
