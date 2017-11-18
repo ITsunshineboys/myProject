@@ -363,6 +363,10 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'strong_current_labor_price' => [],
+                    'strong_current_material' => [],
+                ]
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
@@ -427,6 +431,10 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'waterway_labor_price' => [],
+                    'waterway_material_price' => [],
+                ]
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
@@ -480,6 +488,11 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'waterproof_labor_price' => [],
+                    'waterproof_material' => [],
+                    'total_area' => [],
+                ]
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
@@ -618,6 +631,11 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'carpentry_labor_price' => [],
+                    'carpentry_material' => [],
+                    'carpentry_add_price' => [],
+                ]
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
@@ -772,6 +790,10 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'coating_labor_price' => [],
+                    'coating_material' => [],
+                ]
             ]);
         }
         $goods_price = BasisDecorationService::priceConversion($goods);
@@ -976,7 +998,10 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => $goods,
+                'data' => [
+                    'mud_make_labor_price' => [],
+                    'mud_make_material' => [],
+                ]
             ]);
         }
         $goods_price = BasisDecorationService::priceConversion($goods);
@@ -1141,6 +1166,10 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'labor_cost' => [],
+                    'total_material' => [],
+                ]
             ]);
         }
         $goods_price = BasisDecorationService::priceConversion($goods);
