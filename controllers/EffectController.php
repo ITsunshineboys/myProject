@@ -352,6 +352,10 @@ class EffectController extends Controller
 
         ]);
     }
+    /**
+     * app 样板间申请详情
+     * @return string
+     */
     public function actionAppEffectView(){
         $code=1000;
         $effect_enst_id = trim(Yii::$app->request->get('effect_enst_id', ''), '');
@@ -361,12 +365,25 @@ class EffectController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data=EffectMaterial::geteffectdata($effect_enst_id);
+        $data=Effect::getAppeffectdata($effect_enst_id);
             return Json::encode([
                 'code'=>200,
                 'msg'=>'ok',
                 'data'=>$data
             ]);
+    }
+    public function actionEffectPlan(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $status=(int)Yii::$app->request->get('status','');
+        $data=EffectEarnest::PlanList($user->getId(),$status);
     }
 
 
