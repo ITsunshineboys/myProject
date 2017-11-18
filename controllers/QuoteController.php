@@ -1901,7 +1901,6 @@ class QuoteController extends Controller
     public function actionTest()
     {
         return Json::encode([
-            'goods'=> Goods::find()->all(),
            'project_view'=> ProjectView::find()->all(),
             'apartment' => Apartment::find()->all(),
             'apartment_area' => ApartmentArea::find()->all(),
