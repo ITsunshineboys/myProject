@@ -1102,6 +1102,21 @@ INSERT INTO `carpentry_add` VALUES ('9', '2', '2', '平顶面积', '四川', '�
 INSERT INTO `carpentry_add` VALUES ('10', '4', '2', '造型长度', '四川', '成都', '20');
 INSERT INTO `carpentry_add` VALUES ('11', '4', '2', '平顶面积', '四川', '成都', '4');
 
+-- ----------------------------
+-- Records of engineering_universal_criterion
+-- ----------------------------
+INSERT INTO `engineering_universal_criterion` VALUES ('1', '厨房', '厨房面积', '%', '0.10', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('2', '卫生间', '卫生间面积', '%', '0.10', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('3', '客厅', '客厅面积', '%', '0.25', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('4', '厨房', '厨房防水', '高度', '0.30', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('5', '卫生间', '卫生间防水', '高度', '1.80', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('6', '木作', '造型长度', 'M', '20.00', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('7', '木作', '平顶面积', '平方', '4.00', '00.00', '00.00');
+INSERT INTO `engineering_universal_criterion` VALUES ('8', '油漆', '卧室面积', '%', '0.45', '02.80', '02.80');
+INSERT INTO `engineering_universal_criterion` VALUES ('9', '油漆', '客厅面积', '%', '0.25', '02.80', '02.80');
+INSERT INTO `engineering_universal_criterion` VALUES ('10', '油漆', '餐厅', '%', '0.30', '02.80', '02.80');
+INSERT INTO `engineering_universal_criterion` VALUES ('11', '卧室', '卧室面积', '%', '0.45', '00.00', '00.00');
+
 
 
 

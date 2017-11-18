@@ -26,8 +26,7 @@ class CarpentryAdd extends ActiveRecord
         {
             if($carpentry_add_one['project'] == '造型长度'){
                 $inquire_result ['modelling_length']  = $carpentry_add_one['standard'];
-            }elseif ($carpentry_add_one['project'] == '平顶面积')
-            {
+            }elseif ($carpentry_add_one['project'] == '平顶面积') {
                 $inquire_result ['flat_area'] = $carpentry_add_one['standard'];
             }
         }
