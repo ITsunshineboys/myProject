@@ -4758,4 +4758,45 @@ class OrderController extends Controller
     }
 
 
+
+    /**
+     * 获取购物车列表
+     * @return string
+     */
+    public function  actionFindShippingCartList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        if (!$request->isGet)
+        {
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=ShippingCart::ShippingList($user);
+        if (is_numeric($data))
+        {
+            $code=$data;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+
+
 }

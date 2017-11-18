@@ -64,6 +64,10 @@ class ShippingCart extends \yii\db\ActiveRecord
             ->andWhere(['role_id'=>$user->last_role_id_app])
             ->asArray()
             ->all();
+        if (!$data)
+        {
+            return [];
+        }
         foreach ($data as  &$list)
         {
             $supplierIds[]=Goods::findOne($list['goods_id'])
