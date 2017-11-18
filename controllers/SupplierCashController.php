@@ -317,6 +317,7 @@ class SupplierCashController extends Controller
             if ($time_end) {
                 $time_end = (int)strtotime($time_end);
                 $time_end && $where .= " and g.paytime <= {$time_end}";
+
             }
 
         } else {
