@@ -1091,6 +1091,17 @@ INSERT INTO `apartment_area` VALUES ('306', '70', '150', '159');
 INSERT INTO `apartment_area` VALUES ('307', '70', '160', '169');
 INSERT INTO `apartment_area` VALUES ('308', '70', '170', '179');
 
+INSERT INTO `carpentry_add` VALUES ('1', '1', '1', '造型长度', '四川', '成都', '20');
+INSERT INTO `carpentry_add` VALUES ('2', '1', '1', '平顶面积', '四川', '成都', '4');
+INSERT INTO `carpentry_add` VALUES ('3', '1', '2', '造型长度', '四川', '成都', '20');
+INSERT INTO `carpentry_add` VALUES ('4', '1', '2', '平顶面积', '四川', '成都', '4');
+INSERT INTO `carpentry_add` VALUES ('5', '2', '1', '造型长度', '四川', '成都', '20');
+INSERT INTO `carpentry_add` VALUES ('6', '2', '1', '平顶面积', '四川', '成都', '4');
+INSERT INTO `carpentry_add` VALUES ('8', '2', '2', '造型长度', '四川', '成都', '20');
+INSERT INTO `carpentry_add` VALUES ('9', '2', '2', '平顶面积', '四川', '成都', '4');
+INSERT INTO `carpentry_add` VALUES ('10', '4', '2', '造型长度', '四川', '成都', '20');
+INSERT INTO `carpentry_add` VALUES ('11', '4', '2', '平顶面积', '四川', '成都', '4');
+
 
 
 
