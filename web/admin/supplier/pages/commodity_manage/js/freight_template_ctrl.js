@@ -5,6 +5,7 @@ var shop_style= angular.module("freight_template",[])
     .controller("freight_template_ctrl",function ($rootScope,$scope,$http,$state,$stateParams ,$q,_ajax) {
         $scope.hidden_way = true;
         $scope.airHidden = true;
+         // /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
         $rootScope.crumbs = [{
             name: '商品管理',
             icon: 'icon-shangpinguanli',

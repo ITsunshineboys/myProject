@@ -21,7 +21,7 @@
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-            <li ng-click="sort('sold_number')" ng-class="{'filter_color':(platform_status == 0&&rate_status == 0)}">销量优先</li>
+            <li ng-click="sort('sold_number')" ng-class="{'filter_color':(platform_status == 0 && rate_status == 0)}">销量优先</li>
             <li ng-click="sort('platform_price')" ng-class="{'filter_color':(platform_status != 0&&rate_status == 0)}">价格
                 <img src="images/down.png" alt="" ng-if="platform_status == 1">
                 <img src="images/mall_arrow_up.png" alt="" ng-if="platform_status == 2">

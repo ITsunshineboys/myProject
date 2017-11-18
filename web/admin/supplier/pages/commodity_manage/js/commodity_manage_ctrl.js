@@ -653,16 +653,17 @@ let commodity_manage = angular.module("commodity_manage", [])
                     tablePagesWait()
                 }
             });
+        $scope.wait_sort_time_img = 'lib/images/arrow_down.png';
         $scope.wait_time_sort = function () {
-            if ($scope.down_sort_time_img == 'lib/images/arrow_default.png') {
-                $scope.down_sort_time_img = 'lib/images/arrow_down.png';
-                $scope.params['sort[]'] = 'offline_time:3';
-            } else if ($scope.down_sort_time_img == 'lib/images/arrow_down.png') { //------> 升序
-                $scope.down_sort_time_img = 'lib/images/arrow_up.png';
-                $scope.params['sort[]'] = 'offline_time:4';
+            if ($scope.wait_sort_time_img == 'lib/images/arrow_default.png') {
+                $scope.wait_sort_time_img = 'lib/images/arrow_down.png';
+                $scope.params['sort[]'] = 'publish_time:3';
+            } else if ($scope.wait_sort_time_img == 'lib/images/arrow_down.png') { //------> 升序
+                $scope.wait_sort_time_img = 'lib/images/arrow_up.png';
+                $scope.params['sort[]'] = 'publish_time:4';
             } else {                                                //-------> 降序
-                $scope.down_sort_time_img = 'lib/images/arrow_down.png';
-                $scope.params['sort[]'] = 'offline_time:3';
+                $scope.wait_sort_time_img = 'lib/images/arrow_down.png';
+                $scope.params['sort[]'] = 'publish_time:3';
             }
             // $scope.Config.currentPage = 1; //页数跳转到第一页
             tablePagesWait()

@@ -352,9 +352,10 @@ angular.module("all_controller", ['ngCookies'])
         });
         $scope.getRetrnUp = function () {
             if(flag == 0){
-                history.go(-2)
-            }else{
                 history.go(-1)
+            }
+            else{
+                history.go(-2)
             }
         };
         $scope.id  = $stateParams.id;
@@ -437,8 +438,8 @@ angular.module("all_controller", ['ngCookies'])
                 console.log(err);
             })
         };
-        $scope.platform_status = 0
-        $scope.rate_status = 0
+        $scope.platform_status = 0;
+        $scope.rate_status = 0;
         $scope.params = {
             category_id: '',
             platform_price_min: '',
@@ -465,12 +466,12 @@ angular.module("all_controller", ['ngCookies'])
             $scope.params.brand_id = '';
             $scope.params.style_id = '';
             $scope.params.series_id = '';
-        }
+        };
         //商品排序
         $scope.sort = function (str) {
-            console.log($scope.platform_status)
+            console.log($scope.platform_status);
             if (str == 'sold_number') {
-                $scope.platform_status = 0
+                $scope.platform_status = 0;
                 $scope.rate_status = 0
             } else if (str == 'platform_price') {
                 if ($scope.platform_status == 0 || $scope.platform_status == 2) {
@@ -490,29 +491,29 @@ angular.module("all_controller", ['ngCookies'])
             $scope.params.category_id = $scope.id;
             $scope.params['sort[]'] = str + ($scope.platform_status == 0 ? ($scope.rate_status == 0 ? '' : ($scope.rate_status == 1 ? ':3' : ':4')) : ($scope.platform_status == 1 ? ':3' : ':4'))
             tablePages()
-        }
+        };
         //填写筛选价格区间
         $scope.get_price = function (item) {
-            console.log($scope.price_min)
-            console.log($scope.price_max)
+            console.log($scope.price_min);
+            console.log($scope.price_max);
             if(item == 1){
                 if($scope.price_max != ''){
                     if(+$scope.price_min>+$scope.price_max){
-                        let cur_item = $scope.price_min
-                        $scope.price_min = $scope.price_max
+                        let cur_item = $scope.price_min;
+                        $scope.price_min = $scope.price_max;
                         $scope.price_max = cur_item
                     }
                 }
             }else{
                 if($scope.price_min != ''){
                     if(+$scope.price_min>+$scope.price_max){
-                        let cur_item = $scope.price_min
-                        $scope.price_min = $scope.price_max
+                        let cur_item = $scope.price_min;
+                        $scope.price_min = $scope.price_max;
                         $scope.price_max = cur_item
                     }
                 }
             }
-        }
+        };
         //改变风格系列以及品牌
         $scope.all_change = function (item,cur_item) {
             if(item == 1){
@@ -520,10 +521,10 @@ angular.module("all_controller", ['ngCookies'])
                     return item ===cur_item.id
                 })
                 if(index != -1){
-                    $scope.cur_style_arr.splice(index,1)
+                    $scope.cur_style_arr.splice(index,1);
                     $scope.params.style_id = $scope.cur_style_arr.join(',')
                 }else{
-                    $scope.cur_style_arr.push(cur_item.id)
+                    $scope.cur_style_arr.push(cur_item.id);
                     $scope.params.style_id = $scope.cur_style_arr.join(',')
                 }
             }else if(item == 2){
@@ -531,44 +532,44 @@ angular.module("all_controller", ['ngCookies'])
                     return item ===cur_item.id
                 })
                 if(index != -1){
-                    $scope.cur_series_arr.splice(index,1)
+                    $scope.cur_series_arr.splice(index,1);
                     $scope.params.series_id = $scope.cur_series_arr.join(',')
                 }else{
-                    $scope.cur_series_arr.push(cur_item.id)
+                    $scope.cur_series_arr.push(cur_item.id);
                     $scope.params.series_id = $scope.cur_series_arr.join(',')
                 }
             }else if(item == 3){
                 let index = $scope.cur_brand_arr.findIndex(function (item) {
                     return item ===cur_item.id
-                })
+                });
                 if(index != -1){
-                    $scope.cur_brand_arr.splice(index,1)
+                    $scope.cur_brand_arr.splice(index,1);
                     $scope.params.brand_id = $scope.cur_brand_arr.join(',')
                 }else{
-                    $scope.cur_brand_arr.push(cur_item.id)
+                    $scope.cur_brand_arr.push(cur_item.id);
                     $scope.params.brand_id = $scope.cur_brand_arr.join(',')
                 }
             }else if(item == 4){
                 let index = $scope.cur_brand_copy.findIndex(function (item) {
                     return item ===cur_item.id
-                })
+                });
                 if(index != -1){
                     $scope.cur_brand_copy.splice(index,1)
                 }else{
                     $scope.cur_brand_copy.push(cur_item.id)
                 }
             }
-        }
+        };
         //跳转内层模态框
         $scope.go_inner_data = function () {
             $scope.cur_brand_copy = angular.copy($scope.cur_brand_arr);
             $scope.all_brand_copy = angular.copy($scope.all_goods_brands)
-        }
+        };
         //保存内层数据
         $scope.save_inner_data = function () {
-            $scope.cur_brand_arr = $scope.cur_brand_copy
+            $scope.cur_brand_arr = $scope.cur_brand_copy;
             $scope.params.brand_id = $scope.cur_brand_arr.join(',')
-        }
+        };
         //完成筛选
         $scope.complete_filter = function () {
             $scope.params.platform_price_min = $scope.price_min*100;

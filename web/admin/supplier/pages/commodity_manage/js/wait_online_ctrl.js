@@ -77,7 +77,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			category_id:+goods_item.category_id
 		}
 	}).then(function (res) {
-		/*品牌、系列、风格 下拉框开始*/
+		/*品牌、系列、风格 下拉框开始*/ n
 		$scope.brands_arr=res.data.data.category_brands_styles_series.brands;
 		$scope.series_arr=res.data.data.category_brands_styles_series.series;
 		$scope.styles_arr=res.data.data.category_brands_styles_series.styles;

@@ -441,11 +441,14 @@
                 <td ng-if="wait_7">项目经理采购价格</td>
                 <td ng-if="wait_8">设计师采购价格</td>
                 <td ng-if="wait_9">库存</td>
-                <td ng-if="wait_10">销量</td>
+                <td ng-if="wait_10">
+                    销量
+                    <img ng-click="up_sort_sale_click()" class="arrow_img_size" ng-src="{{up_sort_sale_img}}" alt="">
+                </td>
                 <td ng-if="wait_11">状态</td>
                 <td ng-if="wait_12">
                     <span>发布时间</span>
-                    <img ng-click="wait_time_sort()"  class="arrow_img_size" ng-src="{{down_sort_time_img}}" alt="">
+                    <img ng-click="wait_time_sort()"  class="arrow_img_size" ng-src="{{wait_sort_time_img}}" alt="">
                     <!--<img ng-click="wait_time_sort()" ng-show= on_time_flag class="arrow_img_size"-->
                          <!--src="pages/commodity_manage/image/up.png" alt="">-->
                     <!--<img ng-click="wait_time_sort()" ng-show= down_time_flag  class="arrow_img_size"-->
