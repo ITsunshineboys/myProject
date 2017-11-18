@@ -2,9 +2,19 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let frozen_money = angular.module("frozen_moneyModule", []);
-frozen_money.controller("frozen_money_ctrl", function ($scope, $http, $stateParams) {
+frozen_money.controller("frozen_money_ctrl", function ($rootScope, $scope, $http, $stateParams) {
     let time_type;
     /*获取冻结余额列表*/
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-qianbao',
+        link: 'supplier_wallet'
+    }, {
+        name: '商家账户信息',
+        link: 'supplier_account'
+    },{
+        name: '冻结余额列表'
+    }];
 
 
     /*请求参数*/

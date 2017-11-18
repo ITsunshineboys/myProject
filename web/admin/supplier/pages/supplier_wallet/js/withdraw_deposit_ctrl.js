@@ -2,13 +2,24 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let withdraw_deposit = angular.module("withdraw_depositModule", []);
-withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $state, $anchorScroll, $location, $window) {
+withdraw_deposit.controller("withdraw_deposit_ctrl", function ($rootScope,$scope, $http, $state, $anchorScroll, $location, $window) {
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)
         }
     };
+
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-qianbao',
+        link: 'supplier_wallet'
+    }, {
+        name: '商家账户信息',
+        link: 'supplier_account'
+    },{
+        name: '提现'
+    }];
 
     let reg = /^\d+(\.\d{1,2})?$/; //金额正则
     $scope.psdwarning = false;
@@ -26,18 +37,6 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($scope, $http, $s
             $scope.totalmoney = res.data.data;
         })
     }
-
-
-       // $scope.moneyCheck = () => {
-    //     if(!(reg.test($scope.money_num)&&$scope.money_num>0)){
-    //         $scope.money_num = '';
-    //     }
-    // }
-    //
-
-
-
-
 
     /*确认提现*/
     $scope.sureWithdraw = function (val, error) {
