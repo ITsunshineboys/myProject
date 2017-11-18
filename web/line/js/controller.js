@@ -1,10 +1,10 @@
 angular.module("all_controller", ['ngCookies'])
+    // 微信控制器
     .controller('wxShare_ctrl',function ($rootScope, $scope,$http) {
         $rootScope.$on("$locationChangeSuccess", function () {
             $scope.wxShareUrl = window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.hash;
             wxConfig($scope.wxShareUrl);
         });
-
         // 微信事宜
         $rootScope.isWxOpen = false;
         $http.get(baseUrl+'/order/iswxlogin').then(function (res) {
@@ -38,6 +38,7 @@ angular.module("all_controller", ['ngCookies'])
                 }
             }
         });
+        // 微信配置
         function wxConfig (url) {
             // 分享到朋友圈
             wx.onMenuShareTimeline({
@@ -834,7 +835,7 @@ angular.module("all_controller", ['ngCookies'])
         let vm = $scope.vm = {};
         window.addEventListener("hashchange", function() {
             // 注册返回按键事件
-            $('.modal-backdrop').remove()
+            $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
         let mySwiper = new Swiper("#swiperList", {

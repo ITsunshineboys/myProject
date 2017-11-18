@@ -1,10 +1,15 @@
 
 let account_index=angular.module("account_index_module",[]);
-account_index.controller("account_index_ctrl",function ($scope,$http,$state,$stateParams,_ajax) {
+account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
   $scope.normal_flag=true;
   $scope.close_flag=false;
   $scope.mm = $scope;
   $scope.myng = $scope;
+    $rootScope.crumbs = [{
+        name: '账户管理',
+        icon: 'icon-zhanghuguanli'
+        // link: 'merchant_index'
+    }];
   $scope.normal=function () {
       $scope.normal_flag=true;
       $scope.close_flag=false;

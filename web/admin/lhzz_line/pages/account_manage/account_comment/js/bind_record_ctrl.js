@@ -2,7 +2,17 @@
  * Created by xl on 2017/8/10 0010.
  */
 var bind_record= angular.module("bind_record",[])
-    .controller("bind_record_ctrl",function ($scope,$http,$state,$stateParams,_ajax) {
+    .controller("bind_record_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
+        $rootScope.crumbs = [{
+            name: '账户管理',
+            icon: 'icon-zhanghuguanli',
+            link: 'account_index'
+        },{
+            name:'账户详情',
+            link:'account_comment'
+        },{
+            name:'过往绑定记录'
+        }];
         $scope.id = $stateParams.id;
         $scope.icon = $stateParams.icon;
         $scope.nickname = $stateParams.nickname;
