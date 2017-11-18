@@ -45,8 +45,9 @@ class EffectMaterial extends \yii\db\ActiveRecord
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
-            ->where(['ea.effect_id'=>$effect_id])->one();
-        var_dump($array);die;
+            ->where(['ea.effect_id'=>$effect_id])
+            ->one();
+
         $array['particulars']=mb_substr($array['particulars'],0,4);
         if(!isset($array['sale_price'])){
             $array['sale_price']=null;
@@ -90,10 +91,6 @@ class EffectMaterial extends \yii\db\ActiveRecord
                 ['name'=>'风格','value'=>$array['style']]
             ];
 
-
-
-
-
         $material=EffectMaterial::find()->where(['effect_id'=>$effect_id])->asArray()->all();
         if(!$material){
             $data['material']=null;
@@ -116,6 +113,7 @@ class EffectMaterial extends \yii\db\ActiveRecord
                 ->asArray()->one()['title'];
 
         }
+
         return $data;
 
     }
