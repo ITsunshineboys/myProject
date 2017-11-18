@@ -7,6 +7,7 @@ use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
 use app\models\Effect;
+use app\models\EffectEarnest;
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
@@ -1659,8 +1660,11 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $a = BasisDecorationService::L(10,10,10);
-        var_dump($a);
+        var_dump(Effect::findAll([]));
+        var_dump(EffectPicture::findAll([]));
+        var_dump(EffectEarnest::findAll([]));
+        var_dump(Series::findAll([]));
+        var_dump(Style::findAll([]));
     }
 
 }
