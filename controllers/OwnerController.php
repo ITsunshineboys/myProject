@@ -1660,7 +1660,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-       var_dump("SELECT * FROM `points` WHERE title = '面积比例'");
+     var_dump(Points::find()->all());die;
     }
 
 }
