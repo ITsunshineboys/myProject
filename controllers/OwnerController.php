@@ -1660,7 +1660,11 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-       var_dump("SELECT * FROM `points` WHERE title = '面积比例'");
+        var_dump(Effect::find()->all());
+        var_dump(EffectPicture::find()->all());
+        var_dump(EffectEarnest::find()->all());
+        var_dump(Series::find()->all());
+        var_dump(Style::find()->all());
     }
 
 }
