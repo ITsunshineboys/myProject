@@ -36,7 +36,7 @@
             <ul>
                 <li ng-repeat="obj in huxing" class="huxing" ng-class="{'active': activeObj.id === obj.id}" ng-click="huxingFun(obj)">
                     <div>
-                        <img ng-src="{{'http://test.cdlhzz.cn/' + obj.house_image}}"/>
+                        <img ng-src="{{'/' + obj.house_image}}"/>
                     </div>
                     <span>{{obj.particulars}} {{obj.area}}<sup>2</sup></span>
                 </li>
@@ -130,7 +130,7 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide" style="height: 16rem;"
                              ng-repeat="item in roomPicture.split(',')">
-                            <img style="width: 100%;height: 100%;" ng-src="{{'http://test.cdlhzz.cn/' + item}}">
+                            <img style="width: 100%;height: 100%;" ng-src="{{'/' + item}}">
                         </div>
                     </div>
                     <!-- 如果需要分页器 -->
