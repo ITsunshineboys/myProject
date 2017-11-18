@@ -1660,11 +1660,11 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(Effect::findAll([]));
-        var_dump(EffectPicture::findAll([]));
-        var_dump(EffectEarnest::findAll([]));
-        var_dump(Series::findAll([]));
-        var_dump(Style::findAll([]));
+        var_dump(Effect::find()->all());
+        var_dump(EffectPicture::find()->all());
+        var_dump(EffectEarnest::find()->all());
+        var_dump(Series::find()->all());
+        var_dump(Style::find()->all());
     }
 
 }
