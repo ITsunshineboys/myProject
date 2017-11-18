@@ -294,7 +294,10 @@ class OwnerController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => $goods,
+                'data' => [
+                    'weak_current_labor_price' => [],
+                    'weak_current_material' => [],
+                ]
             ]);
         }
         $judge = BasisDecorationService::priceConversion($goods);
