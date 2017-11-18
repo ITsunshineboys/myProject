@@ -273,7 +273,6 @@ class SupplierCashManager extends ActiveRecord
         foreach ($arr as &$v) {
             $v['paytime'] = date('Y-m-d H:i', $v['paytime']);
             $v['amount_order'] = sprintf('%.2f', (float)($v['goods_price'] * $v['goods_number'] + $v['freight']) / 100);
-            $v['status'] = '已完成';
             unset($v['freight']);
             unset($v['goods_number']);
             unset($v['goods_price']);

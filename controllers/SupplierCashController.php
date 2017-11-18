@@ -321,7 +321,7 @@ class SupplierCashController extends Controller
             }
 
         } else {
-            $where = " s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%' or g.order_no like '%{$search}%'";
+            $where = " and  s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%' or g.order_no like '%{$search}%'";
         }
 
         $page = (int)$request->get('page', 1);
