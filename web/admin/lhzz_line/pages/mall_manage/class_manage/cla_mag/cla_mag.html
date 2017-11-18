@@ -1,85 +1,83 @@
 <link rel="stylesheet" href="pages/mall_manage/class_manage/cla_mag/css/cla_mag.css">
 <div ng-controller="cla_mag_tabbar" class="cla_mag_tabbar">
-        <div class="cla_mag_tabtitle">
-            <span id="onsale_tab" ng-click="tabFunc('onsale_flag')" ng-class="{clickstyle:onsale_flag}">已上架</span>
-            <span id="offsale_tab" ng-click="tabFunc('offsale_flag')" ng-class="{clickstyle:offsale_flag}">已下架</span>
+    <div class="cla_mag_tabtitle">
+        <span id="onsale_tab" ng-click="tabFunc('onsale_flag')" ng-class="{clickstyle:onsale_flag}">已上架</span>
+        <span id="offsale_tab" ng-click="tabFunc('offsale_flag')" ng-class="{clickstyle:offsale_flag}">已下架</span>
+    </div>
+
+    <!--已上架-->
+    <div class="on_sale" id="on_sale">
+        <!--上架菜单按钮组-->
+        <div class="cla_mag_btngroup" ng-if="onsale_flag">
+            <button class="chooseall_btn" ng-click=checkAll()>全选</button>
+            <button class="xiajia_btn" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
+            <span class="fenleichoose_span">分类选择</span>
+            <!--/*分类选择一级下拉框*/-->
+            <select name=""  class="fenleichoose" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+            <!--/*分类选择二级菜单*/-->
+            <select name="" class="cailiaochoose" ng-show="dropdown.firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
+        </div>
+        <div class="cla_mag_btngroup"  ng-if="offsale_flag">
+            <button id="add" ui-sref="add_class">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span>添加</span>
+            </button>
+            <button class="chooseall_btn" ng-click=checkAll()>全选</button>
+            <button class="xiajia_btn" data-toggle="modal" data-target="#batchonline_modal">上架</button>
+            <span class="fenleichoose_span">分类选择</span>
+            <!--/*分类选择一级下拉框*/-->
+            <select name=""  class="fenleichoose" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+            <!--/*分类选择二级菜单*/-->
+            <select name="" class="cailiaochoose" ng-show="dropdown.firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
         </div>
 
-        <!--已上架-->
-        <div class="on_sale" id="on_sale">
-            <!--上架菜单按钮组-->
-            <div class="cla_mag_btngroup" ng-if="onsale_flag">
-                <button class="chooseall_btn" ng-click=checkAll()>全选</button>
-                <button class="xiajia_btn" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
-                <span class="fenleichoose_span">分类选择</span>
-                <!--/*分类选择一级下拉框*/-->
-                <select name=""  class="fenleichoose" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-                <!--/*分类选择二级菜单*/-->
-                <select name="" class="cailiaochoose" ng-show="dropdown.firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
-            </div>
-            <div class="cla_mag_btngroup"  ng-if="offsale_flag">
-                <button id="add" ui-sref="add_class">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span>添加</span>
-                </button>
-                <button class="chooseall_btn" ng-click=checkAll()>全选</button>
-                <button class="xiajia_btn" data-toggle="modal" data-target="#batchonline_modal">上架</button>
-                <span class="fenleichoose_span">分类选择</span>
-                <!--/*分类选择一级下拉框*/-->
-                <select name=""  class="fenleichoose" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-                <!--/*分类选择二级菜单*/-->
-                <select name="" class="cailiaochoose" ng-show="dropdown.firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
-            </div>
-
-
-            <!--已上架Table内容-->
-            <div class="onsale_table">
-                <table>
-                    <tr class="th">
-                        <td>&nbsp;</td>
-                        <td>所属分类</td>
-                        <td>分类图片</td>
-                        <td>分类名称</td>
-                        <td>分类级别</td>
-                        <td ng-click=sortTime()>
-                            <span ng-if="onsale_flag">上架时间</span>
-                            <span ng-if="offsale_flag">下架时间</span>
-                            <span class="sortpic">
+        <!--已上架Table内容-->
+        <div class="onsale_table">
+            <table>
+                <tr class="th">
+                    <td>&nbsp;</td>
+                    <td>所属分类</td>
+                    <td>分类图片</td>
+                    <td>分类名称</td>
+                    <td>分类级别</td>
+                    <td ng-click=sortTime()>
+                        <span ng-if="onsale_flag">上架时间</span>
+                        <span ng-if="offsale_flag">下架时间</span>
+                        <span class="sortpic">
                                  <i class="glyphicon glyphicon-triangle-top"
                                     ng-class="{'active':sortStyleFunc() == 4}"></i>
                                  <i class="glyphicon glyphicon-triangle-bottom"
                                     ng-class="{'active':sortStyleFunc() == 3}"></i>
                     </span>
-                        </td>
-                        <td ng-if="onsale_flag">添加人员</td>
-                        <td ng-if="offsale_flag">操作人员</td>
-                        <td>状态</td>
-                        <td ng-if="offsale_flag">下架原因</td>
-                        <td>详情</td>
-                        <td>操作</td>
-                    </tr>
+                    </td>
+                    <td ng-if="onsale_flag">添加人员</td>
+                    <td ng-if="offsale_flag">操作人员</td>
+                    <td>状态</td>
+                    <td ng-if="offsale_flag">下架原因</td>
+                    <td>详情</td>
+                    <td>操作</td>
+                </tr>
 
-                    <tr ng-repeat="item in listdata">
-                        <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
-                        <td>{{item.parent_title}}</td>
-                        <td><img ng-src="{{baseUrl + '/'+ item.icon}}"></td>
-                        <td>{{item.title}}</td>
-                        <td>{{item.level}}</td>
-                        <td ng-if="onsale_flag">{{item.online_time}}</td>
-                        <td ng-if="!onsale_flag">{{item.offline_time}}</td>
-                        <td ng-if="onsale_flag">{{item.online_person}}</td>
-                        <td ng-if="!onsale_flag">{{item.offline_person}}</td>
-                        <td class="yesGreen" ng-if="onsale_flag">{{item.status}}</td>
-                        <td class="yesred" ng-if="!onsale_flag">{{item.status}}</td>
-                        <td ng-if="onsale_flag" class="edit" ui-sref="onsale_edit({item:item})">编辑</td>
-                        <td ng-if="!onsale_flag" class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
-                        <td ng-if="!onsale_flag" id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></td>
-                        <td ng-if="onsale_flag" class="xiajia" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
-                        <td ng-if="!onsale_flag" class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
-                    </tr>
-                </table>
-                <tm-pagination conf="pageConfig"></tm-pagination >
-            </div>
+                <tr ng-repeat="item in listdata">
+                    <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
+                    <td>{{item.parent_title}}</td>
+                    <td><img ng-src="{{baseUrl + '/'+ item.icon}}"></td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.level}}</td>
+                    <td ng-if="onsale_flag">{{item.online_time}}</td>
+                    <td ng-if="!onsale_flag">{{item.offline_time}}</td>
+                    <td ng-if="onsale_flag">{{item.online_person}}</td>
+                    <td ng-if="!onsale_flag">{{item.offline_person}}</td>
+                    <td class="yesGreen" ng-if="onsale_flag">{{item.status}}</td>
+                    <td class="yesred" ng-if="!onsale_flag">{{item.status}}</td>
+                    <td ng-if="onsale_flag" class="edit" ui-sref="onsale_edit({item:item})">编辑</td>
+                    <td ng-if="!onsale_flag" class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
+                    <td ng-if="!onsale_flag" id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></td>
+                    <td ng-if="onsale_flag" class="xiajia" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
+                    <td ng-if="!onsale_flag" class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
+                </tr>
+            </table>
+            <tm-pagination conf="pageConfig"></tm-pagination >
         </div>
     </div>
 
@@ -201,6 +199,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

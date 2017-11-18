@@ -210,6 +210,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     /*单个确认上架*/
     $scope.sureOnline = function () {
         _ajax.post('/mall/category-status-toggle',{id: singleonid},function (res) {
+            console.log(res);
             $scope.pageConfig.currentPage = 1;
             tableList();
         })
