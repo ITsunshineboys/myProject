@@ -48,7 +48,6 @@ class EffectMaterial extends \yii\db\ActiveRecord
             ->where(['ea.effect_id'=>$effect_id])
             ->one();
 
-        $array['particulars']=mb_substr($array['particulars'],0,4);
         if(!isset($array['sale_price'])){
             $array['sale_price']=null;
         }
