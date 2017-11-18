@@ -317,8 +317,6 @@ class EffectController extends Controller
 
                 list($startTime, $endTime) = StringService::startEndDate($timeType);
 
-                $startTime = explode(' ', $startTime)[0];
-                $endTime = explode(' ', $endTime)[0];
 
             }
 
