@@ -4941,10 +4941,19 @@ class OrderController extends Controller
                     ];
                 }
             }
-            $data[]=
+                $supplier=Supplier::findOne($supplier_id);
+                if (!$supplier)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $data[]=
                 [
                     'supplier_id'=>$supplier_id,
-                    'shop_name'=>Supplier::findOne($supplier_id)->shop_name,
+                    'shop_name'=>$supplier->shop_name,
                     'goods'=>$sup_goods
                 ];
         }
