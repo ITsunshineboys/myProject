@@ -19,7 +19,7 @@ class TestController extends Controller
     const ACCESS_LOGGED_IN_USER = [
         'cache-delete',
         'cache-delete-all',
-        'reset-mobile-pwd',
+//        'reset-mobile-pwd',
         'goods-qr-gen',
         'register-user',
         'upload',
