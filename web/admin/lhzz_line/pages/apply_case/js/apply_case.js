@@ -147,7 +147,6 @@ angular.module('apply_case',[])
             }
             //返回前页
             $scope.go_index = function () {
-                $scope.second_title =  ''
                 $rootScope.crumbs = [
                     {
                         name:'申请样板间',

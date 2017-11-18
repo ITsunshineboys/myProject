@@ -72,8 +72,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.params1 = {};
 
         $scope.ctrlScope = $scope//解决ngModel无法双向绑定
-        $scope.second_title = ''//二级列表项初始化
-        $scope.three_title = ''//三级列表项初始化
         $scope.search_txt = ''//小区搜索文本
         // $scope.pic_error = ''
         $scope.cur_num = 0
@@ -331,7 +329,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     name:'小区列表页'
                 }
             ]
-            // $scope.second_title = '小区列表页'
             console.log($scope.cur_county)
         }
         //跳转添加小区页
@@ -2144,6 +2141,18 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.cur_title = '保存成功'
                 $scope.common_house = function () {
                     $uibModalInstance.close()
+                    $rootScope.crumbs = [
+                        {
+                            name:'智能报价',
+                            icon:'icon-baojia',
+                            link:function(){
+                                $state.go('intelligent.intelligent_index')
+                                $rootScope.crumbs.splice(1,4)
+                            }
+                        },{
+                            name:'首页管理'
+                        }
+                    ]
                     $state.go('intelligent.home_manage')
                 }
             }
@@ -2161,9 +2170,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         recommend_name: $scope.recommend_name
                     },function (res) {
                         console.log(res)
-                        $scope.second_title = '资费/做工标准'
-                        $scope.three_title = ''
-                        $scope.four_title = ''
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
@@ -2188,9 +2194,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         house_type_name: $scope.cur_case.particulars,
                         recommend_name: $scope.recommend_name
                     },function (res) {
-                        $scope.second_title = '资费/做工标准'
-                        $scope.three_title = ''
-                        $scope.four_title = ''
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
@@ -2402,9 +2405,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         name:'工程标准',
                     }
                 ]
-                $scope.second_title = '工程标准'
-                $scope.three_title = ''
-                $scope.four_title = ''
                 $state.go('intelligent.engineering_standards')
             })
         }
@@ -2745,9 +2745,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         material: arr
                     },function (res) {
                         console.log(res)
-                        $scope.second_title = '工程标准'
-                        $scope.three_title = ''
-                        $scope.four_title = ''
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
@@ -2930,7 +2927,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         /*添加材料项*/
         //跳转添加材料项列表
         $scope.go_add_material = function () {
-            $scope.second_title = '添加材料项'
             $rootScope.crumbs = [
                 {
                     name:'智能报价',
