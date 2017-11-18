@@ -1220,7 +1220,9 @@ class BasisDecorationService
     {
         if (count($goods) == count($goods, 1)) {
             return $goods;
-        } else {
+        } elseif ($goods == null){
+            return [];
+        }else {
             foreach($goods as $v) {
                 $r[$v['title']][$v['profit_rate']] = $v;
                 $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
@@ -1632,6 +1634,10 @@ class BasisDecorationService
                     break;
             }
         }
+        if (!$kitchen_ventilator){
+
+        }
+
         $material [] = self::profitMargin($kitchen_ventilator);
         $material [] = self::profitMargin($stove);
         $material [] = self::profitMargin($hall_air_conditioner);
@@ -1790,7 +1796,6 @@ class BasisDecorationService
                 $materials[] = $one_goods;
             }
         }
-
         return BasisDecorationService::profitMargin($materials);
     }
 
