@@ -498,10 +498,10 @@ class OwnerController extends Controller
         }
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
-        var_dump($waterproof);exit;
 
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
+        var_dump($kitchen);exit;
         if ($kitchen){
             foreach ($kitchen as $one_kitchen){
                 if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
@@ -1661,7 +1661,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-     var_dump(CarpentryAdd::find()->all());
+     var_dump(EngineeringUniversalCriterion::find()->all());
     }
 
 }
