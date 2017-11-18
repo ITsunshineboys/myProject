@@ -113,7 +113,7 @@ class EffectMaterial extends \yii\db\ActiveRecord
                 ->asArray()->one()['title'];
 
         }
-
+        $data['material']=$material;
         return $data;
 
     }
