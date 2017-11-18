@@ -395,7 +395,7 @@ class SupplierCashController extends Controller
                 $where.= " and g.status =$status ";
             }
         } else {
-            $where.= " s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%'";
+            $where.= " and s.shop_no like '%{$search}%' or s.shop_name like '%{$search}%'";
         }
 
         $page = (int)$request->get('page', 1);
