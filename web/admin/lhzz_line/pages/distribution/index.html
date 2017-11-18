@@ -1,12 +1,12 @@
 <div ng-controller="distribution_ctrl">
-    <header>
-        <div class="header_title highLight"><i style="font-size: 20px;margin-right: 5px;" class="fa fa-file-text" aria-hidden="true"></i><span ng-click="go_index()">分销</span><span ng-if="!!second_title" ng-click="go_second()" ng-class="{'dark':(!!second_title&&!three_title)}">>{{second_title}}</span>
-            <span ng-if="!!three_title" ng-click="go_three()" ng-class="{'dark':(!!three_title&&!four_title)}">>{{three_title}}</span><span ng-if="!!four_title" class="dark">>{{four_title}}</span></div>
-        <!--<span class="message">站内信</span>-->
-        <!--<span class="account">个人面板</span>-->
-        <button><i class="fa fa-user" aria-hidden="true"></i></button>
-    </header>
-    <div>
+    <!--<header>-->
+        <!--<div class="header_title highLight"><i style="font-size: 20px;margin-right: 5px;" class="fa fa-file-text" aria-hidden="true"></i><span ng-click="go_index()">分销</span><span ng-if="!!second_title" ng-click="go_second()" ng-class="{'dark':(!!second_title&&!three_title)}">>{{second_title}}</span>-->
+            <!--<span ng-if="!!three_title" ng-click="go_three()" ng-class="{'dark':(!!three_title&&!four_title)}">>{{three_title}}</span><span ng-if="!!four_title" class="dark">>{{four_title}}</span></div>-->
+        <!--&lt;!&ndash;<span class="message">站内信</span>&ndash;&gt;-->
+        <!--&lt;!&ndash;<span class="account">个人面板</span>&ndash;&gt;-->
+        <!--<button><i class="fa fa-user" aria-hidden="true"></i></button>-->
+    <!--</header>-->
+    <!--<div>-->
         <div ui-view></div>
-    </div>
+    <!--</div>-->
 </div>

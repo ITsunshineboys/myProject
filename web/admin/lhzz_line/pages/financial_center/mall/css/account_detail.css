@@ -58,3 +58,6 @@ header button{
     /*position: absolute;*/
     /*bottom:50px;*/
 }
+.account_detail .error{
+    border-color: red;
+}

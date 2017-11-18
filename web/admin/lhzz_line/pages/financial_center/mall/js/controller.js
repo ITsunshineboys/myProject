@@ -221,9 +221,9 @@ angular.module('mall_finance', ['ui.bootstrap'])
             }
         }
         //返回前一页
-        $scope.go_prev = function () {
-            if($rootScope.curState_name == 'mall_finance.account_detail'){
-                $rootScope.fromState_name = 'mall_finance.account'
+        $scope.go_prev1 = function () {
+            // if($rootScope.curState_name == 'mall_finance.account_detail'){
+            //     $rootScope.fromState_name = 'mall_finance.account'
                 $rootScope.crumbs = [
                     {
                         name:'财务中心',
@@ -238,9 +238,11 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     name:'账户管理'
                     }
                 ]
-            }else if($rootScope.curState_name == 'mall_finance.account_detail'){
-                
-            }
+            tablePages2()
+            $state.go('mall_finance.account')
+            // }else if($rootScope.curState_name == 'mall_finance.account_detail'){
+            //
+            // }
         }
         $scope.time_type = [
             {name: '全部时间', str: 'all'},
@@ -393,6 +395,20 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 $scope.common_house = function () {
                     $uibModalInstance.close()
                     tablePages()
+                    $rootScope.crumbs = [
+                        {
+                            name:'财务中心',
+                            icon:'icon-caiwu'
+                        },{
+                            name:'商城财务',
+                            link:function () {
+                                $state.go('mall_finance.index')
+                                $rootScope.crumbs.splice(2,4)
+                            }
+                        },{
+                            name:'商家提现管理',
+                        }
+                    ]
                     $state.go('mall_finance.withdraw')
                 }
             }
@@ -404,7 +420,10 @@ angular.module('mall_finance', ['ui.bootstrap'])
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
                     })
+                    $scope.submitted = false
                 })
+            }else{
+                $scope.submitted = true
             }
         }
         //跳转账户管理
@@ -464,10 +483,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         //跳转账户详情页
         $scope.go_account_detail = function (item) {
-            $scope.three_title = '账户管理'
-            $scope.four_title = '详情'
-            $scope.five_title = ''
-            $scope.six_title = ''
             $rootScope.crumbs = [
                 {
                     name:'财务中心',
@@ -488,6 +503,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 name:'详情'
                 }
             ]
+            $scope.cur_account = item
             _ajax.get('/supplieraccount/account-view',{
                 id:item.id
             },function (res) {
@@ -562,7 +578,12 @@ angular.module('mall_finance', ['ui.bootstrap'])
                             name:'详情'
                         }
                     ]
-                    $state.go('mall_finance.account_detail')
+                    _ajax.get('/supplieraccount/account-view',{
+                        id: $scope.cur_account.id
+                    },function (res) {
+                        $scope.cur_account_detail = res.data
+                        $state.go('mall_finance.account_detail')
+                    })
                 }
             }
             let obj = {}
@@ -586,6 +607,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                         id:$scope.cur_account_detail.id
                     },function (res) {
                         console.log(res)
+                        $scope.submitted = false
                         $scope.cur_account_detail = res.data.data
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
@@ -742,10 +764,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         //跳转入账列表
         $scope.go_recorded_detail = function () {
-            $scope.three_title = '入账详情'
-            $scope.four_title = ''
-            $scope.five_title = ''
-            $scope.six_title=''
             $rootScope.crumbs = [
                 {
                     name:'财务中心',
@@ -781,4 +799,23 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages1()
             }
         })
+        //商家提现管理详情返回
+        $scope.go_prev = function () {
+            $scope.submitted = false
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu'
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'商家提现管理',
+                }
+            ]
+            $state.go('mall_finance.withdraw')
+        }
     })

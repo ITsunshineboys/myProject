@@ -1,13 +1,12 @@
 angular.module('apply_case',[])
-        .controller('apply_case_ctrl',function ($scope,$http,$state,$uibModal) {
-            //post请求配置
-            const config = {
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                transformRequest: function (data) {
-                    return $.param(data)
+        .controller('apply_case_ctrl',function ($rootScope,$scope,_ajax,$http,$state,$uibModal) {
+            $rootScope.crumbs = [
+                {
+                    name:'申请样板间',
+                    icon:'icon-yangbanjian'
                 }
-            };
-            //添加小区部分
+            ]
+            //申请样板间部分
             /*分页配置*/
             $scope.Config = {
                 showJump: true,
@@ -19,19 +18,14 @@ angular.module('apply_case',[])
             }
             let tablePages=function () {
                 $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-                $http.get('/effect/effect-list',{
-                    params:$scope.params
-                }).then(function (res) {
+                _ajax.get('/effect/effect-list',$scope.params,function (res) {
                     console.log(res);
-                    $scope.cur_today_apply = res.data.data.today_apply
-                    $scope.cur_today_earnest = res.data.data.today_earnest
-                    $scope.cur_all_apply = res.data.data.all_apply
-                    $scope.cur_all_earnest = res.data.data.all_earnest
-                    $scope.apply_list = res.data.data['0'].list
-                    // $scope.house_detail = res.data.model.details
-                    $scope.Config.totalItems = res.data.data['0'].total_page
-                },function (err) {
-                    console.log(err);
+                    $scope.cur_today_apply = res.data.today_apply
+                    $scope.cur_today_earnest = res.data.today_earnest
+                    $scope.cur_all_apply = res.data.all_apply
+                    $scope.cur_all_earnest = res.data.all_earnest
+                    $scope.apply_list = res.data['0'].list
+                    $scope.Config.totalItems = res.data['0'].total_page
                 })
             };
             $scope.params = {
@@ -77,14 +71,12 @@ angular.module('apply_case',[])
             //修改备注请求
             $scope.edit_remarks = function () {
                 console.log($scope.cur_item)
-                $http.post('/effect/edit-remark',{
+                _ajax.post('/effect/edit-remark',{
                     id:$scope.cur_item.id,
                     remark:$scope.cur_item.remark
-                },config).then(function (response) {
+                },function (res) {
                     console.log(response)
                     tablePages()
-                },function (error) {
-                    console.log(error)
                 })
             }
             //搜索手机号或姓名
@@ -100,19 +92,29 @@ angular.module('apply_case',[])
             //获取详情
             $scope.get_detail = function (item) {
                 $scope.cur_item = item
-                $http.post('/effect/effect-view',{
-                        id:item.id
-                },config).then(function (response) {
-                    console.log(response)
-                    $scope.particulars_view = response.data.data.particulars_view
-                    $scope.material = Object.entries(response.data.data.material)
+                _ajax.post('/effect/effect-view',{
+                    id:item.id
+                },function (res) {
+                    console.log(res)
+                    $scope.particulars_view = res.data.particulars_view
+                    $scope.material = Object.entries(res.data.material)
                     for(let [key,value] of $scope.material.entries()){
                         value[2] = {index:key,cur_index:0}
                     }
                     console.log($scope.material)
+                    $rootScope.crumbs = [
+                        {
+                            name:'申请样板间',
+                            icon:'icon-yangbanjian',
+                            link:function () {
+                                $state.go('apply_case.index')
+                                $rootScope.crumbs.splice(1,1)
+                            }
+                        },{
+                        name:'详情'
+                        }
+                    ]
                     $state.go('apply_case.case_detail')
-                },function (error) {
-                    console.log(error)
                 })
             }
             //保存备注
@@ -121,27 +123,38 @@ angular.module('apply_case',[])
                     $scope.cur_title = '保存成功'
                     $scope.common_house = function () {
                         $uibModalInstance.close()
+                        $rootScope.crumbs = [
+                            {
+                                name:'申请样板间',
+                                icon:'icon-yangbanjian',
+                            }
+                        ]
                         $state.go('apply_case.index')
                     }
                 }
                 all_modal.$inject = ['$scope', '$uibModalInstance']
-                $http.post('/effect/effect-view',{
+                _ajax.post('/effect/effect-view',{
                     id:$scope.cur_item.id,
                     remark:$scope.particulars_view.remark
-                },config).then(function (response) {
-                    console.log(response)
+                },function (res) {
+                    console.log(res)
                     tablePages()
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
                     })
-                },function (error) {
-                    console.log(error)
                 })
             }
             //返回前页
             $scope.go_index = function () {
                 $scope.second_title =  ''
+                $rootScope.crumbs = [
+                    {
+                        name:'申请样板间',
+                        icon:'icon-yangbanjian',
+                    }
+                ]
+                tablePages()
                 $state.go('apply_case.index')
             }
         })
