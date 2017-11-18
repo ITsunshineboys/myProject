@@ -4799,4 +4799,152 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * 添加购物车-app端
+     * @return string
+     */
+    public  function  actionAddShippingCart()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $goods_id=$request->post('goods_id');
+        $goods_num=$request->post('goods_num');
+        if (!$goods_id  || !$goods_num)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $shippingCart=ShippingCart::find()
+                ->where(['goods_id'=>$goods_id,'uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+                ->one();
+            if (!$shippingCart)
+            {
+                $shippingCart=new ShippingCart();
+                $shippingCart->goods_id=$goods_id;
+                $shippingCart->uid=$user->id;
+                $shippingCart->role_id=$user->last_role_id_app;
+                $shippingCart->goods_num=$goods_num;
+                $shippingCart->create_time=time();
+                if (!$shippingCart->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }else{
+                $shippingCart->goods_num+=$goods_num;
+                if (!$shippingCart->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => 'ok'
+            ]);
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
+    /**
+     * 订单详情页-获取商品信息
+     * @return string
+     */
+    public function  actionFindAppGoodsData()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $goods=$request->post('goods');
+        if (!$goods)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        foreach ($goods as &$good)
+        {
+            $Good=Goods::findOne($good['goods_id'])->toArray();
+            $Good['goods_num']=$good['goods_num'];
+            $Goods[]=$Good;
+        }
+        if (!$Goods)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $goods_price=GoodsOrder::GetRoleMoney($user->last_role_id_app);
+        $supplier_ids=[];
+        foreach ($Goods as &$Good)
+        {
+            if (!in_array($Good['supplier_id'],$supplier_ids))
+            {
+                $supplier_ids[]=$Good['supplier_id'];
+            }
+        }
+        $data=[];
+        foreach ($supplier_ids as &$supplier_id)
+        {
+
+            $sup_goods=[];
+            foreach ($Goods as &$Good)
+            {
+                if ($Good['supplier_id']==$supplier_id)
+                {
+                    $sup_goods[]=[
+                        'goods_name'=>$Good['title'],
+                        'subtitle'=>$Good['subtitle'],
+                        'cover_image'=>$Good['cover_image'],
+                        'goods_num'=>$Good['goods_num'],
+                        'goods_price'=>GoodsOrder::switchMoney($Good["{$goods_price}"]*0.01)
+                    ];
+                }
+            }
+            $data[]=
+                [
+                    'supplier_id'=>$supplier_id,
+                    'shop_name'=>Supplier::findOne($supplier_id)->shop_name,
+                    'goods'=>$sup_goods
+                ];
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+
+    }
+
 }

@@ -6,6 +6,7 @@ use Yii;
 use yii\db\Exception;
 use yii\db\Query;
 
+
 /**
  * This is the model class for table "shipping_cart".
  *
