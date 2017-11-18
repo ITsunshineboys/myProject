@@ -47,10 +47,10 @@ class EffectMaterial extends \yii\db\ActiveRecord
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.effect_id'=>$effect_id])->one();
         $array['particulars']=mb_substr($array['particulars'],0,4);
-        if(!$array['sale_price']){
+        if(!isset($array['sale_price'])){
             $array['sale_price']=null;
         }
-        if(!$array['original_price']){
+        if(!isset($array['original_price'])){
             $array['original_price']=null;
         }
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
