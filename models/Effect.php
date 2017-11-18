@@ -218,7 +218,7 @@ class Effect extends ActiveRecord
             ->leftJoin('effect_picture as ep','e.id=ep.effect_id')
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
-            ->where(['ea.id'=>$effect_id])->one();
+            ->where(['ea.effect_id'=>$effect_id])->one();
         if(!$array){
             $data['particulars_view']=null;
         }
