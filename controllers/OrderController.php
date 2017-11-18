@@ -4503,7 +4503,7 @@ class OrderController extends Controller
      * 删除购物车商品
      * @return string
      */
-    public  function  actionDelInvalidGoods()
+    public  function  actionDelShippingCartGoods()
     {
         $request=Yii::$app->request;
         $orders=$request->post('orders');
@@ -4973,6 +4973,82 @@ class OrderController extends Controller
             'msg'=>'ok',
             'data'=>$data
         ]);
+    }
+
+
+    /**
+     * 清空失效商品
+     * @return string
+     */
+    public function actionDelInvalidGoods()
+    {
+
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lists=ShippingCart::find()
+            ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+            ->asArray()
+            ->all();
+        foreach ($lists as &$list)
+        {
+           $Good=Goods::findOne($list['goods_id']);
+           if ($Good)
+           {
+               if($Good->status!=2)
+               {
+                   $Goods[]=$Good->id;
+               }
+           }
+
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            foreach ($Goods as &$cart)
+            {
+                $ca=ShippingCart::find()
+                    ->where(['goods_id'=>$cart])
+                    ->andWhere(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+                    ->one();
+                if (!$ca)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $res=$ca->delete();
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
 
 
