@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 
+use app\models\Effect;
 use app\models\EffectEarnest;
+use app\models\EffectPicture;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
@@ -508,6 +510,9 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-        var_dump(EffectEarnest::find()->asArray()->all());
+        var_dump(EffectEarnest::find()->asArray()->where(['effect_id'=>63])->all());
+        var_dump(Effect::find()->asArray()->where(['id'=>63])->all());
+        var_dump(EffectPicture::find()->asArray()->where(['effect_id'=>63])->all());
+        
     }
 }

@@ -283,6 +283,9 @@ class Effect extends ActiveRecord
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.effect_id'=>$effect_id])->one();
+        if(!$array){
+            $data=null;
+        }
         if(!isset($array['sale_price'])){
             $array['sale_price']=null;
         }

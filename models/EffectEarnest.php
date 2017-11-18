@@ -169,4 +169,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
         $sum=(new Query())->from('effect_earnest')->andWhere(['status'=>self::STATUS_PAYED])->sum("earnest");
         return sprintf('%.2f',(float)$sum*0.01);
     }
+
+    public static function PlanList($uid,$status){
+
+    }
 }
