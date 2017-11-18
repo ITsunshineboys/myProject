@@ -331,7 +331,8 @@ class EffectController extends Controller
             }
 
         }else{
-            $where=" name like '%{$keyword}%' or phone like '%{$keyword}%' or transaction_no like '%{$keyword}%'";
+            $where.= " and CONCAT(name,phone,transaction_no) like '%{$keyword}%'";
+
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', EffectEarnest::PAGE_SIZE_DEFAULT);
