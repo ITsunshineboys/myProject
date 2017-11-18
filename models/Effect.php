@@ -298,8 +298,8 @@ class Effect extends ActiveRecord
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         $data['quote']=[
-            [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
             ['name'=>'原价', 'vaule'=>$array['original_price']],
+            [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
         $data['user_view']=[
