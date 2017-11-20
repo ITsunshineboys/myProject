@@ -2367,7 +2367,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.is_cancel = true
                 $scope.cur_title = '是否删除'
                 $scope.common_house = function () {
-                    if (+item.status == 0) {
+
                         _ajax.post('/quote/homepage-delete',{
                             id: item.id
                         },function (res) {
@@ -2381,14 +2381,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 $uibModalInstance.close()
                             })
                         })
-                    }
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
+        if (+item.status == 0) {
             $uibModal.open({
                 templateUrl: 'pages/intelligent/cur_model.html',
                 controller: all_modal
             })
+        }
         }
 
         /*工程标准*/
