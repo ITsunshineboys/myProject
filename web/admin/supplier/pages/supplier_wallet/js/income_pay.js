@@ -1,6 +1,13 @@
 angular.module('income_pay_module',[])
-.controller('income_pay_ctrl',function ($scope,$http,$state,_ajax) {
-  $scope.myng=$scope;
+.controller('income_pay_ctrl',function ($rootScope,$scope,$http,$state,_ajax) {
+    $scope.myng=$scope;
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-qianbao',
+        link: 'supplier_wallet'
+    }, {
+        name: '收支明细',
+    }];
     /*分页配置*/
     $scope.wjConfig = {
         showJump: true,

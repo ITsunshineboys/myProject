@@ -1,9 +1,9 @@
 section{
-  padding-left: 40px;
+  padding: 40px 0 0 40px;
   width: 95%;
 }
 .select_top{
-  margin: 30px 0;
+  margin-bottom: 30px;
 }
 /*时间*/
 .time_select{
