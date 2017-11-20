@@ -959,6 +959,8 @@ class OwnerController extends Controller
         }
         //泥作面积    mudMakeArea
         //厨房面积
+        $p = ProjectView::find()->asArray()->where(['parent_project'=> '面积比例'])->all();
+        var_dump($p);exit;
         $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['kitchen'],self::ROOM_AREA['kitchen_area']);
         $kitchen_area = $post['area'] * $kitchen_particulars['project_value'];
 
