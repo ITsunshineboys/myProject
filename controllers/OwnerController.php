@@ -1386,7 +1386,8 @@ class OwnerController extends Controller
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         //   生活配套
-        $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
+        $material['a']   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
+        var_dump($material['a']);exit;
         //   基础装修
         $material[]   = BasisDecorationService::capacity($goods_price,$post);
         //   家电配套
@@ -1440,7 +1441,7 @@ class OwnerController extends Controller
         }
 
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material[][] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
+        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
         return Json::encode([
             'code' => 200,
