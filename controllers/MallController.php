@@ -4351,6 +4351,8 @@ class MallController extends Controller
         $size = trim(Yii::$app->request->get('size', '12'));
         $series = Series::findByTimeSort($sort, $pages, $size);
         return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
             'list' => $series
         ]);
     }
@@ -4384,6 +4386,10 @@ class MallController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
     }
 
     /**
@@ -4414,6 +4420,10 @@ class MallController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
     }
 
     /**
@@ -4441,6 +4451,10 @@ class MallController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
     }
 
     /**
@@ -4469,6 +4483,8 @@ class MallController extends Controller
         $size = trim(Yii::$app->request->get('size', '12'));
         $style = Style::findByTimeSort($sort, $pages, $size);
         return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
             'list' => $style
         ]);
     }
