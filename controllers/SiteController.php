@@ -1363,7 +1363,7 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $mobile = trim(htmlspecialchars(Yii::$app->request->post('mobile', '')), '');
+        $mobile = trim(Yii::$app->request->post('mobile', ''));
         if (!$mobile || !preg_match('/^[1][3,5,7,8]\d{9}$/', $mobile)) {
             $code = 1000;
             return Json::encode([

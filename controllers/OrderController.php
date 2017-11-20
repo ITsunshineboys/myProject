@@ -4556,18 +4556,18 @@ class OrderController extends Controller
         $code=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
         if ($code==200)
         {
-//            switch ($pay_way)
-//            {
-////                case 1:
-////                    $data=GoodsOrder::AppBuy($total_amount,$suppliers);
-////                    break;
-////                case 2:
-////                    $data=Wxpay::AppBuy($total_amount,$suppliers);
-////                    break;
-////                case 3:
-////                    $data=Alipay::AppBuy();
-////                    break;
-//            }
+            switch ($pay_way)
+            {
+                case 1:
+                    $data=GoodsOrder::BalanceBuy($total_amount,$suppliers,$pay_pwd);
+                    break;
+//                case 2:
+//                    $data=Wxpay::AppBuy($total_amount,$suppliers);
+//                    break;
+//                case 3:
+//                    $data=Alipay::AppBuy();
+//                    break;
+            }
             $code=200;
             return Json::encode([
                 'code' => $code,
@@ -4670,51 +4670,51 @@ class OrderController extends Controller
         }
     }
 
-    public function actionDelData()
-    {
-        $request=Yii::$app->request;
-//        $order_no=$request->post('order_no');
-        $GoodsOrder=GoodsOrder::Find()->all();
-        foreach ($GoodsOrder as &$list)
-        {
-            $list->delete();
-            $OrderGoods=OrderGoods::find()->all();
-            foreach ($OrderGoods as &$OrderGood)
-            {
-                $OrderGood->delete();
-            }
-            $UserAccessDetail=UserAccessdetail::find()->all();
-            foreach ($UserAccessDetail as &$UserAccess)
-            {
-                $UserAccess->delete();
-            }
-            $express=Express::find()->all();
-            foreach ($express as &$expres)
-            {
-                $expres->delete();
-            }
-            $orderPlatForm=OrderPlatForm::find()->all();
-            foreach ($orderPlatForm as &$orderPlatForms)
-            {
-                $orderPlatForms->delete();
-            }
-            $orderaftersale=OrderAfterSale::find()->all();
-            foreach ($orderaftersale as &$orderaftersales)
-            {
-                $orderaftersales->delete();
-            }
-            $orderaftersaleimage=OrderAfterSaleImage::find()->all();
-            foreach ($orderaftersaleimage as &$orderaftersaleimages)
-            {
-                $orderaftersaleimages->delete();
-            }
-            $orderRefunds=OrderRefund::find()->all();
-            foreach ($orderRefunds as &$orderRefund)
-            {
-                $orderRefund->delete();
-            }
-        }
-    }
+//    public function actionDelData()
+//    {
+//        $request=Yii::$app->request;
+////        $order_no=$request->post('order_no');
+//        $GoodsOrder=GoodsOrder::Find()->all();
+//        foreach ($GoodsOrder as &$list)
+//        {
+//            $list->delete();
+//            $OrderGoods=OrderGoods::find()->all();
+//            foreach ($OrderGoods as &$OrderGood)
+//            {
+//                $OrderGood->delete();
+//            }
+//            $UserAccessDetail=UserAccessdetail::find()->all();
+//            foreach ($UserAccessDetail as &$UserAccess)
+//            {
+//                $UserAccess->delete();
+//            }
+//            $express=Express::find()->all();
+//            foreach ($express as &$expres)
+//            {
+//                $expres->delete();
+//            }
+//            $orderPlatForm=OrderPlatForm::find()->all();
+//            foreach ($orderPlatForm as &$orderPlatForms)
+//            {
+//                $orderPlatForms->delete();
+//            }
+//            $orderaftersale=OrderAfterSale::find()->all();
+//            foreach ($orderaftersale as &$orderaftersales)
+//            {
+//                $orderaftersales->delete();
+//            }
+//            $orderaftersaleimage=OrderAfterSaleImage::find()->all();
+//            foreach ($orderaftersaleimage as &$orderaftersaleimages)
+//            {
+//                $orderaftersaleimages->delete();
+//            }
+//            $orderRefunds=OrderRefund::find()->all();
+//            foreach ($orderRefunds as &$orderRefund)
+//            {
+//                $orderRefund->delete();
+//            }
+//        }
+//    }
 
     /**
      * 去付款-微信app支付

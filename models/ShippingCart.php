@@ -112,18 +112,19 @@ class ShippingCart extends \yii\db\ActiveRecord
                     ->andWhere(['g.supplier_id'=>$supId])
                     ->andWhere('g.status =2')
                     ->all(),
-                'invalid_goods'=>(new Query())
-                    ->from(self::tableName().' as s')
-                    ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
-                    ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
-                    ->where(['s.uid'=>$user->id])
-                    ->andWhere(['s.role_id'=>$user->last_role_id_app])
-                    ->andWhere(['g.supplier_id'=>$supId])
-                    ->andWhere('g.status !=2')
-                    ->all(),
             ];
         }
-        return $mix;
+        return [
+            'normal_goods'=>$mix,
+            'invalid_goods'=>(new Query())
+                ->from(self::tableName().' as s')
+                ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
+                ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
+                ->where(['s.uid'=>$user->id])
+                ->andWhere(['s.role_id'=>$user->last_role_id_app])
+                ->andWhere('g.status !=2')
+                ->all()
+        ];
     }
 
 

@@ -2779,9 +2779,7 @@ class GoodsOrder extends ActiveRecord
                 {
                     $count=1;
                 }
-
                 $freight=$supplier['freight']/$count;
-
                 foreach ($supplier['goods'] as &$goods)
                 {
                     $Goods=Goods::find()
@@ -2828,12 +2826,17 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder->district_code=$address->district;
                 $GoodsOrder->region=$address->region;
                 $GoodsOrder->consignee_mobile=$address->mobile;
-                $invoice=Invoice::findOne($supplier['invoice_id']);
-                $GoodsOrder->invoice_type=$invoice->invoice_type;
-                $GoodsOrder->invoice_header_type=$invoice->invoice_header_type;
-                $GoodsOrder->invoice_header=$invoice->invoice_header;
-                $GoodsOrder->invoicer_card=$invoice->invoicer_card;
-                $GoodsOrder->invoice_content=$invoice->invoice_content;
+//                $invoice=Invoice::findOne($supplier['invoice_id']);
+//                $GoodsOrder->invoice_type=$invoice->invoice_type;
+//                $GoodsOrder->invoice_header_type=$invoice->invoice_header_type;
+//                $GoodsOrder->invoice_header=$invoice->invoice_header;
+//                $GoodsOrder->invoicer_card=$invoice->invoicer_card;
+//                $GoodsOrder->invoice_content=$invoice->invoice_content;
+                $GoodsOrder->invoice_type=$supplier['invoice_type'];
+                $GoodsOrder->invoice_header_type=$supplier['invoice_header_type'];
+                $GoodsOrder->invoice_header=$supplier['invoice_header'];
+                $GoodsOrder->invoicer_card=$supplier['invoicer_card'];
+                $GoodsOrder->invoice_content=$supplier['invoice_content'];
                 if (!$GoodsOrder->save(false))
                 {
                     $tran->rollBack();
@@ -2856,6 +2859,25 @@ class GoodsOrder extends ActiveRecord
             return $code;
         }
     }
+
+
+        /**
+         * 余额购买
+         * @param $total_amount
+         * @param array $suppliers
+         * @param $pay_pwd
+         * @return int
+         */
+      public static function  BalanceBuy($total_amount,$suppliers = [],$pay_pwd)
+      {
+          $user = Yii::$app->user->identity;
+          if (Yii::$app->getSecurity()->validatePassword($pay_pwd,$user->pay_password)==false)
+          {
+              $code=1055;
+              return $code;
+          }
+
+      }
 
 
 
