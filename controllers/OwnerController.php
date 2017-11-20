@@ -951,6 +951,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        var_dump($craft);exit;
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
                 case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
