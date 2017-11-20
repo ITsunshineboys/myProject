@@ -536,7 +536,7 @@ class OwnerController extends Controller
         } else{
             $_toilet_area = EngineeringUniversalCriterion::TOILET_AREA;
         }
-        
+
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
         $total_area = $kitchen_area + $toilet_area;
@@ -659,7 +659,7 @@ class OwnerController extends Controller
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-        var_dump($plasterboard_cost);exit;
+       
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //丝杆费用
