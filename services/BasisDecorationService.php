@@ -1175,7 +1175,7 @@ class BasisDecorationService
             }
         }
 
-        return $material;
+        return $goods_material;
     }
 
     /**
@@ -1308,7 +1308,7 @@ class BasisDecorationService
                 $goods_material[] =   $one;
             }
         }
-        return  $material;
+        return  $goods_material;
     }
 
     /**
@@ -1558,7 +1558,7 @@ class BasisDecorationService
             }
         }
 
-        return $material;
+        return $goods_material;
     }
 
     /**
@@ -1616,7 +1616,7 @@ class BasisDecorationService
                 }
             }
         }
-        return $material;
+        return $goods_material;
     }
 
     /**
@@ -1694,15 +1694,15 @@ class BasisDecorationService
         $material [] = self::profitMargin($c);
         $material [] = self::profitMargin($d);
         $material [] = self::profitMargin($e);
-var_dump($material);
+
         $goods_material = [];
         foreach ($material as $one){
             if($one != null){
                 $goods_material[] =   $one;
             }
         }
-       var_dump($goods_material);
-        return $material;
+
+        return $goods_material;
     }
 
     /**
@@ -1882,7 +1882,7 @@ var_dump($material);
             }
         }
 
-        return $material;
+        return $goods_material;
     }
 
     /**
