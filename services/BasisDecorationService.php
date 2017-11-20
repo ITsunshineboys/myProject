@@ -362,7 +362,7 @@ class BasisDecorationService
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
         $waterproof['quantity'] = ceil($points * $material /$goods_value);
 //            防水涂剂费用：个数×抓取的商品价格
-        $waterproof['cost'] =  $waterproof['quantity'] * $goods_platform_price;
+        $waterproof['cost'] =  round($waterproof['quantity'] * $goods_platform_price,2);
         return $waterproof;
     }
 
