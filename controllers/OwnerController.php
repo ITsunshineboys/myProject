@@ -959,7 +959,8 @@ class OwnerController extends Controller
         //泥作面积    mudMakeArea
         //厨房面积
         $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['kitchen'],self::ROOM_AREA['kitchen_area']);
-        $kitchen_area = (int)$post['area'] * (int)$kitchen_particulars['project_value'];
+        $kitchen_area = $post['area'] * $kitchen_particulars['project_value'];
+        var_dump($kitchen_area);exit;
         //卫生间面积
         $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['toilet'],self::ROOM_AREA['toilet_area']);
         $toilet_area = (int)$post['area'] * (int)$toilet_particulars['project_value'];
