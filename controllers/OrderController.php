@@ -859,7 +859,7 @@ class OrderController extends Controller
                     ->all();
                 if ($list)
                 {
-                   foreach ($list as &$delList)
+                    foreach ($list as &$delList)
                     {
                         $effect_id=$delList->effect_id;
                         $res=$delList->delete();
@@ -878,7 +878,6 @@ class OrderController extends Controller
                                 return false;
                             };
                         }
-
                         $effect_material=EffectMaterial::find()
                             ->where(['effect_id'=>$effect_id])
                             ->one();

@@ -1495,10 +1495,10 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $addressList = Addressadd::find()->where(['uid' => $user->id])->all();
-        foreach ($addressList as $k => $v) {
-            $addressList[$k]['district_code'] = $addressList[$k]['district'];
-            $addressList[$k]['district'] = LogisticsDistrict::getdistrict($addressList[$k]['district']);
+        $addressList = Addressadd::find()->where(['uid' => $user->id])->asArray()->all();
+        foreach ($addressList as &$list) {
+            $list['district_code'] = $list['district'];
+            $list['district'] = LogisticsDistrict::getdistrict($list['district']);
         }
         $code = 200;
         return Json::encode([
