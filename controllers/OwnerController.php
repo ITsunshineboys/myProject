@@ -1382,11 +1382,11 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $material = [];
+
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         //   生活配套
-        $material[]   = (array)BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
+        $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         //   基础装修
         $material[]   = BasisDecorationService::capacity($goods_price,$post);
         //   家电配套
