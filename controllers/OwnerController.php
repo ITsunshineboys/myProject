@@ -779,6 +779,7 @@ class OwnerController extends Controller
         $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($post['area'],$hall_area['project_value'],$post['hall'], self::WALL_SPACE);
 //        阴角线长度
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
+        var_dump($concave_line_length);
 
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
