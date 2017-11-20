@@ -663,24 +663,16 @@ class BasisDecorationService
      */
     public static function paintedArea($area,$house_area ,$bedroom ,$tall= 2.8,$wall = 4)
     {
-        if ($area <= 1) {
 //        卧室地面积：【z】%×（房屋面积）
-            $ground_area = $area * $house_area;
+            $ground_area = $area * ($house_area / 100);
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
             $wall_space_area =  sqrt($ground_area / $bedroom) * $tall * $wall * $bedroom;
 //        卧室底漆面积=卧室地面积+卧室墙面积
             $total_area =    $ground_area + $wall_space_area;
-        } else {
-            $ground_area = $area * ($house_area / 100);
-//        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
-            $wall_space_area = sqrt($area / $bedroom)* $tall * $wall * $bedroom;
-//        卧室底漆面积=卧室地面积+卧室墙面积
-            $total_area =    $ground_area + $wall_space_area;
-            var_dump($total_area);
-            var_dump($wall_space_area);
-            var_dump($total_area);
-            exit;
-        }
+        var_dump($total_area);
+        var_dump($wall_space_area);
+        var_dump($total_area);
+        exit;
         return $total_area;
     }
 
