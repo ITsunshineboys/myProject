@@ -620,9 +620,10 @@ button.close{
 
 /*}*/
 .description_span{
+    width: 100%;
     font-size: 1.5rem;
     color: #4A4A4A;
-    padding: .5rem;
+    /*padding: .5rem;*/
 }
 .tab-content{
     margin-top: .5rem;
@@ -681,7 +682,7 @@ button.close{
 
 }
 .description_span img{
-    width: 32rem;
+    width: 100%;
 }
 .Prompt{
     background-color: #dbdbbd;
