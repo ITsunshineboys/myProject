@@ -1664,7 +1664,7 @@ angular.module("all_controller", ['ngCookies'])
                                 // alert(JSON.stringify(sessionStorage.getItem('address_id')))
                                 $http({     //获取openid 的地址
                                     method: 'get',
-                                    url:  baseUrl+'order/lineplaceorder',
+                                    url:  baseUrl+'/order/lineplaceorder',
                                     params:{
 
                                         // goods_name: $scope.title,
