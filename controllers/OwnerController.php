@@ -536,6 +536,7 @@ class OwnerController extends Controller
         } else{
             $_toilet_area = EngineeringUniversalCriterion::TOILET_AREA;
         }
+        
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
         $total_area = $kitchen_area + $toilet_area;
