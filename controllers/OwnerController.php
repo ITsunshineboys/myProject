@@ -757,6 +757,7 @@ class OwnerController extends Controller
         }
         //卧室底漆面积
         $bedroom_primer_area = BasisDecorationService::paintedArea($kitchen_area['project_value'], $post['area'], $post['bedroom'],self::WALL_HIGH,self::WALL);
+        var_dump($bedroom_primer_area);exit;
 
         //客餐厅底漆面积
         $drawing_room_primer_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
