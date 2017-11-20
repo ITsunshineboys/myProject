@@ -955,14 +955,15 @@ angular.module('all_controller', [])
                 $scope.all_goods_brands = $scope.all_brand_copy
             }
         })
-            $(document).mouseup(function(e){
-                var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
-                if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
-                    if($rootScope.curState_name == 'nodata.all_goods'){
-                        tablePages()
-                    }
-                }
-            })
+        //点击模态框其他区域
+            // $(document).mouseup(function(e){
+            //     var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
+            //     if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+            //         if($rootScope.curState_name == 'nodata.all_goods'){
+            //             tablePages()
+            //         }
+            //     }
+            // })
         //无资料计算
         $scope.get_goods = function (valid, error) {
             console.log(error)

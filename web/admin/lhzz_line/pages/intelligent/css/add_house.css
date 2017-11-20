@@ -7,11 +7,6 @@
 .house_msg_header,.add_house{
     position: relative;
 }
-.house_msg_btn{
-    position: absolute;
-    top: 0;
-    right:calc(50% - 176px);
-}
 .add_house h1{
     font-size:18px !important;
     margin-bottom: 20px!important;
@@ -34,16 +29,6 @@
 }
 .add_house .error{
     border:1px solid red;
-}
-.add_house .btn_up{
-    position: absolute;
-    top: 0;
-    left:calc(50% - 83px);
-}
-.add_house .btn_down{
-    position: absolute;
-    top: 0;
-    left:calc(50% + 21px);
 }
 .add_house .all_btn a{
     position: absolute;

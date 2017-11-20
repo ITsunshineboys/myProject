@@ -1,13 +1,13 @@
 <div class="add_house">
     <form class="form-horizontal" novalidate name="submitForm">
         <div class="all">
-                <h1>基本信息</h1>
+            <h1>基本信息</h1>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区名称</label>
                 <div class="col-md-3">
-                <input type="text" name="districtName" ng-class="{'error':(submitForm.districtName.$invalid&&submitted) ||
+                    <input type="text" name="districtName" ng-class="{'error':(submitForm.districtName.$invalid&&submitted) ||
                 (submitForm.districtName.$error.required&&change)}" ng-blur="change=!!submitForm.districtName.$error"
-                       ng-model="ctrlScope.house_name" class="form-control" required maxlength="14">
+                           ng-model="ctrlScope.house_name" class="form-control" required maxlength="14">
                 </div>
                 <p class="col-md-7">*限1~14个字符</p>
             </div>
@@ -15,62 +15,97 @@
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区地址</label>
                 <div class="col-md-3">
                     <label>选择区县</label>
-                    <select ng-model="ctrlScope.cur_house_county" class="form-control" ng-options="item.id as item.name for item in house_county"></select>
+                    <select ng-model="ctrlScope.cur_house_county" class="form-control"
+                            ng-options="item.id as item.name for item in house_county"></select>
                     <!--<input type="text" class="form-control">-->
                     <label>详细地址</label>
                     <textarea class="form-control" name="address" ng-class="{'error':(submitForm.address.$invalid&&submitted) ||
-                (submitForm.address.$error.required&&change1)}" ng-blur="change1=!!submitForm.address.$error" placeholder="请输入详细地址" required ng-model="ctrlScope.address" cols="30" rows="5"></textarea>
+                (submitForm.address.$error.required&&change1)}" ng-blur="change1=!!submitForm.address.$error"
+                              placeholder="请输入详细地址" required ng-model="ctrlScope.address" cols="30" rows="5"></textarea>
                     <span class="address_num">{{ctrlScope.cur_num}}/45</span>
                 </div>
             </div>
         </div>
         <div class="all">
-            <div class="house_msg_header">
-            <h1>房屋信息</h1>
-                <div class="house_msg_btn">
+            <div class="house_msg_header form-group">
+                <h1 class="col-md-5">房屋信息</h1>
+                <div class="col-md-3">
+                    <p class="col-md-3 col-md-offset-3">
                     <button ng-click="add_ordinary_house()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
+                    </p>
+                    <p class="col-md-3">
                     <button ng-click="add_case()"><i class="glyphicon glyphicon-plus"></i>案例添加</button>
+                    </p>
                 </div>
-                </div>
+            </div>
             <div class="form-group" ng-repeat="item in house_informations track by $index">
-                <label class="col-md-2 col-sm-2 text-left" ng-if="!item.is_ordinary"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
-                <label class="col-md-2 col-sm-2 text-left" ng-if="!!item.is_ordinary"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称-案例</label>
+                <label class="col-md-2 col-sm-2 text-left" ng-if="!item.is_ordinary"><i
+                        class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
+                <label class="col-md-2 col-sm-2 text-left" ng-if="!!item.is_ordinary"><i
+                        class="glyphicon glyphicon-asterisk red_mark"></i>户型名称-案例</label>
                 <div class="col-md-3 col-sm-3">
-                <input type="text" name="houseName{{$index}}" ng-class="{'error':(submitForm['houseName{{$index}}'].$invalid&&submitted) ||
-                (submitForm['houseName{{$index}}'].$error.required&&change2)}" ng-blur="change2=!!submitForm['houseName{{$index}}'].$error" disabled required class="form-control" ng-model="item.house_type_name">
+                    <input type="text" name="houseName{{$index}}" ng-class="{'error':(submitForm['houseName{{$index}}'].$invalid&&submitted) ||
+                (submitForm['houseName{{$index}}'].$error.required&&change2)}"
+                           ng-blur="change2=!!submitForm['houseName{{$index}}'].$error" disabled required
+                           class="form-control" ng-model="item.house_type_name">
                 </div>
                 <div class="col-md-3 col-sm-3">
                     <div class="all_btn">
-                    <button ng-click="delete_house1(item)" class="cur_delete" ng-if="$index!=0"><i class="glyphicon glyphicon-minus"></i></button>
-                    <button class="remove btn_up" ng-if="!$first" ng-click="house_sort(item,'up')"><i class="glyphicon glyphicon-arrow-up"></i>上移</button>
-                    <button class="remove btn_down" ng-if="house_informations.length!=1&&!$last" ng-click="house_sort(item,'down')"><i class="glyphicon glyphicon-arrow-down"></i>下移</button>
-                    <a ng-click="go_to_edit(item,$index)">编辑</a>
+                        <p class="col-md-3" ng-show="$index!=0">
+                            <button ng-click="delete_house1(item)" class="cur_delete"><i
+                                    class="glyphicon glyphicon-minus"></i></button>
+                        </p>
+                        <p class="col-md-3" ng-show="$index==0"></p>
+                        <p ng-show="!$first" class="col-md-3">
+                            <button class="remove btn_up" ng-click="house_sort(item,'up')"><i
+                                    class="glyphicon glyphicon-arrow-up"></i>上移
+                            </button>
+                        </p>
+                        <p class="col-md-3" ng-show="$first"></p>
+                        <p class="col-md-3" ng-if="house_informations.length!=1&&!$last">
+                            <button class="remove btn_down" ng-click="house_sort(item,'down')"><i
+                                    class="glyphicon glyphicon-arrow-down"></i>下移
+                            </button>
+                        </p>
+                        <p class="col-md-3" ng-if="!(house_informations.length!=1&&!$last)"></p>
+                        <p class="col-md-3">
+                            <a ng-click="go_to_edit(item,$index)">编辑</a>
+                        </p>
                     </div>
                 </div>
             </div>
 
         </div>
         <div class="all">
-            <div class="house_msg_header">
-                <h1>图纸信息</h1>
-                <div class="house_msg_btn ">
+            <div class="house_msg_header form-group">
+                <h1 class="col-md-5">图纸信息</h1>
+                <div class="col-md-3">
+                    <p class="col-md-3 col-md-offset-3">
                     <button ng-click="add_drawing()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
+                    </p>
                 </div>
             </div>
 
             <div class="form-group" ng-repeat="item in drawing_informations">
-                <label class="col-md-2 col-sm-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>图纸名称</label>
+                <label class="col-md-2 col-sm-2 text-left"><i
+                        class="glyphicon glyphicon-asterisk red_mark"></i>图纸名称</label>
                 <div class="col-md-3 col-sm-3">
-                <input type="text" name="drawingName" disabled ng-class="{'error':(submitForm.drawingName.$invalid&&submitted) ||
-                (submitForm.drawingName.$error.required&&change3)}" ng-blur="change3=!!submitForm.drawingName.$error" required class="form-control" ng-model="item.drawing_name">
+                    <input type="text" name="drawingName" disabled ng-class="{'error':(submitForm.drawingName.$invalid&&submitted) ||
+                (submitForm.drawingName.$error.required&&change3)}" ng-blur="change3=!!submitForm.drawingName.$error"
+                           required class="form-control" ng-model="item.drawing_name">
                 </div>
                 <div class="col-md-3 col-sm-3">
                     <div class="all_btn">
-                        <button ng-click="delete_drawing(item)" class="cur_delete"><i class="glyphicon glyphicon-minus"></i></button>
+                        <p class="col-md-3">
+                        <button ng-click="delete_drawing(item)" class="cur_delete"><i
+                                class="glyphicon glyphicon-minus"></i></button>
+                        </p>
+                        <p class="col-md-3 col-md-offset-6">
                         <a ng-click="go_to_drawing(item,$index)">编辑</a>
+                        </p>
                     </div>
                     <!--<div class="pull-right">-->
-                        <!--<a ng-click="go_to_drawing(item,$index)">编辑</a></div>-->
+                    <!--<a ng-click="go_to_drawing(item,$index)">编辑</a></div>-->
                 </div>
             </div>
         </div>
