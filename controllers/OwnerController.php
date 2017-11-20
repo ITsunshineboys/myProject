@@ -65,6 +65,7 @@ class OwnerController extends Controller
         'painters'          => '油漆工',
         'mason'             => '泥瓦工',
         'backman'           => '杂工',
+        'backman_'           => '泥工',
     ];
 
     /**
@@ -951,7 +952,6 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        var_dump($craft);exit;
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
                 case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
@@ -973,6 +973,9 @@ class OwnerController extends Controller
 //        保护层天数：保护层面积÷【每天做保护层面积】
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
 
+
+        $perject = ProjectView::find()->where(['and',['parent_project'=>'泥作'],['project'=>$post['high']]])->asArray()->one();
+        var_dump($perject);exit;
 //        卫生间墙面积
         $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $wall_height, $post['toilet']);
 //        厨房墙面积
