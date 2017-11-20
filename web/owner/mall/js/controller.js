@@ -5,7 +5,8 @@ angular.module('all_controller', [])
         sessionStorage.removeItem("roomPicture");
         sessionStorage.removeItem("worker");
         sessionStorage.removeItem("materials");
-        $scope.baseUrl = '/'
+        // $scope.baseUrl = '/'
+         $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
         $http.get(baseUrl + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
@@ -128,7 +129,8 @@ angular.module('all_controller', [])
             }
         });
         // $scope.baseUrl = 'http://test.cdlhzz.cn/'
-        $scope.baseUrl = '/'
+        $scope.baseUrl = 'http://ac.cdlhzz.cn/'
+        // $scope.baseUrl = '/'
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
@@ -1964,6 +1966,7 @@ angular.module('all_controller', [])
         // 跳转到无资料
         $scope.go_nodata = function () {
             $state.go('nodata.house_list')
+            sessionStorage.removeItem('huxing')
             $scope.have_header = true
             $scope.cur_header = '智能报价'
             $scope.is_city = true
