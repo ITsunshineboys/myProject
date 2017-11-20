@@ -236,13 +236,77 @@ class Addressadd extends  ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch (Exception $e)
+        }catch (\Exception $e)
         {
             $code=500;
             $tran->rollBack();
             return $code;
         }
     }
+
+    /**
+     * @param $address_id
+     * @return int
+     */
+    public  static  function  DelAddress($address_id)
+    {
+        $address=Addressadd::findOne($address_id);
+        if (!$address)
+        {
+            $code=1000;
+            return $code;
+        }
+        $user = Yii::$app->user->identity;
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            if ($address->default==1)
+            {
+                $res=$address->delete();
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+                $addressData=Addressadd::find()
+                    ->where(['uid'=>$user->id])
+                    ->andWhere(['default'=>0])
+                    ->one();
+                if ($addressData)
+                {
+                    $addressData->default=1;
+                    $res1=$addressData->save(false);
+                    if (!$res1)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                }
+            }else{
+                $res=$address->delete();
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+
+    }
+
+
+
+
+
 
 
 

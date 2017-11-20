@@ -1585,6 +1585,45 @@ class SiteController extends Controller
 
 
     /**
+     * 删除收货地址
+     * @return string
+     */
+    public  function actionDelReceiveAddress()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $address_id = trim($request->post('address_id'));
+        if (!$address_id){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $code = Addressadd::DelAddress($address_id);
+        if ($code == 200) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        } else {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
+    /**
      *  get user invoice list
      * @return string
      */
