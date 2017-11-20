@@ -1168,11 +1168,7 @@ class BasisDecorationService
         $material [] = self::profitMargin($a);
         $material [] = self::profitMargin($b);
 
-        foreach ($material as &$one_material){
-            if ($one_material == null){
-                unset($one_material);
-            }
-        }
+        $material = array_filter($material);
 
         return $material;
     }
@@ -1301,11 +1297,7 @@ class BasisDecorationService
 
         $a = isset($materials) ? $materials :[];
         $material [] = self::profitMargin($a);
-        foreach ($material as &$one_material){
-            if ($one_material == null){
-                unset($one_material);
-            }
-        }
+        $material = array_filter($material);
         return  $material;
     }
 
@@ -1549,11 +1541,7 @@ class BasisDecorationService
         $material []  = self::profitMargin($e);
         $material []  = self::profitMargin($f);
 
-        foreach ($material as &$one_material){
-            if ($one_material == null){
-                unset($one_material);
-            }
-        }
+        $material = array_filter($material);
 
         return $material;
     }
@@ -1605,11 +1593,7 @@ class BasisDecorationService
             $material [] = self::profitMargin($a);
             $material [] = self::profitMargin($b);
             $material [] = self::profitMargin($c);
-            foreach ($material as &$one_material){
-                if ($one_material == null){
-                    unset($one_material);
-                }
-            }
+            $material = array_filter($material);
         }
         return $material;
     }
@@ -1690,11 +1674,7 @@ class BasisDecorationService
         $material [] = self::profitMargin($d);
         $material [] = self::profitMargin($e);
 
-        foreach ($material as &$one_material){
-            if ($one_material == null){
-                unset($one_material);
-            }
-        }
+        $material = array_filter($material);
         return $material;
     }
 
@@ -1767,15 +1747,9 @@ class BasisDecorationService
         $material [] = self::profitMargin($d);
         $material [] = self::profitMargin($e);
         $material [] = self::profitMargin($f);
-        
+
         $material = array_filter($material);
-//        foreach ($material as $one_material){
-//            if ($one_material == null){
-//                unset($one_material);
-//            }
-//        }
-        echo 111;
-var_dump($material);exit;
+
         return $material;
     }
 
@@ -1869,11 +1843,7 @@ var_dump($material);exit;
         $a = isset($materials) ? $materials :[];
 
         $material[] = BasisDecorationService::profitMargin($a);
-        foreach ($material as &$one_material){
-            if ($one_material == null){
-                unset($one_material);
-            }
-        }
+        $material = array_filter($material);
 
         return $material;
     }
