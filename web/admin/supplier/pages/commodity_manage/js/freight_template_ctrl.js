@@ -28,6 +28,13 @@ var shop_style= angular.module("freight_template",[])
             delivery_cost_delta: "",  // 增加件运费，当选择“快递物流”时，必填(同上)
             delivery_number_delta: ""   // 增加件运费对应商品数量，当选择“快递物流”时，必填
         };
+        // 运费信息
+        $scope.freight = {
+            cost_default: data.delivery_cost_default || "",
+            number_default: data.delivery_number_default || "",
+            cost_delta: data.delivery_cost_delta || "",
+            number_delta: data.delivery_number_delta || ""
+        };
         $http.get('city.json').then(function (response) {
             let data = angular.copy(response.data[0][86]);
             // 循环省份
@@ -182,13 +189,7 @@ var shop_style= angular.module("freight_template",[])
             }
             $('#sed_modal').modal('hide');
         };
-        // 运费信息
-        $scope.freight = {
-            cost_default: data.delivery_cost_default || "",
-            number_default: data.delivery_number_default || "",
-            cost_delta: data.delivery_cost_delta || "",
-            number_delta: data.delivery_number_delta || ""
-        };
+
         // 保存物流模板详情
         $scope.getReally = function () {
             console.log(cityChecked);
