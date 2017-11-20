@@ -1046,7 +1046,7 @@ class QuoteController extends Controller
     public function actionPlotDel()
     {
         $del_id = (int)trim(\Yii::$app->request->post('del_id',''));
-        $effect = Effect::findOne(['id'=>$del_id]);
+        $effect = Effect::find()->where(['id'=>$del_id])->one();
         var_dump($effect);exit;
         // 删除功能
         Effect::deleteAll(['id' => $del_id]);
