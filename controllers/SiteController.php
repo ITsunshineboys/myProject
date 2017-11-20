@@ -1564,6 +1564,7 @@ class SiteController extends Controller
         $district_code = trim($request->post('district_code'));
         $mobile = trim($request->post('mobile', ''));
         $region = trim($request->post('region', ''));
+        $default=trim($request->post('default', '1'));
         if (!$consignee || !$address_id || !$district_code || !$mobile || !$region) {
             $code = 1000;
             return Json::encode([
@@ -1571,7 +1572,7 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code = Addressadd::updateAddress($consignee, $address_id, $district_code, $mobile, $region);
+        $code = Addressadd::updateAddress($consignee, $address_id, $district_code, $mobile, $region,$default);
         if ($code == 200) {
             return Json::encode([
                 'code' => $code,

@@ -55,7 +55,7 @@ class Addressadd extends  ActiveRecord
                  $id=$address->id;
                  $tran->commit();
                  return $id;
-             }catch(Exception $e)
+             }catch(\Exception $e)
              {
                  $code=500;
                  $tran->rollBack();
@@ -80,7 +80,7 @@ class Addressadd extends  ActiveRecord
                  $id=$address->id;
                  $tran->commit();
                  return $id;
-             }catch(Exception $e)
+             }catch(\Exception $e)
              {
                  $code=500;
                  $tran->rollBack();
@@ -129,11 +129,11 @@ class Addressadd extends  ActiveRecord
                 if ($default==1)
                 {
                     $address=self::find()->where(['uid'=>$user_id])->all();
-                    foreach ($address as $k =>$v)
+                    foreach ($address as &$list)
                     {
-                        $address[$k]->default=0;
-                        $res[$k]=$address[$k]->save(false);
-                        if (!$res[$k]){
+                        $list->default=0;
+                        $res=$list->save(false);
+                        if (!$res){
                             $code=500;
                             $tran->rollBack();
                             return $code;
@@ -235,21 +235,48 @@ class Addressadd extends  ActiveRecord
      * @param $region
      * @return int
      */
-    public static  function  updateAddress($consignee,$address_id,$district_code,$mobile,$region)
+    public static  function  updateAddress($consignee,$address_id,$district_code,$mobile,$region,$default)
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-
-            $user_address=self::find()->where(['id'=>$address_id])->one();
-            $user_address->consignee=$consignee;
-            $user_address->region=$region;
-            $user_address->mobile=$mobile;
-            $user_address->district=$district_code;
-            $res =$user_address->save();
-            if (!$res){
-                $code=500;
-                $tran->rollBack();
-                return $code;
+            if ($default==1)
+            {
+                $user = Yii::$app->user->identity;
+                $address=self::find()->where(['uid'=>$user->id])->all();
+                foreach ($address as &$list)
+                {
+                    $list->default=0;
+                    $res=$list->save(false);
+                    if (!$res){
+                        $code=500;
+                        $tran->rollBack();
+                        return $code;
+                    }
+                }
+                $user_address=self::find()->where(['id'=>$address_id])->one();
+                $user_address->consignee=$consignee;
+                $user_address->region=$region;
+                $user_address->mobile=$mobile;
+                $user_address->district=$district_code;
+                $user_address->default=1;
+                $res =$user_address->save(false);
+                if (!$res){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }else{
+                $user_address=self::find()->where(['id'=>$address_id])->one();
+                $user_address->consignee=$consignee;
+                $user_address->region=$region;
+                $user_address->mobile=$mobile;
+                $user_address->district=$district_code;
+                $res =$user_address->save(false);
+                if (!$res){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
             }
             $tran->commit();
             $code=200;
