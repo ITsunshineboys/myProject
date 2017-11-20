@@ -306,6 +306,10 @@ angular.module("all_controller", ['ngCookies'])
         $scope.search_flag_details = $stateParams.search_flag_details;
         //判断
         $scope.getSearch = function () {
+			if ('' == $scope.data) {
+				return;
+			}
+
             let arr=[];
             $http({
                 method:'get',
