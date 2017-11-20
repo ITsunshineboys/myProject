@@ -1773,6 +1773,7 @@ class BasisDecorationService
                 unset($one_material);
             }
         }
+        echo 11;
 var_dump($material);exit;
         return $material;
     }
