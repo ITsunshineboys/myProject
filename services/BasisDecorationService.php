@@ -1226,7 +1226,7 @@ class BasisDecorationService
         if (count($goods) == count($goods, 1)) {
             return $goods;
         } elseif ($goods == null){
-            return [];
+            return (array)$goods;
         }else {
             foreach($goods as $v) {
                 $r[$v['title']][$v['profit_rate']] = $v;
@@ -1740,6 +1740,7 @@ class BasisDecorationService
         $d = isset($bath_cabinet) ? $bath_cabinet :[];
         $e = isset($squatting_pan) ? $squatting_pan :[];
         $f = isset($closestool) ? $closestool :[];
+
 
         $material[] = self::profitMargin($a);
         $material[] = self::profitMargin($b);
