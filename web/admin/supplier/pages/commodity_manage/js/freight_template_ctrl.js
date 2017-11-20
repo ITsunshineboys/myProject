@@ -182,6 +182,13 @@ var shop_style= angular.module("freight_template",[])
             }
             $('#sed_modal').modal('hide');
         };
+        // 运费信息
+        $scope.freight = {
+            cost_default: data.delivery_cost_default || "",
+            number_default: data.delivery_number_default || "",
+            cost_delta: data.delivery_cost_delta || "",
+            number_delta: data.delivery_number_delta || ""
+        };
         // 保存物流模板详情
         $scope.getReally = function () {
             console.log(cityChecked);
@@ -204,9 +211,9 @@ var shop_style= angular.module("freight_template",[])
                         return
                     }
                     $scope.params.delivery_cost_default = $scope.params.delivery_cost_default * 100; // 默认运费
-                    // $scope.params.delivery_number_default = $scope.freight.number_default; // 默认运费对应商品数量
+                    $scope.params.delivery_number_default = $scope.freight.number_default; // 默认运费对应商品数量
                     $scope.params.delivery_cost_delta = $scope.params.delivery_cost_delta * 100; // 增加件运费
-                    // $scope.params.delivery_number_delta = $scope.freight.number_delta; // 增加件运费对应商品数量
+                    $scope.params.delivery_number_delta = $scope.freight.number_delta; // 增加件运费对应商品数量
                 } else {
                     $scope.params.delivery_cost_default = 0;
                     $scope.params.delivery_number_default = 0;
