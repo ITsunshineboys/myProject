@@ -742,6 +742,10 @@ class BasisDecorationService
         //        （卫生间地面积÷卫生间个数）开平方×【2.4m】×4 ×卫生间个数
         $sqrt= sqrt($ground_area / $quantity);
         $wall_area = $sqrt * $craft * $wall * $quantity;
+        var_dump($ground_area);
+        var_dump($craft);
+        var_dump($quantity);
+        var_dump($wall);exit;
 
         return $wall_area;
     }
