@@ -502,38 +502,36 @@ class OwnerController extends Controller
 
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
+        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
+        if (!$p){
+            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+        }
         if ($kitchen){
             foreach ($kitchen as $one_kitchen){
                 if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
                     $_kitchen_area = $one_kitchen['project_value'];
                 }
-
-                if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_waterproof']){
-                    $_kitchen_height = $one_kitchen['project_value'];
-                }
             }
         }else{
             $_kitchen_area = EngineeringUniversalCriterion::KITCHEN_AREA;
-            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         }
         $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
 
 
         //卫生间
         $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
+        $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->one();
+        if (!$toilet_p){
+            $_toilet_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+        }
         if ($toilet){
             foreach ($toilet as $one_toilet){
                 if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['toilet_area']){
                     $_toilet_area = $one_toilet['project_value'];
                 }
-
-                if ($one_toilet['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['toilet_waterproof']){
-                    $_toilet_height = $one_toilet['project_value'];
-                }
             }
         } else{
             $_toilet_area = EngineeringUniversalCriterion::TOILET_AREA;
-            $_toilet_height  = EngineeringUniversalCriterion::TOILET_HEIGHT;
         }
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积

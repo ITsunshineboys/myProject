@@ -340,6 +340,7 @@ class BasisDecorationService
         foreach ($crafts as $craft) {
             $material = $craft['material'];
         }
+
         if (count($goods) == count($goods, 1)) {
             $goods_platform_price = $goods['platform_price'];
             $goods_id [] = $goods['id'];
@@ -349,6 +350,7 @@ class BasisDecorationService
                 $goods_id [] = $one['id'];
             }
         }
+
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
         foreach ($ids as $one_unit) {
             if ($one_unit['title'] == self::GOODS_NAME['waterproof_coating']) {
