@@ -1105,9 +1105,10 @@ class OwnerController extends Controller
 //        客厅地砖费用
         $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
-//        地砖总数量和费用
-        $floor_cost['quantity'] = $toilet_wall_brick_cost['quantity'] + $kitchen_wall_brick_cost['quantity'] +  $hall_wall_brick_cost['quantity'];
-        $floor_cost['cost'] = $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] +  $hall_wall_brick_cost['cost'];
+        var_dump($hall_wall_brick_cost);
+        var_dump($kitchen_wall_brick_cost);
+        var_dump($toilet_wall_brick_cost);
+        exit;
 
         //材料总费用
         $material_cost_total = $cement_cost['cost'] + $self_leveling_cost['cost'] + $river_sand_cost['cost'] + $wall_brick_cost['cost'] + $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] + $hall_wall_brick_cost['cost'];
