@@ -221,8 +221,8 @@ class BasisDecorationService
             }
         }
 
-        var_dump($points);
-        var_dump($material);
+        var_dump($points); echo 111;
+        var_dump($material);echo 222;
         var_dump($goods_value);
 
         //线路个数计算 ,线路费用计算
