@@ -307,7 +307,7 @@ class Effect extends ActiveRecord
             ['name'=>'电话','value'=>$array['phone']],
             ['name'=>'申请时间','value'=>$array['create_time']]
         ];
-        if($array['district']){
+        if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{
             $array['address']=$array['city'].$array['street'];
