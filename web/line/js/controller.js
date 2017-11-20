@@ -1395,7 +1395,6 @@ angular.module("all_controller", ['ngCookies'])
         if($scope.mall_id == undefined){
             $scope.mall_id = sessionStorage.getItem('mall_id')
         }
-
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
