@@ -167,7 +167,6 @@ class Addressadd extends  ActiveRecord
                         return $code;
                     }
                 }
-
                 $tran->commit();
                 $code=200;
                 return $code;

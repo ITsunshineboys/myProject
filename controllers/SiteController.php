@@ -1459,7 +1459,7 @@ class SiteController extends Controller
         $region = trim($request->post('region', ''));
         $consignee = trim($request->post('consignee', ''));
         $mobile = trim($request->post('mobile', ''));
-        $default=trim($request->post('default', ''));
+        $default=trim($request->post('default', 1));
         if (!$district_code || !$region || !$consignee || !$mobile) {
             $code = 1000;
             return Json::encode([
