@@ -974,11 +974,12 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback(response) {
             console.log(response);
             $scope.codeWX = response.data.code;
-            $scope.appId  = response.data.data.appId;
-            $scope.timestamp  = response.data.data.timestamp;
-            $scope.nonceStr  = response.data.data.nonceStr;
-            $scope.signature  = response.data.data.signature;
-
+            if( $scope.codeWX == 200){
+                $scope.appId  = response.data.data.appId;
+                $scope.timestamp  = response.data.data.timestamp;
+                $scope.nonceStr  = response.data.data.nonceStr;
+                $scope.signature  = response.data.data.signature;
+            }
         });
         // 返回
         $scope.getRetun = function () {
