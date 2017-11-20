@@ -286,8 +286,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             console.log($scope.cur_city)
             // $scope.city_name = $scope.province[22].name
             $http.get('districts2.json').then(function (response) {
-                console.log(response)
-                $scope.city_name =response.data[$scope.cur_province][$scope.cur_city]
+                console.log(response.data[0])
+                $scope.city_name =response.data[0][$scope.cur_province][$scope.cur_city]
                 let arr2 = []
                 for (let [key, value] of Object.entries(response.data[0][$scope.cur_city])) {
                     arr2.push({'id': key, 'name': value})

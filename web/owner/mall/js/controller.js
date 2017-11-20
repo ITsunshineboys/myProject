@@ -201,6 +201,18 @@ angular.module('all_controller', [])
             $scope.cur_series = $scope.series[0]//默认选择第一个系列
             $scope.cur_style = $scope.style[0]//默认选择第一个风格
             // $scope.nowStairs = $scope.stairs_details[0].id//楼梯结构
+            $timeout(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    autoplayDisableOnInteraction:false,
+                    effect:'slide',
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination',
+                })
+            },0)
         }, function (error) {
             console.log(error)
         })
@@ -1971,6 +1983,18 @@ angular.module('all_controller', [])
             $scope.cur_header = '智能报价'
             $scope.is_city = true
             $scope.is_edit = false
+            $timeout(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    autoplayDisableOnInteraction:false,
+                    effect:'slide',
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination',
+                })
+            },0)
         }
 
         /*基础装修内页*/
