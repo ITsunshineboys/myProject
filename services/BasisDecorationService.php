@@ -1755,6 +1755,7 @@ class BasisDecorationService
                 unset($one);
             }
         }
+        
 //        $material = array_filter($material);
         return $material;
     }
