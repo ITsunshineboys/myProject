@@ -136,29 +136,32 @@
             <!--物流模板-->
             <div class="template">
                 <span>商品物流</span>
-                <select class="class_name_input wl_input" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics">
-                </select>
-                <br/>
-                <div class="template_div">
-                    <span class="margin_r">快递方式</span>
-                    <span>{{logistics_method}}</span>
+                <span class="margin_left" ng-if="logistics_flag2">请先添加物流模板</span>
+                <div ng-if="logistics_flag1">
+                    <select class="class_name_input wl_input" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics">
+                    </select>
                     <br/>
-                    <br/>
-                    <span  class="margin_r">城市选择</span>
-                    <span class="template_span" ng-repeat="item in district_names.slice(0,3)">{{item}}</span>
-                    <span ng-if="district_names.length>3" style="color: #5677FC" data-toggle="modal" data-target="#show_city">查看</span>
-                    <br/>
-                    <br/>
-                    <span class="margin_r">是否包邮</span>
-                    <span ng-if="delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0">包邮</span>
-                    <span ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">不包邮</span>
-                    <br/>
-                    <br/>
-                    <div ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
-                        <span class="margin_r">收费金额</span>
-                        <div style="display: inline-block; vertical-align: top;">
-                            <p>默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</p>
-                            <p >每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</p>
+                    <div class="template_div">
+                        <span class="margin_r">快递方式</span>
+                        <span>{{logistics_method}}</span>
+                        <br/>
+                        <br/>
+                        <span  class="margin_r">城市选择</span>
+                        <span class="template_span" ng-repeat="item in district_names.slice(0,3)">{{item}}</span>
+                        <span ng-if="district_names.length>3" style="color: #5677FC" data-toggle="modal" data-target="#show_city">查看</span>
+                        <br/>
+                        <br/>
+                        <span class="margin_r">是否包邮</span>
+                        <span ng-if="delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0">包邮</span>
+                        <span ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">不包邮</span>
+                        <br/>
+                        <br/>
+                        <div ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
+                            <span class="margin_r">收费金额</span>
+                            <div style="display: inline-block; vertical-align: top;">
+                                <p>默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</p>
+                                <p >每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

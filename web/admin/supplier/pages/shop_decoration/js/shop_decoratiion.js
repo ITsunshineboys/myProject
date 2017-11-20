@@ -1,9 +1,9 @@
 ;
 let shop_decoration=angular.module('shop_decoration_module',['ngFileUpload','ngDraggable'])
-.controller('shop_decoration_ctrl',function ($rootScope,$scope,$http,$state,Upload,_ajax) {
+shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$http,$state,Upload,_ajax) {
     $rootScope.crumbs = [{
         name: '店铺装修',
-        icon: 'icon-shangchengguanli',
+        icon: 'icon-icon_dianpuzhuangxiu',
     }];
   $scope.myng=$scope;
   let config = {

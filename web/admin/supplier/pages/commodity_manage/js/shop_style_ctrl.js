@@ -2,7 +2,7 @@ let shop_style_let= angular.module("shop_style",['ngFileUpload']);
 shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
     $rootScope.crumbs = [{
         name: '商品管理',
-        icon: 'icon-shangchengguanli',
+        icon: 'icon-shangpinguanli',
         link: 'commodity_manage'
     }, {
         name: '添加新商品'
@@ -199,20 +199,25 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
       _ajax.post('/mall/logistics-templates-supplier',{},function (res) {
           console.log('物流模板');
           console.log(res);
-          $scope.logistics=res.data.logistics_templates_supplier;
-          $scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
-          //物流模块详情
-          $scope.$watch('shop_logistics',function (newVal,oldVal) {
-              _ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
-                  console.log(res);
-                  $scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
-                  $scope.district_names=res.data.logistics_template.district_names;//地区
-                  $scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费
-                  $scope.delivery_number_default=res.data.logistics_template.delivery_number_default;//默认运费的数量
-                  $scope.delivery_cost_delta=res.data.logistics_template.delivery_cost_delta;//增加件费用
-                  $scope.delivery_number_delta=res.data.logistics_template.delivery_number_delta;//增加件的数量
-              })
-          });
+          if(res.data.logistics_templates_supplier.length>0){
+              $scope.logistics_flag1=true;
+              $scope.logistics=res.data.logistics_templates_supplier;
+              $scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
+              //物流模块详情
+              $scope.$watch('shop_logistics',function (newVal,oldVal) {
+                  _ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
+                      console.log(res);
+                      $scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
+                      $scope.district_names=res.data.logistics_template.district_names;//地区
+                      $scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费
+                      $scope.delivery_number_default=res.data.logistics_template.delivery_number_default;//默认运费的数量
+                      $scope.delivery_cost_delta=res.data.logistics_template.delivery_cost_delta;//增加件费用
+                      $scope.delivery_number_delta=res.data.logistics_template.delivery_number_delta;//增加件的数量
+                  })
+              });
+          }else{
+              $scope.logistics_flag2=true;
+          }
       })
   /*-----------------添加按钮-----------------------*/
   $scope.add_goods_confirm=function (valid,error) {
@@ -268,7 +273,7 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
     }
 
     /*判断必填项，全部ok，调用添加接口*/
-    if(valid && $scope.upload_cover_src && !$scope.price_flag &&!$scope.own_submitted){
+    if(valid && $scope.upload_cover_src && !$scope.price_flag &&!$scope.own_submitted &&$scope.logistics_flag1){
       let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.success_variable='#on_shelves_add_success';
       /*循环自己添加的属性*/

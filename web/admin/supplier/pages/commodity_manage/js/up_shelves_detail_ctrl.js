@@ -11,7 +11,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
     };
     $rootScope.crumbs = [{
         name: '商品管理',
-        icon: 'icon-shangchengguanli',
+        icon: 'icon-shangpinguanli',
         link: $scope.back_cm
     }, {
         name: '商品详情'
