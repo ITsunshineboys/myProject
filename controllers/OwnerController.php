@@ -1104,6 +1104,9 @@ class OwnerController extends Controller
 
 //        客厅地砖费用
         $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
+        var_dump($drawing_room_area);
+        var_dump($floor_tile_attr['hall']['area']);
+        exit;
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
         var_dump($hall_wall_brick_cost);
         var_dump($kitchen_wall_brick_cost);
