@@ -5,6 +5,7 @@ angular.module('all_controller', [])
         sessionStorage.removeItem("roomPicture");
         sessionStorage.removeItem("worker");
         sessionStorage.removeItem("materials");
+        $scope.baseUrl = '/'
         //主页推荐
         $http.get(baseUrl + '/owner/homepage').then(function (response) {
             $scope.recommend_list = response.data.data
