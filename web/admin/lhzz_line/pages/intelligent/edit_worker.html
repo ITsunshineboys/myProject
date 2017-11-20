@@ -18,7 +18,7 @@
     <div class="row">
         <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>每日费用</p>
         <p class="col-md-2 enter">
-            <input class="form-control" name="daily_cost" ng-model="daily_cost" type="text" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="change=!!edit_worker.daily_cost.$error"
+            <input class="form-control" name="daily_cost" ng-model="ctrlScope.daily_cost" type="text" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="change=!!edit_worker.daily_cost.$error"
                 required   ng-class="{'error':(edit_worker.daily_cost.$invalid&&submitted) || ((edit_worker.daily_cost.$error.required || edit_worker.daily_cost.$error.pattern)&&change)}">
         </p>
         <p class="col-md-1 text-left">元/天</p>

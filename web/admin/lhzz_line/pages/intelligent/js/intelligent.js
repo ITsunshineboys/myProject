@@ -12,6 +12,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
         ]
+        $scope.baseUrl = 'http://test.cdlhzz.cn'
+        // $scope.baseUrl = ''
         //添加小区部分
         /*分页配置*/
         $scope.Config = {
@@ -1108,32 +1110,30 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.check_item[key] = {id: value.id, pid: value.pid, title: value.title, path: value.path}
             }
             console.log($scope.check_item)
-            $http.post('/quote/assort-goods-add', {
-                'assort': $scope.check_item
-            }, config).then(function (response) {
-                get_case_goods()
-                let all_modal = function ($scope, $uibModalInstance) {
-                    $scope.cur_title = '保存成功'
-                    $scope.common_house = function () {
-                        $uibModalInstance.close()
-                        $rootScope.crumbs = [
-                            {
-                                name:'智能报价',
-                                icon:'icon-baojia'
-                            }
-                        ]
-                        $state.go('intelligent.intelligent_index')
-                    }
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.cur_title = '保存成功'
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                    $rootScope.crumbs = [
+                        {
+                            name:'智能报价',
+                            icon:'icon-baojia'
+                        }
+                    ]
+                    $state.go('intelligent.intelligent_index')
                 }
-                all_modal.$inject = ['$scope', '$uibModalInstance']
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
+            _ajax.post('/quote/assort-goods-add', {
+                'assort': $scope.check_item
+            },function (res) {
+                console.log(res)
+                get_case_goods()
                 $uibModal.open({
                     templateUrl: 'pages/intelligent/cur_model.html',
                     controller: all_modal,
                     backdrop:'static'
                 })
-                console.log(response)
-            }, function (error) {
-                console.log(error)
             })
         }
         //勾选添加/删除三级
@@ -2245,7 +2245,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     city: $scope.cur_city
                 },function (res) {
                     console.log(res)
-                    $scope.all_manage = res.data.list
+                    $scope.all_manage = res.list
                 })
             })
         }
@@ -2278,7 +2278,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 city: $scope.cur_city
             },function (res) {
                 console.log(res)
-                $scope.all_house_city = res.data.list
+                $scope.all_house_city = res.list
                 for (let [key, value] of $scope.all_house_city.entries()) {
                     if (value.district_code == item.district_code) {
                         $scope.cur_house_city = value
@@ -2290,7 +2290,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     district: $scope.cur_house_city.district_code
                 },function (res) {
                     console.log(res)
-                    $scope.all_toponymy = res.data.list
+                    $scope.all_toponymy = res.list
                     for (let [key, value] of $scope.all_toponymy.entries()) {
                         if (value.toponymy == item.toponymy) {
                             $scope.cur_toponymy_house = value
@@ -2303,7 +2303,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         toponymy: $scope.cur_toponymy_house.toponymy
                     },function (res) {
                         console.log(res)
-                        $scope.all_street = res.data.list
+                        $scope.all_street = res.list
                         for (let [key, value] of $scope.all_street.entries()) {
                             if (value.street == item.street) {
                                 $scope.cur_street = value
@@ -2317,7 +2317,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             street: $scope.cur_street.street
                         },function (res) {
                             console.log(res)
-                            $scope.all_case = res.data.list
+                            $scope.all_case = res.list
                             for (let [key, value] of $scope.all_case.entries()) {
                                 if (value.particulars == item.house_type_name) {
                                     $scope.cur_case = value
