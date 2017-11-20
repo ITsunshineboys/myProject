@@ -1649,7 +1649,7 @@ angular.module("all_controller", ['ngCookies'])
                         $scope.order_order = '您好，您的地址超过商品配送范围内，请更换商品或收货地址！'
                     }
                     if($scope.code == 200){
-                        console.log('成功');
+                        console.log(baseUrl+'/order/iswxlogin');
                         // 判断是否微信浏览器打开
                         $http({
                             method: 'get',
