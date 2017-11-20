@@ -1223,7 +1223,6 @@ class BasisDecorationService
      */
     public static function profitMargin($goods)
     {
-//        $array_=[];
         if (count($goods) == count($goods, 1)) {
             return $goods;
         } elseif ($goods == null){
@@ -1734,28 +1733,21 @@ class BasisDecorationService
 
             }
         }
-        $array_ = [];
-        $a = isset($mattress) ? $mattress :$array_;
-        $b = isset($cut_off) ? $cut_off :$array_;
-        $c = isset($sprinkler) ? $sprinkler :$array_;
-        $d = isset($bath_cabinet) ? $bath_cabinet :$array_;
-        $e = isset($squatting_pan) ? $squatting_pan :$array_;
-        $f = isset($closestool) ? $closestool :$array_;
+
+//        $a = isset($mattress) ? $mattress :new \stdClass ;
+//        $b = isset($cut_off) ? $cut_off :$array_;
+//        $c = isset($sprinkler) ? $sprinkler :$array_;
+//        $d = isset($bath_cabinet) ? $bath_cabinet :$array_;
+//        $e = isset($squatting_pan) ? $squatting_pan :$array_;
+//        $f = isset($closestool) ? $closestool :$array_;
 
 
-        $material[] = self::profitMargin($a);
-        $material[] = self::profitMargin($b);
-        $material[] = self::profitMargin($c);
-        $material[] = self::profitMargin($d);
-        $material[] = self::profitMargin($e);
-        $material[] = self::profitMargin($f);
-
-//        foreach ($material as $one){
-//            if (empty($one)){
-//                unset($one);
-//            }
-//        }
-
+        $material[] = self::profitMargin($mattress);
+        $material[] = self::profitMargin($cut_off);
+        $material[] = self::profitMargin($sprinkler);
+        $material[] = self::profitMargin($bath_cabinet);
+        $material[] = self::profitMargin($squatting_pan);
+        $material[] = self::profitMargin($closestool);
 
 
         $material = array_filter($material);
