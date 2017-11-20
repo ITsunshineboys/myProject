@@ -141,6 +141,9 @@ class OwnerController extends Controller
     ];
 
     const AREA_PROPORTION = '面积比例';
+    const OTHER_AREA = [
+        'waterproof_area'=> '防水面积',
+    ];
     /**
      * Actions accessed by logged-in users
      */
@@ -540,7 +543,7 @@ class OwnerController extends Controller
 
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
-        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'].'and project_name='.'防水面积';
+        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'].'and project_name='.self::OTHER_AREA['waterproof_area'];
         $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
 
