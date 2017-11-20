@@ -137,7 +137,7 @@
             <div class="template">
                 <span>商品物流</span>
                 <span class="margin_left" ng-if="logistics_flag2">请先添加物流模板</span>
-                <div ng-if="logistics_flag1">
+                <div class="inline_block" ng-if="logistics_flag1">
                     <select class="class_name_input wl_input" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics">
                     </select>
                     <br/>

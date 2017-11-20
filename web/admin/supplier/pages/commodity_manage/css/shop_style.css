@@ -176,7 +176,7 @@ hr{
 }
 
 .template_div{
-    margin-left: 145px;
+    margin-left: 85px;
     margin-top: 15px;
     color:#666F80;
     font-size: 14px;
@@ -235,6 +235,10 @@ input::-webkit-inner-spin-button{
 .margin_left{
     margin-left: 85px;
     color:red;
+}
+.inline_block{
+    display: inline-block;
+    vertical-align: top;
 }
 .dl_active3{
     background-color: #E6E9F0!important;
