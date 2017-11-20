@@ -774,9 +774,9 @@ class OwnerController extends Controller
         $finishing_coat_day = $finishing_coat_area / $finishing_coat;
 
 //        卧室周长
-        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($bedroom_area['project_value'], $post['area'], $post['bedroom'], self::WALL);
+        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter( $post['area'],$bedroom_area['project_value'],$post['bedroom'], self::WALL);
 //        客厅周长
-        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_SPACE);
+        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($post['area'],$hall_area['project_value'],$post['hall'], self::WALL_SPACE);
 //        阴角线长度
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】

@@ -682,15 +682,12 @@ class BasisDecorationService
      */
     public  static function paintedPerimeter($area,$house_area,$bedroom ,$wall = 4)
     {
-        if ($area <= 1) {
+
 //        卧室地面积：【z】%×（房屋面积）
-            $ground_area =  $area * $house_area;
+            $ground_area =  $area * ($house_area / 100);
 //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
             $wall_space_perimeter = sqrt($ground_area / $bedroom) * $wall * $bedroom;
-        } else {
- //        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
-            $wall_space_perimeter = sqrt($area / $bedroom) * $wall * $bedroom;
-        }
+
         return $wall_space_perimeter;
     }
 
