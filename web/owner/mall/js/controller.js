@@ -391,7 +391,6 @@ angular.module('all_controller', [])
         }
         //查看详情
         $scope.go_details = function (item) {
-            console.log(item)
             if ($scope.cur_status == 0) {
                 $scope.check_goods = $scope.cur_goods_detail
             } else if ($scope.cur_status == 1) {
@@ -400,7 +399,6 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
                 $scope.check_goods['path'] = $scope.cur_three_item.path
             }
-            console.log($scope.check_goods)
             $http.get(baseUrl + '/mall/goods-view', {
                 params: {
                     id: +$scope.check_goods.id
@@ -409,7 +407,6 @@ angular.module('all_controller', [])
                 console.log(response)
                 if ($scope.cur_status == 1) {
                     $scope.cur_title = '更换'
-                    // $scope.check_goods['shop_name'] = response.data.data.goods_view.supplier.shop_name
                     $scope.check_goods['name'] = response.data.data.goods_view.brand_name
                 } else if ($scope.cur_status == 2) {
                     $scope.cur_title = '添加'
@@ -425,6 +422,8 @@ angular.module('all_controller', [])
                         $scope.aftermarket.push(value)
                     }
                 }
+                $scope.description = response.data.data.goods_view.description
+                console.log($scope.description)
                 $scope.supplier = response.data.data.goods_view.supplier
                 $scope.cur_params = {
                     code: response.data.data.goods_view.sku,
@@ -437,9 +436,6 @@ angular.module('all_controller', [])
                 $('#myModal').modal('hide')
                 $timeout(function () {
                     $scope.have_header = false
-                    // $scope.cur_header = ''
-                    // $scope.is_city = false
-                    // $scope.is_edit = false
                     $state.go('nodata.product_detail')
                 }, 300)
                 console.log(response)
@@ -2405,3 +2401,8 @@ angular.module('all_controller', [])
             console.log(obj)
         }
     })
+    .filter("toHtml", ["$sce", function ($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        }
+    }]);

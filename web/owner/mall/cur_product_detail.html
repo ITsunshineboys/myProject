@@ -2,7 +2,7 @@
     <a class="header" ng-click="returnPrev()"><img src="images/nav_return_white.png" alt=""></a>
     <div class="main">
         <div class="details_banner">
-            <img ng-src="{{baseUrl}}{{cur_goods_detail.image}}" alt=""/>
+            <img ng-src="{{baseUrl}}{{check_goods.image}}" alt=""/>
         </div>
         <div class="intro_box">
             <div class="product_name">
@@ -62,8 +62,8 @@
                 <div class="tab-content" ng-switch on="tab_title">
                     <!--图文详情-->
                     <div role="tabpanel" id="home" ng-switch-when="0">
-                        <div class="tab_one">
-                            <img src="images/banner1.png" alt=""/>
+                        <div class="tab_one" ng-bind-html="description | toHtml">
+                            <!--<img src="images/banner1.png" alt=""/>-->
                             <!--<p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>-->
                         </div>
                     </div>
