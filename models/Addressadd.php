@@ -201,7 +201,6 @@ class Addressadd extends  ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
             $address=self::find()
                 ->where("id != {$address_id}")
                 ->andWhere(['uid'=>$user->id])
