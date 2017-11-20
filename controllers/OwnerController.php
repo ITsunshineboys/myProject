@@ -544,7 +544,12 @@ class OwnerController extends Controller
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
 //        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'].' and project_name='.self::OTHER_AREA['waterproof_area'];
-        $apartment = Apartment::find()->asArray()->where(['min_area'=>$post['area']])->andWhere(['max_area'=>$post['area']])->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])->one();
+        $apartment = Apartment::find()
+            ->asArray()
+            ->where(['min_area'=>$post['area']])
+            ->andWhere(['max_area'=>$post['area']])
+            ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
+            ->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
 
 
