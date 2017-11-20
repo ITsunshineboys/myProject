@@ -1068,6 +1068,9 @@ class OwnerController extends Controller
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
+        var_dump($covering_layer_area);
+        var_dump($floor_tile_area);
+        var_dump($wall_area);exit;
         $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
 
 //        自流平费用
