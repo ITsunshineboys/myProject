@@ -1666,7 +1666,7 @@ angular.module("all_controller", ['ngCookies'])
                                     method: 'get',
                                     url:  baseUrl+'order/lineplaceorder',
                                     params:{
-                                        goods_name: $scope.title,
+                                        // goods_name: $scope.title,
                                         order_price:$scope.allCost,
                                         goods_num:+$scope.shopNum,
                                         goods_id:+$scope.mall_id,
