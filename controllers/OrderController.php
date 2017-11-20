@@ -765,7 +765,6 @@ class OrderController extends Controller
                     || !Yii::$app->session['pay_name']
                     || !Yii::$app->session['supplier_id']
                     || !Yii::$app->session['freight']
-                    || !Yii::$app->session['body']
                     || !Yii::$app->session['order_no']
                     || !Yii::$app->session['total_amount']
                 )
