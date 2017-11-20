@@ -13,6 +13,8 @@ use yii\db\Query;
 
 class Effect extends ActiveRecord
 {
+    const TYPE_STATUS=0;
+    const TYPE_ITEM=1;
     const  SUP_BANK_CARD='effect';
     const TYPE_STATUS_YES = 1;
     const TYPE_STATUS_NO = 3;
@@ -184,6 +186,8 @@ class Effect extends ActiveRecord
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
             $effect_earnest->sale_price=$post['sale_price'];
+            $effect_earnest->type=self::TYPE_STATUS;
+            $effect_earnest->item=self::TYPE_STATUS;
             if(!$effect_earnest->save(false)){
                 $tran->rollBack();
                 return false;
@@ -302,11 +306,17 @@ class Effect extends ActiveRecord
             [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
-        $data['user_view']=[
-            ['name'=>'姓名','value'=>$array['name']],
-            ['name'=>'电话','value'=>$array['phone']],
-            ['name'=>'申请时间','value'=>$array['create_time']]
-        ];
+
+            $data['user_view']=[
+                ['name'=>'姓名','value'=>$array['name']],
+                ['name'=>'电话','value'=>$array['phone']],
+                ['name'=>'申请时间','value'=>$array['create_time']]
+            ];
+        if($array['name']=='' && $array['phone']==''){
+           unset($data['user_view']);
+        }
+
+
         if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{

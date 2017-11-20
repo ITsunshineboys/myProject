@@ -353,10 +353,48 @@ class EffectController extends Controller
         ]);
     }
     /**
+     * app 申请样板间
+     * @return string
+     */
+    public function actionAppApplyEffect(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $post=Yii::$app->request->post();
+        $code=EffectEarnest::appAddEffect($user->getId(),$post);
+        if(!$code){
+            $code=1000;
+            return Json::encode([
+                'code' =>$code,
+                'msg' =>\Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok'
+
+        ]);
+
+    }
+    /**
      * app 样板间申请详情
      * @return string
      */
     public function actionAppEffectView(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=1000;
         $effect_enst_id = trim(Yii::$app->request->get('effect_enst_id', ''), '');
         if(!$effect_enst_id){
@@ -372,6 +410,10 @@ class EffectController extends Controller
                 'data'=>$data
             ]);
     }
+    /**
+     * 保存/申请方案列表
+     * @return string
+     */
     public function actionEffectPlan(){
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -381,9 +423,13 @@ class EffectController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=1000;
-        $status=(int)Yii::$app->request->get('status','');
-        $data=EffectEarnest::PlanList($user->getId(),$status);
+        $type=(int)Yii::$app->request->get('type',1);
+        $data=EffectEarnest::PlanList($user->getId(),$type);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
     }
 
 
