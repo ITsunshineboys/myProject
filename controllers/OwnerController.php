@@ -502,8 +502,7 @@ class OwnerController extends Controller
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
         $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
-        
-        var_dump($p);exit;
+
         if (!$p){
             $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         }
