@@ -623,7 +623,7 @@ button.close{
     width: 100%;
     font-size: 1.5rem;
     color: #4A4A4A;
-    /*padding: .5rem;*/
+    padding: .5rem;
 }
 .tab-content{
     margin-top: .5rem;
