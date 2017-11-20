@@ -170,7 +170,7 @@ class Addressadd extends  ActiveRecord
                 $tran->commit();
                 $code=200;
                 return $code;
-            }catch (Exception $e)
+            }catch (\Exception $e)
             {
                 $code=500;
                 $tran->rollBack();
