@@ -675,10 +675,15 @@ class BasisDecorationService
 //        卧室底漆面积=卧室地面积+卧室墙面积
             $total_area =    $ground_area + $wall_space_area;
         } else {
+            $ground_area = $area * $house_area;
+            var_dump($ground_area);
+            var_dump($area);
+            var_dump($house_area);
+            exit;
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
             $wall_space_area = sqrt($area / $bedroom)* $tall * $wall * $bedroom;
 //        卧室底漆面积=卧室地面积+卧室墙面积
-            $total_area =    $area + $wall_space_area;
+            $total_area =    $ground_area + $wall_space_area;
             var_dump($total_area);
             var_dump($area);
             var_dump($wall_space_area);
