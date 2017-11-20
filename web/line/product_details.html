@@ -93,7 +93,8 @@
                 </ul>
                 <div class="tab-content tab-bordered">
                     <div class="tab-panel tab-panel-one" ng-show="vm.activeTab == 1">
-                        <span class="description_span">{{datailsShop.description}}</span>
+                        <!--<span class="description_span">{{datailsShop.description}}</span>-->
+                        <div class="description_span" ng-bind-html="datailsShop.description | toHtml"></div>
                     </div>
                     <div class="tab-panel" ng-show="vm.activeTab == 2">
                         <div class="shop_two">

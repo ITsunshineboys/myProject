@@ -1952,3 +1952,8 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
     })
+    .filter("toHtml", ["$sce", function ($sce) {
+        return function (text) {
+            return $sce.trustAsHtml(text);
+        }
+    }]);
