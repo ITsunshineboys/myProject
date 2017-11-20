@@ -11,13 +11,6 @@ banner_history.controller("banner_history_ctrl", function ($rootScope,$scope, $h
         name: '历史数据统计'
     }];
     $scope.myng=$scope;
-    //POST请求的响应头
-    let config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
     $scope.recommendList=[];
     /*分页配置*/
     $scope.Config = {

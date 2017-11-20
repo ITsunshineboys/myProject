@@ -1,6 +1,6 @@
 ;
 let add_series = angular.module("addseriesModule",[]);
-add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParams,$state) {
+add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParams,$state,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -11,13 +11,6 @@ add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParam
     }, {
         name: '添加新系列'
     }];
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
   $scope.ser_intro='';
   $scope.change_txts=function () {
     if($scope.ser_intro==undefined){
@@ -80,13 +73,21 @@ add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParam
   $scope.tran_arr=[];
   $scope.ser_add_btn=function (valid) {
     if(valid && !$scope.name_flag){
+        $scope.sur_id='suremodal';
       console.log('ok');
       for(let[key,value] of $scope.ser_label_arr.entries()){
         if(value.num!=''){
           $scope.tran_arr.push(value.num);//标签组
         }
       }
-      $scope.sur_id='suremodal';
+        _ajax.post('/mall/series-add',{
+            series:$scope.series_name, //名称
+            theme:$scope.tran_arr.join(','), //标签
+            intro:$scope.ser_intro,//介绍
+            series_grade:$scope.add_ser_select//等级
+        },function (res) {
+            console.log(res);
+        })
       console.log($scope.tran_arr);
       console.log($scope.add_ser_select)
     }else{
@@ -96,20 +97,8 @@ add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParam
   };
 	//添加确认按钮
 	$scope.add_ok=function () {
-    let url=baseUrl+'/mall/series-add';
-    $http.post(url,{
-      series:$scope.series_name, //名称
-      theme:$scope.tran_arr.join(','), //标签
-      intro:$scope.ser_intro,//介绍
-      series_grade:$scope.add_ser_select//等级
-    },config).then(function (res) {
-      console.log("添加成功");
-      console.log(res);
-    },function (err) {
-      console.log(err);
-    });
-    setTimeout(function () {
-      $state.go("style_index");
-    },300);
+        setTimeout(function () {
+            $state.go("style_index");
+        },300);
     };
 });

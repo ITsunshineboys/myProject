@@ -28,6 +28,12 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
             tablePages();
         }
     }
+    $scope.params = {
+        page: 1,                        // 当前页数
+        status: '1',                  // 0：已下架，1：已上架
+        pid: '0',                      // 父分类id，0：全部
+        'sort[]':'online_time:3'
+    };
     let tablePages=function () {
         $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/brand-list-admin',$scope.params,function (res) {
@@ -40,12 +46,6 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
                 $scope.wjConfig.totalItems = res.data.brand_list_admin.total;
             }
         })
-    };
-    $scope.params = {
-        page: 1,                        // 当前页数
-        status: '1',                  // 0：已下架，1：已上架
-        pid: '0',                      // 父分类id，0：全部
-        'sort[]':'online_time:3'
     };
 
     //全选ID数组

@@ -13,15 +13,6 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
         name: '添加品牌'
     }];
   $scope.myng=$scope;
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
-
-
 	//上传商标注册证
   $scope.upload_img_src='';
   $scope.data = {

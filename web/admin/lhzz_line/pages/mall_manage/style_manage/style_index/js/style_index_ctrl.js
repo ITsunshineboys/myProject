@@ -1,5 +1,5 @@
 let style_index = angular.module("styleindexModule", []);
-style_index.controller("style_index", function ($rootScope,$scope, $http, $stateParams) {
+style_index.controller("style_index", function ($rootScope,$scope, $http, $stateParams,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -20,24 +20,20 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
             tablePages();
         }
     };
-
-    let tablePages=function () {
-        $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-        $http.get(baseUrl+'/mall/style-time-sort',{
-            params:$scope.params
-        }).then(function (res) {
-            console.log(res);
-            $scope.style_arr=res.data.list.details;
-            $scope.Config.totalItems = res.data.list.total;
-        },function (err) {
-            console.log(err);
-        })
-    };
-
     $scope.params = {
         page: 1,                        // 当前页数
         sort:0
     };
+    let tablePages=function () {
+        $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+        _ajax.get('/mall/style-time-sort',$scope.params,function (res) {
+            console.log(res);
+            $scope.style_arr=res.list.details;
+            $scope.Config.totalItems = res.list.total;
+        })
+    };
+
+
 
 
     //POST请求的响应头
@@ -55,8 +51,6 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /*属性管理*/
     $scope.handledesorder = true; //排序初始值
     $scope.handleascorder = false; //排序初始值
-
-
 
     /*分页配置*/
     $scope.pageConfig = {
@@ -113,16 +107,10 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         $scope.showseries = true;
         $scope.showstyle = false;
         $scope.showattr = false;
-
         $scope.ser_time_img='lib/images/sort_down.png';
-        $http.get(baseUrl+'/mall/series-time-sort',{
-            params:{
-                sort:0
-            }
-        }).then(function (res) {
-            $scope.series_arr=res.data.list;
-        },function (err) {
-            console.log(err);
+        _ajax.get('/mall/series-time-sort',{sort:0},function (res) {
+            console.log(res);
+            $scope.series_arr=res.list;
         });
     };
     //风格
@@ -157,35 +145,22 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /************************系列开始*******************************/
 
 //	系列——展示数据
-    $http.get(baseUrl+'/mall/series-time-sort',{
-        params:{
-            sort:0
-        }
-    }).then(function (res) {
-        $scope.series_arr=res.data.list;
-        console.log("系列列表返回");
-        console.log(res);
-    },function (err) {
-        console.log(err);
-    });
+    _ajax.get('/mall/series-time-sort',{sort:0},function (res) {
+        $scope.series_arr=res.list;
+    })
     //开启操作
     $scope.open_status=function (item) {
         $scope.open_item=item;
     };
     //开启确认按钮
     $scope.open_btn_ok=function () {
-        let url=baseUrl+'/mall/series-status';
-        $http.post(url,{
+        _ajax.post('/mall/series-status',{
             id:+$scope.open_item.id,
             status:1
-        },config).then(function (res) {
-            $http.get(baseUrl+'/mall/series-time-sort').then(function (res) {
-                $scope.series_arr=res.data.list;
-            },function (err) {
-                console.log(err);
-            });
-        },function (err) {
-            console.log(err);
+        },function (res) {
+            _ajax.get('/mall/series-time-sort',{},function (res) {
+                $scope.series_arr=res.list;
+            })
         })
     };
 
@@ -195,18 +170,13 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     };
     //关闭确认按钮
     $scope.close_btn_ok=function () {
-        let url=baseUrl+'/mall/series-status';
-        $http.post(url,{
+        _ajax.post('/mall/series-status',{
             id:+$scope.close_item.id,
             status:0
-        },config).then(function (res) {
-            $http.get(baseUrl+'/mall/series-time-sort').then(function (res) {
-                $scope.series_arr=res.data.list;
-            },function (err) {
-                console.log(err);
-            });
-        },function (err) {
-            console.log(err);
+        },function (res) {
+            _ajax.get('/mall/series-time-sort',{},function (res) {
+                $scope.series_arr=res.list;
+            })
         })
     };
     //系类时间排序
@@ -219,16 +189,9 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
             $scope.ser_time_img='lib/images/sort_down.png';
             $scope.ser_sort_num=0;
         }
-        $http.get(baseUrl+'/mall/series-time-sort',{
-            params:{
-                sort:$scope.ser_sort_num
-            }
-        }).then(function (res) {
-            $scope.series_arr=res.data.list;
-            console.log(res);
-        },function (err) {
-            console.log(err);
-        });
+        _ajax.get('/mall/series-time-sort',{sort:$scope.ser_sort_num},function (res) {
+            $scope.series_arr=res.list;
+        })
     };
     /******************************系列结束******************************/
 
@@ -254,15 +217,12 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     };
     //开启确认按钮
     $scope.style_open_btn_ok=function () {
-        let url=baseUrl+'/mall/style-status';
-        $http.post(url,{
+        _ajax.post('/mall/style-status',{
             id:+$scope.style_open_item.id,
             status:1
-        },config).then(function (res) {
+        },function (res) {
             $scope.Config.currentPage=1;
             tablePages();
-        },function (err) {
-            console.log(err);
         })
     };
 //关闭操作
@@ -271,15 +231,12 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     };
 //关闭确认按钮
     $scope.style_close_btn_ok=function () {
-        let url=baseUrl+'/mall/style-status';
-        $http.post(url,{
+        _ajax.post('/mall/style-status',{
             id:+$scope.style_close_item.id,
             status:0
-        },config).then(function (res) {
+        },function (res) {
             $scope.Config.currentPage=1;
             tablePages();
-        },function (err) {
-            console.log(err);
         })
     };
 

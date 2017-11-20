@@ -1,6 +1,6 @@
 ;
 let brand_check= angular.module("brand_check_module",[]);
-brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$stateParams,$state) {
+brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -12,15 +12,6 @@ brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$sta
     }, {
         name: '品牌详情'
     }];
-
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
-
   $scope.myng=$scope;
   $scope.item=$stateParams.item;
   console.log($scope.item);
@@ -32,17 +23,15 @@ brand_check.controller("brand_check_ctrl",function ($rootScope,$scope,$http,$sta
     });
     //审核确认按钮
   $scope.review_btn=function () {
-    $http.post(baseUrl+'/mall/brand-application-review',{
+    _ajax.post('/mall/brand-application-review',{
         id:+$scope.item.id,
         review_status:$scope.check_select,
         review_note:$scope.review_txt
-    },config).then(function (res) {
-      console.log(res);
-      setTimeout(function () {
-          $state.go('brand_index',{check_flag:true})
-      },300)
-    },function (err) {
-      console.log(err);
+    },function (res) {
+        setTimeout(function () {
+            $state.go('brand_index',{check_flag:true})
+        },300)
     })
+
   }
 });

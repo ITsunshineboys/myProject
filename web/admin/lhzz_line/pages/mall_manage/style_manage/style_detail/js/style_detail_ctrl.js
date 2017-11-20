@@ -1,5 +1,5 @@
 let style_detail = angular.module("styledetailModule",[]);
-style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,$stateParams,Upload) {
+style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,$stateParams,Upload,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -11,31 +11,24 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
     }, {
         name: '风格详情页'
     }];
-	$scope.myng=$scope;
-	$scope.page=$stateParams.page;//默认页数
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
     }
-  };
+	$scope.myng=$scope;
   $scope.change_txts=function () {
     if($scope.style_txt==undefined){
       $scope.style_txt='';
     }
   };
+
   //风格列表所有数据
   $scope.style_arr=[];
-  $http.get(baseUrl+'/mall/style-list',{
-    params:{
-      size:99999
-    }
-  }).then(function (res) {
-    $scope.style_arr=res.data.data.series_list.details;
-  },function (err) {
-    console.log(err)
-  });
+  _ajax.get('/mall/style-list',{size:99999},function (res) {
+      $scope.style_arr=res.data.series_list.details;
+  })
 
 	$scope.style_item=$stateParams.style_item;//点击的那条数据的所有信息
 	console.log($scope.style_item);
@@ -70,21 +63,23 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
   $scope.upload = function (file) {
     if(!$scope.data.file){
       return
+    }else{
+        Upload.upload({
+            url:baseUrl+'/site/upload',
+            data:{'UploadForm[file]':file}
+        }).then(function (response) {
+            if(!response.data.data){
+                $scope.img_flag="上传图片格式不正确，请重新上传"
+            }else{
+                $scope.img_flag='';
+                $scope.img_list.push(response.data.data.file_path)
+            }
+        },function (error) {
+            console.log(error)
+        })
     }
     console.log($scope.data);
-    Upload.upload({
-      url:baseUrl+'/site/upload',
-      data:{'UploadForm[file]':file}
-    }).then(function (response) {
-      if(!response.data.data){
-        $scope.img_flag="上传图片格式不正确，请重新上传"
-      }else{
-        $scope.img_flag='';
-        $scope.img_list.push(response.data.data.file_path)
-      }
-    },function (error) {
-      console.log(error)
-    })
+
   };
 
   //删除图片
@@ -127,6 +122,15 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
             $scope.tran_arr.push(value.num);//标签组
           }
         }
+         _ajax.post('/mall/style-edit',{
+             id:+$scope.style_item.id,
+             style:$scope.style_name,
+             theme:$scope.tran_arr.join(','),
+             intro:$scope.style_txt,
+             images:$scope.img_list.join(',')
+           },function (res) {
+              console.log(res);
+          })
       }else {
         $scope.submitted = true;
       }
@@ -137,17 +141,6 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
   };
   //跳转页面
   $scope.style_go=function () {
-      $http.post(baseUrl+'/mall/style-edit',{
-        id:+$scope.style_item.id,
-        style:$scope.style_name,
-        theme:$scope.tran_arr.join(','),
-        intro:$scope.style_txt,
-        images:$scope.img_list.join(',')
-      },config).then(function (res) {
-        console.log(res);
-      },function (err) {
-        console.log(err);
-      });
     setTimeout(function () {
       $state.go("style_index",{showstyle:true,page:$scope.page});
     },300);

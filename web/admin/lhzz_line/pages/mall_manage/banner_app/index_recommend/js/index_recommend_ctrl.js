@@ -8,13 +8,6 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
         name: 'APP推荐位-推荐管理',
     }];
   $scope.myng=$scope;//原形继承转换，解决ng-model 无效问题
-//POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
   $scope.shop_rep=[];
   //选择城市开始
   //初始化省市区县;

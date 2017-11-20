@@ -1,5 +1,5 @@
 let series_detail = angular.module("seriesdetailModule",[]);
-series_detail.controller("series_detail",function ($rootScope,$scope,$http,$state,$stateParams) {
+series_detail.controller("series_detail",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -11,13 +11,6 @@ series_detail.controller("series_detail",function ($rootScope,$scope,$http,$stat
         name: '系列详情页'
     }];
   $scope.myng=$scope;
-  //POST请求的响应头
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
   $scope.items=$stateParams.item;  // 主页传参--对应一条的数组
 
   //设置初始值
@@ -47,23 +40,22 @@ series_detail.controller("series_detail",function ($rootScope,$scope,$http,$stat
 
   //系列的所有数据
   $scope.ser_arr=[];
-  $http.get(baseUrl+'/mall/series-list').then(function (res) {
-     $scope.ser_arr=res.data.data.series_list.details;
-    //判断剩余的等级
-    let arr = $scope.list_ser.concat();
-    for(let [key1,ser] of arr.entries()){
-      for(let [key2,list] of $scope.ser_arr.entries()){
-        if(ser.num==list.series_grade){
-          $scope.list_ser.splice($scope.list_ser.indexOf(ser),1);
-        }
+  _ajax.get('/mall/series-list',{},function (res) {
+      console.log(res);
+      $scope.ser_arr=res.data.series_list.details;
+      //判断剩余的等级
+      let arr = $scope.list_ser.concat();
+      for(let [key1,ser] of arr.entries()){
+          for(let [key2,list] of $scope.ser_arr.entries()){
+              if(ser.num==list.series_grade){
+                  $scope.list_ser.splice($scope.list_ser.indexOf(ser),1);
+              }
+          }
       }
-    }
-    //把点击的那条数据的等级，前置在第一条
-    $scope.list_ser.unshift({id:+$scope.items.series_grade,num:$scope.items.series_grade});
-    $scope.series_grade=$scope.list_ser[0].id // 默认设置第一项
-  },function (err) {
-    console.log(err);
-  });
+      //把点击的那条数据的等级，前置在第一条
+      $scope.list_ser.unshift({id:+$scope.items.series_grade,num:$scope.items.series_grade});
+      $scope.series_grade=$scope.list_ser[0].id // 默认设置第一项
+  })
   /*---------------判断等级 结束---------------*/
 
   /*-------------判断系列名称是否存在 开始-------------*/
@@ -111,17 +103,14 @@ series_detail.controller("series_detail",function ($rootScope,$scope,$http,$stat
             $scope.tran_arr.push(value.num);//标签组
           }
         }
-        console.log($scope.tran_arr);
-        $http.post(baseUrl+'/mall/series-edit',{
-          id:+$scope.items.id,
-          series:$scope.ser_name,
-          theme:$scope.tran_arr.join(','),
-          intro:$scope.ser_intro,
-          series_grade:+$scope.series_grade
-        },config).then(function (res) {
-          console.log(res);
-        },function (err) {
-          console.log(err);
+        _ajax.post('/mall/series-edit',{
+            id:+$scope.items.id,
+            series:$scope.ser_name,
+            theme:$scope.tran_arr.join(','),
+            intro:$scope.ser_intro,
+            series_grade:+$scope.series_grade
+        },function (res) {
+            console.log(res);
         })
       }else{
         $scope.submitted = true;
