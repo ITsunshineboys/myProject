@@ -82,7 +82,8 @@ class GoodsOrder extends ActiveRecord
         'a.consignee_mobile',
         'a.order_refer',
         'a.role_id',
-        'z.shipping_type'
+        'z.shipping_type',
+        'u.mobile'
     ];
     const FIELDS_USERORDER_ADMIN = [
         'a.supplier_id',
