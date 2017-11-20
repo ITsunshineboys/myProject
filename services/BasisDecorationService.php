@@ -1701,6 +1701,7 @@ class BasisDecorationService
                 $goods_material[] =   $one;
             }
         }
+        echo 222;
         var_dump($goods_material);exit;
         return $material;
     }
