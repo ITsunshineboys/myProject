@@ -968,6 +968,7 @@ class OwnerController extends Controller
 
         //客餐厅面积
         $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['hall_area']);
+        var_dump(EngineeringUniversalCriterion::find()->all());exit;
         $drawing_room_area = (int)$post['area'] * $drawing_room_particulars['project_value'];
 
         //当地工艺
