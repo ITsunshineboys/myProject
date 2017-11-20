@@ -1740,12 +1740,15 @@ class BasisDecorationService
         $material[] = self::profitMargin($bath_cabinet);
         $material[] = self::profitMargin($squatting_pan);
         $material[] = self::profitMargin($closestool);
+
         $goods_material = [];
         foreach ($material as $one){
             if(isset($one)){
                 $goods_material[] =   $one;
             }
         }
+
+        echo 111;exit;
         var_dump($goods_material);exit;
         
 //        $material = array_filter($material);
