@@ -306,35 +306,35 @@ angular.module("all_controller", ['ngCookies'])
         $scope.search_flag_details = $stateParams.search_flag_details;
         //判断
         $scope.getSearch = function () {
-			if ('' == $scope.data) {
-				return;
-			}
-
-            let arr=[];
-            $http({
-                method:'get',
-                url:baseUrl+"/mall/search?keyword="+$scope.data
-            }).then( function successCallback (response) {
-                console.log(response);
-                $scope.commoditySearch= response.data.data.search.goods;
-                $scope.commoditySearchTwo= response.data.data.search.categories;
-                if($scope.commoditySearch.length > 0) {
-                    for (let [key,item] of response.data.data.search.goods.entries()) { //判断输入框数据和数据库内容匹配
-                        if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
-                            arr.push({"title": item.title,"id":item.id})
+			if ($scope.data != '') {
+                let arr=[];
+                $http({
+                    method:'get',
+                    url:baseUrl+"/mall/search?keyword="+$scope.data
+                }).then( function successCallback (response) {
+                    console.log(response);
+                    $scope.commoditySearch= response.data.data.search.goods;
+                    $scope.commoditySearchTwo= response.data.data.search.categories;
+                    if($scope.commoditySearch.length > 0) {
+                        for (let [key,item] of response.data.data.search.goods.entries()) { //判断输入框数据和数据库内容匹配
+                            if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
+                                arr.push({"title": item.title,"id":item.id})
+                            }
                         }
                     }
-                }
-                if($scope.commoditySearchTwo.length > 0){
-                    for (let [key,item] of response.data.data.search.categories.entries()) { //判断输入框数据和数据库内容匹配
-                        if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
-                            arr.push({"title": item.title,"id":item.id})
+                    if($scope.commoditySearchTwo.length > 0){
+                        for (let [key,item] of response.data.data.search.categories.entries()) { //判断输入框数据和数据库内容匹配
+                            if (item.title.indexOf($scope.data) != -1 && $scope.data != '') {
+                                arr.push({"title": item.title,"id":item.id})
+                            }
                         }
                     }
+                    $scope.search_data = arr;
+                    console.log(response)
+                });
+            }else {
+                   $scope.search_data = []
                 }
-                $scope.search_data = arr;
-                console.log(response)
-            });
         };
         // 点击取消回到首页
         $scope.goPrevIndex = function () {
