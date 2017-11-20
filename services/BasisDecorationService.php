@@ -1742,7 +1742,7 @@ class BasisDecorationService
         $material[] = self::profitMargin($closestool);
         $goods_material = [];
         foreach ($material as $one){
-            if(!empty($one)){
+            if(!isset($one)){
                 $goods_material[] =   $one;
             }
         }
