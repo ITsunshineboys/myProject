@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Apartment;
 use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
@@ -539,6 +540,9 @@ class OwnerController extends Controller
 
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
+        $apartment_where = 'min_area <='.$post['area'] .' and >='.$post['area'];
+        $a = Apartment::find()->asArray()->where($apartment_where)->one();
+        var_dump($a);exit;
         $total_area = $kitchen_area + $toilet_area;
 
 
@@ -786,7 +790,6 @@ class OwnerController extends Controller
 
 //        腻子卧室墙面积
         $putty_bedroom_area = BasisDecorationService::paintedArea($bedroom_area['project_value'], $post['area'], $post['bedroom'], self::WALL_HIGH, self::WALL);
-
 //        腻子客餐厅面积
         $putty_drawing_room_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 //        腻子面积 卧室腻子面积+客厅腻子面积
