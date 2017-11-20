@@ -725,7 +725,9 @@ class BasisDecorationService
         $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods_value_one);
         var_dump($area);
         var_dump($craft['material']);
-        var_dump($goods_value_one);exit;
+        var_dump($goods_value_one);
+        var_dump($putty_cost);
+        exit;
 //        腻子费用：个数×商品价格
         $putty_cost ['cost']  =  $putty_cost['quantity'] * $goods['platform_price'];
         return $putty_cost;
