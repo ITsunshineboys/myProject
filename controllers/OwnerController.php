@@ -1446,7 +1446,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-               'goods' => $material
+               'goods' => Json::decode(Json::encode($material),true),
             ],
         ]);
     }
