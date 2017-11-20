@@ -1734,14 +1734,6 @@ class BasisDecorationService
             }
         }
 
-//        $a = isset($mattress) ? $mattress :new \stdClass ;
-//        $b = isset($cut_off) ? $cut_off :$array_;
-//        $c = isset($sprinkler) ? $sprinkler :$array_;
-//        $d = isset($bath_cabinet) ? $bath_cabinet :$array_;
-//        $e = isset($squatting_pan) ? $squatting_pan :$array_;
-//        $f = isset($closestool) ? $closestool :$array_;
-
-
         $material[] = self::profitMargin($mattress);
         $material[] = self::profitMargin($cut_off);
         $material[] = self::profitMargin($sprinkler);
