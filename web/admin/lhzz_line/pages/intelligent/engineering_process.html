@@ -6,7 +6,7 @@
         <p class="col-md-2" ng-if="!!item1.options">{{item1.title}}</p>
         <p class="col-md-3 enter">
             <select ng-model="item1.value" class="form-control" ng-options="item2 for item2 in item1.options.split(',')" ng-if="!!item1.options"></select>
-            <input ng-if="!item1.options" class="form-control" name="{{item1.name}}" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="item1.flag = !!engineering_process[item1.name].$error" required
+            <input ng-if="!item1.options" class="form-control" name="{{item1.name}}" ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/" ng-blur="item1.flag = !!engineering_process[item1.name].$error" required
                    ng-class="{'error':(engineering_process[item1.name].$invalid&&submitted) || ((engineering_process[item1.name].$error.required || engineering_process[item1.name].$error.pattern)&&item1.flag)}"
                    ng-model="item1.material" type="text">
         </p>

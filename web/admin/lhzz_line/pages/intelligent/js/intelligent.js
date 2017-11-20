@@ -471,7 +471,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     },{
                         name:'小区列表页',
                         link:function(){
-                            $state.go('intelligent.house')
+                            $state.go('intelligent.house_list')
                             $rootScope.crumbs.splice(2,3)
                         }
                     },{
@@ -639,7 +639,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         },{
                             name:'小区列表页',
                             link:function(){
-                                $state.go('intelligent.house')
+                                $state.go('intelligent.house_list')
                                 $rootScope.crumbs.splice(2,3)
                             }
                         },{
@@ -694,7 +694,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         },{
                             name:'小区列表页',
                             link:function(){
-                                $state.go('intelligent.house')
+                                $state.go('intelligent.house_list')
                                 $rootScope.crumbs.splice(2,3)
                             }
                         },{
