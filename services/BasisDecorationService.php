@@ -1753,7 +1753,6 @@ class BasisDecorationService
                 unset( $material[$k] );
         }
 //        $material = array_filter($material);
-        var_dump($material);exit;
 
         return $material;
     }
