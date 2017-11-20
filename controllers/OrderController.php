@@ -410,25 +410,6 @@ class OrderController extends Controller
 
 
     /**
-     * @return string
-     */
-    public function actionGetEffectlist(){
-        $effect=EffectEarnest::find()
-            ->asArray()
-            ->orderBy('create_time desc')
-            ->all();
-        foreach ($effect as $k  =>$v)
-        {
-            $effect[$k]['create_time']=date('Y-m-d H:i',$effect[$k]['create_time']);
-        }
-        return Json::encode([
-            'code' =>  200,
-            'msg'  => 'ok',
-            'data' => $effect
-        ]);
-    }
-
-    /**
      * 样板间支付订单异步返回
      */
     public function actionAlipayeffect_earnstnotify()
@@ -1058,7 +1039,6 @@ class OrderController extends Controller
         }
         if ($type=='all' && !$supplier_id)
                 {
-
                     if($keyword){
                         $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
                     }
@@ -1343,9 +1323,7 @@ class OrderController extends Controller
             if ($type=='all')
             {
                 $where ="  CONCAT(z.order_no,z.goods_name) like '%{$keyword}%'";
-
             }else{
-
                 $where ="  CONCAT(z.order_no,z.goods_name) like '%{$keyword}%' and  ".GoodsOrder::GetTypeWhere($type);
             }
             $where.=" and a.supplier_id={$supplier->id}";
@@ -1379,7 +1357,7 @@ class OrderController extends Controller
 //            $startTime=date('Y-m-d',time());
 //            $endTime=date('Y-m-d',time()+24*60*60);
 //        }
-        $where .=" and supplier_id={$supplier->id}";
+                $where .=" and supplier_id={$supplier->id}";
                 if ($startTime) {
                     $startTime = (int)strtotime($startTime);
                     $startTime && $where .= " and   a.create_time >= {$startTime}";
@@ -1670,7 +1648,6 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         if (!$order_no  || !$sku) {
-
             $code=1000; 
             return Json::encode([
                 'code' => $code,
@@ -1702,7 +1679,6 @@ class OrderController extends Controller
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->asArray()
                 ->one();
-
         }
         if (!$express)
         {
@@ -1777,8 +1753,8 @@ class OrderController extends Controller
      */
     public function actionGetplatformdetail(){
         $request=Yii::$app->request;
-        $order_no=trim(htmlspecialchars($request->post('order_no','')),'');
-        $sku=trim(htmlspecialchars($request->post('sku','')),'');
+        $order_no=trim($request->post('order_no',''));
+        $sku=trim($request->post('sku',''));
         if (!$sku || !$order_no){
             $code=1000;
             return Json::encode([
@@ -4768,7 +4744,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
 
 
     /**

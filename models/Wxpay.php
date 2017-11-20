@@ -95,7 +95,7 @@ class Wxpay  extends ActiveRecord
             $tools = new PayService();
             $input = new WxPayUnifiedOrder();
             $attach=$id;
-            $total_amount=0.01;
+            $total_amount=89;
             $input->SetBody(self::EFFECT_BODY);
             $input->SetAttach($attach);
             $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
