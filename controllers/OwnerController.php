@@ -1015,15 +1015,15 @@ class OwnerController extends Controller
         $high = isset($perject['project_value'])?$perject['project_value']:2.8;
 
 //        卫生间墙面积
-//        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $high, $post['toilet']);
+        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $high, $post['toilet']);
 //        厨房墙面积
         $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $high, $post['kitchen'], 3);
 //        墙砖面积
-//        $wall_area = $toilet_wall_area + $kitchen_wall_area;
-//        var_dump($wall_area);
-//        var_dump($toilet_wall_area);
-//        var_dump($kitchen_wall_area);
-//        exit;
+        $wall_area = $toilet_wall_area + $kitchen_wall_area;
+        var_dump($wall_area);
+        var_dump($toilet_wall_area);
+        var_dump($kitchen_wall_area);
+        exit;
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
 
