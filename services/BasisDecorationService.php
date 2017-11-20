@@ -9,8 +9,6 @@ namespace app\services;
 
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\GoodsAttr;
-use app\models\ProjectView;
-use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 use yii\helpers\Json;
 
 class BasisDecorationService
@@ -223,7 +221,6 @@ class BasisDecorationService
             }
         }
 
-
         //线路个数计算 ,线路费用计算
         $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
         $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
@@ -248,7 +245,7 @@ class BasisDecorationService
      * @param string $crafts
      * @return float
      */
-    public static function waterwayGoods($points,$goods)
+    public static function waterwayGoods($points,$goods,$crafts)
     {
         foreach ($goods as $one) {
             switch ($one) {
@@ -283,18 +280,16 @@ class BasisDecorationService
             }
         }
 
-//        foreach ($crafts as $craft) {
-//            switch ($craft) {
-//                case $craft['project_details'] == self::GOODS_NAME['ppr']:
-//                    $ppr = $craft['material'];
-//                    break;
-//                case $craft['project_details'] == self::GOODS_NAME['pvc']:
-//                    $pvc =  $craft['material'];
-//                    break;
-//            }
-//        }
-        $p = ProjectView::find()->where(['parent_project'=>'防水'])->all();
-        var_dump($p);exit;
+        foreach ($crafts as $craft) {
+            switch ($craft) {
+                case $craft['project_details'] == self::GOODS_NAME['ppr']:
+                    $ppr = $craft['material'];
+                    break;
+                case $craft['project_details'] == self::GOODS_NAME['pvc']:
+                    $pvc =  $craft['material'];
+                    break;
+            }
+        }
 
 
 //           PPR费用：个数×抓取的商品价格
