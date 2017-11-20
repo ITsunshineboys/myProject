@@ -1666,7 +1666,6 @@ angular.module("all_controller", ['ngCookies'])
                                     method: 'get',
                                     url:  baseUrl+'/order/lineplaceorder',
                                     params:{
-
                                         // goods_name: $scope.title,
                                         order_price:$scope.allCost,
                                         goods_num:+$scope.shopNum,
@@ -1679,6 +1678,7 @@ angular.module("all_controller", ['ngCookies'])
                                     }
                                 }).then(function successCallback(response) {
                                     console.log(response);
+
                                     $scope.open_id = response.data.data;
                                     window.location = $scope.open_id
                                 },function (error) {
