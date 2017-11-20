@@ -1391,6 +1391,11 @@ angular.module("all_controller", ['ngCookies'])
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
+        sessionStorage.setItem('mall_id',$stateParams.mall_id);
+        if($scope.mall_id == undefined){
+            $scope.mall_id = sessionStorage.getItem('mall_id')
+        }
+
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
@@ -1476,7 +1481,8 @@ angular.module("all_controller", ['ngCookies'])
                 allCost: response.data.data.allCost,
                 cover_image:  response.data.data.cover_image,
                 icon: response.data.data.icon,
-                goods_num:response.data.data.goods_num
+                goods_num:response.data.data.goods_num,
+
             };
             sessionStorage.setItem('shopInfo', JSON.stringify(shopObj));
         });
@@ -1637,7 +1643,6 @@ angular.module("all_controller", ['ngCookies'])
                 return
             }
             if($scope.show_harvest == true && $scope.show_address == false ){
-
                 //判断收货地址是否在配送范围内
                 $http.post( baseUrl+'/order/judegaddress',{
                     goods_id:+$scope.mall_id,
