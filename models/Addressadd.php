@@ -195,7 +195,7 @@ class Addressadd extends  ActiveRecord
         $tran = Yii::$app->db->beginTransaction();
         try{
             $user_address->default=1;
-            $res =$user_address->save();
+            $res =$user_address->save(false);
             if (!$res){
                 $code=500;
                 $tran->rollBack();
@@ -206,11 +206,11 @@ class Addressadd extends  ActiveRecord
                 ->where("id != {$address_id}")
                 ->andWhere(['uid'=>$user->id])
                 ->all();
-            foreach ($address as $k =>$v)
+            foreach ($address as &$list)
             {
-                $address[$k]->default=0;
-                $res[$k]=$address[$k]->save();
-                if (!$res[$k]){
+                $list->default=0;
+                $res=$list->save(false);
+                if (!$res){
                     $code=500;
                     $tran->rollBack();
                     return $code;
@@ -219,7 +219,7 @@ class Addressadd extends  ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch (Exception $e)
+        }catch (\Exception $e)
         {
             $code=500;
             $tran->rollBack();
