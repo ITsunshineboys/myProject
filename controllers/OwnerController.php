@@ -962,15 +962,15 @@ class OwnerController extends Controller
         $project_view = ProjectView::find()->asArray()->where(['parent_project'=> '面积比例'])->all();
         foreach ($project_view as $value){
             if ($value['project'] == self::ROOM_AREA['kitchen_area']){
-                $kitchen_particulars = $value['project_value'];
+                $kitchen_particulars = $value['project_value'] / 100;
             }
 
             if ($value['project'] == self::ROOM_AREA['toilet_area']){
-                $toilet_particulars = $value['project_value'];
+                $toilet_particulars = $value['project_value'] / 100;
             }
 
             if ($value['project'] == self::ROOM_AREA['hall_area']){
-                $drawing_room_particulars = $value['project_value'];
+                $drawing_room_particulars = $value['project_value'] / 100;
             }
         }
         $kitchen_area = $post['area'] * $kitchen_particulars;
