@@ -1651,6 +1651,7 @@ angular.module("all_controller", ['ngCookies'])
                         $('#order_address_modal').modal('show');
                         // $scope.order_address_model = '#order_address_modal';
                         $scope.order_order = '您好，您的地址超过商品配送范围内，请更换商品或收货地址！'
+                        return
                     }
                     if($scope.code == 200){
                         console.log(baseUrl+'/order/iswxlogin');
@@ -1682,7 +1683,6 @@ angular.module("all_controller", ['ngCookies'])
                                     }
                                 }).then(function successCallback(response) {
                                     console.log(response);
-
                                     $scope.open_id = response.data.data;
                                     window.location = $scope.open_id
                                 },function (error) {

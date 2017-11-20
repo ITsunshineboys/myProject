@@ -55,7 +55,7 @@
                         <p class="comment_two">{{item.subtitle}}</p>
                         <span class="comment_span">销量数：{{item.sold_number}}&nbsp;&nbsp;</span>
                         <span class="comment_span_two">{{item.favourable_comment_rate}}%好评</span>
-                        <p style="margin-top: .8rem;color: #F59C22" class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
+                        <p  class="comment_span_three">{{item.platform_price | currency : '￥'}}</p>
                     </div>
                 </div>
             </div>
@@ -73,9 +73,9 @@
                                 <div class="style_screen" >
                                     <!--f风格选择？-->
                                     <div ng-if="all_goods_style.length!=0">
-                                        <div class="header_font">
+                                        <div class="header_font" data-toggle="collapse" href="#collapseExample_comment" aria-expanded="true" aria-controls="collapseExample_comment">
                                             <span class="style_size">风格选择</span>
-                                            <span class="down_arrow"  data-toggle="collapse" href="#collapseExample_comment" aria-expanded="true" aria-controls="collapseExample_comment">
+                                            <span class="down_arrow"  >
                                           <img src="images/mall_list.png" class="down_list" alt=""/>
                                         </span>
                                         </div>
@@ -94,9 +94,9 @@
 
                                     <!--系列选择-->
                                     <div ng-if="all_goods_series.length!=0">
-                                        <div class="header_font">
+                                        <div class="header_font" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
                                             <span class="style_size">系列选择</span>
-                                            <span class="down_arrow"  data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                                            <span class="down_arrow"  >
                                           <img src="images/mall_list.png" class="down_list" alt=""/>
                                         </span>
                                         </div>

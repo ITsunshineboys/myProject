@@ -130,6 +130,10 @@ a{
 .font_class{
     font-size: 1rem;
     color: #999;
+    line-height: 1.6rem;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 0.6rem;
 }
 .img_box{
     width: 5.3rem;
@@ -157,7 +161,7 @@ a{
 }
 .categorys_content .tab2 .tab_title{
     line-height: 3rem;
-    text-align: center;
+    /*text-align: center;*/
     color:#545454;
     /*background-color: rgba(91, 192, 222, 0.48);*/
     font-size: 1.3rem;
@@ -173,10 +177,11 @@ a{
 }
 .categorys_content .tab2 .sort ul li{
     width: 33.3%;
-    text-align: center;
-    float: left;
+    /*text-align: left;*/
+    display: inline-block;
     padding-right: 1.2rem;
-    /*background-color: #5bc0de;*/
+    margin-bottom: 1.2rem;
+
 }
 .categorys_content .tab2 .sort ul li a{
     width:100%;
