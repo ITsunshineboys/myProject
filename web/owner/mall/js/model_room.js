@@ -97,6 +97,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         }
         $scope.classData = data.pid;    // 材料分类;
         $scope.materials = primary.concat(others);
+        sessionStorage.setItem("materials_bak", JSON.stringify($scope.materials));
     });
 
     // 户型选择
@@ -158,13 +159,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         params.style = obj.id;
         materials();
     };
-
-    let mySwiper = new Swiper("#swiperList", {
-        autoplay: 3000,
-        loop: true,
-        observer: true,
-        pagination: ".swiper-pagination"
-    });
 
     // 申请样板间
     $scope.payDeposit = function () {
@@ -301,18 +295,36 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         $scope.price = 0;               // 原价
         $scope.preferential = 0;        // 优惠价
         let workerMoney = 0;            // 工人费用
-        if (sessionStorage.getItem("materials") === null) {
-            _ajax.get("/owner/case-particulars", params, function (res) {
-                console.log(res, "材料");
-                let data = res.data;
-                if (data === null) {
-                    $scope.activeObj.type = 0;
-                    return;
-                }
+
+        _ajax.get("/owner/case-particulars", params, function (res) {
+            console.log(res, "材料");
+            let data = res.data;
+            if (data === null) {
+                $scope.activeObj.type = 0;
+                return;
+            }
+
+            let params = {  // 系数参数集合
+                list: []
+            };
+            let freightParams = {   // 运费参数集合
+                goods: []
+            };
+            $scope.activeObj.type = 1;
+
+            if (sessionStorage.getItem("materials") === null) {
                 sessionStorage.setItem("backman", JSON.stringify(data.backman_data));
-                $scope.activeObj.type = 1;
                 $scope.roomPicture = data.images.effect_images;
                 sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
+
+                $timeout(function () {
+                    let mySwiper = new Swiper("#swiperList", {
+                        autoplay: 3000,
+                        loop: true,
+                        pagination: ".swiper-pagination"
+                    });
+                });
+
                 let materials = data.goods;     // 材料信息
                 let worker = data.worker_data;  // 工人信息
                 sessionStorage.setItem("worker", JSON.stringify(worker));
@@ -321,12 +333,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 }
                 $scope.price = workerMoney;
                 $scope.preferential = workerMoney;
-                let params = {  // 系数参数集合
-                    list: []
-                };
-                let freightParams = {   // 运费参数集合
-                    goods: []
-                };
+
                 for (let obj of materials) {    // 遍历材料
                     for (let o of $scope.materials) {
                         // 遍历一级分类  判断分类标题是否相等
@@ -354,24 +361,17 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                         obj.totalMoney += parseFloat(o.cost);
                     }
                 }
-
-                // 系数
-                _ajax.post("/owner/coefficient", params, function (res) {
-                    let data = res.data;
-                    $scope.price += parseFloat(data.total_prices);
-                    $scope.preferential += parseFloat(data.special_offer);
-                });
-
-                // 运费
-                _ajax.post("/order/calculation-freight", freightParams, function (res) {
-                    let data = res.data;
-                    $scope.price += parseFloat(data);
-                    $scope.preferential += parseFloat(data);
-                });
-            })
-        } else {
-            $timeout(function () {
+            } else {
                 $scope.roomPicture = JSON.parse(sessionStorage.getItem("roomPicture"));
+
+                $timeout(function () {
+                    let mySwiper = new Swiper("#swiperList", {
+                        autoplay: 3000,
+                        loop: true,
+                        pagination: ".swiper-pagination"
+                    });
+                });
+
                 $scope.materials = JSON.parse(sessionStorage.getItem("materials"));
                 for (let material of $scope.materials) {
                     material.second_level = [];
@@ -382,13 +382,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 }
                 $scope.price = workerMoney;
                 $scope.preferential = workerMoney;
-
-                let params = {  // 系数参数集合
-                    list: []
-                };
-                let freightParams = {   // 运费参数集合
-                    goods: []
-                };
 
                 for (let obj of $scope.materials) {    // 遍历材料
                     for (let o of obj.goods) {
@@ -413,21 +406,20 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                         obj.totalMoney += parseFloat(o.cost);
                     }
                 }
-
-                // 系数
-                _ajax.post("/owner/coefficient", params, function (res) {
-                    let data = res.data;
-                    $scope.price += parseFloat(data.total_prices);
-                    $scope.preferential += parseFloat(data.special_offer);
-                });
-
-                // 运费
-                _ajax.post("/order/calculation-freight", freightParams, function (res) {
-                    let data = res.data;
-                    $scope.price += parseFloat(data);
-                    $scope.preferential += parseFloat(data);
-                });
+            }
+            // 系数
+            _ajax.post("/owner/coefficient", params, function (res) {
+                let data = res.data;
+                $scope.price += parseFloat(data.total_prices);
+                $scope.preferential += parseFloat(data.special_offer);
             });
-        }
+
+            // 运费
+            _ajax.post("/order/calculation-freight", freightParams, function (res) {
+                let data = res.data;
+                $scope.price += parseFloat(data);
+                $scope.preferential += parseFloat(data);
+            });
+        })
     }
 }]);

@@ -441,6 +441,10 @@ button {
     margin-top: 1.2rem;
 }
 
+.carousel img {
+    max-width: 100%;
+}
+
 .application {
     margin-top: 2rem;
     margin-bottom: 1rem;

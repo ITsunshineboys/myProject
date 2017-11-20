@@ -5,6 +5,8 @@ angular.module('all_controller', [])
         sessionStorage.removeItem("roomPicture");
         sessionStorage.removeItem("worker");
         sessionStorage.removeItem("materials");
+        sessionStorage.removeItem("materials_bak");
+        sessionStorage.removeItem("huxing");
         // $scope.baseUrl = '/'
          $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
