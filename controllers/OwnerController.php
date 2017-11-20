@@ -1391,6 +1391,7 @@ class OwnerController extends Controller
         $material['b']   = BasisDecorationService::capacity($goods_price,$post);
         //   家电配套
         $material['c']   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
+        var_dump($material['c']);exit;
         //   移动家具
         $material['d']   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
         //   固定家具

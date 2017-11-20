@@ -1694,15 +1694,14 @@ class BasisDecorationService
         $material [] = self::profitMargin($c);
         $material [] = self::profitMargin($d);
         $material [] = self::profitMargin($e);
-
+var_dump($material);
         $goods_material = [];
         foreach ($material as $one){
             if($one != null){
                 $goods_material[] =   $one;
             }
         }
-        echo 222;
-        var_dump($goods_material);exit;
+       var_dump($goods_material);
         return $material;
     }
 
