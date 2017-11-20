@@ -455,6 +455,9 @@ class BasisDecorationService
             }
         }
 
+        var_dump($series_one);
+        var_dump($length);
+        exit;
         //造型长度=基本造型长度×系列系数2
         return $length* $series_one;
     }
