@@ -734,7 +734,6 @@ class OwnerController extends Controller
         }
         $proportion_where = ['points_id'=>$points['id']];
         $proportion = ProjectView::findByAll([],$proportion_where);
-        var_dump($proportion);
         if ($proportion == null){
             $code = 1060;
             return Json::encode([
@@ -757,7 +756,7 @@ class OwnerController extends Controller
             }
         }
         //卧室底漆面积
-        $bedroom_primer_area = BasisDecorationService::paintedArea($post['area'],$kitchen_area['project_value'],$post['bedroom'],self::WALL_HIGH,self::WALL);
+        $bedroom_primer_area = BasisDecorationService::paintedArea($post['area'],$bedroom_area['project_value'],$post['bedroom'],self::WALL_HIGH,self::WALL);
         echo 111;exit;
 
         //客餐厅底漆面积
