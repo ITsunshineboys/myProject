@@ -963,12 +963,12 @@ class OwnerController extends Controller
 
         //卫生间面积
         $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['toilet'],self::ROOM_AREA['toilet_area']);
-        $toilet_area = (int)$post['area'] * (int)$toilet_particulars['project_value'];
+        $toilet_area = (int)$post['area'] * $toilet_particulars['project_value'];
 
 
         //客餐厅面积
         $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['hall_area']);
-        $drawing_room_area = (int)$post['area'] * (int)$drawing_room_particulars['project_value'];
+        $drawing_room_area = (int)$post['area'] * $drawing_room_particulars['project_value'];
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['tiler'], $post['city']);
