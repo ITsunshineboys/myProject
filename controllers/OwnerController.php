@@ -1400,7 +1400,7 @@ class OwnerController extends Controller
         //   主材
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
 
-        
+
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
@@ -1440,7 +1440,7 @@ class OwnerController extends Controller
         }
 
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
+        $material[][] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
         return Json::encode([
             'code' => 200,
