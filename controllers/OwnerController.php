@@ -1382,7 +1382,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
+        $material = [];
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         //   生活配套
