@@ -976,11 +976,11 @@ class OwnerController extends Controller
 
         $perject = ProjectView::find()->where(['and',['parent_project'=>'泥作'],['project'=>$post['high']]])->asArray()->one();
         $high = isset($perject)?$perject:2.8;
-        var_dump($high);exit;
+
 //        卫生间墙面积
-        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $wall_height, $post['toilet']);
+        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $high, $post['toilet']);
 //        厨房墙面积
-        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $wall_height, $post['kitchen'], 3);
+        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $high, $post['kitchen'], 3);
 //        墙砖面积
         $wall_area = $toilet_wall_area + $kitchen_wall_area;
 //        墙砖天数
