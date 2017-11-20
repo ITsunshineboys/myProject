@@ -25,9 +25,9 @@
                     <div class="row">
                         <p class="col-md-2">层高高度</p>
                         <p class="col-md-2">贴墙砖高度</p>
-                    </div>
+                    </div>  
                     <div class="row" ng-repeat="item in main_item">
-                        <p class="col-md-2">{{item.project}}</p>
+                        <p class="col-md-2" style="margin: 5px 0 !important;">{{item.project}}</p>
                         <p class="col-md-2">
                             <input type="text" name="height{{index}}" class="form-control" required ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/"
                                    ng-blur="item.flag = !!else_general_manage['height'+index].$error " autocomplete="off"
