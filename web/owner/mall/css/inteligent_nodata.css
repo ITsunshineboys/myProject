@@ -385,8 +385,8 @@ input[type="checkbox"]:checked + span {
 input[type='radio'] ~ img{
     position: absolute;
     top: .4rem !important;
-    /* left: -2px!important; */
-    display: none;
+     left: -2px!important;
+    /*display: none;*/
 }
 .storey_ul input[type='radio'] ~ img{
     position: absolute;
