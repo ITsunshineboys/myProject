@@ -1388,13 +1388,13 @@ class OwnerController extends Controller
         //   生活配套
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         //   基础装修
-        $material[][]   = BasisDecorationService::capacity($goods_price,$post);
+        $material[]   = BasisDecorationService::capacity($goods_price,$post);
         //   家电配套
         $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
         //   移动家具
         $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
         //   固定家具
-        $material[][]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        $material[]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
         //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         //   主材
@@ -1418,7 +1418,7 @@ class OwnerController extends Controller
                     $condition_stairs [] = $one_stairs_price;
                 }
             }
-            $material[][] = BasisDecorationService::profitMargin($condition_stairs);
+            $material[] = BasisDecorationService::profitMargin($condition_stairs);
         }
 
 
