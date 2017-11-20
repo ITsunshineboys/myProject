@@ -1769,7 +1769,7 @@ class BasisDecorationService
         $material [] = self::profitMargin($f);
 
         foreach ($material as $one_material){
-            if ($one_material == []){
+            if ($one_material == null){
                 unset($one_material);
             }
         }
