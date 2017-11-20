@@ -80,6 +80,9 @@ section{
     padding-left: 1.2rem;
     position: relative;
 }
+.a_filter{
+    color: #b1b1b1;
+}
 .memo_pad li img{
     vertical-align: initial;
 }
