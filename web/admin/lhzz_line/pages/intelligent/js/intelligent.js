@@ -2366,6 +2366,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.is_cancel = true
                 $scope.cur_title = '是否删除'
+                $scope.cancel_delete = function () {
+                    $uibModalInstance.close()
+                    $scope.is_cancel = false
+                }
                 $scope.common_house = function () {
 
                         _ajax.post('/quote/homepage-delete',{
