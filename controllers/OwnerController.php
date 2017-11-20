@@ -758,13 +758,15 @@ class OwnerController extends Controller
         //卧室底漆面积
         $bedroom_primer_area = BasisDecorationService::paintedArea($post['area'],$bedroom_area['project_value'],$post['bedroom'],self::WALL_HIGH,self::WALL);
 
-
         //客餐厅底漆面积
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
-        var_dump($primer_area);exit;
+        var_dump($primer_area);
+        var_dump($bedroom_primer_area);
+        var_dump($drawing_room_primer_area);
+        exit;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
         $primer_day = $primer_area / $primer;
 
