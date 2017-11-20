@@ -1012,8 +1012,13 @@ class OwnerController extends Controller
         $wall_area = $toilet_wall_area + $kitchen_wall_area;
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
+
 //        地砖面积
         $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area;
+        var_dump($drawing_room_area);
+        var_dump($toilet_area);
+        var_dump($kitchen_area);
+        exit;
 //        地砖天数
         $floor_tile_day = $floor_tile_area / $geostrophy_day_area;
 //        贴砖天数
