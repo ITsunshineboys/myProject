@@ -1733,13 +1733,19 @@ class BasisDecorationService
 
             }
         }
+        $a = isset($mattress) ? $mattress :[];
+        $b = isset($cut_off) ? $cut_off :[];
+        $c = isset($sprinkler) ? $sprinkler :[];
+        $d = isset($bath_cabinet) ? $bath_cabinet :[];
+        $e = isset($squatting_pan) ? $squatting_pan :[];
+        $f = isset($closestool) ? $closestool :[];
 
-        $material[] = self::profitMargin($mattress);
-        $material[] = self::profitMargin($cut_off);
-        $material[] = self::profitMargin($sprinkler);
-        $material[] = self::profitMargin($bath_cabinet);
-        $material[] = self::profitMargin($squatting_pan);
-        $material[] = self::profitMargin($closestool);
+        $material[] = self::profitMargin($a);
+        $material[] = self::profitMargin($b);
+        $material[] = self::profitMargin($c);
+        $material[] = self::profitMargin($d);
+        $material[] = self::profitMargin($e);
+        $material[] = self::profitMargin($f);
 
         $goods_material = [];
         foreach ($material as $one){
@@ -1748,6 +1754,7 @@ class BasisDecorationService
             }
         }
 
+        echo 111;
         var_dump($goods_material);exit;
         
 //        $material = array_filter($material);
