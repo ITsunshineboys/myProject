@@ -450,7 +450,7 @@ class OwnerController extends Controller
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //材料总费用
-        $material_price = BasisDecorationService::waterwayGoods($points['count'], $waterway_current, $craft);
+        $material_price = BasisDecorationService::waterwayGoods($points['count'], $waterway_current);
         $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
 
         return Json::encode([
