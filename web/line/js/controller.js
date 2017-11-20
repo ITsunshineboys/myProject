@@ -135,8 +135,8 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback(response) {
             console.log(response);
             $scope.swiper_img = response.data.data.carousel;
-            $scope.carousel_id = response.data.data.carousel[0].id;
-            console.log($scope.carousel_id);
+            // $scope.carousel_id = response.data.data.carousel[0].id;
+            // console.log($scope.carousel_id);
             //轮播变量
             $timeout(function () {
                 var mySwiper = new Swiper('#swiperList', {
@@ -160,9 +160,10 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击轮播图跳转
         $scope.getDetails = function (item) {
+            console.log(item.id);
             sessionStorage.setItem('wxflag',true);
             $http.post(baseUrl+'/mall/recommend-click-record',{
-                recommend_id:$scope.carousel_id
+                recommend_id:item.id
             },config).then(function (response) {
                 console.log(response)
             });
@@ -183,18 +184,20 @@ angular.module("all_controller", ['ngCookies'])
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
             for(let [key,value] of  $scope.commodity.entries()) {
-                $scope.recommend_id = value.id
+                // console.log(value.id);
+                // $scope.recommend_id = value.id
             }
-            console.log( $scope.commodity);
+            // console.log( $scope.commodity);
             // console.log( $scope.mall_id);
 
         });
         // 点击推荐跳转商品详情
         $scope.getProduct = function (m) {
+            console.log($scope.recommend_id);
             sessionStorage.setItem('wxflag',true);
-            console.log(m);
+            console.log(m.id);
             $http.post( baseUrl+'/mall/recommend-click-record',{
-                recommend_id:+$scope.recommend_id
+                recommend_id:m.id
             },config).then(function (response){
                 console.log(response)
             });
@@ -207,7 +210,7 @@ angular.module("all_controller", ['ngCookies'])
                 console.log($scope.id);
             }else {              //链接类型
                 console.log(222);
-                window.location = m.url
+                window.location.href = m.url
             }
         };
     })
