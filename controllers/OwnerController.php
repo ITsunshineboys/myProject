@@ -51,7 +51,7 @@ class OwnerController extends Controller
     const STRING_MATERIAL = ['电线', '线管', '底盒'];
     const WATERWAY_MATERIAL = ['PPR水管', 'PVC管'];
     const WATERPROOF_MATERIAL = ['防水涂料'];
-    const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆'];
+    const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆','木工板'];
     const LATEX_MATERIAL = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
     const TILER_MATERIAL = ['水泥', '自流平', '河沙'];
     const BACKMAN_MATERIAL = ['水泥','河沙','空心砖'];
@@ -481,7 +481,6 @@ class OwnerController extends Controller
         $worker_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERPROOF_DAY_AREA;
 
 
-
         //防水所需材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name";
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WATERPROOF_MATERIAL,$select);
@@ -503,6 +502,8 @@ class OwnerController extends Controller
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
         $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
+        
+        var_dump($p);exit;
         if (!$p){
             $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         }
@@ -522,7 +523,7 @@ class OwnerController extends Controller
         $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
         $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->one();
         if (!$toilet_p){
-            $_toilet_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+            $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
         }
         if ($toilet){
             foreach ($toilet as $one_toilet){
@@ -552,7 +553,6 @@ class OwnerController extends Controller
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$worker_price,$worker_day_points);
-//        $labor_all_cost['price'] = ceil($total_area / $worker_kind_details['quantity']) * $waterproof_labor['univalence'];
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['waterproof_worker'];
 
         //材料总费用
@@ -656,9 +656,12 @@ class OwnerController extends Controller
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
+        var_dump($plasterboard_cost);exit;
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //丝杆费用
+        $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
+        //木工板
         $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
