@@ -1,6 +1,7 @@
 <?php
  
 namespace app\controllers;
+use app\models\OrderAfterSaleImage;
 use app\models\Test;
 use Yii;
 use app\models\OrderPlatForm;
@@ -817,6 +818,7 @@ class OrderController extends Controller
                 'data'=>$data
             ]);
         }
+
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action
@@ -4667,32 +4669,52 @@ class OrderController extends Controller
             ]);
         }
     }
-//    public function actionDelData()
-//    {
-//        $request=Yii::$app->request;
-////        $order_no=$request->post('order_no');
-//        $GoodsOrder=GoodsOrder::Find()->where(['order_refer'=>2])->all();
-//        foreach ($GoodsOrder as &$list)
-//        {
-//            $list->delete();
-//            $OrderGoods=OrderGoods::find()->where(['order_no'=>$list->order_no])->all();
-//            foreach ($OrderGoods as &$OrderGood)
-//            {
-//                $OrderGood->delete();
-//            }
-//            $UserAccessDetail=UserAccessdetail::find()->where(['order_no'=>$list->order_no])->all();
-//            foreach ($UserAccessDetail as &$UserAccess)
-//            {
-//                $UserAccess->delete();
-//            }
-//            $express=Express::find()->where(['order_no'=>$list->order_no])->all();
-//            foreach ($express as &$expres)
-//            {
-//                $expres->delete();
-//            }
-//        }
-//
-//    }
+
+    public function actionDelData()
+    {
+        $request=Yii::$app->request;
+//        $order_no=$request->post('order_no');
+        $GoodsOrder=GoodsOrder::Find()->all();
+        foreach ($GoodsOrder as &$list)
+        {
+            $list->delete();
+            $OrderGoods=OrderGoods::find()->all();
+            foreach ($OrderGoods as &$OrderGood)
+            {
+                $OrderGood->delete();
+            }
+            $UserAccessDetail=UserAccessdetail::find()->all();
+            foreach ($UserAccessDetail as &$UserAccess)
+            {
+                $UserAccess->delete();
+            }
+            $express=Express::find()->all();
+            foreach ($express as &$expres)
+            {
+                $expres->delete();
+            }
+            $orderPlatForm=OrderPlatForm::find()->all();
+            foreach ($orderPlatForm as &$orderPlatForms)
+            {
+                $orderPlatForms->delete();
+            }
+            $orderaftersale=OrderAfterSale::find()->all();
+            foreach ($orderaftersale as &$orderaftersales)
+            {
+                $orderaftersales->delete();
+            }
+            $orderaftersaleimage=OrderAfterSaleImage::find()->all();
+            foreach ($orderaftersaleimage as &$orderaftersaleimages)
+            {
+                $orderaftersaleimages->delete();
+            }
+            $orderRefunds=OrderRefund::find()->all();
+            foreach ($orderRefunds as &$orderRefund)
+            {
+                $orderRefund->delete();
+            }
+        }
+    }
 
     /**
      * 去付款-微信app支付
@@ -4981,7 +5003,6 @@ class OrderController extends Controller
                    $Goods[]=$Good->id;
                }
            }
-
         }
         $tran = Yii::$app->db->beginTransaction();
         try{
@@ -5018,13 +5039,14 @@ class OrderController extends Controller
                 'msg' => 'ok'
             ]);
         }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
+            $tran->rollBack();             $code=500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }
+
+
 
 }
