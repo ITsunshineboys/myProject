@@ -682,7 +682,7 @@ class OrderController extends Controller
      */
     public function  actionLineplaceorder(){
         $request=Yii::$app->request;
-        $subject=trim($request->get('goods_name'));
+//        $subject=trim($request->get('goods_name'));
         //付款金额，必填
         $total_amount =trim($request->get('order_price'));
         $goods_id=trim($request->get('goods_id'));
@@ -715,7 +715,7 @@ class OrderController extends Controller
             'goods_id'=>$goods_id,
             'goods_num'=>$goods_num,
             'order_price'=>$total_amount,
-            'goods_name'=>$subject,
+//            'goods_name'=>$subject,
             'pay_name'=>$pay_name,
             'supplier_id'=>$supplier_id,
             'freight'=>$freight,
@@ -748,7 +748,7 @@ class OrderController extends Controller
                 'goods_id'=> Yii::$app->session['goods_id'],
                 'goods_num'=> Yii::$app->session['goods_num'],
                 'order_price'=> Yii::$app->session['order_price'],
-                'goods_name'=> Yii::$app->session['goods_name'],
+//                'goods_name'=> Yii::$app->session['goods_name'],
                 'pay_name'=> Yii::$app->session['pay_name'],
                 'supplier_id'=> Yii::$app->session['supplier_id'],
                 'freight'=> Yii::$app->session['freight'],
@@ -762,7 +762,7 @@ class OrderController extends Controller
                     || !Yii::$app->session['goods_id']
                     || !Yii::$app->session['goods_num']
                     || !Yii::$app->session['order_price']
-                    || !Yii::$app->session['goods_name']
+//                    || !Yii::$app->session['goods_name']
                     || !Yii::$app->session['pay_name']
                     || !Yii::$app->session['supplier_id']
                     || !Yii::$app->session['freight']

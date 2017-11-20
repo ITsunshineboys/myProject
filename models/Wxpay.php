@@ -54,7 +54,8 @@ class Wxpay  extends ActiveRecord
         $input = new WxPayUnifiedOrder();
         $orders['return_insurance']=0;
         $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
-        $input->SetBody($orders['body']);
+        $goods=Goods::findOne($orders['goods_id']);
+        $input->SetBody($goods->title);
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
         $input->SetTotal_fee($orders['total_amount']*100);
