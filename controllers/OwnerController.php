@@ -975,7 +975,8 @@ class OwnerController extends Controller
 
 
         $perject = ProjectView::find()->where(['and',['parent_project'=>'泥作'],['project'=>$post['high']]])->asArray()->one();
-        var_dump($perject);exit;
+        $high = isset($perject)?$perject:2.8;
+        var_dump($high);exit;
 //        卫生间墙面积
         $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $wall_height, $post['toilet']);
 //        厨房墙面积
