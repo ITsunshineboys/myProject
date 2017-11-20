@@ -560,29 +560,30 @@ class BasisDecorationService
                 $plasterboard = null;
             }
         }
-//        foreach ($crafts as $craft) {
-//           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_sculpt']){
-//               $plasterboard_sculpt = $craft['material'];
-//           }
-//           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_area']){
-//               $plasterboard_area = $craft['material'];
-//           }
-//           if ($craft['project_details'] == self::CARPENTRY_DETAILS['tv_plasterboard']){
-//               $tv_plasterboard  = $craft['material'];
-//           }
-//        }
-        $p = ProjectView::find()->asArray()->where(['parent_project'=>'木作'])->all();
-        foreach ($p as $p_v){
-            if ($p_v['project'] == '造型长度'){
-                $plasterboard_sculpt = $p_v['project_value'];
-            }
-            if ($p_v['project'] == '平顶面积'){
-                $plasterboard_area = $p_v['project_value'];
-            }
+        foreach ($crafts as $craft) {
+           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_sculpt']){
+               $plasterboard_sculpt = $craft['material'];
+           }
+           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_area']){
+               $plasterboard_area = $craft['material'];
+           }
+           if ($craft['project_details'] == self::CARPENTRY_DETAILS['tv_plasterboard']){
+               $tv_plasterboard  = $craft['material'];
+           }
         }
+//        $p = ProjectView::find()->asArray()->where(['parent_project'=>'木作'])->all();
+//        foreach ($p as $p_v){
+//            if ($p_v['project'] == '造型长度'){
+//                $plasterboard_sculpt = $p_v['project_value'];
+//            }
+//            if ($p_v['project'] == '平顶面积'){
+//                $plasterboard_area = $p_v['project_value'];
+//            }
+//        }
 
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_sculpt + $flat_area / $plasterboard_area + 1);
+        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_sculpt + $flat_area / $plasterboard_area + $tv_plasterboard);
+        var_dump($plasterboard_cost);exit;
 
 //            石膏板费用：个数×商品价格
         $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
