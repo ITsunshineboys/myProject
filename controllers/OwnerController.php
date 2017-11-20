@@ -664,8 +664,8 @@ class OwnerController extends Controller
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //丝杆费用
         $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-        //木工板
-        $blockboard = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
+//        //木工板
+//        $blockboard = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //材料费用
         $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
         $material_total = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost);
@@ -936,10 +936,11 @@ class OwnerController extends Controller
                     break;
             }
         }
-        //泥作面积
+        //泥作面积    mudMakeArea
         //厨房面积
         $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['kitchen'],self::ROOM_AREA['kitchen_area']);
         $kitchen_area = $post['area'] * $kitchen_particulars['project_value'];
+        var_dump($kitchen_area);exit;
         //卫生间面积
         $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['toilet'],self::ROOM_AREA['toilet_area']);
         $toilet_area = $post['area'] * $toilet_particulars['project_value'];
