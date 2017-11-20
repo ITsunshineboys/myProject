@@ -4,7 +4,7 @@
 /*已下架 编辑*/
 
 var offsale_edit = angular.module("offsaleeditModule",['ngFileUpload']);
-offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http,Upload,$rootScope) {
+offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http,Upload,$rootScope,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -54,47 +54,36 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 
 	/*分类所属 第一个下拉框的值*/
 	$scope.findParentClass =  (function () {
-		$http({
-			method: "get",
-			url: baseUrl+"/mall/categories-manage-admin",
-		}).then(function (res) {
-			$scope.firstclass = res.data.data.categories.splice(1);
-			for(let i=0;i<$scope.firstclass.length;i++){
-				if($scope.firstclass[i].id==$scope.finalpatharr[0]){
-					$scope.firstselect=$scope.firstclass[i].id;
-					break;
-				}
-			}
-		})
+        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+            $scope.firstclass = res.data.categories.splice(1);
+            for(let i=0;i<$scope.firstclass.length;i++){
+                if($scope.firstclass[i].id==$scope.finalpatharr[0]){
+                    $scope.firstselect=$scope.firstclass[i].id;
+                    break;
+                }
+            }
+        })
 	})()
 
 	/*二级默认*/
 	$scope.subClassDefault = (function () {
-		$http({
-			method: "get",
-			url: baseUrl+"/mall/categories-manage-admin",
-			params: {pid: $scope.finalpatharr[0]}
-		}).then(function (res) {
-			$scope.secondclass = res.data.data.categories.splice(1);
-			for(let i=0;i<$scope.secondclass.length;i++){
-				if($scope.secondclass[i].id==$scope.finalpatharr[1]){
-					$scope.secselect=$scope.secondclass[i].id;
-					break;
-				}
-			}
-		})
+		_ajax.get('/mall/categories-manage-admin',{pid: $scope.finalpatharr[0]},function (res) {
+            $scope.secondclass = res.data.categories.splice(1);
+            for(let i=0;i<$scope.secondclass.length;i++){
+                if($scope.secondclass[i].id==$scope.finalpatharr[1]){
+                    $scope.secselect=$scope.secondclass[i].id;
+                    break;
+                }
+            }
+        })
 	})()
 
 	/*一级选择后的二级*/
 	$scope.subClass = function (obj) {
-		$http({
-			method: "get",
-			url: baseUrl+"/mall/categories-manage-admin",
-			params: {pid: obj}
-		}).then(function (response) {
-			$scope.secondclass = response.data.data.categories.splice(1);
-			$scope.secselect = $scope.secondclass[0].id
-		})
+		_ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+            $scope.secondclass = res.data.categories.splice(1);
+            $scope.secselect = $scope.secondclass[0].id
+        })
 	}
 	//上传图片
 	$scope.data = {
@@ -146,18 +135,16 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 
 			let url = baseUrl+"/mall/category-edit";
 			let data =  {id:+$scope.item.id,title:$scope.item.title,pid:+pid,icon:$scope.classicon||$stateParams.item.icon,description:description,offline_reason:$scope.item.offline_reason};
-			$http.post(url,data,config).then(function (res) {
-                // console.log(res);
-                $("#save_tishi").modal("show");
-				if(res.data.code==200){
-                    $scope.save_msg="保存成功"
-                    $scope.success_flag = true;
-				}else if(res.data.code==1006){
-                    $scope.save_msg = res.data.msg;
-					$scope.success_flag = false;
-				}
-			})
-
+			 _ajax.post('/mall/category-edit',data,function (res) {
+                 if(res.data.code==200){
+                     $scope.save_msg="保存成功"
+                     $scope.success_flag = true;
+                 }else if(res.data.code==1006){
+                     $scope.save_msg = res.data.msg;
+                     $scope.success_flag = false;
+                 }
+                 $("#save_tishi").modal("show");
+             })
 		}
 	}
 

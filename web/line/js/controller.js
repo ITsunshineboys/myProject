@@ -183,7 +183,7 @@ angular.module("all_controller", ['ngCookies'])
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
             for(let [key,value] of  $scope.commodity.entries()) {
-                // console.log(value.url)
+                $scope.recommend_id = value.id
             }
             console.log( $scope.commodity);
             // console.log( $scope.mall_id);
@@ -193,6 +193,11 @@ angular.module("all_controller", ['ngCookies'])
         $scope.getProduct = function (m) {
             sessionStorage.setItem('wxflag',true);
             console.log(m);
+            $http.post( baseUrl+'/mall/recommend-click-record',{
+                recommend_id:+$scope.recommend_id
+            },config).then(function (response){
+                console.log(response)
+            });
             if(m.from_type == 1){ //商铺类型
                 console.log(11);
                 $scope.mall_id = m.url.split('=')[1];
