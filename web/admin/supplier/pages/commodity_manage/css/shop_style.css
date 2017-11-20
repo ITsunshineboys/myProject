@@ -232,7 +232,10 @@ input::-webkit-inner-spin-button{
     justify-content: space-around;
     flex-wrap: wrap;
 }
-
+.margin_left{
+    margin-left: 85px;
+    color:red;
+}
 .dl_active3{
     background-color: #E6E9F0!important;
 }

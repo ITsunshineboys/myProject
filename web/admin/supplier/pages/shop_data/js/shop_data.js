@@ -2,7 +2,7 @@ angular.module('shop_data_module',[])
 .controller('shop_data_ctrl',function ($rootScope,$scope,$http,_ajax) {
     $rootScope.crumbs = [{
         name: '店铺数据',
-        icon: 'icon-shangchengguanli',
+        icon: 'icon-shuju',
     }];
 
     $scope.myng=$scope;

@@ -11,7 +11,7 @@ let supplier_index = angular.module("supplier_index",[])
     $scope.dt2 = $filter("date")($scope.dt1, "yyyy-MM-dd");
       $rootScope.crumbs = [{
           name: '首页',
-          icon: 'icon-shangchengguanli',
+          icon: 'icon-shouye',
       }];
 
   });
