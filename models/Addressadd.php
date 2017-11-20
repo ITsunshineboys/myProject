@@ -115,7 +115,7 @@ class Addressadd extends  ActiveRecord
      * @param $user_id
      * @return int
      */
-    public static function UserAddressAdd($district_code,$region,$consignee,$mobile,$user_id)
+    public static function UserAddressAdd($district_code,$region,$consignee,$mobile,$user_id,$default)
     {
             $address_count=self::find()->where(['uid'=>$user_id])->count();
             if ($address_count>=6){
@@ -123,31 +123,51 @@ class Addressadd extends  ActiveRecord
                 return $code;
             }
             $tran = Yii::$app->db->beginTransaction();
+
             try{
-                $address=self::find()->where(['uid'=>$user_id])->all();
-                foreach ($address as $k =>$v)
+
+                if ($default==1)
                 {
-                    $address[$k]->default=0;
-                    $res[$k]=$address[$k]->save();
-                    if (!$res[$k]){
+                    $address=self::find()->where(['uid'=>$user_id])->all();
+                    foreach ($address as $k =>$v)
+                    {
+                        $address[$k]->default=0;
+                        $res[$k]=$address[$k]->save(false);
+                        if (!$res[$k]){
+                            $code=500;
+                            $tran->rollBack();
+                            return $code;
+                        }
+                    }
+                    $user_address=new self;
+                    $user_address->consignee=$consignee;
+                    $user_address->region=$region;
+                    $user_address->mobile=$mobile;
+                    $user_address->district=$district_code;
+                    $user_address->uid=$user_id;
+                    $user_address->default=1;
+                    $res =$user_address->save(false);
+                    if (!$res){
+                        $code=500;
+                        $tran->rollBack();
+                        return $code;
+                    }
+                }else{
+                    $user_address=new self;
+                    $user_address->consignee=$consignee;
+                    $user_address->region=$region;
+                    $user_address->mobile=$mobile;
+                    $user_address->district=$district_code;
+                    $user_address->uid=$user_id;
+                    $user_address->default=0;
+                    $res =$user_address->save(false);
+                    if (!$res){
                         $code=500;
                         $tran->rollBack();
                         return $code;
                     }
                 }
-                $user_address=new self;
-                $user_address->consignee=$consignee;
-                $user_address->region=$region;
-                $user_address->mobile=$mobile;
-                $user_address->district=$district_code;
-                $user_address->uid=$user_id;
-                $user_address->default=1;
-                $res =$user_address->save();
-                if (!$res){
-                    $code=500;
-                    $tran->rollBack();
-                    return $code;
-                }
+
                 $tran->commit();
                 $code=200;
                 return $code;
