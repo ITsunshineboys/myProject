@@ -839,12 +839,12 @@ class OwnerController extends Controller
             }
         }
 
-//        腻子费用
-        $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft,$putty_area);
-//        底漆费用
-        $primer_cost = BasisDecorationService::paintedCost($series_and_style['primer'], $primer_craft,$primer_area);
-//        乳胶漆面漆费用
-        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'],$finishing_coat_craft,$finishing_coat_area);
+////        腻子费用
+//        $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft,$putty_area);
+////        底漆费用
+//        $primer_cost = BasisDecorationService::paintedCost($series_and_style['primer'], $primer_craft,$primer_area);
+////        乳胶漆面漆费用
+//        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'],$finishing_coat_craft,$finishing_coat_area);
 //        阴角线费用
         $concave_line_cost = BasisDecorationService::paintedCost($series_and_style['concave_line'],$concave_line_craft,$concave_line_length);
 
