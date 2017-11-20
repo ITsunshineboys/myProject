@@ -220,15 +220,11 @@ class BasisDecorationService
                     break;
             }
         }
-
-        var_dump($points); echo 111;
-        var_dump($material);echo 222;
-        var_dump($goods_value);
+        
 
         //线路个数计算 ,线路费用计算
         $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
         $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
-        var_dump($electricity);exit;
 
         //线管个数计算,线管费用计算
         $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
