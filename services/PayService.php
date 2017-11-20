@@ -87,7 +87,7 @@ class PayService
             Yii::$app->session['buyer_message']=$orders['buyer_message'];
             Yii::$app->session['total_amount']=$orders['total_amount'];
             //触发微信返回code码
-            $baseUrl = urlencode("http://ac.cdlhzz.cn/order/wx-line-pay");
+            $baseUrl = urlencode("http://".$_SERVER['SERVER_NAME']."/order/wx-line-pay");
             $url = $this->__CreateOauthUrlForCode($baseUrl);
             return $url;
     }
@@ -95,7 +95,7 @@ class PayService
 
     public function  FindOpenId()
     { 
-        $baseUrl = urlencode("http://test.cdlhzz.cn/order/find-open-id");
+        $baseUrl = urlencode("http://".$_SERVER['SERVER_NAME']."/order/find-open-id");
         $url = $this->__CreateOauthUrlForCode($baseUrl);
         header("Location:".$url);
     }
