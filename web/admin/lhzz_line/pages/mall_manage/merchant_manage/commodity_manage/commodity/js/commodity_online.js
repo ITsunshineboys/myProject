@@ -1,15 +1,7 @@
 /**
  * Created by Administrator on 2017/10/25/025.
  */
-app.controller('commodity_online', ['$scope', '$stateParams','$http', function ($scope, $stateParams,$http) {
-
-
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    }
+app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', function (_ajax,$scope, $stateParams,$http) {
     let sortway = "online_time"; //默认按上架时间降序排列
     $scope.storeid = $stateParams.id //商家id
     /*默认参数配置*/
@@ -145,16 +137,13 @@ app.controller('commodity_online', ['$scope', '$stateParams','$http', function (
 
     /*单个商品确认下架*/
     $scope.sureGoodOffline = function () {
-        let url = baseUrl+"/mall/goods-status-toggle";
         let data = {id: Number(tempoffgoodid), offline_reason:$scope.offline_reason||''};
-        $http.post(url, data, config).then(function (res) {
-            if(res.data.code==200){
-                $scope.offline_reason = '';
-                $scope.pageConfig.currentPage = 1;
-                $scope.keyword = '';
-                $scope.params.keyword = '';
-                tableList()
-            }
+        _ajax.post('/mall/goods-status-toggle',data,function (res) {
+            $scope.offline_reason = '';
+            $scope.pageConfig.currentPage = 1;
+            $scope.keyword = '';
+            $scope.params.keyword = '';
+            tableList()
         })
     }
 
@@ -166,15 +155,13 @@ app.controller('commodity_online', ['$scope', '$stateParams','$http', function (
     /*确认批量下架*/
     $scope.surepiliangoffline = function () {
         let batchoffids = $scope.table.roles.join(',');
-        let url = baseUrl+"/mall/goods-disable-batch";
         let data = {ids:batchoffids, offline_reason: $scope.batch_offlinereason};
-        $http.post(url, data, config).then(function (res) {
+        _ajax.post('/mall/goods-disable-batch',data,function (res) {
             $scope.batch_offlinereason = ''
             $scope.pageConfig.currentPage = 1;
             $scope.keyword = '';
             $scope.params.keyword = '';
             tableList()
-
         })
     }
 
@@ -188,17 +175,11 @@ app.controller('commodity_online', ['$scope', '$stateParams','$http', function (
     /*列表数据获取*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/goods-list-admin",
-            params: $scope.params,
-        }).then(function (res) {
+        _ajax.get('/mall/goods-list-admin',$scope.params,function (res) {
             console.log(res);
-            $scope.tabledetail = res.data.data.goods_list_admin.details;
-            $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
+            $scope.tabledetail = res.data.goods_list_admin.details;
+            $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })
     }
-
-
 }]);
 ;

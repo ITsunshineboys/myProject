@@ -3,7 +3,7 @@
  */
 /*商家管理*/
 var store_mag = angular.module("storemagModule", []);
-store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
+store_mag.controller("store_mag", function ($scope, $http,$rootScope,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -12,12 +12,6 @@ store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
         name: '商家管理',
     }];
 
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
     let tempshop_no;
     let sortway = 'sales_amount_month';
     firstClass();
@@ -36,15 +30,12 @@ store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
     }
     sortReset();
 
-
-
     /*分页配置*/
     $scope.pageConfig = {
         showJump: true,
         itemsPerPage: 12,
         currentPage: 1,
         onChange: function () {
-            // $scope.keyword = '';
             tableList();
         }
     }
@@ -57,36 +48,25 @@ store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
     /*分类选择下拉框*/
     //一级下拉框
     function firstClass() {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-        }).then(function (response) {
-            $scope.firstclass = response.data.data.categories;
-            $scope.firstselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+            $scope.firstclass = res.data.categories;
+            $scope.firstselect = res.data.categories[0].id;
         })
     }
 
     //二级下拉框
     $scope.subClass = function (obj) {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-            params: {pid: obj}
-        }).then(function (response) {
-            $scope.secondclass = response.data.data.categories;
-            $scope.secselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+            $scope.secondclass = res.data.categories;
+            $scope.secselect = res.data.categories[0].id;
         })
     }
 
     //三级下拉框
     $scope.thirdClass = function (obj) {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-            params: {pid: obj}
-        }).then(function (response) {
-            $scope.thirdclass = response.data.data.categories;
-            $scope.thirdselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+            $scope.thirdclass = res.data.categories;
+            $scope.thirdselect = res.data.categories[0].id;
         })
     }
 
@@ -196,15 +176,9 @@ store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
     function tableList() {
         $scope.params.keyword = $scope.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/supplier-list",
-            params: $scope.params,
-        }).then(function (res) {
-            console.log('商城列表数据');
-            console.log(res)
-            $scope.pageConfig.totalItems = res.data.data.supplier_list.total;
-            $scope.stores = res.data.data.supplier_list.details;
+        _ajax.get('/mall/supplier-list',$scope.params,function (res) {
+            $scope.pageConfig.totalItems = res.data.supplier_list.total;
+            $scope.stores = res.data.supplier_list.details;
         })
     }
 
@@ -229,11 +203,8 @@ store_mag.controller("store_mag", function ($scope, $http,$rootScope) {
     /*确认开店/闭店*/
     $scope.sureCloseStore = function () {
         tempshop_no = Number(tempshop_no)
-        let url = baseUrl+"/mall/supplier-status-toggle";
-        let data = {supplier_id: tempshop_no};
-        $http.post(url, data, config).then(function (res) {
-            console.log(res)
-            if(res.data.code==1037){
+        _ajax.post('/mall/supplier-status-toggle',{supplier_id: tempshop_no},function (res) {
+            if(res.code==1037){
                 $("#unblock_modal").modal('show');  //手动开启
             }else {
                 $scope.pageConfig.currentPage = 1;

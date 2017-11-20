@@ -28,30 +28,30 @@
                         <!--店铺号-->
                         <div class="shop_num">
                             <span>店铺号</span>
-                            <span ng-bind="shop_no"></span>
+                            <span ng-bind="result.shop_no"></span>
                         </div>
 
                         <!--开店时间-->
                         <div class="shop_name">
                             <span>开店时间</span>
-                            <span ng-bind="create_time"></span>
+                            <span ng-bind="result.create_time"></span>
                         </div>
 
                         <!--登录账号-->
                         <div class="shop_name">
                             <span>登录账号</span>
-                            <span ng-bind="mobile"></span>
+                            <span ng-bind="result.mobile"></span>
                         </div>
                         <!--店铺状态-->
                         <div class="shop_name">
                             <span>店铺状态</span>
-                            <span ng-bind="status"></span>
+                            <span ng-bind="result.status"></span>
                         </div>
 
                         <!--店铺logO-->
                         <div class="shop_logo">
                             <span>店铺logo</span>
-                            <img src="{{baseUrl + '/'+ icon}}" alt="店铺logo"/>
+                            <img src="{{baseUrl + '/'+ result.icon}}" alt="店铺logo"/>
                         </div>
                         <hr/>
 
@@ -59,17 +59,17 @@
                         <div class="shop_store">
                             <span>店铺评分</span>
                             <ul>
-                                <li><span>综合评分</span><span ng-bind="comprehensive_score"></span></li>
-                                <li><span>店家服务</span><span ng-bind="store_service_score"></span></li>
-                                <li><span>物流速度</span><span ng-bind="logistics_speed_score"></span></li>
-                                <li><span>配送员服务</span><span ng-bind="delivery_service_score"></span></li>
+                                <li><span>综合评分</span><span ng-bind="result.comprehensive_score"></span></li>
+                                <li><span>店家服务</span><span ng-bind="result.store_service_score"></span></li>
+                                <li><span>物流速度</span><span ng-bind="result.logistics_speed_score"></span></li>
+                                <li><span>配送员服务</span><span ng-bind="result.delivery_service_score"></span></li>
                             </ul>
                         </div>
 
                         <!--关注粉丝-->
                         <div class="shop_name">
                             <span>关注粉丝</span>
-                            <span ng-bind="follower_number"></span>
+                            <span ng-bind="result.follower_number"></span>
                         </div>
                         <!--按钮-->
                         <div class="btn_back">
@@ -81,7 +81,7 @@
                     <div class="tab-panel store_level" ng-show="aptitude_flag">
                         <div class="shop_name">
                             <span>单位类型</span>
-                            <span ng-bind="type_org"></span>
+                            <span ng-bind="result.type_org"></span>
                         </div>
                         <!--店铺号-->
                         <div class="shop_num">
@@ -102,7 +102,7 @@
                         <!--保证金-->
                         <div class="shop_money">
                             <span>质保金</span>
-                            <span ng-bind="quality_guarantee_deposit"></span>
+                            <span ng-bind="result.quality_guarantee_deposit"></span>
                             <span>已免除</span>
                         </div>
 
@@ -116,38 +116,38 @@
                         <!--公司名称-->
                         <div class="shop_name">
                             <span>公司名称</span>
-                            <span ng-bind="name"></span>
+                            <span ng-bind="result.name"></span>
                         </div>
                         <!--社会信用代码-->
                         <div class="shop_credit">
                             <span>社会信用代码</span>
-                            <span ng-bind="licence"></span>
+                            <span ng-bind="result.licence"></span>
                         </div>
                         <!--营业执照-->
                         <div class="shop_license">
                             <span>营业执照</span>
-                            <img src="{{baseUrl + '/'+ licence_image}}" alt="营业执照"/>
+                            <img src="{{baseUrl + '/'+ result.licence_image}}" alt="营业执照"/>
                         </div>
                         <hr/>
                         <!--法人名称-->
                         <div class="shop_name">
                             <span>法人名称</span>
-                            <span ng-bind="legal_person"></span>
+                            <span ng-bind="result.legal_person"></span>
                         </div>
                         <!--法人身份证号-->
                         <div class="shop_card">
                             <span>法人身份证号</span>
-                            <span ng-bind="identity_no"></span>
+                            <span ng-bind="result.identity_no"></span>
                         </div>
                         <!--法人身份证正面-->
                         <div class="shop_face">
                             <span>法人身份证正面</span>
-                            <img src="{{baseUrl + '/'+ identity_card_front_image}}" alt=""/>
+                            <img src="{{baseUrl + '/'+ result.identity_card_front_image}}" alt=""/>
                         </div>
                         <!--法人身份证反面-->
                         <div class="shop_face">
                             <span>法人身份证反面</span>
-                            <img src="{{baseUrl + '/'+ identity_card_back_image}}" alt=""/>
+                            <img src="{{baseUrl + '/'+ result.identity_card_back_image}}" alt=""/>
                         </div>
                         <!--按钮-->
                         <div class="btn_back">

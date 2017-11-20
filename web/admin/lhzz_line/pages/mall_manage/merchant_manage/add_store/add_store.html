@@ -1,212 +1,240 @@
 <link rel="stylesheet" href="pages/mall_manage/merchant_manage/add_store/css/add_store.css">
 <div ng-controller="addstore">
-    <form name="storeform"  novalidate>
-    <div class="add_store_content">
-        <!--商家所属分类-->
-        <div class="belong_class">
-            <span>商家所属分类</span>
-            <div class="sel_group">
-                <!--商家所属分类一级下拉框-->
-                <select name=""  class="cailiaochoose" ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-                <!--商家所属分类二级下拉-->
-                <select name="" class="cailiaochoose"  ng-options="item.id as item.title for item in secondclass" ng-model="secselect" ng-change="thirdClass(secselect)"></select>
-                <!--商家所属分类三级下拉-->
-                <select name="" class="cailiaochoose"  ng-options="item.id as item.title for item in thirdclass" ng-model="params.category_id"></select>
+    <form name="storeform" novalidate>
+        <div class="add_store_content">
+            <!--商家所属分类-->
+            <div class="belong_class">
+                <span>商家所属分类</span>
+                <div class="sel_group">
+                    <!--商家所属分类一级下拉框-->
+                    <select name="" class="cailiaochoose" ng-model="firstselect"
+                            ng-options="item.id as item.title for item in firstclass"
+                            ng-change="subClass(firstselect)"></select>
+                    <!--商家所属分类二级下拉-->
+                    <select name="" class="cailiaochoose" ng-options="item.id as item.title for item in secondclass"
+                            ng-model="secselect" ng-change="thirdClass(secselect)"></select>
+                    <!--商家所属分类三级下拉-->
+                    <select name="" class="cailiaochoose" ng-options="item.id as item.title for item in thirdclass"
+                            ng-model="params.category_id"></select>
+                </div>
             </div>
-        </div>
 
-        <!--单位类型-->
-        <div class="company_type">
-            <span>单位类型</span>
-            <select name="" ng-options="item.id as item.type for item in type_org_arr" ng-model="params.type_org" ng-init="params.type_org=type_org_arr[0].id"></select>
-        </div>
+            <!--单位类型-->
+            <div class="company_type">
+                <span>单位类型</span>
+                <select name="" ng-options="item.id as item.type for item in type_org_arr" ng-model="params.type_org"
+                        ng-init="params.type_org=type_org_arr[0].id"></select>
+            </div>
 
-        <!--店铺类型-->
-        <div class="company_type">
-            <span>店铺类型</span>
-            <select name="" ng-options="item.id as item.storetype for item in type_shop_arr" ng-model="params.type_shop" ng-init="params.type_shop=type_shop_arr[0].id" ng-change="typeshopChange(params.type_shop)"></select>
-        </div>
+            <!--店铺类型-->
+            <div class="company_type">
+                <span>店铺类型</span>
+                <select name="" ng-options="item.id as item.storetype for item in type_shop_arr"
+                        ng-model="params.type_shop" ng-init="params.type_shop=type_shop_arr[0].id"
+                        ng-change="typeshopChange(params.type_shop)"></select>
+            </div>
 
-        <!--店铺名称-->
-        <div class="company_type">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>店铺名称</span>
-            <input type="text" placeholder="请输入店铺名称" ng-model="params.shop_name" name="storename" id="storename" required ng-blur="judge=!!storeform.storename.$invalid" ng-class={'tored':storeform.storename.$invalid&&alljudgefalse||storeform.storename.$error.required&&judge}>
-            <span>{{store_type}}</span>
-            <p ng-if="storename_repeat">
+            <!--店铺名称-->
+            <div class="company_type">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="warningred">{{storename_repeatInfo}}</span>
-            </p>
-        </div>
+                <span>店铺名称</span>
+                <input type="text" placeholder="请输入店铺名称" ng-model="params.shop_name" name="storename" id="storename"
+                       required ng-blur="judge=!!storeform.storename.$invalid"
+                       ng-class={'tored':storeform.storename.$invalid&&alljudgefalse||storeform.storename.$error.required&&judge}>
+                <span>{{store_type}}</span>
+                <p ng-if="storename_repeat">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span class="warningred">{{storename_repeatInfo}}</span>
+                </p>
+            </div>
 
-        <!--是否支持无登录购买-->
-        <!--<div class="without_log_buy">-->
+            <!--是否支持无登录购买-->
+            <!--<div class="without_log_buy">-->
             <!--<span>是否支持线下体验店</span>-->
-                <!--<label class="radiogroup" for="notsupport"></label>-->
-                <!--<input type="radio" id="notsupport" name="yorn" ng-model="support" value=0 ng-checked=true>不支持-->
-                <!--<label for="support"></label>-->
-                <!--<input type="radio" id="support" name="yorn" ng-model="support" value=1>支持-->
-        <!--</div>-->
+            <!--<label class="radiogroup" for="notsupport"></label>-->
+            <!--<input type="radio" id="notsupport" name="yorn" ng-model="support" value=0 ng-checked=true>不支持-->
+            <!--<label for="support"></label>-->
+            <!--<input type="radio" id="support" name="yorn" ng-model="support" value=1>支持-->
+            <!--</div>-->
 
-        <hr>
+            <hr>
 
-        <!--公司名称-->
-        <div class="company_type">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>公司名称/名称</span>
-            <input type="text" placeholder="请输入公司名称" id="companyname" ng-model="params.name" name="companyname" required maxlength=30 ng-blur="company=!!storeform.companyname.$invalid" ng-class={'tored':storeform.companyname.$invalid&&alljudgefalse||storeform.companyname.$error.required&&company}>
-            <p ng-if="companyname_repeat">
+            <!--公司名称-->
+            <div class="company_type">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="warningred">{{companyname_repeatInfo}}</span>
-            </p>
-        </div>
-
-        <!--社会信用代码/注册号-->
-        <div class="company_type">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>社会信用代码/注册号</span>
-            <input type="text" placeholder="请输入信用代码/注册号" id="registercode" name="registercode" ng-model="params.licence" required maxlength=15 ng-blur="register=!!storeform.registercode.$error" ng-class={'tored':storeform.registercode.$invalid&&alljudgefalse||storeform.registercode.$error.required&&register}>
-            <p ng-if="registercode_repeat">
-                <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="warningred">{{registercode_repeatInfo}}</span>
-            </p>
-        </div>
-
-        <!--上传营业执照-->
-        <div class="cla_pic">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span class="each_title">上传营业执照</span>
-            <div class="upload_pic">
-                <img ng-src="{{licencepath}}"  alt="" id="cla_pic_uploadpic" class="picstyle">
-                <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
-                <div class="upload">
-                    <button type="button" ngf-pattern="image/*" ng-change="licenseUpload(data.filefirst)"  ngf-select="" ngf-multiple="false" ng-model="data.filefirst" id="upload_btn">上传</button>
-                </div>
-                <div class="reload_tishi" ng-if="licence_warning||licenceflag">
+                <span>公司名称/名称</span>
+                <input type="text" placeholder="请输入公司名称" id="companyname" ng-model="params.name" name="companyname"
+                       required maxlength=30 ng-blur="company=!!storeform.companyname.$invalid"
+                       ng-class={'tored':storeform.companyname.$invalid&&alljudgefalse||storeform.companyname.$error.required&&company}>
+                <p ng-if="companyname_repeat">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    <span ng-if="licence_warning">上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                    <span ng-if="licenceflag">请上传图片</span>
-                </div>
+                    <span class="warningred">{{companyname_repeatInfo}}</span>
+                </p>
             </div>
-        </div>
 
-        <!--登录账户-->
-        <div class="company_type login_account">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>登录账户</span>
-            <input type="text" placeholder="请输入电话号码" name="accountnum" maxlength=11 ng-model="params.mobile" ng-blur="accountCheck()" required  ng-class={'tored':storeform.accountnum.$invalid&&alljudgefalse||showwarning}>
-            <p ng-if="show_account_warning">
+            <!--社会信用代码/注册号-->
+            <div class="company_type">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span ng-bind="account_warning" class="warningred"></span>
-            </p>
-        </div>
-        <hr>
-
-        <div ng-if="defaultshow">
-
-            <div ng-if="!with_au">
-                <div class="company_type">
+                <span>社会信用代码/注册号</span>
+                <input type="text" placeholder="请输入信用代码/注册号" id="registercode" name="registercode"
+                       ng-model="params.licence" required maxlength=15
+                       ng-blur="register=!!storeform.registercode.$error"
+                       ng-class={'tored':storeform.registercode.$invalid&&alljudgefalse||storeform.registercode.$error.required&&register}>
+                <p ng-if="registercode_repeat">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    <span>法人名称</span>
-                    <input type="text" placeholder="请输入法人名称" ng-model="params.legal_person" name="legalperson" id="legalperson" required  ng-blur="legalCheck()" ng-class={'tored':(storeform.legalperson.$invalid&&alljudgefalse)||(storeform.legalperson.$error.required&&alljudgefalse)||legalwarning}>
-                    <p ng-if="legalwarning">
-                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                        <span class="warningred">名称不符合规范，请重新输入</span>
-                    </p>
-                </div>
+                    <span class="warningred">{{registercode_repeatInfo}}</span>
+                </p>
+            </div>
 
-                <!--法人身份证号-->
-                <div class="company_type">
-                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    <span>法人身份证号</span>
-                    <input type="text" placeholder="请输入身份证号" id="idcard" maxlength=18 ng-model="params.identity_card_no" name="idcard" required  ng-blur="idCheck()" ng-class={'tored':(storeform.idcard.$invalid&&alljudgefalse)||(storeform.idcard.$error.required&&alljudgefalse)||idwarning}>
-                    <p ng-if="idwarning">
-                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                        <span class="warningred" ng-bind="id_repeatInfo"></span>
-                    </p>
-                </div>
-
-                <!--上传法人身份证正面-->
-                <div class="cla_pic">
-                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    <span class="each_title">上传法人身份证正面</span>
-                    <div class="upload_pic">
-                        <img ng-src="{{frontpath}}" alt="" id="idfront" class="picstyle">
-                        <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
-                        <div class="upload">
-                            <button type="button" ngf-pattern="image/*" ng-change="frontUpload(data.filefront)"  ngf-select="" ngf-multiple="false" ng-model="data.filefront" id="upload_btn">上传</button>
-                        </div>
-                        <div class="reload_tishi" ng-if="front_warning||frontpathflag">
-                            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                            <span ng-if="front_warning">上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                            <span ng-if="frontpathflag">请上传图片</span>
-                        </div>
+            <!--上传营业执照-->
+            <div class="cla_pic">
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span class="each_title">上传营业执照</span>
+                <div class="upload_pic">
+                    <img ng-src="{{licencepath}}" alt="" id="cla_pic_uploadpic" class="picstyle">
+                    <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
+                    <div class="upload">
+                        <button type="button" ngf-pattern="image/*" ng-change="licenseUpload(data.filefirst)"
+                                ngf-select="" ngf-multiple="false" ng-model="data.filefirst" id="upload_btn">上传
+                        </button>
                     </div>
-                </div>
-
-                <!--上传法人身份证背面-->
-                <div>
-                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    <span class="each_title">上传法人身份证背面</span>
-                    <div class="upload_pic">
-                        <img  ng-src="{{backpath}}" alt="" id="idback" class="picstyle">
-                        <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
-                        <div class="upload">
-                            <button type="button" ngf-pattern="image/*" ng-change="backUpload(data.fileback)"  ngf-select="" ngf-multiple="false" ng-model="data.fileback" id="upload_btn">上传</button>
-                        </div>
-                        <div class="reload_tishi" ng-if="back_warning||backpathflag">
-                            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                            <span ng-if="back_warning">上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                            <span ng-if="backpathflag">请上传图片</span>
-                        </div>
+                    <div class="reload_tishi" ng-if="licence_warning||licenceflag">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span ng-if="licence_warning">上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                        <span ng-if="licenceflag">请上传图片</span>
                     </div>
                 </div>
             </div>
 
-
-            <div ng-if="with_au">
-                <!--法人名称-->
-                 <div class="company_type">
+            <!--登录账户-->
+            <div class="company_type login_account">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span>法人名称</span>
-                <span ng-bind="result.identity.legal_person" class="mar_left"></span>
+                <span>登录账户</span>
+                <input type="text" placeholder="请输入电话号码" name="accountnum" maxlength=11 ng-model="params.mobile"
+                       ng-blur="accountCheck()" required
+                       ng-class={'tored':storeform.accountnum.$invalid&&alljudgefalse||showwarning}>
+                <p ng-if="show_account_warning">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    <span ng-bind="account_warning" class="warningred"></span>
+                </p>
             </div>
+            <hr>
+
+            <div ng-if="defaultshow">
+
+                <div ng-if="!with_au">
+                    <div class="company_type">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span>法人名称</span>
+                        <input type="text" placeholder="请输入法人名称" ng-model="params.legal_person" name="legalperson"
+                               id="legalperson" required ng-blur="legalCheck()"
+                               ng-class={'tored':(storeform.legalperson.$invalid&&alljudgefalse)||(storeform.legalperson.$error.required&&alljudgefalse)||legalwarning}>
+                        <p ng-if="legalwarning">
+                            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                            <span class="warningred">名称不符合规范，请重新输入</span>
+                        </p>
+                    </div>
+
+                    <!--法人身份证号-->
+                    <div class="company_type">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span>法人身份证号</span>
+                        <input type="text" placeholder="请输入身份证号" id="idcard" maxlength=18
+                               ng-model="params.identity_card_no" name="idcard" required ng-blur="idCheck()"
+                               ng-class={'tored':(storeform.idcard.$invalid&&alljudgefalse)||(storeform.idcard.$error.required&&alljudgefalse)||idwarning}>
+                        <p ng-if="idwarning">
+                            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                            <span class="warningred" ng-bind="id_repeatInfo"></span>
+                        </p>
+                    </div>
+
+                    <!--上传法人身份证正面-->
+                    <div class="cla_pic">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span class="each_title">上传法人身份证正面</span>
+                        <div class="upload_pic">
+                            <img ng-src="{{frontpath}}" alt="" id="idfront" class="picstyle">
+                            <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
+                            <div class="upload">
+                                <button type="button" ngf-pattern="image/*" ng-change="frontUpload(data.filefront)"
+                                        ngf-select="" ngf-multiple="false" ng-model="data.filefront" id="upload_btn">上传
+                                </button>
+                            </div>
+                            <div class="reload_tishi" ng-if="front_warning||frontpathflag">
+                                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                                <span ng-if="front_warning">上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                                <span ng-if="frontpathflag">请上传图片</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--上传法人身份证背面-->
+                    <div>
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span class="each_title">上传法人身份证背面</span>
+                        <div class="upload_pic">
+                            <img ng-src="{{backpath}}" alt="" id="idback" class="picstyle">
+                            <h6>图片大小5M内，支持JPG、PNG、JPGE</h6>
+                            <div class="upload">
+                                <button type="button" ngf-pattern="image/*" ng-change="backUpload(data.fileback)"
+                                        ngf-select="" ngf-multiple="false" ng-model="data.fileback" id="upload_btn">上传
+                                </button>
+                            </div>
+                            <div class="reload_tishi" ng-if="back_warning||backpathflag">
+                                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                                <span ng-if="back_warning">上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                                <span ng-if="backpathflag">请上传图片</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
-                <!--法人身份证号-->
-                <div class="company_type default_company_type">
-                <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span>法人身份证号</span>
-                <span ng-bind="result.identity.identity_no"></span>
-            </div>
+                <div ng-if="with_au">
+                    <!--法人名称-->
+                    <div class="company_type">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span>法人名称</span>
+                        <span ng-bind="result.identity.legal_person" class="mar_left"></span>
+                    </div>
 
 
-                <!--法人身份证正面-->
-                <div class="default_cla_pic">
-                <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="each_title">法人身份证正面</span>
-                <div class="upload_pic">
-                    <img ng-src="{{_front.path}}" alt="" class="picstyle">
+                    <!--法人身份证号-->
+                    <div class="company_type default_company_type">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span>法人身份证号</span>
+                        <span ng-bind="result.identity.identity_no"></span>
+                    </div>
+
+
+                    <!--法人身份证正面-->
+                    <div class="default_cla_pic">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span class="each_title">法人身份证正面</span>
+                        <div class="upload_pic">
+                            <img ng-src="{{_front.path}}" alt="" class="picstyle">
+                        </div>
+                    </div>
+
+
+                    <!--法人身份证背面-->
+                    <div class="default_cla_pic">
+                        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                        <span class="each_title">法人身份证背面</span>
+                        <div class="upload_pic">
+                            <img ng-src="{{_backpath}}" alt="" class="picstyle">
+                        </div>
+                    </div>
                 </div>
             </div>
 
-
-                <!--法人身份证背面-->
-                <div class="default_cla_pic">
-                <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                <span class="each_title">法人身份证背面</span>
-                <div class="upload_pic">
-                    <img  ng-src="{{_backpath}}" alt="" class="picstyle">
-                </div>
-            </div>
+            <div class="btns">
+                <button data-toggle="modal" data-target={{suremodal}} type="submit"
+                        ng-click="sureAddStore(storeform.$valid,storeform.$error.required)">确认
+                </button>
+                <button ui-sref="store_mag">返回</button>
             </div>
         </div>
-
-        <div class="btns">
-            <button data-toggle="modal" data-target={{suremodal}} type="submit" ng-click="sureAddStore(storeform.$valid,storeform.$error.required)">确认</button>
-            <button ui-sref="store_mag">返回</button>
-        </div>
-    </div>
     </form>
 
     <!--添加成功提示模态框-->

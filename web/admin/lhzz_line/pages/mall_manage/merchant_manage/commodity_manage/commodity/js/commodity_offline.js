@@ -1,13 +1,13 @@
 /**
  * Created by tiger on 2017/10/25/025.
  */
-app.controller('commodity_offline', ['$scope', '$stateParams','$http', function ($scope, $stateParams,$http) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    }
+app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', function (_ajax, $scope, $stateParams,$http) {
+    // const config = {
+    //     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    //     transformRequest: function (data) {
+    //         return $.param(data)
+    //     }
+    // }
     $scope.storeid = $stateParams.id;
     let sortway = "offline_time"; //默认按上架时间降序排列
     let tempoffgoodid;  //单个商品id
@@ -142,16 +142,14 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
 //
     /*单个商品确认上架*/
     $scope.sureGoodOnline = function () {
-        let url = baseUrl+"/mall/goods-status-toggle";
-        let data = {id: Number(tempoffgoodid)};
-        $http.post(url, data, config).then(function (res) {
-            console.log(res)
-            /*由于某些原因不能上架*/
-            if (res.data.code != 200) {
+        // let url = baseUrl+"/mall/goods-status-toggle";
+        // let data = {id: Number(tempoffgoodid)};
+        _ajax.post('/mall/goods-status-toggle',{id: Number(tempoffgoodid)},function (res) {
+            if (res.code != 200) {
                 // console.log(res)
                 $('#up_shelves_modal').modal("hide");
                 $("#up_not_shelves_modal").modal("show")
-                $scope.cantonline = res.data.msg;
+                $scope.cantonline = res.msg;
             } else {
                 /*可以上架*/
                 $('#up_shelves_modal').modal("hide");
@@ -161,6 +159,23 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
                 tableList();
             }
         })
+        // $http.post(url, data, config).then(function (res) {
+        //     console.log(res)
+        //     /*由于某些原因不能上架*/
+        //     if (res.data.code != 200) {
+        //         // console.log(res)
+        //         $('#up_shelves_modal').modal("hide");
+        //         $("#up_not_shelves_modal").modal("show")
+        //         $scope.cantonline = res.data.msg;
+        //     } else {
+        //         /*可以上架*/
+        //         $('#up_shelves_modal').modal("hide");
+        //         $scope.pageConfig.currentPage = 1;
+        //         $scope.keyword = '';
+        //         $scope.params.keyword = '';
+        //         tableList();
+        //     }
+        // })
     }
 
     /*不能上架 确认*/
@@ -175,10 +190,10 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
         let data = {ids:batchonids};
         $http.post(url, data, config).then(function (res) {
             /*由于某些原因不能上架*/
-            if (res.data.code != 200) {
+            if (res.code != 200) {
                 $('#piliangonline_modal').modal("hide");
                 $("#up_not_shelves_modal").modal("show")
-                $scope.cantonline = res.data.msg;
+                $scope.cantonline = res.msg;
             } else {
                 /*可以上架*/
                 $('#piliangonline_modal').modal("hide");
@@ -205,15 +220,21 @@ app.controller('commodity_offline', ['$scope', '$stateParams','$http', function 
     /*列表数据获取*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/goods-list-admin",
-            params: $scope.params,
-        }).then(function (res) {
-            // console.log(res);
-            $scope.tabledetail = res.data.data.goods_list_admin.details;
-            $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
+        _ajax.get('/mall/goods-list-admin',$scope.params,function (res) {
+            $scope.tabledetail = res.data.goods_list_admin.details;
+            $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })
+
+
+        // $http({
+        //     method: "get",
+        //     url: baseUrl+"/mall/goods-list-admin",
+        //     params: $scope.params,
+        // }).then(function (res) {
+        //     // console.log(res);
+        //     $scope.tabledetail = res.data.data.goods_list_admin.details;
+        //     $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
+        // })
     }
 
 

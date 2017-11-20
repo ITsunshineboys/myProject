@@ -1,5 +1,5 @@
 var add_store = angular.module("addstoreModule", ['ngFileUpload']);
-add_store.controller("addstore", function ($scope, $http, Upload, $location, $anchorScroll, $window, $state,$rootScope) {
+add_store.controller("addstore", function ($scope, $http, Upload, $location, $anchorScroll, $window, $state,$rootScope,_ajax) {
     cascadeData();
     const picpath = 'pages/mall_manage/merchant_manage/add_store/images/default.png'
     const picprefix = baseUrl + "/";
@@ -47,38 +47,6 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     $scope.back_warning = false;     //身份证背面错误提示
     $scope.legalwarning = false;     //法人名称错误提示
 
-    // getMoble();
-    test();
-    function getMoble() {
-        var prefixArray = new Array("130", "131", "132", "133", "135", "137", "138", "170", "187", "189");
-        var i = parseInt(10 * Math.random());
-        var prefix = prefixArray[i];
-
-        for (var j = 0; j < 8; j++) {
-            prefix = prefix + Math.floor(Math.random() * 10);
-        }
-
-        var x = document.getElementsByName("mobile_tel");
-        for (var i = 0; i < x.length; i++) {
-            var o = x[i];
-            o.value = prefix;
-        }
-       return prefix;
-    }
-
-
-    function test() {
-        let url = baseUrl+"/mall/user-add";
-        let data = {
-           mobile:getMoble(),
-           password:'123456'
-        };
-        $http.post(url, data, config).then(function (res) {
-            console.log(res)
-            // $scope.suremodal = '#suremodal';
-        })
-    }
-
     // 参数
     $scope.params = {
         type_org: '',                    //单位类型
@@ -98,20 +66,22 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
 
     // 所属分类-级联
     function cascadeData() {
-        $http.get(baseUrl + '/mall/categories-manage-admin', {}).then(function (res) {
-            let data = res.data.data;
+        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+            let data = res.data;
             data.categories.splice(0, 1);
             $scope.firstclass = data.categories;
             $scope.firstselect = data.categories[0].id;
         })
-        $http.get(baseUrl + '/mall/categories-manage-admin', {params: {pid: 1}}).then(function (res) {
-            let data = res.data.data;
+
+        _ajax.get('/mall/categories-manage-admin',{pid: 1},function (res) {
+            let data = res.data;
             data.categories.splice(0, 1);
             $scope.secondclass = data.categories;
             $scope.secselect = $scope.secondclass[0].id;
         })
-        $http.get(baseUrl + '/mall/categories-manage-admin', {params: {pid: 2}}).then(function (res) {
-            let data = res.data.data;
+
+        _ajax.get('/mall/categories-manage-admin',{pid: 2},function (res) {
+            let data = res.data;
             data.categories.splice(0, 1);
             $scope.thirdclass = data.categories;
             $scope.params.category_id = $scope.thirdclass[0].id;
@@ -121,13 +91,13 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
 
     // 一级联动
     $scope.subClass = (obj) => {
-        $http.get(baseUrl + '/mall/categories-manage-admin', {params: {pid: obj}}).then(function (res) {
-            let data = res.data.data;
+        _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+            let data = res.data;
             data.categories.splice(0, 1);
             $scope.secondclass = data.categories;
             $scope.secselect = data.categories[0].id;
-            $http.get(baseUrl + '/mall/categories-manage-admin', {params: {pid: $scope.secselect}}).then(function (res) {
-                let data = res.data.data;
+            _ajax.get('/mall/categories-manage-admin',{pid: $scope.secselect},function (res) {
+                let data = res.data;
                 data.categories.splice(0, 1);
                 $scope.thirdclass = data.categories;
                 $scope.params.category_id = data.categories[0].id;
@@ -138,13 +108,13 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
 
     // 二级联动
     $scope.thirdClass = function (obj) {
-        $http.get(baseUrl + '/mall/categories-manage-admin', {params: {pid: obj}}).then(function (res) {
-            let data = res.data.data;
+        _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+            let data = res.data;
             data.categories.splice(0, 1);
             $scope.thirdclass = data.categories;
             $scope.params.category_id = data.categories[0].id;
         })
-    };
+    }
 
     // 店铺类型判断
     $scope.typeshopChange = (obj) => {
@@ -200,20 +170,15 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
         $scope.legalwarning = false;
         $scope.idwarning = false;
         if(phone_pattern.test($scope.params.mobile)){
-            $http({
-                method: "get",
-                url: baseUrl + "/mall/check-role-get-identity",
-                params: {mobile: Number($scope.params.mobile)}
-            }).then(function (res) {
-                console.log(res);
-                if (res.data.code == 1011 || res.data.code == 1010) {
+            _ajax.get('/mall/check-role-get-identity',{mobile: Number($scope.params.mobile)},function (res) {
+                if (res.code == 1011 || res.code == 1010) {
                     //已注册的商家和未成为平台用户
                     $scope.showwarning = true;
                     $scope.show_account_warning = true;
-                    $scope.account_warning = res.data.msg;
-                } else if (res.data.code == 200) {
+                    $scope.account_warning = res.msg;
+                } else if (res.code == 200) {
                     $scope.showwarning = false;
-                    $scope.result = res.data.data;
+                    $scope.result = res.data;
                     $scope.defaultshow = true;
                     $scope.show_account_warning = false;
                     /*未实名认证的商家*/
@@ -326,11 +291,8 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
         if (val) {
             /*未认证的情况*/
             if ((!$scope.with_au) && val && (!($scope.licencepath == picpath || $scope.frontpath == picpath || $scope.backpath == picpath))&&(!$scope.legalwarning)&&(!$scope.idwarning)&&(!$scope.showwarning)) {
-                let url = baseUrl + "/mall/supplier-add";
-                let data = $scope.params;
-                $http.post(url, data, config).then(function (res) {
-                    console.log(res);
-                    wrongBack(Number(res.data.code),res.data.msg);
+                _ajax.post('/mall/supplier-add',$scope.params,function (res) {
+                    wrongBack(Number(res.code),res.msg);
                 })
                 /*已认证的情况*/
             } else if ($scope.with_au && val && $scope.licencepath != picpath&&(!$scope.showwarning)) {
@@ -338,10 +300,8 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 $scope.identity_card_no = '';
                 $scope.identity_card_front_image = '';
                 $scope.identity_card_back_image = '';
-                let url = baseUrl + "/mall/supplier-add";
-                let data = $scope.params;
-                $http.post(url, data, config).then(function (res) {
-                    wrongBack(Number(res.data.code),res.data.msg);
+                _ajax.post('/mall/supplier-add',$scope.params,function (res) {
+                    wrongBack(Number(res.code),res.msg);
                 })
             }
         } else {
