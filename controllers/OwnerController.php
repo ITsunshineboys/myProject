@@ -662,9 +662,9 @@ class OwnerController extends Controller
 
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-        var_dump($keel_cost);exit;
         //丝杆费用
         $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
+        var_dump($pole_cost);exit;
 //        //木工板
 //        $blockboard = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //材料费用
