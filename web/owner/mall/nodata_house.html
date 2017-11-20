@@ -160,13 +160,13 @@
                     <input type="radio" ng-checked="choose_stairs==1" name="have_stairs"/>
                     <span></span>
                     <span class="have">有</span>
-                    <img id='img_size_1' src="images/mall_list_radio.png" alt=""/>
+                    <img id='img_size_1' ng-if="choose_stairs==1" src="images/mall_list_radio.png" alt=""/>
                 </label>
                 <label ng-click="ctrlScope.choose_stairs = 0;ctrlScope.nowStairs = {'id':0,'attribute':''}">
                     <input type="radio" ng-checked="choose_stairs == 0" name="have_stairs"/>
                     <span></span>
                     <span class="no">无</span>
-                    <img id='img_size' src="images/mall_list_radio.png" alt=""/>
+                    <img id='img_size' ng-if="choose_stairs == 0" src="images/mall_list_radio.png" alt=""/>
                 </label>
             </div>
 
@@ -178,7 +178,7 @@
                             <input type="radio" name="stairs" ng-checked="ctrlScope.nowStairs.id==+item.id"/>
                             <span></span>
                             <span>{{item.attribute}}</span>
-                            <img src="images/mall_list_radio.png" alt=""/>
+                            <img ng-if="ctrlScope.nowStairs.id==+item.id" src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                 </ul>
@@ -196,7 +196,7 @@
                             <input type="radio" name="series" ng-checked="(item.id==cur_series.id)">
                             <span></span>
                             <span>{{item.series}}</span>
-                            <img class="check_img" src="images/mall_list_radio.png" alt=""/>
+                            <img ng-if="(item.id==cur_series.id)" class="check_img" src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                 </ul>
