@@ -1420,7 +1420,7 @@ class OwnerController extends Controller
             }
             $material[][] = BasisDecorationService::profitMargin($condition_stairs);
         }
-       
+
 
 
         //无计算公式
