@@ -1048,9 +1048,9 @@ class QuoteController extends Controller
         $del_id = (int)trim(\Yii::$app->request->post('del_id',''));
         $effect = Effect::find()->asArray()->where(['id'=>$del_id])->one();
         // 删除功能
-        $delete ='district_code = '.$effect['district_code']. ' and toponymy = '.$effect['toponymy'] . ' and street = '.$effect['street'];
+//        $delete ='district_code = '.$effect['district_code']. ' and toponymy = '.$effect['toponymy'] . ' and street = '.$effect['street'];
         //  ['and',['district_code'=>$effect['district_code']],['toponymy'=>$effect['toponymy']],['street'=>$effect['street']]]
-        Effect::deleteAll($delete);
+        Effect::deleteAll(['and',['district_code'=>$effect['district_code']],['toponymy'=>$effect['toponymy']],['street'=>$effect['street']]]);
         EffectPicture::deleteAll(['effect_id' => $del_id]);
         WorksBackmanData::deleteAll(['effect_id' => $del_id]);
         WorksWorkerData::deleteAll(['effect_id' => $del_id]);
