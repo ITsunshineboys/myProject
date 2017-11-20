@@ -964,6 +964,7 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
+
    /**
      * find order list by admin user
      * @return string
@@ -998,7 +999,7 @@ class OrderController extends Controller
                 $endTime = trim(Yii::$app->request->get('end_time', ''));
                 if (($startTime && !StringService::checkDate($startTime))
                     || ($endTime && !StringService::checkDate($endTime))
-                ) {
+                ){
                     $code=1000;
                     return Json::encode([
                         'code' => $code,
@@ -1008,35 +1009,34 @@ class OrderController extends Controller
             }else{
                 list($startTime, $endTime) = StringService::startEndDate($timeType);
             }
-
-        if($type=='all')
-        {
-            if($supplier_id)
+            if($type=='all')
             {
-                if(!is_numeric($supplier_id))
+                if($supplier_id)
                 {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    if(!is_numeric($supplier_id))
+                    {
+                        $code=1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $where .=" a.supplier_id={$supplier_id}";
                 }
-                $where .=" a.supplier_id={$supplier_id}";
-            }
-        }else{
-            if($supplier_id)
-            {
-                if(!is_numeric($supplier_id))
+            }else{
+                if($supplier_id)
                 {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    if(!is_numeric($supplier_id))
+                    {
+                        $code=1000;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $where .=" and a.supplier_id={$supplier_id}";
                 }
-                $where .=" and a.supplier_id={$supplier_id}";
             }
-        }
         if ($type=='all' && !$supplier_id)
                 {
                     if($keyword){
