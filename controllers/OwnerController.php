@@ -1418,10 +1418,10 @@ class OwnerController extends Controller
                     $condition_stairs [] = $one_stairs_price;
                 }
             }
-        } else {
-            $condition_stairs = null;
+            $material[][] = BasisDecorationService::profitMargin($condition_stairs);
         }
-        $material[][] = BasisDecorationService::profitMargin($condition_stairs);
+       
+
 
         //无计算公式
         foreach ($without_assort as $one_without_assort){
