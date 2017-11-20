@@ -1770,6 +1770,7 @@ class BasisDecorationService
 
         foreach ($material as &$one_material){
             if ($one_material == null){
+                var_dump($one_material);exit;
                 unset($one_material);
             }
         }
