@@ -3019,13 +3019,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     pid: newVal.id
                 },function (res) {
                     console.log(res)
-                    $scope.level_two = res.data.data.categories
+                    $scope.level_two = res.data.categories
                     $scope.cur_level_two1 = $scope.level_two[0]
                     _ajax.get('/quote/assort-goods',{
                         pid: $scope.cur_level_two.id
                     },function (res) {
                         console.log(res)
-                        $scope.level_three = res.data.data.categories
+                        $scope.level_three = res.data.categories
                         $scope.cur_level_three1 = $scope.level_three[0]
                         $state.go('intelligent.material_detail')
                         console.log($scope.level_three)
@@ -3040,7 +3040,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     pid: newVal.id
                 },function (res) {
                     console.log(res)
-                    $scope.level_three = res.data.data.categories
+                    $scope.level_three = res.data.categories
                     $scope.cur_level_three1 = $scope.level_three[0]
                     $state.go('intelligent.material_detail')
                     console.log($scope.level_three)
@@ -3169,10 +3169,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     if ($scope.is_add_material) {
                         _ajax.post('/quote/decoration-add',data,function (res) {
                             console.log(res)
-                            _ajax.post('/quote/decoration-list', {},function (res) {
-                                console.log(res)
-                                $scope.material_list = res.list.details
-                            })
+                            // _ajax.post('/quote/decoration-list', {},function (res) {
+                            //     console.log(res)
+                            //     $scope.material_list = res.list.details
+                            // })
+                            tablePages1()
                             $uibModal.open({
                                 templateUrl: 'pages/intelligent/cur_model.html',
                                 controller: all_modal
@@ -3181,10 +3182,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     } else {
                         _ajax.post('/quote/decoration-edit', data,function (res) {
                             console.log(res)
-                            _ajax.post('/quote/decoration-list', {},function (res) {
-                                console.log(res)
-                                $scope.material_list = res.data.list.details
-                            })
+                            // _ajax.post('/quote/decoration-list', {},function (res) {
+                            //     console.log(res)
+                            //     $scope.material_list = res.data.list.details
+                            // })
+                            tablePages1()
                             var model_uib =  $uibModal.open({
                                 animation:$scope.animationsEnabled,
                                 templateUrl: 'pages/intelligent/cur_model.html',
@@ -3319,10 +3321,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         id: item.id
                     },function (res) {
                         console.log(res)
-                        _ajax.post('/quote/decoration-list', {},function (res) {
-                            console.log(res)
-                            data.material_list = res.list.details
-                        })
+                        // _ajax.post('/quote/decoration-list', {},function (res) {
+                        //     console.log(res)
+                        //     data.material_list = res.list.details
+                        // })
+                        tablePages1()
                         $uibModalInstance.close()
                         $scope.is_cancel = false
                     })
