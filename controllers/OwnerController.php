@@ -959,19 +959,26 @@ class OwnerController extends Controller
         }
         //泥作面积    mudMakeArea
         //厨房面积
-        $p = ProjectView::find()->asArray()->where(['parent_project'=> '面积比例'])->all();
-        var_dump($p);exit;
-        $kitchen_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['kitchen'],self::ROOM_AREA['kitchen_area']);
-        $kitchen_area = $post['area'] * $kitchen_particulars['project_value'];
+        $project_view = ProjectView::find()->asArray()->where(['parent_project'=> '面积比例'])->all();
+        foreach ($project_view as $value){
+            if ($value['project'] == self::ROOM_AREA['kitchen_area']){
+                $kitchen_particulars = $value['project_value'];
+            }
 
+            if ($value['project'] == self::ROOM_AREA['toilet_area']){
+                $toilet_particulars = $value['project_value'];
+            }
+
+            if ($value['project'] == self::ROOM_AREA['hall_area']){
+                $drawing_room_particulars = $value['project_value'];
+            }
+        }
+        $kitchen_area = $post['area'] * $kitchen_particulars;
         //卫生间面积
-        $toilet_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['toilet'],self::ROOM_AREA['toilet_area']);
-        $toilet_area = (int)$post['area'] * $toilet_particulars['project_value'];
-
+        $toilet_area = (int)$post['area'] * $toilet_particulars;
 
         //客餐厅面积
-        $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['bedroom_area_']);
-        $drawing_room_area = (int)$post['area'] * $drawing_room_particulars['project_value'];
+        $drawing_room_area = (int)$post['area'] * $drawing_room_particulars;
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['tiler'], $post['city']);
