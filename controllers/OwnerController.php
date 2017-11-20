@@ -1386,19 +1386,19 @@ class OwnerController extends Controller
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         //   生活配套
-        $material['1']   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
+        $material['a']   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         //   基础装修
-        $material['2']   = BasisDecorationService::capacity($goods_price,$post);
+        $material['b']   = BasisDecorationService::capacity($goods_price,$post);
         //   家电配套
-        $material['3']   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
+        $material['c']   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
         //   移动家具
-        $material['4']   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
+        $material['d']   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
         //   固定家具
-        $material['5']  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        $material['e']  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
         //   软装配套
-        $material['6']   = BasisDecorationService::mild($goods_price,$post);
+        $material['f']   = BasisDecorationService::mild($goods_price,$post);
         //   主材
-        $material['7']   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
+        $material['a']   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
 
 
         if ($post['stairway_id'] == 1) {
@@ -1419,7 +1419,7 @@ class OwnerController extends Controller
                     $condition_stairs [] = $one_stairs_price;
                 }
             }
-            $material['8'] = BasisDecorationService::profitMargin($condition_stairs);
+            $material['aa'] = BasisDecorationService::profitMargin($condition_stairs);
         }
 
 
@@ -1440,7 +1440,7 @@ class OwnerController extends Controller
         }
 
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material['9'] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
+        $material['aaa'] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
         return Json::encode([
             'code' => 200,
