@@ -1741,13 +1741,18 @@ class BasisDecorationService
         $e = isset($squatting_pan) ? $squatting_pan :[];
         $f = isset($closestool) ? $closestool :[];
 
-        $material[] = (array)self::profitMargin($a);
-        $material[] = (array)self::profitMargin($b);
-        $material[] = (array)self::profitMargin($c);
-        $material[] = (array)self::profitMargin($d);
-        $material[] = (array)self::profitMargin($e);
-        $material[] = (array)self::profitMargin($f);
-
+        $material[] = self::profitMargin($a);
+        $material[] = self::profitMargin($b);
+        $material[] = self::profitMargin($c);
+        $material[] = self::profitMargin($d);
+        $material[] = self::profitMargin($e);
+        $material[] = self::profitMargin($f);
+        
+        foreach ($material as $k=>$v){
+            if (!$v){
+                unset($k);
+            }
+        }
 //        $material = array_filter($material);
 //        var_dump($material);exit;
         return $material;
