@@ -1059,13 +1059,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             },function (res) {
                 if (index == 1 && $scope.cur_level_one != item) {
                     $scope.cur_level_one = item
-                    $scope.level_two = res.data.data.categories
+                    $scope.level_two = res.data.categories
                     $scope.cur_level_one = item
                     $scope.cur_level_two = $scope.level_two[0]
                     _ajax.get('/quote/assort-goods',{
-                        pid: res.data.data.categories[0].id
+                        pid: res.data.categories[0].id
                     },function (res) {
-                        $scope.level_three = res.data.data.categories
+                        $scope.level_three = res.data.categories
                         for (let [key, value] of $scope.level_three.entries()) {
                             if ($scope.check_item.length == 0) {
                                 value['complete'] = false
@@ -1087,7 +1087,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     },function (res) {
                         console.log($scope.check_item)
                         console.log(res)
-                        $scope.level_three = res.data.data.categories
+                        $scope.level_three = res.data.categories
                         for (let [key, value] of $scope.level_three.entries()) {
                             if ($scope.check_item.length == 0) {
                                 value['complete'] = false
