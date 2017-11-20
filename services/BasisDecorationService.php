@@ -1748,8 +1748,14 @@ class BasisDecorationService
         $material [] = self::profitMargin($e);
         $material [] = self::profitMargin($f);
 
-        $material = array_filter($material);
+        foreach ($material as $one_material){
+            if ($one_material ==null){
+                unset($one_material);
+            }
+        }
+//        $material = array_filter($material);
 
+var_dump($material);exit;
         return $material;
     }
 
