@@ -676,11 +676,16 @@ angular.module('all_controller', [])
                 $scope.is_edit = true
                 $rootScope.fromState_name = 'nodata.other_material'
             } else if ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material') {
-                $scope.cur_header = '智能报价'
-                $scope.is_edit = false
-                $scope.is_city = true
-                $scope.all_goods = $scope.cur_all_goods
-                $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
+                console.log($scope.is_delete_btn)
+                if(!$scope.is_delete_btn){
+                    $scope.cur_header = '智能报价'
+                    $scope.is_edit = false
+                    $scope.is_city = true
+                    $scope.all_goods = $scope.cur_all_goods
+                    $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
+                }else{
+                    $rootScope.fromState_name = 'nodata.other_material'
+                }
             } else if ($rootScope.curState_name == 'nodata.house_list') {
                 $scope.have_header = false
                 $rootScope.fromState_name = 'home'
@@ -775,6 +780,12 @@ angular.module('all_controller', [])
                                 $scope.all_delete_goods.push(item)
                                 value2.goods_detail.splice(cur_index, 1)
                             }
+                        }
+                        if(value2.goods_detail.length == 0){
+                            value1.three_level.splice(key2,1)
+                        }
+                        if(value1.three_level.length == 0){
+                            value.second_level.splice(key1,1)
                         }
                     }
                 }
