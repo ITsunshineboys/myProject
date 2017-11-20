@@ -540,6 +540,7 @@ class OwnerController extends Controller
 
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
+        var_dump(Apartment::find()->asArray()->where([])->all());exit;
         $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
         $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
@@ -572,7 +573,7 @@ class OwnerController extends Controller
             }
         }
         $material_total ['material'][] = BasisDecorationService::profitMargin($goods_max);
-        $material_total ['total_cost'][] = $material_price['cost'];
+        $material_total ['total_cost'][] =  round($material_price['cost'],2);
 
         return Json::encode([
             'code' => 200,
@@ -580,7 +581,7 @@ class OwnerController extends Controller
             'data' => [
                 'waterproof_labor_price' => $labor_all_cost,
                 'waterproof_material' => $material_total,
-                'total_area' => $total_area,
+                'total_area' => ceil($total_area),
             ]
         ]);
     }
@@ -765,11 +766,13 @@ class OwnerController extends Controller
         //客餐厅底漆面积
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
+        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
+        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
-        $primer_area = $bedroom_primer_area + $drawing_room_primer_area;
-
+        $primer_area = $bedroom_primer_area + $drawing_room_primer_area + $apartment['project_value'];
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
         $primer_day = $primer_area / $primer;
+
 
         //乳胶漆面漆面积
         $finishing_coat_area = $primer_area * self::DIGITAL;
@@ -781,17 +784,21 @@ class OwnerController extends Controller
 //        客厅周长
         $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($post['area'],$hall_area['project_value'],$post['hall'], self::WALL_SPACE);
 //        阴角线长度
-        $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter;
-        var_dump($concave_line_length);
-
+        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'] . 'and project_name = '.'阴角线长度';
+        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
+        $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $apartment['project_value'];
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
+
+
 
 //        腻子卧室墙面积
         $putty_bedroom_area = BasisDecorationService::paintedArea($bedroom_area['project_value'], $post['area'], $post['bedroom'], self::WALL_HIGH, self::WALL);
 //        腻子客餐厅面积
         $putty_drawing_room_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 //        腻子面积 卧室腻子面积+客厅腻子面积
+        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'] . 'and project_name = '.'腻子面积';
+        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;

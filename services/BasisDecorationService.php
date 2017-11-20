@@ -1936,7 +1936,7 @@ class BasisDecorationService
         $material_total['material'][] = BasisDecorationService::profitMargin($plasterboard);
         $material_total['material'][] = BasisDecorationService::profitMargin($keel);
         $material_total['material'][] = BasisDecorationService::profitMargin($pole);
-        $material_total['total_cost'][] = $material_cost;
+        $material_total['total_cost'][] =  round($material_cost,2);
         return $material_total;
     }
 
