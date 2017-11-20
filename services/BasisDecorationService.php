@@ -1734,7 +1734,7 @@ class BasisDecorationService
 
             }
         }
-        $array_ = (object);
+        $array_ = [];
         $a = isset($mattress) ? $mattress :$array_;
         $b = isset($cut_off) ? $cut_off :$array_;
         $c = isset($sprinkler) ? $sprinkler :$array_;
