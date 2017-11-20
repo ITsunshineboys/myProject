@@ -352,7 +352,7 @@ class OwnerController extends Controller
 
         //强电点位
         $points_select = 'count';
-        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
+        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['strong_current']]];
         $points = Points::findByOne($points_select,$points_where);
         $_points = !isset($points['count']) ? $points['count'] : Points::STRONG_CURRENT_POINTS;
 
