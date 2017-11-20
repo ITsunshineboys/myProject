@@ -109,7 +109,7 @@ angular.module("all_controller", ['ngCookies'])
         }
     })
      //首页控制器
-    .controller("mall_index_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
+    .controller("mall_index_ctrl", function ($rootScope,$scope,$timeout,$http,$state,$stateParams) {  //首页控制器
         $rootScope.baseUrl = baseUrl;
         $scope.search_flag = false;
         let config = {
@@ -118,13 +118,6 @@ angular.module("all_controller", ['ngCookies'])
                 return $.param(data)
             }
         };
-        //轮播变量
-        let mySwiper = new Swiper("#swiperList", {
-            autoplay: 3000,
-            loop: true,
-            observer: true,
-            pagination: ".swiper-pagination"
-        });
         //清空支付后的cookie
         if(sessionStorage.getItem('adressInfo') != null){
             sessionStorage.removeItem('adressInfo')
@@ -144,6 +137,14 @@ angular.module("all_controller", ['ngCookies'])
             $scope.swiper_img = response.data.data.carousel;
             $scope.carousel_id = response.data.data.carousel[0].id;
             console.log($scope.carousel_id);
+            //轮播变量
+            $timeout(function () {
+                var mySwiper = new Swiper('#swiperList', {
+                    autoplay: 3000,
+                    loop: true,
+                    pagination : '#swiperList-pagination',
+                });
+            })
         }, function errorCallback(response) {
             console.log(response)
         });

@@ -11,14 +11,14 @@
     </div>
     <!--banner图开始-->
     <div class="carousel" >
-        <div  id='swiperList' class="swiper-container" >
-            <div class="swiper-wrapper" >
-                 <div class="swiper-slide"  ng-repeat="n in swiper_img" >
-                      <img ng-click="getDetails(n)" src="{{baseUrl + '/'+n.image}}" alt="" class="size_img"/>
-                 </div>
+        <div id="swiperList" class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" ng-repeat="n in swiper_img">
+                    <img class="size_img" ng-src="{{baseUrl + '/'+n.image}}" ng-click="getDetails(n)">
+                </div>
             </div>
-              <!-- 如果需要分页器 -->
-            <div class="swiper-pagination "></div>
+            <!-- 如果需要分页器 -->
+            <div id="swiperList-pagination" class="swiper-pagination"></div>
         </div>
     </div>
 
