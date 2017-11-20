@@ -127,6 +127,7 @@ class OwnerController extends Controller
         'toilet_area'  => '卫生间面积',
         'hall_area'    => '客餐厅及过道面积',
         'bedroom_area' => '卧室面积',
+        'bedroom_area_' => '客厅面积',
     ];
 
     const MATERIALS_CLASSIFY = [
@@ -967,8 +968,7 @@ class OwnerController extends Controller
 
 
         //客餐厅面积
-        $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['hall_area']);
-        var_dump(EngineeringUniversalCriterion::find()->asArray()->all());exit;
+        $drawing_room_particulars = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['hall'],self::ROOM_AREA['bedroom_area_']);
         $drawing_room_area = (int)$post['area'] * $drawing_room_particulars['project_value'];
 
         //当地工艺
