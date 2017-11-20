@@ -23,19 +23,15 @@
                     <td>来源商家</td>
                     <td>
                         <span>上架浏览</span>
-                        <!--<img class="img_sort_size" src="pages/mall_manage/banner_app/index_recommend_history/images/sort_default.png" alt="">-->
                     </td>
-                    <td>
-                        <span>上架销量</span>
-                        <!--<img class="img_sort_size" src="pages/mall_manage/banner_app/index_recommend_history/images/sort_default.png" alt="">-->
-                    </td>
+                    <!--<td>-->
+                        <!--<span>上架销量</span>-->
+                    <!--</td>-->
                     <td>
                         <span>平台价格</span>
-                        <!--<img class="img_sort_size" src="pages/mall_manage/banner_app/index_recommend_history/images/sort_default.png" alt="">-->
                     </td>
                     <td>
                         <span>创建时间</span>
-                        <!--<img class="img_sort_size" src="pages/mall_manage/banner_app/index_recommend_history/images/sort_up.png" alt="">-->
                     </td>
                     <td>图片</td>
                 </tr>
@@ -45,7 +41,7 @@
                     <td>{{item.title}}</td>
                     <td><a href="">{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
                     <td>{{item.viewed_number}}</td>
-                    <td>{{item.sold_number}}</td>
+                    <!--<td>{{item.sold_number}}</td>-->
                     <td ng-if="item.sku!='0'">{{item.platform_price}}</td>
                     <td ng-if="item.sku=='0'">—</td>
                     <td>{{item.create_time}}</td>

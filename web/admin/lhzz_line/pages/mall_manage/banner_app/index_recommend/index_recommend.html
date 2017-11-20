@@ -92,7 +92,7 @@
                 <td ng-if="show_5">{{item.viewed_number}}</td>
                 <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
                 <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
-                <td ng-if="show_8" ng-click="recommend_sort(item)">{{item.create_time}}</td>
+                <td ng-if="show_8">{{item.create_time}}</td>
                 <td ng-if="show_9"><img id="show_img_size" ng-src="{{baseUrl + '/'+ item.image}}"></td>
                 <td ng-if="show_10&&item.sku!='0'">{{item.left_number}}</td>
                 <td ng-if="show_10&&item.sku=='0'">—</td>

@@ -1,5 +1,5 @@
 let index_recommend = angular.module("index_recommend_module",['ngFileUpload','ngDraggable']);
-index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$http,Upload) {
+index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$http,Upload,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -16,7 +16,6 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     }
   };
   $scope.shop_rep=[];
-  let recommend_admin_index=null;
   //选择城市开始
   //初始化省市区县;
   $http.get('districts2.json').then(function (response) {
@@ -134,18 +133,16 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
 
 
   //后台推荐首页(admin)
-  let recommend_url=baseUrl+"/mall/recommend-admin-index";
-  $http.get(recommend_url,{
-    params:{
-      'district_code':510100,
-      'type':2
-    }
-  }).then(function (res) {
-    console.log(res);
-    $scope.shop_rep = res.data.data.recommend_admin_index.details;
-  },function (err) {
-    console.log(err);
-  });
+  let list_fn=function () {
+      _ajax.get('/mall/recommend-admin-index',{
+          'district_code':510100,
+          'type':2
+      },function (res) {
+        console.log(res);
+        $scope.shop_rep = res.data.recommend_admin_index.details;
+      })
+  }
+  list_fn();
 
   $scope.delete_batch_num=[];//初始化删除数目数组
   $scope.disable_batch_num=[];//初始化停用数目数组
@@ -168,31 +165,12 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   };
   //批量删除确认按钮
   $scope.delete_batch_btn=function () {
-    let url=baseUrl+'/mall/recommend-delete-batch';
-    $http.post(url,{
-      'ids':$scope.delete_batch_num.join(',')
-    },config).then(function (response) {
-      console.log(response)
-      let recommend_url=baseUrl+"/mall/recommend-admin-index";
-      $http.get(recommend_url,{
-        params:{
-          'district_code':510100,
-          'type':2
-        }
-      }).then(function (res) {
-        console.log("后台推荐首页");
-        console.log(res);
-        $scope.shop_rep = res.data.data.recommend_admin_index.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (error) {
-      console.log(error)
+    _ajax.post('/mall/recommend-delete-batch',{'ids':$scope.delete_batch_num.join(',')},function (res) {
+        list_fn();
     })
   };
 
   //批量停用按钮
-  $scope.stop_flag='';
   $scope.disable_batch=function () {
     $scope.disable_batch_num=[];
     for(let [key,value] of $scope.shop_rep.entries()){
@@ -203,33 +181,12 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
         $scope.stop_flag='my_modal_stop'
         $scope.disable_batch_num.push(value.id);
       }
-      // if(value.state && value.status=="停用"){
-      //   $scope.stop_flag='my_modal_stop_begin';
-      //   break;
-      // }
     }
   };
   //批量停用确认按钮
   $scope.disable_batch_btn=function () {
-    let url=baseUrl+'/mall/recommend-disable-batch';
-    $http.post(url,{
-      'ids':$scope.disable_batch_num.join(',')
-    },config).then(function (response) {
-      console.log("批量禁用返回");
-      console.log(response);
-      let recommend_url=baseUrl+"/mall/recommend-admin-index";
-      $http.get(recommend_url,{
-        params:{
-          'district_code':510100,
-          'type':2
-        }
-      }).then(function (res) {
-        $scope.shop_rep = res.data.data.recommend_admin_index.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (error) {
-      console.log(error)
+    _ajax.post('/mall/recommend-disable-batch',{'ids':$scope.disable_batch_num.join(',')},function (res) {
+        list_fn();
     })
   };
   /**
@@ -245,20 +202,12 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   $scope.link_check=0;//推荐--添加--链接添加(是否启用) 默认为0 停用
   $scope.shop_edit_check=0;//推荐--添加--商家编辑(是否启用) 默认为0 停用
   $scope.recommend_shop_add_get=function () {
-    $http({
-      method:"GET",
-      url:baseUrl+"/mall/goods-by-sku",
-      params:{
-        sku:$scope.shop_model
-      }
-    }).then(function (res) {
-      console.log(res)
-      $scope.recommend_shop_url=res.data.data.detail.url; //商品链接
-      $scope.recommend_shop_title=res.data.data.detail.title; //商品标题
-      $scope.recommend_shop_subtitle=res.data.data.detail.subtitle; //商品副标题
-      $scope.recommend_shop_platform_price=res.data.data.detail.platform_price; //平台价格
-    },function (err) {
-      console.log(err);
+    _ajax.get('/mall/goods-by-sku',{sku:$scope.shop_model},function (res) {
+      console.log(res);
+      $scope.recommend_shop_url=res.data.detail.url; //商品链接
+      $scope.recommend_shop_title=res.data.detail.title; //商品标题
+      $scope.recommend_shop_subtitle=res.data.detail.subtitle; //商品副标题
+      $scope.recommend_shop_platform_price=res.data.detail.platform_price; //平台价格
     });
   };
 
@@ -266,42 +215,24 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   $scope.shop_num_flag=false; //商品编号提示开关
   $scope.shop_title_flag=false;   //标题红框
   $scope.shop_subtitle_flag=false;//副标题
-
-
-
   $scope.recommend_shop_add_btn=function (valid) {
     console.log(valid);
     if(valid&&$scope.upload_img_src){
       $scope.variable_flag='modal';
-      let url= baseUrl+'/mall/recommend-add';
-      let params= {
-        district_code:510100,
-        url:$scope.recommend_shop_url,
-        title:$scope.recommend_shop_title,
-        image:$scope.upload_img_src,
-        from_type:"1",
-        type:2,
-        sku:$scope.shop_model,
-        description:$scope.recommend_shop_subtitle,
-        platform_price:$scope.recommend_shop_platform_price,
-        status:$scope.shop_check
-      };
-      $http.post(url,params,config).then(function (response) {
-        console.log("添加确定");
-        console.log(response);
-        $http.get(recommend_url,{
-          params:{
-            'district_code':510100,
-            'type':2
-          }
-        }).then(function (res) {
-          $scope.shop_rep = res.data.data.recommend_admin_index.details;
-        },function (err) {
-          console.log(err);
-        });
-      },function (error) {
-        console.log(error)
-      });
+      _ajax.post('/mall/recommend-add',{
+          district_code:510100,
+          url:$scope.recommend_shop_url,
+          title:$scope.recommend_shop_title,
+          image:$scope.upload_img_src,
+          from_type:"1",
+          type:2,
+          sku:$scope.shop_model,
+          description:$scope.recommend_shop_subtitle,
+          platform_price:$scope.recommend_shop_platform_price,
+          status:$scope.shop_check
+      },function (res) {
+          list_fn();
+      })
     }else{
       $scope.submitted = true;
     }
@@ -322,33 +253,18 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   $scope.recommend_link_add_btn=function (vaild) {
     if(vaild && $scope.upload_link_img_src){
       $scope.link_add_modal='modal';
-      let url= baseUrl+'/mall/recommend-add';
-      let params= {
-        district_code:510100,
-        url:$scope.recommend_link_url,
-        title:$scope.recommend_link_title,
-        image:$scope.upload_link_img_src,
-        from_type:"2",
-        status:$scope.link_check,
-        type:2,
-        description:$scope.recommend_link_subtitle,
-        platform_price:$scope.recommend_link_show_price
-      };
-      $http.post(url,params,config).then(function (response) {
-        $http.get(recommend_url,{
-          params:{
-            'district_code':510100,
-            'type':2
-          }
-        }).then(function (res) {
-          console.log("链接添加");
-          console.log(res);
-          $scope.shop_rep = res.data.data.recommend_admin_index.details;
-        },function (err) {
-          console.log(err);
-        });
-      },function (error) {
-        console.log(error)
+      _ajax.post('/mall/recommend-add',{
+          district_code:510100,
+          url:$scope.recommend_link_url,
+          title:$scope.recommend_link_title,
+          image:$scope.upload_link_img_src,
+          from_type:"2",
+          status:$scope.link_check,
+          type:2,
+          description:$scope.recommend_link_subtitle,
+          platform_price:$scope.recommend_link_show_price
+      },function (res) {
+        list_fn();
       })
     }else{
       $scope.link_submitted = true;
@@ -401,29 +317,16 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     }else{
       $scope.recommend_shop_modal_edit='#please_up_shops';
     }
-
-    console.log("点击编辑获取");
-    console.log($scope.edit_item);
-
   };
 
   //商家编辑 - 获取按钮
   $scope.recommend_shop_edit_get=function () {
-    $http({
-      method:"GET",
-      url:baseUrl+"/mall/goods-by-sku",
-      params:{
-        sku:+$scope.shop_edit_sku
-      }
-    }).then(function (res) {
-      console.log("商家获取");
+    _ajax.get('/mall/goods-by-sku',{sku:+$scope.shop_edit_sku},function (res) {
       console.log(res);
-      $scope.recommend_shop_edit_url=res.data.data.detail.url; //商品链接
-      $scope.recommend_shop_edit_title=res.data.data.detail.title; //商品标题
-      $scope.recommend_shop_edit_subtitle=res.data.data.detail.subtitle; //商品副标题
-      $scope.recommend_shop_edit_platform_price=res.data.data.detail.platform_price; //平台价格
-    },function (err) {
-      console.log(err);
+        $scope.recommend_shop_edit_url=res.data.detail.url; //商品链接
+        $scope.recommend_shop_edit_title=res.data.detail.title; //商品标题
+        $scope.recommend_shop_edit_subtitle=res.data.detail.subtitle; //商品副标题
+        $scope.recommend_shop_edit_platform_price=res.data.detail.platform_price; //平台价格
     });
   };
 
@@ -435,67 +338,37 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
         if($scope.upload_img_src==''){
           $scope.upload_img_src=$scope.recommend_shop_edit_img;
         }
-        let shop_url=baseUrl+'/mall/recommend-edit';
-        $http.post(shop_url,{
-          id:$scope.edit_item.id,
-          url:$scope.edit_item.url,
-          title:$scope.recommend_shop_edit_title,
-          image:$scope.upload_img_src,
-          from_type:"1",
-          status:$scope.shop_edit_check,
-          type:2,
-          sku:$scope.shop_edit_sku,
-          description:$scope.recommend_shop_edit_subtitle,
-          platform_price:$scope.edit_item.platform_price
-        },config).then(function (res) {
-          console.log("编辑返回");
-          console.log(res);
-          let recommend_url=baseUrl+"/mall/recommend-admin-index";
-          $http.get(recommend_url,{
-            params:{
-              'district_code':510100,
-              'type':2
-            }
-          }).then(function (res) {
-            $scope.shop_rep = res.data.data.recommend_admin_index.details;
-          },function (err) {
-            console.log(err);
-          });
-        },function (err) {
-          console.log(err);
+        _ajax.post('/mall/recommend-edit',{
+            id:$scope.edit_item.id,
+            url:$scope.edit_item.url,
+            title:$scope.recommend_shop_edit_title,
+            image:$scope.upload_img_src,
+            from_type:"1",
+            status:$scope.shop_edit_check,
+            type:2,
+            sku:$scope.shop_edit_sku,
+            description:$scope.recommend_shop_edit_subtitle,
+            platform_price:$scope.edit_item.platform_price
+        },function (res) {
+            list_fn();
         })
       }
       if($scope.edit_item.from_type=='链接'){
         if($scope.upload_link_img_src==''){
           $scope.upload_link_img_src=$scope.link_edit_img;
         }
-        let shop_url=baseUrl+'/mall/recommend-edit';
-        $http.post(shop_url,{
-          id:$scope.edit_item.id,
-          url:$scope.link_edit_url,
-          title:$scope.link_edit_title,
-          image:$scope.upload_link_img_src,
-          from_type:"2",
-          status:$scope.shop_edit_check,
-          type:2,
-          description:$scope.link_edit_subtitle,
-          platform_price:$scope.link_edit_price
-        },config).then(function (res) {
-          console.log("编辑返回");
-          console.log(res);
-          let recommend_url=baseUrl+"/mall/recommend-admin-index";
-          $http.get(recommend_url,{
-            params:{
-              'district_code':510100,
-              'type':2
-            }
-          }).then(function (res) {
-            $scope.shop_rep = res.data.data.recommend_admin_index.details;
-          },function (err) {
-            console.log(err);
-          });
-        },function (err) {
-          console.log(err);
+        _ajax.post('/mall/recommend-edit',{
+            id:$scope.edit_item.id,
+            url:$scope.link_edit_url,
+            title:$scope.link_edit_title,
+            image:$scope.upload_link_img_src,
+            from_type:"2",
+            status:$scope.shop_edit_check,
+            type:2,
+            description:$scope.link_edit_subtitle,
+            platform_price:$scope.link_edit_price
+        },function (res) {
+            list_fn();
         })
       }
     }else{
@@ -556,27 +429,10 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   };
   //确认删除
   $scope.shop_del_ok=function () {
-    $http.post(baseUrl+'/mall/recommend-delete',{'id':$scope.del_ok_index.id},config)
-      .then(function (response) {
-        $http.get(recommend_url,{
-          params:{
-            'district_code':510100,
-            'type':2
-          }
-        }).then(function (res) {
-          $scope.shop_rep = res.data.data.recommend_admin_index.details;
-          console.log(res);
-        },function (err) {
-          console.log(err);
-        });
-        console.log(response)
-      },function(error){
-        console.log(error)
-      })
+    _ajax.post('/mall/recommend-delete',{'id':$scope.del_ok_index.id},function (res) {
+        list_fn();
+    })
   };
-
-
-
 
   //单个停用
   $scope.stop_use=function (item) {
@@ -585,24 +441,8 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   };
   //单个停用确认按钮
   $scope.sole_stop_btn=function () {
-    let url=baseUrl+'/mall/recommend-status-toggle';
-    $http.post(url,{
-      id:$scope.stop_use_item.id
-    },config).then(function (res) {
-      let recommend_url=baseUrl+"/mall/recommend-admin-index";
-      $http.get(recommend_url,{
-        params:{
-          'district_code':510100,
-          'type':2
-        }
-      }).then(function (res) {
-        // console.log(res);
-        $scope.shop_rep = res.data.data.recommend_admin_index.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (err) {
-      console.log(err);
+    _ajax.post('/mall/recommend-status-toggle',{id:$scope.stop_use_item.id},function (res) {
+        list_fn();
     })
   };
   //单个启用
@@ -616,126 +456,29 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   };
   //单个启用确认按钮
   $scope.sole_begin_btn=function () {
-    let url=baseUrl+'/mall/recommend-status-toggle';
-    $http.post(url,{
-      id:$scope.stop_use_item.id
-    },config).then(function (res) {
-      let recommend_url=baseUrl+"/mall/recommend-admin-index";
-      $http.get(recommend_url,{
-        params:{
-          'district_code':510100,
-          'type':2
-        }
-      }).then(function (res) {
-        // console.log(res);
-        $scope.shop_rep = res.data.data.recommend_admin_index.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (err) {
-      console.log(err);
+    _ajax.post('/mall/recommend-status-toggle',{id:$scope.stop_use_item.id},function (res) {
+        list_fn();
     })
   };
-
-  //推荐排序
-    $scope.recommend_sort_num=[];
-    $scope.recommend_sort=function (item) {
-    console.log('排序');
-    console.log(item);
-    let url=baseUrl+'/mall/recommend-sort';
-    for(let i=0; i<$scope.shop_rep.length;i++){
-      $scope.recommend_sort_num.push($scope.shop_rep[i].id);
-    }
-      $scope.recommend_sort_num.reverse();
-    console.log($scope.recommend_sort_num)
-    $scope.sort_join=$scope.recommend_sort_num.join(',');
-    console.log($scope.sort_join);
-    $http.post(url,{
-      ids:$scope.sort_join
-    },config).then(function (res) {
-      console.log("排序返回");
-      console.log(res);
-      $http.get(recommend_url,{
-        params:{
-          'district_code':510100,
-          'type':2
-        }
-      }).then(function (res) {
-        // console.log(res);
-        $scope.shop_rep = res.data.data.recommend_admin_index.details;
-      },function (err) {
-        console.log(err);
-      });
-    },function (err) {
-      console.log(err);
-    })
-  };
-
     $scope.show_all = function (m) {
         m === true ? $scope[m] = false : $scope[m] = true;
     };
 
   // 分类菜单
   $scope.show_1=true;
-  $scope.show_a= function (m) {
-    m===true?$scope.show_1=true: $scope.show_1=false;
-  };
   $scope.show_2=true;
-  $scope.show_b= function (m) {
-    m===true?$scope.show_2=true: $scope.show_2=false;
-  };
   $scope.show_3=true;
-  $scope.show_c= function (m) {
-    m===true?$scope.show_3=true: $scope.show_3=false;
-  };
   $scope.show_4=true;
-  $scope.show_d= function (m) {
-    m===true?$scope.show_4=true: $scope.show_4=false;
-  };
   $scope.show_5=true;
-  $scope.show_e= function (m) {
-    m===true?$scope.show_5=true: $scope.show_5=false;
-  };
   $scope.show_6=true;
-  $scope.show_f= function (m) {
-    m===true?$scope.show_6=true: $scope.show_6=false;
-  };
   $scope.show_7=true;
-  $scope.show_g= function (m) {
-    m===true?$scope.show_7=true: $scope.show_7=false;
-  };
   $scope.show_8=true;
-  $scope.show_h= function (m) {
-    m===true?$scope.show_8=true: $scope.show_8=false;
-  };
   $scope.show_9=true;
-  $scope.show_i= function (m) {
-    m===true?$scope.show_9=true: $scope.show_9=false;
-  };
   $scope.show_10=false;
-  $scope.show_j= function (m) {
-    m===true?$scope.show_10=true: $scope.show_10=false;
-  };
   $scope.show_11=false;
-  $scope.show_k= function (m) {
-    m===true?$scope.show_11=true: $scope.show_11=false;
-  };
   $scope.show_12=false;
-  $scope.show_l= function (m) {
-    m===true?$scope.show_12=true: $scope.show_12=false;
-  };
   $scope.show_13=false;
-  $scope.show_m= function (m) {
-    m===true?$scope.show_13=true: $scope.show_13=false;
-  };
   $scope.show_14=true;
-  $scope.show_n= function (m) {
-    m===true?$scope.show_14=true: $scope.show_14=false;
-  };
-  change_m=false;
-  $scope.change_menu=function (m) {
-    m===true?$scope.change_m=false: $scope.change_m=true;
-  };
 
   //初始化值---添加
   $scope.clear_add_content=function () {
@@ -775,18 +518,14 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   };
   $scope.sort_order=[];
   $scope.save_btn_ok=function () {
+    $scope.sort_order=[];
     for(let[key,value] of $scope.shop_rep.entries()){
       $scope.sort_order.push(value.id);
     }
   };
   $scope.save_confirm=function () {
-    console.log($scope.sort_order);
-    $http.post(baseUrl+'/mall/recommend-sort',{
-      ids:$scope.sort_order.join(',')
-    },config).then(function (res) {
-      console.log(res);
-    },function (err) {
-      console.log(err);
+    _ajax.post('/mall/recommend-sort',{ids:$scope.sort_order.join(',')},function (res) {
+        console.log(res);
     })
   }
 });

@@ -1,6 +1,5 @@
 let index_recommend_history = angular.module("index_recommend_history_module", []);
-index_recommend_history.controller("index_recommend_history_ctrl", function ($rootScope,$scope, $http) {
-
+index_recommend_history.controller("index_recommend_history_ctrl", function ($rootScope,$scope,$http,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -22,18 +21,6 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($ro
             tablePages();
         }
     }
-    let tablePages=function () {
-        $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-        $http.get(baseUrl+'/mall/recommend-history',{
-            params:$scope.params
-        }).then(function (res) {
-            console.log(res);
-            $scope.recommendList = res.data.data.recommend_history.details
-            $scope.Config.totalItems = res.data.data.recommend_history.total;
-        },function (err) {
-            console.log(err);
-        })
-    };
     $scope.params = {
         page: 1,                        // 当前页数
         district_code: '510100',               // 时间类型
@@ -42,14 +29,18 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($ro
         start_time: '',                 // 自定义开始时间
         end_time: ''                   // 自定义结束时间
     };
+    let tablePages=function () {
+        $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+        _ajax.get('/mall/recommend-history',$scope.params,function (res) {
+            $scope.recommendList = res.data.recommend_history.details
+            $scope.Config.totalItems = res.data.recommend_history.total;
+        })
+    };
 
-    // $scope.selectValue = '全部时间'
-    $http.get(baseUrl+'/site/time-types').then(function (response) {
-        $scope.time = response.data.data.time_types;
-        $scope.selectValue = response.data.data.time_types[0].value;
-    }, function (error) {
-        console.log(error)
-    });
+    _ajax.get('/site/time-types',{},function (res) {
+        $scope.time = res.data.time_types;
+        $scope.selectValue = res.data.time_types[0].value;
+    })
     //监听时间类型
     $scope.type_change=function () {
         $scope.Config.currentPage = 1; //页数跳转到第一页
