@@ -446,8 +446,7 @@ class BasisDecorationService
             ->where(['and',['series_or_style'=>0],['coefficient'=>2]])
             ->asArray()
             ->all();
-        
-var_dump($engineering);
+
         if ($engineering){
             foreach ($engineering as $engineering_one) {
                 if( $engineering_one['project'] == $series) {
@@ -456,9 +455,6 @@ var_dump($engineering);
             }
         }
 
-        var_dump($series_one);
-        var_dump($length);
-        exit;
         //造型长度=基本造型长度×系列系数2
         return $length* $series_one;
     }
@@ -575,15 +571,6 @@ var_dump($engineering);
                $tv_plasterboard  = $craft['material'];
            }
         }
-//        $p = ProjectView::find()->asArray()->where(['parent_project'=>'木作'])->all();
-//        foreach ($p as $p_v){
-//            if ($p_v['project'] == '造型长度'){
-//                $plasterboard_sculpt = $p_v['project_value'];
-//            }
-//            if ($p_v['project'] == '平顶面积'){
-//                $plasterboard_area = $p_v['project_value'];
-//            }
-//        }
 
 //            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
         $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_sculpt + $flat_area / $plasterboard_area + $tv_plasterboard);
