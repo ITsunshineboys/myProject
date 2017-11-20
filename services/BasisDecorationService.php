@@ -1754,10 +1754,6 @@ class BasisDecorationService
             }
         }
 
-        echo 111;
-        var_dump($goods_material);exit;
-        
-//        $material = array_filter($material);
         return $goods_material;
     }
 
