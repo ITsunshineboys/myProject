@@ -1733,13 +1733,13 @@ class BasisDecorationService
 
             }
         }
-
-        $a = isset($mattress) ? $mattress :[];
-        $b = isset($cut_off) ? $cut_off :[];
-        $c = isset($sprinkler) ? $sprinkler :[];
-        $d = isset($bath_cabinet) ? $bath_cabinet :[];
-        $e = isset($squatting_pan) ? $squatting_pan :[];
-        $f = isset($closestool) ? $closestool :[];
+        $array_ = [];
+        $a = isset($mattress) ? $mattress :$array_;
+        $b = isset($cut_off) ? $cut_off :$array_;
+        $c = isset($sprinkler) ? $sprinkler :$array_;
+        $d = isset($bath_cabinet) ? $bath_cabinet :$array_;
+        $e = isset($squatting_pan) ? $squatting_pan :$array_;
+        $f = isset($closestool) ? $closestool :$array_;
 
 
         $material[] = self::profitMargin($a);
