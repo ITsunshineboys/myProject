@@ -773,10 +773,10 @@ class OwnerController extends Controller
         //客餐厅底漆面积
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
-        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
-        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
+//        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
+//        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
-        $primer_area = $bedroom_primer_area + $drawing_room_primer_area + $apartment['project_value'];
+        $primer_area = $bedroom_primer_area + $drawing_room_primer_area ;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
         $primer_day = $primer_area / $primer;
 
@@ -791,9 +791,9 @@ class OwnerController extends Controller
 //        客厅周长
         $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($post['area'],$hall_area['project_value'],$post['hall'], self::WALL_SPACE);
 //        阴角线长度
-        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'] . 'and project_name = '.'阴角线长度';
-        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
-        $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $apartment['project_value'];
+//        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'] . 'and project_name = '.'阴角线长度';
+//        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
+        $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter ;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
 
@@ -804,8 +804,8 @@ class OwnerController extends Controller
 //        腻子客餐厅面积
         $putty_drawing_room_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 //        腻子面积 卧室腻子面积+客厅腻子面积
-        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'] . 'and project_name = '.'腻子面积';
-        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
+//        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'] . 'and project_name = '.'腻子面积';
+//        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
         $putty_area = $putty_bedroom_area + $putty_drawing_room_area;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
