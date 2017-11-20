@@ -1392,10 +1392,11 @@ class OwnerController extends Controller
         //   家电配套
         $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
         //   移动家具
-        $material['a']   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
-        var_dump($material['a']);exit;
+        $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
+
         //   固定家具
-        $material[]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        $material['a']  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
+        var_dump($material);exit;
         //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         //   主材
