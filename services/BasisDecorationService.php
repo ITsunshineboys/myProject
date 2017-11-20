@@ -1749,7 +1749,7 @@ class BasisDecorationService
 
         $goods_material = [];
         foreach ($material as $one){
-            if(isset($one)){
+            if($one != null){
                 $goods_material[] =   $one;
             }
         }
