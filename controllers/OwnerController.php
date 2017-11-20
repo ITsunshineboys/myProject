@@ -502,9 +502,10 @@ class OwnerController extends Controller
         //厨房
         $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
         $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
-var_dump($p);exit;
         if (!$p){
             $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+        }else{
+            $_kitchen_height = $p['project_value'];
         }
         if ($kitchen){
             foreach ($kitchen as $one_kitchen){
@@ -523,6 +524,8 @@ var_dump($p);exit;
         $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->one();
         if (!$toilet_p){
             $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
+        }else{
+            $_toilet_height = $toilet_p['project_value'];
         }
         if ($toilet){
             foreach ($toilet as $one_toilet){
