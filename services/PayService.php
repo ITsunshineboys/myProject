@@ -77,7 +77,7 @@ class PayService
             Yii::$app->session['goods_id']=$orders['goods_id'];
             Yii::$app->session['goods_num']=$orders['goods_num'];
             Yii::$app->session['order_price']=$orders['order_price'];
-//            Yii::$app->session['goods_name']=$orders['goods_name'];
+            Yii::$app->session['goods_name']=$orders['goods_name'];
             Yii::$app->session['pay_name']=$orders['pay_name'];
             Yii::$app->session['freight']=$orders['freight'];
             Yii::$app->session['supplier_id']=$orders['supplier_id'];
