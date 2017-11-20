@@ -678,7 +678,8 @@ class BasisDecorationService
             $total_area =    $ground_area + $wall_space_area;
             var_dump($total_area);
             var_dump($wall_space_area);
-            var_dump($total_area);exit;
+            var_dump($total_area);
+            exit;
         }
         return $total_area;
     }
