@@ -1750,7 +1750,7 @@ class BasisDecorationService
 
         foreach ($material as $k=>$v){
             if (!$v){
-                unset($k);
+                unset($material[$k]);
             }
         }
 //        $material = array_filter($material);
