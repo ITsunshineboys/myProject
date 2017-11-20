@@ -1223,11 +1223,11 @@ class BasisDecorationService
      */
     public static function profitMargin($goods)
     {
-        $array_=[];
+//        $array_=[];
         if (count($goods) == count($goods, 1)) {
             return $goods;
         } elseif ($goods == null){
-            return $array_;
+            return new \stdClass;
         }else {
             foreach($goods as $v) {
                 $r[$v['title']][$v['profit_rate']] = $v;
@@ -1755,7 +1755,7 @@ class BasisDecorationService
                 unset($one);
             }
         }
-        
+
 //        $material = array_filter($material);
         return $material;
     }
