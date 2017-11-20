@@ -446,7 +446,8 @@ class BasisDecorationService
             ->where(['and',['series_or_style'=>0],['coefficient'=>2]])
             ->asArray()
             ->all();
-
+        
+var_dump($engineering);
         if ($engineering){
             foreach ($engineering as $engineering_one) {
                 if( $engineering_one['project'] == $series) {
