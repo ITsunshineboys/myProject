@@ -204,17 +204,17 @@ var shop_style= angular.module("freight_template",[])
             }
             if ($scope.params.delivery_method === 0) {
                 if ($scope.packageMail) {
-                    if ($scope.params.delivery_cost_default === '' || $scope.params.delivery_number_default === '') {
+                    if ($scope.freight.cost_default === '' || $scope.freight.number_default === '') {
                         alert("请将默认运费信息填写完整");
                         return
                     }
-                    if ($scope.params.delivery_cost_delta === '' || $scope.params.delivery_number_delta === '') {
+                    if ($scope.freight.cost_delta === '' || $scope.freight.number_delta === '') {
                         alert("请将增加件信息填写完整");
                         return
                     }
-                    $scope.params.delivery_cost_default = $scope.params.delivery_cost_default * 100; // 默认运费
+                    $scope.params.delivery_cost_default = $scope.freight.cost_default * 100; // 默认运费
                     $scope.params.delivery_number_default = $scope.freight.number_default; // 默认运费对应商品数量
-                    $scope.params.delivery_cost_delta = $scope.params.delivery_cost_delta * 100; // 增加件运费
+                    $scope.params.delivery_cost_delta = $scope.freight.cost_delta * 100; // 增加件运费
                     $scope.params.delivery_number_delta = $scope.freight.number_delta; // 增加件运费对应商品数量
                 } else {
                     $scope.params.delivery_cost_default = 0;
