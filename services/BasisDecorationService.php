@@ -224,6 +224,7 @@ class BasisDecorationService
         //线路个数计算 ,线路费用计算
         $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
         $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
+        var_dump($electricity);exit;
 
         //线管个数计算,线管费用计算
         $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
