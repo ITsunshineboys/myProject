@@ -66,12 +66,12 @@ class Alipay extends  ActiveRecord
         $return_url="http://".$_SERVER['SERVER_NAME']."/owner/mall/index.html#!/pay_success";
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $id=Effect::addneweffect($post);
-         if (!$id)
+        if (!$id)
         {
             return false;
         }
         $str=$id;
-        $total_amount=0.01;
+        $total_amount=89;
         $passback_params=urlencode($str);
         //超时时间
         $timeout_express="1m";
