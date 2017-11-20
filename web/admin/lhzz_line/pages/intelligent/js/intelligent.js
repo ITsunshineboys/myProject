@@ -282,8 +282,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             })
         }
         //根据市动态获取区县
-        $scope.getCounty = function (item) {
+        $scope.getCounty = function () {
+            console.log($scope.cur_city)
+            // $scope.city_name = $scope.province[22].name
             $http.get('districts2.json').then(function (response) {
+                console.log(response)
+                $scope.city_name =response.data[$scope.cur_province][$scope.cur_city]
                 let arr2 = []
                 for (let [key, value] of Object.entries(response.data[0][$scope.cur_city])) {
                     arr2.push({'id': key, 'name': value})
