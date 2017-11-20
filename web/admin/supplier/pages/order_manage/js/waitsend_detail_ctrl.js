@@ -1,9 +1,20 @@
 ;
 let waitsend_detail = angular.module("waitsend_detail_module", []);
-waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $stateParams,$state,_ajax) {
+waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, $http, $stateParams,$state,_ajax) {
   $scope.myng=$scope;
   $scope.tabflag=$stateParams.tabflag;
   console.log($scope.tabflag)
+  //返回按钮
+  $scope.back_list=function () {
+      $state.go('order_manage',{tabflag:$scope.tabflag});//返回待收货列表
+  };
+  $rootScope.crumbs = [{
+      name: '订单管理',
+      icon: 'icon-dingdanguanli',
+      link: back_list
+  }, {
+      name: '订单详情',
+  }];
     //详情数据
   _ajax.post('/order/getsupplierorderdetails',{
       order_no:$stateParams.order_no,
@@ -164,10 +175,6 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($scope, $http, $sta
             $scope.track_change_font='快递单号不能为空';
         }
     }
-   //返回按钮
-    $scope.back_list=function () {
-        $state.go('order_manage',{tabflag:$scope.tabflag});//返回待收货列表
-    };
     //发货按钮
     $scope.track_flag=false;
     $scope.wait_send_ship=function () {

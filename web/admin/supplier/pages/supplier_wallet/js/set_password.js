@@ -1,6 +1,13 @@
 angular.module('set_password_module',[])
-.controller('set_password_ctrl',function ($scope,$http,$state,$stateParams,$timeout,$location,$anchorScroll,$window,_ajax) {
+.controller('set_password_ctrl',function ($rootScope,$scope,$http,$state,$stateParams,$timeout,$location,$anchorScroll,$window,_ajax) {
   $scope.myng=$scope;
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-qianbao',
+        link: 'supplier_wallet'
+    }, {
+        name: '设置交易密码',
+    }];
   let reg=/^\d{6}$/;
   //判断 first or unfirst
   _ajax.post('/withdrawals/check-isset-pay-pwd',{},function (res) {

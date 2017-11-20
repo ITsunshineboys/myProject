@@ -1,6 +1,13 @@
 angular.module('wallet_detail_module',[])
-.controller('wallet_detail_ctrl',function ($scope,$http,$state,$stateParams,_ajax) {
+.controller('wallet_detail_ctrl',function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
   console.log($stateParams.transaction_no);//交易单号
+    $rootScope.crumbs = [{
+        name: '钱包',
+        icon: 'icon-qianbao',
+        link: 'supplier_wallet'
+    }, {
+        name: '钱包详情',
+    }];
   $scope.wallet_detail=[];
   _ajax.get('/supplier-cash/get-cash',{transaction_no:$stateParams.transaction_no},function (res) {
       console.log(res);

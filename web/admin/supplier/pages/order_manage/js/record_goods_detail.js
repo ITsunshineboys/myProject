@@ -1,10 +1,33 @@
 angular.module('goods_detail_module',[])
-.controller('goods_detail_ctrl',function ($scope,$http,$state,$stateParams,_ajax) {
+.controller('goods_detail_ctrl',function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
   console.log($stateParams.express_params)
   $scope.order_no=$stateParams.express_params.order_no;
   $scope.sku=$stateParams.express_params.sku;
   $scope.tabflag=$stateParams.express_params.tabflag;
   let statename = $stateParams.express_params.statename;
+  //返回上一个页面
+    $scope.backPage = function () {
+        if(statename=='waitsend_detail'){
+            $state.go('waitsend_detail',{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
+        }else{
+            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
+        }
+    };
+    //返回订单
+    $scope.back_list=function () {
+        $state.go('order_manage',{tabflag:$scope.tabflag});//返回待收货列表
+    };
+    //面包屑
+    $rootScope.crumbs = [{
+        name: '订单管理',
+        icon: 'icon-dingdanguanli',
+        link: back_list
+    }, {
+        name: '订单详情',
+        link: backPage,
+    },{
+        name:'记录商品详情'
+    }];
   _ajax.post("/order/getsupplierorderdetails",{
       order_no:$stateParams.express_params.order_no,
       sku:$stateParams.express_params.sku
@@ -40,17 +63,4 @@ angular.module('goods_detail_module',[])
         $scope.goods_guarantee=res.data.guarantee;//保障
     })
   }
-    /*返回上一个页面*/
-    $scope.backPage = function () {
-        if(statename=='waitsend_detail'){
-            $state.go('waitsend_detail',{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
-        }else{
-            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
-        }
-    }
-
-    //返回订单
-    $scope.back_list=function () {
-        $state.go('order_manage',{tabflag:$scope.tabflag});//返回待收货列表
-    };
 });
