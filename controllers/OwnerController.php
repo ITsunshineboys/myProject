@@ -1020,19 +1020,11 @@ class OwnerController extends Controller
         $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $high, $post['kitchen'], 3);
 //        墙砖面积
         $wall_area = $toilet_wall_area + $kitchen_wall_area;
-        var_dump($wall_area);
-        var_dump($toilet_wall_area);
-        var_dump($kitchen_wall_area);
-        exit;
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
-
 //        地砖面积
         $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area;
-        var_dump($drawing_room_area);
-        var_dump($toilet_area);
-        var_dump($kitchen_area);
-        exit;
+
 //        地砖天数
         $floor_tile_day = $floor_tile_area / $geostrophy_day_area;
 //        贴砖天数
@@ -1087,11 +1079,7 @@ class OwnerController extends Controller
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        var_dump($covering_layer_area);
-        var_dump($floor_tile_area);
-        var_dump($wall_area);
-        var_dump($cement_area);
-        exit;
+        
         $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
 
 //        自流平费用
