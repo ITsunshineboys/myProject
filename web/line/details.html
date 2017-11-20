@@ -43,7 +43,7 @@
                 <div class=" item_commodity"  ng-repeat="item in cur_replace_material"
                      ng-click="getDetailsProduct(item)">
                     <div class="item_commodity_divimg">
-                        <img ng-src="http://test.cdlhzz.cn/{{item.image}}" alt="" class="img_item " />
+                        <img ng-src="{{baseUrl + '/'+item.image}}" alt="" class="img_item " />
                         <!--{{item.cover_image}}-->
                     </div>
                     <div class="item_commodity_comment">
