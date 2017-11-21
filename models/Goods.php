@@ -1228,6 +1228,34 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Get view data(for admin)
+     *
+     * @return array
+     */
+    public function adminView()
+    {
+        return [
+            'id' => $this->id,
+            'logistics_template_id' => $this->logistics_template_id,
+            'category_title' => GoodsCategory::findOne($this->category_id)->fullTitle(),
+            'title' => $this->title,
+            'subtitle' => $this->subtitle,
+            'cover_image' => $this->cover_image,
+            'supplier_price' => StringService::formatPrice($this->supplier_price / 100),
+            'platform_price' => StringService::formatPrice($this->platform_price / 100),
+            'purchase_price_decoration_company' => StringService::formatPrice($this->purchase_price_decoration_company / 100),
+            'purchase_price_designer' => StringService::formatPrice($this->purchase_price_designer / 100),
+            'purchase_price_manager' => StringService::formatPrice($this->purchase_price_manager / 100),
+            'after_sale_services' => $this->afterSaleServicesReadable(),
+            'qr_code' => UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
+            'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
+            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
+            'images' => GoodsImage::imagesByGoodsId($this->id),
+        ];
+    }
+
+    /**
      * Get view data
      *
      * @param string $ip ip
@@ -1254,7 +1282,7 @@ class Goods extends ActiveRecord
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
-            'platform_price' => $this->platform_price / 100,
+            'platform_price' => StringService::formatPrice($this->platform_price / 100),
             'description' => $this->description,
             'sku' => $this->sku,
             'left_number' => $this->left_number,

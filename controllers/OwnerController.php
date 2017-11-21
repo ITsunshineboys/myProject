@@ -286,19 +286,9 @@ class OwnerController extends Controller
     public function actionWeakCurrent()
     {
         $post = \Yii::$app->request->get();
-        //人工价格
-        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
-        if ($workers != null){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
-        }
-        $worker_price = !isset($workers['univalence']) ? $workers['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
-        $worker_day_price = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] :WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
-
-
         //      点位 和 材料查询
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne('count',$points_where);
-        $weak_current_points = !isset($points['count']) ? $points['count'] : Points::WEAK_CURRENT_POINTS;
 
 
         //查询弱电所需要材料
@@ -329,10 +319,6 @@ class OwnerController extends Controller
             ]);
         }
 
-        //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_current_points, $worker_price ,$worker_day_price);
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
-
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
@@ -342,7 +328,6 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'weak_current_labor_price' => $labor_all_cost,
                 'weak_current_material' => $material,
             ]
         ]);
@@ -355,20 +340,10 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->get();
-        //人工价格
-        $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
-        if ($workers != null){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
-        }
-        $strong_current_price = !isset($workers['univalence']) ? $workers['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
-        $strong_current_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
-
-
         //强电点位
         $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['strong_current']]];
         $points = Points::findByOne($points_select,$points_where);
-        $_points = !isset($points['count']) ? $points['count'] : Points::STRONG_CURRENT_POINTS;
 
 
         //查询弱电所需要材料
@@ -398,10 +373,6 @@ class OwnerController extends Controller
             ]);
         }
 
-        //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($_points,$strong_current_price,$strong_current_day_points);
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
-
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $strong_current, $craft);
         $material = BasisDecorationService::electricianMaterial($strong_current, $material_price);
@@ -426,17 +397,27 @@ class OwnerController extends Controller
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
         if ($waterway_labor != null){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
+            $worker_kind_details = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
+            foreach ($worker_kind_details as $one_){
+                if ($one_['worker_kind_details'] == '强电点位'){
+                    $strong = $one_['quantity'];
+                }
+
+                if ($one_['worker_kind_details'] == '弱电点位'){
+                    $weak = $one_['quantity'];
+                }
+
+                if ($one_['worker_kind_details'] == '水路点位'){
+                    $waterway = $one_['quantity'];
+                }
+            }
         }
-        $worker_price = !isset($waterway_labor['univalence']) ? $waterway_labor['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
-        $worker_ady_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERWAY_DAY_POINTS;
 
 
-        //强电点位
-        $points_select = 'count';
-        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
+        $a = Points::find()->asArray()->select('title,count')->andWhere(['level'=>1])->all();
+        var_dump($a);exit;
         $points = Points::findByOne($points_select,$points_where);
-        $_points = !isset($points['count']) ? $points['count'] : Points::WATERWAY_POINTS;
+
 
 
         //查询弱电所需要材料
@@ -1470,7 +1451,7 @@ class OwnerController extends Controller
         }
 
         foreach ($assort_material as $assort){
-            if ($assort['state'] != MaterialPropertyClassify::DEFAULT_STATUS){
+            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
                 $have_assort[] = $assort;
             } else {
                 $without_assort[] = $assort;
@@ -1482,7 +1463,6 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['title'];
             $material_one[$one_have_assort['title']] = $one_have_assort;
         }
-var_dump($have_assort);exit;
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
@@ -1493,7 +1473,8 @@ var_dump($have_assort);exit;
         }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
+        $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
+        $bedroom_area = $p['project_value'] / self::PRICE_UNITS;
         //   生活配套
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         //   基础装修
@@ -1507,37 +1488,29 @@ var_dump($have_assort);exit;
         //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         //   主材
-        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
-
-
-        if ($post['stairway_id'] == 1) {
-            //  楼梯信息
-            $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
-            if ($assort_material == null) {
-                $code = 1061;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            $stairs_price = BasisDecorationService::priceConversion($stairs);
-            foreach ($stairs_price as &$one_stairs_price) {
-                if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
-                    $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
-                    $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
-                    $condition_stairs [] = $one_stairs_price;
-                }
-            }
-            $material[] = BasisDecorationService::profitMargin($condition_stairs);
-        }
-
+        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
 
 
         //无计算公式
         foreach ($without_assort as $one_without_assort){
-            $without_assort_name[] = $one_without_assort['material'];
-            $without_assort_one[$one_without_assort['material']] = $one_without_assort;
+            $without_assort_name[] = $one_without_assort['title'];
+            $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
+
+        if ($post['stairway_id'] == 1) {
+            //  楼梯信息
+            $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
+            $stairs_price = BasisDecorationService::priceConversion($stairs);
+            foreach ($stairs_price as &$one_stairs_price) {
+                if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
+                    $one_stairs_price['quantity'] = 1;
+                    $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
+                    $condition_stairs [] = $one_stairs_price;
+                }
+            }
+            $material[][] = BasisDecorationService::profitMargin($condition_stairs);
+        }
+
 
         $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
         if ($without_assort_goods == null) {
@@ -1551,11 +1524,17 @@ var_dump($have_assort);exit;
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
+        $goods_material = [];
+        foreach ($material as $one){
+            if($one != null){
+                $goods_material[] =   $one;
+            }
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-               'goods' => Json::decode(Json::encode($material),true),
+               'goods' => Json::decode(Json::encode($goods_material),true),
             ],
         ]);
     }

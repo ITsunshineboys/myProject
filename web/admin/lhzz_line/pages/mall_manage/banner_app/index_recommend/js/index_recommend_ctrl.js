@@ -3,7 +3,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: 'APP推荐位-推荐管理',
     }];

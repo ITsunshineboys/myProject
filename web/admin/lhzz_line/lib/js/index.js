@@ -1,4 +1,4 @@
-app.controller("index_ctrl", function ($rootScope, $scope, _ajax) {
+app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
     $rootScope.baseUrl = baseUrl;
 
     $scope.loginOut = function () {
@@ -40,5 +40,109 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax) {
         elementPathEnabled:false,
         //是否开启字数统计
         wordCount:false
+    }
+    
+    //侧边栏导航
+    $scope.mall_flag=false;
+    $scope.finance_flag=false;
+    $scope.other_flag='home';
+    $scope.mall_active= 0;
+    $scope.finance_active= 0;
+    //商城管理
+    $scope.mall_obj=[
+        {id:0,name:'商城数据',link:'merchant_index'},
+        {id:1,name:'APP搜索位-banner管理',link:'banner_recommend'},
+        {id:2,name:'搜索页面',link:'search'},
+        {id:3,name:'商家管理',link:'store_mag'},
+        {id:4,name:'商城数据',link:'mall_data'},
+        {id:5,name:'品牌管理',link:'brand_index'},
+        {id:6,name:'分类管理',link:'fenleiguanli'},
+        {id:7,name:'系列/风格/属性管理',link:'style_index'}
+    ];
+    //财务中心
+    $scope.finance_obj=[
+        {id:0,name:'财务数据',link:'mall_finance.index'},
+        {id:1,name:'商城财务',link:'mall_finance.index'}
+    ];
+    //商城管理------一级
+    $scope.mall_click=function () {
+        $scope.mall_flag=true;
+        $scope.finance_flag=false;
+        $scope.other_flag='';
+        $scope.mall_active= 0;
+        sessionStorage.removeItem('finance_menu');
+        sessionStorage.removeItem('mall_dd_menu');
+        sessionStorage.removeItem('finance_dd_menu');
+        sessionStorage.removeItem('other_menu');
+        sessionStorage.setItem('mall_menu',$scope.mall_flag);
+        $state.go('merchant_index')
+    }
+    $rootScope.mall_click=$scope.mall_click;
+    if (sessionStorage.getItem('mall_menu')!=null) {
+        $scope.mall_flag=true;
+        $scope.finance_flag=false;
+        $scope.other_flag='';
+        $scope.mall_active= 0;
+    }
+    //商城管理------二级
+    $scope.mall_repeat=function (item) {
+        $scope.mall_active = item.id;
+        sessionStorage.setItem('mall_dd_menu',$scope.mall_active);
+        $state.go(item.link)
+    }
+    if (sessionStorage.getItem('mall_dd_menu')!=null) {
+        $scope.mall_flag=true;
+        $scope.finance_flag=false;
+        $scope.other_flag='';
+        $scope.mall_active= sessionStorage.getItem('mall_dd_menu');
+    }
+    //财务中心------一级
+    $scope.finance_click=function () {
+        $scope.finance_flag=true;
+        $scope.mall_flag=false;
+        $scope.other_flag='';
+        $scope.finance_active= 0;
+        sessionStorage.removeItem('mall_menu');
+        sessionStorage.removeItem('mall_dd_menu');
+        sessionStorage.removeItem('finance_dd_menu');
+        sessionStorage.removeItem('other_menu');
+        sessionStorage.setItem('finance_menu',$scope.finance_flag);
+    }
+    $rootScope.finance_click=$scope.finance_click;
+    if(sessionStorage.getItem('finance_menu')!=null){
+        $scope.finance_flag=true;
+        $scope.mall_flag=false;
+        $scope.other_flag='';
+        $scope.finance_active= 0;
+    }
+    //财务中心-二级
+    $scope.finance_repeat=function (item) {
+        $scope.finance_active = item.id;
+        sessionStorage.setItem('finance_dd_menu',$scope.finance_active);
+        $state.go(item.link)
+    }
+    if (sessionStorage.getItem('finance_dd_menu')!=null) {
+        $scope.finance_flag=true;
+        $scope.mall_flag=false;
+        $scope.other_flag='';
+        $scope.finance_active= sessionStorage.getItem('finance_dd_menu');;
+    }
+    //其他一级菜单
+    $scope.other_display=function (value) {
+        sessionStorage.removeItem('mall_menu');
+        sessionStorage.removeItem('mall_dd_menu');
+        sessionStorage.removeItem('finance_menu');
+        sessionStorage.removeItem('finance_dd_menu');
+        console.log(value);
+        $scope.other_flag='';
+        $scope.other_flag=value;
+        sessionStorage.setItem('other_menu',$scope.other_flag);
+        $scope.mall_flag=false;
+        $scope.finance_flag=false;
+    }
+    if (sessionStorage.getItem('other_menu')!=null) {
+        $scope.mall_flag=false;
+        $scope.finance_flag=false;
+        $scope.other_flag= sessionStorage.getItem('other_menu');
     }
 });

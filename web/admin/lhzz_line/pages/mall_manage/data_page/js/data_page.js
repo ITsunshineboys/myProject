@@ -3,7 +3,7 @@ app.controller('mallDataCtrl', ['$rootScope', '$scope', '$stateParams', '_ajax',
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '商城数据'
     }];
@@ -75,7 +75,7 @@ app.controller('mallDataCtrl', ['$rootScope', '$scope', '$stateParams', '_ajax',
         $rootScope.crumbs = [{
             name: '商城管理',
             icon: 'icon-shangchengguanli',
-            link: 'merchant_index'
+            link: $rootScope.mall_click
         }, {
             name: '商家管理',
             link: 'store_mag'

@@ -121,11 +121,8 @@ class Effect extends ActiveRecord
         }
         $tran=\Yii::$app->db->beginTransaction();
         try{
-            if(!isset($post['particulars'])){
-                $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅'.self::chinanum($post['kitchen']).'厨'.self::chinanum($post['toilet']).'卫';
-            }else{
-                $particulars=$post['particulars'];
-            }
+            $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅'.self::chinanum($post['kitchen']).'厨'.self::chinanum($post['toilet']).'卫';
+
             if(!isset($post['district_code'])){
                 $district_code=null;
             }else{
@@ -185,7 +182,7 @@ class Effect extends ActiveRecord
             $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
-            $effect_earnest->sale_price=$post['sale_price'];
+            $effect_earnest->sale_price=$post['sale_price']*100;
             $effect_earnest->type=self::TYPE_STATUS;
             $effect_earnest->item=self::TYPE_STATUS;
             if(!$effect_earnest->save(false)){
@@ -226,7 +223,6 @@ class Effect extends ActiveRecord
         if(!$array){
             $data['particulars_view']=null;
         }
-        $array['particulars']=mb_substr($array['particulars'],0,4);
         if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{
@@ -277,6 +273,11 @@ class Effect extends ActiveRecord
 
     }
 
+    /**
+     * app 端方案详情
+     * @param $enst_id
+     * @return array|null
+     */
     public static  function getAppeffectdata($enst_id){
         $data=[];
         $query=new Query();
@@ -304,8 +305,9 @@ class Effect extends ActiveRecord
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         $data['quote']=[
-            ['name'=>'原价', 'vaule'=>$array['original_price']],
-            [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
+            ['name'=>'原价', 'vaule'=>'￥'.$array['original_price']],
+            [ 'name'=>'优惠后价格', 'vaule'=>'￥'.$array['sale_price']],
+            ['name'=>'','vaule'=>'（包含工人费用，不包含设计图纸费用）'],
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
 
@@ -317,6 +319,7 @@ class Effect extends ActiveRecord
         if($array['name']=='' && $array['phone']==''){
            unset($data['user_view']);
         }
+
 
         $data['id']=$array['id'];
         if(isset($array['district'])){
@@ -346,10 +349,9 @@ class Effect extends ActiveRecord
         if(!$material){
             $data['material']=null;
         }
-
-        foreach ($material as &$value){
+        foreach ($material as $k=>&$value){
             $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
-            $value['price']= sprintf('%.2f',(float)$value['price']*0.01);
+            $value['price']= '￥'.sprintf('%.2f',(float)$value['price']*0.01);
             $value['cate_level3']=GoodsCategory::find()->select('title')
                 ->where(['id'=>$goods_cate_id['category_id']])
                 ->asArray()
@@ -364,8 +366,15 @@ class Effect extends ActiveRecord
                 ->where(['id'=>$value['first_cate_id']])
                 ->asArray()->one()['title'];
 
+
+            unset($value['effect_id']);
+            unset($value['goods_id']);
+
         }
-        $data['material']=$material;
+
+        $material_grop=self::array_group_by($material,'first_cate_id');
+        $material_grop=array_values($material_grop);
+        $data['material']=$material_grop;
 
         return $data;
 

@@ -32,6 +32,8 @@ commodity_detail.controller("commodity_detail_on_ctrl",function (_ajax,$rootScop
     $scope.supplier_price = gooddetail.supplier_price; //供货价格
     $scope.platform_price = gooddetail.platform_price; //平台价格
     $scope.market_price = gooddetail.market_price; //市场价格
+
+    console.log($scope.supplier_price,$scope.platform_price,$scope.market_price)
     $scope.left_number = gooddetail.left_number; //库存
     let price_a = Number(gooddetail.purchase_price_decoration_company); //装修公司采购价
     let price_b = Number(gooddetail.purchase_price_manager);            //项目经理采购价
@@ -116,20 +118,96 @@ commodity_detail.controller("commodity_detail_on_ctrl",function (_ajax,$rootScop
 
     $scope.price_flag = false;
 
-    $scope.decorationPrice = function () {
-        (+$scope.purchase_price_decoration_company>=+$scope.supplier_price)&&(+$scope.purchase_price_decoration_company<=+$scope.purchase_price_manager)&&(+$scope.purchase_price_decoration_company<=$scope.purchase_price_designer)&&
-        (+$scope.purchase_price_decoration_company<=$scope.platform_price)&&(+$scope.purchase_price_decoration_company<=$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+
+
+    // 时间筛选器
+    $scope.$watch('purchase_price_decoration_company', function (value, oldValue) {
+        if (value==undefined) {
+            $scope.price_flag = true;
+            return;
+        };
+
+        if (parseFloat(value) < parseFloat($scope.supplier_price)) {    // 不能小于供货价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) > parseFloat($scope.purchase_price_manager) || parseFloat(value) > parseFloat($scope.purchase_price_designer)) {  // 不能大于项目经理采购价，或者设计师采购价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) > parseFloat($scope.platform_price)) {    // 不能大于平台价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) > parseFloat($scope.market_price)) {  // 不能大于市场价
+            $scope.price_flag = true;
+            return;
+        }
+
+        $scope.price_flag = false;
+    });
+
+
+    $scope.$watch('purchase_price_manager', function (value, oldValue) {
+        if (value == undefined) {
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) < parseFloat($scope.supplier_price)) {    // 不能小于供货价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) < parseFloat($scope.purchase_price_decoration_company)) { // 不能小于装修公司采购价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) > parseFloat($scope.platform_price)) {    // 不能大于平台价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) > parseFloat($scope.market_price)) {  // 不能大于市场价
+            $scope.price_flag = true;
+            return;
+        }
+
+        $scope.price_flag = false;
+    });
+
+
+    $scope.$watch('purchase_price_designer', function (value, oldValue) {
+        if (value == undefined) {
+            $scope.price_flag = true
+        }
+
+        if (parseFloat(value) < parseFloat($scope.supplier_price)) {    // 不能小于供货价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) < parseFloat($scope.purchase_price_decoration_company)) { // 不能小于装修公司采购价
+            $scope.price_flag = true;
+            return;
+        }
+
+        if (parseFloat(value) > parseFloat($scope.platform_price)) {    // 不能大于平台价
+            $scope.price_flag = true;
+            return;
     }
 
-    $scope.managerPrice = () => {
-        (+$scope.purchase_price_manager>=+$scope.supplier_price)&&(+$scope.purchase_price_manager>=+$scope.purchase_price_decoration_company)&&(+$scope.purchase_price_manager<=+$scope.platform_price)&&
-        (+$scope.purchase_price_manager<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
-    }
+        if (parseFloat(value) > parseFloat($scope.market_price)) {  // 不能大于市场价
+            $scope.price_flag = true;
+            return;
+        }
 
-    $scope.designerPrice = () => {
-        (+$scope.purchase_price_designer>=+$scope.supplier_price)&&(+$scope.purchase_price_designer>=+$scope.purchase_price_decoration_company)&&(+$scope.purchase_price_designer<=+$scope.platform_price)&&
-        (+$scope.purchase_price_designer<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
-    }
+        $scope.price_flag = false;
+    });
 
     $scope.saveGoodDetail = function (val,error) {
         if(val&&!$scope.price_flag){

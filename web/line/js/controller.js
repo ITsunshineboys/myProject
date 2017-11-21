@@ -817,7 +817,7 @@ angular.module("all_controller", ['ngCookies'])
            //店铺首页推荐列表
             $scope.mall_id = item.url.split('=')[1];
             console.log($scope.mall_id);
-            $http.post( baseUrl+'/mall/recommend-click-record',{
+            $http.post( baseUrl+'/mall//recommend-click-record-supplier',{
                 recommend_id:+$scope.recommend_id
             },config).then(function (response){
                 console.log(response)

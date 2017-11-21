@@ -3881,6 +3881,43 @@ class MallController extends Controller
     }
 
     /**
+     * View goods action(for admin)
+     *
+     * @return string
+     */
+    public function actionGoodsViewAdmin()
+    {
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->get('id', 0);
+        if ($id <= 0) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $where['id'] = $id;
+        $goods = Goods::find()->where($where)->one();
+
+        if (!$goods) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $data = $goods->adminView();
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods_view_admin' => $data,
+            ],
+        ]);
+    }
+
+    /**
      * View goods comments action
      *
      * @return string

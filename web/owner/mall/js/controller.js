@@ -301,6 +301,18 @@ angular.module('all_controller', [])
         })
         $scope.$watch('cur_style', function (newVal, oldVal) {
             $scope.show_material = false
+            $timeout(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    autoplayDisableOnInteraction: false,
+                    effect: 'slide',
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination',
+                })
+            }, 0)
         })
         //监听页面是否加载完成操作DOM
         $scope.$on('ngRepeatFinished', function () {

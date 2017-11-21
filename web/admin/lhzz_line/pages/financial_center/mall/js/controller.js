@@ -229,8 +229,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         //返回前一页
         $scope.go_prev1 = function () {
-            // if($rootScope.curState_name == 'mall_finance.account_detail'){
-            //     $rootScope.fromState_name = 'mall_finance.account'
                 $rootScope.crumbs = [
                     {
                         name:'财务中心',
@@ -247,9 +245,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 ]
             tablePages2()
             $state.go('mall_finance.account')
-            // }else if($rootScope.curState_name == 'mall_finance.account_detail'){
-            //
-            // }
         }
         $scope.time_type = [
             {name: '全部时间', str: 'all'},
@@ -778,7 +773,8 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $rootScope.crumbs = [
                 {
                     name:'财务中心',
-                    icon:'icon-caiwu'
+                    icon:'icon-caiwu',
+                    link:$rootScope.finance_click
                 },{
                     name:'商城财务',
                     link:function () {
@@ -816,6 +812,11 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages1()
             }
         })
+        //跳转订单详情
+        $scope.go_list_detail = function (item) {
+            console.log(item)
+            $state.go('order_details',{orderNo:item.order_no,sku:item.sku})
+        }
         //商家提现管理详情返回
         $scope.go_prev = function () {
             $scope.submitted = false

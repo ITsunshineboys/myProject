@@ -3,7 +3,7 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '商家管理',
         link: 'store_mag'
@@ -97,7 +97,7 @@ app.controller('comments', ['$rootScope', '$scope', '$stateParams', '_ajax', fun
         $rootScope.crumbs = [{
             name: '商城管理',
             icon: 'icon-shangchengguanli',
-            link: 'merchant_index'
+            link: $rootScope.mall_click
         }, {
             name: '商家管理',
             link: 'store_mag'

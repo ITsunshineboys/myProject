@@ -19,40 +19,32 @@
     <div class="logo">
         <img src="lib/images/logo.png" alt=""/>
     </div>
-    <dl >
-        <dt ui-sref="home"><i class="iconfont icon-shouye"></i> 首页</dt>
-    </dl>
     <dl>
-        <dt ui-sref="merchant_index"><i class="iconfont icon-shangchengguanli"></i> 商城管理</dt>
-        <dd><a ui-sref="banner_recommend">APP搜索位-banner管理</a></dd>
-        <dd><a ui-sref="search">搜索页面</a></dd>
-        <dd><a ui-sref="store_mag">商家管理</a></dd>
-        <dd><a ui-sref="mall_data">商城数据</a></dd>
-        <dd><a ui-sref="brand_index">品牌管理</a></dd>
-        <dd><a ui-sref="fenleiguanli">分类管理</a></dd>
-        <!--<dd><a href="javascript:void (0);">新品牌/新分类审核</a></dd>-->
-        <!--<dd><a href="javascript:void (0);">商家入驻审核</a></dd>-->
-        <dd><a ui-sref="style_index">系列/风格/属性管理</a></dd>
+        <dt ui-sref="home" ng-class="{on:other_flag=='home'}" ng-click="other_display('home')"><i class="iconfont icon-shouye"></i> 首页</dt>
     </dl>
 
     <dl>
-        <dt  ui-sref="intelligent.intelligent_index"><i class="iconfont icon-baojia"></i> 智能报价</dt>
+        <dt ng-click="mall_click()" ng-class="{on:mall_flag}"><i class="iconfont icon-shangchengguanli"></i>商城管理</dt>
+        <dd ng-repeat="item in mall_obj" ng-click="mall_repeat(item)" ng-class="{true:'y_display',false:'n_display'}[mall_flag]"><a ng-class="{dd_on: mall_active == item.id}">{{item.name}}</a></dd>
     </dl>
 
     <dl>
-        <dt class="on"><i class="iconfont icon-caiwu"></i> 财务中心</dt>
-        <dd><a class="dd_on" ui-sref="mall_finance.index">商城财务</a></dd>
-        <!--<dd><a href="javascript:void (0);" >提现业务</a></dd>-->
+        <dt ui-sref="intelligent.intelligent_index" ng-class="{on:other_flag=='intelligent_index'}" ng-click="other_display('intelligent_index')"><i class="iconfont icon-baojia"></i> 智能报价</dt>
     </dl>
 
     <dl>
-        <dt ui-sref="account_index"><i class="iconfont icon-zhanghuguanli"></i> 账户管理</dt>
+        <dt ng-click="finance_click()" ng-class="{on:finance_flag}"><i class="iconfont icon-caiwu"></i> 财务中心</dt>
+        <dd ng-repeat="item in finance_obj" ng-click="finance_repeat(item)" ng-class="{true:'y_display',false:'n_display'}[finance_flag]"><a ng-class="{dd_on: finance_active == item.id}">{{item.name}}</a></dd>
+    </dl>
+
+    <dl>
+        <dt ui-sref="account_index" ng-class="{on:other_flag=='account_index'}" ng-click="other_display('account_index')"><i class="iconfont icon-zhanghuguanli"></i> 账户管理</dt>
     </dl>
     <dl>
-        <dt ui-sref="distribution.index"><i class="iconfont icon-fenxiao"></i>分销</dt>
+        <dt ui-sref="distribution.index" ng-class="{on:other_flag=='distribution.index'}" ng-click="other_display('distribution.index')"><i class="iconfont icon-fenxiao"></i>分销</dt>
     </dl>
     <dl>
-        <dt ui-sref="apply_case.index"><i class="iconfont icon-yangbanjian"></i> 申请样板间</dt>
+        <dt ui-sref="apply_case.index" ng-class="{on:other_flag=='apply_case.index'}" ng-click="other_display('apply_case.index')"><i class="iconfont icon-yangbanjian"></i> 申请样板间</dt>
     </dl>
 </div>
 <!--左侧导航栏结束-->

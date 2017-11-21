@@ -9,6 +9,8 @@ mall_mag.controller("mall_mag",function ($scope,$http,$rootScope,_ajax) {
         name: '商城管理',
         icon: 'icon-shangchengguanli',
         link: 'merchant_index'
+    },{
+        name:'商城数据'
     }];
 
     _ajax.get('/mall/index-admin',{},function (res) {

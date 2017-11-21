@@ -2,7 +2,7 @@ app.controller('searchCtrl', ['$rootScope', '$scope', '_ajax', function ($rootSc
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '搜索'
     }];

@@ -182,6 +182,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         }
                         $scope.a_pic_error = '上传图片格式不正确或尺寸不匹配,请重新上传'
                     }
+                    console.log($scope.cur_image)
                     console.log(res)
                 }, function (error) {
                     console.log(error)
@@ -190,7 +191,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //上传几张图片
         $scope.arr_upload = function (file) {
-            console.log($scope.all_drawing)
             if (file != null) {
                 Upload.upload({
                     url: '/site/upload',

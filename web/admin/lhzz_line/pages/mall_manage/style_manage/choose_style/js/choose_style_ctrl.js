@@ -13,8 +13,8 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 	}).then(function successCallback(response) {
 		$scope.details = response.data.data.categories;
 		$scope.oneColor= $scope.details[0];
-		console.log(response);
-		console.log($scope.details)
+		// console.log(response);
+
 	});
 	//获取二级
 	$http({
@@ -23,15 +23,14 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 	}).then(function successCallback(response) {
 		$scope.second = response.data.data.categories;
 		$scope.twoColor= $scope.second[0];
-		//console.log(response.data.data.categories[0].id);
-		//console.log(response)
-		console.log($scope.second)
+		// console.log(response)
 	});
 	//获取三级
 	$http({
 		method: 'get',
-		url: baseUrl+'/mall/categories?pid=7'
+		url: baseUrl+'/mall/categories?pid=2'
 	}).then(function successCallback(response) {
+        console.log(response);
 		$scope.three = response.data.data.categories;
 		for(let [key,value] of $scope.three.entries()){
 			if($scope.item_check.length == 0){
@@ -44,7 +43,7 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 				}
 			}
 		}
-		console.log($scope.three);
+
 	});
 	//点击一级 获取相对应的二级
 	$scope.getMore = function (n) {
@@ -80,6 +79,7 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 
 	}
 	//点击二级 获取相对应的三级
+    $scope.three = []
 	$scope.getMoreThree = function (n) {
 		$scope.id=n;
 		$scope.twoColor = n;
@@ -88,6 +88,7 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 			url: baseUrl+'/mall/categories?pid='+ n.id
 		}).then(function successCallback(response) {
 			$scope.three = response.data.data.categories;
+            // console.log($scope.three);
 			for(let [key,value] of $scope.three.entries()){
 				if($scope.item_check.length == 0){
 					value['complete'] = false
@@ -100,12 +101,10 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 				}
 
 			}
-			console.log($scope.three);
-			console.log(response);
-			console.log($scope.id.id);
 
 		});
 	}
+
 	//添加拥有系列的三级
 	$scope.check_item = function(item){
 		console.log(item);
@@ -162,8 +161,9 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 		url: baseUrl+'/mall/categories-have-style-series?type='+'style'
 	}).then(function successCallback(response) {
 		console.log(response);
+
 		$scope.item_check = response.data.data.have_style_series_categories;
-		for(let [key,value] of $scope.three.entries()){
+		for(let [key,value] of Object.entries($scope.three)){
 			if($scope.item_check.length == 0){
 				value['complete'] = false
 			}else{

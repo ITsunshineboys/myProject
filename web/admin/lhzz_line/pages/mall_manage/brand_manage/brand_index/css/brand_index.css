@@ -203,10 +203,6 @@ table tr{
   cursor: default;
 }
 
-.active{
-  background:#487af8!important;
-  color: white!important;
-}
 .down_roles{
   margin-bottom: 20px;
 }
