@@ -16,6 +16,21 @@ angular.module('apply_case',[])
                     tablePages();
                 }
             }
+            if(sessionStorage.getItem('flag') == 1){
+                $rootScope.crumbs = [
+                    {
+                        name:'申请样板间',
+                        icon:'icon-yangbanjian',
+                        link:function () {
+                            $state.go('apply_case.index')
+                            $rootScope.crumbs.splice(1,1)
+                        }
+                    },{
+                        name:'详情'
+                    }
+                ]
+                sessionStorage.removeItem('flag')
+            }
             let tablePages=function () {
                 $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
                 _ajax.get('/effect/effect-list',$scope.params,function (res) {
@@ -148,6 +163,7 @@ angular.module('apply_case',[])
             //跳转商品详情
             $scope.go_goods_detail = function (item) {
                 console.log(item)
+                sessionStorage.setItem('flag',1)
                 $state.go('commodity_detail',{id:item.goods_id})
             }
             //返回前页
