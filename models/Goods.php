@@ -1228,6 +1228,34 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Get view data(for admin)
+     *
+     * @return array
+     */
+    public function adminView()
+    {
+        return [
+            'id' => $this->id,
+            'logistics_template_id' => $this->logistics_template_id,
+            'category_title' => GoodsCategory::findOne($this->category_id)->fullTitle(),
+            'title' => $this->title,
+            'subtitle' => $this->subtitle,
+            'supplier_price' => $this->supplier_price,
+            'cover_image' => $this->cover_image,
+            'platform_price' => $this->platform_price / 100,
+            'purchase_price_decoration_company' => $this->purchase_price_decoration_company,
+            'purchase_price_designer' => $this->purchase_price_designer,
+            'purchase_price_manager' => $this->purchase_price_manager,
+            'after_sale_services' => $this->afterSaleServicesReadable(),
+            'qr_code' => UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
+            'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
+            'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
+            'images' => GoodsImage::imagesByGoodsId($this->id),
+        ];
+    }
+
+    /**
      * Get view data
      *
      * @param string $ip ip
