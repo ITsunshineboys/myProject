@@ -1551,11 +1551,17 @@ class OwnerController extends Controller
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
+        $goods_material = [];
+        foreach ($material as $one){
+            if($one != null){
+                $goods_material[] =   $one;
+            }
+        }
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-               'goods' => Json::decode(Json::encode($material),true),
+               'goods' => Json::decode(Json::encode($goods_material),true),
             ],
         ]);
     }
