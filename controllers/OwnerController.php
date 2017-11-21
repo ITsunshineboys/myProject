@@ -580,7 +580,7 @@ class OwnerController extends Controller
 
         //卫生间
         $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->one();
-        $toilet_ = $toilet['project_value'] * 100;
+        $toilet_ = $toilet['project_value'] / 100;
         $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->one();
         if (!$toilet_p){
             $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
