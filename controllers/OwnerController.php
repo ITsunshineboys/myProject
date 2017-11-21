@@ -1237,7 +1237,9 @@ class OwnerController extends Controller
             ->andWhere(['project_name'=>self::OTHER_AREA['handyman_day']])
             ->one();
 //        总天数
-        $total_day = BasisDecorationService::wallArea($post,$worker_kind_details) + $_area['project_value'];
+        $_day = BasisDecorationService::wallArea($post,$worker_kind_details)
+        $total_day = $_day+ $_area['project_value'];
+        
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
         if ($craft == null){
