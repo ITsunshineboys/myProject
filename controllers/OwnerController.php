@@ -579,7 +579,8 @@ class OwnerController extends Controller
 
 
         //卫生间
-        $toilet = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['toilet']);
+        $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间'])->andWhere(['project_particulars'=>'卫生间面积'])->one();
+        var_dump($toilet);exit;
         $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->one();
         if (!$toilet_p){
             $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
