@@ -21,10 +21,10 @@ angular.module('goods_detail_module',[])
     $rootScope.crumbs = [{
         name: '订单管理',
         icon: 'icon-dingdanguanli',
-        link: back_list
+        link: $scope.back_list
     }, {
         name: '订单详情',
-        link: backPage,
+        link: $scope.backPage,
     },{
         name:'记录商品详情'
     }];

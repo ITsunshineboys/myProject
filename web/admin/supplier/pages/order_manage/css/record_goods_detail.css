@@ -5,25 +5,6 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-header{
-  height: 60px;
-  line-height: 60px;
-  padding-left: 40px;
-  border-bottom: 1px solid #E6E9F0 ;
-}
-.shop_manage{
-  cursor: pointer;
-  color: #2F3033;
-  line-height: 14px;
-  font-weight: bold;
-}
-.commodity_manage{
-  color: #8D9199;
-}
-header img{
-  margin-left:70%;
-}
-
 .goodattrs>div:not(:first-child){
   margin-top: 15px;
 }
@@ -35,8 +16,7 @@ header img{
 
 /*头部结束*/
 section{
-  padding-left: 40px;
-  margin-top: 60px;
+  padding: 40px 0 0 40px;
 }
 /*公共样式开始*/
 .margin_left{
