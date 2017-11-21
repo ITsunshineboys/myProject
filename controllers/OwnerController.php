@@ -1155,12 +1155,11 @@ class OwnerController extends Controller
                 }
             }
         }
-        var_dump($wall_brick_cost);exit;
-        foreach ($wall_brick_max as &$max_){
-            $max_['quantity'] = $wall_brick_cost['quantity'];
-            $max_['cost'] = $wall_brick_cost['cost'];
-            $material_total['material'][] = $max_;
-        }
+
+
+        $wall_brick_max['quantity'] = $wall_brick_cost['quantity'];
+        $wall_brick_max['cost'] = $wall_brick_cost['cost'];
+        $material_total['material'][] = $wall_brick_max;
         var_dump($material_total);exit;
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
