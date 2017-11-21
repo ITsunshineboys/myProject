@@ -412,7 +412,8 @@ class OwnerController extends Controller
                 }
             }
         }
-
+$a = Points::find()->where(['and',['level'=>3],['title'=>'客厅']])->asArray()->all();
+        var_dump($a);exit;
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
         foreach ($points  as $p){
             if ($p['title'] == '水路'){
@@ -455,7 +456,6 @@ class OwnerController extends Controller
                         $croom_strong_points = $one['count'] * ($post['bedroom'] - 1);
                     }
                     if ($one['title'] == '客厅'){
-                        var_dump($one);exit;
                         $hall_strong_points = $one['count'] * $post['hall'];
                     }
                     if ($one['title'] == '卫生间'){
@@ -476,7 +476,6 @@ class OwnerController extends Controller
 
         $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_);
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
-        var_dump($labor_all_cost);exit;
 
         //查询弱电所需要材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
