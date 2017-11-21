@@ -1134,8 +1134,6 @@ class OwnerController extends Controller
         $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
 
-        var_dump($floor_tile_price);
-        var_dump($floor_tile_attr);
         foreach ($floor_tile_price as &$one_goods){
             foreach ($floor_tile_attr as $goods_id){
                 if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房')
@@ -1143,6 +1141,7 @@ class OwnerController extends Controller
                     $one_goods_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
                     $one_goods_price['cost'] = $kitchen_wall_brick_cost['cost'];
                     $kitchen_goods[] = $one_goods_price;
+                    var_dump($kitchen_goods);exit;
                 }
 
                 if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '客厅')
@@ -1166,8 +1165,7 @@ class OwnerController extends Controller
         $wall_brick_max['quantity'] = $wall_brick_cost['quantity'];
         $wall_brick_max['cost'] = $wall_brick_cost['cost'];
         $material_total['material'][] = $wall_brick_max;
-
-        var_dump($kitchen_goods);exit;
+        
         // 地砖价格
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
