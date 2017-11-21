@@ -107,6 +107,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
         sessionStorage.removeItem('finance_dd_menu');
         sessionStorage.removeItem('other_menu');
         sessionStorage.setItem('finance_menu',$scope.finance_flag);
+        $state.go('mall_finance.index');
     }
     $rootScope.finance_click=$scope.finance_click;
     if(sessionStorage.getItem('finance_menu')!=null){
@@ -120,6 +121,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
         $scope.finance_active = item.id;
         sessionStorage.setItem('finance_dd_menu',$scope.finance_active);
         $state.go(item.link)
+        console.log(item.link);
     }
     if (sessionStorage.getItem('finance_dd_menu')!=null) {
         $scope.finance_flag=true;
