@@ -432,7 +432,6 @@ class OwnerController extends Controller
                 $weak_p = $p['count'];
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
-                var_dump($_waterway);exit;
                 foreach ($_waterway as $one){
                     if ($one['title'] == '卫生间'){
                         $toilet_points = $_waterway['count'] * $post['toilet'];
@@ -441,6 +440,7 @@ class OwnerController extends Controller
                         $kitchen_points = $post['kitchen'] * $_waterway['count'];
                     }
                 }
+                var_dump($_waterway);exit;
             }
             if ($p['title'] == '强电'){
                 $strong_p = $p['count'];
