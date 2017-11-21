@@ -449,7 +449,13 @@ class OwnerController extends Controller
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
                     if ($one['title'] == '次卧室'){
-                        $croom_strong_points = $one['count'] * ($post['bedroom'] - 1);
+                        if ($post['bedroom'] <= 1){
+                            $ciwoshi = 0;
+                        }else{
+                            $ciwoshi = -1;
+                        }
+
+                        $croom_strong_points = $one['count'] * $ciwoshi;
                     } elseif ($one['title'] == '客厅'){
                         $hall_strong_points = $one['count'] * $post['hall'];
                     } elseif ($one['title'] == '卫生间'){
