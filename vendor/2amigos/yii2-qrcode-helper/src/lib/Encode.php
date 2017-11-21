@@ -6,6 +6,7 @@
  */
 namespace dosamigos\qrcode\lib;
 
+use app\services\StringService;
 use Yii;
 use yii\base\Object;
 
@@ -204,7 +205,7 @@ class Encode extends Object
         } catch (\Exception $e) {
             Yii::error($e->getMessage());
             if (YII_DEBUG) {
-                self::writeLog('test', $e->getMessage(), 'qrcode');
+                StringService::writeLog('test', $e->getMessage(), 'qrcode');
             }
         }
     }
