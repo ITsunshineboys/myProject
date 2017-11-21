@@ -308,6 +308,9 @@ class StringService
     public static function generateQrCodeImage($str, $filename)
     {
         $dir = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/';
+        if (YII_DEBUG) {
+            self::writeLog('test', $str . '|' . $dir . "{$filename}.png", 'qrcode');
+        }
         QrCode::png($str, $dir . "{$filename}.png");
     }
 
