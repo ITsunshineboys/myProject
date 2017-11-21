@@ -142,11 +142,14 @@ class OwnerController extends Controller
     ];
 
     const AREA_PROPORTION = '面积比例';
+
     const OTHER_AREA = [
         'waterproof_area'=> '防水面积',
         'putty_area'=> '腻子面积',
         'concave_length'=> '阴角线长度',
         'latex_paint_area'=> '乳胶漆面积',
+        'wall_area'=> '墙面积',
+        'land_area'=> '地面积',
     ];
     /**
      * Actions accessed by logged-in users
@@ -756,12 +759,6 @@ class OwnerController extends Controller
             ]);
         }
         foreach ($proportion as $one_proportion){
-            if ($one_proportion['project'] == self::ROOM_AREA['kitchen_area']){
-                $kitchen_area = $one_proportion;
-            }
-            if ($one_proportion['project'] == self::ROOM_AREA['toilet_area']){
-                $toilet_area = $one_proportion;
-            }
             if ($one_proportion['project'] == self::ROOM_AREA['hall_area']){
                 $hall_area = $one_proportion;
             }
@@ -989,10 +986,10 @@ class OwnerController extends Controller
                 $drawing_room_particulars = $value['project_value'] / 100;
             }
         }
+
         $kitchen_area = $post['area'] * $kitchen_particulars;
         //卫生间面积
         $toilet_area = (int)$post['area'] * $toilet_particulars;
-
         //客餐厅面积
         $drawing_room_area = (int)$post['area'] * $drawing_room_particulars;
 
@@ -1007,9 +1004,6 @@ class OwnerController extends Controller
         }
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
-                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
-                    $wall_height = $local_craft['material'];
-                    break;
                 case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['cement']:
                     $cement_craft = $local_craft['material'];
                     break;
@@ -1035,14 +1029,29 @@ class OwnerController extends Controller
 //        厨房墙面积
         $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $high, $post['kitchen'], 3);
 //        墙砖面积
-        $wall_area = $toilet_wall_area + $kitchen_wall_area;
+        $wall_area_ = Apartment::find()
+            ->asArray()
+            ->where(['<=','min_area',$post['area']])
+            ->andWhere(['>=','max_area',$post['area']])
+            ->andWhere(['project_name'=>self::OTHER_AREA['wall_area']])
+            ->one();
+        $wall_area = $toilet_wall_area + $kitchen_wall_area + $wall_area_['project_value'];
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
-//        地砖面积
-        $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area;
 
+
+        $land_area_ = Apartment::find()
+            ->asArray()
+            ->where(['<=','min_area',$post['area']])
+            ->andWhere(['>=','max_area',$post['area']])
+            ->andWhere(['project_name'=>self::OTHER_AREA['land_area']])
+            ->one();
+//        地砖面积
+        $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area + $land_area_['project_value'];
 //        地砖天数
         $floor_tile_day = $floor_tile_area / $geostrophy_day_area;
+
+
 //        贴砖天数
         $tiling_day = $floor_tile_day + $wall_day;
 //        总天数：保护层天数+贴砖天数
