@@ -1493,6 +1493,7 @@ class OwnerController extends Controller
         }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
+        var_dump($goods_price);exit;
         $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         //   生活配套
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
