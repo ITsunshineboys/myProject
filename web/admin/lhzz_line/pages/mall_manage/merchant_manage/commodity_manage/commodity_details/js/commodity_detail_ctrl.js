@@ -20,8 +20,17 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
     }];
 
 
+    // console.log($stateParams.storeid)
+    $stateParams.storeid == null? $scope.showd_default = true : $scope.showd_default = false;
+
     _ajax.get('/mall/goods-view-admin',{id:$stateParams.id},function (res) {
         $scope.good_detail = res.data.goods_view_admin;
+        let price_a = Number( $scope.good_detail.purchase_price_decoration_company); //装修公司采购价
+        let price_b = Number( $scope.good_detail.purchase_price_manager);            //项目经理采购价
+        let price_c = Number( $scope.good_detail.purchase_price_designer);           //设计师采购价
+        $scope.purchase_price_decoration_company = !price_a&&! price_b&&!price_c?'':price_a; //装修公司采购价
+        $scope.purchase_price_manager = !price_a&&! price_b&&!price_c?'':price_b //项目经理采购价
+        $scope.purchase_price_designer = !price_a&&! price_b&&!price_c?'':price_c ; //设计师采购价
         logisticsTemplate();
     })
 
@@ -32,9 +41,7 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
     const safeguard_arr = ['提供发票','上门安装'];
     $scope.storeid = $stateParams.storeid;
     $scope.offline_reason = '';
-    $scope.purchase_price_decoration_company = 50
-    $scope.purchase_price_manager = 60
-    $scope.purchase_price_designer = 70
+
     $scope.alljudgefalse = false;
 
 
@@ -223,8 +230,13 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
 
     $scope.sureSaveDetail = function () {
         setTimeout(function () {
-            $state.go("-1",{id:$stateParams.storeid});
+            history.go(-1);
         },200)
+    }
+
+
+    $scope.backPage = function () {
+        history.go(-1);
     }
 
 
