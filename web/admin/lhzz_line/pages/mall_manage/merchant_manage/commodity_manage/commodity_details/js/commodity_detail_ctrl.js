@@ -22,6 +22,7 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
 
     // console.log($stateParams.storeid)
     $stateParams.storeid == null? $scope.showd_default = true : $scope.showd_default = false;
+    $scope.show_service = false; //显示售后
 
     _ajax.get('/mall/goods-view-admin',{id:$stateParams.id},function (res) {
         $scope.good_detail = res.data.goods_view_admin;
@@ -32,6 +33,7 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         $scope.purchase_price_manager = !price_a&&! price_b&&!price_c?'':price_b //项目经理采购价
         $scope.purchase_price_designer = !price_a&&! price_b&&!price_c?'':price_c ; //设计师采购价
         logisticsTemplate();
+        afterServiceShow()
     })
 
     let good_partdetail;
@@ -75,6 +77,13 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
 
 
     // /*判断是否显示售后*/
+    function afterServiceShow () {
+        for (let [key, value] of $scope.good_detail.after_sale_services.entries()) {
+                    if(afterservice_arr.indexOf(value) != -1){
+                        $scope.show_service = true;
+                    }
+                }
+    }
     // $scope.afterServiceShow = function () {
     //     for (let [key, value] of $scope.good_detail.after_sale_services.entries()) {
     //         if(afterservice_arr.indexOf(value) != -1){

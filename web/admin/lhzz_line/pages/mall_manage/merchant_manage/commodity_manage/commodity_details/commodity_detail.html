@@ -177,15 +177,15 @@
             </div>
         </div>
         <hr>
-        <!--&lt;!&ndash;售后&ndash;&gt;-->
-        <!--<div class="margin_top" ng-show="afterServiceShow()">-->
-            <!--<span>售后</span>-->
-            <!--<div class="margin_left inline_block" style="margin-top:-15px;margin-left: 110px">-->
-                <!--<div class="margin_top" ng-repeat="item in good_detail.after_sale_services">-->
-                    <!--<p ng-show="afterserviceTest(item)">{{item}}</p>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <!--售后-->
+        <div class="margin_top" ng-show="show_service">
+            <span>售后</span>
+            <div class="margin_left inline_block" style="margin-top:-15px;margin-left: 110px">
+                <div class="margin_top" ng-repeat="item in good_detail.after_sale_services">
+                    <p ng-show="afterserviceTest(item)">{{item}}</p>
+                </div>
+            </div>
+        </div>
         <!--&lt;!&ndash;保障&ndash;&gt;-->
         <!--<div class="margin_top">-->
             <!--<span>保障</span>-->
