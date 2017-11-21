@@ -150,6 +150,7 @@ class OwnerController extends Controller
         'latex_paint_area'=> '乳胶漆面积',
         'wall_area'=> '墙面积',
         'land_area'=> '地面积',
+        'handyman_day'=> '杂工天数',
     ];
     /**
      * Actions accessed by logged-in users
@@ -1229,8 +1230,14 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        $_area = Apartment::find()
+            ->asArray()
+            ->where(['<=','min_area',$post['area']])
+            ->andWhere(['>=','max_area',$post['area']])
+            ->andWhere(['project_name'=>self::OTHER_AREA['handyman_day']])
+            ->one();
 //        总天数
-        $total_day = BasisDecorationService::wallArea($post,$worker_kind_details);
+        $total_day = BasisDecorationService::wallArea($post,$worker_kind_details) + $_area['project_value'];
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
         if ($craft == null){
