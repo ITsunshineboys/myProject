@@ -204,9 +204,6 @@ class Encode extends Object
 
         } catch (\Exception $e) {
             Yii::error($e->getMessage());
-            if (YII_DEBUG) {
-                StringService::writeLog('test', $e->getMessage(), 'qrcode');
-            }
         }
     }
 }
