@@ -266,7 +266,10 @@
                 <td ng-if="down_7">项目经理采购价格</td>
                 <td ng-if="down_8">设计师采购价格</td>
                 <td ng-if="down_9">库存</td>
-                <td ng-if="down_10">销量</td>
+                <td ng-if="down_10">
+                    <span>销量</span>
+                    <img ng-click="down_sort_sale_click()" class="arrow_img_size" ng-src="{{down_sort_sale_img}}">
+                </td>
                 <td ng-if="down_11">状态</td>
                 <td ng-if="show_12">
                     <span>下架时间</span>

@@ -19,6 +19,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
   let reg=/^\d+(\.\d{1,2})?$/;
+  let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;//只能输入中文 数字 字母
   $scope.myng=$scope;
   let goods_item=$stateParams.item;//点击对应的那条数据
   console.log(goods_item);
@@ -69,6 +70,15 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       $scope.replacement_check=true;
     }
   }
+    /*-------------------限制特殊字符----------------------------*/
+    $scope.g_name_change=function (value) {
+        let reg_value=pattern.test(value)
+        reg_value?$scope.g_flag=false:$scope.g_flag=true;
+    }
+    $scope.d_name_change=function (value) {
+        let reg_value=pattern.test(value)
+        reg_value?$scope.d_flag=false:$scope.d_flag=true;
+    }
 
   /*-----------------品牌、系列、风格 获取-----------------*/
   $scope.brands_arr=[];
@@ -296,7 +306,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
 
   /*--------------编辑保存按钮----------------------*/
   $scope.edit_confirm=function (valid,error) {
-    if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag){
+    if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag){
       let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];

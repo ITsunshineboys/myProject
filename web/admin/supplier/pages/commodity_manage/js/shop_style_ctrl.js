@@ -16,9 +16,18 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
       $scope.second_category_title=$stateParams.second_category_title;//二级分类名称
       $scope.third_category_title=$stateParams.third_category_title;//三级分类名称
       let reg=/^\d+(\.\d{1,2})?$/;
+      let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;//只能输入中文 数字 字母
       $scope.config=$rootScope.config;//富文本编辑器配置
 
-
+    /*-------------------限制特殊字符----------------------------*/
+      $scope.g_name_change=function (value) {
+          let reg_value=pattern.test(value)
+          reg_value?$scope.g_flag=false:$scope.g_flag=true;
+      }
+      $scope.d_name_change=function (value) {
+          let reg_value=pattern.test(value)
+          reg_value?$scope.d_flag=false:$scope.d_flag=true;
+      }
       /*-----------------品牌、系列、风格 获取-----------------*/
       $scope.brands_arr=[];
       $scope.series_arr=[];
@@ -273,7 +282,7 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
     }
 
     /*判断必填项，全部ok，调用添加接口*/
-    if(valid && $scope.upload_cover_src && !$scope.price_flag &&!$scope.own_submitted &&$scope.logistics_flag1){
+    if(valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1&& !$scope.g_flag && !$scope.d_flag){
       let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.success_variable='#on_shelves_add_success';
       /*循环自己添加的属性*/

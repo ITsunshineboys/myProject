@@ -12,14 +12,14 @@
             <div class="class_name">
                 <img src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>商品名称</span>
-                <input class="class_name_input" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" id="goods_name" name="goods_name" required ng-class="{'border_red':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)}" ng-blur="title_blur=!!form.goods_name.$error"/>
+                <input class="class_name_input" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required ng-class="{'border_red':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur) || g_flag}" ng-blur="title_blur=!!form.goods_name.$error"/>
                 <span>*限1~32个字符，不含特殊字符</span>
             </div>
             <!--商品特色 -->
             <div class="class_name">
                 <img src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>商品特色</span>
-                <input class="class_name_input" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)}" ng-blur="des_blur=!!form.des_name.$error"/>
+                <input class="class_name_input" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" ng-change="d_name_change(des_name)" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}" ng-blur="des_blur=!!form.des_name.$error"/>
                 <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
             </div>
             <!--选择品牌-->

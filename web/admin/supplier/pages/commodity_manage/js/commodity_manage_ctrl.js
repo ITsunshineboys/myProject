@@ -518,9 +518,29 @@ let commodity_manage = angular.module("commodity_manage", [])
 
         /*--------------------已下架 开始-------------------------*/
 
+        /*-----------------销量排序-----------------------*/
+        $scope.down_sort_sale_img = 'lib/images/arrow_default.png';
+        $scope.down_sort_sale_click = function () {
+            $scope.down_sort_time_img = 'lib/images/arrow_default.png';
+            if ($scope.down_sort_sale_img == 'lib/images/arrow_default.png') {
+                $scope.down_sort_sale_img = 'lib/images/arrow_down.png';
+                $scope.params['sort[]'] = 'sold_number:3';
+            } else if ($scope.down_sort_sale_img == 'lib/images/arrow_down.png') { //------> 升序
+                $scope.down_sort_sale_img = 'lib/images/arrow_up.png';
+                $scope.params['sort[]'] = 'sold_number:4';
+            } else {                                                //-------> 降序
+                $scope.down_sort_sale_img = 'lib/images/arrow_down.png';
+                $scope.params['sort[]'] = 'sold_number:3';
+            }
+            $scope.table.roles = [];//清空全选状态
+            $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+            tablePages();
+        }
+
         /*-----------------时间排序-----------------------*/
         $scope.down_sort_time_img = 'lib/images/arrow_down.png';
         $scope.down_sort_time_click = function () {
+            $scope.down_sort_sale_img = 'lib/images/arrow_default.png';
             if ($scope.down_sort_time_img == 'lib/images/arrow_default.png') {
                 $scope.down_sort_time_img = 'lib/images/arrow_down.png';
                 $scope.params['sort[]'] = 'offline_time:3';
