@@ -1163,6 +1163,7 @@ class OwnerController extends Controller
         $wall_brick_max['cost'] = $wall_brick_cost['cost'];
         $material_total['material'][] = $wall_brick_max;
 
+        var_dump($kitchen_goods);exit;
         // 地砖价格
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
