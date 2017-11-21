@@ -1733,6 +1733,7 @@ class OwnerController extends Controller
                         $case_works_datum['name']                  = $one_goods['name'];
                         $case_works_datum['quantity']              = $case_works_datum['goods_quantity'];
                         $case_works_datum['image']                 = $one_goods['cover_image'];
+                        $case_works_datum['goods_name']            = $one_goods['goods_name'];
 
                     }
                 }
