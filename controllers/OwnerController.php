@@ -418,9 +418,9 @@ class OwnerController extends Controller
             if ($p['title'] == '水路'){
                 $waterway_p = $p['count'];
                 $id = $p['id'];
-                
+
                 var_dump($id);
-                var_dump(Points::find()->all());
+                var_dump(Points::find()->asArray()->all());
                 exit;
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>1],['pid'=>$id]])->all();
                 var_dump($_waterway);exit;
