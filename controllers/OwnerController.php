@@ -590,6 +590,11 @@ class OwnerController extends Controller
 
 
         $toilet_area = BasisDecorationService::waterproofArea($toilet_,$_toilet_height, $post['area'], $post['toilet']);
+        var_dump($toilet_);
+        var_dump($_toilet_height);
+        var_dump($post['area']);
+        var_dump($post['toilet']);
+        exit;
         //总面积
         $apartment = Apartment::find()
             ->asArray()
