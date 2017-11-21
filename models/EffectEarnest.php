@@ -172,6 +172,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
     }
 
     public static function appAddEffect($uid,$post){
+
         $effects=Effect::find()
             ->select('sort_id')
             ->asArray()
@@ -255,16 +256,16 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-
+            $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
-            $effect_earnest->phone=$post['phone'];
-            $effect_earnest->name=$post['name'];
-            $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
+            $effect_earnest->phone=$user['mobile'];
+            $effect_earnest->name=$user['nickname'];
+            $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($user['mobile']);
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
-            $effect_earnest->sale_price=$post['sale_price'];
+            $effect_earnest->sale_price=$post['sale_price']*100;
             $effect_earnest->type=$post['type'];
             $effect_earnest->item=Effect::TYPE_ITEM;
             if(!$effect_earnest->save(false)){
@@ -299,7 +300,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
         foreach ($effect_earnests as &$effect_earnest){
             $data[]=(new Query())->from('effect as e')
-                ->select('e.add_time,e.id,st.style,se.series')
+                ->select('ee.id,e.add_time,st.style,se.series')
+                ->leftJoin('effect_earnest as ee','e.id=ee.effect_id')
                 ->leftJoin('effect_picture as ep','ep.effect_id='.$effect_earnest['effect_id'])
                 ->leftJoin('style as st','st.id=ep.style_id')
                 ->leftJoin('series as se','se.id=ep.series_id')
@@ -310,7 +312,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
 
         foreach ($data as &$v){
-
             $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
             $v['style']=$v['series'].'-'.$v['style'];
             unset($v['series']);
