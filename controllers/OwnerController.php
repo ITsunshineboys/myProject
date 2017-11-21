@@ -621,6 +621,10 @@ class OwnerController extends Controller
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$worker_price,$worker_day_points);
+        var_dump($labor_all_cost['price']);
+        var_dump($total_area);
+        var_dump($worker_price);
+        var_dump($worker_day_points);exit;
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['waterproof_worker'];
 
         //材料总费用
