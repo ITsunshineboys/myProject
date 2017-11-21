@@ -470,6 +470,7 @@ class OwnerController extends Controller
                 var_dump($hall_strong_points);
                 var_dump($toilet_strong_points);
                 var_dump($kitchen_strong_points);
+                var_dump($qita);
                 var_dump($strong_count);exit;
             }
         }
