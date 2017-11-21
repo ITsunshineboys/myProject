@@ -1241,6 +1241,8 @@ class Goods extends ActiveRecord
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
+            'left_number' => $this->left_number,
+            'market_price' => StringService::formatPrice($this->market_price / 100),
             'supplier_price' => StringService::formatPrice($this->supplier_price / 100),
             'platform_price' => StringService::formatPrice($this->platform_price / 100),
             'purchase_price_decoration_company' => StringService::formatPrice($this->purchase_price_decoration_company / 100),
