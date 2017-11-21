@@ -412,9 +412,15 @@ angular.module('all_controller', [])
                 if ($scope.cur_status == 1) {
                     $scope.cur_title = '更换'
                     $scope.check_goods['name'] = res.data.goods_view.brand_name
+                    $scope.check_goods['goods_name'] = res.data.goods_view.title
+                    $scope.check_goods['series_name'] = res.data.goods_view.series_name
+                    $scope.check_goods['style_name'] = res.data.goods_view.style_name
                 } else if ($scope.cur_status == 2) {
                     $scope.cur_title = '添加'
                     $scope.check_goods['name'] = res.data.goods_view.brand_name
+                    $scope.check_goods['goods_name'] = res.data.goods_view.title
+                    $scope.check_goods['series_name'] = res.data.goods_view.series_name
+                    $scope.check_goods['style_name'] = res.data.goods_view.style_name
                 }
                 $scope.sale_services = res.data.goods_view.after_sale_services
                 $scope.aftermarket = []
@@ -512,7 +518,7 @@ angular.module('all_controller', [])
                                         value.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
                                         value2.goods_detail.push({
                                             id: $scope.check_goods.id,
-                                            image: $scope.check_goods.cover_image,
+                                            image: $scope.check_goods.image,
                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                             name: $scope.check_goods.name,
                                             platform_price: $scope.check_goods.platform_price,
@@ -523,7 +529,10 @@ angular.module('all_controller', [])
                                             style_id: $scope.check_goods.style_id,
                                             subtitle: $scope.check_goods.subtitle,
                                             supplier_price: $scope.check_goods.supplier_price,
-                                            shop_name: $scope.check_goods.shop_name
+                                            shop_name: $scope.check_goods.shop_name,
+                                            goods_name:$scope.check_goods.goods_name,
+                                            series_name:$scope.check_goods.series_name,
+                                            style_name:$scope.check_goods.style_name
                                         })
                                     }
                                 }
@@ -548,7 +557,7 @@ angular.module('all_controller', [])
                                         title: $scope.cur_three_level,
                                         goods_detail: [{
                                             id: $scope.check_goods.id,
-                                            image: $scope.check_goods.cover_image,
+                                            image: $scope.check_goods.image,
                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                             name: $scope.check_goods.name,
                                             platform_price: $scope.check_goods.platform_price,
@@ -559,7 +568,10 @@ angular.module('all_controller', [])
                                             style_id: $scope.check_goods.style_id,
                                             subtitle: $scope.check_goods.subtitle,
                                             supplier_price: $scope.check_goods.supplier_price,
-                                            shop_name: $scope.check_goods.shop_name
+                                            shop_name: $scope.check_goods.shop_name,
+                                            goods_name:$scope.check_goods.goods_name,
+                                            series_name:$scope.check_goods.series_name,
+                                            style_name:$scope.check_goods.style_name
                                         }]
                                     }]
                                 })
@@ -575,7 +587,7 @@ angular.module('all_controller', [])
                                                 title: $scope.cur_three_level,
                                                 goods_detail: [{
                                                     id: $scope.check_goods.id,
-                                                    image: $scope.check_goods.cover_image,
+                                                    image: $scope.check_goods.image,
                                                     cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                                     name: $scope.check_goods.name,
                                                     platform_price: $scope.check_goods.platform_price,
@@ -586,7 +598,10 @@ angular.module('all_controller', [])
                                                     style_id: $scope.check_goods.style_id,
                                                     subtitle: $scope.check_goods.subtitle,
                                                     supplier_price: $scope.check_goods.supplier_price,
-                                                    shop_name: $scope.check_goods.shop_name
+                                                    shop_name: $scope.check_goods.shop_name,
+                                                    goods_name:$scope.check_goods.goods_name,
+                                                    series_name:$scope.check_goods.series_name,
+                                                    style_name:$scope.check_goods.style_name
                                                 }]
                                             })
                                         } else {
@@ -598,7 +613,7 @@ angular.module('all_controller', [])
                                                     if (goods_item == -1) {
                                                         value2.goods_detail.push({
                                                             id: $scope.check_goods.id,
-                                                            image: $scope.check_goods.cover_image,
+                                                            image: $scope.check_goods.image,
                                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                                             name: $scope.check_goods.name,
                                                             platform_price: $scope.check_goods.platform_price,
@@ -609,7 +624,10 @@ angular.module('all_controller', [])
                                                             style_id: $scope.check_goods.style_id,
                                                             subtitle: $scope.check_goods.subtitle,
                                                             supplier_price: $scope.check_goods.supplier_price,
-                                                            shop_name: $scope.check_goods.shop_name
+                                                            shop_name: $scope.check_goods.shop_name,
+                                                            goods_name:$scope.check_goods.goods_name,
+                                                            series_name:$scope.check_goods.series_name,
+                                                            style_name:$scope.check_goods.style_name
                                                         })
                                                     } else {
                                                         console.log($scope.check_goods)
@@ -720,7 +738,12 @@ angular.module('all_controller', [])
                                                 goods_three: value2.title,
                                                 goods_second: item.title,
                                                 goods_first: value.title,
-                                                quantity: value3.quantity
+                                                quantity: value3.quantity,
+                                                platform_price:value3.platform_price,
+                                                image:value3.image,
+                                                goods_name:value3.goods_name,
+                                                series_name:value3.series_name,
+                                                style_name:value3.style_name
                                             })
                                         } else {
                                             value4.goods.push(value3)

@@ -52,8 +52,8 @@
                         <p class="price">{{cur_goods_detail.platform_price | currency:'￥'}}</p>
                         <p>品牌名称：{{cur_goods_detail.name}}</p>
                         <p>
-                            <span ng-if="cur_goods_detail.series_name!=undefined">系列：{{cur_goods_detail.series_name}}</span>
-                            <span ng-if="cur_goods_detail.style_name!=undefined">风格：{{cur_goods_detail.style_name}}</span>
+                            <span ng-if="cur_goods_detail.series_name!=undefined||cur_goods_detail.series_name!=''">系列：{{cur_goods_detail.series_name}}</span>
+                            <span ng-if="cur_goods_detail.style_name!=undefined||ur_goods_detail.style_name!=''">风格：{{cur_goods_detail.style_name}}</span>
                         </p>
                     </div>
                     <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
