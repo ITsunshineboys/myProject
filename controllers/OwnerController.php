@@ -427,9 +427,12 @@ class OwnerController extends Controller
         }
 
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($waterway_p,$waterway,$waterway_labor['univalence']);
-        var_dump($labor_all_cost);exit;
+        $waterway_ = BasisDecorationService::laborFormula($waterway_p,$waterway,$waterway_labor['univalence']);
+        $weak_ = BasisDecorationService::laborFormula($weak_p,$weak,$waterway_labor['univalence']);
+        $strong_ = BasisDecorationService::laborFormula($strong_p,$strong,$waterway_labor['univalence']);
+        $labor_all_cost['price'] = $waterway_ + $weak_ + $strong_;
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
+        var_dump($labor_all_cost);exit;
 
         //查询弱电所需要材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
