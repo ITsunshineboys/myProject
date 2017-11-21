@@ -443,6 +443,9 @@ class OwnerController extends Controller
                     }
                 }
                 $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
+                var_dump($room_weak_points);
+                var_dump($croom_weak_points);
+                var_dump($hall_weak__points);exit;
             }
             if ($p['title'] == '强电'){
                 $id = $p['id'];
