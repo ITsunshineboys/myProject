@@ -388,8 +388,6 @@ class Effect extends ActiveRecord
         foreach ($arr as $value) {
             $grouped[$value[$key]][] = $value;
         }
-        // Recursively build a nested grouping if more parameters are supplied
-        // Each grouped array value is grouped according to the next sequential key
         if (func_num_args() > 2) {
             $args = func_get_args();
             foreach ($grouped as $key => $value) {
