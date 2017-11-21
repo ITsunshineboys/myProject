@@ -421,39 +421,63 @@ class OwnerController extends Controller
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
                     if ($one['title'] == '卫生间'){
-                        $toilet_points = $one['count'] * $post['toilet'];
+                        $toilet_waterway_points = $one['count'] * $post['toilet'];
                     }
                     if ($one['title'] == '厨房'){
-                        $kitchen_points = $post['kitchen'] * $one['count'];
+                        $kitchen_waterway_points = $post['kitchen'] * $one['count'];
                     }
                 }
+                $waterway_count = $toilet_waterway_points + $kitchen_waterway_points;
             }
             if ($p['title'] == '弱电'){
                 $weak_p = $p['count'];
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
-                    if ($one['title'] == '卫生间'){
-                        $toilet_points = $one['count'] * $post['toilet'];
+                    if ($one['title'] == '主卧'){
+                        $room_weak_points = $one['count'] * $post['toilet'];
                     }
-                    if ($one['title'] == '厨房'){
-                        $kitchen_points = $post['kitchen'] * $one['count'];
+                    if ($one['title'] == '次卧'){
+                        $croom_weak_points = $post['kitchen'] * $one['count'];
+                    }
+                    if ($one['title'] == '客厅'){
+                        $hall_weak__points = $one['count'] * $post['toilet'];
                     }
                 }
-                var_dump($_waterway);exit;
+                $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
             }
             if ($p['title'] == '强电'){
                 $strong_p = $p['count'];
+                $id = $p['id'];
+                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
+                foreach ($_waterway as $one){
+                    if ($one['title'] == '主卧'){
+                        $room_strong_points = $one['count'] * $post['toilet'];
+                    }
+                    if ($one['title'] == '次卧'){
+                        $croom_strong_points = $post['kitchen'] * $one['count'];
+                    }
+                    if ($one['title'] == '客厅'){
+                        $hall_strong_points = $one['count'] * $post['toilet'];
+                    }
+                    if ($one['title'] == '卫生间'){
+                        $toilet_strong_points = $one['count'] * $post['toilet'];
+                    }
+                    if ($one['title'] == '厨房'){
+                        $kitchen_strong_points = $one['count'] * $post['toilet'];
+                    }
+                }
+                $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
             }
         }
 
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
-        $waterway_ = BasisDecorationService::laborFormula($waterway_p,$waterway,$waterway_labor['univalence']);
-        $weak_     = BasisDecorationService::laborFormula($weak_p,$weak,$waterway_labor['univalence']);
-        $strong_   = BasisDecorationService::laborFormula($strong_p,$strong,$waterway_labor['univalence']);
-        var_dump($strong_p);
-        var_dump($weak_p);
-        var_dump($waterway_p);
+        $waterway_ = BasisDecorationService::laborFormula($waterway_count,$waterway,$waterway_labor['univalence']);
+        $weak_     = BasisDecorationService::laborFormula($weak_count,$weak,$waterway_labor['univalence']);
+        $strong_   = BasisDecorationService::laborFormula($strong_count,$strong,$waterway_labor['univalence']);
+        var_dump($waterway_count);
+        var_dump($weak_count);
+        var_dump($strong_count);
         var_dump($strong);
         var_dump($weak);
         var_dump($waterway);
