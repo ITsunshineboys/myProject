@@ -8,14 +8,14 @@ angular.module('all_controller', [])
         sessionStorage.removeItem("materials_bak");
         sessionStorage.removeItem("huxing");
         // $scope.baseUrl = '/'
-         $scope.baseUrl = 'http://ac.cdlhzz.cn/'
+        $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
-        _ajax.get('/owner/homepage',{},function (res) {
+        _ajax.get('/owner/homepage', {}, function (res) {
             console.log(res)
             $scope.recommend_list = res.data
         })
     })
-    .controller('nodata_ctrl', function (_ajax,$q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
+    .controller('nodata_ctrl', function (_ajax, $q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
         console.log(JSON.parse(sessionStorage.getItem('materials')))
         $scope.ctrlScope = $scope
         //post请求配置
@@ -38,7 +38,7 @@ angular.module('all_controller', [])
         let tablePages = function () {
             console.log($scope.params)
             // $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
-            _ajax.get('/mall/category-goods',$scope.params,function (res) {
+            _ajax.get('/mall/category-goods', $scope.params, function (res) {
                 console.log(res);
                 $scope.cur_replace_material = []
                 for (let [key, value] of res.data.category_goods.entries()) {
@@ -52,17 +52,17 @@ angular.module('all_controller', [])
                         profit_rate: value.profit_rate,
                         purchase_price_decoration_company: value.purchase_price_decoration_company,
                         quantity: 1,
-                        series_id: !!$scope.cur_goods_detail?$scope.cur_goods_detail.series_id:'',
-                        style_id: !!$scope.cur_goods_detail?$scope.cur_goods_detail.style_id:'',
+                        series_id: !!$scope.cur_goods_detail ? $scope.cur_goods_detail.series_id : '',
+                        style_id: !!$scope.cur_goods_detail ? $scope.cur_goods_detail.style_id : '',
                         subtitle: value.subtitle,
                         supplier_price: value.supplier_price,
                         title: value.title
                     })
                 }
                 $scope.Config.totalItems = $scope.cur_replace_material.length
-                _ajax.get('/mall/category-brands-styles-series',{
+                _ajax.get('/mall/category-brands-styles-series', {
                     category_id: $scope.params.category_id,
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.all_goods_series = res.data.category_brands_styles_series.series
                     $scope.all_goods_style = res.data.category_brands_styles_series.styles
@@ -182,7 +182,7 @@ angular.module('all_controller', [])
         }
         console.log($scope.all_goods)
         //请求风格系列以及楼梯数据
-        _ajax.get('/owner/series-and-style',{},function (res) {
+        _ajax.get('/owner/series-and-style', {}, function (res) {
             console.log(res)
             $scope.stairs_details = res.data.show.stairs_details;//楼梯数据
             $scope.series = res.data.show.series;//系列数据
@@ -194,13 +194,13 @@ angular.module('all_controller', [])
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
-                    autoplayDisableOnInteraction:false,
-                    effect:'slide',
+                    autoplayDisableOnInteraction: false,
+                    effect: 'slide',
 
                     // 如果需要分页器
                     pagination: '.swiper-pagination',
                 })
-            },0)
+            }, 0)
         })
         if ($rootScope.fromState_name == 'modelRoom' && $rootScope.curState_name == 'nodata.cell_search') {
             $scope.have_header = false
@@ -252,7 +252,7 @@ angular.module('all_controller', [])
             }
         }
         //一级、二级分类数据请求
-        _ajax.post('/owner/classify',{},function (res) {
+        _ajax.post('/owner/classify', {}, function (res) {
             console.log(res)
             $scope.stair = res.data.pid.stair//一级
             $scope.level = res.data.pid.level//二级
@@ -382,9 +382,9 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
                 $scope.check_goods['path'] = $scope.cur_three_item.path
             }
-            _ajax.get( '/mall/goods-view',{
+            _ajax.get('/mall/goods-view', {
                 id: +$scope.check_goods.id
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 if ($scope.cur_status == 1) {
                     $scope.cur_title = '更换'
@@ -396,10 +396,10 @@ angular.module('all_controller', [])
                 $scope.sale_services = res.data.goods_view.after_sale_services
                 $scope.aftermarket = []
                 $scope.protection = []
-                for(let [key,value] of $scope.sale_services.entries()){
-                    if(value == '提供发票'||value == '上门安装'){
+                for (let [key, value] of $scope.sale_services.entries()) {
+                    if (value == '提供发票' || value == '上门安装') {
                         $scope.protection.push(value)
-                    }else{
+                    } else {
                         $scope.aftermarket.push(value)
                     }
                 }
@@ -458,14 +458,14 @@ angular.module('all_controller', [])
                 $scope.cur_header = $scope.cur_three_level || item.title
                 $state.go('nodata.all_goods')
             }, 300)
-                $('#myModal').modal('hide')
-                $timeout(function () {
-                    $scope.have_header = true
-                    $scope.is_city = false
-                    $scope.is_edit = false
-                    $scope.cur_header = $scope.cur_three_level
-                    $state.go('nodata.all_goods')
-                }, 300)
+            $('#myModal').modal('hide')
+            $timeout(function () {
+                $scope.have_header = true
+                $scope.is_city = false
+                $scope.is_edit = false
+                $scope.cur_header = $scope.cur_three_level
+                $state.go('nodata.all_goods')
+            }, 300)
         }
         //较正式更换或者添加商品
         $scope.first_replace = function () {
@@ -642,13 +642,13 @@ angular.module('all_controller', [])
                 $rootScope.fromState_name = 'nodata.other_material'
             } else if ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material') {
                 console.log($scope.is_delete_btn)
-                if(!$scope.is_delete_btn){
+                if (!$scope.is_delete_btn) {
                     $scope.cur_header = '智能报价'
                     $scope.is_edit = false
                     $scope.is_city = true
                     $scope.all_goods = $scope.cur_all_goods
                     $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
-                }else{
+                } else {
                     $rootScope.fromState_name = 'nodata.other_material'
                 }
             } else if ($rootScope.curState_name == 'nodata.house_list') {
@@ -741,11 +741,11 @@ angular.module('all_controller', [])
                                 value2.goods_detail.splice(cur_index, 1)
                             }
                         }
-                        if(value2.goods_detail.length == 0){
-                            value1.three_level.splice(key2,1)
+                        if (value2.goods_detail.length == 0) {
+                            value1.three_level.splice(key2, 1)
                         }
-                        if(value1.three_level.length == 0){
-                            value.second_level.splice(key1,1)
+                        if (value1.three_level.length == 0) {
+                            value.second_level.splice(key1, 1)
                         }
                     }
                 }
@@ -757,9 +757,9 @@ angular.module('all_controller', [])
         $scope.go_three_item = function () {
             $scope.cur_status = 2
             $scope.cur_second_level = $scope.cur_header
-            _ajax.get('/mall/categories-level3',{
+            _ajax.get('/mall/categories-level3', {
                 pid: $scope.cur_item.id
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.cur_header = $scope.cur_item.title
                 $scope.inner_first_level = $scope.cur_item.title
@@ -840,17 +840,17 @@ angular.module('all_controller', [])
         $scope.get_price = function (item) {
             console.log($scope.price_min)
             console.log($scope.price_max)
-            if(item == 1){
-                if($scope.price_max != ''){
-                    if(+$scope.price_min>+$scope.price_max){
+            if (item == 1) {
+                if ($scope.price_max != '') {
+                    if (+$scope.price_min > +$scope.price_max) {
                         let cur_item = $scope.price_min
                         $scope.price_min = $scope.price_max
                         $scope.price_max = cur_item
                     }
                 }
-            }else{
-                if($scope.price_min != ''){
-                    if(+$scope.price_min>+$scope.price_max){
+            } else {
+                if ($scope.price_min != '') {
+                    if (+$scope.price_min > +$scope.price_max) {
                         let cur_item = $scope.price_min
                         $scope.price_min = $scope.price_max
                         $scope.price_max = cur_item
@@ -859,47 +859,47 @@ angular.module('all_controller', [])
             }
         }
         //改变风格系列以及品牌
-        $scope.all_change = function (item,cur_item) {
-            if(item == 1){
+        $scope.all_change = function (item, cur_item) {
+            if (item == 1) {
                 let index = $scope.cur_style_arr.findIndex(function (item) {
-                    return item ===cur_item.id
+                    return item === cur_item.id
                 })
-                if(index != -1){
-                    $scope.cur_style_arr.splice(index,1)
+                if (index != -1) {
+                    $scope.cur_style_arr.splice(index, 1)
                     $scope.params.style_id = $scope.cur_style_arr.join(',')
-                }else{
+                } else {
                     $scope.cur_style_arr.push(cur_item.id)
                     $scope.params.style_id = $scope.cur_style_arr.join(',')
                 }
-            }else if(item == 2){
+            } else if (item == 2) {
                 let index = $scope.cur_series_arr.findIndex(function (item) {
-                    return item ===cur_item.id
+                    return item === cur_item.id
                 })
-                if(index != -1){
-                    $scope.cur_series_arr.splice(index,1)
+                if (index != -1) {
+                    $scope.cur_series_arr.splice(index, 1)
                     $scope.params.series_id = $scope.cur_series_arr.join(',')
-                }else{
+                } else {
                     $scope.cur_series_arr.push(cur_item.id)
                     $scope.params.series_id = $scope.cur_series_arr.join(',')
                 }
-            }else if(item == 3){
+            } else if (item == 3) {
                 let index = $scope.cur_brand_arr.findIndex(function (item) {
-                    return item ===cur_item.id
+                    return item === cur_item.id
                 })
-                if(index != -1){
-                    $scope.cur_brand_arr.splice(index,1)
+                if (index != -1) {
+                    $scope.cur_brand_arr.splice(index, 1)
                     $scope.params.brand_id = $scope.cur_brand_arr.join(',')
-                }else{
+                } else {
                     $scope.cur_brand_arr.push(cur_item.id)
                     $scope.params.brand_id = $scope.cur_brand_arr.join(',')
                 }
-            }else if(item == 4){
+            } else if (item == 4) {
                 let index = $scope.cur_brand_copy.findIndex(function (item) {
-                    return item ===cur_item.id
+                    return item === cur_item.id
                 })
-                if(index != -1){
-                    $scope.cur_brand_copy.splice(index,1)
-                }else{
+                if (index != -1) {
+                    $scope.cur_brand_copy.splice(index, 1)
+                } else {
                     $scope.cur_brand_copy.push(cur_item.id)
                 }
             }
@@ -916,36 +916,36 @@ angular.module('all_controller', [])
         }
         //完成筛选
         $scope.complete_filter = function () {
-            $scope.params.platform_price_min = $scope.price_min*100
-            $scope.params.platform_price_max = $scope.price_max*100
+            $scope.params.platform_price_min = $scope.price_min * 100
+            $scope.params.platform_price_max = $scope.price_max * 100
             tablePages()
         }
         //筛选关键字
-        $scope.$watch('keyword',function (newVal,oldVal) {
+        $scope.$watch('keyword', function (newVal, oldVal) {
             console.log(newVal)
-            if(newVal!=''){
+            if (newVal != '') {
                 let arr = []
-                if(!!$scope.all_goods_brands){
-                    for(let [key,value] of $scope.all_goods_brands.entries()){
-                        if(value.name.indexOf(newVal)!= -1){
+                if (!!$scope.all_goods_brands) {
+                    for (let [key, value] of $scope.all_goods_brands.entries()) {
+                        if (value.name.indexOf(newVal) != -1) {
                             arr.push(value)
                         }
                     }
                 }
                 $scope.all_goods_brands = arr
-            }else{
+            } else {
                 $scope.all_goods_brands = $scope.all_brand_copy
             }
         })
         //点击模态框其他区域
-            // $(document).mouseup(function(e){
-            //     var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
-            //     if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
-            //         if($rootScope.curState_name == 'nodata.all_goods'){
-            //             tablePages()
-            //         }
-            //     }
-            // })
+        // $(document).mouseup(function(e){
+        //     var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
+        //     if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+        //         if($rootScope.curState_name == 'nodata.all_goods'){
+        //             tablePages()
+        //         }
+        //     }
+        // })
         //无资料计算
         $scope.get_goods = function (valid, error) {
             console.log(error)
@@ -975,8 +975,8 @@ angular.module('all_controller', [])
                 }
                 //生成材料数据(同步请求)
                 //弱电
-                $q.all([$http.get(baseUrl + '/owner/weak-current',{
-                    params:data
+                $q.all([$http.get(baseUrl + '/owner/weak-current', {
+                    params: data
                 }).then(function (response) {
                     console.log('弱电')
                     console.log(response)
@@ -1084,8 +1084,8 @@ angular.module('all_controller', [])
                     // })
                     //强电
                     $http.get(baseUrl + '/owner/strong-current', {
-                          params:data
-                        }).then(function (response) {
+                        params: data
+                    }).then(function (response) {
                         console.log('强电')
                         console.log(response)
                         //整合一级
@@ -1190,7 +1190,7 @@ angular.module('all_controller', [])
                     // })
                     //水路
                     $http.get(baseUrl + '/owner/waterway', {
-                        params:data
+                        params: data
                     }).then(function (response) {
                         console.log('水路')
                         console.log(response)
@@ -1296,7 +1296,7 @@ angular.module('all_controller', [])
                     // })
                     //防水
                     $http.get(baseUrl + '/owner/waterproof', {
-                        params:data
+                        params: data
                     }).then(function (response) {
                         console.log('防水')
                         console.log(response)
@@ -1404,7 +1404,7 @@ angular.module('all_controller', [])
                     // })
                     //木作
                     $http.get(baseUrl + '/owner/carpentry', {
-                        params:data
+                        params: data
                     }).then(function (response) {
                         console.log('木作')
                         console.log(response)
@@ -1510,7 +1510,7 @@ angular.module('all_controller', [])
                     // })
                     //乳胶漆
                     $http.get(baseUrl + '/owner/coating', {
-                        params:data
+                        params: data
                     }).then(function (response) {
                         console.log('乳胶漆')
                         console.log(response)
@@ -1613,7 +1613,7 @@ angular.module('all_controller', [])
                     }),
                     //主要材料以及其他
                     $http.get(baseUrl + '/owner/assort-facility', {
-                        params:data
+                        params: data
                     }).then(function (response) {
                         console.log('主要材料及其他')
                         console.log(response)
@@ -1729,7 +1729,7 @@ angular.module('all_controller', [])
                     $q.all([
                         //泥作
                         $http.get(baseUrl + '/owner/mud-make', {
-                            params:data1
+                            params: data1
                         }).then(function (response) {
                             console.log('泥作')
                             console.log(response)
@@ -1866,16 +1866,16 @@ angular.module('all_controller', [])
                 }
             }
             $q.all([$http.post(baseUrl + '/order/calculation-freight', {
-                    goods: arr
-            },config).then(function (res) {
+                goods: arr
+            }, config).then(function (res) {
                 console.log(res)
                 $scope.all_price += +res.data.data
                 $scope.discount_price += +res.data.data
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
             }), $http.post(baseUrl + '/owner/coefficient', {
-                    list: arr1
-            },config).then(function (res) {
+                list: arr1
+            }, config).then(function (res) {
                 console.log(res)
                 $scope.all_price += +res.data.data.total_prices
                 $scope.discount_price += +res.data.data.special_offer
@@ -1907,9 +1907,9 @@ angular.module('all_controller', [])
         $scope.$watch('toponymy', function (newVal, oldVal) {
             console.log(newVal)
             if (newVal != '') {
-                _ajax.get('/owner/search',{
+                _ajax.get('/owner/search', {
                     str: newVal
-                },function (res) {
+                }, function (res) {
                     $scope.cur_all_house = res.data.list_effect
                     $scope.$watch('cur_all_house', function (newVal, oldVal) {
                         $scope.search_data = []//搜索出的小区
@@ -1973,13 +1973,13 @@ angular.module('all_controller', [])
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
-                    autoplayDisableOnInteraction:false,
-                    effect:'slide',
+                    autoplayDisableOnInteraction: false,
+                    effect: 'slide',
 
                     // 如果需要分页器
                     pagination: '.swiper-pagination',
                 })
-            },0)
+            }, 0)
         }
 
         /*基础装修内页*/
@@ -1998,18 +1998,18 @@ angular.module('all_controller', [])
         }
         if (!!sessionStorage.getItem('backman')) {
             console.log(JSON.parse(sessionStorage.getItem('backman')))
-            for(let [key,value] of JSON.parse(sessionStorage.getItem('backman')).entries()){
-                if(value.backman_option == '12墙拆除'){
+            for (let [key, value] of JSON.parse(sessionStorage.getItem('backman')).entries()) {
+                if (value.backman_option == '12墙拆除') {
                     $scope.twelve_dismantle = value.backman_value//12墙拆除
-                }else if(value.backman_option == '24墙拆除'){
+                } else if (value.backman_option == '24墙拆除') {
                     $scope.twenty_four_dismantle = value.backman_value//24墙拆除
-                }else if(value.backman_option == '补烂'){
+                } else if (value.backman_option == '补烂') {
                     $scope.repair = value.backman_value//补烂
-                }else if(value.backman_option == '12墙新建(含双面抹灰)'){
+                } else if (value.backman_option == '12墙新建(含双面抹灰)') {
                     $scope.twelve_new_construction = value.backman_value//12墙新建
-                }else if(value.backman_option == '24墙新建(含双面抹灰)'){
+                } else if (value.backman_option == '24墙新建(含双面抹灰)') {
                     $scope.twenty_four_new_construction = value.backman_value//24墙新建
-                }else if(value.backman_option == '有无建渣点'){
+                } else if (value.backman_option == '有无建渣点') {
                     $scope.building_scrap = !!value.backman_value//有无建渣点
                 }
             }
@@ -2161,7 +2161,7 @@ angular.module('all_controller', [])
                         $state.go('nodata.house_list')
                     }
                 } else {
-                    _ajax.post('/owner/handyman',{
+                    _ajax.post('/owner/handyman', {
                         'province': 510000,
                         'city': 510100,
                         '12_dismantle': +$scope.twelve_dismantle || 0,
@@ -2173,7 +2173,7 @@ angular.module('all_controller', [])
                         'area': $scope.area,
                         'series': (typeof $scope.cur_series === 'object') ? $scope.cur_series.id : $scope.cur_series,
                         'style': (typeof $scope.cur_style === 'object') ? $scope.cur_style.id : $scope.cur_style,
-                    },function (res) {
+                    }, function (res) {
                         console.log('杂工')
                         console.log(res)
                         $scope.cur_goods = res.data.total_material.material
@@ -2321,7 +2321,7 @@ angular.module('all_controller', [])
                             if (!!sessionStorage.getItem('huxingParams')) {
                                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
                             }
-                        }else {
+                        } else {
                             $scope.cur_header = '智能报价'
                             get_all_price()
                             $state.go('nodata.house_list')

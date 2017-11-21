@@ -5,8 +5,8 @@
             <ul class="wall_ul">
                 <div class="wall_margin">
                     <li ng-repeat="item in cur_item.second_level">
-                        <div class="list_line" ng-repeat="item1 in item.three_level" data-toggle="{{cur_content}}" data-target="#myModal" ng-click="get_basic_details(item2,item1.title,item1.id)">
-                            <div ng-repeat="item2 in item1.goods_detail">
+                        <div class="list_line" ng-repeat="item1 in item.three_level" data-toggle="{{cur_content}}" data-target="#myModal" >
+                            <div ng-repeat="item2 in item1.goods_detail" ng-click="get_basic_details(item2,item1.title,item1.id)">
                                 <div ng-class="{'cur_animate':is_delete_btn}">
                                     <div class="wall_span_brand">
                                         <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br>

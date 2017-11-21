@@ -213,11 +213,13 @@ a:hover{
     width:21.28rem!important;
     overflow: hidden;
 }
+.comment_img{
+    width:100%;
+    height:21.28rem;
+}
 .comment_img img{
-    /*width:100%;*/
-    /*height: 100%;*/
-    width:21.28rem!important;
-    height:21.28rem!important;
+    width:100%;
+    height: 100%;
 }
 .close{
     position: absolute;
@@ -328,10 +330,6 @@ a:hover{
     border-radius:.5rem !important;
     width:21.28rem!important;
     overflow: hidden;
-}
-.comment_img img{
-    width:21.28rem!important;
-    height:21.28rem!important;
 }
 .close{
     position: absolute;
