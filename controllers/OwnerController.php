@@ -1515,7 +1515,7 @@ class OwnerController extends Controller
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
-        
+
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
