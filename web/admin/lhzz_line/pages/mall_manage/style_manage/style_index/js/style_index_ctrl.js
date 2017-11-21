@@ -70,13 +70,9 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
     /*分类选择一级下拉框*/
     function firstClass() {
-        console.log('no no no ');
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-        }).then((response) => {
-            $scope.firstclass = response.data.data.categories;
-            $scope.dropdown.firstselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+            $scope.firstclass = res.data.categories;
+            $scope.dropdown.firstselect = res.data.categories[0].id;
         })
     }
 
@@ -265,13 +261,9 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
     /*分类选择二级下拉框*/
     function subClass(obj) {
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/categories-manage-admin",
-            params: {pid: obj}
-        }).then(function (response) {
-            $scope.secondclass = response.data.data.categories;
-            $scope.dropdown.secselect = response.data.data.categories[0].id;
+        _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+            $scope.secondclass = res.data.categories;
+            $scope.dropdown.secselect = res.data.categories[0].id;
         })
     }
 
@@ -312,14 +304,10 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /*列表数据获取*/
     function tableList() {
         $scope.attr_params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/goods-attr-list-admin",
-            params: $scope.attr_params,
-        }).then(function (res) {
-            $scope.pageConfig.totalItems = res.data.data.goods_attr_list_admin.total;
-            $scope.listdata = res.data.data.goods_attr_list_admin.details;
+        _ajax.get('/mall/goods-attr-list-admin',$scope.attr_params,function (res) {
+            $scope.pageConfig.totalItems = res.data.goods_attr_list_admin.total;
+            $scope.listdata = res.data.goods_attr_list_admin.details;
         })
     }
-    /*********************************属性结束*******************************/
+    /*********************************属性结束******************************/
 });
