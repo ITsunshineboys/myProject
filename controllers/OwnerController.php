@@ -24,6 +24,7 @@ use app\models\ProjectView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
+use app\models\Worker;
 use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
@@ -1291,6 +1292,7 @@ class OwnerController extends Controller
         if ($post['building_scrap'] == true) {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
+            echo 111;exit;
             $building_scrap = BasisDecorationService::nothingBuildingScrap($post, $craft);
         }
 
