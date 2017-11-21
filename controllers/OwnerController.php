@@ -1476,7 +1476,7 @@ class OwnerController extends Controller
                 $without_assort[] = $assort;
             }
         }
-
+var_dump($have_assort);exit;
         //有计算公式
         foreach ($have_assort as $one_have_assort){
             $material_name[] = $one_have_assort['title'];
