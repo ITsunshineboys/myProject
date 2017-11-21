@@ -433,13 +433,13 @@ class OwnerController extends Controller
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
                     if ($one['title'] == '主卧'){
-                        $room_weak_points = $one['count'] * $post['toilet'];
+                        $room_weak_points = $one['count'];
                     }
                     if ($one['title'] == '次卧'){
-                        $croom_weak_points = $post['kitchen'] * $one['count'];
+                        $croom_weak_points = $one['count'] * ($post['bedroom'] - 1);
                     }
                     if ($one['title'] == '客厅'){
-                        $hall_weak__points = $one['count'] * $post['toilet'];
+                        $hall_weak__points = $one['count'] * $post['hall'];
                     }
                 }
                 $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
@@ -452,16 +452,16 @@ class OwnerController extends Controller
                         $room_strong_points = $one['count'];
                     }
                     if ($one['title'] == '次卧室'){
-                        $croom_strong_points = $post['kitchen'] * $one['count'];
+                        $croom_strong_points = $one['count'] * ($post['bedroom'] - 1);
                     }
                     if ($one['title'] == '客厅'){
-                        $hall_strong_points = $one['count'] * $post['toilet'];
+                        $hall_strong_points = $one['count'] * $post['hall'];
                     }
                     if ($one['title'] == '卫生间'){
                         $toilet_strong_points = $one['count'] * $post['toilet'];
                     }
                     if ($one['title'] == '厨房'){
-                        $kitchen_strong_points = $one['count'] * $post['toilet'];
+                        $kitchen_strong_points = $one['count'] * $post['kitchen'];
                     }
                 }
                 $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
