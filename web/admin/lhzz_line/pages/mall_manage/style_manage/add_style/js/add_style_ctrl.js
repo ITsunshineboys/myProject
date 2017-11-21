@@ -11,6 +11,12 @@ add_style.controller("add_style",function ($rootScope,$scope,$http,$state,$state
     }, {
         name: '添加新风格'
     }];
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
+    }
   $scope.myng=$scope;
   $scope.style_intro='';
   $scope.change_txts=function () {
@@ -80,14 +86,12 @@ add_style.controller("add_style",function ($rootScope,$scope,$http,$state,$state
   };
 	//删除图片
 	$scope.del_img=function (item) {
-		$http.post(baseUrl+'/site/upload-delete',{
-      file_path:item
-		},config).then(function (res) {
+        $http.post(baseUrl+'/site/upload-delete',{file_path:item},config).then(function (res) {
 			console.log(res);
 			$scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
-    },function (err) {
+        },function (err) {
 			console.log(err);
-    })
+        })
   };
 
 	//风格增加确认按钮

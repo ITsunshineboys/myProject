@@ -7,6 +7,12 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
     }, {
         name: '添加新商品'
     }];
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
+    }
       $scope.myng=$scope;
       $scope.logistics=[];//物流模块列表
       $scope.goods_all_attrs=[];//所有属性数据
@@ -162,10 +168,12 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
       };
       //删除图片
       $scope.del_img=function (item) {
-        _ajax.post('/site/upload-delete',{file_path:item},function (res) {
-            console.log(res);
-            $scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
-        })
+          $http.post(baseUrl+'/site/upload-delete',{file_path:item},config).then(function (res) {
+              console.log(res);
+              $scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
+          },function (err) {
+              console.log(err);
+          })
       };
       //售后、保障
       $scope.after_sale_services=[];//售后、保障传值数组
