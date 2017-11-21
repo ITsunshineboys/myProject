@@ -1535,8 +1535,8 @@ class OwnerController extends Controller
 
         //无计算公式
         foreach ($without_assort as $one_without_assort){
-            $without_assort_name[] = $one_without_assort['material'];
-            $without_assort_one[$one_without_assort['material']] = $one_without_assort;
+            $without_assort_name[] = $one_without_assort['title'];
+            $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
 
         $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
