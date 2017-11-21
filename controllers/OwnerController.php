@@ -423,7 +423,7 @@ class OwnerController extends Controller
                     if ($one['title'] == '卫生间'){
                         $toilet_points = $one['count'] * $post['toilet'];
                     }
-                    if ($_waterway['title'] == '厨房'){
+                    if ($one['title'] == '厨房'){
                         $kitchen_points = $post['kitchen'] * $one['count'];
                     }
                 }
@@ -436,7 +436,7 @@ class OwnerController extends Controller
                     if ($one['title'] == '卫生间'){
                         $toilet_points = $one['count'] * $post['toilet'];
                     }
-                    if ($_waterway['title'] == '厨房'){
+                    if ($one['title'] == '厨房'){
                         $kitchen_points = $post['kitchen'] * $one['count'];
                     }
                 }
