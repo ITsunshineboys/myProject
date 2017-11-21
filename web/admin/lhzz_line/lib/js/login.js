@@ -1,5 +1,6 @@
 let app1= angular.module("app",[]);
 app1.controller('login_ctrl',function ($scope,$http,$document) {
+    $scope.isLoading = false;
     let config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
