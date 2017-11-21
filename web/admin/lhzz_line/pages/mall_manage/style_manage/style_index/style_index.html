@@ -37,7 +37,7 @@
                             <td>{{item.series}}</td>
                             <td>{{item.creation_time}}</td>
                             <td class="color_red" ng-if="item.status=='0'">关闭</td>
-                            <td class="color_skyblue" ng-if="item.status=='1'">启动中</td>
+                            <td class="color_skyblue" ng-if="item.status=='1'">启用中</td>
                             <td class="color_blue" ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})">编辑</td>
                             <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
                             <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>

@@ -3,7 +3,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '分类管理',
         link: 'fenleiguanli',

@@ -3,7 +3,7 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '系列/风格/属性管理'
     }];

@@ -4,7 +4,7 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '品牌管理',
         link: 'brand_index',

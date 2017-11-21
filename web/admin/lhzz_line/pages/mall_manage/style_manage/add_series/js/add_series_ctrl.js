@@ -4,7 +4,7 @@ add_series.controller("add_series",function ($rootScope,$scope,$http,$stateParam
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '系列/风格/属性管理',
         link: 'style_index'

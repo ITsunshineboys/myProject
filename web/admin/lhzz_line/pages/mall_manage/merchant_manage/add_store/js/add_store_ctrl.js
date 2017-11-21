@@ -16,7 +16,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '商家管理',
         link: 'store_mag',
