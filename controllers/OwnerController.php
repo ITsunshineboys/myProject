@@ -412,8 +412,6 @@ class OwnerController extends Controller
                 }
             }
         }
-$a = Points::find()->where(['and',['level'=>3],['pid'=>10]])->asArray()->all();
-        var_dump($a);exit;
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
         foreach ($points  as $p){
             if ($p['title'] == '水路'){
@@ -466,6 +464,10 @@ $a = Points::find()->where(['and',['level'=>3],['pid'=>10]])->asArray()->all();
                     }
                 }
                 $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
+                var_dump($room_strong_points);
+                var_dump($hall_strong_points);
+                var_dump($toilet_strong_points);
+                var_dump($kitchen_strong_points);exit;
             }
         }
 
