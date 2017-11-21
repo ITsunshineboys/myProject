@@ -23,6 +23,24 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages();
             }
         }
+        if(sessionStorage.getItem('flag') == 1){
+            $rootScope.crumbs = [
+                {
+                    name:'财务中心',
+                    icon:'icon-caiwu',
+                    link:$rootScope.finance_click
+                },{
+                    name:'商城财务',
+                    link:function () {
+                        $state.go('mall_finance.index')
+                        $rootScope.crumbs.splice(2,4)
+                    }
+                },{
+                    name:'入账详情',
+                }
+            ]
+            sessionStorage.removeItem('flag')
+        }
         let tablePages=function () {
             $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
             _ajax.get('/supplier-cash/cash-list-today',$scope.params,function (res) {
@@ -827,6 +845,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //跳转订单详情
         $scope.go_list_detail = function (item) {
             console.log(item)
+            sessionStorage.setItem('flag',1)
             $state.go('order_details',{orderNo:item.order_no,sku:item.sku})
         }
         //商家提现管理详情返回
