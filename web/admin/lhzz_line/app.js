@@ -355,6 +355,17 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
             controller: 'commodity_deleted'
         })
+
+        // =                     ================
+        .state('commodity_detail', { // 详情
+            params:{id:null,storeid: null},
+            url: '/commodity_detail',
+            templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail.html',
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail.css',
+            controller: 'commodity_detail'
+        })
+        // =                     ================
+
         .state("commodity_detail_on", {   //商品详情（已上架）
             params: {onlinegood: null, storeid: null},
             url: "/commodity_detail_on",

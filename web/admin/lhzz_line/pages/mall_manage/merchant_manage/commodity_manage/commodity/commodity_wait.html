@@ -93,7 +93,7 @@
             <td ng-if="menu_list[13].value" data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span
                     class="check_border wait_check" ng-bind="item.reason||'点击输入'"
                     ng-click="checkReason(item.id,item.reason)"></span></td>
-            <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail_wait({waitgood:item,storeid:storeid})">编辑</td>
+            <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
             <td ng-if="menu_list[15].value" class="blue"data-toggle="modal" data-target="#waitup_shelves_modal" ng-click="waitToOnline(item.id)">上架
             </td>
         </tr>
