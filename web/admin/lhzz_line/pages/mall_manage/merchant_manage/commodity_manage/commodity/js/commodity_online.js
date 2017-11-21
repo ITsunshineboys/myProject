@@ -176,7 +176,6 @@ app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', fu
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/goods-list-admin',$scope.params,function (res) {
-            console.log(res);
             $scope.tabledetail = res.data.goods_list_admin.details;
             $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })

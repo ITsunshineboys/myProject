@@ -1,11 +1,11 @@
 let commodity_detail_wait=angular.module("commodity_detail_wait_module",[]);
-commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
+commodity_detail_wait.controller("commodity_detail_wait_ctrl",function (_ajax,$rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
+    // const config = {
+    //     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    //     transformRequest: function (data) {
+    //         return $.param(data)
+    //     }
+    // };
     let gooddetail = $stateParams.waitgood;
     let good_partdetail;
     let logistics;
@@ -56,12 +56,8 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootSco
 
     //等待下架商品详情
     function waitGoodDetail() {
-        $http({
-            method: "get",
-            params: {id:Number(gooddetail.id)},
-            url: baseUrl+"/mall/goods-view",
-        }).then(function (res) {
-            good_partdetail = res.data.data.goods_view;
+        _ajax.get('/mall/goods-view',{id:Number(gooddetail.id)},function (res) {
+            good_partdetail = res.data.goods_view;
             $scope.subtitle = good_partdetail.subtitle;
             $scope.style_name = good_partdetail.style_name;//风格
             $scope.series_name = good_partdetail.series_name; //系列
@@ -71,11 +67,7 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootSco
     }
 
     function logisticsTemplate() {
-        $http({
-            method:"get",
-            url:baseUrl+"/mall/logistics-template-view",
-            params:{id:Number($scope.logistics_template_id)}
-        }).then(function (res) {
+        _ajax.get('/mall/logistics-template-view',{id:Number($scope.logistics_template_id)},function (res) {
             logistics = res.data.data.logistics_template;
             $scope.name = logistics.name;//物流名称
             $scope.delivery_method = logistics.delivery_method; //快递方式
@@ -87,7 +79,6 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootSco
             }else{
                 $scope.district_names = logistics.district_names.join(',');
             }//物流地区
-
         })
     }
 
@@ -138,9 +129,6 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootSco
 
     $scope.saveGoodDetail = function (val,error) {
         if(val&&!$scope.price_flag){
-            $scope.savemodal = "#savesuremodal"
-            // console.log($scope.price_flag)
-            let url = baseUrl+"/mall/goods-edit-lhzz";
             let data = {
                 id:+goodid,
                 purchase_price_decoration_company:Number($scope.purchase_price_decoration_company)*100,
@@ -148,9 +136,9 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function ($rootSco
                 purchase_price_designer: Number($scope.purchase_price_designer)*100,
                 reason:$scope.reason
             };
-            $http.post(url, data, config).then(function (res) {
-                console.log(res);
 
+            _ajax.post('/mall/goods-edit-lhzz',data,function (res) {
+                $('#savesuremodal').modal('show');
             })
         }else{
             $scope.alljudgefalse = true;

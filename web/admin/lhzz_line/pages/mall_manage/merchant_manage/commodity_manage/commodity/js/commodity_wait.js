@@ -1,14 +1,7 @@
 /**
  * Created by Administrator on 2017/10/25/025.
  */
-app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($scope, $stateParams,$http) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    }
-
+app.controller('commodity_wait', ['_ajax','$scope', '$stateParams','$http', function (_ajax, $scope, $stateParams,$http) {
     $scope.storeid = $stateParams.id;
     let sortway = "publish_time"; //默认按创建时间降序排列
     let checkId;
@@ -146,16 +139,15 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
 
     /*等待上架 单个确认上架*/
     $scope.sureWaitToOnline = function () {
-        let url = baseUrl+"/mall/goods-status-toggle";
-        let data = {id: tempwaitgoodid};
-        $http.post(url, data, config).then(function (res) {
-            console.log(res);
+        // let url = baseUrl+"/mall/goods-status-toggle";
+        // let data = {id: tempwaitgoodid};
+        _ajax.post('/mall/goods-status-toggle',{id: tempwaitgoodid},function (res) {
             /*由于某些原因不能上架*/
-            if (res.data.code != 200) {
+            if (res.code != 200) {
                 // console.log(res)
                 $('#waitup_shelves_modal').modal("hide");
                 $("#waitup_not_shelves_modal").modal("show")
-                $scope.waitcantonline = res.data.msg;
+                $scope.waitcantonline = res.msg;
             } else {
                 /*可以上架*/
                 $('#waitup_shelves_modal').modal("hide");
@@ -173,13 +165,12 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
         let batchids = $scope.table.roles.join(',');
         let url = baseUrl+"/mall/goods-enable-batch";
         let data = {ids: batchids};
-        $http.post(url, data, config).then(function (res) {
-            console.log(res);
+        _ajax.post('/mall/goods-enable-batch',{ids: batchids},function (res) {
             /*由于某些原因不能上架*/
-            if (res.data.code != 200) {
+            if (res.code != 200) {
                 $('#allwaitonline_modal').modal("hide");
                 $("#waitup_not_shelves_modal").modal("show")
-                $scope.waitcantonline = res.data.msg;
+                $scope.waitcantonline = res.msg;
             } else {
                 /*可以上架*/
                 $('#allwaitonline_modal').modal("hide");
@@ -206,12 +197,9 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
 
     /*确认更新审核备注*/
     $scope.sureCheckReason = function () {
-        console.log(123456);
-        let url = baseUrl+"/mall/goods-reason-reset";
         let data  = {id:Number(checkId),reason:$scope.lastreason||''};
-        $http.post(url,data,config).then((res)=>{
-            console.log(res);
-           tableList();
+        _ajax.post('/mall/goods-reason-reset',data,function (res) {
+            tableList();
         })
     }
 
@@ -219,14 +207,9 @@ app.controller('commodity_wait', ['$scope', '$stateParams','$http', function ($s
     /*列表数据获取*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/goods-list-admin",
-            params: $scope.params,
-        }).then(function (res) {
-            console.log('等待上架'+res);
-            $scope.tabledetail = res.data.data.goods_list_admin.details;
-            $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
+        _ajax.get('/mall/goods-list-admin',$scope.params,function (res) {
+            $scope.tabledetail = res.data.goods_list_admin.details;
+            $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })
     }
 

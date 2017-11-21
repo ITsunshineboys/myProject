@@ -1,6 +1,6 @@
 let commodity_detail=angular.module("commodity_detail_on_module",[]);
 // onlineGoodDetail();
-commodity_detail.controller("commodity_detail_on_ctrl",function ($rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
+commodity_detail.controller("commodity_detail_on_ctrl",function (_ajax,$rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -14,19 +14,13 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($rootScope,$sco
     },{
         name: '商品详情',
     }];
+
     let gooddetail = $stateParams.onlinegood;
     let good_partdetail;
     let logistics;
     let goodid = gooddetail.id;
     const afterservice_arr = ['上门维修','上门退货','上门换货','退货','换货'];
     const safeguard_arr = ['提供发票','上门安装'];
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
     $scope.storeid = $stateParams.storeid;
     $scope.offline_reason = '';
     $scope.logistics_template_id = gooddetail.logistics_template_id;//物流编号
@@ -54,12 +48,8 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($rootScope,$sco
 
     //已上架商品部分详情
     function onlineGoodDetail () {
-        $http({
-            method: "get",
-            params: {id:Number(gooddetail.id)},
-            url: baseUrl+"/mall/goods-view",
-        }).then(function (res) {
-            good_partdetail = res.data.data.goods_view;
+        _ajax.get('/mall/goods-view',{id:Number(gooddetail.id)},function (res) {
+            good_partdetail = res.data.goods_view;
             $scope.subtitle = good_partdetail.subtitle;
             $scope.style_name = good_partdetail.style_name;//风格
             $scope.series_name = good_partdetail.series_name; //系列
@@ -69,35 +59,29 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($rootScope,$sco
     }
     
      function logisticsTemplate () {
-        $http({
-            method:"get",
-            url:baseUrl+"/mall/logistics-template-view",
-            params:{id:Number($scope.logistics_template_id)}
-        }).then(function (res) {
-            logistics = res.data.data.logistics_template;
-            $scope.name = logistics.name;
-            $scope.delivery_method = logistics.delivery_method; //快递方式
-            $scope.delivery_cost_default = logistics.delivery_cost_default;//单个运费
-            $scope.delivery_cost_delta = logistics.delivery_cost_delta;//没增加一件商品，运费增量
-            $scope.alldistricts = logistics.district_names;
-            if(logistics.district_names.length > 3 ){
-                $scope.district_names = logistics.district_names.slice(0,3).join(',');
-            }else{
-                $scope.district_names = logistics.district_names.join(',');
-            }//物流地区
-
-        })
+         _ajax.get('/mall/logistics-template-view',{id:Number($scope.logistics_template_id)},function (res) {
+             logistics = res.data.logistics_template;
+             $scope.name = logistics.name;
+             $scope.delivery_method = logistics.delivery_method; //快递方式
+             $scope.delivery_cost_default = logistics.delivery_cost_default;//单个运费
+             $scope.delivery_cost_delta = logistics.delivery_cost_delta;//没增加一件商品，运费增量
+             $scope.alldistricts = logistics.district_names;
+             if(logistics.district_names.length > 3 ){
+                 $scope.district_names = logistics.district_names.slice(0,3).join(',');
+             }else{
+                 $scope.district_names = logistics.district_names.join(',');
+             }//物流地区
+         })
     }
 
 
 
     /*单个商品确认下架*/
     $scope.sureGoodOffline = () => {
-        let url = baseUrl+"/mall/goods-status-toggle";
         let data = {id: Number(goodid), offline_reason: $scope.offline_reason};
-        $http.post(url, data, config).then((res) => {
+        _ajax.post('/mall/goods-status-toggle',data,function (res) {
             setTimeout(()=>
-                $state.go("commodity.online",{id:$scope.storeid}),200)
+                $state.go("commodity.online",{id:$scope.storeid}),200);
         })
     }
 
@@ -150,18 +134,17 @@ commodity_detail.controller("commodity_detail_on_ctrl",function ($rootScope,$sco
     $scope.saveGoodDetail = function (val,error) {
         if(val&&!$scope.price_flag){
             $scope.savemodal = "#savesuremodal"
-            // console.log($scope.price_flag)
-            let url = baseUrl+"/mall/goods-edit-lhzz";
             let data = {
                 id:+goodid,
                 purchase_price_decoration_company:Number($scope.purchase_price_decoration_company)*100,
                 purchase_price_manager: Number($scope.purchase_price_manager)*100,
                 purchase_price_designer: Number($scope.purchase_price_designer)*100,
             };
-            $http.post(url, data, config).then(function (res) {
-                console.log(res);
 
+            _ajax.post('/mall/goods-edit-lhzz',data,function (res) {
+                $('#savesuremodal').modal('show');
             })
+
         }else{
             $scope.alljudgefalse = true;
             $scope.savemodal = ""

@@ -2,12 +2,6 @@
  * Created by tiger on 2017/10/25/025.
  */
 app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', function (_ajax, $scope, $stateParams,$http) {
-    // const config = {
-    //     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    //     transformRequest: function (data) {
-    //         return $.param(data)
-    //     }
-    // }
     $scope.storeid = $stateParams.id;
     let sortway = "offline_time"; //默认按上架时间降序排列
     let tempoffgoodid;  //单个商品id
@@ -65,7 +59,7 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
         {name: '销量', value: false},
         {name: '状态', value: true},
         {name: '下架时间', value: true},
-        {name:  '操作人员',value:true},
+        {name: '操作人员',value:true},
         {name: '图片', value: true},
         {name: '下架原因', value: true},
         {name: '详情', value: true},
@@ -142,9 +136,8 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
 //
     /*单个商品确认上架*/
     $scope.sureGoodOnline = function () {
-        // let url = baseUrl+"/mall/goods-status-toggle";
-        // let data = {id: Number(tempoffgoodid)};
         _ajax.post('/mall/goods-status-toggle',{id: Number(tempoffgoodid)},function (res) {
+            /*由于某些原因不能上架*/
             if (res.code != 200) {
                 // console.log(res)
                 $('#up_shelves_modal').modal("hide");
@@ -159,23 +152,6 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
                 tableList();
             }
         })
-        // $http.post(url, data, config).then(function (res) {
-        //     console.log(res)
-        //     /*由于某些原因不能上架*/
-        //     if (res.data.code != 200) {
-        //         // console.log(res)
-        //         $('#up_shelves_modal').modal("hide");
-        //         $("#up_not_shelves_modal").modal("show")
-        //         $scope.cantonline = res.data.msg;
-        //     } else {
-        //         /*可以上架*/
-        //         $('#up_shelves_modal').modal("hide");
-        //         $scope.pageConfig.currentPage = 1;
-        //         $scope.keyword = '';
-        //         $scope.params.keyword = '';
-        //         tableList();
-        //     }
-        // })
     }
 
     /*不能上架 确认*/
@@ -186,9 +162,7 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
     /*确认批量上架*/
     $scope.surepiliangonline = function () {
        let batchonids = $scope.table.roles.join(',');
-        let url = baseUrl+"/mall/goods-enable-batch";
-        let data = {ids:batchonids};
-        $http.post(url, data, config).then(function (res) {
+        _ajax.post('/mall/goods-enable-batch',{ids:batchonids},function (res) {
             /*由于某些原因不能上架*/
             if (res.code != 200) {
                 $('#piliangonline_modal').modal("hide");
@@ -202,7 +176,6 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
                 $scope.params.keyword = '';
                 tableList();
             }
-
         })
     }
 
@@ -224,19 +197,6 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
             $scope.tabledetail = res.data.goods_list_admin.details;
             $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })
-
-
-        // $http({
-        //     method: "get",
-        //     url: baseUrl+"/mall/goods-list-admin",
-        //     params: $scope.params,
-        // }).then(function (res) {
-        //     // console.log(res);
-        //     $scope.tabledetail = res.data.data.goods_list_admin.details;
-        //     $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
-        // })
     }
-
-
 }]);
 ;

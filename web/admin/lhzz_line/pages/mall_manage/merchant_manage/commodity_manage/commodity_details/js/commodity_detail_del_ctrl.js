@@ -1,5 +1,5 @@
 let commodity_detail_del=angular.module("commodity_detail_del_module",[]);
-commodity_detail_del.controller("commodity_detail_del_ctrl",function ($rootScope,$scope,$http,$stateParams) {
+commodity_detail_del.controller("commodity_detail_del_ctrl",function (_ajax,$rootScope,$scope,$http,$stateParams) {
     let gooddetail = $stateParams.deletegood;
     let good_partdetail;
     let logistics;
@@ -41,12 +41,8 @@ commodity_detail_del.controller("commodity_detail_del_ctrl",function ($rootScope
     logisticsTemplate();
 
     function deleteGoodDetail() {
-        $http({
-            method: "get",
-            params: {id:Number(goodid)},
-            url: baseUrl+"/mall/goods-view",
-        }).then(function (res) {
-            good_partdetail = res.data.data.goods_view;
+        _ajax.get('/mall/goods-view',{id:Number(goodid)},function (res) {
+            good_partdetail = res.data.goods_view;
             $scope.subtitle = good_partdetail.subtitle;
             $scope.style_name = good_partdetail.style_name;//风格
             $scope.series_name = good_partdetail.series_name; //系列
@@ -56,12 +52,7 @@ commodity_detail_del.controller("commodity_detail_del_ctrl",function ($rootScope
     }
 
     function logisticsTemplate() {
-        $http({
-            method:"get",
-            url:baseUrl+"/mall/logistics-template-view",
-            params:{id:Number($scope.logistics_template_id)}
-        }).then(function (res) {
-            console.log(res);
+        _ajax.get('/mall/logistics-template-view',{id:Number($scope.logistics_template_id)},function (res) {
             logistics = res.data.data.logistics_template;
             $scope.name = logistics.name;//物流名称
             $scope.delivery_method = logistics.delivery_method; //快递方式

@@ -1,14 +1,7 @@
 /**
  * Created by Administrator on 2017/10/25/025.
  */
-app.controller('commodity_deleted', ['$scope', '$stateParams','$http', function ($scope, $stateParams,$http) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    }
-
+app.controller('commodity_deleted', ['_ajax','$scope', '$stateParams','$http', function (_ajax, $scope, $stateParams,$http) {
     $scope.storeid = $stateParams.id;
     let sortway = "online_time"; //默认按上架时间降序排列
     /*默认参数配置*/
@@ -125,14 +118,9 @@ app.controller('commodity_deleted', ['$scope', '$stateParams','$http', function 
     /*列表数据获取*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+"/mall/goods-list-admin",
-            params: $scope.params,
-        }).then(function (res) {
-            console.log(res);
-            $scope.tabledetail = res.data.data.goods_list_admin.details;
-            $scope.pageConfig.totalItems = res.data.data.goods_list_admin.total;
+        _ajax.get('/mall/goods-list-admin',$scope.params,function (res) {
+            $scope.tabledetail = res.data.goods_list_admin.details;
+            $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })
     }
 
