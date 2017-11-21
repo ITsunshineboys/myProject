@@ -482,7 +482,6 @@ class OwnerController extends Controller
         var_dump($strong_);
         var_dump($weak_);
         var_dump($waterway_);
-        exit;
 
 
         $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_);
