@@ -474,6 +474,17 @@ class OwnerController extends Controller
 
         $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_);
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
+        var_dump($waterway_);
+        var_dump($waterway_count);
+        var_dump($waterway_labor['univalence']);
+        var_dump($weak_);
+        var_dump($weak_count);
+        var_dump($weak);
+        var_dump($waterway_labor['univalence']);
+        var_dump($strong_);
+        var_dump($strong_count);
+        var_dump($strong);
+        var_dump($waterway_labor['univalence']);exit;
 
         //查询弱电所需要材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
