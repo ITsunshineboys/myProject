@@ -305,8 +305,8 @@ class Effect extends ActiveRecord
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         $data['quote']=[
-            ['name'=>'原价', 'vaule'=>$array['original_price']],
-            [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
+            ['name'=>'原价', 'vaule'=>'￥'.$array['original_price']],
+            [ 'name'=>'优惠后价格', 'vaule'=>'￥'.$array['sale_price']],
             ['name'=>'','vaule'=>'（包含工人费用，不包含设计图纸费用）'],
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
@@ -319,6 +319,7 @@ class Effect extends ActiveRecord
         if($array['name']=='' && $array['phone']==''){
            unset($data['user_view']);
         }
+
 
         $data['id']=$array['id'];
         if(isset($array['district'])){
@@ -348,10 +349,9 @@ class Effect extends ActiveRecord
         if(!$material){
             $data['material']=null;
         }
-        $arr=[];
         foreach ($material as $k=>&$value){
             $goods_cate_id=Goods::find()->select('brand_id,category_id')->where(['id'=>$value['goods_id']])->asArray()->one();
-            $value['price']= sprintf('%.2f',(float)$value['price']*0.01);
+            $value['price']= '￥'.sprintf('%.2f',(float)$value['price']*0.01);
             $value['cate_level3']=GoodsCategory::find()->select('title')
                 ->where(['id'=>$goods_cate_id['category_id']])
                 ->asArray()
