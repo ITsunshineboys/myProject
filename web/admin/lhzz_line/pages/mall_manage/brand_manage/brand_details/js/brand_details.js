@@ -4,7 +4,7 @@ brand_details.controller("brand_details_ctrl",function ($rootScope,$scope,$state
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '品牌管理',
         link: 'brand_index',

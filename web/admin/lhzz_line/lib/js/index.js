@@ -108,6 +108,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
         sessionStorage.removeItem('other_menu');
         sessionStorage.setItem('finance_menu',$scope.finance_flag);
     }
+    $rootScope.finance_click=$scope.finance_click;
     if(sessionStorage.getItem('finance_menu')!=null){
         $scope.finance_flag=true;
         $scope.mall_flag=false;
