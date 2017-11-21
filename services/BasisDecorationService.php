@@ -465,6 +465,8 @@ class BasisDecorationService
             }
         }
 
+        var_dump($length);
+        var_dump($series_one);exit;
         //造型长度=基本造型长度×系列系数2
         return $length* $series_one;
     }
@@ -506,8 +508,6 @@ class BasisDecorationService
 
 //            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
         $modelling_day = $modelling / $day_modelling * $series_one * $style_one;
-        var_dump($modelling);
-        var_dump($day_modelling);exit;
         return $modelling_day;
     }
 
