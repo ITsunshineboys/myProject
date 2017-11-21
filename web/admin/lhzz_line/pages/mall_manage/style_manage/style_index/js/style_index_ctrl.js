@@ -309,5 +309,5 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
             $scope.listdata = res.data.goods_attr_list_admin.details;
         })
     }
-    /*********************************属性结束*******************************/
+    /*********************************属性结束******************************/
 });
