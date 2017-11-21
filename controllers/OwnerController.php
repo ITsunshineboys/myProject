@@ -421,6 +421,8 @@ class OwnerController extends Controller
                 foreach ($_waterway as $one){
                     if ($one['title'] == '卫生间'){
                         $toilet_waterway_points = $one['count'] * $post['toilet'];
+                        var_dump($one['count']);
+                        var_dump($post['toilet']);
                     }
                     if ($one['title'] == '厨房'){
                         $kitchen_waterway_points = $post['kitchen'] * $one['count'];
