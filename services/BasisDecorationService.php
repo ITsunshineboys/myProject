@@ -1912,7 +1912,7 @@ class BasisDecorationService
     {
         foreach ($goods as &$one){
             foreach ($assort_material as $value){
-                if ($one['title'] == $value['material']){
+                if ($one['title'] == $value['title']){
                     $one['quantity'] =$value['quantity'];
                     $one['cost'] = $one['quantity'] * $one['platform_price'];
                 }
