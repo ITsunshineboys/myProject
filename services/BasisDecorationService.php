@@ -547,6 +547,8 @@ class BasisDecorationService
 
         //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
         $flat_day = $flat_area / $day_area * $series_one * $style_one;
+        var_dump($series_one);
+        var_dump($style_one);exit;
         return $flat_day;
     }
 
