@@ -1499,7 +1499,7 @@ class BasisDecorationService
         $material = [];
         foreach ($goods as $one_goods) {
             if ($one_goods['title'] == self::GOODS_NAME['wood_floor'] && $one_goods['series_id'] == $post['series']) {
-                $bedroom_area = $post['area'] * $area['project_value'];
+                $bedroom_area = $post['area'] * $area;
                 $goods_area = GoodsAttr::findByGoodsIdUnit($one_goods['id']);
                 foreach ($goods_area as $one_goods_area) {
                     if ($one_goods_area['name'] == self::UNITS['length']) {
