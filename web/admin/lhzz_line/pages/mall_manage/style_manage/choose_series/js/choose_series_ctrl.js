@@ -27,11 +27,11 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 	//获取三级
 	$http({
 		method: 'get',
-		url: baseUrl+'/mall/categories?pid=7'
+		url: baseUrl+'/mall/categories?pid=2'
 	}).then(function successCallback(response) {
 		console.log(response)
 		$scope.three = response.data.data.categories;
-		for(let [key,value] of $scope.three.entries()){
+		for(let [key,value] of 	Object.entries($scope.three)){
 			if($scope.item_check.length == 0){
 				value['complete'] = false
 			}else{
@@ -87,13 +87,14 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 
 	};
 	//点击二级 获取相对应的三级
-	$scope.getMoreThree = function (n) {
-		$scope.id=n;
-		$scope.twoColor = n;
-		$http({
-			method: 'get',
-			url: baseUrl+'/mall/categories?pid='+ n.id
-		}).then(function successCallback(response) {
+            $scope.three = []
+            $scope.getMoreThree = function (n) {
+                $scope.id=n;
+                $scope.twoColor = n;
+                $http({
+                    method: 'get',
+                    url: baseUrl+'/mall/categories?pid='+ n.id
+                }).then(function successCallback(response) {
 			$scope.three = response.data.data.categories;
 			for(let [key,value] of $scope.three.entries()){
 				if($scope.item_check.length == 0){
@@ -188,7 +189,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 	}).then(function successCallback(response) {
 		console.log(response);
 		$scope.item_check = response.data.data.have_style_series_categories;
-		for(let [key,value] of $scope.three.entries()){
+		for(let [key,value] of Object.entries($scope.three)){
 			if($scope.item_check.length == 0){
 				value['complete'] = false
 			}else{
