@@ -17,6 +17,7 @@ app1.controller('login_ctrl',function ($scope,$http,$document) {
 
     $scope.error_flag=false;
     $scope.login=function () {
+      $scope.isLoading = true;
       $http.post(baseUrl+'/site/admin-login', {
           role_id: 1,
           username: $scope.my_username,
@@ -28,6 +29,7 @@ app1.controller('login_ctrl',function ($scope,$http,$document) {
           } else {
               $scope.error_flag = true;
               $scope.error_txt=res.data.msg;
+              $scope.isLoading = false;
           }
       }, function (error) {
           console.log(error)
