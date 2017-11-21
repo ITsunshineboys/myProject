@@ -590,7 +590,6 @@ class OwnerController extends Controller
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->one();
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
-        var_dump($qita);exit;
         $total_area = $kitchen_area + $toilet_area + $qita;
 
 
