@@ -971,15 +971,17 @@ class OrderController extends Controller
      * @return string
      */
     public function actionFindOrderList(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-//        $lhzz=Lhzz::find()->where(['uid' => $user->id])->one()['id'];
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+//        $lhzz=Lhzz::find()
+//            ->where(['uid' => $user->id])
+//            ->one()['id'];
 //        if (!$lhzz){
 //            $code=1010;
 //            return Json::encode([
@@ -987,58 +989,58 @@ class OrderController extends Controller
 //                'msg' => Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
-        $request = Yii::$app->request;
-        $page=trim($request->get('page',1));
-        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-        $keyword = trim($request->get('keyword', ''));
-        $timeType = trim($request->get('time_type', ''));
-        $type=trim($request->get('type','all'));
-        $supplier_id=trim($request->get('supplier_id'));
-        $where=GoodsOrder::GetTypeWhere($type);
-            if ($timeType == 'custom') {
-                $startTime = trim(Yii::$app->request->get('start_time', ''));
-                $endTime = trim(Yii::$app->request->get('end_time', ''));
-                if (($startTime && !StringService::checkDate($startTime))
-                    || ($endTime && !StringService::checkDate($endTime))
-                ){
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-            }else{
-                list($startTime, $endTime) = StringService::startEndDate($timeType);
-            }
-            if($type=='all')
-            {
-                if($supplier_id)
-                {
-                    if(!is_numeric($supplier_id))
-                    {
+                $request = Yii::$app->request;
+                $page=trim($request->get('page',1));
+                $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+                $keyword = trim($request->get('keyword', ''));
+                $timeType = trim($request->get('time_type', ''));
+                $type=trim($request->get('type','all'));
+                $supplier_id=trim($request->get('supplier_id'));
+                $where=GoodsOrder::GetTypeWhere($type);
+                if ($timeType == 'custom') {
+                    $startTime = trim(Yii::$app->request->get('start_time', ''));
+                    $endTime = trim(Yii::$app->request->get('end_time', ''));
+                    if (($startTime && !StringService::checkDate($startTime))
+                        || ($endTime && !StringService::checkDate($endTime))
+                    ){
                         $code=1000;
                         return Json::encode([
                             'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code]
+                            'msg' => Yii::$app->params['errorCodes'][$code],
                         ]);
                     }
-                    $where .=" a.supplier_id={$supplier_id}";
+                }else{
+                    list($startTime, $endTime) = StringService::startEndDate($timeType);
                 }
-            }else{
-                if($supplier_id)
+                if($type=='all')
                 {
-                    if(!is_numeric($supplier_id))
+                    if($supplier_id)
                     {
-                        $code=1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code]
-                        ]);
+                        if(!is_numeric($supplier_id))
+                        {
+                            $code=1000;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+                        $where .=" a.supplier_id={$supplier_id}";
                     }
-                    $where .=" and a.supplier_id={$supplier_id}";
+                }else{
+                    if($supplier_id)
+                    {
+                        if(!is_numeric($supplier_id))
+                        {
+                            $code=1000;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+                        $where .=" and a.supplier_id={$supplier_id}";
+                    }
                 }
-            }
-        if ($type=='all' && !$supplier_id)
+                if ($type=='all' && !$supplier_id)
                 {
                     if($keyword){
                         $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
@@ -1228,11 +1230,11 @@ class OrderController extends Controller
         if (!is_numeric($lhzz)){
             return $lhzz;
         }
-        $request    =Yii::$app->request;
-        $order_no   =trim($request->post('order_no',''));
-        $sku        =trim($request->post('sku',''));
-        $handle_type=trim($request->post('handle_type',''));
-        $reason     =trim($request->post('reason',''));
+        $request    = Yii::$app->request;
+        $order_no   = trim($request->post('order_no',''));
+        $sku        = trim($request->post('sku',''));
+        $handle_type= trim($request->post('handle_type',''));
+        $reason     = trim($request->post('reason',''));
         if (!$order_no || !$handle_type  || !$sku){
             $code=1000;
             return Json::encode([
@@ -1278,7 +1280,12 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $template_id=Goods::find()->select('logistics_template_id')->where(['id'=>$goods_id])->asArray()->one()['logistics_template_id'];
+        $template_id=Goods::find()
+            ->select('logistics_template_id')
+            ->where(['id'=>$goods_id])
+            ->asArray()
+            ->one()
+        ['logistics_template_id'];
         $data=LogisticsDistrict::is_apply($districtcode,$template_id);
         if ($data==200){
             return Json::encode([
@@ -1306,7 +1313,9 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier=Supplier::find()->where(['uid' => $user->id])->one();
+        $supplier=Supplier::find()
+            ->where(['uid' => $user->id])
+            ->one();
         if (!$supplier){
             $code=1010;
             return Json::encode([
@@ -1611,7 +1620,10 @@ class OrderController extends Controller
         $waybillnumber= trim($request->post('waybillnumber', ''));
         $order_no= trim($request->post('order_no', ''));
         $sku=trim($request->post('sku', ''));
-        $data=Express::find()->select('waybillnumber,waybillname')->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+        $data=Express::find()
+            ->select('waybillnumber,waybillname')
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
         if (!$data || !$waybillnumber){
             $code=1000;
             return Json::encode([
@@ -1745,11 +1757,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-
-
-
-
     /**
      * @return string
      */
@@ -1788,7 +1795,10 @@ class OrderController extends Controller
 
     public static function lhzzidentity($user)
     {
-        $lhzz=Lhzz::find()->select('id')->where(['uid'=>$user])->one();
+        $lhzz=Lhzz::find()
+            ->select('id')
+            ->where(['uid'=>$user])
+            ->one();
         if (!$lhzz){
             $code = 1010;
             return Json::encode([
@@ -4549,15 +4559,15 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
-        if ($orders==500 || $orders==1000)
-        {
-            $code=$orders;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+            $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
+            if ($orders==500 || $orders==1000)
+            {
+                $code=$orders;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $code=200;
             return Json::encode([
                 'code' => $code,

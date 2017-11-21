@@ -2108,8 +2108,6 @@ class GoodsOrder extends ActiveRecord
                 ->where($where)
                 ->asArray()
                 ->all();
-
-
             foreach ($GoodsOrder AS $k =>$v){
                 $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
@@ -2311,7 +2309,8 @@ class GoodsOrder extends ActiveRecord
                     break;
                 case self::SHIPPING_STATUS_DESC_UNSHIPPED:
                     $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED;
-                    if ( $arr[$k]['unusual']=='申请退款'){
+                    if ( $arr[$k]['unusual']=='申请退款')
+                    {
                         $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
                     }
                     break;
@@ -2528,7 +2527,7 @@ class GoodsOrder extends ActiveRecord
                             if ($afterSale['supplier_handle']==0)
                             {
                                 $list[$k]['aftersale_status']=1;                          $list[$k]['aftersale_type']=OrderAfterSale::AFTER_SALE_SERVICES[$afterSale['type']];
-                                $list[$k]['apply_aftersale_time']=$afterSale['create_time'];                            $list[$k]['apply_aftersale_reason']=$afterSale['description'];
+                                $list[$k]['apply_aftersale_time']=$afterSale['create_time'];                               $list[$k]['apply_aftersale_reason']=$afterSale['description'];
                             }
                         }
                     }
@@ -2565,14 +2564,12 @@ class GoodsOrder extends ActiveRecord
                 $output['to_role_id']=6;
             }
             $output['list']=$list;
-
             return $output;
         }else{
             $arr=[];
             return $arr;
         }
     }
-
     /**
      * 设置平台角色
      * @param array $output
@@ -2602,7 +2599,9 @@ class GoodsOrder extends ActiveRecord
 
 
 
-    /**set order_no
+    /**
+     * 设置订单号
+     * set order_no
      * @return string
      */
     public static function SetOrderNo(){
@@ -2614,6 +2613,7 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
+     * 设置交易单号
      * set  transaction no
      * @param $supplier_id
      * @return string
@@ -2629,7 +2629,9 @@ class GoodsOrder extends ActiveRecord
         }while ( $transaction_no==UserCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
         return $transaction_no;
     }
+
     /**
+     * 切换状态
      * @param $arr
      * @param $user
      * @return mixed
@@ -2773,6 +2775,22 @@ class GoodsOrder extends ActiveRecord
             $total=0;
             foreach ($suppliers as  &$supplier)
             {
+                if (
+                    !array_key_exists('freight',$supplier)
+                    || !array_key_exists('buyer_message',$supplier)
+                    || !array_key_exists('invoice_type',$supplier)
+                    || !array_key_exists('invoice_header_type',$supplier)
+                    || !array_key_exists('invoice_header',$supplier)
+                    || !array_key_exists('invoicer_card',$supplier)
+                    || !array_key_exists('invoice_content',$supplier)
+                    || !array_key_exists('supplier_id',$supplier)
+                    || !array_key_exists('goods',$supplier))
+                {
+
+                    $tran->rollBack();
+                    $code=1000;
+                    return $code;
+                }
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
                 $count=count($supplier['goods']);
@@ -2783,6 +2801,14 @@ class GoodsOrder extends ActiveRecord
                 $freight=$supplier['freight']/$count;
                 foreach ($supplier['goods'] as &$goods)
                 {
+                    if (
+                        !array_key_exists('goods_id',$goods)
+                        || !array_key_exists('goods_num',$goods))
+                    {
+                        $tran->rollBack();
+                        $code=1000;
+                        return $code;
+                    }
                     $Goods=Goods::find()
                         ->where(['id'=>$goods['goods_id']])
                         ->asArray()
@@ -2814,7 +2840,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder=new GoodsOrder();
                 $GoodsOrder->order_no=$order_no;
                 $GoodsOrder->amount_order=$supplier['freight']*100+$money;
-                $GoodsOrder->supplier_id=$supplier['suppier_id'];
+                $GoodsOrder->supplier_id=$supplier['supplier_id'];
                 $GoodsOrder->pay_status=0;
                 $GoodsOrder->user_id=$user->id;
                 $GoodsOrder->pay_name=$pay_name;
