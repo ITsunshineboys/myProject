@@ -1482,7 +1482,6 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['title'];
             $material_one[$one_have_assort['title']] = $one_have_assort;
         }
-var_dump($material_one);exit;
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
@@ -1511,6 +1510,12 @@ var_dump($material_one);exit;
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
 
 
+        //无计算公式
+        foreach ($without_assort as $one_without_assort){
+            $without_assort_name[] = $one_without_assort['title'];
+            $without_assort_one[$one_without_assort['title']] = $one_without_assort;
+        }
+
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
@@ -1518,7 +1523,7 @@ var_dump($material_one);exit;
             $stairs = StairsDetails::find()->asArray()->where(['id'=>$post['stairs']])->one();
             foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $stairs['attribute'] && $one_stairs_price['style_id'] == $post['style']) {
-                    $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
+                    $one_stairs_price['quantity'] = $without_assort_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
                 }
@@ -1526,14 +1531,7 @@ var_dump($material_one);exit;
             $material[] = BasisDecorationService::profitMargin($condition_stairs);
         }
 
-
-
-        //无计算公式
-        foreach ($without_assort as $one_without_assort){
-            $without_assort_name[] = $one_without_assort['title'];
-            $without_assort_one[$one_without_assort['title']] = $one_without_assort;
-        }
-
+        
         $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
         if ($without_assort_goods == null) {
             $code = 1061;
