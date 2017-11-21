@@ -427,6 +427,8 @@ class OwnerController extends Controller
                     }
                 }
                 $waterway_count = $toilet_waterway_points + $kitchen_waterway_points;
+                var_dump($toilet_waterway_points);
+                var_dump($kitchen_waterway_points);exit;
             }
             if ($p['title'] == '弱电'){
                 $id = $p['id'];
@@ -443,9 +445,6 @@ class OwnerController extends Controller
                     }
                 }
                 $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
-                var_dump($room_weak_points);
-                var_dump($croom_weak_points);
-                var_dump($hall_weak__points);exit;
             }
             if ($p['title'] == '强电'){
                 $id = $p['id'];
