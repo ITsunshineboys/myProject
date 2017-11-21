@@ -326,8 +326,6 @@ class BasisDecorationService
         $all_area = $ground + $wall_space;
         $total_area = round($all_area,2);
 
-        var_dump($ground);
-        var_dump($wall_space);exit;
         return $total_area;
 
     }

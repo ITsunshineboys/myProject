@@ -558,24 +558,16 @@ class OwnerController extends Controller
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
-//        //厨房
-//        $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
-//        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
-//        if (!$p){
-//            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
-//        }else{
-//            $_kitchen_height = $p['project_value'];
-//        }
-//        if ($kitchen){
-//            foreach ($kitchen as $one_kitchen){
-//                if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
-//                    $_kitchen_area = $one_kitchen['project_value'];
-//                }
-//            }
-//        }else{
-//            $_kitchen_area = EngineeringUniversalCriterion::KITCHEN_AREA;
-//        }
-//        $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
+        //厨房
+        $kitchen = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->one();
+        $kitchen_ = $kitchen['project_value'] / 100;
+        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
+        if (!$p){
+            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+        }else{
+            $_kitchen_height = $p['project_value'];
+        }
+        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_,$_kitchen_height, $post['area'], $post['kitchen']);
 
 
         //卫生间
@@ -588,13 +580,8 @@ class OwnerController extends Controller
             $_toilet_height = $toilet_p['project_value'];
         }
 
-
         $toilet_area = BasisDecorationService::waterproofArea($toilet_,$_toilet_height, $post['area'], $post['toilet']);
-        var_dump($toilet_);
-        var_dump($_toilet_height);
-        var_dump($post['area']);
-        var_dump($post['toilet']);
-        exit;
+
         //总面积
         $apartment = Apartment::find()
             ->asArray()
@@ -603,11 +590,6 @@ class OwnerController extends Controller
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
-        var_dump($total_area);
-        var_dump($kitchen_area);
-        var_dump($toilet_area);
-        var_dump( $apartment['project_value']);
-        exit;
 
 
         //当地工艺
