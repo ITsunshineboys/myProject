@@ -691,6 +691,7 @@ angular.module('all_controller', [])
             $scope.is_city = true
             $scope.is_edit = false
             $scope.cur_header = '智能报价'
+            console.log()
             let arr = []
             get_all_price()
             if (!!sessionStorage.getItem('materials')) {
@@ -707,6 +708,9 @@ angular.module('all_controller', [])
                             for (let [key3, value3] of value2.goods_detail.entries()) {
                                 for (let [key4, value4] of arr.entries()) {
                                     if (value.id == value4.id) {
+                                        let item = $scope.level.find(function (item1) {
+                                            return item1.id === value1.id
+                                        })
                                         if (value3.goods_id == undefined) {
                                             value4.goods.push({
                                                 cost: value3.cost,
@@ -714,7 +718,7 @@ angular.module('all_controller', [])
                                                 name: value3.name,
                                                 id: value2.id,
                                                 goods_three: value2.title,
-                                                goods_second: value1.title,
+                                                goods_second: item.title,
                                                 goods_first: value.title,
                                                 quantity: value3.quantity
                                             })

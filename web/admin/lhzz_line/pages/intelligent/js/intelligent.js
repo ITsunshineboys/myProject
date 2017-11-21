@@ -2665,6 +2665,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         $scope.process_list = [arr4, arr5, arr6]
                         console.log($scope.process_list)
                         console.log(arr)
+                        console.log($scope.all_series)
                     })
                 }
                 $state.go('intelligent.engineering_process')
