@@ -1105,11 +1105,10 @@ class OwnerController extends Controller
         }
         $floor_tile_price = BasisDecorationService::priceConversion($floor_tile);
         $floor_tile_attr = BasisDecorationService::floorTile($floor_tile_price);
-        var_dump($floor_tile_attr);exit;
+
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-
         $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
 
 //        自流平费用
@@ -1120,22 +1119,45 @@ class OwnerController extends Controller
         $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
         $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods_price, $river_sand_craft, $goods_attr,BasisDecorationService::GOODS_NAME['river_sand']);
 
+
+
 //        墙砖费用 墙砖费用：个数×抓取的商品价格 个数：（墙砖面积÷抓取墙砖面积）
         $wall_brick_cost['quantity'] = ceil($wall_area / $wall_brick_area);
         $wall_brick_cost['cost'] = $wall_brick_cost ['quantity'] * $wall_brick_max['platform_price'];
-
 //        卫生间地砖个数和价格：（墙砖面积÷抓取墙砖面积）  厨房/卫生间墙砖费用
         $toilet_wall_brick_cost['quantity'] = ceil($toilet_area / $floor_tile_attr['toilet']['area']);
         $toilet_wall_brick_cost['cost'] = $toilet_wall_brick_cost['quantity'] * $floor_tile_attr['toilet']['price'];
-
 //        厨房地砖费用 厨房地砖费用：个数×抓取的商品价格 个数：（厨房地砖面积÷抓取厨房地砖面积）
         $kitchen_wall_brick_cost['quantity'] = ceil($kitchen_area / $floor_tile_attr['kitchen']['area']);
         $kitchen_wall_brick_cost['cost'] = $kitchen_wall_brick_cost['quantity'] * $floor_tile_attr['kitchen']['price'];
-
 //        客厅地砖费用
         $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
 
+        foreach ($goods_price as &$one_goods){
+            foreach ($floor_tile_attr as $goods_id){
+                switch ($one_goods){
+                    case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房':
+                        $one_goods_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
+                        $one_goods_price['cost'] = $kitchen_wall_brick_cost['cost'];
+                        $kitchen_goods[] = $one_goods_price;
+                        break;
+                    case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '客厅':
+                        $one_goods_price['quantity'] = $hall_wall_brick_cost['quantity'];
+                        $one_goods_price['cost'] = $hall_wall_brick_cost['cost'];
+                        $hall_goods[] = $one_goods_price;
+                        break;
+                    case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '卫生间':
+                        $one_goods_price['quantity'] = $toilet_wall_brick_cost['quantity'];
+                        $one_goods_price['cost'] = $toilet_wall_brick_cost['cost'];
+                        $toilet_goods[] = $one_goods_price;
+                        break;
+                }
+            }
+        }
+        $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
+        $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
+        $material_total['material'][] = BasisDecorationService::profitMargin($toilet_goods);
 
         //材料总费用
         $material_cost_total = $cement_cost['cost'] + $self_leveling_cost['cost'] + $river_sand_cost['cost'] + $wall_brick_cost['cost'] + $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] + $hall_wall_brick_cost['cost'];
@@ -1164,8 +1186,6 @@ class OwnerController extends Controller
         $material_total['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material_total['material'][] = BasisDecorationService::profitMargin($cement);
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
-
-        // 墙砖 卫生间地砖 厨房地砖 客厅地砖
         $material_total['total_cost'] = $material_cost_total;
 
         return Json::encode([
