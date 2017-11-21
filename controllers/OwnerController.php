@@ -430,9 +430,20 @@ class OwnerController extends Controller
         $waterway_ = BasisDecorationService::laborFormula($waterway_p,$waterway,$waterway_labor['univalence']);
         $weak_     = BasisDecorationService::laborFormula($weak_p,$weak,$waterway_labor['univalence']);
         $strong_   = BasisDecorationService::laborFormula($strong_p,$strong,$waterway_labor['univalence']);
+        var_dump($strong_p);
+        var_dump($weak_p);
+        var_dump($waterway_p);
+        var_dump($strong);
+        var_dump($weak);
+        var_dump($waterway);
+        var_dump($waterway_labor['univalence']);
+        var_dump($strong_);
+        var_dump($weak_);
+        var_dump($waterway_);
+        exit;
 
 
-        $labor_all_cost['price'] = $waterway_ + $weak_ + $strong_;
+        $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_);
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
         var_dump($labor_all_cost);exit;
 
