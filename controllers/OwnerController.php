@@ -382,7 +382,6 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'strong_current_labor_price' => $labor_all_cost,
                 'strong_current_material' => $material,
             ]
         ]);
