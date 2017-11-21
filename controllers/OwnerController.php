@@ -1482,7 +1482,7 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['title'];
             $material_one[$one_have_assort['title']] = $one_have_assort;
         }
-var_dump($material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity']);exit;
+var_dump($material_one);exit;
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
