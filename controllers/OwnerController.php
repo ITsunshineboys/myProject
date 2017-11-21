@@ -1516,15 +1516,13 @@ class OwnerController extends Controller
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             $stairs = StairsDetails::find()->asArray()->where(['id'=>$post['stairs']])->one();
-            var_dump($stairs_price);exit;
             foreach ($stairs_price as &$one_stairs_price) {
-                if ($one_stairs_price['value'] == $stairs['id'] && $one_stairs_price['style_id'] == $post['style']) {
+                if ($one_stairs_price['value'] == $stairs['attribute'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
                 }
             }
-            var_dump($condition_stairs);exit;
             $material[] = BasisDecorationService::profitMargin($condition_stairs);
         }
 
