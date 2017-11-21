@@ -421,16 +421,12 @@ class OwnerController extends Controller
                 foreach ($_waterway as $one){
                     if ($one['title'] == '卫生间'){
                         $toilet_waterway_points = $one['count'] * $post['toilet'];
-                        var_dump($one['count']);
-                        var_dump($post['toilet']);
                     }
                     if ($one['title'] == '厨房'){
                         $kitchen_waterway_points = $post['kitchen'] * $one['count'];
                     }
                 }
                 $waterway_count = $toilet_waterway_points + $kitchen_waterway_points;
-                var_dump($toilet_waterway_points);
-                var_dump($kitchen_waterway_points);exit;
             }
             if ($p['title'] == '弱电'){
                 $id = $p['id'];
@@ -469,6 +465,11 @@ class OwnerController extends Controller
                     }
                 }
                 $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
+                var_dump($room_strong_points);
+                var_dump($croom_strong_points);
+                var_dump($hall_strong_points);
+                var_dump($toilet_strong_points);
+                var_dump($kitchen_strong_points);exit;
             }
         }
 
