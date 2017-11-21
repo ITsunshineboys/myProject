@@ -38,8 +38,10 @@ class Addressadd extends  ActiveRecord
          if ($data){
              $tran = Yii::$app->db->beginTransaction();
              try{
-                 $address=self::find()
-                     ->where(['id'=>$data['id']])->one();
+//                 $address=self::find()
+//                     ->where(['id'=>$data['id']])
+//                     ->one();
+                 $address=self::findOne($data['id']);
                  $address->mobile=$mobile;
                  $address->consignee=$consignee;
                  $address->region=$region;
