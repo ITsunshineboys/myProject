@@ -66,7 +66,9 @@ header div i{
     color: #53A8F4;
 }
 /*头部结束*/
-
+.filter_color{
+    color: #222;
+}
 .shu {
     width: .3rem;
     height: 1.5rem;
@@ -482,7 +484,16 @@ button.close{
     z-index:100;
 }
 .comment{
-    padding:1.5rem .85rem !important;
+    padding:0 .85rem !important;
+}
+.comment p{
+    font-size:32px;
+}
+.comment .goods_name{
+    font-size:42px;
+}
+.comment .price{
+    color: #D9AD65;
 }
 .good_title{
     position: relative;
