@@ -4551,33 +4551,21 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
-        if ($code==200)
+        $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
+        if ($orders==500 || $orders==1000)
         {
-            switch ($pay_way)
-            {
-                case 1:
-                    $data=GoodsOrder::BalanceBuy($total_amount,$suppliers,$pay_pwd);
-                    break;
-//                case 2:
-//                    $data=Wxpay::AppBuy($total_amount,$suppliers);
-//                    break;
-//                case 3:
-//                    $data=Alipay::AppBuy();
-//                    break;
-            }
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg'  =>'ok',
-                'data' =>$data
-            ]);
-        }else{
+            $code=$orders;
             return Json::encode([
                 'code' => $code,
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  =>'ok',
+                'data' =>$orders
+            ]);
     }
 
 

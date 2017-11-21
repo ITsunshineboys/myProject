@@ -2844,6 +2844,7 @@ class GoodsOrder extends ActiveRecord
                     $code=500;
                     return $code;
                 }
+                $orders[]=$order_no;
             }
             // if ($total!=$total_amount*100)
             // {
@@ -2851,9 +2852,8 @@ class GoodsOrder extends ActiveRecord
             //     $tran->rollBack();
             //     return $code;
             // }
-            $code=200;
             $tran->commit();
-            return $code;
+            return $orders;
         }catch (yii\db\Exception $e){
             $tran->rollBack();
             $code=500;
@@ -2869,7 +2869,7 @@ class GoodsOrder extends ActiveRecord
          * @param $pay_pwd
          * @return int
          */
-      public static function  BalanceBuy($total_amount,$suppliers = [],$pay_pwd)
+      public static function  BalanceBuy($total_amount,$pay_pwd,$orders=[])
       {
           $user = Yii::$app->user->identity;
           if (Yii::$app->getSecurity()->validatePassword($pay_pwd,$user->pay_password)==false)
@@ -2877,6 +2877,7 @@ class GoodsOrder extends ActiveRecord
               $code=1055;
               return $code;
           }
+
 
       }
 
