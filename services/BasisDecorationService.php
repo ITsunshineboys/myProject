@@ -1841,7 +1841,7 @@ class BasisDecorationService
             return false;
         }
 
-        $material ['total_cost'] = round($material_price['total_cost'],2);
+        $material ['total_cost'][] = round($material_price['total_cost'],2);
         $material ['material'] [] = BasisDecorationService::profitMargin($wire);
         $material ['material'] []= BasisDecorationService::profitMargin($spool);
         $material ['material'] []= BasisDecorationService::profitMargin($bottom);
