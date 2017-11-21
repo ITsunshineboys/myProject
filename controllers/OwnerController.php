@@ -1297,7 +1297,6 @@ class OwnerController extends Controller
 
 //        总人工费
         $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
-        var_dump( $labor_cost['price']);exit;
         $labor_cost['worker_kind'] = $labor['worker_kind'];
 
         //材料费
