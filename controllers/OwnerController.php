@@ -421,10 +421,10 @@ class OwnerController extends Controller
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
                     if ($one['title'] == '卫生间'){
-                        $toilet_points = $_waterway['count'] * $post['toilet'];
+                        $toilet_points = $one['count'] * $post['toilet'];
                     }
                     if ($_waterway['title'] == '厨房'){
-                        $kitchen_points = $post['kitchen'] * $_waterway['count'];
+                        $kitchen_points = $post['kitchen'] * $one['count'];
                     }
                 }
             }
@@ -434,10 +434,10 @@ class OwnerController extends Controller
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
                     if ($one['title'] == '卫生间'){
-                        $toilet_points = $_waterway['count'] * $post['toilet'];
+                        $toilet_points = $one['count'] * $post['toilet'];
                     }
                     if ($_waterway['title'] == '厨房'){
-                        $kitchen_points = $post['kitchen'] * $_waterway['count'];
+                        $kitchen_points = $post['kitchen'] * $one['count'];
                     }
                 }
                 var_dump($_waterway);exit;
