@@ -1140,24 +1140,23 @@ class OwnerController extends Controller
             foreach ($floor_tile_attr as $goods_id){
                 if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房')
                 {
-                    var_dump($one_goods);exit;
+                    $one_goods_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
+                    $one_goods_price['cost'] = $kitchen_wall_brick_cost['cost'];
+                    $kitchen_goods[] = $one_goods_price;
                 }
-                switch ($one_goods){
-                    case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房':
-                        $one_goods_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
-                        $one_goods_price['cost'] = $kitchen_wall_brick_cost['cost'];
-                        $kitchen_goods[] = $one_goods_price;
-                        break;
-                    case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '客厅':
-                        $one_goods_price['quantity'] = $hall_wall_brick_cost['quantity'];
-                        $one_goods_price['cost'] = $hall_wall_brick_cost['cost'];
-                        $hall_goods[] = $one_goods_price;
-                        break;
-                    case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '卫生间':
-                        $one_goods_price['quantity'] = $toilet_wall_brick_cost['quantity'];
-                        $one_goods_price['cost'] = $toilet_wall_brick_cost['cost'];
-                        $toilet_goods[] = $one_goods_price;
-                        break;
+
+                if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '客厅')
+                {
+                    $one_goods_price['quantity'] = $hall_wall_brick_cost['quantity'];
+                    $one_goods_price['cost'] = $hall_wall_brick_cost['cost'];
+                    $hall_goods[] = $one_goods_price;
+                }
+
+                if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '卫生间')
+                {
+                    $one_goods_price['quantity'] = $toilet_wall_brick_cost['quantity'];
+                    $one_goods_price['cost'] = $toilet_wall_brick_cost['cost'];
+                    $toilet_goods[] = $one_goods_price;
                 }
             }
         }
