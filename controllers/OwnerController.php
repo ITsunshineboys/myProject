@@ -1516,7 +1516,7 @@ class OwnerController extends Controller
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             $stairs = StairsDetails::find()->asArray()->where(['id'=>$post['stairs']])->one();
-            var_dump($stairs);exit;
+            var_dump($stairs_price);exit;
             foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $stairs['id'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
