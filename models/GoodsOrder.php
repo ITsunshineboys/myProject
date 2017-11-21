@@ -2784,7 +2784,8 @@ class GoodsOrder extends ActiveRecord
                     || !array_key_exists('invoicer_card',$supplier)
                     || !array_key_exists('invoice_content',$supplier)
                     || !array_key_exists('supplier_id',$supplier)
-                    || !array_key_exists('goods',$supplier))
+                    || !array_key_exists('goods',$supplier)
+                )
                 {
 
                     $tran->rollBack();
