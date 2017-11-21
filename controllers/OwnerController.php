@@ -1053,6 +1053,9 @@ class OwnerController extends Controller
         $covering_layer_area = $post['waterproof_total_area'];
 //        保护层天数：保护层面积÷【每天做保护层面积】
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
+        var_dump($covering_layer_area);
+        var_dump($covering_layer_day_area);
+        exit;
 
 
         $perject = ProjectView::find()->where(['and',['parent_project'=>'泥作'],['project'=>$post['high']]])->asArray()->one();
