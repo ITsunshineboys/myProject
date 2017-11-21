@@ -1157,13 +1157,16 @@ class OwnerController extends Controller
         }
 
 
+        //  墙砖价格
         $wall_brick_max['quantity'] = $wall_brick_cost['quantity'];
         $wall_brick_max['cost'] = $wall_brick_cost['cost'];
         $material_total['material'][] = $wall_brick_max;
-        var_dump($material_total);exit;
+
+        // 地砖价格
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($toilet_goods);
+        var_dump($material_total);exit;
 
         //材料总费用
         $material_cost_total = $cement_cost['cost'] + $self_leveling_cost['cost'] + $river_sand_cost['cost'] + $wall_brick_cost['cost'] + $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] + $hall_wall_brick_cost['cost'];
