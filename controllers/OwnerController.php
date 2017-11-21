@@ -607,7 +607,7 @@ class OwnerController extends Controller
 
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($total_area,$worker_day_points,$worker_price);
+        $labor_all_cost['price'] = BasisDecorationService::p($total_area,$worker_day_points,$worker_price);
         var_dump($labor_all_cost['price']);
         var_dump($total_area);
         var_dump($worker_price);

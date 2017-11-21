@@ -164,6 +164,15 @@ class BasisDecorationService
         return ($p / $d) * $l;
     }
 
+    public static function P($points,$day_points,$labor)
+    {
+        $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+        $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value2'];
+        $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
+        //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
+        return ceil(($p / $d)) * $l;
+    }
+
     /**
      * 电线计算公式
      * @param string $points
