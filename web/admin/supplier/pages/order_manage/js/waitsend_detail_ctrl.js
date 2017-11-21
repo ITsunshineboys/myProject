@@ -11,7 +11,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
   $rootScope.crumbs = [{
       name: '订单管理',
       icon: 'icon-dingdanguanli',
-      link: back_list
+      link: $scope.back_list
   }, {
       name: '订单详情',
   }];
