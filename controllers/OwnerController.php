@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Apartment;
+use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
@@ -1459,7 +1460,7 @@ class OwnerController extends Controller
     {
         $post = Yii::$app->request->get();
 
-        $assort_material = MaterialPropertyClassify::findByStatus();
+        $assort_material = AssortGoods::find()->asArray()->all();
         if ($assort_material == null) {
             $code = 1065;
             return Json::encode([
@@ -1481,7 +1482,7 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['material'];
             $material_one[$one_have_assort['material']] = $one_have_assort;
         }
-
+var_dump($have_assort);exit;
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
