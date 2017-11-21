@@ -1479,8 +1479,8 @@ class OwnerController extends Controller
 
         //有计算公式
         foreach ($have_assort as $one_have_assort){
-            $material_name[] = $one_have_assort['material'];
-            $material_one[$one_have_assort['material']] = $one_have_assort;
+            $material_name[] = $one_have_assort['title'];
+            $material_one[$one_have_assort['title']] = $one_have_assort;
         }
 var_dump($have_assort);exit;
         $goods = Goods::assortList($material_name,$post['city']);
