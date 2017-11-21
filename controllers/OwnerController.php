@@ -558,24 +558,24 @@ class OwnerController extends Controller
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
-        //厨房
-        $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
-        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
-        if (!$p){
-            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
-        }else{
-            $_kitchen_height = $p['project_value'];
-        }
-        if ($kitchen){
-            foreach ($kitchen as $one_kitchen){
-                if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
-                    $_kitchen_area = $one_kitchen['project_value'];
-                }
-            }
-        }else{
-            $_kitchen_area = EngineeringUniversalCriterion::KITCHEN_AREA;
-        }
-        $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
+//        //厨房
+//        $kitchen = EngineeringUniversalCriterion::findByAll(BasisDecorationService::HOUSE_MESSAGE['kitchen']);
+//        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
+//        if (!$p){
+//            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
+//        }else{
+//            $_kitchen_height = $p['project_value'];
+//        }
+//        if ($kitchen){
+//            foreach ($kitchen as $one_kitchen){
+//                if ($one_kitchen['project_particulars'] == BasisDecorationService::HOUSE_MESSAGE['kitchen_area']){
+//                    $_kitchen_area = $one_kitchen['project_value'];
+//                }
+//            }
+//        }else{
+//            $_kitchen_area = EngineeringUniversalCriterion::KITCHEN_AREA;
+//        }
+//        $kitchen_area = BasisDecorationService::waterproofArea($_kitchen_area,$_kitchen_height, $post['area'], $post['kitchen']);
 
 
         //卫生间

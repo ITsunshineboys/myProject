@@ -325,6 +325,9 @@ class BasisDecorationService
 //            厨房防水面积：厨房地面积+厨房墙面积
         $all_area = $ground + $wall_space;
         $total_area = round($all_area,2);
+
+        var_dump($ground);
+        var_dump($wall_space);exit;
         return $total_area;
 
     }
