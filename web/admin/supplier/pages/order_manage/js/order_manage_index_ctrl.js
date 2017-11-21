@@ -357,8 +357,8 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/order/find-supplier-order-list', $scope.params, function (res) {
-            $scope.alltabledetail = res.data.data.details;
-            $scope.pageConfig.totalItems = res.data.data.count;
+            $scope.alltabledetail = res.data.details;
+            $scope.pageConfig.totalItems = res.data.count;
         });
     }
 
