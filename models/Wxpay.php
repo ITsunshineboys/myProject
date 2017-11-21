@@ -2,84 +2,81 @@
 
 namespace app\models;
 use Yii;
-use yii\base\Model;
-use yii\base\WxPayException;
-use vendor\wxpay\lib\WxPayJsApiPay;
 use vendor\wxpay\lib\WxPayConfig;
 use vendor\wxpay\lib\WxPayUnifiedOrder;
 use vendor\wxpay\lib\WxPayApi;
 use vendor\wxpay\lib\WxPayOrderQuery;
-use vendor\wxpay\lib\log;
-use vendor\wxpay\lib\CLogFileHandler;
 use app\services\PayService;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
 
 class Wxpay  extends ActiveRecord
 {
+        const  EFFECT_NOTIFY_URL='/order/wxpayeffect_earnstnotify';
+        const  LINEPAY_NOTIFY_URL='/order/orderlinewxpaynotify';
+        const  PAY_CANCEL_URL='/line/#!/order_commodity';
+        const  PAY_SUCESS_URL='/line/#!/pay_success';
+        const  PAY_FAIL_URL='/line/#!/order_commodity';
+        const  EFFECT_BODY='样板间申请费';
+        const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
+        const  ACCESS_TOKEN='access_token';
+        const  TICKET='ticket';
 
 
-    const  EFFECT_NOTIFY_URL='/order/wxpayeffect_earnstnotify';
-    const  LINEPAY_NOTIFY_URL='/order/orderlinewxpaynotify';
-    const  PAY_CANCEL_URL='/line/#!/order_commodity';
-    const  PAY_SUCESS_URL='/line/#!/pay_success';
-    const  PAY_FAIL_URL='/line/#!/order_commodity';
-    const  EFFECT_BODY='样板间申请费';
-    const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
-    const  ACCESS_TOKEN='access_token';
-    const  TICKET='ticket';
-    /**
-     * @return string 返回该AR类关联的数据表名
-     */
-    public static function tableName()
-    {
-        return 'goods_order';
-    }
-   /**
-     *无登录-微信公众号支付接口
-     */
-   public function Wxlineapipay($orders,$openid){
-        ini_set('date.timezone','Asia/Shanghai');
-        //打印输出数组信息
-        function printf_info($data)
+        /**
+         * @return string 返回该AR类关联的数据表名
+         */
+        public static function tableName()
         {
-            foreach($data as $key=>$value){
-                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+            return 'goods_order';
+        }
+
+
+       /**
+         *无登录-微信公众号支付接口
+         */
+       public function Wxlineapipay($orders,$openid){
+            ini_set('date.timezone','Asia/Shanghai');
+            //打印输出数组信息
+            function printf_info($data)
+            {
+                foreach($data as $key=>$value){
+                    echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+                }
             }
+            //、获取用户openid
+            $tools = new PayService();
+            $openId = $openid;
+            //②、统一下单
+            $input = new WxPayUnifiedOrder();
+            $orders['return_insurance']=0;
+            $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
+            if (!$orders['goods_name'])
+            {
+                $goods_name=Goods::findOne($orders['goods_id'])->title;
+            }else{
+                $goods_name=$orders['goods_name'];
+            }
+            $input->SetBody($goods_name);
+            $input->SetAttach($attach);
+            $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+            $input->SetTotal_fee($orders['total_amount']*100);
+            $input->SetTime_start(date("YmdHis"));
+            $input->SetTime_expire(date("YmdHis", time() + 600));
+            $input->SetGoods_tag("goods");
+            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::LINEPAY_NOTIFY_URL);
+            $input->SetTrade_type("JSAPI");
+            $input->SetOpenid($openId);
+            $order = WxPayApi::unifiedOrder($input);
+            $jsApiParameters = $tools->GetJsApiParameters($order);
+            $failurl="http://".$_SERVER['SERVER_NAME'].self::PAY_FAIL_URL;
+            $cancelurl="http://".$_SERVER['SERVER_NAME'].self::PAY_CANCEL_URL;
+            $successurl="http://".$_SERVER['SERVER_NAME'].self::PAY_SUCESS_URL;
+            echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
+     function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
+    </script>";
+            exit;
         }
-        //、获取用户openid
-        $tools = new PayService();
-        $openId = $openid;
-        //②、统一下单
-        $input = new WxPayUnifiedOrder();
-        $orders['return_insurance']=0;
-        $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
-        if (!$orders['goods_name'])
-        {
-            $goods_name=Goods::findOne($orders['goods_id'])->title;
-        }else{
-            $goods_name=$orders['goods_name'];
-        }
-        $input->SetBody($goods_name);
-        $input->SetAttach($attach);
-        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-        $input->SetTotal_fee($orders['total_amount']*100);
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("goods");
-        $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::LINEPAY_NOTIFY_URL);
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
-        $order = WxPayApi::unifiedOrder($input);
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-        $failurl="http://".$_SERVER['SERVER_NAME'].self::PAY_FAIL_URL;
-        $cancelurl="http://".$_SERVER['SERVER_NAME'].self::PAY_CANCEL_URL;
-        $successurl="http://".$_SERVER['SERVER_NAME'].self::PAY_SUCESS_URL;
-        echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
- function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
-</script>";
-        exit;
-    }
 
         /**
          * 样板间申请支付定金
@@ -138,27 +135,27 @@ class Wxpay  extends ActiveRecord
             return false;
         }
 
-    /**
-     * 重写回调处理函数
-     * @param $data
-     * @return bool
-     */
-    public static function NotifyProcess($data)
-    {
-
-        $notfiyOutput = array();
-        if(!array_key_exists("transaction_id", $data)){
-            return false;
+        /**
+         * 重写回调处理函数
+         * @param $data
+         * @return bool
+         */
+        public static function NotifyProcess($data)
+        {
+            $notfiyOutput = array();
+            if(!array_key_exists("transaction_id", $data)){
+                return false;
+            }
+            //查询订单，判断订单真实性
+            if(!self::Queryorder($data["transaction_id"])){
+                return false;
+            }
+            return true;
         }
-        //查询订单，判断订单真实性
-        if(!self::Queryorder($data["transaction_id"])){
-            return false;
-        }
-        return true;
-    }
 
 
-       /**
+        /**
+         * 获取微信签名
          * @return array
          */
         public  static  function  GetWxJsSign()
@@ -193,7 +190,7 @@ class Wxpay  extends ActiveRecord
                     }else{
                         $ticket=$result['ticket'];
                     }
-                     $data = $cache->set(self::TICKET,$ticket,7200);
+                    $data = $cache->set(self::TICKET,$ticket,7200);
                 }
             }
             $noncestr=WxPayApi::getNonceStr();
@@ -211,6 +208,12 @@ class Wxpay  extends ActiveRecord
             ];
         }
 
+    /**
+     * @param $url
+     * @param bool $params
+     * @param int $ispost
+     * @return bool|mixed
+     */
     public static   function curl($url,$params=false,$ispost=0){
         $httpInfo = array();
         $ch = curl_init();
@@ -245,6 +248,12 @@ class Wxpay  extends ActiveRecord
     }
 
 
+    /**
+     * 订单app支付
+     * @param $orderAmount
+     * @param $orders
+     * @return mixed
+     */
     public  static function OrderAppPay($orderAmount,$orders)
     {
         ini_set('date.timezone','Asia/Shanghai');
@@ -274,9 +283,8 @@ class Wxpay  extends ActiveRecord
         return  Json::decode($jsApiParameters);
     }
 
-    public  static  function  AppBuy($total_amount,$suppliers)
-    {
-        echo 1;
-
-    }
+//    public  static  function  AppBuy($total_amount,$suppliers)
+//    {
+//        echo 1;
+//    }
 }

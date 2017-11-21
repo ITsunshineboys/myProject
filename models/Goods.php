@@ -1248,6 +1248,7 @@ class Goods extends ActiveRecord
             'purchase_price_manager' => StringService::formatPrice($this->purchase_price_manager / 100),
             'after_sale_services' => $this->afterSaleServicesReadable(),
             'qr_code' => UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
+            'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
             'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),

@@ -2784,7 +2784,8 @@ class GoodsOrder extends ActiveRecord
                     || !array_key_exists('invoicer_card',$supplier)
                     || !array_key_exists('invoice_content',$supplier)
                     || !array_key_exists('supplier_id',$supplier)
-                    || !array_key_exists('goods',$supplier))
+                    || !array_key_exists('goods',$supplier)
+                )
                 {
 
                     $tran->rollBack();
@@ -2872,12 +2873,12 @@ class GoodsOrder extends ActiveRecord
                 }
                 $orders[]=$order_no;
             }
-            // if ($total!=$total_amount*100)
-            // {
-            //     $code=1000;
-            //     $tran->rollBack();
-            //     return $code;
-            // }
+             if ($total!=$total_amount*100)
+             {
+                 $code=1000;
+                 $tran->rollBack();
+                 return $code;
+             }
             $tran->commit();
             return $orders;
         }catch (yii\db\Exception $e){
