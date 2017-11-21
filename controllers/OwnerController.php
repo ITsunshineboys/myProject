@@ -462,6 +462,7 @@ class OwnerController extends Controller
                 $qita = 0;
                 foreach ($_waterway as $one_){
                     if ($one['title'] != '次卧室' && $one['title'] != '客厅' && $one['title'] != '卫生间' && $one['title'] != '厨房'){
+                        var_dump($one_);exit;
                         $qita += $one_['count'];
                     }
                 }
