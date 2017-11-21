@@ -1091,6 +1091,10 @@ class OwnerController extends Controller
         $tiling_day = $floor_tile_day + $wall_day;
 //        总天数：保护层天数+贴砖天数
         $total_day = ceil($tiling_day + $covering_layer_day);
+        var_dump($tiling_day);
+        var_dump($floor_tile_day);
+        var_dump($wall_day);exit;
+        var_dump($floor_tile_day);
         //总的人工费
         $total_labor_cost['price'] = $total_day * $labor_costs['univalence'];
         $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
