@@ -3,7 +3,7 @@ add_style.controller("add_style",function ($rootScope,$scope,$http,$state,$state
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '系列/风格/属性管理',
         link: 'style_index',

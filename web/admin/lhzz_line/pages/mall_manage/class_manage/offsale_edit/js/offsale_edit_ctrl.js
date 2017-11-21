@@ -8,7 +8,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '分类管理',
         link: 'fenleiguanli',

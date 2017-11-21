@@ -8,7 +8,7 @@ mall_mag.controller("mall_mag",function ($scope,$http,$rootScope,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     },{
         name:'商城数据'
     }];

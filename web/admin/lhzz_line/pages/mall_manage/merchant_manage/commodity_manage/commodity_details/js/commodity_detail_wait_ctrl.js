@@ -15,7 +15,7 @@ commodity_detail_wait.controller("commodity_detail_wait_ctrl",function (_ajax,$r
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '商家管理',
         link: 'store_mag',

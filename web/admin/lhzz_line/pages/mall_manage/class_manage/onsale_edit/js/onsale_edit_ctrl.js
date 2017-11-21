@@ -7,7 +7,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '分类管理',
         link: 'fenleiguanli',
