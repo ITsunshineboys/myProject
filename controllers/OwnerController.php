@@ -546,8 +546,8 @@ class OwnerController extends Controller
         //总面积
         $apartment = Apartment::find()
             ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
+            ->where(['>=','min_area',$post['area']])
+            ->andWhere(['<=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
