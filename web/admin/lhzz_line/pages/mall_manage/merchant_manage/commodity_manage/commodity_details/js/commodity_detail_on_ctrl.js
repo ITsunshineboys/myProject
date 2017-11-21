@@ -4,7 +4,7 @@ commodity_detail.controller("commodity_detail_on_ctrl",function (_ajax,$rootScop
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '商家管理',
         link: 'store_mag',
