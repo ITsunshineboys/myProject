@@ -1514,14 +1514,9 @@ class OwnerController extends Controller
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
-            if ($assort_material == null) {
-                $code = 1061;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
             $stairs_price = BasisDecorationService::priceConversion($stairs);
+            var_dump($stairs_price);
+            exit;
             foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
