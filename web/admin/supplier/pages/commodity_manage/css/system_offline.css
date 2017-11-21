@@ -1,3 +1,6 @@
+body{
+    color: #666F80;
+}
 ul{
     margin: 0;
     padding: 0;
@@ -12,17 +15,8 @@ section{
 .margin_left{
     margin-left: 85px;
 }
-
-.class_shop span{
-    font-size: 14px;
-    color: #666f80;
-}
-.class_shop span:nth-child(2) {
-    margin-left:85px ;
-}
 .class_name{
     margin-top: 20px;
-    color: #666F80;
 }
 .class_name img{
     margin-left: -25px;

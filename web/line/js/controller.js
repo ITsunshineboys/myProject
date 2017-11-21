@@ -135,8 +135,6 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback(response) {
             console.log(response);
             $scope.swiper_img = response.data.data.carousel;
-            // $scope.carousel_id = response.data.data.carousel[0].id;
-            // console.log($scope.carousel_id);
             //轮播变量
             $timeout(function () {
                 var mySwiper = new Swiper('#swiperList', {
@@ -172,7 +170,6 @@ angular.module("all_controller", ['ngCookies'])
             if(item.from_type == 1){
                 $state.go('product_details',{'mall_id':$scope.mall_id,'id':$state.mall_id})
             }else{
-                // alert(121);
                 window.location = item.url
             }
         };
@@ -183,13 +180,6 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.commodity = response.data.data.recommend_second;
-            for(let [key,value] of  $scope.commodity.entries()) {
-                // console.log(value.id);
-                // $scope.recommend_id = value.id
-            }
-            // console.log( $scope.commodity);
-            // console.log( $scope.mall_id);
-
         });
         // 点击推荐跳转商品详情
         $scope.getProduct = function (m) {
@@ -202,14 +192,10 @@ angular.module("all_controller", ['ngCookies'])
                 console.log(response)
             });
             if(m.from_type == 1){ //商铺类型
-                console.log(11);
                 $scope.mall_id = m.url.split('=')[1];
                 $scope.id = m.id;
                 $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id});
-                console.log($scope.mall_id);
-                console.log($scope.id);
             }else {              //链接类型
-                console.log(222);
                 window.location.href = m.url
             }
         };
@@ -221,8 +207,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.pid = $stateParams.pid;
         $scope.id = $stateParams.id;
         $scope.search_flag = true;
-        console.log($scope.pid);
-        console.log($scope.search_flag);
         $scope.details = '';
         //左侧数据获取
         $http({
@@ -230,7 +214,6 @@ angular.module("all_controller", ['ngCookies'])
             url: baseUrl+'/mall/categories'
         }).then(function successCallback(response) {
             $scope.star = response.data.data.categories;
-            console.log(response)
         });
         //首页列表点击分类列表传值id获取数据(一级id查去二级)
         $http({
@@ -239,8 +222,6 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback(response) {
             console.log(response);
             $scope.details = response.data.data.categories;
-            //console.log(response.data.data.categories[0].id);
-
         });
 
         //首页列表点击分类列表传值id获取数据(一级id查去三级)
@@ -257,7 +238,6 @@ angular.module("all_controller", ['ngCookies'])
                 }
             }
             $scope.commentThree = arr;
-            console.log(response)
         });
 
         //点击左侧分类列表菜单获取右边数据
@@ -269,8 +249,6 @@ angular.module("all_controller", ['ngCookies'])
                 url:  baseUrl+'/mall/categories?pid=' + item.id
             }).then(function successCallback(response) {
                 $scope.details = response.data.data.categories;
-                //console.log(response.data.data.categories[0].id);
-                console.log(response)
             });
 
             //首页列表点击分类列表传值id获取数据(一级id查去三级)
@@ -287,12 +265,7 @@ angular.module("all_controller", ['ngCookies'])
                     }
                 }
                 $scope.commentThree = arr;
-                console.log(response)
             });
-            //小区搜索
-            //.controller("search_ctrl", function ($scope, $http, $state, $stateParams) {
-            //
-            //})
         }
     })
 
@@ -330,7 +303,6 @@ angular.module("all_controller", ['ngCookies'])
                         }
                     }
                     $scope.search_data = arr;
-                    console.log(response)
                 });
             }else {
                    $scope.search_data = []
@@ -338,7 +310,6 @@ angular.module("all_controller", ['ngCookies'])
         };
         // 点击取消回到首页
         $scope.goPrevIndex = function () {
-            console.log(123);
             if($scope.search_flag == true){
                 $state.go("minute_class",{'pid':$scope.pid,'id':$scope.id,'commentThree':$scope.commentThree})
             }
@@ -386,8 +357,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.search_flag_details = true; //判断搜素页面是否是从详情页面进的变量
         $scope.staus = 'sold_number';
 
-
-
         /*分页配置*/
         $scope.Config = {
             showJump: true,
@@ -398,7 +367,7 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
         let tablePages = function () {
-            console.log($scope.params);
+
             // $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
             $http.get(baseUrl+'/mall/category-goods', {
                 params: $scope.params
@@ -432,7 +401,6 @@ angular.module("all_controller", ['ngCookies'])
                         category_id: $scope.params.category_id,
                     }
                 }).then(function (res) {
-                    console.log(res)
                     $scope.all_goods_series = res.data.data.category_brands_styles_series.series
                     $scope.all_goods_style = res.data.data.category_brands_styles_series.styles
                     $scope.all_goods_brands = res.data.data.category_brands_styles_series.brands
@@ -440,14 +408,6 @@ angular.module("all_controller", ['ngCookies'])
                 }, function (error) {
                     console.log(error)
                 })
-                // $('#myModal').modal('hide');
-                // $timeout(function () {
-                //     $scope.have_header = true;
-                //     $scope.is_city = false;
-                //     $scope.is_edit = false;
-                //     $scope.cur_header = $scope.cur_three_level || item.title;
-                //     $state.go('nodata.all_goods')
-                // }, 300)
             }, function (err) {
                 console.log(err);
             })
@@ -608,232 +568,10 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.all_goods_brands = $scope.all_brand_copy
             }
         });
-        //
-        // $(document).mouseup(function(e){
-        //     var _con = $(' #myModal8 .modal-dialog ');   // 设置目标区域
-        //     if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
-        //         // if($rootScope.curState_name == 'nodata.all_goods'){
-        //         tablePages()
-        //     }
-        // });
-        // //展示数据 默认展示
-        // $http({
-        //     method:"get",
-        //     url:'http://test.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
-        //     params:{
-        //         "sort[]":"sold_number:4"
-        //     }
-        // }).then(function successCallback (response) {
-        //     console.log(response);
-        //     $scope.detailsList = response.data.data.category_goods;
-        // },function (error) {
-        //     console.log(error);
-        // });
-        // // 点击产品列表商品跳转到产品详情页面
-        // $scope.getDetailsProduct = function (item) {
-        //     console.log(item);
-        //     console.log(item.id);
-        //     $scope.mall_id = item.id;
-        //     $state.go('product_details',{mall_id:$scope.mall_id,id:$scope.id})
-        // };
-        // $scope.good_pic_up = 2;
-        // $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
-        //     ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
-        // // $scope.good_pic_down = false;
-        // $scope.praise_up = 2;
-        // $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
-        //     ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
-        // //筛选  排序
-        // //价格排序
-        // $scope.filterPraise = function () {
-        //     $scope.staus = 'platform_price';
-        //     $scope.praise_up = 2;
-        //     $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
-        //         ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
-        //     if($scope.good_pic_up == 2){
-        //         $scope.good_pic_up = 1;
-        //     }else {
-        //         $scope.good_pic_up = +!$scope.good_pic_up;
-        //     }
-        //
-        //     $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
-        //         ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
-        //
-        //     // 排序请求
-        //     $http({
-        //         method: 'get',
-        //         url:'http://test.cdlhzz.cn/mall/category-goods',
-        //         params:{
-        //             category_id:+$scope.id,
-        //             "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3'),
-        //             platform_price_min:+$scope.price_min*100,
-        //             platform_price_max:+$scope.price_max*100,
-        //             brand_id:+$scope.check_brand_id,
-        //             style_id:+$scope.check_style_id,
-        //             series_id:+$scope.check_series_id,
-        //         }
-        //     }).then(function successCallback(response) {
-        //         console.log(response);
-        //         $scope.detailsList = response.data.data.category_goods;
-        //     });
-        // };
-        //
-        // // 好评率排序
-        // $scope.filterPicUp = function () {
-        //     $scope.staus = 'favourable_comment_rate';
-        //     $scope.good_pic_up = 2;
-        //     $scope.good_pic =$scope.good_pic_up==2?'images/mall_filter_sort.png':
-        //         ($scope.good_pic_up==1?'images/mall_arrow_up.png':'images/down.png');
-        //     if($scope.praise_up == 2){
-        //         $scope.praise_up = 1;
-        //     }else {
-        //         $scope.praise_up = +!$scope.praise_up;
-        //     }
-        //
-        //     $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
-        //         ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
-        //     $http({
-        //         method: 'get',
-        //         url:'http://test.cdlhzz.cn/mall/category-goods',
-        //         params:{
-        //             category_id:+$scope.id,
-        //             "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3'),
-        //             platform_price_min:+$scope.price_min*100,
-        //             platform_price_max:+$scope.price_max*100,
-        //             brand_id:+$scope.check_brand_id,
-        //             style_id:+$scope.check_style_id,
-        //             series_id:+$scope.check_series_id,
-        //         }
-        //     }).then(function successCallback(response) {
-        //         console.log(response);
-        //         $scope.detailsList = response.data.data.category_goods;
-        //     });
-        // };
-        //
-        // // 销量排序
-        // $scope.filterSales = function () {
-        //     $http({
-        //         method:"get",
-        //         url:'http://test.cdlhzz.cn/mall/category-goods?category_id='+$scope.id,
-        //         params:{
-        //             "sort[]":"sold_number:4"
-        //         }
-        //     }).then(function successCallback (response) {
-        //         console.log(response);
-        //         $scope.detailsList = response.data.data.category_goods;
-        //     },function (error) {
-        //         console.log(error);
-        //     });
-        // };
-        //
-        // //风格  系类 品牌 接数据调用
-        // $http({
-        //     method:"get",
-        //     url:baseUrl+"/mall/category-brands-styles-series",
-        //     params:{
-        //         category_id:+$scope.id
-        //     }
-        // }).then (function successCallBack (response) {
-        //     console.log(response);
-        //     $scope.brand = response.data.data.category_brands_styles_series.brands;
-        //     $scope.series = response.data.data.category_brands_styles_series.series;
-        //     $scope.styles = response.data.data.category_brands_styles_series.styles;
-        //
-        //     // 判断是否有风格 系列 是否做展示
-        //     //判断风格是否存在
-        //     if($scope.styles.length > 0){
-        //         console.log(11111);
-        //         $scope.show_style = true;
-        //     }else {
-        //         console.log(22222);
-        //         $scope.show_style = false;
-        //     }
-        //     //判断系列是否存在
-        //     if($scope.series.length > 0){
-        //         console.log(33333);
-        //         $scope.show_series = true;
-        //     }else {
-        //         console.log(444444);
-        //         $scope.show_series = false;
-        //     }
-        // });
-        // // 监听最低价和最高价的值
-        // $scope.getBlur = function () {
-        //     let max = '';
-        //     if($scope.price_max == '' || $scope.price_min == ''){
-        //         $scope.price_max = $scope.price_max;
-        //         $scope.price_min = $scope.price_min;
-        //     }else {
-        //         if(+$scope.price_max < +$scope.price_min){
-        //             max = $scope.price_max;
-        //             $scope.price_max = $scope.price_min;
-        //             $scope.price_min = max
-        //         }
-        //     }
-        // };
-        //
-        //
-        // $scope.check_style_id = '';
-        // $scope.check_brand_id = '';
-        // $scope.check_series_id  = '';
-        // // 点击风格切换选中的状态
-        // $scope.changeState = function (index,item) {
-        //     $scope.check_index_series = index;
-        //     $scope.check_series_id = item.id;
-        //     console.log(item)
-        //
-        // };
-        // // 点击系类切换选中的状态
-        // $scope.changeStyle = function (index,item) {
-        //     $scope.check_index_style = index;
-        //     $scope.check_style_id = item.id;
-        //     console.log($scope.check_style_id);
-        //     console.log($scope.check_index_style);
-        // };
-        // // 点击系类切换选中的品牌
-        // $scope.changeBrand = function (index,item) {
-        //     $scope.check_index_brand = index;
-        //     $scope.check_brand_id = item.id;
-        // };
-        // $scope.price_min = '';
-        // $scope.price_max = '';
-        // // 点击完成进行筛选
-        // $scope.getMoreData = function () {
-        //     $http({
-        //         method: 'get',
-        //         url:'http://test.cdlhzz.cn/mall/category-goods',
-        //         params:{
-        //             category_id:+$scope.id,
-        //             platform_price_min:+$scope.price_min*100,
-        //             platform_price_max:+$scope.price_max*100,
-        //             brand_id:+$scope.check_brand_id,
-        //             style_id:+$scope.check_style_id,
-        //             series_id:+$scope.check_series_id,
-        //             "sort[]":$scope.staus+':'+($scope.good_pic_up?'4':'3')
-        //         }
-        //     }).then(function successCallback(response) {
-        //         console.log(response);
-        //         $scope.detailsList = response.data.data.category_goods;
-        //     });
-        //     console.log($scope.price_min);
-        //     console.log($scope.price_max);
-        // };
-        // // 点击重置进行清空
-        // $scope.getNull = function () {
-        //     $scope.price_min = '';
-        //     $scope.price_max = '';
-        //     $scope.check_index_series = -1;
-        //     $scope.check_index_style = -1;
-        //     $scope.check_index_brand = -1;
-        //     $scope.check_style_id = '';
-        //     $scope.check_brand_id = '';
-        //     $scope.check_series_id  = '';
-        // };
+
         // 点击产品列表商品跳转到产品详情页面
         $scope.getDetailsProduct = function (item) {
             sessionStorage.setItem('wxflag',true);
-            console.log(item);
-            console.log(item.id);
             $scope.mall_id = item.id;
             $state.go('product_details',{mall_id:$scope.mall_id,id:$scope.id})
         };
@@ -861,14 +599,8 @@ angular.module("all_controller", ['ngCookies'])
         });
         $scope.id=$stateParams.id;
         $scope.datailsShop = $stateParams.datailsShop;
-        // $scope.supplier_id = $stateParams.supplier_id;
-        // $scope.title=$stateParams.title;
-        // $scope.description=$stateParams.description;
-        // $scope.platform_price=$stateParams.platform_price;
         $scope.mall_id = $stateParams.mall_id;
         $scope.shop_goods = '';
-        console.log( $scope.mall_id);
-        console.log( $scope.id);
 
         $http({
             method:'get',
@@ -898,8 +630,6 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.shop_goods = '#myModal';
             }
 
-            console.log($scope.status);
-            console.log($scope.supplier_id);
             $scope.style_parameter = false;
             $scope.series_parameter = false;
             // 判断是否存在系列
@@ -944,17 +674,14 @@ angular.module("all_controller", ['ngCookies'])
                 else if(vaule == "上门安装"){
                     $scope.doorPay     = true
                 }
-                console.log(vaule);
             }
             // 判断售后服务 不存在时  不显示售后
             if($scope.on_site == false && $scope.changeGoods == false && $scope.returnGoods == false && $scope.changeMore  == false && $scope.returnMore  == false){
                 $scope.show_service = false;
             }
-
         });
         $scope.getOtherApp = function () {
-            console.log(111);
-            window.location = 'http://test.cdlhzz.cn/owner/mall/#!/nodata/cell_search'
+            window.location = 'http://ac.cdlhzz.cn/owner/mall/#!/nodata/cell_search'
         };
         // 购买数量=======点击加减
         $scope.shopNum = 1;
@@ -979,7 +706,6 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
 
-
         // 判断是否是微信浏览器打开 =======是微信浏览器打开 做分享的配置
         $http({   // 判断是否微信浏览器打开
             method: 'get',
@@ -997,7 +723,6 @@ angular.module("all_controller", ['ngCookies'])
         // 返回
         $scope.getRetun = function () {
             if (sessionStorage.getItem('wxflag') == null) {
-                // alert(1111)
                 $state.go('home')
             }else {
                 history.go(-1);
@@ -1005,8 +730,6 @@ angular.module("all_controller", ['ngCookies'])
         };
         // 跳转到订单页面
         $scope.getOrder =function () {
-            console.log($scope.id);
-            console.log($scope.shopNum);
             setTimeout(function () {
                 $state.go('order_commodity',{mall_id:$scope.mall_id,shopNum:$scope.shopNum,supplier_id:$scope.supplier_id,show_address:true})
             },300)
@@ -1038,7 +761,6 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
         //获取商品列表
-        console.log($stateParams);
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
         $scope.mall_id = $stateParams.mall_id;
@@ -1078,8 +800,6 @@ angular.module("all_controller", ['ngCookies'])
                 console.log(value.id)
                 $scope.recommend_id = value.id
             }
-            console.log($scope.recommendList);
-
         });
         $http({   //店铺全部商品列表
             method: 'get',
@@ -1094,9 +814,7 @@ angular.module("all_controller", ['ngCookies'])
         });
         // 点击推荐商品判断跳转商品详情
         $scope.getProductMore = function (item) {
-
            //店铺首页推荐列表
-            console.log(item);
             $scope.mall_id = item.url.split('=')[1];
             console.log($scope.mall_id);
             $http.post( baseUrl+'/mall/recommend-click-record',{
@@ -1115,7 +833,6 @@ angular.module("all_controller", ['ngCookies'])
         // 点击上下排序
         //价格排序
         $scope.filterPraise = function () {
-            console.log($scope.good_pic_up);
             $scope.praise_up = 2;
             $scope.good_pra_up =$scope.praise_up==2?'images/mall_filter_sort.png':
                 ($scope.praise_up==1?'images/mall_arrow_up.png':'images/down.png');
@@ -1136,7 +853,6 @@ angular.module("all_controller", ['ngCookies'])
                     "sort[]":"platform_price:"+($scope.good_pic_up?'4':'3')
                 }
             }).then(function successCallback(response) {
-                console.log(response);
                 $scope.supplier_goods = response.data.data.supplier_goods;
             });
         };
@@ -1161,7 +877,6 @@ angular.module("all_controller", ['ngCookies'])
                     "sort[]":"favourable_comment_rate:"+($scope.good_pic_up?'4':'3')
                 }
             }).then(function successCallback(response) {
-                console.log(response);
                 $scope.supplier_goods = response.data.data.supplier_goods;
             });
         };
@@ -1186,7 +901,6 @@ angular.module("all_controller", ['ngCookies'])
             $scope.logistics_speed_score = response.data.data.supplier_view.logistics_speed_score; //物流速度
             $scope.delivery_service_score = response.data.data.supplier_view.delivery_service_score; //配送服务
             $scope.quality_guarantee_deposit = response.data.data.supplier_view.quality_guarantee_deposit; //资质
-            console.log($scope.t_shop_name)
         });
         // 点击跳转到首页
         $scope.getHome = function () {
@@ -1205,13 +919,10 @@ angular.module("all_controller", ['ngCookies'])
         $scope.harvestAddress  = $stateParams.harvestAddress;
         $scope.harvestName     = $stateParams.harvestName;
         $scope.harvestNum      = $stateParams.harvestNum;
-        // $scope.show_address    = $stateParams.show_address;
-        // $scope.show_harvest    = $stateParams.show_harvest;
         $scope.mall_id         = $stateParams.mall_id;
         $scope.shopNum         = $stateParams.shopNum;
         $scope.supplier_id     = $stateParams.supplier_id;
         $scope.address_id     = $stateParams.address_id;
-
         $scope.consigneeName   = $stateParams.consigneeName;
         $scope.mobile          = $stateParams.mobile;
         $scope.districtMore    = $stateParams.districtMore;
@@ -1226,9 +937,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.invoice_number  = '';//纳税人识别号
         $scope.invoice_model   = '';
         $scope.contentInvoice  = '';
-        // alert( $scope.supplier_id );
-        // alert( $scope.invoice_id );
-        // alert( $scope.address_id );
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -1247,14 +955,6 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.show_harvest = true;
                 $scope.show_address = false;
             }
-            // $state.go('order_commodity',({harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-            //     harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-            //     platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-            //     goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-            //     mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-            //     regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-            //     invoice_id:$scope.invoice_id
-            // }))
         };
         // 切换个人和单位
         $scope.choosePersonal = function () { //个人
@@ -1269,20 +969,16 @@ angular.module("all_controller", ['ngCookies'])
         };
         // 点击确认按钮时保存数据
         $scope.getSave = function () {
-            console.log('确认');
-            console.log($scope.invoice_name );
-            console.log($scope.invoice_number );
             // 选择为个人时
             if($scope.choose_personal == true && $scope.choose_company  == false ){
                 if($scope.invoice_name == ''){
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '请输入抬头名称';
-                    console.log(11111111111111)
                 }
                 else {
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '保存成功';
-                    console.log(222222222222);
+
                     // 添加发票接口
                     $http.post( baseUrl+'/order/orderinvoicelineadd',{
                         invoice_type: 1,
@@ -1292,7 +988,6 @@ angular.module("all_controller", ['ngCookies'])
                     },config).then(function (response) {
                         console.log(response);
                         $scope.invoice_id = response.data.data.invoice_id;
-                        // alert($scope.invoice_id)
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
@@ -1320,18 +1015,16 @@ angular.module("all_controller", ['ngCookies'])
                 console.log($scope.invoice_name );
                 console.log($scope.invoice_number );
                 if($scope.invoice_name == '' || $scope.invoice_number == ''){
-                    console.log(13333333333333)
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '请填写完整';
                 }
                 if($scope.invoice_name != '' && $scope.invoice_number != '' && !numMap.test($scope.invoice_number)){
-                    console.log(44444444444444)
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '请填写正确的纳税人识别号'
 
                 }
                 if($scope.invoice_name != '' && $scope.invoice_number != '' && numMap.test($scope.invoice_number) ){
-                    console.log(15555555555555);
+
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '保存成功';
                     // 添加发票接口
@@ -1344,8 +1037,6 @@ angular.module("all_controller", ['ngCookies'])
                     },config).then(function (response) {
                         console.log(response);
                         $scope.invoice_id = response.data.data.invoice_id;
-                        console.log($scope.invoice_id);
-
                     });
                     $scope.jumpOrder = function () {
                         let invoiceObj = { // 保存
@@ -1401,9 +1092,7 @@ angular.module("all_controller", ['ngCookies'])
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
         $scope.address_id  = $stateParams.address_id;//地址ID
         if($stateParams.show_address !== ''){
-            console.log(12345456);
-            // $scope.show_address = $stateParams.show_address;
-            // $scope.show_harvest = $stateParams.show_harvest;
+
             $scope.harvestNum = $stateParams.harvestNum;//收获人号码
             $scope.harvestName = $stateParams.harvestName;//收货人名字
             $scope.harvestAddress = $stateParams.harvestAddress;//收货人地址
@@ -1514,7 +1203,6 @@ angular.module("all_controller", ['ngCookies'])
                 // 添加收货地址
                 $scope.addressCode = document.getElementById("value1").value;
                 $scope.addressCode = $scope.addressCode.split('—');
-                console.log($scope.addressCode);
                 $http.post( baseUrl+'/order/adduseraddress',{
                     mobile:+$scope.harvestNum,
                     consignee:$scope.harvestName,

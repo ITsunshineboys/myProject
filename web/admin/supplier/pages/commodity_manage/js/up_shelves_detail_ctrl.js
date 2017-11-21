@@ -16,6 +16,12 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
     }, {
         name: '商品详情'
     }];
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        transformRequest: function (data) {
+            return $.param(data)
+        }
+    }
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
   let reg=/^\d+(\.\d{1,2})?$/;
@@ -223,9 +229,10 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
   };
   //删除图片
   $scope.del_img=function (item) {
-    _ajax.post('/site/upload-delete',{file_path:item},function (res) {
-        console.log(res);
+    $http.post(baseUrl+'/site/upload-delete',{},config).then(function (res) {
         $scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
+    },function (err) {
+        console.log(err);
     })
   };
 

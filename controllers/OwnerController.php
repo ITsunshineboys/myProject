@@ -1004,6 +1004,9 @@ class OwnerController extends Controller
         }
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
+                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
+                    $wall_height = $local_craft['material'];
+                    break;
                 case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['cement']:
                     $cement_craft = $local_craft['material'];
                     break;
@@ -1029,27 +1032,28 @@ class OwnerController extends Controller
 //        厨房墙面积
         $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $high, $post['kitchen'], 3);
 //        墙砖面积
-        $wall_area_ = Apartment::find()
+        $latex_paint_area = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['wall_area']])
+            ->andWhere(['project_name'=>self::OTHER_AREA['latex_paint_area']])
             ->one();
-        $wall_area = $toilet_wall_area + $kitchen_wall_area + $wall_area_['project_value'];
+        $wall_area = $toilet_wall_area + $kitchen_wall_area + $latex_paint_area['project_value'];
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
 
 
-        $land_area_ = Apartment::find()
+//        地砖面积
+        $land_area = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['land_area']])
             ->one();
-//        地砖面积
-        $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area + $land_area_['project_value'];
+        $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area + $land_area['project_value'];
 //        地砖天数
         $floor_tile_day = $floor_tile_area / $geostrophy_day_area;
+
 
 
 //        贴砖天数
@@ -1101,6 +1105,7 @@ class OwnerController extends Controller
         }
         $floor_tile_price = BasisDecorationService::priceConversion($floor_tile);
         $floor_tile_attr = BasisDecorationService::floorTile($floor_tile_price);
+        var_dump($floor_tile_attr);exit;
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
@@ -1161,15 +1166,6 @@ class OwnerController extends Controller
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
 
         // 墙砖 卫生间地砖 厨房地砖 客厅地砖
-        $wall_brick_max['quantity'] = $wall_brick_cost['quantity'];
-        $wall_brick_max['cost'] = $wall_brick_cost['cost'];
-        $material_total['material'][] = BasisDecorationService::profitMargin($wall_brick_max);
-
-        foreach ($floor_tile_price as &$one_floor){
-            $one_floor['quantity'] = $floor_cost['quantity'];
-            $one_floor['cost'] = $floor_cost['cost'];
-        }
-        $material_total['material'][] = BasisDecorationService::profitMargin($floor_tile_price);
         $material_total['total_cost'] = $material_cost_total;
 
         return Json::encode([

@@ -1,16 +1,14 @@
+body{
+    color: #666F80;
+}
 section{
     padding: 40px 0 0 40px;
-}
-.class_shop span{
-    color: #666f80;
 }
 .class_shop span:nth-child(2){
     margin-left: 65px;
 }
-
 .class_name{
     margin-top: 20px;
-    color: #666F80;
 }
 .class_name img{
     margin-left: -25px;
@@ -23,7 +21,6 @@ section{
     padding-left: 5px;
     margin-left: 65px;
 }
-
 
 .attr_set{
     margin-top: 20px
