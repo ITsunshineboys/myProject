@@ -1493,7 +1493,9 @@ class OwnerController extends Controller
         }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
+//        $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
+        $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
+        var_dump($p);exit;
         //   生活配套
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         //   基础装修
@@ -1507,7 +1509,7 @@ class OwnerController extends Controller
         //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
         //   主材
-        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price, $material_one,$post,$bedroom_area);
+        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
 
 
         if ($post['stairway_id'] == 1) {
