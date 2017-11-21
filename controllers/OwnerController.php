@@ -412,7 +412,7 @@ class OwnerController extends Controller
                 }
             }
         }
-$a = Points::find()->where(['and',['level'=>3],['title'=>'客厅']])->asArray()->all();
+$a = Points::find()->where(['and',['level'=>3],['pid'=>10]])->asArray()->all();
         var_dump($a);exit;
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
         foreach ($points  as $p){
