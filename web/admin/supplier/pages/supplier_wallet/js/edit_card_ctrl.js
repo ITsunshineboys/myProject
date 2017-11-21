@@ -2,14 +2,7 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let edit_card = angular.module("edit_cardModule", []);
-edit_card.controller("edit_card_ctrl", function ($rootScope,$scope,$http,$anchorScroll,$location,$window,$state) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
+edit_card.controller("edit_card_ctrl", function (_ajax,$rootScope,$scope,$http,$anchorScroll,$location,$window,$state) {
     $rootScope.crumbs = [{
         name: '钱包',
         icon: 'icon-qianbao',
@@ -25,21 +18,17 @@ edit_card.controller("edit_card_ctrl", function ($rootScope,$scope,$http,$anchor
     defaultCard();
 
     function defaultCard() {
-        $http({
-            method: "get",
-            params: {role_id: 6},
-            url: baseUrl+"/withdrawals/find-bank-card"
-        }).then(function (res) {
-            if (Object.keys(res.data.data).length == 0) {
+        _ajax.get('/withdrawals/find-bank-card',{role_id: 6},function (res) {
+            if (Object.keys(res.data).length == 0) {
                 return;
             } else {
                 $scope.carddetail = {
-                    username: res.data.data.username,
-                    bankcard: res.data.data.bankcard,
-                    bankname: res.data.data.bankname,
-                    position: res.data.data.position,
-                    bankbranch: res.data.data.bankbranch,
-                    role_id:+res.data.data.role_id
+                    username: res.data.username,
+                    bankcard: res.data.bankcard,
+                    bankname: res.data.bankname,
+                    position: res.data.position,
+                    bankbranch: res.data.bankbranch,
+                    role_id:res.data.role_id
                 }
             }
         })
@@ -48,18 +37,13 @@ edit_card.controller("edit_card_ctrl", function ($rootScope,$scope,$http,$anchor
     $scope.sureEditCard = (val, error) => {
         /*默认的情况*/
         if (val) {
-            $scope.successmodal = "#edit_card"
-            let url = baseUrl+"/withdrawals/set-bank-card";
-            let data =  $scope.carddetail;
-            // $scope.suremodal = '#suremodal';
-            $http.post(url, data, config).then(function (res) {
-                    console.log(res);
+            _ajax.post('/withdrawals/set-bank-card',$scope.carddetail,function (res) {
+                $('#edit_card').modal('show');
             })
         }
 
         if (!val) {
             $scope.successmodal = "";
-            // console.log(val);
             $scope.alljudgefalse = true;
             //循环错误，定位到第一次错误，并聚焦
             for (let [key, value] of error.entries()) {

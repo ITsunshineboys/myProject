@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let frozen_money = angular.module("frozen_moneyModule", []);
-frozen_money.controller("frozen_money_ctrl", function ($rootScope, $scope, $http, $stateParams) {
+frozen_money.controller("frozen_money_ctrl", function (_ajax, $rootScope, $scope) {
     let time_type;
     /*获取冻结余额列表*/
     $rootScope.crumbs = [{
@@ -41,9 +41,7 @@ frozen_money.controller("frozen_money_ctrl", function ($rootScope, $scope, $http
         if (value == oldValue) {
             return
         }
-        // if (value == 'all' && $scope.params.keyword != '') {
-        //     return
-        // }
+
         if (value != 'custom') {
             $scope.params.start_time = '';     // 自定义开始时间
             $scope.params.end_time = '';       // 自定义结束时间
@@ -90,13 +88,9 @@ frozen_money.controller("frozen_money_ctrl", function ($rootScope, $scope, $http
 
     /*列表数据获取方法*/
     function tableList() {
-        $http({
-            method:"get",
-            params:$scope.params,
-            url:baseUrl+"/withdrawals/find-supplier-freeze-list",
-        }).then(function (res) {
-            $scope.pageConfig.totalItems = +res.data.data.count;
-            $scope.frozendetail = res.data.data.list;
+        _ajax.get('/withdrawals/find-supplier-freeze-list',$scope.params,function (res) {
+            $scope.pageConfig.totalItems = +res.data.count;
+            $scope.frozendetail = res.data.list;
         })
     }
 
