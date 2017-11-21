@@ -292,8 +292,9 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->where(['uid'=>$uid,'type'=>$type,'item'=>1])
             ->asArray()
             ->all();
+
         $data=[];
-        if(!$effect_earnests){
+        if(!isset($effect_earnests)){
             $data=null;
         }
         foreach ($effect_earnests as &$effect_earnest){
