@@ -448,23 +448,25 @@ class OwnerController extends Controller
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
-                    if ($one['title'] == '主卧室'){
-                        $room_strong_points = $one['count'];
-                    }
                     if ($one['title'] == '次卧室'){
                         $croom_strong_points = $one['count'] * ($post['bedroom'] - 1);
-                    }
-                    if ($one['title'] == '客厅'){
+                    } elseif ($one['title'] == '客厅'){
                         $hall_strong_points = $one['count'] * $post['hall'];
-                    }
-                    if ($one['title'] == '卫生间'){
+                    } elseif ($one['title'] == '卫生间'){
                         $toilet_strong_points = $one['count'] * $post['toilet'];
-                    }
-                    if ($one['title'] == '厨房'){
+                    } elseif ($one['title'] == '厨房'){
                         $kitchen_strong_points = $one['count'] * $post['kitchen'];
                     }
                 }
-                $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
+
+                $qita = 0;
+                foreach ($_waterway as $one_){
+                    if ($one['title'] != '次卧室' && $one['title'] != '客厅' && $one['title'] != '卫生间' && $one['title'] != '厨房'){
+                        $qita += $one_['count'];
+                    }
+                }
+                $strong_count =$croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points + $qita;
+                var_dump($strong_count);exit;
             }
         }
 
