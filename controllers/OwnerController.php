@@ -1470,7 +1470,7 @@ class OwnerController extends Controller
         }
 
         foreach ($assort_material as $assort){
-            if ($assort['state'] != MaterialPropertyClassify::DEFAULT_STATUS){
+            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
                 $have_assort[] = $assort;
             } else {
                 $without_assort[] = $assort;
