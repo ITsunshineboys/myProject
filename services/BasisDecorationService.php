@@ -320,7 +320,7 @@ class BasisDecorationService
 //            厨房地面面积：【x】%×（房屋面积)
         $ground = $area * $house_area;
 //            厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
-        $sqrt = sqrt($ground);
+        $sqrt = sqrt($ground / $quantity);
         $wall_space = $sqrt * $height * self::WALL_SPACE * $quantity;
 //            厨房防水面积：厨房地面积+厨房墙面积
         $all_area = $ground + $wall_space;
