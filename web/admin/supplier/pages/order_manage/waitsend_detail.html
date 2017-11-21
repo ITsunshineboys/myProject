@@ -1,14 +1,5 @@
 <link rel="stylesheet" href="pages/order_manage/css/waitsend_detail.css">
 <div ng-controller="waitsend_detail_ctrl">
-    <!--顶部导航-->
-    <!--<header>-->
-        <!--<div>-->
-            <!--<i class="glyphicon glyphicon-home"></i>-->
-            <!--<span class="order_manage" ng-click="back_list()">订单管理</span>-->
-            <!--<span>>订单详情</span>-->
-            <!--<img src="lib/images/user.png" alt=""/>-->
-        <!--</div>-->
-    <!--</header>-->
     <section>
         <div class="order_detail">
             <h3>订单详情</h3>
@@ -224,12 +215,12 @@
             <button class="btn btn-default back" data-toggle="modal" data-target="#turn_down">驳回</button>
             <button class="btn btn-default back" ng-click="back_list()">返回</button>
         </div>
-        <div ng-if="is_unusual=='0'" ng-hide="tabflag=='waitreceive_flag'"  class="btn_group">
+        <div ng-if="is_unusual=='0'" ng-hide="status!='待发货'"  class="btn_group">
             <button class="btn btn-primary pull-left" ng-click="wait_send_ship()">发货</button>
             <button class="btn btn-default back"  ng-click="back_list()">返回</button>
         </div>
         <!--待收货-->
-        <div ng-if="tabflag=='waitreceive_flag' && tabflag!='all_flag' && is_unusual!='1'" class="btn_group">
+        <div ng-if=" status=='待收货' && is_unusual!='1'" class="btn_group">
             <button class="btn btn-default"  ng-click="back_list()">返回</button>
         </div>
 
