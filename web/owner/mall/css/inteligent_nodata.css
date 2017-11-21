@@ -934,7 +934,7 @@ button[disabled]{
     box-shadow: 0 -1px 0 rgba(0,0,0,0.2);
 }
 .footer_set{
-    width:calc(100% - 13.6rem);
+    width:calc(100% - 11rem);
     float: left;
     padding-left:1.19rem;
     height:4rem;
@@ -964,20 +964,10 @@ button[disabled]{
     bottom: .3rem;
     left: 1.4rem;
 }
-/*.footer_settlement button:first-of-type{*/
-    /*border:none;*/
-    /*float: left;*/
-    /*width:6.8rem;*/
-    /*height: 4rem;*/
-    /*color: #6C6C6C;*/
-    /*font-size:1.2rem;*/
-    /*border-left:.08rem solid #CDD3D7;*/
-    /*background-color: #fff;*/
-/*}*/
 .footer_settlement button:last-of-type{
     border:none;
     float: left;
-    width:13.6rem;
+    width:11rem;
     height: 4rem;
     color: #fff;
     font-size:1.2rem;
