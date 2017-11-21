@@ -414,7 +414,7 @@ class OwnerController extends Controller
         }
 
 
-        $a = Points::find()->asArray()->select('title,count')->where(['in','title','水路,弱电,强电'])->andWhere(['level'=>1])->all();
+        $a = Points::find()->asArray()->select('title,count')->andWhere(['level'=>1])->all();
         var_dump($a);exit;
         $points = Points::findByOne($points_select,$points_where);
 
