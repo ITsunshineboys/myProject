@@ -7,7 +7,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: '分类管理',
         link: 'fenleiguanli',
