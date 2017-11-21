@@ -418,11 +418,29 @@ class OwnerController extends Controller
             if ($p['title'] == '水路'){
                 $waterway_p = $p['count'];
                 $id = $p['id'];
-                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->all();
-                var_dump($_waterway);exit;
+                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
+                foreach ($_waterway as $one){
+                    if ($one['title'] == '卫生间'){
+                        $toilet_points = $_waterway['count'] * $post['toilet'];
+                    }
+                    if ($_waterway['title'] == '厨房'){
+                        $kitchen_points = $post['kitchen'] * $_waterway['count'];
+                    }
+                }
             }
             if ($p['title'] == '弱电'){
                 $weak_p = $p['count'];
+                $id = $p['id'];
+                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
+                var_dump($_waterway);exit;
+                foreach ($_waterway as $one){
+                    if ($one['title'] == '卫生间'){
+                        $toilet_points = $_waterway['count'] * $post['toilet'];
+                    }
+                    if ($_waterway['title'] == '厨房'){
+                        $kitchen_points = $post['kitchen'] * $_waterway['count'];
+                    }
+                }
             }
             if ($p['title'] == '强电'){
                 $strong_p = $p['count'];
