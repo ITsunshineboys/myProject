@@ -464,12 +464,6 @@ class OwnerController extends Controller
                     }
                 }
                 $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
-                var_dump($room_strong_points);
-                var_dump($hall_strong_points);
-                var_dump($toilet_strong_points);
-                var_dump($kitchen_strong_points);
-                var_dump($_waterway);
-                exit;
             }
         }
 
