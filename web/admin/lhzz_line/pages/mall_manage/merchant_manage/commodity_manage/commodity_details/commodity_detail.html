@@ -84,7 +84,7 @@
                     <span class="purchase_left">设计师采购价</span>
                 </div>
                 <hr>
-                <div class="margin_top">
+                <div class="margin_top" ng-if='!showd_default'>
                     <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
                          alt="">
                     <input type="text" class="purchase_input" id="decoration" name="decoration"
@@ -99,6 +99,30 @@
                            ng-model="purchase_price_designer" required ng-change="designerPrice()"
                            ng-blur="manager=!!gooddetail.designer.$error"
                            ng-class={'warning':(gooddetail.designer.$invalid&&alljudgefalse)||(gooddetail.designer.$error.required&&manager)||price_flag}>
+                </div>
+
+
+                <div class="margin_top" ng-if='showd_default'>
+                    <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
+                         alt="">
+
+
+                    <span class="purchase_input">{{purchase_price_decoration_company | currency:"¥"}}</span>
+                    <span class="purchase_input">{{purchase_price_manager | currency:"¥"}}</span>
+                    <span class="purchase_input">{{purchase_price_designer | currency:"¥"}}</span>
+
+                    <!--<input type="text" class="purchase_input" id="decoration" name="decoration"-->
+                           <!--ng-model="purchase_price_decoration_company" required ng-change="decorationPrice()"-->
+                           <!--ng-blur="decoration=!!gooddetail.decoration.$error"-->
+                           <!--ng-class={'warning':(gooddetail.decoration.$invalid&&alljudgefalse)||(gooddetail.decoration.$error.required&&decoration)||price_flag}>-->
+                    <!--<input type="text" class="purchase_input" id="manager" name="manager"-->
+                           <!--ng-model="purchase_price_manager" required ng-change="managerPrice()"-->
+                           <!--ng-blur="manager=!!gooddetail.manager.$error"-->
+                           <!--ng-class={'warning':(gooddetail.manager.$invalid&&alljudgefalse)||(gooddetail.manager.$error.required&&manager)||price_flag}>-->
+                    <!--<input type="text" class="purchase_input" id="designer" name="designer"-->
+                           <!--ng-model="purchase_price_designer" required ng-change="designerPrice()"-->
+                           <!--ng-blur="manager=!!gooddetail.designer.$error"-->
+                           <!--ng-class={'warning':(gooddetail.designer.$invalid&&alljudgefalse)||(gooddetail.designer.$error.required&&manager)||price_flag}>-->
                 </div>
                 <p style="margin-top: 10px">*价格，供货价≤装修公司采购价≤项目经理采购价/设计师采购价≤平台价≤市场价</p>
             </div>
@@ -189,10 +213,10 @@
             </div>
         </div>
         <!--操作-->
-        <div class="btn_margin_top">
+        <div class="btn_margin_top" ng-if='showd_default'>
             <span class="btn_size blue" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)">保存</span>
             <span class="btn_size" data-toggle="modal" data-target="#down_shelves_reason_modal">下架</span>
-            <span class="btn_size" ui-sref="commodity.online({id:storeid})">返回</span>
+            <span class="btn_size" ng-click='backPage()'>返回</span>
         </div>
     </form>
 </section>
