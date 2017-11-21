@@ -6,24 +6,15 @@
     margin-top: 4rem;
     border-top: 1rem solid #f6f6f6;
 }
-/*头部样式*/
-/*header{*/
-    /*width: 32rem;*/
-    /*height: 3.75rem;*/
-    /*background-color: white;*/
-    /*position: fixed;*/
-    /*font-size: 1.5rem;*/
-    /*padding:1rem 1.2rem;*/
-    /*line-height:1.75rem;*/
-    /*text-align: center;*/
-    /*margin-bottom:.85rem;*/
-    /*z-index:100;*/
-/*}*/
-/*header a{*/
-    /*position: absolute;*/
-    /*top:1rem;*/
-    /*left:1rem;*/
-/*}*/
+.comment p{
+    font-size:32px;
+}
+.comment .goods_name{
+    font-size:42px;
+}
+.comment .price{
+    color: #D9AD65;
+}
 button.close{
     -webkit-appearance: none;
     padding: 0;

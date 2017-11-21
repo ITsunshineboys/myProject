@@ -9,7 +9,7 @@
                 {{cur_params.title}}
             </div>
             <div class="introduce">{{check_goods.subtitle}}</div>
-            <p class="cost">{{check_goods.cost | currency:'￥'}}</p>
+            <p class="cost">{{check_goods.platform_price | currency:'￥'}}</p>
         </div>
         <!--下拉选择数量-->
         <div class="standard" ng-if="!!cur_status" data-toggle="modal" data-target="#myModal">

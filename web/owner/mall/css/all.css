@@ -112,6 +112,6 @@ header .cur_location span{
     color: #333;
 }
 .filter_color{
-    color: #222;
+    color: #222!important;
 }
 /*header end*/

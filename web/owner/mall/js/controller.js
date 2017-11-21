@@ -368,6 +368,17 @@ angular.module('all_controller', [])
         $scope.get_basic_details = function (item, three_level_name, three_level_id) {
             console.log(item)
             $scope.cur_goods_detail = item
+            for(let [key,value] of $scope.series.entries()){
+                if($scope.cur_goods_detail.series_id == value.id){
+                    $scope.cur_goods_detail['series_name'] = value.series
+                }
+            }
+            for(let [key,value] of $scope.style.entries()){
+                if($scope.cur_goods_detail.style_id == value.id){
+                    $scope.cur_goods_detail['style_name'] = value.style
+                }
+            }
+            console.log($scope.cur_goods_detail)
             $scope.cur_second_level = $scope.cur_header
             $scope.cur_three_level = three_level_name
             $scope.cur_three_id = three_level_id
@@ -980,16 +991,6 @@ angular.module('all_controller', [])
                 }).then(function (response) {
                     console.log('弱电')
                     console.log(response)
-                    //整合一级
-                    // for (let [key, value] of $scope.stair.entries()) {
-                    //     for (let [key1, value1] of response.data.data.weak_current_material.material.entries()) {
-                    //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                    //         let cur_title = {title: value.title}
-                    //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                    //             $scope.all_goods.push(cur_obj)
-                    //         }
-                    //     }
-                    // }
                     //整合二级
                     for (let [key, value] of $scope.level.entries()) {
                         for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1023,6 +1024,7 @@ angular.module('all_controller', [])
                                     let cur_obj = {
                                         id: value3.id,
                                         image: value3.cover_image,
+                                        goods_name:value3.goods_name,
                                         cost: +value3.cost,
                                         name: value3.name,
                                         platform_price: value3.platform_price,
@@ -1079,25 +1081,12 @@ angular.module('all_controller', [])
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
                 }),
-                    //     function (error) {
-                    //     console.log(error)
-                    // })
                     //强电
                     $http.get(baseUrl + '/owner/strong-current', {
                         params: data
                     }).then(function (response) {
                         console.log('强电')
                         console.log(response)
-                        //整合一级
-                        // for (let [key, value] of $scope.stair.entries()) {
-                        //     for (let [key1, value1] of response.data.data.strong_current_material.material.entries()) {
-                        //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                        //         let cur_title = {title: value.title}
-                        //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                        //             $scope.all_goods.push(cur_obj)
-                        //         }
-                        //     }
-                        // }
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1132,6 +1121,7 @@ angular.module('all_controller', [])
                                             id: value3.id,
                                             image: value3.cover_image,
                                             cost: +value3.cost,
+                                            goods_name:value3.goods_name,
                                             name: value3.name,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
@@ -1185,25 +1175,12 @@ angular.module('all_controller', [])
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
-                    //     function (error) {
-                    //     console.log(error)
-                    // })
                     //水路
                     $http.get(baseUrl + '/owner/waterway', {
                         params: data
                     }).then(function (response) {
                         console.log('水路')
                         console.log(response)
-                        //整合一级
-                        // for (let [key, value] of $scope.stair.entries()) {
-                        //     for (let [key1, value1] of response.data.data.waterway_material_price.material.entries()) {
-                        //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                        //         let cur_title = {title: value.title}
-                        //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                        //             $scope.all_goods.push(cur_obj)
-                        //         }
-                        //     }
-                        // }
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1238,6 +1215,7 @@ angular.module('all_controller', [])
                                             id: value3.id,
                                             image: value3.cover_image,
                                             cost: +value3.cost,
+                                            goods_name:value3.goods_name,
                                             name: value3.name,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
@@ -1291,25 +1269,12 @@ angular.module('all_controller', [])
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
-                    //     function (error) {
-                    //     console.log(error)
-                    // })
                     //防水
                     $http.get(baseUrl + '/owner/waterproof', {
                         params: data
                     }).then(function (response) {
                         console.log('防水')
                         console.log(response)
-                        //整合一级
-                        // for (let [key, value] of $scope.stair.entries()) {
-                        //     for (let [key1, value1] of response.data.data.waterproof_material.material.entries()) {
-                        //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                        //         let cur_title = {title: value.title}
-                        //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                        //             $scope.all_goods.push(cur_obj)
-                        //         }
-                        //     }
-                        // }
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1344,6 +1309,7 @@ angular.module('all_controller', [])
                                             id: value3.id,
                                             image: value3.cover_image,
                                             cost: value3.cost,
+                                            goods_name:value3.goods_name,
                                             name: value3.name,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
@@ -1399,25 +1365,12 @@ angular.module('all_controller', [])
                         data1['waterproof_total_area'] = response.data.data.total_area
 
                     }),
-                    //     function (error) {
-                    //     console.log(error)
-                    // })
                     //木作
                     $http.get(baseUrl + '/owner/carpentry', {
                         params: data
                     }).then(function (response) {
                         console.log('木作')
                         console.log(response)
-                        //整合一级
-                        // for (let [key, value] of $scope.stair.entries()) {
-                        //     for (let [key1, value1] of response.data.data.carpentry_material.material.entries()) {
-                        //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                        //         let cur_title = {title: value.title}
-                        //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                        //             $scope.all_goods.push(cur_obj)
-                        //         }
-                        //     }
-                        // }
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1452,6 +1405,7 @@ angular.module('all_controller', [])
                                             id: value3.id,
                                             image: value3.cover_image,
                                             cost: value3.cost,
+                                            goods_name:value3.goods_name,
                                             name: value3.name,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
@@ -1505,25 +1459,12 @@ angular.module('all_controller', [])
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
-                    //     function (error) {
-                    //     console.log(error)
-                    // })
                     //乳胶漆
                     $http.get(baseUrl + '/owner/coating', {
                         params: data
                     }).then(function (response) {
                         console.log('乳胶漆')
                         console.log(response)
-                        //整合一级
-                        // for (let [key, value] of $scope.stair.entries()) {
-                        //     for (let [key1, value1] of response.data.data.coating_material.material.entries()) {
-                        //         let cur_obj = {id: value.id, title: value.title, cost: 0, count: 0, second_level: []}
-                        //         let cur_title = {title: value.title}
-                        //         if (value1.path.split(',')[0] == value.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                        //             $scope.all_goods.push(cur_obj)
-                        //         }
-                        //     }
-                        // }
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1558,6 +1499,7 @@ angular.module('all_controller', [])
                                             id: value3.id,
                                             image: value3.cover_image,
                                             cost: value3.cost,
+                                            goods_name:value3.goods_name,
                                             name: value3.name,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
@@ -1619,24 +1561,6 @@ angular.module('all_controller', [])
                         console.log(response)
                         for (let [key, value] of response.data.data.goods.entries()) {
                             if (!!value) {
-                                //整合一级
-                                // for (let [key2, value2] of $scope.stair.entries()) {
-                                //     for (let [key1, value1] of value.entries()) {
-                                //         if (!!value1) {
-                                //             let cur_obj = {
-                                //                 id: value2.id,
-                                //                 title: value2.title,
-                                //                 cost: 0,
-                                //                 count: 0,
-                                //                 second_level: []
-                                //             }
-                                //             let cur_title = {title: value2.title}
-                                //             if (value1.path.split(',')[0] == value2.id && JSON.stringify($scope.all_goods).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
-                                //                 $scope.all_goods.push(cur_obj)
-                                //             }
-                                //         }
-                                //     }
-                                // }
                                 //整合二级
                                 for (let [key3, value3] of $scope.level.entries()) {
                                     for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1675,7 +1599,6 @@ angular.module('all_controller', [])
                                         }
                                     }
                                 }
-                                console.log(1111)
                                 //整合商品
                                 for (let [key5, value5] of  $scope.all_goods.entries()) {
                                     for (let [key1, value1] of value5.second_level.entries()) {
@@ -1686,6 +1609,7 @@ angular.module('all_controller', [])
                                                         id: value3.id,
                                                         image: value3.cover_image,
                                                         cost: value3.cost,
+                                                        goods_name:value3.goods_name,
                                                         name: value3.name,
                                                         platform_price: value3.platform_price,
                                                         profit_rate: value3.profit_rate,
@@ -1771,6 +1695,7 @@ angular.module('all_controller', [])
                                                 id: value3.id,
                                                 image: value3.cover_image,
                                                 cost: value3.cost,
+                                                goods_name:value3.goods_name,
                                                 name: value3.name,
                                                 platform_price: value3.platform_price,
                                                 profit_rate: value3.profit_rate,

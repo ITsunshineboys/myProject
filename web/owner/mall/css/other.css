@@ -206,7 +206,15 @@ button.close{
 a:hover{
     text-decoration: none;
 }
-
+.comment p{
+    font-size:32px;
+}
+.comment .goods_name{
+    font-size:42px;
+}
+.comment .price{
+    color: #D9AD65;
+}
 /*模态框*/
 .modal-dialog{
     border-radius:.5rem !important;
