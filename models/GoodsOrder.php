@@ -2873,12 +2873,12 @@ class GoodsOrder extends ActiveRecord
                 }
                 $orders[]=$order_no;
             }
-            // if ($total!=$total_amount*100)
-            // {
-            //     $code=1000;
-            //     $tran->rollBack();
-            //     return $code;
-            // }
+             if ($total!=$total_amount*100)
+             {
+                 $code=1000;
+                 $tran->rollBack();
+                 return $code;
+             }
             $tran->commit();
             return $orders;
         }catch (yii\db\Exception $e){
