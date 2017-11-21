@@ -1515,8 +1515,7 @@ class OwnerController extends Controller
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
-            var_dump($stairs_price);
-            exit;
+
             foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = $material_one[BasisDecorationService::GOODS_NAME['stairs']]['quantity'];
@@ -1524,6 +1523,7 @@ class OwnerController extends Controller
                     $condition_stairs [] = $one_stairs_price;
                 }
             }
+            var_dump($condition_stairs);exit;
             $material[] = BasisDecorationService::profitMargin($condition_stairs);
         }
 
