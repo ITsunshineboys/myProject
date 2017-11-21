@@ -273,6 +273,11 @@ class Effect extends ActiveRecord
 
     }
 
+    /**
+     * app 端方案详情
+     * @param $enst_id
+     * @return array|null
+     */
     public static  function getAppeffectdata($enst_id){
         $data=[];
         $query=new Query();
