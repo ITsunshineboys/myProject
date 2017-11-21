@@ -397,16 +397,27 @@ class OwnerController extends Controller
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
         if ($waterway_labor != null){
-            $worker_kind_details = WorkerCraftNorm::find()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
+            $worker_kind_details = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
+            foreach ($worker_kind_details as $one_){
+                if ($one_['worker_kind_details'] == '强电点位'){
+                    $strong = $one_['quantity'];
+                }
+
+                if ($one_['worker_kind_details'] == '弱电点位'){
+                    $weak = $one_['quantity'];
+                }
+
+                if ($one_['worker_kind_details'] == '水路点位'){
+                    $waterway = $one_['quantity'];
+                }
+            }
         }
 
-var_dump($worker_kind_details);exit;
 
-        //强电点位
-        $points_select = 'count';
-        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
+        $a = Points::find()->asArray()->select(['title,count'])->where(['in','title','水路,弱电,强电'])->andWhere(['level'=>1])->all();
+        var_dump($a);exit;
         $points = Points::findByOne($points_select,$points_where);
-        $_points = !isset($points['count']) ? $points['count'] : Points::WATERWAY_POINTS;
+
 
 
         //查询弱电所需要材料
