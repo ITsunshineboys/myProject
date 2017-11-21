@@ -416,7 +416,6 @@ class OwnerController extends Controller
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
         foreach ($points  as $p){
             if ($p['title'] == '水路'){
-                $waterway_p = $p['count'];
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
@@ -430,7 +429,6 @@ class OwnerController extends Controller
                 $waterway_count = $toilet_waterway_points + $kitchen_waterway_points;
             }
             if ($p['title'] == '弱电'){
-                $weak_p = $p['count'];
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
@@ -447,12 +445,12 @@ class OwnerController extends Controller
                 $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
             }
             if ($p['title'] == '强电'){
-                $strong_p = $p['count'];
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
+                var_dump($_waterway);exit;
                 foreach ($_waterway as $one){
                     if ($one['title'] == '主卧'){
-                        $room_strong_points = $one['count'] * $post['toilet'];
+                        $room_strong_points = $one['count'];
                     }
                     if ($one['title'] == '次卧'){
                         $croom_strong_points = $post['kitchen'] * $one['count'];
