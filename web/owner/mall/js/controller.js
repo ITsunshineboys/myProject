@@ -1913,7 +1913,7 @@ angular.module('all_controller', [])
                     $scope.cur_all_house = res.data.list_effect
                     $scope.$watch('cur_all_house', function (newVal, oldVal) {
                         $scope.search_data = []//搜索出的小区
-                        for (let [key, value] of response.data.data.list_effect.entries()) {
+                        for (let [key, value] of res.data.list_effect.entries()) {
                             $scope.search_data.push({
                                 id: value.id,
                                 toponymy: value.toponymy,
