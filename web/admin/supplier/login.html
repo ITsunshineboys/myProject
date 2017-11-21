@@ -6,9 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
     <link rel="shortcut icon" type="image/x-icon" href="lib/images/bitbug_favicon.ico">
-    <link rel="stylesheet" href="lib/css/login.css">
     <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="lib/css/common.css">
+    <link rel="stylesheet" href="lib/css/login.css">
     <title>艾特生活-商家后台</title>
 </head>
 <body>
@@ -82,7 +82,16 @@
             <!--错误提示-->
             <div class="error_red" ng-show="error_flag" ng-bind="error_flag_txt"></div>
             <!--登录按钮-->
-            <button class="login_btn btn-info" ng-click="supplier_login()">登录</button>
+            <button class="login_btn btn-info" ng-disabled="isLoading" ng-click="supplier_login()">
+                <span ng-if="!isLoading">登录</span>
+                <span class="loading" ng-if="isLoading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
             <div>
                 <a class="forget_pw" data-toggle='modal' data-target="#forget_pw_modal" ng-click='forget_pw_click()'>忘记密码？</a>
             </div>
