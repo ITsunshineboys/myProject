@@ -605,6 +605,11 @@ class OwnerController extends Controller
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
+        var_dump($total_area);
+        var_dump($kitchen_area);
+        var_dump($toilet_area);
+        var_dump( $apartment['project_value']);
+        exit;
 
 
         //当地工艺
