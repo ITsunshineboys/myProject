@@ -1238,6 +1238,9 @@ class OwnerController extends Controller
             ->one();
 //        总天数
         $_day = BasisDecorationService::wallArea($post,$worker_kind_details);
+        var_dump($_day);
+        var_dump($_area);
+        exit;
         $total_day = $_day+ $_area['project_value'];
 
 //        清运建渣费用
