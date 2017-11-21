@@ -445,7 +445,7 @@ class OrderController extends Controller
                     $time=(time()-60*60*6);
                     $list=EffectEarnest::find()
                         ->where("create_time<={$time}")
-                        ->andWhere(['status'=>0])
+                        ->andWhere(['status'=>0,'type'=>0,'item'=>0])
                         ->all();
                     if ($list)
                     {
@@ -855,7 +855,7 @@ class OrderController extends Controller
                 $time=(time()-60*60*6);
                 $list=EffectEarnest::find()
                     ->where("  create_time < {$time} ")
-                    ->andWhere(['status'=>0])
+                    ->andWhere(['status'=>0,'type'=>0,'item'=>0])
                     ->all();
                 if ($list)
                 {
