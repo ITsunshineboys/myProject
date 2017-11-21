@@ -286,19 +286,9 @@ class OwnerController extends Controller
     public function actionWeakCurrent()
     {
         $post = \Yii::$app->request->get();
-        //人工价格
-        $workers = LaborCost::profession($post['city'],self::WORK_CATEGORY['plumber']);
-        if ($workers != null){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['weak_current']);
-        }
-        $worker_price = !isset($workers['univalence']) ? $workers['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
-        $worker_day_price = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] :WorkerCraftNorm::WEAK_CURRENT_DAY_POINTS;
-
-
         //      点位 和 材料查询
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
         $points = Points::findByOne('count',$points_where);
-        $weak_current_points = !isset($points['count']) ? $points['count'] : Points::WEAK_CURRENT_POINTS;
 
 
         //查询弱电所需要材料
@@ -329,10 +319,6 @@ class OwnerController extends Controller
             ]);
         }
 
-        //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_current_points, $worker_price ,$worker_day_price);
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
-
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
@@ -342,7 +328,6 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'weak_current_labor_price' => $labor_all_cost,
                 'weak_current_material' => $material,
             ]
         ]);
@@ -355,20 +340,10 @@ class OwnerController extends Controller
     public function actionStrongCurrent()
     {
         $post = \Yii::$app->request->get();
-        //人工价格
-        $workers = LaborCost::profession($post['city'], self::WORK_CATEGORY['plumber']);
-        if ($workers != null){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($workers['id'],self::POINTS_CATEGORY['strong_current']);
-        }
-        $strong_current_price = !isset($workers['univalence']) ? $workers['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
-        $strong_current_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::STRONG_CURRENT_DAY_POINTS;
-
-
         //强电点位
         $points_select = 'count';
         $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['strong_current']]];
         $points = Points::findByOne($points_select,$points_where);
-        $_points = !isset($points['count']) ? $points['count'] : Points::STRONG_CURRENT_POINTS;
 
 
         //查询弱电所需要材料
@@ -398,10 +373,6 @@ class OwnerController extends Controller
             ]);
         }
 
-        //人工总费用
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($_points,$strong_current_price,$strong_current_day_points);
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
-
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $strong_current, $craft);
         $material = BasisDecorationService::electricianMaterial($strong_current, $material_price);
@@ -426,11 +397,10 @@ class OwnerController extends Controller
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
         if ($waterway_labor != null){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterway_labor['id'],self::POINTS_CATEGORY['waterway']);
+            $worker_kind_details = WorkerCraftNorm::find()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
         }
-        $worker_price = !isset($waterway_labor['univalence']) ? $waterway_labor['univalence'] : LaborCost::WEAK_CURRENT_PRICE;
-        $worker_ady_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERWAY_DAY_POINTS;
 
+var_dump($worker_kind_details);exit;
 
         //强电点位
         $points_select = 'count';
