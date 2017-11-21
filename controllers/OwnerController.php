@@ -447,12 +447,11 @@ class OwnerController extends Controller
             if ($p['title'] == '强电'){
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
-                var_dump($_waterway);exit;
                 foreach ($_waterway as $one){
-                    if ($one['title'] == '主卧'){
+                    if ($one['title'] == '主卧室'){
                         $room_strong_points = $one['count'];
                     }
-                    if ($one['title'] == '次卧'){
+                    if ($one['title'] == '次卧室'){
                         $croom_strong_points = $post['kitchen'] * $one['count'];
                     }
                     if ($one['title'] == '客厅'){
