@@ -182,7 +182,7 @@ class Effect extends ActiveRecord
             $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($post['phone']);
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
-            $effect_earnest->sale_price=$post['sale_price'];
+            $effect_earnest->sale_price=$post['sale_price']*100;
             $effect_earnest->type=self::TYPE_STATUS;
             $effect_earnest->item=self::TYPE_STATUS;
             if(!$effect_earnest->save(false)){
