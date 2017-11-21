@@ -497,7 +497,8 @@ class OwnerController extends Controller
 
 
         //材料总费用
-        $material_price = BasisDecorationService::waterwayGoods($points['count'], $waterway_current,$craft);
+        $point = Points::find()->asArray()->select(['count'])->where(['and',['level'=>1],['title'=>'水路']])->one();
+        $material_price = BasisDecorationService::waterwayGoods($point['count'], $waterway_current,$craft);
         $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
 
         return Json::encode([
