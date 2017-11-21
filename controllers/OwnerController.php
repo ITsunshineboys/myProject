@@ -1230,18 +1230,20 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $_area = Apartment::find()
+
+        $Apartment = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['handyman_day']])
             ->one();
+        if ($Apartment){
+            $_area = $Apartment['project_value'];
+        }else{
+            $_area = 1;
+        }
 //        总天数
-        $_day = BasisDecorationService::wallArea($post,$worker_kind_details);
-        var_dump($_day);
-        var_dump(Apartment::find()->all());
-        exit;
-        $total_day = $_day+ $_area['project_value'];
+        $total_day = BasisDecorationService::wallArea($post,$worker_kind_details,$_area);
 
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
