@@ -332,6 +332,7 @@ class OwnerController extends Controller
         $labor_all_cost['price'] = BasisDecorationService::laborFormula($weak_current_points, $worker_price ,$worker_day_price);
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
+
         //材料总费用
         $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
@@ -677,7 +678,6 @@ class OwnerController extends Controller
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-
         //龙骨费用
         $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
         //丝杆费用
