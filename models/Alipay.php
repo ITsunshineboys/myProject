@@ -13,6 +13,11 @@ class Alipay extends  ActiveRecord
 {
 
 
+    const ALIPAY_LINPAY_NOTIFY='order/alipaylinenotify';
+    const LINE_PAY_SUCCESS='line/#!/pay_success';
+    const EFFECT_NOTIFY='order/alipayeffect_earnstnotify';
+    const EFFECT_SUCCESS='owner/mall/index.html#!/pay_success';
+
 
 
     
@@ -34,8 +39,8 @@ class Alipay extends  ActiveRecord
      * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
      */
     public static function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
-        $notify_url="http://".$_SERVER['SERVER_NAME']."/order/alipaylinenotify";
-        $return_url="http://".$_SERVER['SERVER_NAME']."/line/#!/pay_success";
+        $notify_url="http://".$_SERVER['SERVER_NAME'].'/'.self::ALIPAY_LINPAY_NOTIFY;
+        $return_url="http://".$_SERVER['SERVER_NAME'].'/'.self::LINE_PAY_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $str=$goods_id.'&'.$goods_num.'&'.$address_id.'&'.$pay_name.'&'.$invoice_id.'&'.$supplier_id.'&'.$freight.'&'.$return_insurance.'&'.$buyer_message;
         $passback_params=urlencode($str);
@@ -62,8 +67,8 @@ class Alipay extends  ActiveRecord
      */
   public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
     {
-        $notify_url="http://".$_SERVER['SERVER_NAME']."/order/alipayeffect_earnstnotify";
-        $return_url="http://".$_SERVER['SERVER_NAME']."/owner/mall/index.html#!/pay_success";
+        $notify_url="http://".$_SERVER['SERVER_NAME']."/".self::EFFECT_NOTIFY;
+        $return_url="http://".$_SERVER['SERVER_NAME']."/".self::EFFECT_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
         $id=Effect::addneweffect($post);
         if (!$id)
@@ -86,6 +91,9 @@ class Alipay extends  ActiveRecord
         $result=$payResponse->wapPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
     }
 
+    /**
+     * @return AlipayTradeService
+     */
     public function Alipaylinenotify(){
         $notify_url="http://".$_SERVER['SERVER_NAME']."/order/alipaylinenotify";
         $return_url="http://".$_SERVER['SERVER_NAME']."/line/success_pay";
@@ -152,4 +160,5 @@ class Alipay extends  ActiveRecord
         $result=$payResponse->appPay($payRequestBuilder,$config['return_url'],$config['notify_url']);
         return $result;
     }
+
 }

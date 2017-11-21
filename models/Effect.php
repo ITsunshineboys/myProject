@@ -316,7 +316,7 @@ class Effect extends ActiveRecord
            unset($data['user_view']);
         }
 
-
+        $data['id']=$array['id'];
         if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{
@@ -366,6 +366,7 @@ class Effect extends ActiveRecord
         return $data;
 
     }
+
 
 
     public static function array_group_by($arr, $key)

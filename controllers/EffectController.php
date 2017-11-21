@@ -383,7 +383,7 @@ class EffectController extends Controller
 
     }
     /**
-     * app 样板间申请详情
+     * app 样板间保存/申请详情
      * @return string
      */
     public function actionAppEffectView(){
@@ -409,6 +409,41 @@ class EffectController extends Controller
                 'msg'=>'ok',
                 'data'=>$data
             ]);
+    }
+    /**
+     * app 去装修
+     * @return string
+     */
+    public function actionGoDecoration(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $save_id=(int)trim(Yii::$app->request->get('save_id'));
+        if(!$save_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $effect_earnet=EffectEarnest::find()->where(['id'=>$save_id])->one();
+        $effect_earnet->type=0;
+        if(!$effect_earnet->save(false)){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
     }
     /**
      * 保存/申请方案列表

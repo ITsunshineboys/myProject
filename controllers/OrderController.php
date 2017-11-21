@@ -2,7 +2,6 @@
  
 namespace app\controllers;
 use app\models\OrderAfterSaleImage;
-use app\models\Test;
 use Yii;
 use app\models\OrderPlatForm;
 use app\models\Addressadd;
@@ -890,7 +889,6 @@ class OrderController extends Controller
                                 return false;
                             };
                         }
-
                         $EffectPicture=EffectPicture::find()
                             ->where(['effect_id'=>$effect_id])
                             ->one();
@@ -951,7 +949,9 @@ class OrderController extends Controller
             return false;
         }
     }
+
     /**
+     * 获取订单状态
      * find order type
      * @return string
      */
@@ -3161,6 +3161,7 @@ class OrderController extends Controller
         }
 
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+
         if (!$GoodsOrder)
         {
             $code=1000;
@@ -3169,6 +3170,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         switch ($GoodsOrder->order_refer)
         {
             case 1:
@@ -3178,7 +3180,6 @@ class OrderController extends Controller
                 $refund_type='已退至顾客钱包';
                 break;
         }
-
 
         $unshipped=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
@@ -3244,7 +3245,8 @@ class OrderController extends Controller
                     'stage' => $unshipped['order_type']
                 ];
                 if ($unshipped['handle'] == 1) {
-                    $arr1[] = [
+                    $arr1[] =
+                    [
                         'type' => '退款去向',
                         'value' => $refund_type,
                         'content' => '',
@@ -3257,7 +3259,6 @@ class OrderController extends Controller
         }else{
             $data[]=[];
         }
-
         $unreceived=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
             ->asArray()
@@ -3344,13 +3345,6 @@ class OrderController extends Controller
         ]);
     }
 
-
-
-
-
-
-  
-
    /**
      * 去付款支付宝app支付
      * @return string
@@ -3402,228 +3396,228 @@ class OrderController extends Controller
     }
 
 
-   /**
-     * 支付宝APP支付付款数据库操作--异步返回
-     */
-   public  function  actionAppOrderPayDatabase()
-    {
-        $post=Yii::$app->request->post();
-        $model=new Alipay();
-        $alipaySevice=$model->Alipaylinenotify();
-        $result = $alipaySevice->check($post);
-        if ($result){
-            if ($post['trade_status'] == 'TRADE_SUCCESS'){
-                $orders=explode(',',urldecode($post['passback_params']));
-                $total_amount=$post['total_amount'];
-                $orderAmount=GoodsOrder::CalculationCost($orders);
-    //            if ($total_amount*100!=$orderAmount)
-    //            {
-    //                echo 'fail';
-    //                exit;
-    //            }
-                $tran = Yii::$app->db->beginTransaction();
-                try{
-                    foreach ($orders as $k =>$v){
-                        $GoodsOrder=GoodsOrder::find()
-                            ->where(['order_no'=>$orders[$k]])
-                            ->one();
-                        $OrderGoods=OrderGoods::find()
-                            ->where(['order_no'=>$orders[$k]])
-                            ->asArray()
-                            ->all();
-                        foreach ($OrderGoods as &$Goods)
-                        {
-                            if ($Goods['order_status']!=0)
-                            {
-                               echo 'fail';
-                               exit;
-                            }
-                             $date=date('Ymd',time());
-                            $GoodsStat=GoodsStat::find()
-                                ->where(['supplier_id'=>$GoodsOrder->supplier_id])
-                                ->andWhere(['create_date'=>$date])
+       /**
+         * 支付宝APP支付付款数据库操作--异步返回
+         */
+       public  function  actionAppOrderPayDatabase()
+        {
+            $post=Yii::$app->request->post();
+            $model=new Alipay();
+            $alipaySevice=$model->Alipaylinenotify();
+            $result = $alipaySevice->check($post);
+            if ($result){
+                if ($post['trade_status'] == 'TRADE_SUCCESS'){
+                    $orders=explode(',',urldecode($post['passback_params']));
+                    $total_amount=$post['total_amount'];
+                    $orderAmount=GoodsOrder::CalculationCost($orders);
+        //            if ($total_amount*100!=$orderAmount)
+        //            {
+        //                echo 'fail';
+        //                exit;
+        //            }
+                    $tran = Yii::$app->db->beginTransaction();
+                    try{
+                        foreach ($orders as $k =>$v){
+                            $GoodsOrder=GoodsOrder::find()
+                                ->where(['order_no'=>$orders[$k]])
                                 ->one();
-                            if (!$GoodsStat)
+                            $OrderGoods=OrderGoods::find()
+                                ->where(['order_no'=>$orders[$k]])
+                                ->asArray()
+                                ->all();
+                            foreach ($OrderGoods as &$Goods)
                             {
-                                $GoodsStat=new GoodsStat();
-                                $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
-                                $GoodsStat->sold_number=$Goods['goods_number'];
-                                $GoodsStat->amount_sold=$GoodsOrder->amount_order;
-                                $GoodsStat->create_date=$date;
-                                if ($GoodsStat->save(false))
+                                if ($Goods['order_status']!=0)
                                 {
-                                    $code=500;
-                                    $tran->rollBack();
-                                    return $code;
+                                   echo 'fail';
+                                   exit;
                                 }
-                            }else{
-                                $GoodsStat->sold_number+=$Goods['goods_number'];
-                                $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
-                                if ($GoodsStat->save(false))
+                                 $date=date('Ymd',time());
+                                $GoodsStat=GoodsStat::find()
+                                    ->where(['supplier_id'=>$GoodsOrder->supplier_id])
+                                    ->andWhere(['create_date'=>$date])
+                                    ->one();
+                                if (!$GoodsStat)
                                 {
-                                    $code=500;
-                                    $tran->rollBack();
-                                    return $code;
+                                    $GoodsStat=new GoodsStat();
+                                    $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
+                                    $GoodsStat->sold_number=$Goods['goods_number'];
+                                    $GoodsStat->amount_sold=$GoodsOrder->amount_order;
+                                    $GoodsStat->create_date=$date;
+                                    if ($GoodsStat->save(false))
+                                    {
+                                        $code=500;
+                                        $tran->rollBack();
+                                        return $code;
+                                    }
+                                }else{
+                                    $GoodsStat->sold_number+=$Goods['goods_number'];
+                                    $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
+                                    if ($GoodsStat->save(false))
+                                    {
+                                        $code=500;
+                                        $tran->rollBack();
+                                        return $code;
+                                    }
                                 }
+
+
+
                             }
-
-
-
-                        }
-                        if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
-                        {
-                            echo 'fail';
-                            exit;
-                        }
-                        $role_id=$GoodsOrder->role_id;
-                        $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
-
-
-                            $GoodsOrder->pay_status=1;
-                            $GoodsOrder->pay_name='支付宝APP支付';
-                            $res=$GoodsOrder->save(false);
-                            if (!$res)
+                            if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                             {
-                                $tran->rollBack();
                                 echo 'fail';
-                                die;
+                                exit;
                             }
+                            $role_id=$GoodsOrder->role_id;
+                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
+
+
+                                $GoodsOrder->pay_status=1;
+                                $GoodsOrder->pay_name='支付宝APP支付';
+                                $res=$GoodsOrder->save(false);
+                                if (!$res)
+                                {
+                                    $tran->rollBack();
+                                    echo 'fail';
+                                    die;
+                                }
 
 
 
-                    }
-                    $role=Role::GetRoleByRoleId($role_id,$user);
-                    switch ($role_id)
-                    {
-                        case 2:
-                            $role_number=$role->worker_type_id;
-                            break;
-                        case 3:
-                            $role_number=$role->decoration_company_id;
-                            break;
-                        case 4:
-                            $role_number=$role->decoration_company_id;
-                            break;
-                        case 5:
-                            $role_number=$role->id;
-                            break;
-                        case 6:
-                            $role_number=$role->shop_no;
-                            break;
-                        case 7:
-                            $role_number=$role->aite_cube_no;
-                            break;
-                    }
-                    $access=new UserAccessdetail();
-                    $access->uid=$user->id;
-                    $access->role_id=$role_id;
-                    $access->access_type=7;
-                    $access->access_money=$total_amount*100;
-                    $access->create_time=time();
-                    $access->order_no=$orders;
-                    $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
-                    $res3=$access->save(false);
-                    if ( !$res3){
+                        }
+                        $role=Role::GetRoleByRoleId($role_id,$user);
+                        switch ($role_id)
+                        {
+                            case 2:
+                                $role_number=$role->worker_type_id;
+                                break;
+                            case 3:
+                                $role_number=$role->decoration_company_id;
+                                break;
+                            case 4:
+                                $role_number=$role->decoration_company_id;
+                                break;
+                            case 5:
+                                $role_number=$role->id;
+                                break;
+                            case 6:
+                                $role_number=$role->shop_no;
+                                break;
+                            case 7:
+                                $role_number=$role->aite_cube_no;
+                                break;
+                        }
+                        $access=new UserAccessdetail();
+                        $access->uid=$user->id;
+                        $access->role_id=$role_id;
+                        $access->access_type=7;
+                        $access->access_money=$total_amount*100;
+                        $access->create_time=time();
+                        $access->order_no=$orders;
+                        $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
+                        $res3=$access->save(false);
+                        if ( !$res3){
+                            $tran->rollBack();
+                            $code=500;
+                            return $code;
+                        }
+                        $tran->commit();
+                    }catch (Exception $e){
                         $tran->rollBack();
-                        $code=500;
-                        return $code;
+                        echo 'fail';
+                        die;
                     }
-                    $tran->commit();
-                }catch (Exception $e){
-                    $tran->rollBack();
-                    echo 'fail';
-                    die;
+                    echo 'success';
                 }
-                echo 'success';
+            }else{
+                //验证失败
+                echo "fail";    //请不要修改或删除
             }
-        }else{
-            //验证失败
-            echo "fail";    //请不要修改或删除
         }
-    }
 
 
-    /**
-     * 获取订单数量
-     * @return string
-     */
-   public  function  actionGetOrderNum()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
+        /**
+         * 获取订单数量
+         * @return string
+         */
+        public  function  actionGetOrderNum()
+        {
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $supplier_id=Yii::$app->request->get('supplier_id');
+            if (!$supplier_id)
+            {
+              $supplier_id=Supplier::find()->where(['uid'=>$user->id])->one()->id;
+
+            }
+
+            $all=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where(" g.supplier_id={$supplier_id} ")
+                ->count();
+    //        $role_id=$user->last_role_id_app;
+            //Get 待付款订单  and g.role_id={$role_id}
+            $unpaid=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier_id} ")
+                ->count();
+            $unshipped=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier_id} ")
+                ->count();
+            $unreceiveed=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier_id} ")
+                ->count();
+            $completed=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier_id} ")
+                ->count();
+            $canceled=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("o.order_status=2  and g.supplier_id={$supplier_id}")
+                ->count();
+            $code=200;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg' =>'ok',
+                'data'=>[
+                    'all'=>$all,
+                    'unpaid'=>$unpaid,
+                    'unshipped'=>$unshipped,
+                    'unreceiveed'=>$unreceiveed,
+                    'completed'=>$completed,
+                    'canceled'=>$canceled
+                ]
             ]);
         }
-        $supplier_id=Yii::$app->request->get('supplier_id');
-        if (!$supplier_id)
+
+
+       /**
+         * 用户申请售后详情
+         * @return string
+         */
+        public function actionApplyAfterDetails()
         {
-          $supplier_id=Supplier::find()->where(['uid'=>$user->id])->one()->id;
-
-        }
-
-        $all=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where(" g.supplier_id={$supplier_id} ")
-            ->count();
-//        $role_id=$user->last_role_id_app;
-        //Get 待付款订单  and g.role_id={$role_id}
-        $unpaid=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $unshipped=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $unreceiveed=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $completed=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $canceled=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("o.order_status=2  and g.supplier_id={$supplier_id}")
-            ->count();
-        $code=200;
-        return Json::encode([
-            'code' => $code,
-            'msg' =>'ok',
-            'data'=>[
-                'all'=>$all,
-                'unpaid'=>$unpaid,
-                'unshipped'=>$unshipped,
-                'unreceiveed'=>$unreceiveed,
-                'completed'=>$completed,
-                'canceled'=>$canceled
-            ]
-        ]);
-    }
-
-
-   /**
-     * 用户申请售后详情
-     * @return string
-     */
-    public function actionApplyAfterDetails()
-    {
             $user = Yii::$app->user->identity;
             if (!$user){
                 $code=1052;
@@ -3683,11 +3677,11 @@ class OrderController extends Controller
             ]);
         }
 
-    /**
-     * 删除评论操作
-     * @return string
-     */
-   public  function  actionSupplierDeleteComment()
+        /**
+         * 删除评论操作
+         * @return string
+         */
+        public  function  actionSupplierDeleteComment()
         {
             $order_no=Yii::$app->request->post('order_no','');
             $sku=Yii::$app->request->post('sku','');
@@ -4232,43 +4226,45 @@ class OrderController extends Controller
             }
 
 
+    /**
+     * @return string
+     */
+     public function  actionFindOpenId()
+     {
 
-   public function  actionFindOpenId()
-            {
 
-
-                $url=Yii::$app->request->post('url','');
-                if(!$url)
-                {
-                                $code=1000;
-                                return Json::encode([
-                                    'code' => $code,
-                                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                                ]);
-                }
-                $tools = new PayService();
-                if (!isset($_GET['code'])){
-                    //触发微信返回code码
-                    $baseUrl = urlencode($url);
-                    $url = $tools->__CreateOauthUrlForCode($baseUrl);
-                    $code=200;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => 'ok',
-                        'data' =>$url
-                    ]);
-                } else {
-                    //获取code码，以获取openid
-                    $code = $_GET['code'];
-                    $openid = $tools->getOpenidFromMp($code);
-                    $code=200;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => 'ok',
-                        'data' =>$openid
-                    ]);
-                }
-            }
+          $url=Yii::$app->request->post('url','');
+          if(!$url)
+          {
+               $code=1000;
+               return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+               ]);
+          }
+          $tools = new PayService();
+          if (!isset($_GET['code'])){
+               //触发微信返回code码
+               $baseUrl = urlencode($url);
+               $url = $tools->__CreateOauthUrlForCode($baseUrl);
+               $code=200;
+               return Json::encode([
+                    'code' => $code,
+                    'msg'  => 'ok',
+                    'data' =>$url
+               ]);
+          } else {
+                //获取code码，以获取openid
+                $code = $_GET['code'];
+                $openid = $tools->getOpenidFromMp($code);
+                $code=200;
+                return Json::encode([
+                     'code' => $code,
+                     'msg'  => 'ok',
+                     'data' =>$openid
+                ]);
+         }
+     }
  
         /**
          * 提醒发货接口

@@ -2,14 +2,7 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let withdraw_deposit = angular.module("withdraw_depositModule", []);
-withdraw_deposit.controller("withdraw_deposit_ctrl", function ($rootScope,$scope, $http, $state, $anchorScroll, $location, $window) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
+withdraw_deposit.controller("withdraw_deposit_ctrl", function (_ajax, $rootScope,$scope, $http, $state, $anchorScroll, $location, $window) {
     $rootScope.crumbs = [{
         name: '钱包',
         icon: 'icon-qianbao',
@@ -25,25 +18,25 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($rootScope,$scope
     $scope.psdwarning = false;
     $scope.moneywarning = false;
     $scope.alljudgefalse = false;
-    $scope.test = false;
+    $scope.moneyflag = false;
+    $scope.pwdflag = false;
 
 
     totalMoney();
 
     /*可提现金额*/
     function totalMoney() {
-        let url = baseUrl+"/withdrawals/find-supplier-balance";
-        $http.post(url, {}, config).then(function (res) {
-            $scope.totalmoney = res.data.data;
+        _ajax.post('/withdrawals/find-supplier-balance',{},function (res) {
+            $scope.totalmoney = res.data;
         })
     }
 
     /*确认提现*/
     $scope.sureWithdraw = function (val, error) {
-        $scope.test = false;
+        $scope.moneyflag = false;
         $scope.moneywarning = false;
         $scope.psdwarning = false;
-        $scope.test2 = false;
+        $scope.pwdflag = false;
         /*默认的情况*/
         if (!val) {
             $scope.alljudgefalse = true;
@@ -61,20 +54,19 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($rootScope,$scope
         }
 
         if(reg.test($scope.money_num)&&Number($scope.money_num)>0){
-            let url = baseUrl+"/withdrawals/supplier-withdrawals-apply";
             let data = {money: +$scope.money_num, pay_pwd: +$scope.password};
-            $http.post(url, data, config).then(function (res) {
-                switch (res.data.code)
+            _ajax.post('/withdrawals/supplier-withdrawals-apply',data,function (res) {
+                switch (res.code)
                 {
                     case 1055:
                         $scope.psdwarning = true;
-                        $scope.psdwrong = res.data.msg;
-                        $scope.test2 = true;
+                        $scope.psdwrong = res.msg;
+                        $scope.pwdflag = true;
                         break;
                     case 1054:
                         $scope.moneywarning = true;
-                        $scope.moneywrong = res.data.msg;
-                        $scope.test = true;
+                        $scope.moneywrong = res.msg;
+                        $scope.moneyflag = true;
                         break;
                     case 1000:
                         $scope.failwarning = "您尚未绑定银行卡";
@@ -91,7 +83,7 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function ($rootScope,$scope
         }else{
             $scope.moneywarning = true;
             $scope.moneywrong = '您的输入不正确，请重新输入';
-            $scope.test = true;
+            $scope.moneyflag = true;
         }
     }
 

@@ -5,7 +5,7 @@
         <div class="money">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>提现金额</span>
-            <input type="text" placeholder="请输入提现金额" ng-model="money_num" name="money_num" id="money_num" class="input_style" required ng-blur="moneyjudge=!!withdraw_deposit_form.money_num.$error" ng-class={'tored':withdraw_deposit_form.money_num.$invalid&&alljudgefalse||withdraw_deposit_form.money_num.$error.required&&moneyjudge||test}>
+            <input type="text" placeholder="请输入提现金额" ng-model="money_num" name="money_num" id="money_num" class="input_style" required ng-blur="moneyjudge=!!withdraw_deposit_form.money_num.$error" ng-class={'tored':withdraw_deposit_form.money_num.$invalid&&alljudgefalse||withdraw_deposit_form.money_num.$error.required&&moneyjudge||moneyflag}>
             <span>*可提现金额:¥{{totalmoney}}</span>
             <p class='red_mark warning' ng-show="moneywarning">
                 <span class="glyphicon glyphicon-asterisk">{{moneywrong}}</span>
@@ -15,7 +15,7 @@
         <div class="money">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>交易密码</span>
-            <input type="password" placeholder="请输入交易密码" ng-model="password" name="password" id="password" class="input_style" maxlength=6 required ng-blur="pwdjudge=!!withdraw_deposit_form.password.$error" ng-class={'tored':withdraw_deposit_form.password.$invalid&&alljudgefalse||withdraw_deposit_form.password.$error.required&&pwdjudge||test2} onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
+            <input type="password" placeholder="请输入交易密码" ng-model="password" name="password" id="password" class="input_style" maxlength=6 required ng-blur="pwdjudge=!!withdraw_deposit_form.password.$error" ng-class={'tored':withdraw_deposit_form.password.$invalid&&alljudgefalse||withdraw_deposit_form.password.$error.required&&pwdjudge||pwdflag} onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') ">
             <p class='red_mark warning' ng-show="psdwarning">
                 <span class="glyphicon glyphicon-asterisk"></span>
                {{psdwrong}}

@@ -293,6 +293,10 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
+        $data=[];
+        if(!isset($effect_earnests)){
+            $data=null;
+        }
         foreach ($effect_earnests as &$effect_earnest){
             $data[]=(new Query())->from('effect as e')
                 ->select('e.add_time,e.id,st.style,se.series')
@@ -304,6 +308,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
 
         }
+
         foreach ($data as &$v){
 
             $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
