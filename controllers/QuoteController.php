@@ -1843,7 +1843,6 @@ class QuoteController extends Controller
                     foreach ($value as $one_value){
                         ProjectView::findByUpdate($one_value['coefficient'],$one_value['id']);
                     }
-
                 }
 
                 if (isset($else['area'])){
@@ -1853,7 +1852,6 @@ class QuoteController extends Controller
                         }
 
                         if (isset($one_else['min_area'])) {
-
                             Apartment::findByInsert($one_else);
                         }
                     }

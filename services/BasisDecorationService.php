@@ -786,7 +786,7 @@ class BasisDecorationService
      * @param $day_area
      * @return mixed
      */
-    public static function wallArea($get_area,$day_area)
+    public static function wallArea($get_area,$day_area,$_area)
     {
         foreach ($day_area as $skill) {
             switch ($skill) {
@@ -825,7 +825,7 @@ class BasisDecorationService
         $day['repair_day'] = $get_area['repair'] / $repair['quantity'];
 
 //        总天数=拆除天数+新建天数+补烂天数
-        $day['total_day'] = ceil($day['dismantle_day'] + $day['new_construction_day'] + $day['repair_day']);
+        $day['total_day'] = ceil($day['dismantle_day'] + $day['new_construction_day'] + $day['repair_day'] + $_area);
 
         return $day;
     }
