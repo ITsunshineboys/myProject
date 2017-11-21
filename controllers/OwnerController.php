@@ -1155,6 +1155,7 @@ class OwnerController extends Controller
                 }
             }
         }
+        var_dump($wall_brick_cost);exit;
         foreach ($wall_brick_max as &$max_){
             $max_['quantity'] = $wall_brick_cost['quantity'];
             $max_['cost'] = $wall_brick_cost['cost'];
