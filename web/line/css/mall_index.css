@@ -369,10 +369,10 @@ Pagination Styles
     position: fixed;
     width: 100%;
     height: 4rem;
-    line-height: 4rem;
+    /*line-height: 4rem;*/
     bottom: 0;
     background:rgba(255,255,255,1);
-    box-shadow: 0 -1px 0 0 #4A4A4A;
+    box-shadow: 0 -1px 0 0 #A9A9A9;
     z-index: 1000;
 }
 .tab_bottom ul{
@@ -390,6 +390,9 @@ Pagination Styles
     display: inline-block;
     color:#999;
     margin-top:.42rem;
+}
+.tab_bottom ul li img{
+    margin-top: .5rem;
 }
 .span_active span{
     color: #D9AD65!important;
