@@ -88,7 +88,7 @@
             <td ng-if="menu_list[14].value" data-toggle="modal" data-target="#show_reason"
                 ng-click="showOffReason(item.offline_reason)"><span class="off_reason">{{item.offline_reason}}</span>
             </td>
-            <td ng-if="menu_list[15].value" class="blue" ui-sref="commodity_detail_down({offlinegood:item,storeid:storeid})">编辑</td>
+            <td ng-if="menu_list[15].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
             <td ng-if="menu_list[16].value" class="blue" data-toggle="modal" data-target="#up_shelves_modal" ng-click="singlegoodOnline(item.id)">上架
             </td>
         </tr>

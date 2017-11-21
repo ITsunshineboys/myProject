@@ -82,7 +82,7 @@
             <td ng-if="menu_list[13].value"><img class="goodpic" id="img_size"
                                                  ng-src="{{baseUrl + '/'+ item.cover_image}}"
                                                  alt=""></td>
-            <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail_on({onlinegood:item,storeid:storeid})">编辑</td>
+            <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
             <td ng-if="menu_list[15].value" class="blue" data-toggle="modal" data-target="#down_shelves_reason_modal"
                 ng-click="singlegoodOffline(item.id)">下架
             </td>
