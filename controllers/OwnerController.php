@@ -1004,9 +1004,6 @@ class OwnerController extends Controller
         }
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
-                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['tiling']:
-                    $wall_height = $local_craft['material'];
-                    break;
                 case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['cement']:
                     $cement_craft = $local_craft['material'];
                     break;
@@ -1197,7 +1194,7 @@ class OwnerController extends Controller
         $material_total['material'][] = BasisDecorationService::profitMargin($river_sand);
         $material_total['material'][] = BasisDecorationService::profitMargin($cement);
         $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
-        $material_total['total_cost'] = $material_cost_total;
+        $material_total['total_cost'] = round($material_cost_total,2);
 
         return Json::encode([
             'code' => 200,
