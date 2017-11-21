@@ -1515,7 +1515,7 @@ class OwnerController extends Controller
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
-
+var_dump($without_assort_one);exit;
         if ($post['stairway_id'] == 1) {
             //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
@@ -1531,7 +1531,7 @@ class OwnerController extends Controller
             $material[] = BasisDecorationService::profitMargin($condition_stairs);
         }
 
-        
+
         $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
         if ($without_assort_goods == null) {
             $code = 1061;
