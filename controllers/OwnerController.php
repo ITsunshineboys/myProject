@@ -1460,7 +1460,6 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         $assort_material = MaterialPropertyClassify::findByStatus();
-        var_dump($assort_material);exit;
         if ($assort_material == null) {
             $code = 1065;
             return Json::encode([
