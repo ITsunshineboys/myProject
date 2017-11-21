@@ -1493,10 +1493,8 @@ class OwnerController extends Controller
         }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
-//        $bedroom_area = EngineeringUniversalCriterion::mudMakeArea(self::ROOM_DETAIL['bedroom'],self::ROOM_AREA['bedroom_area']);
         $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
-        $bedroom_area = $p['project_value'] / 100;
-        var_dump($bedroom_area);exit;
+        $bedroom_area = $p['project_value'] / self::PRICE_UNITS;
         //   生活配套
         $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
         //   基础装修
