@@ -1053,9 +1053,6 @@ class OwnerController extends Controller
         $covering_layer_area = $post['waterproof_total_area'];
 //        保护层天数：保护层面积÷【每天做保护层面积】
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
-        var_dump($covering_layer_area);
-        var_dump($covering_layer_day_area);
-        exit;
 
 
         $perject = ProjectView::find()->where(['and',['parent_project'=>'泥作'],['project'=>$post['high']]])->asArray()->one();
@@ -1094,10 +1091,6 @@ class OwnerController extends Controller
         $tiling_day = $floor_tile_day + $wall_day;
 //        总天数：保护层天数+贴砖天数
         $total_day = ceil($tiling_day + $covering_layer_day);
-        var_dump($tiling_day);
-        var_dump($floor_tile_day);
-        var_dump($wall_day);
-        var_dump($covering_layer_day);exit;
         //总的人工费
         $total_labor_cost['price'] = $total_day * $labor_costs['univalence'];
         $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
