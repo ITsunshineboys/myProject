@@ -78,7 +78,7 @@ done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $
                 sku: $stateParams.sku
             };
             _ajax.post("/order/find-unusual-list", data, function (res) {
-                abnormal_result = res.data.data;
+                abnormal_result = res.data;
                 res.data[0] instanceof Array? $scope.unshipped=false:abnormalDetail('unshipped',0);
                 res.data[1] instanceof Array? $scope.unreceived=false:abnormalDetail('unreceived',1);
             });
