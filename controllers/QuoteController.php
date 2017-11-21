@@ -274,7 +274,7 @@ class QuoteController extends Controller
      */
     public function actionProjectNormWoodworkList()
     {
-        $material = ['石膏板', '龙骨', '丝杆'];
+        $material = ['石膏板', '龙骨', '丝杆','木工板'];
         $goods['specification']  = GoodsCategory::GoodsAttrValue(3,$material);
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
