@@ -1289,7 +1289,7 @@ class OwnerController extends Controller
             ]);
         }
 
-        if ($post['building_scrap']) {
+        if ($post['building_scrap'] == 'true') {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
             echo 111;exit;
