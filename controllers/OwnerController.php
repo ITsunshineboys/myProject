@@ -456,7 +456,7 @@ class OwnerController extends Controller
                         }elseif ($post['bedroom'] > 2){
                             $ciwoshi = $post['bedroom'] - 2;
                         }
-var_dump($ciwoshi);exit;
+
                         $croom_strong_points = $one['count'] * $ciwoshi;
                     } elseif ($one['title'] == '客厅'){
                         $hall_strong_points = $one['count'] * $post['hall'];
