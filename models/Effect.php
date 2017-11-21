@@ -287,7 +287,9 @@ class Effect extends ActiveRecord
             ->leftJoin('series As s','s.id = ep.series_id')
             ->leftJoin('style As t','t.id = ep.style_id')
             ->where(['ea.id'=>$enst_id])->one();
-        $effect_id=EffectEarnest::find()->select('effect_id')->asArray()->one()['effect_id'];
+
+        $effect_id=EffectEarnest::find()->where(['id'=>$enst_id])->select('effect_id')->asArray()->one()['effect_id'];
+
         if($array==false){
             $data=null;
         }
@@ -363,8 +365,8 @@ class Effect extends ActiveRecord
                 ->asArray()->one()['title'];
 
         }
-
         $data['material']=$material;
+
         return $data;
 
     }
