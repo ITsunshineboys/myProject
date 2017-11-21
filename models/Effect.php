@@ -121,11 +121,8 @@ class Effect extends ActiveRecord
         }
         $tran=\Yii::$app->db->beginTransaction();
         try{
-            if(!isset($post['particulars'])){
-                $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅'.self::chinanum($post['kitchen']).'厨'.self::chinanum($post['toilet']).'卫';
-            }else{
-                $particulars=$post['particulars'];
-            }
+            $particulars=self::chinanum($post['bedroom']).'室'.self::chinanum($post['sittingRoom_diningRoom']).'厅'.self::chinanum($post['kitchen']).'厨'.self::chinanum($post['toilet']).'卫';
+
             if(!isset($post['district_code'])){
                 $district_code=null;
             }else{
@@ -226,7 +223,6 @@ class Effect extends ActiveRecord
         if(!$array){
             $data['particulars_view']=null;
         }
-        $array['particulars']=mb_substr($array['particulars'],0,4);
         if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
         }else{
