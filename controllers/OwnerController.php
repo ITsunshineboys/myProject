@@ -428,8 +428,13 @@ class OwnerController extends Controller
 
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
         $waterway_ = BasisDecorationService::laborFormula($waterway_p,$waterway,$waterway_labor['univalence']);
-        $weak_ = BasisDecorationService::laborFormula($weak_p,$weak,$waterway_labor['univalence']);
-        $strong_ = BasisDecorationService::laborFormula($strong_p,$strong,$waterway_labor['univalence']);
+        var_dump($waterway_p);
+        var_dump($waterway);
+        var_dump($waterway_labor['univalence']);exit;
+        $weak_     = BasisDecorationService::laborFormula($weak_p,$weak,$waterway_labor['univalence']);
+        $strong_   = BasisDecorationService::laborFormula($strong_p,$strong,$waterway_labor['univalence']);
+
+
         $labor_all_cost['price'] = $waterway_ + $weak_ + $strong_;
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
         var_dump($labor_all_cost);exit;
