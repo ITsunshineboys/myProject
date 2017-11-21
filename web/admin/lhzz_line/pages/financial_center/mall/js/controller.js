@@ -773,7 +773,8 @@ angular.module('mall_finance', ['ui.bootstrap'])
             $rootScope.crumbs = [
                 {
                     name:'财务中心',
-                    icon:'icon-caiwu'
+                    icon:'icon-caiwu',
+                    link:$rootScope.finance_click
                 },{
                     name:'商城财务',
                     link:function () {
