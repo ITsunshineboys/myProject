@@ -455,6 +455,7 @@ class OwnerController extends Controller
                         $croom_strong_points = $one['count'] * ($post['bedroom'] - 1);
                     }
                     if ($one['title'] == '客厅'){
+                        var_dump($one);exit;
                         $hall_strong_points = $one['count'] * $post['hall'];
                     }
                     if ($one['title'] == '卫生间'){
@@ -465,11 +466,6 @@ class OwnerController extends Controller
                     }
                 }
                 $strong_count = $room_strong_points + $croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points;
-                var_dump($room_strong_points);
-                var_dump($croom_strong_points);
-                var_dump($hall_strong_points);
-                var_dump($toilet_strong_points);
-                var_dump($kitchen_strong_points);exit;
             }
         }
 
@@ -477,17 +473,6 @@ class OwnerController extends Controller
         $waterway_ = BasisDecorationService::laborFormula($waterway_count,$waterway,$waterway_labor['univalence']);
         $weak_     = BasisDecorationService::laborFormula($weak_count,$weak,$waterway_labor['univalence']);
         $strong_   = BasisDecorationService::laborFormula($strong_count,$strong,$waterway_labor['univalence']);
-        var_dump($waterway_count);
-        var_dump($weak_count);
-        var_dump($strong_count);
-        var_dump($strong);
-        var_dump($weak);
-        var_dump($waterway);
-        var_dump($waterway_labor['univalence']);
-        var_dump($strong_);
-        var_dump($weak_);
-        var_dump($waterway_);
-
 
         $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_);
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
