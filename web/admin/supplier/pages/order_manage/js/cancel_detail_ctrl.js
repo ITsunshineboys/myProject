@@ -2,14 +2,7 @@
  * Created by Administrator on 2017/9/25/025.
  */
 let cancel_detail = angular.module("cancel_detailModule", []);
-cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, $http, $stateParams) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
+cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _ajax, $stateParams) {
     $scope.tabflag = $stateParams.tabflag; //页面跳转
     console.log($scope.tabflag+'页面跳转flag');
     $scope.send = true;
@@ -59,20 +52,19 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, $htt
      * 商品详情
      * 收货详情*/
     function orderDetail() {
-        let url = baseUrl+"/order/getsupplierorderdetails";
         let data = {
             order_no: $stateParams.order_no,
             sku: +$stateParams.sku
         };
-        $http.post(url, data, config).then(function (res) {
-            $scope.order_detail = res.data.data.goods_data; //订单详情
-            $scope.goods_value = res.data.data.goods_value; //商品详情
-            $scope.receive_details = res.data.data.receive_details;//收货详情
-            $scope.is_refund = res.data.data.is_refund //是否有异常记录
-            $scope.is_platform = res.data.data.is_platform;//平台是否介入
+        _ajax.post("/order/getsupplierorderdetails", data, function (res) {
+            $scope.order_detail = res.data.goods_data; //订单详情
+            $scope.goods_value = res.data.goods_value; //商品详情
+            $scope.receive_details = res.data.receive_details;//收货详情
+            $scope.is_refund = res.data.is_refund; //是否有异常记录
+            $scope.is_platform = res.data.is_platform;//平台是否介入
             abnormalHandle();
             $scope.is_platform == 1?$scope.show_plat = false:platAbnormalHandle();//是否显示平台记录
-        })
+        });
     }
 
 
@@ -86,16 +78,15 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, $htt
         $scope.unreceived = false;
         $scope.is_refund == 1 ? $scope.show_abnormal = false : $scope.show_abnormal = true;
         if ($scope.is_refund == 2) {
-            let url = baseUrl+"/order/find-unusual-list";
             let data = {
                 order_no: $stateParams.order_no,
                 sku: $stateParams.sku
             };
-            $http.post(url, data, config).then(function (res) {
-                abnormal_result = res.data.data;
-                res.data.data[0] instanceof Array? $scope.unshipped=false:abnormalDetail('unshipped',0);
-                res.data.data[1] instanceof Array? $scope.unreceived=false:abnormalDetail('unreceived',1);
-            })
+            _ajax.post("/order/find-unusual-list", data, function (res) {
+                abnormal_result = res.data;
+                res.data[0] instanceof Array? $scope.unshipped=false:abnormalDetail('unshipped',0);
+                res.data[1] instanceof Array? $scope.unreceived=false:abnormalDetail('unreceived',1);
+            });
         }
     }
 
@@ -109,14 +100,13 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, $htt
     /*平台介入异常*/
     function platAbnormalHandle() {
        $scope.show_plat = true;//显示平台记录
-        let url = baseUrl+"/order/getplatformdetail";
         let data = {
             order_no: $stateParams.order_no,
             sku: $stateParams.sku
         };
-        $http.post(url, data, config).then(function (res) {
-            $scope.platforminfo = res.data.data;
-            $scope.handle_type = handle_type[Number(res.data.data.handle)]; //操作类型
-        })
+        _ajax.post("/order/getplatformdetail", data, function (res) {
+            $scope.platforminfo = res.data;
+            $scope.handle_type = handle_type[Number(res.data.handle)]; //操作类型
+        });
     }
-})
+});

@@ -2,15 +2,14 @@
  * Created by Administrator on 2017/9/15/015.
  */
 let ordermanage = angular.module("ordermanageModule", []);
-ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $stateParams, $state,_ajax) {
-    let time_type;
+ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $stateParams, $state,_ajax) {
     let tabflag;
     let allTableInit = {
         all_flag: allInit,
         waitpay_flag: waitpayInit,
         finish_flag: finishInit,
         cancel_flag: cancelInit,
-    }
+    };
 
     $rootScope.crumbs = [{
         name: '订单管理',
@@ -28,23 +27,14 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
 
     function totalNumber() {
         console.log('数字获取');
-        $http({
-            method: "get",
-            url: baseUrl+"/order/get-order-num",
-        }).then((res) => {
-            console.log(res);
-            $scope.listcount = res.data.data;
-        })
+        _ajax.get('/order/get-order-num', "", function (res) {
+            $scope.listcount = res.data;
+        });
     }
 
-
-
     /*选项卡数字获取*/
-    $http({
-        method: "get",
-        url: baseUrl+"/order/get-order-num",
-    }).then((res) => {
-        $scope.listcount = res.data.data;
+    _ajax.get('/order/get-order-num', "", function (res) {
+        $scope.listcount = res.data;
         if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag'){
             $scope.tabChange($stateParams.tabflag);
         }else if ($stateParams.tabflag=='waitpay_flag'||$stateParams.tabflag=='finish_flag'||$stateParams.tabflag=='cancel_flag') {
@@ -52,7 +42,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
         } else {
             $scope.tabFunc('all_flag');
         }
-    })
+    });
 
     /*选项卡切换方法*/
     $scope.tabChange = (obj) => {
@@ -103,7 +93,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
         $scope.cancel_flag = false;
         $scope[obj] = true;
         allTableInit[obj]();
-    }
+    };
 
 
     /*请求参数*/
@@ -125,8 +115,8 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
         currentPage: 1,
         onChange: function () {
             tableList();
-}
-    }
+        }
+    };
 
 
     /*表格Menu切换 开始*/
@@ -143,7 +133,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
         {name: '评论', value: true},
         {name: '详情', value: true},
         {name: '操作', value: true}
-    ]
+    ];
     /*表格Menu切换 结束*/
 
     /*全部列表*/
@@ -160,7 +150,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
             {name: '异常', value: true},
             {name: '评论', value: true},
             {name: '详情', value: true},
-            {name: '操作', value: true}]
+            {name: '操作', value: true}];
 
 
         /*参数初始化*/
@@ -193,7 +183,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
             {name: '异常', value: false},
             {name: '详情', value: true},
             {name: '操作', value: false}
-        ]
+        ];
         /*参数初始化*/
         $scope.pageConfig.currentPage = 1;
         $scope.keyword = '';
@@ -366,16 +356,10 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $http, $
     /*列表数据获取方法*/
     function tableList() {
         $scope.params.page = $scope.pageConfig.currentPage;
-        $http({
-            method: "get",
-            url: baseUrl+'/order/find-supplier-order-list',
-            params: $scope.params
-        }).then((res) => {
-            console.log(res);
+        _ajax.get('/order/find-supplier-order-list', $scope.params, function (res) {
             $scope.alltabledetail = res.data.data.details;
             $scope.pageConfig.totalItems = res.data.data.count;
-        })
-
+        });
     }
 
     /*
