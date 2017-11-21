@@ -88,7 +88,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                     $state.go('login')
                 } else if (res.code === 200 || res.code === 201 || res.code === 1068) {
                     if (typeof callback === 'function') {
-                        callback(res)
+                            callback(res)
                     }
                 } else {
                     alert(res.msg)
@@ -113,7 +113,7 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                     $state.go('login')
                 } else if (res.code === 200 || res.code === 1068 || res.code === undefined) {
                     if (typeof callback === 'function') {
-                        callback(res)
+                            callback(res)
                     }
                 } else {
                     alert(res.msg)

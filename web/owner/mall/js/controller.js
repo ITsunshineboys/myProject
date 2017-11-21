@@ -10,14 +10,12 @@ angular.module('all_controller', [])
         // $scope.baseUrl = '/'
          $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
-        $http.get(baseUrl + '/owner/homepage').then(function (response) {
-            $scope.recommend_list = response.data.data
-            console.log(response)
-        }, function (error) {
-            console.log(error)
+        _ajax.get('/owner/homepage',{},function (res) {
+            console.log(res)
+            $scope.recommend_list = res.data
         })
     })
-    .controller('nodata_ctrl', function ($q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
+    .controller('nodata_ctrl', function (_ajax,$q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
         console.log(JSON.parse(sessionStorage.getItem('materials')))
         $scope.ctrlScope = $scope
         //post请求配置
@@ -40,12 +38,10 @@ angular.module('all_controller', [])
         let tablePages = function () {
             console.log($scope.params)
             // $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
-            $http.get(baseUrl + '/mall/category-goods', {
-                params: $scope.params
-            }).then(function (res) {
+            _ajax.get('/mall/category-goods',$scope.params,function (res) {
                 console.log(res);
                 $scope.cur_replace_material = []
-                for (let [key, value] of res.data.data.category_goods.entries()) {
+                for (let [key, value] of res.data.category_goods.entries()) {
                     $scope.cur_replace_material.push({
                         id: value.id,
                         image: value.cover_image,
@@ -61,26 +57,17 @@ angular.module('all_controller', [])
                         subtitle: value.subtitle,
                         supplier_price: value.supplier_price,
                         title: value.title
-                        // shop_name: value.shop_name
                     })
                 }
-                // $scope.house_detail = res.data.model.details
                 $scope.Config.totalItems = $scope.cur_replace_material.length
-                $http.get(baseUrl + '/mall/category-brands-styles-series', {
-                    params: {
-                        category_id: $scope.params.category_id,
-                    }
-                }).then(function (res) {
+                _ajax.get('/mall/category-brands-styles-series',{
+                    category_id: $scope.params.category_id,
+                },function (res) {
                     console.log(res)
-                    $scope.all_goods_series = res.data.data.category_brands_styles_series.series
-                    $scope.all_goods_style = res.data.data.category_brands_styles_series.styles
-                    $scope.all_goods_brands = res.data.data.category_brands_styles_series.brands
-                    console.log($scope.all_goods_style)
-                }, function (error) {
-                    console.log(error)
+                    $scope.all_goods_series = res.data.category_brands_styles_series.series
+                    $scope.all_goods_style = res.data.category_brands_styles_series.styles
+                    $scope.all_goods_brands = res.data.category_brands_styles_series.brands
                 })
-            }, function (err) {
-                console.log(err);
             })
         };
         $scope.params = {
@@ -194,15 +181,14 @@ angular.module('all_controller', [])
             console.log($scope.cur_item)
         }
         console.log($scope.all_goods)
-        //请求后台数据
-        $http.get(baseUrl + '/owner/series-and-style').then(function (response) {
-            console.log(response)
-            $scope.stairs_details = response.data.data.show.stairs_details;//楼梯数据
-            $scope.series = response.data.data.show.series;//系列数据
-            $scope.style = response.data.data.show.style;//风格数据
+        //请求风格系列以及楼梯数据
+        _ajax.get('/owner/series-and-style',{},function (res) {
+            console.log(res)
+            $scope.stairs_details = res.data.show.stairs_details;//楼梯数据
+            $scope.series = res.data.show.series;//系列数据
+            $scope.style = res.data.show.style;//风格数据
             $scope.cur_series = $scope.series[0]//默认选择第一个系列
             $scope.cur_style = $scope.style[0]//默认选择第一个风格
-            // $scope.nowStairs = $scope.stairs_details[0].id//楼梯结构
             $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
@@ -215,8 +201,6 @@ angular.module('all_controller', [])
                     pagination: '.swiper-pagination',
                 })
             },0)
-        }, function (error) {
-            console.log(error)
         })
         if ($rootScope.fromState_name == 'modelRoom' && $rootScope.curState_name == 'nodata.cell_search') {
             $scope.have_header = false
@@ -267,15 +251,12 @@ angular.module('all_controller', [])
                 }
             }
         }
-        //一级、二级分类
-        $http.post(baseUrl + '/owner/classify', {}, config).then(function (response) {
-            console.log(response)
-            $scope.stair = response.data.data.pid.stair//一级
-            $scope.level = response.data.data.pid.level//二级
-        }, function (error) {
-            console.log(error)
+        //一级、二级分类数据请求
+        _ajax.post('/owner/classify',{},function (res) {
+            console.log(res)
+            $scope.stair = res.data.pid.stair//一级
+            $scope.level = res.data.pid.level//二级
         })
-
 
         /*无资料操作*/
         //修改了基础表单数据
@@ -401,20 +382,18 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
                 $scope.check_goods['path'] = $scope.cur_three_item.path
             }
-            $http.get(baseUrl + '/mall/goods-view', {
-                params: {
-                    id: +$scope.check_goods.id
-                }
-            }).then(function (response) {
-                console.log(response)
+            _ajax.get( '/mall/goods-view',{
+                id: +$scope.check_goods.id
+            },function (res) {
+                console.log(res)
                 if ($scope.cur_status == 1) {
                     $scope.cur_title = '更换'
-                    $scope.check_goods['name'] = response.data.data.goods_view.brand_name
+                    $scope.check_goods['name'] = res.data.goods_view.brand_name
                 } else if ($scope.cur_status == 2) {
                     $scope.cur_title = '添加'
-                    $scope.check_goods['name'] = response.data.data.goods_view.brand_name
+                    $scope.check_goods['name'] = res.data.goods_view.brand_name
                 }
-                $scope.sale_services = response.data.data.goods_view.after_sale_services
+                $scope.sale_services = res.data.goods_view.after_sale_services
                 $scope.aftermarket = []
                 $scope.protection = []
                 for(let [key,value] of $scope.sale_services.entries()){
@@ -424,30 +403,25 @@ angular.module('all_controller', [])
                         $scope.aftermarket.push(value)
                     }
                 }
-                $scope.description = response.data.data.goods_view.description
-                console.log($scope.description)
-                $scope.supplier = response.data.data.goods_view.supplier
+                $scope.description = res.data.goods_view.description
+                $scope.supplier = res.data.goods_view.supplier
                 $scope.cur_params = {
-                    code: response.data.data.goods_view.sku,
-                    title: response.data.data.goods_view.title,
-                    attrs: response.data.data.goods_view.attrs,
-                    left_number: response.data.data.goods_view.left_number,
-                    series_name: response.data.data.goods_view.series_name,
-                    style_name: response.data.data.goods_view.style_name
+                    code: res.data.goods_view.sku,
+                    title: res.data.goods_view.title,
+                    attrs: res.data.goods_view.attrs,
+                    left_number: res.data.goods_view.left_number,
+                    series_name: res.data.goods_view.series_name,
+                    style_name: res.data.goods_view.style_name
                 }
                 $('#myModal').modal('hide')
                 $timeout(function () {
                     $scope.have_header = false
                     $state.go('nodata.product_detail')
                 }, 300)
-                console.log(response)
-            }, function (error) {
-                console.log(error)
             })
         }
         //监听商品数量输入
         $scope.$watch('check_goods.quantity', function (newVal, oldVal) {
-            // onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
             if ($scope.cur_params != undefined) {
                 if (newVal === '0' || !(/(^[1-9]{1}\d{0,}$)|(^\s*$)/.test(newVal))) {
                     $scope.check_goods.quantity = 1
@@ -474,8 +448,6 @@ angular.module('all_controller', [])
             $scope.params.series_id = ''
             $scope.price_min = ''
             $scope.price_max = ''
-            // $scope.params.series_id = $scope.cur_goods_detail.series_id
-            // $scope.params.style_id = $scope.cur_goods_detail.style_id
             $scope.params['sort[]'] = 'sold_number:3'
             tablePages()
             $('#myModal').modal('hide')
@@ -494,9 +466,6 @@ angular.module('all_controller', [])
                     $scope.cur_header = $scope.cur_three_level
                     $state.go('nodata.all_goods')
                 }, 300)
-            // }, function (error) {
-            //     console.log(error)
-            // })
         }
         //较正式更换或者添加商品
         $scope.first_replace = function () {
@@ -506,8 +475,6 @@ angular.module('all_controller', [])
                 $scope.have_header = true
                 $scope.cur_header = $scope.cur_second_level
                 $scope.is_city = false
-                // $scope.cur_goods_detail['three_level'] = $scope.cur_three_id
-                // $scope.check_goods['three_level'] = $scope.cur_three_id
                 if ($scope.cur_status == 1) {//更换
                     $scope.check_goods.cost = $scope.check_goods.platform_price * $scope.check_goods.quantity
                     $scope.replaced_goods.push($scope.cur_goods_detail)
@@ -694,11 +661,6 @@ angular.module('all_controller', [])
                 $rootScope.goPrev()
             }
         }
-        //直接返回
-        // $scope.returnIntelligent = function () {
-        //    $scope.all_goods = $scope.cur_all_goods
-        //     $state.go('nodata.house_list')
-        // }
         // 保存返回
         $scope.save = function () {
             console.log($scope.all_goods)
@@ -795,20 +757,16 @@ angular.module('all_controller', [])
         $scope.go_three_item = function () {
             $scope.cur_status = 2
             $scope.cur_second_level = $scope.cur_header
-            $http.get(baseUrl + '/mall/categories-level3', {
-                params: {
-                    pid: $scope.cur_item.id
-                }
-            }).then(function (response) {
-                console.log(response)
+            _ajax.get('/mall/categories-level3',{
+                pid: $scope.cur_item.id
+            },function (res) {
+                console.log(res)
                 $scope.cur_header = $scope.cur_item.title
                 $scope.inner_first_level = $scope.cur_item.title
                 $scope.is_city = false
                 $scope.is_edit = false
-                $scope.all_three_level = response.data.categories_level3
+                $scope.all_three_level = res.categories_level3
                 $state.go('nodata.second_level')
-            }, function (error) {
-                console.log(error)
             })
         }
         //通过三级获取商品
@@ -1015,6 +973,7 @@ angular.module('all_controller', [])
                     value['count'] = 0
                     value['second_level'] = []
                 }
+                //生成材料数据(同步请求)
                 //弱电
                 $q.all([$http.get(baseUrl + '/owner/weak-current',{
                     params:data
@@ -1948,13 +1907,10 @@ angular.module('all_controller', [])
         $scope.$watch('toponymy', function (newVal, oldVal) {
             console.log(newVal)
             if (newVal != '') {
-                $http.get(baseUrl + '/owner/search', {
-                    params:{
-                        str: newVal
-                    }
-                }, config).then(function (response) {
-                    console.log(response)
-                    $scope.cur_all_house = response.data.data.list_effect
+                _ajax.get('/owner/search',{
+                    str: newVal
+                },function (res) {
+                    $scope.cur_all_house = res.data.list_effect
                     $scope.$watch('cur_all_house', function (newVal, oldVal) {
                         $scope.search_data = []//搜索出的小区
                         for (let [key, value] of response.data.data.list_effect.entries()) {
@@ -1967,9 +1923,29 @@ angular.module('all_controller', [])
                             })
                         }
                     })
-                }, function (error) {
-                    console.log(error)
                 })
+                // $http.get(baseUrl + '/owner/search', {
+                //     params:{
+                //         str: newVal
+                //     }
+                // }, config).then(function (response) {
+                //     console.log(response)
+                //     $scope.cur_all_house = response.data.data.list_effect
+                //     $scope.$watch('cur_all_house', function (newVal, oldVal) {
+                //         $scope.search_data = []//搜索出的小区
+                //         for (let [key, value] of response.data.data.list_effect.entries()) {
+                //             $scope.search_data.push({
+                //                 id: value.id,
+                //                 toponymy: value.toponymy,
+                //                 site_particulars: value.site_particulars,
+                //                 district_code: value.district_code,
+                //                 street: value.street
+                //             })
+                //         }
+                //     })
+                // }, function (error) {
+                //     console.log(error)
+                // })
             } else {
                 $scope.search_data = []
             }
@@ -2185,7 +2161,7 @@ angular.module('all_controller', [])
                         $state.go('nodata.house_list')
                     }
                 } else {
-                    $http.post(baseUrl + '/owner/handyman', {
+                    _ajax.post('/owner/handyman',{
                         'province': 510000,
                         'city': 510100,
                         '12_dismantle': +$scope.twelve_dismantle || 0,
@@ -2197,15 +2173,15 @@ angular.module('all_controller', [])
                         'area': $scope.area,
                         'series': (typeof $scope.cur_series === 'object') ? $scope.cur_series.id : $scope.cur_series,
                         'style': (typeof $scope.cur_style === 'object') ? $scope.cur_style.id : $scope.cur_style,
-                    }, config).then(function (response) {
+                    },function (res) {
                         console.log('杂工')
-                        console.log(response)
-                        $scope.cur_goods = response.data.data.total_material.material
-                        $scope.cur_worker = response.data.data.labor_cost
+                        console.log(res)
+                        $scope.cur_goods = res.data.total_material.material
+                        $scope.cur_worker = res.data.labor_cost
                         sessionStorage.setItem('cur_goods', JSON.stringify($scope.cur_goods))
                         //整合一级
                         for (let [key, value] of $scope.stair.entries()) {
-                            for (let [key1, value1] of response.data.data.total_material.material.entries()) {
+                            for (let [key1, value1] of res.data.total_material.material.entries()) {
                                 let cur_obj = {id: value.id, title: value.title, cost: 0, second_level: []}
                                 let cur_title = {title: value.title}
                                 console.log(value1.cost)
@@ -2218,7 +2194,7 @@ angular.module('all_controller', [])
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
-                                for (let [key2, value2] of response.data.data.total_material.material.entries()) {
+                                for (let [key2, value2] of res.data.total_material.material.entries()) {
                                     let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id && value2.cost != 0 &&
@@ -2227,11 +2203,10 @@ angular.module('all_controller', [])
                                     }
                                 }
                         }
-                        console.log(1111)
                         //整合三级
                         for (let [key, value] of  $scope.all_goods.entries()) {
                             for (let [key1, value1] of value.second_level.entries()) {
-                                for (let [key2, value2] of response.data.data.total_material.material.entries()) {
+                                for (let [key2, value2] of res.data.total_material.material.entries()) {
                                     let cur_obj = {id: value2.path.split(',')[2], title: value2.title, goods_detail: []}
                                     let cur_title = {title: value2.title}
                                     if (value2.path.split(',')[1] == value1.id && value2.path.split(',')[0] == value.id && value2.cost != 0 &&
@@ -2245,7 +2220,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of  $scope.all_goods.entries()) {
                             for (let [key1, value1] of value.second_level.entries()) {
                                 for (let [key2, value2] of value1.three_level.entries()) {
-                                    for (let [key3, value3] of response.data.data.total_material.material.entries()) {
+                                    for (let [key3, value3] of res.data.total_material.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
                                             image: value3.cover_image,
@@ -2291,8 +2266,8 @@ angular.module('all_controller', [])
                             }
                         }
                         //工人费用
-                        let cur_worker = {worker_kind: response.data.data.labor_cost.worker_kind}
-                        let cur_worker_price = response.data.data.labor_cost.price
+                        let cur_worker = {worker_kind: res.data.labor_cost.worker_kind}
+                        let cur_worker_price = res.data.labor_cost.price
                         if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
                                 JSON.stringify(cur_worker).length - 1)) == -1) {
                             $scope.all_workers.push({
@@ -2346,15 +2321,11 @@ angular.module('all_controller', [])
                             if (!!sessionStorage.getItem('huxingParams')) {
                                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
                             }
-                        } else {
+                        }else {
                             $scope.cur_header = '智能报价'
                             get_all_price()
                             $state.go('nodata.house_list')
                         }
-                        console.log($scope.all_workers)
-                        console.log($scope.all_goods)
-                    }, function (error) {
-                        console.log(error)
                     })
                 }
             }
