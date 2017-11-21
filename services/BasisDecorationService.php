@@ -157,9 +157,9 @@ class BasisDecorationService
      */
     public static function laborFormula($points,$labor,$day_points)
     {
-        $p  = empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
-        $l  = empty($labor)     ? $labor     : self::DEFAULT_VALUE['value1'];
-        $d  = empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
+        $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+        $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value1'];
+        $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
 var_dump($p);
 var_dump($l);
 var_dump($d);exit;
