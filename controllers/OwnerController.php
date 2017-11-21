@@ -417,6 +417,9 @@ class OwnerController extends Controller
         foreach ($points  as $p){
             if ($p['title'] == '水路'){
                 $waterway_p = $p['count'];
+                $id = $p['id'];
+                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>1],['pid'=>$id]])->all();
+                var_dump($_waterway);exit;
             }
             if ($p['title'] == '弱电'){
                 $weak_p = $p['count'];
