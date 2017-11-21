@@ -8,7 +8,9 @@
         <p class="col-md-2">申请时间</p>
         <p class="col-md-10">{{particulars_view.create_time}}</p>
         <p class="col-md-2">申请金额</p>
-        <p class="col-md-10">{{particulars_view.earnest}}</p>
+        <p class="col-md-10">{{particulars_view.earnest | currency:'￥'}}</p>
+        <p class="col-md-2">交易单号</p>
+        <p class="col-md-10">{{particulars_view.transaction_no}}</p>
     </div>
     <div class="row">
         <h3 class="col-md-12">户型信息</h3>
@@ -16,18 +18,27 @@
         <p class="col-md-10">{{particulars_view.toponymy}}</p>
         <p class="col-md-2">小区地址</p>
         <p class="col-md-10">{{particulars_view.address}}</p>
-        <p class="col-md-2">户型名称</p>
+        <p class="col-md-2">面积</p>
+        <p class="col-md-10">{{particulars_view.area}}m²</p>
+        <p class="col-md-2">户型</p>
         <p class="col-md-10">{{particulars_view.particulars}}</p>
         <p class="col-md-2">层高</p>
-        <p class="col-md-10">{{particulars_view.high}}</p>
+        <p class="col-md-10">{{particulars_view.high}}m</p>
         <p class="col-md-2">飘窗</p>
-        <p class="col-md-10">{{particulars_view.window}}</p>
+        <p class="col-md-10">{{particulars_view.window}}m</p>
         <p class="col-md-2">楼梯选择</p>
         <p class="col-md-10">{{particulars_view.stairway}}</p>
         <p class="col-md-2">系列</p>
         <p class="col-md-10">{{particulars_view.series}}</p>
         <p class="col-md-2">风格</p>
         <p class="col-md-10">{{particulars_view.style}}</p>
+    </div>
+    <div class="row">
+        <h3 class="col-md-12">智能报价</h3>
+        <p class="col-md-2">原价格</p>
+        <p class="col-md-10">{{particulars_view.original_price | currency:'￥'}}</p>
+        <p class="col-md-2">优惠后价格</p>
+        <p class="col-md-10">{{particulars_view.sale_price | currency:'￥'}}</p>
     </div>
     <div class="row" id="accordion2">
         <h3 class="col-md-12">材料信息</h3>
@@ -40,7 +51,7 @@
                 <p class="col-md-2">{{item1.brand}}</p>
                 <p class="col-md-2">总价：{{item1.price}}</p>
                 <p class="col-md-2">数量:{{item1.count}}</p>
-                <p class="col-md-2" style="color: #5677FC;">详情</p>
+                <p class="col-md-2" style="color: #5677FC;" ng-click="go_goods_detail(item1)">详情</p>
             </div>
         </div>
     </div>
