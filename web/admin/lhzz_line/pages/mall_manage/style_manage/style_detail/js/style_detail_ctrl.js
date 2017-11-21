@@ -11,12 +11,6 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
     }, {
         name: '风格详情页'
     }];
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    }
 	$scope.myng=$scope;
   $scope.change_txts=function () {
     if($scope.style_txt==undefined){
@@ -85,17 +79,12 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
   //删除图片
   $scope.del_img=function (item) {
     //判断图片列表是否为空
-    $http.post(baseUrl+'/site/upload-delete',{
-      file_path:item
-    },config).then(function (res) {
-      console.log(res);
-      $scope.img_list.splice($scope.img_list.indexOf(item),1);
-      if($scope.img_list==''){
-        $scope.img_flag='请上传图片';
-      }
-    },function (err) {
-      console.log(err);
-    });
+    _ajax.post('/site/upload-delete',{file_path:item},function (res) {
+        $scope.img_list.splice($scope.img_list.indexOf(item),1);
+        if($scope.img_list==''){
+            $scope.img_flag='请上传图片';
+        }
+    })
   };
   /*----------------------上传图片 结束-----------------------*/
 
