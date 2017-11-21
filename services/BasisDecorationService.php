@@ -506,6 +506,10 @@ class BasisDecorationService
 
 //            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
         $modelling_day = $modelling / $day_modelling * $series_one * $style_one;
+        var_dump($modelling);
+        var_dump($day_modelling);
+        var_dump($series_one);
+        var_dump($style_one);exit;
         return $modelling_day;
     }
 
