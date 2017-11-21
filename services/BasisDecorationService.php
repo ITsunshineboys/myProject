@@ -8,6 +8,7 @@
 namespace app\services;
 
 use app\models\EngineeringStandardCarpentryCoefficient;
+use app\models\EngineeringStandardCraft;
 use app\models\GoodsAttr;
 use app\models\ProjectView;
 use yii\helpers\Json;
@@ -650,6 +651,27 @@ class BasisDecorationService
             $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
         }
         return $pole_cost;
+    }
+
+    public static function carpentryBlockboard($goods,$post)
+    {
+        foreach ($goods as $one_goods){
+            if ($one_goods['title'] == '细木工板'){
+                $blockboard = $one_goods;
+            }
+        }
+        $a = EngineeringStandardCraft::find()
+            ->asArray()
+            ->where(['project'=>'木作'])
+            ->andWhere(['project_details'=>'电视墙用细木工板'])
+            ->andWhere(['district_code'=>$post['city']])
+            ->one();
+        if ($a){
+            $tv = $a['material'];
+        }else{
+            $tv = 1;
+        }
+        return 1;
     }
 
     /**
@@ -1811,7 +1833,7 @@ class BasisDecorationService
             return false;
         }
 
-        $material ['total_cost'] = $material_price['total_cost'];
+        $material ['total_cost'] = round($material_price['total_cost'],2);
         $material ['material'] [] = BasisDecorationService::profitMargin($wire);
         $material ['material'] []= BasisDecorationService::profitMargin($spool);
         $material ['material'] []= BasisDecorationService::profitMargin($bottom);
@@ -1843,7 +1865,7 @@ class BasisDecorationService
         if (!$ppr && !$pvc){
             return false;
         }
-        $material ['total_cost'][] = $material_price['total_cost'];
+        $material ['total_cost'][] = round($material_price['total_cost'],2);
         $material ['material'][] = BasisDecorationService::profitMargin($ppr);
         $material ['material'][] = BasisDecorationService::profitMargin($pvc);
         return $material;
