@@ -677,7 +677,6 @@ class OwnerController extends Controller
 
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
-        var_dump($labour_charges);exit;
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
 
         //材料

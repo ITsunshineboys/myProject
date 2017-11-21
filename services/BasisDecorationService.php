@@ -437,9 +437,6 @@ class BasisDecorationService
         if(!empty($modelling_day) && !empty($flat_day) ) {
             //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
             $artificial_fee = ceil($modelling_day + $flat_day + $video_wall) * $worker_day_cost;
-            var_dump(ceil($modelling_day + $flat_day + $video_wall));
-            var_dump($worker_day_cost);
-            exit;
         }
        return $artificial_fee;
     }
