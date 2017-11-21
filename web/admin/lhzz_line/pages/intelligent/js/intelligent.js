@@ -161,6 +161,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //上传一张图片
         $scope.upload = function (file) {
+            $scope.cur_house_information = {}
+            $scope.cur_image = ''
             console.log($scope.data)
             if (file != null) {
                 Upload.upload({
@@ -191,6 +193,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //上传几张图片
         $scope.arr_upload = function (file) {
             console.log($scope.all_drawing)
+            $scope.all_drawing = []
             if (file != null) {
                 Upload.upload({
                     url: '/site/upload',

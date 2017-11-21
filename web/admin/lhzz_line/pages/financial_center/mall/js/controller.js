@@ -229,8 +229,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
         }
         //返回前一页
         $scope.go_prev1 = function () {
-            // if($rootScope.curState_name == 'mall_finance.account_detail'){
-            //     $rootScope.fromState_name = 'mall_finance.account'
                 $rootScope.crumbs = [
                     {
                         name:'财务中心',
@@ -247,9 +245,6 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 ]
             tablePages2()
             $state.go('mall_finance.account')
-            // }else if($rootScope.curState_name == 'mall_finance.account_detail'){
-            //
-            // }
         }
         $scope.time_type = [
             {name: '全部时间', str: 'all'},
