@@ -459,19 +459,17 @@ class OwnerController extends Controller
 
                         $croom_strong_points = $one['count'] * $ciwoshi;
                     } elseif ($one['title'] == '客厅'){
-                        $hall_strong_points = $one['count'] * $post['hall'];
+                        $hall_strong_points = $one['count'] * ($post['hall']-1);
                     } elseif ($one['title'] == '卫生间'){
-                        $toilet_strong_points = $one['count'] * $post['toilet'];
+                        $toilet_strong_points = $one['count'] * ($post['toilet']-1);
                     } elseif ($one['title'] == '厨房'){
-                        $kitchen_strong_points = $one['count'] * $post['kitchen'];
+                        $kitchen_strong_points = $one['count'] * ($post['kitchen']-1);
                     }
                 }
 
                 $qita = 0;
                 foreach ($_waterway as $one_){
-                    if ($one_['title'] != '次卧室' && $one_['title'] != '客厅' && $one_['title'] != '卫生间' && $one_['title'] != '厨房'){
-                        $qita += $one_['count'];
-                    }
+                    $qita += $one_['count'];
                 }
                 $strong_count =$croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points + $qita;
                 var_dump($croom_strong_points);
