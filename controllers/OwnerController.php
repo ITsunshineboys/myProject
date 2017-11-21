@@ -146,6 +146,7 @@ class OwnerController extends Controller
         'waterproof_area'=> '防水面积',
         'putty_area'=> '腻子面积',
         'concave_length'=> '阴角线长度',
+        'latex_paint_area'=> '乳胶漆面积',
     ];
     /**
      * Actions accessed by logged-in users
@@ -775,10 +776,14 @@ class OwnerController extends Controller
         //客餐厅底漆面积
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
-        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
-        $apartment = Apartment::find()->asArray()->where(['min_area'=>$post['area']])->one();
+        $latex_paint_area = Apartment::find()
+            ->asArray()
+            ->where(['<=','min_area',$post['area']])
+            ->andWhere(['>=','max_area',$post['area']])
+            ->andWhere(['project_name'=>self::OTHER_AREA['latex_paint_area']])
+            ->one();
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
-        $primer_area = $bedroom_primer_area + $drawing_room_primer_area ;
+        $primer_area = $bedroom_primer_area + $drawing_room_primer_area + $latex_paint_area['project_value'];
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
         $primer_day = $primer_area / $primer;
 
