@@ -162,7 +162,7 @@ class BasisDecorationService
         $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
 
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        return (int)ceil(($p / $d)) * $l;
+        return $p / $d * $l;
     }
 
     /**

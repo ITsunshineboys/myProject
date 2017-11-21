@@ -413,11 +413,23 @@ class OwnerController extends Controller
             }
         }
 
-        $a = Points::find()->asArray()->select('title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
-        var_dump($a);exit;
-        $points = Points::findByOne($points_select,$points_where);
+        $points = Points::find()->asArray()->select('title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
+        foreach ($points  as $p){
+            if ($p['title'] == '水路'){
+                $waterway_p = $p['count'];
+            }
+            if ($p['title'] == '弱电'){
+                $weak_p = $p['count'];
+            }
+            if ($p['title'] == '强电'){
+                $strong_p = $p['count'];
+            }
+        }
 
-
+        //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
+        $labor_all_cost['price'] = BasisDecorationService::laborFormula($waterway_p,$waterway,$waterway_labor['univalence']);
+        var_dump($labor_all_cost);exit;
+        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //查询弱电所需要材料
         $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
@@ -439,9 +451,6 @@ class OwnerController extends Controller
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterway'], $post['city']);
 
-        //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
-        $labor_all_cost['price'] = BasisDecorationService::laborFormula($_points,$worker_price,$worker_ady_points);
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($points['count'], $waterway_current,$craft);
