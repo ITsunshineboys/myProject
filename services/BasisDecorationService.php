@@ -1548,7 +1548,6 @@ class BasisDecorationService
                 }else {
                     $marble = null;
                 }
-
             }
         }
 
@@ -1909,9 +1908,9 @@ class BasisDecorationService
      * @param $post
      * @return array
      */
-    public static function withoutAssortGoods($without_assort_goods_price,$assort_material,$post)
+    public static function withoutAssortGoods($goods,$assort_material,$post)
     {
-        foreach ($without_assort_goods_price as &$one){
+        foreach ($goods as &$one){
             foreach ($assort_material as $value){
                 if ($one['title'] == $value['material']){
                     $one['quantity'] =$value['quantity'];
@@ -1919,7 +1918,7 @@ class BasisDecorationService
                 }
             }
         }
-        foreach ($without_assort_goods_price as $goods_value){
+        foreach ($goods as $goods_value){
             if ($goods_value['series_id'] == $post['series'] && $goods_value['style_id'] == $post['style']){
                 $series_style_goods[] =  $goods_value;
             }elseif ($goods_value['series_id'] == $post['series'] && $goods_value['style_id'] == 0){
