@@ -589,9 +589,9 @@ class OwnerController extends Controller
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->one();
-        var_dump($kitchen_area);
-        var_dump($toilet_area);exit;
-        $total_area = $kitchen_area + $toilet_area + isset($apartment['project_value'])?$apartment['project_value']:1;
+        $qita = empty($apartment['project_value'])?$apartment['project_value']:1;
+        var_dump($qita);exit;
+        $total_area = $kitchen_area + $toilet_area + $qita;
 
 
 
