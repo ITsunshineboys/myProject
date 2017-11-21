@@ -3,7 +3,7 @@ banner_history.controller("banner_history_ctrl", function ($rootScope,$scope, $h
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
+        link: $rootScope.mall_click
     }, {
         name: 'APP推荐位-banner管理',
         link: 'banner_recommend',

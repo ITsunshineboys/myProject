@@ -455,9 +455,10 @@ Nav tabs
 
 /*子菜单*/
 .nav_box dl dd {
+    /*display: none;*/
     height: 30px;
     background-color: #F5F7FA;
-    padding-left: 41px;
+    padding-left: 40px;
     cursor: pointer;
 }
 
@@ -618,4 +619,12 @@ Nav tabs
 /* 手形鼠标 */
 .pointer {
     cursor: pointer;
+}
+
+/*dd*/
+.n_display{
+    display: none;
+}
+.y_display{
+    display: block;
 }
