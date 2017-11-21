@@ -363,12 +363,15 @@ class Effect extends ActiveRecord
                 ->select('title')
                 ->where(['id'=>$value['first_cate_id']])
                 ->asArray()->one()['title'];
-            unset($value['id']);
+
+
             unset($value['effect_id']);
             unset($value['goods_id']);
 
         }
+
         $material_grop=self::array_group_by($material,'first_cate_id');
+        $material_grop=array_values($material_grop);
         $data['material']=$material_grop;
 
         return $data;
