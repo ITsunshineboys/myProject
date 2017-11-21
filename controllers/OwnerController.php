@@ -1135,9 +1135,13 @@ class OwnerController extends Controller
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
 
         var_dump($floor_tile_price);
-        var_dump($floor_tile_attr);exit;
+        var_dump($floor_tile_attr);
         foreach ($floor_tile_price as &$one_goods){
             foreach ($floor_tile_attr as $goods_id){
+                if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房')
+                {
+                    var_dump($one_goods);exit;
+                }
                 switch ($one_goods){
                     case $one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房':
                         $one_goods_price['quantity'] = $kitchen_wall_brick_cost['quantity'];
