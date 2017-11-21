@@ -1082,6 +1082,9 @@ class OwnerController extends Controller
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
 
         $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
+        var_dump($goods);
+        var_dump($wall_brick);
+        exit;
         if ($wall_brick == null){
             $code = 1061;
             return Json::encode([
