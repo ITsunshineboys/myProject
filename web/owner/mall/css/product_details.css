@@ -28,7 +28,7 @@
 }
 .main .details_banner img{
     width:100%;
-    /*height: 15rem;*/
+    height: 100%;
 }
 .main .intro_box {
     width: auto;
@@ -63,12 +63,6 @@
     border-bottom: 1px solid #e5e5e5;
     padding: 1.2rem 1.2rem 1.2rem 0;
 }
-/*.main .standard >div:nth-child(1){*/
-    /*position: absolute;*/
-    /*left:0;*/
-    /*top:0;*/
-    /*z-index: 10;*/
-/*}*/
 .img_size{
     width: .8rem!important;
     /*margin-left: .2rem!important;*/
@@ -189,7 +183,7 @@
     height: 3rem;
     overflow: hidden;
     border-radius: .3rem;
-    background: #e5e5e5;
+    /*background: #e5e5e5;*/
     display: inline-block;
     margin: 1.2rem 0 0 1.2rem;
 }
