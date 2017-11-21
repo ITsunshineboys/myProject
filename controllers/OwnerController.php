@@ -1735,6 +1735,7 @@ var_dump($have_assort);exit;
                         $case_works_datum['quantity']              = $case_works_datum['goods_quantity'];
                         $case_works_datum['image']                 = $one_goods['cover_image'];
                         $case_works_datum['goods_name']            = $one_goods['goods_name'];
+                        $case_works_datum['unit_price']            = $cost;
 
                     }
                 }
