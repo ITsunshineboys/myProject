@@ -1082,9 +1082,6 @@ class OwnerController extends Controller
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
 
         $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
-        var_dump($goods);
-        var_dump($wall_brick);
-        exit;
         if ($wall_brick == null){
             $code = 1061;
             return Json::encode([
@@ -1158,6 +1155,12 @@ class OwnerController extends Controller
                 }
             }
         }
+        foreach ($wall_brick_max as &$max_){
+            $max_['quantity'] = $wall_brick_cost['quantity'];
+            $max_['cost'] = $wall_brick_cost['cost'];
+            $material_total['material'][] = $max_;
+        }
+        var_dump($material_total);exit;
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($toilet_goods);
