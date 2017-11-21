@@ -18,7 +18,7 @@ var shop_style= angular.module("freight_template",[])
         $scope.cityList = [];  // 省份
         $scope.city = [];   // 城市
         $scope.selectCity = []; // 选中的城市
-        $scope.packageMail = true; // 默认不包邮
+        $scope.hidden_way = true; // 默认不包邮
         $scope.params = {
             name: '',    // 同一商家模板名称不能重复
             delivery_method:  0 ,   // 0：快递物流，1；送货上门
@@ -193,22 +193,22 @@ var shop_style= angular.module("freight_template",[])
 
         // 保存物流模板详情
         $scope.getReally = function () {
-            console.log(cityChecked);
-            if($scope.params.name === ''){
+            // debugger;
+            if($scope.params.name == ''){
                 alert('请输入模板名称');
                 return
             }
-            if(cityChecked.length === 0){
+            if(cityChecked.length == 0){
                 alert('请选择地区');
                 return
             }
-            if ($scope.params.delivery_method === 0) {
-                if ($scope.packageMail) {
-                    if ($scope.freight.cost_default === '' || $scope.freight.number_default === '') {
+            if ($scope.params.delivery_method == 0) {
+                if ($scope.hidden_way) {  // 不包邮
+                    if ($scope.freight.cost_default == '' || $scope.freight.number_default == '') {
                         alert("请将默认运费信息填写完整");
                         return
                     }
-                    if ($scope.freight.cost_delta === '' || $scope.freight.number_delta === '') {
+                    if ($scope.freight.cost_delta == '' || $scope.freight.number_delta == '') {
                         alert("请将增加件信息填写完整");
                         return
                     }
@@ -216,13 +216,13 @@ var shop_style= angular.module("freight_template",[])
                     $scope.params.delivery_number_default = $scope.freight.number_default; // 默认运费对应商品数量
                     $scope.params.delivery_cost_delta = $scope.freight.cost_delta * 100; // 增加件运费
                     $scope.params.delivery_number_delta = $scope.freight.number_delta; // 增加件运费对应商品数量
-                } else {
+                } else { //包邮
                     $scope.params.delivery_cost_default = 0;
                     $scope.params.delivery_number_default = 0;
                     $scope.params.delivery_cost_delta = 0;
                     $scope.params.delivery_number_delta = 0;
                 }
-            } else {
+            } else {  //送货上门
                 $scope.params.delivery_cost_default = 0;
                 $scope.params.delivery_number_default = 0;
                 $scope.params.delivery_cost_delta = 0;
