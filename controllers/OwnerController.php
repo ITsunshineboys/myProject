@@ -1155,9 +1155,6 @@ class OwnerController extends Controller
                 }
             }
         }
-        var_dump($floor_tile_price);
-        var_dump($floor_tile_attr);
-        exit;
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($toilet_goods);
