@@ -157,12 +157,12 @@ class BasisDecorationService
      */
     public static function laborFormula($points,$labor,$day_points)
     {
-        $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
-        $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value1'];
-        $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
+        $p  = empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+        $l  = empty($labor)     ? $labor     : self::DEFAULT_VALUE['value1'];
+        $d  = empty($day_points)? $day_points: self::DEFAULT_VALUE['value2'];
 
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        return $p / $d * $l;
+        return ($p / $d) * $l;
     }
 
     /**
