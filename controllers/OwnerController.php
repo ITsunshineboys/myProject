@@ -671,17 +671,12 @@ class OwnerController extends Controller
 
         // 造型长度 //造型天数 //平顶天数
         $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$post['series']);
-
         $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$_modelling,$post['series'],$post['style']);
-
+        var_dump($modelling_day);exit;
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $_flat,$post['series'],$post['style']);
 
 
         //人工费
-        var_dump($modelling_day);
-        var_dump($flat_day);
-        var_dump($worker_price);
-        exit;
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
 
