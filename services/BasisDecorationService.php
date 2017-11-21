@@ -522,7 +522,7 @@ class BasisDecorationService
     public static function flatDay($area,$day_area,$series = 1,$style = 1)
     {
         //平顶面积
-        $flat_area = $area['flat_area'];
+        $flat_area = $area['modelling_length'];
 
         $series_ = EngineeringStandardCarpentryCoefficient::find()
             ->where(['and',['series_or_style'=>0],['coefficient'=>3]])
