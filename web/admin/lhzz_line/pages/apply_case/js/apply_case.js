@@ -145,6 +145,10 @@ angular.module('apply_case',[])
                     })
                 })
             }
+            //跳转商品详情
+            $scope.go_goods_detail = function (item) {
+                console.log(item)
+            }
             //返回前页
             $scope.go_index = function () {
                 $rootScope.crumbs = [

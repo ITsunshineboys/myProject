@@ -816,6 +816,11 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages1()
             }
         })
+        //跳转订单详情
+        $scope.go_list_detail = function (item) {
+            console.log(item)
+            $state.go('order_details',{orderNo:item.order_no,sku:item.sku})
+        }
         //商家提现管理详情返回
         $scope.go_prev = function () {
             $scope.submitted = false
