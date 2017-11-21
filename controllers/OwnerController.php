@@ -413,7 +413,7 @@ class OwnerController extends Controller
             }
         }
 
-        $points = Points::find()->asArray()->select('title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
+        $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
         foreach ($points  as $p){
             if ($p['title'] == '水路'){
                 $waterway_p = $p['count'];
