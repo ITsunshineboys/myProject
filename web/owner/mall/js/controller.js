@@ -1725,7 +1725,6 @@ angular.module('all_controller', [])
                         }
                         console.log($scope.all_goods)
                         console.log($scope.all_workers)
-                        $scope.show_material = true
                     })]).then(function () {//计算总费用
                     $q.all([
                         //泥作
@@ -1827,6 +1826,7 @@ angular.module('all_controller', [])
                         })
                     ]).then(function () {
                         get_all_price()
+                        $scope.show_material = true
                     })
                 })
 
