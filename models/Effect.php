@@ -302,6 +302,7 @@ class Effect extends ActiveRecord
         $data['quote']=[
             ['name'=>'原价', 'vaule'=>$array['original_price']],
             [ 'name'=>'优惠后价格', 'vaule'=>$array['sale_price']],
+            ['name'=>'','vaule'=>'（包含工人费用，不包含设计图纸费用）'],
             ['name'=>'保存时间','value'=>$array['add_time']]
         ];
 
