@@ -1133,7 +1133,7 @@ class OwnerController extends Controller
 //        客厅地砖费用
         $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
         $hall_wall_brick_cost['cost'] = $hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'];
-var_dump($kitchen_wall_brick_cost);exit;
+
         foreach ($goods_price as &$one_goods){
             foreach ($floor_tile_attr as $goods_id){
                 switch ($one_goods){
@@ -1155,6 +1155,9 @@ var_dump($kitchen_wall_brick_cost);exit;
                 }
             }
         }
+        var_dump($goods_price);
+        var_dump($floor_tile_attr);
+        exit;
         $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
         $material_total['material'][] = BasisDecorationService::profitMargin($toilet_goods);
