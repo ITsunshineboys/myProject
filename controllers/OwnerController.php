@@ -544,14 +544,14 @@ class OwnerController extends Controller
 
         $toilet_area = BasisDecorationService::waterproofArea($_toilet_area,$_toilet_height, $post['area'], $post['toilet']);
         //总面积
-//        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'].' and project_name='.self::OTHER_AREA['waterproof_area'];
         $apartment = Apartment::find()
             ->asArray()
-            ->where(['min_area'=>$post['area']])
-            ->andWhere(['max_area'=>$post['area']])
+            ->where(['<=','min_area',$post['area']])
+            ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->one();
         $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
+        var_dump($apartment);exit;
 
 
         //当地工艺
@@ -774,8 +774,8 @@ class OwnerController extends Controller
         //客餐厅底漆面积
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
-//        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
-//        $apartment = Apartment::find()->asArray()->where($apartment_where)->one();
+        $apartment_where = 'min_area <='.$post['area'] .' and max_area >='.$post['area'];
+        $apartment = Apartment::find()->asArray()->where(['min_area'=>$post['area']])->one();
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area + $drawing_room_primer_area ;
 //        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
