@@ -1104,7 +1104,6 @@ class OwnerController extends Controller
             ]);
         }
         $floor_tile_price = BasisDecorationService::priceConversion($floor_tile);
-        var_dump($floor_tile_price);exit;
         $floor_tile_attr = BasisDecorationService::floorTile($floor_tile_price);
 
 
