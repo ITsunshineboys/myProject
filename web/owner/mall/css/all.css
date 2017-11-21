@@ -111,4 +111,7 @@ header .cur_location span{
     font-size: 1.2rem;
     color: #333;
 }
+.filter_color{
+    color: #222;
+}
 /*header end*/
