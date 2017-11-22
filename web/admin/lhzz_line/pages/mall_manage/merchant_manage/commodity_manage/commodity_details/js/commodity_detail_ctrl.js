@@ -25,7 +25,6 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         purchase_price_designer:$scope.purchase_price_designer
     }
 
-    console.log($rootScope);
 
     $rootScope.fromState_name=='commodity.online'?  $scope.online_btn = true:$scope.online_btn = false;
     $rootScope.fromState_name=='commodity.offline'? $scope.offline_btn = true:$scope.offline_btn = false;
