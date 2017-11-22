@@ -711,9 +711,9 @@ class OwnerController extends Controller
         $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
 //        //木工板
         $blockboard = BasisDecorationService::carpentryBlockboard($goods_price,$post);
-        var_dump($blockboard);exit;
+
         //材料费用
-        $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']);
+        $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']) + $blockboard['cost'];
         $material_total = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost);
 
         return Json::encode([
