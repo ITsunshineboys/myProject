@@ -1144,12 +1144,12 @@ class QuoteController extends Controller
         }
 
 
-        $code = 200;
-        return Json::encode([
-            'code' => $code,
-            'msg'  => 'ok',
-            'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
-        ]);
+//        $code = 200;
+//        return Json::encode([
+//            'code' => $code,
+//            'msg'  => 'ok',
+//            'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
+//        ]);
     }
 
     /**
