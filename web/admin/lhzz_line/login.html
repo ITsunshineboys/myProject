@@ -17,11 +17,11 @@
         <p class="logo_txt">艾特生活</p>
         <!--手机号-->
         <div class="margin_top">
-            <input type="text" placeholder="账号" class="enter_input enter_input_one"  ng-model="my_username" ng-class="{'border_red':error_flag}">
+            <input type="text" placeholder="账号" class="enter_input enter_input_one"  ng-model="username">
         </div>
         <!--密码-->
         <div>
-            <input type="password"  placeholder="密码" class="enter_input enter_input_two"  ng-model="my_password" ng-class="{'border_red':error_flag}">
+            <input type="password"  placeholder="密码" class="enter_input enter_input_two"  ng-model="password">
         </div>
         <p class='error_red' ng-if="error_flag" ng-bind="error_txt"></p>
         <button class="login_btn btn-info" ng-disabled="isLoading"  ng-click="login()">

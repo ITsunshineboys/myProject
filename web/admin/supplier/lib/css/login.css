@@ -98,9 +98,7 @@ html,body{
   border-radius: 3px;
   padding: 1px;
 }
-.border_red{
-  border: 1px solid #E51C23;
-}
+
 .prompt_txt{
   color:#E51C23;
   margin-top: 5px;
