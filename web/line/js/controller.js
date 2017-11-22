@@ -600,6 +600,14 @@ angular.module("all_controller", ['ngCookies'])
         $scope.id=$stateParams.id;
         $scope.datailsShop = $stateParams.datailsShop;
         $scope.mall_id = $stateParams.mall_id;
+        $scope.activeTab = $stateParams.activeTab;
+        console.log($scope.activeTab);
+
+        if($scope.activeTab != undefined){
+            sessionStorage.setItem('activeTab',$scope.activeTab)
+        }else {
+            sessionStorage.removeItem('activeTab')
+        }
         $scope.shop_goods = '';
 
         $http({
@@ -741,7 +749,8 @@ angular.module("all_controller", ['ngCookies'])
     //店铺首页和全部商品
     .controller("shop_front_ctrl", function ($rootScope,$scope,$http,$state,$stateParams) {  //首页控制器
         $rootScope.baseUrl = baseUrl;
-        let vm = $scope.vm = {};
+        $scope.vm = {activeTab:1};
+
         window.addEventListener("hashchange", function() {
             // 注册返回按键事件
             $('.modal-backdrop').remove();
@@ -760,6 +769,24 @@ angular.module("all_controller", ['ngCookies'])
                 return $.param(data)
             }
         };
+        $(document).ready(function(){
+            var p=0,t=0;
+            $(window).scroll(function(e){
+                p = $(this).scrollTop();
+                if(t<=p){//下滚
+                    if(p >= 226 ){
+                        $('.list_tab').addClass('fixed_tab')
+                        $('.memo_pad').addClass('fixed_memo')
+                    }
+                }else{ //上滚
+                    if(p <= 225 ){
+                        $('.list_tab').removeClass('fixed_tab');
+                        $('.memo_pad').removeClass('fixed_memo')
+                    }
+                }
+                setTimeout(function(){t = p;},0);
+            });
+        });
         //获取商品列表
         $scope.id  = $stateParams.id;
         $scope.pid = $stateParams.pid;
@@ -829,7 +856,7 @@ angular.module("all_controller", ['ngCookies'])
         // 点击全部商品跳转到商品详情页面
         $scope.allGetProdouct = function (item) {
             $scope.mall_id = item.id;
-            $state.go("product_details",{mall_id:$scope.mall_id})
+            $state.go("product_details",{mall_id:$scope.mall_id,activeTab:2})
         };
         // 点击上下排序
         //价格排序
@@ -882,7 +909,20 @@ angular.module("all_controller", ['ngCookies'])
             });
         };
 
-
+        // 销量优先
+        $scope.filterPar = function () {
+            console.log(11);
+            $http({
+                method: 'get',
+                url: baseUrl+'/supplier/goods',
+                params:{
+                    supplier_id:+$scope.supplier_id,
+                    "sort[]":"sold_number:3"
+                }
+            }).then(function successCallback(response) {
+                $scope.supplier_goods = response.data.data.supplier_goods;
+            });
+        };
         // 店铺简介
         $http({
             method: 'get',
@@ -903,6 +943,10 @@ angular.module("all_controller", ['ngCookies'])
             $scope.delivery_service_score = response.data.data.supplier_view.delivery_service_score; //配送服务
             $scope.quality_guarantee_deposit = response.data.data.supplier_view.quality_guarantee_deposit; //资质
         });
+        if(sessionStorage.getItem('activeTab') != null){
+            $scope.vm.activeTab = 2
+        }
+        console.log($scope.vm);
         // 点击跳转到首页
         $scope.getHome = function () {
             $state.go("home")
@@ -959,12 +1003,10 @@ angular.module("all_controller", ['ngCookies'])
         };
         // 切换个人和单位
         $scope.choosePersonal = function () { //个人
-            console.log('个人');
             $scope.choose_personal = true;
             $scope.choose_company  = false;
         };
         $scope.chooseCompany = function () { //单位
-            console.log('单位');
             $scope.choose_personal = true;
             $scope.choose_company  = true;
         };
@@ -989,14 +1031,14 @@ angular.module("all_controller", ['ngCookies'])
                     },config).then(function (response) {
                         console.log(response);
                         $scope.invoice_id = response.data.data.invoice_id;
+                        let invoiceObj = { // 保存
+                            invoice_id: $scope.invoice_id,
+                            invoice_content: $scope.invoice_name
+                        };
+                        sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
-                        let invoiceObj = { // 保存
-                            invoice_id: $scope.invoice_id,
-                            invoice_content: $scope.invoice_names
-                        };
-                        sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                         setTimeout(function () {
                             $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
                                 harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
@@ -1022,10 +1064,8 @@ angular.module("all_controller", ['ngCookies'])
                 if($scope.invoice_name != '' && $scope.invoice_number != '' && !numMap.test($scope.invoice_number)){
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '请填写正确的纳税人识别号'
-
                 }
                 if($scope.invoice_name != '' && $scope.invoice_number != '' && numMap.test($scope.invoice_number) ){
-
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '保存成功';
                     // 添加发票接口
@@ -1038,14 +1078,14 @@ angular.module("all_controller", ['ngCookies'])
                     },config).then(function (response) {
                         console.log(response);
                         $scope.invoice_id = response.data.data.invoice_id;
-                    });
-                    $scope.jumpOrder = function () {
                         let invoiceObj = { // 保存
                             invoice_id: $scope.invoice_id,
                             invoice_content: $scope.invoice_name,
                             invoicer_card: $scope.invoice_number
                         };
                         sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
+                    });
+                    $scope.jumpOrder = function () {
                         setTimeout(function () {
                             $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
                                 harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
