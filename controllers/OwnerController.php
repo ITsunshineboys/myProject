@@ -1452,19 +1452,16 @@ class OwnerController extends Controller
                     }
                 }
             }
-var_dump($goods);exit;
-            foreach ($post['list'] as &$default){
-                if ($default['goods_price'] != 0 || $default['goods_price'] != null){
-                    $default['goods_price'] = $default['goods_price'] * 1;
-                }
-//                if (empty($default['goods_price'])){
-//                    $default['goods_price'] = $default['price'] * 1;
-//                }
-            }
 
+//            foreach ($goods as &$default){
+//                    $default['goods_price'] = $default['goods_price'] * 1;
+////                if (empty($default['goods_price'])){
+////                    $default['goods_price'] = $default['price'] * 1;
+////                }
+//            }
             $special_offer = 0;
             $total_prices = 0;
-            foreach ($post['list'] as $price){
+            foreach ($goods as $price){
                 $total_prices += $price['price'];
                 $special_offer += $price['goods_price'];
 
