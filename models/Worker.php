@@ -151,11 +151,12 @@ class Worker extends \yii\db\ActiveRecord
         $query=new Query();
         $array=$query
             ->from('worker as w')
-            ->select('w.examine_status,w.icon,w.nickname,w.comprehensive_score,wr.rank_name,u.aite_cube_no')
+            ->select('w.nickname,w.icon,w.worker_type_id,w.examine_status,w.comprehensive_score,wr.rank_name,u.aite_cube_no')
             ->leftJoin('user as u','w.uid=u.id')
             ->leftJoin('worker_rank as wr','wr.id=w.level')
             ->where(['w.uid'=>$uid])
             ->one();
+            $array['worker_type_id']=WorkerType::gettype($array['worker_type_id']);
             $array['examine_status']=self::STATUSES[$array['examine_status']];
             $array['worker_no']=$array['aite_cube_no'];
         if(!$array){
