@@ -19,7 +19,8 @@ app.service('_ajax', function ($http, $state) {
                     callback(res)
                 }
             }else {
-                alert(res.msg)
+                console.log(response)
+                // alert(res.msg)
             }
         }, function (response) {
             console.log(response.statusText);

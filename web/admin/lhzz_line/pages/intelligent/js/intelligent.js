@@ -2523,7 +2523,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                     $scope.process_list = [arr1, arr2, arr3]
                 } else if (item.project == '木作') {
-                    let arr4 = [], arr5 = [], arr6 = []
+                    let arr4 = [], arr5 = [], arr6 = [],arr9=[]
                     _ajax.get('/quote/project-norm-woodwork-list',{},function (res) {
                         console.log(res)
                         $scope.cur_norm = res.specification.find_specification
@@ -2532,8 +2532,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             arr2 = angular.copy(res.series),
                             arr3 = angular.copy(res.series),
                             arr7 = angular.copy(res.style),
-                            arr8 = angular.copy(res.style),
-                            arr9 = angular.copy(res.style)
+                            arr8 = angular.copy(res.style)
                         //系列
                         for (let [key, value] of res.coefficient.entries()) {
                             for (let [key1, value1] of arr1.entries()) {
@@ -2710,8 +2709,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             })
                         } else {
                             arr.push({
-                                project: value1.series,
-                                // value: value1.value,
+                                // project: value1.series,
+                                value: value1.value,
                                 add_id:value1.id,
                                 coefficient: value1.coefficient,
                                 series_or_style: value1.series_or_style
@@ -2728,8 +2727,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             })
                         } else {
                             arr.push({
-                                project: value1.style,
-                                // value: value1.value,
+                                // project: value1.style,
+                                value: value1.value,
                                 add_id:value1.id,
                                 coefficient: value1.coefficient,
                                 series_or_style: value1.series_or_style
