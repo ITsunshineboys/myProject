@@ -100,6 +100,15 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
         foreach ($supIds as $supId)
         {
+//            $supplier=Supplier::find()
+//                ->select(['shop_name'])
+//                ->where(['id'=>$supId])
+//                ->one();
+//            if (!$supplier)
+//            {
+//                $code=1000;
+//                return $code;
+//            }
             $mix[]=[
                 'shop_name'=>Supplier::find()
                     ->select(['shop_name'])
