@@ -664,6 +664,8 @@ class BasisDecorationService
 
     public static function carpentryBlockboard($goods,$post)
     {
+
+        var_dump($goods);exit;
         foreach ($goods as $one_goods){
             if ($one_goods['title'] == '细木工板'){
                 $blockboard = $one_goods;
