@@ -54,7 +54,7 @@ class OwnerController extends Controller
     const STRING_MATERIAL = ['电线', '线管', '底盒'];
     const WATERWAY_MATERIAL = ['PPR水管', 'PVC管'];
     const WATERPROOF_MATERIAL = ['防水涂料'];
-    const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆','木工板'];
+    const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆','细木工板'];
     const LATEX_MATERIAL = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
     const TILER_MATERIAL = ['水泥', '自流平', '河沙'];
     const BACKMAN_MATERIAL = ['水泥','河沙','空心砖'];
