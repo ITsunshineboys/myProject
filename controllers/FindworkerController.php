@@ -92,7 +92,8 @@ class FindworkerController extends Controller{
                 $parent[]=[
                       'image'=>$parents[$i]['image'],
                       'id'=>$parents[$i]['id'],
-                      $parents[$i]['worker_name']=>$data[$i],
+                      'worker_type_label'=>$data[$i],
+                    'parent_name'=>$parents[$i]['worker_name']
                   ];
             }
         return Json::encode([
@@ -157,23 +158,23 @@ class FindworkerController extends Controller{
      * 获取某项工艺的价格
      * @return string
      */
-    public function actionGetCraftprice(){
-        $code=1000;
-
-        $craft_id=(int)trim(\Yii::$app->request->get('craft_id',''),'');
-        if (!$craft_id) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $data = WorkerOrderItem::craftprice($craft_id);
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'data' => $data
-        ]);
-    }
+//    public function actionGetCraftprice(){
+//        $code=1000;
+//
+//        $craft_id=(int)trim(\Yii::$app->request->get('craft_id',''),'');
+//        if (!$craft_id) {
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $data = WorkerOrderItem::craftprice($craft_id);
+//        return Json::encode([
+//            'code' => 200,
+//            'msg' => 'ok',
+//            'data' => $data
+//        ]);
+//    }
 
     /**
      *根据条目id 获取子条目+工艺
@@ -200,7 +201,7 @@ class FindworkerController extends Controller{
             ]);
         }
     /**
-     * 用户下单详情-工种
+     * 用户下单详情-工种-可用
      * @return string
      */
     public function actionWorkerOrderView(){
@@ -319,60 +320,30 @@ class FindworkerController extends Controller{
 
     }
 
-    /**
-     *add home images
-     *@return string
-     */
-    public function actionAddHomeimages()
-    {
-        $user_id = \Yii::$app->user->identity;
-        $code=1052;
-        if(!$user_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' =>\ Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $files=FileService::uploadMore();
-            if (is_numeric($files)){
-                $code=$files;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }else{
-                return Json::encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-                    'data'=>$files
-                ]);
-            }
-    }
-
-    /**
-     * 计算出需要的天数
-     * @param $home_info
-     * @return string
-     */
-    public static function getOrderNeedTime($array)
-    {
-        $sum = 0;
-        $code = 1000;
-        $keys = array_keys($array);
-        foreach ($keys as $k => &$key) {
-
-            if (preg_match('/(area)/', $key, $m)) {
-                if ($array[$key] > 200) {
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $sum += $array[$key];
-            }
-        }
-        return  ceil($sum / 12 + 1);
-    }
+//    /**
+//     * 计算出需要的天数
+//     * @param $home_info
+//     * @return string
+//     */
+//    public static function getOrderNeedTime($array)
+//    {
+//        $sum = 0;
+//        $code = 1000;
+//        $keys = array_keys($array);
+//        foreach ($keys as $k => &$key) {
+//
+//            if (preg_match('/(area)/', $key, $m)) {
+//                if ($array[$key] > 200) {
+//                    return Json::encode([
+//                        'code' => $code,
+//                        'msg' => \Yii::$app->params['errorCodes'][$code]
+//                    ]);
+//                }
+//                $sum += $array[$key];
+//            }
+//        }
+//        return  ceil($sum / 12 + 1);
+//    }
     /**
      * 工人个人中心
      * @return string
@@ -387,12 +358,11 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker_info=User::find()->where(['id'=>$user_id->getId()])->one();
+        $worker=Worker::find()->where(['uid'=>$user_id])->select('nickname,uid,balance,status')->asArray()->one();
         $worker['monthly_income']=Worker::worker_monthly_income($user_id->getId());
         $worker['aite_cube_no']=$worker_info->aite_cube_no;
-        $worker['name']=Worker::getWorkerByUid($user_id->getId())->nickname;
-        $worker['uid']=Worker::getWorkerByUid($user_id->getId())->id;
         $worker['worker_no']=$worker_info->aite_cube_no;
-        $worker['balance']=sprintf('%.2f',(float)$worker_info->balance*0.01);
+        $worker['balance']=sprintf('%.2f',(float)$worker['balance']*0.01);
         $order=Worker::getordertypebystatus($user_id->getId());
         if(is_int($order)){
             $code=$order;

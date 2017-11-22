@@ -126,11 +126,8 @@ class Worker extends \yii\db\ActiveRecord
         }
         $count_worker_order=WorkerOrder::find()
             ->select('order_no')
-            ->where(['uid'=>$user_id])
-            ->andWhere(['worker_id'=>$worker_id])
-            ->andWhere(['is_old'=>self::STATUS_OFFLINE])
+            ->where(['uid'=>$user_id,'worker_id'=>$worker_id,'is_old'=>self::STATUS_OFFLINE])
             ->asArray()
-            ->distinct()
             ->count();
         $count_worker_place=WorkerOrder::find()
             ->select('order_no')
@@ -139,7 +136,6 @@ class Worker extends \yii\db\ActiveRecord
             ->andWhere(['status'=>self::SK_ING])
             ->andWhere(['is_old'=>self::STATUS_OFFLINE])
             ->asArray()
-            ->distinct()
             ->count();
 
         $data['worker_count_order']=$count_worker_order;
