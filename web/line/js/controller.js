@@ -770,21 +770,22 @@ angular.module("all_controller", ['ngCookies'])
             }
         };
         $(document).ready(function(){
-            var p=0,t=0;
+             $scope.p=0;
+             $scope.t=0;
             $(window).scroll(function(e){
-                p = $(this).scrollTop();
-                if(t<=p){//下滚
-                    if(p >= 226 ){
-                        $('.list_tab').addClass('fixed_tab')
+                $scope.p = $(this).scrollTop();
+                if($scope.t<=$scope.p){//下滚
+                    if($scope.p >= 226 ){
+                        $('.list_tab').addClass('fixed_tab');
                         $('.memo_pad').addClass('fixed_memo')
                     }
                 }else{ //上滚
-                    if(p <= 225 ){
+                    if($scope.p <= 225 ){
                         $('.list_tab').removeClass('fixed_tab');
                         $('.memo_pad').removeClass('fixed_memo')
                     }
                 }
-                setTimeout(function(){t = p;},0);
+                setTimeout(function(){$scope.t = $scope.p;},0);
             });
         });
         //获取商品列表
@@ -855,6 +856,7 @@ angular.module("all_controller", ['ngCookies'])
         };
         // 点击全部商品跳转到商品详情页面
         $scope.allGetProdouct = function (item) {
+            sessionStorage.setItem('scroll_value',$scope.p);
             $scope.mall_id = item.id;
             $state.go("product_details",{mall_id:$scope.mall_id,activeTab:2})
         };
@@ -945,6 +947,9 @@ angular.module("all_controller", ['ngCookies'])
         });
         if(sessionStorage.getItem('activeTab') != null){
             $scope.vm.activeTab = 2
+        }
+        if(sessionStorage.getItem('scroll_value') != null){
+            document.scrollTo(0,555)
         }
         console.log($scope.vm);
         // 点击跳转到首页

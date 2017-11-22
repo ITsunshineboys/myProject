@@ -1,6 +1,7 @@
 var wait_online = angular.module("wait_online_Module",["ngFileUpload"]);
 wait_online.controller("wait_online",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
     $scope.config=$rootScope.config;//富文本编辑器配置
+
 	$scope.goods_all_attrs=[];//所有属性数据
 	$scope.logistics=[];//物流模块列表
     $rootScope.crumbs = [{
@@ -303,7 +304,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     };
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
-
+        let description = UE.getEditor('editor').getContent();//富文本编辑器
 		console.log(121212)
 		console.log($scope.upload_cover_src)
 		console.log($scope.price_flag)
@@ -406,7 +407,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				logistics_template_id:+$scope.shop_logistics,//物流模板id
 				after_sale_services:$scope.after_sale_services.join(','),//售后服务
 				left_number:+$scope.left_number,//库存
-				description:$scope.detail_description//描述
+				description:description//描述
 			},config).then(function (res) {
 				console.log(res);
 			},function (err) {
