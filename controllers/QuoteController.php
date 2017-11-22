@@ -650,7 +650,6 @@ class QuoteController extends Controller
             }
             $transaction->commit();
         } catch (\Exception $e) {
-            var_dump($e);exit;
             $transaction->rollBack();
             return Json::encode([
                 'code' => 1000,
@@ -658,12 +657,10 @@ class QuoteController extends Controller
             ]);
         }
 
-        if ($effect_ || $effect) {
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-            ]);
-        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+        ]);
     }
 
     /**
