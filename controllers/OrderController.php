@@ -119,6 +119,8 @@ class OrderController extends Controller
         ];
     }
 
+
+
     /**
      * @inheritdoc
      */
@@ -5142,13 +5144,13 @@ class OrderController extends Controller
     }
 
 
-//    public  function  actionTest()
-//    {
-//
-//        return Json::encode(
-//            Yii::$app->request->post()
-//        );
-//    }
+    public  function  actionTest()
+    {
+
+        return Json::encode(
+            Yii::$app->request->post()
+        );
+    }
 
 
 
