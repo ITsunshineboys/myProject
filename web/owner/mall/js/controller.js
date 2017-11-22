@@ -236,18 +236,34 @@ angular.module('all_controller', [])
             $scope.cur_style = item
         }
         //室厅卫厨操作
-        $scope.operate = function (type, is_add, limit) {
+        $scope.operate = function (type, is_add, limit,other) {
             if (!!is_add) {
-                if ($scope[type] == limit) {
-                    $scope[type] = limit
-                } else {
-                    $scope[type]++
+                if(other!=undefined){
+                    if ($scope[type][other] == limit) {
+                        $scope[type][other] = limit
+                    } else {
+                        $scope[type][other]++
+                    }
+                }else{
+                    if ($scope[type] == limit) {
+                        $scope[type] = limit
+                    } else {
+                        $scope[type]++
+                    }
                 }
             } else {
-                if ($scope[type] == limit) {
-                    $scope[type] = limit
-                } else {
-                    $scope[type]--
+                if(other!=undefined){
+                    if ($scope[type][other] == limit) {
+                        $scope[type][other] = limit
+                    } else {
+                        $scope[type][other]--
+                    }
+                }else{
+                    if ($scope[type] == limit) {
+                        $scope[type] = limit
+                    } else {
+                        $scope[type]--
+                    }
                 }
             }
         }
