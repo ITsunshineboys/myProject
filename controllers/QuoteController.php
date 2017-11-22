@@ -682,10 +682,10 @@ class QuoteController extends Controller
         $works = WorksWorkerData::findById($id);
         foreach ($works as $one){
             if ($one['worker_kind'] != '杂工'){
-                $public_message['works_worker_data'] = $one;
+                $works_ []= $one;
             }
         }
-
+        $public_message['works_worker_data'] = $works_;
 //        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
