@@ -160,100 +160,70 @@ class OrderController extends Controller
         return Json::encode($data[0][$code]);
     }
 
-   /**
-     * 无登录app-添加收货地址
-     * @return string
-     */
-    public function actionAdduseraddress()
-    {
-        $request = Yii::$app->request;
-        if ($request->isPost) {
-            $consignee = trim($request->post('consignee',''),'');
-            $mobile= trim($request->post('mobile',''),'');
-            $districtcode=trim($request->post('districtcode',''),'');
-            $region=trim($request->post('region',''));
-            if (!$districtcode || !$region  || !$mobile || !$consignee ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }else{
-                $data=Addressadd::insertaddress($mobile,$consignee,$region,$districtcode);
-                if (!$data){
-                    $code=500;
+       /**
+         * 无登录app-添加收货地址
+         * @return string
+         */
+        public function actionAdduseraddress()
+        {
+            $request = Yii::$app->request;
+            if ($request->isPost) {
+                $consignee = trim($request->post('consignee',''),'');
+                $mobile= trim($request->post('mobile',''),'');
+                $districtcode=trim($request->post('districtcode',''),'');
+                $region=trim($request->post('region',''));
+                if (!$districtcode || !$region  || !$mobile || !$consignee ) {
+                    $code=1000;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
-                }else
-                {
-                    return Json::encode([
-                        'code' => 200,
-                        'msg' => 'ok',
-                        'data'=>[
-                            'address_id'=>$data
-                        ]
-                    ]);
+                }else{
+                    $data=Addressadd::insertaddress($mobile,$consignee,$region,$districtcode);
+                    if (!$data){
+                        $code=500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }else
+                    {
+                        return Json::encode([
+                            'code' => 200,
+                            'msg' => 'ok',
+                            'data'=>[
+                                'address_id'=>$data
+                            ]
+                        ]);
+                    }
                 }
+            }else
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'data' => 0
+                ]);
             }
-        }else
-        {
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => 0
-            ]);
         }
-    }
 
-    /**
-     * 无登录app-确认订单页面-获取收货地址
-     * @return string
-     */
-    public function actionGetaddress(){
-        $request = Yii::$app->request;
-        $address_id=$request ->get('address_id');
-        $user_address=Addressadd::getaddress($address_id);
-        if ($user_address){
-            return Json::encode([
-                'code' => 200,
-                'msg'  => 'ok',
-                'data' => $user_address
-            ]);
-        }else{
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
-            ]);
-        }
-    }
-   /**
-     * 无登录app-添加发票信息
-     * @return string
-     */
-    public function actionOrderinvoicelineadd(){
-        $request = \Yii::$app->request;
-        $invoice_type        = trim($request->post('invoice_type'));
-        $invoice_header_type = 1;
-        $invoice_header      = trim($request->post('invoice_header'));
-        $invoice_content     = trim($request->post('invoice_content'));
-        if (!$invoice_type||!$invoice_header||!$invoice_content )
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $invoicer_card =trim($request->post('invoicer_card'));
-        if ($invoicer_card){
-            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
-            if ($isMatched==false){
-                $code=1000;
+        /**
+         * 无登录app-确认订单页面-获取收货地址
+         * @return string
+         */
+        public function actionGetaddress(){
+            $request = Yii::$app->request;
+            $address_id=$request ->get('address_id');
+            $user_address=Addressadd::getaddress($address_id);
+            if ($user_address){
+                return Json::encode([
+                    'code' => 200,
+                    'msg'  => 'ok',
+                    'data' => $user_address
+                ]);
+            }else{
+                $code=500;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code],
@@ -261,25 +231,55 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $res=Invoice::addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
-        if ($res)
-        {
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg'  =>'ok',
-                'data' =>[
-                    'invoice_id'=>$res
-                ]
-            ]);
-        }else{
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-            ]);
+       /**
+         * 无登录app-添加发票信息
+         * @return string
+         */
+        public function actionOrderinvoicelineadd(){
+            $request = \Yii::$app->request;
+            $invoice_type        = trim($request->post('invoice_type'));
+            $invoice_header_type = 1;
+            $invoice_header      = trim($request->post('invoice_header'));
+            $invoice_content     = trim($request->post('invoice_content'));
+            if (!$invoice_type||!$invoice_header||!$invoice_content )
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $invoicer_card =trim($request->post('invoicer_card'));
+            if ($invoicer_card){
+                $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+                if ($isMatched==false){
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code],
+                        'data' => null
+                    ]);
+                }
+            }
+            $res=Invoice::addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
+            if ($res)
+            {
+                $code=200;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  =>'ok',
+                    'data' =>[
+                        'invoice_id'=>$res
+                    ]
+                ]);
+            }else{
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
-    }
 
          /**
          * 无登录app-获取商品信息
@@ -405,9 +405,7 @@ class OrderController extends Controller
             'code' => $code,
             'msg' => 'ok'
         ]);
-
     }
-
 
     /**
      * 样板间支付订单异步返回
@@ -1109,11 +1107,17 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         if(!$order_no|| !$sku){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $order_no=trim($request->get('order_no',''));
+            $sku=trim($request->get('sku',''));
+            if (!$order_no || !$sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
         }
         //获取订单信息
         $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
@@ -5051,11 +5055,89 @@ class OrderController extends Controller
     }
 
 
-    public function  actionTest()
+    /**
+     * 获取平台介入操作状态
+     * @return string
+     */
+    public function  actionFindOrderAfterHandelStatus()
     {
-        $str=$_SERVER['SERVER_ADDR'];
-        echo $str;
+        $request=Yii::$app->request;
+        $order_no=$request->get('order_no');
+        $sku=$request->get('sku');
+        if(!$order_no || !$sku)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg' =>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg' =>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        if (!$OrderGoods)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg' =>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+
+        switch ($GoodsOrder->order_refer)
+        {
+            case 1:
+//                    $status='待付款';
+                $operation[]=[
+                    'name'=>'关闭订单，线下退款',
+                    'value'=>2
+                ];
+                break;
+            case 2:
+//                    $status='待付款';
+                $operation[]=[
+                    'name'=>'关闭订单，退款',
+                    'value'=>1
+                ];
+                break;
+        }
+
+        if ($GoodsOrder->pay_status==0 && $OrderGoods->order_status==0)
+        {
+            $code=200;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>'ok',
+                    'data'=>$operation
+                ]
+            );
+        }
     }
+
+
+//    public  function  actionTest()
+//    {
+//
+//        return Json::encode(
+//            Yii::$app->request->post()
+//        );
+//    }
 
 
 
