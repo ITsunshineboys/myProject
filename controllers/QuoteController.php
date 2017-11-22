@@ -298,8 +298,8 @@ class QuoteController extends Controller
     public function actionProjectNormWoodworkEdit()
     {
         $post = \Yii::$app->request->post();
-        $transaction = \Yii::$app->db->beginTransaction();
-        try{
+//        $transaction = \Yii::$app->db->beginTransaction();
+//        try{
             foreach ($post['value'] as $one_post){
                 if (isset($one_post['id'])){
                     $value = EngineeringStandardCraft::findOne($one_post['id']);
@@ -307,7 +307,7 @@ class QuoteController extends Controller
                     $edit = $value->save();
                 }
                 if (!$edit){
-                    $transaction->rollBack();
+//                    $transaction->rollBack();
                     $code = 1000;
                     return Json::encode([
                         'code'=>$code,
@@ -325,7 +325,7 @@ class QuoteController extends Controller
                     $add = $value->save();
                 }
                 if (!$add){
-                    $transaction->rollBack();
+//                    $transaction->rollBack();
                     $code = 1000;
                     return Json::encode([
                         'code'=>$code,
@@ -347,7 +347,7 @@ class QuoteController extends Controller
                     $edit = $coefficient->save();
                 }
                 if (!$edit){
-                    $transaction->rollBack();
+//                    $transaction->rollBack();
                     $code = 1000;
                     return Json::encode([
                         'code'=>$code,
@@ -364,9 +364,9 @@ class QuoteController extends Controller
                     $coefficient->series_or_style  = $one_coefficient['series_or_style'];
                     $add = $coefficient->save();
                 }
-
+var_dump($add);exit;
                 if (!$add){
-                    $transaction->rollBack();
+//                    $transaction->rollBack();
                     $code = 1000;
                     return Json::encode([
                         'code'=>$code,
@@ -375,16 +375,15 @@ class QuoteController extends Controller
                 }
             }
 
-            $transaction->commit();
-        }  catch (\Exception $e) {
-            var_dump($e);exit;
-            $transaction->rollBack();
-            $code = 1000;
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//            $transaction->commit();
+//        }  catch (\Exception $e) {
+//            $transaction->rollBack();
+//            $code = 1000;
+//            return Json::encode([
+//                'code'=>$code,
+//                'msg'=>\Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
 
 
         return Json::encode([
