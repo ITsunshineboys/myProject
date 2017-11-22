@@ -949,7 +949,9 @@ angular.module("all_controller", ['ngCookies'])
             $scope.vm.activeTab = 2
         }
         if(sessionStorage.getItem('scroll_value') != null){
-            document.scrollTo(0,555)
+            setTimeout(function () {
+                $(document).scrollTop(sessionStorage.getItem('scroll_value'));
+            },150)
         }
         console.log($scope.vm);
         // 点击跳转到首页
