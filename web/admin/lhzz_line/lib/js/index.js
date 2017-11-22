@@ -2,8 +2,14 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
     $rootScope.baseUrl = baseUrl;
 
     $scope.loginOut = function () {
+
         _ajax.post('/site/admin-logout', {}, function (res) {
             if (res.code === 200) {
+                sessionStorage.removeItem('finance_menu');
+                sessionStorage.removeItem('mall_menu');
+                sessionStorage.removeItem('mall_dd_menu');
+                sessionStorage.removeItem('finance_dd_menu');
+                sessionStorage.removeItem('other_menu');
                 window.location.href='login.html'
             }
         })
@@ -48,11 +54,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
     $scope.other_flag='home';
     $scope.mall_active= 0;
     $scope.finance_active= 0;
-    sessionStorage.removeItem('finance_menu');
-    sessionStorage.removeItem('mall_menu');
-    sessionStorage.removeItem('mall_dd_menu');
-    sessionStorage.removeItem('finance_dd_menu');
-    sessionStorage.removeItem('other_menu');
+
     //商城管理
     $scope.mall_obj=[
         {id:0,name:'商城数据',link:'merchant_index'},
