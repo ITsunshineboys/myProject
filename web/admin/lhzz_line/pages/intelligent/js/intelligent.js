@@ -1,14 +1,14 @@
 angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggable'])
-    .controller('intelligent_ctrl', function ($rootScope,$scope, $state, $stateParams, $uibModal, $http, $timeout, Upload, $location, $anchorScroll, $window,_ajax) {
+    .controller('intelligent_ctrl', function ($rootScope, $scope, $state, $stateParams, $uibModal, $http, $timeout, Upload, $location, $anchorScroll, $window, _ajax) {
         //公共配置以及一些变量初始化
         //头部配置
         $rootScope.crumbs = [
             {
-                name:'智能报价',
-                icon:'icon-baojia',
-                link:function(){
+                name: '智能报价',
+                icon: 'icon-baojia',
+                link: function () {
                     $state.go('intelligent.intelligent_index')
-                    $rootScope.crumbs.splice(1,4)
+                    $rootScope.crumbs.splice(1, 4)
                 }
             }
         ]
@@ -25,32 +25,32 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 tablePages();
             }
         }
-        let tablePages=function () {
-            $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-            _ajax.get('/quote/plot-list',$scope.params,function (res) {
+        let tablePages = function () {
+            $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
+            _ajax.get('/quote/plot-list', $scope.params, function (res) {
                 console.log(res)
                 $scope.house_detail = res.model.details
                 $scope.Config.totalItems = res.model.total
             })
         };
         $scope.params = {
-            post:'',
-            min:'',
-            max:'',
-            toponymy:''
+            post: '',
+            min: '',
+            max: '',
+            toponymy: ''
         };
         $scope.getHouseList = function (item) {
             $scope.Config.currentPage = 1
             $scope.params.toponymy = ''
             $scope.search_txt = ''
             console.log($scope.params)
-            if(item == 1){
+            if (item == 1) {
                 $scope.params.post = $scope.county[0].id
-            }else{
+            } else {
                 $scope.params.min = ''
                 $scope.params.max = ''
             }
-            if($scope.params.post != ''){
+            if ($scope.params.post != '') {
                 tablePages()
             }
         }
@@ -64,9 +64,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 tablePages1();
             }
         }
-        let tablePages1=function () {
-            $scope.params1.page=$scope.Config1.currentPage;//点击页数，传对应的参数
-            _ajax.post('/quote/decoration-list',$scope.params1,function (res) {
+        let tablePages1 = function () {
+            $scope.params1.page = $scope.Config1.currentPage;//点击页数，传对应的参数
+            _ajax.post('/quote/decoration-list', $scope.params1, function (res) {
                 console.log(res)
                 $scope.material_list = res.list.details
                 $scope.Config1.totalItems = res.list.total
@@ -86,9 +86,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         let all_level = ['白银', '黄金', '钻石']
 
         //获取案例需要添加的商品编号和数量
-        function get_case_goods(){
+        function get_case_goods() {
             let arr = []
-            _ajax.get('/quote/assort-goods-list',{},function (res) {
+            _ajax.get('/quote/assort-goods-list', {}, function (res) {
                 console.log(res)
                 for (let [key, value] of res.list.entries()) {
                     for (let [key1, value1] of res.classify.entries()) {
@@ -143,9 +143,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 console.log($scope.all_materials)
             })
         }
+
         get_case_goods()
         //案例页工人
-        _ajax.get('/quote/labor-list',{},function (res) {
+        _ajax.get('/quote/labor-list', {}, function (res) {
             $scope.common_worker = angular.copy(res.labor_list)
             for (let [key, value] of $scope.common_worker.entries()) {
                 if (value.worker_kind == '杂工' && key != $scope.common_worker.length - 1) {
@@ -210,19 +211,19 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //删除上传图片
         $scope.upload_delete = function (item) {
-            _ajax.post('/site/upload-delete',{
+            _ajax.post('/site/upload-delete', {
                 'file_path': item
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.all_drawing.splice($scope.all_drawing.indexOf(item), 1)
             })
         }
         //风格、系列以及楼梯结构
-        _ajax.post('/quote/series-and-style',{},function (res) {
+        _ajax.post('/quote/series-and-style', {}, function (res) {
             console.log(res)
             $scope.cur_all_series = res.series
-                $scope.cur_all_style = res.style
-                $scope.cur_all_stair = res.stairs_details
+            $scope.cur_all_style = res.style
+            $scope.cur_all_stair = res.stairs_details
         })
         //获取省市县数据(JSON)
         //初始化省市区县
@@ -288,7 +289,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             // $scope.city_name = $scope.province[22].name
             $http.get('districts2.json').then(function (response) {
                 console.log(response.data[0])
-                $scope.city_name =response.data[0][$scope.cur_province][$scope.cur_city]
+                $scope.city_name = response.data[0][$scope.cur_province][$scope.cur_city]
                 let arr2 = []
                 for (let [key, value] of Object.entries(response.data[0][$scope.cur_city])) {
                     arr2.push({'id': key, 'name': value})
@@ -296,7 +297,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.house_county = angular.copy(arr2)
                 $scope.cur_house_county = $scope.house_county[0].id
                 $scope.county = arr2
-                $scope.county.unshift({'id':$scope.cur_city , 'name': '全市'})
+                $scope.county.unshift({'id': $scope.cur_city, 'name': '全市'})
                 $scope.cur_county = angular.copy($scope.county)[0]
                 $scope.params.post = $scope.county[0].id
             })
@@ -310,8 +311,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.params.toponymy = $scope.search_txt
             tablePages()
         }
-        $scope.$watch('search_txt',function (newVal,oldVal) {
-            if(newVal==''&&$scope.params.post!=''){
+        $scope.$watch('search_txt', function (newVal, oldVal) {
+            if (newVal == '' && $scope.params.post != '') {
                 $scope.params.toponymy = newVal
                 tablePages()
             }
@@ -329,15 +330,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $state.go('intelligent.house_list')
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
                 },
                 {
-                    name:'小区列表页'
+                    name: '小区列表页'
                 }
             ]
             console.log($scope.cur_county)
@@ -346,20 +347,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_to_add = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'小区列表页',
-                    link:function(){
+                }, {
+                    name: '小区列表页',
+                    link: function () {
                         $state.go('intelligent.house_list')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:'添加小区信息',
+                }, {
+                    name: '添加小区信息',
                 }
             ]
             $scope.is_add = 1
@@ -441,53 +442,53 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             if (!item.is_ordinary) {
                 $rootScope.crumbs = [
                     {
-                        name:'智能报价',
-                        icon:'icon-baojia',
-                        link:function(){
+                        name: '智能报价',
+                        icon: 'icon-baojia',
+                        link: function () {
                             $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1,4)
+                            $rootScope.crumbs.splice(1, 4)
                         }
-                    },{
-                        name:'小区列表页',
-                        link:function(){
+                    }, {
+                        name: '小区列表页',
+                        link: function () {
                             $state.go('intelligent.house_list')
-                            $rootScope.crumbs.splice(2,3)
+                            $rootScope.crumbs.splice(2, 3)
                         }
-                    },{
-                        name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
-                        link:function(){
+                    }, {
+                        name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
+                        link: function () {
                             $state.go('intelligent.add_house')
-                            $rootScope.crumbs.splice(3,2)
+                            $rootScope.crumbs.splice(3, 2)
                         }
-                    },{
-                        name:'户型详情',
+                    }, {
+                        name: '户型详情',
                     }
                 ]
                 $state.go('intelligent.edit_house')
             } else {
                 $rootScope.crumbs = [
                     {
-                        name:'智能报价',
-                        icon:'icon-baojia',
-                        link:function(){
+                        name: '智能报价',
+                        icon: 'icon-baojia',
+                        link: function () {
                             $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1,4)
+                            $rootScope.crumbs.splice(1, 4)
                         }
-                    },{
-                        name:'小区列表页',
-                        link:function(){
+                    }, {
+                        name: '小区列表页',
+                        link: function () {
                             $state.go('intelligent.house_list')
-                            $rootScope.crumbs.splice(2,3)
+                            $rootScope.crumbs.splice(2, 3)
                         }
-                    },{
-                        name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
-                        link:function(){
+                    }, {
+                        name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
+                        link: function () {
                             $state.go('intelligent.add_house')
-                            $rootScope.crumbs.splice(3,2)
+                            $rootScope.crumbs.splice(3, 2)
                         }
-                    },{
-                        name:'案例详情',
-                        link:-1
+                    }, {
+                        name: '案例详情',
+                        link: -1
                     }
                 ]
                 console.log(item)
@@ -632,23 +633,23 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.common_house = function () {
                     $uibModalInstance.close()
                     $state.go('intelligent.add_house')
-                    $rootScope.crumbs.splice(3,2)
+                    $rootScope.crumbs.splice(3, 2)
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'小区列表页',
-                            link:function(){
+                        }, {
+                            name: '小区列表页',
+                            link: function () {
                                 $state.go('intelligent.house_list')
-                                $rootScope.crumbs.splice(2,3)
+                                $rootScope.crumbs.splice(2, 3)
                             }
-                        },{
-                            name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
+                        }, {
+                            name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
                         }
                     ]
                 }
@@ -690,20 +691,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'小区列表页',
-                            link:function(){
+                        }, {
+                            name: '小区列表页',
+                            link: function () {
                                 $state.go('intelligent.house_list')
-                                $rootScope.crumbs.splice(2,3)
+                                $rootScope.crumbs.splice(2, 3)
                             }
-                        },{
-                            name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
+                        }, {
+                            name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
                         }
                     ]
                     $state.go('intelligent.add_house')
@@ -761,26 +762,26 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             console.log(item)
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'小区列表页',
-                    link:function(){
+                }, {
+                    name: '小区列表页',
+                    link: function () {
                         $state.go('intelligent.house_list')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
-                    link:function(){
+                }, {
+                    name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
+                    link: function () {
                         $state.go('intelligent.add_house')
-                        $rootScope.crumbs.splice(3,2)
+                        $rootScope.crumbs.splice(3, 2)
                     }
-                },{
-                    name:'图纸详情',
+                }, {
+                    name: '图纸详情',
                 }
             ]
             $scope.cur_all_house = []
@@ -896,20 +897,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             $uibModalInstance.close()
                             $rootScope.crumbs = [
                                 {
-                                    name:'智能报价',
-                                    icon:'icon-baojia',
-                                    link:function(){
+                                    name: '智能报价',
+                                    icon: 'icon-baojia',
+                                    link: function () {
                                         $state.go('intelligent.intelligent_index')
-                                        $rootScope.crumbs.splice(1,4)
+                                        $rootScope.crumbs.splice(1, 4)
                                     }
-                                },{
-                                    name:'小区列表页',
-                                    link:function(){
+                                }, {
+                                    name: '小区列表页',
+                                    link: function () {
                                         $state.go('intelligent.house_list')
-                                        $rootScope.crumbs.splice(2,3)
+                                        $rootScope.crumbs.splice(2, 3)
                                     }
-                                },{
-                                    name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
+                                }, {
+                                    name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
                                 }
                             ]
                             $state.go('intelligent.add_house')
@@ -941,20 +942,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'小区列表页',
-                    link:function(){
+                }, {
+                    name: '小区列表页',
+                    link: function () {
                         $state.go('intelligent.house_list')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
+                }, {
+                    name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
                 }
             ]
             $state.go('intelligent.add_house')
@@ -968,21 +969,21 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'小区列表页',
-                    link:function(){
+                }, {
+                    name: '小区列表页',
+                    link: function () {
                         $state.go('intelligent.house_list')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:!!$scope.is_add?'添加小区信息':'编辑小区信息',
-                    }
+                }, {
+                    name: !!$scope.is_add ? '添加小区信息' : '编辑小区信息',
+                }
             ]
             $state.go('intelligent.add_house')
             $scope.four_title = ''
@@ -992,14 +993,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.addHouseReturn = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'小区列表页'
+                }, {
+                    name: '小区列表页'
                 }
             ]
             $state.go('intelligent.house_list')
@@ -1010,46 +1011,46 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.check_item = []
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                name:'案例/社区配套商品管理'
+                }, {
+                    name: '案例/社区配套商品管理'
                 }
             ]
             //初始化数据
-            _ajax.get('/quote/assort-goods-list',{},function (res) {
+            _ajax.get('/quote/assort-goods-list', {}, function (res) {
                 $scope.check_item = res.list
             })
-            _ajax.get('/quote/assort-goods',{},function (res) {
+            _ajax.get('/quote/assort-goods', {}, function (res) {
                 console.log(res)
                 $scope.level_one = res.data.categories
                 $scope.cur_level_one = $scope.level_one[0]
-                _ajax.get('/quote/assort-goods',{
+                _ajax.get('/quote/assort-goods', {
                     pid: $scope.cur_level_one.id
-                },function (res) {
+                }, function (res) {
                     $scope.level_two = res.data.categories
                     $scope.cur_level_two = $scope.level_two[0]
-                    _ajax.get('/quote/assort-goods',{
+                    _ajax.get('/quote/assort-goods', {
                         pid: $scope.cur_level_two.id
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $scope.level_three = res.data.categories
-                                    for (let [key, value] of $scope.level_three.entries()) {
-                                        if ($scope.check_item.length == 0) {
-                                            value['complete'] = false
-                                        } else {
-                                            for (let [key1, value1] of $scope.check_item.entries()) {
-                                                if (value.id == value1.id) {
-                                                    value['complete'] = true
-                                                }
-                                            }
-                                        }
+                        for (let [key, value] of $scope.level_three.entries()) {
+                            if ($scope.check_item.length == 0) {
+                                value['complete'] = false
+                            } else {
+                                for (let [key1, value1] of $scope.check_item.entries()) {
+                                    if (value.id == value1.id) {
+                                        value['complete'] = true
                                     }
-                                    console.log($scope.level_three)
+                                }
+                            }
+                        }
+                        console.log($scope.level_three)
                     })
                 })
             })
@@ -1059,17 +1060,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
 
         //点击请求接口数据
         $scope.go_detail = function (item, index) {
-            _ajax.get('/quote/assort-goods',{
+            _ajax.get('/quote/assort-goods', {
                 pid: item.id
-            },function (res) {
+            }, function (res) {
                 if (index == 1 && $scope.cur_level_one != item) {
                     $scope.cur_level_one = item
                     $scope.level_two = res.data.categories
                     $scope.cur_level_one = item
                     $scope.cur_level_two = $scope.level_two[0]
-                    _ajax.get('/quote/assort-goods',{
+                    _ajax.get('/quote/assort-goods', {
                         pid: res.data.categories[0].id
-                    },function (res) {
+                    }, function (res) {
                         $scope.level_three = res.data.categories
                         for (let [key, value] of $scope.level_three.entries()) {
                             if ($scope.check_item.length == 0) {
@@ -1087,9 +1088,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 } else if (index == 2) {
                     console.log($scope.check_item)
                     $scope.cur_level_two = item
-                    _ajax.get('/quote/assort-goods',{
+                    _ajax.get('/quote/assort-goods', {
                         pid: item.id
-                    },function (res) {
+                    }, function (res) {
                         console.log($scope.check_item)
                         console.log(res)
                         $scope.level_three = res.data.categories
@@ -1122,8 +1123,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia'
+                            name: '智能报价',
+                            icon: 'icon-baojia'
                         }
                     ]
                     $state.go('intelligent.intelligent_index')
@@ -1132,21 +1133,21 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             all_modal.$inject = ['$scope', '$uibModalInstance']
             _ajax.post('/quote/assort-goods-add', {
                 'assort': $scope.check_item
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 get_case_goods()
                 $uibModal.open({
                     templateUrl: 'pages/intelligent/cur_model.html',
                     controller: all_modal,
-                    backdrop:'static'
+                    backdrop: 'static'
                 })
             })
         }
         //勾选添加/删除三级
-        $scope.item_check = function (item,index) {
+        $scope.item_check = function (item, index) {
             console.log($scope.check_item)
             if (item.complete) {
-                if(index === 0){
+                if (index === 0) {
                     item.count = ''
                     item.flag = false
                 }
@@ -1155,9 +1156,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 let cur_index = $scope.check_item.findIndex(function (item1) {
                     return item1.id == item.id
                 })
-                    if (cur_index != -1) {
-                        $scope.check_item.splice(cur_index, 1)
-                    }
+                if (cur_index != -1) {
+                    $scope.check_item.splice(cur_index, 1)
+                }
             }
             console.log($scope.check_item)
         }
@@ -1195,7 +1196,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                             'three_name': value3.title,
                                             'good_code': value3.good_id,
                                             'good_quantity': value3.good_quantity,
-                                            'three_id':value3.id
+                                            'three_id': value3.id
                                         })
                                     }
                                 }
@@ -1266,7 +1267,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             'cur_kitchen': value.cur_kitchen,//厨
                             'cur_imgSrc': value.cur_imgSrc,//户型图
                             'have_stair': value.have_stair,//是否有楼梯
-                            'stair':value.stair,//楼梯结构
+                            'stair': value.stair,//楼梯结构
                             'high': value.high,//层高
                             'sort_id': arr.length + 1,
                             'window': value.window,//飘窗长度
@@ -1328,7 +1329,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                                 'three_name': value3.title,
                                                 'good_code': value3.good_id,
                                                 'good_quantity': value3.good_quantity,
-                                                'three_id':value3.id
+                                                'three_id': value3.id
                                             })
                                             value['all_goods'] = goods
                                         } else {
@@ -1342,7 +1343,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                                 'three_name': value3.title,
                                                 'good_code': value3.good_id,
                                                 'good_quantity': value3.good_quantity,
-                                                'three_id':value3.id
+                                                'three_id': value3.id
                                             })
                                             value['all_goods'] = goods
                                         }
@@ -1407,15 +1408,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         for (let [key1, value1] of $scope.drawing_informations.entries()) {
                             if (value1.house_type_name.index == value.index) {
                                 console.log($scope.drawing_informations)
-                                if(value1.id!=undefined){
+                                if (value1.id != undefined) {
                                     value.drawing_list.push({
-                                        'id':value1.id,
+                                        'id': value1.id,
                                         'all_drawing': value1.drawing_list.join(','),
                                         'series': value1.series.id,
                                         'style': value1.style.id,
                                         'drawing_name': value1.drawing_name
                                     })
-                                }else{
+                                } else {
                                     value.drawing_list.push({
                                         'all_drawing': value1.drawing_list.join(','),
                                         'series': value1.series.id,
@@ -1551,14 +1552,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'小区列表页'
+                        }, {
+                            name: '小区列表页'
                         }
                     ]
                     $state.go('intelligent.house_list')
@@ -1568,14 +1569,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             if (valid) {
                 console.log(arr)
                 if ($scope.is_add) {
-                    _ajax.post('/quote/plot-add',{
+                    _ajax.post('/quote/plot-add', {
                         'province_code': $scope.cur_province,
                         'city_code': $scope.cur_city,
                         'house_name': $scope.house_name,
-                        'cur_county_id': {id:$scope.cur_house_county,name:''},
+                        'cur_county_id': {id: $scope.cur_house_county, name: ''},
                         'address': $scope.address,
                         'house_informations': arr
-                    },function (res) {
+                    }, function (res) {
                         //请求小区数据
                         tablePages()
                         //弹出保存成功模态框
@@ -1585,16 +1586,16 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         })
                     })
                 } else {
-                    _ajax.post('/quote/plot-edit',{
+                    _ajax.post('/quote/plot-edit', {
                         'province_code': $scope.cur_province,
                         'city_code': $scope.cur_city,
                         'house_name': $scope.house_name,
-                        'cur_county_id': {id:$scope.cur_house_county,name:''},
+                        'cur_county_id': {id: $scope.cur_house_county, name: ''},
                         'address': $scope.address,
                         'house_informations': arr,
                         'delete_house': $scope.delete_house_list,
                         'delete_drawing': $scope.delete_drawing_list
-                    },function (res) {
+                    }, function (res) {
                         //请求小区数据
                         tablePages()
                         //弹出保存成功模态框
@@ -1633,13 +1634,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.cur_title = '是否删除小区？'
                 $scope.is_cancel = true
                 $scope.common_house = function () {
-                    _ajax.post('/quote/plot-del',{
+                    _ajax.post('/quote/plot-del', {
                         del_id: item.id
-                    },function (res) {
+                    }, function (res) {
                         $scope = data
-                            tablePages()
-                            $uibModalInstance.close()
-                            $scope.is_cancel = false
+                        tablePages()
+                        $uibModalInstance.close()
+                        $scope.is_cancel = false
                     })
                 }
                 $scope.cancel_delete = function () {
@@ -1657,20 +1658,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_edit_house = function (item) {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'小区列表页',
-                    link:function(){
+                }, {
+                    name: '小区列表页',
+                    link: function () {
                         $state.go('intelligent.house_list')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:'编辑小区信息',
+                }, {
+                    name: '编辑小区信息',
                 }
             ]
             $scope.delete_house_list = []
@@ -1681,11 +1682,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.house_informations = []
             $scope.drawing_informations = []
             $scope.cur_all_house = []
-            _ajax.post('/quote/plot-edit-view',{
+            _ajax.post('/quote/plot-edit-view', {
                 'district': item.district,
                 'street': item.street,
                 'toponymy': item.toponymy
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.cur_all_worker = res.effect.works_worker_data
                 //获取基本信息数据
@@ -1867,17 +1868,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_worker_list = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'资费/做工标准'
+                }, {
+                    name: '资费/做工标准'
                 }
             ]
-            _ajax.get('/quote/labor-cost-list',{},function (res) {
+            _ajax.get('/quote/labor-cost-list', {}, function (res) {
                 $scope.cur_worker_list = res.list
                 $state.go('intelligent.worker_price_list')
             })
@@ -1889,27 +1890,27 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.cur_worker = item
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'资费/做工标准',
-                    link:function () {
+                }, {
+                    name: '资费/做工标准',
+                    link: function () {
                         $state.go('intelligent.worker_price_list')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:'资费/做工标准详情'
+                }, {
+                    name: '资费/做工标准详情'
                 }
             ]
-            _ajax.get('/quote/labor-cost-edit-list',{
+            _ajax.get('/quote/labor-cost-edit-list', {
                 province: $scope.cur_province,
                 city: $scope.cur_city,
                 worker_kind: item.worker_kind
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.worker_id = res.labor_cost.id
                 $scope.daily_cost = res.labor_cost.univalence == 0 ? '' : res.labor_cost.univalence
@@ -1942,14 +1943,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'资费/做工标准'
+                        }, {
+                            name: '资费/做工标准'
                         }
                     ]
                     $state.go('intelligent.worker_price_list')
@@ -1957,11 +1958,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
             if (valid) {
-                _ajax.post('/quote/labor-cost-edit',{
+                _ajax.post('/quote/labor-cost-edit', {
                     id: $scope.worker_id,
                     univalence: $scope.daily_cost,
                     else: arr
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
@@ -1976,14 +1977,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.returnWorkerList = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'资费/做工标准'
+                }, {
+                    name: '资费/做工标准'
                 }
             ]
             $state.go('intelligent.worker_price_list')
@@ -1995,20 +1996,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.cur_county = $scope.county[0]
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'首页管理'
+                }, {
+                    name: '首页管理'
                 }
             ]
-            _ajax.get('/quote/homepage-list',{
+            _ajax.get('/quote/homepage-list', {
                 province: $scope.cur_province,
                 city: $scope.cur_city
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.all_manage = res.list
             })
@@ -2023,51 +2024,51 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.submitted = false
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'首页管理',
-                    link:function () {
+                }, {
+                    name: '首页管理',
+                    link: function () {
                         $state.go('intelligent.home_manage')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                name:'添加推荐'
+                }, {
+                    name: '添加推荐'
                 }
             ]
             $scope.is_add_manage = 1
-            _ajax.get('/quote/homepage-district',{
+            _ajax.get('/quote/homepage-district', {
                 province: $scope.cur_province,
                 city: $scope.cur_city
-            },function (res) {
+            }, function (res) {
                 $scope.all_house_city = res.list
                 $scope.cur_house_city = $scope.all_house_city[0]
-                _ajax.post('/quote/homepage-toponymy',{
+                _ajax.post('/quote/homepage-toponymy', {
                     province: $scope.cur_province,
                     city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code
-                },function (res) {
+                }, function (res) {
                     $scope.all_toponymy = res.list
                     $scope.cur_toponymy_house = $scope.all_toponymy[0]
-                    _ajax.post('/quote/homepage-street',{
+                    _ajax.post('/quote/homepage-street', {
                         province: $scope.cur_province,
                         city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy
-                    },function (res) {
+                    }, function (res) {
                         $scope.all_street = res.list
                         $scope.cur_street = $scope.all_street[0]
-                        _ajax.post('/quote/homepage-case',{
+                        _ajax.post('/quote/homepage-case', {
                             province: $scope.cur_province,
                             city: $scope.cur_city,
                             district: $scope.cur_house_city.district_code,
                             toponymy: $scope.cur_toponymy_house.toponymy,
                             street: $scope.cur_street.street
-                        },function (res) {
+                        }, function (res) {
                             $scope.all_case = res.list
                             $scope.cur_case = $scope.all_case[0]
                             $state.go('intelligent.add_manage')
@@ -2078,28 +2079,28 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //当修改区县
         $scope.change_county = function (item) {
-            _ajax.post('/quote/homepage-toponymy',{
+            _ajax.post('/quote/homepage-toponymy', {
                 province: $scope.cur_province,
                 city: $scope.cur_city,
                 district: $scope.cur_house_city.district_code
-            },function (res) {
+            }, function (res) {
                 $scope.all_toponymy = res.list
                 $scope.cur_toponymy_house = $scope.all_toponymy[0]
-                _ajax.post('/quote/homepage-street',{
+                _ajax.post('/quote/homepage-street', {
                     province: $scope.cur_province,
                     city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code,
                     toponymy: $scope.cur_toponymy_house.toponymy
-                },function (res) {
+                }, function (res) {
                     $scope.all_street = res.list
                     $scope.cur_street = $scope.all_street[0]
-                    _ajax.post('/quote/homepage-case',{
+                    _ajax.post('/quote/homepage-case', {
                         province: $scope.cur_province,
                         city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy,
                         street: $scope.cur_street.street
-                    },function (res) {
+                    }, function (res) {
                         $scope.all_case = res.list
                         $scope.cur_case = $scope.all_case[0]
                         $state.go('intelligent.add_manage')
@@ -2109,21 +2110,21 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //当修改小区
         $scope.change_toponymy = function (item) {
-            _ajax.post('/quote/homepage-street',{
+            _ajax.post('/quote/homepage-street', {
                 province: $scope.cur_province,
                 city: $scope.cur_city,
                 district: $scope.cur_house_city.district_code,
                 toponymy: $scope.cur_toponymy_house.toponymy
-            },function (res) {
+            }, function (res) {
                 $scope.all_street = res.list
                 $scope.cur_street = $scope.all_street[0]
-                _ajax.post('/quote/homepage-case',{
+                _ajax.post('/quote/homepage-case', {
                     province: $scope.cur_province,
                     city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code,
                     toponymy: $scope.cur_toponymy_house.toponymy,
                     street: $scope.cur_street.street
-                },function (res) {
+                }, function (res) {
                     $scope.all_case = res.list
                     $scope.cur_case = $scope.all_case[0]
                     $state.go('intelligent.add_manage')
@@ -2132,13 +2133,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
         //当修改街道
         $scope.change_street = function (item) {
-            _ajax.post('/quote/homepage-case',{
+            _ajax.post('/quote/homepage-case', {
                 province: $scope.cur_province,
                 city: $scope.cur_city,
                 district: $scope.cur_house_city.district_code,
                 toponymy: $scope.cur_toponymy_house.toponymy,
                 street: $scope.cur_street.street
-            },function (res) {
+            }, function (res) {
                 $scope.all_case = res.list
                 $scope.cur_case = $scope.all_case[0]
                 $state.go('intelligent.add_manage')
@@ -2152,14 +2153,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'首页管理'
+                        }, {
+                            name: '首页管理'
                         }
                     ]
                     $state.go('intelligent.home_manage')
@@ -2168,7 +2169,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             all_modal.$inject = ['$scope', '$uibModalInstance']
             if (valid && $scope.cur_image != '') {
                 if (!!$scope.is_add_manage) {
-                    _ajax.post('/quote/homepage-add',{
+                    _ajax.post('/quote/homepage-add', {
                         province: $scope.cur_province,
                         city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
@@ -2177,22 +2178,22 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         image: $scope.cur_image,
                         house_type_name: $scope.cur_case.particulars,
                         recommend_name: $scope.recommend_name
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
                         })
-                        _ajax.get('/quote/homepage-list',{
+                        _ajax.get('/quote/homepage-list', {
                             province: $scope.cur_province,
                             city: $scope.cur_city
-                        },function (res) {
+                        }, function (res) {
                             console.log(res)
                             $scope.all_manage = res.list
                         })
                     })
                 } else {
-                    _ajax.post('/quote/homepage-edit',{
+                    _ajax.post('/quote/homepage-edit', {
                         id: $scope.cur_manage_id,
                         province: $scope.cur_province,
                         city: $scope.cur_city,
@@ -2202,15 +2203,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         image: $scope.cur_image,
                         house_type_name: $scope.cur_case.particulars,
                         recommend_name: $scope.recommend_name
-                    },function (res) {
+                    }, function (res) {
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
                         })
-                        _ajax.get('/quote/homepage-list',{
+                        _ajax.get('/quote/homepage-list', {
                             province: $scope.cur_province,
                             city: $scope.cur_city
-                        },function (res) {
+                        }, function (res) {
                             console.log(res)
                             $scope.all_manage = res.list
                         })
@@ -2227,29 +2228,29 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.returnHomeManage = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'首页管理'
+                }, {
+                    name: '首页管理'
                 }
             ]
             $state.go('intelligent.home_manage')
         }
         //修改状态
         $scope.change_status = function (item) {
-            _ajax.get('/quote/homepage-status',{
+            _ajax.get('/quote/homepage-status', {
                 id: item.id,
                 status: +!+item.status
-            },function (res) {
+            }, function (res) {
                 console.log(res)
-                _ajax.get('/quote/homepage-list',{
+                _ajax.get('/quote/homepage-list', {
                     province: $scope.cur_province,
                     city: $scope.cur_city
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.all_manage = res.list
                 })
@@ -2259,30 +2260,30 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_edit_manage = function (item) {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'首页管理',
-                    link:function () {
+                }, {
+                    name: '首页管理',
+                    link: function () {
                         $state.go('intelligent.home_manage')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                    name:'编辑推荐'
+                }, {
+                    name: '编辑推荐'
                 }
             ]
             $scope.recommend_name = item.recommend_name
             $scope.cur_image = item.image
             $scope.cur_manage_id = item.id
             $scope.is_add_manage = 0
-            _ajax.get('/quote/homepage-district',{
+            _ajax.get('/quote/homepage-district', {
                 province: $scope.cur_province,
                 city: $scope.cur_city
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.all_house_city = res.list
                 for (let [key, value] of $scope.all_house_city.entries()) {
@@ -2290,11 +2291,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         $scope.cur_house_city = value
                     }
                 }
-                _ajax.post('/quote/homepage-toponymy',{
+                _ajax.post('/quote/homepage-toponymy', {
                     province: $scope.cur_province,
                     city: $scope.cur_city,
                     district: $scope.cur_house_city.district_code
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.all_toponymy = res.list
                     for (let [key, value] of $scope.all_toponymy.entries()) {
@@ -2302,12 +2303,12 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             $scope.cur_toponymy_house = value
                         }
                     }
-                    _ajax.post('/quote/homepage-street',{
+                    _ajax.post('/quote/homepage-street', {
                         province: $scope.cur_province,
                         city: $scope.cur_city,
                         district: $scope.cur_house_city.district_code,
                         toponymy: $scope.cur_toponymy_house.toponymy
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $scope.all_street = res.list
                         for (let [key, value] of $scope.all_street.entries()) {
@@ -2315,13 +2316,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 $scope.cur_street = value
                             }
                         }
-                        _ajax.post('/quote/homepage-case',{
+                        _ajax.post('/quote/homepage-case', {
                             province: $scope.cur_province,
                             city: $scope.cur_city,
                             district: $scope.cur_house_city.district_code,
                             toponymy: $scope.cur_toponymy_house.toponymy,
                             street: $scope.cur_street.street
-                        },function (res) {
+                        }, function (res) {
                             console.log(res)
                             $scope.all_case = res.list
                             for (let [key, value] of $scope.all_case.entries()) {
@@ -2354,9 +2355,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
-            _ajax.post('/quote/homepage-sort',{
-                sort:arr
-            },function (res) {
+            _ajax.post('/quote/homepage-sort', {
+                sort: arr
+            }, function (res) {
                 console.log(res)
                 $uibModal.open({
                     templateUrl: 'pages/intelligent/cur_model.html',
@@ -2377,46 +2378,46 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
                 $scope.common_house = function () {
 
-                        _ajax.post('/quote/homepage-delete',{
-                            id: item.id
-                        },function (res) {
+                    _ajax.post('/quote/homepage-delete', {
+                        id: item.id
+                    }, function (res) {
+                        console.log(res)
+                        _ajax.get('/quote/homepage-list', {
+                            province: cur_data.cur_province,
+                            city: cur_data.cur_city
+                        }, function (res) {
                             console.log(res)
-                            _ajax.get('/quote/homepage-list',{
-                                province: cur_data.cur_province,
-                                city: cur_data.cur_city
-                            },function (res) {
-                                console.log(res)
-                                cur_data.all_manage = res.list
-                                $uibModalInstance.close()
-                            })
+                            cur_data.all_manage = res.list
+                            $uibModalInstance.close()
                         })
+                    })
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
-        if (+item.status == 0) {
-            $uibModal.open({
-                templateUrl: 'pages/intelligent/cur_model.html',
-                controller: all_modal
-            })
-        }
+            if (+item.status == 0) {
+                $uibModal.open({
+                    templateUrl: 'pages/intelligent/cur_model.html',
+                    controller: all_modal
+                })
+            }
         }
 
         /*工程标准*/
         //    工程标准主页
         $scope.go_engineering = function () {
-            _ajax.get('/quote/project-norm-list',{},function (res) {
+            _ajax.get('/quote/project-norm-list', {}, function (res) {
                 console.log(res)
                 $scope.all_project = res.list
                 $rootScope.crumbs = [
                     {
-                        name:'智能报价',
-                        icon:'icon-baojia',
-                        link:function(){
+                        name: '智能报价',
+                        icon: 'icon-baojia',
+                        link: function () {
                             $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1,4)
+                            $rootScope.crumbs.splice(1, 4)
                         }
-                    },{
-                        name:'工程标准',
+                    }, {
+                        name: '工程标准',
                     }
                 ]
                 $state.go('intelligent.engineering_standards')
@@ -2428,28 +2429,28 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.process_list = []
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'工程标准',
-                    link:function(){
+                }, {
+                    name: '工程标准',
+                    link: function () {
                         $state.go('intelligent.engineering_standards')
-                        $rootScope.crumbs.splice(2,3)
+                        $rootScope.crumbs.splice(2, 3)
                     }
-                },{
-                name:item.project + '工艺'
+                }, {
+                    name: item.project + '工艺'
                 }
             ]
             $scope.cur_item_project = item.project
             $scope.four_title = ''
-            _ajax.get('/quote/project-norm-edit-list',{
+            _ajax.get('/quote/project-norm-edit-list', {
                 city: $scope.cur_city,
                 project: item.project
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 let arr = res.list
                 //简单0处理
@@ -2523,8 +2524,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                     $scope.process_list = [arr1, arr2, arr3]
                 } else if (item.project == '木作') {
-                    let arr4 = [], arr5 = [], arr6 = [],arr9=[]
-                    _ajax.get('/quote/project-norm-woodwork-list',{},function (res) {
+                    let arr4 = [], arr5 = [], arr6 = [], arr9 = []
+                    _ajax.get('/quote/project-norm-woodwork-list', {}, function (res) {
                         console.log(res)
                         $scope.cur_norm = res.specification.find_specification
                         $scope.all_norm = res.specification.specification
@@ -2534,98 +2535,138 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             arr7 = angular.copy(res.style),
                             arr8 = angular.copy(res.style)
                         //系列
-                        for (let [key, value] of res.coefficient.entries()) {
-                            for (let [key1, value1] of arr1.entries()) {
-                                value1['name'] = 'series01' + value1.id
-                                if (value.project == value1.series) {
-                                    if (+value.series_or_style == 0 && +value.coefficient == 1) {
-                                        value1['series_or_style'] = 0
-                                        value1['cur_id'] = value.id
-                                        value1['coefficient'] = 1
-                                        value1['value'] = value.value
-                                    }
-                                } else {
-                                    if (value1.value == undefined) {
-                                        value1['series_or_style'] = 0
-                                        value1['coefficient'] = 1
-                                        value1['value'] = ''
+
+                        for (let [key1, value1] of arr1.entries()) {
+                            value1['name'] = 'series01' + value1.id
+                            if (res.coefficient.length != 0) {
+                                for (let [key, value] of res.coefficient.entries()) {
+                                    if (value.project == value1.series) {
+                                        if (+value.series_or_style == 0 && +value.coefficient == 1) {
+                                            value1['series_or_style'] = 0
+                                            value1['cur_id'] = value.id
+                                            value1['coefficient'] = 1
+                                            value1['value'] = value.value
+                                        }
+                                    } else {
+                                        if (value1.value == undefined) {
+                                            value1['series_or_style'] = 0
+                                            value1['coefficient'] = 1
+                                            value1['value'] = ''
+                                        }
                                     }
                                 }
+                            } else {
+                                value1['series_or_style'] = 0
+                                value1['coefficient'] = 1
+                                value1['value'] = ''
                             }
-                            for (let [key1, value1] of arr2.entries()) {
-                                value1['name'] = 'series02' + value1.id
-                                if (value.project == value1.series) {
-                                    if (+value.series_or_style == 0 && +value.coefficient == 2) {
-                                        value1['series_or_style'] = 0
-                                        value1['cur_id'] = value.id
-                                        value1['coefficient'] = 2
-                                        value1['value'] = value.value
-                                    }
-                                } else {
-                                    if (value1.value == undefined) {
-                                        value1['series_or_style'] = 0
-                                        value1['coefficient'] = 2
-                                        value1['value'] = ''
+                        }
+                        for (let [key1, value1] of arr2.entries()) {
+                            value1['name'] = 'series02' + value1.id
+                            if (res.coefficient.length != 0) {
+                                for (let [key, value] of res.coefficient.entries()) {
+                                    if (value.project == value1.series) {
+                                        if (+value.series_or_style == 0 && +value.coefficient == 2) {
+                                            value1['series_or_style'] = 0
+                                            value1['cur_id'] = value.id
+                                            value1['coefficient'] = 2
+                                            value1['value'] = value.value
+                                        }
+                                    } else {
+                                        if (value1.value == undefined) {
+                                            value1['series_or_style'] = 0
+                                            value1['coefficient'] = 2
+                                            value1['value'] = ''
+                                        }
                                     }
                                 }
+                            } else {
+                                value1['series_or_style'] = 0
+                                value1['coefficient'] = 2
+                                value1['value'] = ''
                             }
-                            for (let [key1, value1] of arr3.entries()) {
-                                value1['name'] = 'series03' + value1.id
-                                if (value.project == value1.series) {
-                                    if (+value.series_or_style == 0 && +value.coefficient == 3) {
-                                        value1['series_or_style'] = 0
-                                        value1['cur_id'] = value.id
-                                        value1['coefficient'] = 3
-                                        value1['value'] = value.value
-                                    }
-                                } else {
-                                    if (value1.value == undefined) {
-                                        value1['series_or_style'] = 0
-                                        value1['coefficient'] = 3
-                                        value1['value'] = ''
+                        }
+                        for (let [key1, value1] of arr3.entries()) {
+                            value1['name'] = 'series03' + value1.id
+                            if (res.coefficient.length != 0) {
+                                for (let [key, value] of res.coefficient.entries()) {
+                                    if (value.project == value1.series) {
+                                        if (+value.series_or_style == 0 && +value.coefficient == 3) {
+                                            value1['series_or_style'] = 0
+                                            value1['cur_id'] = value.id
+                                            value1['coefficient'] = 3
+                                            value1['value'] = value.value
+                                        }
+                                    } else {
+                                        if (value1.value == undefined) {
+                                            value1['series_or_style'] = 0
+                                            value1['coefficient'] = 3
+                                            value1['value'] = ''
+                                        }
                                     }
                                 }
+                            } else {
+                                value1['series_or_style'] = 0
+                                value1['coefficient'] = 3
+                                value1['value'] = ''
                             }
                         }
                         //风格
-                        for (let [key, value] of res.coefficient.entries()) {
-                            for (let [key1, value1] of arr7.entries()) {
-                                value1['name'] = 'style11' + value1.id
-                                if (value.project == value1.style) {
-                                    if (+value.series_or_style == 1 && +value.coefficient == 1) {
-                                        value1['series_or_style'] = 1
-                                        value1['cur_id'] = value.id
-                                        value1['coefficient'] = 1
-                                        value1['value'] = value.value
-                                    }
-                                } else {
-                                    if (value1.value == undefined) {
-                                        value1['series_or_style'] = 1
-                                        value1['coefficient'] = 1
-                                        value1['value'] = ''
+                        for (let [key1, value1] of arr7.entries()) {
+                            value1['name'] = 'style11' + value1.id
+                            if (res.coefficient.length != 0) {
+                                for (let [key, value] of res.coefficient.entries()) {
+                                    if (value.project == value1.style) {
+                                        if (+value.series_or_style == 1 && +value.coefficient == 1) {
+                                            value1['series_or_style'] = 1
+                                            value1['cur_id'] = value.id
+                                            value1['coefficient'] = 1
+                                            value1['value'] = value.value
+                                        }
+                                    } else {
+                                        if (value1.value == undefined) {
+                                            value1['series_or_style'] = 1
+                                            value1['coefficient'] = 1
+                                            value1['value'] = ''
+                                        }
                                     }
                                 }
+                            } else {
+                                console.log(1111)
+                                value1['series_or_style'] = 1
+                                value1['coefficient'] = 1
+                                value1['value'] = ''
                             }
-                            for (let [key1, value1] of arr8.entries()) {
-                                value1['name'] = 'style12' + value1.id
-                                if (value.project == value1.style) {
-                                    if (+value.series_or_style == 1 && +value.coefficient == 2) {
-                                        value1['series_or_style'] = 1
-                                        value1['cur_id'] = value.id
-                                        value1['coefficient'] = 2
-                                        value1['value'] = value.value
-                                    }
-                                } else {
-                                    if (value1.value == undefined) {
-                                        value1['series_or_style'] = 1
-                                        value1['coefficient'] = 2
-                                        value1['value'] = ''
-                                    }
+                        }
+
+                        for (let [key1, value1] of arr8.entries()) {
+                            value1['name'] = 'style12' + value1.id
+                            if (res.coefficient.length != 0) {
+                                for (let [key, value] of res.coefficient.entries()) {
+                                        if (value.project == value1.style) {
+                                            if (+value.series_or_style == 1 && +value.coefficient == 2) {
+                                                value1['series_or_style'] = 1
+                                                value1['cur_id'] = value.id
+                                                value1['coefficient'] = 2
+                                                value1['value'] = value.value
+                                            }
+                                        } else {
+                                            if (value1.value == undefined) {
+                                                value1['series_or_style'] = 1
+                                                value1['coefficient'] = 2
+                                                value1['value'] = ''
+                                            }
+                                        }
                                 }
+                            } else {
+                                value1['series_or_style'] = 1
+                                value1['coefficient'] = 2
+                                value1['value'] = ''
                             }
                         }
                         $scope.all_series = [arr1, arr2, arr3]
                         $scope.all_style = [arr7, arr8]
+                        console.log($scope.all_style)
                         console.log($scope.all_series)
                         for (let [key, value] of $scope.all_norm.entries()) {
                             for (let [key1, value1] of $scope.cur_norm.entries()) {
@@ -2678,14 +2719,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'工程标准'
+                        }, {
+                            name: '工程标准'
                         }
                     ]
                     $state.go('intelligent.engineering_standards')
@@ -2700,6 +2741,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                 }
             } else {
+                console.log($scope.all_series)
                 for (let [key, value] of $scope.all_series.entries()) {
                     for (let [key1, value1] of value.entries()) {
                         if (value1.cur_id != undefined) {
@@ -2711,7 +2753,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             arr.push({
                                 // project: value1.series,
                                 value: value1.value,
-                                add_id:value1.id,
+                                add_id: value1.id,
                                 coefficient: value1.coefficient,
                                 series_or_style: value1.series_or_style
                             })
@@ -2729,7 +2771,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             arr.push({
                                 // project: value1.style,
                                 value: value1.value,
-                                add_id:value1.id,
+                                add_id: value1.id,
                                 coefficient: value1.coefficient,
                                 series_or_style: value1.series_or_style
                             })
@@ -2757,9 +2799,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             console.log(arr2)
             if (valid) {
                 if ($scope.cur_item_project != '木作') {
-                    _ajax.post('/quote/project-norm-edit',{
+                    _ajax.post('/quote/project-norm-edit', {
                         material: arr
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
@@ -2767,11 +2809,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         })
                     })
                 } else {
-                    _ajax.post('/quote/project-norm-woodwork-edit',{
+                    _ajax.post('/quote/project-norm-woodwork-edit', {
                         value: arr2,
                         specification: arr1,
                         coefficient: arr
-                    },function (res) {
+                    }, function (res) {
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
                             controller: all_modal
@@ -2786,14 +2828,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.return_engineering = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'工程标准'
+                }, {
+                    name: '工程标准'
                 }
             ]
             $state.go('intelligent.engineering_standards')
@@ -2805,17 +2847,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.all_coefficient = []
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'系数标准'
+                }, {
+                    name: '系数标准'
                 }
             ]
-            _ajax.get('/quote/coefficient-list',{},function (res) {
+            _ajax.get('/quote/coefficient-list', {}, function (res) {
                 console.log(res)
                 $scope.cur_all_coefficient = res.coefficient
                 $scope.cur_all_category = res.list
@@ -2912,8 +2954,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia'
+                            name: '智能报价',
+                            icon: 'icon-baojia'
                         }
                     ]
                     $state.go('intelligent.intelligent_index')
@@ -2927,9 +2969,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 })
             }
             if (valid) {
-                _ajax.post('/quote/coefficient-add',{
+                _ajax.post('/quote/coefficient-add', {
                     value: arr
-                },function (res) {
+                }, function (res) {
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
@@ -2945,14 +2987,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_add_material = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'添加材料项'
+                }, {
+                    name: '添加材料项'
                 }
             ]
             tablePages1()
@@ -2966,38 +3008,38 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.basic_attr = ''//商品基本属性
             $scope.other_attr = ''//商品额外属性
             //获取一级、二级和三级分类
-            _ajax.get('/quote/assort-goods',{},function (res) {
+            _ajax.get('/quote/assort-goods', {}, function (res) {
                 console.log(res)
                 $scope.level_one = res.data.categories
                 $scope.cur_level_one1 = $scope.level_one[0]
-                _ajax.get('/quote/assort-goods',{
+                _ajax.get('/quote/assort-goods', {
                     pid: $scope.cur_level_one1.id
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.level_two = res.data.categories
                     $scope.cur_level_two1 = $scope.level_two[0]
-                    _ajax.get('/quote/assort-goods',{
+                    _ajax.get('/quote/assort-goods', {
                         pid: $scope.cur_level_two1.id
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $scope.level_three = res.data.categories
                         $scope.cur_level_three1 = $scope.level_three[0]
                         $rootScope.crumbs = [
                             {
-                                name:'智能报价',
-                                icon:'icon-baojia',
-                                link:function(){
+                                name: '智能报价',
+                                icon: 'icon-baojia',
+                                link: function () {
                                     $state.go('intelligent.intelligent_index')
-                                    $rootScope.crumbs.splice(1,4)
+                                    $rootScope.crumbs.splice(1, 4)
                                 }
-                            },{
-                                name:'添加材料项',
-                                link:function () {
+                            }, {
+                                name: '添加材料项',
+                                link: function () {
                                     $state.go('intelligent.add_material')
-                                    $rootScope.crumbs.splice(2,3)
+                                    $rootScope.crumbs.splice(2, 3)
                                 }
-                            },{
-                            name:'材料项详情'
+                            }, {
+                                name: '材料项详情'
                             }
                         ]
                         $state.go('intelligent.material_detail')
@@ -3020,22 +3062,22 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
         }
         //获取户型相关
-        _ajax.get('/quote/house-type-list',{},function (res) {
+        _ajax.get('/quote/house-type-list', {}, function (res) {
             console.log(res)
             $scope.all_area_range = res.list
         })
         //监听一级改变
         $scope.$watch('cur_level_one1', function (newVal, oldVal) {
             if (oldVal != undefined) {
-                _ajax.get('/quote/assort-goods',{
+                _ajax.get('/quote/assort-goods', {
                     pid: newVal.id
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.level_two = res.data.categories
                     $scope.cur_level_two1 = $scope.level_two[0]
-                    _ajax.get('/quote/assort-goods',{
+                    _ajax.get('/quote/assort-goods', {
                         pid: $scope.cur_level_two.id
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $scope.level_three = res.data.categories
                         $scope.cur_level_three1 = $scope.level_three[0]
@@ -3048,9 +3090,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //监听二级改变
         $scope.$watch('cur_level_two1', function (newVal, oldVal) {
             if (oldVal != undefined) {
-                _ajax.get('/quote/assort-goods',{
+                _ajax.get('/quote/assort-goods', {
                     pid: newVal.id
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.level_three = res.data.categories
                     $scope.cur_level_three1 = $scope.level_three[0]
@@ -3065,7 +3107,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.get_material = function () {
             _ajax.post('/quote/decoration-add-classify', {
                 classify: $scope.cur_level_three1.title
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.basic_attr = res.goods
                 $scope.other_attr = res.goods_attr
@@ -3082,17 +3124,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'添加材料项'
+                        }, {
+                            name: '添加材料项'
                         }
                     ]
-                        $state.go('intelligent.add_material')
+                    $state.go('intelligent.add_material')
                 }
             }
             $scope.toggleAnimation = function () {
@@ -3110,13 +3152,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             console.log($scope.cur_all_series)
             //保存系列相关
             for (let [key, value] of $scope.cur_all_series.entries()) {
-                if(value.cur_id!=undefined){
+                if (value.cur_id != undefined) {
                     arr.push({
-                        id:value.cur_id,
+                        id: value.cur_id,
                         series: value.id,
                         quantity: value.num != undefined ? value.num : ''
                     })
-                }else{
+                } else {
                     arr.push({
                         series: value.id,
                         quantity: value.num != undefined ? value.num : ''
@@ -3125,13 +3167,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
             //保存风格相关
             for (let [key, value] of $scope.cur_all_style.entries()) {
-                if(value.cur_id!=undefined){
+                if (value.cur_id != undefined) {
                     arr1.push({
-                        id:value.cur_id,
+                        id: value.cur_id,
                         style: value.id,
                         quantity: value.num != undefined ? value.num : ''
                     })
-                }else{
+                } else {
                     arr1.push({
                         style: value.id,
                         quantity: value.num != undefined ? value.num : ''
@@ -3140,14 +3182,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
             //保存户型相关
             for (let [key, value] of $scope.all_area_range.entries()) {
-                if(value.cur_id!=undefined){
+                if (value.cur_id != undefined) {
                     arr2.push({
-                        id:value.cur_id,
+                        id: value.cur_id,
                         min_area: value.min_area,
                         max_area: value.max_area,
                         quantity: value.area != undefined ? value.area : ''
                     })
-                }else{
+                } else {
                     arr2.push({
                         min_area: value.min_area,
                         max_area: value.max_area,
@@ -3179,7 +3221,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             if (valid) {
                 if (!!$scope.basic_attr) {
                     if ($scope.is_add_material) {
-                        _ajax.post('/quote/decoration-add',data,function (res) {
+                        _ajax.post('/quote/decoration-add', data, function (res) {
                             console.log(res)
                             // _ajax.post('/quote/decoration-list', {},function (res) {
                             //     console.log(res)
@@ -3192,23 +3234,23 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             })
                         })
                     } else {
-                        _ajax.post('/quote/decoration-edit', data,function (res) {
+                        _ajax.post('/quote/decoration-edit', data, function (res) {
                             console.log(res)
                             // _ajax.post('/quote/decoration-list', {},function (res) {
                             //     console.log(res)
                             //     $scope.material_list = res.data.list.details
                             // })
                             tablePages1()
-                            var model_uib =  $uibModal.open({
-                                animation:$scope.animationsEnabled,
+                            var model_uib = $uibModal.open({
+                                animation: $scope.animationsEnabled,
                                 templateUrl: 'pages/intelligent/cur_model.html',
                                 controller: all_modal,
-                                backdrop:'static',
+                                backdrop: 'static',
 
                             })
                             model_uib.result.then(function (result) {
                                 console.log(result)
-                            },function (reason) {
+                            }, function (reason) {
                                 console.log(reason)
                             })
                         })
@@ -3230,7 +3272,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.submitted = false
             _ajax.post('/quote/decoration-edit-list', {
                 id: item.id
-            },function (res) {
+            }, function (res) {
                 console.log(res)
                 $scope.material_category = {
                     first_level: res.decoration_add.one_materials,
@@ -3285,20 +3327,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
                 $rootScope.crumbs = [
                     {
-                        name:'智能报价',
-                        icon:'icon-baojia',
-                        link:function(){
+                        name: '智能报价',
+                        icon: 'icon-baojia',
+                        link: function () {
                             $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1,4)
+                            $rootScope.crumbs.splice(1, 4)
                         }
-                    },{
-                        name:'添加材料项',
-                        link:function () {
+                    }, {
+                        name: '添加材料项',
+                        link: function () {
                             $state.go('intelligent.add_material')
-                            $rootScope.crumbs.splice(2,3)
+                            $rootScope.crumbs.splice(2, 3)
                         }
-                    },{
-                        name:'材料项详情'
+                    }, {
+                        name: '材料项详情'
                     }
                 ]
                 $state.go('intelligent.material_detail')
@@ -3309,14 +3351,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.three_title = ''
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'添加材料项'
+                }, {
+                    name: '添加材料项'
                 }
             ]
             $state.go('intelligent.add_material')
@@ -3331,7 +3373,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 $scope.common_house = function () {
                     _ajax.post('/quote/decoration-del', {
                         id: item.id
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         // _ajax.post('/quote/decoration-list', {},function (res) {
                         //     console.log(res)
@@ -3385,9 +3427,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 if (key == is_valid) {
                                     arr.push({
                                         min_area: value.min_area,
-                                        max_area: cur_data.min_area-1
+                                        max_area: cur_data.min_area - 1
                                     }, {
-                                        min_area: +cur_data.max_area+1,
+                                        min_area: +cur_data.max_area + 1,
                                         max_area: value.max_area
                                     })
                                 } else {
@@ -3418,29 +3460,29 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             let cur_index2 = $scope.all_area_range.findIndex(function (item1) {
                 return item1.min_area == cur_item.min_area
             })
-            $scope.all_area_range.splice(cur_index2,1)
+            $scope.all_area_range.splice(cur_index2, 1)
             let cur_index = $scope.usable_area_range.findIndex(function (item1) {
-                return +cur_item.max_area +1 == +item1.min_area
+                return +cur_item.max_area + 1 == +item1.min_area
             })
             let cur_index1 = $scope.usable_area_range.findIndex(function (item1) {
                 return +cur_item.min_area - 1 == +item1.max_area
             })
-            if(cur_index != -1){
+            if (cur_index != -1) {
                 $scope.usable_area_range[cur_index] = {
-                    min_area:cur_item.min_area,
-                    max_area:$scope.usable_area_range[cur_index].max_area
+                    min_area: cur_item.min_area,
+                    max_area: $scope.usable_area_range[cur_index].max_area
                 }
-            }else{
-                if(cur_index1 != -1){
+            } else {
+                if (cur_index1 != -1) {
                     $scope.usable_area_range[cur_index1] = {
-                        min_area:$scope.usable_area_range[cur_index1].min_area,
-                        max_area:cur_item.max_area
+                        min_area: $scope.usable_area_range[cur_index1].min_area,
+                        max_area: cur_item.max_area
                     }
-                }else{
+                } else {
                     console.log(111)
                     $scope.usable_area_range.push({
-                        min_area:cur_item.min_area,
-                        max_area:cur_item.max_area
+                        min_area: cur_item.min_area,
+                        max_area: cur_item.max_area
                     })
                 }
             }
@@ -3450,14 +3492,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.save_area = function (valid) {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'通用管理'
+                }, {
+                    name: '通用管理'
                 }
             ]
             let cur_data = $scope.all_area_range[$scope.all_area_range.length - 1]
@@ -3478,7 +3520,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             let arr = []
             for (let [key, value] of $scope.all_area_range.entries()) {
                 arr.push({
-                    add_id:$scope.cur_edit_item.id,
+                    add_id: $scope.cur_edit_item.id,
                     min_area: value.min_area,
                     max_area: value.max_area
                 })
@@ -3491,7 +3533,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             apartment_area: arr.sort(function (a, b) {
                                 return +a.min_area - b.min_area
                             })
-                        },function (res) {
+                        }, function (res) {
                             console.log(res)
                             $scope.three_title = ''
                             $uibModal.open({
@@ -3513,24 +3555,24 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         /*通用管理*/
 //跳转通用管理页
         $scope.go_general_manage = function () {
-            _ajax.get('/quote/commonality-list',{},function (res) {
+            _ajax.get('/quote/commonality-list', {}, function (res) {
                 console.log(res)
                 $scope.all_general_manage = res.post
-                for(let [key,value] of $scope.all_general_manage.entries()){
-                    if(value.title=='强电'||value.title=='弱电'||value.title=='水路'){
+                for (let [key, value] of $scope.all_general_manage.entries()) {
+                    if (value.title == '强电' || value.title == '弱电' || value.title == '水路') {
                         value.title = value.title + '点位'
                     }
                 }
                 $rootScope.crumbs = [
                     {
-                        name:'智能报价',
-                        icon:'icon-baojia',
-                        link:function(){
+                        name: '智能报价',
+                        icon: 'icon-baojia',
+                        link: function () {
                             $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1,4)
+                            $rootScope.crumbs.splice(1, 4)
                         }
-                    },{
-                        name:'通用管理'
+                    }, {
+                        name: '通用管理'
                     }
                 ]
                 $state.go('intelligent.general_manage')
@@ -3539,17 +3581,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //编辑通用管理
         $scope.go_general_detail = function (item) {
             $scope.cur_edit_item = item
-            if(item.title.indexOf('点位')!=-1){
-                _ajax.post('/quote/commonality-title',{
-                    id:item.id
-                },function (res) {
+            if (item.title.indexOf('点位') != -1) {
+                _ajax.post('/quote/commonality-title', {
+                    id: item.id
+                }, function (res) {
                     console.log(res)
                     $scope.one_title = res.list.one_title
                     $scope.cur_general_count = res.count
-                    for(let [key,value] of $scope.one_title.entries()){
+                    for (let [key, value] of $scope.one_title.entries()) {
                         value['two_title'] = []
                     }
-                    for(let [key,value] of res.list.two_title.entries()){
+                    for (let [key, value] of res.list.two_title.entries()) {
                         let cur_index = $scope.one_title.findIndex(function (item) {
                             return item.id == value.pid
                         })
@@ -3557,50 +3599,50 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                     console.log($scope.one_title)
                     $scope.del_two_id = []
-                    $scope.cur_one_title = angular.copy($scope.one_title,['destination'])
+                    $scope.cur_one_title = angular.copy($scope.one_title, ['destination'])
                     console.log($scope.cur_one_title)
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'通用管理',
-                            link:function () {
+                        }, {
+                            name: '通用管理',
+                            link: function () {
                                 $state.go('intelligent.general_manage')
-                                $rootScope.crumbs.splice(2,3)
+                                $rootScope.crumbs.splice(2, 3)
                             }
-                        },{
-                        name:'通用管理详情'
+                        }, {
+                            name: '通用管理详情'
                         }
                     ]
                     $state.go('intelligent.general_detail')
                 })
-            }else{
-                $scope.regx = $scope.cur_edit_item.title == '杂工'?/^\d{0,}(.5)?$/:/^\d{0,}$/
-                _ajax.post('/quote/commonality-else-list',{
-                    id:item.id
-                },function (res) {
+            } else {
+                $scope.regx = $scope.cur_edit_item.title == '杂工' ? /^\d{0,}(.5)?$/ : /^\d{0,}$/
+                _ajax.post('/quote/commonality-else-list', {
+                    id: item.id
+                }, function (res) {
                     console.log(res)
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'通用管理',
-                            link:function () {
+                        }, {
+                            name: '通用管理',
+                            link: function () {
                                 $state.go('intelligent.general_manage')
-                                $rootScope.crumbs.splice(2,3)
+                                $rootScope.crumbs.splice(2, 3)
                             }
-                        },{
-                            name:'通用管理详情'
+                        }, {
+                            name: '通用管理详情'
                         }
                     ]
                     $scope.main_item = res.list
@@ -3610,38 +3652,38 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $scope.cur_area_range = []
                     $scope.three_title = '通用管理详情'
                     console.log($scope.else_area_range)
-                    if(item.title == '户型面积'){
+                    if (item.title == '户型面积') {
                         $scope.three_title = '户型面积'
                         $rootScope.crumbs = [
                             {
-                                name:'智能报价',
-                                icon:'icon-baojia',
-                                link:function(){
+                                name: '智能报价',
+                                icon: 'icon-baojia',
+                                link: function () {
                                     $state.go('intelligent.intelligent_index')
-                                    $rootScope.crumbs.splice(1,4)
+                                    $rootScope.crumbs.splice(1, 4)
                                 }
-                            },{
-                                name:'通用管理',
-                                link:function () {
+                            }, {
+                                name: '通用管理',
+                                link: function () {
                                     $state.go('intelligent.general_manage')
-                                    $rootScope.crumbs.splice(2,3)
+                                    $rootScope.crumbs.splice(2, 3)
                                 }
-                            },{
-                                name:'户型面积'
+                            }, {
+                                name: '户型面积'
                             }
                         ]
                         let arr = []
-                        if($scope.all_area_range.length!=0){
+                        if ($scope.all_area_range.length != 0) {
                             $scope.all_area_range.reduce(function (prev, cur, index) {
                                 if (+prev.max_area + 1 == +cur.min_area) {
                                     console.log(prev)
                                     // console.l    og(&&index!=$scope.all_area_range.length-1)
-                                    if(index != $scope.all_area_range.length - 1){
+                                    if (index != $scope.all_area_range.length - 1) {
                                         return {min_area: prev.min_area, max_area: cur.max_area}
-                                    }else{
+                                    } else {
                                         arr.push(prev)
                                     }
-                                }else{
+                                } else {
                                     arr.push(prev)
                                 }
                             })
@@ -3659,7 +3701,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                     })
                                 } else if (+value.min_area == +arr1[cur_index].min_area && +value.max_area != +arr1[cur_index].max_area) {
                                     arr1.push({
-                                        min_area: +value.max_area+1,
+                                        min_area: +value.max_area + 1,
                                         max_area: arr1[cur_index].max_area
                                     })
                                     arr1.splice(cur_index, 1).sort(function (a, b) {
@@ -3668,7 +3710,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 } else if (+value.min_area != +arr1[cur_index].min_area && +value.max_area == +arr1[cur_index].max_area) {
                                     arr1.push({
                                         min_area: arr1[cur_index].min_area,
-                                        max_area: +value.min_area-1
+                                        max_area: +value.min_area - 1
                                     })
                                     arr1.splice(cur_index, 1).sort(function (a, b) {
                                         return +a.min_area - b.min_area
@@ -3676,9 +3718,9 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 } else {
                                     arr1.push({
                                         min_area: arr1[cur_index].min_area,
-                                        max_area: +value.min_area-1
+                                        max_area: +value.min_area - 1
                                     }, {
-                                        min_area: +value.max_area+1,
+                                        min_area: +value.max_area + 1,
                                         max_area: arr1[cur_index].max_area
                                     })
                                     arr1.splice(cur_index, 1).sort(function (a, b) {
@@ -3691,165 +3733,165 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         $scope.usable_area_range = arr1
                         console.log($scope.usable_area_range)
                         $state.go('intelligent.house_area')
-                    }else if(item.title == '面积比例'){
-                        for(let [key,value] of $scope.main_item.entries()){
+                    } else if (item.title == '面积比例') {
+                        for (let [key, value] of $scope.main_item.entries()) {
                             value.project += '百分比'
                         }
                         $state.go('intelligent.else_general_manage')
-                    }else if(item.title == '木作'){
+                    } else if (item.title == '木作') {
                         $state.go('intelligent.else_general_manage')
-                    }else if(item.title == '杂工'||item.title == '防水'){
-                        if(item.title == '杂工'){
+                    } else if (item.title == '杂工' || item.title == '防水') {
+                        if (item.title == '杂工') {
                             $scope.cur_area_range = [{
-                                title:'其他杂工天数',
-                                all_area_range:[]
+                                title: '其他杂工天数',
+                                all_area_range: []
                             }]
-                        }else{
+                        } else {
                             $scope.cur_area_range = [{
-                                title:'其他防水面积',
-                                all_area_range:[]
+                                title: '其他防水面积',
+                                all_area_range: []
                             }]
                         }
                         console.log($scope.cur_area_range[0].all_area_range)
-                        for(let [key,value] of $scope.else_area_range.entries()){
+                        for (let [key, value] of $scope.else_area_range.entries()) {
                             let cur_index = res.area.findIndex(function (item) {
                                 return item.min_area == value.min_area && item.max_area == value.max_area
                             })
                             console.log(res.area[3])
-                            if(cur_index == -1){
+                            if (cur_index == -1) {
                                 $scope.cur_area_range[0].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:''
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: ''
                                 })
-                            }else{
+                            } else {
                                 $scope.cur_area_range[0].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:res.area[cur_index].project_value,
-                                    id:res.area[cur_index].id
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: res.area[cur_index].project_value,
+                                    id: res.area[cur_index].id
                                 })
                             }
                         }
                         console.log($scope.cur_area_range)
                         $state.go('intelligent.else_general_manage')
-                    }else if(item.title=='油漆'){
+                    } else if (item.title == '油漆') {
                         $scope.cur_area_range = [{
-                            title:'其他乳胶漆面积',
-                            all_area_range:[]
-                        },{
-                            title:'其他腻子面积',
-                            all_area_range:[]
-                        },{
-                            title:'其他阴角线长度',
-                            all_area_range:[]
+                            title: '其他乳胶漆面积',
+                            all_area_range: []
+                        }, {
+                            title: '其他腻子面积',
+                            all_area_range: []
+                        }, {
+                            title: '其他阴角线长度',
+                            all_area_range: []
                         }]
                         //整理乳胶漆面积
-                        for(let [key,value] of $scope.else_area_range.entries()){
+                        for (let [key, value] of $scope.else_area_range.entries()) {
                             let cur_index = res.area.findIndex(function (item) {
-                                return item.min_area == value.min_area && item.max_area == value.max_area&&item.project_name.indexOf('乳胶漆')!=-1
+                                return item.min_area == value.min_area && item.max_area == value.max_area && item.project_name.indexOf('乳胶漆') != -1
                             })
-                            if(cur_index != -1){
+                            if (cur_index != -1) {
                                 $scope.cur_area_range[0].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:res.area[cur_index].project_value,
-                                    id:res.area[cur_index].id
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: res.area[cur_index].project_value,
+                                    id: res.area[cur_index].id
                                 })
-                            }else{
+                            } else {
                                 $scope.cur_area_range[0].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:''
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: ''
                                 })
                             }
                         }
                         //整理腻子面积
-                        for(let [key,value] of $scope.else_area_range.entries()){
+                        for (let [key, value] of $scope.else_area_range.entries()) {
                             let cur_index = res.area.findIndex(function (item) {
-                                return item.min_area == value.min_area && item.max_area == value.max_area&&item.project_name.indexOf('腻子')!=-1
+                                return item.min_area == value.min_area && item.max_area == value.max_area && item.project_name.indexOf('腻子') != -1
                             })
-                            if(cur_index != -1){
+                            if (cur_index != -1) {
                                 $scope.cur_area_range[1].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:res.area[cur_index].project_value,
-                                    id:res.area[cur_index].id
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: res.area[cur_index].project_value,
+                                    id: res.area[cur_index].id
                                 })
-                            }else{
+                            } else {
                                 $scope.cur_area_range[1].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:''
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: ''
                                 })
                             }
                         }
                         //整理阴角线面积
-                        for(let [key,value] of $scope.else_area_range.entries()){
+                        for (let [key, value] of $scope.else_area_range.entries()) {
                             let cur_index = res.area.findIndex(function (item) {
-                                return item.min_area == value.min_area && item.max_area == value.max_area&&item.project_name.indexOf('阴角线')!=-1
+                                return item.min_area == value.min_area && item.max_area == value.max_area && item.project_name.indexOf('阴角线') != -1
                             })
-                            if(cur_index != -1){
+                            if (cur_index != -1) {
                                 $scope.cur_area_range[2].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:res.area[cur_index].project_value,
-                                    id:res.area[cur_index].id
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: res.area[cur_index].project_value,
+                                    id: res.area[cur_index].id
                                 })
-                            }else{
+                            } else {
                                 $scope.cur_area_range[2].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:''
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: ''
                                 })
                             }
                         }
                         $state.go('intelligent.else_general_manage')
-                    }else if(item.title == '泥作'){
+                    } else if (item.title == '泥作') {
                         $scope.cur_area_range = [{
-                            title:'其他地面积',
-                            all_area_range:[]
-                        },{
-                            title:'其他墙面积',
-                            all_area_range:[]
+                            title: '其他地面积',
+                            all_area_range: []
+                        }, {
+                            title: '其他墙面积',
+                            all_area_range: []
                         }]
                         //整理地面积
-                        for(let [key,value] of $scope.else_area_range.entries()){
+                        for (let [key, value] of $scope.else_area_range.entries()) {
                             let cur_index = res.area.findIndex(function (item) {
-                                return item.min_area == value.min_area && item.max_area == value.max_area&&item.project_name.indexOf('地面积')!=-1
+                                return item.min_area == value.min_area && item.max_area == value.max_area && item.project_name.indexOf('地面积') != -1
                             })
-                            if(cur_index != -1){
+                            if (cur_index != -1) {
                                 $scope.cur_area_range[0].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:res.area[cur_index].project_value,
-                                    id:res.area[cur_index].id
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: res.area[cur_index].project_value,
+                                    id: res.area[cur_index].id
                                 })
-                            }else{
+                            } else {
                                 $scope.cur_area_range[0].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:''
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: ''
                                 })
                             }
                         }
                         //整理墙面积
-                        for(let [key,value] of $scope.else_area_range.entries()){
+                        for (let [key, value] of $scope.else_area_range.entries()) {
                             let cur_index = res.area.findIndex(function (item) {
-                                return item.min_area == value.min_area && item.max_area == value.max_area&&item.project_name.indexOf('墙面积')!=-1
+                                return item.min_area == value.min_area && item.max_area == value.max_area && item.project_name.indexOf('墙面积') != -1
                             })
-                            if(cur_index != -1){
+                            if (cur_index != -1) {
                                 $scope.cur_area_range[1].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:res.area[cur_index].project_value,
-                                    id:res.area[cur_index].id
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: res.area[cur_index].project_value,
+                                    id: res.area[cur_index].id
                                 })
-                            }else{
+                            } else {
                                 $scope.cur_area_range[1].all_area_range.push({
-                                    min_area:value.min_area,
-                                    max_area:value.max_area,
-                                    num:''
+                                    min_area: value.min_area,
+                                    max_area: value.max_area,
+                                    num: ''
                                 })
                             }
                         }
@@ -3861,53 +3903,53 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //添加一级标题
         $scope.add_first_title = function () {
             $scope.one_title.push({
-                title:''
+                title: ''
             })
-            $scope.cur_one_title = angular.copy($scope.one_title,['destination'])
+            $scope.cur_one_title = angular.copy($scope.one_title, ['destination'])
             console.log($scope.one_title)
         }
         //添加二级标题
         $scope.add_second_title = function (item) {
             item.two_title.push({
-                title:'',
-                count:'',
-                pid:item.id
+                title: '',
+                count: '',
+                pid: item.id
             })
-            $scope.cur_one_title = angular.copy($scope.one_title,['destination'])
+            $scope.cur_one_title = angular.copy($scope.one_title, ['destination'])
         }
         //移除一级标题
-        $scope.remove_first_title = function (index,item) {
-            if(item.id == undefined){
-                $scope.one_title.splice(index,1)
-            }else{
-                for(let [key,value] of item.two_title.entries()){
+        $scope.remove_first_title = function (index, item) {
+            if (item.id == undefined) {
+                $scope.one_title.splice(index, 1)
+            } else {
+                for (let [key, value] of item.two_title.entries()) {
                     $scope.cur_general_count.count = +$scope.cur_general_count.count - value.count
                 }
-                _ajax.post('/quote/commonality-title-add',{
-                    del_id:item.id
-                },function (res) {
+                _ajax.post('/quote/commonality-title-add', {
+                    del_id: item.id
+                }, function (res) {
                     console.log(res)
-                    _ajax.post('/quote/commonality-title',{
-                        id:$scope.cur_general_count.id
-                    },function (res) {
+                    _ajax.post('/quote/commonality-title', {
+                        id: $scope.cur_general_count.id
+                    }, function (res) {
                         console.log(res)
                         $scope.one_title = res.list.one_title
                         // $scope.cur_general_count = res.data.count
-                        for(let [key,value] of $scope.one_title.entries()){
+                        for (let [key, value] of $scope.one_title.entries()) {
                             value['two_title'] = []
                         }
-                        for(let [key,value] of res.list.two_title.entries()){
+                        for (let [key, value] of res.list.two_title.entries()) {
                             let cur_index = $scope.one_title.findIndex(function (item) {
                                 return item.id == value.pid
                             })
                             $scope.one_title[cur_index].two_title.push(value)
                         }
-                        for(let [key,value] of $scope.one_title.entries()){
-                            if(value.two_title.length == 0){
+                        for (let [key, value] of $scope.one_title.entries()) {
+                            if (value.two_title.length == 0) {
                                 value.two_title.push({
-                                    title:'',
-                                    count:'',
-                                    pid:value.id
+                                    title: '',
+                                    count: '',
+                                    pid: value.id
                                 })
                             }
                         }
@@ -3917,17 +3959,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
         }
         //移除二级标题
-        $scope.remove_second_title = function (index,item) {
-            if(item.id!=undefined){
+        $scope.remove_second_title = function (index, item) {
+            if (item.id != undefined) {
                 $scope.del_two_id.push(+item.two_title[index].id)
             }
             $scope.cur_general_count.count = +$scope.cur_general_count.count - item.two_title[index].count
-            item.two_title.splice(index,1)
+            item.two_title.splice(index, 1)
         }
         //改变单项点位计算总点位
-        $scope.get_all_count = function (parent_index,index,count=0) {
+        $scope.get_all_count = function (parent_index, index, count = 0) {
             console.log($scope.cur_one_title[parent_index].two_title[index])
-            if(!isNaN(+count)){
+            if (!isNaN(+count)) {
                 $scope.cur_general_count.count = +$scope.cur_general_count.count + (+count - $scope.cur_one_title[parent_index]
                     .two_title[index].count)
                 $scope.cur_one_title[parent_index].two_title[index].count = count
@@ -3937,8 +3979,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_index = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
+                    name: '智能报价',
+                    icon: 'icon-baojia',
                 }
             ]
             $state.go('intelligent.intelligent_index')
@@ -3947,88 +3989,88 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.return_general_manage = function () {
             $rootScope.crumbs = [
                 {
-                    name:'智能报价',
-                    icon:'icon-baojia',
-                    link:function(){
+                    name: '智能报价',
+                    icon: 'icon-baojia',
+                    link: function () {
                         $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1,4)
+                        $rootScope.crumbs.splice(1, 4)
                     }
-                },{
-                    name:'通用管理'
+                }, {
+                    name: '通用管理'
                 }
             ]
             $state.go('intelligent.general_manage')
         }
         //保存水电通用管理
-        $scope.save_general_manage = function (valid,index,item) {
+        $scope.save_general_manage = function (valid, index, item) {
             let arr = []
-            if(index == 1){
-                if(item.title!=''){
+            if (index == 1) {
+                if (item.title != '') {
                     let obj = {}
-                    if(item.id == undefined){
+                    if (item.id == undefined) {
                         obj = {
-                            id:$scope.cur_general_count.id,
-                            title:item.title
+                            id: $scope.cur_general_count.id,
+                            title: item.title
                         }
-                    }else{
+                    } else {
                         obj = {
-                            edit_id:item.id,
-                            title:item.title
+                            edit_id: item.id,
+                            title: item.title
                         }
                     }
-                    _ajax.post('/quote/commonality-title-add',{
-                        one_title:obj
-                    },function (res) {
+                    _ajax.post('/quote/commonality-title-add', {
+                        one_title: obj
+                    }, function (res) {
                         console.log(res)
-                        _ajax.post('/quote/commonality-title',{
-                            id:$scope.cur_general_count.id
-                        },function (res) {
+                        _ajax.post('/quote/commonality-title', {
+                            id: $scope.cur_general_count.id
+                        }, function (res) {
                             console.log(res)
                             $scope.one_title = res.list.one_title
-                            for(let [key,value] of $scope.one_title.entries()){
+                            for (let [key, value] of $scope.one_title.entries()) {
                                 value['two_title'] = []
                             }
-                            for(let [key,value] of res.list.two_title.entries()){
+                            for (let [key, value] of res.list.two_title.entries()) {
                                 let cur_index = $scope.one_title.findIndex(function (item) {
                                     return item.id == value.pid
                                 })
                                 $scope.one_title[cur_index].two_title.push(value)
                             }
-                            for(let [key,value] of $scope.one_title.entries()){
-                                if(value.two_title.length == 0){
+                            for (let [key, value] of $scope.one_title.entries()) {
+                                if (value.two_title.length == 0) {
                                     value.two_title.push({
-                                        title:'',
-                                        count:'',
-                                        pid:value.id
+                                        title: '',
+                                        count: '',
+                                        pid: value.id
                                     })
                                 }
                             }
-                            $scope.cur_one_title = angular.copy($scope.one_title,['destination'])
+                            $scope.cur_one_title = angular.copy($scope.one_title, ['destination'])
                             console.log($scope.one_title)
                         })
                     })
-                }else{
+                } else {
 
                 }
-            }else{
-                for(let [key,value] of $scope.one_title.entries()){
-                    for(let [key1,value1] of value.two_title.entries()){
-                        if(value1.id == undefined){
+            } else {
+                for (let [key, value] of $scope.one_title.entries()) {
+                    for (let [key1, value1] of value.two_title.entries()) {
+                        if (value1.id == undefined) {
                             arr.push({
-                                id:value.id,
-                                title:value1.title,
-                                count:value1.count
+                                id: value.id,
+                                title: value1.title,
+                                count: value1.count
                             })
-                        }else{
+                        } else {
                             arr.push({
-                                edit_id:value1.id,
-                                title:value1.title,
-                                count:value1.count
+                                edit_id: value1.id,
+                                title: value1.title,
+                                count: value1.count
                             })
                         }
                     }
                 }
-                if(valid){
+                if (valid) {
                     let all_data = ''
                     let cur = $scope
                     let all_modal = function ($scope, $uibModalInstance) {
@@ -4037,14 +4079,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             $uibModalInstance.close()
                             $rootScope.crumbs = [
                                 {
-                                    name:'智能报价',
-                                    icon:'icon-baojia',
-                                    link:function(){
+                                    name: '智能报价',
+                                    icon: 'icon-baojia',
+                                    link: function () {
                                         $state.go('intelligent.intelligent_index')
-                                        $rootScope.crumbs.splice(1,4)
+                                        $rootScope.crumbs.splice(1, 4)
                                     }
-                                },{
-                                    name:'通用管理'
+                                }, {
+                                    name: '通用管理'
                                 }
                             ]
                             cur.three_title = ''
@@ -4052,19 +4094,27 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         }
                     }
                     all_modal.$inject = ['$scope', '$uibModalInstance']
-                    if($scope.del_two_id.length == 0){
+                    if ($scope.del_two_id.length == 0) {
                         all_data = {
-                            two_title:arr,
-                            count:{id:$scope.cur_general_count.id,count:$scope.cur_general_count.count,title:$scope.cur_general_count.title}
+                            two_title: arr,
+                            count: {
+                                id: $scope.cur_general_count.id,
+                                count: $scope.cur_general_count.count,
+                                title: $scope.cur_general_count.title
+                            }
                         }
-                    }else{
+                    } else {
                         all_data = {
-                            two_title:arr,
-                            del_id:$scope.del_two_id,
-                            count:{id:$scope.cur_general_count.id,count:$scope.cur_general_count.count,title:$scope.cur_general_count.title}
+                            two_title: arr,
+                            del_id: $scope.del_two_id,
+                            count: {
+                                id: $scope.cur_general_count.id,
+                                count: $scope.cur_general_count.count,
+                                title: $scope.cur_general_count.title
+                            }
                         }
                     }
-                    _ajax.post('/quote/commonality-title-two-add',all_data,function (res) {
+                    _ajax.post('/quote/commonality-title-two-add', all_data, function (res) {
                         console.log(res)
                         $uibModal.open({
                             templateUrl: 'pages/intelligent/cur_model.html',
@@ -4087,71 +4137,71 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     cur.three_title = ''
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia',
-                            link:function(){
+                            name: '智能报价',
+                            icon: 'icon-baojia',
+                            link: function () {
                                 $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1,4)
+                                $rootScope.crumbs.splice(1, 4)
                             }
-                        },{
-                            name:'通用管理'
+                        }, {
+                            name: '通用管理'
                         }]
                     $state.go('intelligent.general_manage')
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
-            if($scope.cur_edit_item.title == '面积比例'){
-                let data = $scope.main_item.reduce(function (prev,cur,index) {
+            if ($scope.cur_edit_item.title == '面积比例') {
+                let data = $scope.main_item.reduce(function (prev, cur, index) {
                     console.log(prev)
-                    return +prev+(+cur.project_value)
-                },0)
-                if(data > 100){
+                    return +prev + (+cur.project_value)
+                }, 0)
+                if (data > 100) {
                     $scope.true_data = false
-                }else{
+                } else {
                     $scope.true_data = true
                 }
             }
             console.log($scope.main_item)
             console.log($scope.cur_area_range)
-            let arr = [],arr1=[]
-            for(let [key,value] of $scope.main_item.entries()){
+            let arr = [], arr1 = []
+            for (let [key, value] of $scope.main_item.entries()) {
                 arr.push({
-                   id:value.id,
-                    coefficient:value.project_value
+                    id: value.id,
+                    coefficient: value.project_value
                 })
             }
-            for(let [key,value] of $scope.cur_area_range.entries()){
-                for(let [key1,value1] of value.all_area_range.entries()){
-                    if(value1.id == undefined){
+            for (let [key, value] of $scope.cur_area_range.entries()) {
+                for (let [key1, value1] of value.all_area_range.entries()) {
+                    if (value1.id == undefined) {
                         arr1.push({
-                            min_area:value1.min_area,
-                            max_area:value1.max_area,
-                            project_value:value1.num,
-                            project_name:value.title,
-                            points_id:$scope.cur_edit_item.id
+                            min_area: value1.min_area,
+                            max_area: value1.max_area,
+                            project_value: value1.num,
+                            project_name: value.title,
+                            points_id: $scope.cur_edit_item.id
                         })
-                    }else{
+                    } else {
                         arr1.push({
-                            value:value1.num,
-                            id:value1.id
+                            value: value1.num,
+                            id: value1.id
                         })
                     }
                 }
             }
-            if(valid&&$scope.true_data){
-                _ajax.post('/quote/commonality-else-edit',{
-                    else:[{
-                        value:arr,
-                        area:arr1
+            if (valid && $scope.true_data) {
+                _ajax.post('/quote/commonality-else-edit', {
+                    else: [{
+                        value: arr,
+                        area: arr1
                     }]
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
                     })
                 })
-            }else{
+            } else {
                 $scope.submitted = true
             }
         }
@@ -4160,35 +4210,35 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.go_goods_manage = function () {
             $scope.check_item = []
             $scope.submitted = false
-            _ajax.get('/quote/goods-management-list',{},function (res) {
+            _ajax.get('/quote/goods-management-list', {}, function (res) {
                 console.log(res)
                 $scope.check_item = res.list
                 $rootScope.crumbs = [
                     {
-                        name:'智能报价',
-                        icon:'icon-baojia',
-                        link:function(){
+                        name: '智能报价',
+                        icon: 'icon-baojia',
+                        link: function () {
                             $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1,4)
+                            $rootScope.crumbs.splice(1, 4)
                         }
-                    },{
-                        name:'智能报价商品管理'
+                    }, {
+                        name: '智能报价商品管理'
                     }
                 ]
             })
-            _ajax.get('/quote/assort-goods',{},function (res) {
+            _ajax.get('/quote/assort-goods', {}, function (res) {
                 console.log(res)
                 $scope.level_one = res.data.categories
                 $scope.cur_level_one = $scope.level_one[0]
-                _ajax.get('/quote/assort-goods',{
+                _ajax.get('/quote/assort-goods', {
                     pid: $scope.cur_level_one.id
-                },function (res) {
+                }, function (res) {
                     console.log(res)
                     $scope.level_two = res.data.categories
                     $scope.cur_level_two = $scope.level_two[0]
-                    _ajax.get('/quote/assort-goods',{
+                    _ajax.get('/quote/assort-goods', {
                         pid: $scope.cur_level_two.id
-                    },function (res) {
+                    }, function (res) {
                         console.log(res)
                         $scope.level_three = res.data.categories
                         for (let [key, value] of $scope.level_three.entries()) {
@@ -4220,8 +4270,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $uibModalInstance.close()
                     $rootScope.crumbs = [
                         {
-                            name:'智能报价',
-                            icon:'icon-baojia'
+                            name: '智能报价',
+                            icon: 'icon-baojia'
                         }
                     ]
                     $state.go('intelligent.intelligent_index')
@@ -4229,26 +4279,26 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
             let arr = []
-            for(let [key,value] of $scope.check_item.entries()){
+            for (let [key, value] of $scope.check_item.entries()) {
                 arr.push({
-                    id:value.id,
-                    pid:value.pid,
-                    title:value.title,
-                    path:value.path,
-                    quantity:value.quantity
+                    id: value.id,
+                    pid: value.pid,
+                    title: value.title,
+                    path: value.path,
+                    quantity: value.quantity
                 })
             }
-            if(valid){
-                _ajax.post('/quote/goods-management-add',{
-                    add_item:arr
-                },function (res) {
+            if (valid) {
+                _ajax.post('/quote/goods-management-add', {
+                    add_item: arr
+                }, function (res) {
                     console.log(res)
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
                     })
                 })
-            }else{
+            } else {
                 $scope.submitted = true
             }
         }
