@@ -221,7 +221,6 @@ class BasisDecorationService
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        var_dump($ids);exit;
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
                 case $one_unit['title'] == self::GOODS_NAME['reticle'] || $one_unit['title'] == self::GOODS_NAME['wire']:
