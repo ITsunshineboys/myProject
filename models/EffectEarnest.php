@@ -200,11 +200,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
         $tran=\Yii::$app->db->beginTransaction();
         try{
-            if(!isset($post['particulars'])){
-                $particulars=Effect::chinanum($post['bedroom']).'室'.Effect::chinanum($post['sittingRoom_diningRoom']).'厅'.Effect::chinanum($post['kitchen']).'厨'.Effect::chinanum($post['toilet']).'卫';
-            }else{
-                $particulars=$post['particulars'];
-            }
+            $particulars=Effect::chinanum($post['bedroom']).'室'.Effect::chinanum($post['sittingRoom_diningRoom']).'厅'.Effect::chinanum($post['kitchen']).'厨'.Effect::chinanum($post['toilet']).'卫';
+
             if(!isset($post['district_code'])){
                 $district_code=null;
             }else{

@@ -300,6 +300,7 @@ class Effect extends ActiveRecord
         if(!isset($array['original_price'])){
             $array['original_price']=null;
         }
+
         $array['add_time']=date('Y-m-d H:i:s',$array['add_time']);
         $array['create_time']=date('Y-m-d H:i:s',$array['create_time']);
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
