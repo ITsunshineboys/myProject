@@ -364,7 +364,7 @@ class QuoteController extends Controller
                     $coefficient->series_or_style  = $one_coefficient['series_or_style'];
                     $add = $coefficient->save();
                 }
-                var_dump($add);exit;
+
                 if (!$add){
                     $transaction->rollBack();
                     $code = 1000;
@@ -377,6 +377,7 @@ class QuoteController extends Controller
 
             $transaction->commit();
         }  catch (\Exception $e) {
+            var_dump($e);exit;
             $transaction->rollBack();
             $code = 1000;
             return Json::encode([
