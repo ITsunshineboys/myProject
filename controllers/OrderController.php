@@ -4431,16 +4431,21 @@ class OrderController extends Controller
     public function actionCalculationFreight()
     {
         $goods=Yii::$app->request->post('goods');
-        foreach ($goods as  $k =>$v)
+        foreach ($goods as $one){
+            if ($one['num'] != 0 || $one['num'] !=null){
+                $goods_ = $one;
+            }
+        }
+        foreach ($goods_ as  $k =>$v)
         {
             $Good[$k]=LogisticsTemplate::find()
                 ->where(['id'=>Goods::find()
-                    ->where(['id'=>$goods[$k]['goods_id']])
+                    ->where(['id'=>$goods_[$k]['goods_id']])
                     ->one()->logistics_template_id])
                 ->asArray()
                 ->one();
-            $Good[$k]['goods_id']=$goods[$k]['goods_id'];
-            $Good[$k]['num']=$goods[$k]['num'];
+            $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
+            $Good[$k]['num']=$goods_[$k]['num'];
         }
         $templates=[];
         foreach ($Good as &$wuliu){
