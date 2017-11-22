@@ -1451,11 +1451,14 @@ class OwnerController extends Controller
                     }
                 }
             }
-            var_dump($post['list']);exit;
+
             foreach ($post['list'] as &$default){
-                if (empty($default['goods_price'])){
+                if ($default['goods_price'] != 0 || $default['goods_price'] != null){
                     $default['goods_price'] = $default['price'] * 1;
                 }
+//                if (empty($default['goods_price'])){
+//                    $default['goods_price'] = $default['price'] * 1;
+//                }
             }
 
             $special_offer = 0;
