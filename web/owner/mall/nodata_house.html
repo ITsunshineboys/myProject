@@ -160,12 +160,12 @@
             <!--结构-->
             <div class="structure" ng-show="ctrlScope.choose_stairs == 1">
                 <ul>
-                    <li ng-repeat="item in stairs_details" ng-click="ctrlScope.nowStairs.id = item.id">
+                    <li ng-repeat="item in stairs_details" ng-click="nowStairs.id = item.id">
                         <label ng-click="">
-                            <input type="radio" name="stairs" ng-checked="ctrlScope.nowStairs.id === item.id"/>
+                            <input type="radio" name="stairs" ng-checked="nowStairs.id === item.id"/>
                             <span></span>
                             <span>{{item.attribute}}</span>
-                            <img ng-if="ctrlScope.nowStairs.id === item.id" src="images/mall_list_radio.png" alt=""/>
+                            <img ng-if="nowStairs.id === item.id" src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                 </ul>
