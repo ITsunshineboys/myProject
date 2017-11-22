@@ -368,6 +368,9 @@ class Effect extends ActiveRecord
             if($value['brand']==null){
                 $value['brand']='';
             }
+            if($value['cate_level3']==null){
+                $value['cate_level3']='';
+            }
             if($value['first_cate_id']==null){
                 $value['first_cate_id']='';
             }
