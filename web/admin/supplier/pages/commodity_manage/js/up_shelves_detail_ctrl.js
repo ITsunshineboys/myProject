@@ -19,7 +19,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
   let reg=/^\d+(\.\d{1,2})?$/;
-  let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;//只能输入中文 数字 字母
+    let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
   $scope.myng=$scope;
   let goods_item=$stateParams.item;//点击对应的那条数据
   console.log(goods_item);

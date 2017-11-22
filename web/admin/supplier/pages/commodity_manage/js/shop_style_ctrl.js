@@ -16,7 +16,7 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
       $scope.second_category_title=$stateParams.second_category_title;//二级分类名称
       $scope.third_category_title=$stateParams.third_category_title;//三级分类名称
       let reg=/^\d+(\.\d{1,2})?$/;
-      let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;//只能输入中文 数字 字母
+      let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
       $scope.config=$rootScope.config;//富文本编辑器配置
 
     /*-------------------限制特殊字符----------------------------*/
