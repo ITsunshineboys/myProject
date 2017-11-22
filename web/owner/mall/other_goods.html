@@ -3,10 +3,10 @@
         <!--移动家具-->
         <div class="sheet_material" >
             <ul class="wall_ul">
-                <div class="wall_margin">
-                    <li ng-repeat="item in cur_item.second_level">
-                        <div class="list_line" ng-repeat="item1 in item.three_level" data-toggle="{{cur_content}}" data-target="#myModal" >
-                            <div ng-repeat="item2 in item1.goods_detail" ng-click="get_basic_details(item2,item1.title,item1.id)">
+                <div class="wall_margin" ng-repeat="item in cur_item.second_level">
+                    <li ng-repeat="item1 in item.three_level">
+                        <div class="list_line" ng-repeat="item2 in item1.goods_detail" ng-click="get_basic_details(item2,item1.title,item1.id)" data-toggle="{{cur_content}}" data-target="#myModal" >
+                            <div  >
                                 <div ng-class="{'cur_animate':is_delete_btn}">
                                     <div class="wall_span_brand">
                                         <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br>

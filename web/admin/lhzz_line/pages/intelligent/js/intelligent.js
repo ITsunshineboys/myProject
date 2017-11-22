@@ -410,14 +410,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     'index': 1,
                     'all_materials': '',
                     'drawing_list': [],
-                    'backman_option': [
-                        {name: '12墙拆除', num: ''},
-                        {name: '24墙拆除', num: ''},
-                        {name: '补烂', num: ''},
-                        {name: '12墙新建(含双面抹灰)', num: ''},
-                        {name: '24墙新建(含双面抹灰)', num: ''},
-                        {name: '有无建渣点', num: 1},
-                    ],
+                    // 'backman_option': [
+                    //     {name: '12墙拆除', num: ''},
+                    //     {name: '24墙拆除', num: ''},
+                    //     {name: '补烂', num: ''},
+                    //     {name: '12墙新建(含双面抹灰)', num: ''},
+                    //     {name: '24墙新建(含双面抹灰)', num: ''},
+                    //     {name: '有无建渣点', num: 1},
+                    // ],
                     'is_ordinary': 1
                 }]
             //图纸信息数据初始化
@@ -505,7 +505,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                 }
                 $scope.all_drawing = item.drawing_list//当前案例所有图纸
-                $scope.backman_option = item.backman_option//杂工选项
+                // $scope.backman_option = item.backman_option//杂工选项
                 $scope.all_materials = item.all_materials || angular.copy($scope.all_materials_copy)
                 if (!item['worker_list']) {
                     item['worker_list'] = angular.copy($scope.common_worker)
@@ -574,14 +574,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 'index': $scope.house_informations.length,
                 'all_materials': '',
                 'drawing_list': [],
-                'backman_option': [
-                    {name: '12墙拆除', num: ''},
-                    {name: '24墙拆除', num: ''},
-                    {name: '补烂', num: ''},
-                    {name: '12墙新建(含双面抹灰)', num: ''},
-                    {name: '24墙新建(含双面抹灰)', num: ''},
-                    {name: '有无建渣点', num: 1},
-                ],
+                // 'backman_option': [
+                //     {name: '12墙拆除', num: ''},
+                //     {name: '24墙拆除', num: ''},
+                //     {name: '补烂', num: ''},
+                //     {name: '12墙新建(含双面抹灰)', num: ''},
+                //     {name: '24墙新建(含双面抹灰)', num: ''},
+                //     {name: '有无建渣点', num: 1},
+                // ],
                 'is_ordinary': 1
             })
         }
@@ -1218,17 +1218,17 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                 }
                 //处理杂工选项
-                for (let [key, value] of $scope.house_informations.entries()) {
-                    let backman_list = []
-                    if (value.is_ordinary) {
-                        for (let [key1, value1] of value.backman_option.entries()) {
-                            if (!!value1.num || value1.num === 0) {
-                                backman_list.push(value1)
-                                value['backman_list'] = backman_list
-                            }
-                        }
-                    }
-                }
+                // for (let [key, value] of $scope.house_informations.entries()) {
+                //     let backman_list = []
+                //     if (value.is_ordinary) {
+                //         for (let [key1, value1] of value.backman_option.entries()) {
+                //             if (!!value1.num || value1.num === 0) {
+                //                 backman_list.push(value1)
+                //                 value['backman_list'] = backman_list
+                //             }
+                //         }
+                //     }
+                // }
                 //处理普通户型图纸信息
                 for (let [key, value] of $scope.house_informations.entries()) {
                     if (!value.is_ordinary) {
@@ -1304,7 +1304,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             'all_goods': value.all_goods || [],
                             'drawing_list': value.drawing_list.join(','),
                             'worker_list': value.worker_list || [],
-                            'backman_option': value.backman_list || [],
+                            // 'backman_option': value.backman_list || [],
                             'is_ordinary': 1
                         })
                     }
@@ -1378,30 +1378,30 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                 }
                 //处理杂工选项
-                for (let [key, value] of $scope.house_informations.entries()) {
-                    let backman_list = []
-                    if (value.is_ordinary) {
-                        for (let [key1, value1] of value.backman_option.entries()) {
-                            if (!!value1.cur_id) {
-                                if (!!value1.num || (value1.num == 0 && value1.name == '有无建渣点')) {
-                                    backman_list.push({
-                                        'name': value1.name,
-                                        'num': value1.num,
-                                        'id': value1.cur_id
-                                    })
-                                    value['backman_list'] = backman_list
-                                } else {
-                                    value.delete_backman.push(value1.cur_id)
-                                }
-                            } else {
-                                if (!!value1.num || (value1.num == 0 && value1.name == '有无建渣点')) {
-                                    backman_list.push(value1)
-                                    value['backman_list'] = backman_list
-                                }
-                            }
-                        }
-                    }
-                }
+                // for (let [key, value] of $scope.house_informations.entries()) {
+                //     let backman_list = []
+                //     if (value.is_ordinary) {
+                        // for (let [key1, value1] of value.backman_option.entries()) {
+                        //     if (!!value1.cur_id) {
+                        //         if (!!value1.num || (value1.num == 0 && value1.name == '有无建渣点')) {
+                        //             backman_list.push({
+                        //                 'name': value1.name,
+                        //                 'num': value1.num,
+                        //                 'id': value1.cur_id
+                        //             })
+                        //             value['backman_list'] = backman_list
+                        //         } else {
+                        //             value.delete_backman.push(value1.cur_id)
+                        //         }
+                        //     } else {
+                        //         if (!!value1.num || (value1.num == 0 && value1.name == '有无建渣点')) {
+                        //             backman_list.push(value1)
+                        //             value['backman_list'] = backman_list
+                        //         }
+                        //     }
+                        // }
+                //     }
+                // }
                 //处理普通户型图纸信息
                 for (let [key, value] of $scope.house_informations.entries()) {
                     if (!value.is_ordinary) {
@@ -1486,7 +1486,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 'all_goods': value.all_goods || [],
                                 'drawing_list': value.drawing_list.join(','),
                                 'worker_list': value.worker_list || [],
-                                'backman_option': value.backman_list || [],
+                                // 'backman_option': value.backman_list || [],
                                 'is_ordinary': 1
                             })
                             console.log(111)
@@ -1538,7 +1538,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 'all_goods': value.all_goods || [],
                                 'drawing_list': value.drawing_list.join(','),
                                 'worker_list': value.worker_list || [],
-                                'backman_option': value.backman_list || [],
+                                // 'backman_option': value.backman_list || [],
                                 'is_ordinary': 1
                             })
                         }
@@ -1748,14 +1748,14 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             'stair': +value.stair_id,
                             'all_materials': angular.copy($scope.all_materials_copy),
                             'worker_list': angular.copy($scope.common_worker),
-                            'backman_option': [
-                                {name: '12墙拆除', num: ''},
-                                {name: '24墙拆除', num: ''},
-                                {name: '补烂', num: ''},
-                                {name: '12墙新建(含双面抹灰)', num: ''},
-                                {name: '24墙新建(含双面抹灰)', num: ''},
-                                {name: '有无建渣点', num: 1},
-                            ],
+                            // 'backman_option': [
+                            //     {name: '12墙拆除', num: ''},
+                            //     {name: '24墙拆除', num: ''},
+                            //     {name: '补烂', num: ''},
+                            //     {name: '12墙新建(含双面抹灰)', num: ''},
+                            //     {name: '24墙新建(含双面抹灰)', num: ''},
+                            //     {name: '有无建渣点', num: 1},
+                            // ],
                             'high': value.high,
                             'window': value.window,
                             'is_ordinary': 1
@@ -1842,18 +1842,18 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     }
                 }
                 //获取案例杂工选项
-                for (let [key, value] of $scope.house_informations.entries()) {
-                    if (value.is_ordinary) {
-                        for (let [key1, value1] of value.backman_option.entries()) {
-                            for (let [key2, value2] of res.effect.works_backman_data.entries()) {
-                                if (value1.name == value2.backman_option) {
-                                    value1.num = value2.backman_value
-                                    value1['cur_id'] = value2.id
-                                }
-                            }
-                        }
-                    }
-                }
+                // for (let [key, value] of $scope.house_informations.entries()) {
+                //     if (value.is_ordinary) {
+                //         for (let [key1, value1] of value.backman_option.entries()) {
+                //             for (let [key2, value2] of res.effect.works_backman_data.entries()) {
+                //                 if (value1.name == value2.backman_option) {
+                //                     value1.num = value2.backman_value
+                //                     value1['cur_id'] = value2.id
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
                 console.log(angular.copy($scope.all_materials_copy))
                 console.log($scope.drawing_informations)
                 console.log($scope.house_informations)
@@ -2669,13 +2669,22 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         console.log($scope.all_series)
                         for (let [key, value] of $scope.all_norm.entries()) {
                             for (let [key1, value1] of $scope.cur_norm.entries()) {
-                                if (value.title == value1.title) {
+                                if (value.title.indexOf(value1.title)!=-1) {
                                     value1['options'] = value.value
+                                    console.log(value1.value)
+                                    if(value1.value==0){
+                                        value1.value = '其它'
+                                    }
                                 }
                             }
                         }
+                        console.log($scope.cur_norm)
                         for (let [key, value] of $scope.cur_norm.entries()) {
-                            value.value = parseFloat(value.value) + ''
+                            if(value.value == '其它'){
+                                value.value = value.value
+                            }else{
+                                value.value = parseFloat(value.value) + ''
+                            }
                             value.cur_unit = 'm'
                             if (value.title == '石膏板') {
                                 arr4.push(value)
@@ -2683,6 +2692,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 arr5.push(value)
                             } else if (value.title == '丝杆') {
                                 arr6.push(value)
+                            }else if(value.title == '木工板'){
+                                arr9.push(value)
                             }
                         }
                         for (let [key, value] of arr.entries()) {
@@ -2699,9 +2710,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 arr5.push(value)
                             } else if (value.project_details.indexOf('丝杆') != -1) {
                                 arr6.push(value)
+                            }else if (value.project_details.indexOf('木工板') != -1) {
+                                arr9.unshift(value)
                             }
                         }
-                        $scope.process_list = [arr4, arr5, arr6]
+                        $scope.process_list = [arr9,arr4, arr5, arr6]
                         console.log($scope.process_list)
                         console.log(arr)
                         console.log($scope.all_series)
@@ -3746,7 +3759,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 all_area_range: []
                             }]
                         } else {
-                            $scope.cur_area_range = [{
+                            $scope.cur_area_rangge = [{
                                 title: '其他防水面积',
                                 all_area_range: []
                             }]
