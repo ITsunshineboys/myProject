@@ -669,6 +669,7 @@ class BasisDecorationService
                 $blockboard = $one_goods;
             }
         }
+        var_dump($blockboard);exit;
         $a = EngineeringStandardCraft::find()
             ->asArray()
             ->where(['project'=>'木作'])
