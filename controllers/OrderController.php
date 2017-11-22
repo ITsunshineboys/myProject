@@ -3664,7 +3664,9 @@ class OrderController extends Controller
               if ($arr[$k]==0 ||$arr[$k]==1 )
                 {
                     unset($arr[$k]);
-                } else{
+                }
+                else
+                {
                     $value=OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$arr[$k]];
                     $name=array_search($value,OrderAfterSale::AFTER_SALE_SERVICES);
                     $data[]=[
@@ -4014,7 +4016,10 @@ class OrderController extends Controller
             $first_category=GoodsCategory::find()->select('path,title,parent_title')->where(['id'=>$category_arr[0]])->one();
             $category=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
             $brand=GoodsBrand::findOne($Goods->brand_id);
-            $serie=Series::find()->select('series')->where(['id'=>$Goods->series_id])->one();
+            $serie=Series::find()
+                ->select('series')
+                ->where(['id'=>$Goods->series_id])
+                ->one();
             if ($serie)
             {
                 $series=$serie->series;
@@ -4053,7 +4058,11 @@ class OrderController extends Controller
                 ->one();
             $logisticsTemplate['delivery_cost_default']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_default']*0.01);
             $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
-            $logisticsDistrict=LogisticsDistrict::find()->select('district_name')->where(['template_id'=>$logisticsTemplate['id']])->asArray()->all();
+            $logisticsDistrict=LogisticsDistrict::find()
+                ->select('district_name')
+                ->where(['template_id'=>$logisticsTemplate['id']])
+                ->asArray()
+                ->all();
             $after_sale=explode(',',$Goods->after_sale_services);
             $guarantee=[];
             $after=[];
@@ -5039,6 +5048,13 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+    }
+
+
+    public function  actionTest()
+    {
+        $str=$_SERVER['SERVER_ADDR'];
+        echo $str;
     }
 
 
