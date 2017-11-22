@@ -315,7 +315,9 @@ class QuoteController extends Controller
                     ]);
                 }
             }
+
             foreach ($post['value'] as $one_post){
+                var_dump($one_post);exit;
                 if (!isset($one_post['id'])){
                     $value = new EngineeringStandardCraft();
                     $value->district_code   = $post['district_code'];
