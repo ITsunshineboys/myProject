@@ -2540,7 +2540,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             value1['name'] = 'series01' + value1.id
                             if (res.coefficient.length != 0) {
                                 for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.series) {
+                                    if (value.project == value1.id) {
                                         if (+value.series_or_style == 0 && +value.coefficient == 1) {
                                             value1['series_or_style'] = 0
                                             value1['cur_id'] = value.id
@@ -2565,7 +2565,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             value1['name'] = 'series02' + value1.id
                             if (res.coefficient.length != 0) {
                                 for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.series) {
+                                    if (value.project == value1.id) {
                                         if (+value.series_or_style == 0 && +value.coefficient == 2) {
                                             value1['series_or_style'] = 0
                                             value1['cur_id'] = value.id
@@ -2590,7 +2590,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             value1['name'] = 'series03' + value1.id
                             if (res.coefficient.length != 0) {
                                 for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.series) {
+                                    if (value.project == value1.id) {
                                         if (+value.series_or_style == 0 && +value.coefficient == 3) {
                                             value1['series_or_style'] = 0
                                             value1['cur_id'] = value.id
@@ -2616,7 +2616,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             value1['name'] = 'style11' + value1.id
                             if (res.coefficient.length != 0) {
                                 for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.style) {
+                                    if (value.project == value1.id) {
                                         if (+value.series_or_style == 1 && +value.coefficient == 1) {
                                             value1['series_or_style'] = 1
                                             value1['cur_id'] = value.id
@@ -2632,7 +2632,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                     }
                                 }
                             } else {
-                                console.log(1111)
                                 value1['series_or_style'] = 1
                                 value1['coefficient'] = 1
                                 value1['value'] = ''
@@ -2643,7 +2642,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             value1['name'] = 'style12' + value1.id
                             if (res.coefficient.length != 0) {
                                 for (let [key, value] of res.coefficient.entries()) {
-                                        if (value.project == value1.style) {
+                                        if (value.project == value1.id) {
                                             if (+value.series_or_style == 1 && +value.coefficient == 2) {
                                                 value1['series_or_style'] = 1
                                                 value1['cur_id'] = value.id
