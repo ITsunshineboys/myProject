@@ -120,18 +120,33 @@ angular.module('all_controller', [])
         // $scope.baseUrl = 'http://test.cdlhzz.cn/'
         $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         // $scope.baseUrl = '/'
+        $scope.nodata_params = {
+            bedroom: 1,//卧室
+            area: 60,      //面积
+            hall: 1,       //餐厅
+            toilet: 1,   // 卫生间
+            kitchen: 1,  //厨房
+            series: '',   //系列
+            style: '',  //风格
+            window: 0,//飘窗
+            high: 2.8, //层高
+            province: 510000,   //省编码
+            city: 510100,      // 市编码
+            stairway_id: 0,//有无楼梯
+            stairs: ''//楼梯结构
+        }
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
-        $scope.area = 60//房屋面积
-        $scope.house_bedroom = 1//室
-        $scope.house_hall = 1//厅
-        $scope.house_toilet = 1 //卫
-        $scope.house_kitchen = 1//厨
-        $scope.highCrtl = 2.8//层高
-        $scope.window = 0//飘窗
-        $scope.choose_stairs = 0 //有无楼梯，默认无楼梯
-        $scope.nowStairs = {'id': 0, 'attribute': ''}//楼梯结构,，默认无楼梯结构
+        // $scope.area = 60//房屋面积
+        // $scope.house_bedroom = 1//室
+        // $scope.house_hall = 1//厅
+        // $scope.house_toilet = 1 //卫
+        // $scope.house_kitchen = 1//厨
+        // $scope.highCrtl = 2.8//层高
+        // $scope.window = 0//飘窗
+        // $scope.choose_stairs = 0 //有无楼梯，默认无楼梯
+        // $scope.nowStairs = {'id': 0, 'attribute': ''}//楼梯结构,，默认无楼梯结构
         $scope.have_header = true//有无头部
         $scope.all_goods = []//生成材料
         $scope.all_workers = []//工种以及费用
@@ -189,6 +204,8 @@ angular.module('all_controller', [])
             $scope.style = res.data.show.style;//风格数据
             $scope.cur_series = $scope.series[0]//默认选择第一个系列
             $scope.cur_style = $scope.style[0]//默认选择第一个风格
+            $scope.nodata_params.series = $scope.cur_series.id
+            $scope.nodata_params.style = $scope.cur_style.id
             $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
@@ -222,32 +239,16 @@ angular.module('all_controller', [])
         $scope.operate = function (type, is_add, limit, other) {
             console.log(other)
             if (!!is_add) {
-                if ($scope[type] == limit) {
-                    if (!!other) {
-                        $scope[type][other] = limit
-                    } else {
-                        $scope[type] = limit
-                    }
+                if ($scope[type][other] == limit) {
+                    $scope[type][other] = limit
                 } else {
-                    if (!!other) {
-                        $scope[type][other]++
-                    } else {
-                        $scope[type]++
-                    }
+                    $scope[type][other]++
                 }
             } else {
-                if ($scope[type] == limit) {
-                    if (!!other) {
-                        $scope[type][other] = limit
-                    } else {
-                        $scope[type] = limit
-                    }
+                if ($scope[type][other] == limit) {
+                    $scope[type][other] = limit
                 } else {
-                    if (!!other) {
-                        $scope[type][other]--
-                    } else {
-                        $scope[type]--
-                    }
+                    $scope[type][other]--
                 }
             }
         }
@@ -260,60 +261,63 @@ angular.module('all_controller', [])
 
         /*无资料操作*/
         //修改了基础表单数据
-        $scope.$watch('toponymy', function (newVal, oldVal) {
+        $scope.$watch('nodata_params',function (newVal,oldVal) {
             $scope.show_material = false
         })
-        $scope.$watch('message', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('area', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('house_bedroom', function (newVal, oldVal) {
-            $scope.show_material = false
-            console.log(newVal)
-        })
-        $scope.$watch('house_hall', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('house_toilet', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('house_kitchen', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('highCrtl', function (newVal, oldVal) {
-            $scope.show_material = false
-            console.log(newVal)
-        })
-        $scope.$watch('window', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('choose_stairs', function (newVal, oldVal) {
-            $scope.show_material = false
-            console.log(newVal)
-        })
-        $scope.$watch('nowStairs', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('cur_series', function (newVal, oldVal) {
-            $scope.show_material = false
-        })
-        $scope.$watch('cur_style', function (newVal, oldVal) {
-            $scope.show_material = false
-            $timeout(function () {
-                var mySwiper = new Swiper('.swiper-container', {
-                    direction: 'horizontal',
-                    loop: true,
-                    autoplay: 1000,
-                    autoplayDisableOnInteraction: false,
-                    effect: 'slide',
-
-                    // 如果需要分页器
-                    pagination: '.swiper-pagination',
-                })
-            }, 0)
-        })
+        // $scope.$watch('toponymy', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('message', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('area', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('house_bedroom', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        //     console.log(newVal)
+        // })
+        // $scope.$watch('house_hall', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('house_toilet', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('house_kitchen', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('highCrtl', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        //     console.log(newVal)
+        // })
+        // $scope.$watch('window', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('choose_stairs', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        //     console.log(newVal)
+        // })
+        // $scope.$watch('nowStairs', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('cur_series', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        // })
+        // $scope.$watch('cur_style', function (newVal, oldVal) {
+        //     $scope.show_material = false
+        //     $timeout(function () {
+        //         var mySwiper = new Swiper('.swiper-container', {
+        //             direction: 'horizontal',
+        //             loop: true,
+        //             autoplay: 1000,
+        //             autoplayDisableOnInteraction: false,
+        //             effect: 'slide',
+        //
+        //             // 如果需要分页器
+        //             pagination: '.swiper-pagination',
+        //         })
+        //     }, 0)
+        // })
         //监听页面是否加载完成操作DOM
         $scope.$on('ngRepeatFinished', function () {
             let $grid = $('.grid')
@@ -998,26 +1002,27 @@ angular.module('all_controller', [])
         // })
         //无资料计算
         $scope.get_goods = function (valid, error) {
+            console.log($scope.nodata_params)
             console.log(error)
             console.log($scope.nowStairs)
             $scope.all_workers = []
             if (valid) {
-                let data = {
-                    bedroom: $scope.house_bedroom,//卧室
-                    area: $scope.area,      //面积
-                    hall: $scope.house_hall,       //餐厅
-                    toilet: $scope.house_toilet,   // 卫生间
-                    kitchen: $scope.house_kitchen,  //厨房
-                    series: +$scope.cur_series.id,   //系列
-                    style: +$scope.cur_style.id,  //风格
-                    window: $scope.window,//飘窗
-                    high: $scope.highCrtl, //层高
-                    province: 510000,   //省编码
-                    city: 510100,      // 市编码
-                    stairway_id: $scope.choose_stairs,//有无楼梯
-                    stairs: $scope.nowStairs.attribute//楼梯结构
-                }
-                let data1 = angular.copy(data)
+                // let data = {
+                //     bedroom: $scope.house_bedroom,//卧室
+                //     area: $scope.area,      //面积
+                //     hall: $scope.house_hall,       //餐厅
+                //     toilet: $scope.house_toilet,   // 卫生间
+                //     kitchen: $scope.house_kitchen,  //厨房
+                //     series: +$scope.cur_series.id,   //系列
+                //     style: +$scope.cur_style.id,  //风格
+                //     window: $scope.window,//飘窗
+                //     high: $scope.highCrtl, //层高
+                //     province: 510000,   //省编码
+                //     city: 510100,      // 市编码
+                //     stairway_id: $scope.choose_stairs,//有无楼梯
+                //     stairs: $scope.nowStairs.attribute//楼梯结构
+                // }
+                let data1 = angular.copy($scope.nodata_params)
                 $scope.all_goods = angular.copy($scope.stair)
                 for (let [key, value] of $scope.all_goods.entries()) {
                     value['cost'] = 0
@@ -1027,7 +1032,7 @@ angular.module('all_controller', [])
                 //生成材料数据(同步请求)
                 //弱电
                 $q.all([$http.get(baseUrl + '/owner/weak-current', {
-                    params: data
+                    params: $scope.nodata_params
                 }).then(function (response) {
                     console.log('弱电')
                     console.log(response)
@@ -1107,7 +1112,7 @@ angular.module('all_controller', [])
                 }),
                     //强电
                     $http.get(baseUrl + '/owner/strong-current', {
-                        params: data
+                        params: $scope.nodata_params
                     }).then(function (response) {
                         console.log('强电')
                         console.log(response)
@@ -1185,7 +1190,7 @@ angular.module('all_controller', [])
                     }),
                     //水路
                     $http.get(baseUrl + '/owner/waterway', {
-                        params: data
+                        params: $scope.nodata_params
                     }).then(function (response) {
                         console.log('水路')
                         console.log(response)
@@ -1279,7 +1284,7 @@ angular.module('all_controller', [])
                     }),
                     //防水
                     $http.get(baseUrl + '/owner/waterproof', {
-                        params: data
+                        params: $scope.nodata_params
                     }).then(function (response) {
                         console.log('防水')
                         console.log(response)
@@ -1375,7 +1380,7 @@ angular.module('all_controller', [])
                     }),
                     //木作
                     $http.get(baseUrl + '/owner/carpentry', {
-                        params: data
+                        params: $scope.nodata_params
                     }).then(function (response) {
                         console.log('木作')
                         console.log(response)
@@ -1469,7 +1474,7 @@ angular.module('all_controller', [])
                     }),
                     //乳胶漆
                     $http.get(baseUrl + '/owner/coating', {
-                        params: data
+                        params: $scope.nodata_params
                     }).then(function (response) {
                         console.log('乳胶漆')
                         console.log(response)
@@ -1563,7 +1568,7 @@ angular.module('all_controller', [])
                     }),
                     //主要材料以及其他
                     $http.get(baseUrl + '/owner/assort-facility', {
-                        params: data
+                        params: $scope.nodata_params
                     }).then(function (response) {
                         console.log('主要材料及其他')
                         console.log(response)
