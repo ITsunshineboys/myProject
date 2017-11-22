@@ -1925,6 +1925,6 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-       var_dump(BrainpowerInitalSupervise::find()->asArray()->all());
+       var_dump("INSERT INTO `engineering_standard_craft` VALUES ('37', '510100', '木作', '1.00', '电视墙用细木工板', '张'");
     }
 }
