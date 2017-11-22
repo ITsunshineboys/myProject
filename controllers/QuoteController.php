@@ -1901,7 +1901,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['in','id',[6,7,8,9,10,11,12,13,14,15]]));
-       var_dump(EngineeringStandardCarpentryCoefficient::find()->all());
+       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
+//       var_dump(EngineeringStandardCarpentryCoefficient::find()->asArray()->all());
     }
 }
