@@ -1136,21 +1136,19 @@ class QuoteController extends Controller
         $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
         $brainpower = (new BrainpowerInitalSupervise())->codeStatus($province_code,$city_code);
-        var_dump($brainpower);exit;
         foreach ($brainpower as $value){
-            var_dump($value);exit;
             $where = 'district_code ='.$value['district_code'].' and toponymy ='.$value['toponymy'].' and street = '.$value['street'].' and particulars = '.$value['house_type_name'].' and type=1';
             $effect = Effect::find()->asArray()->where($where)->one();
             var_dump($effect);exit;
         }
 
 
-//        $code = 200;
-//        return Json::encode([
-//            'code' => $code,
-//            'msg'  => 'ok',
-//            'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
-//        ]);
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 'ok',
+            'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
+        ]);
     }
 
     /**
