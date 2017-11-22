@@ -1494,7 +1494,6 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-var_dump($assort_material);
         foreach ($assort_material as $assort){
             if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
                 $have_assort[] = $assort;
@@ -1508,7 +1507,6 @@ var_dump($assort_material);
             $material_name[] = $one_have_assort['title'];
             $material_one[$one_have_assort['title']] = $one_have_assort;
         }
-        var_dump($material_name);exit;
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
