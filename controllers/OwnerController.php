@@ -1517,7 +1517,6 @@ class OwnerController extends Controller
         }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        var_dump($goods_price);exit;
         $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
         $bedroom_area = $p['project_value'] / self::PRICE_UNITS;
         //   生活配套
