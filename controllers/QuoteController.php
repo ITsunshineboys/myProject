@@ -332,7 +332,7 @@ class QuoteController extends Controller
 //        }
 
         foreach ($post['coefficient'] as $one_coefficient){
-            if (!isset($one_coefficient['add_id'])){
+            if (isset($one_coefficient['add_id'])){
                 $coefficient = new EngineeringStandardCarpentryCoefficient();
                 $coefficient->project  = $one_coefficient['add_id'];
                 $coefficient->value  = $one_coefficient['value'];
