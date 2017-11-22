@@ -1146,7 +1146,6 @@ class QuoteController extends Controller
 
         $brainpower = (new BrainpowerInitalSupervise())->codeStatus($province_code,$city_code);
         foreach ($brainpower as $value){
-
             $effect = Effect::find()
                 ->asArray()
                 ->where(['district_code'=>$value['district_code']])
@@ -1154,9 +1153,11 @@ class QuoteController extends Controller
                 ->andWhere(['street'=>$value['street']])
                 ->andWhere(['type'=>1])
                 ->one();
+
+            if (!$effect){
+                BrainpowerInitalSupervise::deleteAll(['id'=>$value['id']]);
+            }
         }
-        var_dump($effect);exit;
-        exit;
 
         $code = 200;
         return Json::encode([
@@ -1304,8 +1305,8 @@ class QuoteController extends Controller
     public function actionHomepageStatus()
     {
         $code = 1000;
-        $id       = trim(\Yii::$app->request->get('id',''));
-        $status   = trim(\Yii::$app->request->get('status',''));
+        $id       = (int)trim(\Yii::$app->request->get('id',''));
+        $status   = (int)trim(\Yii::$app->request->get('status',''));
         $find_one = BrainpowerInitalSupervise::findOne(['id'=>$id]);
         $find_one->status = $status;
         if (!$find_one->validate()){
