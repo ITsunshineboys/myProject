@@ -324,7 +324,9 @@ class QuoteController extends Controller
                 $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
                 $coefficient->value = $one_coefficient['value'];
                 $coefficient->save();
-            } else {
+            }
+
+            if (!isset($one_coefficient['add_id'])){
                 $coefficient = new EngineeringStandardCarpentryCoefficient();
                 $coefficient->project  = $one_coefficient['add_id'];
                 $coefficient->value  = $one_coefficient['value'];
@@ -333,6 +335,7 @@ class QuoteController extends Controller
                 $coefficient->save();
             }
         }
+
         return Json::encode([
            'code'=>200,
             'msg'=>'OK'
@@ -1136,7 +1139,6 @@ class QuoteController extends Controller
         $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
         $brainpower = (new BrainpowerInitalSupervise())->codeStatus($province_code,$city_code);
-        var_dump($brainpower);exit;
         foreach ($brainpower as $value){
             var_dump($value);exit;
             $where = 'district_code ='.$value['district_code'].' and toponymy ='.$value['toponymy'].' and street = '.$value['street'].' and particulars = '.$value['house_type_name'].' and type=1';
@@ -1911,7 +1913,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-//       var_dump(BrainpowerInitalSupervise::deleteAll([]));
-       var_dump(BrainpowerInitalSupervise::find()->asArray()->all());
+       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
+       var_dump(EngineeringStandardCarpentryCoefficient::find()->asArray()->all());
     }
 }
