@@ -4433,9 +4433,10 @@ class OrderController extends Controller
         $goods=Yii::$app->request->post('goods');
         foreach ($goods as $one){
             if ($one['num'] != 0 || $one['num'] !=null){
-                $goods_ = $one;
+                $goods_ [] = $one;
             }
         }
+        var_dump($goods_);exit;
         foreach ($goods_ as  $k =>$v)
         {
             $Good[$k]=LogisticsTemplate::find()
