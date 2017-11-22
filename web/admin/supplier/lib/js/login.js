@@ -1,13 +1,14 @@
 let app = angular.module("app", []);
 app.controller("login_ctrl", function ($scope, $http, $document) {
     $scope.isLoading = false;
+    let reg = /^1[3|4|5|7|8][0-9]{9}$/;
+    let new_pw_reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}/;//不少于6位的数字加字母
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
             return $.param(data)
         }
     };
-    let reg = /^1[3|4|5|7|8][0-9]{9}$/;
     //登录角色
     $scope.login_rolo = [
         {id: 6, value: '商家'},
@@ -72,7 +73,7 @@ app.controller("login_ctrl", function ($scope, $http, $document) {
             })
         }
     };
-    let new_pw_reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,}/;//不少于6位的数字加字母
+
     //忘记密码确认按钮
     $scope.forget_pw_confirm = function () {
         $scope.forget_mb == '' || $scope.forget_mb == undefined ? $scope.forget_mb_flag = true : $scope.forget_mb_flag = false;
