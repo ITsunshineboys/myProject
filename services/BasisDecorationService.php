@@ -1325,7 +1325,7 @@ class BasisDecorationService
                     break;
             }
         }
-
+var_dump($materials);exit;
         $a = isset($materials) ? $materials :[];
         $material [] = self::profitMargin($a);
         $goods_material = [];
