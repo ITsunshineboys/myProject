@@ -181,28 +181,28 @@
                                 <p class="col-md-5">*整数</p>
                             </div>
                         </li>
-                        <li>
-                            <div class="form-group">
-                                <label class="col-md-2 text-left goods">杂工选项</label>
-                                <div class="col-md-3">
-                                    <div class="form-group backman" ng-repeat="item in backman_option track by $index">
-                                    <p class="col-md-4" ng-if="item.name!='有无建渣点'">{{item.name}}</p>
-                                    <div class="col-md-8" ng-if="item.name!='有无建渣点'">
-                                        <input type="text" placeholder="请输入数值" class="form-control" ng-model="item.num">
-                                    </div>
-                                        <span class="unit1" ng-if="item.name!='有无建渣点'">m<sup ng-if="item.name!='补烂'">2</sup></span>
-                                        <label class="col-md-12" ng-click="item.num = 1" ng-if="item.name=='有无建渣点'">
-                                        <input type="radio" name="building_slag" ng-checked="item.num == 1">
-                                        小区有建渣点
-                                        </label>
-                                        <label class="col-md-12" ng-click="item.num = 0" ng-if="item.name=='有无建渣点'">
-                                        <input type="radio" name="building_slag" ng-checked="item.num == 0">
-                                        小区无建渣点
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        <!--<li>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-2 text-left goods">杂工选项</label>-->
+                                <!--<div class="col-md-3">-->
+                                    <!--<div class="form-group backman" ng-repeat="item in backman_option track by $index">-->
+                                    <!--<p class="col-md-4" ng-if="item.name!='有无建渣点'">{{item.name}}</p>-->
+                                    <!--<div class="col-md-8" ng-if="item.name!='有无建渣点'">-->
+                                        <!--<input type="text" placeholder="请输入数值" class="form-control" ng-model="item.num">-->
+                                    <!--</div>-->
+                                        <!--<span class="unit1" ng-if="item.name!='有无建渣点'">m<sup ng-if="item.name!='补烂'">2</sup></span>-->
+                                        <!--<label class="col-md-12" ng-click="item.num = 1" ng-if="item.name=='有无建渣点'">-->
+                                        <!--<input type="radio" name="building_slag" ng-checked="item.num == 1">-->
+                                        <!--小区有建渣点-->
+                                        <!--</label>-->
+                                        <!--<label class="col-md-12" ng-click="item.num = 0" ng-if="item.name=='有无建渣点'">-->
+                                        <!--<input type="radio" name="building_slag" ng-checked="item.num == 0">-->
+                                        <!--小区无建渣点-->
+                                        <!--</label>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
                     </ul>
                 </div>
             </div>

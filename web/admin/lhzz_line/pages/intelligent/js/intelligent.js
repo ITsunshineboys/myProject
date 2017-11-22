@@ -148,13 +148,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //案例页工人
         _ajax.get('/quote/labor-list', {}, function (res) {
             $scope.common_worker = angular.copy(res.labor_list)
-            for (let [key, value] of $scope.common_worker.entries()) {
-                if (value.worker_kind == '杂工' && key != $scope.common_worker.length - 1) {
-                    value['price'] = ''
-                }
-                $scope.common_worker.splice(key, 1)
-                $scope.common_worker.push(value)
-            }
+            // for (let [key, value] of $scope.common_worker.entries()) {
+            //     if (value.worker_kind == '杂工' && key != $scope.common_worker.length - 1) {
+            //         value['price'] = ''
+            //     }
+            //     $scope.common_worker.splice(key, 1)
+            //     $scope.common_worker.push(value)
+            // }
         })
         //上传图片
         $scope.data = {
