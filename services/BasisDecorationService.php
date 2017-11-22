@@ -680,7 +680,7 @@ class BasisDecorationService
         }else{
             $tv = 1;
         }
-        return 1;
+        return $tv;
     }
 
     /**

@@ -1808,6 +1808,8 @@ class QuoteController extends Controller
         if (isset($post['count'])){
             $points->findByUpdate($post['count']['count'],$post['count']['id'],$post['count']['title']);
         }
+
+
         return Json::encode([
            'code' => 200,
            'msg' => 'OK',
