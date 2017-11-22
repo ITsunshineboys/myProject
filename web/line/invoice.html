@@ -21,11 +21,11 @@
             <div class="shu"></div>
             <span class="invoice_rise">发票抬头</span>
             <div class="invoice_radio">
-                <label ng-click="choosePersonal ()">
+                <label >
                     <input type="radio" name="invoice_radio"  ng-model="check_in" value="1">
                     个人
                 </label>
-                <label ng-click="chooseCompany ()">
+                <label >
                     <input type="radio" name="invoice_radio" ng-model="check_in" value="2">
                     单位
                 </label>
@@ -34,7 +34,7 @@
             <div class="invoice_input">
                 <input type="text"  placeholder="请输入抬头名称" ng-model="invoice_name">
                 <input type="text" ng-show="check_in == 2" placeholder="请输入纳税人识别号" ng-model="invoice_number" maxlength="18"> <br>
-                <span ng-show="choose_company">纳税人识别号为18位数字和英文字母组成，请仔细填写</span>
+                <span ng-show="check_in == 2">纳税人识别号为18位数字和英文字母组成，请仔细填写</span>
             </div>
         </div>
         <div class="bag_div"></div>
