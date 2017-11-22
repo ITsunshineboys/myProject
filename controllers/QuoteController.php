@@ -678,7 +678,14 @@ class QuoteController extends Controller
         $public_message['images'] = EffectPicture::findById($id);
         $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
         $public_message['works_data'] = WorksData::findById($id);
-        $public_message['works_worker_data'] = WorksWorkerData::findById($id);
+
+        $works = WorksWorkerData::findById($id);
+        foreach ($works as $one){
+            if ($one['worker_kind'] != '杂工'){
+                $public_message['works_worker_data'] = $one;
+            }
+        }
+
 //        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
