@@ -67,5 +67,6 @@ class BrainpowerInitalSupervise extends ActiveRecord
             ->asArray()
             ->where(['and',['province_code'=>$province],['city_code'=>$city]])
             ->all();
+        return $ros;
     }
 }
