@@ -1447,14 +1447,12 @@ class OwnerController extends Controller
                     if ($materials['price'] != 0 || $materials['price'] != null){
 
                          if ($one_coefficient['classify'] == $materials['one_title']){
-                            var_dump($materials);
-//                            $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                            $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
                          }
                     }
                 }
             }
-exit;
-
+            
             foreach ($post['list'] as &$default){
                 if (empty($default['goods_price'])){
                     $default['goods_price'] = $default['price'] * 1;
