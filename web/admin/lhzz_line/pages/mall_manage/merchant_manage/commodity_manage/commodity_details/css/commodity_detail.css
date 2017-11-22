@@ -154,4 +154,50 @@ input{
 }
 
 
+.pic{
+    margin-left: 10px;
+}
+
+#buyprice{
+    text-indent: 1.5rem;
+}
+
+
+#price_rule{
+    margin-top: 10px!important;
+}
+
+/*选择城市*/
+.choosecity span:last-child{
+    color:#5677FC;
+}
+
+/*售后*/
+.afterservice>div{
+    margin-top:-15px;
+    margin-left: 110px
+}
+
+/*保障*/
+.safeguard>div{
+    margin-left: 110px
+}
+
+
+/*二维码*/
+.qrcode>div{
+    text-indent:4rem
+}
+
+.qrcode img{
+    width: 170px;
+    height: 170px;
+}
+
+#reason{
+    margin-right: 50px;
+    vertical-align: top
+}
+
+
 
