@@ -976,12 +976,13 @@ angular.module("all_controller", ['ngCookies'])
         $scope.invoice_name    = $stateParams.invoice_name; //纳税人名称抬头
         $scope.invoice_number  = $stateParams.invoice_number;//纳税人识别号
         $scope.invoice_id      = $stateParams.invoice_id;//纳税人识别号  id
-        $scope.choose_personal = true;
-        $scope.choose_company  = false;
+        // $scope.choose_personal = true;
+        // $scope.choose_company  = false;
         $scope.invoice_name    = ''; //纳税人名称抬头
         $scope.invoice_number  = '';//纳税人识别号
         $scope.invoice_model   = '';
         $scope.contentInvoice  = '';
+        $scope.check_in = '1';
 
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -1001,19 +1002,20 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.show_address = false;
             }
         };
-        // 切换个人和单位
-        $scope.choosePersonal = function () { //个人
-            $scope.choose_personal = true;
-            $scope.choose_company  = false;
-        };
-        $scope.chooseCompany = function () { //单位
-            $scope.choose_personal = true;
-            $scope.choose_company  = true;
-        };
+        // // 切换个人和单位
+        // $scope.choosePersonal = function () { //个人
+        //
+        //     $scope.choose_personal = true;
+        //     $scope.choose_company  = false;
+        // };
+        // $scope.chooseCompany = function () { //单位
+        //     $scope.choose_personal = true;
+        //     $scope.choose_company  = true;
+        // };
         // 点击确认按钮时保存数据
         $scope.getSave = function () {
             // 选择为个人时
-            if($scope.choose_personal == true && $scope.choose_company  == false ){
+            if($scope.check_in == 1 ){
                 if($scope.invoice_name == ''){
                     $scope.invoice_model = '.bs-example-modal-sm';
                     $scope.contentInvoice = '请输入抬头名称';
@@ -1033,7 +1035,8 @@ angular.module("all_controller", ['ngCookies'])
                         $scope.invoice_id = response.data.data.invoice_id;
                         let invoiceObj = { // 保存
                             invoice_id: $scope.invoice_id,
-                            invoice_content: $scope.invoice_name
+                            invoice_content: $scope.invoice_name,
+                            status:$scope.check_in
                         };
                         sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                     });
@@ -1053,7 +1056,7 @@ angular.module("all_controller", ['ngCookies'])
                 }
             }
             // 选择为单位时
-            if($scope.choose_personal == true && $scope.choose_company  == true ){
+            if($scope.check_in == 2  ){
                 console.log('选择支付吧');
                 console.log($scope.invoice_name );
                 console.log($scope.invoice_number );
@@ -1081,7 +1084,8 @@ angular.module("all_controller", ['ngCookies'])
                         let invoiceObj = { // 保存
                             invoice_id: $scope.invoice_id,
                             invoice_content: $scope.invoice_name,
-                            invoicer_card: $scope.invoice_number
+                            invoicer_card: $scope.invoice_number,
+                            status:$scope.check_in
                         };
                         sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                     });
@@ -1108,6 +1112,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.invoice_id =  invoiceInfo.invoice_id;
             $scope.invoice_name =  invoiceInfo.invoice_content;
             $scope.invoice_number =  invoiceInfo.invoicer_card;
+            $scope.check_in =  invoiceInfo.status;
         }
 
     })
