@@ -298,38 +298,38 @@ class QuoteController extends Controller
     public function actionProjectNormWoodworkEdit()
     {
         $post = \Yii::$app->request->post();
-//        foreach ($post['value'] as $one_post){
-//            if (isset($one_post['id'])){
-//                $value = EngineeringStandardCraft::findOne($one_post['id']);
-//                $value->material = $one_post['value'];
-//                $value->save();
-//            }
-//        }
-//
-//        foreach ($post['value'] as $one_post){
-//            if (!isset($one_post['id'])){
-//                $value = new EngineeringStandardCraft();
-//                $value->district_code   = $post['district_code'];
-//                $value->project         = $post['project'];
-//                $value->project_details = $one_post['name'];
-//                $value->material        = $one_post['value'];
-//                $value->save();
-//            }
-//        }
-//
-//        foreach ($post['specification'] as $one_specification){
-//            $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
-//            $specification->value = $one_specification['value'];
-//            $specification->save();
-//        }
-//
-//        foreach ($post['coefficient'] as $one_coefficient){
-//            if (isset($one_coefficient['id'])){
-//                $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
-//                $coefficient->value = $one_coefficient['value'];
-//                $coefficient->save();
-//            }
-//        }
+        foreach ($post['value'] as $one_post){
+            if (isset($one_post['id'])){
+                $value = EngineeringStandardCraft::findOne($one_post['id']);
+                $value->material = $one_post['value'];
+                $value->save();
+            }
+        }
+
+        foreach ($post['value'] as $one_post){
+            if (!isset($one_post['id'])){
+                $value = new EngineeringStandardCraft();
+                $value->district_code   = $post['district_code'];
+                $value->project         = $post['project'];
+                $value->project_details = $one_post['name'];
+                $value->material        = $one_post['value'];
+                $value->save();
+            }
+        }
+
+        foreach ($post['specification'] as $one_specification){
+            $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
+            $specification->value = $one_specification['value'];
+            $specification->save();
+        }
+
+        foreach ($post['coefficient'] as $one_coefficient){
+            if (isset($one_coefficient['id'])){
+                $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
+                $coefficient->value = $one_coefficient['value'];
+                $coefficient->save();
+            }
+        }
 
         foreach ($post['coefficient'] as $one_coefficient){
             if (isset($one_coefficient['add_id'])){
@@ -338,10 +338,9 @@ class QuoteController extends Controller
                 $coefficient->value  = $one_coefficient['value'];
                 $coefficient->coefficient  = $one_coefficient['coefficient'];
                 $coefficient->series_or_style  = $one_coefficient['series_or_style'];
-                $a = $coefficient->save();
+                $coefficient->save();
             }
         }
-var_dump($a);exit;
         return Json::encode([
             'code'=>200,
             'msg'=>'OK'
@@ -1919,7 +1918,7 @@ var_dump($a);exit;
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-//       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
+       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
        var_dump(EngineeringStandardCarpentryCoefficient::find()->asArray()->all());
     }
 }
