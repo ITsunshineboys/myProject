@@ -302,7 +302,7 @@ class QuoteController extends Controller
             if (isset($one_post['id'])){
                 $value = EngineeringStandardCraft::findOne($one_post['id']);
                 $value->material = $one_post['value'];
-                $edit_=$value->save();
+                $value->save();
             }
         }
 
@@ -313,21 +313,21 @@ class QuoteController extends Controller
                 $value->project         = $post['project'];
                 $value->project_details = $one_post['name'];
                 $value->material        = $one_post['value'];
-                $add_=$value->save();
+                $value->save();
             }
         }
 
         foreach ($post['specification'] as $one_specification){
             $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
             $specification->value = $one_specification['value'];
-            $edit__=$specification->save();
+            $specification->save();
         }
 
         foreach ($post['coefficient'] as $one_coefficient){
             if (isset($one_coefficient['id'])){
                 $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
                 $coefficient->value = $one_coefficient['value'];
-                $edit = $coefficient->save();
+                $coefficient->save();
             }
         }
         foreach ($post['coefficient'] as $one_coefficient){
@@ -337,16 +337,10 @@ class QuoteController extends Controller
                 $coefficient->value  = $one_coefficient['value'];
                 $coefficient->coefficient  = $one_coefficient['coefficient'];
                 $coefficient->series_or_style  = $one_coefficient['series_or_style'];
-                $add =$coefficient->save();
+                $coefficient->save();
             }
         }
-        if (!$add || !$edit || !$edit__  || !$add_ || !$edit_){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
         return Json::encode([
             'code'=>200,
             'msg'=>'OK'
