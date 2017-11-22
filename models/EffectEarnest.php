@@ -242,12 +242,19 @@ class EffectEarnest extends \yii\db\ActiveRecord
             //如果有材料
             if(array_key_exists('material',$post)){
                 foreach ($post['material'] as $attributes){
+                    if($attributes['first_cate_id']==null){
+                        $attributes['first_cate_id']='';
+                    }
+                    if($attributes['brand']==null){
+                        $attributes['brand']='';
+                    }
                     $res= \Yii::$app->db->createCommand()->insert('effect_material',[
                         'effect_id'=>$id,
                         'count'=>$attributes['count'],
                         'price'=>$attributes['price']*100,
                         'goods_id'=>$attributes['goods_id'],
-                        'first_cate_id'=>$attributes['first_cate_id']
+                        'first_cate_id'=>$attributes['first_cate_id'],
+                        'brand'=>$attributes['brand']
                     ])->execute();
                 }
                 if(!$res){
