@@ -365,8 +365,12 @@ class Effect extends ActiveRecord
                 ->select('title')
                 ->where(['id'=>$value['first_cate_id']])
                 ->asArray()->one()['title'];
-
-
+            if($value['brand']==null){
+                $value['brand']='';
+            }
+            if($value['first_cate_id']==null){
+                $value['first_cate_id']='';
+            }
             unset($value['effect_id']);
             unset($value['goods_id']);
 

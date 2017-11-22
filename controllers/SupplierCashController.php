@@ -512,7 +512,7 @@ class SupplierCashController extends Controller
     }
 
     public function actionTest(){
-        var_dump(EffectEarnest::find()->asArray()->all());
+        var_dump(EffectEarnest::updateAll(['uid'=>1]));
       
 
 
