@@ -298,64 +298,57 @@ class QuoteController extends Controller
     public function actionProjectNormWoodworkEdit()
     {
         $post = \Yii::$app->request->post();
-//        $transaction = \Yii::$app->db->beginTransaction();
-//        try{
-            foreach ($post['value'] as $one_post){
-                if (isset($one_post['id'])){
-                    $value = EngineeringStandardCraft::findOne($one_post['id']);
-                    $value->material = $one_post['value'];
-                    $value->save();
-                }
+        foreach ($post['value'] as $one_post){
+            if (isset($one_post['id'])){
+                $value = EngineeringStandardCraft::findOne($one_post['id']);
+                $value->material = $one_post['value'];
+                $edit_=$value->save();
             }
+        }
 
-            foreach ($post['value'] as $one_post){
-                if (!isset($one_post['id'])){
-                    $value = new EngineeringStandardCraft();
-                    $value->district_code   = $post['district_code'];
-                    $value->project         = $post['project'];
-                    $value->project_details = $one_post['name'];
-                    $value->material        = $one_post['value'];
-                    $value->save();
-                }
+        foreach ($post['value'] as $one_post){
+            if (!isset($one_post['id'])){
+                $value = new EngineeringStandardCraft();
+                $value->district_code   = $post['district_code'];
+                $value->project         = $post['project'];
+                $value->project_details = $one_post['name'];
+                $value->material        = $one_post['value'];
+                $add_=$value->save();
             }
+        }
 
-            foreach ($post['specification'] as $one_specification){
-                $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
-                $specification->value = $one_specification['value'];
-                $specification->save();
+        foreach ($post['specification'] as $one_specification){
+            $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
+            $specification->value = $one_specification['value'];
+            $edit__=$specification->save();
+        }
+
+        foreach ($post['coefficient'] as $one_coefficient){
+            if (isset($one_coefficient['id'])){
+                $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
+                $coefficient->value = $one_coefficient['value'];
+                $edit = $coefficient->save();
             }
-
-            foreach ($post['coefficient'] as $one_coefficient){
-                if (isset($one_coefficient['id'])){
-                    $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
-                    $coefficient->value = $one_coefficient['value'];
-                    $coefficient->save();
-                }
+        }
+        foreach ($post['coefficient'] as $one_coefficient){
+            if (!isset($one_coefficient['add_id'])){
+                $coefficient = new EngineeringStandardCarpentryCoefficient();
+                $coefficient->project  = $one_coefficient['add_id'];
+                $coefficient->value  = $one_coefficient['value'];
+                $coefficient->coefficient  = $one_coefficient['coefficient'];
+                $coefficient->series_or_style  = $one_coefficient['series_or_style'];
+                $add =$coefficient->save();
             }
-            foreach ($post['coefficient'] as $one_coefficient){
-                if (!isset($one_coefficient['add_id'])){
-                    $coefficient = new EngineeringStandardCarpentryCoefficient();
-                    $coefficient->project  = $one_coefficient['add_id'];
-                    $coefficient->value  = $one_coefficient['value'];
-                    $coefficient->coefficient  = $one_coefficient['coefficient'];
-                    $coefficient->series_or_style  = $one_coefficient['series_or_style'];
-                    $coefficient->save();
-                }
-            }
-
-//            $transaction->commit();
-//        }  catch (\Exception $e) {
-//            $transaction->rollBack();
-//            $code = 1000;
-//            return Json::encode([
-//                'code'=>$code,
-//                'msg'=>\Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-
-
+        }
+        if (!$add || !$edit || !$edit__  || !$add_ || !$edit_){
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         return Json::encode([
-           'code'=>200,
+            'code'=>200,
             'msg'=>'OK'
         ]);
     }
