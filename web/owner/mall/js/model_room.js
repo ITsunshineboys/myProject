@@ -313,7 +313,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             $scope.activeObj.type = 1;
 
             if (sessionStorage.getItem("materials") === null) {
-                sessionStorage.setItem("backman", JSON.stringify(data.backman_data));
                 $scope.roomPicture = data.images.effect_images;
                 sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
 
