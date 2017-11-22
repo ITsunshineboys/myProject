@@ -23,7 +23,7 @@
                 <div class="modal-body body_font">
                     <div class="list_input">
                         <span class="txt">手机号</span>
-                        <input type="text" ng-class="{'border_red':forget_mb_flag}"  class='enter_input' ng-model="forget_mb" placeholder="请输入手机号">
+                        <input type="text" ng-class="{'border_red':forget_mb_flag}"  class='enter_input' maxlength="11" ng-model="forget_mb" placeholder="请输入手机号">
                         <p class='prompt_txt'>{{forget_mb_prompt}}</p>
                     </div>
                     <div class="list_input">
@@ -72,11 +72,11 @@
             <!--</div>-->
             <!--手机号-->
             <div class="margin_top">
-                <input type="text" placeholder="账号" ng-class="{'border_red':error_flag}" class="enter_input enter_input_one" ng-model="phone_number">
+                <input type="text" placeholder="账号" class="enter_input enter_input_one" ng-model="phone_number">
             </div>
             <!--密码-->
-            <div class="">
-                <input type="password" placeholder="密码" ng-class="{'border_red':error_flag}" class="enter_input enter_input_two" ng-model="password_number">
+            <div>
+                <input type="password" placeholder="密码" class="enter_input enter_input_two" ng-model="password_number">
             </div>
             <!--忘记密码-->
             <!--错误提示-->

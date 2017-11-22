@@ -76,13 +76,11 @@ html,body{
   transition: all 0.3s linear;
   cursor: pointer;
 }
-.border_red{
-  border: 1px solid #E51C23;
-}
 .error_red{
   text-align: left;
   margin-top: 10px;
   color: #E51C23;
+  font-size: 14px;
 }
 #particles {
   width: 100%;
