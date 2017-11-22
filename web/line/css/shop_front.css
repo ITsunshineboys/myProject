@@ -97,11 +97,20 @@ header span{
     margin-top: .2rem;
 
 }
-.tab-content{
+.tab-content {
 
+}
+.fixed_tab{
+    position: fixed;
+    top:4rem;
+    z-index: 1000;
+    background-color: white;
 }
 .list_tab {
     /*margin-bottom: 1.5rem;*/
+    /*background-color: white;*/
+    /*z-index: 1000;*/
+    /*position: fixed;*/
 }
 .list_tab li{
     width: 16rem;
@@ -153,6 +162,7 @@ header span{
 }
 .section_div{
     margin-top: 1rem;
+
 }
 .line{
     width: 100%;
@@ -305,6 +315,12 @@ header span{
 /*����*/
 
 /*ȫ����Ʒ��ʼ*/
+.fixed_memo{
+    position: fixed;
+    top: 7.5rem;
+    z-index: 1000;
+    background-color: white;
+}
 .memo_pad{
     background-color: white;
     height: 4rem;

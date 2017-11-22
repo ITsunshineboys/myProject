@@ -26,7 +26,7 @@
         <!--tab切换-->
         <div class="section_div">
             <div>
-                <ul class="nav nav-tabs list_tab" ng-init="vm.activeTab=1">
+                <ul class="nav nav-tabs list_tab" >
                     <li ng-class="{active:vm.activeTab == 2}">
                         <a href="javascript:;" ng-click="vm.activeTab = 1">店铺首页</a>
                         <span ng-class="{line_com:vm.activeTab==1}" ></span>
@@ -76,9 +76,9 @@
                     <!--全部商品-->
                     <div class="tab-panel" ng-show="vm.activeTab == 2">
                         <!--筛选-->
-                        <div class="memo_pad">
+                        <div class="memo_pad ">
                             <ul>
-                                <li >销量优先</li>
+                                <li ng-click="filterPar()">销量优先</li>
                                 <li ng-click="filterPraise ()" alt=""/>
                                 价格
                                 <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png">

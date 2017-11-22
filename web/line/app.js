@@ -49,7 +49,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("product_details", {   //某个商品详细信息
-                url: "/product_details?mall_id&supplier_id$id",
+                url: "/product_details?mall_id&supplier_id$id&activeTab",
                 views: {
                     "": {templateUrl: "product_details.html"}
                 },
@@ -60,7 +60,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("shop_front", {   //店铺首页和全部商品
-                url: "/shop_front?supplier_id&mall_id",
+                url: "/shop_front?supplier_id&mall_id&activeTab",
                 views: {
                     "": {templateUrl: "shop_front.html"}
                 },
