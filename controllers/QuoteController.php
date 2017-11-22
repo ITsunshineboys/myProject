@@ -626,18 +626,18 @@ class QuoteController extends Controller
                         }
                     }
 
-                    if (!empty($house['backman_option'])) {
-                        foreach ($house['backman_option'] as $backman) {
-                            $backman_id         = $effect_id;
-                            $backman_option     = $backman['name'];
-                            $backman_value      = $backman['num'];
-                            $works_backman_data = (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
-                        }
-                        if (!$works_backman_data) {
-                            $transaction->rollBack();
-                            return 500;
-                        }
-                    }
+//                    if (!empty($house['backman_option'])) {
+//                        foreach ($house['backman_option'] as $backman) {
+//                            $backman_id         = $effect_id;
+//                            $backman_option     = $backman['name'];
+//                            $backman_value      = $backman['num'];
+//                            $works_backman_data = (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
+//                        }
+//                        if (!$works_backman_data) {
+//                            $transaction->rollBack();
+//                            return 500;
+//                        }
+//                    }
                 }
             }
             $transaction->commit();
@@ -679,7 +679,7 @@ class QuoteController extends Controller
         $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
         $public_message['works_data'] = WorksData::findById($id);
         $public_message['works_worker_data'] = WorksWorkerData::findById($id);
-        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
+//        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
             'code' => 200,
@@ -842,19 +842,19 @@ class QuoteController extends Controller
                                 return 500;
                             }
                         }
-
-                        if (!empty($house['backman_option'])) {
-                            foreach ($house['backman_option'] as $backman) {
-                                $backman_id         = $effect_id;
-                                $backman_option     = $backman['name'];
-                                $backman_value      = $backman['num'];
-                                $works_backman_data = (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
-                            }
-                            if (!$works_backman_data) {
-                                $transaction->rollBack();
-                                return 500;
-                            }
-                        }
+//
+//                        if (!empty($house['backman_option'])) {
+//                            foreach ($house['backman_option'] as $backman) {
+//                                $backman_id         = $effect_id;
+//                                $backman_option     = $backman['name'];
+//                                $backman_value      = $backman['num'];
+//                                $works_backman_data = (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
+//                            }
+//                            if (!$works_backman_data) {
+//                                $transaction->rollBack();
+//                                return 500;
+//                            }
+//                        }
                     }
                 } elseif (isset($house['id'])) {
                     if ($house['is_ordinary'] == 0) {
@@ -987,21 +987,21 @@ class QuoteController extends Controller
                             }
                         }
 
-                        if (!empty($house['backman_option'])) {
-                            foreach ($house['backman_option'] as $backman) {
-                                if (!empty($backman['id'])) {
-                                    $backman_id     = $backman['id'];
-                                    $backman_option = $backman['name'];
-                                    $backman_value  = $backman['num'];
-                                    (new WorksBackmanData())->plotEdit($backman_id, $backman_option, $backman_value);
-                                } else {
-                                    $backman_id     = $house['id'];
-                                    $backman_option = $backman['name'];
-                                    $backman_value  = $backman['num'];
-                                    (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
-                                }
-                            }
-                        }
+//                        if (!empty($house['backman_option'])) {
+//                            foreach ($house['backman_option'] as $backman) {
+//                                if (!empty($backman['id'])) {
+//                                    $backman_id     = $backman['id'];
+//                                    $backman_option = $backman['name'];
+//                                    $backman_value  = $backman['num'];
+//                                    (new WorksBackmanData())->plotEdit($backman_id, $backman_option, $backman_value);
+//                                } else {
+//                                    $backman_id     = $house['id'];
+//                                    $backman_option = $backman['name'];
+//                                    $backman_value  = $backman['num'];
+//                                    (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
+//                                }
+//                            }
+//                        }
 
                         if (!empty($house['delete_goods'])) {
                             WorksData::deleteAll(['id' => $house['delete_goods']]);
@@ -1011,9 +1011,9 @@ class QuoteController extends Controller
                             WorksWorkerData::deleteAll(['id' => $house['delete_workers']]);
                         }
 
-                        if (!empty($house['delete_backman'])) {
-                            WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
-                        }
+//                        if (!empty($house['delete_backman'])) {
+//                            WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
+//                        }
                     }
                 }
             }
@@ -1059,7 +1059,7 @@ class QuoteController extends Controller
         //  ['and',['district_code'=>$effect['district_code']],['toponymy'=>$effect['toponymy']],['street'=>$effect['street']]]
         Effect::deleteAll(['and',['district_code'=>$effect['district_code']],['toponymy'=>$effect['toponymy']],['street'=>$effect['street']]]);
         EffectPicture::deleteAll(['effect_id' => $del_id]);
-        WorksBackmanData::deleteAll(['effect_id' => $del_id]);
+//        WorksBackmanData::deleteAll(['effect_id' => $del_id]);
         WorksWorkerData::deleteAll(['effect_id' => $del_id]);
         WorksData::deleteAll(['effect_id' => $del_id]);
 
