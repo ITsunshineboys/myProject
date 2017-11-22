@@ -1900,6 +1900,8 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(Effect::find()->asArray()->all());
+        //engineering_standard_carpentry_coefficient
+       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll(['in','id',[6,7,8,9,10,11,12,13,14,15]]));
+       var_dump(EngineeringStandardCarpentryCoefficient::find()->all())
     }
 }
