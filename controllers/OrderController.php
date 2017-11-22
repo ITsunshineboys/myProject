@@ -4436,7 +4436,6 @@ class OrderController extends Controller
                 $goods_ [] = $one;
             }
         }
-        var_dump($goods_);exit;
         foreach ($goods_ as  $k =>$v)
         {
             $Good[$k]=LogisticsTemplate::find()
