@@ -62,10 +62,10 @@ class BrainpowerInitalSupervise extends ActiveRecord
     }
 
     public static function codeStatus($province,$city)
-    {
+    {  // ['status'=>1]
         $ros = self::find()
             ->asArray()
-            ->where(['and',['province_code'=>$province],['city_code'=>$city],['status'=>1]])
+            ->where(['and',['province_code'=>$province],['city_code'=>$city]])
             ->all();
         return $ros;
     }
