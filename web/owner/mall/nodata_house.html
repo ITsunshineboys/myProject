@@ -36,7 +36,7 @@
                     <div class="pull-left input_box">
                         <input type="text"   required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
                                ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
-                               ng-model="nodata_params.area"/>
+                               ng-model="ctrlScope.area"/>
 
                         <span class="p">m<sup>2</sup></span>
                         <p class="error_tips" ng-if="area_news.area.$invalid&&(submitted||change3)">房屋面积1～180m²，精确到小数点后两位</p>
@@ -50,37 +50,37 @@
                 <div>
                     <ul class="apartment_ul">
                         <li>
-                            <input type="text" ng-model="nodata_params.bedroom" class="val_input" disabled/>
+                            <input type="text" ng-model="ctrlScope.bedroom" class="val_input" disabled/>
                             <span>室</span>
                             <i class="icon icon-check-minus btn_left reduce_a icon-5x"
-                               ng-click="operate('nodata_params',0,1,'bedroom')"></i>
+                               ng-click="operate('bedroom',0,1)"></i>
                             <i class="icon icon-check-plus btn_right add_a icon-5x"
-                               ng-click="operate('nodata_params',1,6,'bedroom')"></i>
+                               ng-click="operate('bedroom',1,6)"></i>
                         </li>
                         <li>
-                            <input type="text" ng-model="nodata_params.hall" class="val_input_b" disabled/>
+                            <input type="text" ng-model="ctrlScope.hall" class="val_input_b" disabled/>
                             <span>厅</span>
                             <i class="icon icon-check-minus btn_left reduce_b icon-5x"
-                               ng-click="operate('nodata_params',0,1,'hall')"></i>
+                               ng-click="operate('hall',0,1)"></i>
                             <i class="icon icon-check-plus btn_right add_b icon-5x"
-                               ng-click="operate('nodata_params',1,3,'hall')"></i>
+                               ng-click="operate('hall',1,3)"></i>
                         </li>
                         <li>
-                            <input type="text" ng-model="nodata_params.toilet" class="val_input_c" disabled/>
+                            <input type="text" ng-model="ctrlScope.toilet" class="val_input_c" disabled/>
                             <span>卫</span>
 
                             <i class="icon icon-check-minus btn_left reduce_c icon-5x"
-                               ng-click="operate('nodata_params',0,1,'toilet')"></i>
+                               ng-click="operate('toilet',0,1)"></i>
                             <i class="icon icon-check-plus btn_right add_c icon-5x"
-                               ng-click="operate('nodata_params.',1,4,'toilet')"></i>
+                               ng-click="operate('toilet.',1,4)"></i>
                         </li>
                         <li>
-                            <input type="text" ng-model="nodata_params.kitchen" class="val_input_d" disabled/>
+                            <input type="text" ng-model="ctrlScope.kitchen" class="val_input_d" disabled/>
                             <span>厨</span>
                             <i class="icon icon-check-minus btn_left reduce_d icon-5x"
-                               ng-click="operate('nodata_params',0,1,'kitchen')"></i>
+                               ng-click="operate('kitchen',0,1)"></i>
                             <i class="icon icon-check-plus btn_right add_d icon-5x"
-                               ng-click="operate('nodata_params',1,2,'kitchen')"></i>
+                               ng-click="operate('kitchen',1,2)"></i>
                         </li>
                     </ul>
                 </div>
@@ -92,32 +92,32 @@
                 <span class="sub_title">层高</span>
                 <ul class="storey_ul">
                     <li>
-                        <label ng-click="nodata_params.high=2.8">
-                            <input type="radio" name="test" ng-checked="nodata_params.high==2.8"/>
+                        <label ng-click="ctrlScope.high=2.8">
+                            <input type="radio" name="test" ng-checked="ctrlScope.high==2.8"/>
                             <span></span>
                             <span class="storey_txt">2.8m</span>
                             <img src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                     <li>
-                        <label ng-click="nodata_params.high=3">
-                            <input type="radio" name="test" ng-checked="nodata_params.high==3"/>
+                        <label ng-click="ctrlScope.high=3">
+                            <input type="radio" name="test" ng-checked="ctrlScope.high==3"/>
                             <span></span>
                             <span class="storey_txt">3m</span>
                             <img src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                     <li>
-                        <label ng-click="nodata_params.high=3.3">
-                            <input type="radio" name="test" ng-checked="nodata_params.high==3.3"/>
+                        <label ng-click="ctrlScope.high=3.3">
+                            <input type="radio" name="test" ng-checked="ctrlScope.high==3.3"/>
                             <span></span>
                             <span class="storey_txt">3.3m</span>
                             <img src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                     <li>
-                        <label ng-click="nodata_params.high=4.5">
-                            <input type="radio" name="test" ng-checked="nodata_params.high==4.5"/>
+                        <label ng-click="ctrlScope.high=4.5">
+                            <input type="radio" name="test" ng-checked="ctrlScope.high==4.5"/>
                             <span></span>
                             <span class="storey_txt"> >4.5m</span>
                             <span class="ml storey_txt">(跃层商铺等)</span>
@@ -133,7 +133,7 @@
                 <span class="bay_span">飘窗</span>
                 <input type="text" required placeholder="0" id="window" name="window" ng-pattern="/^(([0-9]|1[0-9])(.\d{1,2})?|20(.00)?)$/"
                        ng-blur="change4=area_news.window.$invalid" class="input_windin" maxlength="6"
-                       ng-model="nodata_params.window"/>
+                       ng-model="ctrlScope.window"/>
                 <span class="bay_square">m</span>
                 <p class="error_tips window_tips" ng-if="area_news.window.$invalid&&(submitted||change4)">
                     飘窗长度9～20m，可精确到小数点后两位</p>
@@ -143,13 +143,13 @@
             <div class="line"></div>
             <div class="choose_stairs">
                 <span class="choose_span">楼梯选择</span>
-                <label ng-click="nodata_params.stairway_id = 1;nodata_params.stairs = stairs_details[0].attribute">
+                <label ng-click="ctrlScope.choose_stairs = 1;ctrlScope.nowStairs = stairs_details[0]">
                     <input type="radio" ng-checked="nodata_params.stairway_id==1" name="have_stairs"/>
                     <span></span>
                     <span class="have">有</span>
                     <img id='img_size_1' ng-if="nodata_params.stairway_id==1" src="images/mall_list_radio.png" alt=""/>
                 </label>
-                <label ng-click="nodata_parmas.stairway_id = 0;nodata_params.stairs = ''">
+                <label ng-click="nodata_parmas.choose_stairs = 0;ctrlScope.nowStairs = {'id': 0, 'attribute': ''}">
                     <input type="radio" ng-checked="nodata_params.stairway_id == 0" name="have_stairs"/>
                     <span></span>
                     <span class="no">无</span>
@@ -158,14 +158,14 @@
             </div>
 
             <!--结构-->
-            <div class="structure" ng-show="nodata_params.stairway_id == 1">
+            <div class="structure" ng-show="ctrlScope.choose_stairs == 1">
                 <ul>
-                    <li ng-repeat="item in stairs_details" ng-click="nodata_params.stairs = item.attribute">
+                    <li ng-repeat="item in stairs_details" ng-click="ctrlScope.nowStairs.id = item.id">
                         <label ng-click="">
-                            <input type="radio" name="stairs" ng-checked="nodata_params.stairs === item.attribute"/>
+                            <input type="radio" name="stairs" ng-checked="ctrlScope.nowStairs.id === item.id"/>
                             <span></span>
                             <span>{{item.attribute}}</span>
-                            <img ng-if="nodata_params.stairs === item.attribute" src="images/mall_list_radio.png" alt=""/>
+                            <img ng-if="ctrlScope.nowStairs.id === item.id" src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                 </ul>
@@ -178,12 +178,12 @@
                 <div class="shu"></div>
                 <div class="title">系列选择</div>
                 <ul>
-                    <li ng-repeat="item in series" ng-cloak ng-click="ctrlScope.cur_series = item;nodata_params.series = item.id">
+                    <li ng-repeat="item in series" ng-cloak ng-click="toggleSeries(item)">
                         <label>
-                            <input type="radio" name="series" ng-checked="nodata_params.series === item.id">
+                            <input type="radio" name="series" ng-checked="cur_series.id === item.id">
                             <span></span>
                             <span>{{item.series}}</span>
-                            <img ng-if="nodata_params.series === item.id" class="check_img" src="images/mall_list_radio.png" alt=""/>
+                            <img ng-if="cur_series.id === item.id" class="check_img" src="images/mall_list_radio.png" alt=""/>
                         </label>
                     </li>
                 </ul>
@@ -201,8 +201,8 @@
                 <div class="title">风格选择</div>
                 <ul>
                     <li ng-repeat="item in style">
-                        <button type="button" ng-cloak ng-class="{'btn_checked':nodata_params.style === item.id}"
-                                ng-click="ctrlScope.cur_style = item;nodata_params.style = item.id">{{item.style}}
+                        <button type="button" ng-cloak ng-class="{'btn_checked':cur_style.id === item.id}"
+                                ng-click="toggleStyle(item)">{{item.style}}
                         </button>
                     </li>
                 </ul>
