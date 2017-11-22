@@ -1918,13 +1918,6 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-//       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
-       //var_dump(AssortGoods::update('',['id'=>758]));
-        \Yii::$app->db
-            ->createCommand()
-            ->update(AssortGoods::tableName(),[
-                'state'=>0,
-            ],['id'=>758])
-            ->execute();
+       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
     }
 }
