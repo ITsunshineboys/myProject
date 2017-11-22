@@ -237,7 +237,6 @@ angular.module('all_controller', [])
         }
         //室厅卫厨操作
         $scope.operate = function (type, is_add, limit,other) {
-            console.log(other)
             if (!!is_add) {
                 if(other!=undefined){
                     if ($scope[type][other] == limit) {
