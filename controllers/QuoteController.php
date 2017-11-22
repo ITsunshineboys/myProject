@@ -685,6 +685,7 @@ class QuoteController extends Controller
         $public_message['works_data'] = WorksData::findById($id);
 
         $works = WorksWorkerData::findById($id);
+        var_dump($works);exit;
         foreach ($works as $one){
             if ($one['worker_kind'] != '杂工'){
                 $works_ []= $one;
