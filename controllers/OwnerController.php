@@ -1800,7 +1800,7 @@ class OwnerController extends Controller
     public function actionTest()
     {
         // decoration_add
-     var_dump(DecorationAdd::find()->all());
+     var_dump(DecorationAdd::find()->asArray()->all());
     }
 
 }
