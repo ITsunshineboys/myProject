@@ -1135,6 +1135,9 @@ class QuoteController extends Controller
         $request = \Yii::$app->request;
         $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
+        $brainpower = (new BrainpowerInitalSupervise())->codeStatus($province_code,$city_code);
+        var_dump($brainpower);exit;
+
         $code = 200;
         return Json::encode([
             'code' => $code,
