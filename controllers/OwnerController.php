@@ -1490,7 +1490,6 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         $assort_material = AssortGoods::find()->asArray()->all();
-        var_dump($assort_material);exit;
         if ($assort_material == null) {
             $code = 1065;
             return Json::encode([
@@ -1800,7 +1799,8 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-     var_dump(EngineeringUniversalCriterion::find()->all());
+        // decoration_add
+     var_dump(DecorationAdd::find()->all());
     }
 
 }
