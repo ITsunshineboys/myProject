@@ -2711,7 +2711,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         } else {
                             arr.push({
                                 project: value1.series,
-                                value: value1.value,
+                                // value: value1.value,
+                                add_id:value1.id,
                                 coefficient: value1.coefficient,
                                 series_or_style: value1.series_or_style
                             })
@@ -2728,7 +2729,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         } else {
                             arr.push({
                                 project: value1.style,
-                                value: value1.value,
+                                // value: value1.value,
+                                add_id:value1.id,
                                 coefficient: value1.coefficient,
                                 series_or_style: value1.series_or_style
                             })
