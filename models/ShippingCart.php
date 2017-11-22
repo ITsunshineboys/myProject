@@ -67,7 +67,10 @@ class ShippingCart extends \yii\db\ActiveRecord
             ->all();
         if (!$data)
         {
-            return [];
+            return [
+                'normal_goods'=>[],
+                'invalid_goods'=>[]
+            ];
         }
         foreach ($data as  &$list)
         {
