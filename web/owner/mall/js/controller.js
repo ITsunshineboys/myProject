@@ -204,8 +204,8 @@ angular.module('all_controller', [])
             $scope.style = res.data.show.style;//风格数据
             $scope.cur_series = $scope.series[0]//默认选择第一个系列
             $scope.cur_style = $scope.style[0]//默认选择第一个风格
-            $scope.nodata_params.series = $scope.cur_series.id
-            $scope.nodata_params.style = $scope.cur_style.id
+            // $scope.nodata_params.series = $scope.cur_series.id
+            // $scope.nodata_params.style = $scope.cur_style.id
             $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
