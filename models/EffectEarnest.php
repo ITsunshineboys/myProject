@@ -256,12 +256,20 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-            $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
+            if($post['type']==1){
+                $name='';
+                $phone='';
+            }else{
+                $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
+                $name=$user['nickname'];
+                $phone=$user['mobile'];
+            }
+
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
-            $effect_earnest->phone=$user['mobile'];
-            $effect_earnest->name=$user['nickname'];
+            $effect_earnest->phone=$name;
+            $effect_earnest->name=$phone;
             $effect_earnest->transaction_no=GoodsOrder::SetTransactionNo($user['mobile']);
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
