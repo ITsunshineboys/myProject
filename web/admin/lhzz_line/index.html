@@ -20,31 +20,31 @@
         <img src="lib/images/logo.png" alt=""/>
     </div>
     <dl>
-        <dt ui-sref="home" ng-class="{on:other_flag=='home'}" ng-click="other_display('home')"><i class="iconfont icon-shouye"></i> 首页</dt>
+        <dt ui-sref="home" ng-class="{on:other_flag=='home'}" ng-click="other_display('home')"><i class="iconfont icon-shouye i_width"></i>首页</dt>
     </dl>
 
     <dl>
-        <dt ng-click="mall_click()" ng-class="{on:mall_flag}"><i class="iconfont icon-shangchengguanli"></i>商城管理</dt>
+        <dt ng-click="mall_click()" ng-class="{on:mall_flag}"><i class="iconfont icon-shangchengguanli i_width"></i>商城管理</dt>
         <dd ng-repeat="item in mall_obj" ng-click="mall_repeat(item)" ng-class="{true:'y_display',false:'n_display'}[mall_flag]"><a ng-class="{dd_on: mall_active == item.id}">{{item.name}}</a></dd>
     </dl>
 
     <dl>
-        <dt ui-sref="intelligent.intelligent_index" ng-class="{on:other_flag=='intelligent_index'}" ng-click="other_display('intelligent_index')"><i class="iconfont icon-baojia"></i> 智能报价</dt>
+        <dt ui-sref="intelligent.intelligent_index" ng-class="{on:other_flag=='intelligent_index'}" ng-click="other_display('intelligent_index')"><i class="iconfont icon-baojia i_width"></i>智能报价</dt>
     </dl>
 
     <dl>
-        <dt ng-click="finance_click()" ng-class="{on:finance_flag}"><i class="iconfont icon-caiwu"></i> 财务中心</dt>
+        <dt ng-click="finance_click()" ng-class="{on:finance_flag}"><i class="iconfont icon-caiwu i_width"></i>财务中心</dt>
         <dd ng-repeat="item in finance_obj" ng-click="finance_repeat(item)" ng-class="{true:'y_display',false:'n_display'}[finance_flag]"><a ng-class="{dd_on: finance_active == item.id}">{{item.name}}</a></dd>
     </dl>
 
     <dl>
-        <dt ui-sref="account_index" ng-class="{on:other_flag=='account_index'}" ng-click="other_display('account_index')"><i class="iconfont icon-zhanghuguanli"></i> 账户管理</dt>
+        <dt ui-sref="account_index" ng-class="{on:other_flag=='account_index'}" ng-click="other_display('account_index')"><i class="iconfont icon-zhanghuguanli i_width"></i>账户管理</dt>
     </dl>
     <dl>
-        <dt ui-sref="distribution.index" ng-class="{on:other_flag=='distribution.index'}" ng-click="other_display('distribution.index')"><i class="iconfont icon-fenxiao"></i>分销</dt>
+        <dt ui-sref="distribution.index" ng-class="{on:other_flag=='distribution.index'}" ng-click="other_display('distribution.index')"><i class="iconfont icon-fenxiao i_width"></i>分销</dt>
     </dl>
     <dl>
-        <dt ui-sref="apply_case.index" ng-class="{on:other_flag=='apply_case.index'}" ng-click="other_display('apply_case.index')"><i class="iconfont icon-yangbanjian"></i> 申请样板间</dt>
+        <dt ui-sref="apply_case.index" ng-class="{on:other_flag=='apply_case.index'}" ng-click="other_display('apply_case.index')"><i class="iconfont icon-yangbanjian i_width"></i>申请样板间</dt>
     </dl>
 </div>
 <!--左侧导航栏结束-->

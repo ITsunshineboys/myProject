@@ -628,3 +628,7 @@ Nav tabs
 .y_display{
     display: block;
 }
+.i_width{
+    display: inline-block;
+    width: 20px;
+}
