@@ -5152,5 +5152,22 @@ class OrderController extends Controller
     }
 
 
+    public  function  actionFindSupplierGoods()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()
+            ->where(['uid'=>$user->id])
+            ->one();
+        var_dump($supplier);exit;
+    }
+
+
 
 }
