@@ -304,16 +304,33 @@ class QuoteController extends Controller
                 if (isset($one_post['id'])){
                     $value = EngineeringStandardCraft::findOne($one_post['id']);
                     $value->material = $one_post['value'];
-                    $value->save();
+                    $edit = $value->save();
                 }
-
+                if (!$edit){
+                    $transaction->rollBack();
+                    $code = 1000;
+                    return Json::encode([
+                        'code'=>$code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+            foreach ($post['value'] as $one_post){
                 if (!isset($one_post['id'])){
                     $value = new EngineeringStandardCraft();
                     $value->district_code   = $post['district_code'];
                     $value->project         = $post['project'];
                     $value->project_details = $one_post['name'];
                     $value->material        = $one_post['value'];
-                    $value->save();
+                    $add = $value->save();
+                }
+                if (!$add){
+                    $transaction->rollBack();
+                    $code = 1000;
+                    return Json::encode([
+                        'code'=>$code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code]
+                    ]);
                 }
             }
 
@@ -327,16 +344,33 @@ class QuoteController extends Controller
                 if (isset($one_coefficient['id'])){
                     $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
                     $coefficient->value = $one_coefficient['value'];
-                    $coefficient->save();
+                    $edit = $coefficient->save();
                 }
-
+                if (!$edit){
+                    $transaction->rollBack();
+                    $code = 1000;
+                    return Json::encode([
+                        'code'=>$code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+            }
+            foreach ($post['coefficient'] as $one_coefficient){
                 if (!isset($one_coefficient['add_id'])){
                     $coefficient = new EngineeringStandardCarpentryCoefficient();
                     $coefficient->project  = $one_coefficient['add_id'];
                     $coefficient->value  = $one_coefficient['value'];
                     $coefficient->coefficient  = $one_coefficient['coefficient'];
                     $coefficient->series_or_style  = $one_coefficient['series_or_style'];
-                    $coefficient->save();
+                    $add = $coefficient->save();
+                }
+                if (!$add){
+                    $transaction->rollBack();
+                    $code = 1000;
+                    return Json::encode([
+                        'code'=>$code,
+                        'msg'=>\Yii::$app->params['errorCodes'][$code]
+                    ]);
                 }
             }
             $transaction->commit();
