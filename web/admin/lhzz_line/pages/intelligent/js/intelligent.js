@@ -1362,7 +1362,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 if (!!value1.price) {
                                     worker.push({
                                         'worker_kind': value1.worker_kind,
-                                        'price': value1.worker_kind,
+                                        'price': value1.price,
                                         'id': value1.cur_id
                                     })
                                 } else {
@@ -1810,6 +1810,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         }
                     }
                 }
+                console.log($scope.house_informations)
                 //获取案例户型材料及费用
                 for (let [key, value] of $scope.house_informations.entries()) {
                     if (value.is_ordinary) {
@@ -1817,7 +1818,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             for (let [key2, value2] of value1.second_level.entries()) {
                                 for (let [key3, value3] of value2.three_level.entries()) {
                                     for (let [key4, value4] of res.effect.works_data.entries()) {
-                                        if (value3.title == value4.goods_three) {
+                                        if (value3.title == value4.goods_three&&value.id == value4.effect_id) {
                                             value3.good_id = value4.goods_code
                                             value3.good_quantity = value4.goods_quantity
                                             value3['cur_id'] = value4.id
@@ -1833,7 +1834,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     if (value.is_ordinary) {
                         for (let [key1, value1] of value.worker_list.entries()) {
                             for (let [key2, value2] of res.effect.works_worker_data.entries()) {
-                                if (value1.worker_kind == value2.worker_kind) {
+                                if (value1.worker_kind == value2.worker_kind&&value.id == value2.effect_id) {
                                     value1.price = value2.worker_price
                                     value1['cur_id'] = value2.id
                                 }
@@ -4126,6 +4127,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             }
                         }
                     }
+                    console.log(all_data)
+                    console.log($scope.one_title)
                     _ajax.post('/quote/commonality-title-two-add', all_data, function (res) {
                         console.log(res)
                         $uibModal.open({
