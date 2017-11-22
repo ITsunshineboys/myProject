@@ -4007,7 +4007,9 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $Goods=Goods::find()->where(['sku'=>$OrderGoods->sku])->one();
+            $Goods=Goods::find()
+                ->where(['sku'=>$OrderGoods->sku])
+                ->one();
             if (!$Goods)
             {
                 return Json::encode([
@@ -4015,9 +4017,15 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $three_category=GoodsCategory::find()->select('path,title,parent_title')->where(['id'=>$Goods->category_id])->one();
+            $three_category=GoodsCategory::find()
+                ->select('path,title,parent_title')
+                ->where(['id'=>$Goods->category_id])
+                ->one();
             $category_arr=explode(',',$three_category->path);
-            $first_category=GoodsCategory::find()->select('path,title,parent_title')->where(['id'=>$category_arr[0]])->one();
+            $first_category=GoodsCategory::find()
+                ->select('path,title,parent_title')
+                ->where(['id'=>$category_arr[0]])
+                ->one();
             $category=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
             $brand=GoodsBrand::findOne($Goods->brand_id);
             $serie=Series::find()
@@ -5046,7 +5054,8 @@ class OrderController extends Controller
                 'msg' => 'ok'
             ]);
         }catch (Exception $e){
-            $tran->rollBack();             $code=500;
+            $tran->rollBack();
+            $code=500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
