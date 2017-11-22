@@ -295,7 +295,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         $scope.price = 0;               // 原价
         $scope.preferential = 0;        // 优惠价
         let workerMoney = 0;            // 工人费用
-
+        $scope.materials = JSON.parse(sessionStorage.getItem("materials_bak"));
         _ajax.get("/owner/case-particulars", params, function (res) {
             console.log(res, "材料");
             let data = res.data;
