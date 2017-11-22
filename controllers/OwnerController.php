@@ -1487,7 +1487,6 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         $assort_material = AssortGoods::find()->asArray()->all();
-        var_dump($assort_material);exit;
         if ($assort_material == null) {
             $code = 1065;
             return Json::encode([
@@ -1509,6 +1508,7 @@ class OwnerController extends Controller
             $material_name[] = $one_have_assort['title'];
             $material_one[$one_have_assort['title']] = $one_have_assort;
         }
+        var_dump($material_name);exit;
         $goods = Goods::assortList($material_name,$post['city']);
         if ($goods == null) {
             $code = 1061;
