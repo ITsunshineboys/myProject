@@ -432,7 +432,7 @@ class EffectController extends Controller
             ]);
         }
         $effect_earnet=EffectEarnest::find()->where(['id'=>$save_id])->one();
-        $effect_earnet->
+        $effect_earnet->create_time=time();
         $effect_earnet->type=0;
         if(!$effect_earnet->save(false)){
             $code=500;
