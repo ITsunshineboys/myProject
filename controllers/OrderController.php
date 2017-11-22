@@ -5165,7 +5165,19 @@ class OrderController extends Controller
         $supplier=Supplier::find()
             ->where(['uid'=>$user->id])
             ->one();
-        var_dump($supplier);exit;
+        $Goods=Goods::find()
+            ->select('id,sku,title')
+            ->where(['supplier_id'=>$supplier->id])
+            ->all();
+        $code=200;
+        return Json::encode(
+            [
+                'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$Goods
+            ]
+        );
+
     }
 
 
