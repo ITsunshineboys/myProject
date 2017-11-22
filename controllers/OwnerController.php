@@ -1445,7 +1445,9 @@ class OwnerController extends Controller
             foreach ($coefficient as $one_coefficient){
                 foreach ($post['list'] as &$materials){
                     if ($one_coefficient['classify'] == $materials['one_title']){
-                        $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                        if ($materials['goods_quantity'] != 0 || $materials['goods_quantity'] != null){
+                            $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                        }
                     }
                 }
             }
