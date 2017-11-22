@@ -326,7 +326,7 @@ class QuoteController extends Controller
                 $coefficient->save();
             } else {
                 $coefficient = new EngineeringStandardCarpentryCoefficient();
-                $coefficient->project  = $one_coefficient['project'];
+                $coefficient->project  = $one_coefficient['add_id'];
                 $coefficient->value  = $one_coefficient['value'];
                 $coefficient->coefficient  = $one_coefficient['coefficient'];
                 $coefficient->series_or_style  = $one_coefficient['series_or_style'];
@@ -720,11 +720,11 @@ class QuoteController extends Controller
                         $type                   = $house['is_ordinary'];
                         $sort_id                = $house['sort_id'];
                         $effect_                = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
-
                         if (!$effect_) {
                             $transaction->rollBack();
                             return 500;
                         }
+
 
                         $hall_area         = $house['hall_area'];
                         $hall_perimeter    = $house['hall_girth'];
@@ -758,9 +758,8 @@ class QuoteController extends Controller
                                 return 500;
                             }
                         }
-
-
                     }
+
                     // 案列添加
                     if ($house['is_ordinary'] == 1) {
                         $bedroom                = $house['cur_room'];
@@ -849,7 +848,7 @@ class QuoteController extends Controller
                             }
                         }
                     }
-                } else {
+                } elseif (isset($house['id'])) {
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
                         $house_id               = $house['id'];
