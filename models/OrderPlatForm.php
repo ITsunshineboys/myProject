@@ -40,7 +40,7 @@ class OrderPlatForm extends ActiveRecord
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             if (!$GoodsOrder || $GoodsOrder->order_refer!=1)
             {
-                $code=1000;
+                $code=1034;
                 return $code;
             }
             $supplier=Supplier::findOne($GoodsOrder->supplier_id);
