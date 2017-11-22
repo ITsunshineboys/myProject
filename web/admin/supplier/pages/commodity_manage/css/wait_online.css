@@ -310,12 +310,12 @@ input::-webkit-inner-spin-button{
 }
 
 
-.detail div{
-    width: 700px;
-    height:380px ;
-    border: 1px solid #666f80;
-    margin-left: 148px;
-}
+/*.detail div{*/
+    /*width: 700px;*/
+    /*height:380px ;*/
+    /*border: 1px solid #666f80;*/
+    /*margin-left: 148px;*/
+/*}*/
 .btn_back{
     margin-top: 40px;
     margin-bottom: 30px;
@@ -381,4 +381,10 @@ input::-webkit-inner-spin-button{
 }
 .a_active3{
     color: #5677FC!important;
+}
+
+.sec{
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 90px;
 }

@@ -1,6 +1,6 @@
 var wait_online = angular.module("wait_online_Module",["ngFileUpload"]);
 wait_online.controller("wait_online",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
-	$scope.name = "fafafafafafa";
+    $scope.config=$rootScope.config;//富文本编辑器配置
 	$scope.goods_all_attrs=[];//所有属性数据
 	$scope.logistics=[];//物流模块列表
     $rootScope.crumbs = [{
@@ -77,7 +77,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			category_id:+goods_item.category_id
 		}
 	}).then(function (res) {
-		/*品牌、系列、风格 下拉框开始*/ n
+		/*品牌、系列、风格 下拉框开始*/
 		$scope.brands_arr=res.data.data.category_brands_styles_series.brands;
 		$scope.series_arr=res.data.data.category_brands_styles_series.series;
 		$scope.styles_arr=res.data.data.category_brands_styles_series.styles;
