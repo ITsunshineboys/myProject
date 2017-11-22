@@ -9,10 +9,6 @@ var app = angular.module("app", ["ng.ueditor", "ui.router", "clamagModule", "ons
     "index_recommend_module",
     "banner_history_module",
     "index_recommend_history_module",
-    "commodity_detail_on_module",
-    "commodity_detail_down_module",
-    "commodity_detail_wait_module",
-    "commodity_detail_del_module",
     "brand_index_module",
     "brand_check_module",
     "edit_attribute_module",
@@ -356,39 +352,12 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'commodity_deleted'
         })
 
-        // =                     ================
-        .state('commodity_detail', { // 详情
+        .state('commodity_detail', { // 商品详情
             params:{id:null,storeid: null},
             url: '/commodity_detail',
             templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail.html',
             css: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail.css',
             controller: 'commodity_detail'
-        })
-        // =                     ================
-
-        .state("commodity_detail_on", {   //商品详情（已上架）
-            params: {onlinegood: null, storeid: null},
-            url: "/commodity_detail_on",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_on.html",
-            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_on.css"
-        })
-        .state("commodity_detail_down", {   //商品详情（已下架）
-            params: {offlinegood: null, storeid: null},
-            url: "/commodity_detail_down",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_down.html",
-            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_down.css"
-        })
-        .state("commodity_detail_wait", {   //商品详情（等待上架）
-            params: {waitgood: null, storeid: null},
-            url: "/commodity_detail_wait",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_wait.html",
-            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_wait.css"
-        })
-        .state("commodity_detail_del", {   //商品详情（已删除）
-            params: {deletegood: null, storeid: null},
-            url: "/commodity_detail_del",
-            templateUrl: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail_del.html",
-            css: "pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail_del.css"
         })
         .state("edit_attribute", {   //属性管理——属性编辑
             params: {titles: '', propattrs: '', propid: ''},
