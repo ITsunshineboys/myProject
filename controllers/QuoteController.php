@@ -1919,6 +1919,12 @@ class QuoteController extends Controller
     {
         //engineering_standard_carpentry_coefficient
 //       var_dump(EngineeringStandardCarpentryCoefficient::deleteAll([]));
-       var_dump(Effect::find()->asArray()->all());
+       //var_dump(AssortGoods::update('',['id'=>758]));
+        \Yii::$app->db
+            ->createCommand()
+            ->update(AssortGoods::tableName(),[
+                'state'=>0,
+            ],['id'=>758])
+            ->execute();
     }
 }
