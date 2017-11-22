@@ -145,6 +145,9 @@ a{
     width: 100%;
     height: 100%;
 }
+.div_title{
+    text-align: center;
+}
 .hor_line{
     background-color:#CDD3D7;
     width: 2.2rem;
@@ -157,7 +160,7 @@ a{
     font-size: 1.4rem;
     color: #666;
     line-height: 16px;
-    margin: 0 1rem;
+    /*text-align: center;*/
 }
 .categorys_content .tab2 .tab_title{
     line-height: 3rem;
@@ -177,7 +180,7 @@ a{
 }
 .categorys_content .tab2 .sort ul li{
     width: 33.3%;
-    /*text-align: left;*/
+    text-align: center;
     display: inline-block;
     padding-right: 1.2rem;
     margin-bottom: 1.2rem;

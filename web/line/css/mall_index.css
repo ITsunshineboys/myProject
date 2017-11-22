@@ -365,6 +365,7 @@ Pagination Styles
     opacity: 1;
     background: #D9AD65;
 }
+/*底部栏样式开始*/
 .tab_bottom{
     position: fixed;
     width: 100%;
@@ -372,7 +373,7 @@ Pagination Styles
     /*line-height: 4rem;*/
     bottom: 0;
     background:rgba(255,255,255,1);
-    box-shadow: 0 -1px 0 0 #A9A9A9;
+    box-shadow: 0 -1px 0 rgba(0,0,0,.2);
     z-index: 1000;
 }
 .tab_bottom ul{
@@ -397,3 +398,4 @@ Pagination Styles
 .span_active span{
     color: #D9AD65!important;
 }
+/*底部栏样式结束*/

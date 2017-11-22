@@ -87,7 +87,7 @@ choose_series.controller("choose_series",function ($scope,$http,$state) {
 
 	};
 	//点击二级 获取相对应的三级
-            $scope.three = []
+            $scope.three = [];
             $scope.getMoreThree = function (n) {
                 $scope.id=n;
                 $scope.twoColor = n;
