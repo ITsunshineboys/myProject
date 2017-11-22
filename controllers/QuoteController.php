@@ -1138,6 +1138,7 @@ class QuoteController extends Controller
         $brainpower = (new BrainpowerInitalSupervise())->codeStatus($province_code,$city_code);
 
         foreach ($brainpower as $value){
+            var_dump($value);exit;
             $where = 'district_code ='.$value['district_code'].' and toponymy ='.$value['toponymy'].' and street = '.$value['street'].' and particulars = '.$value['house_type_name'].' and type=1';
             $effect = Effect::find()->asArray()->where($where)->one();
             var_dump($effect);exit;
