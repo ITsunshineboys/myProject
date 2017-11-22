@@ -1900,6 +1900,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       var_dump(Effect::find()->asArray()->all());
+       var_dump(Effect::deleteAll([]));
     }
 }
