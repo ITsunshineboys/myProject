@@ -680,7 +680,12 @@ class BasisDecorationService
         }else{
             $tv = 1;
         }
-        return $tv;
+//      个数
+        $pole_cost['quantity'] = (int)$tv;
+//      费用
+        $pole_cost['cost'] = $pole_cost['quantity'] * $blockboard['platform_price'];
+
+        return $pole_cost;
     }
 
     /**
