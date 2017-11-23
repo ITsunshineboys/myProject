@@ -113,7 +113,7 @@
                     <td ng-if="show_4">{{item.viewed_number}}</td>
                     <!--<td ng-if="show_5">{{item.sold_number}}</td>-->
                     <td ng-if="show_6">{{item.create_time}}</td>
-                    <td ng-if="show_7"><img class="img_size" ng-src="{{baseUrl+ item.image}}" alt=""></td>
+                    <td ng-if="show_7"><img class="img_size" ng-src="{{baseUrl + '/' + item.image}}" alt=""></td>
                     <td ng-if="show_8">{{item.left_number}}</td>
                     <td ng-if="show_9">{{item.supplier_price}}</td>
                     <td ng-if="show_10">{{item.platform_price}}</td>
@@ -135,7 +135,7 @@
                     <td ng-if="rec_4">{{item.viewed_number}}</td>
                     <!--<td ng-if="rec_5">{{item.sold_number}}</td>-->
                     <td ng-if="rec_6">{{item.create_time}}</td>
-                    <td ng-if="rec_7"><img class="img_size" ng-src="{{baseUrl+ item.image}}" alt=""></td>
+                    <td ng-if="rec_7"><img class="img_size" ng-src="{{baseUrl + '/' + item.image}}" alt=""></td>
                     <td ng-if="rec_8">{{item.left_number}}</td>
                     <td ng-if="rec_9">{{item.supplier_price}}</td>
                     <td ng-if="rec_10">{{item.platform_price}}</td>
@@ -186,7 +186,7 @@
                                 <div class="modal_txt_one modal_img_box">
                                     <i class="red">*</i>
                                     <span> 图片</span>
-                                    <img id="modal_img"  ng-if="!!banner_add_img_src" ng-src="{{baseUrl+ banner_add_img_src}}"/>
+                                    <img id="modal_img"  ng-if="!!banner_add_img_src" ng-src="{{baseUrl + '/' + banner_add_img_src}}"/>
                                     <img id="modal_img2" ng-if="!banner_add_img_src" src="lib/images/default.png"/>
                                     <p class="modal_red" ng-if="!!banner_add_img_flag">{{banner_add_img_flag}}</p>
                                     <div class="modal_img_btn">
@@ -238,7 +238,7 @@
                                 <div class="modal_txt_one modal_img_box">
                                     <i class="red">*</i>
                                     <span> 图片</span>
-                                    <img id="edit_modal_img1"  ng-if="!!banner_edit_img_src" ng-src="{{baseUrl+ banner_edit_img_src}}"/>
+                                    <img id="edit_modal_img1"  ng-if="!!banner_edit_img_src" ng-src="{{baseUrl + '/' + banner_edit_img_src}}"/>
                                     <img id="edit_modal_img2" ng-if="!banner_edit_img_src" src="lib/images/default.png"/>
                                     <p class="modal_red" ng-if="!!banner_edit_img_flag">{{banner_edit_img_flag}}</p>
                                     <div class="modal_img_btn">
@@ -291,7 +291,7 @@
                             <div class="row form_box">
                                 <div class="col-md-12 form_txt">
                                     <div class="col-md-12 form_txt txt_left">图片：</div>
-                                    <img  class='detail_img_size' ng-src="{{baseUrl+ banner_detail_image}}" alt="">
+                                    <img  class='detail_img_size' ng-src="{{baseUrl + '/' + banner_detail_image}}" alt="">
                                 </div>
                             </div>
                         </div>
