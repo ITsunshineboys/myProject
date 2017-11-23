@@ -38,4 +38,12 @@ class WorkerRank extends ActiveRecord
         ],['id'=>$level['id']])->execute();
     }
 
+    public static function RankName($level){
+        return self::find()
+            ->asArray()
+            ->select([])
+            ->where(['id'=>$level])
+            ->one();
+    }
+
 }

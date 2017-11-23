@@ -2,22 +2,19 @@
 
 namespace app\controllers;
 
-use app\models\LaborCost;
-use app\models\MudWorkerOrder;
+
 use app\models\User;
 use app\models\Worker;
-use app\models\WorkerCraft;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
+use app\models\WorkerRank;
 use app\models\WorkerType;
+use app\models\WorkerValuedetails;
 use app\models\WorkerWorks;
 use app\models\WorkerWorksReview;
 use app\models\WorkResult;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
-use app\services\StringService;
-use yii\db\Exception;
-use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1021,5 +1018,66 @@ class WorkerController extends Controller
             'code'=>$code,
             'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
         ]);
+    }
+
+    /**
+     * 工人职称
+     * @return int|string
+     */
+    public function actionWorkerTitle(){
+        $uid = self::userIdentity();
+        if (!is_int($uid)) {
+            return $uid;
+        }
+
+        $worker_info=Worker::find()
+            ->select('nickname,icon,value,worker_type_id,level')
+            ->asArray()
+            ->where(['uid'=>$uid])
+            ->one();
+        $worker_info['worker_rank']=WorkerRank::RankName($worker_info['level'])['rank_name'];
+        $worker_info['worker_type']=WorkerType::gettype($worker_info['worker_type_id']);
+
+        $worker_rank['rank']=array_values(WorkerRank::find()
+            ->asArray()
+            ->where(['worker_type_id'=>$worker_info['worker_type_id']])
+            ->all());
+        unset($worker_info['worker_type_id']);
+        $data=array_merge($worker_info,$worker_rank);
+
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+
+    /**
+     * 工人分值明细
+     * @return int|string
+     */
+    public function actionWorkerValueView(){
+        $uid = self::userIdentity();
+        if (!is_int($uid)) {
+            return $uid;
+        }
+        $worker_id=Worker::getWorkerByUid($uid)->id;
+       $data=WorkerValuedetails::findAllByWorkerid($worker_id);
+       foreach ($data as &$v){
+           $v['create_time']=date('Y-m-d H:i:s',$v['create_time']);
+           if($v['status']==1){
+               $v['value']='+'.$v['value'];
+           }else{
+               $v['value']='-'.$v['value'];
+           }
+       }
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+
     }
 }
