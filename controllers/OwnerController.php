@@ -1730,9 +1730,16 @@ class OwnerController extends Controller
             }
 
             if ($effect['window'] != null){
-                $goods  = Goods::assortList('人造大理石');
-                var_dump($goods);exit;
+                $stone  = Goods::assortList('人造大理石');
+                foreach ($stone as &$_goods){
+                    $_goods['platform_price'] = $_goods['platform_price'] / 100;
+                    $_goods['supplier_price'] = $_goods['supplier_price'] / 100;
+                    $_goods['purchase_price_decoration_company'] = $_goods['purchase_price_decoration_company'] / 100;
+                    $_goods['quantity'] = $effect['window'];
+                    $_goods['cost'] = $_goods['quantity'] * $_goods['platform_price'];
+                }
             }
+            var_dump($stone);exit;
             //物流信息
 
             return Json::encode([
