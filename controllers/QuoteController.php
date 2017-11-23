@@ -1817,7 +1817,7 @@ class QuoteController extends Controller
         }
         if (isset($post['two_count'])){
             foreach ($post['two_count'] as $two){
-                $points->findByUpdate($two['count'],$two['id'],$two['title']);
+                $points->findByUpdate($two['count'],$two['two_id'],$two['title']);
             }
 
         }
