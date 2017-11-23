@@ -1766,20 +1766,20 @@ class OwnerController extends Controller
                 $material = [];
             }
 
-            //物流信息
             $a = [];
             foreach ($data as &$one_data){
                 $a []= $one_data;
                 $a []= $material;
                 $a []= $stone;
             }
-            var_dump($a);exit;
+            $data_ = array_filter($a);
+            $_data = array_merge($data_);
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data' => [
                     'images' => $effect,
-                    'goods' => $data,
+                    'goods' => $_data,
 //                    'backman_data' => $backman_data,
                     'worker_data' => $worker_data,
                 ]
@@ -1791,7 +1791,7 @@ class OwnerController extends Controller
             'msg' => 'ok',
             'data' => [
                 'images' => $effect,
-                'goods' => $data,
+                'goods' => $_data,
 //                'backman_data' => $backman_data,
                 'worker_data' => $worker_data,
             ]
