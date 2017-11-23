@@ -582,6 +582,7 @@ class Effect extends ActiveRecord
         return self::find()
             ->asArray()
             ->where(['and',['district_code'=>$district_code],['street'=>$street],['toponymy'=>$toponymy]])
+            ->andWhere('type != 2')
             ->orderBy(['sort_id'=>SORT_ASC])
             ->all();
     }
