@@ -1767,10 +1767,13 @@ class OwnerController extends Controller
             }
 
             //物流信息
-            $d[] = $material;
-            $d[] = $stone;
-            $d[] = $data;
-            var_dump($d);exit;
+            $a = [];
+            foreach ($data as &$one_data){
+                $a []= $one_data;
+                $a []= $material;
+                $a []= $stone;
+            }
+            var_dump($a);exit;
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
