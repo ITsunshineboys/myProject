@@ -30,6 +30,7 @@ class UserCashregister extends \yii\db\ActiveRecord
         'apply_time',
         'cash_money',
         'real_money',
+        'handle_time',
         'transaction_no',
         'status'
 
@@ -41,7 +42,7 @@ class UserCashregister extends \yii\db\ActiveRecord
     const  CASH_IN=4;
     const  REJECT=5;
     const  GOODSPAYMENT=6;
-    const ACCESS_TYPE_LIST=
+    const  ACCESS_TYPE_LIST=
         [
             1=>self::RECHARGE,
             2=>self::DEBIT,
@@ -51,6 +52,11 @@ class UserCashregister extends \yii\db\ActiveRecord
             6=>self::GOODSPAYMENT,
         ];
     const STATUS_CSED='已提现';
+    const CASH_STATUS_ALL=4;
+    const CASH_STATUS_IN=1;
+    const CASH_STATUS_OVER=2;
+    const CASH_STATUS_FAIL=3;
+
     /**
      * @inheritdoc
      */
@@ -121,6 +127,11 @@ class UserCashregister extends \yii\db\ActiveRecord
         return ModelService::pageDeal($freezeList, $total, $page, $size);
 
 
+    }
+
+    public  static  function  paginationByOwner($where,$size = self::PAGE_SIZE_DEFAULT,$select,$page)
+    {
+        $select = array_diff($select, self::FIELDS_EXTRA);
     }
 
     /**

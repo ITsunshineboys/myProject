@@ -109,33 +109,51 @@ class ShippingCart extends \yii\db\ActiveRecord
 //                $code=1000;
 //                return $code;
 //            }
+            $Goods=(new Query())
+                ->from(self::tableName().' as s')
+                ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
+                ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
+                ->where(['s.uid'=>$user->id])
+                ->andWhere(['s.role_id'=>$user->last_role_id_app])
+                ->andWhere(['g.supplier_id'=>$supId])
+                ->andWhere('g.status =2')
+                ->all();
+            foreach ($Goods as &$list)
+            {
+                $list['platform_price']=GoodsOrder::switchMoney($list[$money]*0.01);
+                if ($money!='platform_price')
+                {
+                    unset($list[$money]);
+                }
+            }
             $mix[]=[
                 'shop_name'=>Supplier::find()
                     ->select(['shop_name'])
                     ->where(['id'=>$supId])
                     ->one()
                     ->shop_name,
-                'goods'=>(new Query())
-                    ->from(self::tableName().' as s')
-                    ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
-                    ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
-                    ->where(['s.uid'=>$user->id])
-                    ->andWhere(['s.role_id'=>$user->last_role_id_app])
-                    ->andWhere(['g.supplier_id'=>$supId])
-                    ->andWhere('g.status =2')
-                    ->all(),
+                'goods'=>$Goods,
             ];
         }
+        $invalid_goods=(new Query())
+            ->from(self::tableName().' as s')
+            ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
+            ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
+            ->where(['s.uid'=>$user->id])
+            ->andWhere(['s.role_id'=>$user->last_role_id_app])
+            ->andWhere('g.status !=2')
+            ->all();
+       foreach ($invalid_goods as &$list)
+       {
+           $list['platform_price']=GoodsOrder::switchMoney($list[$money]*0.01);
+           if ($money!='platform_price')
+           {
+               unset($list[$money]);
+           }
+       }
         return [
             'normal_goods'=>$mix,
-            'invalid_goods'=>(new Query())
-                ->from(self::tableName().' as s')
-                ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
-                ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
-                ->where(['s.uid'=>$user->id])
-                ->andWhere(['s.role_id'=>$user->last_role_id_app])
-                ->andWhere('g.status !=2')
-                ->all()
+            'invalid_goods'=>$invalid_goods
         ];
     }
 

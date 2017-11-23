@@ -921,7 +921,7 @@ class OrderController extends Controller
      */
     public function actionOrderlinewxpaynotify(){
         //获取通知的数据
-        $xml = file_get_contents("php://input");;
+        $xml = file_get_contents("php://input");
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
         $msg=Json::decode($data);
         if ($msg['result_code']=='SUCCESS')

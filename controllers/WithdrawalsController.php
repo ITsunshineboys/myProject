@@ -9,6 +9,7 @@ use app\models\Goods;
 use app\models\GoodsOrder;
 use app\models\Role;
 use app\models\Supplier;
+use app\models\SupplierCashregister;
 use app\models\User;
 use app\models\Worker;
 use app\models\UserAccessdetail;
@@ -16,6 +17,7 @@ use app\models\UserCashregister;
 use app\models\UserBankInfo;
 use app\models\UserFreezelist;
 use app\models\UserRole;
+use app\services\ModelService;
 use app\services\SmValidationService;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -1713,6 +1715,91 @@ class WithdrawalsController extends Controller
     {
         $user = User::find()->all();
         return Json::encode([$user]);
+    }
+
+    public function  actionFindOwnerCashList()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $type=trim(Yii::$app->request->get('type', ''));
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $keyword=Yii::$app->request->get('keyword');
+        $where="role_id=".Supplier::ROLE_SUPPLIER ;
+        $code=1000;
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return json_encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $endTime && $endTime .= ' 23:59:59';
+            }
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+        }
+        if ($startTime) {
+            $startTime = strtotime($startTime);
+            $startTime && $where .= " and apply_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)(strtotime($endTime));
+            $endTime && $where .= " and apply_time <= {$endTime}";
+        }
+        if ($keyword)
+        {
+            echo 1;
+            die;
+        }
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
+        if ($type)
+        {
+            switch ($type)
+            {
+                case UserCashregister::CASH_STATUS_IN:
+                    $where.="status=".UserCashregister::CASH_STATUS_IN;
+                    break;
+                case UserCashregister::CASH_STATUS_OVER:
+                    $where.="status=".UserCashregister::CASH_STATUS_OVER;
+                    break;
+                case UserCashregister::CASH_STATUS_FAIL:
+                    $where.="status=".UserCashregister::CASH_STATUS_FAIL;
+                    break;
+            }
+        }
+        $data=UserCashregister::paginationByOwner($where,Goods::PAGE_SIZE_DEFAULT,UserCashregister::FIELDS_ADMIN,$page);
+        if (is_numeric($data))
+        {
+            $code=$data;
+            return json_encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $code=200;
+        return json_encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+
+
+
     }
 
 
