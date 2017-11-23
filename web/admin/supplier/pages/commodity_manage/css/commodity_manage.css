@@ -99,6 +99,7 @@ section{
   border:1px solid #BFC0C2;
   border-radius: 20px;
   outline: 0;
+  padding-left: 1rem;
 }
 .search{
   position: absolute;

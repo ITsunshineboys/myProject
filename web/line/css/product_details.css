@@ -742,4 +742,11 @@ button.close{
     margin-left: 10.7rem;
     margin-top: .8rem;
 }
-
+.swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #D9AD65;
+}
