@@ -1491,7 +1491,7 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         // 有资料 计算公式
-        $materials = ['大理石'];
+        $materials = ['人造大理石'];
         $goods = Goods::assortList($materials,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
         var_dump($goods_price);exit;
