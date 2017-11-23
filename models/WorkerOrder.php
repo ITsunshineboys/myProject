@@ -1755,10 +1755,11 @@ class WorkerOrder extends \yii\db\ActiveRecord
      * @param $time_area
      * @return array
      */
-    public static function getWorkDaysByTimeArea($worker_id, $time_area)
+    public static function getWorkDaysByTimeArea($worker_id, $start_time,$end_time)
     {
 
-        list($start_time, $end_time) = $time_area;
+      $start_time=(int)strtotime($start_time);
+        $end_time=(int)strtotime($end_time);
 
         //!备注： eg: 8月的排班   开始时间 <= 8月31  结束时间 >= 8月1
 
@@ -1773,7 +1774,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->andWhere(['>=', 'end_time', $start_time])
             ->select('days')
             ->all();
-            var_dump($all_days);die;
+
         if (!$all_days) {
             return [];
         }
