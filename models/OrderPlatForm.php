@@ -10,7 +10,7 @@ use app\services\ModelService;
 class OrderPlatForm extends ActiveRecord
 {
 
-
+    //平台介入表结构creat_time为创建时间  !important
     const PLATFORM_HANDLE_TYPE=[
         1 => '关闭订单退款',
         2 => '关闭订单线下退款',

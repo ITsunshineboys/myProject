@@ -1091,15 +1091,15 @@ class OrderController extends Controller
                     $endTime && $where .= " and a.create_time <= {$endTime}";
                 }
            }
-        $sort_money=trim($request->get('sort_money'));
-        $sort_time=trim($request->get('sort_time'));
-        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'lhzz');
-        $code=200;
-        return Json::encode([
-             'code'=>$code,
-            'msg'=>'ok',
-            'data'=>$paginationData
-        ]);
+            $sort_money=trim($request->get('sort_money'));
+            $sort_time=trim($request->get('sort_time'));
+            $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'lhzz');
+            $code=200;
+            return Json::encode([
+                 'code'=>$code,
+                'msg'=>'ok',
+                'data'=>$paginationData
+            ]);
     }
 
 
@@ -1121,7 +1121,6 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-
         }
         //获取订单信息
         $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
@@ -1644,6 +1643,7 @@ class OrderController extends Controller
         {
             $waybillname='未知快递';
         }
+
         $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
         if ($code==200){
             $code=200;

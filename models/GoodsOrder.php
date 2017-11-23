@@ -1159,7 +1159,6 @@ class GoodsOrder extends ActiveRecord
         if (!$res){
             return null;
         }
-
         $res['handle_time']=date('Y-m-d H:i',$res['creat_time']);
         unset($res['creat_time']);
         $res['refund_result']=self::Getplatformresult($res['refund_result']);
@@ -1167,6 +1166,7 @@ class GoodsOrder extends ActiveRecord
         $res['refund_time']=date('Y-m-d H:i',$res['refund_time']);
         return $res;
     }
+
     /**
      * check is correct money
      * 判断是否是正确的金额
@@ -1185,7 +1185,8 @@ class GoodsOrder extends ActiveRecord
         if ($money*0.01 != $total)
         {
             return false;
-        }else{
+        }else
+        {
             return true;
         }
     }
@@ -1194,9 +1195,10 @@ class GoodsOrder extends ActiveRecord
      * @param $refund_type
      * @return string
      */
-    private  static  function Getplatformtype($refund_type)
+    public  static  function Getplatformtype($refund_type)
     {
-        switch ($refund_type){
+        switch ($refund_type)
+        {
             case 1:
                 $res='退至顾客钱包 ';
                 break;
@@ -1214,7 +1216,7 @@ class GoodsOrder extends ActiveRecord
      * @param $result
      * @return string
      */
-    private  static  function Getplatformresult($result){
+    public  static  function Getplatformresult($result){
         switch ($result){
             case 1:
                 $res='退款中';
