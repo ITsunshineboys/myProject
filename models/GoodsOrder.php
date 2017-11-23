@@ -1405,29 +1405,36 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $role_number=$supplier->shop_no;
         $transaction_no= self::SetTransactionNo($role_number);
+        $orderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        if (!$orderGoods)
+        {
+            return false;
+        }
         try {
-            $res1=Yii::$app->db->createCommand()->update(OrderGoods::tableName(), ['order_status' =>1,'shipping_status'=>2],'order_no='.$order_no.' and sku='.$sku)->execute();
+            $orderGoods->order_status=1;
+            $orderGoods->shipping_status=2;
+            $res1=$orderGoods->save(false);
             if (!$res1)
             {
                 $trans->rollBack();
                 return false;
             }
-            $supplier->balance=$supplier->balance+$money;
-            $supplier->availableamount=$supplier->availableamount+$money;
-            $res2=Yii::$app->db->createCommand()->insert(UserAccessdetail::tableName(),[
-                'access_type'    => 6,
-                'access_money' =>$money,
-                'create_time'      =>$time,
-                'order_no'  =>$order_no,
-                'sku'  =>$sku,
-                'transaction_no'=>$transaction_no,
-                'uid'=>$supplier->uid,
-                'role_id'=>6,
-            ])->execute();
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$supplier->uid;
+            $supplier_accessdetail->role_id=6;
+            $supplier_accessdetail->access_type=6;
+            $supplier_accessdetail->access_money=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
+            $supplier_accessdetail->order_no=$order_no;
+            $supplier_accessdetail->sku=$sku;
+            $supplier_accessdetail->create_time=time();
+            $supplier_accessdetail->transaction_no=$transaction_no;
+            $res2=$supplier_accessdetail->save(false);
             if (!$res2){
                 $trans->rollBack();
                 return false;
             }
+            $supplier->balance=$supplier->balance+$money;
+            $supplier->availableamount=$supplier->availableamount+$money;
             if (!$supplier->save(false))
             {
                 $trans->rollBack();
