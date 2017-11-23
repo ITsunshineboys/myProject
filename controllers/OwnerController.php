@@ -1402,7 +1402,7 @@ class OwnerController extends Controller
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
-        $goods_select = $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
+        $goods_select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
         $goods = Goods::findBySkuAll($codes,$goods_select);
         if ($goods == null){
             $code = 1061;
@@ -1587,6 +1587,11 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function actionA()
+    {
+        $materials = ['木地板','大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具',''];
+    }
+
     /**
      * Owner certification action(app)
      * @return string
@@ -1736,7 +1741,7 @@ class OwnerController extends Controller
             foreach ($data as $one_goods) {
                 $sku [] = $one_goods['goods_code'];
             }
-            $select = "goods.id,goods.sku,goods.platform_price,goods.purchase_price_decoration_company,goods.logistics_template_id,goods_brand.name,goods.cover_image,goods.title as goods_name";
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
             $goods  = Goods::findBySkuAll($sku, $select);
             if ($goods == null) {
                 return Json::encode([
