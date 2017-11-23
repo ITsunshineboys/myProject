@@ -1593,23 +1593,8 @@ class OwnerController extends Controller
         $materials = ['木地板','大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具','立柜式空调','挂壁式空调','灯具','床垫','马桶','浴柜','花洒套装','淋浴隔断'];
         $goods = Goods::assortList($materials,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
-        $bedroom_area = $p['project_value'] / self::PRICE_UNITS;
-        //   生活配套
-        $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
-        //   基础装修
-        $material[]   = BasisDecorationService::capacity($goods_price,$post);
-        //   家电配套
-        $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
-        //   移动家具
-        $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
-        //   固定家具
-        $material[]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
-        //   软装配套
-        $material[]   = BasisDecorationService::mild($goods_price,$post);
-        var_dump($material);exit;
         //   主材
-        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$post);
+        $material[]   = BasisDecorationService::formula($goods_price,$post);
     }
 
     /**
