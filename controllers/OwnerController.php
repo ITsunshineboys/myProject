@@ -1421,8 +1421,8 @@ class OwnerController extends Controller
         }
         return Json::encode([
             'code' => 200,
-            'msg' => 'ok',
-            'add_list' =>  $add_materials,
+            'msg'  => 'ok',
+            'add_list' => $goods,
         ]);
     }
 
