@@ -11,6 +11,7 @@ namespace app\services;
 use app\models\UploadForm;
 use Yii;
 use yii\web\UploadedFile;
+use yii\helpers\Json;
 
 class FileService
 {
@@ -47,17 +48,6 @@ class FileService
 
         $this->_filePath = $filepath;
         $this->_fullPath = $fullPath;
-    }
-
-    /**
-     * Check file type
-     *
-     * @param UploadForm $model upload model
-     * @return bool
-     */
-    public static function checkType(UploadForm $model)
-    {
-        return in_array($model->file->extension, Yii::$app->params['uploadPublic']['extensions']);
     }
 
     /**
@@ -109,56 +99,17 @@ class FileService
             return $code;
         }
 
-        return UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
-    }
-
-    /**
-     * upload files
-     * @return array|int
-     */
-    public static  function uploadMore(){
-        $model = new UploadForm;
-        $model->file = UploadedFile::getInstances($model, 'file');
-        if (!$model->file){
-            $code=1000;
-            return $code;
-
+        $imagePath = UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
+        if (!empty(Yii::$app->params['online']['commonApi']['user'])) {
+            if (in_array($model->file->extension, Yii::$app->params['uploadPublic']['compress']['extensions'])
+                && $model->file->size > Yii::$app->params['uploadPublic']['compress']['minSize']
+            ) {
+                $compressedImageUri = self::compressImage([Yii::$app->request->hostInfo . '/' . $imagePath]);
+                $compressedImageUri && $imagePath = $compressedImageUri;
+            }
         }
-        foreach ($model->file as  &$model->file){
-            $code = 1000;
-            if (!$model->file || !$model->file->extension) {
-                return $code;
-            }
-            if (!$model->validate()) {
-                if (!self::checkUploadSize($model)) {
-                    $code = 1004;
-                    return $code;
-                }
-                if (!self::checkType($model)) {
-                    $code = 1021;
-                    return $code;
-                }
-                return $code;
-            }
-            $ymdDirs = self::makeYmdDirs();
-            if (!$ymdDirs) {
-                $code = 500;
-                return $code;
-            }
-            $directory = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/' . $ymdDirs;
-            $filename = self::generateFilename($directory);
-            if ($filename === false) {
-                $code = 500;
-                return $code;
-            }
-            $file = $filename . '.' . $model->file->extension;
-            if (!$model->file->saveAs($directory . '/' . $file)) {
-                $code = 500;
-                return $code;
-            }
-            $data[]=UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
-        }
-        return  $data;
+
+        return $imagePath;
     }
 
     /**
@@ -170,6 +121,17 @@ class FileService
     public static function checkUploadSize(UploadForm $model)
     {
         return $model->file->size <= Yii::$app->params['uploadPublic']['maxSize'];
+    }
+
+    /**
+     * Check file type
+     *
+     * @param UploadForm $model upload model
+     * @return bool
+     */
+    public static function checkType(UploadForm $model)
+    {
+        return in_array($model->file->extension, Yii::$app->params['uploadPublic']['extensions']);
     }
 
     /**
@@ -212,6 +174,79 @@ class FileService
                 return $filename;
             }
         }
+    }
+
+    /**
+     * Compress images
+     *
+     * @param array $uris image uri list
+     * @return mixed
+     */
+    public static function compressImage(array $uris)
+    {
+        $data = [
+            'user' => Yii::$app->params['online']['commonApi']['user'],
+            'pwd' => Yii::$app->params['online']['commonApi']['pwd'],
+            'quality' => Yii::$app->params['uploadPublic']['compress']['quality'],
+            'src' => Json::encode($uris),
+        ];
+        $res = StringService::httpPost(Yii::$app->params['online']['commonApi']['serviceUri'], $data);
+        if ($res) {
+            $res = json_decode($res, true);
+            if (200 == $res['code'] && !empty($res['data'][0])) {
+                return $res['data'][0];
+            }
+        }
+    }
+
+    /**
+     * upload files
+     * @return array|int
+     */
+    public static function uploadMore()
+    {
+        $model = new UploadForm;
+        $model->file = UploadedFile::getInstances($model, 'file');
+        if (!$model->file) {
+            $code = 1000;
+            return $code;
+
+        }
+        foreach ($model->file as &$model->file) {
+            $code = 1000;
+            if (!$model->file || !$model->file->extension) {
+                return $code;
+            }
+            if (!$model->validate()) {
+                if (!self::checkUploadSize($model)) {
+                    $code = 1004;
+                    return $code;
+                }
+                if (!self::checkType($model)) {
+                    $code = 1021;
+                    return $code;
+                }
+                return $code;
+            }
+            $ymdDirs = self::makeYmdDirs();
+            if (!$ymdDirs) {
+                $code = 500;
+                return $code;
+            }
+            $directory = Yii::getAlias('@webroot') . '/' . UploadForm::DIR_PUBLIC . '/' . $ymdDirs;
+            $filename = self::generateFilename($directory);
+            if ($filename === false) {
+                $code = 500;
+                return $code;
+            }
+            $file = $filename . '.' . $model->file->extension;
+            if (!$model->file->saveAs($directory . '/' . $file)) {
+                $code = 500;
+                return $code;
+            }
+            $data[] = UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
+        }
+        return $data;
     }
 
     /**
