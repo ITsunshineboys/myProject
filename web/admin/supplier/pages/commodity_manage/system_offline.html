@@ -54,14 +54,14 @@
         <!--封面上传图片-->
         <div class="filter_pic">
             <span class="class_name_span">封面图</span>
-            <img class="filter_pic_cover_img" ng-src="{{baseUrl + '/'+ detail_item.cover_image}}" alt="">
+            <img class="filter_pic_cover_img" ng-src="{{baseUrl+ detail_item.cover_image}}" alt="">
         </div>
 
         <!--上传图片-->
         <div class="filter_pic" ng-if="detail_item.images.length!=0">
             <span>图片</span>
             <div class="first_pic" >
-                <img ng-repeat="item in detail_item.images" class="filter_pic_img" ng-src="{{baseUrl + '/'+ item}}" alt="">
+                <img ng-repeat="item in detail_item.images" class="filter_pic_img" ng-src="{{baseUrl+ item}}" alt="">
             </div>
         </div>
 
@@ -153,7 +153,7 @@
 
         <div class="erweima">
             <span>线下商城二维码</span>
-            <img style="border:1px solid black" ng-src="{{baseUrl + '/'+ detail_item.qr_code}}" alt="">
+            <img style="border:1px solid black" ng-src="{{baseUrl+ detail_item.qr_code}}" alt="">
         </div>
 
         <!--详情描述-->

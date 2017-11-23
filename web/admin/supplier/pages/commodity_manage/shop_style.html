@@ -100,7 +100,7 @@
                 <span>上传图片</span>
                 <div class="pic_right">
                     <div class="img_list" ng-repeat="item in upload_img_arr" style="width: 120px;height: 120px;">
-                        <img ng-src="{{baseUrl + '/'+ item}}" class="logo">
+                        <img ng-src="{{baseUrl+ item}}" class="logo">
                         <span class="img_times" ng-click="del_img(item)">&times;</span>
                     </div>
                     <img ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
