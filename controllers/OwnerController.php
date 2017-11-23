@@ -1750,7 +1750,7 @@ class OwnerController extends Controller
                     foreach ($stairs_details as $details){
 
                     }
-                    if ($stairs)
+//                    if ($stairs)
                 }
             }
             //物流信息
