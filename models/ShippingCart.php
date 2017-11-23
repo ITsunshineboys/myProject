@@ -100,7 +100,7 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
         foreach ($supIds as $supId)
         {
-//            $supplier=Supplier::find()
+//           $supplier=Supplier::find()
 //                ->select(['shop_name'])
 //                ->where(['id'=>$supId])
 //                ->one();

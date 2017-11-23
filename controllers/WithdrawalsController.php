@@ -147,7 +147,7 @@ class WithdrawalsController extends Controller
     }
 
 
-  /**
+   /**
      * 移动端查询银行卡信息
      * @return string
      */
@@ -238,7 +238,7 @@ class WithdrawalsController extends Controller
         ]);
     }
 
-   /**
+    /**
      * 获取余额
      * @return string
     */

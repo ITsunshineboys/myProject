@@ -715,7 +715,11 @@ class GoodsOrder extends ActiveRecord
             {
                 $array['freight']=$logistics_template['delivery_cost_default']*0.01;
             }else{
-                $array['freight']=$logistics_template['delivery_cost_default']*0.01+$logistics_template['delivery_cost_delta']*0.01*($goods_num-$logistics_template['delivery_number_default']);
+                if ($logistics_template['delivery_number_delta']==0)
+                {
+                    $logistics_template['delivery_number_delta']=1;
+                }
+                $array['freight']=$logistics_template['delivery_cost_default']*0.01+$logistics_template['delivery_cost_delta']*0.01*ceil(($goods_num-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
             }
         }
         $array['goods_num']=$goods_num;
@@ -1272,7 +1276,6 @@ class GoodsOrder extends ActiveRecord
                 case 1:
                     $data[$k]['user_name']='线下店购买用户';
                     break;
-
                 case 2:
                     $data[$k]['user_name']=User::find()
                         ->select('nickname')

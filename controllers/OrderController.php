@@ -5104,7 +5104,6 @@ class OrderController extends Controller
                 ]
             );
         }
-
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
         if (!$OrderGoods)
         {
@@ -5116,7 +5115,6 @@ class OrderController extends Controller
                 ]
             );
         }
-
         switch ($GoodsOrder->order_refer)
         {
             case 1:
@@ -5134,7 +5132,14 @@ class OrderController extends Controller
                 ];
                 break;
         }
-
+        $operation[]=[
+            'name'=>'关闭订单，线下退款',
+            'value'=>2
+        ];
+        $operation[]=[
+            'name'=>'关闭订单，退款',
+            'value'=>1
+        ];
         if ($GoodsOrder->pay_status==0 && $OrderGoods->order_status==0)
         {
             $code=200;
@@ -5145,6 +5150,79 @@ class OrderController extends Controller
                     'data'=>$operation
                 ]
             );
+        }else
+        {
+            switch ($OrderGoods->order_status){
+                case 0:
+                    $code=200;
+                    return Json::encode(
+                        [
+                            'code'=>$code,
+                            'msg'=>'ok',
+                            'data'=>$operation
+                        ]
+                    );
+                    break;
+                case 1:
+                    switch($OrderGoods->customer_service){
+                        case 0:
+                            $operation[]=[
+                                'name'=>'退货',
+                                'value'=>3
+                            ];
+                            $operation[]=[
+                                'name'=>'换货',
+                                'value'=>4
+                            ];
+                            $operation[]=[
+                                'name'=>'上门维修',
+                                'value'=>5
+                            ];
+                            $operation[]=[
+                                'name'=>'上门退货',
+                                'value'=>6
+                            ];
+                            $operation[]=[
+                                'name'=>'上门换货',
+                                'value'=>7
+                            ];
+                            $code=200;
+                            return Json::encode(
+                                [
+                                    'code'=>$code,
+                                    'msg'=>'ok',
+                                    'data'=>$operation
+                                ]
+                            );
+                            break;
+                        case 1:
+//                            $data[$k]['status']='售后中';
+                            break;
+                        case 2:
+                            $code=200;
+                            return Json::encode(
+                                [
+                                    'code'=>$code,
+                                    'msg'=>'ok',
+                                    'data'=>$operation
+                                ]
+                            );
+//                            $data[$k]['status']='售后结束';
+                            break;
+                    }
+                    break;
+                case 2:
+//                    $data[$k]['status']='已取消';
+                    $code=200;
+                    return Json::encode(
+                        [
+                            'code'=>$code,
+                            'msg'=>'ok',
+                            'data'=>[]
+                        ]
+                    );
+                    break;
+            }
         }
     }
 
@@ -5182,6 +5260,39 @@ class OrderController extends Controller
                 'data'=>$Goods
             ]
         );
+
+    }
+
+
+    public  function  actionFindAfterSaleDetail()
+    {
+        $request=Yii::$app->request;
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
+        if (!$order_no || !$sku)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+//        if ($user->last_role_id_app !=6 && $user->last_role_id_app!=1)
+//        {
+//            $code=1034;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
 
     }
 
