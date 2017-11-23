@@ -1490,34 +1490,34 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         $assort_material = AssortGoods::find()->asArray()->all();
-//        if ($assort_material == null) {
-//            $code = 1065;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code],
-//            ]);
-//        }
-//        foreach ($assort_material as $assort){
-//            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
-//                $have_assort[] = $assort;
-//            } else {
-//                $without_assort[] = $assort;
-//            }
-//        }
-//
-//        //有计算公式
-//        foreach ($have_assort as $one_have_assort){
-//            $material_name[] = $one_have_assort['title'];
-//            $material_one[$one_have_assort['title']] = $one_have_assort;
-//        }
-//        $goods = Goods::assortList($material_name,$post['city']);
-//        if ($goods == null) {
-//            $code = 1061;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code],
-//            ]);
-//        }
+        if ($assort_material == null) {
+            $code = 1065;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        foreach ($assort_material as $assort){
+            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
+                $have_assort[] = $assort;
+            } else {
+                $without_assort[] = $assort;
+            }
+        }
+
+        //有计算公式
+        foreach ($have_assort as $one_have_assort){
+            $material_name[] = $one_have_assort['title'];
+            $material_one[$one_have_assort['title']] = $one_have_assort;
+        }
+        $goods = Goods::assortList($material_name,$post['city']);
+        if ($goods == null) {
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
@@ -1538,9 +1538,9 @@ class OwnerController extends Controller
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
 
 
-        $assort_material = AssortGoods::find()->asArray()->all();
+//        $assort_material = AssortGoods::find()->asArray()->all();
         //无计算公式
-        foreach ($assort_material as $one_without_assort){
+        foreach ($without_assort as $one_without_assort){
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
