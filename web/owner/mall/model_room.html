@@ -197,8 +197,8 @@
     <div class="background_w clearfix special_requirements" ng-show="activeObj.type == 1">
         <div class="shu"></div>
         <div class="title">特殊要求</div>
-        <textarea class="main_text" placeholder="请输入你的要求" ng-model="demand.text"></textarea>
-        <span>0/300</span>
+        <textarea class="main_text" placeholder="请输入你的要求" ng-model="demand.text" maxlength="300"></textarea>
+        <span>{{demand.text.length}}/300</span>
     </div>
 
     <!--尾部结算-->
