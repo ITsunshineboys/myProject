@@ -1741,7 +1741,8 @@ class WithdrawalsController extends Controller
             $endTime = trim(Yii::$app->request->get('end_time', ''));
             if (($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ) {
+            )
+            {
                 return json_encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -1766,7 +1767,7 @@ class WithdrawalsController extends Controller
         }
         if ($keyword)
         {
-            $where .="  CONCAT(u.nickname,u.aite_cube_no) like '%{$keyword}%'";
+            $where .=" and CONCAT(u.nickname,u.aite_cube_no) like '%{$keyword}%'";
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
