@@ -1729,6 +1729,10 @@ class OwnerController extends Controller
                 }
             }
 
+            $as = AssortGoods::find()->asArray()->where(['state'=>0])->all();
+            var_dump($as);exit;
+
+
             if ($effect['window'] != null){
                 $stone  = Goods::assortList('人造大理石');
                 foreach ($stone as &$_goods){
