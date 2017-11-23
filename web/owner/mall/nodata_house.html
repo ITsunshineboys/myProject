@@ -240,7 +240,7 @@
                     <div class="shu"></div>
                     <p class="title">材料选择</p>
                     <div class="basis_decoration">
-                        <div class="grid" water ng-repeat="item in ctrlScope.all_goods" ng-click="go_inner(item)">
+                        <div class="grid" water ng-repeat="item in ctrlScope.all_goods" ng-click="go_inner(item,$index)">
                             <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
                             <div class="basis_item" id="bottom{{item.id}}">
                                 <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
