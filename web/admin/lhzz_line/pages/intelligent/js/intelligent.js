@@ -2673,7 +2673,13 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         for (let [key, value] of $scope.all_norm.entries()) {
                             for (let [key1, value1] of $scope.cur_norm.entries()) {
                                 if (value.title.indexOf(value1.title)!=-1) {
-                                    value1['options'] = value.value
+                                    if(value1.title == '木工板'){
+                                        if(value.name == value1.unit){
+                                            value1['options'] = value.value
+                                        }
+                                    }else{
+                                        value1['options'] = value.value
+                                    }
                                     console.log(value1.value)
                                     if(value1.value==0){
                                         value1.value = '其它'
