@@ -1389,8 +1389,8 @@ class OwnerController extends Controller
         $series = trim(Yii::$app->request->post('series',''));
         $style = trim(Yii::$app->request->post('style',''));
         $area = trim(Yii::$app->request->post('area',''));
-        $add_select = 'id,one_materials,two_materials,three_materials,sku,max(quantity)';
-        $add_where = ['and',['city_code'=>$code],['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]]];
+        $add_select = 'decoration_add.id,decoration_add.one_materials,decoration_add.two_materials,decoration_add.three_materials,decoration_add.sku,d.max(quantity) as quantity';
+        $add_where = ['and',['decoration_add.city_code'=>$code],['or',['d.style_id'=>$style],['d.series_id'=>$series],['and',['<=','d.min_area',$area],['>=','d.max_area',$area]]]];
         $add_materials = DecorationAdd::findByAll($add_select,$add_where);
         if ($add_materials == null){
             $code = 1063;
