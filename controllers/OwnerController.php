@@ -1742,16 +1742,18 @@ class OwnerController extends Controller
 
 
             if ($effect['stairway'] != null){
-                $stairs  = Goods::assortList('楼梯');
+                $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
+                $stairs_price = BasisDecorationService::priceConversion($stairs);
+                $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
                 var_dump($stairs);exit;
-                $stairs_details = StairsDetails::find()->asArray()->all();
-
-                foreach ($stairs as &$one_stairs){
-                    foreach ($stairs_details as $details){
-
+                foreach ($stairs_price as &$one_stairs_price) {
+                    if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
+                        $one_stairs_price['quantity'] = 1;
+                        $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
+                        $condition_stairs [] = $one_stairs_price;
                     }
-//                    if ($stairs)
                 }
+                $material[][] = BasisDecorationService::profitMargin($condition_stairs);
             }
             //物流信息
 
