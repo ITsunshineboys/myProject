@@ -1751,11 +1751,11 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-                var_dump($ma);
-                var_dump( $effect_['style_id']);
+
                 foreach ($stairs_price as &$one_stairs_price) {
-                    var_dump($one_stairs_price['value']);
-                    var_dump($one_stairs_price['value']);
+                    var_dump($ma);
+                   var_dump($one_stairs_price['value']);
+                   
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         echo 111;exit;
                         $one_stairs_price['quantity'] = 1;
