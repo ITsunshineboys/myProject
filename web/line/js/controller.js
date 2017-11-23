@@ -1390,8 +1390,8 @@ angular.module("all_controller", ['ngCookies'])
                 },config).then(function (response) {
                     // alert(JSON.stringify(response));
                     console.log(response);
-                    alert($scope.adCode);
-                    alert($scope.mall_id);
+                    // alert($scope.adCode);
+                    // alert($scope.mall_id);
                     $scope.code = response.data.code;
                     if($scope.code == 1000){
                         console.log(123456);
