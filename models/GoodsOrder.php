@@ -913,11 +913,11 @@ class GoodsOrder extends ActiveRecord
 
     /**
      * 去发货
-     * [Supplierdelivery description]
-     * @param [type] $sku           [description]
-     * @param [type] $order_no      [description]
-     * @param [type] $waybillnumber [description]
-     * @param [type] $shipping_type [description]
+     * @param $sku
+     * @param $order_no
+     * @param $waybillnumber
+     * @param $shipping_type
+     * @return int
      */
     public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
         $create_time=time();
@@ -1024,10 +1024,6 @@ class GoodsOrder extends ActiveRecord
                     $sms['tracking_no']=$waybillnumber;
                     new SmValidationService($sms);
                 }
-
-
-
-
             }else{
                 $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
 
@@ -1077,6 +1073,7 @@ class GoodsOrder extends ActiveRecord
         $code=200;
         return $code;
     }
+
     /**
      * 获取商品信息
      * @param $goods_name
@@ -1235,7 +1232,7 @@ class GoodsOrder extends ActiveRecord
      * @param $handle
      * @return string
      */
-    private  static  function Gethanndletype($handle){
+    public  static  function Gethanndletype($handle){
         switch ($handle){
             case 0:
                 $res=null;
@@ -1461,83 +1458,20 @@ class GoodsOrder extends ActiveRecord
             return false;
         }
     }
-    private static function getorderlist()
+
+    /**
+     * @return $this
+     */
+    public static function getorderlist()
     {
         $getorderlist  =(new Query())
-            ->from('goods_order AS a')
+            ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no');
         return $getorderlist;
     }
-    /**
-     * 异常判断
-     * @param $is_unusual
-     * @return string
-     */
-    private static function unusual($is_unusual){
-        if ($is_unusual==1){
-            $unusual='申请退款';
-        }else if ($is_unusual==0){
-            $unusual='无异常';
-        }else if($is_unusual==2){
-            $unusual='退款失败';
-        }
-        return $unusual;
-    }
-    /**
-     * 商家附加条件
-     * @param $array
-     * @param $time_start
-     * @param $time_end
-     * @param $search
-     * @return mixed
-     */
-    private static  function Business_increase_condition($array,$time_start,$time_end,$search){
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-        return $array;
-    }
-
-    /**
-     * 商家排序
-     * @param $sort_money
-     * @param $sort_time
-     * @return string
-     */
-    private static  function sort_lhzz_busnessorder($sort_money,$sort_time){
-        if ($sort_money==1 && $sort_time==1){
-            $sort='a.create_time asc,a.amount_order asc';
-        }else if ($sort_money==1 && $sort_time==2){
-            $sort='a.create_time asc,a.amount_order desc';
-        }
-        else if ($sort_money==2 && $sort_time==1){
-            $sort='a.create_time desc,a.amount_order asc';
-        }
-        else if ($sort_money==2 && $sort_time==2){
-            $sort='a.create_time desc,a.amount_order desc';
-        }else{
-            $sort='a.create_time desc,a.amount_order desc';
-        }
-        return $sort;
-    }
 
 
-    private static  function increase_condition($array,$time_start,$time_end,$search){
-        if ($time_start && $time_end && $time_end > $time_start) {
-            $array->andWhere(['>', 'a.create_time', $time_start])
-                ->andWhere(['<', 'a.create_time', $time_end]);
-        }
-        if ($search) {
-            $array->andFilterWhere(['like', 'a.order_no', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search])
-                ->orFilterWhere(['like', 'z.goods_name', $search]);
-        }
-    }
+
 
     /**
      * @param $sort_money
@@ -1757,7 +1691,7 @@ class GoodsOrder extends ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch (Exception $e){
+        }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return $code;
@@ -1828,7 +1762,7 @@ class GoodsOrder extends ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch (Exception $e){
+        }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return $code;
@@ -2757,7 +2691,7 @@ class GoodsOrder extends ActiveRecord
      * @param $suppliers
      * @param $total_amount
      * @param $pay_way
-     * @return int
+     * @return array|int
      */
     public static  function AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way)
     {

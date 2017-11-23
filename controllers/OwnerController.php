@@ -1667,7 +1667,7 @@ class OwnerController extends Controller
 
         if ($stairway == self::JUDGE_VALUE){
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
-            $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
+            $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images,effect.window,effect.stairway,effect.stair_id',$where);
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
@@ -1678,7 +1678,7 @@ class OwnerController extends Controller
             }
         } elseif ($stairway == self::TYPE_VALUE) {
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.stair_id'=>$stair_id],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
-            $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images',$where);
+            $effect = Effect::effectAndEffectPicture('effect.id,effect_picture.effect_images,effect.window,effect.stairway,effect.stair_id',$where);
             if ($effect == null) {
                 $code = 1068;
                 return Json::encode([
