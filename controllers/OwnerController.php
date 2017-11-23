@@ -1801,7 +1801,7 @@ class OwnerController extends Controller
     {
         // decoration_add
         var_dump(StairsDetails::find()->asArray()->all());
-        var_dump(\Yii::$app->db->createCommand()->update('stairs_details',['attribute'=>'纯钢构造'],['id'=>4]));
+//        var_dump(\Yii::$app->db->createCommand()->update('stairs_details',['attribute'=>'纯钢构造'],['id'=>4]));
     }
 
 }
