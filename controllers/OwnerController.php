@@ -1753,7 +1753,7 @@ class OwnerController extends Controller
                 }
 var_dump($stairs);
                 foreach ($stairs_price as &$one_stairs_price) {
-                    echo $one_stairs_price['value'] . $ma ."<br>";
+                    echo $one_stairs_price['value'] . $ma .$one_stairs_price['style_id']. $effect_['style_id']."<br>";
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         echo 111;exit;
                         $one_stairs_price['quantity'] = 1;
