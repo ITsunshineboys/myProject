@@ -353,6 +353,8 @@
     border: 2px solid #e5e5e5;
     background: #fff;
     border-radius: .3rem;
+    text-align: center;
+    padding: 0
 }
 .sl span{
     font-size: 1.2rem;
@@ -365,8 +367,8 @@
     display: inline-block;
 }
 .text_box{
-    margin-left: 1.3rem;
-    margin-right: 1rem;
+    border: none !important;
+    width: 4rem !important;
 }
 .div_pic{
     
