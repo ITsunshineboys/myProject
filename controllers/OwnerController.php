@@ -1739,7 +1739,6 @@ class OwnerController extends Controller
                     }
                 }
             }
-var_dump($goods_);exit;
 
 
             if ($effect['window'] != null){
@@ -1780,29 +1779,17 @@ var_dump($goods_);exit;
             }else{
                 $material = [];
             }
-
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'data' => [
-                    'images' => $effect,
-                    'goods' => $data,
-//                    'backman_data' => $backman_data,
-                    'worker_data' => $worker_data,
-                    'stairs' => $material,
-                    'griotte' => $griotte,
-                ]
-            ]);
         }
-
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data' => [
                 'images' => $effect,
-                'goods' => $_data,
-//                'backman_data' => $backman_data,
+                'goods' => $goods_,
+//                    'backman_data' => $backman_data,
                 'worker_data' => $worker_data,
+                'stairs' => $material,
+                'griotte' => $griotte,
             ]
         ]);
     }
