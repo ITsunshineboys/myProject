@@ -958,6 +958,7 @@ class OwnerController extends Controller
             'data' => [
                 'coating_labor_price' => $coating_labor_price,
                 'coating_material' => $material_total,
+                'bedroom_area' => $bedroom_primer_area,
             ]
         ]);
     }
