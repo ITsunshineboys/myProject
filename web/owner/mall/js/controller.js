@@ -1677,7 +1677,16 @@ angular.module('all_controller', [])
                         }
                         console.log($scope.all_goods)
                         console.log($scope.all_workers)
-                    })]).then(function () {//计算总费用
+                    }),
+                    $http.post('/owner/add-materials',{
+                        area: $scope.area,      //面积
+                        series: +$scope.cur_series.id,   //系列
+                        style: +$scope.cur_style.id,  //风格
+                        code: 510100      // 市编码
+                    },config).then(function (res) {
+                        console.log(res)
+                    })
+                ]).then(function () {//计算总费用
                     $q.all([
                         //泥作
                         $http.get(baseUrl + '/owner/mud-make', {
@@ -1937,24 +1946,24 @@ angular.module('all_controller', [])
             $scope.cur_series = JSON.parse(sessionStorage.getItem('huxing')).series
             $scope.cur_style = JSON.parse(sessionStorage.getItem('huxing')).style
         }
-        if (!!sessionStorage.getItem('backman')) {
-            console.log(JSON.parse(sessionStorage.getItem('backman')))
-            for (let [key, value] of JSON.parse(sessionStorage.getItem('backman')).entries()) {
-                if (value.backman_option == '12墙拆除') {
-                    $scope.twelve_dismantle = value.backman_value//12墙拆除
-                } else if (value.backman_option == '24墙拆除') {
-                    $scope.twenty_four_dismantle = value.backman_value//24墙拆除
-                } else if (value.backman_option == '补烂') {
-                    $scope.repair = value.backman_value//补烂
-                } else if (value.backman_option == '12墙新建(含双面抹灰)') {
-                    $scope.twelve_new_construction = value.backman_value//12墙新建
-                } else if (value.backman_option == '24墙新建(含双面抹灰)') {
-                    $scope.twenty_four_new_construction = value.backman_value//24墙新建
-                } else if (value.backman_option == '有无建渣点') {
-                    $scope.building_scrap = !!value.backman_value//有无建渣点
-                }
-            }
-        }
+        // if (!!sessionStorage.getItem('backman')) {
+        //     console.log(JSON.parse(sessionStorage.getItem('backman')))
+        //     for (let [key, value] of JSON.parse(sessionStorage.getItem('backman')).entries()) {
+        //         if (value.backman_option == '12墙拆除') {
+        //             $scope.twelve_dismantle = value.backman_value//12墙拆除
+        //         } else if (value.backman_option == '24墙拆除') {
+        //             $scope.twenty_four_dismantle = value.backman_value//24墙拆除
+        //         } else if (value.backman_option == '补烂') {
+        //             $scope.repair = value.backman_value//补烂
+        //         } else if (value.backman_option == '12墙新建(含双面抹灰)') {
+        //             $scope.twelve_new_construction = value.backman_value//12墙新建
+        //         } else if (value.backman_option == '24墙新建(含双面抹灰)') {
+        //             $scope.twenty_four_new_construction = value.backman_value//24墙新建
+        //         } else if (value.backman_option == '有无建渣点') {
+        //             $scope.building_scrap = !!value.backman_value//有无建渣点
+        //         }
+        //     }
+        // }
         //请求杂工数据
         $scope.go_handyman_options = function (valid) {
             console.log(JSON.parse(sessionStorage.getItem('materials')))
@@ -1966,10 +1975,10 @@ angular.module('all_controller', [])
             if (!!sessionStorage.getItem('worker')) {
                 $scope.all_worker = JSON.parse(sessionStorage.getItem('worker'))
             }
-            if (!!sessionStorage.getItem('backman')) {
-                $scope.all_backman = JSON.parse(sessionStorage.getItem('backman'))
-                console.log($scope.all_backman)
-            }
+            // if (!!sessionStorage.getItem('backman')) {
+            //     $scope.all_backman = JSON.parse(sessionStorage.getItem('backman'))
+            //     console.log($scope.all_backman)
+            // }
             if (!!sessionStorage.getItem('materials')) {
                 $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
             }
@@ -2026,25 +2035,25 @@ angular.module('all_controller', [])
                     }
                     console.log($scope.all_goods)
                 }
-                if (!!sessionStorage.getItem('backman')) {
-                    for (let [key, value] of $scope.all_backman.entries()) {
-                        if (value.backman_option == '12墙拆除') {
-                            value.backman_value = $scope.twelve_dismantle
-                        } else if (value.backman_option == '24墙拆除') {
-                            value.backman_value = $scope.twenty_four_dismantle
-                        } else if (value.backman_option == '补烂') {
-                            value.backman_value = $scope.repair
-                        } else if (value.backman_option == '12墙新建(含双面抹灰)') {
-                            value.backman_value = $scope.twelve_new_construction
-                        } else if (value.backman_option == '24墙新建(含双面抹灰)') {
-                            value.backman_value = $scope.twenty_four_new_construction
-                        } else if (value.backman_option == '有无建渣点') {
-                            value.backman_value = $scope.building_scrap
-                        }
-                    }
-                    console.log($scope.all_backman)
-                    sessionStorage.setItem('backman', JSON.stringify($scope.all_backman))
-                }
+                // if (!!sessionStorage.getItem('backman')) {
+                //     for (let [key, value] of $scope.all_backman.entries()) {
+                //         if (value.backman_option == '12墙拆除') {
+                //             value.backman_value = $scope.twelve_dismantle
+                //         } else if (value.backman_option == '24墙拆除') {
+                //             value.backman_value = $scope.twenty_four_dismantle
+                //         } else if (value.backman_option == '补烂') {
+                //             value.backman_value = $scope.repair
+                //         } else if (value.backman_option == '12墙新建(含双面抹灰)') {
+                //             value.backman_value = $scope.twelve_new_construction
+                //         } else if (value.backman_option == '24墙新建(含双面抹灰)') {
+                //             value.backman_value = $scope.twenty_four_new_construction
+                //         } else if (value.backman_option == '有无建渣点') {
+                //             value.backman_value = $scope.building_scrap
+                //         }
+                //     }
+                //     console.log($scope.all_backman)
+                //     sessionStorage.setItem('backman', JSON.stringify($scope.all_backman))
+                // }
                 //保存并请求杂项数据
                 if (!$scope.twelve_dismantle && !$scope.twenty_four_dismantle && !$scope.repair &&
                     !$scope.twelve_new_construction && !$scope.twenty_four_new_construction) {
