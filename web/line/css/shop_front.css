@@ -470,3 +470,11 @@ header span{
     color:#F59C22;
     margin-left: 19rem;
 }
+.swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #D9AD65;
+}
