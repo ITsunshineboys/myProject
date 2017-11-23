@@ -1751,9 +1751,8 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-                var_dump($stairs_price);exit;
                 foreach ($stairs_price as &$one_stairs_price) {
-                    if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
+                    if ($one_stairs_price['value'] == $ma ) {
                         echo 111;exit;
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
