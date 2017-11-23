@@ -1495,7 +1495,7 @@ class OwnerController extends Controller
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $material[]   = BasisDecorationService::formula($goods_price,$post);
 
-        
+
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->all();
         foreach ($assort_material as $one_without_assort){
