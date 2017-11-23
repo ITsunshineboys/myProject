@@ -1411,11 +1411,11 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        foreach ($add_materials as &$material){
-            foreach ($goods as $one_goods){
+        foreach ($add_materials as $material){
+            foreach ($goods as &$one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
-                    $material['platform_price'] = $one_goods['platform_price'] / 100;
-                    $material['cost'] = $material['quantity'] * $one_goods['platform_price'] / 100;
+//                    $material['platform_price'] = $one_goods['platform_price'] / 100;
+                    $one_goods['cost'] = $material['quantity'] * $one_goods['platform_price'];
                 }
             }
         }
