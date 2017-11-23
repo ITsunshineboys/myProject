@@ -12,6 +12,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
         ]
+        $rootScope.crumbs = JSON.parse(sessionStorage.getItem('crumbs'))
+        // if($rootScope.crumbs.length === JSON.parse(sessionStorage.getItem('crumbs')).length){
+        //     sessionStorage.removeItem('crumbs')
+        // }
         // $scope.baseUrl = 'http://test.cdlhzz.cn'
         // $scope.baseUrl = 'http://ac.cdlhzz.cn'
         $scope.baseUrl = ''
@@ -253,6 +257,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.county.unshift({'id': $scope.cur_city, 'name': '全市'})
             $scope.cur_county = angular.copy($scope.county)[0].id
             $scope.params.post = $scope.county[0].id
+            // tablePages()
         }, function (error) {
             console.log(error)
         })
@@ -341,6 +346,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     name: '小区列表页'
                 }
             ]
+            sessionStorage.setItem('crumbs',JSON.stringify($rootScope.crumbs))
             console.log($scope.cur_county)
         }
         //跳转添加小区页
