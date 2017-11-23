@@ -1497,7 +1497,7 @@ class OwnerController extends Controller
 
 
         //无计算公式
-        $assort_material = AssortGoods::find()->asArray()->all();
+        $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
         foreach ($assort_material as $one_without_assort){
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
