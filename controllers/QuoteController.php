@@ -1934,7 +1934,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-       var_dump(Effect::deleteAll(['type'=>3]));
+//       var_dump(Effect::deleteAll(['type'=>3]));
        var_dump(Effect::find()->asArray()->all());
     }
 }
