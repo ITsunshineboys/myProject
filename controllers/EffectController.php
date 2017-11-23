@@ -17,10 +17,8 @@ use Yii;
 
 class EffectController extends Controller
 {
-    const HIGH=2.8;
-    const WINDOW=2;
+
     const TYPE_EFFECT=2;
-    const STATUST_ON=1;
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
         'effect-list',
@@ -293,7 +291,7 @@ class EffectController extends Controller
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword = trim(Yii::$app->request->get('keyword', ''));
 
-        $where = 'status ='.self::STATUST_ON;
+        $where = 'status ='.self::TYPE_EFFECT;
         if(!$keyword){
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
