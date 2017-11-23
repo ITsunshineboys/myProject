@@ -1728,16 +1728,18 @@ class OwnerController extends Controller
                     }
                 }
             }
-var_dump($data);exit;
+
+
             $assort_goods = AssortGoods::find()->asArray()->where(['state'=>0])->all();
+            $goods_ = [];
             foreach ($assort_goods as $assort){
                 foreach ($data as $woks){
-                    if ($assort['title'] == $woks['']){
-
+                    if ($assort['title'] == $woks['goods_three']){
+                        $goods_[] = $woks;
                     }
                 }
             }
-
+var_dump($goods_);exit;
 
 
             if ($effect['window'] != null){
