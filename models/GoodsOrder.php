@@ -351,9 +351,9 @@ class GoodsOrder extends ActiveRecord
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
 //        +$return_insurance*100
-//         if (($freight*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
-//             return false;
-//         }
+         if (($freight*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
+             return false;
+         }
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (! $address  || !$invoice){
