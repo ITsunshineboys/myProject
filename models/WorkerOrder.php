@@ -1734,7 +1734,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             }
 
             $worker_order = WorkerOrder::find()
-                ->where(['order_no' => $v['order_no'], 'is_old' => self::IS_OLD])
+                ->where(['order_no' => $v['order_no'], 'is_old' => self::IS_NEW])
                 ->one();
 
             if(!$worker_order){
