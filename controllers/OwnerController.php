@@ -1488,59 +1488,15 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $post = Yii::$app->request->get();
+        $materials = ['木地板','大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具','立柜式空调','挂壁式空调','灯具','床垫','马桶','浴柜','花洒套装','淋浴隔断'];
+        $goods = Goods::assortList($materials,$post['city']);
+        $goods_price  = BasisDecorationService::priceConversion($goods);
+        //   主材
+        $material[]   = BasisDecorationService::formula($goods_price,$post);
 
         $assort_material = AssortGoods::find()->asArray()->all();
-        if ($assort_material == null) {
-            $code = 1065;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($assort_material as $assort){
-            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
-                $have_assort[] = $assort;
-            } else {
-                $without_assort[] = $assort;
-            }
-        }
-
-        //有计算公式
-        foreach ($have_assort as $one_have_assort){
-            $material_name[] = $one_have_assort['title'];
-            $material_one[$one_have_assort['title']] = $one_have_assort;
-        }
-        $goods = Goods::assortList($material_name,$post['city']);
-        if ($goods == null) {
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $goods_price  = BasisDecorationService::priceConversion($goods);
-        $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
-        $bedroom_area = $p['project_value'] / self::PRICE_UNITS;
-        //   生活配套
-        $material[]   = BasisDecorationService::lifeAssortSeriesStyle($goods_price,$post);
-        //   基础装修
-        $material[]   = BasisDecorationService::capacity($goods_price,$post);
-        //   家电配套
-        $material[]   = BasisDecorationService::appliancesAssortSeriesStyle($goods_price,$post);
-        //   移动家具
-        $material[]   = BasisDecorationService::moveFurnitureSeriesStyle($goods_price,$post);
-        //   固定家具
-        $material[]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
-        //   软装配套
-        $material[]   = BasisDecorationService::mild($goods_price,$post);
-        //   主材
-        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
-
-
-//        $assort_material = AssortGoods::find()->asArray()->all();
         //无计算公式
-        foreach ($without_assort as $one_without_assort){
+        foreach ($assort_material as $one_without_assort){
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
