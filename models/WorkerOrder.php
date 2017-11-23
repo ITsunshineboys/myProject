@@ -1440,7 +1440,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             return $infos;
 
         }else{
-           return false;
+           return null;
         }
 
     }
