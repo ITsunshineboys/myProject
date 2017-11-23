@@ -88,7 +88,7 @@
                 <img class="filter_pic_red" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span class="class_name_span">上传图片</span>
                 <div class="pic_right">
-                    <img ng-if="!!upload_cover_src" ng-src="{{baseUrl + '/'+ upload_cover_src}}"/>
+                    <img ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
                     <img ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                     <p class="def_gray">图片大小5M内，支持JPG、PNG、JPEG</p>
                     <div class="upload_btn" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">
