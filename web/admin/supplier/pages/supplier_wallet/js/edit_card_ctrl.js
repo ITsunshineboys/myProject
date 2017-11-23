@@ -14,6 +14,11 @@ edit_card.controller("edit_card_ctrl", function (_ajax,$rootScope,$scope,$http,$
         name: '添加/修改银行卡'
     }];
 
+    $scope.carddetail = {
+        role_id:6
+    }
+
+
     $scope.alljudgefalse = false;
     defaultCard();
 
