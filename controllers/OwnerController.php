@@ -1607,8 +1607,9 @@ class OwnerController extends Controller
         $material[]  = BasisDecorationService::fixationFurnitureSeriesStyle($goods_price,$post);
         //   软装配套
         $material[]   = BasisDecorationService::mild($goods_price,$post);
+        var_dump($material);exit;
         //   主材
-        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
+        $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$post);
     }
 
     /**
