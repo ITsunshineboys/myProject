@@ -1595,6 +1595,7 @@ class OwnerController extends Controller
         $goods_price  = BasisDecorationService::priceConversion($goods);
         //   主材
         $material[]   = BasisDecorationService::formula($goods_price,$post);
+        var_dump($material);exit;
     }
 
     /**
