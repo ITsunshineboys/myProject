@@ -17,7 +17,7 @@ class Effect extends ActiveRecord
     const TYPE_ITEM=1;
     const  SUP_BANK_CARD='effect';
     const TYPE_STATUS_YES = 1;
-    const TYPE_STATUS_NO = 3;
+    const TYPE_STATUS_NO = 2;
     const STATUS_STAIRWAY_YES = 1;
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_EXTRA = [];
