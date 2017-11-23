@@ -285,7 +285,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsStat=new GoodsStat();
                 $GoodsStat->supplier_id=$supplier_id;
                 $GoodsStat->sold_number=$goods_num;
-                $GoodsStat->amount_sold=$post['total_amount']*100;
+                $GoodsStat->amount_sold=$post['total_amount'];
                 $GoodsStat->create_date=$date;
                 if (!$GoodsStat->save(false))
                 {
@@ -293,9 +293,8 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }else{
-
                 $GoodsStat->sold_number+=$goods_num;
-                $GoodsStat->amount_sold+=$post['total_amount']*100;
+                $GoodsStat->amount_sold+=$post['total_amount'];
                 if (!$GoodsStat->save(false))
                 {
                     $tran->rollBack();
@@ -351,9 +350,10 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-        // if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
-        //     return false;
-        // }
+//        +$return_insurance*100
+//         if (($freight*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
+//             return false;
+//         }
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (! $address  || !$invoice){
