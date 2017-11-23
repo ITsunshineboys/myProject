@@ -99,6 +99,7 @@ class DecorationAdd extends ActiveRecord
             ->asArray()
             ->select($select)
             ->where($where)
+            ->leftJoin('decoration_message as d','d.decoration_add_id = decoration.id')
             ->groupBy('three_materials')
             ->all();
     }
