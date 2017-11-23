@@ -1262,6 +1262,7 @@ angular.module('all_controller', [])
                 }).then(function (response) {
                     console.log('弱电')
                     console.log(response)
+                    if(response.data.code == 200){
                     //整合二级
                     for (let [key, value] of $scope.level.entries()) {
                         for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1332,7 +1333,7 @@ angular.module('all_controller', [])
                                 }
                             }
                         }
-                    }
+                    }}
                     console.log($scope.all_workers)
                     console.log($scope.all_goods)
                 }),
@@ -1342,6 +1343,7 @@ angular.module('all_controller', [])
                     }).then(function (response) {
                         console.log('强电')
                         console.log(response)
+                        if(response.data.code == 200){
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1410,7 +1412,7 @@ angular.module('all_controller', [])
                                     }
                                 }
                             }
-                        }
+                        }}
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
@@ -1420,6 +1422,7 @@ angular.module('all_controller', [])
                     }).then(function (response) {
                         console.log('水路')
                         console.log(response)
+                        if(response.data.code == 200){
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1504,7 +1507,7 @@ angular.module('all_controller', [])
                                     value.price += cur_worker_price
                                 }
                             }
-                        }
+                        }}
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
@@ -1514,6 +1517,7 @@ angular.module('all_controller', [])
                     }).then(function (response) {
                         console.log('防水')
                         console.log(response)
+                        if(response.data.code == 200){
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1601,7 +1605,7 @@ angular.module('all_controller', [])
                         }
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
-                        data1['waterproof_total_area'] = response.data.data.total_area
+                        data1['waterproof_total_area'] = response.data.data.total_area}
 
                     }),
                     //木作
@@ -1610,6 +1614,7 @@ angular.module('all_controller', [])
                     }).then(function (response) {
                         console.log('木作')
                         console.log(response)
+                        if(response.data.code == 200){
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1694,7 +1699,7 @@ angular.module('all_controller', [])
                                     value.price += cur_worker_price
                                 }
                             }
-                        }
+                        }}
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
@@ -1704,6 +1709,7 @@ angular.module('all_controller', [])
                     }).then(function (response) {
                         console.log('乳胶漆')
                         console.log(response)
+                        if(response.data.code == 200){
                         //整合二级
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
@@ -1789,7 +1795,7 @@ angular.module('all_controller', [])
                                 }
                             }
                         }
-                        data2['bedroom_area'] = response.data.data.bedroom_area
+                        data2['bedroom_area'] = response.data.data.bedroom_area}
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
                     }),
@@ -1801,6 +1807,7 @@ angular.module('all_controller', [])
                     },config).then(function (res) {
                         console.log('添加材料项')
                         console.log(res)
+                        if(res.data.code == 200){
                         for (let [key, value] of res.data.add_list.entries()) {
                             if (!!value) {
                                 //整合二级
@@ -1877,7 +1884,7 @@ angular.module('all_controller', [])
                                     }
                                 }
                             }
-                        }
+                        }}
                         console.log($scope.all_goods)
                         console.log($scope.all_workers)
                     })
@@ -1889,6 +1896,7 @@ angular.module('all_controller', [])
                         }).then(function (response) {
                             console.log('主要材料及其他')
                             console.log(response)
+                            if(response.data.code == 200){
                             for (let [key, value] of response.data.data.goods.entries()) {
                                 if (!!value) {
                                     //整合二级
@@ -1976,7 +1984,7 @@ angular.module('all_controller', [])
                                         }
                                     }
                                 }
-                            }
+                            }}
                             console.log($scope.all_goods)
                             console.log($scope.all_workers)
                         }),
@@ -1986,6 +1994,7 @@ angular.module('all_controller', [])
                         }).then(function (response) {
                             console.log('泥作')
                             console.log(response)
+                            if(response.data.code == 200){
                             //整合二级
                             for (let [key, value] of $scope.level.entries()) {
                                 for (let [key1, value1] of  $scope.all_goods.entries())
@@ -2074,7 +2083,7 @@ angular.module('all_controller', [])
                                         value.price += cur_worker_price
                                     }
                                 }
-                            }
+                            }}
                             console.log($scope.all_workers)
                             console.log($scope.all_goods)
                         })
@@ -2123,18 +2132,22 @@ angular.module('all_controller', [])
                 goods: arr
             }, config).then(function (res) {
                 console.log(res)
-                $scope.all_price += +res.data.data
-                $scope.discount_price += +res.data.data
-                console.log($scope.all_price)
-                console.log($scope.discount_price)
+                if(res.data.code == 200) {
+                    $scope.all_price += +res.data.data
+                    $scope.discount_price += +res.data.data
+                    console.log($scope.all_price)
+                    console.log($scope.discount_price)
+                }
             }), $http.post(baseUrl + '/owner/coefficient', {
                 list: arr1
             }, config).then(function (res) {
                 console.log(res)
-                $scope.all_price += +res.data.data.total_prices
-                $scope.discount_price += +res.data.data.special_offer
-                console.log($scope.all_price)
-                console.log($scope.discount_price)
+                if(res.data.code == 200) {
+                    $scope.all_price += +res.data.data.total_prices
+                    $scope.discount_price += +res.data.data.special_offer
+                    console.log($scope.all_price)
+                    console.log($scope.discount_price)
+                }
             })]).then(function () {
                 let all_worker_price = $scope.all_workers.reduce(function (prev, cur) {
                     return prev + cur.price
