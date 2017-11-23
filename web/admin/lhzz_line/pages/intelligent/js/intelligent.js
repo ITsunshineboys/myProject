@@ -3287,6 +3287,15 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         }
 //编辑材料项
         $scope.edit_material = function (item) {
+            for (let [key, value] of $scope.cur_all_series.entries()) {
+                value.num = ''
+            }
+            for (let [key, value] of $scope.cur_all_style.entries()) {
+                value.num = ''
+            }
+            for (let [key, value] of $scope.all_area_range.entries()) {
+                value.num = ''
+            }
             $scope.is_add_material = false
             $scope.submitted = false
             _ajax.post('/quote/decoration-edit-list', {

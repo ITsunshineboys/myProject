@@ -14,6 +14,7 @@ angular.module('all_controller', [])
             console.log(res)
             $scope.recommend_list = res.data
         })
+        sessionStorage.clear()
     })
     .controller('nodata_ctrl', function (_ajax, $q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
         console.log(JSON.parse(sessionStorage.getItem('materials')))
@@ -280,46 +281,69 @@ angular.module('all_controller', [])
         //     $scope.show_material = false
         // })
         $scope.$watch('toponymy', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('message', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('area', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('house_bedroom', function (newVal, oldVal) {
-            $scope.show_material = false
-            console.log(newVal)
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('house_hall', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('house_toilet', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('house_kitchen', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('highCrtl', function (newVal, oldVal) {
-            $scope.show_material = false
-            console.log(newVal)
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('window', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('choose_stairs', function (newVal, oldVal) {
-            $scope.show_material = false
-            console.log(newVal)
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('nowStairs', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('cur_series', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
         })
         $scope.$watch('cur_style', function (newVal, oldVal) {
-            $scope.show_material = false
+            if(sessionStorage.getItem('nodata') == null){
+                $scope.show_material = false
+            }
             $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
@@ -351,7 +375,7 @@ angular.module('all_controller', [])
             })
         })
         //跳转内页
-        $scope.go_inner = function (item) {
+        $scope.go_inner = function (item,index) {
             if (item.title == '辅材') {
                 $state.go('nodata.basics_decoration')
                 $scope.cur_header = '基础装修'
@@ -383,18 +407,26 @@ angular.module('all_controller', [])
             }
             $scope.have_header = true
             $scope.cur_item = item
+            sessionStorage.setItem('cur_index',index)
+            sessionStorage.setItem('all_status',JSON.stringify({
+                cur_header:$scope.cur_header,
+                inner_header:$scope.inner_header,
+                cur_project:$scope.cur_project,
+                is_city:$scope.is_city,
+                is_edit:$scope.is_edit
+            }))
             $scope.cur_all_goods = angular.copy($scope.all_goods)
         }
-        if ($rootScope.curState_name == 'nodata.basics_decoration') {
-            $scope.is_city = false
-            $scope.is_edit = false
-        } else if ($rootScope.curState_name == 'nodata.main_material') {
-            $scope.is_city = false
-            $scope.is_edit = false
-        } else if ($rootScope.curState_name == 'nodata.other_material') {
-            $scope.is_city = false
-            $scope.is_edit = true
-        }
+            if ($rootScope.curState_name == 'nodata.basics_decoration') {
+                $scope.is_city = false
+                $scope.is_edit = false
+            } else if ($rootScope.curState_name == 'nodata.main_material') {
+                $scope.is_city = false
+                $scope.is_edit = false
+            } else if ($rootScope.curState_name == 'nodata.other_material') {
+                $scope.is_city = false
+                $scope.is_edit = true
+            }
         //模态框详情
         $scope.get_basic_details = function (item, three_level_name, three_level_id) {
             console.log(item)
@@ -410,12 +442,16 @@ angular.module('all_controller', [])
                 }
             }
             console.log($scope.cur_goods_detail)
+            $scope.cur_status = 0
             $scope.cur_second_level = $scope.cur_header
             $scope.cur_three_level = three_level_name
             $scope.cur_three_id = three_level_id
         }
         //查看详情
         $scope.go_details = function (item) {
+            console.log($scope.cur_title)
+            console.log($scope.cur_status)
+            console.log(item)
             if ($scope.cur_status == 0) {
                 $scope.check_goods = $scope.cur_goods_detail
             } else if ($scope.cur_status == 1) {
@@ -424,6 +460,8 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
                 $scope.check_goods['path'] = $scope.cur_three_item.path
             }
+            console.log($scope.check_goods)
+            sessionStorage.setItem('check_goods',JSON.stringify($scope.check_goods))
             _ajax.get('/mall/goods-view', {
                 id: +$scope.check_goods.id
             }, function (res) {
@@ -497,6 +535,15 @@ angular.module('all_controller', [])
             $scope.price_min = ''
             $scope.price_max = ''
             $scope.params['sort[]'] = 'sold_number:3'
+            sessionStorage.setItem('params',JSON.stringify($scope.params))
+            sessionStorage.setItem('all_status',JSON.stringify({
+                cur_header:$scope.cur_header,
+                inner_header:$scope.inner_header,
+                cur_project:$scope.cur_project,
+                cur_status:$scope.cur_status,
+                is_city:$scope.is_city,
+                is_edit:$scope.is_edit
+            }))
             tablePages()
             $('#myModal').modal('hide')
             $timeout(function () {
@@ -504,14 +551,15 @@ angular.module('all_controller', [])
                 $scope.is_city = false
                 $scope.is_edit = false
                 $scope.cur_header = $scope.cur_three_level || item.title
-                $state.go('nodata.all_goods')
-            }, 300)
-            $('#myModal').modal('hide')
-            $timeout(function () {
-                $scope.have_header = true
-                $scope.is_city = false
-                $scope.is_edit = false
-                $scope.cur_header = $scope.cur_three_level
+                sessionStorage.setItem('all_status',JSON.stringify({
+                    have_header:$scope.have_header,
+                    cur_header:$scope.cur_header,
+                    inner_header:$scope.inner_header,
+                    cur_project:$scope.cur_project,
+                    cur_status:$scope.cur_status,
+                    is_city:$scope.is_city,
+                    is_edit:$scope.is_edit
+                }))
                 $state.go('nodata.all_goods')
             }, 300)
         }
@@ -678,12 +726,46 @@ angular.module('all_controller', [])
         }
         //智能报价无资料返回
         $scope.returnPrev = function () {
+            console.log($scope.all_goods)
+            console.log(JSON.parse(sessionStorage.getItem('nodata')))
             console.log($rootScope.curState_name)
+            console.log($scope.cur_header)
             console.log($scope.inner_header)
             console.log($scope.cur_status)
             console.log($scope.cur_project)
             if ($rootScope.curState_name == 'nodata.product_detail') {
                 $scope.have_header = true
+                if(sessionStorage.getItem('check_goods')){
+                    if ($scope.cur_status == 2||$scope.cur_status == 1) {
+                        // $scope.cur_header = $scope.inner_first_level
+                        $rootScope.fromState_name = 'nodata.all_goods'
+                        sessionStorage.setItem('all_status',JSON.stringify({
+                            have_header:true,
+                            cur_header:$scope.cur_header,
+                            inner_header:$scope.inner_header,
+                            cur_project:$scope.cur_project,
+                            cur_status:$scope.cur_status,
+                            is_city:$scope.is_city,
+                            is_edit:$scope.is_edit
+                        }))
+                    } else {
+                        if($scope.cur_project == 0){
+                            $rootScope.fromState_name = 'nodata.basics_decoration'
+                        }else if($scope.cur_project == 1){
+                            $rootScope.fromState_name = 'nodata.main_material'
+                        }else{
+                            $rootScope.fromState_name = 'nodata.other_material'
+                        }
+                        sessionStorage.setItem('all_status',JSON.stringify({
+                            cur_header:$scope.cur_header,
+                            inner_header:$scope.inner_header,
+                            cur_project:$scope.cur_project,
+                            cur_status:0,
+                            is_city:$scope.is_city,
+                            is_edit:$scope.is_edit
+                        }))
+                    }
+                }
             } else if ($rootScope.curState_name == 'nodata.all_goods') {
                 if ($scope.cur_status == 2) {
                     $scope.cur_header = $scope.inner_first_level
@@ -696,6 +778,14 @@ angular.module('all_controller', [])
                     $scope.cur_header = $scope.inner_header
                     $rootScope.fromState_name = 'nodata.main_material'
                 }
+                sessionStorage.setItem('all_status',JSON.stringify({
+                    cur_header:$scope.cur_header,
+                    inner_header:$scope.inner_header,
+                    cur_project:$scope.cur_project,
+                    cur_status:0,
+                    is_city:$scope.is_city,
+                    is_edit:$scope.is_edit
+                }))
             } else if ($rootScope.curState_name == 'nodata.second_level') {
                 $scope.cur_header = $scope.inner_header
                 $scope.is_edit = true
@@ -706,7 +796,12 @@ angular.module('all_controller', [])
                     $scope.cur_header = '智能报价'
                     $scope.is_edit = false
                     $scope.is_city = true
-                    $scope.all_goods = $scope.cur_all_goods
+                    if($scope.cur_all_goods!=undefined){
+                        $scope.all_goods = $scope.cur_all_goods
+                    }
+                    sessionStorage.removeItem('all_status')
+                    sessionStorage.removeItem('cur_index')
+                    sessionStorage.removeItem('params')
                     $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
                 } else {
                     $rootScope.fromState_name = 'nodata.other_material'
@@ -775,6 +870,7 @@ angular.module('all_controller', [])
                 }
                 console.log(arr)
                 sessionStorage.setItem('materials', JSON.stringify(arr))
+                sessionStorage.removeItem('all_status')
                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
                 $state.go('nodata.house_list')
@@ -826,6 +922,14 @@ angular.module('all_controller', [])
         $scope.go_three_item = function () {
             $scope.cur_status = 2
             $scope.cur_second_level = $scope.cur_header
+            sessionStorage.setItem('all_status',JSON.stringify({
+                cur_header:$scope.cur_header,
+                inner_header:$scope.inner_header,
+                cur_project:$scope.cur_project,
+                cur_status:$scope.cur_status,
+                is_city:$scope.is_city,
+                is_edit:$scope.is_edit
+            }))
             _ajax.get('/mall/categories-level3', {
                 pid: $scope.cur_item.id
             }, function (res) {
@@ -1016,13 +1120,97 @@ angular.module('all_controller', [])
         //     }
         // })
         //无资料计算
-        // if(sessionStorage.getItem('nodata')!=undefined){
-        //     let nodata = JSON.parse(sessionStorage.getItem('nodata'))
-        //     $scope.all_goods = nodata.all_goods
-        //     $scope.all_workers = nodata.all_workers
-        //     $scope.all_price = nodata.all_price
-        //     $scope.discount_price = nodata.discount_price
-        // }
+        console.log(JSON.parse(sessionStorage.getItem('nodata')))
+        if(sessionStorage.getItem('basic_nodata')!=null){
+            let basic_nodata = JSON.parse(sessionStorage.getItem('basic_nodata'))
+            $scope.special_request = basic_nodata.special_request
+            $scope.toponymy = basic_nodata.toponymy
+            $scope.message = basic_nodata.message
+            $scope.area = basic_nodata.area
+            $scope.house_bedroom = basic_nodata.house_bedroom
+            $scope.house_hall = basic_nodata.house_hall
+            $scope.house_toilet = basic_nodata.house_toilet
+            $scope.house_kitchen = basic_nodata.house_kitchen
+            $scope.highCrtl = basic_nodata.highCrtl
+            $scope.window = basic_nodata.window
+            $scope.choose_stairs = basic_nodata.choose_stairs
+            $scope.nowStairs = basic_nodata.nowStairs
+        }
+        if(sessionStorage.getItem('nodata')!=null){
+            let nodata = JSON.parse(sessionStorage.getItem('nodata'))
+            console.log(nodata)
+            $scope.all_workers = nodata.all_workers
+            $scope.all_price = nodata.all_price
+            $scope.discount_price = nodata.discount_price
+            $scope.show_material = nodata.show_material
+            $scope.all_goods = nodata.all_goods
+            if(sessionStorage.getItem('cur_index')!=null){
+                $scope.cur_item = $scope.all_goods[sessionStorage.getItem('cur_index')]
+            }
+        }
+        if(sessionStorage.getItem('all_status')!=null){
+            let all_status = JSON.parse(sessionStorage.getItem('all_status'))
+            console.log(all_status)
+            $scope.have_header = all_status.have_header
+            $scope.cur_header = all_status.cur_header
+            $scope.inner_header = all_status.inner_header
+            $scope.cur_project = all_status.cur_project
+            $scope.cur_status = all_status.cur_status
+            $scope.is_city = all_status.is_city
+            $scope.is_edit = all_status.is_edit
+        }
+        if(sessionStorage.getItem('params')!=null){
+            $scope.params = JSON.parse(sessionStorage.getItem('params'))
+            $scope.cur_three_id = $scope.params.category_id
+            console.log($scope.params)
+            tablePages()
+        }
+        if(sessionStorage.getItem('check_goods')!=null){
+            $scope.check_goods = JSON.parse(sessionStorage.getItem('check_goods'))
+            _ajax.get('/mall/goods-view', {
+                id: +$scope.check_goods.id
+            }, function (res) {
+                console.log(res)
+                if ($scope.cur_status == 1) {
+                    $scope.cur_title = '更换'
+                    $scope.check_goods['name'] = res.data.goods_view.brand_name
+                    $scope.check_goods['goods_name'] = res.data.goods_view.title
+                    $scope.check_goods['series_name'] = res.data.goods_view.series_name
+                    $scope.check_goods['style_name'] = res.data.goods_view.style_name
+                } else if ($scope.cur_status == 2) {
+                    $scope.cur_title = '添加'
+                    $scope.check_goods['name'] = res.data.goods_view.brand_name
+                    $scope.check_goods['goods_name'] = res.data.goods_view.title
+                    $scope.check_goods['series_name'] = res.data.goods_view.series_name
+                    $scope.check_goods['style_name'] = res.data.goods_view.style_name
+                }
+                $scope.sale_services = res.data.goods_view.after_sale_services
+                $scope.aftermarket = []
+                $scope.protection = []
+                for (let [key, value] of $scope.sale_services.entries()) {
+                    if (value == '提供发票' || value == '上门安装') {
+                        $scope.protection.push(value)
+                    } else {
+                        $scope.aftermarket.push(value)
+                    }
+                }
+                $scope.description = res.data.goods_view.description
+                $scope.supplier = res.data.goods_view.supplier
+                $scope.cur_params = {
+                    code: res.data.goods_view.sku,
+                    title: res.data.goods_view.title,
+                    attrs: res.data.goods_view.attrs,
+                    left_number: res.data.goods_view.left_number,
+                    series_name: res.data.goods_view.series_name,
+                    style_name: res.data.goods_view.style_name
+                }
+                $('#myModal').modal('hide')
+                $timeout(function () {
+                    $scope.have_header = false
+                    $state.go('nodata.product_detail')
+                }, 300)
+            })
+        }
         $scope.get_goods = function (valid, error) {
             console.log($scope.nodata_params)
             console.log(error)
@@ -1938,7 +2126,27 @@ angular.module('all_controller', [])
                 console.log(all_worker_price)
                 $scope.all_price += all_worker_price
                 $scope.discount_price += all_worker_price
-                sessionStorage.setItem('nodata',{all_goods:$scope.all_goods,all_workers:$scope.all_workers,all_price:$scope.all_price,discount_price:$scope.discount_price})
+                sessionStorage.setItem('nodata',JSON.stringify({
+                    all_goods:$scope.all_goods,
+                    all_workers:$scope.all_workers,
+                    all_price:$scope.all_price,
+                    discount_price:$scope.discount_price,
+                    show_material:$scope.show_material
+                }))
+                sessionStorage.setItem('basic_nodata',JSON.stringify({
+                    special_request:$scope.special_request,
+                    toponymy:$scope.toponymy,
+                    message:$scope.message,
+                    area:$scope.area,
+                    house_bedroom:$scope.house_bedroom,
+                    house_hall:$scope.house_hall,
+                    house_toilet:$scope.house_toilet,
+                    house_kitchen:$scope.house_kitchen,
+                    highCrtl:$scope.highCrtl,
+                    window:$scope.window,
+                    choose_stairs:$scope.choose_stairs,
+                    nowStairs:$scope.nowStairs
+                }))
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
             })
