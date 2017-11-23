@@ -1738,6 +1738,8 @@ class OwnerController extends Controller
                     $_goods['quantity'] = $effect['window'];
                     $_goods['cost'] = $_goods['quantity'] * $_goods['platform_price'];
                 }
+            }else{
+                $stone = [];
             }
 
 
@@ -1760,10 +1762,15 @@ class OwnerController extends Controller
                     }
                 }
                 $material = BasisDecorationService::profitMargin($condition_stairs);
+            }else{
+                $material = [];
             }
 
             //物流信息
-var_dump($material);exit;
+            $d[] = $material;
+            $d[] = $stone;
+            $d[] = $data;
+            var_dump($d);exit;
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
