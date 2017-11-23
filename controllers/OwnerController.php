@@ -1756,11 +1756,11 @@ class OwnerController extends Controller
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                         var_dump($one_stairs_price);exit;
-                        $condition_stairs [] = $one_stairs_price;
+//                        $condition_stairs [] = $one_stairs_price;
                     }
                 }
-                var_dump($condition_stairs);exit;
-                $material = BasisDecorationService::profitMargin($condition_stairs);
+//                var_dump($condition_stairs);exit;
+//                $material = BasisDecorationService::profitMargin($condition_stairs);
             }
             //物流信息
 var_dump($material);exit;
