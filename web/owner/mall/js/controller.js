@@ -811,8 +811,8 @@ angular.module('all_controller', [])
                 console.log($scope.is_delete_btn)
                 if (!$scope.is_delete_btn) {
                     $scope.cur_header = '智能报价'
-                    $scope.is_edit = false
                     $scope.is_city = true
+                    $scope.is_edit = false
                     if($scope.cur_all_goods!=undefined){
                         $scope.all_goods = $scope.cur_all_goods
                     }
