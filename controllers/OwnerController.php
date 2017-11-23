@@ -1751,8 +1751,6 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-//                var_dump($stairs_price['value']);
-                var_dump($stairs_price['style_id']);
                 var_dump($ma);
                 var_dump($effect_['style_id']);
                 foreach ($stairs_price as &$one_stairs_price) {
