@@ -1751,15 +1751,14 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-                var_dump($stairs_price);exit;
                 foreach ($stairs_price as &$one_stairs_price) {
-
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                         $condition_stairs [] = $one_stairs_price;
                     }
                 }
+                var_dump($condition_stairs);exit;
                 $material = BasisDecorationService::profitMargin($condition_stairs);
             }
             //物流信息
