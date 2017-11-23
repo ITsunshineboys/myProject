@@ -1737,9 +1737,11 @@ class OwnerController extends Controller
                     $_goods['purchase_price_decoration_company'] = $_goods['purchase_price_decoration_company'] / 100;
                     $_goods['quantity'] = $effect['window'];
                     $_goods['cost'] = $_goods['quantity'] * $_goods['platform_price'];
+                    $marble[] = $_goods;
                 }
+                $griotte = BasisDecorationService::profitMargin($marble);
             }else{
-                $stone = [];
+                $griotte = [];
             }
 
 
@@ -1765,25 +1767,17 @@ class OwnerController extends Controller
             }else{
                 $material = [];
             }
-var_dump($data);  echo 111;
-var_dump($material); echo 222;
-var_dump($stone);exit;
-            $a = [];
-            foreach ($data as &$one_data){
-                $a []= $one_data;
-                $a []= $material;
-                $a []= $stone;
-            }
-            $data_ = array_filter($a);
-            $_data = array_merge($data_);
+
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data' => [
                     'images' => $effect,
-                    'goods' => $_data,
+                    'goods' => $data,
 //                    'backman_data' => $backman_data,
                     'worker_data' => $worker_data,
+                    'stairs' => $material,
+                    'griotte' => $griotte,
                 ]
             ]);
         }
