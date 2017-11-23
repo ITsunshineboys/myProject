@@ -1402,15 +1402,15 @@ class OwnerController extends Controller
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
-        $goods_select = 'goods.id,goods.platform_price,goods.sku';
+        $goods_select = $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
         $goods = Goods::findBySkuAll($codes,$goods_select);
         if ($goods == null){
-        $code = 1061;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code],
-        ]);
-    }
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         foreach ($add_materials as &$material){
             foreach ($goods as $one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
@@ -1422,7 +1422,7 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-           'add_list' =>  $add_materials,
+            'add_list' =>  $add_materials,
         ]);
     }
 
@@ -1490,34 +1490,34 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         $assort_material = AssortGoods::find()->asArray()->all();
-        if ($assort_material == null) {
-            $code = 1065;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($assort_material as $assort){
-            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
-                $have_assort[] = $assort;
-            } else {
-                $without_assort[] = $assort;
-            }
-        }
-
-        //有计算公式
-        foreach ($have_assort as $one_have_assort){
-            $material_name[] = $one_have_assort['title'];
-            $material_one[$one_have_assort['title']] = $one_have_assort;
-        }
-        $goods = Goods::assortList($material_name,$post['city']);
-        if ($goods == null) {
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+//        if ($assort_material == null) {
+//            $code = 1065;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code],
+//            ]);
+//        }
+//        foreach ($assort_material as $assort){
+//            if ($assort['state'] != MaterialPropertyClassify::CHANGE_STATE){
+//                $have_assort[] = $assort;
+//            } else {
+//                $without_assort[] = $assort;
+//            }
+//        }
+//
+//        //有计算公式
+//        foreach ($have_assort as $one_have_assort){
+//            $material_name[] = $one_have_assort['title'];
+//            $material_one[$one_have_assort['title']] = $one_have_assort;
+//        }
+//        $goods = Goods::assortList($material_name,$post['city']);
+//        if ($goods == null) {
+//            $code = 1061;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code],
+//            ]);
+//        }
 
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $p  = ProjectView::find()->where(['parent_project'=>'面积比例'])->andWhere(['project'=>'卧室面积'])->one();
@@ -1538,8 +1538,9 @@ class OwnerController extends Controller
         $material[]   = BasisDecorationService::principalMaterialSeriesStyle($goods_price,$material_one,$post,$bedroom_area);
 
 
+        $assort_material = AssortGoods::find()->asArray()->all();
         //无计算公式
-        foreach ($without_assort as $one_without_assort){
+        foreach ($assort_material as $one_without_assort){
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }

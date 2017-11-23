@@ -450,7 +450,11 @@ class Goods extends ActiveRecord
             ->asArray()
             ->select($select)
             ->where(['and', ['goods.status' => self::STATUS_ONLINE], ['in', 'goods.sku', $sku]])
-            ->leftJoin('goods_brand', 'goods_brand.id = goods.brand_id')
+            ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
+            ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
+            ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
+            ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
+            ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
             ->all();
     }
 
