@@ -4080,7 +4080,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 console.log($scope.one_title)
                 let arr1 = []
                 for (let [key, value] of $scope.one_title.entries()) {
-                    arr1.push({two_id:value.id,count:value.count})
+                    arr1.push({two_id:value.id,count:value.count,title:value.title})
                     for (let [key1, value1] of value.two_title.entries()) {
                         if (value1.id == undefined) {
                             arr.push({
