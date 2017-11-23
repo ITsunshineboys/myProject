@@ -1752,15 +1752,13 @@ class OwnerController extends Controller
                     }
                 }
                 foreach ($stairs_price as &$one_stairs_price) {
-                    var_dump($ma);
-                    var_dump($one_stairs_price['value']);
-//                    if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
-//                        echo 111;exit;
-//                        $one_stairs_price['quantity'] = 1;
-//                        $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
-//                        var_dump($one_stairs_price);exit;
-////                        $condition_stairs [] = $one_stairs_price;
-//                    }
+                    if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
+                        echo 111;exit;
+                        $one_stairs_price['quantity'] = 1;
+                        $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
+                        var_dump($one_stairs_price);exit;
+//                        $condition_stairs [] = $one_stairs_price;
+                    }
                 }
 //                var_dump($condition_stairs);exit;
 //                $material = BasisDecorationService::profitMargin($condition_stairs);
