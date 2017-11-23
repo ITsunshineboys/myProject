@@ -1754,20 +1754,16 @@ class OwnerController extends Controller
 
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
-                        echo 111;exit;
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
-                        var_dump($one_stairs_price);exit;
-//                        $condition_stairs [] = $one_stairs_price;
+                        $condition_stairs [] = $one_stairs_price;
                     }
                 }
-//                var_dump($condition_stairs);exit;
-//                $material = BasisDecorationService::profitMargin($condition_stairs);
-                exit;
+                $material = BasisDecorationService::profitMargin($condition_stairs);
             }
 
             //物流信息
-//var_dump($material);exit;
+var_dump($material);exit;
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -1802,8 +1798,6 @@ class OwnerController extends Controller
         // decoration_add
         var_dump(StairsDetails::find()->asArray()->all());
 //         $r = \Yii::$app->db->createCommand()->update('stairs_details',['attribute'=>'纯钢构造'],['id'=>4])->execute();
-
-         return $r;
     }
 
 }
