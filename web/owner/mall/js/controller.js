@@ -376,6 +376,13 @@ angular.module('all_controller', [])
         })
         //跳转内页
         $scope.go_inner = function (item,index) {
+            sessionStorage.setItem('nodata',JSON.stringify({
+                all_goods:$scope.all_goods,
+                all_workers:$scope.all_workers,
+                all_price:$scope.all_price,
+                discount_price:$scope.discount_price,
+                show_material:$scope.show_material
+            }))
             if (item.title == '辅材') {
                 $state.go('nodata.basics_decoration')
                 $scope.cur_header = '基础装修'
@@ -812,6 +819,7 @@ angular.module('all_controller', [])
                     sessionStorage.removeItem('all_status')
                     sessionStorage.removeItem('cur_index')
                     sessionStorage.removeItem('params')
+                    sessionStorage.removeItem('nodata')
                     $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
                 } else {
                     $rootScope.fromState_name = 'nodata.other_material'
@@ -2135,13 +2143,6 @@ angular.module('all_controller', [])
                 console.log(all_worker_price)
                 $scope.all_price += all_worker_price
                 $scope.discount_price += all_worker_price
-                sessionStorage.setItem('nodata',JSON.stringify({
-                    all_goods:$scope.all_goods,
-                    all_workers:$scope.all_workers,
-                    all_price:$scope.all_price,
-                    discount_price:$scope.discount_price,
-                    show_material:$scope.show_material
-                }))
                 sessionStorage.setItem('basic_nodata',JSON.stringify({
                     special_request:$scope.special_request,
                     toponymy:$scope.toponymy,
