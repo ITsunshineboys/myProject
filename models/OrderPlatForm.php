@@ -20,6 +20,7 @@ class OrderPlatForm extends ActiveRecord
         6 => '上门退货',
         7 => '上门换货'
     ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
