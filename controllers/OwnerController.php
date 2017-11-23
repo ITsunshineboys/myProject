@@ -958,7 +958,7 @@ class OwnerController extends Controller
             'data' => [
                 'coating_labor_price' => $coating_labor_price,
                 'coating_material' => $material_total,
-                'bedroom_area' => $bedroom_primer_area,
+                'bedroom_area' => round($bedroom_primer_area,2),
             ]
         ]);
     }
@@ -1494,6 +1494,7 @@ class OwnerController extends Controller
         $materials = ['木地板','大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具','立柜式空调','挂壁式空调','灯具','床垫','马桶','浴柜','花洒套装','淋浴隔断'];
         $goods = Goods::assortList($materials,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
+        var_dump($goods_price);exit;
         $material[]   = BasisDecorationService::formula($goods_price,$post);
 
 

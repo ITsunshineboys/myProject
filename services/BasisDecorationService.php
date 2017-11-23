@@ -1445,7 +1445,7 @@ class BasisDecorationService
                         }
                     }
                     $area = $length * $breadth;
-                    $one_goods['quantity'] = ceil(100 / $area);
+                    $one_goods['quantity'] = ceil($post['bedroom_area'] / $area);
                     $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
                     $wood_floor [] = $one_goods;
                     break;
