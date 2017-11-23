@@ -1688,7 +1688,7 @@ class OwnerController extends Controller
                 ]);
             }
         }
-
+        var_dump($effect);exit;
         $effect_where = 'effect_id = '.$effect['id'];
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
 //        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where([])->all();
