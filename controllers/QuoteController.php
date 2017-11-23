@@ -398,33 +398,33 @@ class QuoteController extends Controller
         switch ($post || $min_time || $max_time || $toponymy){
             case $post && !$min_time && !$max_time && !$toponymy:
                 if (substr($post, 4) == 00) {
-                    $where = 'city_code = '.$post;
+                    $where = 'city_code = '.$post . 'and type !=  2';
                     $effect = Effect::pagination($where,$page,$size);
                 } else {
-                    $where = 'district_code = '.$post;
+                    $where = 'district_code = '.$post. 'and type !=  2';
                     $effect = Effect::pagination($where,$page,$size);
                 }
                 break;
             case $post && $min_time && !$max_time && !$toponymy:
-                $where = "add_time >=" . strtotime($min_time) . " AND city_code = ".$post;
+                $where = "add_time >=" . strtotime($min_time) . " AND city_code = ".$post. 'and type !=  2';
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case $post && !$min_time && $max_time && !$toponymy:
-                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post;
+                $where = " add_time <=". strtotime($max_time)." AND city_code = ".$post. 'and type !=  2';
                 $effect = Effect::pagination($where,$page,$size);
                 break;
             case  $post  && $min_time && $max_time && !$toponymy:
                 if (strtotime($min_time) == strtotime($max_time)){
                     $timeType = ModelService::timeDeal($min_time);
-                    $where = "add_time >=" . strtotime($timeType[0]) ." and add_time <=". strtotime($timeType[1]) ." AND city_code = ".$post;
+                    $where = "add_time >=" . strtotime($timeType[0]) ." and add_time <=". strtotime($timeType[1]) ." AND city_code = ".$post. 'and type !=  2';
                     $effect = Effect::pagination($where,$page,$size);
                 } else {
-                    $where = "add_time >=" . strtotime($min_time) ." and add_time <=". strtotime($max_time) ." AND city_code = ".$post;
+                    $where = "add_time >=" . strtotime($min_time) ." and add_time <=". strtotime($max_time) ." AND city_code = ".$post. 'and type !=  2';
                     $effect = Effect::pagination($where,$page,$size);
                 }
                 break;
             case  $post && !$min_time && !$max_time && $toponymy:
-                $where = "toponymy like '%{$toponymy}%' and city_code = ".$post;
+                $where = "toponymy like '%{$toponymy}%' and city_code = ".$post. 'and type !=  2';
                 $effect = Effect::pagination($where,$page,$size);
                 break;
         }
@@ -1934,6 +1934,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-       var_dump("INSERT INTO `engineering_standard_craft` VALUES ('37', '510100', '木作', '1.00', '电视墙用细木工板', '张'");
+       var_dump(Effect::deleteAll(['type'=>3]));
+       var_dump(Effect::find()->asArray()->all());
     }
 }
