@@ -1415,7 +1415,7 @@ class OwnerController extends Controller
             foreach ($goods as $one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
                     $material['platform_price'] = $one_goods['platform_price'] / 100;
-                    $material['cost'] = $material['max(quantity)'] * $one_goods['platform_price'] / 100;
+                    $material['cost'] = $material['quantity'] * $one_goods['platform_price'] / 100;
                 }
             }
         }
