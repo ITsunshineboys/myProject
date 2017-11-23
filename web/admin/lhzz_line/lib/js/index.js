@@ -68,8 +68,8 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
     ];
     //财务中心
     $scope.finance_obj=[
-        {id:0,name:'财务数据',link:'mall_finance.index'},
-        {id:1,name:'商城财务',link:'mall_finance.index'}
+        // {id:0,name:'财务数据',link:'mall_finance.index'},
+        {id:0,name:'商城财务',link:'mall_finance.index'}
     ];
     //商城管理------一级
     $scope.mall_click=function () {
