@@ -1050,7 +1050,7 @@ class OrderController extends Controller
                     }
                 }else{
                     if($keyword){
-                        $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
+                        $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,u.mobile) like '%{$keyword}%'";
                     }
                 }
 

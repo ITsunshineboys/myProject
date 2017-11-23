@@ -1402,7 +1402,7 @@ class OwnerController extends Controller
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
-        $goods_select = $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
+        $goods_select = $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
         $goods = Goods::findBySkuAll($codes,$goods_select);
         if ($goods == null){
             $code = 1061;
@@ -1411,18 +1411,18 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        foreach ($add_materials as &$material){
-            foreach ($goods as $one_goods){
+        foreach ($add_materials as $material){
+            foreach ($goods as &$one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
-                    $material['platform_price'] = $one_goods['platform_price'] / 100;
-                    $material['cost'] = $material['quantity'] * $one_goods['platform_price'] / 100;
+                    $one_goods['quantity'] = $material['quantity'];
+                    $one_goods['cost'] = $material['quantity'] * $one_goods['platform_price'];
                 }
             }
         }
         return Json::encode([
             'code' => 200,
-            'msg' => 'ok',
-            'add_list' =>  $add_materials,
+            'msg'  => 'ok',
+            'add_list' => $goods,
         ]);
     }
 
