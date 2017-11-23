@@ -78,7 +78,7 @@
             <img class="filter_pic_red" src="pages/commodity_manage/image/red.png" alt=""/>
             <span class="class_name_span">上传图片</span>
             <div class="pic_right">
-                <img ng-if="!!upload_cover_src" ng-src="{{baseUrl + '/'+ upload_cover_src}}"/>
+                <img ng-if="!!upload_cover_src" ng-src="{{baseUrl+ upload_cover_src}}"/>
                 <img ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                 <p class="def_gray">图片大小5M内，支持JPG、PNG、JPEG</p>
                 <div class="upload_btn" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">
@@ -96,7 +96,7 @@
             <span>上传图片</span>
             <div class="pic_right">
                 <div class="img_list" ng-repeat="item in upload_img_arr" style="width: 120px;height: 120px;">
-                    <img ng-src="{{baseUrl + '/'+ item}}" class="logo">
+                    <img ng-src="{{baseUrl+ item}}" class="logo">
                     <span class="img_times" ng-click="del_img(item)">&times;</span>
                 </div>
                 <img ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
@@ -204,7 +204,7 @@
 
         <div class="erweima">
             <span>线下商城二维码</span>
-            <img ng-src="{{baseUrl + '/'+ qr_code}}" alt="二维码">
+            <img ng-src="{{baseUrl+ qr_code}}" alt="二维码">
         </div>
 
         <!--详情描述-->
