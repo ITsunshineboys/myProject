@@ -1765,7 +1765,9 @@ class OwnerController extends Controller
             }else{
                 $material = [];
             }
-
+var_dump($data);
+var_dump($material);
+var_dump($stone);exit;
             $a = [];
             foreach ($data as &$one_data){
                 $a []= $one_data;
