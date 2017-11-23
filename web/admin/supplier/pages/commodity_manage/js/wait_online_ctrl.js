@@ -307,7 +307,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         let description = UE.getEditor('editor').getContent();//富文本编辑器
 		console.log($scope.upload_cover_src);
 		console.log($scope.price_flag);
-
 		if(valid && $scope.upload_cover_src && !$scope.price_flag){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];

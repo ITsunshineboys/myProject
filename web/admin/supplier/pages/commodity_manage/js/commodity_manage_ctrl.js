@@ -624,7 +624,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         $scope.paramsWait = {
             status: 1,                       //状态
-            'sort[]': 'online_time:3',      //默认排序
+            'sort[]': 'publish_time:3',      //默认排序
             keyword: '',                    // 关键字查询
 
         };
@@ -677,17 +677,17 @@ let commodity_manage = angular.module("commodity_manage", [])
         $scope.wait_time_sort = function () {
             if ($scope.wait_sort_time_img == 'lib/images/arrow_default.png') {
                 $scope.wait_sort_time_img = 'lib/images/arrow_down.png';
-                $scope.params['sort[]'] = 'publish_time:3';
+                $scope.paramsWait['sort[]'] = 'publish_time:3';
             } else if ($scope.wait_sort_time_img == 'lib/images/arrow_down.png') { //------> 升序
                 $scope.wait_sort_time_img = 'lib/images/arrow_up.png';
-                $scope.params['sort[]'] = 'publish_time:4';
+                $scope.paramsWait['sort[]'] = 'publish_time:4';
             } else {                                                //-------> 降序
                 $scope.wait_sort_time_img = 'lib/images/arrow_down.png';
-                $scope.params['sort[]'] = 'publish_time:3';
+                $scope.paramsWait['sort[]'] = 'publish_time:3';
             }
             // $scope.Config.currentPage = 1; //页数跳转到第一页
             tablePagesWait()
-        }
+        };
         // $scope.on_time_flag = true;
         // $scope.down_time_flag = false;
         //     /*=======降序=====*/
