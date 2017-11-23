@@ -446,7 +446,7 @@ class Goods extends ActiveRecord
         if (!$sku) {
             return false;
         }
-        return self::find()
+        $rows = self::find()
             ->asArray()
             ->select($select)
             ->where(['and', ['goods.status' => self::STATUS_ONLINE], ['in', 'goods.sku', $sku]])
@@ -456,6 +456,10 @@ class Goods extends ActiveRecord
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
             ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
             ->all();
+        var_dump($rows);exit;
+        foreach ($rows as &$row){
+//            $row['']
+        }
     }
 
     /**
