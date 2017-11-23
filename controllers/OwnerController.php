@@ -1739,7 +1739,20 @@ class OwnerController extends Controller
                     $_goods['cost'] = $_goods['quantity'] * $_goods['platform_price'];
                 }
             }
-            var_dump($stone);exit;
+
+
+            if ($effect['stairway'] != null){
+                $stairs  = Goods::assortList('楼梯');
+                var_dump($stairs);exit;
+                $stairs_details = StairsDetails::find()->asArray()->all();
+
+                foreach ($stairs as &$one_stairs){
+                    foreach ($stairs_details as $details){
+
+                    }
+                    if ($stairs)
+                }
+            }
             //物流信息
 
             return Json::encode([
