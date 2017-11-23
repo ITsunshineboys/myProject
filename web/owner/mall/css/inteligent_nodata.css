@@ -607,6 +607,9 @@ ol, ul {
     margin-right: 0.3rem;
     margin-top: 1rem;
     border-radius: .3rem !important;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
 }
 .style_box{
     background-color: #fff;
