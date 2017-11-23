@@ -599,7 +599,7 @@ ol, ul {
 
 .choose_style ul li button {
     background-color: white;
-    width:5.6rem;
+    width:6.6rem;
     height: 2.3rem;
     font-size: 1.1rem;
     color: #999;
@@ -607,9 +607,6 @@ ol, ul {
     margin-right: 0.3rem;
     margin-top: 1rem;
     border-radius: .3rem !important;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
 }
 .style_box{
     background-color: #fff;
