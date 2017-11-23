@@ -1548,16 +1548,6 @@ class OwnerController extends Controller
         ]);
     }
 
-    public function actionA()
-    {
-        $post = Yii::$app->request->get();
-        $materials = ['木地板','大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具','立柜式空调','挂壁式空调','灯具','床垫','马桶','浴柜','花洒套装','淋浴隔断'];
-        $goods = Goods::assortList($materials,$post['city']);
-        $goods_price  = BasisDecorationService::priceConversion($goods);
-        //   主材
-        $material[]   = BasisDecorationService::formula($goods_price,$post);
-        var_dump($material);exit;
-    }
 
     /**
      * Owner certification action(app)
@@ -1702,7 +1692,7 @@ class OwnerController extends Controller
         $effect_where = 'effect_id = '.$effect['id'];
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
 //        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where([])->all();
-        $worker_data = WorksWorkerData::find()->select([])->where([])->all();
+        $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
 
         if ($data != null) {
             foreach ($data as $one_goods) {
