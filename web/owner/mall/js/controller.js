@@ -416,6 +416,7 @@ angular.module('all_controller', [])
             $scope.cur_item = item
             sessionStorage.setItem('cur_index',index)
             sessionStorage.setItem('all_status',JSON.stringify({
+                have_header:$scope.have_header,
                 cur_header:$scope.cur_header,
                 inner_header:$scope.inner_header,
                 cur_project:$scope.cur_project,
@@ -1231,6 +1232,8 @@ angular.module('all_controller', [])
             console.log(error)
             console.log($scope.nowStairs)
             $scope.all_workers = []
+            $scope.discount_price = 0
+            $scope.all_price = 0
             if (valid) {
                 let data = {
                     bedroom: $scope.house_bedroom,//卧室
