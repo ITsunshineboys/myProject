@@ -538,6 +538,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             _ajax.get('/supplieraccount/account-view',{
                 id:item.id
             },function (res) {
+                console.log(res)
                 $scope.cur_account_detail = res.data
                 $state.go('mall_finance.account_detail')
             })

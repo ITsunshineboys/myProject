@@ -28,7 +28,7 @@ edit_card.controller("edit_card_ctrl", function (_ajax,$rootScope,$scope,$http,$
                     bankname: res.data.bankname,
                     position: res.data.position,
                     bankbranch: res.data.bankbranch,
-                    role_id:res.data.role_id
+                    role_id:6
                 }
             }
         })
