@@ -1488,21 +1488,35 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $post = Yii::$app->request->get();
+
+        // 有资料 计算公式
         $materials = ['木地板','大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具','立柜式空调','挂壁式空调','灯具','床垫','马桶','浴柜','花洒套装','淋浴隔断'];
         $goods = Goods::assortList($materials,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        //   主材
         $material[]   = BasisDecorationService::formula($goods_price,$post);
 
-        $assort_material = AssortGoods::find()->asArray()->all();
+
+
         //无计算公式
+        $assort_material = AssortGoods::find()->asArray()->all();
         foreach ($assort_material as $one_without_assort){
             $without_assort_name[] = $one_without_assort['title'];
             $without_assort_one[$one_without_assort['title']] = $one_without_assort;
         }
+        $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
+        if ($without_assort_goods == null) {
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
+        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
+
+        //  楼梯信息
         if ($post['stairway_id'] == 1) {
-            //  楼梯信息
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as &$one_stairs_price) {
@@ -1516,17 +1530,6 @@ class OwnerController extends Controller
         }
 
 
-        $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
-        if ($without_assort_goods == null) {
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
         $goods_material = [];
         foreach ($material as $one){
@@ -1534,6 +1537,8 @@ class OwnerController extends Controller
                 $goods_material[] =   $one;
             }
         }
+
+        
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
