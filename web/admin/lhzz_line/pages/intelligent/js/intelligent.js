@@ -12,10 +12,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
         ]
-        $rootScope.crumbs = JSON.parse(sessionStorage.getItem('crumbs'))
-        // if($rootScope.crumbs.length === JSON.parse(sessionStorage.getItem('crumbs')).length){
-        //     sessionStorage.removeItem('crumbs')
-        // }
         // $scope.baseUrl = 'http://test.cdlhzz.cn'
         // $scope.baseUrl = 'http://ac.cdlhzz.cn'
         $scope.baseUrl = ''
@@ -4081,7 +4077,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
 
                 }
             } else {
+                console.log($scope.one_title)
+                let arr1 = []
                 for (let [key, value] of $scope.one_title.entries()) {
+                    arr1.push({two_id:value.id,count:value.count})
                     for (let [key1, value1] of value.two_title.entries()) {
                         if (value1.id == undefined) {
                             arr.push({
@@ -4129,7 +4128,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 id: $scope.cur_general_count.id,
                                 count: $scope.cur_general_count.count,
                                 title: $scope.cur_general_count.title
-                            }
+                            },
+                            two_count:arr1
                         }
                     } else {
                         all_data = {
@@ -4139,7 +4139,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 id: $scope.cur_general_count.id,
                                 count: $scope.cur_general_count.count,
                                 title: $scope.cur_general_count.title
-                            }
+                            },
+                            two_count:arr1
                         }
                     }
                     console.log(all_data)
