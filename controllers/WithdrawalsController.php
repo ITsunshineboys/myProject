@@ -1786,7 +1786,7 @@ class WithdrawalsController extends Controller
                     break;
             }
         }
-        $data=UserCashregister::paginationByOwner($where,$page,Goods::PAGE_SIZE_DEFAULT,['c.id', 'c.apply_time', 'c.cash_money', 'c.real_money', 'c.handle_time', 'c.transaction_no', 'c.status' ]);
+        $data=UserCashregister::paginationByOwner($where,$page,$size,['c.id', 'c.apply_time', 'c.cash_money', 'c.real_money', 'c.handle_time', 'c.transaction_no', 'c.status' ]);
         if (is_numeric($data))
         {
             $code=$data;

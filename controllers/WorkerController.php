@@ -15,6 +15,7 @@ use app\models\WorkerWorksReview;
 use app\models\WorkResult;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
+use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -919,28 +920,28 @@ class WorkerController extends Controller
      */
     public function actionGetWorkDaysByMonth()
     {
+        $uid = self::userIdentity();
+
+        if (!is_int($uid)) {
+            return $uid;
+        }
         //根据年月查出当前月的接单
 
         $request = \Yii::$app->request;
-
+        $worker_id=Worker::getWorkerByUid($uid)->id;
         $time = trim($request->get('month', ''));
-        $worker_id = (int)$request->get('worker_id', 0);
-
-        $start_time = $end_time = 0;
 
         if (!$time) {
             $time_type = 'month';
+            list($start_time,$end_time)= StringService::startEndDate($time_type);
         } else {
-            $time_type = 'custom';
             $yearMonth = $time;
             list($year, $month) = explode('-', $yearMonth);
             $start_time = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, 1, $year));
             $end_time = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, date('t'), $year));
         }
 
-        $time_area = ModelService::timeDeal($time_type, $start_time, $end_time);
-
-        $data = WorkerOrder::getWorkDaysByTimeArea($worker_id, $time_area);
+        $data = WorkerOrder::getWorkDaysByTimeArea($worker_id, $start_time,$end_time);
 
         return Json::encode([
             'code' => 200,
