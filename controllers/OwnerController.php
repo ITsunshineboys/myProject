@@ -1494,7 +1494,6 @@ class OwnerController extends Controller
         $materials = ['人造大理石'];
         $goods = Goods::assortList($materials,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        var_dump($goods_price);exit;
         $material[]   = BasisDecorationService::formula($goods_price,$post);
 
 
