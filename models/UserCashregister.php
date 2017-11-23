@@ -129,9 +129,31 @@ class UserCashregister extends \yii\db\ActiveRecord
 
     }
 
-    public  static  function  paginationByOwner($where,$size = self::PAGE_SIZE_DEFAULT,$select,$page)
+    /**
+     * @param $where
+     * @param $page
+     * @param int $size
+     * @param $select
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public  static  function  paginationByOwner($where,$page,$size = self::PAGE_SIZE_DEFAULT,$select)
     {
         $select = array_diff($select, self::FIELDS_EXTRA);
+        $cashList = (new Query())
+            ->from(self::tableName().' as c')
+            ->leftJoin(User::tableName().' as u','c.uid=u.id')
+            ->select($select)
+            ->where($where)
+            ->offset(($page - 1) * $size)
+            ->limit($size)
+            ->all();
+        $count = (new Query())
+            ->from(self::tableName().' as c')
+            ->leftJoin(User::tableName().' as u','c.uid=u.id')
+            ->select($select)
+            ->where($where)
+            ->count();
+        return ModelService::pageDeal($cashList, $count, $page, $size);
     }
 
     /**

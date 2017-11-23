@@ -1717,6 +1717,10 @@ class WithdrawalsController extends Controller
         return Json::encode([$user]);
     }
 
+    /**
+     * 业主提现列表
+     * @return string
+     */
     public function  actionFindOwnerCashList()
     {
         $user = Yii::$app->user->identity;
@@ -1730,7 +1734,7 @@ class WithdrawalsController extends Controller
         $type=trim(Yii::$app->request->get('type', ''));
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword=Yii::$app->request->get('keyword');
-        $where="role_id=".Supplier::ROLE_SUPPLIER ;
+        $where="c.role_id=".Supplier::ROLE_SUPPLIER ;
         $code=1000;
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -1754,16 +1758,15 @@ class WithdrawalsController extends Controller
         }
         if ($startTime) {
             $startTime = strtotime($startTime);
-            $startTime && $where .= " and apply_time >= {$startTime}";
+            $startTime && $where .= " and c.apply_time >= {$startTime}";
         }
         if ($endTime) {
             $endTime = (int)(strtotime($endTime));
-            $endTime && $where .= " and apply_time <= {$endTime}";
+            $endTime && $where .= " and c.apply_time <= {$endTime}";
         }
         if ($keyword)
         {
-            echo 1;
-            die;
+            $where .="  CONCAT(u.nickname,u.aite_cube_no) like '%{$keyword}%'";
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
@@ -1772,17 +1775,17 @@ class WithdrawalsController extends Controller
             switch ($type)
             {
                 case UserCashregister::CASH_STATUS_IN:
-                    $where.="status=".UserCashregister::CASH_STATUS_IN;
+                    $where.="c.status=".UserCashregister::CASH_STATUS_IN;
                     break;
                 case UserCashregister::CASH_STATUS_OVER:
-                    $where.="status=".UserCashregister::CASH_STATUS_OVER;
+                    $where.="c.status=".UserCashregister::CASH_STATUS_OVER;
                     break;
                 case UserCashregister::CASH_STATUS_FAIL:
-                    $where.="status=".UserCashregister::CASH_STATUS_FAIL;
+                    $where.="c.=".UserCashregister::CASH_STATUS_FAIL;
                     break;
             }
         }
-        $data=UserCashregister::paginationByOwner($where,Goods::PAGE_SIZE_DEFAULT,UserCashregister::FIELDS_ADMIN,$page);
+        $data=UserCashregister::paginationByOwner($where,$page,Goods::PAGE_SIZE_DEFAULT,['c.id', 'c.apply_time', 'c.cash_money', 'c.real_money', 'c.handle_time', 'c.transaction_no', 'c.status' ]);
         if (is_numeric($data))
         {
             $code=$data;
@@ -1797,8 +1800,6 @@ class WithdrawalsController extends Controller
             'msg' => 'ok',
             'data'=>$data
         ]);
-
-
 
     }
 
