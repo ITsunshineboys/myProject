@@ -1745,18 +1745,24 @@ class OwnerController extends Controller
                 $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
                 $stairs_price = BasisDecorationService::priceConversion($stairs);
                 $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
-                var_dump($stairs);exit;
+                $stairs_details = StairsDetails::find()->asArray()->all();
+                foreach ($stairs_details as $detail){
+                    if ($effect['stair_id'] == $detail['id']){
+                        $ma = $detail['attribute'];
+                    }
+                }
+
                 foreach ($stairs_price as &$one_stairs_price) {
-                    if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
+                    if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                         $condition_stairs [] = $one_stairs_price;
                     }
                 }
-                $material[][] = BasisDecorationService::profitMargin($condition_stairs);
+                $material = BasisDecorationService::profitMargin($condition_stairs);
             }
             //物流信息
-
+var_dump($material);exit;
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
