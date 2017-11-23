@@ -19,6 +19,7 @@ class EffectController extends Controller
 {
 
     const TYPE_EFFECT=2;
+    const PAY_STATUS=1;
     const PAGE_SIZE = 10;
     const ACCESS_LOGGED_IN_USER = [
         'effect-list',
@@ -291,7 +292,7 @@ class EffectController extends Controller
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword = trim(Yii::$app->request->get('keyword', ''));
 
-        $where = 'status ='.self::TYPE_EFFECT;
+        $where = 'status ='.self::PAY_STATUS;
         if(!$keyword){
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
