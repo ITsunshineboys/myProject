@@ -502,6 +502,15 @@ angular.module('all_controller', [])
                 $('#myModal').modal('hide')
                 $timeout(function () {
                     $scope.have_header = false
+                    sessionStorage.setItem('all_status',JSON.stringify({
+                        have_header:$scope.have_header,
+                        cur_header:$scope.cur_header,
+                        inner_header:$scope.inner_header,
+                        cur_project:$scope.cur_project,
+                        cur_status:$scope.cur_status,
+                        is_city:$scope.is_city,
+                        is_edit:$scope.is_edit
+                    }))
                     $state.go('nodata.product_detail')
                 }, 300)
             })
@@ -536,14 +545,14 @@ angular.module('all_controller', [])
             $scope.price_max = ''
             $scope.params['sort[]'] = 'sold_number:3'
             sessionStorage.setItem('params',JSON.stringify($scope.params))
-            sessionStorage.setItem('all_status',JSON.stringify({
-                cur_header:$scope.cur_header,
-                inner_header:$scope.inner_header,
-                cur_project:$scope.cur_project,
-                cur_status:$scope.cur_status,
-                is_city:$scope.is_city,
-                is_edit:$scope.is_edit
-            }))
+            // sessionStorage.setItem('all_status',JSON.stringify({
+            //     cur_header:$scope.cur_header,
+            //     inner_header:$scope.inner_header,
+            //     cur_project:$scope.cur_project,
+            //     cur_status:$scope.cur_status,
+            //     is_city:$scope.is_city,
+            //     is_edit:$scope.is_edit
+            // }))
             tablePages()
             $('#myModal').modal('hide')
             $timeout(function () {
@@ -735,7 +744,7 @@ angular.module('all_controller', [])
             console.log($scope.cur_project)
             if ($rootScope.curState_name == 'nodata.product_detail') {
                 $scope.have_header = true
-                if(sessionStorage.getItem('check_goods')){
+                if(sessionStorage.getItem('check_goods')!=null){
                     if ($scope.cur_status == 2||$scope.cur_status == 1) {
                         // $scope.cur_header = $scope.inner_first_level
                         $rootScope.fromState_name = 'nodata.all_goods'
@@ -766,6 +775,7 @@ angular.module('all_controller', [])
                         }))
                     }
                 }
+                sessionStorage.removeItem('check_goods')
             } else if ($rootScope.curState_name == 'nodata.all_goods') {
                 if ($scope.cur_status == 2) {
                     $scope.cur_header = $scope.inner_first_level
@@ -1205,10 +1215,7 @@ angular.module('all_controller', [])
                     style_name: res.data.goods_view.style_name
                 }
                 $('#myModal').modal('hide')
-                $timeout(function () {
-                    $scope.have_header = false
-                    $state.go('nodata.product_detail')
-                }, 300)
+                $scope.have_header = false
             })
         }
         $scope.get_goods = function (valid, error) {
