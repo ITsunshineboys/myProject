@@ -1934,7 +1934,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_coefficient
-       var_dump(AssortGoods::deleteAll([]));
+//       var_dump(AssortGoods::deleteAll([]));
        var_dump(AssortGoods::find()->asArray()->all());
     }
 }
