@@ -838,17 +838,60 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.recommend_id = value.id
             }
         });
+        // 全部商品展示
         $http({   //店铺全部商品列表
             method: 'get',
             url: baseUrl+"/supplier/goods",
             params:{
                 supplier_id:+$scope.supplier_id,
-                "sort[]":"sold_number:4"
+                "sort[]":"sold_number:4",
             }
         }).then(function successCallback (response) {
             console.log(response);
             $scope.supplier_goods=response.data.data.supplier_goods;
+            setTimeout(function () {
+                // 获取滚动条高度
+                $(document).ready(function () {
+                    $scope.paramsMore = 1;
+                    var pagesFlag = true;
+                    $(window).scroll(function(e){
+                        // $scope.sorllMore = $(this).scrollHeight();
+                        var node = $('.recommend_div');
+                        var top  = node.get(node.length-1).getBoundingClientRect().top;
+                        var se   = document.documentElement.clientHeight;
+                        if(top<=se){
+                            if(pagesFlag){
+                                $scope.paramsMore++;
+                                $http({   //店铺全部商品列表
+                                    method: 'get',
+                                    url: baseUrl+"/supplier/goods",
+                                    params:{
+                                        supplier_id:+$scope.supplier_id,
+                                        "sort[]":"sold_number:4",
+                                        page:$scope.paramsMore
+                                    }
+                                }).then(function successCallback (response) {
+                                    console.log(response);
+                                    if (response.data.data.supplier_goods.length == 0) {
+                                        return
+                                    }
+                                    for( let [key,vaule] of response.data.data.supplier_goods.entries()){
+                                        $scope.supplier_goods.push(vaule)
+                                    }
+                                    setTimeout(function () {
+                                        pagesFlag = true;
+                                    },200);
+
+                                });
+                            }
+                            pagesFlag = false;
+                        }
+                    })
+                });
+            },300)
         });
+
+
         // 点击推荐商品判断跳转商品详情
         $scope.getProductMore = function (item) {
            //店铺首页推荐列表
@@ -1375,7 +1418,7 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
-            alert($scope.mall_id);
+            // alert($scope.mall_id);
             $scope.order_order = '';
             $scope.order_address_model = '';
             if( $scope.show_harvest == false && $scope.show_address == true){
@@ -1394,13 +1437,11 @@ angular.module("all_controller", ['ngCookies'])
             }
             if($scope.show_harvest == true && $scope.show_address == false ){
                 //判断收货地址是否在配送范围内
-                alert("商品id" + $scope.mall_id);
-                alert("区域code" + $scope.adCode);
                 $http.post( baseUrl+'/order/judegaddress',{
                     goods_id:+$scope.mall_id,
                     districtcode:$scope.adCode
                 },config).then(function (response) {
-                    alert(JSON.stringify(response));
+                    // alert(JSON.stringify(response));
                     // console.log(response);
                     $scope.code = response.data.code;
                     if($scope.code == 1000){
@@ -1421,8 +1462,8 @@ angular.module("all_controller", ['ngCookies'])
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
                                 // 微信接口 === 调用
-                                alert(sessionStorage.getItem('address_id'));
-                                alert(JSON.stringify(sessionStorage.getItem('address_id')));
+                                // alert(sessionStorage.getItem('address_id'));
+                                // alert(JSON.stringify(sessionStorage.getItem('address_id')));
                                 $http({     //获取openid 的地址
                                     method: 'get',
                                     url:  baseUrl+'/order/lineplaceorder',
