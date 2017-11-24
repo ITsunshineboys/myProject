@@ -1786,7 +1786,7 @@ class OwnerController extends Controller
                     $_goods['goods_first'] = $goods_category['0']['title'];
                     $_goods['goods_second'] = $goods_category['1']['title'];
                     $_goods['goods_three'] = $goods_category['2']['title'];
-                    $_goods['goods_id'] = $one_stairs_price['id'];
+                    $_goods['goods_id'] = $_goods['id'];
 
 
                     $_goods['platform_price'] = $_goods['platform_price'] / 100;
