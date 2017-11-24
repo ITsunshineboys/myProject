@@ -431,12 +431,12 @@ class WithdrawalsController extends Controller
         {
             $sms_code=trim($request->post('sms_code',''));
             $pay_pwd=trim($request->post('pay_pwd',''));
-            if (!SmValidationService::validCode($user->mobile,$sms_code)) {
-               
-                $code = 1002;
+            $codeValidationRes = SmValidationService::validCode($user->mobile,$sms_code);
+            if ($codeValidationRes !== true) {
+                $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
+                    'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
             SmValidationService::deleteCode($user->mobile);

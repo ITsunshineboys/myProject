@@ -183,13 +183,15 @@ class DistributionController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        if (!SmValidationService::validCode($mobile, $code)) {
-            $code = 1002;
+        $codeValidationRes = SmValidationService::validCode($mobile, $code);
+        if ($codeValidationRes !== true) {
+            $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         SmValidationService::deleteCode($mobile);
         $time=time();
         $user=Distribution::findByMobile($mobile);

@@ -1323,11 +1323,12 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (!SmValidationService::validCode($user->mobile, $SmsCode)) {
-            $code = 1002;
+        $codeValidationRes = SmValidationService::validCode($user->mobile, $SmsCode);
+        if ($codeValidationRes !== true) {
+            $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
         SmValidationService::deleteCode($user->mobile);
