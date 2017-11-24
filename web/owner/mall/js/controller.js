@@ -121,21 +121,6 @@ angular.module('all_controller', [])
         // $scope.baseUrl = 'http://test.cdlhzz.cn/'
         $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         // $scope.baseUrl = '/'
-        // $scope.nodata_params = {
-        //     bedroom: 1,//卧室
-        //     area: 60,      //面积
-        //     hall: 1,       //餐厅
-        //     toilet: 1,   // 卫生间
-        //     kitchen: 1,  //厨房
-        //     series: '',   //系列
-        //     style: '',  //风格
-        //     window: 0,//飘窗
-        //     high: 2.8, //层高
-        //     province: 510000,   //省编码
-        //     city: 510100,      // 市编码
-        //     stairway_id: 0,//有无楼梯
-        //     stairs: ''//楼梯结构
-        // }
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
@@ -205,8 +190,6 @@ angular.module('all_controller', [])
             $scope.style = res.data.show.style;//风格数据
             $scope.cur_series = $scope.series[0]//默认选择第一个系列
             $scope.cur_style = $scope.style[0]//默认选择第一个风格
-            // $scope.nodata_params.series = $scope.cur_series.id
-            // $scope.nodata_params.style = $scope.cur_style.id
             $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
@@ -277,9 +260,6 @@ angular.module('all_controller', [])
 
         /*无资料操作*/
         //修改了基础表单数据
-        // $scope.$watch('nodata_params',function (newVal,oldVal) {
-        //     $scope.show_material = false
-        // })
         $scope.$watch('toponymy', function (newVal, oldVal) {
             if(sessionStorage.getItem('nodata') == null){
                 $scope.show_material = false
@@ -376,13 +356,6 @@ angular.module('all_controller', [])
         })
         //跳转内页
         $scope.go_inner = function (item,index) {
-            sessionStorage.setItem('nodata',JSON.stringify({
-                all_goods:$scope.all_goods,
-                all_workers:$scope.all_workers,
-                all_price:$scope.all_price,
-                discount_price:$scope.discount_price,
-                show_material:$scope.show_material
-            }))
             if (item.title == '辅材') {
                 $state.go('nodata.basics_decoration')
                 $scope.cur_header = '基础装修'
@@ -2159,6 +2132,13 @@ angular.module('all_controller', [])
                 console.log(all_worker_price)
                 $scope.all_price += all_worker_price
                 $scope.discount_price += all_worker_price
+                sessionStorage.setItem('nodata',JSON.stringify({
+                    all_goods:$scope.all_goods,
+                    all_workers:$scope.all_workers,
+                    all_price:$scope.all_price,
+                    discount_price:$scope.discount_price,
+                    show_material:$scope.show_material
+                }))
                 sessionStorage.setItem('basic_nodata',JSON.stringify({
                     special_request:$scope.special_request,
                     toponymy:$scope.toponymy,
@@ -2171,7 +2151,7 @@ angular.module('all_controller', [])
                     highCrtl:$scope.highCrtl,
                     window:$scope.window,
                     choose_stairs:$scope.choose_stairs,
-                    nowStairs:$scope.nowStairs
+                    nowStairs:$scope.nowStairs,
                 }))
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
