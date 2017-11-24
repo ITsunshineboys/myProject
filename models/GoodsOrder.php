@@ -366,7 +366,7 @@ class GoodsOrder extends ActiveRecord
             $goods_order=new self();
             $goods_order->order_no=$order_no;
             $goods_order->amount_order=$msg['total_fee'];
-            $goods_order->supplier_id=$supplier_id;
+            $goods_order->supplier_id=$goods['supplier_id'];
             $goods_order->invoice_id=$invoice_id;
             $goods_order->address_id=$address_id;
             $goods_order->pay_status=1;
