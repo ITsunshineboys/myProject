@@ -29,7 +29,7 @@
         <div class="all">
             <div class="house_msg_header form-group">
                 <h1 class="col-md-5">房屋信息</h1>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <p class="col-md-3 col-md-offset-3">
                     <button ng-click="add_ordinary_house()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
                     </p>
@@ -49,7 +49,7 @@
                            ng-blur="change2=!!submitForm['houseName{{$index}}'].$error" disabled required
                            class="form-control" ng-model="item.house_type_name">
                 </div>
-                <div class="col-md-3 col-sm-3">
+                <div class="col-md-4 col-sm-4">
                     <div class="all_btn">
                         <p class="col-md-3" ng-show="$index!=0">
                             <button ng-click="delete_house1(item)" class="cur_delete"><i
@@ -79,7 +79,7 @@
         <div class="all">
             <div class="house_msg_header form-group">
                 <h1 class="col-md-5">图纸信息</h1>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <p class="col-md-3 col-md-offset-3">
                     <button ng-click="add_drawing()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
                     </p>
@@ -94,7 +94,7 @@
                 (submitForm.drawingName.$error.required&&change3)}" ng-blur="change3=!!submitForm.drawingName.$error"
                            required class="form-control" ng-model="item.drawing_name">
                 </div>
-                <div class="col-md-3 col-sm-3">
+                <div class="col-md-4 col-sm-4">
                     <div class="all_btn">
                         <p class="col-md-3">
                         <button ng-click="delete_drawing(item)" class="cur_delete"><i
