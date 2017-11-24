@@ -345,7 +345,8 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                         one_title: obj.goods_first,
                         two_title: obj.goods_second,
                         three_title: obj.goods_three,
-                        price: obj.cost
+                        price: obj.cost,
+                        procurement: obj.procurement
                     };
                     let tempFreight = {
                         goods_id: obj.goods_id,
@@ -388,7 +389,8 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                             one_title: o.goods_first,
                             two_title: o.goods_second,
                             three_title: o.goods_three,
-                            price: o.cost
+                            price: o.cost,
+                            procurement: o.procurement
                         };
                         let tempFreight = {
                             goods_id: o.id,
