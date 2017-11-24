@@ -333,7 +333,6 @@ class GoodsOrder extends ActiveRecord
      */
     public static function  Wxpaylinenotifydatabase($arr,$msg)
     {
-
         $goods_id=$arr[0];
         $goods_num=$arr[1];
         $address_id=$arr[2];
@@ -550,15 +549,14 @@ class GoodsOrder extends ActiveRecord
                     }
                     break;
                 case 'lhzz':
-                    if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+                    if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成')
+                    {
                         $arr[$k]['handle']='平台介入';
                     }
                     break;
             }
-
 //            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
             $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']+$arr[$k]['freight']*0.01);
-
             $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
             $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
@@ -568,7 +566,11 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['mobile']=$arr[$k]['consignee_mobile'];
                     break;
                 case 2:
-                    $arr[$k]['mobile']=User::find()->select('mobile')->where(['id'=>$arr[$k]['user_id']])->one()->mobile;
+                    $arr[$k]['mobile']=User::find()
+                        ->select('mobile')
+                        ->where(['id'=>$arr[$k]['user_id']])
+                        ->one()
+                        ->mobile;
                     break;
             }
             switch ($arr[$k]['role_id'])
@@ -622,69 +624,7 @@ class GoodsOrder extends ActiveRecord
 
     }
 
-
-
-    /**
-     * @param array $where
-     * @param array $select
-     * @param int $page
-     * @param int $size
-     * @param $sort
-     * @return array
-     */
-    public static  function paginationByUserorder($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort){
-        $offset = ($page - 1) * $size;
-        $OrderList = (new Query())
-            ->from(self::tableName().' AS a')
-            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
-            ->select($select)
-            ->where($where)
-            ->orderBy($sort)
-            ->offset($offset)
-            ->limit($size)
-            ->all();
-        $arr=self::getorderstatus($OrderList);
-        foreach ($arr AS $k =>$v){
-            $arr[$k]['handle']='';
-            if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
-            }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
-            }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
-            }
-            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
-                $arr[$k]['handle']='平台介入';
-            }
-            if ($arr[$k]['status']=='已完成'){
-                if (!$arr[$k]['comment_id']){
-                    $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                }
-            }
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-        }
-        $count=(new Query())
-            ->from(self::tableName().' AS a')
-            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
-            ->select($select)
-            ->where($where)
-            ->count();
-        return [
-            'total_page' =>ceil($count/$size),
-            'count'=>$count,
-            'details' => $arr
-        ];
-    }
-
-
-
-
-
-
-
+    
     /**
      * @param $goods_id
      * @param $goods_num

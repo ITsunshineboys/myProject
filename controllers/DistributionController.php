@@ -207,7 +207,7 @@ class DistributionController extends Controller
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $session['distribution_token']=base64_encode(base64_encode(urlencode($mobile.'&'.$time)));
+                $session['distribution_token']=base64_encode(base64_encode($mobile.'&'.$time));
                 if (!$session['distribution_token'])
                 {
                     $code=500;
