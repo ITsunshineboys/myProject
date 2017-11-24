@@ -185,7 +185,7 @@ angular.module("all_controller", ['ngCookies'])
         $scope.getProduct = function (m) {
             console.log($scope.recommend_id);
             sessionStorage.setItem('wxflag',true);
-            console.log(m.id);
+            console.log(m);
             $http.post( baseUrl+'/mall/recommend-click-record',{
                 recommend_id:m.id
             },config).then(function (response){
@@ -196,7 +196,7 @@ angular.module("all_controller", ['ngCookies'])
                 $scope.id = m.id;
                 $state.go('product_details',{'mall_id':$scope.mall_id,'id':$scope.id});
             }else {              //链接类型
-                window.location.href = m.url
+                window.location = m.url
             }
         };
     })
