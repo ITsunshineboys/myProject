@@ -1810,6 +1810,7 @@ class OwnerController extends Controller
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $where ="id in (".$stairs['path'].")";
+                        var_dump($where);exit;
                         $goods_category = GoodsCategory::find()->asArray()->where($where)->all();
                         var_dump($goods_category);exit;
                         $one_stairs_price['quantity'] = 1;
