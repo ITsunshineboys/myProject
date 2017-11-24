@@ -1,16 +1,4 @@
-/*选择时间 开始*/
-table{
-  width: 100%;
-}
-/*公用CSS样式 结束*/
-.content{
-  /*margin-left: 200px;*/
-  /*border: 2px solid blue;*/
-  height: 500px;
-}
-/*APP推荐-banner开始*/
 .city{
-  width: 90%;
   margin: 20px auto;
 }
 
@@ -19,7 +7,7 @@ table{
 }
 
 .time_select{
-  width: 188px;
+  width: 190px;
   height: 32px;
   font-size: 12px;
   color: #666F80;
@@ -29,7 +17,7 @@ table{
 .start_stop_time{
   width: 150px;
   margin-right: 10px;
-  height: 34px;
+  height: 32px;
   font-size: 12px;
   color: #666F80;
   padding: 0;
@@ -50,35 +38,11 @@ table{
 /*选择时间 结束*/
 
 /*Table内容 开始-*/
-.tabTable{
-  width: 90%;
-  margin: 0 auto;
-}
 
-.tabTable table tr td{
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #666F80;
-  line-height: 14px;
-  /*padding: 0 22px;*/
-}
 .table{
   table-layout:fixed;
 }
-.table>tbody > tr > td{
-  vertical-align: middle;
-}
 
-.tabTable table tr td a{
-  color: #3F94F6;
-}
-
-#th td{
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #7A8599!important;
-  border-top:0!important;
-}
 #show_img_size{
   width: 30px;
   height: 30px;
@@ -88,66 +52,8 @@ table{
   height: 16px;
 }
 .table_txt{
-  width: 100%;
   word-break: keep-all;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-/*Table内容 结束-*/
-
-/*分页*/
-/*分页处理*/
-.pages{
-  width: 90%;
-  margin: 20px auto 0;
-  /*outline: 1px solid red;*/
-  overflow: hidden;
-  padding-left: 0;
-  list-style: none;
-}
-
-.pages>div{
-  float: left;
-  overflow: hidden;
-}
-
-.pages li{
-  float: left;
-  margin-right: 10px;
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #999;
-  line-height: 12px;
-  padding: 6px 18px;
-  background-color: white;
-  border: 1px solid #5677FC;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.pages #jumpto{
-  border: none;
-  padding:0 0 0 5px;
-}
-
-#jumpto input{
-  height: 25px;
-  width: 62px;
-}
-
-.pagenum{
-  padding-left: 9px!important;
-  padding-right: 9px!important;
-}
-
-#omit,#off{
-  border:none;!important;
-  padding:6px 0 0 0;
-  cursor: default;
-}
-
-.active{
-  background:#487af8!important;
-  color: white!important;
 }

@@ -1,8 +1,6 @@
 app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
     $rootScope.baseUrl = baseUrl;
-
     $scope.loginOut = function () {
-
         _ajax.post('/site/admin-logout', {}, function (res) {
             if (res.code === 200) {
                 sessionStorage.removeItem('finance_menu');
