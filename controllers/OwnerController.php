@@ -1780,6 +1780,15 @@ class OwnerController extends Controller
             if ($effect['window'] != null){
                 $stone  = Goods::findByCategory('人造大理石');
                 foreach ($stone as &$_goods){
+                    $substr = substr($stone['path'],0,strlen($one_stairs_price['path'])-1);
+                    $where ="id in (".$substr.")";
+                    $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
+                    $_goods['goods_first'] = $goods_category['0']['title'];
+                    $_goods['goods_second'] = $goods_category['1']['title'];
+                    $_goods['goods_three'] = $goods_category['2']['title'];
+                    $_goods['goods_id'] = $one_stairs_price['id'];
+
+
                     $_goods['platform_price'] = $_goods['platform_price'] / 100;
                     $_goods['supplier_price'] = $_goods['supplier_price'] / 100;
                     $_goods['purchase_price_decoration_company'] = $_goods['purchase_price_decoration_company'] / 100;
@@ -1831,8 +1840,13 @@ class OwnerController extends Controller
         }
 
         // $goods_     $material    $griotte
-
-//        var_dump($material);exit;
+        $_goods = [];
+        foreach ($goods_ as $value){
+            $goods [] = $value;
+            $goods [] = $material;
+            $goods [] = $griotte;
+        }
+        var_dump($_goods);exit;
 
         return Json::encode([
             'code' => 200,
@@ -1842,8 +1856,6 @@ class OwnerController extends Controller
                 'goods' => $goods_,
 //                    'backman_data' => $backman_data,
                 'worker_data' => $worker_data,
-                'stairs' => $material,
-                'griotte' => $griotte,
             ]
         ]);
     }
