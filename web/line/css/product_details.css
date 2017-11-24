@@ -462,10 +462,10 @@ button.close{
 .add{
     position: absolute;
     right: 0.8rem;
-    top: 0rem;
-    font-size: 1.5rem;
-    color: #333;
-    font-weight: 200;
+    top: 0;
+    /*font-size: 1.5rem;*/
+    /*color: #333;*/
+    /*font-weight: 200;*/
 }
 .pic_more{
     position: absolute;
