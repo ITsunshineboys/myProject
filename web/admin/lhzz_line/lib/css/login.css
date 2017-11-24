@@ -73,16 +73,9 @@ html,body{
   text-align: center;
   margin-top: 20px;
   transition: all 0.3s linear;
-  color: #3F94F6;
-  border: 1px solid #4094f6;
-  background-color: #EFF7FF;
   cursor: pointer;
 }
-.login_btn:hover, .login_btn.active:hover, .login_btn:active:hover{
-  background-color: #3F94F6 !important;
-  border: 1px solid #3F94F6 !important;
-  color: #fff !important;
-}
+
 .error_red{
   text-align: left;
   margin-top: 10px;

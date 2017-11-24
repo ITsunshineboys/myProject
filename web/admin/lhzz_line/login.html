@@ -6,6 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome">
     <link rel="shortcut icon" type="image/x-icon" href="lib/images/bitbug_favicon.ico">
+    <link rel="stylesheet" href="lib/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="lib/css/common.css">
     <link rel="stylesheet" href="lib/css/login.css">
     <title>艾特生活-大后台</title>
@@ -24,7 +25,7 @@
             <input type="password"  placeholder="密码" class="enter_input enter_input_two"  ng-model="password">
         </div>
         <p class='error_red' ng-if="error_flag" ng-bind="error_txt"></p>
-        <button class="login_btn" ng-disabled="isLoading"  ng-click="login()">
+        <button class="btn btn-primary login_btn" ng-disabled="isLoading"  ng-click="login()">
             <span ng-if="!isLoading">登录</span>
             <span class="loading" ng-if="isLoading">
                 <span></span>
