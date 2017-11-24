@@ -1375,6 +1375,7 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
+            alert(sessionStorage.getItem('address_id'));
             $scope.order_order = '';
             $scope.order_address_model = '';
             if( $scope.show_harvest == false && $scope.show_address == true){
@@ -1397,7 +1398,7 @@ angular.module("all_controller", ['ngCookies'])
                     goods_id:+$scope.mall_id,
                     districtcode:$scope.adCode
                 },config).then(function (response) {
-                    // alert(JSON.stringify(response));
+                    alert(JSON.stringify(response));
                     // console.log(response);
                     $scope.code = response.data.code;
                     if($scope.code == 1000){
@@ -1418,8 +1419,8 @@ angular.module("all_controller", ['ngCookies'])
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
                                 // 微信接口 === 调用
-                                alert(sessionStorage.getItem('address_id'))
-                                alert(JSON.stringify(sessionStorage.getItem('address_id')))
+                                alert(sessionStorage.getItem('address_id'));
+                                alert(JSON.stringify(sessionStorage.getItem('address_id')));
                                 $http({     //获取openid 的地址
                                     method: 'get',
                                     url:  baseUrl+'/order/lineplaceorder',
