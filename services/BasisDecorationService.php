@@ -367,10 +367,12 @@ class BasisDecorationService
 
         if (count($goods) == count($goods, 1)) {
             $goods_platform_price = $goods['platform_price'];
+            $goods_price = $goods['purchase_price_decoration_company'];
             $goods_id [] = $goods['id'];
         } else {
             foreach ($goods as $one) {
                 $goods_platform_price = $one['platform_price'];
+                $goods_price = $one['purchase_price_decoration_company'];
                 $goods_id [] = $one['id'];
             }
         }
@@ -386,6 +388,7 @@ class BasisDecorationService
         $waterproof['quantity'] = ceil($points * $material /$goods_value);
 //            防水涂剂费用：个数×抓取的商品价格
         $waterproof['cost'] =  round($waterproof['quantity'] * $goods_platform_price,2);
+        $waterproof['procurement'] =  round($waterproof['quantity'] * $goods_price,2);
         return $waterproof;
     }
 

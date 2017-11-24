@@ -611,6 +611,7 @@ class OwnerController extends Controller
             if ($one_waterproof['title'] == BasisDecorationService::GOODS_NAME['waterproof_coating']) {
                 $one_waterproof['quantity'] = $material_price['quantity'];
                 $one_waterproof['cost'] = $material_price['cost'];
+                $one_waterproof['procurement'] = $material_price['procurement'];
                 $goods_max [] = $one_waterproof;
             }
         }
