@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\BankinfoLog;
 use app\models\GoodsCategory;
+use app\models\OwnerCashManager;
 use app\models\Supplier;
 use app\models\SupplierCashregister;
 use app\models\SupplierFreezelist;
@@ -178,6 +179,37 @@ class SupplieraccountController extends  Controller{
         ]);
 
 }
+
+    public function actionOwnerAccountList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $vaue_all=Yii::$app->params['value_all'];
+        $status=(int)Yii::$app->request->get('status',$vaue_all);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
+        $keyword=trim(Yii::$app->request->get('keyword',''));
+        $where="last_role_id_app=7";
+        if($keyword){
+           $where=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
+        }
+        $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
+
+        return json_encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' =>
+                $paginationData
+
+        ]);
+
+    }
     /**
      * 商家账户详情
      * @return array
