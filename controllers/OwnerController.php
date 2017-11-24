@@ -1838,13 +1838,13 @@ class OwnerController extends Controller
             }
         }
 
-        //  合并 三个数组 $goods_     $material    $griotte
+        //  合并 三个数组  $goods_     $material    $griotte
         $_goods = [];
         foreach ($goods_ as $value){
             $_goods [] = $value;
-            $_goods [] = $material;
-            $_goods [] = $griotte;
         }
+        $_goods [] = $material;
+        $_goods [] = $griotte;
         $array_filter = array_filter($_goods);
         $array_merge = array_merge($array_filter);
 
