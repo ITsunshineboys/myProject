@@ -136,7 +136,7 @@ return [
         'appSecret' => 'f589df8c27f634a94df0b908da7339f7',
         'interval' => 60, // 1m
         'validationCode' => [
-            'expire' => 600, // 10m
+            'expire' => 60, // 10m
             'rule' => 'fourDigits',
         ],
         'maxSendNumPerDay' => 5,
