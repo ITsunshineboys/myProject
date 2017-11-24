@@ -1709,8 +1709,9 @@ class WithdrawalsController extends Controller
     }
 
 
-
-
+    /**
+     * @return string
+     */
     public function  actionFindUser()
     {
         $user = User::find()->all();
@@ -1734,7 +1735,7 @@ class WithdrawalsController extends Controller
         $type=trim(Yii::$app->request->get('type', ''));
         $timeType = trim(Yii::$app->request->get('time_type', ''));
         $keyword=Yii::$app->request->get('keyword');
-        $where="c.role_id=".Supplier::ROLE_SUPPLIER ;
+        $where="c.role_id=".Supplier::ROLE_SUPPLIER;
         $code=1000;
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -1753,9 +1754,8 @@ class WithdrawalsController extends Controller
             }else{
                 $endTime && $endTime .= ' 23:59:59';
             }
-        } else {
+        }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
-
         }
         if ($startTime) {
             $startTime = strtotime($startTime);
@@ -1803,6 +1803,8 @@ class WithdrawalsController extends Controller
         ]);
 
     }
+
+//    public  function action
 
 
 
