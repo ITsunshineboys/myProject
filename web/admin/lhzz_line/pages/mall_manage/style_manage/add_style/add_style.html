@@ -34,7 +34,7 @@
             <span>风格效果图</span>
             <div class="pic_right">
                 <div class="img_list" ng-repeat="item in upload_img_arr">
-                    <img ng-src="{{baseUrl + '/'+ item}}" class="logo">
+                    <img ng-src="{{ item}}" class="logo">
                     <div class="img_times" ng-click="del_img(item)">&times;</div>
                 </div>
                 <img ng-if="upload_img_arr.length!=3" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/mall_manage/style_manage/add_style/image/plus.png" alt="" id="logo">

@@ -21,7 +21,7 @@
         <!--授权书上传-->
         <div class="shop_img" ng-repeat="imgs in (item.images)">
             <span>{{imgs.authorization_name}}</span>
-            <img ng-src="{{baseUrl + '/'+ imgs.image}}" alt=""/>
+            <img ng-src="{{ imgs.image}}" alt=""/>
         </div>
         <hr/>
         <!--商家名称-->

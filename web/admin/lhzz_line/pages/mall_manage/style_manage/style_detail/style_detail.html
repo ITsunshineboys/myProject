@@ -49,7 +49,7 @@
 
             <div class="pic_right">
                 <div class="img_list" ng-repeat="item in img_list">
-                    <img ng-src="{{baseUrl + '/'+ item}}" class="logo">
+                    <img ng-src="{{ item}}" class="logo">
                     <div class="img_times" ng-click="del_img(item)">&times;</div>
                 </div>
                 <img  class="logo" ng-if="img_list.length!=3" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/mall_manage/style_manage/add_style/image/plus.png">

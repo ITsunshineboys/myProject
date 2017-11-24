@@ -45,7 +45,7 @@
                     <td ng-if="item.sku!='0'">{{item.platform_price}}</td>
                     <td ng-if="item.sku=='0'">—</td>
                     <td>{{item.create_time}}</td>
-                    <td><img id="show_img_size" ng-src="{{baseUrl + '/'+ item.image}}" alt=""></td>
+                    <td><img id="show_img_size" ng-src="{{ item.image}}" alt=""></td>
                 </tr>
             </table>
             <!--分页-->

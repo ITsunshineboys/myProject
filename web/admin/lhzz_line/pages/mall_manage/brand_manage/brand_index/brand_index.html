@@ -34,7 +34,7 @@
                 </tr>
                 <tr ng-repeat="item in on_shelves_list">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
-                    <td><img class="img_size" src="{{baseUrl + '/'+ item.logo}}" alt=""></td>
+                    <td><img class="img_size" src="{{ item.logo}}" alt=""></td>
                     <td>{{item.name}}</td>
                     <td>{{item.online_time}}</td>
                     <td>{{item.applicant}}</td>
@@ -103,7 +103,7 @@
                 </tr>
                 <tr ng-repeat="item in down_shelves_list">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
-                    <td><img class="img_size" src="{{baseUrl + '/'+ item.logo}}" alt=""></td>
+                    <td><img class="img_size" src="{{ item.logo}}" alt=""></td>
                     <td>{{item.name}}</td>
                     <td>{{item.offline_time}}</td>
                     <td>{{item.applicant}}</td>
@@ -232,7 +232,7 @@
                 <td>操作</td>
             </tr>
             <tr class="table_content" ng-repeat="item in brand_review_list">
-                <td><img class="img_size" src="{{baseUrl + '/'+ item.brand_logo}}" alt=""></td>
+                <td><img class="img_size" src="{{ item.brand_logo}}" alt=""></td>
                 <td>{{item.brand_name}}</td>
                 <td>{{item.create_time}}</td>
                 <td>{{item.supplier_name}}</td>

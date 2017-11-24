@@ -61,7 +61,7 @@
                 <tr ng-repeat="item in listdata">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                     <td>{{item.parent_title}}</td>
-                    <td><img ng-src="{{baseUrl + '/'+ item.icon}}"></td>
+                    <td><img ng-src="{{ item.icon}}"></td>
                     <td>{{item.title}}</td>
                     <td>{{item.level}}</td>
                     <td ng-if="onsale_flag">{{item.online_time}}</td>

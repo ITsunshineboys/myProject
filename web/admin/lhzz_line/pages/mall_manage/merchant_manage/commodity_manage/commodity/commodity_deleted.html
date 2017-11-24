@@ -73,7 +73,7 @@
             <td ng-if="menu_list[11].value">{{item.delete_time}}</td>
             <td ng-if="menu_list[12].value">{{item.operator}}</td>
             <td ng-if="menu_list[13].value"><img class="goodpic" id="img_size"
-                                                 ng-src="{{baseUrl + '/'+ item.cover_image}}"
+                                                 ng-src="{{ item.cover_image}}"
                                                  alt=""></td>
             <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">查看</td>
         </tr>

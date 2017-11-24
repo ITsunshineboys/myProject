@@ -56,7 +56,7 @@
                 <div class="col-md-3">
                     <div style="width: 100px;height: 100px;">
                     <!--<img src="pages\intelligent\images\default.png" ng-if="!data.file" alt=""  width="100px" height="100px">-->
-                    <img ng-src="{{baseUrl + '/'+ cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                    <img ng-src="{{ cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
                     <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
                     </div>
                     <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>

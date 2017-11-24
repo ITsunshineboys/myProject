@@ -46,11 +46,11 @@
             <div class="margin_top picarr">
                 <span>上传图片</span>
                 <div class="margin_left inline_block img_size coverimg">
-                    <img ng-src="{{baseUrl + '/'+ good_detail.cover_image}}" alt="">
+                    <img ng-src="{{ good_detail.cover_image}}" alt="">
                     <div id="coverimg_span">封面图</div>
                 </div>
                 <div class="inline_block pic" ng-repeat="item in good_detail.images track by $index">
-                    <img ng-src="{{baseUrl + '/'+ item}}" alt="">
+                    <img ng-src="{{ item}}" alt="">
                 </div>
             </div>
             <!--价格/库存-->
@@ -185,7 +185,7 @@
             <div class="margin_top qrcode">
                 <span>线下商城二维码</span>
                 <div class="inline_block">
-                    <img ng-src="{{baseUrl + '/'+ good_detail.qr_code}}" alt="">
+                    <img ng-src="{{ good_detail.qr_code}}" alt="">
                 </div>
             </div>
             <hr>

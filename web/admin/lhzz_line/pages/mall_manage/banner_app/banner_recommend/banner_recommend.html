@@ -94,7 +94,7 @@
                     <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
                     <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
                     <td ng-if="show_8">{{item.create_time}}</td>
-                    <td ng-if="show_9"><img id="show_img_size" ng-src="{{baseUrl + '/'+ item.image}}"></td>
+                    <td ng-if="show_9"><img id="show_img_size" ng-src="{{ item.image}}"></td>
                     <td ng-if="show_10&&item.sku!='0'">{{item.left_number}}</td>
                     <td ng-if="show_10&&item.sku=='0'">—</td>
                     <td ng-if="show_11&&item.sku!='0'">{{item.supplier_price}}</td>
@@ -178,7 +178,7 @@
                             <div class="modal_txt_one modal_img_box">
                                 <i class="red">*</i>
                                 <span> 图片</span>
-                                <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{baseUrl + '/'+ upload_img_src}}"/>
+                                <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{ upload_img_src}}"/>
                                 <img id="modal_img2" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
                                 <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
                                 <div class="modal_img_btn">
@@ -231,7 +231,7 @@
                             </div>
                             <div class="modal_txt_one modal_img_box">
                                 <span><i class="red">*</i> 图片</span>
-                                <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{baseUrl + '/'+ upload_link_img_src}}"/>
+                                <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{ upload_link_img_src}}"/>
                                 <img id="modal_link_img2" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
                                 <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
                                 <div class="modal_img_btn">
@@ -385,7 +385,7 @@
                             </div>
                             <div class="modal_txt_one modal_img_box">
                                 <span><i class="red">*</i>图片</span>
-                                <img id="modal_edit_img"  ng-if="!upload_img_src" ng-src="{{baseUrl + '/'+ myng.recommend_shop_edit_img}}"/>
+                                <img id="modal_edit_img"  ng-if="!upload_img_src" ng-src="{{ myng.recommend_shop_edit_img}}"/>
                                 <img id="modal_edit_img2" ng-if="!!upload_img_src" ngf-src="data.file" />
                                 <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
                                 <div class="modal_img_btn">
@@ -413,7 +413,7 @@
                             </div>
                             <div class="modal_txt_one modal_img_box">
                                 <span><i class="red">*</i>图片</span>
-                                <img id="modal_edit_link_img"  ng-if="!upload_link_img_src" ng-src="{{baseUrl + '/'+ myng.link_edit_img}}" />
+                                <img id="modal_edit_link_img"  ng-if="!upload_link_img_src" ng-src="{{ myng.link_edit_img}}" />
                                 <img id="modal_edit_link_img2" ng-if="!!upload_link_img_src" ngf-src="data.file" />
                                 <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
                                 <div class="modal_img_btn">
@@ -511,7 +511,7 @@
                         <!--</div>-->
                         <div class="modal_txt_one modal_img_box">
                             <span>图片：</span>
-                            <img id="shop_details_img" ng-src="{{baseUrl + '/'+ shop_details_img}}" >
+                            <img id="shop_details_img" ng-src="{{ shop_details_img}}" >
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -560,7 +560,7 @@
                         </div>
                         <div class="modal_txt_one modal_img_box">
                             <span>图片：</span>
-                            <img id="link_details_img" ng-src="{{baseUrl + '/'+ link_details_img}}" >
+                            <img id="link_details_img" ng-src="{{ link_details_img}}" >
                         </div>
                     </div>
                     <div class="modal-footer">

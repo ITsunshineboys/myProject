@@ -41,7 +41,7 @@
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>图纸</label>
                 <div class="col-md-10">
                     <div class="cur_drawing" ng-repeat="item in all_drawing track by $index">
-                        <img ng-src="{{baseUrl + '/'+ item}}" width="100px" height="100px">
+                        <img ng-src="{{ item}}" width="100px" height="100px">
                         <div class="text-center" ng-click="upload_delete(item)">&times;</div>
                     </div>
                     <div style="width: 100px;height: 100px;display: inline-block" ngf-pattern="image/*" ng-change="arr_upload(data.file)"  ngf-select="" ng-model="data.file" ngf-multiple="false" ng-if="all_drawing.length<6">
