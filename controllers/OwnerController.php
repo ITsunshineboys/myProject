@@ -1758,6 +1758,7 @@ class OwnerController extends Controller
                         $case_works_datum['image']                 = $one_goods['cover_image'];
                         $case_works_datum['goods_name']            = $one_goods['goods_name'];
                         $case_works_datum['platform_price']        = $cost;
+                        $case_works_datum['procurement']           = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
 
                     }
                 }
@@ -1777,13 +1778,14 @@ class OwnerController extends Controller
 
             //  大理石 数据
             if ($effect['window'] != null){
-                $stone  = Goods::CategoryDetails('人造大理石');
+                $stone  = Goods::findByCategory('人造大理石');
                 foreach ($stone as &$_goods){
                     $_goods['platform_price'] = $_goods['platform_price'] / 100;
                     $_goods['supplier_price'] = $_goods['supplier_price'] / 100;
                     $_goods['purchase_price_decoration_company'] = $_goods['purchase_price_decoration_company'] / 100;
                     $_goods['quantity'] = $effect['window'];
-                    $_goods['cost'] = $_goods['quantity'] * $_goods['platform_price'];
+                    $_goods['cost'] = round($_goods['quantity'] * $_goods['platform_price'],2);
+                    $_goods['procurement'] = round($_goods['quantity'] * $_goods['purchase_price_decoration_company'],2);
                     $marble[] = $_goods;
                 }
                 $griotte = BasisDecorationService::profitMargin($marble);
@@ -1795,7 +1797,7 @@ class OwnerController extends Controller
 
             //   楼梯  数据
             if ($effect['stairway'] != null){
-                $stairs = Goods::CategoryDetails(BasisDecorationService::GOODS_NAME['stairs']);
+                $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
                 $stairs_price = BasisDecorationService::priceConversion($stairs);
                 $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
                 $stairs_details = StairsDetails::find()->asArray()->all();
@@ -1804,11 +1806,12 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-
+                $goods_c = GoodsCategory::find()->asArray()->where()->all();
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $one_stairs_price['quantity'] = 1;
-                        $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
+                        $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
+                        $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
                         $condition_stairs [] = $one_stairs_price;
                     }
                 }
