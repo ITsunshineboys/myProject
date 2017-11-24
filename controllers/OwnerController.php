@@ -1776,7 +1776,7 @@ class OwnerController extends Controller
 
 
             //  大理石 数据
-            if ($effect['window'] != null){
+            if ($effect['window'] != 0){
                 $stone  = Goods::findByCategory('人造大理石');
                 foreach ($stone as &$_goods){
                     $substr = substr($_goods['path'],0,strlen($_goods['path'])-1);
