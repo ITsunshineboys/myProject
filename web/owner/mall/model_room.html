@@ -35,8 +35,8 @@
             <div class="sub_title">户型选择</div>
             <ul>
                 <li ng-repeat="obj in huxing" class="huxing" ng-class="{'active': activeObj.id === obj.id}" ng-click="huxingFun(obj)">
-                    <div>
-                        <img ng-src="{{ obj.house_image}}"/>
+                    <div> 
+                        <img ng-src="{{'/' + obj.house_image}}"/>
                     </div>
                     <span>{{obj.particulars}} {{obj.area}}<sup>2</sup></span>
                 </li>
