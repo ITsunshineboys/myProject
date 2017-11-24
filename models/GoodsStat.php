@@ -128,7 +128,7 @@ class GoodsStat extends ActiveRecord
             ->orderBy($orderBy);
 
         return [
-            'total' => count($query->all()),
+            'total' => $query->count(),
             'details' => $query->offset($offset)->limit($size)->all(),
         ];
     }
