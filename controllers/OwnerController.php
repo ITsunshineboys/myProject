@@ -1780,7 +1780,7 @@ class OwnerController extends Controller
             if ($effect['window'] != null){
                 $stone  = Goods::findByCategory('人造大理石');
                 foreach ($stone as &$_goods){
-                    $substr = substr($stone['path'],0,strlen($one_stairs_price['path'])-1);
+                    $substr = substr($_goods['path'],0,strlen($one_stairs_price['path'])-1);
                     $where ="id in (".$substr.")";
                     $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
                     $_goods['goods_first'] = $goods_category['0']['title'];
