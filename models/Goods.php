@@ -217,7 +217,7 @@ class Goods extends ActiveRecord
 
             if (isset($goods['id'])) {
                 $goods['images'] = GoodsImage::imagesByGoodsId($goods['id']);
-                $goods['qr_code'] = UploadForm::DIR_PUBLIC . '/goods_' . $goods['id'] . '.png';
+                $goods['qr_code'] = '/' . UploadForm::DIR_PUBLIC . '/goods_' . $goods['id'] . '.png';
             }
 
             if (isset($goods['after_sale_services'])) {
@@ -1261,7 +1261,7 @@ class Goods extends ActiveRecord
             'purchase_price_designer' => StringService::formatPrice($this->purchase_price_designer / 100),
             'purchase_price_manager' => StringService::formatPrice($this->purchase_price_manager / 100),
             'after_sale_services' => $this->afterSaleServicesReadable(),
-            'qr_code' => UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
+            'qr_code' => '/' . UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
             'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
