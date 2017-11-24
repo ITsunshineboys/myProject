@@ -1394,6 +1394,8 @@ angular.module("all_controller", ['ngCookies'])
             }
             if($scope.show_harvest == true && $scope.show_address == false ){
                 //判断收货地址是否在配送范围内
+                alert("商品id" + $scope.mall_id);
+                alert("区域code" + $scope.adCode);
                 $http.post( baseUrl+'/order/judegaddress',{
                     goods_id:+$scope.mall_id,
                     districtcode:$scope.adCode
