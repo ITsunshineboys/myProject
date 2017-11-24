@@ -1,12 +1,12 @@
 <section>
     <div class="tab clearfix">
         <ul>
-            <li ng-click="show(true)" ui-sref-active="tab_blue" ui-sref=".all">全部{{orderNum.all}}</li>
-            <li ng-click="show()" ui-sref-active="tab_blue" ui-sref=".unpaid">待付款{{orderNum.unpaid}}</li>
-            <li ng-click="show()" ui-sref-active="tab_blue" ui-sref=".unshipped">待发货{{orderNum.unshipped}}</li>
-            <li ng-click="show()" ui-sref-active="tab_blue" ui-sref=".unreceived">待收货{{orderNum.unreceiveed}}</li>
-            <li ng-click="show()" ui-sref-active="tab_blue" ui-sref=".completed">已完成{{orderNum.completed}}</li>
-            <li ng-click="show()" ui-sref-active="tab_blue" ui-sref=".cancel">已取消{{orderNum.canceled}}</li>
+            <li ng-click="show(true)" ui-sref-active="active" ui-sref=".all">全部{{orderNum.all}}</li>
+            <li ng-click="show()" ui-sref-active="active" ui-sref=".unpaid">待付款{{orderNum.unpaid}}</li>
+            <li ng-click="show()" ui-sref-active="active" ui-sref=".unshipped">待发货{{orderNum.unshipped}}</li>
+            <li ng-click="show()" ui-sref-active="active" ui-sref=".unreceived">待收货{{orderNum.unreceiveed}}</li>
+            <li ng-click="show()" ui-sref-active="active" ui-sref=".completed">已完成{{orderNum.completed}}</li>
+            <li ng-click="show()" ui-sref-active="active" ui-sref=".cancel">已取消{{orderNum.canceled}}</li>
         </ul>
         <a ng-if="showDel" ui-sref="comments_del({id: id})">已删除评论</a>
     </div>
