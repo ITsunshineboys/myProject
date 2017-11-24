@@ -2298,7 +2298,7 @@ angular.module('all_controller', [])
             if (!!sessionStorage.getItem('huxingParams')) {
                 $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
-                $rootScope.goPrev()
+                history.go(-1)
             }
             $timeout.cancel($scope.time)
             $scope.time = $timeout(function () {
