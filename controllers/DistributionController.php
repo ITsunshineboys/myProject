@@ -222,7 +222,7 @@ class DistributionController extends Controller
                     'msg' =>'ok'
                 ]);
             }else{
-                    $session['distribution_token']=base64_encode(base64_encode(urlencode($user->mobile.'&'.$user->create_time)));
+                    $session['distribution_token']=base64_encode(base64_encode($user->mobile.'&'.$user->create_time));
                     $code=200;
                     return Json::encode([
                         'code' => $code,
@@ -237,7 +237,7 @@ class DistributionController extends Controller
      */
     public function actionDistributionUserCenter(){
         $session = Yii::$app->session;
-        $data=explode('&', base64_decode(base64_decode(urldecode($session['distribution_token']))));
+        $data=explode('&', base64_decode(base64_decode($session['distribution_token'])));
         if (!$data)
         {
             $code=1052;
