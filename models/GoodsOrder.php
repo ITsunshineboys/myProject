@@ -277,13 +277,13 @@ class GoodsOrder extends ActiveRecord
             }
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
-                ->where(['supplier_id'=>$supplier_id])
+                ->where(['supplier_id'=>$goods['supplier_id']])
                 ->andWhere(['create_date'=>$date])
                 ->one();
             if (!$GoodsStat)
             {
                 $GoodsStat=new GoodsStat();
-                $GoodsStat->supplier_id=$supplier_id;
+                $GoodsStat->supplier_id=$goods['supplier_id'];
                 $GoodsStat->sold_number=$goods_num;
                 $GoodsStat->amount_sold=$post['total_amount'];
                 $GoodsStat->create_date=$date;
@@ -428,13 +428,13 @@ class GoodsOrder extends ActiveRecord
             }
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
-                ->where(['supplier_id'=>$supplier_id])
+                ->where(['supplier_id'=>$goods['supplier_id']])
                 ->andWhere(['create_date'=>$date])
                 ->one();
             if (!$GoodsStat)
             {
                 $GoodsStat=new GoodsStat();
-                $GoodsStat->supplier_id=$supplier_id;
+                $GoodsStat->supplier_id=$goods['supplier_id'];
                 $GoodsStat->sold_number=$goods_num;
                 $GoodsStat->amount_sold=$msg['total_fee'];
                 $GoodsStat->create_date=$date;
