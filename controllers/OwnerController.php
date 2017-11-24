@@ -1486,7 +1486,6 @@ class OwnerController extends Controller
                     }
                 }
             }
-var_dump($goods);exit;
 //            foreach ($goods as &$default){
 //                    $default['goods_price'] = $default['goods_price'] * 1;
 ////                if (empty($default['goods_price'])){
