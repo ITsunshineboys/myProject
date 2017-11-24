@@ -821,6 +821,7 @@ class BasisDecorationService
         foreach ($goods as $one) {
             if ($one['title'] == $project) {
                 $goods_price = $one['platform_price'];
+                $goods_procurement = $one['purchase_price_decoration_company'];
             }
         }
         $goods_unit = 0;
@@ -836,7 +837,8 @@ class BasisDecorationService
         //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
         $mud_make['quantity'] = ceil($area * $craft / $goods_unit);
         //        水泥费用:个数×抓取的商品价格
-        $mud_make['cost'] = $mud_make['quantity'] * $goods_price;
+        $mud_make['cost'] = round($mud_make['quantity'] * $goods_price,2);
+        $mud_make['procurement'] = round($mud_make['quantity'] * $goods_procurement,2);
         return $mud_make;
     }
 
@@ -1434,12 +1436,15 @@ class BasisDecorationService
             {
                 case $goods_price['id'] == $kitchen_id:
                     $goods_attr_details['kitchen']['price'] =  $goods_price['platform_price'];
+                    $goods_attr_details['kitchen']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
                     break;
                 case $goods_price['id'] == $toilet_id:
                     $goods_attr_details['toilet']['price'] =  $goods_price['platform_price'];
+                    $goods_attr_details['toilet']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
                     break;
                 case $goods_price['id'] == $hall_id:
                     $goods_attr_details['hall']['price'] =  $goods_price['platform_price'];
+                    $goods_attr_details['hall']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
                     break;
             }
         }
