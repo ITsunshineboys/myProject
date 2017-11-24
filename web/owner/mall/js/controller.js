@@ -2270,26 +2270,26 @@ angular.module('all_controller', [])
         //修改搜索小区字段实时请求小区数据
         $scope.$watch('toponymy', function (newVal, oldVal) {
             console.log(newVal)
-            // if (newVal != '') {
-            //     _ajax.get('/owner/search', {
-            //         str: newVal
-            //     }, function (res) {
-            //         console.log(res)
-            //         $scope.cur_all_house = res.data.list_effect
-            //         $scope.search_data = []//搜索出的小区
-            //         for (let [key, value] of res.data.list_effect.entries()) {
-            //             $scope.search_data.push({
-            //                 id: value.id,
-            //                 toponymy: value.toponymy,
-            //                 site_particulars: value.site_particulars,
-            //                 district_code: value.district_code,
-            //                 street: value.street
-            //             })
-            //         }
-            //     })
-            // } else {
-            //     $scope.search_data = []
-            // }
+            if (newVal != ''&&newVal!=undefined) {
+                _ajax.get('/owner/search', {
+                    str: newVal
+                }, function (res) {
+                    console.log(res)
+                    $scope.cur_all_house = res.data.list_effect
+                    $scope.search_data = []//搜索出的小区
+                    for (let [key, value] of res.data.list_effect.entries()) {
+                        $scope.search_data.push({
+                            id: value.id,
+                            toponymy: value.toponymy,
+                            site_particulars: value.site_particulars,
+                            district_code: value.district_code,
+                            street: value.street
+                        })
+                    }
+                })
+            } else {
+                $scope.search_data = []
+            }
         })
         //取消返回
         $scope.cancel = function () {
