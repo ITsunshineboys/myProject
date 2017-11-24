@@ -1480,7 +1480,7 @@ class OwnerController extends Controller
                 foreach ($post['list'] as &$materials){
                     if ($materials['price'] != 0 || $materials['price'] != null){
                          if ($one_coefficient['classify'] == $materials['one_title']){
-                            $materials['goods_price'] = $materials['price'] * $one_coefficient['coefficient'];
+                            $materials['goods_price'] = $materials['procurement'] * $one_coefficient['coefficient'];
                             $goods[] = $materials;
                          }
                     }
@@ -1846,9 +1846,9 @@ class OwnerController extends Controller
             $_goods [] = $material;
             $_goods [] = $griotte;
         }
-
         $array_filter = array_filter($_goods);
         $array_merge = array_merge($array_filter);
+
 
         return Json::encode([
             'code' => 200,
