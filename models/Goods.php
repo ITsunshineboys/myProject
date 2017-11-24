@@ -553,7 +553,7 @@ class Goods extends ActiveRecord
     }
 
     /**
-     * Get categories by title
+     * Get goods by title
      *
      * @param string $title title
      * @param array $select select fields default id, title etc.
@@ -565,6 +565,26 @@ class Goods extends ActiveRecord
         $goodsList = self::find()
             ->select($select)
             ->where(['like', 'title', $title])
+            ->orderBy($orderBy)
+            ->asArray()
+            ->all();
+        return self::_format($goodsList);
+    }
+
+    /**
+     * Get online goods by title
+     *
+     * @param string $title title
+     * @param array $select select fields default id, title etc.
+     * @param  array $orderBy order by fields default sold_number desc
+     * @return array
+     */
+    public static function findValidByTitle($title, array $select = self::CATEGORY_GOODS_APP, $orderBy = ['sold_number' => SORT_DESC])
+    {
+        $goodsList = self::find()
+            ->select($select)
+            ->where(['status' => self::STATUS_ONLINE])
+            ->andWhere(['like', 'title', $title])
             ->orderBy($orderBy)
             ->asArray()
             ->all();

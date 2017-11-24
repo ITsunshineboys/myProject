@@ -598,6 +598,23 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get online categories by title
+     *
+     * @param string $title title
+     * @param array $select select fields default id, title and icon
+     * @return array
+     */
+    public static function findValidLvl3ByTitle($title, array $select = self::APP_FIELDS)
+    {
+        return self::find()
+            ->select($select)
+            ->where(['deleted' => 0, 'level' => self::LEVEL3])
+            ->andWhere(['like', 'title', $title])
+            ->asArray()
+            ->all();
+    }
+
+    /**
      * Reset category attribute has_style and/or has_series
      *
      * @param ActiveRecord $operator operator

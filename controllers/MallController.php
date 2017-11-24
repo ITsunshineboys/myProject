@@ -465,11 +465,11 @@ class MallController extends Controller
 
         $keyword = trim(Yii::$app->request->get('keyword', ''));
         if ($keyword) {
-            $categories = GoodsCategory::findByTitle($keyword);
+            $categories = GoodsCategory::findValidLvl3ByTitle($keyword);
             if ($categories) {
                 $res['categories'] = $categories;
             } else {
-                $goods = Goods::findByTitle($keyword);
+                $goods = Goods::findValidByTitle($keyword);
                 if ($goods) {
                     $res['goods'] = $goods;
                     $res['category_id'] = Goods::findOne($goods[0]['id'])->category_id;
