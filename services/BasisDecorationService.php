@@ -1476,13 +1476,15 @@ class BasisDecorationService
                     }
                     $area = $length * $breadth;
                     $one_goods['quantity'] = ceil($post['bedroom_area'] / $area);
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $wood_floor [] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['marble']: // 大理石
                     if ($post['window'] > 1) {
                         $one_goods['quantity'] = $post['window'];
-                        $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                        $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                        $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                         $marble [] = $one_goods;
                     }else {
                         $marble = null;
@@ -1490,92 +1492,110 @@ class BasisDecorationService
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['elbow']: // 弯头
                     $one_goods['quantity'] = $post['toilet'] * 4;
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $elbow[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['timber_door'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']: //木门
                     $one_goods['quantity'] = $post['bedroom'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $timber_door[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['bath_heater'] && $one_goods['series_id'] == $post['series'] : //浴霸
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $bath_heater[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['ventilator'] && $one_goods['series_id'] == $post['series'] : //换气扇
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $ventilator[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['ceiling_light'] && $one_goods['series_id'] == $post['series'] : //吸顶灯
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $ceiling_light[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['tap'] && $one_goods['series_id'] == $post['series'] : //水龙头
                     $one_goods['quantity'] = $post['toilet'] + $post['kitchen'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $tap[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['bed'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']: //床
                     $one_goods['quantity'] = $post['bedroom'] ;
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $bed[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['night_table'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']: //床头柜
                     $one_goods['quantity'] = $post['bedroom'] * 2;
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $night_table[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['kitchen_ventilator'] && $one_goods['series_id'] == $post['series'] : //抽油烟机
                     $one_goods['quantity'] = $post['kitchen'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $kitchen_ventilator[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['stove'] && $one_goods['series_id'] == $post['series'] : //灶具
                     $one_goods['quantity'] = $post['kitchen'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $stove[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['upright_air_conditioner'] && $one_goods['series_id'] == $post['series'] : //立柜空调
                     $one_goods['quantity'] = $post['hall'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $upright_air_conditioner[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['hang_air_conditioner'] && $one_goods['series_id'] == $post['series'] : //壁挂空调
                     $one_goods['quantity'] = $post['bedroom'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $hang_air_conditioner[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['lamp'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'] : //灯具
                     $one_goods['quantity'] = $post['bedroom'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $lamp[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['mattress'] && $one_goods['series_id'] == $post['series'] : //床垫
                     $one_goods['quantity'] = $post['bedroom'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $mattress[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['closestool'] && $one_goods['series_id'] == $post['series'] : //马桶
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $closestool[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['bath_cabinet'] && $one_goods['series_id'] == $post['series'] : //浴柜
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $bath_cabinet[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['sprinkler'] && $one_goods['series_id'] == $post['series'] : //花洒套装
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $sprinkler[] = $one_goods;
                     break;
                 case $one_goods['title'] == self::GOODS_NAME['shower_partition'] && $one_goods['series_id'] == $post['series'] : //淋浴隔断
                     $one_goods['quantity'] = $post['toilet'];
-                    $one_goods['cost'] = $one_goods['platform_price'] * $one_goods['quantity'];
+                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
+                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $shower_partition[] = $one_goods;
                     break;
             }
@@ -1724,6 +1744,7 @@ class BasisDecorationService
                 if ($one['title'] == $value['title']){
                     $one['quantity'] =$value['quantity'];
                     $one['cost'] = round($one['quantity'] * $one['platform_price'],2);
+                    $one['procurement'] = round($one['quantity'] * $one['purchase_price_decoration_company'],2);
                 }
             }
         }

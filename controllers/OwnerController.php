@@ -1556,6 +1556,7 @@ class OwnerController extends Controller
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = 1;
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
+                    $one_stairs_price['procurement'] = $one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
                 }
             }
