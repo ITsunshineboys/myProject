@@ -230,10 +230,10 @@ table tr{
   cursor: default;
 }
 
-.active{
-  background:#487af8!important;
-  color: white!important;
-}
+/*.active{*/
+  /*background:#487af8!important;*/
+  /*color: white!important;*/
+/*}*/
 /*.modal-backdrop {*/
   /*display: none!important;*/
   /*opacity: 0 !important;*/
