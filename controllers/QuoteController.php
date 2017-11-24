@@ -1949,7 +1949,11 @@ class QuoteController extends Controller
         }
 
 
-        $goods = Goods::find()->where(['sku'=>$sku])->andWhere(['category_id'=>$goods_category['id']])->one();
+        $goods = Goods::find()
+            ->where(['sku'=>$sku])
+            ->andWhere(['category_id'=>$goods_category['id']])
+            ->andWhere(['status'=>2])
+            ->one();
         if (!$goods){
             $code = 1043;
             return Json::encode([
