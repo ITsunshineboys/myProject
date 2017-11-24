@@ -22,6 +22,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
 use app\services\AuthService;
+use yii\web\Request;
 
 class SupplierCashController extends Controller
 {
@@ -370,6 +371,10 @@ class SupplierCashController extends Controller
         ]);
     }
 
+    /**
+     * 业主提现详情
+     * @return int|string
+     */
     public function actionOwnerCashedDetail(){
         $user = self::userIdentity();
         if (!is_int($user)) {
@@ -397,6 +402,44 @@ class SupplierCashController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $data = OwnerCashManager::GetCashView($transaction_no,$user_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+
+
+    /**
+     * 处理业主提现
+     * @return int|string
+     */
+    public function actionOwnerDoCashDeal(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+        $code = 1000;
+        $request = \Yii::$app->request;
+        $cash_id = (int)$request->post('cash_id', '');
+        $status = (int)$request->post('status', '');
+        $reason = trim(htmlspecialchars($request->post('reason', '')), '');
+        $real_money = (int)$request->post('real_money', '');
+        if (($status != self::CASH_STATUS_DONE && $real_money <= 0)  || !$cash_id
+        ) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=OwnerCashManager::doCash($cash_id, $status, $reason, $real_money);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code]
+        ]);
+
+
     }
     /**
      * 获取今日入账列表
@@ -536,7 +579,7 @@ class SupplierCashController extends Controller
 
 
     /**
-     * 大后台提现详情操作页
+     * 大后台商家提现详情操作页
      * @return mixed
      */
     public function actionCashActionDetail()

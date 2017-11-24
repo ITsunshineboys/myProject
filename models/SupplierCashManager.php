@@ -135,6 +135,9 @@ class SupplierCashManager extends ActiveRecord
     {
         return (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
     }
+    public static function GetUser($user_id){
+        return (new Query())->from(OwnerCashManager::USER)->where(['id' => $user_id])->one();
+    }
 
 
     /**

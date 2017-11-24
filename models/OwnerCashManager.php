@@ -6,6 +6,7 @@ use app\controllers\SupplierCashController;
 use app\services\ModelService;
 use yii\data\Pagination;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\db\Query;
 
 class OwnerCashManager extends ActiveRecord {
@@ -66,6 +67,14 @@ class OwnerCashManager extends ActiveRecord {
             ->count();
     }
 
+    /**
+     * 业主提现列表
+     * @param array $where
+     * @param int $page
+     * @param int $size
+     * @param string $orderBy
+     * @return array
+     */
     public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
 
@@ -105,4 +114,154 @@ class OwnerCashManager extends ActiveRecord {
         return ModelService::pageDeal($arr, $count, $page, $size);
     }
 
+    /**
+     * 业主提现详情
+     * @param $transaction_no
+     * @param $user_id
+     * @return array|null|ActiveRecord
+     */
+    public static function GetCashView($transaction_no,$user_id)
+    {
+
+        $query =UserCashregister::find()
+            ->asArray()
+            ->where(['transaction_no' => $transaction_no, 'role_id' => self::OWNER_ROLE]);
+
+        $arr = $query->one();
+        if (!$arr) {
+            return null;
+        }
+        if ($arr['apply_time']) {
+            $arr['apply_time'] = date('Y-m-d H:i', $arr['apply_time']);
+        }
+        if ($arr['handle_time']) {
+            $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
+        }
+        $bankcard = SupplierCashManager::GetBankcard($arr['bank_log_id']);
+        $user = SupplierCashManager::GetUser($user_id);
+        if (!$bankcard || !$user) {
+            return null;
+        }
+
+        $arr['card_no'] = $bankcard['bankcard'];
+        $arr['nickname'] = $user['nickname'];
+        $arr['bank_name'] = $bankcard['bankname'];
+        $arr['position'] = $bankcard['position'];
+        $arr['bank_branch'] = $bankcard['bankbranch'];
+        $arr['username'] = $bankcard['username'];
+        $arr['cash_money'] = sprintf('%.2f', (float)$arr['cash_money'] / 100);
+        if ($arr['real_money']) {
+            $arr['real_money'] = sprintf('%.2f', (float)$arr['real_money'] / 100);
+            $arr['lost_money'] = sprintf('%.2f', $arr['cash_money'] - $arr['real_money']);
+        } else {
+            $arr['lost_money'] = null;
+            $arr['real_money'] = null;
+        }
+
+        $arr['status'] = SupplierCashController::USER_CASH_STATUSES[$arr['status']];
+        return $arr;
+    }
+
+    /**
+     * 处理业主提现
+     * @param $cash_id
+     * @param $status
+     * @param $reason
+     * @param $real_money
+     * @return int
+     */
+    public static function doCash($cash_id, $status, $reason, $real_money){
+        $owner_cash = (new Query())
+            ->from(self::USER_CASHREGISTER)
+            ->where(['id' => $cash_id, 'role_id' => self::OWNER_ROLE])
+            ->select(['cash_money', 'uid', 'status', 'transaction_no'])
+            ->one();
+        $code=1000;
+        $cash_money = $owner_cash['cash_money'];
+        $user_id = (int)$owner_cash['uid'];
+        $old_status = (int)$owner_cash['status'];
+        $transaction_no = $owner_cash['transaction_no'];
+        //初始状态不能为已经处理过的
+        if (!$cash_money || !$user_id || !$old_status
+        ) {
+            return $code;
+        }
+        //提现失败
+        if ($status == SupplierCashController::CASH_STATUS_FAIL) {
+            $real_money = 0;
+        }
+        //提现成功
+        if ($status == SupplierCashController::CASH_STATUS_DONE) {
+            $real_money && $real_money *= 100;
+            $real_money > $cash_money && $real_money = $cash_money;
+        }
+        $supplier_accessdetail = UserAccessdetail::find()
+            ->where(['transaction_no' => $transaction_no, 'role_id' => self::OWNER_ROLE])
+            ->one();
+
+
+        if (!$supplier_accessdetail) {
+            return $code;
+        }
+
+        $time = time();
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            \Yii::$app->db->createCommand()
+                ->update(self::USER_CASHREGISTER, [
+                    'status' => $status,
+                    'supplier_reason' => $reason,
+                    'real_money' => $real_money,
+                    'handle_time' => $time
+                ], [
+                    'id' => $cash_id
+                ])
+                ->execute();
+            //提现失败
+            if ($status == SupplierCashController::CASH_STATUS_FAIL) {
+                //钱退回供货商
+                $user = User::find()->where(['uid' => $user_id])->one();
+                if (!$user) {
+                    return $code;
+                }
+                $user->balance += $cash_money;
+                $user->availableamount += $cash_money;
+                if(!$user->save(false)){
+                    $trans->rollBack();
+                    $code=500;
+                    return $code;
+
+                }
+                //修改明细单数据
+                $supplier_accessdetail->access_type = SupplierCashController::ACCESS_TYPE_REJECT;
+                if(!$supplier_accessdetail->update(false)){
+                    $trans->rollBack();
+                    $code=500;
+                    return $code;
+                }
+
+
+
+            }
+            //提现成功
+            if ($status == SupplierCashController::CASH_STATUS_DONE) {
+                $supplier_accessdetail->access_type = SupplierCashController::ACCESS_TYPE_CASH_DONE;
+                if(!$supplier_accessdetail->update(false)){
+                    $trans->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }
+
+            $trans->commit();
+            $code=200;
+            return $code;
+
+        } catch (Exception $e) {
+            $trans->rollBack();
+            $code=500;
+            return $code;
+        }
+
+    }
 }
