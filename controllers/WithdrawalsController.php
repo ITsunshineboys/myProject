@@ -363,7 +363,9 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier= Supplier::find()->where(['uid'=>$user->id])->one();
+        $supplier= Supplier::find()
+            ->where(['uid'=>$user->id])
+            ->one();
         if (!$supplier){
             $code=1034;
             return Json::encode([

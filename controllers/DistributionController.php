@@ -183,15 +183,8 @@ class DistributionController extends Controller
             ]);
         }
         $codeValidationRes = SmValidationService::validCode($mobile, $code);
-        if (!$codeValidationRes == true) {
-            if ($codeValidationRes==1020)
-            {
-                $code = $codeValidationRes;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        if ($codeValidationRes !== true)
+        {
             $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
