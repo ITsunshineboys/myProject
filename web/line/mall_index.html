@@ -14,7 +14,7 @@
         <div id="swiperList" class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide" ng-repeat="n in swiper_img">
-                    <img class="size_img" ng-src="{{baseUrl + '/'+n.image}}" ng-click="getDetails(n)">
+                    <img class="size_img" ng-src="{{n.image}}" ng-click="getDetails(n)">
                 </div>
             </div>
             <!-- 如果需要分页器 -->
@@ -27,7 +27,7 @@
         <ul class="classify-ul">
             <li ng-repeat="n in message" ui-sref="minute_class({'pid':n.id ,'title':n.title})">
                 <a >
-                    <img src="{{baseUrl + '/'+n.icon}}" alt=""/><br/>
+                    <img src="{{n.icon}}" alt=""/><br/>
                     <!--<img src="images/material.png" alt=""/><br/>-->
                 <!--<img src="{{n.icon}}" alt=""/><br/>-->
                 <span>{{n.title}}</span>
@@ -48,7 +48,7 @@
                     <!--platform_price:n.platform_price,url:n.url})"-->
                     <a  ng-click="getProduct(n)">
                         <div class="img_box">
-                            <img src="{{baseUrl + '/'+n.image}}" alt=""/>
+                            <img src="{{n.image}}" alt=""/>
                         </div>
 
                         <div class="title2">{{n.title}}</div>

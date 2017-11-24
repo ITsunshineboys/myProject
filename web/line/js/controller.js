@@ -286,7 +286,7 @@ angular.module("all_controller", ['ngCookies'])
                     url:baseUrl+"/mall/search?keyword="+$scope.data
                 }).then( function successCallback (response) {
                     console.log(response);
-                    $scope.commoditySearch= response.data.data.search.goods;
+                    $scope.commoditySearch = response.data.data.search.goods;
                     $scope.commoditySearchTwo= response.data.data.search.categories;
                     if($scope.commoditySearch.length > 0) {
                         for (let [key,item] of response.data.data.search.goods.entries()) { //判断输入框数据和数据库内容匹配
@@ -322,7 +322,14 @@ angular.module("all_controller", ['ngCookies'])
         };
         //跳转道某个商品详情
         $scope.getBackData = function (item) {
-            $state.go("details",{'pid':$scope.pid,'id':item.id,'flag':0})
+            console.log(item);
+
+            if($scope.commoditySearch.length == 0){
+                $state.go("details",{'pid':$scope.pid,'id':item.id,'flag':0})
+            }else {
+                sessionStorage.setItem('flag_goods','htsb');
+                $state.go("product_details",{'mall_id':item.id,'id':item.id,'flag':0})
+            }
         }
     })
 
@@ -732,6 +739,8 @@ angular.module("all_controller", ['ngCookies'])
         $scope.getRetun = function () {
             if (sessionStorage.getItem('wxflag') == null) {
                 $state.go('home')
+            }else if(sessionStorage.getItem('flag_goods') !=null){
+                history.go(-2);
             }else {
                 history.go(-1);
             }

@@ -99,7 +99,7 @@
                             <div class="flex_div" >
                                 <div class="item_commodity clearfix"  ng-repeat="n in supplier_goods" ng-click="allGetProdouct(n)">
                                     <div class="item_commodity_divimg pull-left">
-                                        <img src="{{baseUrl + '/'+n.cover_image}}" alt="" class="img_item " />
+                                        <img src="{{n.cover_image}}" alt="" class="img_item " />
                                     </div>
                                     <div class="item_commodity_comment pull-left">
                                         <p class="comment_one">{{n.title}}</p>
@@ -141,7 +141,7 @@
                     <div class="modal-body" >
                         <!--头部-->
                         <div class="header_shop">
-                            <img src="{{baseUrl + '/'+t_icon}}" alt="" class="shop_img"/>
+                            <img src="{{t_icon}}" alt="" class="shop_img"/>
                             <span>{{t_shop_name}}</span>
                             <!--<div>-->
                             <!--<p class="num">12k</p>-->

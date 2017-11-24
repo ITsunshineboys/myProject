@@ -33,7 +33,7 @@
                                 <li  ng-repeat="item1 in commentThree[item.id]" class="animated fadeIn">
                                     <a ui-sref="details({id:item1.id,pid:pid})">
                                         <div class="img_box">
-                                            <img src="{{baseUrl + '/'+item1.icon}}" id="img_three" alt=""/>
+                                            <img src="{{item1.icon}}" id="img_three" alt=""/>
                                         </div>
                                         <div class="font_class">{{item1.title}}</div>
                                     </a>

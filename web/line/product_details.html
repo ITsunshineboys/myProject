@@ -12,7 +12,7 @@
             <div id="swiperList" class="swiper-container"  style="height: 30rem">
                 <div  class="swiper-wrapper" >
                     <div class="swiper-slide" ng-repeat="n in datailsShop.images" id="size_img" >
-                        <img src="{{baseUrl + '/'+n}}" alt="" />
+                        <img src="{{n}}" alt="" />
                     </div>
                 </div>
                 <!-- 如果需要分页器 -->
@@ -51,7 +51,7 @@
         <div class="shop_header" >
             <div class="shop_header_child clearfix" >
                 <div class="shop_header_child_imgbox pull-left">
-                    <img src="{{baseUrl + '/'+datailsShop.supplier.icon}}" alt=""/>
+                    <img src="{{datailsShop.supplier.icon}}" alt=""/>
                 </div>
                 <div class="shop_name pull-left">{{datailsShop.supplier.shop_name}}</div>
             </div>
@@ -123,7 +123,7 @@
                     <div class="modal-body clearfix">
                         <div class="clearfix">
                             <div class="add_cart pull-left">
-                                <img src="{{baseUrl + '/'+datailsShop.cover_image}}" alt=""/>
+                                <img src="{{datailsShop.cover_image}}" alt=""/>
                             </div>
                             <div class="pic_add pull-left">
                                 <div class="pic_span">￥{{datailsShop.platform_price}}</div>
