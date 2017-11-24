@@ -238,18 +238,18 @@ class BasisDecorationService
 
         //线路个数计算 ,线路费用计算
         $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
-        $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
-        $electricity['wire_procurement'] = $electricity['wire_quantity'] * $goods_procurement;
+        $electricity['wire_cost'] = round($electricity['wire_quantity'] * $goods_price,2);
+        $electricity['wire_procurement'] = round($electricity['wire_quantity'] * $goods_procurement,2);
 
         //线管个数计算,线管费用计算
         $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
-        $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
-        $electricity['spool_procurement'] =  $electricity['spool_quantity'] * $spool_procurement;
+        $electricity['spool_cost'] =  round($electricity['spool_quantity'] * $spool_price,2);
+        $electricity['spool_procurement'] =  round($electricity['spool_quantity'] * $spool_procurement,2);
 
         // 底盒个数计算.底盒费用计算
         $electricity['bottom_quantity'] = $points;
-        $electricity['bottom_cost'] = $points * $bottom_case;
-        $electricity['bottom_procurement'] = $points * $bottom_procurement;
+        $electricity['bottom_cost'] = round($points * $bottom_case,2);
+        $electricity['bottom_procurement'] = round($points * $bottom_procurement,2);
 
         //总费用
         $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
@@ -1644,7 +1644,7 @@ class BasisDecorationService
             return false;
         }
 
-        
+
         $material ['total_cost'] = round($material_price['total_cost'],2);
         $material ['material'] [] = BasisDecorationService::profitMargin($wire);
         $material ['material'] []= BasisDecorationService::profitMargin($spool);
