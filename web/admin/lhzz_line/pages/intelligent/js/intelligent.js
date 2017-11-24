@@ -884,13 +884,25 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     })
                 } else {
                     $scope.submitted = false
-                    $scope.drawing_informations[$scope.drawing_index] = {
-                        'index': $scope.cur_house.index,
-                        'drawing_name': $scope.cur_drawing_name,
-                        'house_type_name': $scope.cur_house,
-                        'series': $scope.cur_series,
-                        'style': $scope.cur_style,
-                        'drawing_list': $scope.all_drawing
+                    if($scope.drawing_informations[$scope.drawing_index].id!=undefined){
+                        $scope.drawing_informations[$scope.drawing_index] = {
+                            'id':$scope.drawing_informations[$scope.drawing_index].id,
+                            'index': $scope.cur_house.index,
+                            'drawing_name': $scope.cur_drawing_name,
+                            'house_type_name': $scope.cur_house,
+                            'series': $scope.cur_series,
+                            'style': $scope.cur_style,
+                            'drawing_list': $scope.all_drawing
+                        }
+                    }else{
+                        $scope.drawing_informations[$scope.drawing_index] = {
+                            'index': $scope.cur_house.index,
+                            'drawing_name': $scope.cur_drawing_name,
+                            'house_type_name': $scope.cur_house,
+                            'series': $scope.cur_series,
+                            'style': $scope.cur_style,
+                            'drawing_list': $scope.all_drawing
+                        }
                     }
                     let all_modal = function ($scope, $uibModalInstance) {
                         $scope.cur_title = '保存成功'
