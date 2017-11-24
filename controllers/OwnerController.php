@@ -1804,7 +1804,7 @@ class OwnerController extends Controller
 
 
             //   楼梯  数据
-            if ($effect['stairway'] != null){
+            if ($effect['stairway'] != 0){
                 $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
                 $stairs_price = BasisDecorationService::priceConversion($stairs);
                 $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
