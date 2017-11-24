@@ -1814,6 +1814,9 @@ class OwnerController extends Controller
                         $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
 
                         $one_stairs_price['quantity'] = 1;
+                        $one_stairs_price['goods_first'] = $goods_category['0']['title'];
+                        $one_stairs_price['goods_second'] = $goods_category['1']['title'];
+                        $one_stairs_price['goods_three'] = $goods_category['2']['title'];
                         $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
                         $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
                         $condition_stairs [] = $one_stairs_price;
@@ -1827,7 +1830,7 @@ class OwnerController extends Controller
 
         // $goods_     $material    $griotte
 
-        var_dump($goods_);exit;
+        var_dump($material);exit;
 
         return Json::encode([
             'code' => 200,
