@@ -2,6 +2,7 @@
  
 namespace app\controllers;
 use app\models\OrderAfterSaleImage;
+use app\services\ModelService;
 use Yii;
 use app\models\OrderPlatForm;
 use app\models\Addressadd;
@@ -1011,6 +1012,11 @@ class OrderController extends Controller
                             'msg' => Yii::$app->params['errorCodes'][$code],
                         ]);
                     }
+                    if($startTime==$endTime){
+                        list($startTime, $endTime) =ModelService::timeDeal($startTime);
+                    }else{
+                        $endTime && $endTime .= ' 23:59:59';
+                    }
                 }else{
                     list($startTime, $endTime) = StringService::startEndDate($timeType);
                 }
@@ -1365,6 +1371,12 @@ class OrderController extends Controller
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
+            }
+
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $endTime && $endTime .= ' 23:59:59';
             }
         }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
