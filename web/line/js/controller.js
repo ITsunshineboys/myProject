@@ -1398,13 +1398,12 @@ angular.module("all_controller", ['ngCookies'])
                     districtcode:$scope.adCode
                 },config).then(function (response) {
                     // alert(JSON.stringify(response));
-                    console.log(response);
+                    // console.log(response);
                     $scope.code = response.data.code;
                     if($scope.code == 1000){
-                        console.log(123456);
                         $('#order_address_modal').modal('show');
                         // $scope.order_address_model = '#order_address_modal';
-                        $scope.order_order = '您好，您的地址超过商品配送范围内，请更换商品或收货地址！'
+                        $scope.order_order = '您好，您的地址超过商品配送范围内，请更换商品或收货地址！';
                         return
                     }
                     if($scope.code == 200){
@@ -1419,8 +1418,8 @@ angular.module("all_controller", ['ngCookies'])
                             // 是微信浏览器打开
                             if($scope.codeWX == 200){  // 微信支付
                                 // 微信接口 === 调用
-                                // alert(sessionStorage.getItem('address_id'))
-                                // alert(JSON.stringify(sessionStorage.getItem('address_id')))
+                                alert(sessionStorage.getItem('address_id'))
+                                alert(JSON.stringify(sessionStorage.getItem('address_id')))
                                 $http({     //获取openid 的地址
                                     method: 'get',
                                     url:  baseUrl+'/order/lineplaceorder',
