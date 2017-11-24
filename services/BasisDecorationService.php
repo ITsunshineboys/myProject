@@ -202,14 +202,17 @@ class BasisDecorationService
             switch ($one) {
                 case $one['title'] == self::GOODS_NAME['reticle'] || $one['title'] == self::GOODS_NAME['wire']:
                     $goods_price = $one['platform_price'];
+                    $goods_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
                 case $one['title'] == self::GOODS_NAME['spool']:
                     $spool_price = $one['platform_price'];
+                    $spool_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
                 case $one['title'] == self::GOODS_NAME['bottom_case']:
                     $bottom_case = $one['platform_price'];
+                    $bottom_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
             }
@@ -236,14 +239,17 @@ class BasisDecorationService
         //线路个数计算 ,线路费用计算
         $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
         $electricity['wire_cost'] = $electricity['wire_quantity'] * $goods_price;
+        $electricity['wire_procurement'] = $electricity['wire_quantity'] * $goods_procurement;
 
         //线管个数计算,线管费用计算
         $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
         $electricity['spool_cost'] =  $electricity['spool_quantity'] * $spool_price;
+        $electricity['spool_procurement'] =  $electricity['spool_quantity'] * $spool_procurement;
 
         // 底盒个数计算.底盒费用计算
         $electricity['bottom_quantity'] = $points;
         $electricity['bottom_cost'] = $points * $bottom_case;
+        $electricity['bottom_procurement'] = $points * $bottom_procurement;
 
         //总费用
         $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
@@ -1616,16 +1622,19 @@ class BasisDecorationService
                 case $one_weak_current['title'] == self::GOODS_NAME['reticle'] || $one_weak_current['title'] == self::GOODS_NAME['wire']:
                     $one_weak_current['quantity'] = $material_price['wire_quantity'];
                     $one_weak_current['cost'] = $material_price['wire_cost'];
+                    $one_weak_current['procurement'] = $material_price['wire_procurement'];
                     $wire [] =  $one_weak_current;
                     break;
                 case $one_weak_current['title'] == self::GOODS_NAME['spool']:
                     $one_weak_current['quantity'] = $material_price['spool_quantity'];
                     $one_weak_current['cost'] = $material_price['spool_cost'];
+                    $one_weak_current['procurement'] = $material_price['spool_procurement'];
                     $spool [] =  $one_weak_current;
                     break;
                 case $one_weak_current['title'] == self::GOODS_NAME['bottom_case']:
                     $one_weak_current['quantity'] = $material_price['bottom_quantity'];
                     $one_weak_current['cost'] = $material_price['bottom_cost'];
+                    $one_weak_current['procurement'] = $material_price['bottom_procurement'];
                     $bottom [] =  $one_weak_current;
                     break;
             }

@@ -1729,7 +1729,7 @@ class OwnerController extends Controller
                 }
             }
 
-
+            //  匹配 通用管理 数据
             $assort_goods = AssortGoods::find()->asArray()->where(['state'=>0])->all();
             $goods_ = [];
             foreach ($assort_goods as $assort){
@@ -1741,8 +1741,9 @@ class OwnerController extends Controller
             }
 
 
+            //  大理石 数据
             if ($effect['window'] != null){
-                $stone  = Goods::assortList('人造大理石');
+                $stone  = Goods::CategoryDetails('人造大理石');
                 foreach ($stone as &$_goods){
                     $_goods['platform_price'] = $_goods['platform_price'] / 100;
                     $_goods['supplier_price'] = $_goods['supplier_price'] / 100;
@@ -1757,8 +1758,10 @@ class OwnerController extends Controller
             }
 
 
+
+            //   楼梯  数据
             if ($effect['stairway'] != null){
-                $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
+                $stairs = Goods::CategoryDetails(BasisDecorationService::GOODS_NAME['stairs']);
                 $stairs_price = BasisDecorationService::priceConversion($stairs);
                 $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
                 $stairs_details = StairsDetails::find()->asArray()->all();
@@ -1780,6 +1783,11 @@ class OwnerController extends Controller
                 $material = [];
             }
         }
+
+        // $goods_     $material    $griotte
+
+        var_dump($griotte);exit;
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
