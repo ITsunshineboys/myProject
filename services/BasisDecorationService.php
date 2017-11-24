@@ -1018,7 +1018,8 @@ class BasisDecorationService
 //        个数：（水泥用量÷抓取的商品的KG）
         $cement['quantity'] = ceil($new_dosage/$value);
 //        水泥费用：个数×抓取的商品价格
-        $cement['cost'] = $cement['quantity'] * $goods['platform_price'];
+        $cement['cost'] = round($cement['quantity'] * $goods['platform_price'],2);
+        $cement['procurement'] = round($cement['quantity'] * $goods['purchase_price_decoration_company'],2);
         return $cement;
     }
 
@@ -1052,10 +1053,12 @@ class BasisDecorationService
             $dosage_12 = $get_area['12_new_construction'] / $length / $wide;
             $dosage_24 = $get_area['24_new_construction'] / $wide / $high;
             $brick['quantity'] = ceil($dosage_12 + $dosage_24);
-            $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
+            $brick['cost'] = round($brick['quantity'] * $goods['platform_price'],2);
+            $brick['procurement'] = round($brick['quantity'] * $goods['purchase_price_decoration_company'],2);
         } else {
             $brick['quantity'] = 0;
             $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
+            $brick['procurement'] = $brick['quantity'] * $goods['purchase_price_decoration_company'];
         }
         return $brick;
     }
@@ -1094,7 +1097,8 @@ class BasisDecorationService
 //              个数：（河沙用量÷抓取的商品的KG）
             $river_sand['quantity'] =  ceil($river_sand_dosage / $value);
 //              河沙费用：个数×抓取的商品价格
-            $river_sand['cost'] =   $river_sand['quantity'] * $goods['platform_price'];
+            $river_sand['cost'] =   round($river_sand['quantity'] * $goods['platform_price'],2);
+            $river_sand['procurement'] =   round($river_sand['quantity'] * $goods['platform_price'],2);
         } else {
             $river_sand['quantity'] =  0;
             $river_sand['cost'] =  0;

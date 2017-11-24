@@ -1354,6 +1354,7 @@ class OwnerController extends Controller
                     $cement_cost = BasisDecorationService::cementCost($post,$craft,$max,$goods_attr);
                     $max['quantity'] = $cement_cost['quantity'];
                     $max['cost'] = $cement_cost['cost'];
+                    $max['procurement'] = $cement_cost['procurement'];
                     $cement[] = $max;
                     break;
                 case $max['title'] == BasisDecorationService::GOODS_NAME['air_brick']:
@@ -1369,6 +1370,7 @@ class OwnerController extends Controller
                     $brick_cost = BasisDecorationService::brickCost($post, $max, $brick_standard);
                     $max['quantity'] = $brick_cost['quantity'];
                     $max['cost'] = $brick_cost['cost'];
+                    $max['procurement'] = $brick_cost['procurement'];
                     $air_brick[] = $max;
                     break;
                 case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
