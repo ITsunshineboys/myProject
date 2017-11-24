@@ -2295,12 +2295,12 @@ angular.module('all_controller', [])
         $scope.cancel = function () {
             $scope.toponymy = $scope.cur_toponymy
             $scope.have_header = true
-            if (!!sessionStorage.getItem('huxingParams')) {
+            if (sessionStorage.getItem('huxingParams')!= null) {
                 $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
                 history.go(-1)
             }
-            $timeout.cancel($scope.time)
+            // $timeout.cancel($scope.time)
             $scope.time = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
