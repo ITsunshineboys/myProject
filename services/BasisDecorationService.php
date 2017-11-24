@@ -269,10 +269,12 @@ class BasisDecorationService
             switch ($one) {
                 case $one['title'] == self::GOODS_NAME['pvc']:
                     $pvc_price = $one['platform_price'];
+                    $pvc_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
                 case $one['title'] == self::GOODS_NAME['ppr']:
                     $ppr_price = $one['platform_price'];
+                    $ppr_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
             }
@@ -319,6 +321,9 @@ class BasisDecorationService
 
         $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
         $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
+
+        $waterway['ppr_procurement'] = $waterway['pvc_quantity'] * $ppr_procurement;
+        $waterway['pvc_procurement'] = $waterway['pvc_quantity'] * $pvc_procurement;
 
         $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
         return $waterway;
@@ -1665,11 +1670,13 @@ class BasisDecorationService
                 case $one_waterway_current['title'] == self::GOODS_NAME['ppr'];
                     $one_waterway_current['quantity'] = $material_price['ppr_quantity'];
                     $one_waterway_current['cost'] = $material_price['ppr_cost'];
+                    $one_waterway_current['procurement'] = $material_price['ppr_procurement'];
                     $ppr[] = $one_waterway_current;
                     break;
                 case $one_waterway_current['title'] == self::GOODS_NAME['pvc'];
                     $one_waterway_current['quantity'] = $material_price['pvc_quantity'];
                     $one_waterway_current['cost'] = $material_price['pvc_cost'];
+                    $one_waterway_current['procurement'] = $material_price['pvc_procurement'];
                     $pvc[] = $one_waterway_current;
                     break;
             }
