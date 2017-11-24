@@ -1449,6 +1449,7 @@ class OwnerController extends Controller
                 if ($one_goods['sku'] == $material['sku']) {
                     $one_goods['quantity'] = $material['quantity'];
                     $one_goods['cost'] = $material['quantity'] * $one_goods['platform_price'];
+                    $one_goods['procurement'] = $material['quantity'] * $one_goods['purchase_price_decoration_company'];
                 }
             }
         }
