@@ -1817,6 +1817,7 @@ class OwnerController extends Controller
                         $one_stairs_price['goods_first'] = $goods_category['0']['title'];
                         $one_stairs_price['goods_second'] = $goods_category['1']['title'];
                         $one_stairs_price['goods_three'] = $goods_category['2']['title'];
+                        $one_stairs_price['goods_id'] = $goods_category['id'];
                         $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
                         $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
                         unset($one_stairs_price['path']);
