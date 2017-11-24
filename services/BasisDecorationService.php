@@ -319,11 +319,11 @@ class BasisDecorationService
         $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
         $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
 
-        $waterway['ppr_cost'] = $waterway['ppr_quantity'] * $ppr_price;
-        $waterway['pvc_cost'] = $waterway['pvc_quantity'] * $pvc_price;
+        $waterway['ppr_cost'] = round($waterway['ppr_quantity'] * $ppr_price,2);
+        $waterway['pvc_cost'] = round($waterway['pvc_quantity'] * $pvc_price,2);
 
-        $waterway['ppr_procurement'] = $waterway['pvc_quantity'] * $ppr_procurement;
-        $waterway['pvc_procurement'] = $waterway['pvc_quantity'] * $pvc_procurement;
+        $waterway['ppr_procurement'] = round($waterway['pvc_quantity'] * $ppr_procurement,2);
+        $waterway['pvc_procurement'] = round($waterway['pvc_quantity'] * $pvc_procurement,2);
 
         $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
         return $waterway;
