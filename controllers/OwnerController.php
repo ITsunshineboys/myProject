@@ -1798,7 +1798,6 @@ class OwnerController extends Controller
             //   楼梯  数据
             if ($effect['stairway'] != null){
                 $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
-                var_dump($stairs);exit;
                 $stairs_price = BasisDecorationService::priceConversion($stairs);
                 $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
                 $stairs_details = StairsDetails::find()->asArray()->all();
@@ -1807,9 +1806,13 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-//                $goods_c = GoodsCategory::find()->asArray()->where()->all();
+
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
+                        $where ="id in (".$one_stairs_price['path'].")";
+                        var_dump($where);exit;
+                        $goods_category = GoodsCategory::find()->asArray()->where($where)->all();
+                        var_dump($goods_category);exit;
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
                         $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
