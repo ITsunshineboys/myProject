@@ -444,6 +444,7 @@ angular.module('all_controller', [])
                     $scope.cur_goods_detail['style_name'] = value.style
                 }
             }
+            sessionStorage.setItem('cur_goods_detail',JSON.stringify($scope.cur_goods_detail))
             console.log($scope.cur_goods_detail)
             $scope.cur_status = 0
             $scope.cur_second_level = $scope.cur_header
@@ -461,7 +462,7 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
             } else {
                 $scope.check_goods = item
-                // $scope.check_goods['path'] = $scope.cur_three_item.path
+                $scope.check_goods['path'] = $scope.cur_three_item.path
             }
             console.log($scope.check_goods)
             sessionStorage.setItem('check_goods',JSON.stringify($scope.check_goods))
@@ -989,6 +990,9 @@ angular.module('all_controller', [])
             $scope.params.brand_id = ''
             $scope.params.style_id = ''
             $scope.params.series_id = ''
+            sessionStorage.setItem('cur_three',JSON.stringify({
+                cur_three_item:$scope.cur_three_item
+            }))
             tablePages()
             sessionStorage.setItem('params',JSON.stringify($scope.params))
             $('#myModal').modal('hide')
@@ -1260,6 +1264,15 @@ angular.module('all_controller', [])
                 $('#myModal').modal('hide')
                 $scope.have_header = false
             })
+            if(sessionStorage.getItem('cur_three')!=null){
+                let cur_three = JSON.parse(sessionStorage.getItem('cur_three'))
+                $scope.cur_three_item = cur_three.cur_three_item
+                $scope.cur_three_id = $scope.cur_three_item.id
+                $scope.check_goods['path'] = $scope.cur_three_item.path
+            }
+            if(sessionStorage.getItem('cur_goods_detail')!=null){
+                $scope.cur_goods_detail = JSON.parse(sessionStorage.getItem('cur_goods_detail'))
+            }
         }
         $scope.get_goods = function (valid, error) {
             console.log($scope.nodata_params)
