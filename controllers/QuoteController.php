@@ -1934,6 +1934,39 @@ class QuoteController extends Controller
         ]);
     }
 
+    public function actionSkuFefer()
+    {
+        $category = trim(\Yii::$app->request->get('category',''));
+        $sku = (int)trim(\Yii::$app->request->get('sku',''));
+
+
+        $goods_category = GoodsCategory::find()->where(['title'=>$category])->one();
+        if (!$goods_category){
+            $code = 1043;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+
+        $goods = Goods::find()->where(['sku'=>$sku])->one();
+        if (!$goods){
+            $code = 1043;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+        ]);
+
+    }
+
     /**
      * 测试功能
      */
