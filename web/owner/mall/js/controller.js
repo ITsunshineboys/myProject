@@ -86,36 +86,38 @@ angular.module('all_controller', [])
             $('.modal-backdrop').remove()
             $('body').removeClass('modal-open')
             console.log($rootScope.curState_name)
-            if ($rootScope.curState_name == 'nodata.house_list') {
-                $scope.have_header = true
-                $scope.cur_header = '智能报价'
-                $scope.is_city = true
-                $scope.is_edit = false
-            } else if ($rootScope.curState_name == 'nodata.main_material') {
-                $scope.have_header = true
-                $scope.cur_header = '主材料'
-                $scope.is_city = false
-                $scope.is_edit = false
-            } else if ($rootScope.curState_name == 'nodata.basics_decoration') {
-                $scope.have_header = true
-                $scope.cur_header = '基础装修'
-                $scope.is_city = false
-                $scope.is_edit = false
-            } else if ($rootScope.curState_name == 'nodata.other_material') {
-                $scope.have_header = true
-                $scope.cur_header = $scope.inner_header
-                $scope.is_city = false
-                $scope.is_edit = true
-            } else if ($rootScope.curState_name == 'nodata.all_goods') {
-                $scope.have_header = true
-                $scope.cur_header = $scope.cur_three_level
-                $scope.is_city = false
-                $scope.is_edit = false
-            } else if ($rootScope.curState_name == 'nodata.second_level') {
-                $scope.have_header = true
-                $scope.cur_header = $scope.inner_first_level
-                $scope.is_city = false
-                $scope.is_edit = false
+            if(sessionStorage.getItem('all_status')==null) {
+                if ($rootScope.curState_name == 'nodata.house_list') {
+                    $scope.have_header = true
+                    $scope.cur_header = '智能报价'
+                    $scope.is_city = true
+                    $scope.is_edit = false
+                } else if ($rootScope.curState_name == 'nodata.main_material') {
+                    $scope.have_header = true
+                    $scope.cur_header = '主材料'
+                    $scope.is_city = false
+                    $scope.is_edit = false
+                } else if ($rootScope.curState_name == 'nodata.basics_decoration') {
+                    $scope.have_header = true
+                    $scope.cur_header = '基础装修'
+                    $scope.is_city = false
+                    $scope.is_edit = false
+                } else if ($rootScope.curState_name == 'nodata.other_material') {
+                    $scope.have_header = true
+                    $scope.cur_header = $scope.inner_header
+                    $scope.is_city = false
+                    $scope.is_edit = true
+                } else if ($rootScope.curState_name == 'nodata.all_goods') {
+                    $scope.have_header = true
+                    $scope.cur_header = $scope.cur_three_level
+                    $scope.is_city = false
+                    $scope.is_edit = false
+                } else if ($rootScope.curState_name == 'nodata.second_level') {
+                    $scope.have_header = true
+                    $scope.cur_header = $scope.inner_first_level
+                    $scope.is_city = false
+                    $scope.is_edit = false
+                }
             }
         });
         // $scope.baseUrl = 'http://test.cdlhzz.cn/'
@@ -156,7 +158,7 @@ angular.module('all_controller', [])
         $scope.is_delete_btn = false //切换编辑状态
         $scope.platform_status = 0//价格状态
         $scope.rate_status = 0//好评率状态
-        if (!!sessionStorage.getItem('materials')) {
+        if (sessionStorage.getItem('materials')!= null) {
             $scope.all_goods = JSON.parse(sessionStorage.getItem('materials'))
             console.log($scope.all_goods)
             for (let [key, value] of $scope.all_goods.entries()) {
@@ -264,22 +266,22 @@ angular.module('all_controller', [])
         /*无资料操作*/
         //修改了基础表单数据
         $scope.$watch('toponymy', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('message', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('area', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('house_bedroom', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
@@ -289,45 +291,44 @@ angular.module('all_controller', [])
             }
         })
         $scope.$watch('house_toilet', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('house_kitchen', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('highCrtl', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('window', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('choose_stairs', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('nowStairs', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('cur_series', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
         })
         $scope.$watch('cur_style', function (newVal, oldVal) {
-            if(sessionStorage.getItem('nodata') == null){
+            if(sessionStorage.getItem('basic_nodata') == null){
                 $scope.show_material = false
             }
-            console.log($scope.cur_style.images.split(','))
             $timeout.cancel($scope.time)
             $scope.time = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
@@ -403,6 +404,20 @@ angular.module('all_controller', [])
                 is_city:$scope.is_city,
                 is_edit:$scope.is_edit
             }))
+            sessionStorage.setItem('basic_nodata',JSON.stringify({
+                special_request:$scope.special_request,
+                toponymy:$scope.toponymy,
+                message:$scope.message,
+                area:$scope.area,
+                house_bedroom:$scope.house_bedroom,
+                house_hall:$scope.house_hall,
+                house_toilet:$scope.house_toilet,
+                house_kitchen:$scope.house_kitchen,
+                highCrtl:$scope.highCrtl,
+                window:$scope.window,
+                choose_stairs:$scope.choose_stairs,
+                nowStairs:$scope.nowStairs,
+            }))
             $scope.cur_all_goods = angular.copy($scope.all_goods)
         }
             if ($rootScope.curState_name == 'nodata.basics_decoration') {
@@ -446,7 +461,7 @@ angular.module('all_controller', [])
                 $scope.check_goods = item
             } else {
                 $scope.check_goods = item
-                $scope.check_goods['path'] = $scope.cur_three_item.path
+                // $scope.check_goods['path'] = $scope.cur_three_item.path
             }
             console.log($scope.check_goods)
             sessionStorage.setItem('check_goods',JSON.stringify($scope.check_goods))
@@ -513,6 +528,7 @@ angular.module('all_controller', [])
                 }
             }
         })
+        console.log($scope.is_edit)
         //更换商品
         $scope.replace_material = function () {
             $scope.cur_status = 1
@@ -732,7 +748,7 @@ angular.module('all_controller', [])
             console.log($scope.cur_project)
             if ($rootScope.curState_name == 'nodata.product_detail') {
                 $scope.have_header = true
-                if(sessionStorage.getItem('check_goods')!=null){
+                // if(sessionStorage.getItem('check_goods')!=null){
                     if ($scope.cur_status == 2||$scope.cur_status == 1) {
                         // $scope.cur_header = $scope.inner_first_level
                         $rootScope.fromState_name = 'nodata.all_goods'
@@ -754,6 +770,7 @@ angular.module('all_controller', [])
                             $rootScope.fromState_name = 'nodata.other_material'
                         }
                         sessionStorage.setItem('all_status',JSON.stringify({
+                            have_header:$scope.have_header,
                             cur_header:$scope.cur_header,
                             inner_header:$scope.inner_header,
                             cur_project:$scope.cur_project,
@@ -762,7 +779,7 @@ angular.module('all_controller', [])
                             is_edit:$scope.is_edit
                         }))
                     }
-                }
+                // }
                 sessionStorage.removeItem('check_goods')
             } else if ($rootScope.curState_name == 'nodata.all_goods') {
                 if ($scope.cur_status == 2) {
@@ -777,6 +794,7 @@ angular.module('all_controller', [])
                     $rootScope.fromState_name = 'nodata.main_material'
                 }
                 sessionStorage.setItem('all_status',JSON.stringify({
+                    have_header:$scope.have_header,
                     cur_header:$scope.cur_header,
                     inner_header:$scope.inner_header,
                     cur_project:$scope.cur_project,
@@ -787,6 +805,15 @@ angular.module('all_controller', [])
             } else if ($rootScope.curState_name == 'nodata.second_level') {
                 $scope.cur_header = $scope.inner_header
                 $scope.is_edit = true
+                sessionStorage.setItem('all_status',JSON.stringify({
+                    have_header:$scope.have_header,
+                    cur_header:$scope.cur_header,
+                    inner_header:$scope.inner_header,
+                    cur_project:$scope.cur_project,
+                    cur_status:0,
+                    is_city:$scope.is_city,
+                    is_edit:true
+                }))
                 $rootScope.fromState_name = 'nodata.other_material'
             } else if ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material') {
                 console.log($scope.is_delete_btn)
@@ -797,10 +824,11 @@ angular.module('all_controller', [])
                     if($scope.cur_all_goods!=undefined){
                         $scope.all_goods = $scope.cur_all_goods
                     }
+                    sessionStorage.removeItem('basic_nodata')
                     sessionStorage.removeItem('all_status')
                     sessionStorage.removeItem('cur_index')
                     sessionStorage.removeItem('params')
-                    sessionStorage.removeItem('nodata')
+                    // sessionStorage.removeItem('nodata')
                     $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
                 } else {
                     $rootScope.fromState_name = 'nodata.other_material'
@@ -922,12 +950,13 @@ angular.module('all_controller', [])
             $scope.cur_status = 2
             $scope.cur_second_level = $scope.cur_header
             sessionStorage.setItem('all_status',JSON.stringify({
+                have_header:$scope.have_header,
                 cur_header:$scope.cur_header,
                 inner_header:$scope.inner_header,
                 cur_project:$scope.cur_project,
                 cur_status:$scope.cur_status,
-                is_city:$scope.is_city,
-                is_edit:$scope.is_edit
+                is_city:false,
+                is_edit:false
             }))
             _ajax.get('/mall/categories-level3', {
                 pid: $scope.cur_item.id
@@ -961,12 +990,22 @@ angular.module('all_controller', [])
             $scope.params.style_id = ''
             $scope.params.series_id = ''
             tablePages()
+            sessionStorage.setItem('params',JSON.stringify($scope.params))
             $('#myModal').modal('hide')
             $timeout(function () {
                 $scope.have_header = true
                 $scope.is_city = false
                 $scope.is_edit = false
                 $scope.cur_header = $scope.cur_three_level || item.title
+                sessionStorage.setItem('all_status',JSON.stringify({
+                    have_header:$scope.have_header,
+                    cur_header:$scope.cur_header,
+                    inner_header:$scope.inner_header,
+                    cur_project:$scope.cur_project,
+                    cur_status:$scope.cur_status,
+                    is_city:$scope.is_city,
+                    is_edit:$scope.is_edit
+                }))
                 $state.go('nodata.all_goods')
             }, 300)
         }
@@ -1134,6 +1173,9 @@ angular.module('all_controller', [])
             $scope.window = basic_nodata.window
             $scope.choose_stairs = basic_nodata.choose_stairs
             $scope.nowStairs = basic_nodata.nowStairs
+            if($rootScope.curState_name == 'nodata.house_list'){
+                sessionStorage.removeItem('basic_nodata')
+            }
         }
         if(sessionStorage.getItem('nodata')!=null){
             let nodata = JSON.parse(sessionStorage.getItem('nodata'))
@@ -1145,6 +1187,18 @@ angular.module('all_controller', [])
             $scope.all_goods = nodata.all_goods
             if(sessionStorage.getItem('cur_index')!=null){
                 $scope.cur_item = $scope.all_goods[sessionStorage.getItem('cur_index')]
+                _ajax.get('/mall/categories-level3', {
+                    pid: $scope.cur_item.id
+                }, function (res) {
+                    console.log(res)
+                    // if(sessionStorage.getItem('all_status')!=null){
+                    //     $scope.cur_header = $scope.cur_item.title
+                    // }
+                    $scope.inner_first_level = $scope.cur_item.title
+                    // $scope.is_city = false
+                    // $scope.is_edit = false
+                    $scope.all_three_level = res.categories_level3
+                })
             }
         }
         if(sessionStorage.getItem('all_status')!=null){
@@ -2146,20 +2200,6 @@ angular.module('all_controller', [])
                     discount_price:$scope.discount_price,
                     show_material:$scope.show_material
                 }))
-                sessionStorage.setItem('basic_nodata',JSON.stringify({
-                    special_request:$scope.special_request,
-                    toponymy:$scope.toponymy,
-                    message:$scope.message,
-                    area:$scope.area,
-                    house_bedroom:$scope.house_bedroom,
-                    house_hall:$scope.house_hall,
-                    house_toilet:$scope.house_toilet,
-                    house_kitchen:$scope.house_kitchen,
-                    highCrtl:$scope.highCrtl,
-                    window:$scope.window,
-                    choose_stairs:$scope.choose_stairs,
-                    nowStairs:$scope.nowStairs,
-                }))
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
             })
@@ -2638,6 +2678,7 @@ angular.module('all_controller', [])
             $state.go('deposit')
             console.log(obj)
         }
+        console.log($scope.cur_header)
     })
     .filter("toHtml", ["$sce", function ($sce) {
         return function (text) {
