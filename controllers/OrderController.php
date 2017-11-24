@@ -5298,6 +5298,9 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
+        $order=GoodsOrder::FindByOrderNo('1124132087');
+        var_dump($order->toArray());
+        die;
         $suplier=Supplier::find()->asArray()->all();
         var_dump($suplier);
     }
