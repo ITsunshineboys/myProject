@@ -1810,7 +1810,9 @@ class OwnerController extends Controller
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $explode = explode(',',$one_stairs_price['path']);
-                        var_dump($explode);exit;
+                        $array = array_filter($explode);
+                        $implode = implode(',',$array);
+                        var_dump($implode);exit;
 //                        $path = explode(',',$one_stairs_price['path']);
                         $where ="id in (".$one_stairs_price['path'].")";
                         $goods_category = GoodsCategory::find()->asArray()->where($where)->all();
