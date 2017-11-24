@@ -14,7 +14,7 @@ class SupplierCashManager extends ActiveRecord
 {
     const  USER_BANKINFO = 'user_bankinfo';
     const  SUPPLIER = 'supplier';
-    const  SUP_CASHREGISTER = 'user_cashregister';
+    const  USER_CASHREGISTER = 'user_cashregister';
     const  GOODS_ORDER = 'goods_order';
     const  ROLE_ID = 6;
 
@@ -37,7 +37,7 @@ class SupplierCashManager extends ActiveRecord
     {
 
         $query = (new Query())
-            ->from(self::SUP_CASHREGISTER)
+            ->from(self::USER_CASHREGISTER)
             ->where($where)
             ->orderBy('apply_time Desc');
 
@@ -140,7 +140,7 @@ class SupplierCashManager extends ActiveRecord
     /**
      * @return array
      */
-    public function getToday()
+    public static function getToday()
     {
         $year = date("Y");
         $month = date("m");
@@ -171,7 +171,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedOrdersToday()
     {
-        $today = $this->getToday();
+        $today = self::getToday();
         $data = (new Query())
             ->from(self::GOODS_ORDER)
             ->where(['pay_status' => 1])
@@ -190,7 +190,7 @@ class SupplierCashManager extends ActiveRecord
     public function getPayedCashesAll()
     {
         $data = (new Query())
-            ->from(self::SUP_CASHREGISTER)
+            ->from(self::USER_CASHREGISTER)
             ->where(['status' => SupplierCashController::ACCESS_TYPE_CHARGE, 'role_id' => self::ROLE_ID])
             ->sum('cash_money');
 
@@ -205,9 +205,9 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesToday()
     {
-        $today = $this->getToday();
+        $today = self::getToday();
         $data = (new Query())
-            ->from(self::SUP_CASHREGISTER)
+            ->from(self::USER_CASHREGISTER)
             ->where(['status' => SupplierCashController::ACCESS_TYPE_CHARGE, 'role_id' => self::ROLE_ID])
             ->andwhere('handle_time >= ' . $today[0])
             ->andWhere('handle_time <= ' . $today[1])
@@ -224,7 +224,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)
+        return (new Query())->from(self::USER_CASHREGISTER)
             ->where([
                 'status' => [SupplierCashController::CASH_STATUS_DONE, SupplierCashController::CASH_STATUS_FAIL],
                 'role_id' => self::ROLE_ID
@@ -237,7 +237,7 @@ class SupplierCashManager extends ActiveRecord
      */
     public function getNotPayedCashesCountAll()
     {
-        return (new Query())->from(self::SUP_CASHREGISTER)
+        return (new Query())->from(self::USER_CASHREGISTER)
             ->where([
                 'status' => SupplierCashController::CASH_STATUS_ING, 'role_id' => self::ROLE_ID
             ])
@@ -279,9 +279,7 @@ class SupplierCashManager extends ActiveRecord
         }
         return ModelService::pageDeal($arr, $count, $page, $size);
     }
-    public static function pagination(){
 
-    }
 
     /**
      * 获取提现列表
@@ -298,7 +296,7 @@ class SupplierCashManager extends ActiveRecord
     {
 
         $query = (new Query())
-                ->from(self::SUP_CASHREGISTER . ' as g')
+                ->from(self::USER_CASHREGISTER . ' as g')
                 ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
                 ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
                 ->where($where)
@@ -346,7 +344,7 @@ class SupplierCashManager extends ActiveRecord
     {
 
         $supplier_cash = (new Query())
-            ->from(self::SUP_CASHREGISTER)
+            ->from(self::USER_CASHREGISTER)
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
             ->select(['cash_money', 'uid', 'status', 'transaction_no'])
             ->one();
@@ -382,7 +380,7 @@ class SupplierCashManager extends ActiveRecord
         $trans = \Yii::$app->db->beginTransaction();
         try {
             \Yii::$app->db->createCommand()
-                ->update(self::SUP_CASHREGISTER, [
+                ->update(self::USER_CASHREGISTER, [
                     'status' => $status,
                     'supplier_reason' => $reason,
                     'real_money' => $real_money,

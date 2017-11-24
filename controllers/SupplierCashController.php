@@ -6,6 +6,7 @@ namespace app\controllers;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\models\EffectPicture;
+use app\models\OwnerCashManager;
 use app\models\Series;
 use app\models\Style;
 use app\models\Supplier;
@@ -276,8 +277,127 @@ class SupplierCashController extends Controller
             'data' => $data
         ]);
     }
+    /**
+     * 大后台业主财务中心
+     * @return int|string
+     */
+    public function actionCashOwnerIndex(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+        $data=[];
+        $data['cashes_all'] = OwnerCashManager::getOwnerCashedAll();
+        $data['cashes_today'] = OwnerCashManager::getOwnerCashedToday();
+        $data['payed_cashes_count'] = OwnerCashManager::getOwnerCashed();
+        $data['not_payed_cashes_count'] = OwnerCashManager::getOwnerCashing();
 
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $data
+        ]);
+    }
+    /**
+     * 业主提现管理
+     * @return int|string
+     */
+    public function actionOwnerCashedList(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
 
+        $request = \Yii::$app->request;
+
+        $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');
+
+        $status = trim(htmlspecialchars($request->get('status', '')), '');
+        $search = trim(htmlspecialchars($request->get('search', '')), '');
+        $code = 1000;
+
+        if ($status==1 || $status==0){
+            $time_s='g.apply_time';
+        }else{
+            $time_s='g.handle_time';
+        }
+        $where = "g.role_id=7";
+        if (!$search) {
+            if ($timeType == 'custom') {
+                $time_start = trim(htmlspecialchars($request->get('time_start', '')), '');
+                $time_end = trim(htmlspecialchars($request->get('time_end', '')), '');
+                if (($time_start && !StringService::checkDate($time_start))
+                    || ($time_end && !StringService::checkDate($time_end))
+                ) {
+                    return json_encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if ($time_start == $time_end) {
+                    list($time_start, $time_end) = ModelService::timeDeal($time_start);
+                }else{
+                    $time_end && $time_end .= ' 23:59:59';
+                }
+
+            } else {
+                list($time_start, $time_end) = StringService::startEndDate($timeType);
+            }
+
+            if ($time_start) {
+                $startTime = (int)strtotime($time_start);
+                $startTime && $where .= " and {$time_s} >= {$startTime}";
+            }
+            if ($time_end) {
+                $time_end = (int)strtotime($time_end);
+                $time_end && $where .= " and {$time_s} <= {$time_end}";
+            }
+
+            if ($status!=0){
+                $where.= " and g.status =$status ";
+            }
+        } else {
+            $where.= " and CONCAT(u.nickname,u.aite_cube_no) like '%{$search}%'";
+        }
+
+        $page = (int)$request->get('page', 1);
+        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        $paginationData = OwnerCashManager::getCashListAll($where,$page, $page_size);
+        return json_encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data' => $paginationData
+        ]);
+    }
+
+    public function actionOwnerCashedDetail(){
+        $user = self::userIdentity();
+        if (!is_int($user)) {
+            return $user;
+        }
+
+        $request = \Yii::$app->request;
+        $transaction_no = (int)$request->get('transaction_no', '');
+        if (!$transaction_no) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user_uid=UserCashregister::find()
+            ->asArray()
+            ->where(['transaction_no'=>$transaction_no])
+            ->one()['uid'];
+        $user_id=User::find()->where(['id'=>$user_uid])->asArray()->one()['id'];
+        if(!$user_id){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
     /**
      * 获取今日入账列表
      * @return int|string
