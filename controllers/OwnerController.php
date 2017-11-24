@@ -1811,7 +1811,7 @@ class OwnerController extends Controller
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
                         $where ="id in (".$substr.")";
-                        $goods_category = GoodsCategory::find()->asArray()->where($where)->all();
+                        $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
                         var_dump($goods_category);exit;
                         $one_stairs_price['quantity'] = 1;
                         $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
