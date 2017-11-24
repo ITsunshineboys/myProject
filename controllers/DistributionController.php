@@ -162,11 +162,6 @@ class DistributionController extends Controller
      * @return string
      */
     public function actionDistributionLogin(){
-        $code = 1020;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code],
-        ]);
         $session = \Yii::$app->session;
         $mobile=base64_decode(base64_decode($session['distribution_mobile']));
         if (!$mobile)
@@ -188,7 +183,7 @@ class DistributionController extends Controller
             ]);
         }
         $codeValidationRes = SmValidationService::validCode($mobile, $code);
-        if ($codeValidationRes !== true) {
+        if (!$codeValidationRes == true) {
             $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
             return Json::encode([
                 'code' => $code,
