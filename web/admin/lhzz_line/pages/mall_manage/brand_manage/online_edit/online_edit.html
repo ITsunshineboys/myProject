@@ -23,7 +23,7 @@
             <span>商品注册证</span>
 
             <div class="pic_right">
-                <img ng-if="!!upload_img_src" ng-src="{{ upload_img_src}}"/>
+                <img ng-if="!!upload_img_src" ng-src="{{upload_img_src}}"/>
                 <img ng-if="!upload_img_src" src="pages/mall_manage/brand_manage/add_brand/image/default.png"/>
                 <p>图片大小5M内，支持JPG、PNG、JPEG</p>
                 <div ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">
@@ -41,7 +41,7 @@
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>品牌LOGO</span>
             <div class="pic_right">
-                <img ng-if="!!upload_logo_src" ng-src="{{ upload_logo_src}}"/>
+                <img ng-if="!!upload_logo_src" ng-src="{{upload_logo_src}}"/>
                 <img ng-if="!upload_logo_src" src="pages/mall_manage/brand_manage/add_brand/image/default.png"/>
                 <p>图片大小5M内，支持JPG、PNG、JPEG</p>
                 <div ngf-pattern="image/*" ng-change="upload_logo(logo_data.file)"  ngf-select="" ngf-multiple="false" ng-model="logo_data.file">
