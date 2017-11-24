@@ -12,6 +12,7 @@ use app\services\StringService;
 use Yii;
 use yii\helpers\Json;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class GoodsStat extends ActiveRecord
 {
@@ -118,19 +119,17 @@ class GoodsStat extends ActiveRecord
             'sum(`ip_number`) as ip_number',
             'sum(`viewed_number`) as viewed_number',
         ];
-        $goodsStatList = (new \yii\db\Query)
+
+        $query= (new Query)
             ->select($select)
             ->from(self::tableName())
             ->where($where)
             ->groupBy('create_date')
-            ->orderBy($orderBy)
-            ->offset($offset)
-            ->limit($size)
-            ->all();
+            ->orderBy($orderBy);
 
         return [
-            'total' => (int)self::find()->where($where)->asArray()->count(),
-            'details' => $goodsStatList
+            'total' => count($query->all()),
+            'details' => $query->offset($offset)->limit($size)->all(),
         ];
     }
 
