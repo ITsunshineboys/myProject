@@ -1940,7 +1940,7 @@ class QuoteController extends Controller
         $sku = (int)trim(\Yii::$app->request->get('sku',''));
 
 
-        $goods_category = GoodsCategory::find()->where(['title'=>$category])->one();
+        $goods_category = GoodsCategory::find()->where(['title'=>$category])->andwhere(['level'=>3])->one();
         if (!$goods_category){
             $code = 1043;
             return Json::encode([
