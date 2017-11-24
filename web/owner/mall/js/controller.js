@@ -550,14 +550,6 @@ angular.module('all_controller', [])
             $scope.price_max = ''
             $scope.params['sort[]'] = 'sold_number:3'
             sessionStorage.setItem('params',JSON.stringify($scope.params))
-            // sessionStorage.setItem('all_status',JSON.stringify({
-            //     cur_header:$scope.cur_header,
-            //     inner_header:$scope.inner_header,
-            //     cur_project:$scope.cur_project,
-            //     cur_status:$scope.cur_status,
-            //     is_city:$scope.is_city,
-            //     is_edit:$scope.is_edit
-            // }))
             tablePages()
             $('#myModal').modal('hide')
             $timeout(function () {
@@ -587,6 +579,7 @@ angular.module('all_controller', [])
                 $scope.is_city = false
                 if ($scope.cur_status == 1) {//更换
                     $scope.check_goods.cost = $scope.check_goods.platform_price * $scope.check_goods.quantity
+                    $scope.check_goods.procurement = $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity
                     $scope.replaced_goods.push($scope.cur_goods_detail)
                     $scope.goods_replaced.push($scope.check_goods)
                     for (let [key, value] of $scope.all_goods.entries()) {
@@ -597,11 +590,14 @@ angular.module('all_controller', [])
                                         value2.goods_detail.splice(key3, 1)
                                         value1.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
                                         value.cost += $scope.check_goods.cost - $scope.cur_goods_detail.cost
+                                        value1.procurement += $scope.check_goods.procurement - $scope.cur_goods_detail.procurement
+                                        value.procurement += $scope.check_goods.procurement - $scope.cur_goods_detail.procurement
                                         value2.goods_detail.push({
                                             id: $scope.check_goods.id,
                                             image: $scope.check_goods.image,
                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                             name: $scope.check_goods.name,
+                                            procurement:$scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
                                             platform_price: $scope.check_goods.platform_price,
                                             profit_rate: $scope.check_goods.profit_rate,
                                             purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
@@ -626,6 +622,7 @@ angular.module('all_controller', [])
                     for (let [key, value] of $scope.all_goods.entries()) {
                         if (value.id == $scope.check_goods.path.split(',')[0]) {
                             value.cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
+                            value.procurement += $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity
                             value.count++
                             let second_item = value.second_level.findIndex(function (item) {
                                 return item.id == $scope.check_goods.path.split(',')[1]
@@ -641,6 +638,7 @@ angular.module('all_controller', [])
                                             image: $scope.check_goods.image,
                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                             name: $scope.check_goods.name,
+                                            procurement:$scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
                                             platform_price: $scope.check_goods.platform_price,
                                             profit_rate: $scope.check_goods.profit_rate,
                                             purchase_price_decoration_company: $scope.check_goods.purchase_price_decoration_company,
@@ -670,6 +668,7 @@ angular.module('all_controller', [])
                                                     id: $scope.check_goods.id,
                                                     image: $scope.check_goods.image,
                                                     cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
+                                                    procurement: $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
                                                     name: $scope.check_goods.name,
                                                     platform_price: $scope.check_goods.platform_price,
                                                     profit_rate: $scope.check_goods.profit_rate,
@@ -696,6 +695,7 @@ angular.module('all_controller', [])
                                                             id: $scope.check_goods.id,
                                                             image: $scope.check_goods.image,
                                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
+                                                            procurement: $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
                                                             name: $scope.check_goods.name,
                                                             platform_price: $scope.check_goods.platform_price,
                                                             profit_rate: $scope.check_goods.profit_rate,
@@ -715,6 +715,7 @@ angular.module('all_controller', [])
                                                         console.log(value2)
                                                         value.count--
                                                         value2.goods_detail[goods_item].cost += $scope.check_goods.platform_price * $scope.check_goods.quantity
+                                                        value2.goods_detail[goods_item].procurement += $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity
                                                         value2.goods_detail[goods_item].quantity = +value2.goods_detail[goods_item].quantity + $scope.check_goods.quantity
                                                     }
                                                 }
@@ -1304,6 +1305,7 @@ angular.module('all_controller', [])
                     value['cost'] = 0
                     value['count'] = 0
                     value['second_level'] = []
+                    value['procurement'] = 0
                 }
                 //生成材料数据(同步请求)
                 //弱电
@@ -1317,7 +1319,7 @@ angular.module('all_controller', [])
                     for (let [key, value] of $scope.level.entries()) {
                         for (let [key1, value1] of  $scope.all_goods.entries())
                             for (let [key2, value2] of response.data.data.weak_current_material.material.entries()) {
-                                let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                 let cur_title = {title: value.title}
                                 if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                     JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -1349,6 +1351,7 @@ angular.module('all_controller', [])
                                         goods_name: value3.goods_name,
                                         cost: +value3.cost,
                                         name: value3.name,
+                                        procurement:+value3.procurement,
                                         platform_price: value3.platform_price,
                                         profit_rate: value3.profit_rate,
                                         purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -1366,6 +1369,8 @@ angular.module('all_controller', [])
                                         value3.path.split(',')[2] == value2.id) {
                                         value.cost += value3.cost
                                         value1.cost += value3.cost
+                                        value.procurement += value3.procurement
+                                        value1.procurement += value3.procurement
                                         if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                             value2.goods_detail.push(cur_obj)
                                             value.count++
@@ -1373,6 +1378,7 @@ angular.module('all_controller', [])
                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                 if (value3.id == value4.id) {
                                                     value4.cost += value3.cost
+                                                    value4.procurement += value3.procurement
                                                     value4.quantity += cur_obj.quantity
                                                     console.log(value4.quantity)
                                                     console.log(typeof value3.quantity)
@@ -1398,7 +1404,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
                                 for (let [key2, value2] of response.data.data.strong_current_material.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                         JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -1430,6 +1436,7 @@ angular.module('all_controller', [])
                                             cost: +value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
+                                            procurement: +value3.procurement,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -1445,6 +1452,8 @@ angular.module('all_controller', [])
                                             value3.path.split(',')[2] == value2.id) {
                                             value.cost += value3.cost
                                             value1.cost += value3.cost
+                                            value.procurement += value3.procurement
+                                            value1.procurement += value3.procurement
                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                 value2.goods_detail.push(cur_obj)
                                                 value.count++
@@ -1452,6 +1461,7 @@ angular.module('all_controller', [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (value3.id == value4.id) {
                                                         value4.cost += value3.cost
+                                                        value4.procurement += value3.procurement
                                                         value4.quantity += cur_obj.quantity
                                                         console.log(value4.quantity)
                                                         console.log(typeof value3.quantity)
@@ -1477,7 +1487,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
                                 for (let [key2, value2] of response.data.data.waterway_material_price.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                         JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -1509,6 +1519,7 @@ angular.module('all_controller', [])
                                             cost: +value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
+                                            procurement:value3.procurement,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -1524,6 +1535,8 @@ angular.module('all_controller', [])
                                             value3.path.split(',')[2] == value2.id) {
                                             value.cost += value3.cost
                                             value1.cost += value3.cost
+                                            value.procurement += value3.procurement
+                                            value1.procurement += value3.procurement
                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                 value2.goods_detail.push(cur_obj)
                                                 value.count++
@@ -1531,6 +1544,7 @@ angular.module('all_controller', [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (value3.id == value4.id) {
                                                         value4.cost += value3.cost
+                                                        value4.procurement += value3.procurement
                                                         value4.quantity += cur_obj.quantity
                                                         console.log(value4.cost)
                                                         console.log(value3.cost)
@@ -1572,7 +1586,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
                                 for (let [key2, value2] of response.data.data.waterproof_material.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                         JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -1604,6 +1618,7 @@ angular.module('all_controller', [])
                                             cost: value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
+                                            procurement:value3.procurement,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -1619,6 +1634,8 @@ angular.module('all_controller', [])
                                             value3.path.split(',')[2] == value2.id) {
                                             value.cost += value3.cost
                                             value1.cost += value3.cost
+                                            value.procurement += value3.procurement
+                                            value1.procurement += value3.procurement
                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                 value2.goods_detail.push(cur_obj)
                                                 value.count++
@@ -1626,6 +1643,7 @@ angular.module('all_controller', [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (value3.id == value4.id) {
                                                         value4.cost += value3.cost
+                                                        value4.procurement += value3.procurement
                                                         value4.quantity += cur_obj.quantity
                                                         console.log(value4.cost)
                                                         console.log(value3.cost)
@@ -1669,7 +1687,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
                                 for (let [key2, value2] of response.data.data.carpentry_material.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                         JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -1701,6 +1719,7 @@ angular.module('all_controller', [])
                                             cost: value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
+                                            procurement:value3.procurement,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -1716,6 +1735,8 @@ angular.module('all_controller', [])
                                             value3.path.split(',')[2] == value2.id) {
                                             value.cost += value3.cost
                                             value1.cost += value3.cost
+                                            value.procurement += value3.procurement
+                                            value1.procurement += value3.procurement
                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                 value2.goods_detail.push(cur_obj)
                                                 value.count++
@@ -1723,6 +1744,7 @@ angular.module('all_controller', [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (value3.id == value4.id) {
                                                         value4.cost += value3.cost
+                                                        value4.procurement += value3.procurement
                                                         value4.quantity += cur_obj.quantity
                                                         console.log(value4.cost)
                                                         console.log(value3.cost)
@@ -1764,7 +1786,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
                                 for (let [key2, value2] of response.data.data.coating_material.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                         JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -1796,6 +1818,7 @@ angular.module('all_controller', [])
                                             cost: value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
+                                            procurement:value3.procurement,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -1811,6 +1834,8 @@ angular.module('all_controller', [])
                                             value3.path.split(',')[2] == value2.id) {
                                             value.cost += value3.cost
                                             value1.cost += value3.cost
+                                            value.procurement += value3.procurement
+                                            value1.procurement += value3.procurement
                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                 value2.goods_detail.push(cur_obj)
                                                 value.count++
@@ -1818,6 +1843,7 @@ angular.module('all_controller', [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (value3.id == value4.id) {
                                                         value4.cost += value3.cost
+                                                        value4.procurement += value3.procurement
                                                         value4.quantity += cur_obj.quantity
                                                         console.log(value4.cost)
                                                         console.log(value3.cost)
@@ -1867,7 +1893,8 @@ angular.module('all_controller', [])
                                             id: value3.id,
                                             title: value3.title,
                                             cost: 0,
-                                            three_level: []
+                                            three_level: [],
+                                            procurement:0
                                         }
                                         let cur_title = {title: value3.title}
                                         if (value.path.split(',')[1] == value3.id && value.path.split(',')[0] == value1.id &&
@@ -1901,6 +1928,7 @@ angular.module('all_controller', [])
                                                         cost: value.cost,
                                                         goods_name: value.goods_name,
                                                         name: value.name,
+                                                        procurement:value.procurement,
                                                         platform_price: value.platform_price,
                                                         profit_rate: value.profit_rate,
                                                         purchase_price_decoration_company: value.purchase_price_decoration_company,
@@ -1916,6 +1944,8 @@ angular.module('all_controller', [])
                                                         value.path.split(',')[2] == value2.id) {
                                                         value5.cost += value.cost
                                                         value1.cost += value.cost
+                                                        value5.procurement += value.procurement
+                                                        value1.procurement += value.procurement
                                                         if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                             value2.goods_detail.push(cur_obj)
                                                             value5.count++
@@ -1923,6 +1953,7 @@ angular.module('all_controller', [])
                                                             for (let [key4, value4] of value2.goods_detail.entries()) {
                                                                 if (value.id == value4.id) {
                                                                     value4.cost += value.cost
+                                                                    value4.procurement += value.procurement
                                                                     value4.quantity += cur_obj.quantity
                                                                     console.log(value4.cost)
                                                                     console.log(value.cost)
@@ -1958,7 +1989,8 @@ angular.module('all_controller', [])
                                                         id: value3.id,
                                                         title: value3.title,
                                                         cost: 0,
-                                                        three_level: []
+                                                        three_level: [],
+                                                        procurement:0
                                                     }
                                                     let cur_title = {title: value3.title}
                                                     if (value2.path.split(',')[1] == value3.id && value2.path.split(',')[0] == value1.id &&
@@ -1999,6 +2031,7 @@ angular.module('all_controller', [])
                                                             cost: value3.cost,
                                                             goods_name: value3.goods_name,
                                                             name: value3.name,
+                                                            procurement:value3.procurement,
                                                             platform_price: value3.platform_price,
                                                             profit_rate: value3.profit_rate,
                                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -2014,6 +2047,8 @@ angular.module('all_controller', [])
                                                             value3.path.split(',')[2] == value2.id) {
                                                             value5.cost += value3.cost
                                                             value1.cost += value3.cost
+                                                            value5.procurement += value3.procurement
+                                                            value1.procurement += value3.procurement
                                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                                 value2.goods_detail.push(cur_obj)
                                                                 value5.count++
@@ -2021,6 +2056,7 @@ angular.module('all_controller', [])
                                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                                     if (value3.id == value4.id) {
                                                                         value4.cost += value3.cost
+                                                                        value4.procurement += value3.procurement
                                                                         value4.quantity += cur_obj.quantity
                                                                         console.log(value4.cost)
                                                                         console.log(value3.cost)
@@ -2049,7 +2085,7 @@ angular.module('all_controller', [])
                             for (let [key, value] of $scope.level.entries()) {
                                 for (let [key1, value1] of  $scope.all_goods.entries())
                                     for (let [key2, value2] of response.data.data.mud_make_material.material.entries()) {
-                                        let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                        let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                         let cur_title = {title: value.title}
                                         if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id &&
                                             JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -2085,6 +2121,7 @@ angular.module('all_controller', [])
                                                 cost: value3.cost,
                                                 goods_name: value3.goods_name,
                                                 name: value3.name,
+                                                procurement:value3.procurement,
                                                 platform_price: value3.platform_price,
                                                 profit_rate: value3.profit_rate,
                                                 purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -2100,6 +2137,8 @@ angular.module('all_controller', [])
                                                 value3.path.split(',')[2] == value2.id) {
                                                 value.cost += value3.cost
                                                 value1.cost += value3.cost
+                                                value.procurement += value3.procurement
+                                                value1.procurement += value3.procurement
                                                 if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                     value2.goods_detail.push(cur_obj)
                                                     value.count++
@@ -2107,6 +2146,7 @@ angular.module('all_controller', [])
                                                     for (let [key4, value4] of value2.goods_detail.entries()) {
                                                         if (value3.id == value4.id) {
                                                             value4.cost += value3.cost
+                                                            value4.procurement += value3.procurement
                                                             value4.quantity += cur_obj.quantity
                                                             console.log(value4.cost)
                                                             console.log(value3.cost)
@@ -2165,7 +2205,8 @@ angular.module('all_controller', [])
             for (let [key, value] of $scope.all_goods.entries()) {
                 arr1.push({
                     one_title: value.title,
-                    price: value.cost
+                    price: value.cost,
+                    procurement:value.procurement
                 })
                 for (let [key1, value1] of value.second_level.entries()) {
                     for (let [key2, value2] of value1.three_level.entries()) {

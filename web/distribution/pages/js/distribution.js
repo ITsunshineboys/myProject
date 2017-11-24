@@ -94,6 +94,7 @@
             }
             //完成分销登录
             $scope.complete = function () {
+                let vm = $scope
                 let big_word = ''
                 let all_modal = function ($scope, $uibModalInstance) {
                     $scope.big_word = big_word
@@ -112,16 +113,16 @@
                     $scope.common_house = function () {
                         $uibModalInstance.close()
                         _ajax.post('/distribution/distribution-login-mobile',{
-                            mobile:$scope.cur_tel
+                            mobile:vm.cur_tel
                         },function (res) {
                             console.log(res)
-                            $scope.first_click = 1
-                            $scope.countdown = 60
-                            if($scope.countdown != 0){
-                                $scope.timer = $interval(function () {
-                                    $scope.countdown --
-                                    if($scope.countdown == 0){
-                                        $interval.cancel($scope.timer)
+                            vm.first_click = 1
+                            vm.countdown = 60
+                            if(vm.countdown != 0){
+                                vm.timer = $interval(function () {
+                                    vm.countdown --
+                                    if(vm.countdown == 0){
+                                        $interval.cancel(vm.timer)
                                     }
                                 },1000)
                             }
