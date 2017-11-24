@@ -8,6 +8,9 @@
     width: 100%;
     position: relative;
 }
+.personal_center img{
+    width:1.47rem;
+}
 .personal_center  .avatar > div p{
     position: absolute;
     bottom: 0;
