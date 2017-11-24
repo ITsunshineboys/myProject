@@ -241,5 +241,7 @@ var shop_style= angular.module("freight_template",[])
         $scope.getBack = function () {
             $state.go('commodity_manage',{logistics_flag: true})
         }
-
+        $('#sed_modal').on('hidden.bs.modal', function () {
+            $('body').addClass('modal-open');
+        })
     });
