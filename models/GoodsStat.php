@@ -100,6 +100,41 @@ class GoodsStat extends ActiveRecord
     }
 
     /**
+     * Get goods statistics list(for lhzz)
+     *
+     * @param  array $where search condition
+     * @param  int $page page number default 1
+     * @param  int $size page size default 12
+     * @param  string $orderBy order by fields default id desc
+     * @return array
+     */
+    public static function paginationLhzz($where = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    {
+        $offset = ($page - 1) * $size;
+        $select = [
+            'concat(left(`create_date`,4), "-", substring(`create_date`,5,2), "-", right(`create_date`, 2)) as create_date',
+            'sum(`sold_number`) as sold_number',
+            'truncate(sum(`amount_sold`)/100,2) as amount_sold',
+            'sum(`ip_number`) as ip_number',
+            'sum(`viewed_number`) as viewed_number',
+        ];
+        $goodsStatList = (new \yii\db\Query)
+            ->select($select)
+            ->from(self::tableName())
+            ->where($where)
+            ->groupBy('create_date')
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->all();
+
+        return [
+            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'details' => $goodsStatList
+        ];
+    }
+
+    /**
      * Get goods statistics list
      *
      * @param  array $where search condition

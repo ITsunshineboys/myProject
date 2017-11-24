@@ -4279,7 +4279,12 @@ class MallController extends Controller
 
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsStat::PAGE_SIZE_DEFAULT);
-        $paginationData = GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size);
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $paginationData = GoodsStat::pagination($where, GoodsStat::FIELDS_ADMIN, $page, $size);
+        } else {
+            $paginationData = GoodsStat::paginationLhzz($where, $page, $size);
+        }
 
         return Json::encode([
             'code' => 200,
