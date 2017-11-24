@@ -11,7 +11,7 @@
             $scope.is_small = true//是否有小字提示
             $scope.header_word = '登录'//头部文字
             $scope.cur_bind_tel = ''//绑定手机号
-            if(!!sessionStorage.getItem('basic_data')){
+            if(sessionStorage.getItem('basic_data')!=null){
                 $scope.header_word = JSON.parse(sessionStorage.getItem('basic_data')).header_word
                 $scope.countdown = JSON.parse(sessionStorage.getItem('basic_data')).countdown
                 $scope.first_click = JSON.parse(sessionStorage.getItem('basic_data')).first_click
@@ -28,6 +28,15 @@
             //跳转个人中心页获取数据
             if(!!sessionStorage.getItem('all_data')){
                 $scope.all_data = JSON.parse(sessionStorage.getItem('all_data'))
+            }
+            //判断设置头部
+            if($rootScope.curState_name == 'index.login'){
+                $scope.header_word = '登录'
+                sessionStorage.setItem('basic_data',JSON.stringify({header_word:$scope.header_word,countdown:$scope.countdown,first_click:$scope.countdown}))
+            }else if($rootScope.curState_name == 'index.verification'){
+                $scope.header_word = '填写验证码'
+            }else{
+                $scope.header_word = '绑定手机号'
             }
             //判断返回
             $scope.cur_return = function () {
