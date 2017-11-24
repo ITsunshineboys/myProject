@@ -216,7 +216,7 @@ class GoodsOrder extends ActiveRecord
             $goods_order=new self();
             $goods_order->order_no=$post['out_trade_no'];
             $goods_order->amount_order=$post['total_amount'];
-            $goods_order->supplier_id=$supplier_id;
+            $goods_order->supplier_id=$goods['supplier_id'];
             $goods_order->invoice_id=$invoice_id;
             $goods_order->pay_status=1;
             $goods_order->create_time=strtotime($post['gmt_create']);
