@@ -296,7 +296,7 @@
                 <td ng-if="down_11" class="red">{{item.status}}</td>
                 <td ng-if="down_12">{{item.offline_time}}</td>
                 <td ng-if="down_13">{{item.operator}}</td>
-                <td ng-if="down_14"><img class="img_cover_size" ng-src="{{baseUrl + '/'+ item.cover_image}}" alt=""></td>
+                <td ng-if="down_14"><img class="img_cover_size" ng-src="{{item.cover_image}}" alt=""></td>
                 <td ng-if="down_15" class="blue reason_width" ng-show="item.operator =='系统下架'" ng-click="reason_click(item.offline_reason)" data-toggle="modal" data-target="#down_shelves_reason_modal">{{item.offline_reason}}</td>
                 <td ng-if="down_15" class="blue reason_width" ng-show="item.operator !='系统下架'">{{item.offline_reason}}</td>
                 <td ng-if="down_16" ng-show="item.operator =='系统下架'" class="blue" ui-sref="system_offline({item:item})">查看</td>
@@ -477,7 +477,7 @@
                 <td ng-if="wait_10">{{item.sold_number}}</td>
                 <td ng-if="wait_11">{{item.status}}</td>
                 <td ng-if="wait_12" class="sky_blue">{{item.publish_time}}</td>
-                <td ng-if="wait_13"><img class="img_cover_size" ng-src="{{baseUrl + '/' + item.cover_image}}"
+                <td ng-if="wait_13"><img class="img_cover_size" ng-src="{{item.cover_image}}"
                                          alt=""></td>
                 <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)"
                     data-target={{waiteModel}}>{{item.reason}}
