@@ -1,48 +1,7 @@
-section{
-  padding-left: 40px;
+.form-horizontal .control-label{
+  text-align:left;
 }
 
-
-/* 分类菜单开始*/
-.classification_menu{
-  position: absolute;
-  right: 70px;
-}
-
-.classification_menu ul{
-  list-style: none;
-  border: 1px solid black;
-  padding: 0!important;
-  background-color: white;
-
-}
-.classification_menu ul li{
-  height: 20px;
-  position: relative;
-  width: 120px;
-  margin: 2px 0;
-}
-.classification_menu ul input{
-  width: 14px;
-  height: 14px;
-  position: absolute;
-  top:50%;
-  transform: translateY(-50%);
-  margin-right: 20px;
-  margin-left: 10px;
-}
-.classification_menu ul li span{
-  border: 0;
-  background-color: white;
-  margin: 0 0 0 30px ;
-  /*position: absolute;*/
-  /*height: auto;*/
-  /*margin: 0;*/
-  height: 14px;
-  line-height: 14px;
-  font-size: 14px!important;
-}
-/* 分类菜单结束*/
 /*公用CSS样式 开始*/
 #shop_num_null,#shop_num_null2{
   border:1px solid red;
@@ -51,7 +10,7 @@ section{
   line-height: 32px;
   background-color: #FFF2F2;
   color: #E82A2A;
-  width: 540px;
+  border-radius: 4px;
 }
 #show_img_size{
   width: 30px;
@@ -61,10 +20,7 @@ section{
   margin-left: 10px;
   font-weight: bold;
 }
-.shop_get_sku{
-  position: relative;
-  z-index: 9999
-}
+
 .img_sort_size{
   width: 10px;
   height: 16px;
@@ -86,11 +42,8 @@ section{
 .gray{
   color: #cccccc;
 }
-table{
-  width: 100%;
-}
-.no_radio{
-  margin-left: 40px!important;
+.btn_top{
+  margin-top: 10px;
 }
 .yesGreen{
   color: #92C661!important;
@@ -109,27 +62,19 @@ table{
   background-color: #F0F0F0!important;
 }
 .ellipsis{
+  word-break: keep-all;
+  white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.ellipsis_name{
-  display: block;
-  width: 120px;
-  line-height: 42px!important;
 }
 /*公用CSS样式 结束*/
 
 /*APP推荐-banner开始*/
-.rmd_content{
-  /*margin-left: 200px;*/
-}
+
 .city{
   margin: 20px 0;
 }
-.changeCity{
-  /*padding: 0 5px;*/
-}
+
 .citySelect{
   padding: 6px 10px 10px 18px;
   font-size: 12px;
@@ -140,68 +85,30 @@ table{
 .formDiv{
   display: inline-block;
 }
-/*APP推荐-banner结束*/
 
 /*选项卡开始*/
 .myTab{
+  margin-bottom: 30px;
   border-bottom: 1px solid #E6E9F0;
-  overflow: hidden;
 }
 .myTab span{
   width: 60px;
-  font-family: Helvetica-Bold;
-  font-size: 14px;
   color: #666F80;
   text-align: center;
   float: left;
-  list-style: none;
   padding: 10px 0;
   cursor: pointer;
 }
-
+.myTab:after{
+  content: '';
+  display: table;
+  clear: both;
+}
 /*选项卡内容*/
-.tabContent{
-  margin:20px auto;
+.table{
+  table-layout:fixed;
 }
-.all_check_span{
-  position: relative;
-}
-.all_check{
-  display: inline-block!important;
-  width: 15px!important;
-  height: 15px!important;
-  /*margin-left: 10px!important;*/
-  line-height: 32px!important;
-  position: absolute;
-  top:50%;
-  transform: translateY(-50%);
-}
-.topTab span{
-  display: inline-block;
-  height: 32px;
-  margin: 5px;
-  text-align: center;
-  line-height: 32px;
-  background: #EFF7FF;
-  border: 1px solid #89C0FF;
-  border-radius: 3px;
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #666F80;
-  cursor: pointer;
-  position: relative;
-}
-.topTab a{
-  display: inline-block;
-  height: 32px;
-  margin: 5px;
-  text-align: center;
-  line-height: 32px;
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #3F94F6;
-}
-.topTabE{
+.tab_history{
   width: 85px;
   display: inline-block;
   height: 32px;
@@ -212,110 +119,22 @@ table{
   font-size: 12px;
   color: #3F94F6;
 }
-.topTabS{
-  width: 60px;
-}
-.topTabActive{
 
-}
-.topTabList{
-  float: right;
-}
-/*Table内容-*/
 .tab_class{
-  margin: 30px 0 20px 0;
-}
-.tabTable table tr{
-  height: 42px;
-  border-bottom: 1px solid #E6E9F0;
-
-}
-.tabTable table tr td{
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #666F80;
-  line-height: 14px;
-  padding: 0 22px;
-}
-.tabTable table tr td a{
-  color: #3F94F6;
-}
-.tabTable tr td:nth-child(1){
-  width: 16px;
-  height: 16px;
-}
-.th{
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #7A8599;
-  line-height: 14px;
-}
-/*模态框居中*/
-.modelCenter{
-  width: 650px;
-  height: 750px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%)
+  margin: 30px 0;
 }
 
 /*添加模态框*/
 .modal_tab{
   height: 50px;
 }
-#my_modal_add{
-  height: 650px;
-}
-.modal_tab span{
+.modal_tab>span{
   display: inline-block;
   text-align: center;
-  width: 68px;
-  height: 28px;
-  line-height: 28px;
-  border-radius: 3px;
-  font-family: Helvetica-Bold;
-  font-size: 14px;
-}
-.modal_tab_active{
-  color: #3F94F6;
-  border: 1px solid #89C0FF;
-  background: #EFF7FF;
-}
-.modal_txt_one{
-  margin-top: 10px;
-}
-.modal_txt_one span{
-  display: inline-block;
-  width: 64px;
-  height: 32px;
-  line-height: 32px;
-}
-.modal_txt_one span:nth-child(4){
-  background: #FFFFFF;
-  border: 1px solid #BFC0C2;
-  border-radius: 3px;
-  text-align: center;
-}
-.modal_txt_one input[type="text"]{
-  width: 395px;
-  height: 32px;
-  background: #FFFFFF;
-  border: 1px solid #E6E9F0;
-  box-shadow: inset 0 2px 3px 0 #EEF1F8;
-  border-radius: 3px;
-}
-.modal_txt_two input[type="text"]{
-  width: 460px;
-}
-.modal_img_box{
-  overflow: hidden;
-}
-.modal_img_box i{
-  float: left;
-}
-.modal_img_box span{
-  float: left;
+  width: 62px;
+  height: 35px;
+  line-height: 35px;
+  cursor: pointer;
 }
 #modal_img,#modal_img2,#modal_link_img,#modal_link_img2,#modal_edit_link_img,#modal_edit_link_img2{
   display: inline-block!important;
@@ -325,50 +144,14 @@ table{
 }
 .modal_red{
   color:red;
-  margin:10px 0 0 70px;
 }
-.clear{
-  clear: both;
+.img_txt{
+  padding-left: 15px;
 }
-.modal_img_btn{
-  margin: 10px 0 0 70px;
-}
-.modal_img_btn span:nth-child(1){
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  text-align: center;
-}
-
-/*链接详情开始*/
-.details_big_div{
-  width: 100%;
-  margin-top: 10px;
-}
-.details_div{
-  width: 50%;
-  float: left;
-}
-.details_big_div:after{
-  content: "";
-  display: table;
-  clear: both;
-}
-/*链接详情结束*/
 
 .border_red{
   border:1px solid red!important;
 }
-
-.dropdown-menu > li:hover{
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-.dropdown-menu > li {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color: #333;
-  white-space: nowrap;
+.btn_height{
+  height: 34px;
 }

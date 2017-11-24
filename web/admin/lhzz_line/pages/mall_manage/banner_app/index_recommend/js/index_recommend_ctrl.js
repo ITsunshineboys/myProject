@@ -244,6 +244,9 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
 
   //链接添加--确认按钮
   $scope.recommend_link_add_btn=function (vaild) {
+    if($scope.recommend_link_url.indexOf('http://')){
+      $scope.recommend_link_url='http://'+$scope.recommend_link_url
+    }
     if(vaild && $scope.upload_link_img_src){
       $scope.link_add_modal='modal';
       _ajax.post('/mall/recommend-add',{
@@ -349,6 +352,9 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
       if($scope.edit_item.from_type=='链接'){
         if($scope.upload_link_img_src==''){
           $scope.upload_link_img_src=$scope.link_edit_img;
+        }
+        if($scope.link_edit_url.indexOf('http://')){
+          $scope.link_edit_url='http://'+$scope.link_edit_url
         }
         _ajax.post('/mall/recommend-edit',{
             id:$scope.edit_item.id,
@@ -496,7 +502,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
     $scope.link_title_blur=false;
     $scope.link_subtitle_blur=false;
     $scope.link_price_blur=false;
-    $scope.recommend_link_url='';
+    $scope.recommend_link_url='http://';
     $scope.recommend_link_title='';
     $scope.recommend_link_subtitle='';
     $scope.recommend_link_show_price='';

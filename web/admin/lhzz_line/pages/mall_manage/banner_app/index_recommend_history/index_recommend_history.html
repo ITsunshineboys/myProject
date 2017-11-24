@@ -1,57 +1,39 @@
 <link rel="stylesheet" href="pages/mall_manage/banner_app/index_recommend_history/css/index_recommend_history.css">
-
 <div ng-controller="index_recommend_history_ctrl">
-    <!--APP推荐-banner开始-->
-    <div class="content">
         <!--选择城市开始-->
         <div class="city">
-            <div class="formDiv"><select  name="province" ng-model="params.time_type" ng-change="type_change()" class="time_select" ng-options="item.value as item.name for item in time">
-            </select>
+            <div class="formDiv">
+                <select  name="province" ng-model="params.time_type" ng-change="type_change()" class="time_select" ng-options="item.value as item.name for item in time"></select>
                 <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
                 <input ng-if="params.time_type=='custom'" id="end_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
             </div>
         </div>
-        <!--选择城市结束-->
-
         <!--Table内容  开始-->
-        <div class="tabTable">
-            <table class="table">
-                <tr id="th">
-                    <td>类型</td>
-                    <td>商品编号</td>
-                    <td>标题</td>
-                    <td>来源商家</td>
-                    <td>
-                        <span>上架浏览</span>
-                    </td>
-                    <!--<td>-->
-                        <!--<span>上架销量</span>-->
-                    <!--</td>-->
-                    <td>
-                        <span>平台价格</span>
-                    </td>
-                    <td>
-                        <span>创建时间</span>
-                    </td>
-                    <td>图片</td>
+            <table class="table table-hover table-responsive">
+                <tr>
+                    <th>类型</th>
+                    <th>商品编号</th>
+                    <th>标题</th>
+                    <th>来源商家</th>
+                    <th>上架浏览</th>
+                    <!--<td>上架销量</td>-->
+                    <th>平台价格</th>
+                    <th>创建时间</th>
+                    <th>图片</th>
                 </tr>
                 <tr ng-repeat="item in recommendList">
                     <td>{{item.from_type}}</td>
                     <td>{{item.sku=='0'?'无':item.sku}}</td>
-                    <td>{{item.title}}</td>
-                    <td><a href="">{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
+                    <td class="table_txt">{{item.title}}</td>
+                    <td>{{item.supplier_name==''?'链接':item.supplier_name}}</td>
                     <td>{{item.viewed_number}}</td>
                     <!--<td>{{item.sold_number}}</td>-->
                     <td ng-if="item.sku!='0'">{{item.platform_price}}</td>
                     <td ng-if="item.sku=='0'">—</td>
                     <td>{{item.create_time}}</td>
-                    <td><img id="show_img_size" ng-src="{{ item.image}}" alt=""></td>
+                    <td><img id="show_img_size" ng-src="{{item.image}}" alt=""></td>
                 </tr>
             </table>
             <!--分页-->
             <tm-pagination conf="Config"></tm-pagination>
-        </div>
-        <!--Table内容  结束-->
-
-    </div>
 </div>

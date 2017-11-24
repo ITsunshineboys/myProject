@@ -1,20 +1,16 @@
 <link rel="stylesheet" href="pages/mall_manage/banner_app/index_recommend/css/index_recommend.css">
 <div ng-controller="index_recommend_ctrl">
-<section>
-<!--APP推荐-banner开始-->
-<div class="rmd_content">
+
     <!--选择城市开始-->
     <div class="city">
-        <form action="">
             <label>
-                选择省份
+                <span>选择省份</span>
                 <select  class="citySelect" ng-model="cur_province" ng-options="item.name for item in province" ng-change="getCity(cur_province)"></select>
             </label>
             <label>
-                选择城市
+                <span>选择城市</span>
                 <select  class="citySelect" ng-model="cur_city" ng-options="item.name for item in city" ng-change="getCounty(cur_city)"></select>
             </label>
-        </form>
     </div>
     <!--选择城市结束-->
 
@@ -33,7 +29,7 @@
             <button class="btn btn-default pull-left"  ng-modal="selectAll"  ng-click="all(selectAll)">全选</button>
             <button class="btn btn-default pull-left"  data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</button>
             <button class="btn btn-default pull-left" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</button>
-            <a class="topTabE" ui-sref="index_recommend_history"><i class="glyphicon glyphicon-home"></i> 历史数据</a>
+            <a class="tab_history" ui-sref="index_recommend_history"><i class="glyphicon glyphicon-home"></i> 历史数据</a>
         </div>
         <div class="pull-right">
             <!-- 筛选菜单 -->
@@ -63,28 +59,27 @@
     <!--Table操作（增删改查）结束-->
 
     <!--Table内容  开始-->
-    <div class="tabTable">
-        <table>
-            <tr class="th">
-                <td>&nbsp;</td>
-                <td ng-if="show_1">类型</td>
-                <td ng-if="show_2">商品编号</td>
-                <td ng-if="show_3">名称</td>
-                <td ng-if="show_4">来源商家</td>
-                <td ng-if="show_5"><span>上架浏览</span></td>
+        <table class="table table-hover table-responsive">
+            <tr>
+                <th>&nbsp;</th>
+                <th ng-if="show_1">类型</th>
+                <th ng-if="show_2">商品编号</th>
+                <th ng-if="show_3">名称</th>
+                <th ng-if="show_4">来源商家</th>
+                <th ng-if="show_5">上架浏览</th>
                 <!--<td ng-if="show_6" style="padding: 0 5px"><span>上架销量</span></td>-->
-                <td ng-if="show_7">是否启用</td>
-                <td ng-if="show_8"><span>创建时间</span></td>
-                <td ng-if="show_9">图片</td>
-                <td ng-if="show_10">库存</td>
-                <td ng-if="show_11">供货价格</td>
-                <td ng-if="show_12">平台价格</td>
-                <td ng-if="show_13">市场价格</td>
-                <td ng-if="show_14">操作</td>
+                <th ng-if="show_7">是否启用</th>
+                <th ng-if="show_8">创建时间</th>
+                <th ng-if="show_9">图片</th>
+                <th ng-if="show_10">库存</th>
+                <th ng-if="show_11">供货价格</th>
+                <th ng-if="show_12">平台价格</th>
+                <th ng-if="show_13">市场价格</th>
+                <th ng-if="show_14">操作</th>
             </tr>
             <!--数据展示-->
             <tr ng-repeat="item in shop_rep" ng-drop="true" ng-drag="true" ng-drop-success="dropComplete($index,$data,$event)" ng-drag-data="item">
-                <td ><input type="checkbox" ng-checked="selectAll" ng-model="item.state"></td>
+                <td><input type="checkbox" ng-checked="selectAll" ng-model="item.state"></td>
                 <td ng-if="show_1">{{item.from_type}}</td>
                 <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
                 <td ng-if="show_3" class="ellipsis ellipsis_name">{{item.title}}</td>
@@ -93,7 +88,7 @@
                 <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
                 <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
                 <td ng-if="show_8">{{item.create_time}}</td>
-                <td ng-if="show_9"><img id="show_img_size" ng-src="{{ item.image}}"></td>
+                <td ng-if="show_9"><img id="show_img_size" ng-src="{{item.image}}"></td>
                 <td ng-if="show_10&&item.sku!='0'">{{item.left_number}}</td>
                 <td ng-if="show_10&&item.sku=='0'">—</td>
                 <td ng-if="show_11&&item.sku!='0'">{{item.supplier_price}}</td>
@@ -103,19 +98,18 @@
                 <td ng-if="show_13&&item.sku!='0'">{{item.market_price}}</td>
                 <td ng-if="show_13&&item.sku=='0'">—</td>
                 <td ng-if="show_14">
-                    <a href="" ng-if="item.status=='停用'" ng-click="start_use(item)" data-toggle="modal" data-target="{{solo_begin_modal}}">启用</a>
-                    <a href="" ng-if="item.status=='启用'" ng-click="stop_use(item)" data-toggle="modal" data-target="#solo_stop_modal">停用</a>
-                    <a href="" data-toggle="modal" data-target="{{recommend_shop_modal_edit}}" ng-click="shop_edit_item(item)">编辑</a>
-                    <a href="" data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">详情</a>
-                    <a href="" data-toggle="modal" data-target="#recommend_modal_disable_del" ng-click="shop_del(item)">删除</a>
+                    <a ng-if="item.status=='停用'" ng-click="start_use(item)" data-toggle="modal" data-target="{{solo_begin_modal}}">启用</a>
+                    <a ng-if="item.status=='启用'" ng-click="stop_use(item)" data-toggle="modal" data-target="#solo_stop_modal">停用</a>
+                    <a data-toggle="modal" data-target="{{recommend_shop_modal_edit}}" ng-click="shop_edit_item(item)">编辑</a>
+                    <a data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">详情</a>
+                    <a data-toggle="modal" data-target="#recommend_modal_disable_del" ng-click="shop_del(item)">删除</a>
                 </td>
             </tr>
         </table>
-    </div>
     <!--Table内容  结束-->
 
     <!--保存模态框开始-->
-    <div class="modal fade modelCenter" id="my_modal_save" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="my_modal_save" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -135,10 +129,10 @@
     <!--保存模态框结束-->
 
     <!--商家  添加模态框开始-->
-    <div class="modal fade modelCenter" id="recommend_shop_modal_add" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="recommend_shop_modal_add" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-<!--NG-Form表单--><form name="shop_form" novalidate>
+                <form class="form-horizontal" name="shop_form" novalidate>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -147,51 +141,86 @@
                     </div>
                     <div class="modal-body">
                         <div class="modal_tab">
-                            <span class="modal_tab_active">商家</span>
+                            <button class="btn btn-info">商家</button>
                             <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_link_modal_add" ng-click="clear_add_content()">链接</span>
                         </div>
                         <div id="shop_num_null" ng-if="(shop_form.shop_num.$invalid &&submitted)||(shop_form.shop_num.$error.required && num_blur)">
                             <span class="shop_left">商品编号不能为空</span>
                         </div>
-                        <div class="modal_txt_one">
-                            <i class="red">*</i>
-                            <span >商品编号</span>
-                            <input  name="shop_num"  required ng-blur="num_blur=!!shop_form.shop_num.$error"  type="text" ng-model="shop_model"/><span id="shop_get" class="shop_get_sku" ng-click="recommend_shop_add_get()">获取</span>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span >商品编号</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" ng-model="shop_model" name="shop_num" required ng-blur="num_blur=!!shop_form.shop_num.$error"/>
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default btn_height" ng-click="recommend_shop_add_get()">获取</button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>商品链接</span>
-                            <input ng-model="recommend_shop_url" type="text" class="still" disabled="disabled"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>商品链接</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="still form-control"  ng-model="recommend_shop_url" type="text" disabled="disabled"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>商品标题</span>
-                            <input  name="title_name" class="still" disabled="disabled" required ng-class="{'border_red':(shop_form.title_name.$invalid &&submitted)||(shop_form.title_name.$error.required && title_blur)}" ng-blur="title_blur=!!shop_form.title_name.$error" ng-model="recommend_shop_title" type="text" />
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>商品标题</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="text" name="title_name" class="still form-control" ng-model="recommend_shop_title"  disabled="disabled"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>副标题</span>
-                            <input name="subtitle_name" class="still" disabled="disabled" required ng-class="{'border_red':((shop_form.subtitle_name.$invalid &&submitted)||(shop_form.subtitle_name.$error.required && subtitle_blur))}" ng-blur="subtitle_blur=!!shop_form.subtitle_name.$error" ng-model="recommend_shop_subtitle" type="text" />
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>副标题</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="text"  name="subtitle_name" class="still form-control" ng-model="recommend_shop_subtitle" disabled="disabled"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>平台价格</span>
-                            <input  ng-model="recommend_shop_platform_price" class="still" disabled="disabled" type="text" />
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>平台价格</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input  ng-model="recommend_shop_platform_price" class="still form-control" disabled="disabled" type="text" />
+                            </div>
                         </div>
-                        <div class="modal_txt_one">
-                            <i class="red">*</i>
-                            <span>是否启用</span>
-                            <input ng-click="shop_check=1" type="radio" ng-checked="shop_check==1">是
-                            <input ng-click="shop_check=0" type="radio" ng-checked="shop_check==0" class="no_radio">否
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>是否启用</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="shop_check=1" type="radio" ng-checked="shop_check==1">是
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="shop_check=0" type="radio" ng-checked="shop_check==0" class="no_radio">否
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_img_box">
-                            <i class="red">*</i>
-                            <span> 图片</span>
-                            <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{ upload_img_src}}"/>
-                            <img id="modal_img2" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/index_recommend/images/default.png"/>
-                            <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
-                            <div class="modal_img_btn">
-                                <span ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span> 图片</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{upload_img_src}}"/>
+                                <img id="modal_img2" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/index_recommend/images/default.png"/>
+                            </div>
+                            <div class="col-sm-offset-2 img_txt">
+                                <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
+                                <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                             </div>
                         </div>
                     </div>
@@ -206,11 +235,11 @@
     <!--商家 添加模态 框结束-->
 
     <!--链接  添加模态框开始-->
-    <div class="modal fade modelCenter" id="recommend_link_modal_add" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="recommend_link_modal_add" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <!--链接NG-From表单-->
-                <form name="link_form" novalidate>
+                <form class="form-horizontal" name="link_form" novalidate>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -220,41 +249,68 @@
                     <div class="modal-body">
                         <div class="modal_tab">
                             <span data-dismiss="modal" data-toggle="modal" data-target="#recommend_shop_modal_add" ng-click="clear_add_content()">商家</span>
-                            <span class="modal_tab_active">链接</span>
+                            <button class="btn btn-info">链接</button>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>链接</span>
-                            <input name="link_name" required ng-class="{'border_red':((link_form.link_name.$invalid &&link_submitted)||(link_form.link_name.$error.required && link_blur))}" ng-blur="link_blur=!!link_form.link_name.$error" type="text" ng-model="recommend_link_url"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>链接</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" ng-model="recommend_link_url" name="link_name" required ng-class="{'border_red':((link_form.link_name.$invalid &&link_submitted)||(link_form.link_name.$error.required && link_blur))}" ng-blur="link_blur=!!link_form.link_name.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>标题</span>
-                            <input name="link_title" required ng-class="{'border_red':((link_form.link_title.$invalid &&link_submitted)||(link_form.link_title.$error.required && link_title_blur))}" ng-blur="link_title_blur=!!link_form.link_title.$error" type="text" ng-model="recommend_link_title"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>标题</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" ng-model="recommend_link_title" name="link_title" required ng-class="{'border_red':((link_form.link_title.$invalid &&link_submitted)||(link_form.link_title.$error.required && link_title_blur))}" ng-blur="link_title_blur=!!link_form.link_title.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>副标题</span>
-                            <input name="link_subtitle" required ng-class="{'border_red':((link_form.link_subtitle.$invalid &&link_submitted)||(link_form.link_subtitle.$error.required && link_subtitle_blur))}" ng-blur="link_subtitle_blur=!!link_form.link_subtitle.$error" type="text" ng-model="recommend_link_subtitle"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>副标题</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" ng-model="recommend_link_subtitle" name="link_subtitle" required ng-class="{'border_red':((link_form.link_subtitle.$invalid &&link_submitted)||(link_form.link_subtitle.$error.required && link_subtitle_blur))}" ng-blur="link_subtitle_blur=!!link_form.link_subtitle.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>显示价格</span>
-                            <input name="link_price" required ng-class="{'border_red':((link_form.link_price.$invalid &&link_submitted)||(link_form.link_price.$error.required && link_price_blur))}" ng-blur="link_price_blur=!!link_form.link_price.$error" type="text" ng-model="recommend_link_show_price"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>显示价格</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" ng-model="recommend_link_show_price" name="link_price" required ng-class="{'border_red':((link_form.link_price.$invalid &&link_submitted)||(link_form.link_price.$error.required && link_price_blur))}" ng-blur="link_price_blur=!!link_form.link_price.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one">
-                            <i class="red">*</i>
-                            <span>是否启用</span>
-                            <input ng-click="link_check=1" type="radio" ng-checked="link_check==1">是
-                            <input ng-click="link_check=0" type="radio" ng-checked="link_check==0" class="no_radio">否
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>是否启用</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="link_check=1" type="radio" ng-checked="link_check==1">是
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="link_check=0" type="radio" ng-checked="link_check==0" class="no_radio">否
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_img_box">
-                            <span><i class="red">*</i> 图片</span>
-                            <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{ upload_link_img_src}}"/>
-                            <img id="modal_link_img2" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/index_recommend/images/default.png"/>
-                            <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
-                            <div class="modal_img_btn">
-                                <span ngf-pattern="image/*" ng-change="upload_link(data_link.file)"  ngf-select="" ngf-multiple="false" ng-model="data_link.file">上传</span>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>图片</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{upload_link_img_src}}"/>
+                                <img id="modal_link_img2" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/index_recommend/images/default.png"/>
+                            </div>
+                            <div class="col-sm-offset-2 img_txt">
+                                <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
+                                <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data_link.file)"  ngf-select="" ngf-multiple="false" ng-model="data_link.file">上传</button>
                             </div>
                         </div>
                     </div>
@@ -307,7 +363,6 @@
         </div>
     </div>
     <!--停用模态框结束-->
-
 
     <!--未停用 删除模态框开始-->
     <div class="modal fade modelCenter" id="my_modal_del_stop" data-backdrop="static" data-keyboard="false">
@@ -370,7 +425,7 @@
     <div class="modal fade modelCenter" id="recommend_shop_modal_edit" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form name="edit_form" novalidate>
+                <form class="form-horizontal" name="edit_form" novalidate>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -382,81 +437,142 @@
                         <div id="shop_num_null2" ng-if="(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)">
                             <span class="shop_left">商品编号不能为空</span>
                         </div>
-                        <div class="modal_txt_one">
-                            <i class="red">*</i>
-                            <span>商铺编号</span>
-                            <input name="edit_shop_num" required ng-class="{'border_red':(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)}" ng-blur="edit_shop_num_blur=!!edit_form.edit_shop_num.$error" ng-model="myng.shop_edit_sku" type="text"/><span ng-click="recommend_shop_edit_get()">获取</span>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>商铺编号</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input class="form-control" name="edit_shop_num" required ng-class="{'border_red':(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)}" ng-blur="edit_shop_num_blur=!!edit_form.edit_shop_num.$error" ng-model="myng.shop_edit_sku" type="text"/>
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-default btn_height" ng-click="recommend_shop_edit_get()">获取</button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>商品链接</span>
-                            <input ng-model="recommend_shop_edit_url"  type="text" disabled="disabled"  class="still"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>商品链接</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="still form-control" ng-model="recommend_shop_edit_url"  type="text" disabled="disabled"  />
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>标题</span>
-                            <input name="edit_shop_title" class="still" disabled="disabled" required ng-class="{'border_red':(edit_form.edit_shop_title.$invalid &&submitted)||(edit_form.edit_shop_title.$error.required && edit_shop_title_blur)}" ng-blur="edit_shop_title_blur=!!edit_form.edit_shop_title.$error" ng-model="myng.recommend_shop_edit_title" type="text" />
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>标题</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input name="edit_shop_title" class="still form-control" ng-model="myng.recommend_shop_edit_title" type="text" disabled="disabled" required ng-class="{'border_red':(edit_form.edit_shop_title.$invalid &&submitted)||(edit_form.edit_shop_title.$error.required && edit_shop_title_blur)}" ng-blur="edit_shop_title_blur=!!edit_form.edit_shop_title.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>副标题</span>
-                            <input name="edit_shop_subtitle" class="still" disabled="disabled" required ng-class="{'border_red':(edit_form.edit_shop_subtitle.$invalid &&submitted)||(edit_form.edit_shop_subtitle.$error.required && edit_shop_subtitle_blur)}" ng-blur="edit_shop_subtitle_blur=!!edit_form.edit_shop_subtitle.$error" ng-model="myng.recommend_shop_edit_subtitle" type="text" />
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>副标题</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="still form-control" ng-model="myng.recommend_shop_edit_subtitle" type="text" name="edit_shop_subtitle" disabled="disabled" required ng-class="{'border_red':(edit_form.edit_shop_subtitle.$invalid &&submitted)||(edit_form.edit_shop_subtitle.$error.required && edit_shop_subtitle_blur)}" ng-blur="edit_shop_subtitle_blur=!!edit_form.edit_shop_subtitle.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>平台价</span>
-                            <input  ng-model="recommend_shop_edit_platform_price" type="text" disabled="disabled"  class="still"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>平台价</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input class="still form-control" ng-model="recommend_shop_edit_platform_price" type="text" disabled="disabled"  />
+                            </div>
                         </div>
-                        <div class="modal_txt_one">
-                            <i class="red">*</i>
-                            <span>是否启用</span>
-                            <input ng-click="myng.shop_edit_check=1" type="radio" ng-checked="myng.shop_edit_check==1">是
-                            <input ng-click="myng.shop_edit_check=0" type="radio" ng-checked="myng.shop_edit_check==0" class="no_radio">否
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>是否启用</span>
+                            </div>
+                            <div class="col-sm-2 control-label" >
+                                <input ng-click="myng.shop_edit_check=1" type="radio" ng-checked="myng.shop_edit_check==1">是
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="myng.shop_edit_check=0" type="radio" ng-checked="myng.shop_edit_check==0" class="no_radio">否
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_img_box">
-                            <span><i class="red">*</i>图片</span>
-                            <img id="modal_edit_img" ng-if="!upload_img_src" ng-src="{{ myng.recommend_shop_edit_img}}"  />
-                            <img id="modal_edit_img2" ng-if="!!upload_img_src" ngf-src="data.file" />
-                            <div class="modal_img_btn">
-                                <span ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <span><i class="red">*</i>图片</span>
+                            </div>
+                            <div class="col-sm-10 control-label">
+                                <img id="modal_edit_img" ng-if="!upload_img_src" ng-src="{{myng.recommend_shop_edit_img}}"  />
+                                <img id="modal_edit_img2" ng-if="!!upload_img_src" ngf-src="data.file" />
+                            </div>
+                            <div class="col-sm-offset-2 img_txt">
+                                <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                             </div>
                         </div>
                     </div>
                     <!--链接-->
                     <div class="modal-body" ng-if="edit_item.from_type=='链接'">
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>链接</span>
-                            <input name="edit_link_link" required ng-class="{'border_red':(edit_form.edit_link_link.$invalid &&submitted)||(edit_form.edit_link_link.$error.required && edit_link_link_blur)}" ng-blur="edit_link_link_blur=!!edit_form.edit_link_link.$error" type="text" ng-model="myng.link_edit_url"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>链接</span>
+                            </div>
+                            <div class="col-sm-10 control-label">
+                                <input class="form-control" type="text" ng-model="myng.link_edit_url" name="edit_link_link" required ng-class="{'border_red':(edit_form.edit_link_link.$invalid &&submitted)||(edit_form.edit_link_link.$error.required && edit_link_link_blur)}" ng-blur="edit_link_link_blur=!!edit_form.edit_link_link.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>标题</span>
-                            <input name="edit_link_title" required ng-class="{'border_red':(edit_form.edit_link_title.$invalid &&submitted)||(edit_form.edit_link_title.$error.required && edit_link_title_blur)}" ng-blur="edit_link_title_blur=!!edit_form.edit_link_title.$error" type="text" ng-model="myng.link_edit_title"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>标题</span>
+                            </div>
+                            <div class="col-sm-10 control-label">
+                                <input class="form-control" type="text" ng-model="myng.link_edit_title" name="edit_link_title" required ng-class="{'border_red':(edit_form.edit_link_title.$invalid &&submitted)||(edit_form.edit_link_title.$error.required && edit_link_title_blur)}" ng-blur="edit_link_title_blur=!!edit_form.edit_link_title.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>副标题</span>
-                            <input name="edit_link_subtitle" required ng-class="{'border_red':(edit_form.edit_link_subtitle.$invalid &&submitted)||(edit_form.edit_link_subtitle.$error.required && edit_link_subtitle_blur)}" ng-blur="edit_link_subtitle_blur=!!edit_form.edit_link_subtitle.$error" type="text" ng-model="myng.link_edit_subtitle"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>副标题</span>
+                            </div>
+                            <div class="col-sm-10 control-label">
+                                <input class="form-control" type="text" ng-model="myng.link_edit_subtitle" name="edit_link_subtitle" required ng-class="{'border_red':(edit_form.edit_link_subtitle.$invalid &&submitted)||(edit_form.edit_link_subtitle.$error.required && edit_link_subtitle_blur)}" ng-blur="edit_link_subtitle_blur=!!edit_form.edit_link_subtitle.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_txt_two">
-                            <i class="red">*</i>
-                            <span>价格</span>
-                            <input name="edit_link_price" required ng-class="{'border_red':(edit_form.edit_link_price.$invalid &&submitted)||(edit_form.edit_link_price.$error.required && edit_link_price_blur)}" ng-blur="edit_link_price_blur=!!edit_form.edit_link_price.$error" type="text" ng-model="myng.link_edit_price"/>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>价格</span>
+                            </div>
+                            <div class="col-sm-10 control-label">
+                                <input class="form-control" type="text" ng-model="myng.link_edit_price" name="edit_link_price" required ng-class="{'border_red':(edit_form.edit_link_price.$invalid &&submitted)||(edit_form.edit_link_price.$error.required && edit_link_price_blur)}" ng-blur="edit_link_price_blur=!!edit_form.edit_link_price.$error"/>
+                            </div>
                         </div>
-                        <div class="modal_txt_one">
-                            <i class="red">*</i>
-                            <span>是否启用</span>
-                            <input ng-click="myng.shop_edit_check=1" type="radio" ng-checked="myng.shop_edit_check==1">是
-                            <input ng-click="myng.shop_edit_check=0" type="radio" ng-checked="myng.shop_edit_check==0" class="no_radio">否
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>是否启用</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="myng.shop_edit_check=1" type="radio" ng-checked="myng.shop_edit_check==1">是
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input ng-click="myng.shop_edit_check=0" type="radio" ng-checked="myng.shop_edit_check==0" class="no_radio">否
+                            </div>
                         </div>
-                        <div class="modal_txt_one modal_img_box">
-                            <span><i class="red">*</i>图片</span>
-                            <img id="modal_edit_link_img" ng-if="!upload_link_img_src" ng-src="{{ myng.link_edit_img}}" />
-                            <img id="modal_edit_link_img2" ng-if="!!upload_link_img_src" ngf-src="data.file" />
-                            <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
-                            <div class="modal_img_btn">
-                                <span ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</span>
+                        <div class="form-group">
+                            <div class="col-sm-2 control-label">
+                                <i class="red">*</i>
+                                <span>图片</span>
+                            </div>
+                            <div class="col-sm-10 control-label">
+                                <img id="modal_edit_link_img" ng-if="!upload_link_img_src" ng-src="{{myng.link_edit_img}}" />
+                                <img id="modal_edit_link_img2" ng-if="!!upload_link_img_src" ngf-src="data.file" />
+                            </div>
+                            <div class="col-sm-offset-2 img_txt">
+                                <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                             </div>
                         </div>
                     </div>
@@ -482,82 +598,40 @@
                     <h4 class="modal-title">推荐——商家详情</h4>
                 </div>
                 <!--商铺详情模态框-->
-                <div class="modal-body" >
-                    <div class="details_big_div">
-                        <span>商品名称：</span>
-                        <span>{{shop_details_title}}</span>
+                <div class="modal-body">
+                    <div class="row">
+                        <p class="col-sm-12">商品名称 : {{shop_details_title}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <span>副标题：</span>
-                        <span>{{shop_details_subtitle}}</span>
+                    <div class="row">
+                        <p class="col-sm-12">副标题 : {{shop_details_subtitle}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>类型：</span>
-                            <span>{{shop_details_types}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>商品编号：</span>
-                            <span>{{shop_details_sku}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">类型 : {{shop_details_types}}</p>
+                        <p class="col-sm-6">商品编号 : {{shop_details_sku}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>来源商家：</span>
-                            <span class="blue">{{shop_details_supplier_name}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>创建时间：</span>
-                            <span>{{shop_details_time}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">来源商家 : <span class="blue">{{shop_details_supplier_name}}</span></p>
+                        <p class="col-sm-6">创建时间 : {{shop_details_time}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>是否启用：</span>
-                            <span class="yesGreen" ng-class="{'noRed':(shop_details_status=='停用')}">{{shop_details_status}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>上架浏览：</span>
-                            <span class="blue">{{shop_details_viewed_number}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">是否启用 : <span class="yesGreen" ng-class="{'noRed':(shop_details_status=='停用')}">{{shop_details_status}}</span></p>
+                        <p class="col-sm-6">上架浏览 : <span class="blue">{{shop_details_viewed_number}}</span></p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>库存：</span>
-                            <span>{{shop_details_viewed_left}}</span>
-                        </div>
-                        <!--<div class="details_div">-->
-                            <!--<span>上架销量：</span>-->
-                            <!--<span class="blue">{{shop_details_sold_number}}</span>-->
-                        <!--</div>-->
-                        <div class="details_div">
-                            <span>供货价格：</span>
-                            <span>{{shop_details_supplier_price}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">库存 : {{shop_details_viewed_left}}</p>
+                        <p class="col-sm-6">供货价格 : {{shop_details_supplier_price}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <!--<div class="details_div">-->
-                            <!--<span>供货价格：</span>-->
-                            <!--<span>{{shop_details_supplier_price}}</span>-->
-                        <!--</div>-->
-                        <div class="details_div">
-                            <span>平台价格：</span>
-                            <span>{{shop_details_platform_price}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>市场价格：</span>
-                            <span>{{shop_details_market_price}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">平台价格 : {{shop_details_platform_price}}</p>
+                        <p class="col-sm-6">市场价格 : {{shop_details_market_price}}</p>
                     </div>
-                    <!--<div class="details_big_div">-->
-                        <!--<div class="details_div">-->
-                            <!--<span>市场价格：</span>-->
-                            <!--<span>{{shop_details_market_price}}</span>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <div class="modal_txt_one modal_img_box">
-                        <span>图片：</span>
-                        <img id="shop_details_img" ng-src="{{ shop_details_img}}" >
+                    <div class="row">
+                        <p class="col-sm-12">图片 : </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-12">
+                            <img id="shop_details_img" ng-src="{{shop_details_img}}"/>
+                        </p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -574,47 +648,31 @@
                 </div>
                 <!--商铺详情模态框-->
                 <div class="modal-body" >
-                    <div class="details_big_div">
-                        <span>名称：</span>
-                        <span>{{link_details_title}}</span>
+                    <div class="row">
+                        <p class="col-sm-12">名称 : {{link_details_title}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <span>副标题：</span>
-                        <span>{{link_details_subtitle}}</span>
+                    <div class="row">
+                        <p class="col-sm-12">副标题 : {{link_details_subtitle}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>类型：</span>
-                            <span>{{link_details_from_type}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>显示价格：</span>
-                            <span>{{link_details_show_price}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">类型 : {{link_details_from_type}}</p>
+                        <p class="col-sm-6">显示价格 : {{link_details_show_price}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>来源商家：</span>
-                            <span class="blue">{{link_details_supplier_name==''?'链接':link_details_supplier_name}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>创建时间：</span>
-                            <span>{{link_details_create_time}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">来源商家 : <span class="blue">{{link_details_supplier_name==''?'链接':link_details_supplier_name}}</span></p>
+                        <p class="col-sm-6">创建时间 : {{link_details_create_time}}</p>
                     </div>
-                    <div class="details_big_div">
-                        <div class="details_div">
-                            <span>是否启用：</span>
-                            <span class="yesGreen" ng-class="{'noRed':(link_details_status=='停用')}">{{link_details_status}}</span>
-                        </div>
-                        <div class="details_div">
-                            <span>浏览：</span>
-                            <span>{{link_details_viewed_number}}</span>
-                        </div>
+                    <div class="row">
+                        <p class="col-sm-6">是否启用 : <span class="yesGreen" ng-class="{'noRed':(link_details_status=='停用')}">{{link_details_status}}</span></p>
+                        <p class="col-sm-6">浏览 : {{link_details_viewed_number}}</p>
                     </div>
-                    <div class="modal_txt_one modal_img_box">
-                        <span>图片：</span>
-                        <img id="link_details_img" ng-src="{{ link_details_img}}" >
+                    <div class="row">
+                        <p class="col-sm-12">图片 : </p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-12">
+                            <img id="link_details_img" ng-src="{{link_details_img}}" >
+                        </p>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -719,6 +777,4 @@
         </div>
     </div>
     <!--请先上架商品模态框  结束-->
-</div>
-</section>
 </div>

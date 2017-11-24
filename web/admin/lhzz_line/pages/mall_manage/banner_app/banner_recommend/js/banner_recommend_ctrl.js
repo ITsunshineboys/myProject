@@ -251,6 +251,9 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
 
   //链接添加--确认按钮
   $scope.recommend_link_add_btn=function (valid) {
+    if($scope.recommend_link_url.indexOf('http://')){
+      $scope.recommend_link_url='http://'+$scope.recommend_link_url
+    }
     if(valid&&$scope.upload_link_img_src){
       $scope.variable_link_add_modal='modal';
       _ajax.post('/mall/recommend-add',{
@@ -350,6 +353,9 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
       if($scope.edit_item.from_type=='链接'){
         if($scope.upload_link_img_src==''){
           $scope.upload_link_img_src=$scope.link_edit_img;
+        }
+        if($scope.link_edit_url.indexOf('http://')){
+          $scope.link_edit_url='http://'+$scope.link_edit_url
         }
         _ajax.post('/mall/recommend-edit',{
             id:+$scope.edit_item.id,
@@ -500,7 +506,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     $scope.recommend_shop_subtitle='';
     $scope.recommend_shop_platform_price='';
     //链接
-    $scope.recommend_link_url='';
+    $scope.recommend_link_url="http://";
     $scope.recommend_link_title='';
     $scope.recommend_link_subtitle='';
     $scope.recommend_link_show_price='';
