@@ -15,9 +15,11 @@
     <!--选择城市结束-->
 
     <!--Banner、推荐选项卡开始-->
-    <div class="myTab">
-        <span ng-class="{'bottom_blue':(tab_banner_flag==true)}" ng-click="tab_banner()" ui-sref="banner_recommend">Banner</span>
-        <span ng-class="{'bottom_blue':(tab_recommend_flag==true)}" ng-click="tab_recommend()"  ui-sref="index_recommend">推荐</span>
+    <div class="tab clearfix">
+        <ul>
+            <li ng-class="{'active':(tab_banner_flag==true)}" ng-click="tab_banner()" ui-sref="banner_recommend">Banner</li>
+            <li ng-class="{'active':(tab_recommend_flag==true)}" ng-click="tab_recommend()"  ui-sref="index_recommend">推荐</li>
+        </ul>
     </div>
     <!--Banner、推荐选项卡结束-->
 

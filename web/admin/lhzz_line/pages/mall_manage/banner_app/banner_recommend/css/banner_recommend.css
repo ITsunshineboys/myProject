@@ -32,10 +32,6 @@
 .ng-hide:not(.ng-hide-animate){
   display: inline-block!important;
 }
-.bottom_blue{
-  color:#3F94F6;
-  border-bottom: 1px solid #3F94F6;
-}
 .head_nav_font_weight{
   font-weight: bold;
 }
@@ -86,25 +82,7 @@
   display: inline-block;
 }
 
-/*选项卡开始*/
-.myTab{
-  margin-bottom: 30px;
-  border-bottom: 1px solid #E6E9F0;
-}
-.myTab span{
-  width: 60px;
-  color: #666F80;
-  text-align: center;
-  float: left;
-  padding: 10px 0;
-  cursor: pointer;
-}
-.myTab:after{
-  content: '';
-  display: table;
-  clear: both;
-}
-/*选项卡内容*/
+
 .table{
   table-layout:fixed;
 }

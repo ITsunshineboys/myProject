@@ -13,6 +13,10 @@ a {
     color: #4094F6;
 }
 
+ul {
+    list-style: none;
+}
+
 .pointer { /* pointer */
     cursor: pointer !important;
 }
@@ -262,7 +266,6 @@ select.form-control:focus {
 
 /* tab start */
 .tab {
-    margin-right: 40px;
     margin-bottom: 40px;
     font-weight: bold;
     border-bottom: 1px solid #E6E9F0;

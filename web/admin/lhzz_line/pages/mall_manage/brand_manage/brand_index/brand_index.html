@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="pages/mall_manage/brand_manage/brand_index/css/brand_index.css">
 <div ng-controller="brand_index_ctrl">
     <!--选项卡-->
-    <div class="tab">
+    <div class="tab clearfix">
         <ul>
-            <li ng-class="{'tab_blue':(on_flag==true)}"  ng-click="on_shelves()">已上架</li>
-            <li ng-class="{'tab_blue':(down_flag==true)}" ng-click="down_shelves()">已下架</li>
-            <li ng-class="{'tab_blue':(check_flag==true)}" ng-click="wait_shelves()">品牌使用审核</li>
+            <li ng-class="{'active':(on_flag==true)}"  ng-click="on_shelves()">已上架</li>
+            <li ng-class="{'active':(down_flag==true)}" ng-click="down_shelves()">已下架</li>
+            <li ng-class="{'active':(check_flag==true)}" ng-click="wait_shelves()">品牌使用审核</li>
         </ul>
     </div>
 <!--已上架开始-->
