@@ -1145,9 +1145,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
         sessionStorage.setItem('mall_id',$stateParams.mall_id);
-        if($scope.mall_id == undefined){
-            $scope.mall_id = sessionStorage.getItem('mall_id')
-        }
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
         $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
@@ -1375,6 +1372,9 @@ angular.module("all_controller", ['ngCookies'])
 
         // 点击去支付判断是否填写完整
         $scope.getModel = function () {
+            if($scope.mall_id == undefined){
+                $scope.mall_id = sessionStorage.getItem('mall_id')
+            }
             alert(sessionStorage.getItem('address_id'));
             $scope.order_order = '';
             $scope.order_address_model = '';
