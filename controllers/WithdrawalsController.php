@@ -479,6 +479,11 @@ class WithdrawalsController extends Controller
         }
     }
 
+    public  function  actionGetData()
+    {
+        $codeValidationRes = SmValidationService::validCode(13880414513,'register');
+        var_dump($codeValidationRes);
+    }
 
     /**
      * 获取可用余额-商家后台

@@ -5310,14 +5310,9 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
+        $request=Yii::$app->request->post();
+        return Json::encode($request);
 
-        $Goods=Goods::find()->where(['sku'=>'167238'])->asArray()->one();
-        var_dump($Goods);exit;
-        $order=GoodsOrder::FindByOrderNo('1124132087');
-        var_dump($order->toArray());
-        die;
-        $suplier=Supplier::find()->asArray()->all();
-        var_dump($suplier);
     }
 
 
