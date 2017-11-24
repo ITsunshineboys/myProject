@@ -11,6 +11,12 @@ use yii\db\Query;
 
 class OwnerCashManager extends ActiveRecord {
 
+    const FIELDS_USER_MANAGER = [
+        'icon',
+        'nickname',
+        'aite_cube_no',
+        'balance',
+    ];
     const USER_CASHREGISTER='user_cashregister';
     const USER='user';
     const STATUS_CASHING=1;
@@ -65,6 +71,22 @@ class OwnerCashManager extends ActiveRecord {
         return UserCashregister::find()
             ->where(['status'=>self::STATUS_CASHING,'role_id'=>self::OWNER_ROLE])
             ->count();
+    }
+
+    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
+
+        $select = array_diff($select, OwnerCashManager::FIELDS_USER_MANAGER);
+        $offset = ($page - 1) * $size;
+        $userList = User::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        var_dump($userList);
+
     }
 
     /**
