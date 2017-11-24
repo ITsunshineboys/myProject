@@ -275,7 +275,8 @@ class DistributionController extends Controller
      */
     public function actionDistributionBindingMobile(){
         $session = Yii::$app->session;
-        $data=explode('&', urldecode($session['distribution_token']));
+//        $data=explode('&', urldecode($session['distribution_token']));
+        $data=explode('&', base64_decode(base64_decode($session['distribution_token'])));
         if (!$data)
         {
             $code=1052;
