@@ -1840,12 +1840,12 @@ class OwnerController extends Controller
         }
 
         // $goods_     $material    $griotte
-        var_dump($goods_);exit;
+        var_dump($goods_);
         $_goods = [];
         foreach ($goods_ as $value){
-            $goods [] = $value;
-            $goods [] = $material;
-            $goods [] = $griotte;
+            $_goods [] = $value;
+            $_goods [] = $material;
+            $_goods [] = $griotte;
         }
         var_dump($_goods);exit;
 
