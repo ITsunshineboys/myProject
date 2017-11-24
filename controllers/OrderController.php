@@ -5296,6 +5296,12 @@ class OrderController extends Controller
 
     }
 
+    public  function  actionTest123()
+    {
+        $suplier=Supplier::find()->asArray()->all();
+        var_dump($suplier);
+    }
+
 
 
 }
