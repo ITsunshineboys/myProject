@@ -581,17 +581,19 @@ class BasisDecorationService
         foreach ($goods as $goods_price ) {
             if($goods_price['title'] == self::GOODS_NAME['plasterboard']) {
                 $plasterboard = $goods_price;
-            }else {
-                $plasterboard = null;
             }
         }
+
         foreach ($crafts as $craft) {
+
            if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_sculpt']){
                $plasterboard_sculpt = $craft['material'];
            }
+
            if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_area']){
                $plasterboard_area = $craft['material'];
            }
+
            if ($craft['project_details'] == self::CARPENTRY_DETAILS['tv_plasterboard']){
                $tv_plasterboard  = $craft['material'];
            }
@@ -601,7 +603,8 @@ class BasisDecorationService
         $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_sculpt + $flat_area / $plasterboard_area + $tv_plasterboard);
 
 //            石膏板费用：个数×商品价格
-        $plasterboard_cost['cost'] = $plasterboard_cost['quantity'] * $plasterboard['platform_price'];
+        $plasterboard_cost['cost'] = round($plasterboard_cost['quantity'] * $plasterboard['platform_price'],2);
+        $plasterboard_cost['procurement'] = round($plasterboard_cost['quantity'] * $plasterboard['purchase_price_decoration_company'],2);
         return $plasterboard_cost;
     }
 
@@ -637,7 +640,8 @@ class BasisDecorationService
 //          个数2：（平顶面积÷【1.5m²】）
             $keel_cost['quantity'] = ceil($modelling_length / $keel_sculpt + $flat_area /$keel_area);
 //          主龙骨费用：个数×商品价格
-            $keel_cost['cost'] = $keel_cost['quantity'] * $goods_price['platform_price'];
+            $keel_cost['cost'] = round($keel_cost['quantity'] * $goods_price['platform_price'],2);
+            $keel_cost['procurement'] = round($keel_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
         }
         return $keel_cost;
     }
@@ -672,7 +676,8 @@ class BasisDecorationService
 //            个数2：（平顶面积÷【2m²】
             $pole_cost['quantity'] = ceil($modelling_length / $screw_rod_sculpt + $flat_area / $screw_rod_area);
 //            丝杆费用：个数×抓取的商品价格
-            $pole_cost['cost'] = $pole_cost['quantity'] * $goods_price['platform_price'];
+            $pole_cost['cost'] = round($pole_cost['quantity'] * $goods_price['platform_price'],2);
+            $pole_cost['procurement'] = round($pole_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
         }
         return $pole_cost;
     }
@@ -700,7 +705,8 @@ class BasisDecorationService
 //      个数
         $pole_cost['quantity'] = (int)$tv;
 //      费用
-        $pole_cost['cost'] = $pole_cost['quantity'] * $blockboard['platform_price'];
+        $pole_cost['cost'] = round($pole_cost['quantity'] * $blockboard['platform_price'],2);
+        $pole_cost['procurement'] = round($pole_cost['quantity'] * $blockboard['purchase_price_decoration_company'],2);
 
         return $pole_cost;
     }
@@ -1733,16 +1739,19 @@ class BasisDecorationService
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['plasterboard']:
                     $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
                     $one_goods_price['cost'] = $plasterboard_cost['cost'];
+                    $one_goods_price['procurement'] = $plasterboard_cost['procurement'];
                     $plasterboard [] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['keel']:
                     $one_goods_price['quantity'] = $keel_cost['quantity'];
                     $one_goods_price['cost'] = $keel_cost['cost'];
+                    $one_goods_price['procurement'] = $keel_cost['procurement'];
                     $keel [] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['lead_screw']:
                     $one_goods_price['quantity'] = $pole_cost['quantity'];
                     $one_goods_price['cost'] = $pole_cost['cost'];
+                    $one_goods_price['procurement'] = $pole_cost['procurement'];
                     $pole [] = $one_goods_price;
                     break;
             }
