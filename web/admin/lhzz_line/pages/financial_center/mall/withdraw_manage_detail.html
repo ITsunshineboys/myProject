@@ -72,7 +72,7 @@
                 <input type="text" name="cur_account_money" ng-model="ctrlScope.cur_account_money" required
                        ng-blur="flag = !!account_detail.cur_account_money.$error"
                        class="form-control" placeholder="请输入实到帐金额"
-                       ng-pattern="/^[1-9]\d{0,}(.\d{1,2})?$/"
+                       ng-pattern="/^0.[1-9]\d?$|^0.0\d$|^[1-9]\d{0,}(.\d{1,2})?$/"
                 ng-class="{'error':(account_detail.cur_account_money.$invalid&&submitted)||
                 (cur_deal_style.name=='提现'&&(account_detail.cur_account_money.$error.required||account_detail.cur_account_money.$error.pattern)&&flag)}">
             </p>
