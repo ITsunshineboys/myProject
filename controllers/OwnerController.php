@@ -1819,6 +1819,7 @@ class OwnerController extends Controller
                         $one_stairs_price['goods_three'] = $goods_category['2']['title'];
                         $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
                         $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
+                        unset($one_stairs_price['path']);
                         $condition_stairs [] = $one_stairs_price;
                     }
                 }
@@ -1830,7 +1831,7 @@ class OwnerController extends Controller
 
         // $goods_     $material    $griotte
 
-        var_dump($material);exit;
+//        var_dump($material);exit;
 
         return Json::encode([
             'code' => 200,
