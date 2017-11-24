@@ -419,7 +419,7 @@ app.service('_ajax', function ($http, $state) {
             restrict: 'E',
             replace: true,
             template: '<ol class="breadcrumb">' +
-            '<li ng-repeat="obj in crumbConf">' +
+            '<li ng-repeat="obj in crumbConf" ng-class="{active: $last}">' +
             '<i class="iconfont" ng-if="$index == 0" ng-class="obj.icon"></i>' +
             '<a ng-if="!$last" href="javascript:void (0);" ng-bind="obj.name" ng-click="goToPage(obj.link, obj.params)"></a>' +
             '<span ng-if="$last" ng-bind="obj.name"></span>' +
