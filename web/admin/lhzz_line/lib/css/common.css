@@ -9,6 +9,7 @@ textarea {
 }
 
 a {
+    cursor: pointer;
     color: #4094F6;
 }
 

@@ -25,11 +25,11 @@
 
         <div class="tab_tools clearfix tab_class">
             <div class="pull-left">
-                <button class="btn btn-primary pull-left" type="submit" ng-click="save_btn_ok()" data-toggle="modal" data-target="#my_modal_save"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
-                <button class="btn btn-info pull-left" ng-click="clear_add_content()" type="submit" data-toggle="modal" data-target="#recommend_shop_modal_add"><i class="glyphicon glyphicon-plus"></i>添加</button>
-                <button class="btn btn-default pull-left"  ng-modal="selectAll"  ng-click="all(selectAll)">全选</button>
-                <button class="btn btn-default pull-left"  data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</button>
-                <button class="btn btn-default pull-left" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</button>
+                <button class="btn btn-info  pull-left" type="submit" ng-click="save_btn_ok()" data-toggle="modal" data-target="#my_modal_save"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
+                <button class="btn btn-primary pull-left btn_left" ng-click="clear_add_content()" type="submit" data-toggle="modal" data-target="#recommend_shop_modal_add"><i class="glyphicon glyphicon-plus"></i>添加</button>
+                <button class="btn btn-default pull-left btn_left"  ng-modal="selectAll"  ng-click="all(selectAll)">全选</button>
+                <button class="btn btn-default pull-left btn_left"  data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</button>
+                <button class="btn btn-default pull-left btn_left" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</button>
                 <a class="tab_history" ui-sref="banner_history"><i class="glyphicon glyphicon-home"></i> 历史数据</a>
             </div>
             <div class="pull-right">
