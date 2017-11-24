@@ -911,7 +911,8 @@ class OwnerController extends Controller
 //        石膏粉费用   石膏粉费用：个数×商品价格
 //        个数：（【3元】×乳胶漆面漆面积÷商品价格）
         $gypsum_powder_cost['quantity'] = ceil($gypsum_powder_craft['material'] * $primer_area / $series_and_style['gypsum_powder']['platform_price']);
-        $gypsum_powder_cost['cost'] = $gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['platform_price'];
+        $gypsum_powder_cost['cost'] = round($gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['platform_price'],2);
+        $gypsum_powder_cost['procurement'] = round($gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['purchase_price_decoration_company'],2);
 
         //总费用
         $total_cost = $putty_cost['cost'] + $primer_cost['cost'] + $finishing_coat_cost['cost'] + $concave_line_cost['cost'] + $gypsum_powder_cost['cost'];
@@ -921,26 +922,31 @@ class OwnerController extends Controller
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['putty']:
                     $one_goods_price['quantity'] = $putty_cost['quantity'];
                     $one_goods_price['cost'] = $putty_cost['cost'];
+                    $one_goods_price['procurement'] = $putty_cost['procurement'];
                     $material_total['material'][] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_primer']:
                     $one_goods_price['quantity'] = $primer_cost['quantity'];
                     $one_goods_price['cost'] = $primer_cost['cost'];
+                    $one_goods_price['procurement'] = $primer_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_surface']:
                     $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
                     $one_goods_price['cost']     = $finishing_coat_cost['cost'];
+                    $one_goods_price['procurement']     = $finishing_coat_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['concave_line']:
                     $one_goods_price['quantity'] = $concave_line_cost['quantity'];
                     $one_goods_price['cost']     = $concave_line_cost['cost'];
+                    $one_goods_price['procurement']     = $concave_line_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['land_plaster']:
                     $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
                     $one_goods_price['cost']     = $gypsum_powder_cost['cost'];
+                    $one_goods_price['procurement']     = $gypsum_powder_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
             }
