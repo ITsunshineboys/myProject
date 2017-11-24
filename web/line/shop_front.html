@@ -15,7 +15,7 @@
         <!--头部-->
         <div class="header_shop clearfix">
             <div class="pull-left shop_img">
-                <img src="{{baseUrl + '/'+icon}}" id="shop_img_header" alt=""/>
+                <img src="{{icon}}" id="shop_img_header" alt=""/>
             </div>
             <div class="pull-left shop_name">{{shop_name}}</div>
             <!--<div>-->
@@ -45,7 +45,7 @@
                                     <div id='swiperList' class="swiper-container" >
                                         <div class="swiper-wrapper">
                                             <div class="swiper-slide"  ng-repeat=" n in swiperList" >
-                                                <img src="{{baseUrl + '/'+n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
+                                                <img src="{{n.image}}" ng-click="getProductMore(n)" id="size_img" alt="" />
                                             </div>
                                         </div>
                                         <!-- 如果需要分页器 -->
@@ -62,7 +62,7 @@
                                     <li ng-repeat="n in recommendList" >
                                         <a ng-click="getProductMore(n)">
                                             <div class="img_box">
-                                                <img src="{{baseUrl + '/'+n.image}}" alt=""/>
+                                                <img src="{{n.image}}" alt=""/>
                                             </div>
                                             <div class="title2">{{n.title}}</div>
                                             <div class="describe2">{{n.description}}</div>
