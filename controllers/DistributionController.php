@@ -198,7 +198,6 @@ class DistributionController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
         SmValidationService::deleteCode($mobile);
         $time=time();
         $user=Distribution::findByMobile($mobile);
