@@ -1839,22 +1839,23 @@ class OwnerController extends Controller
             }
         }
 
-        // $goods_     $material    $griotte
-        var_dump($goods_);
+        //  合并 三个数组 $goods_     $material    $griotte
         $_goods = [];
         foreach ($goods_ as $value){
             $_goods [] = $value;
             $_goods [] = $material;
             $_goods [] = $griotte;
         }
-        var_dump($_goods);exit;
+
+        $array_filter = array_filter($_goods);
+        $array_merge = array_merge($array_filter);
 
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data' => [
                 'images' => $effect,
-                'goods' => $goods_,
+                'goods' => $array_merge,
 //                    'backman_data' => $backman_data,
                 'worker_data' => $worker_data,
             ]
