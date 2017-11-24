@@ -190,12 +190,15 @@ angular.module('all_controller', [])
             $scope.style = res.data.show.style;//风格数据
             $scope.cur_series = $scope.series[0]//默认选择第一个系列
             $scope.cur_style = $scope.style[0]//默认选择第一个风格
-            $timeout(function () {
+            $timeout.cancel($scope.time)
+            $scope.time = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
                     autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
                     effect: 'slide',
 
                     // 如果需要分页器
@@ -324,12 +327,16 @@ angular.module('all_controller', [])
             if(sessionStorage.getItem('nodata') == null){
                 $scope.show_material = false
             }
-            $timeout(function () {
+            console.log($scope.cur_style.images.split(','))
+            $timeout.cancel($scope.time)
+            $scope.time = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
                     autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
                     effect: 'slide',
 
                     // 如果需要分页器
@@ -2199,12 +2206,15 @@ angular.module('all_controller', [])
             } else {
                 $rootScope.goPrev()
             }
-            $timeout(function () {
+            $timeout.cancel($scope.time)
+            $scope.time = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
                     autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
                     effect: 'slide',
 
                     // 如果需要分页器
@@ -2220,12 +2230,15 @@ angular.module('all_controller', [])
             $scope.cur_header = '智能报价'
             $scope.is_city = true
             $scope.is_edit = false
-            $timeout(function () {
+            $timeout.cancel($scope.time)
+            $scope.time = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
                     autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
                     effect: 'slide',
 
                     // 如果需要分页器
