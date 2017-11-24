@@ -778,6 +778,11 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $endTime && $endTime .= ' 23:59:59';
+            }
         }else{
             list($startTime, $endTime) = StringService::startEndDate($timeType);
         }
