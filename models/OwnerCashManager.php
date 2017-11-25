@@ -384,7 +384,12 @@ class OwnerCashManager extends ActiveRecord {
         }
     }
 
-
+    /**
+     * 解冻处理
+     * @param $freeze_id
+     * @param $role_id
+     * @return int
+     */
     public static function freezeTaw($freeze_id,$role_id){
         $freeze=UserFreezelist::find()->where(['id'=>$freeze_id,'role_id'=>$role_id])->one();
         if($role_id==6){

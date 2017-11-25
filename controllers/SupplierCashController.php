@@ -679,8 +679,8 @@ class SupplierCashController extends Controller
         return $user->getId();
     }
 
-    public function actionTest(){
-        var_dump(EffectEarnest::find()->asArray()->all());
-        
+    public function actionTest()
+    {
+
     }
 }
