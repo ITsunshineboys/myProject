@@ -61,7 +61,6 @@ class OrderPlatForm extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
-
                 $OrderGoods=OrderGoods::find()
                     ->where(['order_no'=>$order_no])
                     ->andWhere(['sku'=>$sku])
@@ -84,6 +83,14 @@ class OrderPlatForm extends ActiveRecord
                 $UserAccessDetail->sku=$sku;
                 $UserAccessDetail->transaction_no=GoodsOrder::SetTransactionNo($GoodsOrder->consignee_mobile);
                 if (!$UserAccessDetail->save(false))
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $supplier->availableamount-=($OrderGoods->supplier_price*$OrderGoods->goods_number);
+                $supplier->balance-=($OrderGoods->supplier_price*$OrderGoods->goods_number);
+                if (!$supplier->save(false))
                 {
                     $code=500;
                     $trans->rollBack();
