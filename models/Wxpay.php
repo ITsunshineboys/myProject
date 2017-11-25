@@ -196,8 +196,8 @@ class Wxpay  extends ActiveRecord
             $noncestr=WxPayApi::getNonceStr();
             $timestamp=time();
             // $url='https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115';
-//           $url=$_SERVER['HTTP_REFERER'];
-            $url=self::curPageURL();
+           $url=$_SERVER['HTTP_REFERER'];
+//            $url=self::curPageURL();
             $appid=WxPayConfig::APPID;
 
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
