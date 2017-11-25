@@ -1261,14 +1261,14 @@ var_dump($max);
                 }
             }
 
-
+            $min =[];
             $len = count($goods);
             for ($i=0; $i<$len; $i++){
                 if ($i==0){
                     $min = $goods[$i];
                     continue;
                 }
-                if ($goods[$i]['count']>$min['count']){
+                if ($goods[$i]['profit_rate']>$min['profit_rate']){
                     $min = $goods[$i];
                 }
 
