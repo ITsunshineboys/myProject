@@ -12,7 +12,6 @@ use yii\db\Query;
 class OwnerCashManager extends ActiveRecord {
 
     const FIELDS_USER_MANAGER = [
-        'icon',
         'nickname',
         'aite_cube_no',
         'balance',
@@ -73,9 +72,17 @@ class OwnerCashManager extends ActiveRecord {
             ->count();
     }
 
-    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
+    /**
+     * 用户账户管理
+     * @param array $where
+     * @param $select
+     * @param int $page
+     * @param int $size
+     * @param string $orderBy
+     * @return array|null|ActiveRecord[]
+     */
+    public static function pagination($where = [], $select, $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
 
-        $select = array_diff($select, OwnerCashManager::FIELDS_USER_MANAGER);
         $offset = ($page - 1) * $size;
         $userList = User::find()
             ->select($select)
@@ -85,7 +92,18 @@ class OwnerCashManager extends ActiveRecord {
             ->limit($size)
             ->asArray()
             ->all();
-        var_dump($userList);
+
+        if($userList){
+            foreach ($userList as &$user){
+                $user['balance']=sprintf('%.2f',(float)$user['balance']*0.01);
+            }
+        }else{
+            return null;
+        }
+        $count=count($userList);
+        return ModelService::pageDeal($userList,$count,$page,$size);
+
+
 
     }
 
