@@ -196,8 +196,10 @@ class Wxpay  extends ActiveRecord
             $noncestr=WxPayApi::getNonceStr();
             $timestamp=time();
             // $url='https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115';
-           $url=$_SERVER['HTTP_REFERER'];
+//           $url=$_SERVER['HTTP_REFERER'];
+            $url=self::curPageURL();
             $appid=WxPayConfig::APPID;
+
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
             $sign=sha1($str);
             return [
@@ -207,6 +209,27 @@ class Wxpay  extends ActiveRecord
                 'signature'=>$sign
             ];
         }
+
+    public static function curPageURL()
+    {
+        $pageURL = 'http';
+
+        if ($_SERVER["HTTPS"] == "on")
+        {
+            $pageURL .= "s";
+        }
+        $pageURL .= "://";
+
+        if ($_SERVER["SERVER_PORT"] != "80")
+        {
+            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+        }
+        else
+        {
+            $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+        }
+        return $pageURL;
+    }
 
     /**
      * @param $url
