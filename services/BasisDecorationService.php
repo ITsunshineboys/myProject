@@ -1763,11 +1763,10 @@ class BasisDecorationService
 
 
         $effect = Effect::array_group_by($series_style_goods,'title');
-        var_dump($effect);exit;
         foreach ($effect as $c){
             $material[] = self::profitMargin($c);
         }
-
+var_dump($material);exit;
         return $material;
     }
 
