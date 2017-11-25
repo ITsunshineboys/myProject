@@ -86,5 +86,7 @@ hr{
 .border_red{
     border:1px solid red!important;
 }
-
+.active{
+    color: #5677FC;
+}
 

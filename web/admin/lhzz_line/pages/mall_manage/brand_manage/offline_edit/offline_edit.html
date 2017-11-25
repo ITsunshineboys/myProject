@@ -7,14 +7,14 @@
                 <i class="glyphicon glyphicon-asterisk red_mark"></i>
                 <span>品牌名称</span>
             </div>
-          <div class="col-sm-4">
+          <div class="col-sm-2">
             <input type="text" class="form-control" ng-model="myng.brand_name_model" required name="brand_title" id="brand_title" maxlength="10"  ng-class="{'border_red':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}">
             <p class="red_mark" ng-if="myng.edit_title_red">
               <span class="glyphicon glyphicon-asterisk"></span>
               <span>该品牌名称已存在，请重新填写</span>
             </p>
           </div>
-          <div class="col-sm-6 control-label">
+          <div class="col-sm-8 control-label">
             <span class="img_txt">*限1~10个字符</span>
           </div>
         </div>

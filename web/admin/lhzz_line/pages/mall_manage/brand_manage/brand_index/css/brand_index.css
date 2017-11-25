@@ -26,31 +26,6 @@
   border: 1px solid #BFC0C2;
   border-radius: 3px;
 }
-.search_box{
-  display: inline-block;
-  float: right;
-  margin-right: 20px;
-  position: relative;
-}
-.search_input{
-  width: 250px;
-  height: 34px;
-  border:1px solid #BFC0C2;
-  border-radius: 20px;
-}
-.search_input:focus{
-  outline: none;
-}
-.search{
-  position: absolute;
-  top:50%;
-  transform: translateY(-50%);
-  right: 20px;
-  color: #BFC0C2;
-}
-.menu_right{
-  float: right;
-}
 .sort_choose{
   margin-right: 15px;
 }
@@ -65,9 +40,6 @@
 }
 .sky_blue{
   color: #03A9F4!important;
-}
-.blue{
-  color: #5677FC!important;
 }
 .table{
   table-layout:fixed;
@@ -103,5 +75,6 @@
   font-weight: bold;
 }
 .operating_div{
-  margin-bottom: 20px;
+  margin-bottom: 20px!important;
+  width: 100%;
 }
