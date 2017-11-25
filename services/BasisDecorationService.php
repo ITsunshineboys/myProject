@@ -1764,7 +1764,7 @@ class BasisDecorationService
 
         $a = Effect::array_group_by($series_style_goods,'title');
         foreach ($a as $c){
-            $b = self::profitMargin($c);
+            $b[] = self::profitMargin($c);
         }
 
         var_dump($b);exit;
