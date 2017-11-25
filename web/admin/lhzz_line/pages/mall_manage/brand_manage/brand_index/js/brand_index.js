@@ -152,55 +152,48 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
 
   /*分类选择一级下拉框*/
   _ajax.get('/mall/categories-manage-admin',{},function (res) {
-      console.log(res);
       $scope.firstclass = res.data.categories;
       $scope.firstselect = res.data.categories[0].id;
-  })
-  //监听一级，返回数据
-  $scope.$watch('firstselect',function (newVal,oldVal) {
-      $scope.down_two=newVal;
-      $scope.params.pid=$scope.down_two;
-      $scope.table.roles=[];//清空全选状态
-      tablePages();
   });
   /*分类选择二级下拉框*/
   $scope.secondclass=[];//二级分类数组
   $scope.subClass = function (pid) {
+    console.log(pid)
+    $scope.down_two=pid;
+    $scope.params.pid=$scope.down_two;
+    $scope.table.roles=[];//清空全选状态
+    tablePages();
     _ajax.get('/mall/categories-manage-admin',{pid: pid},function (res) {
         $scope.secondclass = res.data.categories;
         $scope.secselect = res.data.categories[0].id;
     })
   };
-    //监听二级
-    $scope.$watch('secselect',function (newVal,oldVal) {
-        if(newVal==0){
-            newVal=$scope.down_two
-        }
-        $scope.down_three=newVal;
-        $scope.params.pid=newVal;
-        $scope.table.roles=[];//清空全选状态
-        tablePages();
-    });
-
   /*分类选择三级下拉框*/
   $scope.three_class=[];//二级分类数组
   $scope.three_Class = function (pid) {
+    if(pid==0){
+      pid=$scope.down_two
+    }
+    $scope.down_three=pid;
+    $scope.params.pid=pid;
+    $scope.table.roles=[];//清空全选状态
     _ajax.get('/mall/categories-manage-admin',{pid: pid},function (res) {
         $scope.three_class = res.data.categories;
         $scope.three_select = res.data.categories[0].id;
     })
+    tablePages();
   };
     //监听三级
-  $scope.$watch('three_select',function (newVal,oldVal) {
-      if(newVal==0){
-          newVal=$scope.down_three
-      }
-      $scope.last_value=newVal;
-      $scope.params.pid=newVal;
-      $scope.table.roles=[];//清空全选状态
-      tablePages();
-    });
-
+  $scope.last_Class=function (pid) {
+    console.log(pid)
+    if(pid==0){
+      pid=$scope.down_three
+    }
+    $scope.last_value=pid;
+    $scope.params.pid=pid;
+    $scope.table.roles=[];//清空全选状态
+    tablePages();
+  }
   /*==============================已上架===================================*/
   //时间排序
     $scope.time_img='lib/images/sort_down.png';
@@ -318,10 +311,17 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
         }
     };
     let brand_Pages=function () {
+      $scope.application_num=null;
         $scope.brand_params.page=$scope.brand_Config.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/brand-application-review-list',$scope.brand_params,function (res) {
-            $scope.brand_review_list=res.data.brand_application_review_list.details;
-            $scope.brand_Config.totalItems = res.data.brand_application_review_list.total;
+          console.log(res);
+          $scope.brand_review_list=res.data.brand_application_review_list.details;
+          $scope.brand_Config.totalItems = res.data.brand_application_review_list.total;
+          for(let[key,value] of res.data.brand_application_review_list.details.entries()){
+              if(value.review_status==0){
+                $scope.application_num++;
+              }
+          }
         })
     };
     $scope.brand_params = {
@@ -332,13 +332,6 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
         'sort[]':'create_time:3',
         keyword: '',
     };
-
-    //判断有多少个申请
-    _ajax.get('/mall/brand-application-review-list',{review_status:0},function (res) {
-        console.log(res);
-        /*判断多少个申请个数*/
-        $scope.application_num=res.data.brand_application_review_list.total;
-    });
 
   //获取审核类型
   $scope.brand_types_arr=[

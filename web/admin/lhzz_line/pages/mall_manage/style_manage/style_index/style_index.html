@@ -25,11 +25,11 @@
                 <div class="series_mag_table">
                     <table class="table table-hover table-responsive">
                         <tr>
-                            <td>系列名称</td>
-                            <td>创建时间<img ng-click="ser_time_sort()" src="{{ser_time_img}}" width="10"></td>
-                            <td>状态</td>
-                            <td>详情</td>
-                            <td>操作</td>
+                            <th>系列名称</th>
+                            <th>创建时间<img ng-click="ser_time_sort()" src="{{ser_time_img}}" width="10"></th>
+                            <th>状态</th>
+                            <th>详情</th>
+                            <th>操作</th>
                         </tr>
                         <tr ng-repeat="item in series_arr">
                             <td>{{item.series}}</td>
@@ -59,13 +59,13 @@
             <!--风格管理Table内容-->
                 <table class="table table-hover table-responsive">
                     <tr>
-                        <td>风格名称</td>
-                        <td>创建时间
+                        <th>风格名称</th>
+                        <th>创建时间
                             <img ng-click="style_time_sort()"  ng-src="{{style_time_img}}" width="10">
-                        </td>
-                        <td>状态</td>
-                        <td>详情</td>
-                        <td>操作</td>
+                        </th>
+                        <th>状态</th>
+                        <th>详情</th>
+                        <th>操作</th>
                     </tr>
                     <tr ng-repeat="style_item in style_arr">
                         <td>{{style_item.style}}</td>
@@ -96,19 +96,19 @@
             <div class="series_mag_table">
                 <table class="table table-hover table-responsive">
                     <tr>
-                        <td>所属分类</td>
-                        <td>分类名称</td>
-                        <td ng-click="sortTime()">最后操作时间
+                        <th>所属分类</th>
+                        <th>分类名称</th>
+                        <th ng-click="sortTime()">最后操作时间
                             <span class="sortpic">
                                  <i class="glyphicon glyphicon-triangle-top"
                                     ng-class="{'active':sortStyleFunc() == 4}"></i>
                                  <i class="glyphicon glyphicon-triangle-bottom"
                                     ng-class="{'active':sortStyleFunc() == 3}"></i>
                     </span>
-                        </td>
-                        <td>最后操作账号</td>
-                        <td>属性个数</td>
-                        <td>详情</td>
+                        </th>
+                        <th>最后操作账号</th>
+                        <th>属性个数</th>
+                        <th>详情</th>
                     </tr>
                     <tr ng-repeat="item in listdata">
                         <td>{{item.parent_title}}</td>

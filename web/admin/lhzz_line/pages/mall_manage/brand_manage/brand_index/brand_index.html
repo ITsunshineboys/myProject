@@ -40,8 +40,8 @@
                     <td>{{item.online_time}}</td>
                     <td>{{item.applicant}}</td>
                     <td class="green">{{item.status}}</td>
-                    <td class="blue" ui-sref="online_edit({on_shelves_list:item})">编辑</td>
-                    <td class="blue" data-toggle="modal" data-target="#on_shelves_down_reason_modal" ng-click="down_shelver_btn(item.id)">下架</td>
+                    <td><a ui-sref="online_edit({on_shelves_list:item})">编辑</a></td>
+                    <td data-toggle="modal" data-target="#on_shelves_down_reason_modal"><a ng-click="down_shelver_btn(item.id)">下架</a></td>
                 </tr>
             </table>
             <!--分页-->
@@ -111,8 +111,8 @@
                     <td class="red">{{item.status}}</td>
                     <td ng-show="item.offline_reason!=''"><span class="table_width" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >{{item.offline_reason}}</span></td>
                     <td ng-show="item.offline_reason==''"><span class="table_width" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >点击输入</span></td>
-                    <td class="blue" ui-sref="offline_edit({down_shelves_list:item})">编辑</td>
-                    <td class="blue" data-toggle="modal" data-target="#solo_on_shelves_modal" ng-click="on_shelver_btn(item.id)">上架</td>
+                    <td><a ui-sref="offline_edit({down_shelves_list:item})">编辑</a></td>
+                    <td data-toggle="modal" data-target="#solo_on_shelves_modal"><a ng-click="on_shelver_btn(item.id)">上架</a></td>
                 </tr>
             </table>
         <!--分页-->
@@ -196,23 +196,33 @@
 
 <!--品牌审核内容 开始-->
     <section ng-show="check_flag==true">
-        <div class="operating_div">
-          <!--申请-->
-          <div class="inline_block">
-              <i class="glyphicon glyphicon-th-large"></i>
-              <span class="apply">{{application_num}}个申请</span>
-          </div>
-          <!--时间-->
-          <div class="inline_block">
-              <select  name="province" ng-model="brand_params.review_status" ng-change="brand_types()" class="time_select" ng-options="item.id as item.value for item in brand_types_arr"></select>
-              <input  id="start_time"  ng-model="brand_params.start_time" ng-change='brand_time_change()' max-date="{{brand_params.end_time}}" ngc-lay-date  class="time_input" type="text" placeholder="开始时间">
-              <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
-          </div>
-          <!--搜索-->
-          <button class="btn btn-default menu_right" ng-click="brand_search_btn()">查询</button>
-          <div class="search_box">
-              <input ng-model="myng.search_input_ok" class="search_input" type="text" placeholder="搜索商家名称或账户">
-              <span class="glyphicon glyphicon-search search"></span>
+        <div class="search form-inline clearfix">
+          <div class="form-group operating_div">
+            <!--申请-->
+            <div class="row">
+            <div class="col-sm-8">
+              <div class="pull-left">
+                <div class="inline_block">
+                  <i class="glyphicon glyphicon-th-large"></i>
+                  <span class="apply">{{application_num}}个申请</span>
+                </div>
+                <!--时间-->
+                <div class="inline_block">
+                  <select  name="province" ng-model="brand_params.review_status" ng-change="brand_types()" class="time_select" ng-options="item.id as item.value for item in brand_types_arr"></select>
+                  <input  id="start_time"  ng-model="brand_params.start_time" ng-change='brand_time_change()' max-date="{{brand_params.end_time}}" ngc-lay-date  class="time_input" type="text" placeholder="开始时间">
+                  <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4 ">
+            <!--搜索-->
+              <div class="pull-right">
+                <input ng-model="myng.search_input_ok" class="form-control" type="text" placeholder="搜索商家名称或账户">
+                <span class="glyphicon glyphicon-search"></span>
+                <button class="btn btn-default" ng-click="brand_search_btn()">查询</button>
+              </div>
+            </div>
+            </div>
           </div>
         </div>
 
@@ -243,11 +253,11 @@
                 <td ng-show="item.review_status=='0'" class="sky_blue">等待审核</td>
                 <td ng-show="item.review_note ==''&& item.review_status!='0'"><span  class="table_width" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">点击输入...</span></td>
                 <td ng-show="item.review_note !=''&& item.review_status!='0'"><span  class="table_width" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">{{item.review_note}}</span></td>
-                <td ng-show="item.review_status=='0'"><span>&nbsp;</span></td>
-                <td ng-show="item.review_status!='0'" class="blue" ui-sref="brand_details({item:item})">查看</td>
-                <td ng-show="item.review_status=='0'" class="blue">&nbsp;</td>
-                <td ng-show="item.review_status=='0'" class="blue" ui-sref="brand_check({item:item})">审核</td>
-                <td ng-show="item.review_status!='0'" class="blue">&nbsp;</td>
+                <td ng-show="item.review_status=='0'">&nbsp;</td>
+                <td ng-show="item.review_status!='0'"><a ui-sref="brand_details({item:item})">查看</a></td>
+                <td ng-show="item.review_status=='0'">&nbsp;</td>
+                <td ng-show="item.review_status=='0'"><a ui-sref="brand_check({item:item})"></a>审核</td>
+                <td ng-show="item.review_status!='0'">&nbsp;</td>
             </tr>
         </table>
         <!--分页-->
