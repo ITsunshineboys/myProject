@@ -1935,6 +1935,10 @@ class QuoteController extends Controller
         ]);
     }
 
+    /**
+     * 检测商品编码
+     * @return string
+     */
     public function actionSkuFefer()
     {
         $category = trim(\Yii::$app->request->get('category',''));
