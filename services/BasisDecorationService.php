@@ -1248,6 +1248,8 @@ class BasisDecorationService
         } elseif ($goods == null){
             return new \stdClass;
         }else {
+
+
             foreach($goods as $v) {
                 $a = $v;
                 $max = max($a['profit_rate'],$v['profit_rate']);
@@ -1773,9 +1775,6 @@ class BasisDecorationService
             $material[] = self::profitMargin($c);
         }
 
-//        $material[] = self::profitMargin($effect['茶几']);
-//        var_dump($material);
-//        exit;
         return $material;
     }
 
