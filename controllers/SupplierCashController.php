@@ -38,7 +38,12 @@ class SupplierCashController extends Controller
         'cash-list-today',
         'cash-action-detail',
         'cash-deal',
-        'mall-view'
+        'mall-view',
+        'owner-cash-index',
+        'owner-cashed-list',
+        'owner-cashed-detail',
+        'owner-do-cash-deal',
+
     ];
 
 
@@ -282,7 +287,7 @@ class SupplierCashController extends Controller
      * 大后台业主财务中心
      * @return int|string
      */
-    public function actionCashOwnerIndex(){
+    public function actionOwnerCashIndex(){
         $user = self::userIdentity();
         if (!is_int($user)) {
             return $user;
