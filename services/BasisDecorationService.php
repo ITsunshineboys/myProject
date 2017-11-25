@@ -78,6 +78,7 @@ class BasisDecorationService
         'air_brick'=>'空心砖',
         'stairs'=>'楼梯',
         'timber_door' => '木门',
+        'slab' => '细木工板',
     ];
 
     /**
@@ -1778,7 +1779,7 @@ class BasisDecorationService
         return $material;
     }
 
-    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost)
+    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost,$blockboard)
     {
         $material_total = [];
         foreach ($goods_price as &$one_goods_price) {
@@ -1801,12 +1802,19 @@ class BasisDecorationService
                     $one_goods_price['procurement'] = $pole_cost['procurement'];
                     $pole [] = $one_goods_price;
                     break;
+                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['slab']:
+                    $one_goods_price['quantity'] = $pole_cost['quantity'];
+                    $one_goods_price['cost'] = $pole_cost['cost'];
+                    $one_goods_price['procurement'] = $pole_cost['procurement'];
+                    $slab [] = $one_goods_price;
+                    break;
             }
         }
 
         $material_total['material'][] = BasisDecorationService::profitMargin($plasterboard);
         $material_total['material'][] = BasisDecorationService::profitMargin($keel);
         $material_total['material'][] = BasisDecorationService::profitMargin($pole);
+        $material_total['material'][] = BasisDecorationService::profitMargin($slab);
         $material_total['total_cost'][] =  round($material_cost,2);
         return $material_total;
     }
