@@ -3,52 +3,52 @@ ul{
 }
 
 /*选项卡样式*/
-.cla_mag_tabbar{
-    padding-left: 40px;
-}
+/*.cla_mag_tabbar{*/
+    /*padding-left: 40px;*/
+/*}*/
 
-.cla_mag_tabtitle{
-    padding-top: 41px;
-    padding-bottom: 36px;
-    width: 1000px;
-    border-bottom: 2px solid #E6E9F0;;
-}
+/*.cla_mag_tabtitle{*/
+    /*!*padding-top: 41px;*!*/
+    /*!*padding-bottom: 36px;*!*/
+    /*!*width: 1000px;*!*/
+    /*border-bottom: 2px solid #E6E9F0;*/
+/*}*/
 
-.cla_mag_tabtitle span{
-    display: block;
-    float: left;
-    font-family: Helvetica-Bold;
-    font-size: 14px;
-    color: #666F80;
-    padding-bottom: 16px;
-    font-weight: bold;
-}
+/*.cla_mag_tabtitle span{*/
+    /*display: block;*/
+    /*float: left;*/
+    /*font-family: Helvetica-Bold;*/
+    /*font-size: 14px;*/
+    /*color: #666F80;*/
+    /*padding-bottom: 16px;*/
+    /*font-weight: bold;*/
+/*}*/
 
-.cla_mag_tabtitle span:nth-child(1){
-    margin-right: 40px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-}
+/*.cla_mag_tabtitle span:nth-child(1){*/
+    /*margin-right: 40px;*/
+    /*padding-left: 10px;*/
+    /*padding-right: 10px;*/
+    /*border-bottom: 2px solid transparent;*/
+    /*cursor: pointer;*/
+/*}*/
 
-.cla_mag_tabtitle span:nth-child(2){
-    margin-right: 40px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-bottom: 2px solid transparent;
-    cursor: pointer;
-}
+/*.cla_mag_tabtitle span:nth-child(2){*/
+    /*margin-right: 40px;*/
+    /*padding-left: 10px;*/
+    /*padding-right: 10px;*/
+    /*border-bottom: 2px solid transparent;*/
+    /*cursor: pointer;*/
+/*}*/
 
-.clickstyle{
-    color: #3F94F6!important;
-    border-bottom: 2px solid #3F94F6!important;
-}
+/*.clickstyle{*/
+    /*color: #3F94F6!important;*/
+    /*border-bottom: 2px solid #3F94F6!important;*/
+/*}*/
 
 /*按钮组*/
-.cla_mag_btngroup{
-    padding-top: 40px;
-}
+/*.cla_mag_btngroup{*/
+    /*padding-top: 40px;*/
+/*}*/
 
 .cla_mag_btngroup .chooseall_btn,.xiajia_btn,.chaxun,#add{
     font-family: Helvetica;
@@ -72,15 +72,15 @@ ul{
     color: #666F80;
 }
 
-.cla_mag_btngroup select{
-    width: 188px;
-    height: 34px;
-    padding-left: 12px;
-    border-radius: 3px;
-    font-size: 14px;
-    margin-right: 13px;
-    margin-right: 13px;
-}
+/*.cla_mag_btngroup select{*/
+    /*width: 188px;*/
+    /*height: 34px;*/
+    /*padding-left: 12px;*/
+    /*border-radius: 3px;*/
+    /*font-size: 14px;*/
+    /*margin-right: 13px;*/
+    /*margin-right: 13px;*/
+/*}*/
 
 /*已上架Table内容*/
 .onsale_table table tr{
