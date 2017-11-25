@@ -79,7 +79,15 @@ class Distribution extends ActiveRecord
                 $goodsOrder_line_data=$goodsOrder_line->asArray()->all();
                 foreach ($goodsOrder_line_data as &$goodsOrder_line_data_list)
                 {
-                    $goodsOrder_line_money+=$goodsOrder_line_data_list['amount_order']*0.01;
+                    $orderGoods=OrderGoods::find()
+                        ->where(['order_no'=>$goodsOrder_line_data_list['order_no']])
+                        ->asArray()
+                        ->all();
+                    foreach ($orderGoods as &$list)
+                    {
+                        $goodsOrder_line_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                    }
+
                 }
                 $goodsOrder_line_count+=$goodsOrder_line->count();
                 $user=User::find()->where(['mobile'=>$data->mobile])->one();
@@ -89,7 +97,15 @@ class Distribution extends ActiveRecord
                     $goodsOrder_online_data=$goodsOrder_online->asArray()->all();
                     foreach ($goodsOrder_online_data as &$goodsOrder_online_data_list)
                     {
-                        $goodsOrder_online_money+=$goodsOrder_online_data_list['amount_order']*0.01;
+//                        $goodsOrder_online_money+=$goodsOrder_online_data_list['amount_order']*0.01;
+                        $orderGoods=OrderGoods::find()
+                            ->where(['order_no'=>$goodsOrder_online_data_list['order_no']])
+                            ->asArray()
+                            ->all();
+                        foreach ($orderGoods as &$list)
+                        {
+                            $goodsOrder_online_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                        }
                     }
                     $goodsOrder_online_count+=$goodsOrder_online->count();
                 }
