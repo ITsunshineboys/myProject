@@ -1,14 +1,5 @@
 <link rel="stylesheet" href="pages/shop_manage/css/shop_manage_index.css">
 <div ng-controller="shopmanage_ctrl">
-    <!--顶部导航-->
-    <!--<header>-->
-        <!--<div>-->
-            <!--<i class="glyphicon glyphicon-home"></i>-->
-            <!--<span class="order_manage" ng-click="tabFunc('basic_flag')">店铺管理</span>-->
-            <!--<img src="pages/shop_manage/shop_manage_index/image/user.png" alt=""/>-->
-        <!--</div>-->
-    <!--</header>-->
-
     <section>
         <!--选项卡-->
         <div class="tab">
@@ -47,7 +38,7 @@
             <!--店铺状态-->
             <div>
                 <span>店铺状态</span>
-                <span class="margin_left_86" ng-bind="result.status"></span>
+                <span class="margin_left_86" ng-bind="result.status_desc"></span>
             </div>
 
             <!--店铺Logo-->
@@ -78,11 +69,11 @@
                 </ul>
             </div>
 
-            <!--关注粉丝-->
-            <div>
-                <span>关注粉丝</span>
-                <span class="margin_left_86" ng-bind="result.follower_number"></span>
-            </div>
+            <!--&lt;!&ndash;关注粉丝&ndash;&gt;-->
+            <!--<div>-->
+                <!--<span>关注粉丝</span>-->
+                <!--<span class="margin_left_86" ng-bind="result.follower_number"></span>-->
+            <!--</div>-->
 
 
             <button ng-click="resetLogo()" class="btn btn-primary pull-left" id="savebtn"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
