@@ -2550,7 +2550,7 @@ angular.module('all_controller', [])
                         //整合一级
                         for (let [key, value] of $scope.stair.entries()) {
                             for (let [key1, value1] of res.data.total_material.material.entries()) {
-                                let cur_obj = {id: value.id, title: value.title, cost: 0, second_level: []}
+                                let cur_obj = {id: value.id, title: value.title, cost: 0, second_level: [],procurement:0}
                                 let cur_title = {title: value.title}
                                 console.log(value1.cost)
                                 console.log($scope.all_goods)
@@ -2563,7 +2563,7 @@ angular.module('all_controller', [])
                         for (let [key, value] of $scope.level.entries()) {
                             for (let [key1, value1] of  $scope.all_goods.entries())
                                 for (let [key2, value2] of res.data.total_material.material.entries()) {
-                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: []}
+                                    let cur_obj = {id: value.id, title: value.title, cost: 0, three_level: [],procurement:0}
                                     let cur_title = {title: value.title}
                                     if (value2.path.split(',')[1] == value.id && value2.path.split(',')[0] == value1.id && value2.cost != 0 &&
                                         JSON.stringify(value1.second_level).indexOf(JSON.stringify(cur_title).slice(1, JSON.stringify(cur_title).length - 1)) == -1) {
@@ -2594,6 +2594,7 @@ angular.module('all_controller', [])
                                             cover_image: value3.cover_image,
                                             cost: value3.cost,
                                             name: value3.name,
+                                            procurement:value3.procurement,
                                             platform_price: value3.platform_price,
                                             profit_rate: value3.profit_rate,
                                             purchase_price_decoration_company: value3.purchase_price_decoration_company,
@@ -2611,6 +2612,8 @@ angular.module('all_controller', [])
                                             value3.path.split(',')[2] == value2.id) {
                                             value.cost += value3.cost
                                             value1.cost += value3.cost
+                                            value.procurement += value3.procurement
+                                            value1.procurement += value3.procurement
                                             if (JSON.stringify(value2.goods_detail).indexOf(JSON.stringify(cur_goods).slice(1, JSON.stringify(cur_goods).length - 1)) == -1) {
                                                 value2.goods_detail.push(cur_obj)
                                             } else {
@@ -2618,11 +2621,13 @@ angular.module('all_controller', [])
                                                     if (!!sessionStorage.getItem('materials')) {
                                                         if (value3.id == value4.goods_id) {
                                                             value4.cost += value3.cost
+                                                            value4.procurement += value3.procurement
                                                             value4.quantity += value3.quantity
                                                         }
                                                     } else {
                                                         if (value3.id == value4.id) {
                                                             value4.cost += value3.cost
+                                                            value4.procurement += value3.procurement
                                                             value4.quantity += value3.quantity
                                                         }
                                                     }
@@ -2667,6 +2672,7 @@ angular.module('all_controller', [])
                                                     if (value3.goods_id == undefined) {
                                                         value4.goods.push({
                                                             cost: value3.cost,
+                                                            procurement:value3.procurement,
                                                             goods_id: value3.id,
                                                             name: value3.name,
                                                             id: value2.id,
