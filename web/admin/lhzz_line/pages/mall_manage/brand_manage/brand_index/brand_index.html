@@ -21,17 +21,17 @@
             <!--表格-->
             <table class="table table-hover table-responsive">
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>品牌LOGO</td>
-                    <td>品牌名称</td>
-                    <td>
+                    <th>&nbsp;</th>
+                    <th>品牌LOGO</th>
+                    <th>品牌名称</th>
+                    <th>
                         <span>上架时间</span>
                         <img ng-click="time_sort_click()"  class="img_sort_size" ng-src="{{time_img}}" alt="">
-                    </td>
-                    <td>添加人员</td>
-                    <td>状态</td>
-                    <td>详情</td>
-                    <td>操作</td>
+                    </th>
+                    <th>添加人员</th>
+                    <th>状态</th>
+                    <th>详情</th>
+                    <th>操作</th>
                 </tr>
                 <tr ng-repeat="item in on_shelves_list">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
@@ -89,18 +89,18 @@
             <!--表格-->
             <table class="table table-hover table-responsive">
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>品牌LOGO</td>
-                    <td>品牌名称</td>
-                    <td>
+                    <th>&nbsp;</th>
+                    <th>品牌LOGO</th>
+                    <th>品牌名称</th>
+                    <th>
                         <span>下架时间</span>
                         <img ng-click="time_sort_click()"  class="img_sort_size" ng-src="{{time_img}}" alt="">
-                    </td>
-                    <td>添加人员</td>
-                    <td>状态</td>
-                    <td>下架原因</td>
-                    <td>详情</td>
-                    <td>操作</td>
+                    </th>
+                    <th>添加人员</th>
+                    <th>状态</th>
+                    <th>下架原因</th>
+                    <th>详情</th>
+                    <th>操作</th>
                 </tr>
                 <tr ng-repeat="item in down_shelves_list">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
@@ -219,18 +219,18 @@
         <!--表格内容-->
         <table class="table table-hover table-responsive">
             <tr>
-                <td>品牌LOGO</td>
-                <td>品牌名称</td>
-                <td>
+                <th>品牌LOGO</th>
+                <th>品牌名称</th>
+                <th>
                     <span>申请时间</span>
                     <img ng-click="brand_img_src_click()" class="img_sort_size" ng-src="{{brand_img_src}}" alt="">
-                </td>
-                <td>商家名称</td>
-                <td>申请帐户</td>
-                <td>状态</td>
-                <td>审核备注</td>
-                <td>详情</td>
-                <td>操作</td>
+                </th>
+                <th>商家名称</th>
+                <th>申请帐户</th>
+                <th>状态</th>
+                <th>审核备注</th>
+                <th>详情</th>
+                <th>操作</th>
             </tr>
             <tr ng-repeat="item in brand_review_list">
                 <td><img class="img_size" src="{{ item.brand_logo}}" alt=""></td>
