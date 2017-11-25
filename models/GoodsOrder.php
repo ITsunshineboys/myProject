@@ -1321,6 +1321,18 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['pay_term']=$pay_term-$time;
                 }
             }
+            if ($data[$k]['status']=='已取消')
+            {
+                $express=Express::find()
+                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->one();
+                if ($express)
+                {
+                    $data[$k]['complete_time']=$express->receive_time;
+                }else{
+                    $data[$k]['complete_time']=0;
+                }
+            }
             unset($data[$k]['customer_service']);
             unset($data[$k]['pay_status']);
             unset($data[$k]['order_status']);
