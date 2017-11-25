@@ -1248,11 +1248,11 @@ class BasisDecorationService
         } elseif ($goods == null){
             return new \stdClass;
         }else {
-            echo 111;exit;
             foreach($goods as $v) {
                 $r[$v['title']][$v['profit_rate']] = $v;
                 $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
             }
+            var_dump($max);exit;
             return $max;
         }
     }
