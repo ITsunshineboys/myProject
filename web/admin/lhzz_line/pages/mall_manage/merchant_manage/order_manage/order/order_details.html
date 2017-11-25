@@ -58,7 +58,7 @@
             <div class="col-xs-2">付款时间</div>
             <div class="col-xs-10">{{orderDetails.paytime}}</div>
         </div>
-        <div class="row" ng-if="orderDetails.complete_time == 0">
+        <div class="row" ng-if="orderDetails.complete_time != 0">
             <div class="col-xs-2">完成时间</div>
             <div class="col-xs-10">{{orderDetails.complete_time}}</div>
         </div>
