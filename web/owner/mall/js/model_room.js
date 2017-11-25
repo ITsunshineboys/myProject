@@ -101,6 +101,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     });
 
     // 户型选择
+    let huxingFlag = true;
     $scope.huxingFun = function (obj) {
         $scope.activeObj = angular.copy(obj);
         params.particulars = obj.particulars;
@@ -132,7 +133,10 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             params.series = $scope.seriesList[0].id;
             params.style = $scope.styleList[0].id;
         }
-        materials();
+        if (huxingFlag) {
+            huxingFlag = false;
+            materials();
+        }
     };
 
     // 楼梯选择
@@ -413,6 +417,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 let data = res.data;
                 $scope.price += parseFloat(data.total_prices);
                 $scope.preferential += parseFloat(data.special_offer);
+                huxingFlag = true;
             });
 
             // 运费
