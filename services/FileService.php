@@ -256,6 +256,9 @@ class FileService
      */
     public static function deleteFile($filepath)
     {
+        if (YII_DEBUG) {
+            StringService::writeLog('test', var_export(StringService::checkUri($filepath), true) . '|' . var_export(self::existUploadFile($filepath), true));
+        }
         if (false === StringService::checkUri($filepath) && self::existUploadFile($filepath)) {
             $file = Yii::getAlias('@webroot') . '/' . ltrim($filepath, '/');
             unlink($file);
