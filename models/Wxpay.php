@@ -64,14 +64,14 @@ class Wxpay  extends ActiveRecord
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("goods");
-            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::LINEPAY_NOTIFY_URL);
+            $input->SetNotify_url(Yii::$app->request->hostInfo.self::LINEPAY_NOTIFY_URL);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
-            $failurl="http://".$_SERVER['SERVER_NAME'].self::PAY_FAIL_URL;
-            $cancelurl="http://".$_SERVER['SERVER_NAME'].self::PAY_CANCEL_URL;
-            $successurl="http://".$_SERVER['SERVER_NAME'].self::PAY_SUCESS_URL;
+            $failurl=Yii::$app->request->hostInfo.self::PAY_FAIL_URL;
+            $cancelurl=Yii::$app->request->hostInfo.self::PAY_CANCEL_URL;
+            $successurl=Yii::$app->request->hostInfo.self::PAY_SUCESS_URL;
             echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
      function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
     </script>";
@@ -106,7 +106,7 @@ class Wxpay  extends ActiveRecord
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("goods");
-            $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
+            $input->SetNotify_url(Yii::$app->request->hostInfo.self::EFFECT_NOTIFY_URL);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
@@ -276,7 +276,7 @@ class Wxpay  extends ActiveRecord
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
-        $input->SetNotify_url("http://".$_SERVER['SERVER_NAME'].self::EFFECT_NOTIFY_URL);
+        $input->SetNotify_url(Yii::$app->request->hostInfo.self::EFFECT_NOTIFY_URL);
         $input->SetTrade_type("APP");
         $order = WxPayApi::AppUnifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParametersApp($order);
