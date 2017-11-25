@@ -49,6 +49,8 @@ class OrderPlatForm extends ActiveRecord
             $trans = \Yii::$app->db->beginTransaction();
             try {
                 $OrderPlatForm=new self;
+                $OrderPlatForm->order_no=$order_no;
+                $OrderPlatForm->sku=$order_no;
                 $OrderPlatForm->handle=$handle_type;
                 $OrderPlatForm->reasons=$reason;
                 $OrderPlatForm->creat_time=$time;
@@ -286,5 +288,6 @@ class OrderPlatForm extends ActiveRecord
             return $code;
         }
     }
+
 
 }
