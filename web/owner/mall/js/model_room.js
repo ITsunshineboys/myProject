@@ -233,7 +233,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                 title: goods.goods_three,
                                 goods_detail: []
                             };
-                            if (goods.goods_three === "辅材") {
+                            if (goods.goods_first === "辅材") {
                                 tempLevel = {
                                     id: goods.effect_id,
                                     title: goods.goods_three,
@@ -264,7 +264,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                             title: goods.goods_three,
                                             goods_detail: []
                                         };
-                                        if (goods.goods_three === "辅材") {
+                                        if (goods.goods_first === "辅材") {
                                             tempLevel = {
                                                 id: goods.effect_id,
                                                 title: goods.goods_three,
@@ -284,7 +284,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                     title: goods.goods_three,
                                     goods_detail: []
                                 };
-                                if (goods.goods_three === "辅材") {
+                                if (goods.goods_first === "辅材") {
                                     tempLevel = {
                                         id: goods.effect_id,
                                         title: goods.goods_three,
