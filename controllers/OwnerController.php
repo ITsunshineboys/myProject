@@ -1875,16 +1875,12 @@ class OwnerController extends Controller
            ['123','张三',12],
            ['123','张三',44],
         ];
-
-            $max = [];
-            for ($i=0; $i<count($a);$i++){
-                $m = $i;
-                if ($i[3]>$m[3]){
-                    $max = $i;
-                }
-            }
-var_dump($m);exit;
-
+        
+        foreach ($a as $c){
+           $b = $c;
+           $max = max($b[3],$c[3]);
+        }
+var_dump($max);
     }
 
 }
