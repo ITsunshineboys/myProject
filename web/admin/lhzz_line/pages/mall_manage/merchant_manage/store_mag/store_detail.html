@@ -45,13 +45,13 @@
                         <!--店铺状态-->
                         <div class="shop_name">
                             <span>店铺状态</span>
-                            <span ng-bind="result.status"></span>
+                            <span ng-bind="result.status_desc"></span>
                         </div>
 
                         <!--店铺logO-->
                         <div class="shop_logo">
                             <span>店铺logo</span>
-                            <img src="{{ result.icon}}" alt="店铺logo"/>
+                            <img ng-src="{{ result.icon}}" alt="店铺logo"/>
                         </div>
                         <hr/>
 
@@ -66,11 +66,11 @@
                             </ul>
                         </div>
 
-                        <!--关注粉丝-->
-                        <div class="shop_name">
-                            <span>关注粉丝</span>
-                            <span ng-bind="result.follower_number"></span>
-                        </div>
+                        <!--&lt;!&ndash;关注粉丝&ndash;&gt;-->
+                        <!--<div class="shop_name">-->
+                            <!--<span>关注粉丝</span>-->
+                            <!--<span ng-bind="result.follower_number"></span>-->
+                        <!--</div>-->
                         <!--按钮-->
                         <div class="btn_back">
                             <button ui-sref="store_mag">返回</button>
@@ -102,7 +102,7 @@
                         <!--保证金-->
                         <div class="shop_money">
                             <span>质保金</span>
-                            <span ng-bind="result.quality_guarantee_deposit"></span>
+                            <span>{{result.quality_guarantee_deposit | currency:'¥'}}</span>
                             <span>已免除</span>
                         </div>
 
