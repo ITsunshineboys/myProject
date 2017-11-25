@@ -224,7 +224,7 @@ return [
         'daily_forgot_pwd_cnt_max' => 5,
         'daily_reset_pwd_cnt_max' => 5,
         'default_nickname' => 'default nickname', // 待定
-        'deault_icon_path' => 'uploads/user_icon_default.png', // 默认头像
+        'deault_icon_path' => '/uploads/user_icon_default.png', // 默认头像
     ],
     //聊天服务配置
     'chatOptions' => [
