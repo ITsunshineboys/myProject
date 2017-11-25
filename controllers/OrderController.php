@@ -4919,6 +4919,8 @@ class OrderController extends Controller
      */
     public function  actionFindAppGoodsData()
     {
+        $data=file_get_contents("php://input");
+        $arr=(array)json_decode($data);
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -4927,8 +4929,8 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request=Yii::$app->request;
-        $goods=$request->post('goods');
+//        $request=Yii::$app->request;
+        $goods=$arr['goods'];
         if (!$goods)
         {
             $code=1000;
@@ -4939,7 +4941,7 @@ class OrderController extends Controller
         }
         foreach ($goods as &$good)
         {
-            $Good=Goods::findOne($good['goods_id']);
+            $Good=Goods::findOne($good->goods_id);
             if (!$Good)
             {
                 $code=1000;
@@ -4949,7 +4951,7 @@ class OrderController extends Controller
                 ]);
             }
             $Good=$Good->toArray();
-            $Good['goods_num']=$good['goods_num'];
+            $Good['goods_num']=$good->goods_num;
             $Goods[]=$Good;
         }
         if (!$Goods)
@@ -5310,8 +5312,18 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-        $request=Yii::$app->request->post();
-        return Json::encode($request);
+//        header('Access-Control-Allow-Origin:*');
+//        $data=$GLOBALS['HTTP_RAW_POST_DATA'];
+        $data=file_get_contents("php://input");
+        $arr=(array)json_decode($data);
+        var_dump($arr);
+//        var_dump($data);
+//        var_dump($data);
+//        var_dump($data);exit;
+//        $request=Yii::$app->request->post();
+//        var_dump($data);exit;
+//      urlencode($request);
+//        return Json::decode($data);
 
     }
 
