@@ -857,7 +857,7 @@ angular.module('all_controller', [])
             $scope.cur_header = '智能报价'
             let arr = []
             get_all_price()
-            if (!!sessionStorage.getItem('materials')) {
+            if (sessionStorage.getItem('materials')!=null) {
                 for (let [key, value] of $scope.all_goods.entries()) {
                     arr.push({
                         id: value.id,
@@ -880,6 +880,7 @@ angular.module('all_controller', [])
                                                 goods_id: value3.id,
                                                 name: value3.name,
                                                 id: value2.id,
+                                                procurement:value3.procurement,
                                                 goods_three: value2.title,
                                                 goods_second: item.title,
                                                 goods_first: value.title,
