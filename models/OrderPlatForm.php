@@ -68,14 +68,6 @@ class OrderPlatForm extends ActiveRecord
                     ->where(['order_no'=>$order_no])
                     ->andWhere(['sku'=>$sku])
                     ->one();
-                $OrderGoods->order_status=2;
-                $res2=$OrderGoods->save(false);
-                if (!$res2){
-                    $code=500;
-                    $trans->rollBack();
-                    return $code;
-                }
-
                 if ($OrderGoods->order_status==1)
                 {
                     $access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
@@ -103,7 +95,13 @@ class OrderPlatForm extends ActiveRecord
                         return $code;
                     }
                 }
-
+                $OrderGoods->order_status=2;
+                $res2=$OrderGoods->save(false);
+                if (!$res2){
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
                 //减少销量，减少销售额，增加库存.减少商品销量
                 $date=date('Ymd',time());
                 $GoodsStat=GoodsStat::find()
