@@ -1877,7 +1877,7 @@ class OwnerController extends Controller
         );
         $r = [];
         foreach($a as $v){
-            $r[$v[2]][$v[1]]=max($v[3],$r[$v[2]][$v[1]]);
+            $r[]=max($v[3],$r[$v[2]][$v[1]]);
         }
         print_r($r);
     }
