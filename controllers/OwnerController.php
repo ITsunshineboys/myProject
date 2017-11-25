@@ -1878,12 +1878,12 @@ class OwnerController extends Controller
 
             $max = [];
             for ($i=0; $i<count($a);$i++){
-                $m = $a;
-                if ($a[3]>$m[3]){
+                $m = $i;
+                if ($i[3]>$m[3]){
                     $max = $a;
                 }
             }
-var_dump($m);exit;
+var_dump($max);exit;
 
     }
 
