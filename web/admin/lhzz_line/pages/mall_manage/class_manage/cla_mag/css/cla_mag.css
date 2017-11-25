@@ -1,69 +1,10 @@
-ul{
-    list-style: none;
+.clickstyle{
+    color: #4094F6;
+    border-bottom: 1px solid #4094F6;
 }
 
-/*选项卡样式*/
-/*.cla_mag_tabbar{*/
-    /*padding-left: 40px;*/
-/*}*/
-
-/*.cla_mag_tabtitle{*/
-    /*!*padding-top: 41px;*!*/
-    /*!*padding-bottom: 36px;*!*/
-    /*!*width: 1000px;*!*/
-    /*border-bottom: 2px solid #E6E9F0;*/
-/*}*/
-
-/*.cla_mag_tabtitle span{*/
-    /*display: block;*/
-    /*float: left;*/
-    /*font-family: Helvetica-Bold;*/
-    /*font-size: 14px;*/
-    /*color: #666F80;*/
-    /*padding-bottom: 16px;*/
-    /*font-weight: bold;*/
-/*}*/
-
-/*.cla_mag_tabtitle span:nth-child(1){*/
-    /*margin-right: 40px;*/
-    /*padding-left: 10px;*/
-    /*padding-right: 10px;*/
-    /*border-bottom: 2px solid transparent;*/
-    /*cursor: pointer;*/
-/*}*/
-
-/*.cla_mag_tabtitle span:nth-child(2){*/
-    /*margin-right: 40px;*/
-    /*padding-left: 10px;*/
-    /*padding-right: 10px;*/
-    /*border-bottom: 2px solid transparent;*/
-    /*cursor: pointer;*/
-/*}*/
-
-/*.clickstyle{*/
-    /*color: #3F94F6!important;*/
-    /*border-bottom: 2px solid #3F94F6!important;*/
-/*}*/
-
-/*按钮组*/
-/*.cla_mag_btngroup{*/
-    /*padding-top: 40px;*/
-/*}*/
-
-.cla_mag_btngroup .chooseall_btn,.xiajia_btn,.chaxun,#add{
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #666F80;
-    line-height: 12px;
-    padding: 10px 18px;
-    background-color: white;
-    border: 1px solid #BFC0C2;
-    border-radius: 3px;
-    margin-right: 14px;
-}
-
-.cla_mag_btngroup #fenleidrop{
-    display: inline-block;
+.cla_mag_btngroup button{
+    margin-right: 15px;
 }
 
 .cla_mag_btngroup .fenleichoose_span{
@@ -72,38 +13,12 @@ ul{
     color: #666F80;
 }
 
-/*.cla_mag_btngroup select{*/
-    /*width: 188px;*/
-    /*height: 34px;*/
-    /*padding-left: 12px;*/
-    /*border-radius: 3px;*/
-    /*font-size: 14px;*/
-    /*margin-right: 13px;*/
-    /*margin-right: 13px;*/
-/*}*/
-
-/*已上架Table内容*/
-.onsale_table table tr{
-    height: 42px;
-    border-bottom: 1px solid #E6E9F0;
-
-}
-.onsale_table table tr td{
-    font-family: Helvetica;
-    font-size: 14px;
-    color: #666F80;
-    line-height: 14px;
-    padding: 0 24px;
-}
-.onsale_table table tr td a{
-    color: #3F94F6;
-}
-.onsale_table tr td:nth-child(1){
-    width: 16px;
-    height: 16px;
+table{
+    margin-top: 40px;
 }
 
-.onsale_table table img{
+
+table img{
     width: 30px;
     height: 30px;
 }
@@ -114,12 +29,7 @@ input[type="checkbox"]{
     margin: 0;
     padding: 0px!important;
 }
-.th{
-    font-family: Helvetica;
-    font-size: 14px;
-    color: #7A8599;
-    line-height: 14px;
-}
+
 .yesGreen{
     color: #92C661!important;
 }
@@ -152,15 +62,6 @@ table .sortpic i{
 
 table .sortpic .glyphicon-triangle-bottom {
     margin-top: -4px;
-}
-
-/*已下架tab样式*/
-.cla_mag_btngroup #add{
-    padding-top: 8px;
-}
-
-.offsale_table table tr td{
-    padding: 0 19px;
 }
 
 /*模态框*/
@@ -243,19 +144,16 @@ table .sortpic .glyphicon-triangle-bottom {
     cursor: pointer;
 }
 
-#dianji_shuru{
+#dianji_shuru span{
     display: inline-block;
-    width: 80px;
-    height: 30px;
-    margin-top: 5px;
-    line-height: 30px;
-    border: 1px solid #BFC0C2;
+    width: 50px;
+    border-radius: 3px;
+    border: 1px solid #666F80;
+    text-align: center;
     cursor: pointer;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: 0px !important;
-    text-align: center;
 }
 
 #xiajiacaozuo,#piliangxiajiacaozuo{
