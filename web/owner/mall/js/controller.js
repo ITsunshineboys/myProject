@@ -879,7 +879,7 @@ angular.module('all_controller', [])
                                                 cost: value3.cost,
                                                 goods_id: value3.id,
                                                 name: value3.name,
-                                                id: value2.id,
+                                                id: value3.id,
                                                 procurement:value3.procurement,
                                                 goods_three: value2.title,
                                                 goods_second: item.title,
@@ -889,7 +889,8 @@ angular.module('all_controller', [])
                                                 image: value3.image,
                                                 goods_name: value3.goods_name,
                                                 series_name: value3.series_name,
-                                                style_name: value3.style_name
+                                                style_name: value3.style_name,
+                                                category_id:value2.id
                                             })
                                         } else {
                                             value4.goods.push(value3)
@@ -2257,6 +2258,12 @@ angular.module('all_controller', [])
                     discount_price:$scope.discount_price,
                     show_material:$scope.show_material
                 }))
+                $scope.twelve_dismantle = ''//12墙拆除
+                $scope.twenty_four_dismantle = ''//24墙拆除
+                $scope.repair = ''//补烂
+                $scope.twelve_new_construction = ''//12墙新建
+                $scope.twenty_four_new_construction = ''//24墙新建
+                $scope.building_scrap = false//有无建渣点
                 console.log($scope.all_price)
                 console.log($scope.discount_price)
             })
@@ -2346,12 +2353,6 @@ angular.module('all_controller', [])
 
         /*基础装修内页*/
         //杂工选项
-        $scope.twelve_dismantle = ''//12墙拆除
-        $scope.twenty_four_dismantle = ''//24墙拆除
-        $scope.repair = ''//补烂
-        $scope.twelve_new_construction = ''//12墙新建
-        $scope.twenty_four_new_construction = ''//24墙新建
-        $scope.building_scrap = false//有无建渣点
         if (!!sessionStorage.getItem('huxing')) {
             console.log(JSON.parse(sessionStorage.getItem('huxing')))
             $scope.area = JSON.parse(sessionStorage.getItem('huxing')).area
@@ -2507,11 +2508,12 @@ angular.module('all_controller', [])
                                                             cost: value3.cost,
                                                             goods_id: value3.id,
                                                             name: value3.name,
-                                                            id: value2.id,
+                                                            id: value3.id,
                                                             goods_three: value2.title,
                                                             goods_second: value1.title,
                                                             goods_first: value.title,
-                                                            quantity: value3.quantity
+                                                            quantity: value3.quantity,
+                                                            category_id:value2.id
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
