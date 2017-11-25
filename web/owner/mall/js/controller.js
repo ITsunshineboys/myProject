@@ -358,7 +358,7 @@ angular.module('all_controller', [])
                     'top': min,
                     'left': minIndex * ($(window).width() * 0.471),
                 })
-                cur_height[minIndex] += $(this).outerHeight() + 5
+                cur_height[minIndex] += $(this).outerHeight() + 20
                 $('.basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
             })
         })

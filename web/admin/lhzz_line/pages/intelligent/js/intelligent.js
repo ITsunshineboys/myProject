@@ -445,13 +445,16 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         console.log(res)
                         if(res.code == 1043){
                             item.flag = true
+                            item.msg = res.msg
                             console.log(item)
                         }else if(res.code == 200){
                             item.flag = false
+                            item.msg = ''
                         }
                     })
             }else{
                 item.flag = false
+                item.msg = ''
             }
         }
         //跳转编辑户型(判断普通户型/案例)
@@ -707,6 +710,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.get_case_tips = function (valid, error) {
             console.log($scope.all_materials)
             console.log($scope.house_informations)
+            let index = JSON.stringify($scope.all_materials).indexOf('"msg":"请输入正确的商品编码"')
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '保存成功'
                 $scope.common_house = function () {
@@ -733,7 +737,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
-            if (valid && !!$scope.cur_house_information.cur_imgSrc && $scope.all_drawing.length != 0) {
+            if (valid && !!$scope.cur_house_information.cur_imgSrc && $scope.all_drawing.length != 0&&index == -1) {
                 $scope.four_title = ''
                 $scope.submitted = false
                 $scope.house_informations[$scope.index].all_materials = $scope.all_materials

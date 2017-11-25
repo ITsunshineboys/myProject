@@ -159,6 +159,7 @@
                                 <label class="col-md-2 text-left goods">{{item3.title}}</label>
                                 <div class="col-md-3">
                                     <input type="text" ng-blur="determine_goods_code(item3)" ng-class="{'error': (curForm['good{{item3.id}}'].$error.pattern)||!!item3.flag}" name="good{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码" class="form-control" ng-model="item3.good_id">
+                                    <p class="error_word" ng-if="item3.msg!=''">{{item3.msg}}</p>
                                 </div>
                                 <div class="col-md-2">
                                     <input type="text" ng-class="{'error': (curForm['quantity{{item3.id}}'].$error.pattern)}" name="quantity{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量" class="form-control" ng-model="item3.good_quantity">
