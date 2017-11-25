@@ -434,14 +434,12 @@ class DistributionController extends Controller
         $data=Distribution::pagination($where,[],$page,$size,$sort);
         if ($data['list'])
         {
-            $code=200;
-            return Json::encode([
-                'code' => $code,
-                'msg' =>'ok',
-                'data'=>$data['list']
-            ]);
             foreach ($data['list'] as &$list)
             {
+                if ($list['id']==13)
+                {
+                    echo 1;exit;
+                }
                 $total_amount=0;
                 $order_subsetnum=0;
                 $son_disList=Distribution::find()
