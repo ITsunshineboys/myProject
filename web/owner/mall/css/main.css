@@ -118,9 +118,12 @@ ul{
     width:21.28rem!important;
     overflow: hidden;
 }
+.comment_img{
+    width: 100%;
+    overflow: hidden;
+}
 .comment_img img{
-    width:21.28rem!important;
-    height:21.28rem!important;
+    width:100%;
 }
 .close{
     position: absolute;

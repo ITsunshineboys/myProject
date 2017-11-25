@@ -223,11 +223,10 @@ a:hover{
 }
 .comment_img{
     width:100%;
-    height:21.28rem;
+    overflow: hidden;
 }
 .comment_img img{
     width:100%;
-    height: 100%;
 }
 .close{
     position: absolute;
