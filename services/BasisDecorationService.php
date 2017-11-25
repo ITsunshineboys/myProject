@@ -1248,13 +1248,13 @@ class BasisDecorationService
         } elseif ($goods == null){
             return new \stdClass;
         }else {
-var_dump($goods);exit;
+var_dump($goods);
 
             foreach($goods as $v) {
                 $a = $v;
-                $max = max($a['profit_rate'],$v['profit_rate']);
+                $max = max($v['profit_rate'],$a['profit_rate']);
             }
-
+var_dump($max);exit;
             foreach ($goods as  $g){
                 if ($g['profit_rate'] == $max){
                     $goods_max = $g;
