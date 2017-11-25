@@ -1763,7 +1763,7 @@ class BasisDecorationService
 
 
         $effect = Effect::array_group_by($series_style_goods,'title');
-
+var_dump($effect);exit;
         foreach ($effect as $c){
            if ($c['title'] == '茶几'){
                $as[] = $c;
