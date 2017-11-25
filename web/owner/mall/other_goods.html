@@ -53,7 +53,7 @@
                         <p>品牌名称：{{cur_goods_detail.name}}</p>
                         <p>
                             <span ng-if="(cur_goods_detail.series_name!=undefined&&cur_goods_detail.series_name!='')||+cur_goods_detail.series_id!=0">系列：{{cur_goods_detail.series_name}}</span>
-                            <span class="style_position" ng-if="(cur_goods_detail.series_name!=undefined&&cur_goods_detail.series_name!='')||+cur_goods_detail.style_id!=0">风格：{{cur_goods_detail.style_name}}</span>
+                            <span class="style_position" ng-if="(cur_goods_detail.style_name!=undefined&&cur_goods_detail.style_name!='')||+cur_goods_detail.style_id!=0">风格：{{cur_goods_detail.style_name}}</span>
                         </p>
                     </div>
                     <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
