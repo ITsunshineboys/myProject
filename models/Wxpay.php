@@ -197,14 +197,15 @@ class Wxpay  extends ActiveRecord
             $timestamp=time();
             // $url='https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421141115';
 
-            if ($_SERVER["HTTPS"] == "on")
-            {
-                $url = 'https://';
-
-            }else{
-                $url = 'http://';
-//                $url=$_SERVER['HTTP_REFERER'];
-            }
+//            if ($_SERVER["HTTPS"] == "on")
+//            {
+//                $url = 'https://';
+//
+//            }else{
+//                $url = 'http://';
+////                $url=$_SERVER['HTTP_REFERER'];
+//            }
+            $url = 'http://';
             $url .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
 //            $url=self::curPageURL();
             $appid=WxPayConfig::APPID;
