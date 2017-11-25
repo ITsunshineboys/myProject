@@ -1248,7 +1248,7 @@ class BasisDecorationService
         } elseif ($goods == null){
             return new \stdClass;
         }else {
-
+var_dump($goods);exit;
 
             foreach($goods as $v) {
                 $a = $v;
