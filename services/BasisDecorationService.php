@@ -1803,9 +1803,9 @@ class BasisDecorationService
                     $pole [] = $one_goods_price;
                     break;
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['slab']:
-                    $one_goods_price['quantity'] = $pole_cost['quantity'];
-                    $one_goods_price['cost'] = $pole_cost['cost'];
-                    $one_goods_price['procurement'] = $pole_cost['procurement'];
+                    $one_goods_price['quantity'] = $blockboard['quantity'];
+                    $one_goods_price['cost'] = $blockboard['cost'];
+                    $one_goods_price['procurement'] = $blockboard['procurement'];
                     $slab [] = $one_goods_price;
                     break;
             }
