@@ -1034,25 +1034,26 @@ class SiteController extends Controller
      */
     public function actionUploadDelete()
     {
-        $code = 1000;
-
         $filePath = trim(Yii::$app->request->post('file_path', ''));
+        FileService::deleteFile($filePath);
 
         /*
+        $code = 1000;
+
         if (!$filePath || !FileService::existUploadFile($filePath)) {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
-        }*/
+        }
 
-        if (!@unlink($filePath)) {/*
+        if (!@unlink($filePath)) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);*/
-        }
+            ]);
+        }*/
 
         return Json::encode([
             'code' => 200,
