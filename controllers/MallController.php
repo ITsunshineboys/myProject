@@ -2817,9 +2817,6 @@ class MallController extends Controller
                 return str_replace('，', ',', $value);
             }, $values);
             if (!GoodsAttr::validateValues($values, $additionTypes)) {
-                if (YII_DEBUG) {
-                    StringService::writeLog('test', 'GoodsAttr::validateValues', 'goods_attr');
-                }
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2831,9 +2828,6 @@ class MallController extends Controller
         $lhzz = Lhzz::find()->where(['uid' => $user->id])->one();
         $category = GoodsCategory::find()->where(['id' => $categoryId, 'level' => GoodsCategory::LEVEL3])->one();
         if (!$category) {
-            if (YII_DEBUG) {
-                StringService::writeLog('test', 'GoodsCategory::find()', 'goods_category');
-            }
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2868,9 +2862,6 @@ class MallController extends Controller
             $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
 
             if (!$goodsAttr->validate()) {
-                if (YII_DEBUG) {
-                    StringService::writeLog('test', json_encode($goodsAttr->errors), 'goods_attr');
-                }
                 $transaction->rollBack();
 
                 if (isset($goodsAttr->errors['name'])) {
@@ -4941,9 +4932,6 @@ class MallController extends Controller
             ]);
         }
 
-        if (YII_DEBUG) {
-            StringService::writeLog('test', date('H:i:s'), 'categories-level3', Logger::LEVEL_INFO);
-        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
