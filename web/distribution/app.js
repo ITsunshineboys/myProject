@@ -1,6 +1,6 @@
 var app = angular.module("app",['ionic','distribution','angularCSS'])
 app.config(function ($stateProvider,$urlRouterProvider) {
-    $urlRouterProvider.otherwise('/index')
+    $urlRouterProvider.otherwise('/')
     $stateProvider
         .state('index',{
             url:'/',
