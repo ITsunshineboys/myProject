@@ -1,86 +1,28 @@
-section{
-    padding-left: 40px;
-}
-.shop_name{
-    margin-bottom: 25px;
-    margin-top: 40px;
-}
-.shop_name span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_name span:nth-child(2){
-    margin-left: 85px;
-}
 hr{
-    margin-left: 6px;
-    width: 90%;
     color: #ABABAB;
 }
-.shop_img{
-    margin-bottom: 25px;
-    margin-top: 25px;
+p{
+    margin: 1em 0;
 }
-.shop_img span{
-    color: #666F80;
-    display: inline-block;
-    min-width:56px
+.row .col-sm-10 img{
+    max-width: 310px;
+    max-height: 220px;
 }
-.shop_img img{
-    width: 310px;
-    height: 222px;
-    margin-left: 85px;
-    vertical-align: text-top;
-}
-.shop_img_more{
-    margin-bottom: 25px;
-    margin-top: 25px;
-}
-.shop_img_more span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_img_more img{
-    width: 310px;
-    height: 222px;
-    border: 1px solid #ABABAB;
-    margin-left: 88px;
-    vertical-align: text-top;
-}
-.shop_select{
-    margin-bottom: 25px;
-    margin-top: 25px;
-}
-.shop_select span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_select select{
+.check_select{
     width: 200px;
     height: 30px;
     border: 1px solid #ABABAB;
     border-radius: 4px;
-    margin-left: 85px;
 }
-.shop_input{
-    margin-bottom: 25px;
-    margin-top: 25px;
-}
-.shop_input span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_input textarea{
-    width: 740px;
+.texta{
+    width: 100%;
     height: 100px;
     border: 1px solid #ABABAB;
-    border-radius: 5px;
-    margin-left: 85px;
+    border-radius: 4px;
     vertical-align: text-top;
 }
-.btn_back{
+.btn_top{
     margin-top: 30px;
-    margin-bottom: 40px;
 }
 .btn_left{
     margin-left: 20px;

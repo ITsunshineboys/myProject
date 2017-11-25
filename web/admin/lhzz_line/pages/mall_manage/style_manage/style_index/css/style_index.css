@@ -1,26 +1,4 @@
-/*内容部分*/
-.style_content{
-    padding-top: 30px;
-    padding-left: 40px;
 
-}
-/*选项卡*/
-.allstyle_tabtitle{
-    padding: 0;
-    overflow: hidden;
-    border-bottom: 1px solid #E6E9F0;;
-}
-
-.allstyle_tabtitle li{
-    display: inline-block;
-    float: left;
-    margin-right: 25px;
-    font-weight: bold;
-    color: #666F80;
-    border-bottom: 1px solid transparent;
-    padding-bottom: 4px;
-    cursor: pointer;
-}
 
 .clickstyle{
     color: #3F94F6!important;
@@ -29,9 +7,6 @@
 
 
 /*系列管理*/
-.series_mag{
-   padding-top: 30px;
-}
 
 /*系列管理按钮组*/
 .btn_right{
@@ -39,42 +14,6 @@
 }
 /*系列管理表格*/
 /*表格部分*/
-.series_mag_table{
-    margin-top: 9px;
-}
-
-.series_mag_table table{
-    width: 90%;
-    table-layout: fixed;
-}
-
-.series_mag_table table tr{
-    height: 42px;
-    border-bottom: 1px solid #E6E9F0;
-
-}
-.series_mag_table table tr td{
-    font-family: Helvetica;
-    font-size: 14px;
-    color: #666F80;
-    line-height: 14px;
-    padding: 0 11px;
-}
-.series_mag_table table tr td a{
-    color: #3F94F6;
-}
-
-.series_mag_table table img{
-    width: 10px;
-}
-
-.th{
-    font-family: Helvetica;
-    font-size: 14px;
-    color: #7A8599;
-    line-height: 14px;
-}
-
 .color_blue{
     color: #5677FC!important;
 }
@@ -133,9 +72,6 @@ table .sortpic .glyphicon-triangle-bottom {
     margin-top: -4px;
 }
 
-.active{
-    color: #1B7CEE!important;
-}
 
 
 

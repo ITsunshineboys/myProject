@@ -158,7 +158,7 @@
                                 <div class="input-group">
                                     <input class="form-control" type="text" ng-model="shop_model" name="shop_num" required ng-blur="num_blur=!!shop_form.shop_num.$error"/>
                                     <span class="input-group-btn">
-                                    <button class="btn btn-default btn_height" ng-click="recommend_shop_add_get()">获取</button>
+                                    <button class="btn btn-default" ng-click="recommend_shop_add_get()">获取</button>
                                     </span>
                                 </div>
                             </div>
@@ -448,7 +448,7 @@
                                 <div class="input-group">
                                     <input class="form-control" name="edit_shop_num" required ng-class="{'border_red':(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)}" ng-blur="edit_shop_num_blur=!!edit_form.edit_shop_num.$error" ng-model="myng.shop_edit_sku" type="text"/>
                                     <span class="input-group-btn">
-                                    <button class="btn btn-default btn_height" ng-click="recommend_shop_edit_get()">获取</button>
+                                    <button class="btn btn-default" ng-click="recommend_shop_edit_get()">获取</button>
                                     </span>
                                 </div>
                             </div>

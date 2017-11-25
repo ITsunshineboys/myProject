@@ -85,8 +85,6 @@
 .formDiv{
   display: inline-block;
 }
-
-
 /*选项卡内容*/
 .table{
   table-layout:fixed;
@@ -94,10 +92,9 @@
 .tab_history{
   width: 85px;
   display: inline-block;
-  height: 32px;
-  margin: 5px;
+  height: 34px;
   text-align: center;
-  line-height: 32px;
+  line-height: 34px;
   font-family: Helvetica;
   font-size: 12px;
   color: #3F94F6;
@@ -105,7 +102,7 @@
 
 /*Table内容-*/
 .tab_class{
-  margin: 30px 0;
+  margin-bottom: 20px;
 }
 
 /*添加模态框*/
@@ -135,7 +132,4 @@
 
 .border_red{
   border:1px solid red!important;
-}
-.btn_height{
-  height: 34px;
 }

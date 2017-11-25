@@ -1,152 +1,35 @@
-
-/*内容*/
-p{
-    margin-bottom: 0;
-}
-
-ul{
-    list-style: none;
-}
-
-.onine_edit_content{
-    padding-top: 55px;
-    padding-left: 40px;
+body{
     color: #666F80;
 }
-
-/*品牌名称*/
+.row .col-sm-10 img{
+  max-width: 120px;
+  max-height: 120px;
+}
+.img_txt{
+  font-size: 12px;
+  color: #ABABAB;
+}
+.form-horizontal .control-label{
+  text-align:left;
+}
 .red_mark{
     color:#E51C23;
 }
-
-.company_type input{
-    margin-left: 87px;
-    width: 245px;
-    height: 31px;
-    margin-left: 87px;
-    border: 1px solid #999;
-    border-radius: 3px;
-    padding-left: 10px;
-    line-height: 31px;
-    outline: 0;
+hr{
+    margin:20px 0;
 }
-
-.company_type p{
-    font-size: 12px;
-    margin-left: 165px;
-    margin-top: 5px;
-}
-
-#limitword{
-    margin-left: 20px;
-    font-size: 13px;
-    color: #ABABAB;
-
-}
-
-/*第一个分割线*/
-#firsthr{
-    margin-top: 7px;
-    margin-bottom: 22px;
-}
-
-/*商标注册证*/
-.pic_right{
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 50px;
-}
-
-.pic_right img{
-    width: 120px;
-    height: 120px;
-}
-
-.pic_right p:nth-child(2){
-    font-size: 12px;
-    color: #ABABAB;
-    margin-top: 3px;
-}
-
-.pic_right div{
-    width: 67px;
-    height: 24px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 24px;
-    color: #666F80;
-    background-color: #FFFFFF;
-    border: 1px solid #666F80;
-    border-radius: 3px;
-    margin-top: 4px;
-}
-
 .warning{
     font-size: 12px;
     margin-top: 6px;
 }
-
-/*品牌LOGO*/
-.brand_logo{
-    margin-top: 16px;
+.btn_top{
+  margin-top: 20px;
 }
-
-
-#logo{
-    width: 120px;
-    height: 120px;
-}
-
-/*第二个分割线*/
-#sechr{
-    margin-top: 4px;
-    margin-bottom: 30px;
-}
-
-
-/*第三个分割线*/
-#thirdhr{
-    margin-top: 35px;
-    margin-bottom: 21px;
-}
-
-/*添加人员*/
-.add_people span:last-child{
-    margin-left: 87px;
-}
-
-/*上架时间*/
-.online_time{
-    margin-top: 16px;
-}
-
-
-.online_time span:last-child{
-    margin-left: 87px;
-}
-
-/*按钮组*/
-.btn_sure{
-    margin: 40px auto;
-}
-
 .btn_left{
     margin-left: 20px;
 }
 
 /*选择拥有系列的分类*/
-.ulright{
-    display: inline-block;
-    margin-top: 11px;
-}
-.right_div{
-    display: inline-block;
-    vertical-align: top;
-}
-.left_div{
-    margin-left: 33px;
-    display: inline-block;
-}
 .ulright ul{
     display: inline-block;
     width: 160px;
@@ -157,9 +40,6 @@ ul{
     vertical-align: top;
     /*padding-bottom: 20px;*/
     overflow: auto;
-}
-.active{
-    color: #487AF8;
 }
 .ulright ul li{
     padding-top: 10px;

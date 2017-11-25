@@ -1,32 +1,3 @@
-
-/*选项卡开始*/
-/*.tab{*/
-  /*height: 60px;*/
-  /*border-bottom: 1px solid #E6E9F0 ;*/
-/*}*/
-/*.tab>ul{*/
-  /*list-style: none;*/
-  /*padding: 0;*/
-  /*margin: 0;*/
-/*}*/
-/*.tab ul:after{*/
-  /*content: "";*/
-  /*display: table;*/
-  /*clear: both;*/
-/*}*/
-/*.tab>ul>li{*/
-  /*float: left;*/
-  /*height: 60px;*/
-  /*line-height: 60px;*/
-  /*margin-right: 25px;*/
-  /*cursor: pointer;*/
-/*}*/
-.tab_blue{
-  color: #5677FC;
-  border-bottom: 1px solid #5677FC ;
-}
-/*选项卡结束*/
-
 /*操作开始*/
 .inline_block{
   display: inline-block;
@@ -41,12 +12,6 @@
   border: 1px solid #BFC0C2;
   margin-right: 15px;
 }
-/*.border{*/
-  /*border:1px solid #666F80;*/
-  /*border-radius: 3px;*/
-  /*padding: 8px;*/
-  /*margin-right: 15px;*/
-/*}*/
 .btn_right{
   margin-right: 10px;
 }
@@ -69,7 +34,7 @@
 }
 .search_input{
   width: 250px;
-  height: 35px;
+  height: 34px;
   border:1px solid #BFC0C2;
   border-radius: 20px;
 }
@@ -91,31 +56,6 @@
 }
 /*操作结束*/
 
-/*表格开始*/
-.th{
-  border-top: 0!important;
-}
-.th>td{
-  color:#7A8599;
-}
-.table_content>td{
-  color: #666F80;
-}
-table{
-  width: 100%;
-  margin-top:30px;
-}
-
-table tr{
-  height: 40px;
-  border-top: 1px solid #ddd;
-}
-
-.table_content{
-  border-top:1px solid #e6e6e6;
-}
-/*表格结束*/
-
 /*颜色*/
 .green{
   color:#8BC34A!important;
@@ -129,18 +69,19 @@ table tr{
 .blue{
   color: #5677FC!important;
 }
-.gay_input{
-  width: 70px!important;
-  height: 32px;
-  color: #ABABAB;
-  padding: 5px!important;
-  border:1px solid #ABABAB!important;
-  border-radius: 3px;
-  margin: 0!important;
-  display:block;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.table{
+  table-layout:fixed;
+}
+.table_width{
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #ABABAB;
+  padding: 5px;
+  border-radius: 4px;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .img_size{
   height: 30px!important;
@@ -149,54 +90,6 @@ table tr{
 .img_sort_size {
   width: 10px!important;
   height: 16px!important;
-}
-/*分页处理*/
-.pages{
-  /*width: 90%;*/
-  margin: 30px auto ;
-  /*outline: 1px solid red;*/
-  overflow: hidden;
-  padding-left: 0;
-  list-style: none;
-}
-
-.pages>div{
-  float: left;
-  overflow: hidden;
-}
-
-.pages li{
-  float: left;
-  margin-right: 10px;
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #999;
-  line-height: 12px;
-  padding: 6px 18px;
-  background-color: white;
-  border: 1px solid #5677FC;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.pages .jumpto{
-  border: none;
-  padding:0 0 0 5px;
-}
-
-.jumpto input{
-  height: 25px;
-  width: 62px;
-}
-
-.pagenum{
-  padding-left: 9px!important;
-  padding-right: 9px!important;
-}
-
-#omit,#off{
-  border:none;!important;
-  padding:6px 0 0 0;
-  cursor: default;
 }
 
 .down_roles{
@@ -208,4 +101,7 @@ table tr{
 .apply{
   color: #666F80;
   font-weight: bold;
+}
+.operating_div{
+  margin-bottom: 20px;
 }
