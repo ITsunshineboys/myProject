@@ -259,6 +259,9 @@ class FileService
         if (!StringService::checkUri($filepath) && self::existUploadFile($filepath)) {
             $file = Yii::getAlias('@webroot') . '/' . ltrim($filepath, '/');
             unlink($file);
+            if (YII_DEBUG) {
+                StringService::writeLog('test', $file);
+            }
         }
     }
 
