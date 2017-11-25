@@ -2,8 +2,8 @@
 
 namespace app\models;
 use Yii;
+use yii\db\ActiveRecord;
 use Yii\db\Exception;
-use Yii\db\ActiveRecord;
 use yii\db\query;
 use app\services\ModelService;
 
