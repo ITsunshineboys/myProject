@@ -4545,7 +4545,7 @@ class OrderController extends Controller
                 ->where(['order_no'=>$order_no])
                 ->one();
             $supplier=Supplier::findOne($goodsOrder->supplier_id);
-            if (!$goodsOrder || !$supplier || !$goodsOrder)
+            if (!$goodsOrder || !$supplier )
             {
                 $code=1000;
                 return Json::encode(
@@ -5329,6 +5329,33 @@ class OrderController extends Controller
 //            ]);
 //        }
 
+    }
+
+
+    /**
+     * 获取默认地址
+     * @return string
+     */
+    public function  actionFindDefaultAddress()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $address=Addressadd::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['default'=>1])
+            ->one();
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$address
+        ]);
     }
 
     public  function  actionTest123()

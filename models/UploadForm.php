@@ -33,7 +33,7 @@ class UploadForm extends Model
     public static function getUploadImageRelativePath($imageUrl)
     {
         list($_, $path) = explode(UploadForm::DIR_PUBLIC, $imageUrl, 2);
-        return UploadForm::DIR_PUBLIC . $path;
+        return '/' . UploadForm::DIR_PUBLIC . $path;
     }
 
     /**

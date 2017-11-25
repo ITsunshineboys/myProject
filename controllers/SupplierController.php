@@ -363,9 +363,6 @@ class SupplierController extends Controller
         $icon = trim(Yii::$app->request->post('icon', ''));
         $supplier = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->params['supplierRoleId']);
         $res = ModelService::resetIcon($supplier, $icon);
-        if (YII_DEBUG) {
-            StringService::writeLog('test', $icon, 'supplier_reset_icon');
-        }
         return Json::encode([
             'code' => $res,
             'msg' => 200 == $res ? '修改Logo成功' : Yii::$app->params['errorCodes'][$res],

@@ -48,7 +48,10 @@ class OrderPlatForm extends ActiveRecord
             $time=time();
             $trans = \Yii::$app->db->beginTransaction();
             try {
+
                 $OrderPlatForm=new self;
+                $OrderPlatForm->order_no=$order_no;
+                $OrderPlatForm->sku=$order_no;
                 $OrderPlatForm->handle=$handle_type;
                 $OrderPlatForm->reasons=$reason;
                 $OrderPlatForm->creat_time=$time;
@@ -73,30 +76,34 @@ class OrderPlatForm extends ActiveRecord
                     return $code;
                 }
 
-                $access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
-                $UserAccessDetail=new UserAccessdetail();
-                $UserAccessDetail->uid=$supplier->uid;
-                $UserAccessDetail->role_id=6;
-                $UserAccessDetail->access_type=2;
-                $UserAccessDetail->access_money=$access_money;
-                $UserAccessDetail->create_time=time();
-                $UserAccessDetail->order_no=$order_no;
-                $UserAccessDetail->sku=$sku;
-                $UserAccessDetail->transaction_no=GoodsOrder::SetTransactionNo($GoodsOrder->consignee_mobile);
-                if (!$UserAccessDetail->save(false))
+                if ($$OrderGoods->order_status==1)
                 {
-                    $code=500;
-                    $trans->rollBack();
-                    return $code;
+                    $access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+                    $UserAccessDetail=new UserAccessdetail();
+                    $UserAccessDetail->uid=$supplier->uid;
+                    $UserAccessDetail->role_id=6;
+                    $UserAccessDetail->access_type=2;
+                    $UserAccessDetail->access_money=$access_money;
+                    $UserAccessDetail->create_time=time();
+                    $UserAccessDetail->order_no=$order_no;
+                    $UserAccessDetail->sku=$sku;
+                    $UserAccessDetail->transaction_no=GoodsOrder::SetTransactionNo($GoodsOrder->consignee_mobile);
+                    if (!$UserAccessDetail->save(false))
+                    {
+                        $code=500;
+                        $trans->rollBack();
+                        return $code;
+                    }
+                    $supplier->availableamount-=$access_money;
+                    $supplier->balance-=$access_money;
+                    if (!$supplier->save(false))
+                    {
+                        $code=500;
+                        $trans->rollBack();
+                        return $code;
+                    }
                 }
-                $supplier->availableamount-=$access_money;
-                $supplier->balance-=$access_money;
-                if (!$supplier->save(false))
-                {
-                    $code=500;
-                    $trans->rollBack();
-                    return $code;
-                }
+
                 //减少销量，减少销售额，增加库存.减少商品销量
                 $date=date('Ymd',time());
                 $GoodsStat=GoodsStat::find()
@@ -286,5 +293,6 @@ class OrderPlatForm extends ActiveRecord
             return $code;
         }
     }
+
 
 }
