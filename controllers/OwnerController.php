@@ -1880,7 +1880,12 @@ class OwnerController extends Controller
            $b = $c;
            $max = max($b['c'],$c['c']);
         }
-var_dump($max);
+        foreach ($a as  $b){
+            if ($b['c'] == $max){
+                $aa = $b;
+            }
+        }
+var_dump($aa);
     }
 
 }
