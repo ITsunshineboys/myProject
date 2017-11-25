@@ -4356,7 +4356,7 @@ class MallController extends Controller
             'data' => [
                 'index_admin' => [
                     'today_date' => date('Y-m-d'),
-                    'today_amount_order' => $todayAmountOrder,
+                    'today_amount_order' => StringService::formatPrice($todayAmountOrder / 100),
                     'today_order_number' => $todayOrderNumber,
                     'today_ip_number' => GoodsStat::totalIpNumber($where),
                     'today_viewed_number' => GoodsStat::totalViewedNumber($where),
