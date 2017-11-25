@@ -85,7 +85,10 @@ class Distribution extends ActiveRecord
                         ->all();
                     foreach ($orderGoods as &$list)
                     {
-                        $goodsOrder_line_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                        if ($list['order_status']!==2)
+                        {
+                            $goodsOrder_line_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                        }
                     }
 
                 }
@@ -104,7 +107,11 @@ class Distribution extends ActiveRecord
                             ->all();
                         foreach ($orderGoods as &$list)
                         {
-                            $goodsOrder_online_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                            if ($list['order_status']!==2)
+                            {
+                                $goodsOrder_online_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                            }
+
                         }
                     }
                     $goodsOrder_online_count+=$goodsOrder_online->count();
