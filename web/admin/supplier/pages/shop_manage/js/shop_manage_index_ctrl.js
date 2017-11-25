@@ -5,7 +5,6 @@ let shopmanage = angular.module("shopmanageModule", []);
 shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $http, $stateParams, _ajax, Upload) {
     let result;
     let id;
-    const picprefix = baseUrl+"/";
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         transformRequest: function (data) {
@@ -53,7 +52,7 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
             let timearr = result.create_time.split('-');
             timearr.splice(0, 1, year);
             $scope.onemoreyear = timearr.join('-');//资质日期加一年
-            $scope.iconpath = picprefix + result.icon;
+            $scope.iconpath = result.icon;
             id = result.id;
         });
     }
@@ -76,7 +75,7 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
                 $scope.iconpath = 'lib/images/default.png';
             } else {
                 $scope.picwarning = false;
-                $scope.iconpath = picprefix + response.data.data.file_path;
+                $scope.iconpath = response.data.data.file_path;
                 $scope.classicon = response.data.data.file_path;
             }
         }, (error) => {
