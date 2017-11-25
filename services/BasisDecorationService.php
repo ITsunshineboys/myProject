@@ -1764,15 +1764,10 @@ class BasisDecorationService
 
         $effect = Effect::array_group_by($series_style_goods,'title');
         foreach ($effect as $c){
-            if (count($c) == count($c, 1)) {
-                $goods = $c;
-            } else {
-                $a = $c;
-            }
-//            $material[] = self::profitMargin($c);
+            $material[] = self::profitMargin($c);
         }
-        var_dump($goods);
-        var_dump($a);exit;
+        var_dump($material);
+        exit;
 //        return $material;
     }
 
