@@ -1763,7 +1763,8 @@ class BasisDecorationService
 
 
         $a = Effect::array_group_by($series_style_goods,'title');
-        var_dump($a);exit;
+        $b = self::profitMargin($a);
+        var_dump($b);exit;
 
         return $series_style_goods;
     }
