@@ -5359,7 +5359,8 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-     var_dump($_SERVER['HTTP_USER_AGENT']);exit;
+        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        echo $http_type . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
 
