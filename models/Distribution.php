@@ -87,7 +87,7 @@ class Distribution extends ActiveRecord
                     {
                         if ($list['order_status']!==2)
                         {
-                            $goodsOrder_line_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                            $goodsOrder_line_money+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
                             $goodsOrder_line_count+=$goodsOrder_line->count();
                         }
                     }
@@ -111,7 +111,7 @@ class Distribution extends ActiveRecord
                         {
                             if ($list['order_status']!==2)
                             {
-                                $goodsOrder_online_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                                $goodsOrder_online_money+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
                                 $add_data=1;
                             }
 
