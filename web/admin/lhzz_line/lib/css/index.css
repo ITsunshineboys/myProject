@@ -58,3 +58,11 @@
     background-color: #1B7CEE !important;
     border: 1px solid #1B7CEE !important;
 }
+/* side menu start */
+.y_display{
+    display: block;
+}
+.n_display{
+    display: none;
+}
+/* side menu end */

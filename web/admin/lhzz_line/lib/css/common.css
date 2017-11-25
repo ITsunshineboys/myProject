@@ -125,8 +125,12 @@ select.form-control:focus {
     border-bottom: 1px solid #E6E9F0;
 }
 
-.table.table-hover tbody tr:hover {
+.table.table-hover tbody tr:hover td {
     background-color: #D8E9FC;
+}
+
+.table.table-hover tr:hover {
+    background-color: inherit;
 }
 
 .table tbody tr td,
