@@ -1250,9 +1250,10 @@ class BasisDecorationService
         }else {
             $a = [];
             foreach($goods as $v) {
-                $a = max($a['profit_rate'],$v['profit_rate']);
+                $a = $v;
+                $max = max($a['profit_rate'],$v['profit_rate']);
             }
-            return $a;
+            return $max;
         }
     }
 
