@@ -1,66 +1,13 @@
-section{
-    padding-left: 40px;
-}
-.shop_name{
-    margin-bottom: 25px;
-    margin-top: 40px;
-}
-.shop_name span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_name span:nth-child(2){
-    margin-left: 85px;
-}
-
-.shop_num{
-    margin-bottom: 25px;
-}
-.shop_num span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_num span:nth-child(2){
-    margin-left: 112px;
-}
 hr{
-    margin-left: 6px;
-    width: 90%;
     color: #ABABAB;
 }
-.shop_img{
-    margin-bottom: 25px;
-    margin-top: 25px;
+p{
+    margin: 1em 0;
 }
-.shop_img span{
-    color: #666F80;
-    display: inline-block;
-    min-width:56px;
-}
-.shop_img img{
+.book_img{
     width: 310px;
-    height: 222px;
-    margin-left: 85px;
+    height: 220px;
     vertical-align: text-top;
-}
-.shop_img_more{
-    margin-bottom: 25px;
-    margin-top: 25px;
-}
-.shop_img_more span{
-    color: #666F80;
-    font-size: 14px;
-}
-.shop_img_more img{
-    width: 310px;
-    height: 222px;
-    border: 1px solid #ABABAB;
-    margin-left: 88px;
-    vertical-align: text-top;
-}
-.btn_back{
-    margin-top: 30px;
-    margin-bottom: 40px;
 }
 .red{
     color:#FF5722!important;

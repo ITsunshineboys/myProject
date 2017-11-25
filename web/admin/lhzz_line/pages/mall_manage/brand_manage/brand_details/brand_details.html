@@ -1,59 +1,61 @@
 <link rel="stylesheet" href="pages/mall_manage/brand_manage/brand_details/css/brand_details.css"/>
 <div ng-controller="brand_details_ctrl">
-    <section>
         <!--所属分类-->
-        <div class="shop_name">
-            <span>所属分类</span>
-            <span>{{item.category_title}}</span>
+        <div class="row">
+            <p class="col-sm-2">所属分类</p>
+            <p class="col-sm-10">{{item.category_title}}</p>
         </div>
         <!--品牌-->
-        <div class="shop_num">
-            <span>品牌</span>
-            <span>{{item.brand_name}}</span>
+        <div class="row">
+            <p class="col-sm-2">品牌</p>
+            <p class="col-sm-10">{{item.brand_name}}</p>
         </div>
         <!--授权期限-->
-        <div class="shop_name">
-            <span>授权期限</span>
-            <span>{{item.authorization_start}} 至 {{item.authorization_end}}</span>
+        <div class="row">
+            <p class="col-sm-2">授权期限</p>
+            <p class="col-sm-10">{{item.authorization_start}} 至 {{item.authorization_end}}</p>
         </div>
 
         <hr/>
         <!--授权书上传-->
-        <div class="shop_img" ng-repeat="imgs in (item.images)">
-            <span>{{imgs.authorization_name}}</span>
-            <img ng-src="{{ imgs.image}}" alt=""/>
+        <div class="row" ng-repeat="imgs in (item.images)">
+            <p class="col-sm-2">{{imgs.authorization_name}}</p>
+            <p class="col-sm-10">
+                <img class="book_img" ng-src="{{ imgs.image}}" alt=""/>
+            </p>
         </div>
         <hr/>
         <!--申请人-->
-        <div class="shop_name">
-            <span>商家名称</span>
-            <span>{{item.supplier_name}}</span>
+        <div class="row">
+            <p class="col-sm-2">商家名称</p>
+            <p class="col-sm-10">{{item.supplier_name}}</p>
         </div>
         <!--账户申请-->
-        <div class="shop_name">
-            <span>申请账户</span>
-            <span>{{item.mobile}}</span>
+        <div class="row">
+            <p class="col-sm-2">申请账户</p>
+            <p class="col-sm-10">{{item.mobile}}</p>
         </div>
         <!--申请时间-->
-        <div class="shop_name">
-            <span>申请时间</span>
-            <span>{{item.create_time}}</span>
+        <div class="row">
+            <p class="col-sm-2">申请时间</p>
+            <p class="col-sm-10">{{item.create_time}}</p>
         </div>
         <hr/>
         <!--审核状态-->
-        <div class="shop_name">
-            <span>审核状态</span>
-            <span class="green" ng-if="item.review_status=='2'">通过</span>
-            <span class="red" ng-if="item.review_status=='1'">不通过</span>
+        <div class="row">
+            <p class="col-sm-2">审核状态</p>
+            <p class="col-sm-10 green" ng-if="item.review_status=='2'">通过</p>
+            <p class="col-sm-10 red" ng-if="item.review_status=='1'">不通过</p>
         </div>
         <!--审核备注-->
-        <div class="shop_name">
-            <span>审核备注</span>
-            <span>{{item.review_note}}</span>
+        <div class="row">
+            <p class="col-sm-2">审核备注</p>
+            <p class="col-sm-10">{{item.review_note}}</p>
         </div>
         <!--按钮-->
-        <div class="btn_back">
-            <button class="btn btn-default" ui-sref="brand_index({check_flag:true})">返回</button>
+        <div class="row">
+            <p class="col-sm-12">
+                <button class="btn btn-default" ui-sref="brand_index({check_flag:true})">返回</button>
+            </p>
         </div>
-    </section>
 </div>

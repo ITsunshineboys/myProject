@@ -1,15 +1,17 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/style_index/css/style_index.css">
 <div ng-controller="style_index">
     <!--内容-->
-    <div class="style_content">
+
         <!--选项卡-->
-        <ul class="allstyle_tabtitle">
-            <li id="series_mag" ng-click="changeToseries()" ng-class="{clickstyle:showseries}">系列管理</li>
-            <li ng-click="changeTostyle()" ng-class="{clickstyle:showstyle}">风格管理</li>
-            <li ng-click="changeToattr()" ng-class="{clickstyle:showattr}">属性管理</li>
+    <div class="tab clearfix">
+        <ul>
+            <li ng-click="changeToseries()" ng-class="{'active':showseries}">系列管理</li>
+            <li ng-click="changeTostyle()" ng-class="{'active':showstyle}">风格管理</li>
+            <li ng-click="changeToattr()" ng-class="{'active':showattr}">属性管理</li>
         </ul>
+    </div>
         <!--系列管理-->
-        <div ng-if="showseries==true" class="series_mag">
+        <div ng-if="showseries==true">
             <!--按钮组-->
             <div class="series_btn">
                 <div class="series_btn">
@@ -21,26 +23,22 @@
                 </div>
                 <!--系列管理Table内容-->
                 <div class="series_mag_table">
-                    <table>
-                        <tr class="th">
-                            <td width="224">系列名称</td>
-                            <td width="270">创建时间
-                                <img ng-click="ser_time_sort()" src="{{ser_time_img}}" alt="">
-
-                            </td>
-                            <td width="224">状态</td>
-                            <td width="224">详情</td>
+                    <table class="table table-hover table-responsive">
+                        <tr>
+                            <td>系列名称</td>
+                            <td>创建时间<img ng-click="ser_time_sort()" src="{{ser_time_img}}" width="10"></td>
+                            <td>状态</td>
+                            <td>详情</td>
                             <td>操作</td>
                         </tr>
-
                         <tr ng-repeat="item in series_arr">
                             <td>{{item.series}}</td>
                             <td>{{item.creation_time}}</td>
                             <td class="color_red" ng-if="item.status=='0'">关闭</td>
                             <td class="color_skyblue" ng-if="item.status=='1'">启用中</td>
-                            <td class="color_blue" ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})">编辑</td>
-                            <td class="color_blue" ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)">开启</td>
-                            <td class="color_blue" ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)">关闭</td>
+                            <td ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})"><a href="">编辑</a></td>
+                            <td ng-if="item.status=='0'" data-toggle="modal" data-target="#open_modal" ng-click="open_status(item)"><a href="">开启</a></td>
+                            <td ng-if="item.status=='1'" data-toggle="modal" data-target="#close_modal" ng-click="close_status(item)"><a href="">关闭</a></td>
                         </tr>
                     </table>
                 </div>
@@ -48,7 +46,7 @@
         </div>
 
         <!--风格管理-->
-        <div ng-if="showstyle==true" class="series_mag">
+        <div ng-if="showstyle==true">
             <!--按钮组-->
             <div class="series_btn">
                 <button class="btn btn-default btn_right" ui-sref="add_style({style_arr:style_arr})">
@@ -59,35 +57,32 @@
             </div>
 
             <!--风格管理Table内容-->
-            <div class="series_mag_table">
-                <table>
-                    <tr class="th">
-                        <td width="224">风格名称</td>
-                        <td width="270">创建时间
-                            <img ng-click="style_time_sort()"  ng-src="{{style_time_img}}" alt="">
+                <table class="table table-hover table-responsive">
+                    <tr>
+                        <td>风格名称</td>
+                        <td>创建时间
+                            <img ng-click="style_time_sort()"  ng-src="{{style_time_img}}" width="10">
                         </td>
-                        <td width="224">状态</td>
-                        <td width="224">详情</td>
+                        <td>状态</td>
+                        <td>详情</td>
                         <td>操作</td>
                     </tr>
-
                     <tr ng-repeat="style_item in style_arr">
                         <td>{{style_item.style}}</td>
                         <td>{{style_item.creation_time}}</td>
                         <td class="color_red" ng-if="style_item.status=='0'">关闭</td>
                         <td class="color_skyblue" ng-if="style_item.status=='1'">启用中</td>
-                        <td class="color_blue" ui-sref="style_detail({style_item:style_item,page:page})">编辑</td>
-                        <td class="color_blue" ng-if="style_item.status=='0'" ng-click="style_open(style_item)" data-toggle="modal" data-target="#style_open_modal">开启</td>
-                        <td class="color_blue" ng-if="style_item.status=='1'" ng-click="style_close(style_item)" data-toggle="modal" data-target="#style_close_modal">关闭</td>
+                        <td ui-sref="style_detail({style_item:style_item,page:page})"><a href="">编辑</a></td>
+                        <td ng-if="style_item.status=='0'" ng-click="style_open(style_item)" data-toggle="modal" data-target="#style_open_modal"><a href="">开启</a></td>
+                        <td ng-if="style_item.status=='1'" ng-click="style_close(style_item)" data-toggle="modal" data-target="#style_close_modal"><a href="">关闭</a></td>
                     </tr>
                 </table>
                 <!--分页-->
                 <tm-pagination conf="Config"></tm-pagination>
-            </div>
         </div>
 
         <!--属性管理-->
-        <div ng-if="showattr==true" class="series_mag">
+        <div ng-if="showattr==true">
             <!--属性管理按钮组-->
             <div class="attr_btns">
                 <span>分类选择</span>
@@ -99,11 +94,11 @@
 
             <!--属性管理表格-->
             <div class="series_mag_table">
-                <table>
-                    <tr class="th">
-                        <td width="150">所属分类</td>
-                        <td width="148">分类名称</td>
-                        <td width="211" ng-click="sortTime()">最后操作时间
+                <table class="table table-hover table-responsive">
+                    <tr>
+                        <td>所属分类</td>
+                        <td>分类名称</td>
+                        <td ng-click="sortTime()">最后操作时间
                             <span class="sortpic">
                                  <i class="glyphicon glyphicon-triangle-top"
                                     ng-class="{'active':sortStyleFunc() == 4}"></i>
@@ -111,18 +106,17 @@
                                     ng-class="{'active':sortStyleFunc() == 3}"></i>
                     </span>
                         </td>
-                        <td width="217">最后操作账号</td>
-                        <td width="217">属性个数</td>
+                        <td>最后操作账号</td>
+                        <td>属性个数</td>
                         <td>详情</td>
                     </tr>
-
                     <tr ng-repeat="item in listdata">
                         <td>{{item.parent_title}}</td>
                         <td>{{item.title}}</td>
                         <td>{{item.attr_op_time}}</td>
                         <td>{{item.attr_op_username}}</td>
                         <td>{{item.attr_number}}</td>
-                        <td class="color_blue" ui-sref="edit_attribute({titles:item.titles,propid:item.id,propattrs:item.attrs})">编辑</td>
+                        <td ui-sref="edit_attribute({titles:item.titles,propid:item.id,propattrs:item.attrs})"><a href="">编辑</a></td>
                     </tr>
                 </table>
                 <tm-pagination conf="pageConfig"></tm-pagination>
@@ -207,5 +201,4 @@
             </div>
         </div>
     </div>
-</div>
 

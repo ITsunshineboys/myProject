@@ -1,28 +1,31 @@
 <link rel="stylesheet" href="pages/mall_manage/brand_manage/offline_edit/css/offline_edit.css">
 <div ng-controller="offlineedit">
-    <!--内容-->
-    <div class="onine_edit_content">
         <!--店铺名称-->
-        <form name="add_brand_form" novalidate>
-        <div class="company_type">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>品牌名称</span>
-            <input required name="brand_title" id="brand_title" maxlength="10"  ng-class="{'border_red':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}"  type="text"  ng-model="myng.brand_name_model">
-            <span id="limitword">*限1~10个字符</span>
+        <form class="form-horizontal" name="add_brand_form" novalidate>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                <span>品牌名称</span>
+            </div>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" ng-model="myng.brand_name_model" required name="brand_title" id="brand_title" maxlength="10"  ng-class="{'border_red':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}">
             <p class="red_mark" ng-if="myng.edit_title_red">
-                <span class="glyphicon glyphicon-asterisk"></span>
-                该品牌名称已存在，请重新填写
+              <span class="glyphicon glyphicon-asterisk"></span>
+              <span>该品牌名称已存在，请重新填写</span>
             </p>
+          </div>
+          <div class="col-sm-6 control-label">
+            <span class="img_txt">*限1~10个字符</span>
+          </div>
         </div>
-
-        <hr id="firsthr">
-
+        <hr/>
         <!--商品注册证-->
-        <div class="brand_register">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>商品注册证</span>
-
-            <div class="pic_right">
+        <div class="row">
+            <div class="col-sm-2 control-label">
+              <span class="glyphicon glyphicon-asterisk red_mark"></span>
+              <span>商标注册证</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <img ng-if="!!upload_img_src" ng-src="{{upload_img_src}}"/>
                 <img ng-if="!upload_img_src" src="pages/mall_manage/brand_manage/add_brand/image/default.png"/>
                 <p>图片大小5M内，支持JPG、PNG、JPEG</p>
@@ -35,12 +38,13 @@
                 </p>
             </div>
         </div>
-
         <!--品牌LOGO-->
-        <div class="brand_register brand_logo">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>品牌LOGO</span>
-            <div class="pic_right">
+        <div class="row">
+            <div class="col-sm-2 control-label">
+              <span class="glyphicon glyphicon-asterisk red_mark"></span>
+              <span>品牌LOGO</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <img ng-if="!!upload_logo_src" ng-src="{{upload_logo_src}}"/>
                 <img ng-if="!upload_logo_src" src="pages/mall_manage/brand_manage/add_brand/image/default.png"/>
                 <p>图片大小5M内，支持JPG、PNG、JPEG</p>
@@ -53,15 +57,15 @@
                 </p>
             </div>
         </div>
-
-        <hr id="sechr">
-
+        <hr/>
         <!--选择品牌所在分类-->
-        <div class="brand_class">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>选择品牌所在分类</span>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+              <span class="glyphicon glyphicon-asterisk red_mark"></span>
+              <span>选择品牌所在分类</span>
+            </div>
             <!--三级分类列表-->
-            <div class="ulright">
+            <div class="col-sm-10 control-label ulright">
                 <!--一级-->
                 <ul>
                     <li ng-repeat="n in details track by $index" ng-class="{'active':oneColor== n}" ng-click="getMore (n)">
@@ -98,35 +102,36 @@
             </div>
         </div>
 
-        <hr id="thirdhr">
+        <hr/>
 
         <!--下架原因-->
-        <div class="offline_reason">
-            <span>下架原因</span>
-            <p class="offline_reason_content" >{{edit_reason}}</p>
+        <div class="row">
+            <p class="col-sm-2">下架原因</p>
+            <p class="col-sm-10" >{{edit_reason}}</p>
         </div>
 
-        <hr id="fourthhr">
+        <hr/>
 
         <!--添加人员-->
-        <div class="add_people">
-            <span>操作人员</span>
-            <span>{{off_people}}</span>
+        <div class="row">
+            <p class="col-sm-2">操作人员</p>
+            <p class="col-sm-10">{{off_people}}</p>
         </div>
 
         <!--上架人员-->
-        <div class="online_time">
-            <span>下架时间</span>
-            <span>{{off_time}}</span>
+        <div class="row">
+            <p class="col-sm-2">下架时间</p>
+            <p class="col-sm-10">{{off_time}}</p>
         </div>
 
         <!--按钮组-->
-        <div class="btn_sure">
-            <button class="btn btn-primary"  id="save" ng-click="save_btn(add_brand_form.$valid,add_brand_form.$error.required)">保存</button>
-            <button class="btn btn-default btn_left" ui-sref="brand_index({down_flag:true})">返回</button>
+        <div class="row">
+            <div class="col-sm-12 btn_top">
+              <button class="btn btn-primary"  id="save" ng-click="save_btn(add_brand_form.$valid,add_brand_form.$error.required)">保存</button>
+              <button class="btn btn-default btn_left" ui-sref="brand_index({down_flag:true})">返回</button>
+            </div>
         </div>
         </form>
-    </div>
 
     <div class="modal fade" id="edit_ok_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">

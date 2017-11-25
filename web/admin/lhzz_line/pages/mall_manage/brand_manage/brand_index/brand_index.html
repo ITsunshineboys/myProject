@@ -9,17 +9,18 @@
         </ul>
     </div>
 <!--已上架开始-->
-    <section ng-if="on_flag==true">
-        <div>
+    <section ng-show="on_flag==true">
+        <div class="operating_div">
             <button class="btn btn-default btn_right"  ng-click="checkAll()">全选</button>
             <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</button>
             <span class="sort_choose">分类选择</span>
             <select name="" class="time_select" ng-model="myng.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-            <select name="" class="time_select" ng-if="firstselect!=0" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
-            <select name="" class="time_select" ng-if="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+            <select name="" class="time_select" ng-show="firstselect!=0" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
+            <select name="" class="time_select" ng-show="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+        </div>
             <!--表格-->
-            <table>
-                <tr class="th">
+            <table class="table table-hover table-responsive">
+                <tr>
                     <td>&nbsp;</td>
                     <td>品牌LOGO</td>
                     <td>品牌名称</td>
@@ -45,7 +46,6 @@
             </table>
             <!--分页-->
             <tm-pagination conf="wjConfig"></tm-pagination>
-        </div>
     </section>
 
     <!--批量下架原因 模态框-->
@@ -73,8 +73,8 @@
 
 
 <!--已下架 开始-->
-    <section ng-if="down_flag==true">
-        <div>
+    <section ng-show="down_flag==true">
+        <div class="operating_div">
             <button class="btn btn-default btn_right" ui-sref="add_brand"><i class="glyphicon glyphicon-plus"></i>添加</button>
             <button class="btn btn-default btn_right" ng-click="checkAll()">全选</button>
             <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{down_modal_v}}" ng-click="batch_on_shelves()">上架</button>
@@ -85,9 +85,10 @@
             </select>
             <select name="" class="time_select" ng-show="firstselect!=0&&secselect!=0" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)">
             </select>
+        </div>
             <!--表格-->
-            <table>
-                <tr class="th">
+            <table class="table table-hover table-responsive">
+                <tr>
                     <td>&nbsp;</td>
                     <td>品牌LOGO</td>
                     <td>品牌名称</td>
@@ -108,13 +109,12 @@
                     <td>{{item.offline_time}}</td>
                     <td>{{item.applicant}}</td>
                     <td class="red">{{item.status}}</td>
-                    <td ng-if="item.offline_reason!=''"><span class="gay_input" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >{{item.offline_reason}}</span></td>
-                    <td ng-if="item.offline_reason==''"><span class="gay_input" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >点击输入</span></td>
+                    <td ng-show="item.offline_reason!=''"><span class="table_width" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >{{item.offline_reason}}</span></td>
+                    <td ng-show="item.offline_reason==''"><span class="table_width" data-target="#down_shelves_reason_modal" data-toggle="modal" ng-click="down_reason_click(item.id,item.offline_reason)" >点击输入</span></td>
                     <td class="blue" ui-sref="offline_edit({down_shelves_list:item})">编辑</td>
                     <td class="blue" data-toggle="modal" data-target="#solo_on_shelves_modal" ng-click="on_shelver_btn(item.id)">上架</td>
                 </tr>
             </table>
-        </div>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
     </section>
@@ -172,7 +172,6 @@
             </div>
         </div>
     </div>
-
     <!--下架原因 模态框-->
     <div class="modal fade" id="down_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
@@ -196,28 +195,30 @@
 <!--已下架结束-->
 
 <!--品牌审核内容 开始-->
-    <section ng-if="check_flag==true">
-        <!--申请-->
-        <div class="inline_block">
-            <i class="glyphicon glyphicon-th-large"></i>
-            <span class="apply">{{application_num}}个申请</span>
-        </div>
-        <!--时间-->
-        <div class="inline_block">
-            <select  name="province" ng-model="brand_params.review_status" ng-change="brand_types()" class="time_select" ng-options="item.id as item.value for item in brand_types_arr"></select>
-            <input  id="start_time"  ng-model="brand_params.start_time" ng-change='brand_time_change()' max-date="{{brand_params.end_time}}" ngc-lay-date  class="time_input" type="text" placeholder="开始时间">
-            <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
-        </div>
-        <!--搜索-->
-        <button class="btn btn-default menu_right" ng-click="brand_search_btn()">查询</button>
-        <div class="search_box">
-            <input ng-model="myng.search_input_ok" class="search_input" type="text" placeholder="搜索商家名称或账户">
-            <span class="glyphicon glyphicon-search search"></span>
+    <section ng-show="check_flag==true">
+        <div class="operating_div">
+          <!--申请-->
+          <div class="inline_block">
+              <i class="glyphicon glyphicon-th-large"></i>
+              <span class="apply">{{application_num}}个申请</span>
+          </div>
+          <!--时间-->
+          <div class="inline_block">
+              <select  name="province" ng-model="brand_params.review_status" ng-change="brand_types()" class="time_select" ng-options="item.id as item.value for item in brand_types_arr"></select>
+              <input  id="start_time"  ng-model="brand_params.start_time" ng-change='brand_time_change()' max-date="{{brand_params.end_time}}" ngc-lay-date  class="time_input" type="text" placeholder="开始时间">
+              <input  id="stop_time"   ng-model="brand_params.end_time" ng-change='brand_time_change()' min-date="{{brand_params.start_time}}" ngc-lay-date  class="time_input" type="text"  placeholder="结束时间">
+          </div>
+          <!--搜索-->
+          <button class="btn btn-default menu_right" ng-click="brand_search_btn()">查询</button>
+          <div class="search_box">
+              <input ng-model="myng.search_input_ok" class="search_input" type="text" placeholder="搜索商家名称或账户">
+              <span class="glyphicon glyphicon-search search"></span>
+          </div>
         </div>
 
         <!--表格内容-->
-        <table>
-            <tr class="th">
+        <table class="table table-hover table-responsive">
+            <tr>
                 <td>品牌LOGO</td>
                 <td>品牌名称</td>
                 <td>
@@ -231,22 +232,22 @@
                 <td>详情</td>
                 <td>操作</td>
             </tr>
-            <tr class="table_content" ng-repeat="item in brand_review_list">
+            <tr ng-repeat="item in brand_review_list">
                 <td><img class="img_size" src="{{ item.brand_logo}}" alt=""></td>
                 <td>{{item.brand_name}}</td>
                 <td>{{item.create_time}}</td>
                 <td>{{item.supplier_name}}</td>
                 <td>{{item.mobile}}</td>
-                <td ng-if="item.review_status=='2'" class="green">通过</td>
-                <td ng-if="item.review_status=='1'" class="red">不通过</td>
-                <td ng-if="item.review_status=='0'" class="sky_blue">等待审核</td>
-                <td ng-if="item.reason ==''&& item.review_status!='0'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">点击输入</span></td>
-                <td ng-if="item.reason !=''&& item.review_status!='0'"><span  class="gay_input" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">{{item.review_note}}</span></td>
-                <td ng-if="item.review_status=='0'"><span>&nbsp;</span></td>
-                <td ng-if="item.review_status!='0'" class="blue" ui-sref="brand_details({item:item})">查看</td>
-                <td ng-if="item.review_status=='0'" class="blue">&nbsp;</td>
-                <td ng-if="item.review_status=='0'" class="blue" ui-sref="brand_check({item:item})">审核</td>
-                <td ng-if="item.review_status!='0'" class="blue">&nbsp;</td>
+                <td ng-show="item.review_status=='2'" class="green">通过</td>
+                <td ng-show="item.review_status=='1'" class="red">不通过</td>
+                <td ng-show="item.review_status=='0'" class="sky_blue">等待审核</td>
+                <td ng-show="item.review_note ==''&& item.review_status!='0'"><span  class="table_width" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">点击输入...</span></td>
+                <td ng-show="item.review_note !=''&& item.review_status!='0'"><span  class="table_width" data-toggle="modal" data-target="#review_modal" ng-click="review_click(item.id,item.review_note)">{{item.review_note}}</span></td>
+                <td ng-show="item.review_status=='0'"><span>&nbsp;</span></td>
+                <td ng-show="item.review_status!='0'" class="blue" ui-sref="brand_details({item:item})">查看</td>
+                <td ng-show="item.review_status=='0'" class="blue">&nbsp;</td>
+                <td ng-show="item.review_status=='0'" class="blue" ui-sref="brand_check({item:item})">审核</td>
+                <td ng-show="item.review_status!='0'" class="blue">&nbsp;</td>
             </tr>
         </table>
         <!--分页-->
