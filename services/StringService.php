@@ -157,6 +157,23 @@ class StringService
     }
 
     /**
+     * Check if valid uri
+     *
+     * @param string $uri uri
+     * @return mixed
+     */
+    public static function checkUri($uri)
+    {
+        return filter_var($uri, FILTER_VALIDATE_REGEXP,
+            [
+                'options' => [
+                    'regexp' => '/^https?:\/\//',
+                ]
+            ]
+        );
+    }
+
+    /**
      * Get district names
      *
      * @param  array $codes strict code list
