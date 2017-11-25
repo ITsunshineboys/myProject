@@ -93,7 +93,7 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
     $scope.interOper = {
         order_no: $stateParams.orderNo, // 订单编号
         sku: $stateParams.sku,          // 商品编号
-        handle_type: '1',               // 平台介入类型
+        handle_type: '2',               // 平台介入类型
         reason: ''                      // 原因
     };
 
