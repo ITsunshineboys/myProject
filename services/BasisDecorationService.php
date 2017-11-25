@@ -1249,11 +1249,9 @@ class BasisDecorationService
             return new \stdClass;
         }else {
             foreach($goods as $v) {
-                var_dump($v);
                 $r[$v['title']][$v['profit_rate']] = $v;
                 $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
             }
-            exit;
             return $max;
         }
     }
@@ -1766,10 +1764,16 @@ class BasisDecorationService
 
         $effect = Effect::array_group_by($series_style_goods,'title');
         foreach ($effect as $c){
-            $material[] = self::profitMargin($c);
+            if (count($c) == count($c, 1)) {
+                $goods = $c;
+            } else {
+                $a = $c;
+            }
+//            $material[] = self::profitMargin($c);
         }
-var_dump($material);exit;
-        return $material;
+        var_dump($goods);
+        var_dump($a);exit;
+//        return $material;
     }
 
     public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost)
