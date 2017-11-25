@@ -5014,6 +5014,10 @@ class OrderController extends Controller
                 [
                     'supplier_id'=>$supplier_id,
                     'shop_name'=>$supplier->shop_name,
+                    'freight'=>0,
+                    'market_price'=>0,
+                    'discount_price'=>0,
+                    'require_payment'=>0,
                     'goods'=>$sup_goods
                 ];
         }
@@ -5023,7 +5027,7 @@ class OrderController extends Controller
             'data'=>[
                 'list'=>$data,
                 'freight'=>GoodsOrder::switchMoney($freight*0.01),
-                'all_money'=>GoodsOrder::switchMoney($all_money*0.01)
+                'all_money'=>GoodsOrder::switchMoney(($all_money+$freight)*0.01)
             ]
         ]);
     }
@@ -5329,18 +5333,13 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-//        header('Access-Control-Allow-Origin:*');
-//        $data=$GLOBALS['HTTP_RAW_POST_DATA'];
-        $data=file_get_contents("php://input");
-        $arr=(array)json_decode($data);
-        var_dump($arr);
-//        var_dump($data);
-//        var_dump($data);
-//        var_dump($data);exit;
-//        $request=Yii::$app->request->post();
-//        var_dump($data);exit;
-//      urlencode($request);
-//        return Json::decode($data);
+        $GoodsStat=GoodsStat::find()->asArray()->all();
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code],
+            'data'=>$GoodsStat
+        ]);
 
     }
 
