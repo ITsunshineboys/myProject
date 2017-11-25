@@ -436,10 +436,7 @@ class DistributionController extends Controller
         {
             foreach ($data['list'] as &$list)
             {
-                if ($list['id']==13)
-                {
-                    echo 1;exit;
-                }
+
                 $total_amount=0;
                 $order_subsetnum=0;
                 $son_disList=Distribution::find()
@@ -466,17 +463,17 @@ class DistributionController extends Controller
                                 ->where(['order_no'=>$UserOrder['order_no']])
                                 ->asArray()
                                 ->all();
-                            $test_data=0;
-                            foreach ($orderGoods as &$list)
+                            $test_data1=0;
+                            foreach ($orderGoods as &$alist)
                             {
-                                if (!$list['order_status']==2)
+                                if (!$alist['order_status']==2)
                                 {
-                                    $total_amount+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
-                                    $test_data=1;
+                                    $total_amount+=($alist['goods_price']*0.01*$list['goods_number']+$alist['freight']*0.01);
+                                    $test_data1=1;
                                 }
 
                             }
-                            if ($test_data==1)
+                            if ($test_data1==1)
                             {
                                 $order_subsetnum+=1;
                             }
@@ -496,11 +493,11 @@ class DistributionController extends Controller
                             ->asArray()
                             ->all();
                         $test_data=0;
-                        foreach ($orderGoods as &$list)
+                        foreach ($orderGoods as &$alist)
                         {
-                            if (!$list['order_status']==2)
+                            if (!$alist['order_status']==2)
                             {
-                                $total_amount+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
+                                $total_amount+=($alist['goods_price']*0.01*$list['goods_number']+$alist['freight']*0.01);
                                 $test_data=1;
                             }
 
