@@ -105,7 +105,7 @@
                         <span class="pull-left">购买数量</span>
                         <div class="input_div pull-right">
                             <input class="min am-btn" ng-click="operate('check_goods',0,1,'quantity')" name="" type="button" value="-" />
-                            <input class="text_box" name="" ng-blur="check_goods.quantity==''?check_goods.quantity=1:''" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" type="text" ng-model="check_goods.quantity" />
+                            <input class="text_box" name=""  type="tel" ng-model="check_goods.quantity" />
                             <input class="add am-btn" ng-click="operate('check_goods',1,cur_params.left_number,'quantity')" name="" type="button" value="+" />
                         </div>
                     </div>

@@ -45,7 +45,7 @@ angular.module('all_controller', [])
                 for (let [key, value] of res.data.category_goods.entries()) {
                     $scope.cur_replace_material.push({
                         id: value.id,
-                        image: value.cover_image,
+                        cover_image: value.cover_image,
                         cost: +value.platform_price,
                         favourable_comment_rate: value.favourable_comment_rate,
                         sold_number: value.sold_number,
@@ -358,7 +358,7 @@ angular.module('all_controller', [])
                     'top': min,
                     'left': minIndex * ($(window).width() * 0.471),
                 })
-                cur_height[minIndex] += $(this).outerHeight() + 5
+                cur_height[minIndex] += $(this).outerHeight() + 20
                 $('.basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
             })
         })
@@ -449,7 +449,7 @@ angular.module('all_controller', [])
             $scope.cur_status = 0
             $scope.cur_second_level = $scope.cur_header
             $scope.cur_three_level = three_level_name
-            $scope.cur_three_id = three_level_id
+            $scope.cur_three_id = sessionStorage.getItem('materials')==null?three_level_id:item.category_id
         }
         //查看详情
         $scope.go_details = function (item) {
@@ -852,7 +852,6 @@ angular.module('all_controller', [])
             $scope.is_city = true
             $scope.is_edit = false
             $scope.cur_header = '智能报价'
-            console.log()
             let arr = []
             get_all_price()
             if (!!sessionStorage.getItem('materials')) {
@@ -1347,7 +1346,7 @@ angular.module('all_controller', [])
                                 for (let [key3, value3] of response.data.data.weak_current_material.material.entries()) {
                                     let cur_obj = {
                                         id: value3.id,
-                                        image: value3.cover_image,
+                                        cover_image: value3.cover_image,
                                         goods_name: value3.goods_name,
                                         cost: +value3.cost,
                                         name: value3.name,
@@ -1432,7 +1431,7 @@ angular.module('all_controller', [])
                                     for (let [key3, value3] of response.data.data.strong_current_material.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
-                                            image: value3.cover_image,
+                                            cover_image: value3.cover_image,
                                             cost: +value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
@@ -1515,7 +1514,7 @@ angular.module('all_controller', [])
                                     for (let [key3, value3] of response.data.data.waterway_material_price.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
-                                            image: value3.cover_image,
+                                            cover_image: value3.cover_image,
                                             cost: +value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
@@ -1614,7 +1613,7 @@ angular.module('all_controller', [])
                                     for (let [key3, value3] of response.data.data.waterproof_material.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
-                                            image: value3.cover_image,
+                                            cover_image: value3.cover_image,
                                             cost: value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
@@ -1715,7 +1714,7 @@ angular.module('all_controller', [])
                                     for (let [key3, value3] of response.data.data.carpentry_material.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
-                                            image: value3.cover_image,
+                                            cover_image: value3.cover_image,
                                             cost: value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
@@ -1814,7 +1813,7 @@ angular.module('all_controller', [])
                                     for (let [key3, value3] of response.data.data.coating_material.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
-                                            image: value3.cover_image,
+                                            cover_image: value3.cover_image,
                                             cost: value3.cost,
                                             goods_name: value3.goods_name,
                                             name: value3.name,
@@ -1924,7 +1923,7 @@ angular.module('all_controller', [])
                                         for (let [key2, value2] of value1.three_level.entries()) {
                                                     let cur_obj = {
                                                         id: value.id,
-                                                        image: value.cover_image,
+                                                        cover_image: value.cover_image,
                                                         cost: value.cost,
                                                         goods_name: value.goods_name,
                                                         name: value.name,
@@ -2027,7 +2026,7 @@ angular.module('all_controller', [])
                                                     if (!!value3) {
                                                         let cur_obj = {
                                                             id: value3.id,
-                                                            image: value3.cover_image,
+                                                            cover_image: value3.cover_image,
                                                             cost: value3.cost,
                                                             goods_name: value3.goods_name,
                                                             name: value3.name,
@@ -2117,7 +2116,7 @@ angular.module('all_controller', [])
                                         for (let [key3, value3] of response.data.data.mud_make_material.material.entries()) {
                                             let cur_obj = {
                                                 id: value3.id,
-                                                image: value3.cover_image,
+                                                cover_image: value3.cover_image,
                                                 cost: value3.cost,
                                                 goods_name: value3.goods_name,
                                                 name: value3.name,
@@ -2582,7 +2581,7 @@ angular.module('all_controller', [])
                                     for (let [key3, value3] of res.data.total_material.material.entries()) {
                                         let cur_obj = {
                                             id: value3.id,
-                                            image: value3.cover_image,
+                                            cover_image: value3.cover_image,
                                             cost: value3.cost,
                                             name: value3.name,
                                             platform_price: value3.platform_price,

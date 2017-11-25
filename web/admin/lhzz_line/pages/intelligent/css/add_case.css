@@ -114,6 +114,9 @@
     margin-top:5px;
     color: red;
 }
+.add_case .error_word{
+    color: red;
+}
 .add_case .cur_drawing{
     width: 100px;
     height: 100px;

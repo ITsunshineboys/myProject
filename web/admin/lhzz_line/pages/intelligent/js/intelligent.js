@@ -434,6 +434,29 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $state.go('intelligent.add_house')
             $scope.three_title = '添加小区信息'
         }
+        //判断商品编号是否填写正确
+        $scope.determine_goods_code = function (item) {
+            console.log(item)
+            if(item.good_id!=''){
+                    _ajax.get('/quote/sku-fefer',{
+                        category:item.title,
+                        sku:item.good_id
+                    },function (res) {
+                        console.log(res)
+                        if(res.code == 1043){
+                            item.flag = true
+                            item.msg = res.msg
+                            console.log(item)
+                        }else if(res.code == 200){
+                            item.flag = false
+                            item.msg = ''
+                        }
+                    })
+            }else{
+                item.flag = false
+                item.msg = ''
+            }
+        }
         //跳转编辑户型(判断普通户型/案例)
         $scope.go_to_edit = function (item, index) {
             //数据初始化
@@ -687,6 +710,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.get_case_tips = function (valid, error) {
             console.log($scope.all_materials)
             console.log($scope.house_informations)
+            let index = JSON.stringify($scope.all_materials).indexOf('"msg":"请输入正确的商品编码"')
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '保存成功'
                 $scope.common_house = function () {
@@ -713,7 +737,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
-            if (valid && !!$scope.cur_house_information.cur_imgSrc && $scope.all_drawing.length != 0) {
+            if (valid && !!$scope.cur_house_information.cur_imgSrc && $scope.all_drawing.length != 0&&index == -1) {
                 $scope.four_title = ''
                 $scope.submitted = false
                 $scope.house_informations[$scope.index].all_materials = $scope.all_materials
@@ -826,7 +850,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $state.go('intelligent.add_drawing')//跳转添加图纸页面
         }
         //初始化图纸数据
-        // $scope.cur_drawing_name = ''
         //添加图纸
         $scope.add_drawing = function () {
             $scope.drawing_informations.push({

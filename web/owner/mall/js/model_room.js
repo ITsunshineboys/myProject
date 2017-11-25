@@ -116,6 +116,10 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             }
             params.series = obj.case_picture[0].series_id;
             params.style = obj.case_picture[0].style_id;
+            if (huxingFlag) {
+                huxingFlag = false;
+                materials();
+            }
         } else {
             if (obj.stairway === "1") {
                 params.stairway = obj.stairway;
@@ -132,10 +136,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             $scope.activeObj.case_picture = angular.copy(tempArray);
             params.series = $scope.seriesList[0].id;
             params.style = $scope.styleList[0].id;
-        }
-        if (huxingFlag) {
-            huxingFlag = false;
-            materials();
         }
     };
 

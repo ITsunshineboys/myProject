@@ -61,9 +61,8 @@ angular.module('apply_case',[])
                     tablePages()
                 }
             }
-            tablePages()
             $scope.$watch('keyword',function (newVal,oldVal) {
-                if(newVal == ''){
+                if(newVal == ''&&oldVal!=''){
                     $scope.params.keyword = newVal
                     tablePages()
                 }

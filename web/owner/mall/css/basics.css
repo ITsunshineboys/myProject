@@ -119,6 +119,9 @@ header div i{
 .in_span{
     
 }
+.style_position{
+    float: right;
+}
 /*.pic_span{*/
     /*margin-left: 11rem;*/
     /*font-size: 1.5rem;*/

@@ -15,6 +15,9 @@
 .comment .price{
     color: #D9AD65;
 }
+.style_position{
+    float: right;
+}
 button.close{
     -webkit-appearance: none;
     padding: 0;
