@@ -120,9 +120,7 @@ angular.module('all_controller', [])
                 }
             }
         });
-        // $scope.baseUrl = 'http://test.cdlhzz.cn/'
-        $scope.baseUrl = 'http://ac.cdlhzz.cn/'
-        // $scope.baseUrl = '/'
+      
         $scope.special_request = ''//特殊要求
         $scope.toponymy = ''//小区名称
         $scope.message = ''//小区地址
@@ -856,7 +854,6 @@ angular.module('all_controller', [])
             $scope.is_edit = false
             $scope.cur_header = '智能报价'
             let arr = []
-            get_all_price()
             if (sessionStorage.getItem('materials')!=null) {
                 for (let [key, value] of $scope.all_goods.entries()) {
                     arr.push({
@@ -906,6 +903,7 @@ angular.module('all_controller', [])
                 sessionStorage.removeItem('all_status')
                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
+                get_all_price()
                 $state.go('nodata.house_list')
             }
         }

@@ -2,6 +2,7 @@
  * Created by xl on 2017/6/29 0029.
  */
 app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams", "_ajax", function ($scope, $timeout, $state, $stateParams, _ajax) {
+    sessionStorage.removeItem('check_goods');
     $scope.activeStatus = "";   // 户型选中状态值
     $scope.activeObj = {        // 选中的户型参数
         id: "",
