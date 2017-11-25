@@ -67,6 +67,10 @@ section{
     height:3.3rem;
     line-height:3rem ;
     margin-bottom: 1rem;
+    /*position: fixed;*/
+    /*top: 6rem;*/
+    /*z-index: 100;*/
+
 }
 .memo_pad ul {
     padding-left: 0;
