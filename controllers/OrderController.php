@@ -1516,7 +1516,9 @@ class OrderController extends Controller
               if ($order_information['paytime']!=0){
                   $goods_data['paytime']=$order_information['paytime'];
               }
-              if (!OrderPlatForm::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one())
+              if (!OrderPlatForm::find()
+                  ->where(['order_no'=>$order_no,'sku'=>$sku])
+                  ->one())
               {
                   $is_platform=1;
               }else{
@@ -5360,7 +5362,8 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-        $GoodsStat=GoodsStat::find()->asArray()->all();
+        $GoodsStat=OrderPlatForm::find()
+            ->all();
         $code=200;
         return Json::encode([
             'code' => $code,

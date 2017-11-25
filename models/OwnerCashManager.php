@@ -11,7 +11,9 @@ use yii\db\Query;
 
 class OwnerCashManager extends ActiveRecord {
 
+
     const FIELDS_USER_MANAGER = [
+        'id',
         'nickname',
         'aite_cube_no',
         'balance',
@@ -107,6 +109,35 @@ class OwnerCashManager extends ActiveRecord {
 
     }
 
+
+    /**
+     * 账户详情
+     * @param $user_id
+     * @return array|bool|null
+     */
+    public static function getOwnerView($user_id){
+        $array=(new Query())
+            ->from('user as u')
+            ->select('u.nickname,u.id,u.balance,u.availableamount,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch')
+            ->leftJoin('user_bankinfo as ub', 'ub.uid=u.id')
+            ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
+            ->where(['u.id'=>$user_id])
+            ->one();
+        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => self::STATUS_CASHING])->sum('freeze_money');
+        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 2])->sum('cash_money');
+        if($array){
+            $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
+            $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
+            $array['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
+            $array['availableamount'] = sprintf('%.2f', (float)$array['availableamount'] * 0.01);
+        }else{
+            return null;
+        }
+
+        return $array;
+
+
+    }
 
     /**
      * 业主提现列表
@@ -305,4 +336,88 @@ class OwnerCashManager extends ActiveRecord {
         }
 
     }
+
+
+    /**
+     * 冻结金额处理
+     * @param $uid
+     * @param $freeze_money
+     * @param string $feeze_seaon
+     * @param $role_id
+     * @return int
+     */
+    public static function applyfreeze($uid,$freeze_money,$feeze_seaon='',$role_id){
+
+        $model = new UserFreezelist();
+        $model->uid = $uid;
+        $model->role_id = $role_id;
+        $model->freeze_money = $freeze_money;
+        $model->freeze_reason =$feeze_seaon;
+        $model->create_time = time();
+
+        $transaction=\Yii::$app->db->beginTransaction();
+        try{
+            if(!$model->save(false)){
+                $transaction->rollBack();
+                $code=500;
+                return $code;
+            }
+            if($role_id==6){
+                $user=Supplier::find()->where(['uid'=>$uid])->one();
+            }elseif($role_id==7){
+                $user=User::find()->where(['id'=>$uid])->one();
+            }
+            $user->availableamount-=$freeze_money*100;
+            $model->freeze_money=$freeze_money*100;
+            if(!$user->update(false)){
+                $transaction->rollBack();
+                $code=500;
+                return $code;
+            }
+            $transaction->commit();
+            $code=200;
+            return $code;
+        }catch(Exception $e){
+            $transaction->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
+    public static function freezeTaw($freeze_id,$role_id){
+        $freeze=UserFreezelist::find()->where(['id'=>$freeze_id,'role_id'=>$role_id])->one();
+        if($role_id==6){
+            $user=Supplier::find()->where(['uid'=>$freeze->uid])->one();
+        }elseif($role_id==7){
+            $user=User::find()->where(['id'=>$freeze->uid])->one();
+        }
+        $transaction = \Yii::$app->db->beginTransaction();
+        try{
+            if($user){
+                $user->availableamount+=$freeze->freeze_money;
+
+                $freeze->status=self::STATUS_CASHING;
+                if(!$user->update(false) || !$freeze->update(false)){
+                    $transaction->rollBack();
+                    $code=500;
+                    return $code;
+                }
+                $transaction->commit();
+                return 200;
+            }else{
+                $transaction->rollBack();
+                $code=500;
+                return $code;
+            }
+
+        }catch (Exception $e){
+            $transaction->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
+
 }

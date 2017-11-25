@@ -2,14 +2,11 @@
 namespace app\controllers;
 
 
-use app\models\BankinfoLog;
-use app\models\GoodsCategory;
+
 use app\models\OwnerCashManager;
 use app\models\Supplier;
 use app\models\SupplierCashregister;
-use app\models\SupplierFreezelist;
 use app\models\User;
-use app\models\UserBankInfo;
 use app\models\UserCashregister;
 use app\models\UserFreezelist;
 use app\services\AuthService;
@@ -18,14 +15,12 @@ use app\services\ModelService;
 use app\services\StringService;
 use yii\db\Exception;
 use yii\db\Query;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\validators\ValidationAsset;
+use yii\helpers\Json;
 use yii\web\Controller;
 use Yii;
-
 use yii\web\Request;
-use yii\web\ViewAction;
+
 
 class SupplieraccountController extends  Controller{
 
@@ -42,6 +37,12 @@ class SupplieraccountController extends  Controller{
         'cashed-list',
         'cashed-view',
         'category',
+        'owner-account-list',
+        'owner-account-detail',
+        'owner-freeze-money',
+        'owner-apply-freeze',
+        'owner-freeze-list',
+        'owner-freeze-taw'
     ];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
@@ -84,7 +85,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -92,13 +93,13 @@ class SupplieraccountController extends  Controller{
         $pid=(int)trim(\Yii::$app->request->get('pid',''),'');
         $cate_title=(new Query())->from('goods_category')->select('title,pid,id')->where(['pid'=>$pid])->all();
         if($cate_title){
-            return json_encode([
+            return Json::encode([
                 'code' => 200,
                 'msg' => 'OK',
                 'data' =>$cate_title
             ]);
         }else{
-            return json_encode([
+            return Json::encode([
                 'code' => 200,
                 'msg' => 'OK',
                 'data' =>null
@@ -115,7 +116,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -127,7 +128,7 @@ class SupplieraccountController extends  Controller{
         $keyword=trim(\Yii::$app->request->get('keyword',''),'');
         $category_id=(int)trim(\Yii::$app->request->get('category_id',''),'');
         if (!Supplier::checkShopType($type_shop) || !Supplier::checkStatus($status)) {
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
@@ -170,7 +171,7 @@ class SupplieraccountController extends  Controller{
         $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
         $paginationData = Supplier::pagination($where, Supplier::FIELDS_ADMIN, $page, $size);
 
-        return json_encode([
+        return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' =>
@@ -181,41 +182,7 @@ class SupplieraccountController extends  Controller{
 }
 
 
-    /**用户账户管理
-     * @return string
-     */
-    public function actionOwnerAccountList(){
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return json_encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $vaue_all=Yii::$app->params['value_all'];
-        $status=(int)Yii::$app->request->get('status',$vaue_all);
-        $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
-        $keyword=trim(Yii::$app->request->get('keyword',''));
-        $where="last_role_id_app=7";
-        if($keyword){
-           $where.=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
-        }
-        if($status!=-1){
-            $where.= $status == self::STATUS_ONLINE ? ' and deadtime >0' : ' and  deadtime = 0';
-        }
-        $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
 
-        return json_encode([
-            'code' => 200,
-            'msg' => 'OK',
-            'data' =>
-                $paginationData
-
-        ]);
-
-    }
     /**
      * 商家账户详情
      * @return array
@@ -224,7 +191,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -234,14 +201,14 @@ class SupplieraccountController extends  Controller{
             $supplier_id = trim($request->get('id', ''), '');
             $model=Supplier::find()->where(['id'=>$supplier_id])->one();
             if(!$supplier_id || !$model){
-                return json_encode([
+                return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
 
                 ]);
             }
             $data= Supplier::getsupplierdata($supplier_id,$model->uid);
-            return json_encode([
+            return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data'=>$data
@@ -254,11 +221,11 @@ class SupplieraccountController extends  Controller{
      * 商家账户可冻结金额
      * @return bool
      */
-        public function actionFreezeMoney(){
+    public function actionFreezeMoney(){
             $user = Yii::$app->user->identity;
             if (!$user){
                 $code=1052;
-                return json_encode([
+                return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
@@ -267,7 +234,7 @@ class SupplieraccountController extends  Controller{
             $request=new Request();
             $supplier_id = trim($request->get('id', ''), '');
             if(!$supplier_id){
-                return json_encode([
+                return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
@@ -275,7 +242,7 @@ class SupplieraccountController extends  Controller{
             $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
             $freezed_money=sprintf('%.2f',(float)$supplier->availableamount*0.01);
             if($supplier){
-                return json_encode([
+                return Json::encode([
                     'code' => 200,
                     'msg' => 'ok',
                     'data'=>[
@@ -286,71 +253,38 @@ class SupplieraccountController extends  Controller{
             }
     }
     /**
-     * 冻结金额
+     * 商家冻结金额
      * @return string
      */
     public function actionApplyFreeze(){
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $request=new Request();
         $supplier_id=trim(Yii::$app->request->post('supplier_id'));
-        $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
 
+        $freeze_money =  trim($request->post('freeze_money', ''), '');
+        $freeze_reason = trim($request->post('freeze_reason', ''), '');
+        $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
+        $role_id=6;
         if(!$supplier_id || !$supplier){
             $code=1000;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-            $transaction=Yii::$app->db->beginTransaction();
-        try {
-            $model = new UserFreezelist();
-            $model->uid = $supplier->uid;
-            $model->role_id = Supplier::ROLE_SUPPLIER;
-            $freeze_money = $model->freeze_money = trim($request->post('freeze_money', ''), '');
-            $model->freeze_reason = trim($request->post('freeze_reason', ''), '');
-            $model->create_time = time();
-            if (!$freeze_money) {
-                $transaction->rollBack();
-                $code = 1000;
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
+        $code=OwnerCashManager::applyfreeze($supplier->uid,$freeze_money,$freeze_reason,$role_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' =>$code==200?'ok': Yii::$app->params['errorCodes'][$code]
+        ]);
 
-                ]);
-            }
-            $supplier=Supplier::find()->where(['id'=>$supplier_id])->one();
-            $supplier->availableamount-=$freeze_money*100;
-            $model->freeze_money=$freeze_money*100;
-            if(!$model->save(false) || !$supplier->update(false)){
-                $transaction->rollBack();
-                $code=500;
-                return json_encode([
-                    'code'=>$code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-
-            }
-            $transaction->commit();
-            return json_encode([
-                'code'=>200,
-                'msg'=>'ok',
-            ]);
-         }catch (Exception $e){
-            $transaction->rollBack();
-            $code=500;
-            return json_encode([
-                'code'=>$code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-         }
     }
     /**
      * 商家账户冻结列表
@@ -360,7 +294,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -369,7 +303,7 @@ class SupplieraccountController extends  Controller{
                 $supplier_id=trim(Yii::$app->request->get('supplier_id'));
                  $uid=Supplier::find()->asArray()->where(['id'=>$supplier_id])->one()['uid'];
                 if(!$supplier_id || !$uid){
-                    return json_encode([
+                    return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
@@ -382,7 +316,7 @@ class SupplieraccountController extends  Controller{
                     if (($startTime && !StringService::checkDate($startTime))
                         || ($endTime && !StringService::checkDate($endTime))
                     ) {
-                        return json_encode([
+                        return Json::encode([
                             'code' => $code,
                             'msg' => Yii::$app->params['errorCodes'][$code],
                         ]);
@@ -409,7 +343,7 @@ class SupplieraccountController extends  Controller{
                 $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
 
                 $paginationData = UserFreezelist::pagination($uid,$where, UserFreezelist::FIELDS_ADMIN, $page, $size);
-                return json_encode([
+                return Json::encode([
                     'code'=>200,
                     'msg'=>'ok',
                     'data'=>$paginationData
@@ -427,7 +361,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -436,13 +370,13 @@ class SupplieraccountController extends  Controller{
         $request=new Request();
         $id = trim($request->get('id', ''), '');
         if (!$id) {
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }else{
             $model=UserFreezelist::find()->where(['id'=>$id])->one();
-            return json_encode([
+            return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
                 'data'=>$model->freeze_reason
@@ -462,7 +396,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -470,54 +404,18 @@ class SupplieraccountController extends  Controller{
         $request=new Request();
             $code=1000;
             $freeze_id=(int)trim($request->get('freeze_id',''),'');
-
+            $role_id=6;
             if(!$freeze_id){
-                return json_encode([
+                return Json::encode([
                     'code'=>$code,
                     'msg'=>Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $freeze=UserFreezelist::find()->where(['id'=>$freeze_id])->one();
-            $supplier=Supplier::find()->where(['uid'=>$freeze->uid])->one();
-            $transaction = Yii::$app->db->beginTransaction();
-        try{
-            if($supplier){
-                $supplier->availableamount+=$freeze->freeze_money;
-
-                $freeze->status=self::STATUS_WJD;
-                if(!$supplier->update(false) || !$freeze->update(false)){
-                    $transaction->rollBack();
-                    $code=500;
-                    return json_encode([
-                        'code'=>$code,
-                        'msg'=>Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $transaction->commit();
-                return json_encode([
-                    'code'=>200,
-                    'msg'=>'ok',
-
-                ]);
-            }else{
-                $transaction->rollBack();
-                $code=500;
-                return json_encode([
-                    'code'=>$code,
-                    'msg'=>Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-        }catch (Exception $e){
-            $transaction->rollBack();
-            $code=500;
-            return json_encode([
-                'code'=>$code,
-                'msg'=>Yii::$app->params['errorCodes'][$code]
+            $code=OwnerCashManager::freezeTaw($freeze_id,$role_id);
+            return Json::encode([
+                'code' => $code,
+                'msg' =>$code==200?'ok': Yii::$app->params['errorCodes'][$code]
             ]);
-        }
-
-
     }
 
     /**
@@ -529,7 +427,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -538,7 +436,7 @@ class SupplieraccountController extends  Controller{
         $supplier_id=trim(Yii::$app->request->get('supplier_id'));
         $uid=Supplier::find()->asArray()->where(['id'=>$supplier_id])->one()['uid'];
         if(!$supplier_id || !$uid){
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -551,7 +449,7 @@ class SupplieraccountController extends  Controller{
             if (($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
             ) {
-                return json_encode([
+                return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
@@ -576,7 +474,7 @@ class SupplieraccountController extends  Controller{
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
         $paginationData = UserCashregister::pagination($uid,$where, UserCashregister::FIELDS_ADMIN, $page, $size);
-        return json_encode([
+        return Json::encode([
             'code'=>200,
             'msg'=>'ok',
             'data'=>$paginationData
@@ -595,7 +493,7 @@ class SupplieraccountController extends  Controller{
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -604,7 +502,7 @@ class SupplieraccountController extends  Controller{
         $request=new Request();
         $cash_id = trim($request->get('id', ''), '');
         if(!$cash_id){
-            return json_encode([
+            return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
 
@@ -612,7 +510,7 @@ class SupplieraccountController extends  Controller{
         }
           $data=UserCashregister::getcashviewdata($cash_id);
 
-        return json_encode([
+        return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'data'=>$data
@@ -620,4 +518,235 @@ class SupplieraccountController extends  Controller{
         ]);
     }
 
+
+    /**大后台用户账户管理
+     * @return string
+     */
+    public function actionOwnerAccountList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $vaue_all=Yii::$app->params['value_all'];
+        $status=(int)Yii::$app->request->get('status',$vaue_all);
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
+        $keyword=trim(Yii::$app->request->get('keyword',''));
+        $where="last_role_id_app=7";
+        if($keyword){
+            $where.=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
+        }
+        if($status!=-1){
+            $where.= $status == self::STATUS_ONLINE ? ' and deadtime >0' : ' and  deadtime = 0';
+        }
+        $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' =>
+                $paginationData
+
+        ]);
+
+    }
+
+    /**
+     *大后台 业主账户详情
+     * @return string
+     */
+    public function actionOwnerAccountDetail(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $user_id=(int)Yii::$app->request->get('user_id','');
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=OwnerCashManager::getOwnerView($user_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data'=>$data
+
+        ]);
+    }
+
+    /**
+     * 大后台业主可冻结金额
+     * @return string
+     */
+    public function actionOwnerFreezeMoney()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = 1000;
+
+        $user_id = (int)(Yii::$app->request->get('id', ''));
+        if (!$user_id) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user = User::find()->where(['id' => $user_id])->one();
+        $freezed_money = sprintf('%.2f', (float)$user->availableamount * 0.01);
+        if ($user) {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'data' => [
+                    'freeze_money' => $freezed_money,
+                    'id' => $user->id
+                ]
+            ]);
+        }
+    }
+
+
+    /**
+     * 大后台业主冻结操作
+     * @return string
+     */
+    public function actionOwnerApplyFreeze(){
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $user_id=(int)(Yii::$app->request->post('user_id',''));
+        $freeze_money=trim(Yii::$app->request->post('freeze_money',''));
+        $freeze_reason=trim(Yii::$app->request->post('freeze_reason',''));
+        $role_id=7;
+        if(!$user_id || !$freeze_money ){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=OwnerCashManager::applyfreeze($user_id,$freeze_money,$freeze_reason,$role_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' =>$code==200?'ok': Yii::$app->params['errorCodes'][$code]
+        ]);
+
+
+    }
+
+    /**
+     * 大后台业主冻结列表
+     * @return string
+     */
+    public function actionOwnerFreezeList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = 1000;
+        $user_id=trim(Yii::$app->request->get('user_id'));
+
+        if(!$user_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+        $where=" role_id=".OwnerCashManager::OWNER_ROLE ." AND status=".self::STATUS_JD;
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $endTime && $endTime .= ' 23:59:59';
+            }
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+
+        }
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)(strtotime($endTime));
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
+
+        $paginationData = UserFreezelist::pagination($user_id,$where, UserFreezelist::FIELDS_ADMIN, $page, $size);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+    }
+
+    /**
+     * 大后台业主解冻操作
+     * @return string
+     */
+    public function actionOwnerFreezeTaw(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=new Request();
+        $code=1000;
+        $freeze_id=(int)trim($request->get('freeze_id',''),'');
+        $role_id=7;
+        if(!$freeze_id){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=OwnerCashManager::freezeTaw($freeze_id,$role_id);
+        return Json::encode([
+            'code' => $code,
+            'msg' =>$code==200?'ok': Yii::$app->params['errorCodes'][$code]
+        ]);
+    }
 }

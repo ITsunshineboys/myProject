@@ -2,8 +2,8 @@
 
 namespace app\models;
 use Yii;
+use yii\db\ActiveRecord;
 use Yii\db\Exception;
-use Yii\db\ActiveRecord;
 use yii\db\query;
 use app\services\ModelService;
 
@@ -51,7 +51,7 @@ class OrderPlatForm extends ActiveRecord
 
                 $OrderPlatForm=new self;
                 $OrderPlatForm->order_no=$order_no;
-                $OrderPlatForm->sku=$order_no;
+                $OrderPlatForm->sku=$sku;
                 $OrderPlatForm->handle=$handle_type;
                 $OrderPlatForm->reasons=$reason;
                 $OrderPlatForm->creat_time=$time;

@@ -64,7 +64,7 @@ class UserFreezelist extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
         foreach ($freezeList as &$freeze) {
-            $freeze['create_time']=date('Y-m-d H:i',$freeze['create_time']);
+            $freeze['create_time']=date('Y-m-d H:i:s',$freeze['create_time']);
             $freeze['freeze_money']=sprintf('%.2f',(float)$freeze['freeze_money']*0.01);
         }
         $total=self::find()->where($where)->andWhere($andwhere)->count();;
