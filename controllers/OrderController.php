@@ -4255,10 +4255,10 @@ class OrderController extends Controller
     }
  
 
-        /**
-         * 获取openID1-微信
-         * @return string
-         */
+            /**
+             * 获取openID1-微信
+             * @return string
+             */
             public function actionGetOpenId()
             {
                     $tools = new PayService();
@@ -5359,7 +5359,7 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-      echo $_SERVER['HTTP_HOST'];
+      echo $_SERVER['HTTP_REFERER'];
     }
 
 
