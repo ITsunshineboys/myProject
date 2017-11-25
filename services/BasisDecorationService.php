@@ -1254,13 +1254,28 @@ var_dump($goods);
                 $a = $v;
                 $max = max($v['profit_rate'],$a['profit_rate']);
             }
-var_dump($max);exit;
+var_dump($max);
             foreach ($goods as  $g){
                 if ($g['profit_rate'] == $max){
                     $goods_max = $g;
                 }
             }
-            return $goods_max;
+
+
+            $len = count($goods);
+            for ($i=0; $i<$len; $i++){
+                if ($i==0){
+                    $min = $goods[$i];
+                    continue;
+                }
+                if ($goods[$i]['count']>$min['count']){
+                    $min = $goods[$i];
+                }
+
+            }
+            var_dump($min);
+            exit;
+            return $min;
         }
     }
 
