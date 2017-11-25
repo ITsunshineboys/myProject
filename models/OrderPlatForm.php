@@ -73,6 +73,7 @@ class OrderPlatForm extends ActiveRecord
                     return $code;
                 }
 
+                $access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
                 $UserAccessDetail=new UserAccessdetail();
                 $UserAccessDetail->uid=$supplier->uid;
                 $UserAccessDetail->role_id=6;
@@ -88,8 +89,8 @@ class OrderPlatForm extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
-                $supplier->availableamount-=($OrderGoods->supplier_price*$OrderGoods->goods_number);
-                $supplier->balance-=($OrderGoods->supplier_price*$OrderGoods->goods_number);
+                $supplier->availableamount-=$access_money;
+                $supplier->balance-=$access_money;
                 if (!$supplier->save(false))
                 {
                     $code=500;
