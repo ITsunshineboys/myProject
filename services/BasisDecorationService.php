@@ -1252,7 +1252,6 @@ class BasisDecorationService
                 $r[$v['title']][$v['profit_rate']] = $v;
                 $max = max($v['profit_rate'],$r[$v['title']][$v['profit_rate']]);
             }
-            var_dump($max);exit;
             return $max;
         }
     }
@@ -1764,11 +1763,11 @@ class BasisDecorationService
 
 
         $effect = Effect::array_group_by($series_style_goods,'title');
-        foreach ($effect as $c){
-            $material[] = self::profitMargin($c);
-        }
+//        foreach ($effect as $c){
+//            $material[] = self::profitMargin($c);
+//        }
 
-
+        $material[] = self::profitMargin($effect['茶几']);
         var_dump($material);
         exit;
 //        return $material;
