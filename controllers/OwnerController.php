@@ -1883,7 +1883,7 @@ class OwnerController extends Controller
                     $max = $i;
                 }
             }
-var_dump($max);exit;
+var_dump($m);exit;
 
     }
 
