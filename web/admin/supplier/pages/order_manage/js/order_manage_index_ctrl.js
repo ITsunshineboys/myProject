@@ -18,22 +18,16 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
 
     $scope.show_comment = true;
     $scope.myng=$scope;
-    let config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
 
+    /*发货之后操作选项卡数字*/
     function totalNumber() {
-        console.log('数字获取');
-        _ajax.get('/order/get-order-num', "", function (res) {
+        _ajax.get('/order/get-order-num', {}, function (res) {
             $scope.listcount = res.data;
         });
     }
 
     /*选项卡数字获取*/
-    _ajax.get('/order/get-order-num', "", function (res) {
+    _ajax.get('/order/get-order-num', {}, function (res) {
         $scope.listcount = res.data;
         if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag'){
             $scope.tabChange($stateParams.tabflag);
@@ -41,6 +35,8 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.tabFunc($stateParams.tabflag);
         } else {
             $scope.tabFunc('all_flag');
+            // tableList()
+            // return;
         }
     });
 
@@ -166,7 +162,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             sort_time: 2,                  // 下单时间排序
             type: 'all'                  // 订单类型
         };
-        tableList();
+        // tableList();
     }
 
     /*待付款列表*/
