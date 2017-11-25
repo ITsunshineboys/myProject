@@ -1,4 +1,3 @@
-
 let account_index=angular.module("account_index_module",[]);
 account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
   $scope.normal_flag=true;
@@ -28,8 +27,8 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
       });
       $scope.close_flag=true;
       $scope.normal_flag=false;
-      $scope.params.status = 0;
-      tablePages();
+      // $scope.params.status = 0;
+      // tablePages();
   };
   $scope.flag = true;
   $scope.strat = false;
@@ -101,7 +100,7 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
   };
   // //监听搜索的内容为空时，恢复初始状态
   $scope.$watch("search_text",function (newVal,oldVal) {
-    if (newVal == "") {
+    if (newVal == "" && oldVal!='') {
           $scope.params.keyword ='';
           $scope.params.status = 1;
           tablePages();
@@ -165,6 +164,14 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
   });
 
   //============监听下拉框值的变化===========
+  //   $scope.getHouseList = function (item) {
+  //       $scope.Config.currentPage = 1
+  //       $scope.params.keyword = ''
+  //       $scope.search_text = ''
+  //       console.log($scope.params)
+  //       tablePages();
+  //   }
+  //
   $scope.$watch('selectValue',function(newVal,oldVal){
       if(!!newVal){
         $scope.params.status = 1;
@@ -270,9 +277,6 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
 
     };
 
-
-
-
     // if ($scope.close_flag == true) {
         $scope.$watch('selectValueClose',function(newVal,oldVal){
             if(!!newVal) {
@@ -320,11 +324,11 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
         };
         //监听搜索的内容为空时，恢复初始状态
         $scope.$watch("name_num",function (newVal,oldVal) {
-            if (newVal == "") {
+            if (newVal == "" && oldVal!= '') {
                 $scope.params.status = 0;
                 tablePages();
             }
-        })
+        });
 
     // 点击查看
     $scope.getMore = function (item) {
