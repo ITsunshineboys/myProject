@@ -1868,9 +1868,18 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        // decoration_add
-        var_dump(WorksData::find()->asArray()->all());
-//         $r = \Yii::$app->db->createCommand()->update('stairs_details',['attribute'=>'纯钢构造'],['id'=>4])->execute();
+        $a = array(
+            array( 123, '张三','大一', 45 ),
+            array( 123, '张三','大一', 60 ),
+            array( 234, '李四', '大二',47 ),
+            array( 234, '李四','大二', 68 ),
+            array( 234, '李四','大一', 87 ),
+        );
+        $r = [];
+        foreach($a as $v){
+            $r[$v[2]][$v[1]]=max($v[3],$r[$v[2]][$v[1]]);
+        }
+        print_r($r);
     }
 
 }
