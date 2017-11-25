@@ -726,14 +726,26 @@ class DistributionController extends Controller
                     ->all();
                 foreach ($UserOrders as &$UserOrder)
                 {
-                    $list[]=[
-                        'mobile'=>$user->mobile,
-                        'order_no'=>$UserOrder['order_no'],
-                        'amount_order'=>GoodsOrder::switchMoney($UserOrder['amount_order']*0.01),
-                        'create_time'=>date('Y-m-d H:i',$UserOrder['paytime']),
-                        'remarks'=>$UserOrder['remarks']
-                    ];
-                    $total_amount+=$UserOrder['amount_order']*0.01;
+                    $orderGoods=OrderGoods::find()
+                        ->select('order_status')
+                        ->where(['order_no'=>$UserOrder['order_no']])
+                        ->asArray()
+                        ->all();
+                    foreach ($orderGoods as &$orders)
+                    {
+                        if (!$orders['order_status']==2)
+                        {
+                            $list[]=[
+                                'mobile'=>$user->mobile,
+                                'order_no'=>$UserOrder['order_no'],
+                                'amount_order'=>GoodsOrder::switchMoney($UserOrder['amount_order']*0.01),
+                                'create_time'=>date('Y-m-d H:i',$UserOrder['paytime']),
+                                'remarks'=>$UserOrder['remarks']
+                            ];
+                            $total_amount+=$UserOrder['amount_order']*0.01;
+                        }
+                    }
+
                 }
             }
 
@@ -744,14 +756,26 @@ class DistributionController extends Controller
                 ->all();
             foreach ($consigneeOrders as &$consigneeOrder)
             {
-                $list[]=[
-                    'mobile'=>$subset['mobile'],
-                    'order_no'=>$consigneeOrder['order_no'],
-                    'amount_order'=>GoodsOrder::switchMoney($consigneeOrder['amount_order']*0.01),
-                    'create_time'=>date('Y-m-d H:i',$consigneeOrder['paytime']),
-                    'remarks'=>$consigneeOrder['remarks']
-                ];
-                $total_amount+=$consigneeOrder['amount_order']*0.01;
+                $orderGoods=OrderGoods::find()
+                    ->select('order_status')
+                    ->where(['order_no'=>$consigneeOrder['order_no']])
+                    ->asArray()
+                    ->all();
+                foreach ($orderGoods as &$orders)
+                {
+                    if (!$orders['order_status']==2)
+                    {
+                        $list[]=[
+                            'mobile'=>$subset['mobile'],
+                            'order_no'=>$consigneeOrder['order_no'],
+                            'amount_order'=>GoodsOrder::switchMoney($consigneeOrder['amount_order']*0.01),
+                            'create_time'=>date('Y-m-d H:i',$consigneeOrder['paytime']),
+                            'remarks'=>$consigneeOrder['remarks']
+                        ];
+                        $total_amount+=$consigneeOrder['amount_order']*0.01;
+                    }
+                }
+
             }
         }
         $page=trim($request->get('page',1));
