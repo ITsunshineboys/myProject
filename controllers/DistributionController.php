@@ -468,7 +468,7 @@ class DistributionController extends Controller
                             {
                                 if (!$alist['order_status']==2)
                                 {
-                                    $total_amount+=($alist['goods_price']*0.01*$list['goods_number']+$alist['freight']*0.01);
+                                    $total_amount+=($alist['goods_price']*0.01*$alist['goods_number']+$alist['freight']*0.01);
                                     $test_data1=1;
                                 }
 
@@ -497,7 +497,7 @@ class DistributionController extends Controller
                         {
                             if (!$alist['order_status']==2)
                             {
-                                $total_amount+=($alist['goods_price']*0.01*$list['goods_number']+$alist['freight']*0.01);
+                                $total_amount+=($alist['goods_price']*0.01*$alist['goods_number']+$alist['freight']*0.01);
                                 $test_data=1;
                             }
 
