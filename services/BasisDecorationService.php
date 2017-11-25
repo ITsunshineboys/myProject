@@ -7,6 +7,7 @@
  */
 namespace app\services;
 
+use app\models\Effect;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
 use app\models\GoodsAttr;
@@ -1759,6 +1760,11 @@ class BasisDecorationService
                 $series_style_goods[] =  $goods_value;
             }
         }
+
+
+        $a = Effect::array_group_by($series_style_goods,'title');
+        var_dump($a);exit;
+
         return $series_style_goods;
     }
 
