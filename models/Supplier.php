@@ -212,6 +212,9 @@ class Supplier extends ActiveRecord
 //            : self::OFFLINE_SHOP_NOT_SUPPORT;
         $supplier->support_offline_shop = self::OFFLINE_SHOP_NOT_SUPPORT;
         $supplier->icon = Yii::$app->params['user']['deault_icon_path'];
+        $supplier->quality_guarantee_deposit = isset($attrs['quality_guarantee_deposit'])
+            ? (int)$attrs['quality_guarantee_deposit']
+            : Yii::$app->params['supplier']['quality_guarantee_deposit'];
 
         $supplier->scenario = self::SCENARIO_ADD;
         if (!$supplier->validate()) {

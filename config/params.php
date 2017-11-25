@@ -213,6 +213,7 @@ return [
     ],
     'supplier' => [
         'offline_reason' => '闭店下架',
+        'quality_guarantee_deposit' => 5000000, // unit: fen
     ],
     'lhzz' => [
         'offline_reason' => '运营下架',
