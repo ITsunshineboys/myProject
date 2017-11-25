@@ -48,6 +48,7 @@ class OrderPlatForm extends ActiveRecord
             $time=time();
             $trans = \Yii::$app->db->beginTransaction();
             try {
+
                 $OrderPlatForm=new self;
                 $OrderPlatForm->order_no=$order_no;
                 $OrderPlatForm->sku=$order_no;
