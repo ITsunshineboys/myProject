@@ -1868,21 +1868,23 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $a = array(
-            array( 123, '张三', 45 ),
-            array( 123, '张三', 60 ),
-            array( 234, '李四', 47 ),
-            array( 234, '李四', 68 ),
-            array( 234, '李四', 87 ),
-        );
-        $r = [];
-        foreach($a as $v){
-            $r = $v;
-            $r = max($r[$v[2]], $v[2]);
-        }
+        $a =[
+           ['123','张三',45],
+           ['123','张三',65],
+           ['123','张三',75],
+           ['123','张三',12],
+           ['123','张三',44],
+        ];
 
+            $max = [];
+            for ($i=0; $i<count($a);$i++){
+                $m = $a;
+                if ($a[3]>$m[3]){
+                    $max = $a;
+                }
+            }
+var_dump($max);exit;
 
-        print_r($r);
     }
 
 }
