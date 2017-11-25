@@ -4504,6 +4504,7 @@ class OrderController extends Controller
             }
             $request=Yii::$app->request;
             $suppliers=$request->post('suppliers');
+            return Json::encode($suppliers);
             $total_amount=$request->post('total_amount');
             $address_id=$request->post('address_id');
             $pay_way=$request->post('pay_way');
@@ -5362,15 +5363,7 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-        $GoodsStat=OrderPlatForm::find()
-            ->all();
-        $code=200;
-        return Json::encode([
-            'code' => $code,
-            'msg' =>'ok',
-            'data'=>$GoodsStat
-        ]);
-
+      echo $_SERVER['HTTP_HOST'];
     }
 
 
