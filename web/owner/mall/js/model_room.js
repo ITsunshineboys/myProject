@@ -229,7 +229,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                         if (material.second_level.length === 0) {
                             material.second_level.push(temp);
                             let tempLevel = {
-                                id: goods.id,
+                                id: goods.effect_id,
                                 title: goods.goods_three,
                                 goods_detail: []
                             };
