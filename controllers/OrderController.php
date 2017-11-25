@@ -5359,7 +5359,7 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-      echo $_SERVER['HTTP_REFERER'];
+     var_dump($_SERVER['HTTP_USER_AGENT']);exit;
     }
 
 
