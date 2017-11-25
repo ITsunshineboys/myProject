@@ -1762,14 +1762,12 @@ class BasisDecorationService
         }
 
 
-        $a = Effect::array_group_by($series_style_goods,'title');
-        foreach ($a as $c){
-            $b[] = self::profitMargin($c);
+        $effect = Effect::array_group_by($series_style_goods,'title');
+        foreach ($effect as $c){
+            $material[] = self::profitMargin($c);
         }
 
-        var_dump($b);exit;
-
-        return $series_style_goods;
+        return $material;
     }
 
     public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost)
