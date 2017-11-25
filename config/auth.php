@@ -242,6 +242,7 @@ return [
     'quote/commonality-else-edit' => [1],
     'quote/goods-management-list' => [1],
     'quote/goods-management-add' => [1],
+    'quote/sku-fefer' => [1],
     'mall/series-list' => [1],
     'mall/series-time-sort' => [1],
     'mall/series-add' => [1],

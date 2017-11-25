@@ -97,6 +97,7 @@ class QuoteController extends Controller
         'commonality-else-edit',
         'goods-management-list',
         'goods-management-add' ,
+        'sku-fefer' ,
     ];
 
     const CATEGORY_LEVEL = 3;
