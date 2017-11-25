@@ -14,8 +14,8 @@ body{
     position: relative;
     border-bottom: 1rem solid #f6f6f6;
 }
-.wall_ul li .ng-scope{
-    
+.style_position{
+    float: right;
 }
 .list_line{
     border-bottom: 2px solid #dcdcdc;

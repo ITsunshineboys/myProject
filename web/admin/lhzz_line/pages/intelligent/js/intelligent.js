@@ -434,6 +434,26 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $state.go('intelligent.add_house')
             $scope.three_title = '添加小区信息'
         }
+        //判断商品编号是否填写正确
+        $scope.determine_goods_code = function (item) {
+            console.log(item)
+            if(item.good_id!=''){
+                    _ajax.get('/quote/sku-fefer',{
+                        category:item.title,
+                        sku:item.good_id
+                    },function (res) {
+                        console.log(res)
+                        if(res.code == 1043){
+                            item.flag = true
+                            console.log(item)
+                        }else if(res.code == 200){
+                            item.flag = false
+                        }
+                    })
+            }else{
+                item.flag = false
+            }
+        }
         //跳转编辑户型(判断普通户型/案例)
         $scope.go_to_edit = function (item, index) {
             //数据初始化
@@ -826,7 +846,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $state.go('intelligent.add_drawing')//跳转添加图纸页面
         }
         //初始化图纸数据
-        // $scope.cur_drawing_name = ''
         //添加图纸
         $scope.add_drawing = function () {
             $scope.drawing_informations.push({
