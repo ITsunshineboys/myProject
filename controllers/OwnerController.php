@@ -851,7 +851,7 @@ class OwnerController extends Controller
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['putty_area']])
             ->one();
-        $putty_area = $putty_bedroom_area + $putty_drawing_room_area + $putty_area['project_value'];
+        $putty_area = $putty_bedroom_area[0] + $putty_drawing_room_area[0] + $putty_area['project_value'];
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
