@@ -170,7 +170,7 @@ class ShippingCart extends \yii\db\ActiveRecord
             foreach ($carts as &$cart)
             {
                 $ca=self::find()
-                    ->where(['id'=>$cart])
+                    ->where(['goods_id'=>$cart])
                     ->andWhere($andWhere)
                     ->one();
                 if (!$ca)

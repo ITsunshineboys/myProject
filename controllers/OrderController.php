@@ -1051,12 +1051,12 @@ class OrderController extends Controller
                 if ($type=='all' && !$supplier_id)
                 {
                     if($keyword){
-                        $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
+                        $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile  or u.mobile) like '%{$keyword}%'";
 //                        a.consignee_mobile,u.mobile
                     }
                 }else{
                     if($keyword){
-                        $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
+                        $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile or u.mobile) like '%{$keyword}%'";
                     }
                 }
 
