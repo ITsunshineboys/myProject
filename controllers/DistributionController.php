@@ -455,7 +455,7 @@ class DistributionController extends Controller
                             ->where(['user_id'=>$user->id,'order_refer'=>2])
                             ->asArray()
                             ->all();
-                        $order_subsetnum+=count($UserOrders);
+//                        $order_subsetnum+=count($UserOrders);
                         foreach ($UserOrders as &$UserOrder)
                         {
                             $orderGoods=OrderGoods::find()
