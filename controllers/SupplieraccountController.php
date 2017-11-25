@@ -180,6 +180,10 @@ class SupplieraccountController extends  Controller{
 
 }
 
+
+    /**用户账户管理
+     * @return string
+     */
     public function actionOwnerAccountList(){
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -189,7 +193,6 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=1000;
         $vaue_all=Yii::$app->params['value_all'];
         $status=(int)Yii::$app->request->get('status',$vaue_all);
         $page = (int)Yii::$app->request->get('page', 1);
@@ -197,7 +200,10 @@ class SupplieraccountController extends  Controller{
         $keyword=trim(Yii::$app->request->get('keyword',''));
         $where="last_role_id_app=7";
         if($keyword){
-           $where=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
+           $where.=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
+        }
+        if($status!=-1){
+            $where.= $status == self::STATUS_ONLINE ? ' and deadtime >0' : ' and  deadtime = 0';
         }
         $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
 

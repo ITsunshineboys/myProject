@@ -107,6 +107,7 @@ class OwnerCashManager extends ActiveRecord {
 
     }
 
+
     /**
      * 业主提现列表
      * @param array $where
