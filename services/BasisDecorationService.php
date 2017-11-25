@@ -1601,7 +1601,7 @@ class BasisDecorationService
                     $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $sprinkler[] = $one_goods;
                     break;
-                case $one_goods['title'] == self::GOODS_NAME['shower_partition'] && $one_goods['series_id'] == $post['series'] : //淋浴隔断
+                case $one_goods['title'] == self::GOODS_NAME['shower_partition']: //淋浴隔断
                     $one_goods['quantity'] = $post['toilet'];
                     $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
                     $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
