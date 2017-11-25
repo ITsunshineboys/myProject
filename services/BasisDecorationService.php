@@ -1248,15 +1248,11 @@ class BasisDecorationService
         } elseif ($goods == null){
             return new \stdClass;
         }else {
-            echo 11;
-            var_dump($goods);exit;
             foreach($goods as $v) {
-//                $r[$v['title']][$v['profit_rate']] = $v;
-//                $max = max($r[$v['title']][$v['profit_rate']],$v['profit_rate']);
-
-                $r = max($v,$v['profit_rate']);
+                $r[$v['title']][$v['profit_rate']] = $v;
+                $max = max($r[$v['title']][$v['profit_rate']],$v['profit_rate']);
             }
-            return $r;
+            return $max;
         }
     }
 
@@ -1770,8 +1766,8 @@ class BasisDecorationService
 //        foreach ($effect as $c){
 //            $material[] = self::profitMargin($c);
 //        }
-        var_dump($effect['茶几']);
-        exit;
+
+        var_dump($effect['茶几']);exit;
         $material[] = self::profitMargin($effect['茶几']);
         var_dump($material);
         exit;
