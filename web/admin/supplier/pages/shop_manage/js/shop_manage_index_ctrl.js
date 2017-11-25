@@ -5,13 +5,6 @@ let shopmanage = angular.module("shopmanageModule", []);
 shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $http, $stateParams, _ajax, Upload) {
     let result;
     let id;
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
     $rootScope.crumbs = [{
         name: '店铺管理',
         icon: 'icon-dianpuguanli',
@@ -87,10 +80,9 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
         if (!$scope.picwarning) {
             let url = baseUrl+"/mall/supplier-icon-reset";
             let data = {id: +id, icon: $scope.classicon || result.icon};
-            $http.post(url, data, config).then(function (res) {
-                console.log(res)
-            });
-            $scope.savemodal = '#suresave';
+            _ajax.post('/mall/supplier-icon-reset',data,function (res) {
+                $('#suresave').modal('show');
+            })
         }
     };
     /* -------------------- 品牌授权 -------------------- */
