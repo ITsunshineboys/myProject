@@ -88,11 +88,12 @@ class Distribution extends ActiveRecord
                         if ($list['order_status']!==2)
                         {
                             $goodsOrder_line_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                            $goodsOrder_line_count+=$goodsOrder_line->count();
                         }
                     }
 
                 }
-                $goodsOrder_line_count+=$goodsOrder_line->count();
+
                 $user=User::find()->where(['mobile'=>$data->mobile])->one();
                 if ($user)
                 {
@@ -105,16 +106,22 @@ class Distribution extends ActiveRecord
                             ->where(['order_no'=>$goodsOrder_online_data_list['order_no']])
                             ->asArray()
                             ->all();
+                        $add_data=0;
                         foreach ($orderGoods as &$list)
                         {
                             if ($list['order_status']!==2)
                             {
                                 $goodsOrder_online_money+=$list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01;
+                                $add_data=1;
                             }
 
                         }
+                        if ($add_data==1)
+                        {
+                            $goodsOrder_online_count+=1;
+                        }
                     }
-                    $goodsOrder_online_count+=$goodsOrder_online->count();
+//                    $goodsOrder_online_count+=$goodsOrder_online->count();
                 }
 
                 unset($list['applydis_time']);
