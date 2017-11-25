@@ -432,98 +432,98 @@ class DistributionController extends Controller
         }
         $count=Distribution::find()->count();
         $data=Distribution::pagination($where,[],$page,$size,$sort);
-        if ($data['list'])
-        {
-            foreach ($data['list'] as &$list)
-            {
-                $total_amount=0;
-                $order_subsetnum=0;
-                $son_disList=Distribution::find()
-                    ->where(['parent_id'=>$list['id']])
-                    ->asArray()
-                    ->all();
-
-                foreach ($son_disList as &$Son_list)
-                {
-                    $user=User::find()
-                        ->where(['mobile'=>$Son_list['mobile']])
-                        ->one();
-                    if ($user)
-                    {
-                        $UserOrders=GoodsOrder::find()
-                            ->select('order_no,amount_order,paytime,remarks')
-                            ->where(['user_id'=>$user->id,'order_refer'=>2])
-                            ->asArray()
-                            ->all();
-//                        $order_subsetnum+=count($UserOrders);
-                        foreach ($UserOrders as &$UserOrder)
-                        {
-                            $orderGoods=OrderGoods::find()
-                                ->where(['order_no'=>$UserOrder['order_no']])
-                                ->asArray()
-                                ->all();
-                            $test_data=0;
-                            foreach ($orderGoods as &$list)
-                            {
-                                if (!$list['order_status']==2)
-                                {
-                                    $total_amount+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
-                                    $test_data=1;
-                                }
-
-                            }
-                            if ($test_data==1)
-                            {
-                                $order_subsetnum+=1;
-                            }
-
-                        }
-                    }
-                    $consigneeOrders=GoodsOrder::find()
-                        ->select('order_no,amount_order,paytime,remarks')
-                        ->where(['consignee_mobile'=>$Son_list['mobile'],'order_refer'=>1])
-                        ->asArray()
-                        ->all();
-//                    $order_subsetnum+=count($consigneeOrders);
-                    foreach ($consigneeOrders as &$consigneeOrder)
-                    {
-                        $orderGoods=OrderGoods::find()
-                            ->where(['order_no'=>$consigneeOrder['order_no']])
-                            ->asArray()
-                            ->all();
-                        $test_data=0;
-                        foreach ($orderGoods as &$list)
-                        {
-                            if (!$list['order_status']==2)
-                            {
-                                $total_amount+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
-                                $test_data=1;
-                            }
-
-                        }
-                        if ($test_data==1)
-                        {
-                            $order_subsetnum+=1;
-                        }
-//                        $total_amount+=$consigneeOrder['amount_order']*0.01;
-                    }
-                }
-                $list['subset_amount']=GoodsOrder::switchMoney($total_amount);
-                $list['order_subsetnum']=$order_subsetnum;
-                unset($list['profit']);
-                unset($list['parent_id']);
-                unset($list['id']);
-                $list['applydis_time']=$list['create_time'];
-                unset($list['create_time']);
-            }
-        }
-        $time=strtotime(date('Y-m-d',time()));
-        $nowday_user=Distribution::find()
-            ->asArray()
-            ->where('create_time>'.$time)
-            ->count();
-        $data['total_add']=$count;
-        $data['nowday_add']=$nowday_user;
+//        if ($data['list'])
+//        {
+//            foreach ($data['list'] as &$list)
+//            {
+//                $total_amount=0;
+//                $order_subsetnum=0;
+//                $son_disList=Distribution::find()
+//                    ->where(['parent_id'=>$list['id']])
+//                    ->asArray()
+//                    ->all();
+//
+//                foreach ($son_disList as &$Son_list)
+//                {
+//                    $user=User::find()
+//                        ->where(['mobile'=>$Son_list['mobile']])
+//                        ->one();
+//                    if ($user)
+//                    {
+//                        $UserOrders=GoodsOrder::find()
+//                            ->select('order_no,amount_order,paytime,remarks')
+//                            ->where(['user_id'=>$user->id,'order_refer'=>2])
+//                            ->asArray()
+//                            ->all();
+////                        $order_subsetnum+=count($UserOrders);
+//                        foreach ($UserOrders as &$UserOrder)
+//                        {
+//                            $orderGoods=OrderGoods::find()
+//                                ->where(['order_no'=>$UserOrder['order_no']])
+//                                ->asArray()
+//                                ->all();
+//                            $test_data=0;
+//                            foreach ($orderGoods as &$list)
+//                            {
+//                                if (!$list['order_status']==2)
+//                                {
+//                                    $total_amount+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
+//                                    $test_data=1;
+//                                }
+//
+//                            }
+//                            if ($test_data==1)
+//                            {
+//                                $order_subsetnum+=1;
+//                            }
+//
+//                        }
+//                    }
+//                    $consigneeOrders=GoodsOrder::find()
+//                        ->select('order_no,amount_order,paytime,remarks')
+//                        ->where(['consignee_mobile'=>$Son_list['mobile'],'order_refer'=>1])
+//                        ->asArray()
+//                        ->all();
+////                    $order_subsetnum+=count($consigneeOrders);
+//                    foreach ($consigneeOrders as &$consigneeOrder)
+//                    {
+//                        $orderGoods=OrderGoods::find()
+//                            ->where(['order_no'=>$consigneeOrder['order_no']])
+//                            ->asArray()
+//                            ->all();
+//                        $test_data=0;
+//                        foreach ($orderGoods as &$list)
+//                        {
+//                            if (!$list['order_status']==2)
+//                            {
+//                                $total_amount+=($list['goods_price']*0.01*$list['goods_number']+$list['freight']*0.01);
+//                                $test_data=1;
+//                            }
+//
+//                        }
+//                        if ($test_data==1)
+//                        {
+//                            $order_subsetnum+=1;
+//                        }
+////                        $total_amount+=$consigneeOrder['amount_order']*0.01;
+//                    }
+//                }
+//                $list['subset_amount']=GoodsOrder::switchMoney($total_amount);
+//                $list['order_subsetnum']=$order_subsetnum;
+//                unset($list['profit']);
+//                unset($list['parent_id']);
+//                unset($list['id']);
+//                $list['applydis_time']=$list['create_time'];
+//                unset($list['create_time']);
+//            }
+//        }
+//        $time=strtotime(date('Y-m-d',time()));
+//        $nowday_user=Distribution::find()
+//            ->asArray()
+//            ->where('create_time>'.$time)
+//            ->count();
+//        $data['total_add']=$count;
+//        $data['nowday_add']=$nowday_user;
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
