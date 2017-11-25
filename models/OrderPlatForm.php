@@ -51,7 +51,7 @@ class OrderPlatForm extends ActiveRecord
 
                 $OrderPlatForm=new self;
                 $OrderPlatForm->order_no=$order_no;
-                $OrderPlatForm->sku=$order_no;
+                $OrderPlatForm->sku=$sku;
                 $OrderPlatForm->handle=$handle_type;
                 $OrderPlatForm->reasons=$reason;
                 $OrderPlatForm->creat_time=$time;
