@@ -409,6 +409,9 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 $scope.preferential = workerMoney;
 
                 for (let obj of $scope.materials) {    // 遍历材料
+                    if (obj.goods.length === 0) {
+                        break;
+                    }
                     for (let o of obj.goods) {
                         let tempObj = {
                             one_title: o.goods_first,
