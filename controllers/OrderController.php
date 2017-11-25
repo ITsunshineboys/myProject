@@ -4436,94 +4436,6 @@ class OrderController extends Controller
         }
 
 
-    /**
-     * 计算运费
-     * @return string
-     */
-    public function actionCalculationFreight()
-    {
-        $goods=Yii::$app->request->post('goods');
-        foreach ($goods as $one){
-            if ($one['num'] != 0 || $one['num'] !=null){
-                $goods_ [] = $one;
-            }
-        }
-        foreach ($goods_ as  $k =>$v)
-        {
-            $Good[$k]=LogisticsTemplate::find()
-                ->where(['id'=>Goods::find()
-                    ->where(['id'=>$goods_[$k]['goods_id']])
-                    ->one()->logistics_template_id])
-                ->asArray()
-                ->one();
-            $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
-            $Good[$k]['num']=$goods_[$k]['num'];
-        }
-        $templates=[];
-        foreach ($Good as &$wuliu){
-            if (!in_array($wuliu['id'],$templates))
-            {
-
-                $templates[]=$wuliu['id'];
-            };
-        } 
-        foreach ($templates as &$list)
-        {
-            $costs[]['id']=$list;
-        }
-        foreach ($costs as &$cost)
-        {
-            $cost['num']=0;
-            foreach ($Good as &$list)
-            {
-                if ($list['id']==$cost['id'])
-                {
-
-                    $cost['num']+=$list['num'];
-                }
-            }
-        }
-        $freight=0;
-        foreach ($costs as &$cost)
-        {
-            $logistics_template=LogisticsTemplate::find()
-                ->where(['id'=>$cost['id']])
-                ->asArray()
-                ->one();
-            if ($logistics_template['delivery_number_default']>=$cost['num'])
-            {
-                $freight+=$logistics_template['delivery_cost_default'];
-            }else{
-                if ($logistics_template['delivery_number_delta']==0)
-                {
-                    $logistics_template['delivery_number_delta']=1;
-                }
-                $addnum=ceil(($cost['num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
-                $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
-                $freight+=$money;
-            }
-        }
-
-//            foreach ($costs as &$cost)
-//            {
-//                foreach ($Good as &$list)
-//                {
-//                    if ($list['id']==$cost['id'])
-//                    {
-//                        $cost['goods'][]=[
-//                            'goods_id'=>$list['goods_id'],
-//                            'num'=>$list['num']
-//                        ];
-//                    }
-//                }
-//            }
-
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>GoodsOrder::switchMoney($freight*0.01)
-        ]);
-    }
 
 
     /**
@@ -4913,6 +4825,96 @@ class OrderController extends Controller
         }
     }
 
+
+    /**
+     * 计算运费
+     * @return string
+     */
+    public function actionCalculationFreight()
+    {
+        $goods=Yii::$app->request->post('goods');
+        foreach ($goods as $one){
+            if ($one['num'] != 0 || $one['num'] !=null){
+                $goods_ [] = $one;
+            }
+        }
+        foreach ($goods_ as  $k =>$v)
+        {
+            $Good[$k]=LogisticsTemplate::find()
+                ->where(['id'=>Goods::find()
+                    ->where(['id'=>$goods_[$k]['goods_id']])
+                    ->one()->logistics_template_id])
+                ->asArray()
+                ->one();
+            $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
+            $Good[$k]['num']=$goods_[$k]['num'];
+        }
+        $templates=[];
+        foreach ($Good as &$wuliu){
+            if (!in_array($wuliu['id'],$templates))
+            {
+
+                $templates[]=$wuliu['id'];
+            };
+        }
+        foreach ($templates as &$list)
+        {
+            $costs[]['id']=$list;
+        }
+        foreach ($costs as &$cost)
+        {
+            $cost['num']=0;
+            foreach ($Good as &$list)
+            {
+                if ($list['id']==$cost['id'])
+                {
+
+                    $cost['num']+=$list['num'];
+                }
+            }
+        }
+        $freight=0;
+        foreach ($costs as &$cost)
+        {
+            $logistics_template=LogisticsTemplate::find()
+                ->where(['id'=>$cost['id']])
+                ->asArray()
+                ->one();
+            if ($logistics_template['delivery_number_default']>=$cost['num'])
+            {
+                $freight+=$logistics_template['delivery_cost_default'];
+            }else{
+                if ($logistics_template['delivery_number_delta']==0)
+                {
+                    $logistics_template['delivery_number_delta']=1;
+                }
+                $addnum=ceil(($cost['num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
+                $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
+                $freight+=$money;
+            }
+        }
+
+//            foreach ($costs as &$cost)
+//            {
+//                foreach ($Good as &$list)
+//                {
+//                    if ($list['id']==$cost['id'])
+//                    {
+//                        $cost['goods'][]=[
+//                            'goods_id'=>$list['goods_id'],
+//                            'num'=>$list['num']
+//                        ];
+//                    }
+//                }
+//            }
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>GoodsOrder::switchMoney($freight*0.01)
+        ]);
+    }
+
     /**
      * 订单详情页-获取商品信息
      * @return string
@@ -4931,6 +4933,16 @@ class OrderController extends Controller
         }
 //        $request=Yii::$app->request;
         $goods=$arr['goods'];
+        if (!$goods)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $freight=GoodsOrder::CalculationFreight($goods);
+        $all_money=0;
         if (!$goods)
         {
             $code=1000;
@@ -4979,6 +4991,7 @@ class OrderController extends Controller
             {
                 if ($Good['supplier_id']==$supplier_id)
                 {
+                    $all_money+=($Good['goods_num']*$Good["{$goods_price}"]);
                     $sup_goods[]=[
                         'goods_name'=>$Good['title'],
                         'subtitle'=>$Good['subtitle'],
@@ -5007,7 +5020,11 @@ class OrderController extends Controller
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>$data
+            'data'=>[
+                'list'=>$data,
+                'freight'=>GoodsOrder::switchMoney($freight*0.01),
+                'all_money'=>GoodsOrder::switchMoney($all_money*0.01)
+            ]
         ]);
     }
 
