@@ -76,7 +76,7 @@ class OrderPlatForm extends ActiveRecord
                     return $code;
                 }
 
-                if ($$OrderGoods->order_status==1)
+                if ($OrderGoods->order_status==1)
                 {
                     $access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
                     $UserAccessDetail=new UserAccessdetail();
