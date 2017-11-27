@@ -2702,6 +2702,7 @@ angular.module('all_controller', [])
                                             subtitle: value3.subtitle,
                                             supplier_price: value3.supplier_price,
                                             shop_name: value3.shop_name,
+                                            goods_name:value3.goods_name,
                                             category_id:value3.category_id
                                         }
                                         let cur_goods = {
@@ -2801,7 +2802,14 @@ angular.module('all_controller', [])
                                                             goods_second: value1.title,
                                                             goods_first: value.title,
                                                             quantity: value3.quantity,
-                                                            category_id:value3.category_id
+                                                            shop_name: value3.shop_name,
+                                                            goods_name:value3.goods_name,
+                                                            category_id:value3.category_id,
+                                                            cover_image:value3.cover_image,
+                                                            style_id:value3.style_id,
+                                                            series_id:value3.series_id,
+                                                            platform_price: value3.platform_price,
+                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company,
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
