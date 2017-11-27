@@ -294,7 +294,7 @@
     top: 0;
     right: 0;
     background-color: #333;
-    order: 1px solid #333;
+    border: 1px solid #333;
 }
 .foot_tab div{
     position: absolute;

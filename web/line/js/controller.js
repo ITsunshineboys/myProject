@@ -598,12 +598,7 @@ angular.module("all_controller", ['ngCookies'])
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
-        let mySwiper = new Swiper("#swiperList", {
-            autoplay: 3000,
-            loop: true,
-            observer: true,
-            pagination: ".swiper-pagination"
-        });
+
         $scope.id=$stateParams.id;
         $scope.datailsShop = $stateParams.datailsShop;
         $scope.mall_id = $stateParams.mall_id;
@@ -629,7 +624,12 @@ angular.module("all_controller", ['ngCookies'])
             $scope.supplier_id = response.data.data.goods_view.supplier.id;
             $scope.status = response.data.data.goods_view.status;
             $scope.showPrompt = false;
-
+            let mySwiper = new Swiper("#swiperList", {
+                autoplay: 3000,
+                loop: true,
+                observer: true,
+                pagination: ".swiper-pagination"
+            });
             if($scope.status == 2){
                 $scope.myModal = '#myModal';
                 $scope.myModal_sec = '#myModal_sec'
@@ -765,13 +765,7 @@ angular.module("all_controller", ['ngCookies'])
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
-        //轮播变量
-        let mySwiper = new Swiper("#swiperList", {
-            autoplay: 3000,
-            loop: true,
-            observer: true,
-            pagination: ".swiper-pagination"
-        });
+
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
@@ -822,6 +816,13 @@ angular.module("all_controller", ['ngCookies'])
             $scope.follower_number = response.data.data.index.follower_number; //粉丝数量
             $scope.icon = response.data.data.index.icon; //店铺图片
             $scope.shop_name = response.data.data.index.shop_name; //店铺名称
+            //轮播变量
+            let mySwiper = new Swiper("#swiperList", {
+                autoplay: 3000,
+                loop: true,
+                observer: true,
+                pagination: ".swiper-pagination"
+            });
             console.log($scope.detailsList)
         });
         $http({   //店铺首页推荐列表
