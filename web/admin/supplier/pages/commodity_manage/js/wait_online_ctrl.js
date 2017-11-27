@@ -292,7 +292,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     //市场价
     let reg=/^\d+(\.\d{1,2})?$/;
     $scope.price_flag=false;
-    $scope.my_market_price=function () {
+    $scope.my_market_price=function (value) {
     	let reg_value=reg.test(value);
     	if(!reg_value){
             $scope.price_flag=true;
@@ -300,8 +300,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
             (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
 		}
     };
-//平台价
-    $scope.my_platform_price=function () {
+   //平台价
+    $scope.my_platform_price=function (value) {
         let reg_value=reg.test(value);
         if(!reg_value){
             $scope.price_flag=true;
@@ -309,8 +309,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
             (+$scope.platform_price <= +$scope.market_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
         }
     };
-//供货商价
-    $scope.my_supplier_price=function () {
+   //供货商价
+    $scope.my_supplier_price=function (value) {
         let reg_value=reg.test(value);
         if(!reg_value){
             $scope.price_flag=true;
