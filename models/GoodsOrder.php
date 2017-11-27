@@ -1028,9 +1028,9 @@ class GoodsOrder extends ActiveRecord
         $goods['goods_name']=$goods_name;
         $goods['goods_id']=$goods_id;
         $attr_id=explode(',',$goods_attr_id);
-        $goods['attr']=array();
+        $goods['attr']=(object)[];
         foreach($attr_id AS $key =>$val){
-            $goods['attr'][$key]=GoodsAttr::find()
+            $goods['attr'][]=GoodsAttr::find()
                 ->select('name,value,unit')
                 ->where(['goods_id'=>$goods['goods_id']])
                 ->all();
