@@ -954,7 +954,7 @@ class Goods extends ActiveRecord
                 ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
                 ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
                 ->where(['gc.title' => $condition])
-                ->andWhere(['status'=>self::STATUS_ONLINE])
+                ->andWhere(['goods.status'=>self::STATUS_ONLINE])
                 ->all();
 
             return $goods;

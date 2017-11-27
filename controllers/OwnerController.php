@@ -1746,15 +1746,14 @@ class OwnerController extends Controller
                     ]
                 ]);
             }
+
+
             foreach ($data as &$case_works_datum) {
                 foreach ($goods as $one_goods) {
-
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
-
                         $one_goods['quantity']    = $case_works_datum['goods_quantity'];
                         $one_goods['cost']        = $one_goods['quantity'] * $one_goods['platform_price'];
                         $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
-
                     }
                 }
             }
