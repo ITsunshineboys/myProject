@@ -228,6 +228,7 @@ angular.module('all_controller', [])
                     if ($scope[type] == limit) {
                         $scope[type] = limit
                     } else {
+                        $scope.recalculate()
                         $scope[type]++
                     }
                 }
@@ -242,6 +243,7 @@ angular.module('all_controller', [])
                     if ($scope[type] == limit) {
                         $scope[type] = limit
                     } else {
+                        $scope.recalculate()
                         $scope[type]--
                     }
                 }
