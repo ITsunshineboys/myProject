@@ -6,12 +6,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         icon: 'icon-icon_dianpuzhuangxiu',
     }];
   $scope.myng=$scope;
-  let config = {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    transformRequest: function (data) {
-      return $.param(data)
-    }
-  };
   $scope.banner_list=[];//Banner
   $scope.recommend_list=[];//推荐
   $scope.delete_arr=[];//删除个数数组
@@ -19,14 +13,14 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
   $scope.b_show_table_flag=true;
   $scope.r_show_table_flag=false;
   $scope.banner_tab=function () {
-    $scope.show_hide_menu();
+	  $scope.show_hide_menu();
     $scope.b_tab_class='bottom_border';
     $scope.r_tab_class='';
     $scope.b_show_table_flag=true;
     $scope.r_show_table_flag=false;
   };
   $scope.recommend_tab=function () {
-    $scope.show_hide_menu();
+	  $scope.show_hide_menu();
     $scope.b_tab_class='';
     $scope.r_tab_class='bottom_border';
     $scope.b_show_table_flag=false;

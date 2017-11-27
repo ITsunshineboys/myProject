@@ -552,12 +552,6 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         }
 
     }
-
-
-
-
-    /*------------------------待发货结束-----------------------------------*/
-
     /*待发货表格Menu切换 开始*/
     $scope.waitsend_1 = true;
     $scope.waitsend_2 = true;
