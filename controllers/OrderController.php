@@ -4321,23 +4321,21 @@ class OrderController extends Controller
      }
      public  function  actionTestOpenId()
      {
-//         $url=Yii::$app->request->post('url','');
-//         if(!$url)
-//         {
-//             $code=1000;
-//             return Json::encode([
-//                 'code' => $code,
-//                 'msg'  => Yii::$app->params['errorCodes'][$code]
-//             ]);
-//         }
-         $url="https://ac.cdlhzz.cn/order/return-url";
-         $baseUrl = urlencode($url);
          $tools = new PayService();
-         $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-         echo $urls;exit;
-//         Header("Location: {$url}");
-         $res=StringService::httpGet($url);
-         var_dump($res);exit;
+         $code = $_GET['code'];
+         if (!$code)
+         {
+
+             $url="https://ac.cdlhzz.cn/order/test-open-id";
+             $baseUrl = urlencode($url);
+             $tools = new PayService();
+             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
+//         echo $urls;exit;
+             Header("Location: {$urls}");
+         }
+         $openid = $tools->getOpenidFromMp($code);
+//         $res=StringService::httpGet($urls);
+         var_dump($openid);exit;
      }
  
         /**
