@@ -464,7 +464,7 @@ angular.module('all_controller', [])
         $scope.$watch('cur_params',function (newVal,oldVal) {
             $timeout.cancel($scope.time1)
             $scope.time1 = $timeout(function () {
-                var mySwiper = new Swiper('.swiper-container1', {
+                var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
@@ -474,7 +474,7 @@ angular.module('all_controller', [])
                     effect: 'slide',
 
                     // 如果需要分页器
-                    pagination: '.swiper-pagination1',
+                    pagination: '.swiper-pagination',
                 })
             }, 100)
         },true)
@@ -1292,7 +1292,7 @@ angular.module('all_controller', [])
             })
             $timeout.cancel($scope.time1)
             $scope.time1 = $timeout(function () {
-                var mySwiper = new Swiper('.swiper-container1', {
+                var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
                     autoplay: 1000,
@@ -1302,7 +1302,7 @@ angular.module('all_controller', [])
                     effect: 'slide',
 
                     // 如果需要分页器
-                    pagination: '.swiper-pagination1',
+                    pagination: '.swiper-pagination',
                 })
             }, 0)
             if(sessionStorage.getItem('cur_three')!=null){
