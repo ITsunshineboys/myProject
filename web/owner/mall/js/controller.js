@@ -7,14 +7,14 @@ angular.module('all_controller', [])
         sessionStorage.removeItem("materials");
         sessionStorage.removeItem("materials_bak");
         sessionStorage.removeItem("huxing");
-        // $scope.baseUrl = '/'
-        $scope.baseUrl = 'http://ac.cdlhzz.cn/'
+        $scope.baseUrl = '/';
+        // $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
         _ajax.get('/owner/homepage', {}, function (res) {
-            console.log(res)
+            console.log(res);
             $scope.recommend_list = res.data
-        })
-        sessionStorage.clear()
+        });
+        // sessionStorage.clear()
     })
     .controller('nodata_ctrl', function (_ajax, $q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
         console.log(JSON.parse(sessionStorage.getItem('materials')))
