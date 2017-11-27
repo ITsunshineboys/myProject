@@ -4879,10 +4879,17 @@ class OrderController extends Controller
         }
         foreach ($goods_ as  $k =>$v)
         {
+            $goodsData=Goods::findOne($goods_[$k]['goods_id']);
+            if (!$goodsData)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $Good[$k]=LogisticsTemplate::find()
-                ->where(['id'=>Goods::find()
-                    ->where(['id'=>$goods_[$k]['goods_id']])
-                    ->one()->logistics_template_id])
+                ->where(['id'=>$goodsData->logistics_template_id])
                 ->asArray()
                 ->one();
             $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
