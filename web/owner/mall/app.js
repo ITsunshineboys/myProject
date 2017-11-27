@@ -43,10 +43,9 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
                 css:['css/other.css','css/all.css']
             })
             .state('nodata.product_detail',{
-                url:'/product_detail',
+                url:'/product_detail?num',
                 templateUrl:'cur_product_detail.html',
                 css:['css/product_details.css','css/all.css'],
-                params:{num:''}
             })
             .state('nodata.all_goods',{
                 url:'/all_goods',
