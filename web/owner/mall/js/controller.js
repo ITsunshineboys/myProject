@@ -461,6 +461,23 @@ angular.module('all_controller', [])
             $scope.cur_three_level = three_level_name
             $scope.cur_three_id = sessionStorage.getItem('materials')==null?three_level_id:item.category_id
         }
+        $scope.$watch('cur_params',function (newVal,oldVal) {
+            $timeout.cancel($scope.time1)
+            $scope.time1 = $timeout(function () {
+                var mySwiper = new Swiper('.swiper-container1', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
+                    effect: 'slide',
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination1',
+                })
+            }, 0)
+        },true)
         //查看详情
         $scope.go_details = function (item) {
             console.log($scope.cur_title)
@@ -515,21 +532,6 @@ angular.module('all_controller', [])
                     images:res.data.goods_view.images
                 }
                 $('#myModal').modal('hide')
-                $timeout.cancel($scope.time1)
-                $scope.time1 = $timeout(function () {
-                    var mySwiper = new Swiper('.swiper-container1', {
-                        direction: 'horizontal',
-                        loop: true,
-                        autoplay: 1000,
-                        autoplayDisableOnInteraction: false,
-                        observer:true,
-                        observeParents:true,
-                        effect: 'slide',
-
-                        // 如果需要分页器
-                        pagination: '.swiper-pagination1',
-                    })
-                }, 0)
                 $timeout(function () {
                     $scope.have_header = false
                     sessionStorage.setItem('all_status',JSON.stringify({
@@ -545,21 +547,6 @@ angular.module('all_controller', [])
                 }, 300)
             })
         }
-        $timeout.cancel($scope.time1)
-        $scope.time1 = $timeout(function () {
-            var mySwiper = new Swiper('.swiper-container1', {
-                direction: 'horizontal',
-                loop: true,
-                autoplay: 1000,
-                autoplayDisableOnInteraction: false,
-                observer:true,
-                observeParents:true,
-                effect: 'slide',
-
-                // 如果需要分页器
-                pagination: '.swiper-pagination1',
-            })
-        }, 0)
         //监听商品数量输入
         $scope.$watch('check_goods.quantity', function (newVal, oldVal) {
             if ($scope.cur_params != undefined) {
