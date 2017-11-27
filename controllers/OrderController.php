@@ -4333,6 +4333,7 @@ class OrderController extends Controller
              $this->redirect($urls);
 //             Header("Location: {$urls}");
              echo $urls;die;
+
              Header("Location: {$urls}");
          }else{
              $openid = $tools->getOpenidFromMp($code);
