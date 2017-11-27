@@ -78,7 +78,7 @@ header span{
 .inoc_title .img_box{
     width: 1.8rem;
     height: 1.8rem;
-    overflow: hidden;
+    /*overflow: hidden;*/
     border-radius: .2rem;
     display: inline-block;
 }
