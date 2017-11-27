@@ -1763,7 +1763,7 @@ class OwnerController extends Controller
             $goods_ = [];
             foreach ($assort_goods as $assort){
                 foreach ($goods as $woks){
-                    if ($assort['title'] == $woks['goods_three']){
+                    if ($assort['title'] == $woks['title']){
                         $goods_[] = $woks;
                     }
                 }
