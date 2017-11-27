@@ -1,78 +1,43 @@
-/*顶部导航*/
-ul{
-    padding: 0;
-    list-style: none;
+.row{
+    margin-bottom: 20px;
 }
-
-/*添加新系列内容*/
-.add_series{
-    padding-top: 50px;
-    padding-left: 40px;
-    color: #666F80;
-    font-size: 14px;
-}
-
-/*系列名称*/
 .red_mark {
     color: #E51C23;
     margin-left: -17px;
 }
-
-.series_name input {
-    margin-left: 87px;
-    width: 245px;
-    height: 31px;
-    margin-left: 87px;
-    border: 1px solid #999;
-    border-radius: 3px;
-    padding-left: 10px;
-    line-height: 31px;
+.form-horizontal .control-label{
+    text-align: left;
 }
-
-#limitword {
-    margin-left: 20px;
-    font-size: 13px;
-    color: #ABABAB;
-}
-
-.series_name p {
+.img_txt{
     font-size: 12px;
-    margin-left: 146px;
-    margin-top: 5px;
+    color: #ABABAB;
 }
 
 /*系列标签*/
 .series_tag img{
     width: 24px;
     height: 26px;
-    margin-left: 53px;
-    margin-right: 10px;
-}
-
-
-.series_tag{
-    margin-top: 35px;
+    margin-left: -28px;
 }
 
 .tags{
     /*overflow: hidden;*/
     display: inline-block;
     vertical-align: top;
+    padding-left: 0;
 }
 
 .tags li{
     float: left;
-    margin-right: 13px;
-    margin-bottom: 19px;
     position: relative;
+    margin-right: 15px;
 }
 
 .tags li input{
-    width: 88px;
-    height: 31px;
-    /*text-align: center;*/
-    padding-left: 6px;
-    line-height: 31px;
+    width: 90px;
+    height: 30px;
+    padding-left: 5px;
+    line-height: 30px;
     color: #ABABAB;
     border: 1px solid #666F80;
     border-radius: 3px;
@@ -86,18 +51,13 @@ ul{
 }
 .closetag{
     position: absolute;
-    left: 25px;
+    right: 0;
     top: -10px;
     width: 21px!important;
     height: 21px!important;
 }
 /*所处等级*/
-.present_level{
-    margin-top: 52px;
-}
-
 #level_select{
-    margin-left: 87px;
     width: 200px;
     height: 30px;
     padding-left: 5px;
@@ -105,64 +65,36 @@ ul{
 }
 
 /*系列介绍*/
-.series_intro{
+.series_intro {
     position: relative;
-    margin-top: 48px;
 }
 
 .series_intro textarea{
-    width: 749px;
+    width: 100%;
     height: 145px;
     vertical-align: top;
-    margin-left: 87px;
     border-radius: 3px;
 }
 .word_num{
     position: absolute;
+    right: 15px;
     bottom:0;
-    margin-left: -50px;
 }
 
-
 /*两个按钮*/
-.btn_sure{
-    margin-top: 70px;
+.btn_top{
+    margin-top: 20px;
 }
 .btn_left{
     margin-left: 20px;
 }
-#caozuo_sure{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #487AF8;
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    margin-top: 54px;
-    float: right;
-    margin-right: 40px;
+.btn_fix{
+    position: fixed;
+    bottom: 40px;
 }
-#save_content{
-    width: 636px;
-    height: 256px;
-}
-#tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
 /*添加+按钮*/
-.visibility{
-    visibility: hidden;
+.none{
+    display: none;
 }
 .border_red{
     border: 1px solid red!important;

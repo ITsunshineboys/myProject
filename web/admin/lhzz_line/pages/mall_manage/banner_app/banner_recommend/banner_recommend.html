@@ -63,6 +63,7 @@
 
         <!--Table内容  开始-->
             <table class="table table-hover table-responsive">
+                <thead>
                 <tr>
                     <th>&nbsp;</th>
                     <th ng-if="show_1">类型</th>
@@ -80,13 +81,15 @@
                     <th ng-if="show_13">市场价格</th>
                     <th ng-if="show_14">操作</th>
                 </tr>
+                </thead>
                 <!--数据展示-->
+                <tbody>
                 <tr ng-repeat="item in shop_rep" ng-drop="true" ng-drag="true" ng-drop-success="dropComplete($index,$data,$event)" ng-drag-data="item">
                     <td ><input type="checkbox" ng-checked="selectAll" ng-model="item.state" ng-click="my_check(item)"></td>
                     <td ng-if="show_1">{{item.from_type}}</td>
                     <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
                     <td ng-if="show_3">{{item.title}}</td>
-                    <td ng-if="show_4">{{item.supplier_name==''?'链接':item.supplier_name}}</td>
+                    <td ng-if="show_4" class="blue">{{item.supplier_name==''?'链接':item.supplier_name}}</td>
                     <td ng-if="show_5">{{item.viewed_number}}</td>
                     <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
                     <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
@@ -108,6 +111,7 @@
                         <a data-toggle="modal" data-target="#recommend_modal_disable_del" ng-click="shop_del(item)">删除</a>
                     </td>
                 </tr>
+                </tbody>
             </table>
         <!--Table内容  结束-->
 

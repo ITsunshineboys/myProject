@@ -20,29 +20,33 @@
         </div>
             <!--表格-->
             <table class="table table-hover table-responsive">
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>品牌LOGO</th>
-                    <th>品牌名称</th>
-                    <th>
-                        <span>上架时间</span>
-                        <img ng-click="time_sort_click()"  class="img_sort_size" ng-src="{{time_img}}" alt="">
-                    </th>
-                    <th>添加人员</th>
-                    <th>状态</th>
-                    <th>详情</th>
-                    <th>操作</th>
-                </tr>
-                <tr ng-repeat="item in on_shelves_list">
-                    <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
-                    <td><img class="img_size" src="{{ item.logo}}" alt=""></td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.online_time}}</td>
-                    <td>{{item.applicant}}</td>
-                    <td class="green">{{item.status}}</td>
-                    <td><a ui-sref="online_edit({on_shelves_list:item})">编辑</a></td>
-                    <td data-toggle="modal" data-target="#on_shelves_down_reason_modal"><a ng-click="down_shelver_btn(item.id)">下架</a></td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>品牌LOGO</th>
+                        <th>品牌名称</th>
+                        <th>
+                            <span>上架时间</span>
+                            <img ng-click="time_sort_click()"  class="img_sort_size" ng-src="{{time_img}}" alt="">
+                        </th>
+                        <th>添加人员</th>
+                        <th>状态</th>
+                        <th>详情</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in on_shelves_list">
+                        <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
+                        <td><img class="img_size" src="{{ item.logo}}" alt=""></td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.online_time}}</td>
+                        <td>{{item.applicant}}</td>
+                        <td class="green">{{item.status}}</td>
+                        <td><a ui-sref="online_edit({on_shelves_list:item})">编辑</a></td>
+                        <td data-toggle="modal" data-target="#on_shelves_down_reason_modal"><a ng-click="down_shelver_btn(item.id)">下架</a></td>
+                    </tr>
+                </tbody>
             </table>
             <!--分页-->
             <tm-pagination conf="wjConfig"></tm-pagination>
@@ -88,6 +92,7 @@
         </div>
             <!--表格-->
             <table class="table table-hover table-responsive">
+                <thead>
                 <tr>
                     <th>&nbsp;</th>
                     <th>品牌LOGO</th>
@@ -102,6 +107,8 @@
                     <th>详情</th>
                     <th>操作</th>
                 </tr>
+                </thead>
+                <tbody>
                 <tr ng-repeat="item in down_shelves_list">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                     <td><img class="img_size" src="{{ item.logo}}" alt=""></td>
@@ -114,6 +121,7 @@
                     <td><a ui-sref="offline_edit({down_shelves_list:item})">编辑</a></td>
                     <td data-toggle="modal" data-target="#solo_on_shelves_modal"><a ng-click="on_shelver_btn(item.id)">上架</a></td>
                 </tr>
+                </tbody>
             </table>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
@@ -228,6 +236,7 @@
 
         <!--表格内容-->
         <table class="table table-hover table-responsive">
+            <thead>
             <tr>
                 <th>品牌LOGO</th>
                 <th>品牌名称</th>
@@ -242,6 +251,8 @@
                 <th>详情</th>
                 <th>操作</th>
             </tr>
+            </thead>
+            <tbody>
             <tr ng-repeat="item in brand_review_list">
                 <td><img class="img_size" src="{{ item.brand_logo}}" alt=""></td>
                 <td>{{item.brand_name}}</td>
@@ -259,6 +270,8 @@
                 <td ng-show="item.review_status=='0'"><a ui-sref="brand_check({item:item})">审核</a></td>
                 <td ng-show="item.review_status!='0'">&nbsp;</td>
             </tr>
+            </tbody>
+
         </table>
         <!--分页-->
         <tm-pagination conf="brand_Config"></tm-pagination>

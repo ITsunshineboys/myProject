@@ -1,13 +1,10 @@
-
-
 .clickstyle{
     color: #3F94F6!important;
     border-bottom: 1px solid #3F94F6!important;
 }
-
-
-/*系列管理*/
-
+.series_btn{
+    margin-bottom: 20px;
+}
 /*系列管理按钮组*/
 .btn_right{
     margin-right: 10px;

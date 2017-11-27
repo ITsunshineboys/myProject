@@ -62,51 +62,54 @@
 
     <!--Table内容  开始-->
         <table class="table table-hover table-responsive">
-            <tr>
-                <th>&nbsp;</th>
-                <th ng-if="show_1">类型</th>
-                <th ng-if="show_2">商品编号</th>
-                <th ng-if="show_3">名称</th>
-                <th ng-if="show_4">来源商家</th>
-                <th ng-if="show_5">上架浏览</th>
-                <!--<td ng-if="show_6" style="padding: 0 5px"><span>上架销量</span></td>-->
-                <th ng-if="show_7">是否启用</th>
-                <th ng-if="show_8">创建时间</th>
-                <th ng-if="show_9">图片</th>
-                <th ng-if="show_10">库存</th>
-                <th ng-if="show_11">供货价格</th>
-                <th ng-if="show_12">平台价格</th>
-                <th ng-if="show_13">市场价格</th>
-                <th ng-if="show_14">操作</th>
-            </tr>
-            <!--数据展示-->
-            <tr ng-repeat="item in shop_rep" ng-drop="true" ng-drag="true" ng-drop-success="dropComplete($index,$data,$event)" ng-drag-data="item">
-                <td><input type="checkbox" ng-checked="selectAll" ng-model="item.state"></td>
-                <td ng-if="show_1">{{item.from_type}}</td>
-                <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
-                <td ng-if="show_3" class="ellipsis ellipsis_name">{{item.title}}</td>
-                <td ng-if="show_4"><a href="" >{{item.supplier_name==''?'链接':item.supplier_name}}</a></td>
-                <td ng-if="show_5">{{item.viewed_number}}</td>
-                <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
-                <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
-                <td ng-if="show_8">{{item.create_time}}</td>
-                <td ng-if="show_9"><img id="show_img_size" ng-src="{{item.image}}"></td>
-                <td ng-if="show_10&&item.sku!='0'">{{item.left_number}}</td>
-                <td ng-if="show_10&&item.sku=='0'">—</td>
-                <td ng-if="show_11&&item.sku!='0'">{{item.supplier_price}}</td>
-                <td ng-if="show_11&&item.sku=='0'">—</td>
-                <td ng-if="show_12&&item.sku!='0'">{{item.platform_price}}</td>
-                <td ng-if="show_12&&item.sku=='0'">—</td>
-                <td ng-if="show_13&&item.sku!='0'">{{item.market_price}}</td>
-                <td ng-if="show_13&&item.sku=='0'">—</td>
-                <td ng-if="show_14">
-                    <a ng-if="item.status=='停用'" ng-click="start_use(item)" data-toggle="modal" data-target="{{solo_begin_modal}}">启用</a>
-                    <a ng-if="item.status=='启用'" ng-click="stop_use(item)" data-toggle="modal" data-target="#solo_stop_modal">停用</a>
-                    <a data-toggle="modal" data-target="{{recommend_shop_modal_edit}}" ng-click="shop_edit_item(item)">编辑</a>
-                    <a data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">详情</a>
-                    <a data-toggle="modal" data-target="#recommend_modal_disable_del" ng-click="shop_del(item)">删除</a>
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th ng-if="show_1">类型</th>
+                    <th ng-if="show_2">商品编号</th>
+                    <th ng-if="show_3">名称</th>
+                    <th ng-if="show_4">来源商家</th>
+                    <th ng-if="show_5">上架浏览</th>
+                    <!--<td ng-if="show_6" style="padding: 0 5px"><span>上架销量</span></td>-->
+                    <th ng-if="show_7">是否启用</th>
+                    <th ng-if="show_8">创建时间</th>
+                    <th ng-if="show_9">图片</th>
+                    <th ng-if="show_10">库存</th>
+                    <th ng-if="show_11">供货价格</th>
+                    <th ng-if="show_12">平台价格</th>
+                    <th ng-if="show_13">市场价格</th>
+                    <th ng-if="show_14">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in shop_rep" ng-drop="true" ng-drag="true" ng-drop-success="dropComplete($index,$data,$event)" ng-drag-data="item">
+                    <td><input type="checkbox" ng-checked="selectAll" ng-model="item.state"></td>
+                    <td ng-if="show_1">{{item.from_type}}</td>
+                    <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
+                    <td ng-if="show_3" class="ellipsis ellipsis_name">{{item.title}}</td>
+                    <td ng-if="show_4" class="blue">{{item.supplier_name==''?'链接':item.supplier_name}}</td>
+                    <td ng-if="show_5">{{item.viewed_number}}</td>
+                    <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
+                    <td ng-if="show_7" class="yesGreen" ng-class="{'noRed':(item.status=='停用')}">{{item.status}}</td>
+                    <td ng-if="show_8">{{item.create_time}}</td>
+                    <td ng-if="show_9"><img id="show_img_size" ng-src="{{item.image}}"></td>
+                    <td ng-if="show_10&&item.sku!='0'">{{item.left_number}}</td>
+                    <td ng-if="show_10&&item.sku=='0'">—</td>
+                    <td ng-if="show_11&&item.sku!='0'">{{item.supplier_price}}</td>
+                    <td ng-if="show_11&&item.sku=='0'">—</td>
+                    <td ng-if="show_12&&item.sku!='0'">{{item.platform_price}}</td>
+                    <td ng-if="show_12&&item.sku=='0'">—</td>
+                    <td ng-if="show_13&&item.sku!='0'">{{item.market_price}}</td>
+                    <td ng-if="show_13&&item.sku=='0'">—</td>
+                    <td ng-if="show_14">
+                        <a ng-if="item.status=='停用'" ng-click="start_use(item)" data-toggle="modal" data-target="{{solo_begin_modal}}">启用</a>
+                        <a ng-if="item.status=='启用'" ng-click="stop_use(item)" data-toggle="modal" data-target="#solo_stop_modal">停用</a>
+                        <a data-toggle="modal" data-target="{{recommend_shop_modal_edit}}" ng-click="shop_edit_item(item)">编辑</a>
+                        <a data-toggle="modal" data-target="#recommend_shop_modal_details" ng-click="shop_details(item)">详情</a>
+                        <a data-toggle="modal" data-target="#recommend_modal_disable_del" ng-click="shop_del(item)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     <!--Table内容  结束-->
 
