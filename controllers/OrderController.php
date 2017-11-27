@@ -4326,6 +4326,7 @@ class OrderController extends Controller
      {
          $tools = new PayService();
          $code=Yii::$app->request->get('code');
+         StringService::writeLog('test', json_encode(Yii::$app->request->get()), 'wx');
          $openid = $tools->getOpenidFromMp($code);
          Yii::$app->session['openId']=$openid;
          echo $openid;
