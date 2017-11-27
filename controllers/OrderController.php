@@ -4278,8 +4278,6 @@ class OrderController extends Controller
      */
      public function  actionFindOpenId()
      {
-
-
           $url=Yii::$app->request->post('url','');
           if(!$url)
           {
@@ -4289,6 +4287,8 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                ]);
           }
+          echo $url;exit;
+
           $tools = new PayService();
           if (!isset($_GET['code'])){
                //触发微信返回code码
