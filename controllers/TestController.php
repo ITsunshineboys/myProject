@@ -161,4 +161,12 @@ class TestController extends Controller
 //        Yii::$app->runAction('order/test-open-id');
         return empty(Yii::$app->session['openId']) ? '' : Yii::$app->session['openId'];
     }
+
+    /**
+     * Test
+     */
+    public function actionWx()
+    {
+        return $this->render('wx');
+    }
 }
