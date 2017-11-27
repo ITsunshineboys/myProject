@@ -4329,11 +4329,9 @@ class OrderController extends Controller
              $baseUrl = urlencode($url);
              $tools = new PayService();
              $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-//             var_dump($urls);exit;
-//         echo $urls;exit;
              Header("Location: {$urls}");
          }else{
-             echo $code;exit;
+             $tools = new PayService();
              $openid = $tools->getOpenidFromMp($code);
              echo $openid;
          }
