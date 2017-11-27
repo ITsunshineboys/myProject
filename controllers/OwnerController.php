@@ -1734,6 +1734,7 @@ class OwnerController extends Controller
             }
             $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
             $goods  = Goods::findBySkuAll($sku, $select);
+            var_dump($goods);exit;
             if ($goods == null) {
                 return Json::encode([
                     'code' => 200,
@@ -1752,7 +1753,7 @@ class OwnerController extends Controller
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
                         unset($case_works_datum['id']);
                         $cost                                      = $one_goods['platform_price'];
-                        $case_works_datum['id']              = $one_goods['id'];
+                        $case_works_datum['id']                    = $one_goods['id'];
 //                        $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
                         $case_works_datum['cost']                  = round($cost * $case_works_datum['goods_quantity'],2);
                         $case_works_datum['name']                  = $one_goods['name'];
