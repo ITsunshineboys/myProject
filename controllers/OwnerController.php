@@ -1397,19 +1397,18 @@ class OwnerController extends Controller
         $material['material'][] = BasisDecorationService::profitMargin($river_sand);
 
 
-        $material['total_cost'] = 0;
-        foreach ($material['material'] as $total_cost){
-            $material['total_cost'] += $total_cost['cost'];
-        }
-
-        $goods_value = [];
+        $goods_value['material'] = [];
         foreach ($material['material'] as $value){
             if ($value['quantity'] != 0){
-                $goods_value [] = $value;
+                $goods_value['material'] [] = $value;
             }
         }
+        $goods_value['total_cost'] = 0;
+        foreach ($goods_value['material'] as $total_cost){
+            $goods_value['total_cost'] += $total_cost['cost'];
+        }
 
-        if (empty($goods_value)){
+        if (empty($goods_value['material'])){
             return Json::encode([
                 'code' => 200,
                 'msg' => '成功',
