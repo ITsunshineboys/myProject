@@ -4318,7 +4318,7 @@ class OrderController extends Controller
          $code = $_GET['code'];
          $openid = $tools->getOpenidFromMp($code);
          $code=200;
-         return Json::encode($openid);
+         echo $openid;
      }
      public  function  actionTestOpenId()
      {
@@ -4336,9 +4336,8 @@ class OrderController extends Controller
          $baseUrl = urlencode($url);
          $tools = new PayService();
          $url = $tools->__CreateOauthUrlForCode1($baseUrl);
-
          $res=Wxpay::curl($url,false,0);
-         var_dump($res);exit;
+         var_dump(json_decode($res,true));exit;
      }
  
         /**
