@@ -4333,8 +4333,8 @@ class OrderController extends Controller
          $url="https://ac.cdlhzz.cn/order/return-url";
          $baseUrl = urlencode($url);
          $tools = new PayService();
-         $url = $tools->__CreateOauthUrlForCode1($baseUrl);
-         echo $url;exit;
+         $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
+         echo $urls;exit;
 //         Header("Location: {$url}");
          $res=StringService::httpGet($url);
          var_dump($res);exit;
