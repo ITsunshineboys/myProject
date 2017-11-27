@@ -4322,10 +4322,10 @@ class OrderController extends Controller
      public  function  actionTestOpenId()
      {
          $tools = new PayService();
-         $code = $_GET['code'];
-         if (!$code)
-         {
 
+         if (!Yii::$app->request->get('code',''))
+         {
+             $code =Yii::$app->request->get('code','');
              $url="https://ac.cdlhzz.cn/order/test-open-id";
              $baseUrl = urlencode($url);
              $tools = new PayService();
