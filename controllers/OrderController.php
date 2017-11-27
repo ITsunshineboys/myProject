@@ -377,9 +377,9 @@ class OrderController extends Controller
                 'msg' =>'微信内打开',
                 'data'=>Wxpay::GetWxJsSign()
             ]);
-            Yii::$app->runAction('order/test-open-id');
-        }
 
+        }
+        Yii::$app->runAction('order/test-open-id');
     }
 
     /**
