@@ -4288,7 +4288,6 @@ class OrderController extends Controller
      */
      public function  actionFindOpenId()
      {
-
           $url=Yii::$app->request->post('url','');
           if(!$url)
           {
@@ -4326,7 +4325,7 @@ class OrderController extends Controller
      public  function  actionReturnUrl()
      {
          $tools = new PayService();
-         $code = $_GET['code'];
+         $code=Yii::$app->request->get('code');
          $openid = $tools->getOpenidFromMp($code);
          echo $openid;
      }
@@ -4348,16 +4347,16 @@ class OrderController extends Controller
         if (!$code)
         {
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-            $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
+            $url=$http_type."ac.cdlhzz.cn/order/return-url";
             $baseUrl = urlencode($url);
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
 //            $this->redirect($urls);
-            file_get_contents($urls);
-//            return Json::encode([
-//                'code'=>200,
-//                'msg' =>'ok',
-//                'data'=>Yii::$app->runAction('order/test-open-id')
-//            ]);
+            $data=file_get_contents($urls);
+            return Json::encode([
+                'code'=>200,
+                'msg' =>'ok',
+                'data'=>$data
+            ]);
         }else{
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
