@@ -4327,6 +4327,7 @@ class OrderController extends Controller
          $tools = new PayService();
          $code=Yii::$app->request->get('code');
          $openid = $tools->getOpenidFromMp($code);
+         Yii::$app->session['openId']=$openid;
          echo $openid;
      }
 
@@ -4353,18 +4354,14 @@ class OrderController extends Controller
 //            $this->redirect($urls);
             $data=file_get_contents($urls);
             return Json::encode([
-                'code'=>200,
-                'msg' =>'ok',
-                'data'=>$data
+                'code' => Yii::$app->session['openId'],
+                'msg'  =>$data
             ]);
         }else{
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
         }
-//        return Json::encode([
-//            'code' => 200,
-//            'msg'  => 'ok'
-//        ]);
+
     }
 
         /**
