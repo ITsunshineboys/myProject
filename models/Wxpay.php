@@ -98,12 +98,12 @@ class Wxpay  extends ActiveRecord
             $tools = new PayService();
             $input = new WxPayUnifiedOrder();
 //            $openid =Yii::$app->session['openId'];
-            $openid=Yii::$app->session['openId'];
-            if (!$openid)
-            {
-                $code=1000;
-                return $code;
-            }
+            $openid=$openId;
+//            if (!$openid)
+//            {
+//                $code=1000;
+//                return $code;
+//            }
             $attach=$id;
             $total_amount=0.01;
             $input->SetBody(self::EFFECT_BODY);
