@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace app\controllers;
 use app\models\OrderAfterSaleImage;
 use app\services\ModelService;
@@ -588,7 +588,7 @@ class OrderController extends Controller
                 ]);
             }
     }
-    
+
     /**
      * 支付宝线下店商城异步返回操作
      */
@@ -825,7 +825,7 @@ class OrderController extends Controller
      * wxpay nityfy apply Deposit database
      * @return bool
      */
-    public function actionWxpayeffect_earnstnotify(){ 
+    public function actionWxpayeffect_earnstnotify(){
         //获取通知的数据
         $xml = file_get_contents("php://input");;
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
@@ -837,7 +837,7 @@ class OrderController extends Controller
             if (!$result)
             {
                 return false;
-            } 
+            }
            // if ($arr['total_fee']!=8900)
            // {
            //     return false;
@@ -1684,7 +1684,7 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         if (!$order_no  || !$sku) {
-            $code=1000; 
+            $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -2000,7 +2000,7 @@ class OrderController extends Controller
                 'data'=>$arr
         ]);
     }
- 
+
     /**退款处理
      * @return string
      */
@@ -2094,7 +2094,7 @@ class OrderController extends Controller
     }
 
 
-    
+
      /**获取退款详情
      * @return string
      */
@@ -2485,7 +2485,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-  
+
     /**
      *用户申请售后
      * @return string
@@ -2527,7 +2527,7 @@ class OrderController extends Controller
 
 
     /**
-     * 商家售后操作-- 同意  or  驳回 
+     * 商家售后操作-- 同意  or  驳回
      * @return string
      */
     public function  actionSupplierAfterSaleHandle(){
@@ -3931,8 +3931,8 @@ class OrderController extends Controller
                 ->select('goods_name,sku')
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->asArray()
-                ->one(); 
-     
+                ->one();
+
             if (!$OrderGoods)
             {
                 $code=1000;
@@ -4128,7 +4128,7 @@ class OrderController extends Controller
                 }
             }
             $qrcode=UploadForm::DIR_PUBLIC . '/' . Goods::GOODS_QR_PREFIX . $Goods->id . '.png';
-            $code=200; 
+            $code=200;
             return Json::encode([
                 'code'=>$code,
                 'msg'=>'ok',
@@ -4253,7 +4253,7 @@ class OrderController extends Controller
             ]);
         }
     }
- 
+
 
             /**
              * 获取openID1-微信
@@ -4332,24 +4332,27 @@ class OrderController extends Controller
         ]);
     }
 
-     public  function  actionTestOpenId()
-     {
-         $tools = new PayService();
-         $code=Yii::$app->request->get('code');
-         if (!$code)
-         {
-             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-             $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
-             $baseUrl = urlencode($url);
-             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-             $this->redirect($urls);
-             Header("Location: {$urls}");
-         }else{
-             $openid = $tools->getOpenidFromMp($code);
-             Yii::$app->session['openId']=$openid;
-         }
-     }
- 
+    public  function  actionTestOpenId()
+    {
+        $tools = new PayService();
+        $code=Yii::$app->request->get('code');
+        if (!$code)
+        {
+            $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+            $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
+            $baseUrl = urlencode($url);
+            $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
+            $this->redirect($urls);
+            Header("Location: {$urls}");
+        }else{
+            $openid = $tools->getOpenidFromMp($code);
+            Yii::$app->session['openId']=$openid;
+            if (YII_DEBUG) {
+                StringService::writeLog('test', Yii::$app->session->id, 'wxpay');
+            }
+        }
+    }
+
         /**
          * 提醒发货接口
          * @return string
