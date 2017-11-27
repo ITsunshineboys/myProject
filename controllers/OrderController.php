@@ -4325,7 +4325,8 @@ class OrderController extends Controller
          $code=Yii::$app->request->get('code');
          if (!$code)
          {
-             $url="https://ac.cdlhzz.cn/order/test-open-id";
+             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+             $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
              $baseUrl = urlencode($url);
              $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
              Header("Location: {$urls}");
@@ -4338,9 +4339,6 @@ class OrderController extends Controller
                  'data' =>$openid
              ]);
          }
-
-//         $res=StringService::httpGet($urls);
-
      }
  
         /**
