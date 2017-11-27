@@ -4334,10 +4334,9 @@ class OrderController extends Controller
          $baseUrl = urlencode($url);
          $tools = new PayService();
          $url = $tools->__CreateOauthUrlForCode1($baseUrl);
-//         echo $url;
+         echo $url;exit;
 //         Header("Location: {$url}");
          $res=StringService::httpGet($url);
-//         $res=Wxpay::curl($url,false,0);
          var_dump($res);exit;
      }
  
