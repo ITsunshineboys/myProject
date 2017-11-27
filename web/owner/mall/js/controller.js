@@ -575,6 +575,20 @@ angular.module('all_controller', [])
                 }, 300)
             })
         }
+        if($rootScope.curState_name == 'nodata.product_detail'){
+            var mySwiper = new Swiper('.swiper-container', {
+                direction: 'horizontal',
+                loop: true,
+                autoplay: 1000,
+                autoplayDisableOnInteraction: false,
+                observer:true,
+                observeParents:true,
+                effect: 'slide',
+
+                // 如果需要分页器
+                pagination: '.swiper-pagination',
+            })
+        }
         //监听商品数量输入
         $scope.$watch('check_goods.quantity', function (newVal, oldVal) {
             if ($scope.cur_params != undefined) {
