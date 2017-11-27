@@ -4348,7 +4348,7 @@ class OrderController extends Controller
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
             if (YII_DEBUG) {
-                StringService::writeLog('test', Yii::$app->session->id, 'wxpay');
+                StringService::writeLog('test', Yii::$app->session->id.'|'.$openid, 'wxpay');
             }
         }
     }
