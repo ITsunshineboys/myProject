@@ -24,6 +24,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         toponymy: $stateParams.toponymy,    // 小区名称
         street: $stateParams.street         // 街道地址
     };
+    let mySwiper;   // 轮播变量
     let huxingParams = {
         roomCode: $stateParams.roomCode,
         toponymy: $stateParams.toponymy,
@@ -303,7 +304,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         $scope.materials = JSON.parse(sessionStorage.getItem("materials_bak"));
         _ajax.get("/owner/case-particulars", params, function (res) {
             console.log(res, "材料");
-            let mySwiper;
             let data = res.data;
             if (data === null) {
                 $scope.activeObj.type = 0;
@@ -319,7 +319,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             $scope.activeObj.type = 1;
 
             if (mySwiper !== undefined) {
-                mySwiper.destroy();
+                mySwiper.destroy(true,true);
             }
             if (sessionStorage.getItem("materials") === null) {
                 $scope.roomPicture = data.images.effect_images;
