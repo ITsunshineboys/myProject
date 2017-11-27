@@ -653,24 +653,25 @@ class OrderController extends Controller
             ]);
         }
         $out_trade_no =GoodsOrder::SetOrderNo();
-        $id=Effect::addneweffect($post);
-        if (!$id)
-        {
-            $code=1000;
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $id=Effect::addneweffect($post);
+//        if (!$id)
+//        {
+//            $code=1000;
+//            return json_encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+        $id=1;
         $openId=$request->post('wxpayCode', '');
-        if (!$openId)
-        {
-            $code=1000;
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        if (!$openId)
+//        {
+//            $code=1000;
+//            return json_encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $res=Wxpay::effect_earnstsubmit($id,$openId);
         return Json::encode([
             'code' => 200,
