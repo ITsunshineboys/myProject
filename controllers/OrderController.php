@@ -4330,7 +4330,7 @@ class OrderController extends Controller
              $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
              $baseUrl = urlencode($url);
 //             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-             Header("Location: {$baseUrl}");
+             Header("Location: {$url}");
          }else{
              $openid = $tools->getOpenidFromMp($code);
              $code=200;
