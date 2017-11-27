@@ -1,7 +1,7 @@
 var wait_online = angular.module("wait_online_Module",["ngFileUpload"]);
 wait_online.controller("wait_online",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
     $scope.config=$rootScope.config;//富文本编辑器配置
-
+    let reg=/^\d+(\.\d{1,2})?$/;
 	$scope.goods_all_attrs=[];//所有属性数据
 	$scope.logistics=[];//物流模块列表
     $rootScope.crumbs = [{
@@ -290,33 +290,33 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		console.log(err)
 	});
     //市场价
-    let reg=/^\d+(\.\d{1,2})?$/;
     $scope.price_flag=false;
     $scope.my_market_price=function (value) {
-    	let reg_value=reg.test(value);
-    	if(!reg_value){
+        let reg_value=reg.test(value);
+        if(!reg_value){
             $scope.price_flag=true;
-		}else{
+        }else{
             (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
-		}
+        }
     };
-   //平台价
+    //平台价
     $scope.my_platform_price=function (value) {
         let reg_value=reg.test(value);
         if(!reg_value){
             $scope.price_flag=true;
-        }else {
-            (+$scope.platform_price <= +$scope.market_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
+        }else{
+            (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
         }
     };
-   //供货商价
+    //供货商价
     $scope.my_supplier_price=function (value) {
         let reg_value=reg.test(value);
         if(!reg_value){
             $scope.price_flag=true;
         }else{
             (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
-		}
+        }
+
     };
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
