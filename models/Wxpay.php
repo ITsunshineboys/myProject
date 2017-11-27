@@ -100,6 +100,7 @@ class Wxpay  extends ActiveRecord
             $openid =Yii::$app->session['openId'];
             if (!$openid)
             {
+                echo $openid;exit;
                 $code=1000;
                 return $code;
             }
