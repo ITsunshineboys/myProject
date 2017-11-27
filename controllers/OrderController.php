@@ -4338,7 +4338,6 @@ class OrderController extends Controller
      {
          $tools = new PayService();
          $code=Yii::$app->request->get('code');
-         StringService::writeLog('test', json_encode(Yii::$app->request->get()), 'wx');
          $openid = $tools->getOpenidFromMp($code);
          Yii::$app->session['openId']=$openid;
          echo $openid;
@@ -4356,7 +4355,6 @@ class OrderController extends Controller
         $url=$http_type."ac.cdlhzz.cn/order/return-url";
         $baseUrl = urlencode($url);
         $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-        StringService::writeLog('test', $urls, 'wx');
         file_get_contents($urls);
     }
 
