@@ -2706,9 +2706,9 @@ angular.module('all_controller', [])
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (sessionStorage.getItem('materials')!=null) {
                                                         if (value3.id == value4.id) {
-                                                            value4.cost += value3.cost
-                                                            value4.procurement += value3.procurement
-                                                            value4.quantity += value3.quantity
+                                                            value4.cost += +value3.cost
+                                                            value4.procurement += +value3.procurement
+                                                            value4.quantity += +value3.quantity
                                                         }
                                                     } else {
                                                         if (value3.id == value4.id) {
