@@ -15,12 +15,12 @@
                 </div>
                 <a class="two_box" ui-sref="nodata.house_list">
                     <button>计算我的房屋报价</button>
+                    {{aaa | currency:'￥'}}
                 </a>
             </div>
         </div>
 
         <!--展示页面-->
-
         <div class="exhibition">
             <ul>
                 <li class="animated fadeInUp" ng-repeat="item in recommend_list | orderBy:'sort'"
