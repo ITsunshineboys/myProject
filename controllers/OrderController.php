@@ -4287,8 +4287,6 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                ]);
           }
-          echo $url;exit;
-
           $tools = new PayService();
           if (!isset($_GET['code'])){
                //触发微信返回code码
