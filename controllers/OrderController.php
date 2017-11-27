@@ -4332,7 +4332,7 @@ class OrderController extends Controller
 //             ]);
 //         }
          $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-         $url= $http_type."ac.cdlhzz.cn/order/return-url";
+         $url="https://ac.cdlhzz.cn/order/return-url";
          $baseUrl = urlencode($url);
          $tools = new PayService();
          $url = $tools->__CreateOauthUrlForCode1($baseUrl);
