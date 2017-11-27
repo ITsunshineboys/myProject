@@ -171,7 +171,7 @@ section{
   color: #8BC34A;
 }
 .red{
-  color:#FF5722;
+  color:red;
 }
 .img_size{
   height:20px;
@@ -184,12 +184,6 @@ section{
 .arrow_img_size{
   width: 10px;
   height: 16px;
-}
-.myred{
-  color: red;
-}
-.myred:last-child{
-  color: blue;
 }
 /*清楚number上下箭头*/
 input::-webkit-outer-spin-button,

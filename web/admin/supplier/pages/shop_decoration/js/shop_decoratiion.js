@@ -296,8 +296,11 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         _ajax.get('/mall/goods-by-sku',{
             sku:+$scope.banner_edit_sku
         },function (res) {
+          console.log(res);
             if(res.data.detail.url!=$scope.banner_edit_url){
-                $scope.banner_edit_num_error=true;
+	            console.log(res.data.detail.url);
+	            console.log($scope.banner_edit_url);
+	            $scope.banner_edit_num_error=true;
                 $scope.shop_edit_sku_error='商品编号错误，请重新添加';
                 $scope.banner_edit_title='';
                 $scope.banner_edit_url='';

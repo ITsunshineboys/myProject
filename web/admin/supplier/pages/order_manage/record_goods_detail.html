@@ -160,7 +160,7 @@
                 <span class="left_font">详细描述</span>
                 <div class="margin_left inline_block">
                     <div>
-                        <p>{{goods_item.description}}</p>
+                        <p ng-bind-html="goods_item.description | toHtml"></p>
                     </div>
                 </div>
             </div>

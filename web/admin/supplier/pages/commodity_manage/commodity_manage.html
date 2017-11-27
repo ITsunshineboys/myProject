@@ -55,30 +55,33 @@
         </div>
         <!--表格内容-->
         <table>
+            <thead>
             <tr>
-                <td>&nbsp;</td>
-                <td ng-if="show_1">商品编号</td>
-                <td ng-if="show_2">商品名称</td>
-                <td ng-if="show_3">供货价格</td>
-                <td ng-if="show_5">平台价格</td>
-                <td ng-if="show_4">市场价格</td>
-                <td ng-if="show_6">装修公司采购价格</td>
-                <td ng-if="show_7">项目经理采购价格</td>
-                <td ng-if="show_8">设计师采购价格</td>
-                <td ng-if="show_9">库存</td>
-                <td ng-if="show_10">
+                <th>&nbsp;</th>
+                <th ng-if="show_1">商品编号</th>
+                <th ng-if="show_2">商品名称</th>
+                <th ng-if="show_3">供货价格</th>
+                <th ng-if="show_5">平台价格</th>
+                <th ng-if="show_4">市场价格</th>
+                <th ng-if="show_6">装修公司采购价格</th>
+                <th ng-if="show_7">项目经理采购价格</th>
+                <th ng-if="show_8">设计师采购价格</th>
+                <th ng-if="show_9">库存</th>
+                <th ng-if="show_10">
                     <span>销量</span>
                     <img ng-click="up_sort_sale_click()" class="arrow_img_size" ng-src="{{up_sort_sale_img}}" alt="">
-                </td>
-                <td ng-if="show_11">状态</td>
-                <td ng-if="show_12">
+                </th>
+                <th ng-if="show_11">状态</th>
+                <th ng-if="show_12">
                     <span>上架时间</span>
                     <img ng-click="up_sort_time_click()"  class="arrow_img_size" ng-src="{{up_sort_time_img}}" alt="">
-                </td>
-                <td ng-if="show_13">图片</td>
-                <td ng-if="show_14">详情</td>
-                <td ng-if="show_15">操作</td>
+                </th>
+                <th ng-if="show_13">图片</th>
+                <th ng-if="show_14">详情</th>
+                <th ng-if="show_15">操作</th>
             </tr>
+            </thead>
+            <tbody>
             <tr class="table_content" ng-repeat="item in up_list_arr">
                 <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                 <td ng-if="show_1">{{item.sku}}</td>
@@ -97,6 +100,7 @@
                 <td ng-if="show_14" class="blue" ui-sref="up_shelves_detail({item:item,flag:0})">编辑</td>
                 <td ng-if="show_15" class="blue" data-toggle="modal" data-target="#down_shelves_solo_modal" ng-click="offline_solo(item.id)">下架</td>
             </tr>
+            </tbody>
         </table>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
@@ -255,6 +259,7 @@
             </div>
         </div>
         <table>
+            <thead>
             <tr>
                 <!--<td>&nbsp;</td>-->
                 <td ng-if="down_1">商品编号</td>
@@ -281,6 +286,8 @@
                 <td ng-if="down_16">详情</td>
                 <td ng-if="down_17">操作</td>
             </tr>
+            </thead>
+            <tbody>
             <tr class="table_content" ng-repeat="item in down_list_arr">
                 <!--<td><input type="checkbox" ng-checked="off_selectAll" ng-model="item.state"></td>-->
                 <td ng-if="down_1">{{item.sku}}</td>
@@ -310,6 +317,7 @@
                     <span>&nbsp;</span>
                 </td>
             </tr>
+            </tbody>
         </table>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
@@ -434,6 +442,7 @@
             </div>
         </div>
         <table>
+            <thead>
             <tr>
                 <td ng-if="wait_1">商品编号</td>
                 <td ng-if="wait_2">商品名称</td>
@@ -453,15 +462,16 @@
                     <span>发布时间</span>
                     <img ng-click="wait_time_sort()"  class="arrow_img_size" ng-src="{{wait_sort_time_img}}" alt="">
                     <!--<img ng-click="wait_time_sort()" ng-show= on_time_flag class="arrow_img_size"-->
-                         <!--src="pages/commodity_manage/image/up.png" alt="">-->
+                    <!--src="pages/commodity_manage/image/up.png" alt="">-->
                     <!--<img ng-click="wait_time_sort()" ng-show= down_time_flag  class="arrow_img_size"-->
-                         <!--src="pages/commodity_manage/image/down.png" alt="">-->
+                    <!--src="pages/commodity_manage/image/down.png" alt="">-->
                 </td>
                 <td ng-if="wait_13">图片</td>
                 <td ng-if="wait_14">审核备注</td>
                 <td ng-if="wait_15">详情</td>
             </tr>
-
+            </thead>
+            <tbody>
             <tr class="table_content" ng-repeat="item in wait_list_arr">
                 <td ng-if="wait_1">{{item.sku}}</td>
                 <td ng-if="wait_2">{{item.title}}</td>
@@ -484,6 +494,7 @@
                 </td>
                 <td ng-if="wait_15" class="blue" ui-sref="wait_online({item:item,flag:1})">编辑</td>
             </tr>
+            </tbody>
         </table>
         <!--分页开始-->
         <tm-pagination conf="ConfigWait"></tm-pagination>
@@ -517,16 +528,20 @@
             </ul>
         </div>
         <table style="width: 100%">
+            <thead>
             <tr>
                 <td>模块名称</td>
                 <td>详情</td>
                 <td>操作</td>
             </tr>
+            </thead>
+            <tbody>
             <tr class="table_content" ng-repeat="n in contentMore">
                 <td>{{n.name}}</td>
                 <td class="blue" ng-click="getDetails (n)">查看</td>
                 <td class="blue" ng-click="getId (n.id)" data-toggle="modal" data-target="#detate_modal">删除</td>
             </tr>
+            </tbody>
         </table>
 
         <!--是否删除确认模态框-->

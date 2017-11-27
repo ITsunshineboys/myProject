@@ -4,80 +4,40 @@ body{
 section{
     padding: 40px 0 0 40px;
 }
-.class_shop span:nth-child(2){
-    margin-left: 65px;
+ul{
+    padding-left: 0;
 }
-.class_name{
-    margin-top: 20px;
+.row{
+    margin-bottom: 20px;
 }
-.class_name img{
+.form-horizontal .control-label{
+    text-align: left;
+}
+.red_txt{
+    color: #E51C23;
+}
+.red_img{
     margin-left: -25px;
 }
-.class_name_input{
-    width: 245px;
-    height: 31px;
-    border-radius:3px ;
-    border: 1px solid #666F80;
-    padding-left: 5px;
-    margin-left: 65px;
-}
-
-.attr_set{
-    margin-top: 20px
-}
-
-.attr_set div{
-    margin-top: 25px;
-}
-.attr_set div img{
-    margin-left:80px;
-}
-
-.attr_set div input{
-    padding-left: 5px;
-    height: 30px;
-    border: 1px solid #666F80;
-    border-radius:5px ;
-}
-
-.name_width{
+.own_attr_name{
     display: inline-block;
-    width: 150px;
-    margin-right: 30px;
+    width: 75%;
+    padding: 0;
 }
-.content_width{
-    display: inline-block;
-    width: 280px;
-    margin-right: 30px;
-    margin-left: 0!important;
+.img_size{
+    width: 120px;
+    height: 120px;
 }
-.dw_width{
-    display: inline-block;
-    width: 30px;
-    text-align: center;
-    margin-right: 30px;
-}
-.wl_input{
-    margin-left: 83px;
+.prompt_txt{
+    font-size: 12px;
+    color: #ABABAB;
+    margin-top: 5px;
 }
 
 hr{
-    margin-left: 6px;
+    margin: 5px;
     width: 90%;
     color: #ABABAB;
-}
-.filter_pic{
-    margin-top: 30px;
-}
-.pic_right{
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 85px;
-}
-
-.pic_right img{
-    width: 120px;
-    height: 120px;
 }
 .img_list{
     display: inline-block;
@@ -85,39 +45,12 @@ hr{
     position: relative;
 }
 
-.def_gray{
-    font-size: 12px;
-    color: #ABABAB;
-    margin-top: 3px;
-}
-
-.upload_btn{
-    width: 67px;
-    height: 24px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 24px;
-    color: #666F80;
-    background-color: #FFFFFF;
-    border: 1px solid #666F80;
-    border-radius: 3px;
-    margin-top: 4px;
-}
-
 .warning{
     font-size: 12px;
     margin-top: 6px;
     color: #E51C23;
 }
-.filter_pic_red{
-    margin-left: -25px;
-}
-.logo{
-    width: 138px;
-    height: 138px;
-}
 .img_list{
-    display: inline-block;
     margin-right: 10px;
     position: relative;
 }
@@ -134,50 +67,26 @@ hr{
     background-color: #ddd;
 }
 
-.price_stock{
-    margin-top: 30px;
-}
-.price_stock img{
-    margin-left: -25px;
-}
-.price_stock ul{
-    margin-top: -20px;
-    margin-left:80px;
-
-}
 .price_stock ul li {
     list-style: none;
     float: left;
-    margin-left:25px;
-}
-.price_stock div{
-    margin-left: 125px;
-    margin-top: -20px;
+    width: 60px;
+    margin-right:25px;
 }
 .price_stock p{
     border-bottom: 1px solid #ABABAB;
     width: 320px;
     margin-top: 30px;
-    margin-left: 145px;
 }
-.price_stock div input{
-    width:58px;
-    height:31px;
-    border-radius: 5px;
-    border: 1px solid #666f80;
-    padding-left: 5px;
-    margin-left: 20px;
+.price_stock_input{
+    display: inline-block;
+    width:60px;
+    margin-right:20px;
 }
 .template{
     margin-top: 30px;
 }
 
-.template_div{
-    margin-left: 85px;
-    margin-top: 15px;
-    color:#666F80;
-    font-size: 14px;
-}
 /*清楚number上下箭头*/
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
@@ -190,31 +99,10 @@ input::-webkit-inner-spin-button{
     margin-right:10px;
 }
 
-.service{
-    margin-bottom: 30px;
+.aftermark_ul>li>span{
+    margin-left:10px;
 }
-.service ul li {
-    list-style: none;
-    vertical-align:text-top;
-}
-.service ul {
-   margin-left:110px;
-    margin-top: -20px;
-}
-.service ul li span{
-    margin-left:20px;
-    font-size: 14px;
-    color: #666F80;
-}
-.ueditor_css{
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 90px;
-}
-.btn_back{
-    margin-top: 40px;
-    margin-bottom: 30px;
-}
+
 .btn_left{
     margin-left: 20px;
 }
@@ -228,14 +116,6 @@ input::-webkit-inner-spin-button{
     flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
-}
-.margin_left{
-    margin-left: 85px;
-    color:red;
-}
-.inline_block{
-    display: inline-block;
-    vertical-align: top;
 }
 .dl_active3{
     background-color: #E6E9F0!important;
