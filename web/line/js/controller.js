@@ -603,7 +603,7 @@ angular.module("all_controller", ['ngCookies'])
         $scope.datailsShop = $stateParams.datailsShop;
         $scope.mall_id = $stateParams.mall_id;
         $scope.activeTab = $stateParams.activeTab;
-        console.log($scope.activeTab);
+        // console.log($scope.activeTab);
 
         if($scope.activeTab != undefined){
             sessionStorage.setItem('activeTab',$scope.activeTab)
@@ -624,6 +624,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.supplier_id = response.data.data.goods_view.supplier.id;
             $scope.status = response.data.data.goods_view.status;
             $scope.showPrompt = false;
+            //轮播变量
             let mySwiper = new Swiper("#swiperList", {
                 autoplay: 3000,
                 loop: true,
@@ -722,19 +723,19 @@ angular.module("all_controller", ['ngCookies'])
         };
 
         // 判断是否是微信浏览器打开 =======是微信浏览器打开 做分享的配置
-        $http({   // 判断是否微信浏览器打开
-            method: 'get',
-            url:  baseUrl+'/order/iswxlogin'
-        }).then(function successCallback(response) {
-            console.log(response);
-            $scope.codeWX = response.data.code;
-            if( $scope.codeWX == 200){
-                $scope.appId  = response.data.data.appId;
-                $scope.timestamp  = response.data.data.timestamp;
-                $scope.nonceStr  = response.data.data.nonceStr;
-                $scope.signature  = response.data.data.signature;
-            }
-        });
+        // $http({   // 判断是否微信浏览器打开
+        //     method: 'get',
+        //     url:  baseUrl+'/order/iswxlogin'
+        // }).then(function successCallback(response) {
+        //     console.log(response);
+        //     $scope.codeWX = response.data.code;
+        //     if( $scope.codeWX == 200){
+        //         $scope.appId  = response.data.data.appId;
+        //         $scope.timestamp  = response.data.data.timestamp;
+        //         $scope.nonceStr  = response.data.data.nonceStr;
+        //         $scope.signature  = response.data.data.signature;
+        //     }
+        // });
         // 返回
         $scope.getRetun = function () {
             if (sessionStorage.getItem('wxflag') == null) {
