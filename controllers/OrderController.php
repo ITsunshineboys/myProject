@@ -243,7 +243,7 @@ class OrderController extends Controller
         public function actionOrderinvoicelineadd(){
             $request = \Yii::$app->request;
             $invoice_type        = trim($request->post('invoice_type'));
-            $invoice_header_type = 1;
+            $invoice_header_type = trim($request->post('invoice_header_type'));
             $invoice_header      = trim($request->post('invoice_header'));
             $invoice_content     = trim($request->post('invoice_content'));
             if (!$invoice_type||!$invoice_header||!$invoice_content )
@@ -654,7 +654,7 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $out_trade_no =GoodsOrder::SetOrderNo();
+//        $out_trade_no =GoodsOrder::SetOrderNo();
         $id=Effect::addneweffect($post);
         if (!$id)
         {
