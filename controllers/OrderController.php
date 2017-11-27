@@ -366,18 +366,19 @@ class OrderController extends Controller
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($user_agent, 'MicroMessenger') === false) {
             // 非微信浏览器禁止浏览
-            return Json::encode([
+            echo Json::encode([
                 'code' => 201,
                 'msg' =>'非微信打开',
             ]);
         } else {
             // 微信浏览器，允许访问
-            return Json::encode([
+            echo Json::encode([
                 'code' => 200,
                 'msg' =>'微信内打开',
                 'data'=>Wxpay::GetWxJsSign()
             ]);
         }
+        Yii::$app->runAction('order/test-open-id');
     }
 
     /**
