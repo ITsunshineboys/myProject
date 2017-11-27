@@ -4264,6 +4264,7 @@ class OrderController extends Controller
                     $tools = new PayService();
                     $code=Yii::$app->request->post('code','');
                     $openid = $tools->getOpenidFromMp($code);
+
                     return Json::encode([
                         'code' => 200,
                         'msg'  => 'ok',
@@ -4278,6 +4279,7 @@ class OrderController extends Controller
      */
      public function  actionFindOpenId()
      {
+
           $url=Yii::$app->request->post('url','');
           if(!$url)
           {
@@ -4320,6 +4322,16 @@ class OrderController extends Controller
          echo $openid;
      }
 
+    public  function  actionRetOpenId()
+    {
+        $openid=Yii::$app->session['openId'];
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' =>$openid
+        ]);
+    }
+
      public  function  actionTestOpenId()
      {
          $tools = new PayService();
@@ -4332,15 +4344,9 @@ class OrderController extends Controller
              $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
              $this->redirect($urls);
              Header("Location: {$urls}");
-//             Header("Location: {$urls}");
          }else{
              $openid = $tools->getOpenidFromMp($code);
-             $code=200;
-             return Json::encode([
-                 'code' => $code,
-                 'msg'  => 'ok',
-                 'data' =>$openid
-             ]);
+             Yii::$app->session['openId']=$openid;
          }
      }
  

@@ -188,7 +188,13 @@ class PayService
         //取出openid
         $data = json_decode($res,true);
            $this->data = $data;
-           $openid = $data['openid'];
+           if (!isset($data['openid']))
+           {
+               $openid =Yii::$app->session['openId'];
+           }else{
+               $openid = $data['openid'];
+               Yii::$app->session['openId']=$openid;
+           }
         return $openid;
     }
 
