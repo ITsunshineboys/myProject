@@ -17,13 +17,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
         name: '分类详情',
 	}];
 
-	const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-	const picprefix = baseUrl+"/";
+	// const picprefix = baseUrl+"/";
     let pid;
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;  //分类名称正则
 	$scope.show_class_warning = false; //分类名称错误提示
@@ -34,7 +28,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
     let onlinepath = $stateParams.item.path.split(",");
 	onlinepath.splice(onlinepath.length-1,onlinepath.length);
 	$scope.finalpatharr = onlinepath;
-	$scope.iconpath = picprefix+$stateParams.item.icon; /*图片路径*/
+	$scope.iconpath = $stateParams.item.icon; /*图片路径*/
 	$scope.show_picwarning = false;
 	$scope.selectscope = $scope;
 
@@ -102,7 +96,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 				$scope.iconpath = 'pages/mall_manage/class_manage/offsale_edit/images/default.png';
 			}else{
 				$scope.show_picwarning = false;
-				$scope.iconpath = picprefix + response.data.data.file_path;
+				$scope.iconpath = response.data.data.file_path;
 				$scope.classicon = response.data.data.file_path;
 			}
 		},function (error) {
