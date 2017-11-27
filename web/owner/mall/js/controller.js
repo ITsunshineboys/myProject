@@ -462,8 +462,7 @@ angular.module('all_controller', [])
             $scope.cur_three_id = sessionStorage.getItem('materials')==null?three_level_id:item.category_id
         }
         $scope.$watch('cur_params',function (newVal,oldVal) {
-            $timeout.cancel($scope.time1)
-            $scope.time1 = $timeout(function () {
+            $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
@@ -1290,8 +1289,7 @@ angular.module('all_controller', [])
                 $('#myModal').modal('hide')
                 $scope.have_header = false
             })
-            $timeout.cancel($scope.time1)
-            $scope.time1 = $timeout(function () {
+            $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container', {
                     direction: 'horizontal',
                     loop: true,
