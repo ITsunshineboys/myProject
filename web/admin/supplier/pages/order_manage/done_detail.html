@@ -178,7 +178,7 @@
                 <span ng-bind="receive_details.invoice_content">明细</span>
             </div>
         </div>
-        <hr/>
+        <hr ng-if="show_abnormal||show_plat" />
 
         <!--异常记录-待发货-->
         <div class='order_manage' ng-if="show_abnormal&&unshipped">
@@ -211,7 +211,7 @@
                 </li>
             </ul>
         </div>
-        <hr ng-if="show_abnormal"/>
+        <!--<hr ng-if="show_abnormal"/>-->
 
         <!--评论回复-->
         <div class="order_detail" ng-if="showcomment">
