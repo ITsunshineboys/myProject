@@ -4342,7 +4342,7 @@ class OrderController extends Controller
             $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
             $baseUrl = urlencode($url);
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-            $this->redirect($urls);
+//            $this->redirect($urls);
             Header("Location: {$urls}");
         }else{
             $openid = $tools->getOpenidFromMp($code);
@@ -4537,7 +4537,6 @@ class OrderController extends Controller
             }
             $request=Yii::$app->request;
             $suppliers=$request->post('suppliers');
-            return Json::encode($suppliers);
             $total_amount=$request->post('total_amount');
             $address_id=$request->post('address_id');
             $pay_way=$request->post('pay_way');
@@ -4974,7 +4973,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-//        $request=Yii::$app->request;
         $goods=$arr['goods'];
         if (!$goods)
         {
