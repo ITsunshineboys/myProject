@@ -278,15 +278,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
 
         /*芳子------------------------------------start*/
-        // .state("fenleiguanli", {
-        //     params: {'offsale_flag': null},
-        //     url: "/fenleiguanli",
-        //     templateUrl: "pages/mall_manage/class_manage/cla_mag/cla_mag.html"
-        // })
-
-
-
-
         .state('class', { // 分类管理
             abstract: true,
             url: '/class_mag',
@@ -317,10 +308,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/offsale_edit",
             templateUrl: "pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
         })
-
-
-
-
 
         .state("add_class", {
             url: "/add_class",
@@ -392,6 +379,27 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             params: {titles: '', propattrs: '', propid: ''},
             url: "/edit_attribute",
             templateUrl: "pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
+        })
+
+        .state('account',{
+            abstract:true,
+            url:'/account_mag',
+            templateUrl:'pages/account_manage/account_mag/account.html',
+            controller:'account'
+        })
+
+        .state('account.normal',{
+            url:'/account_normal',
+            templateUrl:'pages/account_manage/account_mag/account_normal.html',
+            css: 'pages/account_manage/account_mag/css/account.css',
+            controller:'account_normal'
+        })
+
+        .state('account.closed',{
+            url:'/account_closed',
+            templateUrl:'pages/account_manage/account_mag/account_closed.html',
+            css: 'pages/account_manage/account_mag/css/account.css',
+            controller:'account_closed'
         })
         /*芳子-------------------------------------end*/
 

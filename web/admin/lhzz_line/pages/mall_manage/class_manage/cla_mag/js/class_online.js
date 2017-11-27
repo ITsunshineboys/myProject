@@ -59,11 +59,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     // 时间排序
     $scope.sortTime = function () {
-        if($scope.onsale_flag){
-            $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
-        }else {
-            $scope.params['sort[]'] = $scope.params['sort[]'] == 'offline_time:3' ? 'offline_time:4' : 'offline_time:3';
-        }
+        $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
         $scope.table.roles.length = 0;
         $scope.pageConfig.currentPage = 1;
         tableList();
@@ -75,7 +71,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         if (value == oldValue) {
             return
         }
-        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
+        $scope.params['sort[]'] = 'online_time:3';
         subClass(value);
         $scope.params.pid = value;
         tableList()
@@ -86,7 +82,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         if (value == oldValue) {
             return
         }
-        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
+        $scope.params['sort[]'] = 'online_time:3';
         if (value == oldValue) {
             return
         }

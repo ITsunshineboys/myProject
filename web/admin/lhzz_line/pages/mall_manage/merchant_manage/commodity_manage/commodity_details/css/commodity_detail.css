@@ -204,4 +204,19 @@ input{
 }
 
 
+/* 城市选择 */
+.city span + span::before {
+    content: '、'
+}
+
+div.city span:nth-child(4)::before {
+    content: ''
+}
+
+.city a {
+    margin-left: 20px;
+}
+
+
+
 
