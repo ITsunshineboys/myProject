@@ -1104,6 +1104,7 @@ class BasisDecorationService
         } else {
             $river_sand['quantity'] =  0;
             $river_sand['cost'] =  0;
+            $river_sand['procurement'] = 0;
         }
         return $river_sand;
     }
