@@ -533,7 +533,7 @@ angular.module('all_controller', [])
                     images:res.data.goods_view.images
                 }
                 $('#myModal').modal('hide')
-                $timeout(function () {
+                $q.all[($timeout(function () {
                     $scope.have_header = false
                     sessionStorage.setItem('all_status',JSON.stringify({
                         have_header:$scope.have_header,
@@ -545,7 +545,7 @@ angular.module('all_controller', [])
                         is_edit:$scope.is_edit
                     }))
                     $state.go('nodata.product_detail')
-                }, 300).then(function () {
+                }, 300))].then(function () {
                     var mySwiper = new Swiper('.swiper-container', {
                         direction: 'horizontal',
                         loop: true,
