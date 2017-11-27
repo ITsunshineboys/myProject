@@ -1751,9 +1751,12 @@ class OwnerController extends Controller
             foreach ($data as $case_works_datum) {
                 foreach ($goods as &$one_goods) {
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
-                        $one_goods['quantity']    = $case_works_datum['goods_quantity'];
-                        $one_goods['cost']        = $one_goods['quantity'] * $one_goods['platform_price'];
-                        $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
+                        $one_goods['goods_first']  = $case_works_datum['goods_first'];
+                        $one_goods['goods_second'] = $case_works_datum['goods_second'];
+                        $one_goods['goods_three']  = $case_works_datum['goods_three'];
+                        $one_goods['quantity']     = $case_works_datum['goods_quantity'];
+                        $one_goods['cost']         = $one_goods['quantity'] * $one_goods['platform_price'];
+                        $one_goods['procurement']  = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
                     }
                 }
             }
@@ -1774,13 +1777,12 @@ class OwnerController extends Controller
             if ($effect['window'] != 0){
                 $stone  = Goods::findByCategory('人造大理石');
                 foreach ($stone as &$_goods){
-//                    $substr = substr($_goods['path'],0,strlen($_goods['path'])-1);
-//                    $where ="id in (".$substr.")";
-//                    $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
-//                    $_goods['goods_first'] = $goods_category['0']['title'];
-//                    $_goods['goods_second'] = $goods_category['1']['title'];
-//                    $_goods['goods_three'] = $goods_category['2']['title'];
-//                    $_goods['goods_id'] = $_goods['id'];
+                    $substr = substr($_goods['path'],0,strlen($_goods['path'])-1);
+                    $where ="id in (".$substr.")";
+                    $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
+                    $_goods['goods_first'] = $goods_category['0']['title'];
+                    $_goods['goods_second'] = $goods_category['1']['title'];
+                    $_goods['goods_three'] = $goods_category['2']['title'];
 
                     $_goods['platform_price'] = $_goods['platform_price'] / 100;
                     $_goods['supplier_price'] = $_goods['supplier_price'] / 100;
@@ -1811,14 +1813,13 @@ class OwnerController extends Controller
 
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
-//                        $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
-//                        $where ="id in (".$substr.")";
-//                        $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
+                        $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
+                        $where ="id in (".$substr.")";
+                        $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
                         $one_stairs_price['quantity'] = 1;
-//                        $one_stairs_price['goods_first'] = $goods_category['0']['title'];
-//                        $one_stairs_price['goods_second'] = $goods_category['1']['title'];
-//                        $one_stairs_price['goods_three'] = $goods_category['2']['title'];
-//                        $one_stairs_price['goods_id'] = $one_stairs_price['id'];
+                        $one_stairs_price['goods_first'] = $goods_category['0']['title'];
+                        $one_stairs_price['goods_second'] = $goods_category['1']['title'];
+                        $one_stairs_price['goods_three'] = $goods_category['2']['title'];
                         $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
                         $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
                         unset($one_stairs_price['path']);
