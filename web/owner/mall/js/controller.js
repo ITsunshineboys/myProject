@@ -476,7 +476,7 @@ angular.module('all_controller', [])
                     // 如果需要分页器
                     pagination: '.swiper-pagination1',
                 })
-            }, 0)
+            }, 100)
         },true)
         //查看详情
         $scope.go_details = function (item) {
