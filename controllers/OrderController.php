@@ -4333,32 +4333,27 @@ class OrderController extends Controller
 
     public  function  actionRetOpenId()
     {
-        $openid=Yii::$app->session['openId'];
-        return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok',
-            'data' =>$openid
-        ]);
+        echo Yii::$app->session['openId'];exit;
     }
 
     public  function  actionTestOpenId()
     {
         $tools = new PayService();
-        $code=Yii::$app->request->get('code');
-        if (!$code)
-        {
+//        $code=Yii::$app->request->get('code');
+//        if (!$code)
+//        {
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
             $url=$http_type."ac.cdlhzz.cn/order/return-url";
             $baseUrl = urlencode($url);
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
 //            $this->redirect($urls);
             $data=file_get_contents($urls);
-            echo Yii::$app->session['openId'];exit;
+
 //            return Json::encode([ Yii::$app->session['openId']);
-        }else{
-            $openid = $tools->getOpenidFromMp($code);
-            Yii::$app->session['openId']=$openid;
-        }
+//        }else{
+//            $openid = $tools->getOpenidFromMp($code);
+//            Yii::$app->session['openId']=$openid;
+//        }
 
     }
 
