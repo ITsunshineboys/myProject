@@ -1626,6 +1626,15 @@ class OrderController extends Controller
         }
 
         $model = new  Express();
+        $waybillname=(new Express())->GetExpressName($waybillnumber);
+        if (!$waybillname)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '快递单号错误',
+            ]);
+        }
         $res = $model->Expressadd($sku, $waybillname, $waybillnumber, $order_no);
         if ($res) {
             return Json::encode([
@@ -1664,7 +1673,11 @@ class OrderController extends Controller
         $waybillname=(new Express())->GetExpressName($waybillnumber);
         if (!$waybillname)
         {
-            $waybillname='未知快递';
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '快递单号错误',
+            ]);
         }
 
         $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
@@ -4359,7 +4372,7 @@ class OrderController extends Controller
             $baseUrl = urlencode($url);
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
 //            $this->redirect($urls);
-           header("Location: {$urls}");
+            header("Location: {$urls}");
 
 //            return Json::encode([ Yii::$app->session['openId']);
 //        }else{
