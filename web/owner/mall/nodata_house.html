@@ -8,7 +8,7 @@
                 <span class="sub_title pull-left">小区选择</span>
                 <a class="pull-left input_box" ng-click="go_search()">
                     <img src="images/mall_searchbar.png" alt="">
-                    <input type="text" name="toponymy" id="toponymy" required placeholder="请输入小区"
+                    <input type="text" ng-change="recalculate()" name="toponymy" id="toponymy" required placeholder="请输入小区"
                            ng-blur="change1=area_news.toponymy.$invalid" class="seach" ng-model="ctrlScope.toponymy"/><br/>
                     <p class="error_tips" ng-if="area_news.toponymy.$invalid&&(submitted||change1)">请输入小区名称</p>
                 </a>
@@ -16,7 +16,7 @@
             <div class="list_box clearfix">
                 <span class="sub_title pull-left">小区地址</span>
                 <div class="right_box pull-left">
-                    <textarea class="text_all" required rows="3" id="message" name="message" cols="44" placeholder="例：金牛区沙西线66号"
+                    <textarea class="text_all" ng-change="recalculate()" required rows="3" id="message" name="message" cols="44" placeholder="例：金牛区沙西线66号"
                               ng-model="ctrlScope.message" maxlength="45" ng-blur="change2=area_news.message.$invalid">
                     </textarea>
                     <span class="text_all_length">{{message.length}}/45</span>
@@ -34,7 +34,7 @@
                 <div class="list_box clearfix">
                     <span class="sub_title pull-left">房屋面积</span>
                     <div class="pull-left input_box">
-                        <input type="text"   required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
+                        <input type="text" ng-change="recalculate()"  required placeholder="请输入1-180的面积" id="area" name="area" style="color: #4a4a4a;" maxlength="8"
                                ng-pattern="/^[1-9]\d{0,1}\.\d{1,2}$|^[1-9]\d{0,1}$|^1[0-7]\d\.\d{1,2}$|^1[0-7]\d$|^180$/" ng-blur="change3=area_news.area.$invalid"
                                ng-model="ctrlScope.area"/>
 
@@ -50,7 +50,7 @@
                 <div>
                     <ul class="apartment_ul">
                         <li>
-                            <input type="text" ng-model="ctrlScope.house_bedroom" class="val_input" readonly="readonly"/>
+                            <input type="text" ng-change="recalculate()" ng-model="ctrlScope.house_bedroom" class="val_input" readonly="readonly"/>
                             <span>室</span>
                             <i class="icon icon-check-minus btn_left reduce_a icon-5x"
                                ng-click="operate('house_bedroom',0,1)"></i>
@@ -58,7 +58,7 @@
                                ng-click="operate('house_bedroom',1,6)"></i>
                         </li>
                         <li>
-                            <input type="text" ng-model="ctrlScope.house_hall" class="val_input_b" readonly="readonly"/>
+                            <input type="text" ng-change="recalculate()" ng-model="ctrlScope.house_hall" class="val_input_b" readonly="readonly"/>
                             <span>厅</span>
                             <i class="icon icon-check-minus btn_left reduce_b icon-5x"
                                ng-click="operate('house_hall',0,1)"></i>
@@ -66,7 +66,7 @@
                                ng-click="operate('house_hall',1,3)"></i>
                         </li>
                         <li>
-                            <input type="text" ng-model="ctrlScope.house_toilet" class="val_input_c" readonly="readonly"/>
+                            <input type="text" ng-change="recalculate()" ng-model="ctrlScope.house_toilet" class="val_input_c" readonly="readonly"/>
                             <span>卫</span>
 
                             <i class="icon icon-check-minus btn_left reduce_c icon-5x"
@@ -75,7 +75,7 @@
                                ng-click="operate('house_toilet',1,4)"></i>
                         </li>
                         <li>
-                            <input type="text" ng-model="ctrlScope.house_kitchen" class="val_input_d" readonly="readonly"/>
+                            <input type="text" ng-change="recalculate()" ng-model="ctrlScope.house_kitchen" class="val_input_d" readonly="readonly"/>
                             <span>厨</span>
                             <i class="icon icon-check-minus btn_left reduce_d icon-5x"
                                ng-click="operate('house_kitchen',0,1)"></i>
@@ -92,7 +92,7 @@
                 <span class="sub_title">层高</span>
                 <ul class="storey_ul">
                     <li>
-                        <label ng-click="ctrlScope.highCrtl=2.8">
+                        <label ng-click="recalculate('highCrtl',2.8)">
                             <input type="radio" name="test" ng-checked="ctrlScope.highCrtl==2.8"/>
                             <span></span>
                             <span class="storey_txt">2.8m</span>
@@ -100,7 +100,7 @@
                         </label>
                     </li>
                     <li>
-                        <label ng-click="ctrlScope.highCrtl=3">
+                        <label ng-click="recalculate('highCrtl',3)">
                             <input type="radio" name="test" ng-checked="ctrlScope.highCrtl==3"/>
                             <span></span>
                             <span class="storey_txt">3m</span>
@@ -108,7 +108,7 @@
                         </label>
                     </li>
                     <li>
-                        <label ng-click="ctrlScope.highCrtl=3.3">
+                        <label ng-click="recalculate('highCrtl',3.3)">
                             <input type="radio" name="test" ng-checked="ctrlScope.highCrtl==3.3"/>
                             <span></span>
                             <span class="storey_txt">3.3m</span>
@@ -116,7 +116,7 @@
                         </label>
                     </li>
                     <li>
-                        <label ng-click="ctrlScope.highCrtl=4.5">
+                        <label ng-click="recalculate('highCrtl',4.5)">
                             <input type="radio" name="test" ng-checked="ctrlScope.highCrtl==4.5"/>
                             <span></span>
                             <span class="storey_txt"> >4.5m</span>
@@ -131,7 +131,7 @@
             <div class="line"></div>
             <div class="bay_window">
                 <span class="bay_span">飘窗</span>
-                <input type="text" required placeholder="0" id="window" name="window" ng-pattern="/^\d{1}(\.\d{1,2})?$|^[1]\d{1}(\.\d{1,2})?$|^20$/"
+                <input type="text" ng-change="recalculate()" required placeholder="0" id="window" name="window" ng-pattern="/^\d{1}(\.\d{1,2})?$|^[1]\d{1}(\.\d{1,2})?$|^20$/"
                        ng-blur="change4=area_news.window.$invalid" class="input_windin" maxlength="6"
                        ng-model="ctrlScope.window"/>
                 <span class="bay_square">m</span>
@@ -143,13 +143,13 @@
             <div class="line"></div>
             <div class="choose_stairs">
                 <span class="choose_span">楼梯选择</span>
-                <label ng-click="ctrlScope.choose_stairs = 1;ctrlScope.nowStairs = stairs_details[0]">
+                <label ng-click="ctrlScope.nowStairs = stairs_details[0];recalculate('choose_stairs',1)">
                     <input type="radio" ng-checked="ctrlScope.choose_stairs==1" name="have_stairs"/>
                     <span></span>
                     <span class="have">有</span>
                     <img id='img_size_1' ng-if="ctrlScope.choose_stairs==1" src="images/mall_list_radio.png" alt=""/>
                 </label>
-                <label ng-click="ctrlScope.choose_stairs = 0;ctrlScope.nowStairs = {'id': 0, 'attribute': ''}">
+                <label ng-click="recalculate('choose_stairs',0);ctrlScope.nowStairs = {'id': 0, 'attribute': ''}">
                     <input type="radio" ng-checked="ctrlScope.choose_stairs == 0" name="have_stairs"/>
                     <span></span>
                     <span class="no">无</span>
@@ -160,7 +160,7 @@
             <!--结构-->
             <div class="structure" ng-show="ctrlScope.choose_stairs == 1">
                 <ul>
-                    <li ng-repeat="item in stairs_details" ng-click="toggleStairs(item)">
+                    <li ng-repeat="item in stairs_details" ng-click="recalculate('nowStairs',item)">
                         <label ng-click="">
                             <input type="radio" name="stairs" ng-checked="nowStairs.id === item.id"/>
                             <span></span>
@@ -178,7 +178,7 @@
                 <div class="shu"></div>
                 <div class="title">系列选择</div>
                 <ul>
-                    <li ng-repeat="item in series" ng-cloak ng-click="toggleSeries(item)">
+                    <li ng-repeat="item in series" ng-cloak ng-click="recalculate('cur_series',item)">
                         <label>
                             <input type="radio" name="series" ng-checked="cur_series.id === item.id">
                             <span></span>
@@ -202,7 +202,7 @@
                 <ul>
                     <li ng-repeat="item in style">
                         <button type="button" ng-cloak ng-class="{'btn_checked':cur_style.id === item.id}"
-                                ng-click="toggleStyle(item)">{{item.style}}
+                                ng-click="recalculate('cur_style',item)">{{item.style}}
                         </button>
                     </li>
                 </ul>
@@ -223,7 +223,7 @@
             <div class="note">
                 <ul>
                     <li ng-repeat="item in cur_style.theme.split(',')">
-                        <button ng-cloak>{{item}}</button>
+                        <button type="button" ng-cloak>{{item}}</button>
                     </li>
                 </ul>
             </div>
@@ -271,7 +271,7 @@
                                     </div>
                                 </ul>
                                 <p ng-if="item.cost == 0">
-                                    <button style="font-size: 28px;padding: 1.02rem 3.91rem;background: none;border: 2px dashed #E5E5E5;border-radius: 2rem;color: #53A7F3;">点击编辑</button>
+                                    <button type="button" style="font-size: 28px;padding: 1.02rem 3.91rem;background: none;border: 2px dashed #E5E5E5;border-radius: 2rem;color: #53A7F3;">点击编辑</button>
                                 </p>
                             </div>
                         </div>

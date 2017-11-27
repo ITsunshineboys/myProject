@@ -404,3 +404,8 @@ a:hover{
     display: inline-block;
     border: none;
 }
+.no_data{
+    text-align: center;
+    font-size:40px;
+    line-height: 6rem;
+}

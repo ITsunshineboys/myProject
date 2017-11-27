@@ -1,7 +1,7 @@
 <div ng-controller="nodata_ctrl" class="back">
     <header ng-if="have_header">
         <div>
-            <a class="return_btn" ng-click="returnPrev()">
+            <a class="return_btn" ng-click="returnPrev()" ng-if="!is_delete_btn">
                 <img src="images/mall_nav_return.png" class="in_span">
             </a>
             <p class="pic_span" style="text-align: center;">{{ctrlScope.cur_header}}</p>
