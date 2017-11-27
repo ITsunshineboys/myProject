@@ -153,7 +153,7 @@
             </div>
 
             <!--留言-->
-            <div class="phonenum">
+            <div class="phonenum" ng-if="receive_details.buyer_message">
                 <span>留言</span>
                 <span ng-bind="receive_details.buyer_message"></span>
             </div>
@@ -182,7 +182,7 @@
                 <span ng-bind="receive_details.invoice_content" ui-sref="done_detail">明细</span>
             </div>
         </div>
-        <hr/>
+        <hr ng-if="show_abnormal||show_plat" />
 
         <!--异常记录-待发货-->
         <div class='order_manage' ng-if="show_abnormal&&unshipped">
@@ -199,8 +199,7 @@
             </ul>
         </div>
 
-<!--待收货显示-->
-        <!--异常记录待收货-->
+        <!--异常记录-待收货-->
         <div class='order_manage abnormal' ng-if="show_abnormal&&unreceived">
             <h3 class="abnormal_title">异常记录-待收货</h3>
             <span class="glyphicon glyphicon-chevron-down arrows" ng-show="receive"
@@ -216,7 +215,7 @@
                 </li>
             </ul>
         </div>
-        <hr ng-if="show_abnormal||show_plat"/>
+        <hr ng-if="show_abnormal"/>
 
         <!--平台介入-->
         <div class='order_manage abnormal' ng-if="show_plat">

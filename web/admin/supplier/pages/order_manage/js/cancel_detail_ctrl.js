@@ -4,7 +4,6 @@
 let cancel_detail = angular.module("cancel_detailModule", []);
 cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _ajax, $stateParams) {
     $scope.tabflag = $stateParams.tabflag; //页面跳转
-    console.log($scope.tabflag+'页面跳转flag');
     $scope.send = true;
     $scope.receive = true;
     $scope.plat_send = true;
