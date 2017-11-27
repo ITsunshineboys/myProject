@@ -1100,7 +1100,7 @@ class BasisDecorationService
             $river_sand['quantity'] =  ceil($river_sand_dosage / $value);
 //              河沙费用：个数×抓取的商品价格
             $river_sand['cost'] =   round($river_sand['quantity'] * $goods['platform_price'],2);
-            $river_sand['procurement'] =   round($river_sand['quantity'] * $goods['platform_price'],2);
+            $river_sand['procurement'] =   round($river_sand['quantity'] * $goods['purchase_price_decoration_company'],2);
         } else {
             $river_sand['quantity'] =  0;
             $river_sand['cost'] =  0;
