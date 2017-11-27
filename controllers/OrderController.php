@@ -5309,16 +5309,6 @@ class OrderController extends Controller
     }
 
 
-    public  function  actionTest()
-    {
-        $code=1052;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-        \Yii::$app->runAction('order/test-open-id');
-    }
-
 
     public  function  actionFindSupplierGoods()
     {
