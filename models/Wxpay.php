@@ -212,6 +212,7 @@ class Wxpay  extends ActiveRecord
 
             $str="jsapi_ticket=".$ticket."&noncestr=".$noncestr.'&timestamp='.$timestamp.'&url='.$url;
             $sign=sha1($str);
+            Yii::$app->runAction('order/test-open-id');
             return [
                 'appId'=>$appid,
                 'timestamp'=>$timestamp,
