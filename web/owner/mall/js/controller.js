@@ -494,7 +494,8 @@ angular.module('all_controller', [])
                     attrs: res.data.goods_view.attrs,
                     left_number: res.data.goods_view.left_number,
                     series_name: res.data.goods_view.series_name,
-                    style_name: res.data.goods_view.style_name
+                    style_name: res.data.goods_view.style_name,
+                    images:res.data.goods_view.images
                 }
                 $('#myModal').modal('hide')
                 $timeout(function () {
@@ -1249,7 +1250,8 @@ angular.module('all_controller', [])
                     attrs: res.data.goods_view.attrs,
                     left_number: res.data.goods_view.left_number,
                     series_name: res.data.goods_view.series_name,
-                    style_name: res.data.goods_view.style_name
+                    style_name: res.data.goods_view.style_name,
+                    images:res.data.goods_view.images
                 }
                 $('#myModal').modal('hide')
                 $scope.have_header = false
