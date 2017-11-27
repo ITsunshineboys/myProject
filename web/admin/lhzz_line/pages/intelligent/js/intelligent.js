@@ -3812,7 +3812,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 all_area_range: []
                             }]
                         } else {
-                            $scope.cur_area_rangge = [{
+                            $scope.cur_area_range = [{
                                 title: '其他防水面积',
                                 all_area_range: []
                             }]
