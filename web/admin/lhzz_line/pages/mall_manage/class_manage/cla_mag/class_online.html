@@ -82,7 +82,7 @@
                         下架操作
                     </h4>
                 </div>
-                <div class="modal-body" id="piliangxiajia_body">
+                <div class="modal-body" id="piliangxiajia_body" ng-if="table.roles.length">
                     <h6 id="piliangxiajia_fenlei">下架
                         {{table.roles.length}}个分类
                     </h6>
@@ -91,9 +91,19 @@
                               placeholder="请填写下架原因，如选择多个则为批量备注" ng-model="batchoffline_reason"></textarea>
                 </div>
 
-                <div class="btn_modal">
+                <div class="modal-body" id="piliangxiajia_body" ng-if="!table.roles.length">
+                    <h6 id="piliangxiajia_fenlei">请至少选择一个分类</h6>
+                </div>
+
+
+
+                <div class="btn_modal" ng-if="table.roles.length">
                     <button id="piliang_cancel" data-dismiss="modal" ng-click="cancelBatchOffline()">取消</button>
                     <button id="piliang_sure" data-dismiss="modal" ng-click="sureBatchOffline()">确认</button>
+                </div>
+
+                <div class="btn_modal" ng-if="!table.roles.length">
+                    <button id="piliang_sure" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>

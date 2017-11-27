@@ -84,13 +84,21 @@
                         提示
                     </h4>
                 </div>
-                <div class="modal-body" id="sjcaozuo_body">
+                <div class="modal-body" id="sjcaozuo_body" ng-if="table.roles.length">
                     <h6>上架{{table.roles.length}}个分类，是否确认上架</h6>
                 </div>
 
-                <div class="btn_modal_two">
+                <div class="modal-body" id="sjcaozuo_body" ng-if="!table.roles.length">
+                    <h6>请至少选择一个分类</h6>
+                </div>
+
+                <div class="btn_modal_two" ng-if="table.roles.length">
                     <button data-dismiss="modal" id="sjcaozuo_cancel" ng-click="cancelplliangonline()">取消</button>
                     <button data-dismiss="modal" id="sjcaozuo_sure" ng-click="surepiliangonline()">确认</button>
+                </div>
+
+                <div class="btn_modal_two" ng-if="!table.roles.length">
+                    <button data-dismiss="modal" id="sjcaozuo_sure">确认</button>
                 </div>
             </div>
         </div>
