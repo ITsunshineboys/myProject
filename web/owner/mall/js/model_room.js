@@ -106,14 +106,13 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     let huxingFlag = true;
     $scope.huxingFun = function (obj) {
         let openId = sessionStorage.getItem("openId"),
-            materials_bak = sessionStorage.getItem("materials_bak");
-        if (openId !== null) {
+            materials_bak = sessionStorage.getItem("materials_bak"),
+            huxingParams = sessionStorage.getItem("huxingParams");
+        if (openId !== null || materials_bak !== null || huxingParams !== null) {
             sessionStorage.clear();
             sessionStorage.setItem("openId", openId);
-        }
-        if (materials_bak !== null) {
-            sessionStorage.clear();
             sessionStorage.setItem("materials_bak", materials_bak);
+            sessionStorage.setItem("huxingParams", huxingParams);
         }
         $scope.activeObj = angular.copy(obj);
         params.particulars = obj.particulars;
