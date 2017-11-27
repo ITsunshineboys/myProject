@@ -1,44 +1,55 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/add_style/css/add_style.css">
 <div ng-controller="add_style">
-    <div class="add_series">
-        <form name="form" novalidate>
+        <form class="form-horizontal" name="form" novalidate>
             <!--系列名称-->
-        <div class="series_name">
-            <span class="glyphicon glyphicon-asterisk red_mark" ></span>
-            <span>风格名称</span>
-            <input name="style_name" required ng-class="{'border_red':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error" maxlength=10 type="text" placeholder="请输入风格名称" ng-model="style_name" >
-            <span id="limitword">*限1~10个字符</span>
-            <p class="red_mark" ng-show="name_flag">
+        <div class="row">
+            <div class="col-sm-2 control-label">
+              <span class="glyphicon glyphicon-asterisk red_mark" ></span>
+              <span>风格名称</span>
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control" name="style_name" maxlength=10  placeholder="请输入风格名称" ng-model="style_name"  required ng-class="{'border_red':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error">
+              <p class="red_mark" ng-show="name_flag">
                 <span class="glyphicon glyphicon-asterisk"></span>
                 该风格名称已存在，请重新填写
-            </p>
+              </p>
+            </div>
+          <div class="col-sm-8">
+            <span class="img_txt">*限1~10个字符</span>
+          </div>
         </div>
 
         <!--系列标签-->
-        <div class="series_tag">
+        <div class="row series_tag">
+          <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark" ></span>
             <span>系列标签</span>
+          </div>
+          <div class="col-sm-10 control-label">
             <img ng-click="label_add()" ng-class="{'add_vis':style_label_arr.length>=9}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="">
             <ul class="tags">
-                <li ng-repeat="item in style_label_arr track by $index">
-                    <input ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required && submitted)}" type="text" maxlength="4" placeholder="请输入标签">
-                    <img ng-if="style_label_arr.length!=1" ng-click="close_label($index)" src="pages/mall_manage/style_manage/add_style/image/close.png" class="closetag">
-                </li>
-                <span>*限1~4个字符,最多9个标签</span>
+              <li ng-repeat="item in style_label_arr track by $index">
+                <input class="form-control" ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required && submitted)}" type="text" maxlength="4" placeholder="请输入标签">
+                <img class="closetag" ng-if="style_label_arr.length!=1" ng-click="close_label($index)" src="pages/mall_manage/style_manage/add_style/image/close.png">
+              </li>
             </ul>
+            <span class="img_txt">*限1~4个字符,最多9个标签</span>
+           </div>
         </div>
 
         <!--风格效果图-->
-        <div class="brand_register brand_logo">
+        <div class="row">
+          <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格效果图</span>
-            <div class="pic_right">
+          </div>
+            <div class="col-sm-10 control-label pic_right">
                 <div class="img_list" ng-repeat="item in upload_img_arr">
                     <img ng-src="{{ item}}" class="logo">
                     <div class="img_times" ng-click="del_img(item)">&times;</div>
                 </div>
                 <img ng-if="upload_img_arr.length!=3" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/mall_manage/style_manage/add_style/image/plus.png" alt="" id="logo">
-                <p>图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
+                <p class="img_txt more_txt" >图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
                 <p class="red_mark warning" ng-if="!!img_flag">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     {{img_flag}}
@@ -47,21 +58,25 @@
         </div>
 
         <!--系列介绍-->
-        <div class="series_intro">
+        <div class="row series_intro">
+          <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark" ></span>
             <span>风格介绍</span>
-            <textarea name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_intro"></textarea>
+          </div>
+          <div class="col-sm-10 control-label">
+            <textarea class="form-control" name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_intro"></textarea>
             <span class="word_num">{{style_intro.length}}/70</span>
+          </div>
         </div>
 
         <!--按钮-->
-        <div class="btn_sure">
+        <div class="row">
+          <div class="col-sm-12 btn_top btn_fix">
             <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="add_style_ok(form.$valid)">确认</button>
             <button class="btn btn-default btn_left" ui-sref="style_index({showstyle:true})">返回</button>
+          </div>
         </div>
         </form>
-    </div>
-
     <!--确认提示框-->
     <div class="modal fade" id="{{sur_id}}" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
