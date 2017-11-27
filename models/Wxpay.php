@@ -103,11 +103,11 @@ class Wxpay  extends ActiveRecord
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
             self::curl($urls,false,0);
             $openid =Yii::$app->session['openId'];
-            if (!$openid)
-            {
-                $code=1000;
-                return $code;
-            }
+//            if (!$openid)
+//            {
+//                $code=1000;
+//                return $code;
+//            }
             $attach=$id;
             $total_amount=0.01;
             $input->SetBody(self::EFFECT_BODY);
