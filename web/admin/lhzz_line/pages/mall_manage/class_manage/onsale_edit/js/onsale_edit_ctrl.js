@@ -16,7 +16,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
         name: '分类详情'
     }];
 
-	const picprefix = baseUrl+"/";
+	// const picprefix = baseUrl+"/";
     let pid;
     let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;
 	$scope.changescope = $scope;
@@ -26,7 +26,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
     $scope.firstclass = []; /*一级下拉框*/
     $scope.subClass = [];/*二级下拉框*/
     $scope.item =  $stateParams.item;
-	$scope.iconpath = picprefix+$stateParams.item.icon; /*图片路径*/
+	$scope.iconpath = $stateParams.item.icon; /*图片路径*/
 	$scope.savemodal = '';
 	//分类路径处理
 	let onlinepath = $stateParams.item.path.split(",");
@@ -98,7 +98,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 					$scope.iconpath = 'pages/mall_manage/class_manage/onsale_edit/images/default.png';
 			}else{
 				$scope.picwarning = false;
-				$scope.iconpath = picprefix + response.data.data.file_path;
+				$scope.iconpath = response.data.data.file_path;
 				$scope.classicon = response.data.data.file_path;
 			}
 		},function (error) {
