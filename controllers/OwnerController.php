@@ -1387,6 +1387,7 @@ class OwnerController extends Controller
                     $river_sand_cost = BasisDecorationService::riverSandCost($post, $max, $craft, $goods_attr);
                     $max['quantity'] = $river_sand_cost['quantity'];
                     $max['cost'] = $river_sand_cost['cost'];
+                    $max['procurement'] = $river_sand_cost['procurement'];
                     $river_sand[] = $max;
                     break;
             }
