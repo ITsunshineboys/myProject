@@ -20,11 +20,14 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wxConfig($scope.wxShareUrl);
             });
             $rootScope.isWxOpen = true;
-            if (localStorage.getItem("openId") === null) {
+            _ajax.post('/order/test-open-id', {}, function (res) {
+                // location.href = res.data
+            });
+            /*if (localStorage.getItem("openId") === null) {
                 if (getUrlParams('code') === "") {
                     let url = location.href;
                     _ajax.post('/order/find-open-id', {url: url}, function (res) {
-                        location.href = res.data
+                        // location.href = res.data
                     })
                 } else {
                     let code = getUrlParams('code');
@@ -33,7 +36,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                         localStorage.setItem('openId', openId);
                     })
                 }
-            }
+            }*/
         }
     });
 }]);

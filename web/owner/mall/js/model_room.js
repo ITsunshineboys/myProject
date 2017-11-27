@@ -341,15 +341,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             if (sessionStorage.getItem("materials") === null) {
                 $scope.roomPicture = data.images.effect_images;
                 sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
-
-                /*$timeout(function () {
-                    let mySwiper = new Swiper("#swiperList", {
-                        autoplay: 3000,
-                        loop: true,
-                        pagination: ".swiper-pagination"
-                    });
-                });*/
-
                 let materials = data.goods;     // 材料信息
                 let worker = data.worker_data;  // 工人信息
                 sessionStorage.setItem("worker", JSON.stringify(worker));
@@ -375,7 +366,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                         procurement: obj.procurement
                     };
                     let tempFreight = {
-                        goods_id: obj.goods_id,
+                        goods_id: obj.id,
                         num: obj.quantity
                     };
                     params.list.push(tempObj);
@@ -389,15 +380,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 }
             } else {
                 $scope.roomPicture = JSON.parse(sessionStorage.getItem("roomPicture"));
-
-                /*$timeout(function () {
-                    let mySwiper = new Swiper("#swiperList", {
-                        autoplay: 3000,
-                        loop: true,
-                        pagination: ".swiper-pagination"
-                    });
-                });*/
-
                 $scope.materials = JSON.parse(sessionStorage.getItem("materials"));
                 for (let material of $scope.materials) {
                     material.second_level = [];
@@ -439,7 +421,12 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             }
 
             $timeout(function () {
-                let mySwiper = new Swiper("#swiperList", {
+                let mySwiper;
+                console.log(mySwiper);
+                if (mySwiper !== undefined) {
+                    mySwiper.destroy();
+                }
+                mySwiper = new Swiper("#swiperList", {
                     autoplay: 3000,
                     loop: true,
                     pagination: ".swiper-pagination"
