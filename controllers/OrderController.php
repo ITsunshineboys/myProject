@@ -4337,6 +4337,17 @@ class OrderController extends Controller
         echo Yii::$app->session['openId'];exit;
     }
 
+    public  function  actionTestOpenId2()
+    {
+        $tools = new PayService();
+        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+        $url=$http_type."ac.cdlhzz.cn/order/return-url";
+        $baseUrl = urlencode($url);
+        $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
+        StringService::writeLog('test', $urls, 'wx');
+        file_get_contents($urls);
+    }
+
     public  function  actionTestOpenId()
     {
         $tools = new PayService();
