@@ -1454,16 +1454,20 @@ class OrderController extends Controller
             $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']);
             $receive_details['region']=$order_information['region'];
             $receive_details['invoice_header']=$order_information['invoice_header'];
-            $receive_details['invoice_header_type']=$order_information['invoice_header_type'];
+            //此处有更改  输出发票抬头类型为发票类型
+            $receive_details['invoice_header_type']=$order_information['invoice_type'];
             $receive_details['invoice_content']=$order_information['invoice_content'];
             $receive_details['invoicer_card'] = $order_information['invoicer_card'];
             $receive_details['buyer_message'] = $order_information['buyer_message'];
             switch ($order_information['invoice_header_type']){
                 case 1:
-                    $receive_details['invoice_header_type']='个人';
+                    $receive_details['invoice_header_type']='普通发票';
                     break;
                 case 2:
-                    $receive_details['invoice_header_type']='公司';
+                    $receive_details['invoice_header_type']='电子发票';
+                    break;
+                case 3:
+                    $receive_details['invoice_header_type']='普通增值税发票';
                     break;
             }
             $goods_data=array();
