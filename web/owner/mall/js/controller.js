@@ -544,6 +544,8 @@ angular.module('all_controller', [])
                         is_city:$scope.is_city,
                         is_edit:$scope.is_edit
                     }))
+                    $state.go('nodata.product_detail')
+                }, 300).then(function () {
                     var mySwiper = new Swiper('.swiper-container', {
                         direction: 'horizontal',
                         loop: true,
@@ -556,23 +558,7 @@ angular.module('all_controller', [])
                         // 如果需要分页器
                         pagination: '.swiper-pagination',
                     })
-                    // $timeout.cancel($scope.time)
-                    // $scope.time = $timeout(function () {
-                    //     var mySwiper = new Swiper('.swiper-container', {
-                    //         direction: 'horizontal',
-                    //         loop: true,
-                    //         autoplay: 1000,
-                    //         autoplayDisableOnInteraction: false,
-                    //         observer:true,
-                    //         observeParents:true,
-                    //         effect: 'slide',
-                    //
-                    //         // 如果需要分页器
-                    //         pagination: '.swiper-pagination',
-                    //     })
-                    // }, 0)
-                    $state.go('nodata.product_detail')
-                }, 300)
+                })
             })
         }
         if($rootScope.curState_name == 'nodata.product_detail'){
