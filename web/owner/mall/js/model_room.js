@@ -236,7 +236,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                             };
                             if (goods.goods_first === "辅材") {
                                 tempLevel = {
-                                    id: goods.effect_id,
+                                    id: goods.id,
                                     title: goods.goods_three,
                                     goods_detail: []
                                 }
