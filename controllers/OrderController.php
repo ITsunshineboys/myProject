@@ -4332,6 +4332,8 @@ class OrderController extends Controller
              $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
              $this->redirect($urls);
 //             Header("Location: {$urls}");
+             echo $urls;die;
+             Header("Location: {$urls}");
          }else{
              $openid = $tools->getOpenidFromMp($code);
              $code=200;
