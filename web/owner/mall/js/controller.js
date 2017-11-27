@@ -2470,7 +2470,7 @@ angular.module('all_controller', [])
                                         if (!!sessionStorage.getItem('materials')) {
                                             console.log(value3)
                                             console.log(value4)
-                                            if (value4.id == value3.goods_id) {
+                                            if (value4.id == value3.id) {
                                                 value3.quantity -= value4.quantity
                                                 value3.cost -= value4.cost
                                                 value1.cost -= value4.cost
