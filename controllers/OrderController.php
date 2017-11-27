@@ -5308,13 +5308,11 @@ class OrderController extends Controller
     }
 
 
-//    public  function  actionTest()
-//    {
-////        session_id(Yii::$app->session->id);
-////    var_dump(Yii::$app->session['id']);exit;
-////        Yii::$app->session['id']=1;
-////     var_dump() ;
-//    }
+    public  function  actionTest()
+    {
+        Yii::$app->runAction('order/test-open-id');
+        echo 1;
+    }
 
 
     public  function  actionFindSupplierGoods()
