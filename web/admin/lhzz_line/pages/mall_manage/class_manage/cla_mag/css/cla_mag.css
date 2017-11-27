@@ -1,18 +1,13 @@
-.clickstyle{
-    color: #4094F6;
-    border-bottom: 1px solid #4094F6;
-}
-
-.cla_mag_btngroup button{
+/*按钮组样式补充*/
+.class-choose{
     margin-right: 15px;
 }
 
-.cla_mag_btngroup .fenleichoose_span{
-    margin-right: 10px;
-    font-size: 12px;
-    color: #666F80;
+button{
+    margin-right: 15px;
 }
 
+/*表格样式*/
 table{
     margin-top: 40px;
 }
@@ -30,38 +25,21 @@ input[type="checkbox"]{
     padding: 0px!important;
 }
 
-.yesGreen{
+/*状态字段*/
+.class-state{
     color: #92C661!important;
 }
-.noRed{
-    color:#E6594D!important;
-}
 
-.onsale_table .edit{
+/*编辑字段*/
+table .edit{
     color: #5677FC;
     cursor: pointer;
 }
 
-.onsale_table .xiajia{
+/*操作字段*/
+table .handle{
     color: #5677FC;
     cursor: pointer;
-}
-
-/*排序按钮样式*/
-table .sortpic {
-    display: inline-block;
-    margin-top: -4px;
-    vertical-align: middle;
-}
-
-table .sortpic i{
-    display: block;
-    font-size: 12px;
-    color: #ababab;
-}
-
-table .sortpic .glyphicon-triangle-bottom {
-    margin-top: -4px;
 }
 
 /*模态框*/
@@ -165,7 +143,7 @@ textarea{
     font-size: 15px;
     font-weight: 400;
 }
-.yesred{
+.off-state{
     color:red!important;
 }
 
