@@ -544,11 +544,11 @@ angular.module('all_controller', [])
                         is_city:$scope.is_city,
                         is_edit:$scope.is_edit
                     }))
-                    $state.go('nodata.product_detail',{num:1})
+                    $state.go('nodata.product_detail')
                 }, 300)
             })
         }
-        if($rootScope.curState_name == 'nodata.product_detail'||$stateParams.num == 1){
+        if($rootScope.curState_name == 'nodata.product_detail'){
             var mySwiper = new Swiper('.swiper-container', {
                 direction: 'horizontal',
                 loop: true,
@@ -2705,7 +2705,7 @@ angular.module('all_controller', [])
                                             } else {
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
                                                     if (sessionStorage.getItem('materials')!=null) {
-                                                        if (value3.id == value4.goods_id) {
+                                                        if (value3.id == value4.id) {
                                                             value4.cost += value3.cost
                                                             value4.procurement += value3.procurement
                                                             value4.quantity += value3.quantity
