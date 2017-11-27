@@ -100,14 +100,14 @@ class Wxpay  extends ActiveRecord
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
             $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
             $baseUrl = urlencode($url);
-            $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-            self::curl($urls,false,0);
+//            $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
+//            header($urls);
             $openid =Yii::$app->session['openId'];
-//            if (!$openid)
-//            {
-//                $code=1000;
-//                return $code;
-//            }
+            if (!$openid)
+            {
+                $code=1000;
+                return $code;
+            }
             $attach=$id;
             $total_amount=0.01;
             $input->SetBody(self::EFFECT_BODY);
