@@ -1750,8 +1750,9 @@ class OwnerController extends Controller
                 foreach ($goods as $one_goods) {
 
                     if ($one_goods['sku'] == $case_works_datum['goods_code']) {
+                        unset($case_works_datum['id']);
                         $cost                                      = $one_goods['platform_price'];
-                        $case_works_datum['goods_id']              = $one_goods['id'];
+                        $case_works_datum['id']              = $one_goods['id'];
 //                        $case_works_datum['logistics_template_id'] = $one_goods['logistics_template_id'];
                         $case_works_datum['cost']                  = round($cost * $case_works_datum['goods_quantity'],2);
                         $case_works_datum['name']                  = $one_goods['name'];
