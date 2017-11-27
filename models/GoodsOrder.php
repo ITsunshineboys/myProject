@@ -1024,13 +1024,13 @@ class GoodsOrder extends ActiveRecord
      * @return array
      */
     public  static function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
-        $goods=array();
+        $goods=[];
         $goods['goods_name']=$goods_name;
         $goods['goods_id']=$goods_id;
         $attr_id=explode(',',$goods_attr_id);
         $goods['attr']=[];
         foreach($attr_id AS $key =>$val){
-            $goods['attr'][]=GoodsAttr::find()
+            $goods['attr'][]=(object)GoodsAttr::find()
                 ->select('name,value,unit')
                 ->where(['goods_id'=>$goods['goods_id']])
                 ->all();
