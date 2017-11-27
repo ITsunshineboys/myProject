@@ -544,6 +544,21 @@ angular.module('all_controller', [])
                         is_city:$scope.is_city,
                         is_edit:$scope.is_edit
                     }))
+                    $timeout.cancel($scope.time)
+                    $scope.time = $timeout(function () {
+                        var mySwiper = new Swiper('.swiper-container', {
+                            direction: 'horizontal',
+                            loop: true,
+                            autoplay: 1000,
+                            autoplayDisableOnInteraction: false,
+                            observer:true,
+                            observeParents:true,
+                            effect: 'slide',
+
+                            // 如果需要分页器
+                            pagination: '.swiper-pagination',
+                        })
+                    }, 0)
                     $state.go('nodata.product_detail')
                 }, 300)
             })
@@ -1290,21 +1305,21 @@ angular.module('all_controller', [])
                 }
                 $('#myModal').modal('hide')
                 $scope.have_header = false
-            })
-            $timeout(function () {
-                var mySwiper = new Swiper('.swiper-container', {
-                    direction: 'horizontal',
-                    loop: true,
-                    autoplay: 1000,
-                    autoplayDisableOnInteraction: false,
-                    observer:true,
-                    observeParents:true,
-                    effect: 'slide',
+                $timeout(function () {
+                    var mySwiper = new Swiper('.swiper-container', {
+                        direction: 'horizontal',
+                        loop: true,
+                        autoplay: 1000,
+                        autoplayDisableOnInteraction: false,
+                        observer:true,
+                        observeParents:true,
+                        effect: 'slide',
 
-                    // 如果需要分页器
-                    pagination: '.swiper-pagination',
-                })
-            }, 0)
+                        // 如果需要分页器
+                        pagination: '.swiper-pagination',
+                    })
+                }, 0)
+            })
             if(sessionStorage.getItem('cur_three')!=null){
                 let cur_three = JSON.parse(sessionStorage.getItem('cur_three'))
                 $scope.cur_three_item = cur_three.cur_three_item
