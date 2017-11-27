@@ -303,6 +303,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         $scope.materials = JSON.parse(sessionStorage.getItem("materials_bak"));
         _ajax.get("/owner/case-particulars", params, function (res) {
             console.log(res, "材料");
+            let mySwiper;
             let data = res.data;
             if (data === null) {
                 $scope.activeObj.type = 0;
@@ -317,6 +318,9 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             };
             $scope.activeObj.type = 1;
 
+            if (mySwiper !== undefined) {
+                mySwiper.destroy();
+            }
             if (sessionStorage.getItem("materials") === null) {
                 $scope.roomPicture = data.images.effect_images;
                 sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
@@ -400,11 +404,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             }
 
             $timeout(function () {
-                let mySwiper;
-                console.log(mySwiper);
-                if (mySwiper !== undefined) {
-                    mySwiper.destroy();
-                }
                 mySwiper = new Swiper("#swiperList", {
                     autoplay: 3000,
                     loop: true,
