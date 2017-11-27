@@ -264,6 +264,23 @@ angular.module('all_controller', [])
                     $scope[item] = num
                     $scope.show_material = false
                 }
+                if(item == 'cur_style'){
+                    $timeout.cancel($scope.time)
+                        $scope.time = $timeout(function () {
+                            var mySwiper = new Swiper('.swiper-container', {
+                                direction: 'horizontal',
+                                loop: true,
+                                autoplay: 1000,
+                                autoplayDisableOnInteraction: false,
+                                observer:true,
+                                observeParents:true,
+                                effect: 'slide',
+
+                                // 如果需要分页器
+                                pagination: '.swiper-pagination',
+                            })
+                        }, 0)
+                }
             }else{
                 $scope.show_material = false
             }
@@ -498,6 +515,21 @@ angular.module('all_controller', [])
                     images:res.data.goods_view.images
                 }
                 $('#myModal').modal('hide')
+                $timeout.cancel($scope.time)
+                $scope.time = $timeout(function () {
+                    var mySwiper = new Swiper('.swiper-container', {
+                        direction: 'horizontal',
+                        loop: true,
+                        autoplay: 1000,
+                        autoplayDisableOnInteraction: false,
+                        observer:true,
+                        observeParents:true,
+                        effect: 'slide',
+
+                        // 如果需要分页器
+                        pagination: '.swiper-pagination',
+                    })
+                }, 0)
                 $timeout(function () {
                     $scope.have_header = false
                     sessionStorage.setItem('all_status',JSON.stringify({
@@ -1256,6 +1288,21 @@ angular.module('all_controller', [])
                 $('#myModal').modal('hide')
                 $scope.have_header = false
             })
+            $timeout.cancel($scope.time)
+            $scope.time = $timeout(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
+                    effect: 'slide',
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination',
+                })
+            }, 0)
             if(sessionStorage.getItem('cur_three')!=null){
                 let cur_three = JSON.parse(sessionStorage.getItem('cur_three'))
                 $scope.cur_three_item = cur_three.cur_three_item
