@@ -110,7 +110,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 		_ajax.post('/mall/category-status-toggle',{id:$scope.item.id,offline_reason:$scope.offlinereason},function (res) {
             $scope.offlinereason = '';
             setTimeout(function () {
-                $state.go("fenleiguanli");
+                $state.go("class.offline");
             },200)
         })
 	}
