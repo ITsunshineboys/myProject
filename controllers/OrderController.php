@@ -377,7 +377,7 @@ class OrderController extends Controller
                 'msg' =>'微信内打开',
                 'data'=>Wxpay::GetWxJsSign()
             ]);
-            Yii::$app->runAction('order/test-open-id');
+//            Yii::$app->runAction('order/test-open-id');
         }
 
     }
@@ -1679,8 +1679,6 @@ class OrderController extends Controller
                 'msg' => '快递单号错误',
             ]);
         }
-
-
         $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
         if ($code==200){
             $code=200;
