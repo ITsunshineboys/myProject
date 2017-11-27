@@ -78,16 +78,17 @@
             <!--待收货的情况-->
             <!--完成时间-->
             <div>
-            <div class="order_state">
-                <span>完成时间</span>
-                <span ng-bind="order_detail.complete_time"></span>
-            </div>
+                <div class="order_state" ng-if="order_detail.complete_time">
+                    <span>完成时间</span>
+                    <span ng-bind="order_detail.complete_time"></span>
+                </div>
 
-            <!--配送方式-->
-            <div class="order_state express_method">
-                <span>配送方式</span>
-                <span class="text_blue" ui-sref="express({express_params})" ng-bind="order_detail.shipping_way"></span>
-            </div>
+                <!--配送方式-->
+                <div class="order_state express_method" ng-if="order_detail.shipping_way">
+                    <span>配送方式</span>
+                    <span class="text_blue" ui-sref="express({express_params})"
+                          ng-bind="order_detail.shipping_way"></span>
+                </div>
             </div>
 
 
@@ -116,16 +117,16 @@
             </div>
 
             <!--商品属性-->
-            <div class="order_state">
-                <span>商品属性</span>
+            <!--<div class="order_state">-->
+                <!--<span>商品属性</span>-->
 
-                <ul class="good_attr">
-                    <li ng-repeat="item in goods_value.attr">
-                        <span ng-bind="item.name"></span>
-                        <span ng-bind="item.value"></span>
-                    </li>
-                </ul>
-            </div>
+                <!--<ul class="good_attr">-->
+                    <!--<li ng-repeat="item in goods_value.attr">-->
+                        <!--<span ng-bind="item.name"></span>-->
+                        <!--<span ng-bind="item.value"></span>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
         </div>
         <hr/>
 
