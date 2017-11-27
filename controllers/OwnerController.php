@@ -1783,7 +1783,6 @@ class OwnerController extends Controller
 //                    $_goods['goods_three'] = $goods_category['2']['title'];
 //                    $_goods['goods_id'] = $_goods['id'];
 
-
                     $_goods['platform_price'] = $_goods['platform_price'] / 100;
                     $_goods['supplier_price'] = $_goods['supplier_price'] / 100;
                     $_goods['purchase_price_decoration_company'] = $_goods['purchase_price_decoration_company'] / 100;
@@ -1816,7 +1815,6 @@ class OwnerController extends Controller
 //                        $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
 //                        $where ="id in (".$substr.")";
 //                        $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
-
                         $one_stairs_price['quantity'] = 1;
 //                        $one_stairs_price['goods_first'] = $goods_category['0']['title'];
 //                        $one_stairs_price['goods_second'] = $goods_category['1']['title'];
