@@ -4349,10 +4349,10 @@ class OrderController extends Controller
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
         }
-        return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok'
-        ]);
+//        return Json::encode([
+//            'code' => 200,
+//            'msg'  => 'ok'
+//        ]);
     }
 
         /**
@@ -5308,12 +5308,13 @@ class OrderController extends Controller
     }
 
 
-    public  function  actionTest()
-    {
-        return Json::encode(
-            Yii::$app->request->post()
-        );
-    }
+//    public  function  actionTest()
+//    {
+////        session_id(Yii::$app->session->id);
+////    var_dump(Yii::$app->session['id']);exit;
+////        Yii::$app->session['id']=1;
+////     var_dump() ;
+//    }
 
 
     public  function  actionFindSupplierGoods()
