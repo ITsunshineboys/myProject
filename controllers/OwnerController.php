@@ -1657,7 +1657,7 @@ class OwnerController extends Controller
      * @return string
      */
     public function actionCaseList(){
-        $code     = trim(Yii::$app->request->get('code',''));
+        $code     = (int)trim(Yii::$app->request->get('code',''));
         $street   = trim(Yii::$app->request->get('street',''));
         $toponymy = trim(Yii::$app->request->get('toponymy',''));
 
@@ -1692,13 +1692,13 @@ class OwnerController extends Controller
     public function actionCaseParticulars()
     {
 //        $id = trim(Yii::$app->request->post('id',''));
-        $series = trim(Yii::$app->request->get('series',''));
-        $style = trim(Yii::$app->request->get('style',''));
+        $series = (int)trim(Yii::$app->request->get('series',''));
+        $style = (int)trim(Yii::$app->request->get('style',''));
         $stairway = trim(Yii::$app->request->get('stairway',''));
         $stair_id = trim(Yii::$app->request->get('stair_id',''));
         $toponymy = trim(Yii::$app->request->get('toponymy',''));
         $particulars = trim(Yii::$app->request->get('particulars',''));
-        $area = trim(Yii::$app->request->get('area',''));
+        $area = (int)trim(Yii::$app->request->get('area',''));
 
         if ($stairway == self::JUDGE_VALUE){
             $where = ['and',['effect_picture.series_id'=>$series],['effect_picture.style_id'=>$style],['effect.stairway'=>$stairway],['effect.toponymy'=>$toponymy],['effect.particulars'=>$particulars],['effect.area'=>$area],['type'=>1]];
