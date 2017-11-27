@@ -98,12 +98,12 @@ class Wxpay  extends ActiveRecord
             $tools = new PayService();
             $input = new WxPayUnifiedOrder();
 //            $openid =Yii::$app->session['openId'];
-            $openid=$openId;
-//            if (!$openid)
-//            {
-//                $code=1000;
-//                return $code;
-//            }
+            $openid=Yii::$app->session['openId'];
+            if (!$openid)
+            {
+                $code=1000;
+                return $code;
+            }
             $attach=$id;
             $total_amount=0.01;
             $input->SetBody(self::EFFECT_BODY);
@@ -115,7 +115,7 @@ class Wxpay  extends ActiveRecord
             $input->SetGoods_tag("goods");
             $input->SetNotify_url(Yii::$app->request->hostInfo.self::EFFECT_NOTIFY_URL);
             $input->SetTrade_type("JSAPI");
-            $input->SetOpenid($openId);
+            $input->SetOpenid($openid);
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
             return  Json::decode($jsApiParameters);
