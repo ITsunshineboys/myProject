@@ -4337,7 +4337,8 @@ class OrderController extends Controller
          $url = $tools->__CreateOauthUrlForCode1($baseUrl);
 //         echo $url;
 //         Header("Location: {$url}");
-         $res=Wxpay::curl($url,false,0);
+         $res=file_get_contents($url);
+//         $res=Wxpay::curl($url,false,0);
          var_dump($res);exit;
      }
  
