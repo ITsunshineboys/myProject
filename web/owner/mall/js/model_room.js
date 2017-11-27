@@ -234,13 +234,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                 title: goods.goods_three,
                                 goods_detail: []
                             };
-                            if (goods.goods_first === "辅材") {
-                                tempLevel = {
-                                    id: goods.id,
-                                    title: goods.goods_three,
-                                    goods_detail: []
-                                }
-                            }
                             material.second_level[0].three_level.push(tempLevel);
                             material.second_level[0].three_level[0].goods_detail.push(goods);
                         } else {
@@ -265,13 +258,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                             title: goods.goods_three,
                                             goods_detail: []
                                         };
-                                        if (goods.goods_first === "辅材") {
-                                            tempLevel = {
-                                                id: goods.effect_id,
-                                                title: goods.goods_three,
-                                                goods_detail: []
-                                            }
-                                        }
                                         secondLevel.three_level.push(tempLevel);
                                         secondLevel.three_level[secondLevel.three_level.length - 1].goods_detail.push(goods);
                                     }
@@ -285,13 +271,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                                     title: goods.goods_three,
                                     goods_detail: []
                                 };
-                                if (goods.goods_first === "辅材") {
-                                    tempLevel = {
-                                        id: goods.effect_id,
-                                        title: goods.goods_three,
-                                        goods_detail: []
-                                    }
-                                }
                                 material.second_level[material.second_level.length - 1].three_level.push(tempLevel);
                                 material.second_level[material.second_level.length - 1].three_level[0].goods_detail.push(goods);
                             }
