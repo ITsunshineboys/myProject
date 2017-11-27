@@ -21,18 +21,18 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
             });
             $rootScope.isWxOpen = true;
             if (localStorage.getItem("openId") === null) {
-                if (getUrlParams('code') === "") {
-                    let url = location.href;
-                    _ajax.post('/order/find-open-id', {url: url}, function (res) {
-                        location.href = res.data
-                    })
-                } else {
-                    let code = getUrlParams('code');
-                    _ajax.post('/order/get-open-id', {code: code}, function (res) {
+                // if (getUrlParams('code') === "") {
+                //     let url = location.href;
+                //     _ajax.post('/order/find-open-id', {url: url}, function (res) {
+                //         location.href = res.data
+                //     })
+                // } else {
+                //     let code = getUrlParams('code');
+                    _ajax.post('/order/test-open-id', {code: '1'}, function (res) {
                         let openId = res.data;
                         localStorage.setItem('openId', openId);
                     })
-                }
+                // }
             }
         }
     });

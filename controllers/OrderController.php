@@ -4319,6 +4319,7 @@ class OrderController extends Controller
          $openid = $tools->getOpenidFromMp($code);
          echo $openid;
      }
+
      public  function  actionTestOpenId()
      {
          $tools = new PayService();
