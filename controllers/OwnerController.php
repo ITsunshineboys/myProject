@@ -1414,6 +1414,7 @@ class OwnerController extends Controller
                 'msg' => '成功',
                 'data' => [
                     'labor_cost' => $labor_cost,
+                    'total_material' => $goods_value,
                 ]
             ]);
         }
