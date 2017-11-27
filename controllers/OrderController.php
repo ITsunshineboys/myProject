@@ -4353,8 +4353,8 @@ class OrderController extends Controller
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
 //            $this->redirect($urls);
             $data=file_get_contents($urls);
-            return Json::encode([ Yii::$app->session['openId'],
-                $data]);
+            echo Yii::$app->session['openId'];exit;
+//            return Json::encode([ Yii::$app->session['openId']);
         }else{
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
