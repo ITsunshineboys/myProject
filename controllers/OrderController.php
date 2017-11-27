@@ -4316,7 +4316,6 @@ class OrderController extends Controller
      {
          $tools = new PayService();
          $code = $_GET['code'];
-         echo $code;
          $openid = $tools->getOpenidFromMp($code);
          echo $openid;
      }
