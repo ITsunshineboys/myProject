@@ -127,13 +127,12 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
 				pid = 0;
 			}
 
-			let url = baseUrl+"/mall/category-edit";
 			let data =  {id:+$scope.item.id,title:$scope.item.title,pid:+pid,icon:$scope.classicon||$stateParams.item.icon,description:description,offline_reason:$scope.item.offline_reason};
 			 _ajax.post('/mall/category-edit',data,function (res) {
-                 if(res.data.code==200){
+                 if(res.code==200){
                      $scope.save_msg="保存成功"
                      $scope.success_flag = true;
-                 }else if(res.data.code==1006){
+                 }else if(res.code==1006){
                      $scope.save_msg = res.data.msg;
                      $scope.success_flag = false;
                  }
