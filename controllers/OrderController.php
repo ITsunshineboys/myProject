@@ -4331,10 +4331,13 @@ class OrderController extends Controller
              $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
 //         echo $urls;exit;
              Header("Location: {$urls}");
+         }else{
+             $openid = $tools->getOpenidFromMp($code);
+             echo $openid;
          }
-         $openid = $tools->getOpenidFromMp($code);
+
 //         $res=StringService::httpGet($urls);
-         var_dump($openid);exit;
+
      }
  
         /**
