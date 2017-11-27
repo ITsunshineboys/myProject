@@ -4330,14 +4330,13 @@ class OrderController extends Controller
 //                 'msg'  => Yii::$app->params['errorCodes'][$code]
 //             ]);
 //         }
-         $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
          $url="https://ac.cdlhzz.cn/order/return-url";
          $baseUrl = urlencode($url);
          $tools = new PayService();
          $url = $tools->__CreateOauthUrlForCode1($baseUrl);
 //         echo $url;
 //         Header("Location: {$url}");
-         $res=file_get_contents($url);
+         $res=StringService::httpGet($url);
 //         $res=Wxpay::curl($url,false,0);
          var_dump($res);exit;
      }
