@@ -20,23 +20,20 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wxConfig($scope.wxShareUrl);
             });
             $rootScope.isWxOpen = true;
-            _ajax.get('/order/test-open-id', {}, function (res) {
-                // location.href = res.data
-            });
-            /*if (localStorage.getItem("openId") === null) {
+            if (sessionStorage.getItem("openId") === null) {
                 if (getUrlParams('code') === "") {
                     let url = location.href;
                     _ajax.post('/order/find-open-id', {url: url}, function (res) {
-                        // location.href = res.data
+                        location.href = res.data
                     })
                 } else {
                     let code = getUrlParams('code');
                     _ajax.post('/order/get-open-id', {code: code}, function (res) {
                         let openId = res.data;
-                        localStorage.setItem('openId', openId);
+                        sessionStorage.setItem('openId', openId);
                     })
                 }
-            }*/
+            }
         }
     });
 }]);

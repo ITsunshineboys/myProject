@@ -1,6 +1,12 @@
 angular.module('all_controller', [])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
-        sessionStorage.clear();
+        if (sessionStorage.getItem("openId") !== null) {
+            let openId = sessionStorage.getItem("openId");
+            sessionStorage.clear();
+            sessionStorage.setItem("openId", openId);
+        } else {
+            sessionStorage.clear();
+        }
         $scope.baseUrl = '';
         // $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐

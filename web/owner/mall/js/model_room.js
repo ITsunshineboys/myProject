@@ -105,6 +105,16 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     // 户型选择
     let huxingFlag = true;
     $scope.huxingFun = function (obj) {
+        let openId = sessionStorage.getItem("openId"),
+            materials_bak = sessionStorage.getItem("materials_bak");
+        if (openId !== null) {
+            sessionStorage.clear();
+            sessionStorage.setItem("openId", openId);
+        }
+        if (materials_bak !== null) {
+            sessionStorage.clear();
+            sessionStorage.setItem("materials_bak", materials_bak);
+        }
         $scope.activeObj = angular.copy(obj);
         params.particulars = obj.particulars;
         params.area = obj.area;
@@ -216,7 +226,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             series: $scope.activeObj.case_picture[0].series_id,
             style: $scope.activeObj.case_picture[0].series_id
         };
-        console.log($scope.materials);
         for (let material of $scope.materials) {
             for (let goods of material.goods) {
                 for (let second of $scope.classData.level) {
