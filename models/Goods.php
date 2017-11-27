@@ -449,7 +449,7 @@ class Goods extends ActiveRecord
         $rows = self::find()
             ->asArray()
             ->select($select)
-            ->where(['and', ['goods.status' => self::STATUS_ONLINE], ['in', 'goods.sku', $sku]])
+            ->where(['and', ['goods.status' => self::STATUS_ONLINE], ['in', 'goods.sku', $sku],['status'=>self::STATUS_ONLINE]])
             ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
@@ -954,6 +954,7 @@ class Goods extends ActiveRecord
                 ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
                 ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
                 ->where(['gc.title' => $condition])
+                ->andWhere(['status'=>self::STATUS_ONLINE])
                 ->all();
 
             return $goods;
