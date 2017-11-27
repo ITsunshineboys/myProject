@@ -228,6 +228,7 @@ angular.module('all_controller', [])
                     if ($scope[type] == limit) {
                         $scope[type] = limit
                     } else {
+                        $scope.recalculate()
                         $scope[type]++
                     }
                 }
@@ -242,6 +243,7 @@ angular.module('all_controller', [])
                     if ($scope[type] == limit) {
                         $scope[type] = limit
                     } else {
+                        $scope.recalculate()
                         $scope[type]--
                     }
                 }
@@ -263,6 +265,23 @@ angular.module('all_controller', [])
                 if($scope[item]!=num){
                     $scope[item] = num
                     $scope.show_material = false
+                }
+                if(item == 'cur_style'){
+                    $timeout.cancel($scope.time)
+                        $scope.time = $timeout(function () {
+                            var mySwiper = new Swiper('.swiper-container', {
+                                direction: 'horizontal',
+                                loop: true,
+                                autoplay: 1000,
+                                autoplayDisableOnInteraction: false,
+                                observer:true,
+                                observeParents:true,
+                                effect: 'slide',
+
+                                // 如果需要分页器
+                                pagination: '.swiper-pagination',
+                            })
+                        }, 0)
                 }
             }else{
                 $scope.show_material = false
@@ -444,6 +463,22 @@ angular.module('all_controller', [])
             $scope.cur_three_level = three_level_name
             $scope.cur_three_id = sessionStorage.getItem('materials')==null?three_level_id:item.category_id
         }
+        $scope.$watch('cur_params',function (newVal,oldVal) {
+            $timeout(function () {
+                var mySwiper = new Swiper('.swiper-container', {
+                    direction: 'horizontal',
+                    loop: true,
+                    autoplay: 1000,
+                    autoplayDisableOnInteraction: false,
+                    observer:true,
+                    observeParents:true,
+                    effect: 'slide',
+
+                    // 如果需要分页器
+                    pagination: '.swiper-pagination',
+                })
+            }, 100)
+        },true)
         //查看详情
         $scope.go_details = function (item) {
             console.log($scope.cur_title)
@@ -509,6 +544,21 @@ angular.module('all_controller', [])
                         is_city:$scope.is_city,
                         is_edit:$scope.is_edit
                     }))
+                    $timeout.cancel($scope.time)
+                    $scope.time = $timeout(function () {
+                        var mySwiper = new Swiper('.swiper-container', {
+                            direction: 'horizontal',
+                            loop: true,
+                            autoplay: 1000,
+                            autoplayDisableOnInteraction: false,
+                            observer:true,
+                            observeParents:true,
+                            effect: 'slide',
+
+                            // 如果需要分页器
+                            pagination: '.swiper-pagination',
+                        })
+                    }, 0)
                     $state.go('nodata.product_detail')
                 }, 300)
             })
@@ -1255,6 +1305,20 @@ angular.module('all_controller', [])
                 }
                 $('#myModal').modal('hide')
                 $scope.have_header = false
+                $timeout(function () {
+                    var mySwiper = new Swiper('.swiper-container', {
+                        direction: 'horizontal',
+                        loop: true,
+                        autoplay: 1000,
+                        autoplayDisableOnInteraction: false,
+                        observer:true,
+                        observeParents:true,
+                        effect: 'slide',
+
+                        // 如果需要分页器
+                        pagination: '.swiper-pagination',
+                    })
+                }, 0)
             })
             if(sessionStorage.getItem('cur_three')!=null){
                 let cur_three = JSON.parse(sessionStorage.getItem('cur_three'))

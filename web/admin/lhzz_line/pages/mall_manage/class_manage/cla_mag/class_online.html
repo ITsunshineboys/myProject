@@ -1,7 +1,7 @@
 <div class="form-inline clearfix">
         <button class="btn btn-default" ng-click=checkAll()>全选</button>
         <button class="btn btn-default" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
-        <span class="fenleichoose_span">分类选择</span>
+        <span class="class-choose">分类选择</span>
         <!--/*分类选择一级下拉框*/-->
         <select name=""  class="form-control" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
         <!--/*分类选择二级菜单*/-->
@@ -23,7 +23,7 @@
                             <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
                         </span>
                 </th>
-                <th>操作人员</th>
+                <th>添加人员</th>
                 <th>状态</th>
                 <th>详情</th>
                 <th>操作</th>
@@ -39,9 +39,9 @@
                 <td>{{item.level}}</td>
                 <td>{{item.online_time}}</td>
                 <td>{{item.online_person}}</td>
-                <td class="yesGreen">{{item.status}}</td>
+                <td class="class-state">{{item.status}}</td>
                 <td class="edit" ui-sref="onsale_edit({item:item})">编辑</td>
-                <td class="xiajia" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
+                <td class="handle" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
             </tr>
             </tbody>
         </table>
@@ -82,7 +82,7 @@
                         下架操作
                     </h4>
                 </div>
-                <div class="modal-body" id="piliangxiajia_body">
+                <div class="modal-body" id="piliangxiajia_body" ng-if="table.roles.length">
                     <h6 id="piliangxiajia_fenlei">下架
                         {{table.roles.length}}个分类
                     </h6>
@@ -91,9 +91,19 @@
                               placeholder="请填写下架原因，如选择多个则为批量备注" ng-model="batchoffline_reason"></textarea>
                 </div>
 
-                <div class="btn_modal">
+                <div class="modal-body" id="piliangxiajia_body" ng-if="!table.roles.length">
+                    <h6 id="piliangxiajia_fenlei">请至少选择一个分类</h6>
+                </div>
+
+
+
+                <div class="btn_modal" ng-if="table.roles.length">
                     <button id="piliang_cancel" data-dismiss="modal" ng-click="cancelBatchOffline()">取消</button>
                     <button id="piliang_sure" data-dismiss="modal" ng-click="sureBatchOffline()">确认</button>
+                </div>
+
+                <div class="btn_modal" ng-if="!table.roles.length">
+                    <button id="piliang_sure" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>

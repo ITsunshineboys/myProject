@@ -27,7 +27,7 @@
                             <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
                         </span>
                 </th>
-                <th>添加人员</th>
+                <th>操作人员</th>
                 <th>状态</th>
                 <th>下架原因</th>
                 <th>详情</th>
@@ -44,10 +44,10 @@
                 <td>{{item.level}}</td>
                 <td>{{item.offline_time}}</td>
                 <td>{{item.offline_person}}</td>
-                <td class="yesred" ng-if="!onsale_flag">{{item.status}}</td>
-                <td class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
+                <td class="off-state">{{item.status}}</td>
                 <td id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ><span ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></span></td>
-                <td class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
+                <td class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
+                <td class="handle" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
             </tr>
             </tbody>
         </table>
@@ -84,13 +84,21 @@
                         提示
                     </h4>
                 </div>
-                <div class="modal-body" id="sjcaozuo_body">
+                <div class="modal-body" id="sjcaozuo_body" ng-if="table.roles.length">
                     <h6>上架{{table.roles.length}}个分类，是否确认上架</h6>
                 </div>
 
-                <div class="btn_modal_two">
+                <div class="modal-body" id="sjcaozuo_body" ng-if="!table.roles.length">
+                    <h6>请至少选择一个分类</h6>
+                </div>
+
+                <div class="btn_modal_two" ng-if="table.roles.length">
                     <button data-dismiss="modal" id="sjcaozuo_cancel" ng-click="cancelplliangonline()">取消</button>
                     <button data-dismiss="modal" id="sjcaozuo_sure" ng-click="surepiliangonline()">确认</button>
+                </div>
+
+                <div class="btn_modal_two" ng-if="!table.roles.length">
+                    <button data-dismiss="modal" id="sjcaozuo_sure">确认</button>
                 </div>
             </div>
         </div>

@@ -10,13 +10,11 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
         link: $rootScope.mall_click
     }, {
         name: '分类管理',
-        link: 'fenleiguanli',
-        params:{offsale_flag:false}
+        link: 'class.online',
     }, {
         name: '分类详情'
     }];
 
-	// const picprefix = baseUrl+"/";
     let pid;
     let pattern =/^[\u4E00-\u9FA5A-Za-z0-9]+$/;
 	$scope.changescope = $scope;
@@ -112,7 +110,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 		_ajax.post('/mall/category-status-toggle',{id:$scope.item.id,offline_reason:$scope.offlinereason},function (res) {
             $scope.offlinereason = '';
             setTimeout(function () {
-                $state.go("fenleiguanli");
+                $state.go("class.offline");
             },200)
         })
 	}
@@ -163,7 +161,7 @@ onsale_edit.controller("onsaleEdit", function ($scope, $state, $stateParams,$htt
 	/*保存模态框确认*/
 	$scope.suresave = function () {
 		setTimeout(function () {
-			$state.go("fenleiguanli");
+			$state.go("class.online");
 		},200)
 	}
 })

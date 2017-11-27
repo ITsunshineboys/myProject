@@ -817,7 +817,7 @@ angular.module("all_controller", ['ngCookies'])
             $scope.icon = response.data.data.index.icon; //店铺图片
             $scope.shop_name = response.data.data.index.shop_name; //店铺名称
             //轮播变量
-            let mySwiper = new Swiper("#swiperList", {
+            let mSwiper = new Swiper("#swiperList", {
                 autoplay: 3000,
                 loop: true,
                 observer: true,
@@ -835,7 +835,7 @@ angular.module("all_controller", ['ngCookies'])
             console.log(response);
             $scope.recommendList = response.data.data.recommend_second;
             for( let [key, value] of $scope.recommendList.entries() ){
-                console.log(value.id)
+                console.log(value.id);
                 $scope.recommend_id = value.id
             }
         });

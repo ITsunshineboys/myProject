@@ -211,6 +211,13 @@
     color: #999;
     font-size: 1.2rem;
 }
+.carousel {
+    margin-top: 1rem;
+    border: 1px solid #C2C2C2;
+    width: 30rem;
+    height: 16rem;
+    margin-left: 1rem;
+}
 .shop_number ul li:first-child{
     border-right: 1px solid #e5e5e5;
 }

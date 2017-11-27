@@ -3,26 +3,18 @@
  */
 /*已下架 添加分类*/
 var add_class = angular.module("addclassModule",['ngFileUpload']);
-add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope) {
+add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
         link: $rootScope.mall_click
     }, {
         name: '分类管理',
-        link: 'fenleiguanli',
-        params:{offsale_flag:true}
+        link: 'class.offline',
     }, {
         name: '添加分类'
     }];
 
-    const picprefix = baseUrl+"/";
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
     let pid;
     $scope.showsub = false; /*初始无二级下拉选项*/
@@ -50,26 +42,20 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 
 	/*分类所属 第一个下拉框的值*/
 	$scope.findParentClass =  (function () {
-		$http({
-			method: "get",
-			url: baseUrl+"/mall/categories-manage-admin",
-		}).then(function (res) {
-			$scope.firstclass = res.data.data.categories.splice(1);
-		})
+		_ajax.get('/mall/categories-manage-admin',{},function (res) {
+			console.log(res);
+            $scope.firstclass = res.data.categories.splice(1);
+        })
 	})()
 
 	/*一级选择后的二级*/
 	$scope.subClass = function (obj) {
 		if (obj != '') {
 			$scope.showsub = true;
-			$http({
-				method: "get",
-				url: baseUrl+"/mall/categories-manage-admin",
-				params: {pid: obj}
-			}).then(function (response) {
-				$scope.secondclass = response.data.data.categories.splice(1);
-				$scope.secselect = '0';
-			})
+			_ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+                $scope.secondclass = res.data.categories.splice(1);
+                $scope.secselect = '0';
+            })
 		}else{
 			$scope.showsub = false;
 		}
@@ -94,7 +80,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 				$scope.iconpath = 'pages/mall_manage/class_manage/add_class/images/default.png';
 			}else{
 				$scope.picwarning = false;
-				$scope.iconpath = picprefix + response.data.data.file_path;
+				$scope.iconpath = response.data.data.file_path;
 				$scope.classicon = response.data.data.file_path;
 			}
 		},function (error) {
@@ -127,26 +113,24 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 				pid = $scope.secselect;
 			}
 
-			let url = baseUrl+"/mall/category-add";
 			let data =  {title:$scope.class_name,pid:pid,icon:$scope.classicon,description:description};
-			$http.post(url,data,config).then(function (res) {
-                // console.log(res);
+			_ajax.post('/mall/category-add',data,function (res) {
                 $("#save_tishi").modal("show");
-                if(res.data.code==200){
+                if(res.code==200){
                     $scope.save_msg="保存成功"
                     $scope.success_flag = true;
-                }else if(res.data.code==1006){
+                }else if(res.code==1006){
                     $scope.save_msg = res.data.msg;
                     $scope.success_flag = false;
                 }
-			})
+            })
 		}
 	}
 
 	//*保存模态框确认*/
 	$scope.suresave = function () {
 		setTimeout(function () {
-			$state.go("fenleiguanli",{offsale_flag:true});
+			$state.go("class.offline");
 		},200)
 	}
 
