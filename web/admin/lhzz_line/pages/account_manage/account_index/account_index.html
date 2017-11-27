@@ -1,23 +1,15 @@
 <link rel="stylesheet" href="pages/account_manage/account_index/css/account_index.css">
 <div ng-controller="account_index_ctrl">
-    <!--<header>-->
-        <!--<div>-->
-            <!--<i class="glyphicon glyphicon-home"></i>-->
-            <!--<span class="shop_manage">账户管理</span>-->
-            <!--<img src="pages/mall_manage/style_manage/edit_attribute/images/user.png" alt=""/>-->
-        <!--</div>-->
-    <!--</header>-->
-    <!--选项卡-->
-    <div class="tab">
+    <div class="tab clearfix">
         <ul>
-            <li ng-class="{'tab_blue':(normal_flag==true)}"  ng-click="normal()">正常</li>
-            <li ng-class="{'tab_blue':(close_flag==true)}" ng-click="close()">关闭</li>
+            <li ng-class="{'tab_blue':normal_flag}"  ng-click="tabFunc('normal_flag')">正常</li>
+            <li ng-class="{'tab_blue':close_flag}" ng-click="tabFunc('close_flag')">关闭</li>
         </ul>
     </div>
     <!--正常 内容-->
     <section ng-if="normal_flag==true">
-            <span class="border"  ui-sref="add_user">添加新用户</span>
-            <span class="border" data-toggle="modal" data-target="#{{more_modal}}" ng-click="change_model ()" >关闭</span>
+            <btn class="btn btn-default"  ui-sref="add_user">添加新用户</btn>
+            <span class="btn btn-default" data-toggle="modal" data-target="#{{more_modal}}" ng-click="change_model ()" >关闭</span>
         <select  name="province" ng-model="mm.selectValue" class="time_select" ng-options="item.name for item in time">
         </select>
         <input  ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
@@ -30,21 +22,25 @@
             </div>
 
             <!--表格-->
-            <table>
-                <tr class="th">
-                    <td>&nbsp;</td>
-                    <td>绑定手机号</td>
-                    <td>昵称</td>
-                    <td>魔方号</td>
-                    <td>注册时间
-                        <img class="img_size" ng-show=flag ng-click="changePic ()"  src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
-                        <img class="img_size" ng-show=strat ng-click="changePicse ()"  src="pages/account_manage/account_comment/images/mall_filter_sor.png" alt=""/>
-                    </td>
-                    <td>状态</td>
-                    <td>拥有角色</td>
-                    <td>详情</td>
-                    <td>操作</td>
-                </tr>
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>绑定手机号</th>
+                        <th>昵称</th>
+                        <th>魔方号</th>
+                        <th>注册时间
+                            <img class="img_size" ng-show=flag ng-click="changePic ()"  src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
+                            <img class="img_size" ng-show=strat ng-click="changePicse ()"  src="pages/account_manage/account_comment/images/mall_filter_sor.png" alt=""/>
+                        </th>
+                        <th>状态</th>
+                        <th>拥有角色</th>
+                        <th>详情</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+
+                <tbody>
                 <tr ng-repeat=" n in account">
                     <td><input type="checkbox" ng-checked="close_input" ng-model="n.state" ng-click="changeStar (n.id)"></td>
                     <td>{{n.mobile}}</td>
@@ -54,16 +50,10 @@
                     <td>{{n.status}}</td>
                     <td>{{n.names}}</td>
                     <td class="blue" ng-click = 'getMore(n)'>查看</td>
-                    <!--ui-sref="account_comment({id:n.id,icon:n.icon,nickname:n.nickname-->
-                    <!--,old_nickna:n.old_nickname,district_name:n.district_name,birthday:n.birthday,-->
-                    <!--signature:n.signature,mobile:n.mobile,aite_cube_no:n.aite_cube_no,-->
-                    <!--create_time:n.create_time,names:n.names,review_status_desc:n.review_status_desc,-->
-                    <!--status:n.status,id:n.id,legal_person:n.legal_person,identity_no:n.identity_no-->
-                    <!--,identity_card_front_imagen:n.identity_card_front_image,identity_card_back_image:-->
-                    <!--n.identity_card_back_image,review_time:n.review_time,a:false,-->
-                    <!--})"-->
                     <td class="blue" data-toggle="modal" data-target="#close_modal" ng-click="getId (n.id)">关闭</td>
                 </tr>
+                </tbody>
+
             </table>
 
         <!--分页开始-->

@@ -1,20 +1,21 @@
 let account_index=angular.module("account_index_module",[]);
 account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
-  $scope.normal_flag=true;
-  $scope.close_flag=false;
-  $scope.mm = $scope;
-  $scope.myng = $scope;
+  // $scope.normal_flag=true;
+  // $scope.close_flag=false;
+  // $scope.mm = $scope;
+  // $scope.myng = $scope;
     $rootScope.crumbs = [{
         name: '账户管理',
         icon: 'icon-zhanghuguanli'
         // link: 'merchant_index'
     }];
-  $scope.normal=function () {
-      $scope.normal_flag=true;
-      $scope.close_flag=false;
-      $scope.params.status = 1;
-      tablePages();
-  };
+
+  // $scope.normal=function () {
+  //     $scope.normal_flag=true;
+  //     $scope.close_flag=false;
+  //     $scope.params.status = 1;
+  //     tablePages();
+  // };
   $scope.close=function () {
       //关闭状态 选择时间排顺序  选择自定义 显示开始结束框
       _ajax.get('/site/time-types',{},function (response) {
@@ -32,6 +33,37 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
   };
   $scope.flag = true;
   $scope.strat = false;
+
+
+    /*选项卡切换方法*/
+    $scope.tabFunc = (obj) => {
+        $scope.normal_flag = false;
+        $scope.close_flag = false;
+        $scope[obj] = true;
+        initFunc(obj);
+    }
+
+
+    /*列表初始化方法*/
+    function initFunc(obj) {
+        let tab = obj == 'onsale_flag' ? 1 : 0;
+        let sortflag = obj == 'onsale_flag' ? "online_time:3":"offline_time:3"
+        $scope.params = {
+            status: tab, //已上架
+            pid: 0,   //父分类id
+            page: 1,  //当前页数
+            'sort[]': sortflag //排序规则
+        }
+        $scope.dropdown = {
+            firstselect: 0,
+            secselect: 0
+        }
+        $scope.pageConfig.currentPage = 1;
+        tableList();
+    }
+
+
+
 
     /*分页配置*/
     $scope.Config = {

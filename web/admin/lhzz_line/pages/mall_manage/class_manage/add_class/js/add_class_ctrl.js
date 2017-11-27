@@ -43,7 +43,8 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 	/*分类所属 第一个下拉框的值*/
 	$scope.findParentClass =  (function () {
 		_ajax.get('/mall/categories-manage-admin',{},function (res) {
-            $scope.firstclass = res.data.data.categories.splice(1);
+			console.log(res);
+            $scope.firstclass = res.data.categories.splice(1);
         })
 	})()
 
@@ -52,7 +53,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 		if (obj != '') {
 			$scope.showsub = true;
 			_ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
-                $scope.secondclass = response.data.data.categories.splice(1);
+                $scope.secondclass = res.data.categories.splice(1);
                 $scope.secselect = '0';
             })
 		}else{
@@ -115,10 +116,10 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 			let data =  {title:$scope.class_name,pid:pid,icon:$scope.classicon,description:description};
 			_ajax.post('/mall/category-add',data,function (res) {
                 $("#save_tishi").modal("show");
-                if(res.data.code==200){
+                if(res.code==200){
                     $scope.save_msg="保存成功"
                     $scope.success_flag = true;
-                }else if(res.data.code==1006){
+                }else if(res.code==1006){
                     $scope.save_msg = res.data.msg;
                     $scope.success_flag = false;
                 }
