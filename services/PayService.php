@@ -266,6 +266,26 @@ class PayService
 
     /**
      *
+     * 构造获取code的url连接
+     * @param string $redirectUrl 微信服务器回跳的url，需要url编码
+     *
+     * @return 返回构造好的url
+     */
+    public function __CreateOauthUrlForCode1($redirectUrl)
+    {
+        $urlObj["appid"] = WxPayConfig::APPID;
+        $urlObj["redirect_uri"] = "$redirectUrl";
+        $urlObj["response_type"] = "code";
+        $urlObj["scope"] = "snsapi_base";
+//        snsapi_userinfo  snsapi_base
+        $urlObj["state"] = "STATE"."#wechat_redirect";
+        $bizString = $this->ToUrlParams($urlObj);
+        return "https://open.weixin.qq.com/connect/oauth2/authorize?".$bizString;
+    }
+
+
+    /**
+     *
      * 构造获取open和access_toke的url地址
      * @param string $code，微信跳转带回的code
      *

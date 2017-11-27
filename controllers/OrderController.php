@@ -4310,6 +4310,36 @@ class OrderController extends Controller
                 ]);
          }
      }
+
+
+     public  function  actionReturnUrl()
+     {
+         $tools = new PayService();
+         $code = $_GET['code'];
+         $openid = $tools->getOpenidFromMp($code);
+         $code=200;
+         return Json::encode($openid);
+     }
+     public  function  actionTestOpenId()
+     {
+//         $url=Yii::$app->request->post('url','');
+//         if(!$url)
+//         {
+//             $code=1000;
+//             return Json::encode([
+//                 'code' => $code,
+//                 'msg'  => Yii::$app->params['errorCodes'][$code]
+//             ]);
+//         }
+         $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+         $url= $http_type."ac.cdlhzz.cn/order/return-url";
+         $baseUrl = urlencode($url);
+         $tools = new PayService();
+         $url = $tools->__CreateOauthUrlForCode1($baseUrl);
+
+         $res=Wxpay::curl($url,false,0);
+         var_dump($res);exit;
+     }
  
         /**
          * 提醒发货接口
