@@ -47,22 +47,27 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
         console.log(res, "样板间");
         let data = res.data;
         $scope.huxing = data;
-        for (let i of data) {
-            if (i.type === '1') {
-                $scope.activeObj = angular.copy(i);
-                params.particulars = i.particulars;
-                params.area = i.area;
-                params.stairway = i.stairway;
-                if (i.stairway === "1") {
-                    params.stair_id = i.stair_id;
-                } else {
-                    params.stair_id = ""
+        if (sessionStorage.getItem("activeObj") === null) {
+            for (let i of data) {
+                if (i.type === '1') {
+                    $scope.activeObj = angular.copy(i);
+                    break;
                 }
-                params.series = i.case_picture[0].series_id;
-                params.style = i.case_picture[0].style_id;
-                break;
             }
+        } else {
+            $scope.activeObj = JSON.parse(sessionStorage.getItem("activeObj"));
         }
+        let activeTemp = angular.copy($scope.activeObj);
+        params.particulars = activeTemp.particulars;
+        params.area = activeTemp.area;
+        params.stairway = activeTemp.stairway;
+        if (activeTemp.stairway === "1") {
+            params.stair_id = activeTemp.stair_id;
+        } else {
+            params.stair_id = ""
+        }
+        params.series = activeTemp.case_picture[0].series_id;
+        params.style = activeTemp.case_picture[0].style_id;
         materials();
     });
 
@@ -114,6 +119,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             sessionStorage.setItem("materials_bak", materials_bak);
             sessionStorage.setItem("huxingParams", huxingParams);
         }
+        sessionStorage.setItem("activeObj", JSON.stringify(obj));
         $scope.activeObj = angular.copy(obj);
         params.particulars = obj.particulars;
         params.area = obj.area;
