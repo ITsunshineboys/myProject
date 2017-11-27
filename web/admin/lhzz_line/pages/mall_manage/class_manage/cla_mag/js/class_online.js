@@ -56,26 +56,6 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         })
     }
 
-    //
-    // /*列表初始化方法*/
-    // function initFunc(obj) {
-    //     $scope.table.roles.length = 0;
-    //     let tab = obj == 'onsale_flag' ? 1 : 0;
-    //     let sortflag = obj == 'onsale_flag' ? "online_time:3":"offline_time:3"
-    //     $scope.params = {
-    //         status: tab, //已上架
-    //         pid: 0,   //父分类id
-    //         page: 1,  //当前页数
-    //         'sort[]': sortflag //排序规则
-    //     }
-    //     $scope.dropdown = {
-    //         firstselect: 0,
-    //         secselect: 0
-    //     }
-    //     $scope.pageConfig.currentPage = 1;
-    //     tableList();
-    // }
-
 
     // 时间排序
     $scope.sortTime = function () {
