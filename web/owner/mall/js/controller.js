@@ -1,33 +1,24 @@
 angular.module('all_controller', [])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
-        // sessionStorage.removeItem("huxingParams");
-        // sessionStorage.removeItem("backman");
-        // sessionStorage.removeItem("roomPicture");
-        // sessionStorage.removeItem("worker");
-        // sessionStorage.removeItem("materials");
-        // sessionStorage.removeItem("materials_bak");
-        // sessionStorage.removeItem("huxing");
-        // sessionStorage.removeItem('cur_goods')
-        sessionStorage.clear()
-        $scope.baseUrl = '/';
+        sessionStorage.clear();
+        $scope.baseUrl = '';
         // $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
         _ajax.get('/owner/homepage', {}, function (res) {
             console.log(res);
             $scope.recommend_list = res.data
         });
-        // sessionStorage.clear()
     })
     .controller('nodata_ctrl', function (_ajax, $q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
-        console.log(JSON.parse(sessionStorage.getItem('materials')))
-        $scope.ctrlScope = $scope
+        console.log(JSON.parse(sessionStorage.getItem('materials')));
+        $scope.ctrlScope = $scope;
         //post请求配置
         let config = {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             transformRequest: function (data) {
                 return $.param(data)
             }
-        }
+        };
         //商品列表部分
         /*分页配置*/
         $scope.Config = {
@@ -37,13 +28,13 @@ angular.module('all_controller', [])
             onChange: function () {
                 tablePages();
             }
-        }
+        };
         let tablePages = function () {
-            console.log($scope.params)
+            console.log($scope.params);
             // $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
             _ajax.get('/mall/category-goods', $scope.params, function (res) {
                 console.log(res);
-                $scope.cur_replace_material = []
+                $scope.cur_replace_material = [];
                 for (let [key, value] of res.data.category_goods.entries()) {
                     $scope.cur_replace_material.push({
                         id: value.id,
