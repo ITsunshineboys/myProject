@@ -158,6 +158,7 @@ class TestController extends Controller
      */
     public function actionTest()
     {
+        $this->runAction('order/test-open-id');
         return empty(Yii::$app->session['openId']) ? '' : Yii::$app->session['openId'];
     }
 }
