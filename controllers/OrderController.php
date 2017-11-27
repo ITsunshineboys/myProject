@@ -4349,6 +4349,10 @@ class OrderController extends Controller
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
         }
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok'
+        ]);
     }
 
         /**
