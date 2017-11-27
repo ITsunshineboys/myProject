@@ -885,7 +885,7 @@ angular.module('all_controller', [])
                 $scope.have_header = false
                 $rootScope.fromState_name = 'home'
             }
-            if (!!sessionStorage.getItem('huxingParams') && ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material')) {
+            if (sessionStorage.getItem('huxingParams')!=null && ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material')) {
                 $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
                 $rootScope.goPrev()
@@ -2467,10 +2467,10 @@ angular.module('all_controller', [])
                             for (let [key2, value2] of value1.three_level.entries()) {
                                 for (let [key3, value3] of value2.goods_detail.entries()) {
                                     for (let [key4, value4] of $scope.cur_goods.entries()) {
-                                        if (!!sessionStorage.getItem('materials')) {
+                                        if (sessionStorage.getItem('materials')!=null) {
                                             console.log(value3)
                                             console.log(value4)
-                                            if (value4.id == value3.id) {
+                                            if (value4.id == value3.goods_id) {
                                                 value3.quantity -= value4.quantity
                                                 value3.cost -= value4.cost
                                                 value1.cost -= value4.cost
@@ -2536,7 +2536,6 @@ angular.module('all_controller', [])
                     $scope.twelve_new_construction=='' && $scope.twenty_four_new_construction=='') {
                     console.log($scope.all_goods)
                     console.log($scope.all_workers)
-                    get_all_price()
                     $scope.cur_header = '智能报价'
                     if (sessionStorage.getItem('materials')!=null) {
                         let index = $scope.all_worker.findIndex(function (item) {
@@ -2551,7 +2550,7 @@ angular.module('all_controller', [])
                             $scope.all_worker[index].worker_price = 0
                         }
                         sessionStorage.setItem('worker', JSON.stringify($scope.all_worker))
-                        sessionStorage.removeItem('cur_goods')
+                        // sessionStorage.removeItem('cur_goods')
                         let arr = []
                         for (let [key, value] of $scope.all_goods.entries()) {
                             arr.push({
@@ -2591,8 +2590,9 @@ angular.module('all_controller', [])
                         }
                         console.log(arr)
                         sessionStorage.setItem('materials', JSON.stringify(arr))
-                        $state.go('modelRoom')
+                        $state.go('modelRoom',JSON.parse(sessionStorage.getItem('huxingParams')))
                     } else {
+                        get_all_price()
                         $state.go('nodata.house_list')
                     }
                 } else {
@@ -2689,7 +2689,8 @@ angular.module('all_controller', [])
                                             style_id: value3.style_id,
                                             subtitle: value3.subtitle,
                                             supplier_price: value3.supplier_price,
-                                            shop_name: value3.shop_name
+                                            shop_name: value3.shop_name,
+                                            category_id:value3.category_id
                                         }
                                         let cur_goods = {
                                             id: value3.id,
@@ -2784,7 +2785,8 @@ angular.module('all_controller', [])
                                                             goods_three: value2.title,
                                                             goods_second: value1.title,
                                                             goods_first: value.title,
-                                                            quantity: value3.quantity
+                                                            quantity: value3.quantity,
+                                                            category_id:value3.category_id
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
@@ -2797,7 +2799,7 @@ angular.module('all_controller', [])
                             }
                             console.log(arr)
                             sessionStorage.setItem('materials', JSON.stringify(arr))
-                            if (!!sessionStorage.getItem('huxingParams')) {
+                            if (sessionStorage.getItem('huxingParams')!=null) {
                                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
                             }
                         } else {
