@@ -377,9 +377,9 @@ class OrderController extends Controller
                 'msg' =>'微信内打开',
                 'data'=>Wxpay::GetWxJsSign()
             ]);
-
+            Yii::$app->runAction('order/test-open-id');
         }
-        Yii::$app->runAction('order/test-open-id');
+
     }
 
     /**
@@ -4130,7 +4130,7 @@ class OrderController extends Controller
                     $after[]='换货';
                 }
             }
-            $qrcode=UploadForm::DIR_PUBLIC . '/' . Goods::GOODS_QR_PREFIX . $Goods->id . '.png';
+            $qrcode='/'.UploadForm::DIR_PUBLIC . '/' . Goods::GOODS_QR_PREFIX . $Goods->id . '.png';
             $code=200;
             return Json::encode([
                 'code'=>$code,
