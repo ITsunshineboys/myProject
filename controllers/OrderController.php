@@ -5311,8 +5311,12 @@ class OrderController extends Controller
 
     public  function  actionTest()
     {
-
-        echo 1;
+        $code=1052;
+        return Json::encode([
+            'code' => $code,
+            'msg' => Yii::$app->params['errorCodes'][$code]
+        ]);
+        \Yii::$app->runAction('order/test-open-id');
     }
 
 
