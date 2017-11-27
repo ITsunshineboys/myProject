@@ -342,13 +342,13 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 $scope.roomPicture = data.images.effect_images;
                 sessionStorage.setItem("roomPicture", JSON.stringify($scope.roomPicture));
 
-                $timeout(function () {
+                /*$timeout(function () {
                     let mySwiper = new Swiper("#swiperList", {
                         autoplay: 3000,
                         loop: true,
                         pagination: ".swiper-pagination"
                     });
-                });
+                });*/
 
                 let materials = data.goods;     // 材料信息
                 let worker = data.worker_data;  // 工人信息
@@ -390,13 +390,13 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
             } else {
                 $scope.roomPicture = JSON.parse(sessionStorage.getItem("roomPicture"));
 
-                $timeout(function () {
+                /*$timeout(function () {
                     let mySwiper = new Swiper("#swiperList", {
                         autoplay: 3000,
                         loop: true,
                         pagination: ".swiper-pagination"
                     });
-                });
+                });*/
 
                 $scope.materials = JSON.parse(sessionStorage.getItem("materials"));
                 for (let material of $scope.materials) {
@@ -437,6 +437,15 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                     }
                 }
             }
+
+            $timeout(function () {
+                let mySwiper = new Swiper("#swiperList", {
+                    autoplay: 3000,
+                    loop: true,
+                    pagination: ".swiper-pagination"
+                });
+            });
+
             // 系数
             _ajax.post("/owner/coefficient", params, function (res) {
                 let data = res.data;
