@@ -1,0 +1,121 @@
+<div class="form-inline clearfix">
+        <button id="add" class="btn btn-default" ui-sref="add_class">
+            <span class="glyphicon glyphicon-plus"></span>
+            <span>添加</span>
+        </button>
+        <button class="btn btn-default" ng-click=checkAll()>全选</button>
+        <button class="btn btn-default" data-toggle="modal" data-target="#batchonline_modal">上架</button>
+        <span class="fenleichoose_span">分类选择</span>
+        <!--/*分类选择一级下拉框*/-->
+        <select name=""  class="form-control" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+        <!--/*分类选择二级菜单*/-->
+        <select name="" class="form-control" ng-show="dropdown.firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
+
+    <div class="content">
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>所属分类</th>
+                <th>分类图片</th>
+                <th>分类名称</th>
+                <th>分类级别</th>
+                <th ng-click=sortTime()>
+                    <span>上架时间</span>
+                    <span class="sort">
+                            <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
+                            <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
+                        </span>
+                </th>
+                <th>添加人员</th>
+                <th>状态</th>
+                <th>下架原因</th>
+                <th>详情</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="item in listdata">
+                <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
+                <td>{{item.parent_title}}</td>
+                <td><img ng-src="{{ item.icon}}"></td>
+                <td>{{item.title}}</td>
+                <td>{{item.level}}</td>
+                <td>{{item.offline_time}}</td>
+                <td>{{item.offline_person}}</td>
+                <td class="yesred" ng-if="!onsale_flag">{{item.status}}</td>
+                <td class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
+                <td id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ><span ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></span></td>
+                <td class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+    </div>
+    <!--已下架 单个上架 模态框-->
+    <div class="modal fade" id="shangjia_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="caozuo_content">
+                <div class="modal-header" id="caozuo_header">
+                    <h4 class="modal-title" id="caozuo_shangjia">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="caozuo_body">
+                    <h6 id="shangjia_makesure">上架1个分类，是否确认上架</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button data-dismiss="modal" id="caozuo_cancel">取消</button>
+                    <button data-dismiss="modal" id="caozuo_sure"  ng-click="sureOnline()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--已下架 批量上架 模态框-->
+    <div class="modal fade" id="batchonline_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="sjcaozuo_content">
+                <div class="modal-header" id="sjcaozuo_header">
+                    <h4 class="modal-title" id="sjcaozuo_shangjia">
+                        提示
+                    </h4>
+                </div>
+                <div class="modal-body" id="sjcaozuo_body">
+                    <h6>上架{{table.roles.length}}个分类，是否确认上架</h6>
+                </div>
+
+                <div class="btn_modal_two">
+                    <button data-dismiss="modal" id="sjcaozuo_cancel" ng-click="cancelplliangonline()">取消</button>
+                    <button data-dismiss="modal" id="sjcaozuo_sure" ng-click="surepiliangonline()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--已下架 下架原因模态框-->
+    <div class="modal fade" id="shuru_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content" id="shuru_content">
+                <div class="modal-header" id="shuru_header">
+                    <h4 class="modal-title" id="shurucaozuo">
+                        下架原因
+                    </h4>
+                </div>
+                <div class="modal-body" id="shuru_body">
+                    <h6 id="shuru_reason">下架原因（选填）</h6>
+                    <textarea name="" id="shuru_textarea" cols="50" rows="14"
+                              placeholder={{original_reason==''?'请填写下架原因，如选择多个则为批量备注':''}} ng-model="original_reason"></textarea>
+                </div>
+
+                <div class="btn_modal">
+                    <button data-dismiss="modal" id="shuru_cancel" ng-click="cancelReset()">取消</button>
+                    <button data-dismiss="modal" id="shuru_sure" ng-click="surereset()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

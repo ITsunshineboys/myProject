@@ -1,24 +1,11 @@
-let cla_mag = angular.module("clamagModule", []);
-cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$rootScope,_ajax) {
-    $rootScope.crumbs = [{
-        name: '商城管理',
-        icon: 'icon-shangchengguanli',
-        link: $rootScope.mall_click
-    }, {
-        name: '分类管理',
-        link: 'fenleiguanli',
-        params:{offsale_flag:false}
-    }];
-
-    let singleoffid;   //单个下架分类id
+app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
     let singleonid;    //单个上架分类id
-
     /*默认参数*/
     $scope.params = {
-        status: 1, //已上架
+        status: 0, //已上架
         pid: 0,   //父分类id
         page: 1,  //当前页数
-        'sort[]': "online_time:3" //排序规则 默认按上架时间降序排列
+        'sort[]': "online_time:3" //排序规则 默认按下架时间降序排列
     }
     /*全选ID数组*/
     $scope.table = {
@@ -26,8 +13,7 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     };
     /*已上架单个下架初始化下架原因*/
     $scope.offlinereason = '';
-    /*已上架批量下架初始化下架原因*/
-    $scope.piliangofflinereason = '';
+
     /*分类选择下拉框初始化*/
     $scope.dropdown = {
         firstselect: 0,
@@ -43,21 +29,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
             $scope.table.roles = [];
             tableList();
         }
-    }
-
-    /*选项卡切换方法*/
-    $scope.tabFunc = (obj) => {
-        $scope.onsale_flag = false;
-        $scope.offsale_flag = false;
-        $scope[obj] = true;
-        initFunc(obj);
-    }
-
-    /*根据参数执行选项卡方法*/
-    if ($stateParams.offsale_flag) {
-        $scope.tabFunc('offsale_flag');
-    } else {
-        $scope.tabFunc('onsale_flag');
     }
 
 
@@ -84,26 +55,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     }
 
 
-    /*列表初始化方法*/
-    function initFunc(obj) {
-        $scope.table.roles.length = 0;
-        let tab = obj == 'onsale_flag' ? 1 : 0;
-        let sortflag = obj == 'onsale_flag' ? "online_time:3":"offline_time:3"
-        $scope.params = {
-            status: tab, //已上架
-            pid: 0,   //父分类id
-            page: 1,  //当前页数
-            'sort[]': sortflag //排序规则
-        }
-        $scope.dropdown = {
-            firstselect: 0,
-            secselect: 0
-        }
-        $scope.pageConfig.currentPage = 1;
-        tableList();
-    }
-
-
     // 时间排序
     $scope.sortTime = function () {
         if($scope.onsale_flag){
@@ -119,6 +70,9 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
+        if (value == oldValue) {
+            return
+        }
         $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
         subClass(value);
         $scope.params.pid = value;
@@ -127,6 +81,9 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
 
 
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
+        if (value == oldValue) {
+            return
+        }
         $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
         if (value == oldValue) {
             return
@@ -160,45 +117,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     };
 
 
-    /*-----------------------已上架操作--------------------*/
-
-    /*已上架单个分类下架种类统计*/
-    $scope.singleOffline = function (id) {
-        singleoffid = id;
-    }
-
-    /*单个确认下架*/
-    $scope.sureOffline = function () {
-        let data = {id: singleoffid, offline_reason: $scope.offlinereason};
-        _ajax.post('/mall/category-status-toggle',data,function (res) {
-            $scope.offlinereason = '';
-            $scope.pageConfig.currentPage = 1;
-            tableList();
-        })
-    }
-
-    /*单个取消下架*/
-    $scope.cancelOffline = function () {
-        $scope.offlinereason = '';
-    }
-
-    /*确认批量下架*/
-    $scope.sureBatchOffline = function () {
-        let batchoffids = $scope.table.roles.join(',');
-        let data = {ids: batchoffids, offline_reason: $scope.batchoffline_reason};
-        _ajax.post('/mall/category-disable-batch',data,function (res) {
-            $scope.batchoffline_reason = '';
-            $scope.pageConfig.currentPage = 1;
-            tableList()
-        })
-    }
-
-    /*取消批量下架*/
-    $scope.cancelBatchOffline = function () {
-        $scope.batchoffline_reason = '';
-
-    }
-
     /*-----------------------已下架操作--------------------*/
 
     /*已下架单个分类上架种类统计*/
@@ -210,7 +128,6 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     /*单个确认上架*/
     $scope.sureOnline = function () {
         _ajax.post('/mall/category-status-toggle',{id: singleonid},function (res) {
-            console.log(res);
             $scope.pageConfig.currentPage = 1;
             tableList();
         })
@@ -243,9 +160,5 @@ cla_mag.controller("cla_mag_tabbar", function ($scope, $http, $stateParams,$root
     $scope.cancelReset = function () {
         $scope.original_reason= '';
     }
-})
 
-
-
-
-
+}]);

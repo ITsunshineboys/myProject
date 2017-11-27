@@ -1,0 +1,181 @@
+app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
+
+    let singleoffid;   //单个下架分类id
+
+    /*默认参数*/
+    $scope.params = {
+        status: 1, //已上架
+        pid: 0,   //父分类id
+        page: 1,  //当前页数
+        'sort[]': "online_time:3" //排序规则 默认按上架时间降序排列
+    }
+    /*全选ID数组*/
+    $scope.table = {
+        roles: [],
+    };
+    /*已上架单个下架初始化下架原因*/
+    $scope.offlinereason = '';
+
+    /*分类选择下拉框初始化*/
+    $scope.dropdown = {
+        firstselect: 0,
+        secselect: 0
+    }
+
+    /*分页配置*/
+    $scope.pageConfig = {
+        showJump: true,
+        itemsPerPage: 12,
+        currentPage: 1,
+        onChange: function () {
+            $scope.table.roles = [];
+            tableList();
+        }
+    }
+
+
+    /*排序按钮样式控制*/
+    $scope.sortStyleFunc = () => {
+        return $scope.params['sort[]'].split(':')[1]
+    }
+
+    firstClass();
+    /*分类选择一级下拉框*/
+    function firstClass() {
+        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+            $scope.firstclass = res.data.categories;
+            $scope.dropdown.firstselect = res.data.categories[0].id;
+        })
+    }
+
+    /*分类选择二级下拉框*/
+    function subClass(obj) {
+        _ajax.get('/mall/categories-manage-admin',{pid:obj},function (res) {
+            $scope.secondclass = res.data.categories;
+            $scope.dropdown.secselect = res.data.categories[0].id;
+        })
+    }
+
+    //
+    // /*列表初始化方法*/
+    // function initFunc(obj) {
+    //     $scope.table.roles.length = 0;
+    //     let tab = obj == 'onsale_flag' ? 1 : 0;
+    //     let sortflag = obj == 'onsale_flag' ? "online_time:3":"offline_time:3"
+    //     $scope.params = {
+    //         status: tab, //已上架
+    //         pid: 0,   //父分类id
+    //         page: 1,  //当前页数
+    //         'sort[]': sortflag //排序规则
+    //     }
+    //     $scope.dropdown = {
+    //         firstselect: 0,
+    //         secselect: 0
+    //     }
+    //     $scope.pageConfig.currentPage = 1;
+    //     tableList();
+    // }
+
+
+    // 时间排序
+    $scope.sortTime = function () {
+        if($scope.onsale_flag){
+            $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
+        }else {
+            $scope.params['sort[]'] = $scope.params['sort[]'] == 'offline_time:3' ? 'offline_time:4' : 'offline_time:3';
+        }
+        $scope.table.roles.length = 0;
+        $scope.pageConfig.currentPage = 1;
+        tableList();
+    }
+
+
+    /*分类筛选方法*/
+    $scope.$watch('dropdown.firstselect', function (value, oldValue) {
+        if (value == oldValue) {
+            return
+        }
+        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
+        subClass(value);
+        $scope.params.pid = value;
+        tableList()
+    });
+
+
+    $scope.$watch('dropdown.secselect', function (value, oldValue) {
+        if (value == oldValue) {
+            return
+        }
+        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
+        if (value == oldValue) {
+            return
+        }
+        if (value) {
+            $scope.params.pid = value;
+            tableList()
+        } else {
+            //二级分类id为0
+            $scope.params.pid = $scope.dropdown.firstselect;
+            tableList()
+        }
+    });
+
+
+    /*列表数据获取*/
+    function tableList() {
+        $scope.params.page = $scope.pageConfig.currentPage;
+        _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
+            $scope.pageConfig.totalItems = res.data.category_list_admin.total;
+            $scope.listdata = res.data.category_list_admin.details;
+        })
+    }
+
+
+    /*全选*/
+    $scope.checkAll = function () {
+        !$scope.table.roles.length ? $scope.table.roles = $scope.listdata.map(function (item) {
+            return item.id;
+        }) : $scope.table.roles.length = 0;
+    };
+
+
+    /*-----------------------已上架操作--------------------*/
+
+    /*已上架单个分类下架种类统计*/
+    $scope.singleOffline = function (id) {
+        singleoffid = id;
+    }
+
+    /*单个确认下架*/
+    $scope.sureOffline = function () {
+        let data = {id: singleoffid, offline_reason: $scope.offlinereason};
+        _ajax.post('/mall/category-status-toggle',data,function (res) {
+            $scope.offlinereason = '';
+            $scope.pageConfig.currentPage = 1;
+            tableList();
+        })
+    }
+
+    /*单个取消下架*/
+    $scope.cancelOffline = function () {
+        $scope.offlinereason = '';
+    }
+
+    /*确认批量下架*/
+    $scope.sureBatchOffline = function () {
+        let batchoffids = $scope.table.roles.join(',');
+        let data = {ids: batchoffids, offline_reason: $scope.batchoffline_reason};
+        _ajax.post('/mall/category-disable-batch',data,function (res) {
+            $scope.batchoffline_reason = '';
+            $scope.pageConfig.currentPage = 1;
+            tableList()
+        })
+    }
+
+    /*取消批量下架*/
+    $scope.cancelBatchOffline = function () {
+        $scope.batchoffline_reason = '';
+
+    }
+}]);
+

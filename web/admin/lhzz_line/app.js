@@ -1,4 +1,4 @@
-var app = angular.module("app", ["ng.ueditor", "ui.router", "clamagModule", "onsaleeditModule", "offsaleeditModule",
+var app = angular.module("app", ["ng.ueditor", "ui.router","onsaleeditModule", "offsaleeditModule",
     "addclassModule", 'brand_details_module', 'account_comment', 'change_num', 'bind_record', 'operation_record',
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
@@ -278,11 +278,35 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
 
         /*芳子------------------------------------start*/
-        .state("fenleiguanli", {
-            params: {'offsale_flag': null},
-            url: "/fenleiguanli",
-            templateUrl: "pages/mall_manage/class_manage/cla_mag/cla_mag.html"
+        // .state("fenleiguanli", {
+        //     params: {'offsale_flag': null},
+        //     url: "/fenleiguanli",
+        //     templateUrl: "pages/mall_manage/class_manage/cla_mag/cla_mag.html"
+        // })
+
+
+
+
+        .state('class', { // 分类管理
+            abstract: true,
+            url: '/class_mag',
+            templateUrl: 'pages/mall_manage/class_manage/cla_mag/class.html',
+            css: 'pages/mall_manage/class_manage/cla_mag/css/cla_mag.css',
+            controller: 'class'
         })
+        .state('class.online', { // 已上架分类
+            url: '/class_online',
+            templateUrl: 'pages/mall_manage/class_manage/cla_mag/class_online.html',
+            css: 'pages/mall_manage/class_manage/cla_mag/css/cla_mag.css',
+            controller: 'class_online'
+        })
+        .state('class.offline', { // 已下架分类
+            url: '/class_offline',
+            templateUrl: 'pages/mall_manage/class_manage/cla_mag/class_offline.html',
+            css: 'pages/mall_manage/class_manage/cla_mag/css/cla_mag.css',
+            controller: 'class_offline'
+        })
+
         .state("onsale_edit", {
             params: {item:null},
             url: "/onsale_edit",
@@ -293,6 +317,11 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/offsale_edit",
             templateUrl: "pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
         })
+
+
+
+
+
         .state("add_class", {
             url: "/add_class",
             templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html"

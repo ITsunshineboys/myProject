@@ -61,7 +61,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
         {id:3,name:'商家管理',link:'store_mag'},
         {id:4,name:'商城数据',link:'mall_data'},
         {id:5,name:'品牌管理',link:'brand_index'},
-        {id:6,name:'分类管理',link:'fenleiguanli'},
+        {id:6,name:'分类管理',link:'class.online'},
         {id:7,name:'系列/风格/属性管理',link:'style_index'}
     ];
     //财务中心
