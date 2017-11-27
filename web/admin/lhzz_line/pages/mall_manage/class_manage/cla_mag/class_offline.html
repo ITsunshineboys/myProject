@@ -44,10 +44,10 @@
                 <td>{{item.level}}</td>
                 <td>{{item.offline_time}}</td>
                 <td>{{item.offline_person}}</td>
-                <td class="yesred" ng-if="!onsale_flag">{{item.status}}</td>
+                <td class="off-state">{{item.status}}</td>
                 <td class="edit" ui-sref="offsale_edit({item:item})">编辑</td>
                 <td id="dianji_shuru" data-toggle="modal" data-target="#shuru_modal" ><span ng-click="resetOffReason(item.id,item.offline_reason)" ng-bind="item.offline_reason||'点击输入'" ></span></td>
-                <td class="shangjia" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
+                <td class="handle" data-toggle="modal" data-target="#shangjia_modal" ng-click="singleOnline(item.id)">上架</td>
             </tr>
             </tbody>
         </table>

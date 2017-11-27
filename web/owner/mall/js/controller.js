@@ -515,8 +515,8 @@ angular.module('all_controller', [])
                     images:res.data.goods_view.images
                 }
                 $('#myModal').modal('hide')
-                $timeout.cancel($scope.time)
-                $scope.time = $timeout(function () {
+                $timeout.cancel($scope.time1)
+                $scope.time1 = $timeout(function () {
                     var mySwiper = new Swiper('.swiper-container1', {
                         direction: 'horizontal',
                         loop: true,
@@ -545,6 +545,21 @@ angular.module('all_controller', [])
                 }, 300)
             })
         }
+        $timeout.cancel($scope.time1)
+        $scope.time1 = $timeout(function () {
+            var mySwiper = new Swiper('.swiper-container1', {
+                direction: 'horizontal',
+                loop: true,
+                autoplay: 1000,
+                autoplayDisableOnInteraction: false,
+                observer:true,
+                observeParents:true,
+                effect: 'slide',
+
+                // 如果需要分页器
+                pagination: '.swiper-pagination1',
+            })
+        }, 0)
         //监听商品数量输入
         $scope.$watch('check_goods.quantity', function (newVal, oldVal) {
             if ($scope.cur_params != undefined) {
@@ -1288,8 +1303,8 @@ angular.module('all_controller', [])
                 $('#myModal').modal('hide')
                 $scope.have_header = false
             })
-            $timeout.cancel($scope.time)
-            $scope.time = $timeout(function () {
+            $timeout.cancel($scope.time1)
+            $scope.time1 = $timeout(function () {
                 var mySwiper = new Swiper('.swiper-container1', {
                     direction: 'horizontal',
                     loop: true,

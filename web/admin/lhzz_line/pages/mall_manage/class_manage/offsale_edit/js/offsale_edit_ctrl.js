@@ -11,8 +11,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
         link: $rootScope.mall_click
     }, {
         name: '分类管理',
-        link: 'fenleiguanli',
-        params:{offsale_flag:true}
+        link: 'class.offline',
     },{
         name: '分类详情',
 	}];
@@ -144,7 +143,7 @@ offsale_edit.controller("offsaleEdit",function ($scope,$state,$stateParams,$http
     //*保存模态框确认*/
     $scope.suresave = function () {
         setTimeout(function () {
-            $state.go("fenleiguanli",{offsale_flag:true});
+            $state.go("class.offline");
         },200)
     }
 })

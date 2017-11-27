@@ -1,7 +1,7 @@
 <div class="form-inline clearfix">
         <button class="btn btn-default" ng-click=checkAll()>全选</button>
         <button class="btn btn-default" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
-        <span class="fenleichoose_span">分类选择</span>
+        <span class="class-choose">分类选择</span>
         <!--/*分类选择一级下拉框*/-->
         <select name=""  class="form-control" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
         <!--/*分类选择二级菜单*/-->
@@ -39,9 +39,9 @@
                 <td>{{item.level}}</td>
                 <td>{{item.online_time}}</td>
                 <td>{{item.online_person}}</td>
-                <td class="yesGreen">{{item.status}}</td>
+                <td class="class-state">{{item.status}}</td>
                 <td class="edit" ui-sref="onsale_edit({item:item})">编辑</td>
-                <td class="xiajia" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
+                <td class="handle" data-toggle="modal" data-target="#xiajia_modal" ng-click="singleOffline(item.id)">下架</td>
             </tr>
             </tbody>
         </table>
