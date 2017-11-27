@@ -1,20 +1,13 @@
 angular.module('all_controller', [])
     .controller("intelligent_index_ctrl", function ($scope, $http, _ajax) {//主页控制器
-        sessionStorage.removeItem("huxingParams");
-        sessionStorage.removeItem("backman");
-        sessionStorage.removeItem("roomPicture");
-        sessionStorage.removeItem("worker");
-        sessionStorage.removeItem("materials");
-        sessionStorage.removeItem("materials_bak");
-        sessionStorage.removeItem("huxing");
-        $scope.baseUrl = '/';
+        sessionStorage.clear();
+        $scope.baseUrl = '';
         // $scope.baseUrl = 'http://ac.cdlhzz.cn/'
         //主页推荐
         _ajax.get('/owner/homepage', {}, function (res) {
             console.log(res);
             $scope.recommend_list = res.data
         });
-        // sessionStorage.clear()
     })
     .controller('nodata_ctrl', function (_ajax, $q, $scope, $http, $state, $rootScope, $timeout, $stateParams, $anchorScroll, $location, $window) {
         console.log(JSON.parse(sessionStorage.getItem('materials')))

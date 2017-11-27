@@ -20,7 +20,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                 wxConfig($scope.wxShareUrl);
             });
             $rootScope.isWxOpen = true;
-            if (sessionStorage.getItem("openId") === null) {
+            if (localStorage.getItem("openId") === null) {
                 if (getUrlParams('code') === "") {
                     let url = location.href;
                     _ajax.post('/order/find-open-id', {url: url}, function (res) {
@@ -30,7 +30,7 @@ app.controller("indexCtrl", ["$rootScope", "$scope", "_ajax", function ($rootSco
                     let code = getUrlParams('code');
                     _ajax.post('/order/get-open-id', {code: code}, function (res) {
                         let openId = res.data;
-                        sessionStorage.setItem('openId', openId);
+                        localStorage.setItem('openId', openId);
                     })
                 }
             }
