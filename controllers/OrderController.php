@@ -4327,13 +4327,16 @@ class OrderController extends Controller
          {
              $url="https://ac.cdlhzz.cn/order/test-open-id";
              $baseUrl = urlencode($url);
-             $tools = new PayService();
              $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
              Header("Location: {$urls}");
          }else{
-             $tools = new PayService();
              $openid = $tools->getOpenidFromMp($code);
-             echo $openid;
+             $code=200;
+             return Json::encode([
+                 'code' => $code,
+                 'msg'  => 'ok',
+                 'data' =>$openid
+             ]);
          }
 
 //         $res=StringService::httpGet($urls);
