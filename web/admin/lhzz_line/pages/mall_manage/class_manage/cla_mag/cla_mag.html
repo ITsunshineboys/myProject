@@ -51,12 +51,10 @@
                     <th ng-click=sortTime()>
                         <span ng-if="onsale_flag">上架时间</span>
                         <span ng-if="offsale_flag">下架时间</span>
-                        <span class="sortpic">
-                                 <i class="glyphicon glyphicon-triangle-top"
-                                    ng-class="{'active':sortStyleFunc() == 4}"></i>
-                                 <i class="glyphicon glyphicon-triangle-bottom"
-                                    ng-class="{'active':sortStyleFunc() == 3}"></i>
-                    </span>
+                        <span class="sort">
+                            <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
+                            <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
+                        </span>
                     </th>
                     <th ng-if="onsale_flag">添加人员</th>
                     <th ng-if="offsale_flag">操作人员</th>
@@ -66,9 +64,6 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <!--<tr class="th">-->
-                   <!---->
-                <!--</tr>-->
                 <tbody>
                 <tr ng-repeat="item in listdata">
                     <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>

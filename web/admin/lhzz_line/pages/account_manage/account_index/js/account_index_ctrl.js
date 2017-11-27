@@ -44,7 +44,28 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
     };
 
     //获取账户管理列表 正常状态
-    let tablePages = function () {
+    // let tablePages = function () {
+    //     console.log(132456)
+    //     $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+    //     _ajax.get('/mall/user-list',$scope.params,function (response) {
+    //         console.log(response);
+    //         console.log($scope.id);
+    //         if($scope.close_flag==true){
+    //             $scope.account_colse = response.data.user_list.details;
+    //         }
+    //         if($scope.normal_flag==true){
+    //             $scope.account = response.data.user_list.details;
+    //         }
+    //         $scope.account = response.data.user_list.details;
+    //         $scope.Config.totalItems = response.data.user_list.total;
+    //         for(let [key,value] of $scope.account.entries()){
+    //             value['names'] = value.role_names.join(',')
+    //         }
+    //     })
+    // };
+
+    function tablePages () {
+        console.log(132456)
         $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/user-list',$scope.params,function (response) {
             console.log(response);
@@ -62,6 +83,7 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
             }
         })
     };
+
     $scope.params = {
         keyword:'',
         page: 1,                        // 当前页数
@@ -181,6 +203,9 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
   });
   //监听开始时间
   $scope.$watch('begin_time',function (newVal,oldVal) {
+      if(newVal == oldVal){
+          return;
+      }
       console.log(newVal);
       // $scope.page=1;//默认第一页
     if(newVal!=undefined && newVal!='' && $scope.begin_time!=undefined && $scope.end_time != undefined){
@@ -290,6 +315,9 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
         $scope.mm = $scope;
         $scope.myng = $scope;
         $scope.$watch('begin_time_more',function (newVal,oldVal) {
+            if(newVal == oldVal){
+                return;
+            }
             console.log(1111);
             $scope.page=1;//默认第一页
             if(newVal!=undefined && newVal !='' && $scope.begin_time_more!=undefined && $scope.end_time_more!=undefined) {
@@ -303,6 +331,9 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
 
         //监听结束时间
         $scope.$watch('end_time_more',function (newVal,oldVal) {
+            if(newVal == oldVal){
+                return;
+            }
             $scope.page = 1;//默认第一页
             if (newVal != undefined && newVal != '' && $scope.begin_time_more != undefined && $scope.end_time_more != undefined) {
                 $scope.params.status = 0;
@@ -324,6 +355,10 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
         };
         //监听搜索的内容为空时，恢复初始状态
         $scope.$watch("name_num",function (newVal,oldVal) {
+            if(newVal == oldVal){
+                return;
+            }
+
             if (newVal == "" && oldVal!= '') {
                 $scope.params.status = 0;
                 tablePages();
