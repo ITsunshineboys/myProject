@@ -4329,8 +4329,8 @@ class OrderController extends Controller
              $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
              $url=$http_type."ac.cdlhzz.cn/order/test-open-id";
              $baseUrl = urlencode($url);
-//             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-             Header("Location: {$url}");
+             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
+             Header("Location: {$urls}");
          }else{
              $openid = $tools->getOpenidFromMp($code);
              $code=200;
