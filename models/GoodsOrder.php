@@ -1033,7 +1033,6 @@ class GoodsOrder extends ActiveRecord
             $goods['attr'][$key]=GoodsAttr::find()
                 ->select('name,value,unit')
                 ->where(['goods_id'=>$goods['goods_id']])
-                ->asArray()
                 ->all();
         }
         return $goods;
