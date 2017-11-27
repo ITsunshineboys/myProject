@@ -544,21 +544,33 @@ angular.module('all_controller', [])
                         is_city:$scope.is_city,
                         is_edit:$scope.is_edit
                     }))
-                    $timeout.cancel($scope.time)
-                    $scope.time = $timeout(function () {
-                        var mySwiper = new Swiper('.swiper-container', {
-                            direction: 'horizontal',
-                            loop: true,
-                            autoplay: 1000,
-                            autoplayDisableOnInteraction: false,
-                            observer:true,
-                            observeParents:true,
-                            effect: 'slide',
+                    var mySwiper = new Swiper('.swiper-container', {
+                        direction: 'horizontal',
+                        loop: true,
+                        autoplay: 1000,
+                        autoplayDisableOnInteraction: false,
+                        observer:true,
+                        observeParents:true,
+                        effect: 'slide',
 
-                            // 如果需要分页器
-                            pagination: '.swiper-pagination',
-                        })
-                    }, 0)
+                        // 如果需要分页器
+                        pagination: '.swiper-pagination',
+                    })
+                    // $timeout.cancel($scope.time)
+                    // $scope.time = $timeout(function () {
+                    //     var mySwiper = new Swiper('.swiper-container', {
+                    //         direction: 'horizontal',
+                    //         loop: true,
+                    //         autoplay: 1000,
+                    //         autoplayDisableOnInteraction: false,
+                    //         observer:true,
+                    //         observeParents:true,
+                    //         effect: 'slide',
+                    //
+                    //         // 如果需要分页器
+                    //         pagination: '.swiper-pagination',
+                    //     })
+                    // }, 0)
                     $state.go('nodata.product_detail')
                 }, 300)
             })
