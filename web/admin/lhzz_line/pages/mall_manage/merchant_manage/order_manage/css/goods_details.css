@@ -57,6 +57,10 @@ div.city span:nth-child(4)::before {
     word-break: break-all;
 }
 
+.description img {
+    max-width: 100%;
+}
+
 /* 封面图 */
 .cover-map {
     display: inline-block;
