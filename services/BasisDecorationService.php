@@ -1012,6 +1012,7 @@ class BasisDecorationService
         $new_24 = $get_area['24_new_construction'] * $cement_24;
         $new_repair = $get_area['repair'] * $repair;
         $new_dosage = $new_12 + $new_24 + $new_repair;
+
         if ($new_dosage == 0){
             $cement['quantity'] = 0;
             $cement['cost'] = 0;
