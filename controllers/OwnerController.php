@@ -1756,7 +1756,7 @@ class OwnerController extends Controller
                         $case_works_datum['cost']                  = round($cost * $case_works_datum['goods_quantity'],2);
                         $case_works_datum['name']                  = $one_goods['name'];
                         $case_works_datum['quantity']              = $case_works_datum['goods_quantity'];
-                        $case_works_datum['image']                 = $one_goods['cover_image'];
+                        $case_works_datum['cover_image']           = $one_goods['cover_image'];
                         $case_works_datum['goods_name']            = $one_goods['goods_name'];
                         $case_works_datum['platform_price']        = $cost;
                         $case_works_datum['procurement']           = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
