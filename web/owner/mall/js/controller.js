@@ -2475,6 +2475,9 @@ angular.module('all_controller', [])
                                                 value3.cost -= value4.cost
                                                 value1.cost -= value4.cost
                                                 value.cost -= value4.cost
+                                                value3.procurement -= value4.procurement
+                                                value1.procurement -= value4.procurement
+                                                value.procurement -= value4.procurement
                                             }
                                         } else {
                                             if (value4.path.split(',')[0] == value.id && value4.path.split(',')[1] == value1.id && value4.path.split(',')[2]
@@ -2483,6 +2486,9 @@ angular.module('all_controller', [])
                                                 value3.cost -= value4.cost
                                                 value1.cost -= value4.cost
                                                 value.cost -= value4.cost
+                                                value3.procurement -= value4.procurement
+                                                value1.procurement -= value4.procurement
+                                                value.procurement -= value4.procurement
                                                 if (value3.cost == 0) {
                                                     value2.goods_detail.splice(key3, 1)
                                                     console.log(value2.goods_detail)
@@ -2576,7 +2582,7 @@ angular.module('all_controller', [])
                                                             goods_second: value1.title,
                                                             goods_first: value.title,
                                                             quantity: value3.quantity,
-                                                            category_id:value2.id
+                                                            category_id:value3.category_id
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
@@ -2615,7 +2621,7 @@ angular.module('all_controller', [])
                         $scope.cur_goods = res.data.total_material.material
                         $scope.cur_worker = res.data.labor_cost
                         sessionStorage.setItem('cur_goods', JSON.stringify($scope.cur_goods))
-                        if(sessionStorage.getItem('materials')!=null) {
+                        // if(sessionStorage.getItem('materials')!=null) {
                             //整合一级
                             for (let [key, value] of $scope.stair.entries()) {
                                 for (let [key1, value1] of res.data.total_material.material.entries()) {
@@ -2669,7 +2675,7 @@ angular.module('all_controller', [])
                                     }
                                 }
                             }
-                        }
+                        // }
                         //整合商品
                         for (let [key, value] of  $scope.all_goods.entries()) {
                             for (let [key1, value1] of value.second_level.entries()) {
@@ -2705,17 +2711,20 @@ angular.module('all_controller', [])
                                                 value2.goods_detail.push(cur_obj)
                                             } else {
                                                 for (let [key4, value4] of value2.goods_detail.entries()) {
+                                                    value4.cost = +value4.cost
+                                                    value4.quantity = +value4.quantity
+                                                    value4.procurement = +value4.procurement
                                                     if (sessionStorage.getItem('materials')!=null) {
-                                                        if (value3.id == value4.id) {
-                                                            value4.cost += +value3.cost
-                                                            value4.procurement += +value3.procurement
-                                                            value4.quantity += +value3.quantity
+                                                        if (cur_obj.id == value4.id) {
+                                                            value4.cost += cur_obj.cost
+                                                            value4.procurement += cur_obj.procurement
+                                                            value4.quantity += cur_obj.quantity
                                                         }
                                                     } else {
                                                         if (value3.id == value4.id) {
-                                                            value4.cost += value3.cost
-                                                            value4.procurement += value3.procurement
-                                                            value4.quantity += value3.quantity
+                                                            value4.cost += cur_obj.cost
+                                                            value4.procurement += cur_obj.procurement
+                                                            value4.quantity += cur_obj.quantity
                                                         }
                                                     }
                                                 }
@@ -2781,7 +2790,7 @@ angular.module('all_controller', [])
                                                             procurement:value3.procurement,
                                                             goods_id: value3.id,
                                                             name: value3.name,
-                                                            id: value2.id,
+                                                            id: value3.id,
                                                             goods_three: value2.title,
                                                             goods_second: value1.title,
                                                             goods_first: value.title,
