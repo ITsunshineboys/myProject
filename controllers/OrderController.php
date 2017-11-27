@@ -4338,7 +4338,7 @@ class OrderController extends Controller
              $code=200;
              return Json::encode([
                  'code' => $code,
-                 'msg'  => 'ok',
+                 'msg'  => 'ok'.Yii::$app->session->id,
                  'data' =>$openid
              ]);
          }
