@@ -646,7 +646,7 @@ angular.module('all_controller', [])
                                         value.procurement += $scope.check_goods.procurement - $scope.cur_goods_detail.procurement
                                         value2.goods_detail.push({
                                             id: $scope.check_goods.id,
-                                            image: $scope.check_goods.image,
+                                            cover_image: $scope.check_goods.cover_image,
                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                             name: $scope.check_goods.name,
                                             procurement:$scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
@@ -687,7 +687,7 @@ angular.module('all_controller', [])
                                         title: $scope.cur_three_level,
                                         goods_detail: [{
                                             id: $scope.check_goods.id,
-                                            image: $scope.check_goods.image,
+                                            cover_image: $scope.check_goods.cover_image,
                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                             name: $scope.check_goods.name,
                                             procurement:$scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
@@ -718,7 +718,7 @@ angular.module('all_controller', [])
                                                 title: $scope.cur_three_level,
                                                 goods_detail: [{
                                                     id: $scope.check_goods.id,
-                                                    image: $scope.check_goods.image,
+                                                    cover_image: $scope.check_goods.cover_image,
                                                     cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                                     procurement: $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
                                                     name: $scope.check_goods.name,
@@ -745,7 +745,7 @@ angular.module('all_controller', [])
                                                     if (goods_item == -1) {
                                                         value2.goods_detail.push({
                                                             id: $scope.check_goods.id,
-                                                            image: $scope.check_goods.image,
+                                                            cover_image: $scope.check_goods.cover_image,
                                                             cost: $scope.check_goods.platform_price * $scope.check_goods.quantity,
                                                             procurement: $scope.check_goods.purchase_price_decoration_company * $scope.check_goods.quantity,
                                                             name: $scope.check_goods.name,
@@ -934,7 +934,7 @@ angular.module('all_controller', [])
                                                 goods_first: value.title,
                                                 quantity: value3.quantity,
                                                 platform_price: value3.platform_price,
-                                                image: value3.image,
+                                                cover_image: value3.cover_image,
                                                 goods_name: value3.goods_name,
                                                 series_name: value3.series_name,
                                                 style_name: value3.style_name,
