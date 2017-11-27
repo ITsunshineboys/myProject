@@ -4344,7 +4344,8 @@ class OrderController extends Controller
             $baseUrl = urlencode($url);
             $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
 //            $this->redirect($urls);
-            Header("Location: {$urls}");
+//            Header("Location: {$urls}");
+            Yii::$app->runAction('order/test-open-id');
         }else{
             $openid = $tools->getOpenidFromMp($code);
             Yii::$app->session['openId']=$openid;
@@ -5310,7 +5311,7 @@ class OrderController extends Controller
 
     public  function  actionTest()
     {
-        Yii::$app->runAction('order/test-open-id');
+
         echo 1;
     }
 
