@@ -551,18 +551,20 @@ angular.module('all_controller', [])
                         is_edit:$scope.is_edit
                     }))
                     $scope.$apply(function () {
+                        $timeout(function () {
                             var mySwiper = new Swiper('.swiper-container', {
                                 direction: 'horizontal',
                                 loop: true,
                                 autoplay: 1000,
                                 autoplayDisableOnInteraction: false,
-                                observer: true,
-                                observeParents: true,
+                                observer:true,
+                                observeParents:true,
                                 effect: 'slide',
 
                                 // 如果需要分页器
                                 pagination: '.swiper-pagination',
                             })
+                        }, 100)
                     })
                     $state.go('nodata.product_detail')
                 }, 300)
