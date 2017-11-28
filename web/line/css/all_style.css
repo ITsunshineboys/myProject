@@ -37,6 +37,10 @@ input{
     float: left;
 }
 
+[ng-cloak] {
+    display: none !important;
+}
+
 ::-webkit-input-placeholder { color:#b1b1b1; }
 ::-moz-placeholder { color:#b1b1b1; } /* firefox 19+ */
 :-ms-input-placeholder { color:#b1b1b1; } /* ie */
