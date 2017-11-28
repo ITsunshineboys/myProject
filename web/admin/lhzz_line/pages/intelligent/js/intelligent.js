@@ -2503,29 +2503,36 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 if (item.project == '强电' || item.project == '弱电' || item.project == '水路') {
                     for (let [key, value] of arr.entries()) {
                         value.cur_unit = 'm/点位'
+                        value.project_info = value.project_details + '用料'
                     }
                     $scope.process_list.push(arr)
                 } else if (item.project == '防水') {
                     for (let [key, value] of arr.entries()) {
                         value.cur_unit = 'kg/m2'
+                        value.project_info = value.project_details + '用料'
                     }
                     $scope.process_list.push(arr)
                 } else if (item.project == '乳胶漆') {
                     for (let [key, value] of arr.entries()) {
                         if (value.project_details.indexOf('腻子') != -1) {
+                            value.project_info = '1平方腻子用量'
                             value.cur_unit = 'kg/m2'
                         } else if (value.project_details.indexOf('底漆') != -1 || value.project_details.indexOf('面漆') != -1) {
+                            value.project_info = '1平方'+ value.project_details + '用量'
                             value.cur_unit = 'L/m2'
                         } else if (value.project_details.indexOf('阴角线') != -1) {
+                            value.project_info = '1米阴角线用量'
                             value.cur_unit = 'm/m'
                         } else if (value.project_details.indexOf('石膏粉') != -1) {
+                            value.project_info = '1平方石膏粉费用'
                             value.cur_unit = 'm/m'
                         }
                     }
                     $scope.process_list.push(arr)
                 } else if (item.project == '泥工') {
                     for (let [key, value] of arr.entries()) {
-                        value.cur_unit = 'kg/m2'
+                        value.project_info = value.project_details + '用量'
+                            value.cur_unit = 'kg/m2'
                     }
                     $scope.process_list.push(arr)
                 } else if (item.project == '杂工') {
@@ -2534,27 +2541,50 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         if (value.project_details.indexOf('水泥') != -1) {
                             if (value.project_details.indexOf('补烂') != -1) {
                                 value.cur_unit = 'kg/m'
+                                value.project_info = '补烂水泥用量'
                                 arr1.push(value)
                             } else {
+                                if(value.project_details.indexOf('12墙')!=-1){
+                                    value.project_info = '12墙新建水泥用量'
+                                }else{
+                                    value.project_info = '24墙新建水泥用量'
+                                }
                                 value.cur_unit = 'kg/m2'
                                 arr1.push(value)
                             }
                         } else if (value.project_details.indexOf('河沙') != -1) {
                             if (value.project_details.indexOf('补烂') != -1) {
                                 value.cur_unit = 'kg/m'
+                                value.project_info = '补烂河沙用量'
                                 arr2.push(value)
                             } else {
+                                if(value.project_details.indexOf('12墙')!=-1){
+                                    value.project_info = '12墙新建河沙用量'
+                                }else{
+                                    value.project_info = '24墙新建河沙用量'
+                                }
                                 value.cur_unit = 'kg/m2'
                                 arr2.push(value)
                             }
                         } else {
                             if (value.project_details.indexOf('清运') != -1) {
+                                if(value.project_details.indexOf('12墙')!=-1){
+                                    value.project_info = '12墙建渣运到楼下'
+                                }else{
+                                    value.project_info = '24墙建渣运到楼下'
+                                }
                                 value.cur_unit = '元'
                                 arr3.push(value)
                             } else if (value.project_details.indexOf('面积') != -1) {
+                                if(value.project_details.indexOf('12墙')!=-1){
+                                    value.project_info = '运渣车-车拉12墙面积'
+                                }else{
+                                    value.project_info = '运渣车-车拉24墙面积'
+                                }
                                 value.cur_unit = 'm2/车'
                                 arr3.push(value)
                             } else if (value.project_details.indexOf('费用') != -1) {
+                                value.project_info = '运渣车-车费用'
                                 value.cur_unit = '元/车'
                                 arr3.push(value)
                             }
@@ -2731,12 +2761,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             }
                             value.cur_unit = 'm'
                             if (value.title == '石膏板') {
+                                value.project_info = value.title + '抓取规格'
                                 arr4.push(value)
                             } else if (value.title == '龙骨') {
+                                value.project_info = value.title + '抓取规格'
                                 arr5.push(value)
                             } else if (value.title == '丝杆') {
+                                value.project_info = value.title + '抓取规格'
                                 arr6.push(value)
                             }else if(value.title == '木工板'){
+                                if(value.unit == '长度'){
+                                    value.project_info = '细木工板抓取长度'
+                                }else if(value.unit == '宽度'){
+                                    value.project_info = '细木工板抓取宽度'
+                                }
                                 arr9.push(value)
                             }
                         }
@@ -2749,12 +2787,20 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 value.cur_unit = '张'
                             }
                             if (value.project_details.indexOf('石膏板') != -1) {
+                                if(value.project_details.indexOf('面积')!=-1||value.project_details.indexOf('长度')!=-1){
+                                    value.project_info = '1张'+value.project_details
+                                }else{
+                                    value.project_info = value.project_details
+                                }
                                 arr4.push(value)
                             } else if (value.project_details.indexOf('龙骨') != -1) {
+                                value.project_info = '1根' + value.project_details
                                 arr5.push(value)
                             } else if (value.project_details.indexOf('丝杆') != -1) {
+                                value.project_info = '1根' + value.project_details
                                 arr6.push(value)
                             }else if (value.project_details.indexOf('木工板') != -1) {
+                                value.project_info = value.project_details
                                 arr9.unshift(value)
                             }
                         }
