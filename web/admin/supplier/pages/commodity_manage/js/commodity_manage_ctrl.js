@@ -137,6 +137,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             // $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
             $scope.params.status = 1;
+            // tablePagesWait()
         }
         //物流模板
         $scope.logistics_flag = $stateParams.logistics_flag;
@@ -605,7 +606,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             itemsPerPage: 12,
             currentPage: 1,
             onChange: function () {
-                tablePagesWait();
+                // tablePagesWait();
             }
         };
         let tablePagesWait = function () {
