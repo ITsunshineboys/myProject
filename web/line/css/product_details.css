@@ -461,9 +461,9 @@ button.close{
     position: absolute;
     right: 0.8rem;
     top: 0;
-    font-size: 2rem;
-    /*color: #333;*/
-    /*font-weight: 700;*/
+    font-size: 3.8rem;
+    color: #333;
+    font-weight: 100;
 }
 .pic_more{
     position: absolute;
