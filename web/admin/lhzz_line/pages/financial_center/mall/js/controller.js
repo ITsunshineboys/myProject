@@ -397,6 +397,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             if($scope.all_withdraw_detail!=undefined && oldVal!=undefined){
                 if(+newVal > +$scope.all_withdraw_detail.cash_money){
                     $scope.cur_account_money = $scope.all_withdraw_detail.cash_money
+                    $scope.no_money = ($scope.all_withdraw_detail.cash_money - $scope.cur_account_money).toFixed()
                 }
             }
         })
