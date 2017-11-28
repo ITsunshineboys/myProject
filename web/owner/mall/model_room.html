@@ -149,7 +149,7 @@
         <div id="masonry" class="masonry clearfix">
             <!--辅材-->
             <div class="column">
-                <div class="box" ng-repeat="obj in materials" ng-if="$even == true" ng-click="editMaterial($index)">
+                <div class="box" ng-repeat="obj in materials" id="{{obj.id}}" ng-if="$even == true" ng-click="editMaterial($index)">
                     <h1 class="title_p" ng-if="obj.title == '辅材'">
                         基础装修
                         <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
@@ -172,7 +172,7 @@
                 </div>
             </div>
             <div class="column">
-                <div class="box" ng-repeat="obj in materials" ng-if="$odd == true" ng-click="editMaterial($index)">
+                <div class="box" ng-repeat="obj in materials" id="{{obj.id}}" ng-if="$odd == true" ng-click="editMaterial(obj.id, $index)">
                     <h1 class="title_p">
                         {{obj.title}}
                         <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>

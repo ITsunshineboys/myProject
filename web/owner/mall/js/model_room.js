@@ -1,7 +1,7 @@
 /**
  * Created by xl on 2017/6/29 0029.
  */
-app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams", "_ajax", function ($scope, $timeout, $state, $stateParams, _ajax) {
+app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScroll", "$state", "$stateParams", "_ajax", function ($scope, $timeout, $location, $anchorScroll, $state, $stateParams, _ajax) {
     sessionStorage.removeItem('check_goods');
     $scope.activeStatus = "";   // 户型选中状态值
     $scope.activeObj = {        // 选中的户型参数
@@ -112,8 +112,9 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     $scope.huxingFun = function (obj) {
         let openId = sessionStorage.getItem("openId"),
             materials_bak = sessionStorage.getItem("materials_bak"),
-            huxingParams = sessionStorage.getItem("huxingParams");
-        if (openId !== null || materials_bak !== null || huxingParams !== null) {
+            huxingParams = sessionStorage.getItem("huxingParams"),
+            roomScroll = sessionStorage.getItem("roomScroll");
+        if (openId !== null || materials_bak !== null || huxingParams !== null || roomScroll !== null) {
             sessionStorage.clear();
             sessionStorage.setItem("openId", openId);
             sessionStorage.setItem("materials_bak", materials_bak);
@@ -225,7 +226,8 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
     };
 
     // 修改材料
-    $scope.editMaterial = function (index) {
+    $scope.editMaterial = function (id, index) {
+        sessionStorage.setItem("roomScroll", id);
         let huxing = {
             area: $scope.activeObj.area,
             series: $scope.activeObj.case_picture[0].series_id,
@@ -439,6 +441,14 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
                 $scope.price += parseFloat(data);
                 $scope.preferential += parseFloat(data);
             });
+
+            $timeout(function () {
+                if (sessionStorage.getItem("roomScroll") !== null) {
+                    let roomScroll = sessionStorage.getItem("roomScroll");
+                    $location.hash(roomScroll);
+                    $anchorScroll();
+                }
+            })
         })
     }
 }]);
