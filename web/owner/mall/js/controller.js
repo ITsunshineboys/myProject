@@ -467,7 +467,7 @@ angular.module('all_controller', [])
             $scope.cur_status = 0
             $scope.cur_second_level = $scope.cur_header
             $scope.cur_three_level = three_level_name
-            $scope.cur_three_id = sessionStorage.getItem('materials') == null ? three_level_id : item.category_id
+            $scope.cur_three_id = three_level_id
         }
         $scope.$watch('cur_params', function (newVal, oldVal) {
             $timeout(function () {
