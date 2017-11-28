@@ -639,7 +639,6 @@ let commodity_manage = angular.module("commodity_manage", [])
                 left_number: +left_num
             }, config).then(function (res) {
                 console.log(res);
-
             }, function (err) {
                 console.log(err);
             })
