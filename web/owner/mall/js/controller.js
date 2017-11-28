@@ -550,6 +550,20 @@ angular.module('all_controller', [])
                         is_city:$scope.is_city,
                         is_edit:$scope.is_edit
                     }))
+                    $scope.$apply(function () {
+                            var mySwiper = new Swiper('.swiper-container', {
+                                direction: 'horizontal',
+                                loop: true,
+                                autoplay: 1000,
+                                autoplayDisableOnInteraction: false,
+                                observer: true,
+                                observeParents: true,
+                                effect: 'slide',
+
+                                // 如果需要分页器
+                                pagination: '.swiper-pagination',
+                            })
+                    })
                     $state.go('nodata.product_detail')
                 }, 300)
             })
@@ -793,18 +807,9 @@ angular.module('all_controller', [])
         }
         //智能报价无资料返回
         $scope.returnPrev = function () {
-            console.log($scope.all_goods)
-            console.log(JSON.parse(sessionStorage.getItem('nodata')))
-            console.log($rootScope.curState_name)
-            console.log($scope.cur_header)
-            console.log($scope.inner_header)
-            console.log($scope.cur_status)
-            console.log($scope.cur_project)
             if ($rootScope.curState_name == 'nodata.product_detail') {
                 $scope.have_header = true
-                // if(sessionStorage.getItem('check_goods')!=null){
                     if ($scope.cur_status == 2||$scope.cur_status == 1) {
-                        // $scope.cur_header = $scope.inner_first_level
                         $rootScope.fromState_name = 'nodata.all_goods'
                         sessionStorage.setItem('all_status',JSON.stringify({
                             have_header:true,
@@ -833,7 +838,6 @@ angular.module('all_controller', [])
                             is_edit:$scope.is_edit
                         }))
                     }
-                // }
                 sessionStorage.removeItem('check_goods')
             } else if ($rootScope.curState_name == 'nodata.all_goods') {
                 if ($scope.cur_status == 2) {
@@ -870,7 +874,14 @@ angular.module('all_controller', [])
                 }))
                 $rootScope.fromState_name = 'nodata.other_material'
             } else if ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material') {
-                console.log($scope.is_delete_btn)
+                console.log(sessionStorage.getItem('cur_index'))
+                if(sessionStorage.getItem('nodata')!=null){
+                    let index = sessionStorage.getItem('cur_index')
+                    let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
+                    $anchorScroll.yOffset = 150
+                    $location.hash('bottom'+nodata[index].id)
+                    $anchorScroll()
+                }
                 if (!$scope.is_delete_btn) {
                     $scope.cur_header = '智能报价'
                     $scope.is_city = true
@@ -878,12 +889,9 @@ angular.module('all_controller', [])
                     if($scope.cur_all_goods!=undefined){
                         $scope.all_goods = $scope.cur_all_goods
                     }
-                    // sessionStorage.removeItem('basic_nodata')
                     sessionStorage.removeItem('all_status')
-                    sessionStorage.removeItem('cur_index')
                     sessionStorage.removeItem('params')
-                    // sessionStorage.removeItem('nodata')
-                    $rootScope.fromState_name = !!sessionStorage.getItem('materials') ? 'modelRoom' : 'nodata.house_list'
+                    $rootScope.fromState_name = sessionStorage.getItem('materials')!=null ? 'modelRoom' : 'nodata.house_list'
                 } else {
                     $rootScope.fromState_name = 'nodata.other_material'
                 }
