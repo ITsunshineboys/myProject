@@ -352,7 +352,7 @@ class Express extends ActiveRecord
      */
       public  function  GetExpressName($waybillnumber)
       {
-          $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$waybillnumber), true);
+          $name = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$waybillnumber), true);
           if (!$name)
           {
               return null;

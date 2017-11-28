@@ -1455,11 +1455,11 @@ class OrderController extends Controller
             $receive_details['region']=$order_information['region'];
             $receive_details['invoice_header']=$order_information['invoice_header'];
             //此处有更改  输出发票抬头类型为发票类型
-            $receive_details['invoice_header_type']=$order_information['invoice_type'];
+            $receive_details['invoice_type']=$order_information['invoice_type'];
             $receive_details['invoice_content']=$order_information['invoice_content'];
             $receive_details['invoicer_card'] = $order_information['invoicer_card'];
             $receive_details['buyer_message'] = $order_information['buyer_message'];
-            switch ($order_information['invoice_header_type']){
+            switch ($order_information['invoice_type']){
                 case 1:
                     $receive_details['invoice_header_type']='普通发票';
                     break;
@@ -5054,6 +5054,8 @@ class OrderController extends Controller
             }
         }
         $data=[];
+        $market_price=0;
+        $discount_price=0;
         foreach ($supplier_ids as &$supplier_id)
         {
             $sup_goods=[];
@@ -5063,14 +5065,19 @@ class OrderController extends Controller
                 {
                     $all_money+=($Good['goods_num']*$Good["{$goods_price}"]);
                     $sup_goods[]=[
+                        'goods_id'=>$Good['id'],
                         'goods_name'=>$Good['title'],
                         'subtitle'=>$Good['subtitle'],
                         'cover_image'=>$Good['cover_image'],
                         'goods_num'=>$Good['goods_num'],
                         'goods_price'=>GoodsOrder::switchMoney($Good["{$goods_price}"]*0.01)
                     ];
+                    $market_price+=($Good["market_price"]*$Good['goods_num']);
+                    $discount_price+=($Good["{$goods_price}"]*$Good['goods_num']);
                 }
             }
+
+                $sup_freight=GoodsOrder::CalculationFreight($sup_goods);
                 $supplier=Supplier::findOne($supplier_id);
                 if (!$supplier)
                 {
@@ -5084,10 +5091,10 @@ class OrderController extends Controller
                 [
                     'supplier_id'=>$supplier_id,
                     'shop_name'=>$supplier->shop_name,
-                    'freight'=>0,
-                    'market_price'=>0,
-                    'discount_price'=>0,
-                    'require_payment'=>0,
+                    'freight'=>GoodsOrder::switchMoney($sup_freight*0.01),
+                    'market_price'=>GoodsOrder::switchMoney($market_price*0.01),
+                    'discount_price'=>GoodsOrder::switchMoney($discount_price*0.01),
+                    'require_payment'=>GoodsOrder::switchMoney(($discount_price+$sup_freight)*0.01),
                     'goods'=>$sup_goods
                 ];
         }
@@ -5097,7 +5104,8 @@ class OrderController extends Controller
             'data'=>[
                 'list'=>$data,
                 'freight'=>GoodsOrder::switchMoney($freight*0.01),
-                'all_money'=>GoodsOrder::switchMoney(($all_money+$freight)*0.01)
+                'all_money'=>GoodsOrder::switchMoney(($all_money+$freight)*0.01),
+                'availableamount'=>GoodsOrder::switchMoney($user->availableamount*0.01)
             ]
         ]);
     }
@@ -5423,8 +5431,8 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-        echo $http_type . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+       $data= Yii::$app->request->post();
+        return Json::encode($data);
     }
 
 

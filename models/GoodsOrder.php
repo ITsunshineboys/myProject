@@ -2685,6 +2685,7 @@ class GoodsOrder extends ActiveRecord
                 )
                 {
 
+
                     $tran->rollBack();
                     $code=1000;
                     return $code;
@@ -2703,6 +2704,7 @@ class GoodsOrder extends ActiveRecord
                         !array_key_exists('goods_id',$goods)
                         || !array_key_exists('goods_num',$goods))
                     {
+
                         $tran->rollBack();
                         $code=1000;
                         return $code;
@@ -2711,6 +2713,7 @@ class GoodsOrder extends ActiveRecord
                         ->where(['id'=>$goods['goods_id']])
                         ->asArray()
                         ->one();
+
                     $OrderGoods=new OrderGoods();
                     $OrderGoods->order_no=$order_no;
                     $OrderGoods->goods_number=$goods['goods_num'];
@@ -2728,7 +2731,10 @@ class GoodsOrder extends ActiveRecord
                     $OrderGoods->create_time=$time;
                     if (!$OrderGoods->save(false))
                     {
+
+
                         $tran->rollBack();
+
                         $code=500;
                         return $code;
                     }
@@ -2764,7 +2770,9 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder->invoice_content=$supplier['invoice_content'];
                 if (!$GoodsOrder->save(false))
                 {
+
                     $tran->rollBack();
+
                     $code=500;
                     return $code;
                 }
@@ -2772,6 +2780,7 @@ class GoodsOrder extends ActiveRecord
             }
              if ($total!=$total_amount*100)
              {
+
                  $code=1000;
                  $tran->rollBack();
                  return $code;
