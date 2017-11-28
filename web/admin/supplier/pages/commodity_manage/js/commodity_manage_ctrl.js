@@ -137,7 +137,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             // $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
             $scope.params.status = 1;
-            tablePagesWait()
+            tablePages()
         }
         //物流模板
         $scope.logistics_flag = $stateParams.logistics_flag;
@@ -189,14 +189,13 @@ let commodity_manage = angular.module("commodity_manage", [])
             tablePages();
         };
         //等待下架
-
         $scope.wait_shelves = function () {
             $scope.wait_flag = true;
             $scope.on_flag = false;
             $scope.down_flag = false;
             $scope.logistics_flag = false;
             $scope.params.status = 1;
-            $scope.params['sort[]'] = 'publish_time:3'
+            $scope.params['sort[]'] = 'publish_time:3';
             tablePagesWait()
         };
         //物流模块
