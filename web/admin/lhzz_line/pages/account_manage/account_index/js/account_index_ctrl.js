@@ -101,7 +101,7 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
     };
     // //监听搜索的内容为空时，恢复初始状态
     $scope.$watch("search_text",function (newVal,oldVal) {
-        if (newVal == "") {
+        if (newVal == "" && oldVal != '') {
             $scope.params.keyword ='';
             $scope.params.status = 1;
             tablePages();
@@ -165,6 +165,18 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
     });
 
     //============监听下拉框值的变化===========
+    // $scope.getApplyCase = function () {
+    //     $scope.Config.currentPage = 1
+    //     $scope.params.keyword = ''
+    //     $scope.keyword = ''
+    //     if($scope.params.time_type == 'custom'){
+    //         if($scope.params.start_time!=''||$scope.params.start_time!=''){
+    //             tablePages()
+    //         }
+    //     }else{
+    //         tablePages()
+    //     }
+    // };
     $scope.$watch('selectValue',function(newVal,oldVal){
         if(!!newVal){
             $scope.params.status = 1;

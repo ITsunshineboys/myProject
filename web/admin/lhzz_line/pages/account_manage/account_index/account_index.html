@@ -18,7 +18,7 @@
     <section ng-if="normal_flag==true">
         <span class="border"  ui-sref="add_user">添加新用户</span>
         <span class="border" data-toggle="modal" data-target="#{{more_modal}}" ng-click="change_model ()" >关闭</span>
-        <select  name="province" ng-model="mm.selectValue" class="time_select" ng-options="item.name for item in time">
+        <select  name="province"  ng-model="params.selectValue" class="time_select" ng-options="item.name for item in time">
         </select>
         <input  ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
         <input  ng-if="selectValue.name=='自定义'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">

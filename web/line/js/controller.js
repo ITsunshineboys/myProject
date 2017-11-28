@@ -1089,8 +1089,8 @@ angular.module("all_controller", ['ngCookies'])
                     $http.post( baseUrl+'/order/orderinvoicelineadd',{
                         invoice_type: 1,
                         invoice_header_type:1,
-                        invoice_header:'发票抬头',
-                        invoice_content:$scope.invoice_name,
+                        invoice_header:$scope.invoice_name,
+                        invoice_content:'明细',
                     },config).then(function (response) {
                         console.log(response);
                         $scope.invoice_id = response.data.data.invoice_id;
