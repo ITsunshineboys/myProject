@@ -8,8 +8,7 @@
     color: #3F94F6;
 }
 .engineering_process .submit{
-    position: absolute;
-    bottom:50px;
+    margin-top:100px;
 }
 .engineering_process .red_mark{
     color: red;
