@@ -110,7 +110,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->all();
 
         foreach ($effectList as &$effect) {
-            $effect['item']=self::EFFECT_LOGIN[$effect['itme']];
+            $effect['item']=self::EFFECT_LOGIN[$effect['item']];
             if(isset($effect['create_time'])){
                 $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
             }
