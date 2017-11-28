@@ -1,65 +1,63 @@
 <link rel="stylesheet" href="pages/mall_manage/merchant_manage/store_mag/css/store_mag.css">
 <div ng-controller="store_mag">
-    <div class="store_mag_content">
-        <div>
             <!--商家管理按钮组-->
-            <div class="store_mag_btngroup">
-                <button id="add_btn" ui-sref="add_store">
-                    <span class="glyphicon glyphicon-plus"></span>
+            <div class="store_mag_btngroup search form-inline clearfix">
+                <button class="btn btn-primary" ui-sref="add_store">
                     添加
                 </button>
                 <span class="fenleichoose_span">分类选择</span>
                 <!--/*分类选择一级下拉框*/-->
-                <select name="" class="cailiaochoose" ng-model="firstselect"
+                <select name="" class="form-control" ng-model="firstselect"
                         ng-options="item.id as item.title for item in firstclass"
                         ng-change="subClass(firstselect)"></select>
                 <!--/*分类选择二级菜单*/-->
-                <select name="" class="cailiaochoose" ng-show="firstselect=='0'?false:true"
+                <select name="" class="form-control" ng-show="firstselect=='0'?false:true"
                         ng-options="item.id as item.title for item in secondclass" ng-model="secselect"
                         ng-change="thirdClass(secselect)"></select>
-                <select name="" class="cailiaochoose" ng-show="firstselect=='0'||secselect=='0'?false:true"
+                <select name="" class="form-control" ng-show="firstselect=='0'||secselect=='0'?false:true"
                         ng-options="item.id as item.title for item in thirdclass" ng-model="thirdselect"
                         ng-change="finalSelect(thirdselect)"></select>
 
 
-                <span class="fenleichoose_span" id="store_type">店铺类型</span>
-                <select name="" class="cailiaochoose" ng-options="item.id as item.storetype for item in storetype_arr"
+                <span id="store_type">店铺类型</span>
+                <select name="" class="form-control" ng-options="item.id as item.storetype for item in storetype_arr"
                         ng-model="params.shop_type" ng-change="selectType(typeselect)">
                     <!--<option value="456">全部</option>-->
                 </select>
 
-                <span class="fenleichoose_span" id="store_state">状态</span>
-                <select name="" class="cailiaochoose" ng-options="item.id as item.status for item in status_arr"
+                <span>状态</span>
+                <select name="" class="form-control" ng-options="item.id as item.status for item in status_arr"
                         ng-model="params.status" ng-change="selectStatus(statusselect)">
 
                 </select>
 
-
-                <div class="search_box">
-                    <input class="search_input" type="text" placeholder="搜索商家编号或名称" ng-model="keyword">
-                    <span class="glyphicon glyphicon-search search"></span>
+                <div class="form-group pull-right">
+                    <div class="input-group">
+                        <input class="form-control" type="text" ng-model="keyword" placeholder="搜索商家编号或名称">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
+                    <button class="btn btn-default" ng-click="searchStore()">查询</button>
                 </div>
-                <button id="search_btn" ng-click="searchStore()">搜索</button>
-
             </div>
 
             <!--商家管理Table内容-->
-            <div class="store_mag_table">
-                <table>
-                    <tr class="th">
-                        <td>商家编号</td>
-                        <td>商家名称</td>
-                        <td>店铺类型</td>
-                        <td>所属类目</td>
-                        <td ng-click="sortAmount()">本月销售额
+            <div class="content">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                    <tr>
+                        <th>商家编号</th>
+                        <th>商家名称</th>
+                        <th>店铺类型</th>
+                        <th>所属类目</th>
+                        <th ng-click="sortAmount()">本月销售额
                             <span class="sortpic">
                                  <i class="glyphicon glyphicon-triangle-top"
                                     ng-class="{'active':amount_ascorder}"></i>
                                  <i class="glyphicon glyphicon-triangle-bottom"
                                     ng-class="{'active':amount_desorder}"></i>
                             </span>
-                        </td>
-                        <td ng-click="sortVolumn()">
+                        </th>
+                        <th ng-click="sortVolumn()">
                             本月销量
                             <span class="sortpic">
                                  <i class="glyphicon glyphicon-triangle-top"
@@ -67,13 +65,14 @@
                                  <i class="glyphicon glyphicon-triangle-bottom"
                                     ng-class="{'active':volumn_desorder}"></i>
                              </span>
-                        </td>
-                        <td>状态</td>
-                        <td>详情</td>
-                        <td>管理</td>
-                        <td data-toggle="modal" data-target="#unblock_modal">操作</td>
+                        </th>
+                        <th>状态</th>
+                        <th>详情</th>
+                        <th>管理</th>
                     </tr>
+                    </thead>
 
+                    <tbody>
                     <tr ng-repeat="item in stores track by $index">
                         <td>{{item.shop_no}}</td>
                         <td>{{item.shop_name}}</td>
@@ -95,12 +94,62 @@
                         </td>
 
                     </tr>
+                    </tbody>
+
+                    <!--<tr class="th">-->
+                        <!--<td>商家编号</td>-->
+                        <!--<td>商家名称</td>-->
+                        <!--<td>店铺类型</td>-->
+                        <!--<td>所属类目</td>-->
+                        <!--<td ng-click="sortAmount()">本月销售额-->
+                            <!--<span class="sortpic">-->
+                                 <!--<i class="glyphicon glyphicon-triangle-top"-->
+                                    <!--ng-class="{'active':amount_ascorder}"></i>-->
+                                 <!--<i class="glyphicon glyphicon-triangle-bottom"-->
+                                    <!--ng-class="{'active':amount_desorder}"></i>-->
+                            <!--</span>-->
+                        <!--</td>-->
+                        <!--<td ng-click="sortVolumn()">-->
+                            <!--本月销量-->
+                            <!--<span class="sortpic">-->
+                                 <!--<i class="glyphicon glyphicon-triangle-top"-->
+                                    <!--ng-class="{'active':volumn_ascorder}"></i>-->
+                                 <!--<i class="glyphicon glyphicon-triangle-bottom"-->
+                                    <!--ng-class="{'active':volumn_desorder}"></i>-->
+                             <!--</span>-->
+                        <!--</td>-->
+                        <!--<td>状态</td>-->
+                        <!--<td>详情</td>-->
+                        <!--<td>管理</td>-->
+                        <!--<td data-toggle="modal" data-target="#unblock_modal">操作</td>-->
+                    <!--</tr>-->
+
+                    <!--<tr ng-repeat="item in stores track by $index">-->
+                        <!--<td>{{item.shop_no}}</td>-->
+                        <!--<td>{{item.shop_name}}</td>-->
+                        <!--<td>{{item.type_shop}}</td>-->
+                        <!--<td>{{item.category_name}}</td>-->
+                        <!--<td style="text-align: center">{{item.sales_amount_month | currency:"¥"}}</td>-->
+                        <!--<td style="text-align: center">{{item.sales_volumn_month}}</td>-->
+                        <!--<td class="running" ng-class="{tored:item.status=='已闭店'}">{{item.status}}</td>-->
+                        <!--<td class="color_blue clickstyle" ui-sref="store_detail({store:item})">查看</td>-->
+                        <!--<td>-->
+                            <!--<span class="color_blue" ui-sref="commodity.online({id:item.id})">商品管理</span>-->
+                            <!--<a class="color_blue" ui-sref="order.all({id: item.id})">订单管理</a>-->
+                            <!--<a class="color_blue" ui-sref="store_data({id: item.id})">数据</a>-->
+                        <!--</td>-->
+                        <!--<td class="color_blue clickstyle">-->
+                            <!--<span data-toggle="modal" data-target="#bidian_tishi"-->
+                                  <!--ng-click=changeStatus(item.id,item.status)-->
+                                  <!--ng-bind="item.status=='正常营业'?'闭店':'开店'"></span>-->
+                        <!--</td>-->
+
+                    <!--</tr>-->
                 </table>
 
                 <tm-pagination conf="pageConfig"></tm-pagination>
             </div>
-        </div>
-    </div>
+
 
     <!--闭店提示模态框-->
     <div class="modal fade" id="bidian_tishi" data-backdrop="static" data-keyboard="false">

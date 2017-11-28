@@ -2,19 +2,32 @@
  * Created by Administrator on 2017/10/25/025.
  */
 app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stateParams','$state','$location','$anchorScroll','$window','$rootScope', function (_ajax,$rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window,$rootScope) {
-    $rootScope.crumbs = [{
-        name: '商城管理',
-        icon: 'icon-shangchengguanli',
-        link: 'merchant_index'
-    }, {
-        name: '商家管理',
-        link: 'store_mag',
-    },{
-        name: '商品管理',
-        link: -1,
-    },{
-        name: '商品详情',
-    }];
+    if($stateParams.storeid == null){
+        $rootScope.crumbs = [{
+            name: '申请样板间',
+            icon: 'icon-yangbanjian',
+            link: 'apply_case.index'
+        }, {
+            name: '详情',
+            link: -1,
+        },{
+            name: '商品详情',
+        }];
+    }else{
+        $rootScope.crumbs = [{
+            name: '商城管理',
+            icon: 'icon-shangchengguanli',
+            link: 'merchant_index'
+        }, {
+            name: '商家管理',
+            link: 'store_mag',
+        },{
+            name: '商品管理',
+            link: -1,
+        },{
+            name: '商品详情',
+        }];
+    }
 
     $scope.allprice = {
         purchase_price_decoration_company:$scope.purchase_price_decoration_company,
@@ -22,11 +35,11 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         purchase_price_designer:$scope.purchase_price_designer
     }
 
-
+    // console.log($rootScope)
     $rootScope.fromState_name=='commodity.online'?  $scope.online_btn = true:$scope.online_btn = false;
     $rootScope.fromState_name=='commodity.offline'? $scope.offline_btn = true:$scope.offline_btn = false;
     $rootScope.fromState_name=='commodity.wait'?    $scope.wait_btn = true:$scope.wait_btn = false;
-    $rootScope.fromState_name=='commodity.deleted'|| $rootScope.fromState_name=='apply_case.case_detail'? $scope.deleted_btn = true:$scope.deleted_btn = false;
+    $rootScope.fromState_name=='commodity.deleted' || $rootScope.fromState_name=='apply_case.case_detail'? $scope.deleted_btn = true:$scope.deleted_btn = false;
 
 
 
@@ -248,4 +261,3 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         history.go(-1);
     }
 }]);
-;
