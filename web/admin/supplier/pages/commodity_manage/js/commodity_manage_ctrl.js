@@ -668,7 +668,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             };
             //监听搜索框的值为空时，返回最初的值
             $scope.$watch("off_search_content", function (newVal, oldVal) {
-                if (newVal == "") {
+                if (newVal == "" && oldVal !='') {
                     $scope.paramsWait.status = 1;
                     tablePagesWait()
                 }
