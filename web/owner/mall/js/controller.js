@@ -934,16 +934,16 @@ angular.module('all_controller', [])
                                         })
                                         if (value3.goods_id == undefined) {
                                             value4.goods.push({
-                                                cost: value3.cost,
+                                                cost: +value3.cost,
                                                 goods_id: value3.id,
                                                 name: value3.name,
                                                 id: value3.id,
-                                                procurement:value3.procurement,
+                                                procurement:+value3.procurement,
                                                 goods_three: value2.title,
                                                 goods_second: item.title,
                                                 goods_first: value.title,
-                                                quantity: value3.quantity,
-                                                platform_price: value3.platform_price,
+                                                quantity: +value3.quantity,
+                                                platform_price: + value3.platform_price,
                                                 cover_image: value3.cover_image,
                                                 goods_name: value3.goods_name,
                                                 series_name: value3.series_name,
