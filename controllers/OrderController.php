@@ -4586,8 +4586,7 @@ class OrderController extends Controller
                 ]);
             }
             $request=Yii::$app->request;
-            return Json::encode($request->post());
-            $suppliers=$request->post('suppliers');
+            $suppliers=Json::decode($request->post('suppliers'));
             $total_amount=$request->post('total_amount');
             $address_id=$request->post('address_id');
             $pay_way=$request->post('pay_way');
