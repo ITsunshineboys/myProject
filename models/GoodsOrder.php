@@ -1841,25 +1841,25 @@ class GoodsOrder extends ActiveRecord
                     break;
             }
 
-            $access=new UserAccessdetail();
-            $access->uid=$user->id;
-            $access->role_id=$user->last_role_id_app;
-            $access->access_type=7;
-            $access->access_money=$postData['total_amount']*100;
-            $access->create_time=time();
-            $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
-            $access->order_no=$orders;
-            $res3=$access->save(false);
-            if ( !$res3){
-                $tran->rollBack();
-                $code=500;
-                return $code;
-            }
-
+            $transaction_no=GoodsOrder::SetTransactionNo($role_number);
             foreach ($orders as $k =>$v){
                 $GoodsOrder=self::find()
                     ->where(['order_no'=>$orders[$k]])
                     ->one();
+                $access=new UserAccessdetail();
+                $access->uid=$user->id;
+                $access->role_id=$user->last_role_id_app;
+                $access->access_type=7;
+                $access->access_money=$GoodsOrder['amount_order'];
+                $access->create_time=time();
+                $access->transaction_no=$transaction_no;
+                $access->order_no=$orders[$k];
+                $res3=$access->save(false);
+                if ( !$res3){
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
                 $OrderGoods=OrderGoods::find()
                     ->where(['order_no'=>$orders[$k]])
                     ->asArray()
@@ -1895,6 +1895,7 @@ class GoodsOrder extends ActiveRecord
                         $GoodsStat->create_date=$date;
                         if (!$GoodsStat->save(false))
                         {
+
                             $code=500;
                             $tran->rollBack();
                             return $code;
@@ -1903,6 +1904,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                 {
+
                     $code=1000;
                     $tran->rollBack();
                     return $code;
@@ -1938,15 +1940,12 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
-
             $tran->commit();
         }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return $code;
         }
-
-
         $code=200;
         return $code;
     }
@@ -2646,6 +2645,7 @@ class GoodsOrder extends ActiveRecord
      */
     public static  function AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way)
     {
+        $total=0;
         //1:余额支付  2：支付宝app支付  3：微信APP支付
         switch ($pay_way)
         {
@@ -2665,11 +2665,11 @@ class GoodsOrder extends ActiveRecord
             $code=1000;
             return $code;
         }
+
         $tran = Yii::$app->db->beginTransaction();
         $role_money=self::GetRoleMoney($user->last_role_id_app);
         $time=time();
         try{
-            $total=0;
             foreach ($suppliers as  &$supplier)
             {
                 if (
@@ -2684,11 +2684,21 @@ class GoodsOrder extends ActiveRecord
                     || !array_key_exists('goods',$supplier)
                 )
                 {
-
-
                     $tran->rollBack();
                     $code=1000;
                     return $code;
+                }
+                if (empty($supplier['freight']))
+                {
+                    $supplier['freight']=0;
+                }
+                if (empty($supplier['invoice_type']))
+                {
+                    $supplier['invoice_type']=1;
+                }
+                if (empty($supplier['invoice_header_type']))
+                {
+                    $supplier['invoice_header_type']=1;
                 }
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
@@ -2701,7 +2711,7 @@ class GoodsOrder extends ActiveRecord
                 foreach ($supplier['goods'] as &$goods)
                 {
                     if (
-                        !array_key_exists('goods_id',$goods)
+                           !array_key_exists('goods_id',$goods)
                         || !array_key_exists('goods_num',$goods))
                     {
 
@@ -2713,7 +2723,6 @@ class GoodsOrder extends ActiveRecord
                         ->where(['id'=>$goods['goods_id']])
                         ->asArray()
                         ->one();
-
                     $OrderGoods=new OrderGoods();
                     $OrderGoods->order_no=$order_no;
                     $OrderGoods->goods_number=$goods['goods_num'];
@@ -2731,16 +2740,14 @@ class GoodsOrder extends ActiveRecord
                     $OrderGoods->create_time=$time;
                     if (!$OrderGoods->save(false))
                     {
-
-
                         $tran->rollBack();
-
                         $code=500;
                         return $code;
                     }
                     $money+=($Goods["{$role_money}"]*$goods['goods_num']);
+
                 }
-                $total+=($supplier['freight']*100+$money);
+                $total+=($money+$supplier['freight']*100);
                 $GoodsOrder=new GoodsOrder();
                 $GoodsOrder->order_no=$order_no;
                 $GoodsOrder->amount_order=$supplier['freight']*100+$money;
@@ -2768,6 +2775,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder->invoice_header=$supplier['invoice_header'];
                 $GoodsOrder->invoicer_card=$supplier['invoicer_card'];
                 $GoodsOrder->invoice_content=$supplier['invoice_content'];
+
                 if (!$GoodsOrder->save(false))
                 {
 
@@ -2777,10 +2785,11 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
                 $orders[]=$order_no;
+
             }
+
              if ($total!=$total_amount*100)
              {
-
                  $code=1000;
                  $tran->rollBack();
                  return $code;
@@ -2788,6 +2797,7 @@ class GoodsOrder extends ActiveRecord
             $tran->commit();
             return $orders;
         }catch (yii\db\Exception $e){
+
             $tran->rollBack();
             $code=500;
             return $code;

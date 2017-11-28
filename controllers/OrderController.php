@@ -3536,9 +3536,6 @@ class OrderController extends Controller
                                         return $code;
                                     }
                                 }
-
-
-
                             }
                             if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                             {
@@ -4578,7 +4575,8 @@ class OrderController extends Controller
         public function actionAppBuyGoods()
         {
             $user = Yii::$app->user->identity;
-            if (!$user){
+            if (!$user)
+            {
                 $code=1052;
                 return Json::encode([
                     'code' => $code,
@@ -4598,6 +4596,7 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+
             $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
             if ($orders==500 || $orders==1000)
             {
@@ -4614,7 +4613,6 @@ class OrderController extends Controller
                 'data' =>$orders
             ]);
         }
-
 
         /**
          * 测试收货
@@ -4692,7 +4690,7 @@ class OrderController extends Controller
                     'code' => $code,
                     'msg'  => 'ok'
                 ]);
-            }catch (Exception $e){
+            }catch (\Exception $e){
                 $tran->rollBack();
                 $code=500;
                 return Json::encode([
@@ -4701,6 +4699,7 @@ class OrderController extends Controller
                 ]);
             }
         }
+
 
 //    public function actionDelData()
 //    {
@@ -4919,6 +4918,14 @@ class OrderController extends Controller
     {
         $goods=Yii::$app->request->post('goods');
         foreach ($goods as $one){
+            if(!array_key_exists('num',$one)|| !array_key_exists('goods_id',$one))
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             if ($one['num'] != 0 || $one['num'] !=null){
                 $goods_ [] = $one;
             }
@@ -5032,7 +5039,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $freight=GoodsOrder::CalculationFreight($goods);
+
         $all_money=0;
         if (!$goods)
         {
@@ -5084,7 +5091,6 @@ class OrderController extends Controller
             {
                 if ($Good['supplier_id']==$supplier_id)
                 {
-                    $all_money+=($Good['goods_num']*$Good["{$goods_price}"]);
                     $sup_goods[]=[
                         'goods_id'=>$Good['id'],
                         'goods_name'=>$Good['title'],
@@ -5095,6 +5101,7 @@ class OrderController extends Controller
                     ];
                     $market_price+=($Good["market_price"]*$Good['goods_num']);
                     $discount_price+=($Good["{$goods_price}"]*$Good['goods_num']);
+
                 }
             }
 
@@ -5118,7 +5125,10 @@ class OrderController extends Controller
                     'require_payment'=>GoodsOrder::switchMoney(($discount_price+$sup_freight)*0.01),
                     'goods'=>$sup_goods
                 ];
+
         }
+        $all_money+=$discount_price;
+        $freight=GoodsOrder::CalculationFreight($goods);
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',

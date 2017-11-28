@@ -7,6 +7,8 @@ use app\models\BankinfoLog;
 use app\models\BankName;
 use app\models\Goods;
 use app\models\GoodsOrder;
+use app\models\OrderGoods;
+use app\models\OrderPlatForm;
 use app\models\Role;
 use app\models\Supplier;
 use app\models\SupplierCashregister;
@@ -1550,20 +1552,21 @@ class WithdrawalsController extends Controller
                 ];
                 break;
             case 7:
-                 
-                if ($access['order_no'])
-                {
-                    $orders=explode(',',$access['order_no']);
-                    foreach ($orders as $order)
+                $accessList=UserAccessdetail::find()
+                    ->where(['transaction_no'=>$transaction_no])
+                    ->asArray()
+                    ->all();
+                if ($access['order_no']){
+                    $goodsOrder=GoodsOrder::find()
+                        ->select('pay_name')
+                        ->where(['order_no'=>$access['order_no']])
+                        ->one();
+                    $pay_name=$goodsOrder->pay_name;
+                    foreach ($accessList as &$list)
                     {
-                        $goodsOrder=GoodsOrder::find()
-                            ->select('pay_name')
-                            ->where(['order_no'=>$order])
-                            ->one();
-                        $pay_name=$goodsOrder->pay_name;
                         $orderGoods=OrderGoods::find()
                             ->select('goods_name')
-                            ->where(['order_no'=>$order])
+                            ->where(['order_no'=>$list['order_no']])
                             ->asArray()
                             ->all();
                         foreach ($orderGoods as $orderGood)
