@@ -1359,7 +1359,7 @@ angular.module('all_controller', [])
             console.log($scope.nodata_params)
             console.log(error)
             console.log($scope.nowStairs)
-            $scope.all_workers = []
+            $scope.all_worker = []
             $scope.discount_price = 0
             $scope.all_price = 0
             if (valid) {
@@ -1665,23 +1665,24 @@ angular.module('all_controller', [])
                                 }
                             }
                             //工人费用
-                            let cur_worker = {worker_kind: response.data.data.waterway_labor_price.worker_kind}
-                            let cur_worker_price = response.data.data.waterway_labor_price.price
-                            if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                    JSON.stringify(cur_worker).length - 1)) == -1) {
-                                $scope.all_workers.push({
-                                    worker_kind: cur_worker.worker_kind,
-                                    price: cur_worker_price
-                                })
-                            } else {
-                                for (let [key, value] of $scope.all_workers.entries()) {
-                                    if (cur_worker.worker_kind == value.worker_kind) {
-                                        value.price += cur_worker_price
-                                    }
-                                }
-                            }
+                            // let cur_worker = {worker_kind: response.data.data.waterway_labor_price.worker_kind}
+                            // let cur_worker_price = response.data.data.waterway_labor_price.price
+                            // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                            //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                            //     $scope.all_workers.push({
+                            //         worker_kind: cur_worker.worker_kind,
+                            //         price: cur_worker_price
+                            //     })
+                            // } else {
+                            //     for (let [key, value] of $scope.all_workers.entries()) {
+                            //         if (cur_worker.worker_kind == value.worker_kind) {
+                            //             value.price += cur_worker_price
+                            //         }
+                            //     }
+                            // }
+                            $scope.all_worker.push({worker_kind:response.data.data.waterway_labor_price.worker_kind,worker_price:response.data.data.waterway_labor_price.price})
                         }
-                        console.log($scope.all_workers)
+                        console.log($scope.all_worker)
                         console.log($scope.all_goods)
                     }),
                     //防水
@@ -1775,21 +1776,22 @@ angular.module('all_controller', [])
                                 }
                             }
                             //工人费用
-                            let cur_worker = {worker_kind: response.data.data.waterproof_labor_price.worker_kind}
-                            let cur_worker_price = response.data.data.waterproof_labor_price.price
-                            if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                    JSON.stringify(cur_worker).length - 1)) == -1) {
-                                $scope.all_workers.push({
-                                    worker_kind: cur_worker.worker_kind,
-                                    price: cur_worker_price
-                                })
-                            } else {
-                                for (let [key, value] of $scope.all_workers.entries()) {
-                                    if (cur_worker.worker_kind == value.worker_kind) {
-                                        value.price += cur_worker_price
-                                    }
-                                }
-                            }
+                            // let cur_worker = {worker_kind: response.data.data.waterproof_labor_price.worker_kind}
+                            // let cur_worker_price = response.data.data.waterproof_labor_price.price
+                            // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                            //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                            //     $scope.all_workers.push({
+                            //         worker_kind: cur_worker.worker_kind,
+                            //         price: cur_worker_price
+                            //     })
+                            // } else {
+                            //     for (let [key, value] of $scope.all_workers.entries()) {
+                            //         if (cur_worker.worker_kind == value.worker_kind) {
+                            //             value.price += cur_worker_price
+                            //         }
+                            //     }
+                            // }
+                            $scope.all_worker.push({worker_kind:response.data.data.waterproof_labor_price.worker_kind,worker_price:response.data.data.waterproof_labor_price.price})
                             console.log($scope.all_workers)
                             console.log($scope.all_goods)
                             data1['waterproof_total_area'] = response.data.data.total_area
@@ -1887,21 +1889,22 @@ angular.module('all_controller', [])
                                 }
                             }
                             //工人费用
-                            let cur_worker = {worker_kind: response.data.data.carpentry_labor_price.worker_kind}
-                            let cur_worker_price = response.data.data.carpentry_labor_price.price
-                            if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                    JSON.stringify(cur_worker).length - 1)) == -1) {
-                                $scope.all_workers.push({
-                                    worker_kind: cur_worker.worker_kind,
-                                    price: cur_worker_price
-                                })
-                            } else {
-                                for (let [key, value] of $scope.all_workers.entries()) {
-                                    if (cur_worker.worker_kind == value.worker_kind) {
-                                        value.price += cur_worker_price
-                                    }
-                                }
-                            }
+                            // let cur_worker = {worker_kind: response.data.data.carpentry_labor_price.worker_kind}
+                            // let cur_worker_price = response.data.data.carpentry_labor_price.price
+                            // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                            //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                            //     $scope.all_workers.push({
+                            //         worker_kind: cur_worker.worker_kind,
+                            //         price: cur_worker_price
+                            //     })
+                            // } else {
+                            //     for (let [key, value] of $scope.all_workers.entries()) {
+                            //         if (cur_worker.worker_kind == value.worker_kind) {
+                            //             value.price += cur_worker_price
+                            //         }
+                            //     }
+                            // }
+                            $scope.all_worker.push({worker_kind:response.data.data.carpentry_labor_price.worker_kind,worker_price:response.data.data.carpentry_labor_price.price})
                         }
                         console.log($scope.all_workers)
                         console.log($scope.all_goods)
@@ -1997,21 +2000,22 @@ angular.module('all_controller', [])
                                 }
                             }
                             //工人费用
-                            let cur_worker = {worker_kind: response.data.data.coating_labor_price.worker_kind}
-                            let cur_worker_price = response.data.data.coating_labor_price.price
-                            if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                    JSON.stringify(cur_worker).length - 1)) == -1) {
-                                $scope.all_workers.push({
-                                    worker_kind: cur_worker.worker_kind,
-                                    price: cur_worker_price
-                                })
-                            } else {
-                                for (let [key, value] of $scope.all_workers.entries()) {
-                                    if (cur_worker.worker_kind == value.worker_kind) {
-                                        value.price += cur_worker_price
-                                    }
-                                }
-                            }
+                            // let cur_worker = {worker_kind: response.data.data.coating_labor_price.worker_kind}
+                            // let cur_worker_price = response.data.data.coating_labor_price.price
+                            // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                            //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                            //     $scope.all_workers.push({
+                            //         worker_kind: cur_worker.worker_kind,
+                            //         price: cur_worker_price
+                            //     })
+                            // } else {
+                            //     for (let [key, value] of $scope.all_workers.entries()) {
+                            //         if (cur_worker.worker_kind == value.worker_kind) {
+                            //             value.price += cur_worker_price
+                            //         }
+                            //     }
+                            // }
+                            $scope.all_worker.push({worker_kind:response.data.data.coating_labor_price.worker_kind,worker_price:response.data.data.coating_labor_price.price})
                             data2['bedroom_area'] = response.data.data.bedroom_area
                         }
                         console.log($scope.all_workers)
@@ -2309,21 +2313,22 @@ angular.module('all_controller', [])
                                     }
                                 }
                                 //工人费用
-                                let cur_worker = {worker_kind: response.data.data.mud_make_labor_price.worker_kind}
-                                let cur_worker_price = response.data.data.mud_make_labor_price.price
-                                if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                        JSON.stringify(cur_worker).length - 1)) == -1) {
-                                    $scope.all_workers.push({
-                                        worker_kind: cur_worker.worker_kind,
-                                        price: cur_worker_price
-                                    })
-                                } else {
-                                    for (let [key, value] of $scope.all_workers.entries()) {
-                                        if (cur_worker.worker_kind == value.worker_kind) {
-                                            value.price += cur_worker_price
-                                        }
-                                    }
-                                }
+                                // let cur_worker = {worker_kind: response.data.data.mud_make_labor_price.worker_kind}
+                                // let cur_worker_price = response.data.data.mud_make_labor_price.price
+                                // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                                //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                                //     $scope.all_workers.push({
+                                //         worker_kind: cur_worker.worker_kind,
+                                //         price: cur_worker_price
+                                //     })
+                                // } else {
+                                //     for (let [key, value] of $scope.all_workers.entries()) {
+                                //         if (cur_worker.worker_kind == value.worker_kind) {
+                                //             value.price += cur_worker_price
+                                //         }
+                                //     }
+                                // }
+                                $scope.all_worker.push({worker_kind:response.data.data.mud_make_labor_price.worker_kind,worker_price:response.data.data.mud_make_labor_price.price})
                             }
                             console.log($scope.all_workers)
                             console.log($scope.all_goods)
@@ -2405,8 +2410,8 @@ angular.module('all_controller', [])
                     console.log($scope.discount_price)
                 }
             })]).then(function () {
-                let all_worker_price = $scope.all_workers.reduce(function (prev, cur) {
-                    return prev + cur.price
+                let all_worker_price = $scope.all_worker.reduce(function (prev, cur) {
+                    return prev + cur.worker_price
                 }, 0)
                 console.log($scope.all_workers)
                 console.log(all_worker_price)
@@ -2636,26 +2641,31 @@ angular.module('all_controller', [])
                     console.log($scope.all_backman)
                     sessionStorage.setItem('backman', JSON.stringify($scope.all_backman))
                 }
+                let index = $scope.all_worker.findIndex(function (item) {
+                    return item.worker_kind == '杂工'
+                })
+                if(index!=-1){
+                    $scope.all_worker.splice(index,1)
+                }
                 //保存并请求杂项数据
                 if ($scope.twelve_dismantle == '' && $scope.twenty_four_dismantle == '' && $scope.repair == '' &&
                     $scope.twelve_new_construction == '' && $scope.twenty_four_new_construction == '') {
                     console.log($scope.all_goods)
                     console.log($scope.all_workers)
                     $scope.cur_header = '智能报价'
-                    if (sessionStorage.getItem('materials') != null) {
-                        let index = $scope.all_worker.findIndex(function (item) {
-                            return item.worker_kind == '杂工'
+                    let index = $scope.all_worker.findIndex(function (item) {
+                        return item.worker_kind == '杂工'
+                    })
+                    if (index == -1) {
+                        $scope.all_worker.push({
+                            'worker_kind': '杂工',
+                            'worker_price': 0
                         })
-                        if (index == -1) {
-                            $scope.all_workers.push({
-                                'worker_kind': '杂工',
-                                'worker_price': 0
-                            })
-                        } else {
-                            $scope.all_worker[index].worker_price = 0
-                        }
+                    } else {
+                        $scope.all_worker[index].worker_price = 0
+                    }
+                    if (sessionStorage.getItem('materials') != null) {
                         sessionStorage.setItem('worker', JSON.stringify($scope.all_worker))
-                        // sessionStorage.removeItem('cur_goods')
                         let arr = []
                         for (let [key, value] of $scope.all_goods.entries()) {
                             arr.push({
@@ -2852,21 +2862,22 @@ angular.module('all_controller', [])
                             }
                         }
                         //工人费用
-                        let cur_worker = {worker_kind: res.data.labor_cost.worker_kind}
-                        let cur_worker_price = res.data.labor_cost.price
-                        if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
-                                JSON.stringify(cur_worker).length - 1)) == -1) {
-                            $scope.all_workers.push({
-                                worker_kind: cur_worker.worker_kind,
-                                price: cur_worker_price
-                            })
-                        } else {
-                            for (let [key, value] of $scope.all_workers.entries()) {
-                                if (cur_worker.worker_kind == value.worker_kind) {
-                                    value.price += cur_worker_price
-                                }
-                            }
-                        }
+                        $scope.all_worker.push({worker_kind:$scope.cur_worker.worker_kind,worker_price:$scope.cur_worker.price})
+                        // let cur_worker = {worker_kind: res.data.labor_cost.worker_kind}
+                        // let cur_worker_price = res.data.labor_cost.price
+                        // if (JSON.stringify($scope.all_workers).indexOf(JSON.stringify(cur_worker).slice(1,
+                        //         JSON.stringify(cur_worker).length - 1)) == -1) {
+                        //     $scope.all_workers.push({
+                        //         worker_kind: cur_worker.worker_kind,
+                        //         price: cur_worker_price
+                        //     })
+                        // } else {
+                        //     for (let [key, value] of $scope.all_workers.entries()) {
+                        //         if (cur_worker.worker_kind == value.worker_kind) {
+                        //             value.price += cur_worker_price
+                        //         }
+                        //     }
+                        // }
                         sessionStorage.setItem('backman', JSON.stringify([{
                             backman_option: '12墙拆除',
                             backman_value: $scope.twelve_dismantle == undefined ? '' : $scope.twelve_dismantle
@@ -2886,6 +2897,8 @@ angular.module('all_controller', [])
                             backman_option: '有无建渣点',
                             backman_value: $scope.building_scrap
                         }]))
+                        console.log($scope.all_worker)
+                        sessionStorage.setItem('worker', JSON.stringify($scope.all_worker))
                         if (sessionStorage.getItem('materials') != null) {
                             let arr = []
                             for (let [key, value] of $scope.all_goods.entries()) {

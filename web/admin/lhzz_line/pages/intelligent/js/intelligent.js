@@ -3101,7 +3101,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     name: '添加材料项'
                 }
             ]
-            tablePages1()
+            // tablePages1()
             $state.go('intelligent.add_material')
         }
         //跳转添加材料详情
