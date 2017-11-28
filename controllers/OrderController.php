@@ -236,6 +236,7 @@ class OrderController extends Controller
                 ]);
             }
         }
+
        /**
          * 无登录app-添加发票信息
          * @return string
@@ -261,8 +262,7 @@ class OrderController extends Controller
                     $code=1000;
                     return Json::encode([
                         'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code],
-                        'data' => null
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
             }
@@ -534,7 +534,7 @@ class OrderController extends Controller
         $supplier_id=trim($request->post('supplier_id'),' ');
         $freight=trim($request->post('freight'));
         $return_insurance=trim($request->post('return_insurance'),' ');
-        $buyer_message=trim($request->post('buyer_message','0'));
+        $buyer_message=trim($request->post('buyer_message',''));
         //商品描述，可空
         $body = trim($request->post('body'),' ');
         if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id ){
