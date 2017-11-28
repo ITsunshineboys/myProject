@@ -935,16 +935,16 @@ angular.module('all_controller', [])
                                         })
                                         if (value3.goods_id == undefined) {
                                             value4.goods.push({
-                                                cost: +value3.cost,
+                                                cost: +value3.cost.toFixed(2),
                                                 goods_id: value3.id,
                                                 name: value3.name,
                                                 id: value3.id,
-                                                procurement: +value3.procurement,
+                                                procurement: +value3.procurement.toFixed(2),
                                                 goods_three: value2.title,
                                                 goods_second: item.title,
                                                 goods_first: value.title,
                                                 quantity: +value3.quantity,
-                                                platform_price: +value3.platform_price,
+                                                platform_price: +value3.platform_price.toFixed(2),
                                                 cover_image: value3.cover_image,
                                                 goods_name: value3.goods_name,
                                                 series_name: value3.series_name,
@@ -2570,9 +2570,11 @@ angular.module('all_controller', [])
                                             if (value4.id == value3.goods_id) {
                                                 value3.quantity -= value4.quantity
                                                 value3.cost -= value4.cost
+                                                value3.cost = value3.cost.toFixed(2)
                                                 value1.cost -= value4.cost
                                                 value.cost -= value4.cost
                                                 value3.procurement -= value4.procurement
+                                                value3.procurement = value3.procurement.toFixed(2)
                                                 value1.procurement -= value4.procurement
                                                 value.procurement -= value4.procurement
                                             }
@@ -2671,7 +2673,8 @@ angular.module('all_controller', [])
                                                 if (value.id == value4.id && value3.quantity != 0) {
                                                     if (value3.goods_id == undefined) {
                                                         value4.goods.push({
-                                                            cost: value3.cost,
+                                                            cost: value3.cost.toFixed(2),
+                                                            procurement: value3.procurement.toFixed(2),
                                                             goods_id: value3.id,
                                                             name: value3.name,
                                                             id: value3.id,
@@ -2679,7 +2682,14 @@ angular.module('all_controller', [])
                                                             goods_second: value1.title,
                                                             goods_first: value.title,
                                                             quantity: value3.quantity,
-                                                            category_id: value3.category_id
+                                                            shop_name: value3.shop_name,
+                                                            goods_name: value3.goods_name,
+                                                            category_id: value3.category_id,
+                                                            cover_image: value3.cover_image,
+                                                            style_id: value3.style_id,
+                                                            series_id: value3.series_id,
+                                                            platform_price: +value3.platform_price.toFixed(2),
+                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company.toFixed(2),
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
@@ -2893,8 +2903,8 @@ angular.module('all_controller', [])
                                                 if (value.id == value4.id && value3.quantity != 0) {
                                                     if (value3.goods_id == undefined) {
                                                         value4.goods.push({
-                                                            cost: value3.cost,
-                                                            procurement: value3.procurement,
+                                                            cost: value3.cost.toFixed(2),
+                                                            procurement: value3.procurement.toFixed(2),
                                                             goods_id: value3.id,
                                                             name: value3.name,
                                                             id: value3.id,
@@ -2908,8 +2918,8 @@ angular.module('all_controller', [])
                                                             cover_image: value3.cover_image,
                                                             style_id: value3.style_id,
                                                             series_id: value3.series_id,
-                                                            platform_price: value3.platform_price,
-                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company,
+                                                            platform_price: value3.platform_price.toFixed(2),
+                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company.toFixed(2),
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
