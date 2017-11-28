@@ -389,6 +389,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             },function (res) {
                 console.log(res)
                 $scope.all_withdraw_detail = res.data
+                $scope.no_money = $scope.all_withdraw_detail.cash_money
                 $state.go('mall_finance.withdraw_manage_detail')
             })
         }
