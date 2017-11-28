@@ -390,7 +390,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$state", "$stateParams",
 
                 for (let obj of $scope.materials) {    // 遍历材料
                     if (obj.goods.length === 0) {
-                        break;
+                        continue;
                     }
                     for (let o of obj.goods) {
                         let tempObj = {
