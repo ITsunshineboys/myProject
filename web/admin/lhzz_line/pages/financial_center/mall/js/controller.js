@@ -122,7 +122,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             itemsPerPage: 12,
             currentPage: 1,
             onChange: function () {
-                tablePages2();
+                // tablePages2();
             }
         }
         let tablePages2=function () {

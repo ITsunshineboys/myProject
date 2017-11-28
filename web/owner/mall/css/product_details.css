@@ -310,9 +310,9 @@
     text-align: center;
     margin-left:2rem!important;
 }
-#myModal{
-    margin-top: 28rem;
-}
+/*#myModal{*/
+    /*margin-top: 28rem;*/
+/*}*/
 .modal-content{
     width:100vw;
 }

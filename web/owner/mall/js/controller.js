@@ -944,7 +944,7 @@ angular.module('all_controller', [])
                                                 goods_second: item.title,
                                                 goods_first: value.title,
                                                 quantity: +value3.quantity,
-                                                platform_price: +value3.platform_price.toFixed(2),
+                                                platform_price: value3.platform_price,
                                                 cover_image: value3.cover_image,
                                                 goods_name: value3.goods_name,
                                                 series_name: value3.series_name,
@@ -2698,8 +2698,8 @@ angular.module('all_controller', [])
                                                             cover_image: value3.cover_image,
                                                             style_id: value3.style_id,
                                                             series_id: value3.series_id,
-                                                            platform_price: +value3.platform_price.toFixed(2),
-                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company.toFixed(2),
+                                                            platform_price: +value3.platform_price,
+                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company,
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
@@ -2931,8 +2931,8 @@ angular.module('all_controller', [])
                                                             cover_image: value3.cover_image,
                                                             style_id: value3.style_id,
                                                             series_id: value3.series_id,
-                                                            platform_price: value3.platform_price.toFixed(2),
-                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company.toFixed(2),
+                                                            platform_price: value3.platform_price,
+                                                            purchase_price_decoration_company: +value3.purchase_price_decoration_company,
                                                         })
                                                     } else {
                                                         value4.goods.push(value3)
