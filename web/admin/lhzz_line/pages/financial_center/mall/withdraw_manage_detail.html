@@ -80,7 +80,7 @@
         </div>
         <div class="row" ng-if="cur_deal_style.name=='提现'">
             <p class="col-md-1">扣除费用</p>
-            <p class="col-md-2">{{no_money}}</p>
+            <p class="col-md-2">{{(all_withdraw_detail.cash_money - cur_account_money).toFixed(2)}}</p>
             <p class="col-md-9">元</p>
         </div>
         <div class="row">
