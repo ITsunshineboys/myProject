@@ -1461,12 +1461,15 @@ class OrderController extends Controller
             $receive_details['buyer_message'] = $order_information['buyer_message'];
             switch ($order_information['invoice_type']){
                 case 1:
+                    $order_information['invoice_type']='普通发票';
                     $receive_details['invoice_header_type']='普通发票';
                     break;
                 case 2:
+                    $order_information['invoice_type']='电子发票';
                     $receive_details['invoice_header_type']='电子发票';
                     break;
                 case 3:
+                    $order_information['invoice_type']='普通增值税发票';
                     $receive_details['invoice_header_type']='普通增值税发票';
                     break;
             }
