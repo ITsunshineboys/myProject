@@ -1,7 +1,4 @@
 /**
- * Created by Administrator on 2017/11/21/021.
- */
-/**
  * Created by Administrator on 2017/10/25/025.
  */
 app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stateParams','$state','$location','$anchorScroll','$window','$rootScope', function (_ajax,$rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window,$rootScope) {
@@ -29,7 +26,7 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
     $rootScope.fromState_name=='commodity.online'?  $scope.online_btn = true:$scope.online_btn = false;
     $rootScope.fromState_name=='commodity.offline'? $scope.offline_btn = true:$scope.offline_btn = false;
     $rootScope.fromState_name=='commodity.wait'?    $scope.wait_btn = true:$scope.wait_btn = false;
-    $rootScope.fromState_name=='commodity.deleted'? $scope.deleted_btn = true:$scope.deleted_btn = false;
+    $rootScope.fromState_name=='commodity.deleted'|| $rootScope.fromState_name=='apply_case.case_detail'? $scope.deleted_btn = true:$scope.deleted_btn = false;
 
 
 
@@ -37,7 +34,6 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
     let logistics;
     const afterservice_arr = ['上门维修','上门退货','上门换货','退货','换货'];
     const safeguard_arr = ['提供发票','上门安装'];
-    // console.log( $stateParams.storeid)
     $stateParams.storeid == null? $scope.show_default = true : $scope.show_default = false;
     $scope.storeid = $stateParams.storeid;
     $scope.offline_reason = '';
@@ -59,9 +55,6 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         logisticsTemplate();
         afterServiceShow()
     })
-
-
-
 
     function logisticsTemplate () {
         _ajax.get('/mall/logistics-template-view',{id:$scope.good_detail.logistics_template_id},function (res) {

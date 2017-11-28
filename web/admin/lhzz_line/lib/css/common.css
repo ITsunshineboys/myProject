@@ -129,6 +129,10 @@ select.form-control:focus {
 /* select end */
 
 /* table start */
+.table{
+    margin-top: 15px;
+}
+
 .table thead tr th,
 .table tr th {
     color: #7a8599;

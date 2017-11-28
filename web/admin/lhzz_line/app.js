@@ -311,7 +311,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state("add_class", {
             url: "/add_class",
-            templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html"
+            templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html",
+            css:"pages/mall_manage/class_manage/add_class/css/add_class.css"
         })
 
         .state("merchant_index", {  //商城管理首页
