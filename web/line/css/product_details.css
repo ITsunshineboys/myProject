@@ -463,7 +463,7 @@ button.close{
     top: 0;
     font-size: 2rem;
     /*color: #333;*/
-    font-weight: 700;
+    /*font-weight: 700;*/
 }
 .pic_more{
     position: absolute;

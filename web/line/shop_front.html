@@ -78,14 +78,15 @@
                         <!--筛选-->
                         <div class="memo_pad ">
                             <ul>
-                                <li ng-click="filterPar()">销量优先</li>
-                                <li ng-click="filterPraise ()" alt=""/>
+
+                                <li ng-class="{'color_filter':(platform_status == 0 && rate_status == 0)}" ng-click="filterPar()">销量优先</li>
+                                <li ng-class="{'color_filter':(platform_status != 0 && rate_status == 0)}" ng-click="filterPraise ()" alt=""/>
                                 价格
                                 <img class="up_down" ng-src= '{{good_pic}}' src="images/mall_arrow_up.png">
                                 <!--mall_filter_sort.png-->
                                 <!--<img class="up_down" src="images/down.png"  ng-show= good_pic_down ng-click="filterPicDown ()" alt=""/>-->
                                 </li>
-                                <li ng-click ="filterPicUp ()" alt=""/>
+                                <li ng-class="{'color_filter':(platform_status == 0 && rate_status != 0)}" ng-click ="filterPicUp ()" alt=""/>
                                 好评率
                                 <img class="up_down" ng-src= '{{good_pra_up}}' src="images/mall_arrow_up.png">
                                 <!--<img class="up_down" src="images/down.png"  ng-show= praise_down ng-click ="filterSalesDown ()" alt=""/>-->

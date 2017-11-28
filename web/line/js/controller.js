@@ -821,12 +821,15 @@ angular.module("all_controller", ['ngCookies'])
             $scope.icon = response.data.data.index.icon; //店铺图片
             $scope.shop_name = response.data.data.index.shop_name; //店铺名称
             //轮播变量
-            let mSwiper = new Swiper("#swiperList", {
-                autoplay: 3000,
-                loop: true,
-                observer: true,
-                pagination: ".swiper-pagination"
-            });
+            setTimeout(function () {
+                let mSwiper = new Swiper("#swiperList", {
+                    autoplay: 3000,
+                    loop: true,
+                    observer: true,
+                    pagination: ".swiper-pagination"
+                });
+            },300);
+
             console.log($scope.detailsList)
         });
         $http({   //店铺首页推荐列表
