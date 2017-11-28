@@ -865,6 +865,9 @@ angular.module("all_controller", ['ngCookies'])
                     $(window).scroll(function(e){
                         // $scope.sorllMore = $(this).scrollHeight();
                         var node = $('.recommend_div');
+                        if(node.length == 0){
+                            return
+                        }
                         var top  = node.get(node.length-1).getBoundingClientRect().top;
                         var se   = document.documentElement.clientHeight;
                         if(top<=se){
