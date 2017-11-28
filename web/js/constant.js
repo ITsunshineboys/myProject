@@ -1,0 +1,1 @@
+const loadingPicUri = "http://service.cdlhzz.cn/static/image/loading.gif";
