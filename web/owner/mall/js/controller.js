@@ -880,8 +880,7 @@ angular.module('all_controller', [])
                     $scope.$apply(function () {
                         let index = sessionStorage.getItem('cur_index')
                         let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
-                        $anchorScroll.yOffset = 150
-                        // $location.hash('bottom' + nodata[index].id)
+                        $anchorScroll.yOffset = 250
                         $anchorScroll('bottom' + nodata[index].id)
                     })
                 })
@@ -966,6 +965,14 @@ angular.module('all_controller', [])
                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
                 get_all_price()
+                $timeout(function () {
+                    $scope.$apply(function () {
+                        let index = sessionStorage.getItem('cur_index')
+                        let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
+                        $anchorScroll.yOffset = 250
+                        $anchorScroll('bottom' + nodata[index].id)
+                    })
+                })
                 $state.go('nodata.house_list')
             }
         }
