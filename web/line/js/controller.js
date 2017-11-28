@@ -625,12 +625,15 @@ angular.module("all_controller", ['ngCookies'])
             $scope.status = response.data.data.goods_view.status;
             $scope.showPrompt = false;
             //轮播变量
-            let mySwiper = new Swiper("#swiperList", {
-                autoplay: 3000,
-                loop: true,
-                observer: true,
-                pagination: ".swiper-pagination"
-            });
+            setTimeout(function () {
+                let mySwiper = new Swiper("#swiperList", {
+                    autoplay: 3000,
+                    loop: true,
+                    observer: true,
+                    pagination: ".swiper-pagination"
+                });
+            },300);
+
             if($scope.status == 2){
                 $scope.myModal = '#myModal';
                 $scope.myModal_sec = '#myModal_sec'

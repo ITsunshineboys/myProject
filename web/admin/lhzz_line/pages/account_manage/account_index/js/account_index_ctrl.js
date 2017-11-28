@@ -23,7 +23,7 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
             $scope.selectValueClose = response.data.time_types[0];
             $scope.params.status = 0;
             $scope.params.time_type = $scope.selectValueClose.value;
-            console.log(response);
+            // console.log(response);
             tablePages();
         });
         $scope.close_flag=true;
