@@ -1,263 +1,41 @@
 body{
     color: #666F80;
 }
-ul{
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    overflow: hidden;
-}
 /*主体内容*/
 section{
     padding: 40px 0 0 40px;
 }
-
-.margin_left{
-    margin-left: 85px;
+ul{
+    padding-left: 0;
 }
-.class_name{
-    margin-top: 20px;
+.row_left{
+    padding-left: 0;
 }
-.class_name img{
+.row_left_add{
+    padding-left: 15px;
+}
+.row{
+    margin-bottom: 20px;
+}
+.red_img{
     margin-left: -25px;
 }
-.class_name input,select{
-    margin-left: 85px;
-    width: 245px;
-    height: 31px;
-    border-radius:3px ;
-    border: 1px solid #666F80;
-    padding-left: 5px;
+.red_txt{
+    color: #E51C23;
 }
-.class_name span:nth-child(4){
-    margin-left: 12px;
-    color: #ABABAB;
+.img_size{
+    width: 120px;
+    height: 120px;
 }
-
-#special_warning{
-    margin-left: 25px;
-    color: #999;
-}
-
-.attr_set{
-    margin-top: 20px
-}
-
-.attr_set ul li{
-    float: left;
-    width: 60px;
-}
-
-.otherul{
-    margin-left: 60px!important;
-    margin-top: 25px!important;
-}
-
-.margin_left_120{
-    margin-left: 120px;
-}
-
-.margin_left_280{
-    margin-left: 280px;
-}
-.city_right{
-    margin-right: 45px;
-}
-.city_change{
-    margin-right: 10px;
-}
-
 hr{
     margin-left: 6px;
     width: 90%;
     color: #ABABAB;
 }
-.filter_pic{
-    margin-top: 30px;
-}
-.first_pic{
-    display: inline-block;
-}
-.filter_pic_cover_img{
-    display: inline-block;
-    margin-left:101px;
-    width: 120px;
-    height: 120px;
-    vertical-align:text-top;
-}
-.filter_pic_img{
-    display: inline-block;
-    margin: 0 10px 0 10px;
-    width: 120px;
-    height: 120px;
-    vertical-align:text-top;
-    /*float: left;*/
-}
-.filter_pic_img:first-child{
-    margin: 0 10px 0 115px;
-}
-/*.first_pic:after{*/
-    /*content: '';*/
-    /*display: table;*/
-    /*clear: both;*/
-/*}*/
 
-.pic_rule{
-    display: inline-block;
-    color: #ABABAB;
-    margin-top: 5px;
-    margin-left: 145px;
-}
-.pic_warning{
-    display: inline-block;
-    color: red;
-    margin-top: 5px;
-    margin-left: 135px;
-}
-
-.buy_price{
-    margin-top: 30px;
-}
-
-.buy_price ul{
-    overflow: hidden;
-    margin-top: -20px;
-    margin-left:146px;
-}
-
-.buy_price ul li{
-    width: 106px;
-    list-style: none;
-    float: left;
-    margin-right: 60px;
-}
-
-.buy_price p{
+.price_p{
     border-bottom: 1px solid #ABABAB;
-    width: 404px;
-    margin-left: 145px;
-}
-
-.price_stock{
-    margin-top: 30px;
-}
-
-/*.price_stock ul{*/
-    /*margin-left: 144px;*/
-/*}*/
-
-.firstul{
-    margin-top: -20px;
-    margin-left: 146px;
-}
-
-.firstul li{
-    margin-right: 30px;
-    width: 60px;
-    float: left;
-}
-
-.secul{
-    margin-left: 146px;
-}
-
-.secul li{
-    margin-right: 30px;
-    width: 60px;
-    float: left;
-}
-
-.price_stock div{
-    margin-left: 125px;
-}
-.price_stock p{
-    border-bottom: 1px solid #ABABAB;
-    width: 320px;
-    margin-left: 145px;
-}
-.price_stock div input{
-    width:58px;
-    height:31px;
-    border-radius: 5px;
-    border: 1px solid #666f80;
-    padding-left: 5px;
-    margin-left: 20px;
-}
-.template{
-    margin-top: 30px;
-}
-
-
-.template img{
-    margin-left: -25px;
-}
-.template select{
-    margin-left: 85px;
-}
-.template div{
-    margin-left: 145px;
-    margin-top: 15px;
-    color:#666F80;
-    font-size: 14px;
-}
-.template_left{
-    margin-left:45px;
-
-}
-.service{
-    margin-bottom: 30px;
-}
-.service ul li {
-    list-style: none;
-    vertical-align:text-top;
-}
-.service ul {
-    margin-left:125px;
-    /*float: left;*/
-    /*margin-top: -20px;*/
-}
-
-.service ul li{
-    margin-bottom: 18px;
-}
-
-.service ul li span{
-    margin-left:20px;
-    font-size: 14px;
-    color: #666F80;
-}
-
-.erweima{
-    margin-top: 60px;
-    margin-bottom: 60px;
-}
-
-.erweima img{
-    margin-left: 45px;
-    width: 172px;
-    vertical-align:text-top;
-}
-
-.done_stuff,.offline_time{
-    margin-top: 30px;
-}
-
-.sec{
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 90px;
-}
-
-
-.detail textarea{
-    width: 700px;
-    height:380px ;
-    border: 1px solid #666f80;
-    margin-left: 88px;
-}
-.btn_back{
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin: 10px 0;
 }
 
 

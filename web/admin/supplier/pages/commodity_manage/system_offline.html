@@ -2,183 +2,239 @@
 <div ng-controller="system_offline" class="container_left">
     <section>
         <!--商品分类-->
-        <div>
-            <span>商品分类</span>
-            <span class="margin_left">{{detail_item.category_title}}</span>
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>商品分类</span>
+            </div>
+            <div class="col-sm-11 control-label">
+                <span>{{detail_item.category_title}}</span>
+            </div>
         </div>
         <!--商品名称-->
-        <div class="class_name">
-            <span>商品名称</span>
-            <span class="margin_left">{{detail_item.title}}</span>
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>商品名称</span>
+            </div>
+            <div class="col-sm-1 control-label">
+                <span>{{detail_item.title}}</span>
+            </div>
         </div>
         <!--商品特色 -->
-        <div class="class_name">
-            <span>商品特色</span>
-            <span class="margin_left">{{detail_item.subtitle}}</span>
-            <span id="special_warning">*在智能报价中，增强识别性</span>
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>商品特色</span>
+            </div>
+            <div class="col-sm-4 control-label">
+                <span>{{detail_item.subtitle}}</span>
+            </div>
+            <div class="col-sm-7 control-label">
+                <span>*在智能报价中，增强识别性</span>
+            </div>
         </div>
         <!--选择品牌-->
-        <div class="class_name">
-            <span>选择品牌</span>
-            <span class="margin_left">{{detail_arr.brand_name}}</span>
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>选择品牌</span>
+            </div>
+            <div class="col-sm-11 control-label">
+                <span>{{detail_arr.brand_name}}</span>
+            </div>
         </div>
         <!--选择系列-->
-        <div class="class_name" ng-if="detail_arr.series_name!=''">
+        <div class="row" ng-if="detail_arr.series_name!=''">
+            <div class="col-sm-1 control-label">
             <span>选择系列</span>
-            <span class="margin_left">{{detail_arr.series_name}}</span>
+            </div>
+            <div class="col-sm-11 control-label">
+            <span>{{detail_arr.series_name}}</span>
+            </div>
         </div>
         <!--选择风格-->
-        <div class="class_name" ng-if="detail_arr.style_name!=''">
-            <span>选择风格</span>
-            <span class="margin_left">{{detail_arr.style_name}}</span>
+        <div class="row" ng-if="detail_arr.style_name!=''">
+            <div class="col-sm-1 control-label">
+                <span>选择风格</span>
+            </div>
+            <div class="col-sm-11 control-label">
+                <span class="margin_left">{{detail_arr.style_name}}</span>
+            </div>
         </div>
         <!--属性设置-->
-        <div class="attr_set" ng-if="detail_arr.attrs.length!=0">
-            <ul class="attr_title">
-                <li>属性设置</li>
-                <li class="margin_left">属性名称</li>
-                <li class="margin_left_120">属性内容</li>
-                <li class="margin_left_120">单位</li>
-            </ul>
-
-            <ul class="otherul" ng-repeat="item in detail_attrs">
-                <li class="margin_left">{{item.name}}</li>
-                <li class="margin_left_120" ng-if="!item.selected">{{item.value}}</li>
-                <li class="margin_left_120">{{item.selected}}</li>
-                <li class="margin_left_120">{{item.unit}}</li>
-            </ul>
-
+        <div class="row" ng-if="detail_arr.attrs.length!=0">
+            <div class="col-sm-1 control-label">
+                <span>属性设置</span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <span>属性名称</span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <span>属性内容</span>
+            </div>
+            <div class="col-sm-1 control-label">
+                <span>单位</span>
+            </div>
+        </div>
+        <div class="row" ng-repeat="item in detail_attrs">
+            <div class="col-sm-offset-1 col-sm-2 control-label">
+                <span>{{item.name}}</span>
+            </div>
+            <div class="col-sm-2 control-label" ng-if="!item.selected">
+                {{item.value}}
+            </div>
+            <div class="col-sm-2 control-label" ng-if="item.selected">
+                {{item.selected}}
+            </div>
+            <div class="col-sm-2 control-label">
+                {{item.unit}}
+            </div>
         </div>
         <hr/>
 
         <!--封面上传图片-->
-        <div class="filter_pic">
-            <span class="class_name_span">封面图</span>
-            <img class="filter_pic_cover_img" ng-src="{{detail_item.cover_image}}" alt="">
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>封面图</span>
+            </div>
+            <div class="col-sm-11 control-label">
+                <img class="img_size" ng-src="{{detail_item.cover_image}}" alt="">
+            </div>
         </div>
 
         <!--上传图片-->
-        <div class="filter_pic" ng-if="detail_item.images.length!=0">
-            <span>图片</span>
-            <div class="first_pic" >
-                <img ng-repeat="item in detail_item.images" class="filter_pic_img" ng-src="{{item}}" alt="">
+        <div class="row" ng-if="detail_item.images.length!=0">
+            <div class="col-sm-1 control-label">
+                <span>图片</span>
+            </div>
+            <div class="col-sm-11 control-label">
+                <img class="img_size" ng-repeat="item in detail_item.images" ng-src="{{item}}" alt="">
             </div>
         </div>
 
         <!--价格库存-->
-        <div class="price_stock">
-            <span>价格库存</span>
-            <ul  class="firstul">
-                <li>供货价格</li>
-                <li>平台价格</li>
-                <li>市场价格</li>
-                <li>库存</li>
-            </ul>
-            <p></p>
-                <ul class="secul">
-                    <li>¥{{detail_item.supplier_price}}</li>
-                    <li>¥{{detail_item.platform_price}}</li>
-                    <li>¥{{detail_item.market_price}}</li>
-                    <li>{{detail_item.left_number}}</li>
-                </ul>
-            <span class="pic_rule">*价格，供货价≤平台价≤市场价</span>
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>价格库存</span>
+            </div>
+            <div class="col-sm-4 control-label">
+                <span class="col-sm-3 control-label">供货价格</span>
+                <span class="col-sm-3 control-label">平台价格</span>
+                <span class="col-sm-3 control-label">市场价格</span>
+                <span class="col-sm-3 control-label">库存</span>
+                <p class="col-sm-12 price_p"></p>
+                <span class="col-sm-3 control-label">¥{{detail_item.supplier_price}}</span>
+                <span class="col-sm-3 control-label">¥{{detail_item.platform_price}}</span>
+                <span class="col-sm-3 control-label">¥{{detail_item.market_price}}</span>
+                <span class="col-sm-3 control-label">{{detail_item.left_number}}</span>
+                <p class="col-sm-12">*价格，供货价≤平台价≤市场价</p>
+            </div>
         </div>
 
         <!--采购价-->
-        <div class="buy_price">
+        <div class="row">
+            <div class="col-sm-1 control-label">
             <span>采购价</span>
-            <ul>
-                <li>装修公司采购价</li>
-                <li>项目经理采购价</li>
-                <li>设计师采购价</li>
-            </ul>
-            <p></p>
-            <br/>
-            <ul>
-                <li>￥{{detail_item.purchase_price_decoration_company}}</li>
-                <li>￥{{detail_item.purchase_price_manager}}</li>
-                <li>￥{{detail_item.purchase_price_designer}}</li>
-            </ul>
+            </div>
+            <div class="col-sm-4 control-label">
+                <span class="col-sm-4 control-label">装修公司采购价</span>
+                <span class="col-sm-4 control-label">项目经理采购价</span>
+                <span class="col-sm-4 control-label">设计师采购价</span>
+                <p class="price_p col-sm-12"></p>
+                <span class="col-sm-4 control-label">￥{{detail_item.purchase_price_decoration_company}}</span>
+                <span class="col-sm-4 control-label">￥{{detail_item.purchase_price_manager}}</span>
+                <span class="col-sm-4 control-label">￥{{detail_item.purchase_price_designer}}</span>
+            </div>
         </div>
 
         <!--物流模板-->
-        <div class="template">
-            <span>商品物流</span>
-            <span class="margin_left">{{logistics_name}}</span>
-            <div>
-                <span>快递方式</span>
-                <span class="template_left">{{logistics_delivery_method}}</span>
-                <br/>
-                <br/>
-                <span class="city_right">城市选择</span>
-                <span class="city_change" ng-repeat="item in logistics_district_names_arr.slice(0,3)">{{item}}</span>
-                <span ng-if='logistics_district_names_arr.length>3' style="color: #5677FC" data-toggle="modal" data-target="#show_city">查看</span>
-                <br/>
-                <br/>
-                <span>是否包邮</span>
-                <span class="template_left" ng-if="delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0">包邮</span>
-                <span class="template_left" ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">不包邮</span>
-                <br/>
-                <br/>
-                <p ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
-                    <span>收费金额</span>
-                    <span class="template_left">默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</span>
-                    <br/>
-                    <span style="display:inline-block;margin:10px 0 0 102px">每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</span>
-                </p>
-
+        <div class="row">
+            <div class="col-sm-1 control-label">
+                <span>商品物流</span>
             </div>
-            <hr/>
+            <div class="col-sm-1 control-label">
+                <span>{{logistics_name}}</span>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-5 control-label row_left">
+                <span class="col-sm-2 control-label">快递方式</span>
+                <span class="col-sm-10 control-label">{{logistics_delivery_method}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-5 control-label row_left">
+                <span class="col-sm-2 control-label">城市选择</span>
+                <span class="col-sm-3 control-label" ng-repeat="item in logistics_district_names_arr.slice(0,3)">{{item}}</span>
+                <span class="col-sm-1 control-label" ng-if='logistics_district_names_arr.length>3' style="color: #5677FC;padding: 0" data-toggle="modal" data-target="#show_city">查看</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-5 control-label row_left">
+                <span class="col-sm-2 control-label">是否包邮</span>
+                <span class="col-sm-10 control-label" ng-if="delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0">包邮</span>
+                <span class="col-sm-10 control-label" ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">不包邮</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-5 control-label row_left" ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
+                <span class="col-sm-2 control-label">收费金额</span>
+                <span class="col-sm-10 control-label">默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-5 control-label row_left">
+                <span class="col-sm-offset-2 col-sm-10 control-label">每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</span>
+            </div>
+        </div>
+
         <!--售后-->
-        <div class="service" ng-if="sale_services_flag==true">
-            <span style="float: left">售后</span>
-            <ul ng-repeat="item in detail_item.after_sale_services_desc">
-                <li ng-if="item=='上门维修'"><span>上门维修</span></li>
-                <li ng-if="item=='上门退货'"><span>上门退货</span></li>
-                <li ng-if="item=='上门换货'"><span>上门换货</span></li>
-                <li ng-if="item=='退货'"><span>退货</span></li>
-                <li ng-if="item=='换货'"><span>换货</span></li>
-            </ul>
+        <div class="row" ng-if="sale_services_flag==true">
+            <span class="col-sm-1 control-label">售后</span>
+            <div class="col-sm-offset-1 control-label row_left_add" ng-repeat="item in detail_item.after_sale_services_desc">
+                <span ng-if="item=='上门维修'"><span>上门维修</span></span>
+                <span ng-if="item=='上门退货'"><span>上门退货</span></span>
+                <span ng-if="item=='上门换货'"><span>上门换货</span></span>
+                <span ng-if="item=='退货'"><span>退货</span></span>
+                <span ng-if="item=='换货'"><span>换货</span></span>
+            </div>
         </div>
         <!--保障-->
-        <div class="service">
-            <span style="float: left">保障</span>
-            <ul ng-repeat="item in detail_item.after_sale_services_desc">
-                <li ng-if="item==('提供发票')"><span>提供发票</span></li>
-                <li ng-if="item=='上门安装'"><span>上门安装</span></li>
-            </ul>
+        <div class="row">
+            <span class="col-sm-1 control-label">保障</span>
+            <div class="col-sm-offset-1 control-label row_left_add" ng-repeat="item in detail_item.after_sale_services_desc">
+                <span ng-if="item==('提供发票')"><span>提供发票</span></span>
+                <span ng-if="item=='上门安装'"><span>上门安装</span></span>
+            </div>
         </div>
         <hr/>
 
-        <div class="erweima">
-            <span>线下商城二维码</span>
-            <img style="border:1px solid black" ng-src="{{detail_item.qr_code}}" alt="">
+        <div class="row">
+            <span class="col-sm-1 control-label">线下商城二维码</span>
+            <img class="col-sm-11 control-label" ng-src="{{detail_item.qr_code}}" alt="">
         </div>
 
         <!--详情描述-->
-        <div class="detail">
-            <span>详情描述</span>
-            <div class="sec" ng-bind-html="detail_txt | toHtml"></div>
+        <div class="row">
+            <span class="col-sm-1 control-label">详情描述</span>
+            <div class="col-sm-11 control-label" ng-bind-html="detail_txt | toHtml"></div>
         </div>
-        <div class="done_stuff">
-            <span>下架原因</span>
-            <span class="sec">{{detail_item.offline_reason}}</span>
-        </div>
-
-        <div class="offline_time">
-            <span>操作人员</span>
-            <span class="sec">{{detail_item.operator}}</span>
+        <div class="row">
+            <span class="col-sm-1 control-label">下架原因</span>
+            <span class="col-sm-11 control-label">{{detail_item.offline_reason}}</span>
         </div>
 
-        <div class="offline_time">
-            <span>下架时间</span>
-            <span class="sec">{{detail_item.offline_time}}</span>
+        <div class="row">
+            <span class="col-sm-1 control-label">操作人员</span>
+            <span class="col-sm-11 control-label">{{detail_item.operator}}</span>
         </div>
 
-        <!--按钮-->
-        <div class="btn_back">
-            <button class="btn btn-default" ui-sref="commodity_manage({down_flag:true})">返回</button>
+        <div class="row">
+            <span class="col-sm-1 control-label">下架时间</span>
+            <span class="col-sm-11 control-label">{{detail_item.offline_time}}</span>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 control-label">
+                <button class="btn btn-default" ui-sref="commodity_manage({down_flag:true})">返回</button>
+            </div>
         </div>
     </section>
     <!--查看城市模态框-->
