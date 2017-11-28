@@ -165,18 +165,6 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
     });
 
     //============监听下拉框值的变化===========
-    // $scope.getApplyCase = function () {
-    //     $scope.Config.currentPage = 1
-    //     $scope.params.keyword = ''
-    //     $scope.keyword = ''
-    //     if($scope.params.time_type == 'custom'){
-    //         if($scope.params.start_time!=''||$scope.params.start_time!=''){
-    //             tablePages()
-    //         }
-    //     }else{
-    //         tablePages()
-    //     }
-    // };
     $scope.$watch('selectValue',function(newVal,oldVal){
         if(!!newVal){
             $scope.params.status = 1;
