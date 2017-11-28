@@ -1490,6 +1490,7 @@ class OrderController extends Controller
                     $order_information['invoice_type']='普通增值税发票';
                     break;
             }
+            echo $order_information['invoice_type'];die;
             $goods_data=array();
               if ($order_information['goods_name']=='+'){
                   $goods_data['goods_name']='';
