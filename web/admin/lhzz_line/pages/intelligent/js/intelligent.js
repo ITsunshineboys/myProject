@@ -2787,8 +2787,10 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                                 value.cur_unit = '张'
                             }
                             if (value.project_details.indexOf('石膏板') != -1) {
-                                if(value.project_details.indexOf('面积')!=-1||value.project_details.indexOf('长度')!=-1){
-                                    value.project_info = '1张'+value.project_details
+                                if(value.project_details.indexOf('面积')!=-1){
+                                    value.project_info = '1张石膏板做平顶面积'
+                                }else if(value.project_details.indexOf('长度')!=-1){
+                                    value.project_info = '1张石膏板做造型长度'
                                 }else{
                                     value.project_info = value.project_details
                                 }
