@@ -881,7 +881,8 @@ angular.module('all_controller', [])
                         let index = sessionStorage.getItem('cur_index')
                         let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
                         $anchorScroll.yOffset = 250
-                        $anchorScroll('bottom' + nodata[index].id)
+                        $location.hash('bottom' + nodata[index].id)
+                        $anchorScroll()
                     })
                 })
                 if (!$scope.is_delete_btn) {
@@ -965,15 +966,16 @@ angular.module('all_controller', [])
                 $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
                 get_all_price()
+                $state.go('nodata.house_list')
                 $timeout(function () {
                     $scope.$apply(function () {
                         let index = sessionStorage.getItem('cur_index')
                         let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
                         $anchorScroll.yOffset = 250
-                        $anchorScroll('bottom' + nodata[index].id)
+                        $location.hash('bottom' + nodata[index].id)
+                        $anchorScroll()
                     })
                 })
-                $state.go('nodata.house_list')
             }
         }
         //切换编辑/完成
@@ -2695,6 +2697,15 @@ angular.module('all_controller', [])
                     } else {
                         get_all_price()
                         $state.go('nodata.house_list')
+                        $timeout(function () {
+                            $scope.$apply(function () {
+                                let index = sessionStorage.getItem('cur_index')
+                                let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
+                                $anchorScroll.yOffset = 250
+                                $location.hash('bottom' + nodata[index].id)
+                                $anchorScroll()
+                            })
+                        })
                     }
                 } else {
                     _ajax.post('/owner/handyman', {
@@ -2918,6 +2929,15 @@ angular.module('all_controller', [])
                             $scope.cur_header = '智能报价'
                             get_all_price()
                             $state.go('nodata.house_list')
+                            $timeout(function () {
+                                $scope.$apply(function () {
+                                    let index = sessionStorage.getItem('cur_index')
+                                    let nodata = JSON.parse(sessionStorage.getItem('nodata')).all_goods
+                                    $anchorScroll.yOffset = 250
+                                    $location.hash('bottom' + nodata[index].id)
+                                    $anchorScroll()
+                                })
+                            })
                         }
                     })
                 }
