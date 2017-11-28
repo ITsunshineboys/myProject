@@ -133,23 +133,29 @@
                         <span ng-if="goods_item.logisticsTemplate.delivery_method==0">快递物流</span>
                         <span ng-if="goods_item.logisticsTemplate.delivery_method==1">送货上门</span>
                     </div>
+                    <br>
+                    <br>
                     <div class="col-sm-offset-2 control-label">
                         <span class="col-sm-2 control-label">快递方式</span>
                         <span>{{goods_item.logisticsTemplate.name}}</span>
                     </div>
+                    <br>
                     <div class="col-sm-offset-2 control-label">
                         <span class="col-sm-2 control-label">城市选择</span>
                         <span class="city_left" ng-repeat="city in goods_city.slice(0,3)">{{city.district_name}}</span>
                         <span class="city_see"  ng-show="goods_city.length > 3" data-toggle="modal" data-target="#cityModal">查看</span>
                     </div>
+                    <br>
                     <div class="col-sm-offset-2 control-label">
                         <span class="col-sm-2 control-label">是否包邮</span>
                         <span  ng-if="goods_item.logisticsTemplate.delivery_cost_default==0">包邮</span>
                         <span  ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">不包邮</span>
                     </div>
+                    <br>
                     <div class="col-sm-offset-2 control-label" ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">
                         <span class="col-sm-2 control-label">收费金额</span>
                         <div >默认{{goods_item.logisticsTemplate.delivery_number_default}}件商品：¥{{goods_item.logisticsTemplate.delivery_cost_default}}</div>
+                        <br>
                         <span class="col-sm-offset-2">每增加{{goods_item.logisticsTemplate.delivery_number_delta}}件商品，运费增加：¥{{goods_item.logisticsTemplate.delivery_cost_delta}}</span>
                     </div>
             </div>
@@ -206,10 +212,8 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">城市选择</h4>
                 </div>
-                <div class="modal-body">
-                    <p class="city">
-                        <span ng-repeat="item in goods_city">{{item.district_name}}</span>
-                    </p>
+                <div class="modal-body city">
+                        <span style="padding: 10px" ng-repeat="item in goods_city">{{item.district_name}}</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>

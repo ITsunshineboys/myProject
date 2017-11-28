@@ -144,7 +144,7 @@
                     <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
                     <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                     <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
-                    <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                    <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                     <p class="warning" ng-if="!!cover_flag">
                         <span class="glyphicon glyphicon-asterisk"></span>
                         {{cover_flag}}

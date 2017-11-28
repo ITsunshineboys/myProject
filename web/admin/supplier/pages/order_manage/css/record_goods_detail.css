@@ -10,25 +10,13 @@ body{
 .img_size {
     width: 120px;
     height: 120px;
+    margin-right: 10px;
 }
 .padding_left{
     padding-left: 15px;
 }
 hr{
     margin: 10px auto;
-}
-
-.btn_size {
-    padding: 5px 20px;
-    border: 1px solid black;
-    border-radius: 3px;
-    margin-right: 20px;
-}
-
-.blue {
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border: 1px solid #487AF8;
 }
 
 .city_left {
@@ -45,14 +33,6 @@ hr{
     position: relative;
 }
 
-.warning {
-    border: 1px solid red;
-}
-
-input {
-    outline: none;
-}
-
 #coverimg_span {
     position: absolute;
     right: 0;
@@ -66,7 +46,12 @@ input {
     line-height: 24px;
     z-index: 2;
 }
-
+.city{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
 .dl_active4 {
     background-color: #E6E9F0 !important;
 }
@@ -75,18 +60,7 @@ input {
     color: #5677FC !important;
 }
 
-/* 城市选择 */
-.city span + span::before {
-    content: '、'
-}
 
-div.city span:nth-child(4)::before {
-    content: ''
-}
-
-.city a {
-    margin-left: 20px;
-}
 
 
 
