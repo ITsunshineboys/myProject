@@ -53,6 +53,18 @@ ul {
     border-color: #666f80;
 }
 
+.btn.btn-info {
+    background-color: #3f94f6;
+    border: 1px solid #3f94f6
+}
+
+.btn.btn-info:hover,
+.btn.btn-info:focus {
+    color: #ffffff;
+    background-color: #1b7cee;
+    border: 1px solid #1b7cee;
+}
+
 .btn i.iconfont {
     margin-right: 5px;
 }

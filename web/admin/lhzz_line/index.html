@@ -24,7 +24,7 @@
     </dl>
     <dl>
         <dt ng-click="mall_click()" ng-class="{on:mall_flag}"><i class="iconfont icon-shangchengguanli i_width"></i>商城管理</dt>
-        <dd ng-repeat="item in mall_obj" ng-click="mall_repeat(item)" ng-class="{true:'y_display',false:'n_display'}[mall_flag]"><a ng-class="{dd_on: mall_active == item.id}" ng-bind="item.name"></a></dd>
+        <dd ng-repeat="item in mall_obj" ng-click="mall_repeat(item)" ng-class="{true:'show',false:'hide'}[mall_flag]"><a ng-class="{dd_on: mall_active == item.id}" ng-bind="item.name"></a></dd>
     </dl>
 
     <dl>
@@ -33,7 +33,7 @@
 
     <dl>
         <dt ng-click="finance_click()" ng-class="{on:finance_flag}"><i class="iconfont icon-caiwu i_width"></i>财务中心</dt>
-        <dd ng-repeat="item in finance_obj" ng-click="finance_repeat(item)" ng-class="{true:'y_display',false:'n_display'}[finance_flag]"><a ng-class="{dd_on: finance_active == item.id}" ng-bind="item.name"></a></dd>
+        <dd ng-repeat="item in finance_obj" ng-click="finance_repeat(item)" ng-class="{true:'show',false:'hide'}[finance_flag]"><a ng-class="{dd_on: finance_active == item.id}" ng-bind="item.name"></a></dd>
     </dl>
 
     <dl>
