@@ -73,7 +73,8 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                 views: {
                     "": {templateUrl: "order_commodity.html"}
                 },
-                controller: "order_commodity"
+                controller: "order_commodity",
+                css: "css/order.css"
                 /*params:{'mall_id':'','shopNum':'','harvestName':'','harvestNum':'','harvestAddress':'',
                     'title':'','subtitle':'','shop_name':'','platform_price':'','cover_image':"",'icon':"",
                     'goods_num':'','show_harvest':'','show_address':'','consigneeName':'','mobile':'','districtMore':'',
