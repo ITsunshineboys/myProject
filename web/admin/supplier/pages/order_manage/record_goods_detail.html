@@ -2,175 +2,203 @@
 <div ng-controller="goods_detail_ctrl">
     <section>
         <!--商品分类-->
-        <form  name="gooddetail">
-            <div>
-                <span class="left_font">商品分类</span>
-                <span class="margin_left">{{goods_item.category}}</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>商品分类</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{goods_item.category}}</span>
+                </div>
             </div>
             <!--商品名称-->
-            <div class="margin_top">
-                <span class="left_font">商品名称</span>
-                <span class="margin_left">{{goods_item.goods_name}}</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>商品名称</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{goods_item.goods_name}}</span>
+                </div>
             </div>
             <!--商品特色-->
-            <div class="margin_top">
-                <span class="left_font">商品特色</span>
-                <span class="margin_left">{{goods_item.subtitle}}</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>商品特色</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{goods_item.subtitle}}</span>
+                </div>
             </div>
             <!--选择品牌-->
-            <div class="margin_top">
-                <span class="left_font">选择品牌</span>
-                <span class="margin_left">{{goods_item.brand}}</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>选择品牌</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{goods_item.brand}}</span>
+                </div>
             </div>
-            <div class="margin_top">
-                <span class="left_font">风格</span>
-                <span class="margin_left">{{goods_item.style}}</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>风格</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{goods_item.style}}</span>
+                </div>
             </div>
-            <div class="margin_top">
-                <span class="left_font">系列</span>
-                <span class="margin_left">{{goods_item.series}}</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>系列</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{goods_item.series}}</span>
+                </div>
             </div>
             <!--商品属性-->
-            <div class="margin_top">
-                <span class="left_font">商品属性</span>
-                <div class="margin_left inline_block goodattrs">
-                    <div>
-                        <span class="attr_font">属性名称</span>
-                        <span class="attr_font">属性内容</span>
-                        <span class="attr_font">单位</span>
-                    </div>
-                    <div ng-repeat="item in goods_attrs">
-                        <span class="attr_font">{{item.name}}</span>
-                        <span class="attr_font">{{item.value}}</span>
-                        <span class="attr_font">{{item.unit}}</span>
-                    </div>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>商品属性</span>
                 </div>
+                <div class="col-sm-2 control-label">
+                    <span>属性名称</span>
+                </div>
+                <div class="col-sm-2 control-label">
+                    <span>属性内容</span>
+                </div>
+                <div class="col-sm-4 control-label">
+                    <span>单位</span>
+                </div>
+            </div>
+            <div class="row" ng-repeat="item in goods_attrs">
+                <span class="col-sm-offset-2 col-sm-2 control-label">{{item.name}}</span>
+                <span class="col-sm-2 control-label">{{item.value}}</span>
+                <span class="col-sm-2 control-label">{{item.unit}}</span>
             </div>
             <hr>
             <!--上传图片-->
-            <div class="margin_top picarr">
-                <span class="left_font">上传图片</span>
-                <div class="margin_left inline_block img_size coverimg">
-                    <img src="{{goods_item.cover_image}}" alt="">
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>图片</span>
+                </div>
+                <div class="col-sm-2 control-label img_size coverimg">
+                    <img class="img_size" src="{{goods_item.cover_image}}" alt="">
                     <div id="coverimg_span">封面图</div>
                 </div>
-                <div class="inline_block img_size picarr_left" ng-repeat="item in goods_images track by $index">
+                <div class="img_size col-sm-2 control-label" ng-repeat="item in goods_images track by $index">
                     <img src="{{item.image}}" alt="">
                 </div>
             </div>
             <!--价格/库存-->
-            <div class="margin_top">
-                <span class="left_font">价格/库存</span>
-                <div class="margin_left inline_block">
-                    <div>
-                        <span class="font_size">供货价格</span>
-                        <span class="font_size">平台价格</span>
-                        <span class="font_size">市场价格</span>
-                        <span class="font_size">库存</span>
-                    </div>
-                    <hr>
-                    <div class="margin_top">
-                        <span class="font_size">{{goods_item.supplier_price | currency:"¥"}}</span>
-                        <span class="font_size">{{goods_item.platform_price | currency:"¥"}}</span>
-                        <span class="font_size">{{goods_item.market_price | currency:"¥"}}</span>
-                        <span class="font_size">{{goods_item.left_number}}</span>
-                    </div>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span >价格/库存</span>
+                </div>
+                <div class="col-sm-5 control-label">
+                    <span class="col-sm-3 control-label">供货价格</span>
+                    <span class="col-sm-3 control-label">平台价格</span>
+                    <span class="col-sm-3 control-label">市场价格</span>
+                    <span class="col-sm-3 control-label">库存</span>
+                    <hr class="col-sm-12 control-label">
+                </div>
+                <div class="col-sm-offset-2 col-sm-5 control-label">
+                    <span class="col-sm-3 control-label">{{goods_item.supplier_price | currency:"¥"}}</span>
+                    <span class="col-sm-3 control-label">{{goods_item.platform_price | currency:"¥"}}</span>
+                    <span class="col-sm-3 control-label">{{goods_item.market_price | currency:"¥"}}</span>
+                    <span class="col-sm-3 control-label">{{goods_item.left_number}}</span>
                 </div>
             </div>
             <!--采购价-->
-            <div class="margin_top">
-                <span class="left_font">采购价</span>
-                <div  class="margin_left inline_block">
-                    <div>
-                        <span class="purchase_left">装修公司采购价</span>
-                        <span class="purchase_left">项目经理采购价</span>
-                        <span class="purchase_left">设计师采购价</span>
-                    </div>
-                    <hr>
-                    <div class="margin_top">
-                        <span class="purchase_left">{{goods_item.purchase_price_decoration_company | currency:"¥"}}</span>
-                        <span class="purchase_left">{{goods_item.purchase_price_manager | currency:"¥"}}</span>
-                        <span class="purchase_left">{{goods_item.purchase_price_designer | currency:"¥"}}</span>
-                    </div>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span >采购价</span>
+                </div>
+                <div class="col-sm-5 control-label">
+                    <span class="col-sm-4 control-label">装修公司采购价</span>
+                    <span class="col-sm-4 control-label">项目经理采购价</span>
+                    <span class="col-sm-4 control-label">设计师采购价</span>
+                    <hr class="col-sm-12 control-label">
+                </div>
+                <div class="col-sm-offset-2 col-sm-5 control-label">
+                    <span class="col-sm-4 control-label">{{goods_item.purchase_price_decoration_company | currency:"¥"}}</span>
+                    <span class="col-sm-4 control-label">{{goods_item.purchase_price_manager | currency:"¥"}}</span>
+                    <span class="col-sm-4 control-label">{{goods_item.purchase_price_designer | currency:"¥"}}</span>
+                    <hr class="col-sm-12 control-label">
                 </div>
             </div>
             <!--物流模块-->
-            <div class="margin_top">
-                <span class="left_font">商品物流</span>
-                <div class="margin_left inline_block">
-                    <div>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>商品物流</span>
+                </div>
+                    <div class="col-sm-10 control-label">
                         <span ng-if="goods_item.logisticsTemplate.delivery_method==0">快递物流</span>
                         <span ng-if="goods_item.logisticsTemplate.delivery_method==1">送货上门</span>
                     </div>
-                    <div class="margin_top">
-                        <span>快递方式</span>
-                        <span class="margin_left">{{goods_item.logisticsTemplate.name}}</span>
+                    <div class="col-sm-offset-2 control-label">
+                        <span class="col-sm-2 control-label">快递方式</span>
+                        <span>{{goods_item.logisticsTemplate.name}}</span>
                     </div>
-                    <div class="margin_top city_div">
-                        <span>城市选择</span>
+                    <div class="col-sm-offset-2 control-label">
+                        <span class="col-sm-2 control-label">城市选择</span>
                         <span class="city_left" ng-repeat="city in goods_city.slice(0,3)">{{city.district_name}}</span>
-                        <span ng-if="goods_city.length > 3">...</span>
                         <span class="city_see"  ng-show="goods_city.length > 3" data-toggle="modal" data-target="#cityModal">查看</span>
                     </div>
-                    <div class="margin_top">
-                        <span>是否包邮</span>
-                        <span class="margin_left" ng-if="goods_item.logisticsTemplate.delivery_cost_default==0">包邮</span>
-                        <span class="margin_left" ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">不包邮</span>
+                    <div class="col-sm-offset-2 control-label">
+                        <span class="col-sm-2 control-label">是否包邮</span>
+                        <span  ng-if="goods_item.logisticsTemplate.delivery_cost_default==0">包邮</span>
+                        <span  ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">不包邮</span>
                     </div>
-                    <div class="margin_top" ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">
-                        <span>收费金额</span>
-                        <div class="margin_left inline_block">
-                            <p>默认{{goods_item.logisticsTemplate.delivery_number_default}}件商品：¥{{goods_item.logisticsTemplate.delivery_cost_default}}</p>
-                            <p>每增加{{goods_item.logisticsTemplate.delivery_number_delta}}件商品，运费增加：¥{{goods_item.logisticsTemplate.delivery_cost_delta}}</p>
-                        </div>
+                    <div class="col-sm-offset-2 control-label" ng-if="goods_item.logisticsTemplate.delivery_cost_default!=0">
+                        <span class="col-sm-2 control-label">收费金额</span>
+                        <div >默认{{goods_item.logisticsTemplate.delivery_number_default}}件商品：¥{{goods_item.logisticsTemplate.delivery_cost_default}}</div>
+                        <span class="col-sm-offset-2">每增加{{goods_item.logisticsTemplate.delivery_number_delta}}件商品，运费增加：¥{{goods_item.logisticsTemplate.delivery_cost_delta}}</span>
                     </div>
-                </div>
             </div>
-
             <hr>
             <!--售后-->
-            <div class="margin_top" ng-if="goods_after.length>0">
-                <span class="left_font">售后</span>
-                <div class="margin_left inline_block aftermarket">
-                    <div class="margin_top" ng-repeat="item in goods_after">
-                        <p>{{item}}</p>
-                    </div>
+            <div class="row" ng-if="goods_after.length>0">
+                <div class="col-sm-2 control-label">
+                    <span>售后</span>
+                </div>
+                <div class="col-sm-offset-2 control-label padding_left" ng-repeat="item in goods_after">
+                    <p>{{item}}</p>
                 </div>
             </div>
             <!--保障-->
-            <div class="margin_top">
-                <span class="left_font">保障</span>
-                <div class="margin_left inline_block protection">
-                    <div ng-repeat="item in goods_guarantee">
-                        <p>{{item}}</p>
-                    </div>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>保障</span>
+                </div>
+                <div class="col-sm-offset-2 control-label padding_left" ng-repeat="item in goods_guarantee">
+                    <p>{{item}}</p>
                 </div>
             </div>
             <hr>
             <!--线下商城二维码-->
-            <div class="margin_top">
-                <span class="left_font">线下商城二维码</span>
-                <div class="inline_block erm_txt">
-                    <img class="erm_img" src="{{goods_item.qrcode}}" alt="">
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>线下商城二维码</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <img class="img_size" src="{{goods_item.qrcode}}" alt="">
                 </div>
             </div>
             <hr>
             <!--详细描述-->
-            <div class="margin_top">
-                <span class="left_font">详细描述</span>
-                <div class="margin_left inline_block">
-                    <div>
-                        <p ng-bind-html="goods_item.description | toHtml"></p>
-                    </div>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>详细描述</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <p ng-bind-html="goods_item.description | toHtml"></p>
                 </div>
             </div>
             <!--操作-->
-            <div class="btn_margin_top">
-                <button class="btn btn-default" ng-click="backPage()">返回</button>
+            <div class="row">
+                <div class="col-sm-12 control-label">
+                    <button class="btn btn-default" ng-click="backPage()">返回</button>
+                </div>
             </div>
-        </form>
     </section>
-
     <div id="cityModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -189,7 +217,4 @@
             </div>
         </div>
     </div>
-
-
-
 </div>

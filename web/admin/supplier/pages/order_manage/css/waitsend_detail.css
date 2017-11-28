@@ -4,7 +4,9 @@ section {
     padding: 40px 0 0 40px;
     color: #666F80;
 }
-
+hr{
+    margin: 10px 0;
+}
 h3 {
     color: rgba(102, 111, 128, 1);
     font-weight: bold;
@@ -17,7 +19,7 @@ h3 {
     margin-bottom: 20px;
 }
 .hr_p{
-    border-bottom: 1px solid #ABABAB;
+    border-bottom: 1px solid #eee;
 }
 .arrow_class{
     color: #5677FC;
