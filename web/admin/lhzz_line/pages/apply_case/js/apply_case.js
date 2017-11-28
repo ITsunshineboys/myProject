@@ -24,6 +24,7 @@ angular.module('apply_case',[])
                         link:function () {
                             $state.go('apply_case.index')
                             $rootScope.crumbs.splice(1,1)
+                            sessionStorage.removeItem('id')
                         }
                     },{
                         name:'详情'
@@ -104,8 +105,35 @@ angular.module('apply_case',[])
             }
             //查看详情
             //获取详情
+            if(sessionStorage.getItem('id')!=null){
+                _ajax.post('/effect/effect-view',{
+                    id:sessionStorage.getItem('id')
+                },function (res) {
+                    console.log(res)
+                    $scope.particulars_view = res.data.particulars_view
+                    $scope.material = Object.entries(res.data.material)
+                    for(let [key,value] of $scope.material.entries()){
+                        value[2] = {index:key,cur_index:0}
+                    }
+                    console.log($scope.material)
+                    $rootScope.crumbs = [
+                        {
+                            name:'申请样板间',
+                            icon:'icon-yangbanjian',
+                            link:function () {
+                                $state.go('apply_case.index')
+                                $rootScope.crumbs.splice(1,1)
+                                sessionStorage.removeItem('id')
+                            }
+                        },{
+                            name:'详情'
+                        }
+                    ]
+                })
+            }
             $scope.get_detail = function (item) {
                 $scope.cur_item = item
+                sessionStorage.setItem('id',item.id)
                 _ajax.post('/effect/effect-view',{
                     id:item.id
                 },function (res) {
@@ -153,6 +181,7 @@ angular.module('apply_case',[])
                 },function (res) {
                     console.log(res)
                     tablePages()
+                    sessionStorage.removeItem('id')
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',
                         controller: all_modal
@@ -174,6 +203,7 @@ angular.module('apply_case',[])
                     }
                 ]
                 tablePages()
+                sessionStorage.removeItem('id')
                 $state.go('apply_case.index')
             }
         })
