@@ -118,12 +118,13 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
         if(!$scope.data.file){
           return
         }
-        console.log($scope.data);
+		$scope.upload_cover_src=loadingPicUri;
         Upload.upload({
           url:baseUrl+'/site/upload',
           data:{'UploadForm[file]':file}
         }).then(function (response) {
           console.log(response);
+		  $scope.upload_cover_src='';
           if(!response.data.data){
             $scope.cover_flag="上传图片格式不正确，请重新上传"
           }else{
@@ -131,7 +132,8 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
             $scope.upload_cover_src=response.data.data.file_path;
           }
         },function (error) {
-          console.log(error)
+          console.log(error);
+		  $scope.upload_cover_src='';
         })
       };
 
@@ -141,23 +143,29 @@ shop_style_let.controller("shop_style_ctrl",function ($rootScope,$scope,$http,$s
       $scope.data = {
         file:null
       };
+	  $scope.completeUpload = true;
       $scope.upload = function (file) {
         if(!$scope.data.file){
           return
         }
         console.log($scope.data);
+	    $scope.completeUpload = false;
+		$scope.upload_img_arr.push(loadingPicUri);
         Upload.upload({
           url:baseUrl+'/site/upload',
           data:{'UploadForm[file]':file}
         }).then(function (response) {
+		  $scope.upload_img_arr.pop();
           if(!response.data.data){
             $scope.img_flag="上传图片格式不正确，请重新上传"
           }else{
+			$scope.completeUpload = true;
             $scope.img_flag='';
-            $scope.upload_img_arr.push(response.data.data.file_path)
+            $scope.upload_img_arr.push(response.data.data.file_path);
           }
         },function (error) {
           console.log(error)
+		  $scope.upload_img_arr.pop();
         })
       };
       //删除图片

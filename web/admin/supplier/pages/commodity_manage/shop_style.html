@@ -160,7 +160,7 @@
                 <div class="col-sm-11 control-label">
                     <div class="img_list" ng-repeat="item in upload_img_arr">
                         <img class="img_size" ng-src="{{item}}">
-                        <span class="img_times" ng-click="del_img(item)">&times;</span>
+                        <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)">&times;</span>
                     </div>
                     <img class="img_size" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
                     <p class="prompt_txt">图片大小694×400，5M内，可上传5张图片，支持JPG、PNG、JPEG</p>

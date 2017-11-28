@@ -192,11 +192,13 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			return
 		}
 		console.log($scope.data);
+		$scope.upload_cover_src=loadingPicUri;
 		Upload.upload({
 			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
 			console.log(response);
+		    $scope.upload_cover_src='';
 			if(!response.data.data){
 				$scope.cover_flag="上传图片格式不正确，请重新上传"
 			}else{
@@ -204,7 +206,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				$scope.upload_cover_src=response.data.data.file_path;
 			}
 		},function (error) {
-			console.log(error)
+			console.log(error);
+		    $scope.upload_cover_src='';
 		})
 	};
 	/*================封面图片结束=================*/
@@ -214,23 +217,29 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.data = {
 		file:null
 	};
+	$scope.completeUpload = true;
 	$scope.upload = function (file) {
 		if(!$scope.data.file){
 			return
 		}
 		console.log($scope.data);
+	    $scope.completeUpload = false;
+		$scope.upload_img_arr.push(loadingPicUri);
 		Upload.upload({
 			url:baseUrl+'/site/upload',
 			data:{'UploadForm[file]':file}
 		}).then(function (response) {
+		    $scope.upload_img_arr.pop();
 			if(!response.data.data){
 				$scope.img_flag="上传图片格式不正确，请重新上传"
 			}else{
+			    $scope.completeUpload = true;
 				$scope.img_flag='';
 				$scope.upload_img_arr.push(response.data.data.file_path)
 			}
 		},function (error) {
 			console.log(error)
+		    $scope.upload_img_arr.pop();
 		})
 	};
 	//删除图片
