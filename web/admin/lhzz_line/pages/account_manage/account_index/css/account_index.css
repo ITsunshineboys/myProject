@@ -4,7 +4,9 @@
     line-height: 14px;
     font-weight: bold;
 }
-
+.ul_tab{
+    margin-bottom: 6rem;
+}
 .commodity_manage {
     color: #8D9199;
 }
@@ -92,7 +94,7 @@
 
 .search {
     position: absolute;
-    top: 50%;
+    /*top: 50%;*/
     transform: translateY(-50%);
     right: 20px;
 }

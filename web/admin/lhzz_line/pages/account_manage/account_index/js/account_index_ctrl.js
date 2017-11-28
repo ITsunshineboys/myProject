@@ -3,8 +3,8 @@ let account_index=angular.module("account_index_module",[]);
 account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
     $scope.normal_flag=true;
     $scope.close_flag=false;
-    $scope.mm = $scope;
-    $scope.myng = $scope;
+    // $scope.mm = $scope;
+    // $scope.myng = $scope;
     $rootScope.crumbs = [{
         name: '账户管理',
         icon: 'icon-zhanghuguanli'
@@ -29,7 +29,7 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
         $scope.close_flag=true;
         $scope.normal_flag=false;
         $scope.params.status = 0;
-        tablePages();
+        // tablePages();
     };
     $scope.flag = true;
     $scope.strat = false;
@@ -156,22 +156,44 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
 
 
     //正常状态 选择时间排顺序  选择自定义 显示开始结束框
-    _ajax.get('/site/time-types',{},function (response) {
-        $scope.time = response.data.time_types;
-        $scope.selectValue = response.data.time_types[0];
-        $scope.params.time_type = $scope.selectValue.value;
-        $scope.params.status = 1;
-        tablePages();
-    });
+    // _ajax.get('/site/time-types',{},function (response) {
+    //     $scope.time = response.data.time_types;
+    //     $scope.selectValue = response.data.time_types[0];
+    //     $scope.params.time_type = $scope.selectValue.value;
+    //     $scope.params.status = 1;
+    //     tablePages();
+    // });
 
     //============监听下拉框值的变化===========
-    $scope.$watch('selectValue',function(newVal,oldVal){
-        if(!!newVal){
-            $scope.params.status = 1;
-            $scope.params.time_type = newVal.value;
-            tablePages();
+    $scope.time_type = [
+        {name:'全部时间',str:'all'},
+        {name:'今天',str:'today'},
+        {name:'本周',str:'week'},
+        {name:'本月',str:'month'},
+        {name:'本年',str:'year'},
+        {name:'自定义',str:'custom'}
+    ]
+    $scope.getAccount = function () {
+        $scope.Config.currentPage = 1;
+        $scope.params.keyword = '';
+        $scope.keyword = '';
+        if($scope.params.time_type == 'custom'){
+            if($scope.params.start_time!=''||$scope.params.end_time!=''){
+                tablePages()
+            }
+        }else{
+            $scope.params.start_time = '';
+            $scope.params.end_time = '';
+            tablePages()
         }
-    });
+    }
+    // $scope.$watch('selectValue',function(newVal,oldVal){
+    //     if(!!newVal){
+    //         $scope.params.status = 1;
+    //         $scope.params.time_type = newVal.value;
+    //         tablePages();
+    //     }
+    // });
     //监听开始时间
     $scope.$watch('begin_time',function (newVal,oldVal) {
         console.log(newVal);
@@ -206,7 +228,6 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
 
     //单个选择开启
     $scope.getOpen = function (item) {
-        console.log(item.id);
         $scope.getColse = function () {
             _ajax.post('/mall/user-status-toggle',{
                 user_id:item.id,
@@ -246,49 +267,55 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
         },function (response) {
             $scope.params.status = 0;
             tablePages();
-
         })
-
     };
     // 点击筛选降序
     $scope.changePicClose = function () {
-        console.log(111);
         $scope.flag = false;
         $scope.strat = true;
         $scope.params["sort[]"] = 'id:4';
         $scope.params.status = 0;
         tablePages();
-
     };
     $scope.changePicseClose = function () {
-        console.log(222);
         $scope.flag = true;
         $scope.strat = false;
         $scope.params["sort[]"] = 'id:3';
         $scope.params.status = 0;
         tablePages();
-
     };
-
-
-
-
-    // if ($scope.close_flag == true) {
-    $scope.$watch('selectValueClose',function(newVal,oldVal){
-        if(!!newVal) {
-            $scope.params.status = 0;
-            $scope.params.time_type = newVal.value;
-            tablePages();
+    
+    // 监听下拉知道而变化
+    $scope.getAccountClose = function () {
+        $scope.Config.currentPage = 1;
+        $scope.params.keyword = '';
+        $scope.keyword = '';
+        if($scope.params.time_type == 'custom'){
+            if($scope.params.start_time!=''||$scope.params.end_time!=''){
+                tablePages()
+            }
+        }else{
+            $scope.params.start_time = '';
+            $scope.params.end_time = '';
+            tablePages()
         }
-
-    });
+    }
+    // if ($scope.close_flag == true) {
+    // $scope.$watch('selectValueClose',function(newVal,oldVal){
+    //     if(!!newVal) {
+    //         $scope.params.status = 0;
+    //         $scope.params.time_type = newVal.value;
+    //         tablePages();
+    //     }
+    //
+    // });
     //监听开始时间
     $scope.mm = $scope;
     $scope.myng = $scope;
     $scope.$watch('begin_time_more',function (newVal,oldVal) {
         console.log(1111);
         $scope.page=1;//默认第一页
-        if(newVal!=undefined && newVal !='' && $scope.begin_time_more!=undefined && $scope.end_time_more!=undefined) {
+        if(newVal!= undefined && newVal !='' && $scope.begin_time_more!=undefined && $scope.end_time_more!=undefined) {
             $scope.params.status = 0;
             $scope.params.time_type = 'custom';
             $scope.params.end_time = $scope.end_time_more;
@@ -320,7 +347,7 @@ account_index.controller("account_index_ctrl",function ($rootScope,$scope,$http,
     };
     //监听搜索的内容为空时，恢复初始状态
     $scope.$watch("name_num",function (newVal,oldVal) {
-        if (newVal == "") {
+        if (newVal == "" && oldVal !='') {
             $scope.params.status = 0;
             tablePages();
         }

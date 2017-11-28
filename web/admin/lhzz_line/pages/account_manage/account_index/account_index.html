@@ -8,7 +8,7 @@
     <!--</div>-->
     <!--</header>-->
     <!--选项卡-->
-    <div class="tab">
+    <div class="tab ul_tab">
         <ul>
             <li ng-class="{'tab_blue':(normal_flag==true)}"  ng-click="normal()">正常</li>
             <li ng-class="{'tab_blue':(close_flag==true)}" ng-click="close()">关闭</li>
@@ -18,10 +18,10 @@
     <section ng-if="normal_flag==true">
         <span class="border"  ui-sref="add_user">添加新用户</span>
         <span class="border" data-toggle="modal" data-target="#{{more_modal}}" ng-click="change_model ()" >关闭</span>
-        <select  name="province"  ng-model="mm.selectValue" class="time_select" ng-options="item.name for item in time">
+        <select  name="province"  ng-model="params.time_type" ng-change="getAccount()" class="time_select" ng-options="item.str as item.name for item in time_type">
         </select>
-        <input  ng-if="selectValue.name=='自定义'" id="start_time"  ng-model="myng.begin_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-        <input  ng-if="selectValue.name=='自定义'" id="stop_time"   ng-model="myng.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+        <input  ng-if="params.time_type=='custom'" id="start_time" ng-change="getAccount()" ng-model="params.start_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+        <input  ng-if="params.time_type=='custom'" id="stop_time"  ng-change="getAccount()" ng-model="params.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
         <!--搜索-->
         <span class="menu" ng-click="getSearch()">查询</span>
         <div class="search_box">
@@ -133,10 +133,10 @@
     <!--关闭 内容-->
     <section ng-if="close_flag==true">
         <span class="border" data-toggle="modal" data-target="#{{open_modal}}" ng-click="change_open_model ()">开启</span>
-        <select  name="province" ng-model="mm.selectValueClose" class="time_select" ng-options="item.name for item in timeClose ">
+        <select  name="province"  ng-model="params.time_type" ng-change="getAccountClose()" class="time_select" ng-options="item.str as item.name for item in time_type">
         </select>
-        <input  ng-if="selectValueClose.name=='自定义'" id="start_time_more"  ng-model="myng.begin_time_more" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-        <input  ng-if="selectValueClose.name=='自定义'" id="stop_time_more"   ng-model="myng.end_time_more" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+        <input  ng-if="params.time_type=='custom'"  ng-change="getAccountClose()" ng-model="params.start_time" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
+        <input  ng-if="params.time_type=='custom'"  ng-change="getAccountClose()" ng-model="params.end_time" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
         <!--搜索-->
         <span class="menu" ng-click="getSearchClose () ">查询</span>
         <div class="search_box">

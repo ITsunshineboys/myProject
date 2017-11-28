@@ -6,6 +6,7 @@ header{
     height: 4rem;
     line-height: 4rem;
     text-align: center;
+    background-color: white;
 }
 header div a{
     display: inline-block;
