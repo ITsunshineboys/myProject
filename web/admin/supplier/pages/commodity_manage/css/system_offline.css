@@ -28,8 +28,7 @@ ul{
     height: 120px;
 }
 hr{
-    margin-left: 6px;
-    width: 90%;
+    margin: 5px;
     color: #ABABAB;
 }
 
@@ -37,7 +36,6 @@ hr{
     border-bottom: 1px solid #ABABAB;
     margin: 10px 0;
 }
-
 
 .show_city{
     height: 400px;

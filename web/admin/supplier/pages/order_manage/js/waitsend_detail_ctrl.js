@@ -50,7 +50,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       $scope.district=$scope.item.receive_details.district;//收获地址
       $scope.consignee_mobile=$scope.item.receive_details.consignee_mobile;//收货人电话
       $scope.buyer_message=$scope.item.receive_details.buyer_message;//留言
-      $scope.invoice_header_type=$scope.item.receive_details.invoice_header_type;//发票类型
+      $scope.invoice_header_type=$scope.item.receive_details.invoice_type;//发票类型
       $scope.invoice_header=$scope.item.receive_details.invoice_header;//抬头
       $scope.invoicer_card=$scope.item.receive_details.invoicer_card;//纳税人识别码
       $scope.invoice_content=$scope.item.receive_details.invoice_content;//发票内容
