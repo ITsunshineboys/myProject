@@ -402,7 +402,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         itemsPerPage: 12,
         currentPage: 1,
         onChange: function () {
-            tablePages();
+            // tablePages();
         }
     }
     let tablePages=function () {
