@@ -23,9 +23,14 @@ use yii\db\Query;
 class EffectEarnest extends \yii\db\ActiveRecord
 {
     const STATUS_PAYED=1;
+    const STATUS_NO=0;
     const INSET_EARNST = 8900;
     const PAGE_SIZE_DEFAULT = 10;
     const FIELDS_EXTRA = [];
+    const EFFECT_LOGIN=[
+        self::STATUS_NO=>'无登陆申请',
+        self::STATUS_PAYED=>'APP内申请'
+    ];
     const FIELDS_ADMIN = [
         'id',
         'create_time',
@@ -34,7 +39,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
         'earnest',
         'remark',
         'transaction_no',
-        'status'
+        'status',
+        'item'
 
     ];
     /**
@@ -104,7 +110,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->all();
 
         foreach ($effectList as &$effect) {
-
+            $effect['item']=self::EFFECT_LOGIN[$effect['itme']];
             if(isset($effect['create_time'])){
                 $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
             }
