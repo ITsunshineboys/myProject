@@ -1410,8 +1410,8 @@ angular.module("all_controller", ['ngCookies'])
                 }
             }).then(function successCallback(response) {
                 console.log(response);
-                $scope.invoice_content = response.data.data.invoice_content;
-                $scope.invoice_header = response.data.data.invoice_header + '-';
+                $scope.invoice_header = response.data.data.invoice_header;
+                $scope.invoice_content = response.data.data.invoice_content + '-';
                 console.log($scope.invoice_content)
             })
         }
