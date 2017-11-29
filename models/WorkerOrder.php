@@ -916,7 +916,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取时间段精确到具体每一天
+     * 获取时间段精确到具体每一天除去 周末两天
      * @param $start_time
      * @param $end_time
      * @return string
@@ -928,7 +928,12 @@ class WorkerOrder extends \yii\db\ActiveRecord
         for ($i = 0; $i < $days; $i++) {
             $date[] = date('Ymd', $start_time + (86400 * $i));
         }
-        return implode(',', $date);
+        foreach ($date as $v){
+            if((date('w',strtotime($v))!=6) && (date('w',strtotime($v))!=0)){
+                $value[]=$v;
+            }
+        }
+        return $value;
     }
 
 //    /**
