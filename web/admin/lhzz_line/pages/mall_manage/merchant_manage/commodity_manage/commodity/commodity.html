@@ -1,10 +1,11 @@
- <!--选项卡-->
-    <div class="tab">
+<section>
+    <div class="tab clearfix">
         <ul>
-            <li ui-sref-active="tab_blue"  ui-sref=".online">已上架</li>
+            <li ui-sref-active="tab_blue" ui-sref=".online">已上架</li>
             <li ui-sref-active="tab_blue" ui-sref=".offline">已下架</li>
             <li ui-sref-active="tab_blue" ui-sref=".wait">等待上架</li>
             <li ui-sref-active="tab_blue" ui-sref=".deleted">已删除</li>
         </ul>
     </div>
     <div ui-view></div>
+</section>

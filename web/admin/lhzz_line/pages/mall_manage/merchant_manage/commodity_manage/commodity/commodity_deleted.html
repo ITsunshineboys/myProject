@@ -1,64 +1,62 @@
-<div class="table_left">
-    <div class="btn_group">
         <!--搜索框、menu-->
-        <div class="right-btns">
-            <div class="tab_tools clearfix">
-                <div class="btn-group pull-right">
-                            <span class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown"
-                                  aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i></span>
-                    <!--Menu-->
-                    <ul class="dropdown-menu dropdown-menu-right btn_list_menu">
-                        <li ng-repeat="item in menu_list">
-                            <lable>
-                                <input type="checkbox" class="right_input"
-                                       ng-model=item.value>{{item.name}}
-                            </lable>
-                        </li>
-                    </ul>
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-right">
+                <div class="input-group">
+                    <input class="form-control" type="text" ng-model="keyword" placeholder="搜索商家编号或名称">
+                    <span class="glyphicon glyphicon-search"></span>
                 </div>
-            </div>
-            <div class="search-box">
-                <input type="text" ng-model="keyword" placeholder="搜索商品编号或名称">
-                <span class="glyphicon glyphicon-search search"></span>
-                <button class="btn btn-default" type="submit" ng-click="search()">搜索</button>
+                <button class="btn btn-default" ng-click="search()">查询</button>
+                <button class="btn btn-default" href="javascript: void(0);" ng-click="filter = !filter"
+                        ng-class={'btn-focus':filter}>
+                    <i class="iconfont icon-shaixuan"></i>
+                </button>
+                <ul class="filter" ng-if="filter">
+                    <div class="checkbox" ng-repeat="item in menu_list">
+                        <label>
+                            <input type="checkbox" class="right_input" ng-model=item.value>{{item.name}}
+                        </label>
+                    </div>
+                </ul>
             </div>
         </div>
-    </div>
 
     <!--表格内容-->
-    <table>
+    <table class="table table-responsive table-hover">
+        <thead>
         <tr>
-            <td>&nbsp;</td>
-            <td ng-if="menu_list[0].value">商品编号</td>
-            <td ng-if="menu_list[1].value">商品名称</td>
-            <td ng-if="menu_list[2].value">供货价格</td>
-            <td ng-if="menu_list[3].value">市场价格</td>
-            <td ng-if="menu_list[4].value">平台价格</td>
-            <td ng-if="menu_list[5].value">装修公司采购价格</td>
-            <td ng-if="menu_list[6].value">项目经理采购价格</td>
-            <td ng-if="menu_list[7].value">设计师采购价格</td>
-            <td ng-if="menu_list[8].value">库存</td>
-            <td ng-if="menu_list[9].value" ng-click="sortVolumn()">
+            <!--<th>&nbsp;</th>-->
+            <th ng-if="menu_list[0].value">商品编号</th>
+            <th ng-if="menu_list[1].value">商品名称</th>
+            <th ng-if="menu_list[2].value">供货价格</th>
+            <th ng-if="menu_list[3].value">市场价格</td>
+            <th ng-if="menu_list[4].value">平台价格</th>
+            <th ng-if="menu_list[5].value">装修公司采购价格</th>
+            <th ng-if="menu_list[6].value">项目经理采购价格</th>
+            <th ng-if="menu_list[7].value">设计师采购价格</th>
+            <th ng-if="menu_list[8].value">库存</th>
+            <th ng-if="menu_list[9].value" ng-click="sortVolumn()">
                 销量
-                <span class="sortpic">
-                    <i class="glyphicon glyphicon-triangle-top" ng-class="{'active':volumn_ascorder}"></i>
-                    <i class="glyphicon glyphicon-triangle-bottom" ng-class="{'active':volumn_desorder}"></i>
+                <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':volumn_ascorder}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':volumn_desorder}"></i>
                 </span>
-            </td>
-            <td ng-if="menu_list[10].value">状态</td>
-            <td ng-if="menu_list[11].value" ng-click="sortTime()">
+            </th>
+            <th ng-if="menu_list[10].value">状态</th>
+            <th ng-if="menu_list[11].value" ng-click="sortTime()">
                 删除时间
-                <span class="sortpic">
-                    <i class="glyphicon glyphicon-triangle-top" ng-class="{'active':time_ascorder}"></i>
-                    <i class="glyphicon glyphicon-triangle-bottom" ng-class="{'active':time_desorder}"></i>
+                <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':time_ascorder}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':time_desorder}"></i>
                 </span>
-            </td>
-            <td ng-if="menu_list[12].value">操作人员</td>
-            <td ng-if="menu_list[13].value">图片</td>
-            <td ng-if="menu_list[14].value">详情</td>
+            </th>
+            <th ng-if="menu_list[12].value">操作人员</th>
+            <th ng-if="menu_list[13].value">图片</th>
+            <th ng-if="menu_list[14].value">详情</th>
         </tr>
-        <tr class="table_content" ng-repeat="item in tabledetail track by $index">
-            <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="item in tabledetail track by $index">
             <td ng-if="menu_list[0].value">{{item.sku}}</td>
             <td ng-if="menu_list[1].value">{{item.title}}</td>
             <td ng-if="menu_list[2].value">{{item.supplier_price | currency:"¥"}}</td>
@@ -72,11 +70,12 @@
             <td ng-if="menu_list[10].value" class="green">{{item.status}}</td>
             <td ng-if="menu_list[11].value">{{item.delete_time}}</td>
             <td ng-if="menu_list[12].value">{{item.operator}}</td>
-            <td ng-if="menu_list[13].value"><img class="goodpic" id="img_size"
+            <td ng-if="menu_list[13].value"><img class="goodpic"
                                                  ng-src="{{ item.cover_image}}"
                                                  alt=""></td>
             <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">查看</td>
         </tr>
+        </tbody>
     </table>
     <tm-pagination conf="pageConfig"></tm-pagination>
 
@@ -138,5 +137,3 @@
             </div>
         </div>
     </div>
-
-</div>

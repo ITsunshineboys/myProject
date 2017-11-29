@@ -11,37 +11,30 @@
     line-height: 14px;
 }
 
-/*头部结束*/
-section {
-    padding-left: 40px;
+
+.filter {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 40%;
+    border: 1px solid #ababab;
+    background-color: #ffffff;
 }
 
-/*选项卡开始*/
-.tab {
-    width: 90%;
-    height: 60px;
-    margin-left: 40px;
-    border-bottom: 1px solid #E6E9F0;
+.filter .checkbox {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.tab > ul {
-    list-style: none;
-    padding: 0;
+.search .form-group .btn-focus{
+    color: #333;
+    background-color: #d4d4d4;
+    border-color: #8c8c8c;
 }
 
-.tab ul:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.tab > ul > li {
-    float: left;
-    height: 60px;
-    line-height: 60px;
-    margin-right: 25px;
-    cursor: pointer;
-}
 
 .tab_blue {
     color: #5677FC;
@@ -49,101 +42,15 @@ section {
 }
 
 .img_size {
-    width: 30px;
-    height: 30px;
-}
-
-.table_left{
-    padding-left: 40px;
-}
-
-/*按钮组开始*/
-.btn_group{
-    margin-top: 30px;
-    width: 87%;
-}
-
-.btn_right{
-    margin-right: 10px;
-}
-
-.search-box {
-    display: inline-block;
-    float: right;
-    margin-right: 20px;
-    position: relative;
-}
-
-.search-box input{
-    width: 250px;
-    height: 35px;
-    border: 1px solid #8D9199;
-    padding-left: 10px;
-    padding-right: 35px;
-    border-radius: 20px;
-}
-
-.search-box input:focus{
-    outline: none;
-}
-
-.search {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 110px;
+    width: 30px!important;
+    height: 30px!important;
 }
 
 .right-btns{
     float: right;
 }
 
-.tab_tools{
-    float: right;
-}
 
-.search-box button{
-    margin-right: 20px;
-    margin-left: 10px;
-}
-
-.dropdown-menu > li:hover{
-    background-color: #f5f5f5;
-    cursor: pointer;
-}
-.dropdown-menu > li {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: 400;
-    line-height: 1.42857143;
-    color: #333;
-    white-space: nowrap;
-}
-.btn_menu_right{
-    display: inline-block;
-    float: right;
-}
-
-/*按钮组结束*/
-
-/*表格内容开始*/
-
-table .sortpic {
-    display: inline-block;
-    margin-top: -4px;
-    vertical-align: middle;
-}
-
-table .sortpic i{
-    display: block;
-    font-size: 12px;
-    color: #ababab;
-}
-
-table .sortpic .glyphicon-triangle-bottom {
-    margin-top: -4px;
-}
 .blue {
     color: #5677FC;
 }
@@ -160,11 +67,6 @@ table .sortpic .glyphicon-triangle-bottom {
     color: #FF5722;
 }
 
-.img_size {
-    height: 20px;
-    width: 10px;
-}
-
 .stock {
     width: 50px;
     border-radius: 3px;
@@ -172,28 +74,16 @@ table .sortpic .glyphicon-triangle-bottom {
     text-align: center;
 }
 
-table {
-    width: 90%;
-    color: #7A8599;
-}
-
-table tr {
-    height: 40px;
-}
-
-.table_content {
-    border-top: 1px solid #e6e6e6;
-}
-
 .wait_check {
     display: inline-block;
-    width: 80px;
+    width: 50px;
+    border-radius: 3px;
+    border: 1px solid #666F80;
+    text-align: center;
+    cursor: pointer;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    border: 1px solid transparent;
-    color: #CCCCCC;
-    padding: 5px;
 }
 
 .illegal {
@@ -208,8 +98,6 @@ table tr {
     text-overflow:ellipsis;
     white-space: nowrap;
 }
-
-/*表格内容结束*/
 
 /*添加模态框开始*/
 .add_box {
@@ -238,11 +126,6 @@ table tr {
     display: table;
     clear: both;
 }
-
-.right_input {
-    margin-right: 5px !important;
-}
-
 /*添加模态框结束*/
 
 /*模态框样式*/
@@ -340,11 +223,6 @@ textarea {
     font-weight: 400;
 }
 
-/*一些按钮样式*/
-.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
-    outline: 0px auto -webkit-focus-ring-color;
-    outline-offset: 0px;
-}
 
 .active {
     color: #1B7CEE!important;
@@ -362,10 +240,10 @@ textarea {
     line-height: 20px;
 }
 
-.check_border {
-    border: 1px solid #ABABAB;
-    text-align: center;
+.search button:first-child{
+    margin-right: 15px;
 }
+
 
 
 

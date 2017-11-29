@@ -1,189 +1,186 @@
-<div class="table_left">
-    <div class="btn_group">
-        <!--全选、上架-->
-        <div class="pull-left">
-            <button class="btn btn-default btn_right" type="submit" ng-click=checkAll()>全选</button>
-            <button class="btn btn-default" type="submit" data-toggle="modal" data-target="#piliangonline_modal" ng-click="piliangshangjia()">上架</button>
-        </div>
+<div class="search form-inline clearfix">
+    <!--全选、上架-->
+    <button class="btn btn-default" ng-click=checkAll()>全选</button>
+    <button class="btn btn-default" data-toggle="modal" data-target="#piliangonline_modal" ng-click="piliangshangjia()">
+        上架
+    </button>
 
-        <!--搜索框、menu-->
-        <div class="right-btns">
-            <div class="tab_tools clearfix">
-                <div class="btn-group pull-right">
-                            <span class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown"
-                                  aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i></span>
-                    <!--Menu-->
-                    <ul class="dropdown-menu dropdown-menu-right btn_list_menu">
-                        <li ng-repeat="item in menu_list">
-                            <lable>
-                                <input type="checkbox" class="right_input"
-                                       ng-model=item.value>{{item.name}}
-                            </lable>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="search-box">
-                <input type="text" ng-model="keyword" placeholder="搜索商品编号或名称">
-                <span class="glyphicon glyphicon-search search"></span>
-                <button class="btn btn-default" type="submit" ng-click="search()">搜索</button>
-            </div>
+    <div class="form-group pull-right">
+        <div class="input-group">
+            <input class="form-control" type="text" ng-model="keyword" placeholder="搜索商家编号或名称">
+            <span class="glyphicon glyphicon-search"></span>
         </div>
+        <button class="btn btn-default" ng-click="search()">查询</button>
+        <button class="btn btn-default" href="javascript: void(0);" ng-click="filter = !filter"
+                ng-class={'btn-focus':filter}>
+            <i class="iconfont icon-shaixuan"></i>
+        </button>
+        <ul class="filter" ng-if="filter">
+            <div class="checkbox" ng-repeat="item in menu_list">
+                <label>
+                    <input type="checkbox" class="right_input" ng-model=item.value>{{item.name}}
+                </label>
+            </div>
+        </ul>
     </div>
-
-    <!--表格内容-->
-    <table>
-        <tr>
-            <td>&nbsp;</td>
-            <td ng-if="menu_list[0].value">商品编号</td>
-            <td ng-if="menu_list[1].value">商品名称</td>
-            <td ng-if="menu_list[2].value">供货价格</td>
-            <td ng-if="menu_list[3].value">市场价格</td>
-            <td ng-if="menu_list[4].value">平台价格</td>
-            <td ng-if="menu_list[5].value">装修公司采购价格</td>
-            <td ng-if="menu_list[6].value">项目经理采购价格</td>
-            <td ng-if="menu_list[7].value">设计师采购价格</td>
-            <td ng-if="menu_list[8].value">库存</td>
-            <td ng-if="menu_list[9].value" ng-click="sortVolumn()">
-                销量
-                <span class="sortpic">
-                    <i class="glyphicon glyphicon-triangle-top" ng-class="{'active':volumn_ascorder}"></i>
-                    <i class="glyphicon glyphicon-triangle-bottom" ng-class="{'active':volumn_desorder}"></i>
-                </span>
-            </td>
-            <td ng-if="menu_list[10].value">状态</td>
-            <td ng-if="menu_list[11].value" ng-click="sortTime()">
-                下架时间
-                <span class="sortpic">
-                    <i class="glyphicon glyphicon-triangle-top" ng-class="{'active':time_ascorder}"></i>
-                    <i class="glyphicon glyphicon-triangle-bottom" ng-class="{'active':time_desorder}"></i>
-                </span>
-            </td>
-
-            <td ng-if="menu_list[12].value">操作人员</td>
-            <td ng-if="menu_list[13].value">图片</td>
-            <td ng-if="menu_list[14].value">下架原因</td>
-            <td ng-if="menu_list[15].value">详情</td>
-            <td ng-if="menu_list[16].value">操作</td>
-        </tr>
-        <tr class="table_content" ng-repeat="item in tabledetail track by $index">
-            <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
-            <td ng-if="menu_list[0].value">{{item.sku}}</td>
-            <td ng-if="menu_list[1].value">{{item.title}}</td>
-            <td ng-if="menu_list[2].value">{{item.supplier_price | currency:"¥"}}</td>
-            <td ng-if="menu_list[3].value">{{item.market_price | currency:"¥"}}</td>
-            <td ng-if="menu_list[4].value">{{item.platform_price | currency:"¥"}}</td>
-            <td ng-if="menu_list[5].value">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
-            <td ng-if="menu_list[6].value">{{item.purchase_price_manager | currency:"¥"}}</td>
-            <td ng-if="menu_list[7].value"> {{item.purchase_price_designer | currency:"¥"}}</td>
-            <td ng-if="menu_list[8].value">{{item.left_number}}</td>
-            <td ng-if="menu_list[9].value">{{item.sold_number}}</td>
-            <td ng-if="menu_list[10].value" class="red">{{item.status}}</td>
-            <td ng-if="menu_list[11].value">{{item.offline_time}}</td>
-            <td ng-if="menu_list[12].value">{{item.operator}}</td>
-            <td ng-if="menu_list[13].value"><img class="goodpic" id="img_size"
-                                                 ng-src="{{ item.cover_image}}"
-                                                 alt=""></td>
-
-            <td ng-if="menu_list[14].value" data-toggle="modal" data-target="#show_reason"
-                ng-click="showOffReason(item.offline_reason)"><span class="off_reason">{{item.offline_reason}}</span>
-            </td>
-            <td ng-if="menu_list[15].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
-            <td ng-if="menu_list[16].value" class="blue" data-toggle="modal" data-target="#up_shelves_modal" ng-click="singlegoodOnline(item.id)">上架
-            </td>
-        </tr>
-    </table>
-    <tm-pagination conf="pageConfig"></tm-pagination>
-
-    <!--上架模态框-->
-    <div class="modal fade" id="up_shelves_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">提示</h4>
-                </div>
-                <div class="modal-body">
-                    <span>是否确认上架1件商品</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" ng-click="sureGoodOnline()">确认</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">
-                        取消
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--上架被移除 模态框-->
-    <div class="modal fade" id="up_not_shelves_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">提示</h4>
-                </div>
-                <div class="modal-body">
-                    <span>{{cantonline}}</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--批量上架模态框-->
-    <div class="modal fade" id="piliangonline_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title">提示</h4>
-                </div>
-                <div class="modal-body" ng-show="table.roles.length">
-                    是否确认上架{{table.roles.length}}个商品
-                </div>
-
-                <div class="modal-body" ng-show="!table.roles.length">
-                    请选择商品上架
-                </div>
-
-                <div class="modal-footer" ng-show="table.roles.length">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="surepiliangonline()">
-                        确认
-                    </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelplliangonline()">取消</button>
-                </div>
-                <div class="modal-footer" ng-show="!table.roles.length">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-    <!-- 下架原因-详情 -->
-    <div class="modal customer_modal detail_modal fade" id="show_reason" tabindex="-1" role="dialog"
-         data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">详情</h4>
-                </div>
-                <div class="modal-body">
-                    {{offreason}}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 </div>
 
+<!--表格内容-->
+<table class="table table-responsive table-hover">
+    <thead>
+    <tr>
+        <th> </th>
+        <th ng-if="menu_list[0].value">商品编号</th>
+        <th ng-if="menu_list[1].value">商品名称</th>
+        <th ng-if="menu_list[2].value">供货价格</th>
+        <th ng-if="menu_list[3].value">市场价格</th>
+        <th ng-if="menu_list[4].value">平台价格</th>
+        <th ng-if="menu_list[5].value">装修公司采购价格</th>
+        <th ng-if="menu_list[6].value">项目经理采购价格</th>
+        <th ng-if="menu_list[7].value">设计师采购价格</th>
+        <th ng-if="menu_list[8].value">库存</th>
+        <th ng-if="menu_list[9].value" ng-click="sortVolumn()">
+            销量
+            <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':volumn_ascorder}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':volumn_desorder}"></i>
+                </span>
+        </th>
+        <th ng-if="menu_list[10].value">状态</th>
+        <th ng-if="menu_list[11].value" ng-click="sortTime()">
+            下架时间
+            <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':time_ascorder}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':time_desorder}"></i>
+                </span>
+        </th>
+
+        <th ng-if="menu_list[12].value">操作人员</th>
+        <th ng-if="menu_list[13].value">图片</th>
+        <th ng-if="menu_list[14].value">下架原因</th>
+        <th ng-if="menu_list[15].value">详情</th>
+        <th ng-if="menu_list[16].value">操作</th>
+    </tr>
+    </thead>
+
+
+    <tbody>
+    <tr ng-repeat="item in tabledetail track by $index">
+        <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
+        <td ng-if="menu_list[0].value">{{item.sku}}</td>
+        <td ng-if="menu_list[1].value">{{item.title}}</td>
+        <td ng-if="menu_list[2].value">{{item.supplier_price | currency:"¥"}}</td>
+        <td ng-if="menu_list[3].value">{{item.market_price | currency:"¥"}}</td>
+        <td ng-if="menu_list[4].value">{{item.platform_price | currency:"¥"}}</td>
+        <td ng-if="menu_list[5].value">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
+        <td ng-if="menu_list[6].value">{{item.purchase_price_manager | currency:"¥"}}</td>
+        <td ng-if="menu_list[7].value"> {{item.purchase_price_designer | currency:"¥"}}</td>
+        <td ng-if="menu_list[8].value">{{item.left_number}}</td>
+        <td ng-if="menu_list[9].value">{{item.sold_number}}</td>
+        <td ng-if="menu_list[10].value" class="red">{{item.status}}</td>
+        <td ng-if="menu_list[11].value">{{item.offline_time}}</td>
+        <td ng-if="menu_list[12].value">{{item.operator}}</td>
+        <td ng-if="menu_list[13].value"><img class="goodpic"
+                                             ng-src="{{ item.cover_image}}"
+                                             alt=""></td>
+
+        <td ng-if="menu_list[14].value" data-toggle="modal" data-target="#show_reason"
+            ng-click="showOffReason(item.offline_reason)"><span class="off_reason">{{item.offline_reason}}</span>
+        </td>
+        <td ng-if="menu_list[15].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
+        <td ng-if="menu_list[16].value" class="blue" data-toggle="modal" data-target="#up_shelves_modal"
+            ng-click="singlegoodOnline(item.id)">上架
+        </td>
+    </tr>
+    </tbody>
+</table>
+<tm-pagination conf="pageConfig"></tm-pagination>
+
+<!--上架模态框-->
+<div class="modal fade" id="up_shelves_modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>是否确认上架1件商品</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="sureGoodOnline()">确认</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+<!--上架被移除 模态框-->
+<div class="modal fade" id="up_not_shelves_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>{{cantonline}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--批量上架模态框-->
+<div class="modal fade" id="piliangonline_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body" ng-show="table.roles.length">
+                是否确认上架{{table.roles.length}}个商品
+            </div>
+
+            <div class="modal-body" ng-show="!table.roles.length">
+                请选择商品上架
+            </div>
+
+            <div class="modal-footer" ng-show="table.roles.length">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="surepiliangonline()">
+                    确认
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelplliangonline()">取消
+                </button>
+            </div>
+            <div class="modal-footer" ng-show="!table.roles.length">
+                <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 下架原因-详情 -->
+<div class="modal customer_modal detail_modal fade" id="show_reason" tabindex="-1" role="dialog"
+     data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-body">
+                {{offreason}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
