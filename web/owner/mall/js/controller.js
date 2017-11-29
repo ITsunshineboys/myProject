@@ -174,7 +174,7 @@ angular.module('all_controller', [])
                 $scope.all_goods = []
                 sessionStorage.removeItem('materials')
             } else if ($rootScope.curState_name == 'nodata.other_material') {
-                $scope.cur_item = $scope.all_goods[$stateParams.index]
+                $scope.cur_item = $scope.all_goods[$stateParams.index!=undefined?$stateParams.index:sessionStorage.getItem('roomScroll')]
                 $scope.cur_project = 2
                 $scope.cur_header = $scope.inner_header = $scope.cur_item.title
             }
