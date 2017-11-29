@@ -655,7 +655,7 @@ class OwnerController extends Controller
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
         $total_area = $kitchen_area + $toilet_area + $qita;
 
-        
+
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterproof'], $post['city']);
         if ($craft == null){
@@ -872,11 +872,13 @@ class OwnerController extends Controller
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
 
+        $points = Points::findByOne('id,title',"title = '乳胶漆'");
         $latex_paint_area = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['latex_paint_area']])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
         $primer_area = $bedroom_primer_area[0] + $drawing_room_primer_area[0] + $latex_paint_area['project_value'];
@@ -899,6 +901,7 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['concave_length']])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $concave_length['project_value'] ;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
@@ -918,6 +921,7 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['putty_area']])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
         $putty_area = $putty_bedroom_area[0] + $putty_drawing_room_area[0] + $putty_area['project_value'];
 //        腻子天数 腻子面积÷【每天做腻子面积】
