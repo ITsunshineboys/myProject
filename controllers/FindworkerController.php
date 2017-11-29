@@ -506,7 +506,7 @@ class FindworkerController extends Controller{
         ]);
     }
     /**
-     * 实名认证
+     * 实名认证 -去除
      */
     public function  actionCertification(){
         $user_id = \Yii::$app->user->identity;

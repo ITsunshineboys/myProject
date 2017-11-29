@@ -7,6 +7,7 @@ use app\models\OwnerCashManager;
 use app\models\Supplier;
 use app\models\SupplierCashregister;
 use app\models\User;
+use app\models\UserAccessdetail;
 use app\models\UserCashregister;
 use app\models\UserFreezelist;
 use app\services\AuthService;
@@ -551,6 +552,83 @@ class SupplieraccountController extends  Controller{
             'data' =>
                 $paginationData
 
+        ]);
+
+    }
+
+    /**
+     * 大后台业主的收支明细
+     * @return string
+     */
+    public function actionOwnerAccessDetailList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $request = Yii::$app->request;
+        $user_id=(int)$request->get('user_id','');
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',ModelService::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim($request->get('time_type', ''));
+        $type=trim($request->get('type',''));
+        if (array_key_exists($type,UserCashregister::ACCESS_TYPE_LIST))
+        {
+            $where="access_type={$type} and role_id=7 and uid=$user_id";
+        }else{
+            $where="role_id=7 and uid=$user_id";
+        }
+        if($keyword){
+            $where .=" and   CONCAT(order_no,transaction_no) like '%{$keyword}%'";
+        }
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $endTime && $endTime .= ' 23:59:59';
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+        }
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+            $startTime && $where .= " and create_time >= {$startTime}";
+        }
+        if ($endTime) {
+            $endTime = (int)strtotime($endTime);
+            $endTime && $where .= " and create_time <= {$endTime}";
+        }
+        $sort_time=trim($request->get('sort_time','2'));
+        switch ($sort_time)
+        {
+            case 1:
+                $sort='create_time asc';
+                break;
+            case 2:
+                $sort='create_time desc';
+                break;
+        }
+        $data=UserAccessdetail::pagination($where,[],$page,$size,$sort);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
         ]);
 
     }
