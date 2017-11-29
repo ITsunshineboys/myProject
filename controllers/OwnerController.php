@@ -291,6 +291,7 @@ class OwnerController extends Controller
         $points = Points::findByOne('id,title',"title =".self::PROJECT_DETAILS['weak_current']);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
+        
         var_dump($weak_points);exit;
 
 
