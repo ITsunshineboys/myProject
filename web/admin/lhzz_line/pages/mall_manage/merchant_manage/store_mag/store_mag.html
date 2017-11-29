@@ -4,9 +4,10 @@
             <div class="store_mag_btngroup search form-inline clearfix">
 
                 <button class="btn btn-primary" ui-sref="add_store">
+                    <i class="iconfont icon-add"></i>
                     添加
                 </button>
-                <span class="fenleichoose_span">分类选择</span>
+                <span class="btn-group-span">分类选择</span>
                 <!--/*分类选择一级下拉框*/-->
                 <select name="" class="form-control" ng-model="firstselect"
                         ng-options="item.id as item.title for item in firstclass"
@@ -20,13 +21,13 @@
                         ng-change="finalSelect(thirdselect)"></select>
 
 
-                <span id="store_type">店铺类型</span>
+                <span class="btn-group-span">店铺类型</span>
                 <select name="" class="form-control" ng-options="item.id as item.storetype for item in storetype_arr"
                         ng-model="params.shop_type" ng-change="selectType(typeselect)">
                     <!--<option value="456">全部</option>-->
                 </select>
 
-                <span>状态</span>
+                <span class="btn-group-span">状态</span>
                 <select name="" class="form-control" ng-options="item.id as item.status for item in status_arr"
                         ng-model="params.status" ng-change="selectStatus(statusselect)">
 
@@ -51,19 +52,19 @@
                         <th>店铺类型</th>
                         <th>所属类目</th>
                         <th ng-click="sortAmount()">本月销售额
-                            <span class="sortpic">
-                                 <i class="glyphicon glyphicon-triangle-top"
+                            <span class="sort">
+                                 <i class="iconfont icon-up"
                                     ng-class="{'active':amount_ascorder}"></i>
-                                 <i class="glyphicon glyphicon-triangle-bottom"
+                                 <i class="iconfont icon-down"
                                     ng-class="{'active':amount_desorder}"></i>
                             </span>
                         </th>
                         <th ng-click="sortVolumn()">
                             本月销量
-                            <span class="sortpic">
-                                 <i class="glyphicon glyphicon-triangle-top"
+                            <span class="sort">
+                                 <i class="iconfont icon-up"
                                     ng-class="{'active':volumn_ascorder}"></i>
-                                 <i class="glyphicon glyphicon-triangle-bottom"
+                                 <i class="iconfont icon-down"
                                     ng-class="{'active':volumn_desorder}"></i>
                              </span>
                         </th>

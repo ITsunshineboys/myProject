@@ -12,18 +12,6 @@
     line-height: 14px;
 }
 
-/*ͷ������*/
-
-/*��������*/
-section {
-    padding-left: 40px;
-}
-
-/*�л���ʽ*/
-.pic_comment {
-    background-color: #fff;
-    margin-bottom: 5rem;
-}
 
 .img_size {
     width: 1.1rem !important;
@@ -33,77 +21,10 @@ section {
     width: 1.3rem !important;
 }
 
-.nav-tabs {
-    border: none;
-}
-
-.pic_tabs {
-    margin-bottom: 1rem;
-}
-
-.pic_tabs li a {
-    font-size: 14px;
-    color: #53A8F4;
-    padding-top: .5rem;
-}
-
-.line_com {
-    display: block;
-    width: 4.2rem;
-    height: .2rem;
-    background-color: #53A8F4;
-    /*margin-left: 5.7rem;*/
-    margin-top: .5rem;
-}
-
-.tab-content {
-    margin-top: .5rem;
-}
-
-.list_tab {
-    margin-bottom: 1.5rem;
-    margin-left: -23px;
-    margin-top: 25px;
-
-}
-
-.list_tab li {
-    /*width: 16rem;*/
-    text-align: center;
-    padding-top: .5rem;
-    margin-left: 25px;
-}
-
-.list_tab li a {
-    color: #53A8F4;
-    font-size: 14px;
-}
-
-.nav > li > a {
-    padding: 0;
-    color: #666F80;
-}
-
 .active {
     color: #53A8F4;
 }
 
-.nav > li > a:focus, .nav > li > a:hover {
-    text-decoration: none;
-    background-color: white;
-}
-
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    border: none;
-}
-
-.nav-tabs > li > a {
-    border: none;
-}
-
-/*����*/
-
-/*����������ʽ  ������Ϣ*/
 .shop_name {
     margin-bottom: 25px;
 }
@@ -177,15 +98,6 @@ hr {
     margin-top: 30px;
 }
 
-.btn_back button {
-    width: 80px;
-    height: 34px;
-    background-color: white;
-    color: #5E6166;
-    border: 1px solid #5E6166;
-}
-
-/*����������ʽ  ��������*/
 .shop_money {
     margin-bottom: 25px;
 }
@@ -246,24 +158,6 @@ hr {
     height: 150px;
     border: 1px solid #ABABAB;
     vertical-align: text-top;
-}
-
-.table_div table tr {
-    border-bottom: 1px solid #ddd;
-    height: 35px;
-    line-height: 35px;
-}
-
-.table_div table tr td {
-    /*margin-left: 60px;*/
-    color: #7A8599;
-    font-size: 14px;
-    border-top: none;
-    /*border-bottom: 1px solid #ddd;*/
-}
-
-.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-    border-top: none;
 }
 
 .modal_size {
