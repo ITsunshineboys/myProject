@@ -616,6 +616,9 @@ class OwnerController extends Controller
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
+
+        $points = Points::findByOne('id,title',"title = '防水'");
+        var_dump($points);exit;
         //厨房
         $kitchen = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->one();
         $kitchen_ = $kitchen['project_value'] / 100;
@@ -646,7 +649,9 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
+            ->andWhere([])
             ->one();
+        var_dump($apartment);exit;
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
 
         $total_area = $kitchen_area + $toilet_area + $qita;
