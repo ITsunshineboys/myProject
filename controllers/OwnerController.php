@@ -618,11 +618,10 @@ class OwnerController extends Controller
 
 
         $points = Points::findByOne('id,title',"title = '防水'");
-        var_dump($points);exit;
         //厨房
-        $kitchen = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->one();
+        $kitchen = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->andWhere(['points'=>$points['id']])->one();
         $kitchen_ = $kitchen['project_value'] / 100;
-        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->one();
+        $p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'厨房防水高度']])->andWhere(['points'=>$points['id']])->one();
         if (!$p){
             $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         }else{
@@ -632,9 +631,9 @@ class OwnerController extends Controller
 
 
         //卫生间
-        $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->one();
+        $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->andWhere(['points'=>$points['id']])->one();
         $toilet_ = $toilet['project_value'] / 100;
-        $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->one();
+        $toilet_p = ProjectView::find()->asArray()->where(['and',['parent_project'=>'防水'],['project'=>'卫生间防水高度']])->andWhere(['points'=>$points['id']])->one();
         if (!$toilet_p){
             $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
         }else{
@@ -649,7 +648,7 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
-            ->andWhere([])
+            ->andWhere(['points'=>$points['id']])
             ->one();
         var_dump($apartment);exit;
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
