@@ -358,11 +358,12 @@ class FindworkerController extends Controller{
             ]);
         }
         $worker_info=User::find()->where(['id'=>$user_id->getId()])->one();
-        $worker=Worker::find()->where(['uid'=>$user_id])->select('nickname,uid,balance,status')->asArray()->one();
+        $worker=Worker::find()->where(['uid'=>$user_id])->select('id,nickname,uid,balance,status')->asArray()->one();
         $worker['monthly_income']=Worker::worker_monthly_income($user_id->getId());
         $worker['aite_cube_no']=$worker_info->aite_cube_no;
         $worker['worker_no']=$worker_info->aite_cube_no;
         $worker['balance']=sprintf('%.2f',(float)$worker['balance']*0.01);
+        $worker['monthly_days']=Worker::worker_start_days($worker['id']);
         $order=Worker::getordertypebystatus($user_id->getId());
         if(is_int($order)){
             $code=$order;

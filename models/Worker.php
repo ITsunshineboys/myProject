@@ -273,6 +273,19 @@ class Worker extends \yii\db\ActiveRecord
         return $income;
     }
 
+    /**
+     * 统计本月的工人开工天数
+     * @param $worker_id
+     * @return int
+     */
+    public static function worker_start_days($worker_id){
+        $time_type = 'month';
+        list($start_time,$end_time)= StringService::startEndDate($time_type);
+        $data = WorkerOrder::getWorkDaysByTimeArea($worker_id, $start_time,$end_time);
+        return count($data);
+
+    }
+
     public static function findByCode($where = [],$size,$page)
     {
         $offset = ($page - 1) * $size;
