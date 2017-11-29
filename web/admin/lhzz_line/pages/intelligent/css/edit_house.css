@@ -73,9 +73,12 @@
     width:32px;
     position: absolute;
     top: 0;
+    height: 100%!important;
+    margin-left:0!important;
+    margin-right:0!important;
 }
 .edit_house button:first-of-type{
-    right:-5px;
+    right:0;
 }
 .edit_house  button:last-of-type{
     right:32px;
