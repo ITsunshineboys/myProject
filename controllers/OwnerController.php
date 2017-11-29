@@ -623,7 +623,7 @@ class OwnerController extends Controller
         $kitchen = ProjectView::find()->asArray()->where(['project'=>'厨房面积'])->andWhere(['parent_project'=>'面积比例'])->one();
         $kitchen_ = $kitchen['project_value'] / 100;
 
-        $p = ProjectView::find()->asArray()->where(['project'=>'厨房防水高度'])->andWhere(['points'=>$points['id']])->one();
+        $p = ProjectView::find()->asArray()->where(['project'=>'厨房防水高度'])->andWhere(['points_id'=>$points['id']])->one();
         if (!$p){
             $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
         }else{
@@ -636,7 +636,7 @@ class OwnerController extends Controller
         //卫生间
         $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->andWhere(['points'=>$points['id']])->one();
         $toilet_ = $toilet['project_value'] / 100;
-        $toilet_p = ProjectView::find()->asArray()->where(['project'=>'卫生间防水高度'])->andWhere(['points'=>$points['id']])->one();
+        $toilet_p = ProjectView::find()->asArray()->where(['project'=>'卫生间防水高度'])->andWhere(['points_id'=>$points['id']])->one();
         if (!$toilet_p){
             $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
         }else{
