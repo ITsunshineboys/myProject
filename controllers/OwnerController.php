@@ -616,11 +616,15 @@ class OwnerController extends Controller
         $judge = BasisDecorationService::priceConversion($goods);
         $waterproof = BasisDecorationService::judge($judge, $post);
 
-
         $points = Points::findByOne('id,title',"title = '防水'");
+
+
         //厨房
         $kitchen = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->andWhere(['points'=>$points['id']])->one();
+        var_dump($kitchen);exit;
         $kitchen_ = $kitchen['project_value'] / 100;
+
+
         $p = ProjectView::find()->asArray()->where(['project'=>'厨房防水高度'])->andWhere(['points'=>$points['id']])->one();
         if (!$p){
             $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
