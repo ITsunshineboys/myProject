@@ -1131,7 +1131,7 @@ class OwnerController extends Controller
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
 
 
-        $points = Points::findByOne('id,tile',"title='泥作'");
+        $points = Points::findByOne('id,title',"title='泥作'");
         $perject = ProjectView::find()->where(['and',['points_id'=>$points['id']],['project'=>$post['high']]])->asArray()->one();
         $high = isset($perject['project_value'])?$perject['project_value']:2.8;
 
