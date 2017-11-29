@@ -288,8 +288,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //      点位 和 材料查询
-        $points = Points::findByOne('id,title',self::PROJECT_DETAILS['weak_current']);
-        var_dump($points);exit;
+        $points = Points::findByOne('id,title',"title =".self::PROJECT_DETAILS['weak_current']);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
         var_dump($weak_points);exit;
