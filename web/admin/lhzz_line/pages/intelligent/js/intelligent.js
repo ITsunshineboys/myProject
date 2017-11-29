@@ -2533,7 +2533,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             value.cur_unit = 'm/m'
                         } else if (value.project_details.indexOf('石膏粉') != -1) {
                             value.project_info = '1平方石膏粉费用'
-                            value.cur_unit = 'm/m'
+                            value.cur_unit = '元/m2'
                         }
                     }
                     $scope.process_list.push(arr)
