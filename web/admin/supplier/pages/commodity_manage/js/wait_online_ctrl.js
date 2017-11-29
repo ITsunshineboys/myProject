@@ -17,6 +17,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			return $.param(data)
 		}
 	};
+    $scope.upload_txt='上传';
+    $scope.upload_dis=false;
 	$scope.myng=$scope;
 	let goods_item=$stateParams.item;//点击对应的那条数据
 	console.log(goods_item);
@@ -184,64 +186,63 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	/*---------------------------------属性获取结束---------------------------------*/
 	/*----------------上传封面图-----------------------*/
 	//$scope.upload_cover_src='';
-	$scope.data = {
-		file:null
-	};
-	$scope.upload_cover = function (file) {
-		if(!$scope.data.file){
-			return
-		}
-		console.log($scope.data);
-		$scope.upload_cover_src=loadingPicUri;
-		Upload.upload({
-			url:baseUrl+'/site/upload',
-			data:{'UploadForm[file]':file}
-		}).then(function (response) {
-			console.log(response);
-		    $scope.upload_cover_src='';
-			if(!response.data.data){
-				$scope.cover_flag="上传图片格式不正确，请重新上传"
-			}else{
-				$scope.cover_flag='';
-				$scope.upload_cover_src=response.data.data.file_path;
-			}
-		},function (error) {
-			console.log(error);
-		    $scope.upload_cover_src='';
-		})
-	};
+    $scope.data = {
+        file:null
+    };
+    $scope.upload_cover = function (file) {
+        if(!$scope.data.file){
+            return
+        }
+        $scope.upload_dis=true;
+        $scope.upload_txt='上传中...';
+        Upload.upload({
+            url:baseUrl+'/site/upload',
+            data:{'UploadForm[file]':file}
+        }).then(function (response) {
+            if(!response.data.data){
+                $scope.cover_flag="上传图片格式不正确，请重新上传"
+            }else{
+                $scope.cover_flag='';
+                $scope.upload_cover_src=response.data.data.file_path;
+            }
+            $scope.upload_dis=false;
+            $scope.upload_txt='上传';
+        },function (error) {
+            console.log(error)
+            $scope.upload_cover_src='';
+        })
+    };
 	/*================封面图片结束=================*/
 	/*------------------------上传多张图片--------------------------*/
 	//上传图片
-	//$scope.upload_img_arr=[]; //图片数组
-	$scope.data = {
-		file:null
-	};
-	$scope.completeUpload = true;
-	$scope.upload = function (file) {
-		if(!$scope.data.file){
-			return
-		}
-		console.log($scope.data);
-	    $scope.completeUpload = false;
-		$scope.upload_img_arr.push(loadingPicUri);
-		Upload.upload({
-			url:baseUrl+'/site/upload',
-			data:{'UploadForm[file]':file}
-		}).then(function (response) {
-		    $scope.upload_img_arr.pop();
-			if(!response.data.data){
-				$scope.img_flag="上传图片格式不正确，请重新上传"
-			}else{
-			    $scope.completeUpload = true;
-				$scope.img_flag='';
-				$scope.upload_img_arr.push(response.data.data.file_path)
-			}
-		},function (error) {
-			console.log(error)
-		    $scope.upload_img_arr.pop();
-		})
-	};
+    $scope.data = {
+        file:null
+    };
+    $scope.completeUpload = true;
+    $scope.upload = function (file) {
+        if(!$scope.data.file){
+            return
+        }
+        console.log($scope.data);
+        $scope.completeUpload = false;
+        $scope.upload_img_arr.push(loadingPicUri);
+        Upload.upload({
+            url:baseUrl+'/site/upload',
+            data:{'UploadForm[file]':file}
+        }).then(function (response) {
+            $scope.upload_img_arr.pop();
+            if(!response.data.data){
+                $scope.img_flag="上传图片格式不正确，请重新上传"
+            }else{
+                $scope.completeUpload = true;
+                $scope.img_flag='';
+                $scope.upload_img_arr.push(response.data.data.file_path)
+            }
+        },function (error) {
+            console.log(error)
+            $scope.upload_img_arr.pop();
+        })
+    };
 	//删除图片
 	$scope.del_img=function (item) {
 		$http.post(baseUrl+'/site/upload-delete',{
@@ -459,7 +460,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	};
 	/*-----------------------保存成功跳转--------------------------------*/
 	$scope.change_go=function () {
-		console.log(666);
 		setTimeout(function () {
 			$state.go('commodity_manage',{wait_flag:true})
 		},300)
