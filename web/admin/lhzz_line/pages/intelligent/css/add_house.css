@@ -68,3 +68,6 @@
 .add_house .red_mark{
     color: red;
 }
+.add_house .edit{
+    padding-top:5px;
+}
