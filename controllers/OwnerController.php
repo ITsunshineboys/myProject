@@ -119,6 +119,8 @@ class OwnerController extends Controller
         'toilet'  => '卫生间',
         'hall'    => '客厅',
         'bedroom' => '卧室',
+        'master_bedroom' => '主卧',
+        'secondary_bedroom' => '次卧',
     ];
 
     /**
@@ -291,8 +293,22 @@ class OwnerController extends Controller
         $points = Points::findByOne('id,title',['title'=>self::PROJECT_DETAILS['weak_current']]);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
-        var_dump($weak_points);exit;
+        foreach ($weak_points as $one_points){
+            if ($one_points['title'] == self::ROOM_DETAIL['hall']){
+                $all = $one_points['count'] * $post['hall'];
+            }
 
+            if ($one_points['title'] == self::ROOM_DETAIL['master_bedroom'] && $post['bedroom'] = 1){
+                $master_bedroom = $one_points['count'] * $post['bedroom'];
+            }
+
+            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] > 1){
+                $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
+            }
+        }
+        //  弱电总点位
+        $weak_current_points = $all + $master_bedroom + $secondary_bedroom;
+        var_dump($weak_current_points);exit;
 
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
