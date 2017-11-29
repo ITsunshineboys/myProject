@@ -134,10 +134,10 @@ let commodity_manage = angular.module("commodity_manage", [])
             /*初始化已下架的搜索*/
             // $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
             $scope.down_search_value = '';//清空输入框值
-            // $scope.params.keyword = '';
+            $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
             $scope.params.status = 1;
-            // tablePagesWait()
+            // tablePagesWait();
         }
         //物流模板
         $scope.logistics_flag = $stateParams.logistics_flag;
