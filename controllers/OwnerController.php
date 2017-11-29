@@ -311,9 +311,6 @@ class OwnerController extends Controller
         }
         //  弱电总点位
         $weak_current_points = $all + $secondary_bedroom + $other;
-        var_dump($secondary_bedroom);
-        var_dump($weak_current_points);
-        exit;
 
 
         //查询弱电所需要材料
@@ -376,11 +373,6 @@ class OwnerController extends Controller
                 $all = $one_points['count'] * $post['hall'];
             }
 
-            // 主卧
-            if ($one_points['title'] == '主卧室'){
-                $master_bedroom = $one_points['count'] * $post['bedroom'];
-            }
-
             // 次卧
             if ($one_points['title'] == '次卧室' && $post['bedroom'] > 1){
                 $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
@@ -399,12 +391,12 @@ class OwnerController extends Controller
             }
 
 
-            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['master_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] == self::ROOM_DETAIL['toilet']){
+            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] == self::ROOM_DETAIL['toilet']){
                 $other +=  $one_points['count'];
             }
         }
         //  弱电总点位
-        $weak_current_points = $all + $master_bedroom + $secondary_bedroom + $kitchen + $toilet + $other;
+        $weak_current_points = $all + $secondary_bedroom + $kitchen + $toilet + $other;
 
 
         //查询弱电所需要材料
