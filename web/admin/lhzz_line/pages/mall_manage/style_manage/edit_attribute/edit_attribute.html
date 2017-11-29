@@ -1,14 +1,13 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/edit_attribute/css/edit_attribute.css">
 <div ng-controller="edit_attribute_ctrl">
-    <section>
         <div class="top_title">
             <span style="margin-right: 80px">分类名称</span>
             <span ng-bind="titles"></span>
         </div>
         <hr>
         <div class="add_box">
-            <span class="add" ng-click=selectAdd()>下拉添加</span>
-            <span class="add" ng-click="generalAdd()">普通添加</span>
+            <button class="btn btn-default" ng-click=selectAdd()><i class="iconfont icon-add"></i>下拉添加</button>
+            <button class="btn btn-default" ng-click="generalAdd()"><i class="iconfont icon-add"></i>普通添加</button>
         </div>
         <!--属性设置-->
         <div class="margin_top">
@@ -45,8 +44,8 @@
         </div>
         <!--保存 返回-->
         <div class="bottom">
-            <span class="bg_blue" ng-click=saveProp()>保存</span>
-            <span ui-sref='style_index({showattr:true})'>返回</span>
+            <button class="btn btn-primary" ng-click=saveProp()><i class="iconfont icon-save"></i>保存</button>
+            <button class="btn btn-default" ui-sref='style_index({showattr:true})'>返回</button>
         </div>
 
 

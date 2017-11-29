@@ -10,14 +10,6 @@
 }
 
 /*头部结束*/
-section {
-    padding-left: 40px;
-}
-
-.top_title {
-    padding: 40px 0;
-}
-
 hr {
     margin: 0 auto;
 }
@@ -92,16 +84,16 @@ input {
     margin-top: 200px;
 }
 
-.bottom span {
-    display: inline-block;
-    border: 1px solid #ddd;
-    width: 80px;
-    height: 35px;
-    border-radius: 3px;
-    text-align: center;
-    line-height: 35px;
-    cursor: pointer;
-}
+/*.bottom span {*/
+    /*display: inline-block;*/
+    /*border: 1px solid #ddd;*/
+    /*width: 80px;*/
+    /*height: 35px;*/
+    /*border-radius: 3px;*/
+    /*text-align: center;*/
+    /*line-height: 35px;*/
+    /*cursor: pointer;*/
+/*}*/
 
 .bg_blue {
     color: #487AF8;
