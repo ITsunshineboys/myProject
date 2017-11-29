@@ -30,9 +30,12 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_DESC_UNPAID='待付款';
     const ORDER_TYPE_DESC_UNSHIPPED='待发货';
     const ORDER_TYPE_DESC_UNRECEIVED='待收货';
+    const ORDER_TYPE_DESC_SHIPPED='已发货';
     const ORDER_TYPE_DESC_COMPLETED='已完成';
     const ORDER_TYPE_DESC_CANCEL='已取消';
     const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
+    const ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN='售后中';
+    const ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER='售后结束';
     const ORDER_TYPE_DESC_UNCOMMENT='待评论';
     const ORDER_TYPE_DESC_APPLYREFUND='申请退款';
     const ORDER_TYPE_APPLYREFUND='apply_refund';
@@ -45,6 +48,8 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_CANCEL='cancel';
     const ORDER_TYPE_CUSTOMER_SERVICE='customer_service';
     const ORDER_TYPE_UNCOMMENT='uncomment';
+    const ORDER_TYPE_CUSTOMER_SERVICE_IN='after_saled';
+    const ORDER_TYPE_CUSTOMER_SERVICE_OVER='after_sale_completed';
     const ORDER_TYPE_LIST=[
         self::ORDER_TYPE_DESC_ALL=>self::ORDER_TYPE_ALL,
         self::ORDER_TYPE_DESC_UNPAID=>self::ORDER_TYPE_UNPAID,
@@ -1223,26 +1228,26 @@ class GoodsOrder extends ActiveRecord
                     break;
             }
             if ($data[$k]['pay_status']==0 && $data[$k]['order_status']==0){
-                $data[$k]['status']='待付款';
+                $data[$k]['status']=self::PAY_STATUS_DESC_UNPAID;
             }else{
                 switch ($data[$k]['order_status']){
                     case 0:
                         switch ($data[$k]['shipping_status']){
                             case 0:
-                                $data[$k]['status']='待发货';
+                                $data[$k]['status']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
                                 break;
                             case 1:
-                                $data[$k]['status']='待收货';
+                                $data[$k]['status']=self::ORDER_TYPE_DESC_UNRECEIVED;
                                 break;
                             case 2:
-                                $data[$k]['status']='已完成';
+                                $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
                                 break;
                         }
                         break;
                     case 1:
                         switch($data[$k]['customer_service']){
                             case 0:
-                                $data[$k]['status']='已完成';
+                                $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
                                 break;
                             case 1:
                                 $data[$k]['status']='售后中';
@@ -1253,14 +1258,14 @@ class GoodsOrder extends ActiveRecord
                         }
                         break;
                     case 2:
-                        $data[$k]['status']='已取消';
+                        $data[$k]['status']=self::ORDER_TYPE_DESC_CANCEL;
                         break;
                 }
             }
             $data[$k]['send_time']=0;
             $data[$k]['complete_time']=0;
             $data[$k]['RemainingTime']=0;
-            if ($data[$k]['status']=='待收货'){
+            if ($data[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                     ->one();
@@ -1270,7 +1275,7 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                     if ($data[$k]['RemainingTime']<=0){
                         $data[$k]['complete_time']=$express->receive_time;
-                        $data[$k]['status']='已完成';
+                        $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
                         $data[$k]['is_unusual']=0;
                         $supplier_id[$k]=self::find()
                             ->select('supplier_id')
@@ -1285,7 +1290,7 @@ class GoodsOrder extends ActiveRecord
                     }
                 }
             };
-            if ($data[$k]['status']=='已完成')
+            if ($data[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
             {
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
@@ -1307,7 +1312,7 @@ class GoodsOrder extends ActiveRecord
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
-            if ($data[$k]['status']=='待付款'){
+            if ($data[$k]['status']==self::PAY_STATUS_DESC_UNPAID){
                 $time=time();
                 $pay_term=(strtotime($data[$k]['create_time'])+24*60*60);
                 if (($pay_term-$time)<=0){
@@ -1315,12 +1320,12 @@ class GoodsOrder extends ActiveRecord
                         ->createCommand()
                         ->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$data[$k]['order_no'].' and sku='.$data[$k]['sku'])
                         ->execute();
-                    $data[$k]['status']='已取消';
+                    $data[$k]['status']=self::ORDER_TYPE_DESC_CANCEL;
                 }else{
                     $data[$k]['pay_term']=$pay_term-$time;
                 }
             }
-            if ($data[$k]['status']=='已取消')
+            if ($data[$k]['status']==self::ORDER_TYPE_DESC_CANCEL)
             {
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
@@ -2008,7 +2013,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
                 $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
                 $GoodsOrder[$k]['user_name']=$user->nickname;
-                $GoodsOrder[$k]['status']='待付款';
+                $GoodsOrder[$k]['status']=self::PAY_STATUS_DESC_UNPAID;
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
                 $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
@@ -2039,7 +2044,9 @@ class GoodsOrder extends ActiveRecord
                         $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+                        unset($GoodsOrder[$k]['list'][$key]['order_status']);
                     }
+
                     unset($GoodsOrder[$k]['pay_status']);
                     unset($GoodsOrder[$k]['supplier_id']);
                     $arr[]=$GoodsOrder[$k];
@@ -2102,8 +2109,9 @@ class GoodsOrder extends ActiveRecord
      */
     public static function  findOrderData($arr,$user,$role)
     {
+
         foreach ($arr as $k=>$v){
-            if ($arr[$k]['status']=='待付款'){
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_UNPAID){
                 unset($arr[$k]);
             }
         }
@@ -2117,10 +2125,10 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成'){
+            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
                 $arr[$k]['handle']='平台介入';
             }
-            if ($arr[$k]['status']=='已完成'){
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
                 if (!$arr[$k]['comment_id']){
                     $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
                 }
@@ -2172,6 +2180,7 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['RemainingTime']);
             unset($arr[$k]['supplier_id']);
             unset($arr[$k]['role_id']);
+            unset($arr[$k]['pay_term']);
             $arr[$k]['list']=[$arr_list];
         }
         return $arr;
@@ -2199,43 +2208,67 @@ class GoodsOrder extends ActiveRecord
         {
             switch ($arr[$k]['status'])
             {
-                case self::PAY_STATUS_DESC_UNPAID:
+                case self::ORDER_TYPE_DESC_UNPAID:
+                    $arr[$k]['status_type']=1; //待付款
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_UNPAID;
                     $arr[$k]['status']=self::ORDER_TYPE_UNPAID;
                     break;
-                case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                case self::ORDER_TYPE_DESC_UNSHIPPED:
+                    $arr[$k]['status_type']=2; //待发货
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_UNSHIPPED;
                     $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED;
-                    if ( $arr[$k]['unusual']=='申请退款')
+                    if ($arr[$k]['unusual']==self::ORDER_TYPE_DESC_APPLYREFUND)
                     {
+                        $arr[$k]['status_type']=3; //待发货-申请退款
+                        $arr[$k]['status_name']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
                         $arr[$k]['status']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
                     }
                     break;
                 case  self::ORDER_TYPE_DESC_UNRECEIVED:
                     if ($role=='supplier')
                     {
-                        $arr[$k]['status']='shipped';
-                        if ($arr[$k]['unusual']=='申请退款'){
-                            $arr[$k]['status']='shipped'.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        $arr[$k]['status_type']=4; //已发货
+                        $arr[$k]['status_name']=self::ORDER_TYPE_DESC_SHIPPED;
+                        $arr[$k]['status']=self::ORDER_TYPE_SHIPPED;
+                        if ($arr[$k]['unusual']==self::ORDER_TYPE_DESC_APPLYREFUND){
+                            $arr[$k]['status_type']=5; //已发货-申请退款
+                            $arr[$k]['status_name']=self::ORDER_TYPE_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                            $arr[$k]['status']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
                         }
                     }else{
+                        $arr[$k]['status_type']=6; //待收货
+                        $arr[$k]['status_name']=self::ORDER_TYPE_DESC_UNRECEIVED;
                         $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED;
-                        if ($arr[$k]['unusual']=='申请退款'){
+                        if ($arr[$k]['unusual']==self::ORDER_TYPE_DESC_APPLYREFUND){
+                            $arr[$k]['status_type']=7; //待收货-申请退款
+                            $arr[$k]['status_name']=self::ORDER_TYPE_DESC_UNRECEIVED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
                             $arr[$k]['status']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
                         }
                     }
                     break;
                 case  self::ORDER_TYPE_DESC_CANCEL:
+                    $arr[$k]['status_type']=8; //已取消
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_CANCEL;
                     $arr[$k]['status']=self::ORDER_TYPE_CANCEL;
                     break;
-                case  '售后中':
-                    $arr[$k]['status']='after_saled';
+                case  self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN:
+                    $arr[$k]['status_type']=9; //售后中
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN;
+                    $arr[$k]['status']=self::ORDER_TYPE_CUSTOMER_SERVICE_IN;
                     break;
-                case  '售后结束':
-                    $arr[$k]['status']='after_sale_completed';
+                case  self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER:
+                    $arr[$k]['status_type']=10; //售后结束
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
+                    $arr[$k]['status']=self::ORDER_TYPE_CUSTOMER_SERVICE_OVER;
                     break;
                 case self::ORDER_TYPE_DESC_COMPLETED:
+                    $arr[$k]['status_type']=11; //已完成
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_COMPLETED;
                     $arr[$k]['status']=self::ORDER_TYPE_COMPLETED;
                     break;
                 case self::ORDER_TYPE_DESC_UNCOMMENT:
+                    $arr[$k]['status_type']=12; //待评论
+                    $arr[$k]['status_name']=self::ORDER_TYPE_DESC_UNCOMMENT;
                     $arr[$k]['status']=self::ORDER_TYPE_UNCOMMENT;
                     break;
             }
@@ -2718,13 +2751,17 @@ class GoodsOrder extends ActiveRecord
                         ->andWhere(['role_id'=>$user->last_role_id_app])
                         ->andWhere(['goods_id'=>$goods['goods_id']])
                         ->one();
-                    $resS=$shoppingCart->delete();
-                    if (!$resS)
+                    if ($shoppingCart)
                     {
-                        $tran->rollBack();
-                        $code=500;
-                        return $code;
+                        $resS=$shoppingCart->delete();
+                        if (!$resS)
+                        {
+                            $tran->rollBack();
+                            $code=500;
+                            return $code;
+                        }
                     }
+
                     $Goods=Goods::find()
                         ->where(['id'=>$goods['goods_id']])
                         ->asArray()
@@ -2800,7 +2837,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 $orders[]=$order_no;
             }
-             if ($total!=$total_amount*100)
+             if (!$total==$total_amount*100)
              {
                  $code=1000;
                  $tran->rollBack();
