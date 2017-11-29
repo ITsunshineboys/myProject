@@ -1881,26 +1881,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        $a =[
-           ['a'=>'123','b'=>'张三','c'=>44],
-           ['a'=>'123','b'=>'张三','c'=>35],
-           ['a'=>'123','b'=>'张三','c'=>55],
-           ['a'=>'123','b'=>'张三','c'=>125],
-
-        ];
-
-        foreach ($a as $c){
-           $b = $c;
-           $max = max($c['c'],$b['c']);
-        }
-
-
-        foreach ($a as  $b){
-            if ($b['c'] == $max){
-                $aa = $b;
-            }
-        }
-var_dump($aa);
+        var_dump(Effect::find()->asArray()->all());
     }
 
 }
