@@ -407,6 +407,7 @@ class OwnerController extends Controller
         }
         //  弱电总点位
         $weak_current_points = $all + $secondary_bedroom + $kitchen + $toilet + $other;
+        var_dump($secondary_bedroom);exit;
 
 
         //查询弱电所需要材料
