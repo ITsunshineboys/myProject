@@ -367,9 +367,45 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //强电点位
-        $points_select = 'count';
-        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['strong_current']]];
-        $points = Points::findByOne($points_select,$points_where);
+        $points = Points::findByOne('id,title',['title'=>self::PROJECT_DETAILS['strong_current']]);
+        $weak_where = 'pid = '.$points['id'];
+        $weak_points = Points::findByPid('title,count',$weak_where);
+        $other = 0;
+        foreach ($weak_points as $one_points){
+            //客厅
+            if ($one_points['title'] == self::ROOM_DETAIL['hall']){
+                $all = $one_points['count'] * $post['hall'];
+            }
+
+            // 主卧
+            if ($one_points['title'] == self::ROOM_DETAIL['master_bedroom'] && $post['bedroom'] = 1){
+                $master_bedroom = $one_points['count'] * $post['bedroom'];
+            }
+
+            // 次卧
+            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] > 1){
+                $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
+            }else{
+                $secondary_bedroom = 0;
+            }
+
+            // 厨房
+            if ($one_points['title'] == self::ROOM_DETAIL['kitchen']){
+                $kitchen = $one_points['count'] * $post['kitchen'] ;
+            }
+
+            // 卫生间
+            if ($one_points['title'] == self::ROOM_DETAIL['toilet']){
+                $toilet = $one_points['count'] * $post['toilet'] ;
+            }
+
+
+            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['master_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] == self::ROOM_DETAIL['toilet']){
+                $other +=  $one_points['count'];
+            }
+        }
+        //  弱电总点位
+        $weak_current_points = $all + $master_bedroom + $secondary_bedroom + $kitchen + $toilet + $other;
 
 
         //查询弱电所需要材料
@@ -400,7 +436,7 @@ class OwnerController extends Controller
         }
 
         //材料总费用
-        $material_price = BasisDecorationService::quantity($points['count'], $strong_current, $craft);
+        $material_price = BasisDecorationService::quantity($weak_current_points, $strong_current, $craft);
         $material = BasisDecorationService::electricianMaterial($strong_current, $material_price);
 
         return Json::encode([
