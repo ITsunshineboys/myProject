@@ -315,8 +315,7 @@ class OwnerController extends Controller
         }
         //  弱电总点位
         $weak_current_points = $all + $master_bedroom + $secondary_bedroom + $other;
-        
-        var_dump($weak_current_points);exit;
+
 
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
@@ -348,7 +347,7 @@ class OwnerController extends Controller
 
 
         //材料总费用
-        $material_price = BasisDecorationService::quantity($points['count'], $weak_current, $craft);
+        $material_price = BasisDecorationService::quantity($weak_current_points, $weak_current, $craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
         return Json::encode([
