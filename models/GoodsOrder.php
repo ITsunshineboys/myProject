@@ -2713,6 +2713,18 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
+                   $shoppingCart= ShippingCart::find()
+                        ->where(['uid'=>$user->id])
+                        ->andWhere(['role_id'=>$user->last_role_id_app])
+                        ->andWhere(['goods_id'=>$goods['goods_id']])
+                        ->one();
+                    $resS=$shoppingCart->delete();
+                    if (!$resS)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
                     $Goods=Goods::find()
                         ->where(['id'=>$goods['goods_id']])
                         ->asArray()
@@ -2778,8 +2790,6 @@ class GoodsOrder extends ActiveRecord
                 {
                     $GoodsOrder->invoice_content=$supplier['invoice_content'];
                 }
-
-
                 if (!$GoodsOrder->save(false))
                 {
 
@@ -2789,9 +2799,7 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
                 $orders[]=$order_no;
-
             }
-
              if ($total!=$total_amount*100)
              {
                  $code=1000;
