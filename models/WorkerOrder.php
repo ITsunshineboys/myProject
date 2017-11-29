@@ -933,7 +933,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $value[]=$v;
             }
         }
-        return $value;
+        return implode(',',$value);
     }
 
 //    /**
@@ -1135,7 +1135,6 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $transaction->commit();
             return 200;
         } catch (Exception $e) {
-            var_dump($e);die;
             $transaction->rollBack();
             return 500;
         }

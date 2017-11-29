@@ -3226,7 +3226,6 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
-
         if (!$order_no || !$sku)
         {
             $code=1000;
@@ -3412,7 +3411,6 @@ class OrderController extends Controller
         }else{
             $data[]=[];
         }
-
         $code=200;
         return Json::encode([
             'code' => $code,

@@ -88,7 +88,8 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      */
    public  static  function  pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $select = array_diff($select, self::FIELDS_EXTRA);
+        $select = array_diff($select, self::FIELDS_ADMIN);
+//        $select .=",group_concat(spec order by spec)";
         $offset = ($page - 1) * $size;
         $Accessdetaillist=self::find()
             ->select($select)
@@ -97,7 +98,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->offset($offset)
             ->limit($size)
             ->asArray()
-            ->all(); 
+            ->all();
          foreach ($Accessdetaillist as &$list) {
             $list['access_type']=self::findAccessType($list['access_type']);
              if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
