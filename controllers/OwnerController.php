@@ -650,7 +650,7 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
-            ->andWhere(['points'=>$points['id']])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
 
