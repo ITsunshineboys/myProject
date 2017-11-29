@@ -326,6 +326,9 @@ class BasisDecorationService
 
         $waterway['ppr_procurement'] = round($waterway['pvc_quantity'] * $ppr_procurement,2);
         $waterway['pvc_procurement'] = round($waterway['pvc_quantity'] * $pvc_procurement,2);
+        var_dump($ppr);
+        var_dump($ppr_value);
+        var_dump($points);exit;
 
         $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
         return $waterway;
