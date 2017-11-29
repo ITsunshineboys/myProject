@@ -397,7 +397,7 @@ class OwnerController extends Controller
             }
 
 
-            if ($one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] != '次卧室' && $one_points['title'] == self::ROOM_DETAIL['kitchen'] && $one_points['title'] == self::ROOM_DETAIL['toilet']){
+            if ($one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] != '次卧室' && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] != self::ROOM_DETAIL['toilet']){
                 $other +=  $one_points['count'];
             }
         }
