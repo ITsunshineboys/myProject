@@ -538,8 +538,7 @@ class OwnerController extends Controller
                 $strong_count =$croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points + $qita;
             }
         }
-
-        var_dump($waterway_count);exit;
+        
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
         $waterway_ = BasisDecorationService::laborFormula($waterway_count,$waterway);
         $weak_     = BasisDecorationService::laborFormula($weak_count,$weak);
