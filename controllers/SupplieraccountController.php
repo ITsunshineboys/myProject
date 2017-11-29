@@ -14,7 +14,6 @@ use app\services\AuthService;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
-use yii\db\Exception;
 use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -43,7 +42,8 @@ class SupplieraccountController extends  Controller{
         'owner-freeze-money',
         'owner-apply-freeze',
         'owner-freeze-list',
-        'owner-freeze-taw'
+        'owner-freeze-taw',
+        'Owner-access-detail-list'
     ];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
@@ -577,6 +577,13 @@ class SupplieraccountController extends  Controller{
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->get('type',''));
+        if(!$user_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         if (array_key_exists($type,UserCashregister::ACCESS_TYPE_LIST))
         {
             $where="access_type={$type} and role_id=7 and uid=$user_id";
