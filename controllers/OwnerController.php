@@ -377,7 +377,7 @@ class OwnerController extends Controller
             }
 
             // 次卧
-            if ($one_points['title'] == '次卧室' && $post['bedroom'] > 1){
+            if ($one_points['title'] == '次卧室'){
                 if ($post['bedroom'] == 1){
                     $secondary_bedroom =  0 ;
                 }elseif ($post['bedroom'] > 1){
