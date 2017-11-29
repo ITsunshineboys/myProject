@@ -14,6 +14,7 @@ use app\models\SupplierCashManager;
 use app\models\User;
 use app\models\UserBankInfo;
 use app\models\UserCashregister;
+use app\models\WorkerOrder;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
@@ -681,6 +682,14 @@ class SupplierCashController extends Controller
 
     public function actionTest()
     {
-
+        $data = WorkerOrder::dataeveryday(strtotime('2017-11-20'), strtotime('2017-11-29'));
+        var_dump($data);die;
+        foreach ($data as $v){
+            if((date('w',strtotime($v))!=6) && (date('w',strtotime($v))!=0)){
+              $value[]=$v;
+            }
+        }
+        var_dump(implode(',',$value));
     }
+
 }
