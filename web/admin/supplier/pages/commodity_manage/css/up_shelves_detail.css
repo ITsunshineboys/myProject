@@ -17,6 +17,10 @@ ul{
 .red_txt{
   color: #E51C23;
 }
+.remove_txt{
+  padding-left: 15px;
+  color: #E51C23;
+}
 .red_img{
   margin-left: -25px;
 }
