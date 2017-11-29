@@ -1003,6 +1003,7 @@ angular.module('all_controller', [])
                         if (cur_id == value2.id) {
                             if (cur_index != -1) {
                                 value.cost -= item.cost
+                                value.procurement -= item.procurement
                                 value.count--
                                 $scope.all_delete_goods.push(item)
                                 value2.goods_detail.splice(cur_index, 1)
