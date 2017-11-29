@@ -924,8 +924,6 @@ class OwnerController extends Controller
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $putty_area = $putty_bedroom_area[0] + $putty_drawing_room_area[0] + $putty_area['project_value'];
-
-        var_dump( $putty_area['project_value']);exit;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
