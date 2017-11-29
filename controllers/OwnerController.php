@@ -299,13 +299,13 @@ class OwnerController extends Controller
                 $all = $one_points['count'] * $post['hall'];
             }
 
-            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] >= 2){
+            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] <= 2){
                 $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
             }else{
                 $secondary_bedroom = 0;
             }
 
-            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['master_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall']){
+            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall']){
                 $other +=  $one_points['count'];
             }
         }
