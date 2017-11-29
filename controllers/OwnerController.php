@@ -1952,7 +1952,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(Effect::find()->asArray()->all());
+        var_dump(Points::find()->asArray()->where('pid=1 and level=2')->all());
     }
 
 }
