@@ -568,7 +568,7 @@ class OwnerController extends Controller
 
 
         //材料总费用
-        $material_price = BasisDecorationService::waterwayGoods($weak_count, $waterway_current,$craft);
+        $material_price = BasisDecorationService::waterwayGoods($waterway_count, $waterway_current,$craft);
         $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
 
         return Json::encode([
