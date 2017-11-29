@@ -1150,7 +1150,9 @@ class OwnerController extends Controller
         $wall_area = $toilet_wall_area + $kitchen_wall_area + $latex_paint_area['project_value'];
         var_dump($toilet_wall_area);
         var_dump($kitchen_wall_area);
-        var_dump($latex_paint_area['project_value']);exit;
+        var_dump($latex_paint_area['project_value']);
+        var_dump($wall_area);
+        exit;
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
 
