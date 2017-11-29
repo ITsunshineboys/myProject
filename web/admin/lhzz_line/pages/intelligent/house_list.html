@@ -1,18 +1,26 @@
 <div>
     <div class="house_list">
         <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
-        <form>
-            <button class="add_garden" ng-click="go_to_add()"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加小区</button>
-            <select class="choose_area" ng-model="params.post" ng-change="getHouseList()" ng-options="item.id as item.name for item in county">
-                <option value="全市"></option>
-            </select>
-            <input type="text" class="start_time" placeholder="开始时间" ng-model="params.min" max-date="{{params.max}}" ng-change="getHouseList(1)" id="start_time" ngc-lay-date>
-            <input type="text" class="end_time" placeholder="结束时间" ng-model="params.max" min-date="{{params.min}}" ng-change="getHouseList(1)" id="end_time" ngc-lay-date>
-            <label for="search">
-            <input id="search" type="text" placeholder="搜索小区名称" ng-model="ctrlScope.search_txt">
-            </label>
-            <button class="search_btn" ng-click="search_house()">查询</button>
-        </form>
+        <div class="search">
+            <form class="form-inline clearfix">
+                <button class="btn btn-default" ng-click="go_to_add()">
+                    <i class="iconfont icon-add"></i>
+                    <span>添加小区</span>
+                </button>
+                <select class="form-control" ng-model="params.post" ng-change="getHouseList()" ng-options="item.id as item.name for item in county">
+                    <option value="全市"></option>
+                </select>
+                <input type="text" class="form-control start_time" placeholder="开始时间" ng-model="params.min" max-date="{{params.max}}" ng-change="getHouseList(1)" id="start_time" ngc-lay-date>
+                <input type="text" class="form-control end_time" placeholder="结束时间" ng-model="params.max" min-date="{{params.min}}" ng-change="getHouseList(1)" id="end_time" ngc-lay-date>
+                <div class="form-group pull-right">
+                    <div class="input-group">
+                        <input id="search" class="form-control" type="text" placeholder="搜索小区名称" ng-model="ctrlScope.search_txt">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
+                    <button class="btn btn-default" ng-click="search_house()">查询</button>
+                </div>
+            </form>
+        </div>
         <table class="table">
             <tr>
                 <th>小区名称</th>

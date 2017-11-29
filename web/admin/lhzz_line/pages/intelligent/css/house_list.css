@@ -1,42 +1,10 @@
 /*小区列表页*/
-.house_list{
-    padding-left:40px;
-    padding-right:40px;
-}
 .house_list .location{
     font-size: 16px;
-    margin-top:60px;
     font-weight:bold;
     margin-bottom:30px;
 }
-.house_list button,.house_list select,.house_list input{
-    padding:5px;
-    height: 30px;
-    margin-right:20px;
-    font-size:14px;
-    background:none;
-    border:.5px solid #ccc;
-    border-radius:2px;
-}
-.house_list button:not('.search_btn'),.house_list select,.house_list input{
-    float: left;
-}
-.choose_area{
-    width:200px;
-}
-.start_time,.end_time{
-    width:160px;
-}
-.search_btn{
-    padding:5px 10px!important;
-}
-#search{
-    width:250px;
-    border-radius: 20px;
-    margin-left:10px;
-    font-weight:normal;
-    padding-left:10px!important;
-}
+
 .house_list table{
     font-size:14px;
 }
@@ -104,8 +72,3 @@
     padding:6px 0 0 0;
     cursor: default;
 }
-
-/*.active{*/
-    /*background:#487af8!important;*/
-    /*color: white!important;*/
-/*}*/

@@ -1,50 +1,56 @@
 <div class="account_detail">
     <div class="row">
-        <p class="col-md-1">商家名称</p>
-        <p class="col-md-11">{{cur_account_detail.shop_name}}</p>
+        <div class="col-sm-2">商家名称</div>
+        <div class="col-sm-10">{{cur_account_detail.shop_name}}</div>
     </div>
     <div class="row">
-        <p class="col-md-1">开户银行</p>
-        <p class="col-md-11">{{cur_account_detail.bankname}}</p>
+        <div class="col-sm-2">开户银行</div>
+        <div class="col-sm-10">{{cur_account_detail.bankname}}</div>
     </div>
     <div class="row">
-        <p class="col-md-1">银行账号</p>
-        <p class="col-md-11">{{cur_account_detail.bankcard}}</p>
+        <div class="col-sm-2">银行账号</div>
+        <div class="col-sm-10">{{cur_account_detail.bankcard}}</div>
     </div>
     <div class="row">
-        <p class="col-md-1">开户行所在地</p>
-        <p class="col-md-11">{{cur_account_detail.position}}</p>
+        <div class="col-sm-2">开户行所在地</div>
+        <div class="col-sm-10">{{cur_account_detail.position}}</div>
     </div>
     <div class="row">
-        <p class="col-md-1">开户所在支行</p>
-        <p class="col-md-11">{{cur_account_detail.bankbranch}}</p>
+        <div class="col-sm-2">开户所在支行</div>
+        <div class="col-sm-10">{{cur_account_detail.bankbranch}}</div>
     </div>
     <div class="row">
-        <p class="col-md-1">开户名</p>
-        <p class="col-md-11">{{cur_account_detail.username}}</p>
+        <div class="col-sm-2">开户名</div>
+        <div class="col-sm-10">{{cur_account_detail.username}}</div>
     </div>
     <div class="row" style="margin-top: 30px">
-        <p class="col-md-1">账户余额</p>
-        <p class="col-md-1">{{cur_account_detail.balance | currency:'￥'}}</p>
-        <p class="col-md-10">
-            <button style="margin-left: 0;" ng-click="go_freeze_money()">冻结金额</button>
-        </p>
+        <div class="col-sm-2">账户余额</div>
+        <div class="col-sm-2">{{cur_account_detail.balance | currency:'￥'}}</div>
+        <div class="col-sm-8">
+            <button class="btn btn-default" ng-click="go_freeze_money()">冻结金额</button>
+        </div>
     </div>
     <div class="row">
-        <p class="col-md-1">可提现金额</p>
-        <p class="col-md-11">{{cur_account_detail.cashwithdrawal_money | currency:'￥'}}</p>
+        <div class="col-sm-2">可提现金额</div>
+        <div class="col-sm-10">{{cur_account_detail.cashwithdrawal_money | currency:'￥'}}</div>
     </div>
     <div class="row">
-        <p class="col-md-1">已提现金额</p>
-        <p class="col-md-1">{{cur_account_detail.cashed_money | currency:'￥'}}</p>
-        <p class="col-md-10" style="color: #5677FC;" ng-click="go_withdraw_list()">详情</p>
+        <div class="col-sm-2">已提现金额</div>
+        <div class="col-sm-2">{{cur_account_detail.cashed_money | currency:'￥'}}</div>
+        <div class="col-sm-8">
+            <a ng-click="go_withdraw_list()" href="javascript:void (0);">详情</a>
+        </div>
     </div>
     <div class="row">
-        <p class="col-md-1">冻结金额</p>
-        <p class="col-md-1">{{cur_account_detail.freeze_money | currency:'￥'}}</p>
-        <p class="col-md-10" style="color: #5677FC;" ng-click="go_freeze_list()">详情</p>
+        <div class="col-sm-2">冻结金额</div>
+        <div class="col-sm-2">{{cur_account_detail.freeze_money | currency:'￥'}}</div>
+        <div class="col-sm-8">
+            <a ng-click="go_freeze_list()" href="javascript:void (0);">详情</a>
+        </div>
     </div>
-    <div class="from-group submit">
-        <button type="button" ng-click="go_prev1()">返回</button>
+    <div class="row">
+        <div class="col-sm-5">
+            <button class="btn btn-default" type="button" ng-click="go_prev1()">返回</button>
+        </div>
     </div>
 </div>

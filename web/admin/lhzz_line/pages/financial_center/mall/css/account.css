@@ -1,12 +1,4 @@
 /*账户管理样式*/
-.account{
-    padding-left:40px;
-    padding-right:40px;
-    padding-top:40px;
-}
-.account span{
-    margin-right:15px;
-}
 .account > div{
     margin-bottom:20px;
 }
@@ -25,25 +17,6 @@
 .account table td{
     color: #666F80;
 }
-.account button{
-    padding:5px 10px;
-    height: 30px;
-    margin-right:20px;
-    font-size:14px;
-    background:none;
-    border:.5px solid #ccc;
-    border-radius:2px;
-}
-/*.apply_case_index .form-control{*/
-/*padding:20px 12px;*/
-/*}*/
-/*.apply_case_index td{*/
-/*padding-top:15px !important;*/
-/*padding-bottom:15px !important;*/
-/*}*/
-/*.apply_case_index td input{*/
-
-/*}*/
 .account .modal-content{
     padding:40px!important;
 }
@@ -52,6 +25,6 @@
     height: 30px;
 }
 .account .other_btn{
-    border:.5px solid #5677FC;
+    border:1px solid #5677FC;
     color: #5677FC;
 }
