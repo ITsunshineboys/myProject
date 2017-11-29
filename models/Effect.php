@@ -72,7 +72,7 @@ class Effect extends ActiveRecord
      */
     public static function districtSearch($search = '花好月圆',$select = [])
     {
-        $andWhere = 'status != 2';
+        $andWhere = 'type != 2';
         $detail = self::find()
             ->asArray()
             ->select($select)
