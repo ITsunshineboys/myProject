@@ -539,6 +539,7 @@ class OwnerController extends Controller
             }
         }
 
+        var_dump($waterway_count);exit;
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
         $waterway_ = BasisDecorationService::laborFormula($waterway_count,$waterway);
         $weak_     = BasisDecorationService::laborFormula($weak_count,$weak);
