@@ -474,6 +474,7 @@ class OwnerController extends Controller
             }
         }
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
+        $w_orh = 0;
         foreach ($points  as $p){
             if ($p['title'] == '水路'){
                 $id = $p['id'];
@@ -485,8 +486,12 @@ class OwnerController extends Controller
                     if ($one['title'] == '厨房'){
                         $kitchen_waterway_points = $post['kitchen'] * $one['count'];
                     }
+
+                    if ($one['title'] != '卫生间' && $one['title'] != '厨房'){
+                        $w_orh += $one['count'];
+                    }
                 }
-                $waterway_count = $toilet_waterway_points + $kitchen_waterway_points;
+                $waterway_count = $toilet_waterway_points + $kitchen_waterway_points + $w_orh;
             }
             if ($p['title'] == '弱电'){
                 $id = $p['id'];
@@ -563,8 +568,7 @@ class OwnerController extends Controller
 
 
         //材料总费用
-        $point = Points::find()->asArray()->select(['count'])->where(['and',['level'=>1],['title'=>'水路']])->one();
-        $material_price = BasisDecorationService::waterwayGoods($point['count'], $waterway_current,$craft);
+        $material_price = BasisDecorationService::waterwayGoods($weak_count, $waterway_current,$craft);
         $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
 
         return Json::encode([
