@@ -864,7 +864,10 @@ class QuoteController extends Controller
 //                            }
 //                        }
                     }
-                } elseif (isset($house['id'])) {
+                }
+
+                //  案例修改
+                if (isset($house['id'])) {
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
                         $house_id               = $house['id'];
