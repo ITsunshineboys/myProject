@@ -653,16 +653,9 @@ class OwnerController extends Controller
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
-
         $total_area = $kitchen_area + $toilet_area + $qita;
-        var_dump($kitchen_area);
-        var_dump($toilet_area);
-        var_dump($qita);
-        var_dump($total_area);
-        exit;
 
-
-
+        
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterproof'], $post['city']);
         if ($craft == null){
