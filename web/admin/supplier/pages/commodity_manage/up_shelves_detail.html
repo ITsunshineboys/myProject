@@ -4,41 +4,41 @@
         <form class="form-horizontal" name="form" novalidate>
         <!--商品分类-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
             <span>商品分类</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
             <span>{{category_title}}</span>
             </div>
         </div>
         <!--商品名称-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
             <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
             <span>商品名称</span>
             </div>
             <div class="col-sm-4">
                 <input class="form-control" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required ng-class="{'border_red':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)|| g_flag}" ng-blur="title_blur=!!form.goods_name.$error"/>
             </div>
-            <div class="col-sm-7 control-label">
+            <div class="col-sm-6 control-label">
                 <span>*限1~32个字符，不含特殊字符</span>
             </div>
         </div>
         <!--商品特色 -->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>商品特色</span>
             </div>
             <div class="col-sm-4">
                 <input class="form-control" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" ng-change="d_name_change(des_name)" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}" ng-blur="des_blur=!!form.des_name.$error"/>
             </div>
-            <div class="col-sm-7 control-label">
+            <div class="col-sm-6 control-label">
                 <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
             </div>
         </div>
         <div class="row" ng-if="brands_arr.length>0">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>选择品牌</span>
             </div>
             <div class="col-sm-4">
@@ -47,33 +47,39 @@
         </div>
         <!--选择系列-->
         <div class="row" ng-if="series_arr.length>0">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>选择系列</span>
             </div>
             <div class="col-sm-4">
                 <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
             </div>
         </div>
+        <div class="row" ng-if="series_null_flag">
+            <div class="col-sm-offset-2 red_txt">系列已被移除，请重新选择风格</div>
+        </div>
         <!--选择风格-->
         <div class="row" ng-if="styles_arr.length>0">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>选择风格</span>
             </div>
             <div class="col-sm-4">
                 <select class="form-control" ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr"></select>
             </div>
         </div>
+        <div class="row" ng-if="style_null_flag">
+            <div class="col-sm-offset-2 red_txt">风格已被移除，请重新选择风格</div>
+        </div>
 
         <!--属性设置-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>属性设置</span>
             </div>
             <div class="col-sm-3 control-label">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-click="add_own_attrs()"></span>
                 <span>属性名称</span>
             </div>
-            <div class="col-sm-4 control-label">
+            <div class="col-sm-3 control-label">
                 <span>属性内容</span>
             </div>
             <div class="col-sm-1 control-label">
@@ -81,12 +87,12 @@
             </div>
             <!--普通文本框-->
             <div class="row" ng-repeat="item in goods_input_attrs">
-                <div class="col-sm-offset-1 col-sm-3 control-label">
+                <div class="col-sm-offset-2 col-sm-3 control-label">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span style="display: inline-block;width: 15px">&nbsp;</span>
                     <span ng-model="myng.attr_name">{{item.name}}</span>
                 </div>
-                <div class="col-sm-4 control-label">
+                <div class="col-sm-3 control-label">
                     <input class="form-control" ng-model="item.value"  type="text" maxlength="6" placeholder="请输入属性内容"/>
                 </div>
                 <div class="col-sm-1 control-label">
@@ -98,12 +104,12 @@
             </div>
             <!--下拉框-->
             <div class="row" ng-repeat="item in goods_select_attrs">
-                <div class="col-sm-offset-1 col-sm-3 control-label">
+                <div class="col-sm-offset-2 col-sm-3 control-label">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span style="display: inline-block;width: 15px">&nbsp;</span>
                     <span style="display: inline-block;width: 140px">{{item.name}}</span>
                 </div>
-                <div class="col-sm-4 control-label">
+                <div class="col-sm-3 control-label">
                     <select class="form-control"  ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
                 </div>
                 <div class="col-sm-1 control-label">
@@ -114,15 +120,15 @@
                 </div>
             </div>
             <div class="row" ng-repeat="item in own_attrs_arr track by $index">
-                <div class="col-sm-offset-1 col-sm-3">
+                <div class="col-sm-offset-2">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span class="glyphicon glyphicon-minus" ng-click="del_own_attrs($index)"></span>
                     <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请输入属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'border_red':form.{{item.name_model}}.$invalid &&submitted||(form.{{item.name_model}}.$error.required && submitted)}"/>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'border_red':form.{{item.value_model}}.$invalid &&submitted||(form.{{item.value_model}}.$error.required && submitted)}"/>
                 </div>
-                <div class="col-sm-1 control-label">
+                <div class="col-sm-1">
                     <span class="unit">&nbsp;</span>
                 </div>
                 <div class="col-sm-3 control-label">
@@ -134,11 +140,11 @@
 
         <!--封面上传图片-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>上传图片</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
                 <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
                 <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                 <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
@@ -152,10 +158,10 @@
 
         <!--上传图片-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>上传图片</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
                 <div class="img_list" ng-repeat="item in upload_img_arr" style="width: 120px;height: 120px;">
                     <img class="img_size" ng-src="{{item}}" class="logo">
                     <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)">&times;</span>
@@ -172,11 +178,11 @@
 
         <!--价格库存-->
         <div class="row price_stock">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>价格库存</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
             <ul>
                 <li>供货价格</li>
                 <li>平台价格</li>
@@ -196,10 +202,10 @@
 
         <!--采购价-->
         <div class="row buy_price">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>采购价</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
             <ul>
                 <li>装修公司采购价</li>
                 <li>项目经理采购价</li>
@@ -216,8 +222,8 @@
 
         <!--物流模板-->
         <div class="row">
-            <div class="col-sm-1 control-label">
-                <img src="pages/commodity_manage/image/red.png" alt=""/>
+            <div class="col-sm-2 control-label">
+                <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>商品物流</span>
             </div>
             <div class="col-sm-4 control-label">
@@ -253,10 +259,10 @@
             <hr/>
         <!--售后-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>售后</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
             <ul class="aftermark_ul">
                 <li><input type="checkbox" ng-model="myng.door_service_check"/><span>上门维修</span></li>
                 <li><input type="checkbox" ng-model="myng.door_return_check" /><span>上门退货</span></li>
@@ -268,10 +274,10 @@
         </div>
         <!--保障-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>保障</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
                 <ul class="aftermark_ul">
                     <li><input type="checkbox" ng-model="myng.invoice_check" ng-checked="true" disabled="disabled"/><span>提供发票</span></li>
                     <li><input type="checkbox"  ng-model="myng.door_instal_model"/><span>上门安装</span></li>
@@ -281,30 +287,30 @@
         <hr/>
 
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>线下商城二维码</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
                 <img class="img_size" ng-src="{{qr_code}}" alt="二维码">
             </div>
         </div>
 
         <!--详情描述-->
         <div class="row">
-            <div class="col-sm-1 control-label">
+            <div class="col-sm-2 control-label">
                 <span>详情描述</span>
             </div>
-            <div class="col-sm-11 control-label">
+            <div class="col-sm-10 control-label">
                 <div class="ueditor" ng-model="ueditor_value"  config="config" id="editor"></div>
             </div>
         </div>
             <!--操作人员，下架时间-->
         <div ng-if="show_flag" class="row">
-            <div class="col-sm-offset-1 col-sm-11 control-label">
+            <div class="col-sm-offset-2 col-sm-10 control-label">
                  <span class="people_time_right">操作人员</span>
                  <span>{{operator}}</span>
             </div>
-            <div class="col-sm-offset-1 col-sm-11 control-label">
+            <div class="col-sm-offset-2 col-sm-10 control-label">
                 <span class="people_time_right">下架时间</span>
                 <span>{{offline_time}}</span>
             </div>
