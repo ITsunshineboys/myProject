@@ -60,8 +60,8 @@
                     <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
                     </div>
                     <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
-                    <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*"  ngf-select="" ngf-multiple="false" ng-model="data.file">
-                        上传</button>
+                    <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*" ng-disabled="upload_status"  ngf-select="" ngf-multiple="false" ng-model="data.file">
+                        {{upload_txt}}</button>
                     <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}</p>
                 </div>
             </div>

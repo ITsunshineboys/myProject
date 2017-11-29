@@ -161,9 +161,11 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             file: null
         }
         //上传一张图片
+        $scope.upload_txt = '上传'
         $scope.upload = function (file) {
-            console.log($scope.data)
             if (file != null) {
+                $scope.upload_txt = '上传中...'
+                $scope.upload_status = true
                 Upload.upload({
                     url: '/site/upload',
                     data: {'UploadForm[file]': file}
@@ -174,6 +176,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         } else if ($scope.cur_image != undefined) {
                             $scope.cur_image = res.data.data.file_path
                         }
+                        $scope.upload_txt = '上传'
+                        $scope.upload_status = false
                         $scope.a_pic_error = ''
                     } else {
                         if ($scope.cur_house_information != undefined) {
@@ -193,6 +197,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //上传几张图片
         $scope.arr_upload = function (file) {
             if (file != null) {
+                $scope.all_drawing.push(loadingPicUri)
+                $scope.all_upload_status = false
                 Upload.upload({
                     url: '/site/upload',
                     data: {'UploadForm[file]': file}
@@ -202,6 +208,8 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                         $scope.pic_error = '上传图片格式不正确或尺寸不匹配，请重新上传'
                     } else {
                         $scope.pic_error = ''
+                        $scope.all_upload_status = true
+                        $scope.all_drawing.pop()
                         $scope.all_drawing.push(res.data.data.file_path)
                     }
                 }, function (error) {

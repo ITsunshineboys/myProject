@@ -60,8 +60,8 @@
                         <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
                     </div>
                     <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
-                    <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*"  ngf-select="" ngf-multiple="false" ng-model="data.file">
-                        上传</button>
+                    <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*"  ngf-select="" ng-disabled="upload_status" ngf-multiple="false" ng-model="data.file">
+                        {{upload_txt}}</button>
                     <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}</p>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                 <div class="col-md-10">
                     <div class="cur_drawing" ng-repeat="item in all_drawing">
                         <img ng-src="{{item}}" width="100px" height="100px">
-                        <div class="text-center" ng-click="upload_delete(item)">&times;</div>
+                        <div class="text-center" ng-if="all_upload_status" ng-click="upload_delete(item)">&times;</div>
                     </div>
                     <div style="width: 100px;height: 100px;display: inline-block" ngf-pattern="image/*" ng-change="arr_upload(data.file)"  ngf-select="" ng-model="data.file" ngf-multiple="false" ng-if="all_drawing.length<6">
                         <img src="pages/intelligent/images/add.png" alt="" width="100px" height="100px">
