@@ -12,8 +12,8 @@
                                         <span class="wall_span">{{item1.title}}x{{item2.quantity}}</span><br>
                                         <span class="wall_brand">{{item2.name}}</span>
                                     </div>
-                                    <span class="wall_money" >{{item2.cost | currency:'￥'}}<i><img
-                                            src="images/left_more.png" alt=""></i></span>
+                                    <span class="wall_money" >{{item2.cost | currency:'￥'}}<img ng-if="!is_delete_btn"
+                                            src="images/left_more.png" alt=""></span>
                                     <button class="del" ng-click="delete_item(item2,item1.id)" ng-if="is_delete_btn">删除</button>
                                 </div>
                             </div>
