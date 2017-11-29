@@ -1946,7 +1946,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(Points::find()->asArray()->where('pid=2 and level=2')->all());
+        var_dump(Points::find()->asArray()->where('pid=1 and level=2')->all());
     }
 
 }
