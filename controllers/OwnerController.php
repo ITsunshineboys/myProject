@@ -873,6 +873,7 @@ class OwnerController extends Controller
 
 
         $points = Points::findByOne('id,title',"title = '乳胶漆'");
+        var_dump($points);
         $latex_paint_area = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
