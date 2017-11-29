@@ -11,31 +11,6 @@
     line-height: 14px;
 }
 
-
-.filter {
-    position: absolute;
-    right: 0;
-    top: 40px;
-    padding-left: 10px;
-    padding-right: 10px;
-    width: 40%;
-    border: 1px solid #ababab;
-    background-color: #ffffff;
-}
-
-.filter .checkbox {
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.search .form-group .btn-focus{
-    color: #333;
-    background-color: #d4d4d4;
-    border-color: #8c8c8c;
-}
-
-
 .tab_blue {
     color: #5677FC;
     border-bottom: 1px solid #5677FC;

@@ -1,17 +1,11 @@
-input,button{
-    outline: none;
-}
-
 /*表单内容*/
 .add_store_content{
-    padding-left: 40px;
     font-size: 14px;
     color: #666F80;
 }
 
 .sel_group{
     display: inline-block;
-    margin-top: 91px;
     margin-left: 59px;
 }
 
