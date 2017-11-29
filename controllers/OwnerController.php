@@ -904,6 +904,10 @@ class OwnerController extends Controller
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $concave_length['project_value'] ;
+        var_dump($bedroom_primer_perimeter);
+        var_dump($drawing_room_perimeter);
+        var_dump($concave_length['project_value']);
+        var_dump($concave_line_length);exit;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
 
@@ -924,10 +928,6 @@ class OwnerController extends Controller
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $putty_area = $putty_bedroom_area[0] + $putty_drawing_room_area[0] + $putty_area['project_value'];
-        var_dump($putty_area);
-        var_dump($putty_bedroom_area[0]);
-        var_dump($putty_drawing_room_area[0]);
-        var_dump($putty_area['project_value']);exit;
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
