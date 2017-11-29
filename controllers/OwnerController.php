@@ -1131,7 +1131,8 @@ class OwnerController extends Controller
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
 
 
-        $perject = ProjectView::find()->where(['and',['parent_project'=>'泥作'],['project'=>$post['high']]])->asArray()->one();
+        $points = Points::findByOne('id,tile',"title='泥作'");
+        $perject = ProjectView::find()->where(['and',['points_id'=>$points['id']],['project'=>$post['high']]])->asArray()->one();
         $high = isset($perject['project_value'])?$perject['project_value']:2.8;
 
 //        卫生间墙面积
@@ -1144,8 +1145,12 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['latex_paint_area']])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
         $wall_area = $toilet_wall_area + $kitchen_wall_area + $latex_paint_area['project_value'];
+        var_dump($toilet_wall_area);
+        var_dump($kitchen_wall_area);
+        var_dump($latex_paint_area['project_value']);exit;
 //        墙砖天数
         $wall_day = $wall_area / $wall_tile_day_area;
 
@@ -1156,6 +1161,7 @@ class OwnerController extends Controller
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
             ->andWhere(['project_name'=>self::OTHER_AREA['land_area']])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
         $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area + $land_area['project_value'];
 //        地砖天数
