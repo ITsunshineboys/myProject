@@ -620,10 +620,8 @@ class OwnerController extends Controller
 
 
         //厨房
-        $kitchen = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->andWhere(['points'=>$points['id']])->one();
-        var_dump($kitchen);exit;
+        $kitchen = ProjectView::find()->asArray()->where(['project'=>'厨房面积'])->andWhere(['parent_project'=>'面积比例'])->one();
         $kitchen_ = $kitchen['project_value'] / 100;
-
 
         $p = ProjectView::find()->asArray()->where(['project'=>'厨房防水高度'])->andWhere(['points'=>$points['id']])->one();
         if (!$p){
@@ -632,6 +630,7 @@ class OwnerController extends Controller
             $_kitchen_height = $p['project_value'];
         }
         $kitchen_area = BasisDecorationService::waterproofArea($kitchen_,$_kitchen_height, $post['area'], $post['kitchen']);
+        var_dump($kitchen_area);exit;
 
 
         //卫生间
