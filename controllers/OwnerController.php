@@ -872,7 +872,7 @@ class OwnerController extends Controller
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
 
-        $points = Points::findByOne('id,title',"title = '乳胶漆'");
+        $points = Points::findByOne('id,title',"title = '油漆'");
         var_dump($points);
         $latex_paint_area = Apartment::find()
             ->asArray()
