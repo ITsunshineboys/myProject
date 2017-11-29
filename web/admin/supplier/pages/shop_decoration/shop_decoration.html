@@ -211,12 +211,12 @@
                                     </div>
                                     <div class="col-sm-offset-2 img_txt">
                                         <p class="modal_red" ng-if="!!banner_add_img_flag">{{banner_add_img_flag}}</p>
-                                        <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="banner_add_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                                        <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="banner_add_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button ng-click="banner_add_btn(shop_form.$valid)" type="button" class="btn btn-primary">确认</button>
+                                <button ng-click="banner_add_btn(shop_form.$valid)" type="button" ng-disabled="upload_dis" class="btn btn-primary">确认</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="banner_clear_add()">取消</button>
                             </div>
                         </form>
@@ -284,12 +284,12 @@
                                     </div>
                                     <div class="col-sm-offset-2 img_txt">
                                         <p class="modal_red" ng-if="!!banner_edit_img_flag">{{banner_edit_img_flag}}</p>
-                                        <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="banner_edit_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                                        <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="banner_edit_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button ng-click="banner_edit_btn(banner_edit_form.$valid)"  type="button" class="btn btn-primary">确认</button>
+                                <button ng-click="banner_edit_btn(banner_edit_form.$valid)"  type="button" ng-disabled="upload_dis" class="btn btn-primary">确认</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="banner_clear_edit()">取消</button>
                             </div>
                         </form>

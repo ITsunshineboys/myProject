@@ -16,6 +16,8 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
     }, {
         name: '商品详情'
     }];
+	$scope.upload_txt='上传';
+	$scope.upload_dis=false;
   $scope.goods_all_attrs=[];//所有属性数据
   $scope.logistics=[];//物流模块列表
   let reg=/^\d+(\.\d{1,2})?$/;
@@ -181,23 +183,23 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
     if(!$scope.data.file){
       return
     }
-    console.log($scope.data);
-	$scope.upload_cover_src=loadingPicUri;
+	  $scope.upload_dis=true;
+	  $scope.upload_txt='上传中...';
     Upload.upload({
       url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
-      console.log(response);
-	  $scope.upload_cover_src='';
       if(!response.data.data){
         $scope.cover_flag="上传图片格式不正确，请重新上传"
       }else{
         $scope.cover_flag='';
         $scope.upload_cover_src=response.data.data.file_path;
       }
+	    $scope.upload_dis=false;
+	    $scope.upload_txt='上传';
     },function (error) {
       console.log(error)
-	  $scope.upload_cover_src='';
+	    $scope.upload_cover_src='';
     })
   };
 

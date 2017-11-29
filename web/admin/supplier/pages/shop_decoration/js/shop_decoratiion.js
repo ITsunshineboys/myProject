@@ -12,6 +12,8 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
   $scope.b_tab_class='bottom_border';//默认给Banner加class
   $scope.b_show_table_flag=true;
   $scope.r_show_table_flag=false;
+	$scope.upload_dis=false;
+	$scope.upload_txt='上传';
   $scope.banner_tab=function () {
 	  $scope.show_hide_menu();
     $scope.b_tab_class='bottom_border';
@@ -162,11 +164,15 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     if(!$scope.data.file){
       return
     }
+	  $scope.upload_dis=true;
+	  $scope.upload_txt='上传中...';
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
+	    $scope.upload_dis=false;
+	    $scope.upload_txt='上传';
       console.log(response);
       if(!response.data.data){
         $scope.banner_add_img_flag="上传图片格式不正确，请重新上传"
@@ -254,11 +260,15 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     if(!$scope.data.file){
       return
     }
+	  $scope.upload_dis=true;
+	  $scope.upload_txt='上传中...';
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
+	    $scope.upload_dis=false;
+	    $scope.upload_txt='上传';
       console.log(response);
       if(!response.data.data){
         $scope.banner_edit_img_flag="上传图片格式不正确，请重新上传"

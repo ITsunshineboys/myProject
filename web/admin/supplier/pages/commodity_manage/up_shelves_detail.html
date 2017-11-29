@@ -142,7 +142,7 @@
                 <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
                 <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                 <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
-                <button  class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                <button  class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                 <p class="warning" ng-if="!!cover_flag">
                     <span class="glyphicon glyphicon-asterisk"></span>
                     {{cover_flag}}
@@ -223,7 +223,7 @@
             <div class="col-sm-4 control-label">
             <span class="red_txt" ng-if="logistics_null==true">*物流模板为空，请先添加物流模板</span>
             <select class="form-control" ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
-            <p class="red_txt" ng-if="logistics_red==true">*上一个物流模板已被删除，请选择新的模板</p>
+            <div class="red_txt" ng-if="logistics_red==true">*上一个物流模板已被删除，请选择新的模板</div>
             <br>
             <div ng-if="logistics_status==true">
                 <span class="margin_r">快递方式</span>
