@@ -1,26 +1,19 @@
 <div class="account">
-    <div class="row">
-        <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">分类选择</p>
-        <div class="col-md-1">
-            <select ng-model="ctrlScope.cur_first_level" ng-options="item.id as item.title for item in first_level" ng-change="getCategory(1)"  class="form-control"></select>
-        </div>
-        <div class="col-md-1" >
-            <select ng-if="second_level.length!=0" ng-model="ctrlScope.cur_second_level" ng-options="item.id as item.title for item in second_level" ng-change="getCategory(2)" class="form-control"></select>
-        </div>
-        <div class="col-md-1" >
-            <select ng-if="third_level.length!=0" ng-model="ctrlScope.cur_third_level" ng-options="item.id as item.title for item in third_level" ng-change="getCategory(3)" class="form-control"></select>
-        </div>
-        <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">店铺类型</p>
-        <div class="col-md-1">
-            <select ng-model="params2.type_shop" ng-change="getCategory()" ng-options="item.num as item.name for item in shop_type"  class="form-control"></select>
-        </div>
-        <p class="col-md-1 text-right" style="width: 6%;margin: 8px 0 12px !important;">状态</p>
-        <div class="col-md-1">
-            <select ng-model="params2.status" ng-change="getCategory()" ng-options="item.num as item.name for item in shop_status" class="form-control"></select>
-        </div>
-        <button  ng-click="get_account_list()">查询</button>
-        <div class="col-md-2 col-md-offset-1">
-            <input class="form-control" ng-model="ctrlScope.keyword2" placeholder="搜索商家名称或商家编号" type="text">
+    <div class="search form-inline clearfix">
+        <span>分类选择</span>
+        <select ng-model="ctrlScope.cur_first_level" ng-options="item.id as item.title for item in first_level" ng-change="getCategory(1)"  class="form-control"></select>
+        <select ng-if="second_level.length!=0" ng-model="ctrlScope.cur_second_level" ng-options="item.id as item.title for item in second_level" ng-change="getCategory(2)" class="form-control"></select>
+        <select ng-if="third_level.length!=0" ng-model="ctrlScope.cur_third_level" ng-options="item.id as item.title for item in third_level" ng-change="getCategory(3)" class="form-control"></select>
+        <span>店铺类型</span>
+        <select ng-model="params2.type_shop" ng-change="getCategory()" ng-options="item.num as item.name for item in shop_type"  class="form-control"></select>
+        <span>状态</span>
+        <select ng-model="params2.status" ng-change="getCategory()" ng-options="item.num as item.name for item in shop_status" class="form-control"></select>
+        <div class="form-group pull-right">
+            <div class="input-group">
+                <input class="form-control" ng-model="ctrlScope.keyword2" placeholder="搜索商家名称或商家编号" type="text">
+                <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <button class="btn btn-default" ng-click="get_account_list()">查询</button>
         </div>
     </div>
     <table class="table">
@@ -52,8 +45,8 @@
                     <h4 class="modal-title text-left">备注</h4>
                 </div>
                 <div class="modal-body row">
-                    <p class="col-md-3">备注(选填)</p>
-                    <textarea  ng-model="cur_item.remark" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
+                    <p class="col-sm-3">备注(选填)</p>
+                    <textarea  ng-model="cur_item.remark" class="col-sm-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>
