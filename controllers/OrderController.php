@@ -3486,11 +3486,11 @@ class OrderController extends Controller
                     $orders=explode(',',urldecode($post['passback_params']));
                     $total_amount=$post['total_amount'];
                     $orderAmount=GoodsOrder::CalculationCost($orders);
-                    if ($total_amount*100!=$orderAmount)
-                    {
-                        echo 'fail';
-                        exit;
-                    }
+//                    if ($total_amount*100!=$orderAmount)
+//                    {
+//                        echo 'fail';
+//                        exit;
+//                    }
                     $tran = Yii::$app->db->beginTransaction();
                     try{
                         $Ord= GoodsOrder::find()
