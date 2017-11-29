@@ -630,7 +630,6 @@ class OwnerController extends Controller
             $_kitchen_height = $p['project_value'];
         }
         $kitchen_area = BasisDecorationService::waterproofArea($kitchen_,$_kitchen_height, $post['area'], $post['kitchen']);
-        var_dump($kitchen_area);exit;
 
 
         //卫生间
@@ -653,7 +652,6 @@ class OwnerController extends Controller
             ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
             ->andWhere(['points'=>$points['id']])
             ->one();
-        var_dump($apartment);exit;
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
 
         $total_area = $kitchen_area + $toilet_area + $qita;
