@@ -378,12 +378,12 @@ class OwnerController extends Controller
             }
 
             // 主卧
-            if ($one_points['title'] == self::ROOM_DETAIL['master_bedroom']){
+            if ($one_points['title'] == '主卧室'){
                 $master_bedroom = $one_points['count'] * $post['bedroom'];
             }
 
             // 次卧
-            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] > 1){
+            if ($one_points['title'] == '次卧室' && $post['bedroom'] > 1){
                 $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
             }else{
                 $secondary_bedroom = 0;
