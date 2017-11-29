@@ -904,10 +904,6 @@ class OwnerController extends Controller
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $concave_length['project_value'] ;
-        var_dump($bedroom_primer_perimeter);
-        var_dump($drawing_room_perimeter);
-        var_dump($concave_length['project_value']);
-        var_dump($concave_line_length);exit;
 //        阴角线天数：阴角线长度÷【每天做阴角线长度】
         $concave_line_day = $concave_line_length / $concave_line;
 
@@ -988,6 +984,10 @@ class OwnerController extends Controller
 //        石膏粉费用   石膏粉费用：个数×商品价格
 //        个数：（【3元】×乳胶漆面漆面积÷商品价格）
         $gypsum_powder_cost['quantity'] = ceil($gypsum_powder_craft['material'] * $primer_area / $series_and_style['gypsum_powder']['platform_price']);
+        var_dump($gypsum_powder_craft['material']);
+        var_dump($primer_area);
+        var_dump($series_and_style['gypsum_powder']['platform_price']);
+        exit;
         $gypsum_powder_cost['cost'] = round($gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['platform_price'],2);
         $gypsum_powder_cost['procurement'] = round($gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['purchase_price_decoration_company'],2);
 
