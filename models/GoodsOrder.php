@@ -1895,7 +1895,6 @@ class GoodsOrder extends ActiveRecord
                         $GoodsStat->create_date=$date;
                         if (!$GoodsStat->save(false))
                         {
-
                             $code=500;
                             $tran->rollBack();
                             return $code;
@@ -2675,11 +2674,6 @@ class GoodsOrder extends ActiveRecord
                 if (
                     !array_key_exists('freight',$supplier)
                     || !array_key_exists('buyer_message',$supplier)
-                    || !array_key_exists('invoice_type',$supplier)
-                    || !array_key_exists('invoice_header_type',$supplier)
-                    || !array_key_exists('invoice_header',$supplier)
-                    || !array_key_exists('invoicer_card',$supplier)
-                    || !array_key_exists('invoice_content',$supplier)
                     || !array_key_exists('supplier_id',$supplier)
                     || !array_key_exists('goods',$supplier)
                 )
@@ -2772,9 +2766,19 @@ class GoodsOrder extends ActiveRecord
 //                $GoodsOrder->invoice_content=$invoice->invoice_content;
                 $GoodsOrder->invoice_type=$supplier['invoice_type'];
                 $GoodsOrder->invoice_header_type=$supplier['invoice_header_type'];
-                $GoodsOrder->invoice_header=$supplier['invoice_header'];
-                $GoodsOrder->invoicer_card=$supplier['invoicer_card'];
-                $GoodsOrder->invoice_content=$supplier['invoice_content'];
+                if(!empty($supplier['invoicer_card']))
+                {
+                    $GoodsOrder->invoicer_card=$supplier['invoicer_card'];
+                }
+                if (!empty($supplier['invoice_header']))
+                {
+                    $GoodsOrder->invoice_header=$supplier['invoice_header'];
+                }
+                if (!empty($supplier['invoice_content']))
+                {
+                    $GoodsOrder->invoice_content=$supplier['invoice_content'];
+                }
+
 
                 if (!$GoodsOrder->save(false))
                 {

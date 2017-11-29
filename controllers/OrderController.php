@@ -3486,13 +3486,41 @@ class OrderController extends Controller
                     $orders=explode(',',urldecode($post['passback_params']));
                     $total_amount=$post['total_amount'];
                     $orderAmount=GoodsOrder::CalculationCost($orders);
-        //            if ($total_amount*100!=$orderAmount)
-        //            {
-        //                echo 'fail';
-        //                exit;
-        //            }
+                    if ($total_amount*100!=$orderAmount)
+                    {
+                        echo 'fail';
+                        exit;
+                    }
                     $tran = Yii::$app->db->beginTransaction();
                     try{
+                        $Ord= GoodsOrder::find()
+                            ->where(['order_no'=>$orders[0]])
+                            ->one();
+                        $role_id=$Ord->role_id;
+                        $user=User::findOne($Ord->user_id);
+                        $role=Role::GetRoleByRoleId($role_id,$user);
+                        switch ($role_id)
+                        {
+                            case 2:
+                                $role_number=$role->worker_type_id;
+                                break;
+                            case 3:
+                                $role_number=$role->decoration_company_id;
+                                break;
+                            case 4:
+                                $role_number=$role->decoration_company_id;
+                                break;
+                            case 5:
+                                $role_number=$role->id;
+                                break;
+                            case 6:
+                                $role_number=$role->shop_no;
+                                break;
+                            case 7:
+                                $role_number=$role->aite_cube_no;
+                                break;
+                        }
+                        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
                         foreach ($orders as $k =>$v){
                             $GoodsOrder=GoodsOrder::find()
                                 ->where(['order_no'=>$orders[$k]])
@@ -3542,10 +3570,8 @@ class OrderController extends Controller
                                 echo 'fail';
                                 exit;
                             }
-                            $role_id=$GoodsOrder->role_id;
-                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
-
-
+//                            $role_id=$GoodsOrder->role_id;
+//                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
                                 $GoodsOrder->pay_status=1;
                                 $GoodsOrder->pay_name='支付宝APP支付';
                                 $res=$GoodsOrder->save(false);
@@ -3555,46 +3581,23 @@ class OrderController extends Controller
                                     echo 'fail';
                                     die;
                                 }
+                            $access=new UserAccessdetail();
+                            $access->uid=$user->id;
+                            $access->role_id=$role_id;
+                            $access->access_type=7;
+                            $access->access_money=$GoodsOrder['amount_order'];
+                            $access->create_time=time();
+                            $access->order_no=$orders[$k];
+                            $access->transaction_no=$transaction_no;
+                            $res3=$access->save(false);
+                            if ( !$res3){
+                                $tran->rollBack();
+                                $code=500;
+                                return $code;
+                            }
+                        }
 
 
-
-                        }
-                        $role=Role::GetRoleByRoleId($role_id,$user);
-                        switch ($role_id)
-                        {
-                            case 2:
-                                $role_number=$role->worker_type_id;
-                                break;
-                            case 3:
-                                $role_number=$role->decoration_company_id;
-                                break;
-                            case 4:
-                                $role_number=$role->decoration_company_id;
-                                break;
-                            case 5:
-                                $role_number=$role->id;
-                                break;
-                            case 6:
-                                $role_number=$role->shop_no;
-                                break;
-                            case 7:
-                                $role_number=$role->aite_cube_no;
-                                break;
-                        }
-                        $access=new UserAccessdetail();
-                        $access->uid=$user->id;
-                        $access->role_id=$role_id;
-                        $access->access_type=7;
-                        $access->access_money=$total_amount*100;
-                        $access->create_time=time();
-                        $access->order_no=$orders;
-                        $access->transaction_no=GoodsOrder::SetTransactionNo($role_number);
-                        $res3=$access->save(false);
-                        if ( !$res3){
-                            $tran->rollBack();
-                            $code=500;
-                            return $code;
-                        }
                         $tran->commit();
                     }catch (Exception $e){
                         $tran->rollBack();
