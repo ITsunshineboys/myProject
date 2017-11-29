@@ -649,7 +649,7 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['waterproof_area']])
+            ->andWhere(['project_name'=>'其他防水面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
@@ -877,7 +877,7 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['latex_paint_area']])
+            ->andWhere(['project_name'=>'其他乳胶漆面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
 //        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
@@ -900,7 +900,7 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['concave_length']])
+            ->andWhere(['project_name'=> '其他阴角线长度'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $concave_length['project_value'] ;
@@ -920,7 +920,7 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['putty_area']])
+            ->andWhere(['project_name'=>'其他腻子面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $putty_area = $putty_bedroom_area[0] + $putty_drawing_room_area[0] + $putty_area['project_value'];
@@ -1144,7 +1144,7 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['latex_paint_area']])
+            ->andWhere(['project_name'=>'其他墙面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $wall_area = $toilet_wall_area + $kitchen_wall_area + $latex_paint_area['project_value'];
@@ -1157,7 +1157,7 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['land_area']])
+            ->andWhere(['project_name'=>'其他地面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
         $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area + $land_area['project_value'];
@@ -1366,11 +1366,13 @@ class OwnerController extends Controller
             ]);
         }
 
+        $points = Points::findByOne('id,title',"title='杂工'");
         $Apartment = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>self::OTHER_AREA['handyman_day']])
+            ->andWhere(['project_name'=>'其他杂工天数'])
+            ->andWhere(['points_id'=>$points['id']])
             ->one();
         if ($Apartment){
             $_area = $Apartment['project_value'];
