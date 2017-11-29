@@ -4177,20 +4177,27 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 console.log($scope.one_title)
                 let arr1 = []
                 for (let [key, value] of $scope.one_title.entries()) {
-                    arr1.push({two_id:value.id,count:value.count,title:value.title})
+                    arr1.push({two_id:value.id,count:0,title:value.title})
+                }
+                for (let [key, value] of $scope.one_title.entries()) {
                     for (let [key1, value1] of value.two_title.entries()) {
-                        if (value1.id == undefined) {
-                            arr.push({
-                                id: value.id,
-                                title: value1.title,
-                                count: value1.count
-                            })
-                        } else {
-                            arr.push({
-                                edit_id: value1.id,
-                                title: value1.title,
-                                count: value1.count
-                            })
+                        for (let [key2, value2] of arr1.entries()) {
+                            if (value.id == value2.two_id) {
+                                value2.count += +value1.count
+                                if (value1.id == undefined) {
+                                    arr.push({
+                                        id: value.id,
+                                        title: value1.title,
+                                        count: value1.count
+                                    })
+                                } else {
+                                    arr.push({
+                                        edit_id: value1.id,
+                                        title: value1.title,
+                                        count: value1.count
+                                    })
+                                }
+                            }
                         }
                     }
                 }
