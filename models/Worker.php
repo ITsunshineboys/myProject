@@ -236,7 +236,6 @@ class Worker extends \yii\db\ActiveRecord
         if($array){
             $array['province']=District::findByCode($array['province_code'])->name;
             $array['city']=District::findByCode($array['city_code'])->name;
-
             $worker_type=WorkerType::getparenttype($array['worker_type_id']);
             $rank=WorkerRank::find()->where(['id'=>$array['level']])->one()->rank_name;
             $array['worker_type_rank']=$rank.$worker_type;
@@ -255,6 +254,11 @@ class Worker extends \yii\db\ActiveRecord
         }
 
     }
+    /**
+     * 工人本月收入
+     * @param $uid
+     * @return mixed|string
+     */
     public static function worker_monthly_income($uid){
         $worker_id=Worker::find()->asArray()->where(['uid'=>$uid])->one()['id'];
         list($start_time,$end_time)=StringService::startEndDate('month');
