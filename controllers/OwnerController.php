@@ -299,11 +299,7 @@ class OwnerController extends Controller
                 $all = $one_points['count'] * $post['hall'];
             }
 
-            if ($one_points['title'] == self::ROOM_DETAIL['master_bedroom']){
-                $master_bedroom = $one_points['count'] * $post['bedroom'];
-            }
-
-            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] > 1){
+            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] >= 2){
                 $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
             }else{
                 $secondary_bedroom = 0;
@@ -314,9 +310,9 @@ class OwnerController extends Controller
             }
         }
         //  弱电总点位
-        $weak_current_points = $all + $master_bedroom + $secondary_bedroom + $other;
+        $weak_current_points = $all + $secondary_bedroom + $other;
         var_dump($weak_current_points);
-        var_dump($master_bedroom);
+        var_dump($all);
         var_dump($secondary_bedroom);
         var_dump($other);
         exit;
