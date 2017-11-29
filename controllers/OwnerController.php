@@ -293,6 +293,7 @@ class OwnerController extends Controller
         $points = Points::findByOne('id,title',['title'=>self::PROJECT_DETAILS['weak_current']]);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
+        $other = 0;
         foreach ($weak_points as $one_points){
             if ($one_points['title'] == self::ROOM_DETAIL['hall']){
                 $all = $one_points['count'] * $post['hall'];
@@ -305,9 +306,13 @@ class OwnerController extends Controller
             if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $post['bedroom'] > 1){
                 $secondary_bedroom = $one_points['count'] * ($post['bedroom'] -1) ;
             }
+
+            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['master_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall']){
+                $other +=  $one_points['count'];
+            }
         }
         //  弱电总点位
-        $weak_current_points = $all + $master_bedroom + $secondary_bedroom;
+        $weak_current_points = $all + $master_bedroom + $secondary_bedroom + $other;
         var_dump($weak_current_points);exit;
 
         //查询弱电所需要材料
