@@ -316,10 +316,6 @@ class OwnerController extends Controller
         }
         //  弱电总点位
         $weak_current_points = $all + $secondary_bedroom + $other;
-        var_dump($all);
-        var_dump($secondary_bedroom);
-        var_dump($other);exit;
-
 
         //查询弱电所需要材料
         $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
@@ -1949,7 +1945,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(Points::find()->asArray()->where('pid=1 and level=2')->all());
+        var_dump(Points::find()->asArray()->where('pid=2 and level=2')->all());
     }
 
 }
