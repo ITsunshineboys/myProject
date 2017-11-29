@@ -288,8 +288,10 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //      点位 和 材料查询
-        $points_where = ['and',['level'=>1],['title'=>self::PROJECT_DETAILS['weak_current']]];
-        $points = Points::findByOne('count',$points_where);
+        $points = Points::findByOne('id,title',self::PROJECT_DETAILS['weak_current']);
+        $weak_where = 'pid = '.$points['id'];
+        $weak_points = Points::findByPid('title,count',$weak_where);
+        var_dump($weak_points);exit;
 
 
         //查询弱电所需要材料
