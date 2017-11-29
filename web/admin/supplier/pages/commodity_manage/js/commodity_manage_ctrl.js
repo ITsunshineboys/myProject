@@ -5,6 +5,29 @@ let commodity_manage = angular.module("commodity_manage", [])
             name: '商品管理',
             icon: 'icon-shangpinguanli'
         }];
+        $scope.paramsWait = {
+            status: 1,                       //状态
+            'sort[]': 'publish_time:3',      //默认排序
+            keyword: '',                    // 关键字查询
+
+        };
+        /*分页配置*/
+        $scope.ConfigWait = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                // tablePagesWait();
+            }
+        };
+        function tablePagesWait () {
+            $scope.paramsWait.page = $scope.ConfigWait.currentPage;//点击页数，传对应的参数
+            _ajax.get('/mall/goods-list-admin', $scope.paramsWait,function (res) {
+                console.log(res);
+                $scope.wait_list_arr = res.data.goods_list_admin.details;
+                $scope.ConfigWait.totalItems = res.data.goods_list_admin.total
+            });
+        };
         $scope.myng = $scope;
         /*POST请求头*/
         const config = {
@@ -132,12 +155,12 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.wait_flag = true;
             $scope.logistics_flag = false;
             /*初始化已下架的搜索*/
-            // $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
+            $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
             $scope.down_search_value = '';//清空输入框值
             $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
             $scope.params.status = 1;
-            // tablePagesWait();
+            tablePagesWait();
         }
         //物流模板
         $scope.logistics_flag = $stateParams.logistics_flag;
@@ -600,30 +623,8 @@ let commodity_manage = angular.module("commodity_manage", [])
         /*--------------------已下架 结束-------------------------*/
 
         /*--------------------等待上架 开始-------------------------*/
-        /*分页配置*/
-        $scope.ConfigWait = {
-            showJump: true,
-            itemsPerPage: 12,
-            currentPage: 1,
-            onChange: function () {
-                // tablePagesWait();
-            }
-        };
-        let tablePagesWait = function () {
-            $scope.paramsWait.page = $scope.ConfigWait.currentPage;//点击页数，传对应的参数
-            _ajax.get('/mall/goods-list-admin', $scope.paramsWait,function (res) {
-                console.log(res);
-                $scope.wait_list_arr = res.data.goods_list_admin.details;
-                $scope.ConfigWait.totalItems = res.data.goods_list_admin.total
-            });
 
-        };
-        $scope.paramsWait = {
-            status: 1,                       //状态
-            'sort[]': 'publish_time:3',      //默认排序
-            keyword: '',                    // 关键字查询
 
-        };
         // $scope.getWaitChange = function () {
         //     $scope.ConfigWait.currentPage = 1 ;
         //     tablePagesWait()

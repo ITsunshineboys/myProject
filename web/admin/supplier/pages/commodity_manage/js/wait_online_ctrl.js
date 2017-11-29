@@ -315,7 +315,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         if(!reg_value){
             $scope.price_flag=true;
         }else{
-            (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+            (+$scope.platform_price <= $scope.market_price)&&(+$scope.platform_price >= $scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
         }
     };
     //供货商价
@@ -324,7 +324,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         if(!reg_value){
             $scope.price_flag=true;
         }else{
-            (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+            (+$scope.supplier_price <= $scope.platform_price)&&(+$scope.supplier_price <= $scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
         }
 
     };
@@ -464,4 +464,4 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			$state.go('commodity_manage',{wait_flag:true})
 		},300)
 	}
-})
+});
