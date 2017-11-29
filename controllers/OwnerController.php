@@ -1957,7 +1957,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(ProjectView::find()->asArray()->all());
+        var_dump(Apartment::find()->asArray() ->Where(['project_name'=>self::OTHER_AREA['putty_area']])->all());
     }
 
 }
