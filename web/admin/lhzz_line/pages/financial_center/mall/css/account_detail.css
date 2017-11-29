@@ -1,29 +1,10 @@
 /*账户详情样式*/
-.account_detail{
-    padding-left:40px;
-    padding-right:40px;
-    padding-top:40px;
-}
-.account_detail p {
+.account_detail .row {
     margin-bottom: 20px;
-    font-size:14px;
-}
-.account_detail button{
-    width:70px;
-    height: 32px;
-    font-size:12px;
-    background: none;
-    border:.5px solid #ccc;
-    margin-left:10px;
-    margin-right:10px;
-    border-radius:2px;
 }
 .account_detail .remove{
     border-color: #3F94F6!important;
     color: #3F94F6;
-}
-.account_detail .submit{
-    margin-top:100px;
 }
 .account_detail .error{
     border-color: red;
