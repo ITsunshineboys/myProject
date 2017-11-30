@@ -162,7 +162,6 @@
                     <ul class="decoration" ng-if="obj.title == '辅材' && obj.goods.length != 0">
                         <li ng-repeat="data in obj.goods | unique: 'goods_second'">
                             <span>{{data.goods_second}}</span>
-                            <br>
                             <span class="pic_q">{{'¥' + data.cost}}</span>
                         </li>
                     </ul>
