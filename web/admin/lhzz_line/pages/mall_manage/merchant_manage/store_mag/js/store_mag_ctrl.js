@@ -16,7 +16,7 @@ store_mag.controller("store_mag", function ($scope, $http,$rootScope,_ajax) {
     let sortway = 'sales_amount_month';
     firstClass();
     $scope.storetype_arr = [{storetype: "全部", id: -1}, {storetype: "旗舰店", id: 0}, {
-        storetype: "专卖店", id: 1}, {storetype: "专营店", id: 2}] //店铺类型
+        storetype: "专卖店", id: 1}, {storetype: "专营店", id: 2},{storetype: "自营店", id: 3}] //店铺类型
     $scope.status_arr = [{status: "全部", id: -1}, {status: "正常营业", id: 1}, {status: "已关闭", id: 0}]; //状态
     $scope.firstselect = 0;
     $scope.keyword = '';

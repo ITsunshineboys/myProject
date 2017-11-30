@@ -24,7 +24,7 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
     }];
 
     $scope.type_org_arr = [{type: "个体工商户", id: 0}, {type: "企业", id: 1}]; //单位类型数组
-    $scope.type_shop_arr = [{storetype: "旗舰店", id: 0}, {storetype: "专营店", id: 2}, {storetype: "专卖店", id: 1}]; //店铺类型数组
+    $scope.type_shop_arr = [{storetype: "旗舰店", id: 0}, {storetype: "专营店", id: 2}, {storetype: "专卖店", id: 1},{storetype: "自营店", id: 3}]; //店铺类型数组
     $scope.store_type = '旗舰店';
     $scope.alljudgefalse = false;
     $scope.showwarning = false;
@@ -126,6 +126,9 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 break;
             case 2:
                 $scope.store_type = '专营店';
+                break;
+            case 3:
+                $scope.store_type = '自营店';
                 break;
             default:
                 $scope.store_type = '旗舰店';
