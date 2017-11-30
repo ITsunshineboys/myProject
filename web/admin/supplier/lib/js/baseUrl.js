@@ -1,2 +1,2 @@
 // const baseUrl = '';
-const baseUrl = 'http://ac.cdlhzz.cn';
+const baseUrl = 'http://test.cdlhzz.cn';
