@@ -351,7 +351,7 @@ class OwnerCashManager extends ActiveRecord {
         $model = new UserFreezelist();
         $model->uid = $uid;
         $model->role_id = $role_id;
-        $model->freeze_money = $freeze_money;
+        $model->freeze_money = $freeze_money*100;
         $model->freeze_reason =$feeze_seaon;
         $model->create_time = time();
 
@@ -368,7 +368,6 @@ class OwnerCashManager extends ActiveRecord {
                 $user=User::find()->where(['id'=>$uid])->one();
             }
             $user->availableamount-=$freeze_money*100;
-            $model->freeze_money=$freeze_money*100;
             if(!$user->update(false)){
                 $transaction->rollBack();
                 $code=500;
