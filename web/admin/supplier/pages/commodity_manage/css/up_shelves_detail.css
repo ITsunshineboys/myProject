@@ -1,6 +1,9 @@
 /*主体内容*/
 body{
-  color: #666f80;
+  color: #666f80!important;
+}
+.form-control{
+  color: #999!important;
 }
 section{
   padding:40px 0 0 40px;
@@ -27,7 +30,6 @@ ul{
 .own_attr_name{
   display: inline-block;
   width: 75%;
-  padding: 0;
 }
 .img_size{
   width: 120px;
@@ -132,11 +134,13 @@ input::-webkit-inner-spin-button{
   margin-right: 50px;
 }
 .show_city{
-  height: 400px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   flex-wrap: wrap;
+}
+.show_city span{
+  padding: 20px 5px;
 }
 
 .dl_active3{

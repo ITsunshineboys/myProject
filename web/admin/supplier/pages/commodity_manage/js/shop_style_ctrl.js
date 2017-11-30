@@ -126,13 +126,13 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			data: {'UploadForm[file]': file}
 		}).then(function (response) {
 			console.log(response);
-			$scope.upload_dis=false;
-			$scope.upload_txt='上传';
 			if (!response.data.data) {
 				$scope.cover_flag = "上传图片格式不正确，请重新上传"
 			} else {
 				$scope.cover_flag = '';
 				$scope.upload_cover_src = response.data.data.file_path;
+				$scope.upload_dis=false;
+				$scope.upload_txt='上传';
 			}
 		}, function (error) {
 			console.log(error);

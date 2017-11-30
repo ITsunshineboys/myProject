@@ -208,9 +208,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       }else{
         $scope.cover_flag='';
         $scope.upload_cover_src=response.data.data.file_path;
+	      $scope.upload_dis=false;
+	      $scope.upload_txt='上传';
       }
-	    $scope.upload_dis=false;
-	    $scope.upload_txt='上传';
     },function (error) {
       console.log(error)
 	    $scope.upload_cover_src='';
@@ -328,9 +328,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       }
   })
 
-  /*--------------编辑保存按钮----------------------*/
+  // /*--------------编辑保存按钮----------------------*/  /*&&!!$scope.series_model && !!$scope.style_model*/
   $scope.edit_confirm=function (valid,error) {
-    if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag &&!!$scope.series_model && !!$scope.style_model){
+    if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag){
       let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];
