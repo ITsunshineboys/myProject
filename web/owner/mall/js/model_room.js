@@ -33,13 +33,13 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
     sessionStorage.setItem("huxingParams", JSON.stringify(huxingParams));
 
     let params = {
-        toponymy: $scope.params.toponymy,    // 小区名称
+        toponymy: $scope.params.toponymy,   // 小区名称
         particulars: "",                    // 厅室名称
         area: "",                           // 面积
         stairway: "",                       // 有无楼梯
         stair_id: "",                       // 楼梯信息 ID
         series: "",                         // 系列ID
-        style: ""                          // 风格ID
+        style: ""                           // 风格ID
     };
 
     // 样板间信息

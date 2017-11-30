@@ -124,29 +124,13 @@ let app = angular.module("app", ["ui.router","directives", "all_controller","ngA
             })
         }
     })
-    .filter('unique', function () {
-        return function (collection, keyname) {
-            console.info(collection);
-            console.info(keyname);
-            let output = [],
-                keys = [];
-            angular.forEach(collection, function (item) {
-                let key = item[keyname];
-                if (keys.indexOf(key) === -1) {
-                    keys.push(key);
-                    output.push(item);
-                }
-            });
-            return output;
-        }
-    })
-    .run(["$rootScope", "$state", function ($rootScope, $state) {
-        $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
+    .run(["$rootScope","$state",function ($rootScope,$state) {
+        $rootScope.$on("$stateChangeSuccess",function (event,toState,toParams,fromState,fromParams) {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
             $rootScope.fromState_name = fromState.name;
             $rootScope.curState_name = toState.name
         });
         $rootScope.goPrev = function (obj) {
-            $state.go($rootScope.fromState_name, obj)
+            $state.go($rootScope.fromState_name,obj)
         }
     }]);
