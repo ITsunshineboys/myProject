@@ -3,6 +3,13 @@
  */
 let applybrand = angular.module("applybrandModule", []);
 applybrand.controller("applybrand_ctrl", function ($scope, $rootScope, $state, Upload, _ajax) {
+    $rootScope.crumbs = [{
+        name: '店铺管理',
+        icon: 'icon-dianpuguanli',
+        link: 'shop_manage'
+    },{
+        name: '申请新品牌'
+    }];
     $scope.uploadDisabled = false;  // 上传按钮禁用
     $scope.startTimeIsNull = false; // 初始日期是否为空
     $scope.endTimeIsNull = false;   // 结束日期是否为空

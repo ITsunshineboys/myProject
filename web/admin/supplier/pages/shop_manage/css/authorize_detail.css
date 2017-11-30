@@ -8,32 +8,6 @@ hr{
     margin-bottom: 42px;
 }
 
-header{
-    height: 60px;
-    line-height: 60px;
-    padding-left: 40px;
-    border-bottom: 1px solid #E6E9F0 ;
-    position: relative;
-}
-
-header span:nth-child(2){
-    font-size: 14px;
-    color: #2F3033;
-    line-height: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-header span:nth-child(3){
-    color: rgba(171, 171, 171, 1);
-}
-
-header img{
-    position: absolute;
-    right: 20px;
-    top: 8px;
-}
-
 /*内容开始*/
 .authorize_detail {
     margin-top: 93px;
