@@ -159,12 +159,18 @@
                         <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
                     </h1>
                     <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
-                    <ul class="decoration" ng-show="obj.goods.length != 0">
+                    <ul class="decoration" ng-if="obj.title == '辅材' && obj.goods.length != 0">
+                        <li ng-repeat="data in obj.goods | unique: 'goods_second'">
+                            <span>{{data.goods_second}}</span>
+                            <br>
+                            <span class="pic_q">{{'¥' + data.cost}}</span>
+                        </li>
+                    </ul>
+                    <ul class="decoration" ng-if="obj.title != '辅材' && obj.goods.length != 0">
                         <li ng-repeat="data in obj.goods">
-                            <span ng-show="$parent.$index == 0">{{data.goods_second}}</span>
-                            <span ng-show="$parent.$index != 0">{{data.goods_three}}</span>
-                            <br ng-show="$parent.$index != 0">
-                            <span class="brand" ng-show="$parent.$index != 0">{{data.name}}</span>
+                            <span>{{data.goods_three}}</span>
+                            <br>
+                            <span class="brand">{{data.name}}</span>
                             <span class="pic_q">{{'¥' + data.cost}}</span>
                         </li>
                     </ul>

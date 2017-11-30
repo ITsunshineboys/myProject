@@ -354,7 +354,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                         // 遍历一级分类  判断分类标题是否相等
                         if (obj.goods_first === o.title) {
                             o.goods.push(obj);
-                            console.log(o.secondInfo.length);
                             break;
                         }
                     }
