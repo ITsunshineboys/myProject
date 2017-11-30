@@ -617,6 +617,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
 
         //保存冻结金额
         $scope.save_freeze_money = function (valid) {
+            let data = $scope
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.cur_title = '冻结成功'
                 $scope.common_house = function () {
@@ -643,9 +644,9 @@ angular.module('mall_finance', ['ui.bootstrap'])
                         }
                     ]
                     _ajax.get('/supplieraccount/account-view', {
-                        id: $scope.cur_account.id
+                        id: data.cur_account.id
                     }, function (res) {
-                        $scope.cur_account_detail = res.data
+                        data.cur_account_detail = res.data
                         $state.go('mall_finance.account_detail')
                     })
                 }
