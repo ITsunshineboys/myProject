@@ -39,7 +39,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
         stairway: "",                       // 有无楼梯
         stair_id: "",                       // 楼梯信息 ID
         series: "",                         // 系列ID
-        style: "",                          // 风格ID
+        style: ""                          // 风格ID
     };
 
     // 样板间信息
@@ -354,6 +354,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                         // 遍历一级分类  判断分类标题是否相等
                         if (obj.goods_first === o.title) {
                             o.goods.push(obj);
+                            console.log(o.secondInfo.length);
                             break;
                         }
                     }
