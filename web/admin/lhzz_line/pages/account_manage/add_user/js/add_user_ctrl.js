@@ -1,7 +1,14 @@
 let add_user=angular.module("add_user_module",[]);
-add_user.controller("add_user_ctrl",function ($scope,$http,$stateParams,$state, _ajax) {
+add_user.controller("add_user_ctrl",function ($rootScope,$scope,$http,$stateParams,$state, _ajax) {
     $scope.flag = false;
     $scope.strat =false;
+    $rootScope.crumbs = [{
+        name: '账户管理',
+        icon: 'icon-zhanghuguanli',
+        link: 'account_index'
+    },{
+        name: '添加账户',
+    }];
     let reg =/^0?(13[0-9]|15[012356789]|18[0236789]|14[57])[0-9]{8}$/;
     let password = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
 
