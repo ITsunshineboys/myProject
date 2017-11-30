@@ -1,44 +1,3 @@
-/*顶部导航*/
-.topnav {
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px solid #999;
-    overflow: hidden;
-}
-
-.topnav span {
-    float: left;
-    margin: 20px 0 20px 40px;
-}
-
-.topnav h6 {
-    float: left;
-    font-size: 14px;
-    line-height: 36px;
-    margin-left: 5px;
-    font-family: PingFangSC-Semibold;
-    font-size: 14px;
-    color: #2F3033;
-}
-
-.topnav h6:nth-child(2){
-    font-weight: bold;
-}
-
-.topnav h6:last-child{
-    color: gray;
-}
-
-.class_detail{
-    padding-left: 26px;
-}
-
-/*分类表单*/
-.cla_detail{
-    padding-top: 56px;
-    font-size: 14px;
-}
-
 .red_mark{
     color: red;
     font-size: 14px;
@@ -65,7 +24,6 @@
     height: 1px;
     width: 90%;
     margin-top: 34px;
-    margin-left:19px;
     background-color: #BFC0C2;
 }
 
@@ -175,21 +133,11 @@
 }
 
 .btn_sure{
-    margin-left: 164px;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .btn_sure button{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #c2c2c2;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    color: #5e6166;
-    background-color: white;
-    margin-right: 20px;
+   margin-right: 15px;
 }
 
 /*确认提示模态框*/
