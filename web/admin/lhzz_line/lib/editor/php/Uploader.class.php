@@ -29,7 +29,7 @@ class Uploader
         "上传文件为空",
         "ERROR_TMP_FILE" => "临时文件错误",
         "ERROR_TMP_FILE_NOT_FOUND" => "找不到临时文件",
-        "ERROR_SIZE_EXCEED" => "文件大小超出网站限制",
+        "ERROR_SIZE_EXCEED" => "上传文件大小不能超过5M",
         "ERROR_TYPE_NOT_ALLOWED" => "文件类型不允许",
         "ERROR_CREATE_DIR" => "目录创建失败",
         "ERROR_DIR_NOT_WRITEABLE" => "目录没有写权限",
