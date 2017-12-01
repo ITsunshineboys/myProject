@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\models\OrderAfterSaleImage;
 use app\models\OrderGoodsAttr;
 use app\models\OrderGoodsBrand;
+use app\models\OrderGoodsDescription;
 use app\models\OrderGoodsImage;
 use app\models\OrderLogisticsDistrict;
 use app\models\OrderLogisticsTemplate;
@@ -4139,11 +4140,11 @@ class OrderController extends Controller
                 ->all();
             $market_price=$OrderGoods->market_price;
             $supplier_price=$OrderGoods->supplier_price;
-            $platform_price=$Goods->platform_price;
-            $left_number=$Goods->left_number;
-            $purchase_price_decoration_company=$Goods->purchase_price_decoration_company;
-            $purchase_price_manager=$Goods->purchase_price_manager;
-            $purchase_price_designer=$Goods->purchase_price_designer;
+            $platform_price=$OrderGoods->platform_price;
+            $left_number=$OrderGoods->left_number;
+            $purchase_price_decoration_company=$OrderGoods->purchase_price_decoration_company;
+            $purchase_price_manager=$OrderGoods->purchase_price_manager;
+            $purchase_price_designer=$OrderGoods->purchase_price_designer;
             $logisticsTemplate=OrderLogisticsTemplate::find()
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
@@ -4198,6 +4199,13 @@ class OrderController extends Controller
                 }
             }
             $qrcode='/'.UploadForm::DIR_PUBLIC . '/' . Goods::GOODS_QR_PREFIX . $Goods->id . '.png';
+            $descriptionList=OrderGoodsDescription::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+            if (!$descriptionList)
+            {
+                $description=$Goods->description;
+            }else{
+                $description=$descriptionList->description;
+            }
             $code=200;
             return Json::encode([
                 'code'=>$code,
@@ -4224,7 +4232,7 @@ class OrderController extends Controller
                     'guarantee'=>$guarantee,
                     'after'=>$after,
                     'qrcode'=>$qrcode,
-                    'description'=>$Goods->description
+                    'description'=>$description
                 ]
             ]);
         }
