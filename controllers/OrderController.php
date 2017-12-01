@@ -4141,7 +4141,7 @@ class OrderController extends Controller
             $market_price=$OrderGoods->market_price;
             $supplier_price=$OrderGoods->supplier_price;
             $platform_price=$OrderGoods->platform_price;
-            $left_number=$OrderGoods->left_number;
+            $left_number=$Goods->left_number;
             $purchase_price_decoration_company=$OrderGoods->purchase_price_decoration_company;
             $purchase_price_manager=$OrderGoods->purchase_price_manager;
             $purchase_price_designer=$OrderGoods->purchase_price_designer;
