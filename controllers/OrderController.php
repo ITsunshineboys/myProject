@@ -4165,7 +4165,7 @@ class OrderController extends Controller
                 ->where(['order_template_id'=>$logisticsTemplate['id']])
                 ->asArray()
                 ->all();
-            $after_sale=explode(',',$Goods->after_sale_services);
+            $after_sale=explode(',',$OrderGoods->after_sale_services);
             $guarantee=[];
             $after=[];
             foreach ($after_sale as &$afterSale)
