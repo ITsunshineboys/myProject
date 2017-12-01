@@ -102,5 +102,7 @@ ALTER TABLE `order_goodslist` ADD  `purchase_price_decoration_company` bigint(20
 ALTER TABLE `order_goodslist` ADD  `purchase_price_manager` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
 ALTER TABLE `order_goodslist` ADD  `purchase_price_designer` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
 
+ALTER TABLE `order_goodslist` ADD  `subtitle` varchar(100) NOT NULL DEFAULT ''
+
 
 
