@@ -206,13 +206,13 @@ class GoodsOrder extends ActiveRecord
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
         if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100)
-    {
-        return false;
-    }
+        {
+            return false;
+        }
         $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
-        if (! $address  || !$invoice){
+        if (!$address  || !$invoice){
             return false;
         }
         $time=time();
@@ -264,6 +264,10 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->freight=$freight*100;
             $OrderGoods->category_id=$goods['category_id'];
             $OrderGoods->after_sale_services=$goods['after_sale_services'];
+            $OrderGoods->platform_price=$goods['platform_price'];
+            $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
+            $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
+            $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $tran->rollBack();
@@ -446,7 +450,15 @@ class GoodsOrder extends ActiveRecord
                 }
             }
 
-
+            $orderGoodsdescription=new OrderGoodsDescription();
+            $orderGoodsdescription->order_no=$post['out_trade_no'];
+            $orderGoodsdescription->sku=$goods['sku'];
+            $orderGoodsdescription->description=$goods['description'];
+            if (!$orderGoodsdescription)
+            {
+                $tran->rollBack();
+                return false;
+            }
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
@@ -547,6 +559,10 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->freight=$freight*100;
             $OrderGoods->category_id=$goods['category_id'];
             $OrderGoods->after_sale_services=$goods['after_sale_services'];
+            $OrderGoods->platform_price=$goods['platform_price'];
+            $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
+            $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
+            $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $tran->rollBack();
@@ -739,6 +755,18 @@ class GoodsOrder extends ActiveRecord
             }
 
 
+            //详情描述
+            $orderGoodsdescription=new OrderGoodsDescription();
+            $orderGoodsdescription->order_no=$order_no;
+            $orderGoodsdescription->sku=$goods['sku'];
+            $orderGoodsdescription->description=$goods['description'];
+            if (!$orderGoodsdescription)
+            {
+                $tran->rollBack();
+                return false;
+            }
+
+
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
@@ -776,7 +804,6 @@ class GoodsOrder extends ActiveRecord
      */
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $sort_time,$sort_money,$type)
     {
-
         $sort='';
         if ($sort_time=='' && $sort_money==2)
         {
