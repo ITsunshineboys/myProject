@@ -305,33 +305,35 @@
                             <h4 class="modal-title">详情</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="row form_box">
-                                <span class="col-md-12 form_txt">商铺名称：<span>{{banner_detail_title}}</span></span>
+                            <div class="row">
+                                <span class="col-md-12">商铺名称：<span>{{banner_detail_title}}</span></span>
                             </div>
-                            <div class="row form_box">
-                                <span class="col-md-6 form_txt">类型：<span>{{banner_detail_from_type}}</span></span>
-                                <span class="col-md-6 form_txt">商品编号：<span>{{banner_detail_sku}}</span></span>
+                            <div class="row">
+                                <span class="col-md-6">类型：<span>{{banner_detail_from_type}}</span></span>
+                                <span class="col-md-6">商品编号：<span>{{banner_detail_sku}}</span></span>
                             </div>
-                            <div class="row form_box">
-                                <div class="col-md-6 form_txt">库存：<span>{{banner_detail_left_number}}</span></div>
-                                <div class="col-md-6 form_txt">创建时间：<span>{{banner_detail_create_time}}</span></div>
+                            <div class="row">
+                                <div class="col-md-6">库存：<span>{{banner_detail_left_number}}</span></div>
+                                <div class="col-md-6">创建时间：<span>{{banner_detail_create_time}}</span></div>
                             </div>
-                            <div class="row form_box">
-                                <div class="col-md-6 form_txt">供货价格：<span>{{banner_detail_supplier_price}}</span></div>
-                                <div class="col-md-6 form_txt">平台价格：<span>{{banner_detail_platform_price}}</span></div>
+                            <div class="row">
+                                <div class="col-md-6">供货价格：<span>{{banner_detail_supplier_price}}</span></div>
+                                <div class="col-md-6">平台价格：<span>{{banner_detail_platform_price}}</span></div>
                             </div>
-                            <div class="row form_box">
-                                <div class="col-md-6 form_txt">市场价格：<span>{{banner_detail_market_price}}</span></div>
-                                <div class="col-md-6 form_txt">装修公司采购价：<span>{{banner_detail_purchase_price_decoration_company}}</span></div>
+                            <div class="row">
+                                <div class="col-md-6">市场价格：<span>{{banner_detail_market_price}}</span></div>
+                                <div class="col-md-6">装修公司采购价：<span>{{banner_detail_purchase_price_decoration_company}}</span></div>
                             </div>
-                            <div class="row form_box">
-                                <div class="col-md-6 form_txt">项目经理采购价：<span>{{banner_detail_purchase_price_manager}}</span></div>
-                                <div class="col-md-6 form_txt">设计师采购价：<span>{{banner_detail_purchase_price_designer}}</span></div>
+                            <div class="row">
+                                <div class="col-md-6">项目经理采购价：<span>{{banner_detail_purchase_price_manager}}</span></div>
+                                <div class="col-md-6">设计师采购价：<span>{{banner_detail_purchase_price_designer}}</span></div>
                             </div>
-                            <div class="row form_box">
-                                <div class="col-md-12 form_txt">
-                                    <div class="col-md-12 form_txt txt_left">图片：</div>
-                                    <img  class='detail_img_size' ng-src="{{banner_detail_image}}" alt="">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-12 txt_left">图片：</div>
+                                    <div class="img_top" ng-class="{'img_banner':b_show_table_flag,'img_recommend':r_show_table_flag}">
+                                        <img  class='modal_img' ng-src="{{banner_detail_image}}" alt="">
+                                    </div>
                                 </div>
                             </div>
                         </div>

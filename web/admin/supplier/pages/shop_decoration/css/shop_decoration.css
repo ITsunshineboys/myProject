@@ -1,9 +1,9 @@
-section{
-  padding: 40px 0 0 40px;
-  width: 95%;
-}
+
 .form-horizontal .control-label{
   text-align: left;
+}
+.row{
+  margin-bottom: 20px;
 }
 .img_txt_c{
   font-size: 12px;
@@ -21,11 +21,6 @@ section{
 .checkbox_index{
   position: relative;
   z-index: 9999;
-}
-.detail_img_size{
-  display: inline-block!important;
-  max-width: 240px!important;
-  max-height: 140px!important;
 }
 
 /*添加模态框*/
@@ -62,6 +57,9 @@ section{
 }
 .txt_left{
   padding-left: 0;
+}
+.img_top{
+  padding-top: 10px;
 }
 .dl_active6{
   background-color: #E6E9F0!important;
