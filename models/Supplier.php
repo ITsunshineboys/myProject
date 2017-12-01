@@ -207,6 +207,7 @@ class Supplier extends ActiveRecord
         $supplier->create_time = time();
         $supplier->status = isset($attrs['status']) ? (int)$attrs['status'] : self::STATUS_WAIT_REVIEW;
         $supplier->shop_name = isset($attrs['shop_name']) ? trim($attrs['shop_name']) : '';
+        $supplier->shop_name .= self::TYPE_SHOP[$supplier->type_shop];
 //        $supplier->support_offline_shop = isset($attrs['support_offline_shop'])
 //            ? (int)$attrs['support_offline_shop']
 //            : self::OFFLINE_SHOP_NOT_SUPPORT;
