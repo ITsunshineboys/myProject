@@ -1,22 +1,23 @@
 <link rel="stylesheet" href="pages/supplier_wallet/css/supplier_wallet.css">
 <div ng-controller="supplier_wallet_ctrl">
-    <section>
         <!--Tab-->
-        <ul class="nav_ul">
-            <li ui-sref="supplier_account">商家账户信息</li>
-            <li ui-sref="income_pay">收支明细</li>
-            <li ui-sref="set_password">交易密码</li>
-        </ul>
+    <ul class="nav_ul">
+        <li><a ui-sref="supplier_account">商家账户信息</a></li>
+        <li><a ui-sref="income_pay">收支明细</a></li>
+        <li><a ui-sref="set_password">交易密码</a></li>
+    </ul>
+    <div class="form-inline clearfix">
         <div class="select_top">
-            <select  name="province" ng-model="params.time_type" ng-change="time_status_change()" class="time_select" ng-options="item.value as item.name for item in time">
-            </select>
-            <input ng-if="params.time_type=='custom'" id="start_time"  ng-model="params.time_start" ng-change="time_change()" max-date="{{params.time_end}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-            <input ng-if="params.time_type=='custom'" id="stop_time"   ng-model="params.time_end" ng-change="time_change()"  min-date="{{params.time_start}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+            <select  name="province" ng-model="params.time_type" ng-change="time_status_change()" class="form-control" ng-options="item.value as item.name for item in time"></select>
+            <input ng-if="params.time_type=='custom'" id="start_time"  ng-model="params.time_start" ng-change="time_change()" max-date="{{params.time_end}}" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
+            <input ng-if="params.time_type=='custom'" id="stop_time"   ng-model="params.time_end" ng-change="time_change()"  min-date="{{params.time_start}}" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
             <span class="status_choose">状态选择</span>
-            <select ng-model="params.status" class="time_select" ng-change="time_change()" ng-options="items.id as items.value for items in status_arr"></select>
+            <select ng-model="params.status" class="form-control" ng-change="time_change()" ng-options="items.id as items.value for items in status_arr"></select>
         </div>
+    </div>
+
         <!-- 表格 -->
-        <table class="table table-responsive table_css">
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
                 <th>申请时间</th>
@@ -36,11 +37,10 @@
                 <td>{{item.lost_money}}</td>
                 <td>{{item.status}}</td>
                 <td class="blue supplier_reason">{{item.supplier_reason}}</td>
-                <td class="blue"   ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</td>
+                <td><a ui-sref="wallet_detail({transaction_no:item.transaction_no})">查看</a></td>
             </tr>
             </tbody>
         </table>
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
-    </section>
 </div>
