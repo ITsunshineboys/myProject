@@ -35,7 +35,13 @@
                 <tr ng-repeat="obj in data.goods_attr">
                     <td>{{obj.name}}</td>
                     <td>{{obj.value}}</td>
-                    <td>{{obj.unit}}</td>
+                    <td>
+                        <span ng-if="obj.unit == 1">L</span>
+                        <span ng-if="obj.unit == 2">M</span>
+                        <span ng-if="obj.unit == 3">M²</span>
+                        <span ng-if="obj.unit == 4">Kg</span>
+                        <span ng-if="obj.unit == 5">MM</span>
+                    </td>
                 </tr>
             </table>
         </div>
