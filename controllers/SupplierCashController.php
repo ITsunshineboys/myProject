@@ -529,7 +529,7 @@ class SupplierCashController extends Controller
         $search = trim(htmlspecialchars($request->get('search', '')), '');
         $code = 1000;
 
-        if ($status==1){
+        if ($status==1 || $status==0){
           $time_s='g.apply_time';
         }else{
             $time_s='g.handle_time';
