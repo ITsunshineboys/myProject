@@ -163,7 +163,7 @@ class TestController extends Controller
     }
 
     /**
-     * Test wxa
+     * Test wxb
      */
     public function actionWx()
     {
