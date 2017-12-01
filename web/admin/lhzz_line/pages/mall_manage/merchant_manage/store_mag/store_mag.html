@@ -98,56 +98,6 @@
 
                     </tr>
                     </tbody>
-
-                    <!--<tr class="th">-->
-                        <!--<td>商家编号</td>-->
-                        <!--<td>商家名称</td>-->
-                        <!--<td>店铺类型</td>-->
-                        <!--<td>所属类目</td>-->
-                        <!--<td ng-click="sortAmount()">本月销售额-->
-                            <!--<span class="sortpic">-->
-                                 <!--<i class="glyphicon glyphicon-triangle-top"-->
-                                    <!--ng-class="{'active':amount_ascorder}"></i>-->
-                                 <!--<i class="glyphicon glyphicon-triangle-bottom"-->
-                                    <!--ng-class="{'active':amount_desorder}"></i>-->
-                            <!--</span>-->
-                        <!--</td>-->
-                        <!--<td ng-click="sortVolumn()">-->
-                            <!--本月销量-->
-                            <!--<span class="sortpic">-->
-                                 <!--<i class="glyphicon glyphicon-triangle-top"-->
-                                    <!--ng-class="{'active':volumn_ascorder}"></i>-->
-                                 <!--<i class="glyphicon glyphicon-triangle-bottom"-->
-                                    <!--ng-class="{'active':volumn_desorder}"></i>-->
-                             <!--</span>-->
-                        <!--</td>-->
-                        <!--<td>状态</td>-->
-                        <!--<td>详情</td>-->
-                        <!--<td>管理</td>-->
-                        <!--<td data-toggle="modal" data-target="#unblock_modal">操作</td>-->
-                    <!--</tr>-->
-
-                    <!--<tr ng-repeat="item in stores track by $index">-->
-                        <!--<td>{{item.shop_no}}</td>-->
-                        <!--<td>{{item.shop_name}}</td>-->
-                        <!--<td>{{item.type_shop}}</td>-->
-                        <!--<td>{{item.category_name}}</td>-->
-                        <!--<td style="text-align: center">{{item.sales_amount_month | currency:"¥"}}</td>-->
-                        <!--<td style="text-align: center">{{item.sales_volumn_month}}</td>-->
-                        <!--<td class="running" ng-class="{tored:item.status=='已闭店'}">{{item.status}}</td>-->
-                        <!--<td class="color_blue clickstyle" ui-sref="store_detail({store:item})">查看</td>-->
-                        <!--<td>-->
-                            <!--<span class="color_blue" ui-sref="commodity.online({id:item.id})">商品管理</span>-->
-                            <!--<a class="color_blue" ui-sref="order.all({id: item.id})">订单管理</a>-->
-                            <!--<a class="color_blue" ui-sref="store_data({id: item.id})">数据</a>-->
-                        <!--</td>-->
-                        <!--<td class="color_blue clickstyle">-->
-                            <!--<span data-toggle="modal" data-target="#bidian_tishi"-->
-                                  <!--ng-click=changeStatus(item.id,item.status)-->
-                                  <!--ng-bind="item.status=='正常营业'?'闭店':'开店'"></span>-->
-                        <!--</td>-->
-
-                    <!--</tr>-->
                 </table>
 
                 <tm-pagination conf="pageConfig"></tm-pagination>
