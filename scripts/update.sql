@@ -89,4 +89,18 @@ ALTER TABLE `order_goodslist` ADD `category_id` int(11) DEFAULT '0' COMMENT '分
 ALTER TABLE `order_goodslist` ADD  `after_sale_services` set('0', '1', '2', '3', '4', '5', '6') not null DEFAULT '0' comment '0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货';
 
 
+CREATE TABLE `order_goods_description` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) CHARACTER SET utf32 NOT NULL DEFAULT '' COMMENT '订单商品描述',
+  `order_no` varchar(50) NOT NULL,
+  `sku` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `order_goodslist` ADD `platform_price` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
+ALTER TABLE `order_goodslist` ADD  `purchase_price_decoration_company` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
+ALTER TABLE `order_goodslist` ADD  `purchase_price_manager` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
+ALTER TABLE `order_goodslist` ADD  `purchase_price_designer` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
+
+
 
