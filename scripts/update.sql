@@ -86,7 +86,7 @@ CREATE TABLE `order_style` (
 
 
 ALTER TABLE `order_goodslist` ADD `category_id` int(11) DEFAULT '0' COMMENT '分类id';
-ALTER TABLE `order_goodslist` ADD  `after_sale_services` set('0','1','2','3','4') NOT NULL DEFAULT '0' COMMENT '0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货';
+ALTER TABLE `order_goodslist` ADD  `after_sale_services` set('0', '1', '2', '3', '4', '5', '6') not null DEFAULT '0' comment '0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货';
 
 
 
