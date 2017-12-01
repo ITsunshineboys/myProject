@@ -4199,7 +4199,9 @@ class OrderController extends Controller
                 }
             }
             $qrcode='/'.UploadForm::DIR_PUBLIC . '/' . Goods::GOODS_QR_PREFIX . $Goods->id . '.png';
-            $descriptionList=OrderGoodsDescription::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+            $descriptionList=OrderGoodsDescription::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
             if (!$descriptionList)
             {
                 $description=$Goods->description;
