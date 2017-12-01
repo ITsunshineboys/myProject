@@ -132,10 +132,6 @@ input::-webkit-inner-spin-button{
 .btn_left{
   margin-left: 20px;
 }
-.border_red{
-  border: 1px solid red!important;
-  outline: 0;
-}
 
 .people_time_right{
   margin-right: 50px;

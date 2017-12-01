@@ -87,8 +87,8 @@
                 <td ng-if="show_11" class="green">{{item.status}}</td>
                 <td ng-if="show_12">{{item.online_time}}</td>
                 <td ng-if="show_13"><img class="img_cover_size" ng-src="{{item.cover_image}}" alt=""></td>
-                <td ng-if="show_14" class="blue" ui-sref="up_shelves_detail({item:item,flag:0})">编辑</td>
-                <td ng-if="show_15" class="blue" data-toggle="modal" data-target="#down_shelves_solo_modal" ng-click="offline_solo(item.id)">下架</td>
+                <td ng-if="show_14" ><a ui-sref="up_shelves_detail({item:item,flag:0})">编辑</a></td>
+                <td ng-if="show_15"><a data-toggle="modal" data-target="#down_shelves_solo_modal" ng-click="offline_solo(item.id)">下架</a></td>
             </tr>
             </tbody>
         </table>
@@ -282,11 +282,11 @@
                 <td ng-if="down_14"><img class="img_cover_size" ng-src="{{item.cover_image}}" alt=""></td>
                 <td ng-if="down_15" class="blue reason_width" ng-show="item.operator =='系统下架'" ng-click="reason_click(item.offline_reason)" data-toggle="modal" data-target="#down_shelves_reason_modal">{{item.offline_reason}}</td>
                 <td ng-if="down_15" class="blue reason_width" ng-show="item.operator !='系统下架'">{{item.offline_reason}}</td>
-                <td ng-if="down_16" ng-show="item.operator =='系统下架'" class="blue" ui-sref="system_offline({item:item})">查看</td>
-                <td ng-if="down_16" ng-show="item.operator !='系统下架'" class="blue" ui-sref="up_shelves_detail({item:item,flag:1})">编辑</td>
+                <td ng-if="down_16" ng-show="item.operator =='系统下架'"><a ui-sref="system_offline({item:item})">查看</a></td>
+                <td ng-if="down_16" ng-show="item.operator !='系统下架'"><a ui-sref="up_shelves_detail({item:item,flag:1})">编辑</a></td>
                 <td ng-if="down_17" class="blue" ng-show="item.operator !='系统下架'">
-                    <span data-toggle="modal" data-target="#all_up_shelves_modal" ng-click="sole_on_shelf(item.id)">上架</span>
-                    <span data-toggle="modal" data-target="#off_del_modal" ng-click="solo_del_off(item.id)">删除</span>
+                    <a data-toggle="modal" data-target="#all_up_shelves_modal" ng-click="sole_on_shelf(item.id)">上架</a>
+                    <a data-toggle="modal" data-target="#off_del_modal" ng-click="solo_del_off(item.id)">删除</a>
                 </td>
                 <td ng-show="item.operator =='系统下架'">
                     <span>&nbsp;</span>
