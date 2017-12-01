@@ -1236,7 +1236,7 @@ class OrderController extends Controller
         }else{
             $goods_data['pay_term']=0;
         }
-        if ($order_information['paytime']!=0){
+        if (!$order_information['paytime']==0){
             $goods_data['paytime']=$order_information['paytime'];
         }
         $goods_data['create_time']=$order_information['create_time'];
@@ -4221,7 +4221,7 @@ class OrderController extends Controller
                     'series'=>$series,
                     'style'=>$style,
                     'goods_attr'=>$attr,
-                    'cover_image'=>$Goods->cover_image,
+                    'cover_image'=>$OrderGoods->cover_image,
                     'goods_image'=>$goods_image,
                     'market_price'=>GoodsOrder::switchMoney($market_price*0.01),
                     'supplier_price'=>GoodsOrder::switchMoney($supplier_price*0.01),
