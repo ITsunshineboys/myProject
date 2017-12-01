@@ -27,7 +27,7 @@
                 <span>{{detail_item.subtitle}}</span>
             </div>
             <div class="col-sm-6 control-label">
-                <span>*在智能报价中，增强识别性</span>
+                <span class="prompt_txt">*在智能报价中，增强识别性</span>
             </div>
         </div>
         <!--选择品牌-->
@@ -113,17 +113,17 @@
             <div class="col-sm-2 control-label">
                 <span>价格库存</span>
             </div>
-            <div class="col-sm-4 control-label">
+            <div class="col-sm-4 control-label price_left">
                 <span class="col-sm-3 control-label">供货价格</span>
                 <span class="col-sm-3 control-label">平台价格</span>
                 <span class="col-sm-3 control-label">市场价格</span>
                 <span class="col-sm-3 control-label">库存</span>
-                <p class="col-sm-12 price_p"></p>
+                <p class="col-sm-11 price_p"></p>
                 <span class="col-sm-3 control-label">¥{{detail_item.supplier_price}}</span>
                 <span class="col-sm-3 control-label">¥{{detail_item.platform_price}}</span>
                 <span class="col-sm-3 control-label">¥{{detail_item.market_price}}</span>
                 <span class="col-sm-3 control-label">{{detail_item.left_number}}</span>
-                <p class="col-sm-12">*价格，供货价≤平台价≤市场价</p>
+                <p class="col-sm-12 prompt_txt">*价格，供货价≤平台价≤市场价</p>
             </div>
         </div>
 
@@ -132,11 +132,11 @@
             <div class="col-sm-2 control-label">
             <span>采购价</span>
             </div>
-            <div class="col-sm-4 control-label">
+            <div class="col-sm-4 control-label price_left">
                 <span class="col-sm-4 control-label">装修公司采购价</span>
                 <span class="col-sm-4 control-label">项目经理采购价</span>
                 <span class="col-sm-4 control-label">设计师采购价</span>
-                <p class="price_p col-sm-12"></p>
+                <p class="price_p col-sm-11"></p>
                 <span class="col-sm-4 control-label">￥{{detail_item.purchase_price_decoration_company}}</span>
                 <span class="col-sm-4 control-label">￥{{detail_item.purchase_price_manager}}</span>
                 <span class="col-sm-4 control-label">￥{{detail_item.purchase_price_designer}}</span>

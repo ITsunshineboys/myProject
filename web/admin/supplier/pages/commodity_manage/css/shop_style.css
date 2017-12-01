@@ -4,7 +4,6 @@ body{
 .form-control{
     color: #999!important;
 }
-
 .row{
     margin-bottom: 20px;
 }
@@ -23,17 +22,19 @@ body{
     padding: 0;
 }
 .img_box{
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     background-color: #F6F6F6;
+    overflow: hidden;
+    position: relative;
 }
 .img_size{
     width: 100%;
 }
 .img_add{
     cursor: pointer;
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
 }
 .prompt_txt{
     font-size: 12px;
@@ -60,11 +61,13 @@ hr{
     display: inline-block;
     width: 100%;
     text-align: center;
-    font-size: 20px;
     color: red;
     background-color: #ccc;
     font-weight:bold;
     cursor: pointer;
+    position: absolute;
+    left: 0;
+    bottom: 0;
 }
 
 .price_stock ul li {
@@ -98,7 +101,9 @@ input::-webkit-inner-spin-button{
 .template_span{
     margin-right:10px;
 }
-
+.aftermark_ul{
+    padding-left: 0;
+}
 .aftermark_ul>li>span{
     margin-left:10px;
 }

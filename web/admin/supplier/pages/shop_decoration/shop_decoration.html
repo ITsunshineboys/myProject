@@ -8,25 +8,17 @@
             </ul>
         </div>
         <!--Banner、推荐选项卡结束-->
-
-        <!-- Tab one -->
-        <div role="tabpanel" class="tab-pane  active" id="tab_one">
-
-            <!-- Tab tools -->
-            <div class="tab_tools clearfix">
-                <div class="pull-left">
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-left">
                     <button class="btn btn-info " ng-click="banner_save_btn()" data-target="#banner_save_modal" data-toggle="modal"><i class="iconfont icon-save"></i> 保存</button>
                     <button class="btn btn-primary btn_left" ng-click="banner_clear_add()"  data-toggle="modal" data-target="#banner_add_modal"><i class="iconfont icon-add"></i> 添加</button>
                     <button class="btn btn-default btn_left" ng-modal="selectAll_modal" ng-click="selectAll(selectAll_modal)">全选</button>
                     <button class="btn btn-default btn_left" data-target="#banner_del_modal" data-toggle="modal" ng-click="delete_all()">删除</button>
-                </div>
-                <div class="pull-right">
-                    <!-- 筛选菜单 -->
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i></span>
-                        </button>
-                        <!--Menu-->
-                        <ul class="dropdown-menu dropdown-menu-right btn_list_menu" ng-show="b_show_table_flag">
+            </div>
+            <div class="form-group pull-right">
+                <div class="input-group">
+                        <button type="button" class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-shaixuan"></i></button>
+                        <ul class="dropdown-menu dropdown-menu-right filter" ng-show="b_show_table_flag">
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_1" ng-click="show_all(show_1)">类型</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_2" ng-click="show_all(show_2)">商品编号</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_3" ng-click="show_all(show_3)">名称</li>
@@ -43,8 +35,7 @@
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_14" ng-click="show_all(show_14)">设计师采购价</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_15" ng-click="show_all(show_15)">操作</li>
                         </ul>
-
-                        <ul class="dropdown-menu dropdown-menu-right btn_list_menu" ng-show="r_show_table_flag">
+                        <ul class="dropdown-menu dropdown-menu-right filter" ng-show="r_show_table_flag">
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_1" ng-click="show_all(rec_1)">类型</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_2" ng-click="show_all(rec_2)">商品编号</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_3" ng-click="show_all(rec_3)">名称</li>
@@ -61,12 +52,12 @@
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_14" ng-click="show_all(rec_14)">设计师采购价</li>
                             <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="rec_15" ng-click="show_all(rec_15)">操作</li>
                         </ul>
-                    </div>
                 </div>
             </div>
+        </div>
 
             <!-- 表格 -->
-            <table class="table table-responsive">
+            <table class="table table-hover table-responsive">
                 <thead>
                 <tr ng-if="b_show_table_flag">
                     <th>&nbsp;</th>
@@ -166,15 +157,15 @@
                                 <h4 class="modal-title" ng-if="r_show_table_flag">添加推荐</h4>
                             </div>
                             <div class="modal-body">
-                                <div  clsss="col-sm-12 control-label" id="shop_num_null"  ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && banner_add_num_blur) ||banner_num_error ">
+                                <div clsss="col-sm-12 control-label" id="shop_num_null"  ng-if="(shop_form.shop_num_name.$invalid &&submitted)||(shop_form.shop_num_name.$error.required && banner_add_num_blur) ||banner_num_error ">
                                      <span class="shop_left">{{shop_sku_error}}</span>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span >商品编号</span>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <div class="input-group">
                                             <input type="text" class="form-control" ng-model="banner_add_sku"  name="shop_num_name" required ng-blur="banner_add_num_blur=!!shop_form.shop_num_name.$error">
                                             <span class="input-group-btn">
@@ -184,33 +175,36 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span>商品名称</span>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <input type="text" class="still form-control" disabled="disabled" ng-model="banner_add_title"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span>商品链接</span>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <input type="text" class="still form-control" disabled="disabled" ng-model="banner_add_url"/>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                <div class="form-group img_div">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span> 图片</span>
+                                        <p class="img_txt_c">375x185,3M内</p>
                                     </div>
-                                    <div class="col-sm-10 control-label">
-                                        <img id="modal_img"  ng-if="!!banner_add_img_src" ng-src="{{banner_add_img_src}}"/>
-                                        <img id="modal_img2" ng-if="!banner_add_img_src" src="lib/images/default.png"/>
+                                    <div class="col-sm-9 control-label" ng-class="{'img_banner':b_show_table_flag,'img_recommend':r_show_table_flag}">
+                                        <img class="modal_img"  ng-if="!!banner_add_img_src" ng-src="{{banner_add_img_src}}"/>
+                                        <img class="modal_img" ng-if="!banner_add_img_src" width=254; height=137 src="lib/images/default.png"/>
                                     </div>
-                                    <div class="col-sm-offset-2 img_txt">
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 img_txt">
                                         <p class="modal_red" ng-if="!!banner_add_img_flag">{{banner_add_img_flag}}</p>
                                         <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="banner_add_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                     </div>
@@ -243,11 +237,11 @@
                                     <span class="shop_left">{{shop_edit_sku_error}}</span>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span >商品编号</span>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <div class="input-group">
                                             <input type="text" class="form-control"  ng-model="banner_edit_sku" name="banner_edit_num" required ng-blur="banner_edit_num_blur=!!banner_edit_form.banner_edit_num.$error"/>
                                             <span class="input-group-btn">
@@ -257,33 +251,36 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span>商品名称</span>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <input type="text" class="still form-control" disabled="disabled" ng-model="banner_edit_title"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span>商品链接</span>
                                     </div>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-9">
                                         <input type="text" class="still form-control" disabled="disabled" ng-model="banner_edit_url"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2 control-label">
+                                    <div class="col-sm-3 control-label">
                                         <i class="red">*</i>
                                         <span> 图片</span>
+                                        <p class="img_txt_c">375x185,3M内</p>
                                     </div>
-                                    <div class="col-sm-10 control-label">
-                                        <img id="edit_modal_img1"  ng-if="!!banner_edit_img_src" ng-src="{{banner_edit_img_src}}"/>
-                                        <img id="edit_modal_img2" ng-if="!banner_edit_img_src" src="lib/images/default.png"/>
+                                    <div class="col-sm-9 control-label" ng-class="{'img_banner':b_show_table_flag,'img_recommend':r_show_table_flag}">
+                                        <img class="modal_img"  ng-if="!!banner_edit_img_src"  ng-src="{{banner_edit_img_src}}"/>
+                                        <img class="modal_img" ng-if="!banner_edit_img_src" src="lib/images/default.png"/>
                                     </div>
-                                    <div class="col-sm-offset-2 img_txt">
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-3 img_txt">
                                         <p class="modal_red" ng-if="!!banner_edit_img_flag">{{banner_edit_img_flag}}</p>
                                         <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="banner_edit_upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                     </div>

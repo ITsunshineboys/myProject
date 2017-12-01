@@ -1,4 +1,3 @@
-<script src="js/up_shelves_detail_ctrl.js"></script>
 <link rel="stylesheet" href="pages/commodity_manage/css/up_shelves_detail.css"/>
 <div ng-controller="up_shelves_detail_ctrl" class="container_left">
         <form class="form-horizontal" name="form" novalidate>
@@ -21,7 +20,7 @@
                 <input class="form-control" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required ng-class="{'border_red':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)|| g_flag}" ng-blur="title_blur=!!form.goods_name.$error"/>
             </div>
             <div class="col-sm-6 control-label">
-                <span>*限1~32个字符，不含特殊字符</span>
+                <span class="small_txt">*限1~32个字符，不含特殊字符</span>
             </div>
         </div>
         <!--商品特色 -->
@@ -34,7 +33,7 @@
                 <input class="form-control" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" ng-change="d_name_change(des_name)" id="des_name" name="des_name" required ng-class="{'border_red':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}" ng-blur="des_blur=!!form.des_name.$error"/>
             </div>
             <div class="col-sm-6 control-label">
-                <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
+                <span class="small_txt">*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
             </div>
         </div>
         <div class="row" ng-if="brands_arr.length>0">
@@ -54,9 +53,9 @@
                 <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
             </div>
         </div>
-        <!--<div class="row" ng-if="series_null_flag">-->
-            <!--<div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择风格</div>-->
-        <!--</div>-->
+        <div class="row" ng-if="series_null_flag">
+            <div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择风格</div>
+        </div>
         <!--选择风格-->
         <div class="row" ng-if="styles_arr.length>0">
             <div class="col-sm-2 control-label">
@@ -99,7 +98,7 @@
                     <span class="unit">{{item.unit}}</span>
                 </div>
                 <div class="col-sm-3 control-label">
-                    <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                    <span class="small_txt">*属性内容限1～10个字符</span>
                 </div>
             </div>
             <!--下拉框-->
@@ -116,7 +115,7 @@
                     <span class="unit">{{item.unit}}</span>
                 </div>
                 <div class="col-sm-3 control-label">
-                    <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                    <span class="small_txt">*属性内容限1～10个字符</span>
                 </div>
             </div>
             <div class="row" ng-repeat="item in own_attrs_arr track by $index">
@@ -132,7 +131,7 @@
                     <span class="unit">&nbsp;</span>
                 </div>
                 <div class="col-sm-3 control-label">
-                    <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                    <span class="small_txt">*属性名称限1～6个字符,属性内容限1～10个字符</span>
                 </div>
             </div>
         </div>
@@ -145,8 +144,10 @@
                 <span>上传图片</span>
             </div>
             <div class="col-sm-10 control-label">
-                <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
-                <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
+                <div class="img_box">
+                    <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
+                    <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
+                </div>
                 <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
                 <button  class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                 <p class="warning" ng-if="!!cover_flag">
@@ -162,11 +163,11 @@
                 <span>上传图片</span>
             </div>
             <div class="col-sm-10 control-label">
-                <div class="img_list" ng-repeat="item in upload_img_arr" style="width: 120px;height: 120px;">
+                <div class="img_box" ng-repeat="item in upload_img_arr">
                     <img class="img_size" ng-src="{{item}}" class="logo">
-                    <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)">&times;</span>
+                    <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)"><span>x</span></span>
                 </div>
-                <img class="img_size" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
+                <img class="img_add" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
                 <p class="prompt_txt">图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
                 <p class="warning" ng-if="!!img_flag">
                     <span class="glyphicon glyphicon-asterisk"></span>
@@ -183,7 +184,7 @@
                 <span>价格库存</span>
             </div>
             <div class="col-sm-10 control-label">
-            <ul>
+            <ul class="aftermark_ul">
                 <li>供货价格</li>
                 <li>平台价格</li>
                 <li>市场价格</li>
@@ -196,7 +197,7 @@
                 <input class="form-control price_stock_input" type="text" ng-model="market_price"  ng-change="my_market_price(market_price)" id="market_price" name="market_price" required ng-class="{'border_red':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}" ng-blur="market_blur=!!form.market_price.$error"/>
                 <input class="form-control price_stock_input" type="text" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" string-to-number2 ng-model="left_number" id="left_number" name="left_number" required ng-class="{'border_red':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
             </div>
-            <span class="prompt_txt">*价格，供货价≤平台价≤市场价</span>
+            <div class="prompt_txt">*价格，供货价≤平台价≤市场价</div>
             </div>
         </div>
 
@@ -206,13 +207,13 @@
                 <span>采购价</span>
             </div>
             <div class="col-sm-10 control-label">
-            <ul>
+            <ul class="aftermark_ul">
                 <li>装修公司采购价</li>
                 <li>项目经理采购价</li>
                 <li>设计师采购价</li>
             </ul>
             <p></p>
-            <ul>
+            <ul class="aftermark_ul">
                 <li>￥{{purchase_price_decoration_company}}</li>
                 <li>￥{{purchase_price_manager}}</li>
                 <li>￥{{purchase_price_designer}}</li>

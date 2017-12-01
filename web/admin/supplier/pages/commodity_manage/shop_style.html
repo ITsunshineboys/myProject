@@ -144,7 +144,7 @@
                         <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
                         <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                     </div>
-                    <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
+                    <p class="prompt_txt">图片大小750x750,5M内，支持JPG、PNG、JPEG</p>
                     <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                     <p class="warning" ng-if="!!cover_flag">
                         <span class="glyphicon glyphicon-asterisk"></span>
@@ -168,7 +168,7 @@
                         </div>
                     </div>
                     <img class="img_add" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
-                    <p class="prompt_txt">图片大小694×400，5M内，可上传5张图片，支持JPG、PNG、JPEG</p>
+                    <p class="prompt_txt">图片大小750x750，5M内，可上传5张图片，支持JPG、PNG、JPEG</p>
                     <p class="warning" ng-if="!!img_flag">
                         <span class="glyphicon glyphicon-asterisk"></span>
                         {{img_flag}}
@@ -183,7 +183,7 @@
                     <span>价格库存</span>
                 </div>
                 <div class="col-sm-10 control-label">
-                    <ul>
+                    <ul class="aftermark_ul">
                         <li>供货价格</li>
                         <li>平台价格</li>
                         <li>市场价格</li>

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="pages/shop_data/css/shop_data.css">
 <div ng-controller="shop_data_ctrl">
-    <section>
+    <div class="form-inline clearfix">
         <ul class="nav_ul">
             <li>销量：{{total_sold_number}}</li>
             <li>销售额：￥{{total_amount_sold}}</li>
@@ -8,12 +8,13 @@
             <li>访问量：{{total_viewed_number}}</li>
         </ul>
         <div>
-            <select  name="province" ng-model="params.time_type" ng-change="time_change()" class="time_select" ng-options="item.value as item.name for item in time"></select>
-            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-            <input ng-if="params.time_type=='custom'" id="stop_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+            <select  name="province" ng-model="params.time_type" ng-change="time_change()" class="form-control" ng-options="item.value as item.name for item in time"></select>
+            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
+            <input ng-if="params.time_type=='custom'" id="stop_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
         </div>
+    </div>
         <!-- 表格 -->
-        <table class="table table-responsive">
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
                 <th>时间</th>
@@ -33,8 +34,5 @@
             </tr>
             </tbody>
         </table>
-        <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
-        <!---->
-    </section>
 </div>

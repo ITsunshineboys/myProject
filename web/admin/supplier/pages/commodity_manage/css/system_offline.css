@@ -16,6 +16,11 @@ body{
 .red_txt{
     color: #E51C23;
 }
+.prompt_txt {
+    font-size: 12px;
+    color: #ABABAB;
+    margin-top: 5px;
+}
 .img_size{
     width: 120px;
     height: 120px;
@@ -26,8 +31,14 @@ hr{
 }
 
 .price_p{
-    border-bottom: 1px solid #ABABAB;
+    border-bottom: 1px solid #eee;
     margin: 10px 0;
+}
+.price_left span{
+    padding-left: 0;
+}
+.price_left p{
+    padding-left: 0;
 }
 
 .show_city{
