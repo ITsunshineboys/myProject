@@ -362,62 +362,63 @@
 
     <!--等待上架开始-->
     <section ng-if="wait_flag==true">
-        <div class="operating">
-            <span ng-click="wait_menu (wait_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>
-            <button class="btn btn-default search_txt1" ng-click="wait_search_btn()">搜索</button>
-            <div class="search_box">
-                <input class="search_input" ng-model="myng.wait_search_content" type="text" placeholder="搜索商品编号或名称">
-                <span class="glyphicon glyphicon-search search"></span>
-            </div>
-            <!--Menu 切换-->
-            <div class="on_menu" ng-if="wait_menu_flag">
-                <ul>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_1"
-                               ng-click="wait_a(wait_1)">商品编号
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_2"
-                               ng-click="wait_b(wait_2)">商品名称
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_3"
-                               ng-click="wait_c(wait_3)">供货价格
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_4"
-                               ng-click="wait_d(wait_4)">市场价格
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_5"
-                               ng-click="wait_e(wait_5)">平台价格
-                    </li>
-                    <li><input type="checkbox" class="right_input" ng-model="wait_6" ng-click="wait_f(wait_6)">装饰公司采购价格
-                    </li>
-                    <li><input type="checkbox" class="right_input" ng-model="wait_7" ng-click="wait_g(wait_7)">项目经理采购价格
-                    </li>
-                    <li><input type="checkbox" class="right_input" ng-model="wait_8" ng-click="wait_h(wait_8)">设计师采购价格
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_9"
-                               ng-click="wait_i(wait_9)">库存
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_10"
-                               ng-click="wait_j(wait_10)">销量
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_11"
-                               ng-click="wait_k(wait_11)">状态
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_12"
-                               ng-click="wait_l(wait_12)">发布时间
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_13"
-                               ng-click="wait_m(wait_13)">图片
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_14"
-                               ng-click="wait_n(wait_14)">审核备注
-                    </li>
-                    <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_15"
-                               ng-click="wait_o(wait_15)">详情
-                    </li>
-                </ul>
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-right">
+                <div class="input-group">
+                    <input class="form-control" ng-model="myng.wait_search_content" type="text" placeholder="搜索商品编号或名称">
+                    <span class="iconfont icon-search"></span>
+                </div>
+                <button class="btn btn-default" ng-click="wait_search_btn()">搜索</button>
+                <span class="btn btn-default dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-shaixuan"></i></span>
+                <!--<span ng-click="wait_menu (wait_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>-->
+                <!--Menu 切换-->
+                <!--<div class="on_menu" ng-if="wait_menu_flag">-->
+                    <ul class="dropdown-menu dropdown-menu-right filter">
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_1" ng-click="wait_a(wait_1)">商品编号</li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_2"
+                                   ng-click="wait_b(wait_2)">商品名称
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_3"
+                                   ng-click="wait_c(wait_3)">供货价格
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_4"
+                                   ng-click="wait_d(wait_4)">市场价格
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_5"
+                                   ng-click="wait_e(wait_5)">平台价格
+                        </li>
+                        <li><input type="checkbox" class="right_input" ng-model="wait_6" ng-click="wait_f(wait_6)">装饰公司采购价格
+                        </li>
+                        <li><input type="checkbox" class="right_input" ng-model="wait_7" ng-click="wait_g(wait_7)">项目经理采购价格
+                        </li>
+                        <li><input type="checkbox" class="right_input" ng-model="wait_8" ng-click="wait_h(wait_8)">设计师采购价格
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_9"
+                                   ng-click="wait_i(wait_9)">库存
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_10"
+                                   ng-click="wait_j(wait_10)">销量
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_11"
+                                   ng-click="wait_k(wait_11)">状态
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_12"
+                                   ng-click="wait_l(wait_12)">发布时间
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_13"
+                                   ng-click="wait_m(wait_13)">图片
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_14"
+                                   ng-click="wait_n(wait_14)">审核备注
+                        </li>
+                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_15"
+                                   ng-click="wait_o(wait_15)">详情
+                        </li>
+                    </ul>
+                <!--</div>-->
             </div>
         </div>
-        <table>
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
                 <td ng-if="wait_1">商品编号</td>
@@ -494,16 +495,18 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <!--物流模块开始-->
     <section ng-if="logistics_flag==true">
-        <div class="operating">
-            <ul class="add_ul">
-                <li ui-sref="freight_template">添加</li>
-            </ul>
+        <div class="search form-inline clearfix">
+            <!--<ul class="add_ul">-->
+                <button class="btn btn-primary" ui-sref="freight_template" ><i class="iconfont icon-add"></i> 添加</button>
+                <!--<li ui-sref="freight_template">添加</li>-->
+            <!--</ul>-->
         </div>
-        <table style="width: 100%">
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
                 <td>模块名称</td>
