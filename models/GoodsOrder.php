@@ -268,6 +268,7 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
             $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
             $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
+            $OrderGoods->subtitle=$goods['subtitle'];
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $tran->rollBack();
@@ -563,6 +564,7 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
             $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
             $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
+            $OrderGoods->subtitle=$goods['subtitle'];
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $tran->rollBack();
