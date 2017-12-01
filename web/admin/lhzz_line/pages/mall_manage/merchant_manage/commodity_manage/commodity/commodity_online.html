@@ -14,11 +14,11 @@
             <i class="iconfont icon-shaixuan"></i>
         </button>
         <ul class="filter" ng-if="filter">
-            <div class="checkbox" ng-repeat="item in menu_list">
+            <li class="checkbox" ng-repeat="item in menu_list">
                 <label>
-                    <input type="checkbox" class="right_input" ng-model=item.value>{{item.name}}
+                    <input type="checkbox" ng-model=item.value>{{item.name}}
                 </label>
-            </div>
+            </li>
         </ul>
     </div>
 </div>

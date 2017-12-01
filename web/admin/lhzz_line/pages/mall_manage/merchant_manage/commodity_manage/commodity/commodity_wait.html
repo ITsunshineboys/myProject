@@ -17,39 +17,14 @@
              <i class="iconfont icon-shaixuan"></i>
          </button>
          <ul class="filter" ng-if="filter">
-             <div class="checkbox" ng-repeat="item in menu_list">
+             <li class="checkbox" ng-repeat="item in menu_list">
                  <label>
-                     <input type="checkbox" class="right_input" ng-model=item.value>{{item.name}}
+                     <input type="checkbox" ng-model=item.value>{{item.name}}
                  </label>
-             </div>
+             </li>
          </ul>
      </div>
-
-
-        <!--搜索框、menu-->
-        <!--<div class="right-btns">-->
-            <!--<div class="tab_tools clearfix">-->
-                <!--<div class="btn-group pull-right">-->
-                            <!--<span class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown"-->
-                                  <!--aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i></span>-->
-                    <!--&lt;!&ndash;Menu&ndash;&gt;-->
-                    <!--<ul class="dropdown-menu dropdown-menu-right btn_list_menu">-->
-                        <!--<li ng-repeat="item in menu_list">-->
-                            <!--<lable>-->
-                                <!--<input type="checkbox" class="right_input"-->
-                                       <!--ng-model=item.value>{{item.name}}-->
-                            <!--</lable>-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="search-box">-->
-                <!--<input type="text" ng-model="keyword" placeholder="搜索商品编号或名称">-->
-                <!--<span class="glyphicon glyphicon-search search"></span>-->
-                <!--<button class="btn btn-default" type="submit" ng-click="search()">搜索</button>-->
-            <!--</div>-->
-        <!--</div>-->
-    </div>
+</div>
 
     <!--表格内容-->
     <table class="table table-responsive table-hover">
