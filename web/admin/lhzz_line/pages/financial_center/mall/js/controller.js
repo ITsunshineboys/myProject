@@ -122,7 +122,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             itemsPerPage: 12,
             currentPage: 1,
             onChange: function () {
-                // tablePages2();
+                tablePages2();
             }
         }
         let tablePages2 = function () {
@@ -516,7 +516,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 $scope.cur_first_level = $scope.first_level[0].id
                 $scope.second_level = []
                 $scope.third_level = []
-                tablePages2()
+                // tablePages2()
                 $state.go('mall_finance.account')
             })
         }
