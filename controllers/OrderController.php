@@ -1454,6 +1454,7 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
+
             //获取商品信息
             $goods_name=$order_information['goods_name'];
             $goods_id=$order_information['goods_id'];

@@ -1061,8 +1061,9 @@ class GoodsOrder extends ActiveRecord
             }else{
                 $output['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
             }
+
             $output['pay_name']=$arr[$k]['pay_name'];
-            $output['paytime']=date('Y-m-d H:i:s',$arr[$k]['paytime']);
+            $output['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
             $output['status']=$arr[$k]['status'];
             $output['goods_attr_id']=$arr[$k]['goods_attr_id'];
             $output['order_no']=$arr[$k]['order_no'];
