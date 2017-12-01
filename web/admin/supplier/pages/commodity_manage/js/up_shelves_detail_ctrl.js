@@ -131,19 +131,24 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
                   $scope.style_model=value.id;
               }
           }
-          //判断有无
-          if(!!res.data.goods_view.style_name){
-            let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
-              return $scope.detail_style==value
-            });
-            style_null_flag===-1?$scope.style_null_flag=true:$scope.style_null_flag=false;
-          }
+
           if(!!res.data.goods_view.series_name){
             let series_null_flag= $scope.series_null_arr.findIndex(function (value) {
               return $scope.detail_ser==value
             });
             series_null_flag===-1?$scope.series_null_flag=true:$scope.series_null_flag=false;
+          }else{
+	          $scope.series_model=true;
           }
+          if(!!res.data.goods_view.style_name){
+            let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
+              return $scope.detail_style==value
+            });
+            style_null_flag===-1?$scope.style_null_flag=true:$scope.style_null_flag=false;
+          }else{
+	          $scope.style_model=true;
+          }
+
 
       })
   });
@@ -333,10 +338,11 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
           $scope.logistics_status=false;//隐藏select
       }
   })
-
   // /*--------------编辑保存按钮----------------------*/
   $scope.edit_confirm=function (valid,error) {
-    if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag&&!!$scope.series_model && !!$scope.style_model){
+	  console.log($scope.series_model);
+	  console.log($scope.style_model);
+	  if(valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag&&!!$scope.series_model && !!$scope.style_model){
       let description = UE.getEditor('editor').getContent();//富文本编辑器
       $scope.change_ok='#change_ok';//编辑成功
       $scope.after_sale_services=[];
@@ -390,8 +396,8 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
         }
       }
       /*判断风格和系列是否存在，如果不存在，值传0*/
-      $scope.series_model==undefined?$scope.series_model=0:$scope.series_model=parseInt($scope.series_model);
-      $scope.style_model==undefined?$scope.style_model=0:$scope.style_model=parseInt($scope.style_model);
+      $scope.series_model==true?$scope.series_model=0:$scope.series_model=parseInt($scope.series_model);
+      $scope.style_model==true?$scope.style_model=0:$scope.style_model=parseInt($scope.style_model);
       /*循环自己添加的属性*/
       for(let[key,value] of $scope.own_attrs_arr.entries()){
         $scope.pass_attrs_name.push(value.name);//属性名

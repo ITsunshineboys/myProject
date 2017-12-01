@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="row" ng-if="series_null_flag">
-            <div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择风格</div>
+            <div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择系列</div>
         </div>
         <!--选择风格-->
         <div class="row" ng-if="styles_arr.length>0">
@@ -65,9 +65,9 @@
                 <select class="form-control" ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr"></select>
             </div>
         </div>
-        <!--<div class="row" ng-if="style_null_flag">-->
-            <!--<div class="col-sm-offset-2 remove_txt">风格已被移除，请重新选择风格</div>-->
-        <!--</div>-->
+        <div class="row" ng-if="style_null_flag">
+            <div class="col-sm-offset-2 remove_txt">风格已被移除，请重新选择风格</div>
+        </div>
 
         <!--属性设置-->
         <div class="row">
