@@ -16,7 +16,6 @@ use app\services\SmValidationService;
 use app\services\ModelService;
 class GoodsOrder extends ActiveRecord
 {
-
     const PAY_STATUS_PAID = 1;
     const PAY_STATUS_DESC_UNPAID = '待付款';
     const SHIPPING_STATUS_DESC_UNSHIPPED='待发货';
@@ -35,7 +34,7 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_DESC_CANCEL='已取消';
     const ORDER_TYPE_DESC_CUSTOMER_SERVICE='售后';
     const ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN='售后中';
-    const ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER='售后结束';
+    const ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER='售后完成';
     const ORDER_TYPE_DESC_UNCOMMENT='待评论';
     const ORDER_TYPE_DESC_APPLYREFUND='申请退款';
     const ORDER_TYPE_APPLYREFUND='apply_refund';
@@ -206,9 +205,10 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100){
-            return false;
-        }
+        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100)
+    {
+        return false;
+    }
         $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
         $address=Addressadd::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
@@ -240,7 +240,8 @@ class GoodsOrder extends ActiveRecord
             $goods_order->invoice_header=$invoice->invoice_header;
             $goods_order->invoice_content=$invoice->invoice_content;
             $res1=$goods_order->save(false);
-            if (!$res1){
+            if (!$res1)
+            {
                 $tran->rollBack();
                 return false;
             }
@@ -261,8 +262,9 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->customer_service=0;
             $OrderGoods->is_unusual=0;
             $OrderGoods->freight=$freight*100;
+            $OrderGoods->category_id=$goods['category_id'];
+            $OrderGoods->after_sale_services=$goods['after_sale_services'];
             $res2=$OrderGoods->save(false);
-
             if (!$res2){
                 $tran->rollBack();
                 return false;
@@ -297,7 +299,8 @@ class GoodsOrder extends ActiveRecord
                     $tran->rollBack();
                     return false;
                 }
-            }else{
+            }else
+            {
                 $GoodsStat->sold_number+=$goods_num;
                 $GoodsStat->amount_sold+=$post['total_amount'];
                 if (!$GoodsStat->save(false))
@@ -314,6 +317,136 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+            $style=Style::findOne($Goods->style_id);
+            if ($style)
+            {
+                $orderStyle=new OrderStyle();
+                $orderStyle->order_no=$post['out_trade_no'];
+                $orderStyle->sku=$goods['sku'];
+                $orderStyle->style=$style->style;
+                $orderStyle->intro=$style->intro;
+                $orderStyle->theme=$style->theme;
+                $orderStyle->images=$style->images;
+                if (!$orderStyle->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+            $serires=Series::findOne($Goods->series_id);
+            if ($serires)
+            {
+                $orderSeries=new OrderSeries();
+                $orderSeries->order_no=$post['out_trade_no'];
+                $orderSeries->sku=$goods['sku'];
+                $orderSeries->series=$serires->series;
+                $orderSeries->intro=$serires->intro;
+                if (!$orderSeries->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+            $goods_image=GoodsImage::find()
+                ->where(['goods_id'=>$goods_id])
+                ->all();
+            if ($goods_image)
+            {
+                foreach ( $goods_image as &$image)
+                {
+                    $orderGoodsImage=new OrderGoodsImage();
+                    $orderGoodsImage->order_no=$post['out_trade_no'];
+                    $orderGoodsImage->sku=$goods['sku'];
+                    $orderGoodsImage->goods_id=$goods_id;
+                    $orderGoodsImage->image=$image->image;
+                    if (!$orderGoodsImage->save(false))
+                    {
+                        $tran->rollBack();
+                        return false;
+                    }
+                }
+            }
+
+            $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
+            if ($GoodsBrand)
+            {
+                $orderGoodsBrand=new OrderGoodsBrand();
+                $orderGoodsBrand->order_no=$post['out_trade_no'];
+                $orderGoodsBrand->sku=$goods['sku'];
+                $orderGoodsBrand->name=$GoodsBrand->name;
+                $orderGoodsBrand->logo=$GoodsBrand->logo;
+                $orderGoodsBrand->certificate=$GoodsBrand->certificate;
+                if (!$orderGoodsBrand->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+            $goodsAttr=GoodsAttr::find()
+                ->where(['goods_id'=>$goods_id])
+                ->all();
+            if ($goodsAttr)
+            {
+                foreach ( $goodsAttr as &$attr)
+                {
+                    $orderGoodsAttr=new OrderGoodsAttr();
+
+                    $orderGoodsAttr->order_no=$post['out_trade_no'];
+                    $orderGoodsAttr->sku=$goods['sku'];
+                    $orderGoodsAttr->name=$attr->name;
+                    $orderGoodsAttr->value=$attr->value;
+                    $orderGoodsAttr->unit=$attr->unit;
+                    $orderGoodsAttr->addition_type=$attr->addition_type;
+                    $orderGoodsAttr->goods_id=$attr->goods_id;
+                    if (!$orderGoodsAttr->save(false))
+                    {
+                        $tran->rollBack();
+                        return false;
+                    }
+                }
+            }
+
+            $LogisticTemp=LogisticsTemplate::findOne($Goods->logistics_template_id);
+            if ($LogisticTemp)
+            {
+                $orderLogisticTemp=new  OrderLogisticsTemplate();
+                $orderLogisticTemp->order_no=$post['out_trade_no'];
+                $orderLogisticTemp->sku=$goods['sku'];
+                $orderLogisticTemp->name=$LogisticTemp->name;
+                $orderLogisticTemp->delivery_method=$LogisticTemp->delivery_method;
+                $orderLogisticTemp->delivery_cost_default=$LogisticTemp->delivery_cost_default;
+                $orderLogisticTemp->delivery_number_default=$LogisticTemp->delivery_number_default;
+                $orderLogisticTemp->delivery_cost_delta=$LogisticTemp->delivery_cost_delta;
+                $orderLogisticTemp->delivery_number_delta=$LogisticTemp->delivery_number_delta;
+                if (!$orderLogisticTemp->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+                $LogisticDis=LogisticsDistrict::find()
+                    ->where(['template_id'=>$Goods->logistics_template_id])
+                    ->all();
+                if ($LogisticDis)
+                {
+                    foreach ($LogisticDis as  &$dis)
+                    {
+                        $OrderLogisticDis=new OrderLogisticsDistrict();
+                        $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
+                        $OrderLogisticDis->district_code=$dis->district_code;
+                        $OrderLogisticDis->district_name=$dis->district_name;
+                        if (!$OrderLogisticDis->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+                }
+            }
+
+
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
@@ -412,6 +545,8 @@ class GoodsOrder extends ActiveRecord
             $OrderGoods->customer_service=0;
             $OrderGoods->is_unusual=0;
             $OrderGoods->freight=$freight*100;
+            $OrderGoods->category_id=$goods['category_id'];
+            $OrderGoods->after_sale_services=$goods['after_sale_services'];
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $tran->rollBack();
@@ -464,6 +599,146 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+            //风格
+            $style=Style::findOne($Goods->style_id);
+            if ($style)
+            {
+                $orderStyle=new OrderStyle();
+                $orderStyle->order_no=$order_no;
+                $orderStyle->sku=$goods['sku'];
+                $orderStyle->style=$style->style;
+                $orderStyle->intro=$style->intro;
+                $orderStyle->theme=$style->theme;
+                $orderStyle->images=$style->images;
+                if (!$orderStyle->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+
+            //系列
+            $serires=Series::findOne($Goods->series_id);
+            if ($serires)
+            {
+                $orderSeries=new OrderSeries();
+                $orderSeries->order_no=$order_no;
+                $orderSeries->sku=$goods['sku'];
+                $orderSeries->series=$serires->series;
+                $orderSeries->intro=$serires->intro;
+                if (!$orderSeries->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+
+            //商品图片
+            $goods_image=GoodsImage::find()
+                ->where(['goods_id'=>$goods_id])
+                ->all();
+            if ($goods_image)
+            {
+                foreach ( $goods_image as &$image)
+                {
+                    $orderGoodsImage=new OrderGoodsImage();
+                    $orderGoodsImage->order_no=$order_no;
+                    $orderGoodsImage->sku=$goods['sku'];
+                    $orderGoodsImage->goods_id=$goods_id;
+                    $orderGoodsImage->image=$image->image;
+                    if (!$orderGoodsImage->save(false))
+                    {
+                        $tran->rollBack();
+                        return false;
+                    }
+                }
+            }
+
+
+            //品牌
+            $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
+            if ($GoodsBrand)
+            {
+                $orderGoodsBrand=new OrderGoodsBrand();
+                $orderGoodsBrand->order_no=$order_no;
+                $orderGoodsBrand->sku=$goods['sku'];
+                $orderGoodsBrand->name=$GoodsBrand->name;
+                $orderGoodsBrand->logo=$GoodsBrand->logo;
+                $orderGoodsBrand->certificate=$GoodsBrand->certificate;
+                if (!$orderGoodsBrand->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+            //商品属性
+            $goodsAttr=GoodsAttr::find()
+                ->where(['goods_id'=>$goods_id])
+                ->all();
+            if ($goodsAttr)
+            {
+                foreach ( $goodsAttr as &$attr)
+                {
+                    $orderGoodsAttr=new OrderGoodsAttr();
+
+                    $orderGoodsAttr->order_no=$order_no;
+                    $orderGoodsAttr->sku=$goods['sku'];
+                    $orderGoodsAttr->name=$attr->name;
+                    $orderGoodsAttr->value=$attr->value;
+                    $orderGoodsAttr->unit=$attr->unit;
+                    $orderGoodsAttr->addition_type=$attr->addition_type;
+                    $orderGoodsAttr->goods_id=$attr->goods_id;
+                    if (!$orderGoodsAttr->save(false))
+                    {
+                        $tran->rollBack();
+                        return false;
+                    }
+                }
+            }
+
+            //物流末班
+            $LogisticTemp=LogisticsTemplate::findOne($Goods->logistics_template_id);
+            if ($LogisticTemp)
+            {
+                $orderLogisticTemp=new  OrderLogisticsTemplate();
+                $orderLogisticTemp->order_no=$order_no;
+                $orderLogisticTemp->sku=$goods['sku'];
+                $orderLogisticTemp->name=$LogisticTemp->name;
+                $orderLogisticTemp->delivery_method=$LogisticTemp->delivery_method;
+                $orderLogisticTemp->delivery_cost_default=$LogisticTemp->delivery_cost_default;
+                $orderLogisticTemp->delivery_number_default=$LogisticTemp->delivery_number_default;
+                $orderLogisticTemp->delivery_cost_delta=$LogisticTemp->delivery_cost_delta;
+                $orderLogisticTemp->delivery_number_delta=$LogisticTemp->delivery_number_delta;
+                if (!$orderLogisticTemp->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+
+                $LogisticDis=LogisticsDistrict::find()
+                    ->where(['template_id'=>$Goods->logistics_template_id])
+                    ->all();
+                if ($LogisticDis)
+                {
+                    foreach ($LogisticDis as  &$dis)
+                    {
+                        $OrderLogisticDis=new OrderLogisticsDistrict();
+                        $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
+                        $OrderLogisticDis->district_code=$dis->district_code;
+                        $OrderLogisticDis->district_name=$dis->district_name;
+                        if (!$OrderLogisticDis->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+                }
+            }
+
+
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
@@ -554,7 +829,7 @@ class GoodsOrder extends ActiveRecord
                     }
                     break;
                 case 'lhzz':
-                    if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成')
+                    if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成')
                     {
                         $arr[$k]['handle']='平台介入';
                     }
@@ -1028,18 +1303,14 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public  static function Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
+    public  static function GetOrderGoodsInformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
         $goods=[];
         $goods['goods_name']=$goods_name;
         $goods['goods_id']=$goods_id;
-        $attr_id=explode(',',$goods_attr_id);
-//        $goods['attr']=[];
-//        foreach($attr_id AS $key =>$val){
-            $goods['attr']=(object)GoodsAttr::find()
+        $goods['attr']=(object)OrderGoodsAttr::find()
                 ->select('name,value,unit')
-                ->where(['goods_id'=>$goods['goods_id']])
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->all();
-//        }
         return $goods;
     }
 
@@ -1250,10 +1521,10 @@ class GoodsOrder extends ActiveRecord
                                 $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
                                 break;
                             case 1:
-                                $data[$k]['status']='售后中';
+                                $data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN;
                                 break;
                             case 2:
-                                $data[$k]['status']='售后结束';
+                                $data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
                                 break;
                         }
                         break;
@@ -2038,15 +2309,19 @@ class GoodsOrder extends ActiveRecord
                     unset($GoodsOrder[$k]);
                 }else
                 {
+                    $GoodsOrder[$k]['all_freight']=0;
+                    $GoodsOrder[$k]['all_goods_num']=0;
                     foreach ($GoodsOrder[$k]['list'] as $key =>$val){
+                        $GoodsOrder[$k]['all_freight']+=$GoodsOrder[$k]['list'][$key]['freight'];
                         $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
                         $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
                         unset($GoodsOrder[$k]['list'][$key]['order_status']);
+                        $GoodsOrder[$k]['all_goods_num']+=$GoodsOrder[$k]['list'][$key]['goods_number'];
                     }
-
+                    $GoodsOrder[$k]['all_freight']=self::switchMoney($GoodsOrder[$k]['all_freight']*0.01);
                     unset($GoodsOrder[$k]['pay_status']);
                     unset($GoodsOrder[$k]['supplier_id']);
                     $arr[]=$GoodsOrder[$k];
@@ -2073,7 +2348,6 @@ class GoodsOrder extends ActiveRecord
             $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
             if($goods->after_sale_services=='0' )
             {
-
                 $arr[$key]['is_support_after_sale']=0;
             }else{
                 $arr[$key]['is_support_after_sale']=1;
@@ -2090,7 +2364,8 @@ class GoodsOrder extends ActiveRecord
             $count=count($arr);
             $total_page=ceil($count/$size);
             $data=array_slice($arr, ($page-1)*$size,$size);
-            return [
+            return
+            [
                 'total_page' =>$total_page,
                 'count'=>$count,
                 'details' => $data
@@ -2125,7 +2400,7 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']='退款失败';
             }
-            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']=='售后结束' || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
+            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
                 $arr[$k]['handle']='平台介入';
             }
             if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
@@ -2138,17 +2413,16 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
             $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
-            $supplier=Supplier::find()->where(['id'=>$arr[$k]['supplier_id']])->one();
+            $supplier=Supplier::find()
+                ->where(['id'=>$arr[$k]['supplier_id']])
+                ->one();
             $arr[$k]['shop_name']=$supplier->shop_name;
             if ($role=='user')
             {
-
                 $arr[$k]['uid']=$supplier->uid;
                 $arr[$k]['to_role_id']=6;
-
             }else
             {
-
                 $arr[$k]['uid']= $arr[$k]['user_id'];
                 $arr[$k]['to_role_id']=$arr[$k]['role_id'];
             }
@@ -2165,11 +2439,9 @@ class GoodsOrder extends ActiveRecord
             $arr_list['shipping_type']=$arr[$k]['shipping_type'];
             unset($arr[$k]['goods_name']);
             unset($arr[$k]['goods_price']);
-            unset($arr[$k]['goods_number']);
             unset($arr[$k]['market_price']);
             unset($arr[$k]['supplier_price']);
             unset($arr[$k]['sku']);
-            unset($arr[$k]['freight']);
             unset($arr[$k]['cover_image']);
             unset($arr[$k]['order_id']);
             unset($arr[$k]['is_unusual']);
@@ -2182,6 +2454,10 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['role_id']);
             unset($arr[$k]['pay_term']);
             $arr[$k]['list']=[$arr_list];
+            $arr[$k]['all_freight']=self::switchMoney($arr[$k]['freight']*0.01);
+            $arr[$k]['all_goods_num']=self::switchMoney($arr[$k]['goods_number']*0.01);
+            unset($arr[$k]['freight']);
+            unset($arr[$k]['goods_number']);
         }
         return $arr;
     }
@@ -2196,6 +2472,92 @@ class GoodsOrder extends ActiveRecord
     {
         $data=sprintf('%.2f', (float)$data);
         return $data;
+    }
+
+
+
+    /**
+     * 切换状态
+     * @param $arr
+     * @param $user
+     * @return mixed
+     */
+    public  static  function  SwitchStatus_desc($arr,$user)
+    {
+        foreach ($arr as $k =>$v)
+        {
+            switch ($arr[$k]['status'])
+            {
+                case self::PAY_STATUS_DESC_UNPAID:
+                    $arr[$k]['status_type']=1; //待付款
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
+                    $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
+                    break;
+                case self::SHIPPING_STATUS_DESC_UNSHIPPED:
+                    $arr[$k]['status_type']=2; //待发货
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
+                    $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
+                    if ( $arr[$k]['is_unusual']==1){
+                        $arr[$k]['status_type']=3; //待发货
+                        $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                    }
+                    break;
+                case  self::ORDER_TYPE_DESC_UNRECEIVED:
+                    $arr[$k]['status_type']=6; //待收货
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
+                    if ($arr[$k]['is_unusual']==1){
+                        $arr[$k]['status_type']=7; //待收货
+                        $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                    }
+                    if ($user->last_role_id_app==6)
+                    {
+                        $arr[$k]['status_type']=4; //已发货
+                        $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
+                        $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
+                        if ($arr[$k]['is_unusual']==1){
+                            $arr[$k]['status_type']=5; //已发货
+                            $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
+                            $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
+                        }
+                    }
+                    break;
+                case  self::ORDER_TYPE_DESC_CANCEL:
+                    $arr[$k]['status_type']=8; //已取消
+                    $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
+                    break;
+                case  '售后中':
+                    $arr[$k]['status_type']=9; //售后中
+                    $arr[$k]['status_code']='after_saled';
+                    $arr[$k]['status_desc']='售后中';
+                    break;
+                case  self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER:
+                    $arr[$k]['status_type']=10; //售后结束
+                    $arr[$k]['status_code']='after_sale_completed';
+                    $arr[$k]['status_desc']='售后完成';
+                    break;
+                case self::ORDER_TYPE_DESC_COMPLETED:
+                    $arr[$k]['status_type']=11; //已完成
+                    $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
+                    if (!$arr[$k]['comment_id'])
+                    {
+                        $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                    }
+                    break;
+                case self::ORDER_TYPE_DESC_UNCOMMENT:
+                    $arr[$k]['status_type']=12; //待评论
+                    $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                    break;
+            }
+            unset($arr[$k]['unusual']);
+        }
+        return $arr;
     }
 
     /**
@@ -2558,77 +2920,6 @@ class GoodsOrder extends ActiveRecord
         return $transaction_no;
     }
 
-    /**
-     * 切换状态
-     * @param $arr
-     * @param $user
-     * @return mixed
-     */
-    public  static  function  SwitchStatus_desc($arr,$user)
-    {
-        foreach ($arr as $k =>$v)
-        {
-            switch ($arr[$k]['status'])
-            {
-                case self::PAY_STATUS_DESC_UNPAID:
-                    $arr[$k]['status_code']=self::ORDER_TYPE_UNPAID;
-                    $arr[$k]['status_desc']=self::PAY_STATUS_DESC_UNPAID;
-                    break;
-                case self::SHIPPING_STATUS_DESC_UNSHIPPED:
-                    $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED;
-                    $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
-                    if ( $arr[$k]['is_unusual']==1){
-                        $arr[$k]['status_code']=self::ORDER_TYPE_UNSHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                        $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_UNSHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
-                    }
-                    break;
-                case  self::ORDER_TYPE_DESC_UNRECEIVED:
-                    $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED;
-                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED;
-                    if ($arr[$k]['is_unusual']==1){
-                        $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
-                    }
-                    if ($user->last_role_id_app==6)
-                    {
-                        $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED;
-                        $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED;
-                        if ($arr[$k]['is_unusual']==1){
-                            $arr[$k]['status_code']=self::ORDER_TYPE_SHIPPED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                            $arr[$k]['status_desc']=self::SHIPPING_STATUS_DESC_SHIPPED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
-                        }
-                    }
-                    break;
-                case  self::ORDER_TYPE_DESC_CANCEL:
-                    $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
-                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
-                    break;
-                case  '售后中':
-                    $arr[$k]['status_code']='after_saled';
-                    $arr[$k]['status_desc']='售后中';
-                    break;
-                case  '售后结束':
-                    $arr[$k]['status_code']='after_sale_completed';
-                    $arr[$k]['status_desc']='售后完成';
-                    break;
-                case self::ORDER_TYPE_DESC_COMPLETED:
-                    $arr[$k]['status_code']=self::ORDER_TYPE_COMPLETED;
-                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
-                    if (!$arr[$k]['comment_id'])
-                    {
-                        $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
-                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                    }
-                    break;
-                case self::ORDER_TYPE_DESC_UNCOMMENT:
-                    $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
-                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
-                    break;
-            }
-            unset($arr[$k]['unusual']);
-        }
-        return $arr;
-    }
 
     /**
      * 获取角色购买商品价格
@@ -2780,13 +3071,146 @@ class GoodsOrder extends ActiveRecord
                     $OrderGoods->is_unusual=0;
                     $OrderGoods->freight=$freight;
                     $OrderGoods->cover_image=$Goods['cover_image'];
-                    $OrderGoods->create_time=$time;
+                    $OrderGoods->create_time=time();
+                    $OrderGoods->category_id=$Goods['category_id'];
+                    $OrderGoods->after_sale_services=$Goods['after_sale_services'];
                     if (!$OrderGoods->save(false))
                     {
                         $tran->rollBack();
                         $code=500;
                         return $code;
                     }
+
+                    $style=Style::findOne($Goods['style_id']);
+                    if ($style)
+                    {
+                        $orderStyle=new OrderStyle();
+                        $orderStyle->order_no=$order_no;
+                        $orderStyle->sku=$Goods['sku'];
+                        $orderStyle->style=$style->style;
+                        $orderStyle->intro=$style->intro;
+                        $orderStyle->theme=$style->theme;
+                        $orderStyle->images=$style->images;
+                        if (!$orderStyle->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+
+                    $serires=Series::findOne($Goods['series_id']);
+                    if ($serires)
+                    {
+                        $orderSeries=new OrderSeries();
+                        $orderSeries->order_no=$order_no;
+                        $orderSeries->sku=$Goods['sku'];
+                        $orderSeries->series=$serires->series;
+                        $orderSeries->intro=$serires->intro;
+                        if (!$orderSeries->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+
+                    $goods_image=GoodsImage::find()
+                        ->where(['goods_id'=>$goods['goods_id']])
+                        ->all();
+                    if ($goods_image)
+                    {
+                        foreach ( $goods_image as &$image)
+                        {
+                            $orderGoodsImage=new OrderGoodsImage();
+                            $orderGoodsImage->order_no=$order_no;
+                            $orderGoodsImage->sku=$Goods['sku'];
+                            $orderGoodsImage->goods_id=$goods['goods_id'];
+                            $orderGoodsImage->image=$image->image;
+                            if (!$orderGoodsImage->save(false))
+                            {
+                                $tran->rollBack();
+                                return false;
+                            }
+                        }
+                    }
+
+                    $GoodsBrand=GoodsBrand::findOne($Goods['brand_id']);
+                    if ($GoodsBrand)
+                    {
+                        $orderGoodsBrand=new OrderGoodsBrand();
+                        $orderGoodsBrand->order_no=$order_no;
+                        $orderGoodsBrand->sku=$Goods['sku'];
+                        $orderGoodsBrand->name=$GoodsBrand->name;
+                        $orderGoodsBrand->logo=$GoodsBrand->logo;
+                        $orderGoodsBrand->certificate=$GoodsBrand->certificate;
+                        if (!$orderGoodsBrand->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+
+                    $goodsAttr=GoodsAttr::find()
+                        ->where(['goods_id'=>$goods['goods_id']])
+                        ->all();
+                    if ($goodsAttr)
+                    {
+                        foreach ( $goodsAttr as &$attr)
+                        {
+                            $orderGoodsAttr=new OrderGoodsAttr();
+                            $orderGoodsAttr->order_no=$order_no;
+                            $orderGoodsAttr->sku=$Goods['sku'];
+                            $orderGoodsAttr->name=$attr->name;
+                            $orderGoodsAttr->value=$attr->value;
+                            $orderGoodsAttr->unit=$attr->unit;
+                            $orderGoodsAttr->addition_type=$attr->addition_type;
+                            $orderGoodsAttr->goods_id=$attr->goods_id;
+                            if (!$orderGoodsAttr->save(false))
+                            {
+                                $tran->rollBack();
+                                return false;
+                            }
+                        }
+                    }
+
+                    $LogisticTemp=LogisticsTemplate::findOne($Goods['logistics_template_id']);
+                    if ($LogisticTemp)
+                    {
+                        $orderLogisticTemp=new  OrderLogisticsTemplate();
+                        $orderLogisticTemp->order_no=$order_no;
+                        $orderLogisticTemp->sku=$Goods['sku'];
+                        $orderLogisticTemp->name=$LogisticTemp->name;
+                        $orderLogisticTemp->delivery_method=$LogisticTemp->delivery_method;
+                        $orderLogisticTemp->delivery_cost_default=$LogisticTemp->delivery_cost_default;
+                        $orderLogisticTemp->delivery_number_default=$LogisticTemp->delivery_number_default;
+                        $orderLogisticTemp->delivery_cost_delta=$LogisticTemp->delivery_cost_delta;
+                        $orderLogisticTemp->delivery_number_delta=$LogisticTemp->delivery_number_delta;
+                        if (!$orderLogisticTemp->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+
+                        $LogisticDis=LogisticsDistrict::find()
+                            ->where(['template_id'=>$Goods['logistics_template_id']])
+                            ->all();
+                        if ($LogisticDis)
+                        {
+                            foreach ($LogisticDis as  &$dis)
+                            {
+                                $OrderLogisticDis=new OrderLogisticsDistrict();
+                                $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
+                                $OrderLogisticDis->district_code=$dis->district_code;
+                                $OrderLogisticDis->district_name=$dis->district_name;
+                                if (!$OrderLogisticDis->save(false))
+                                {
+                                    $tran->rollBack();
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+
+
                     $money+=($Goods["{$role_money}"]*$goods['goods_num']);
 
                 }

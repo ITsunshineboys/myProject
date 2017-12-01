@@ -2,6 +2,13 @@
 
 namespace app\controllers;
 use app\models\OrderAfterSaleImage;
+use app\models\OrderGoodsAttr;
+use app\models\OrderGoodsBrand;
+use app\models\OrderGoodsImage;
+use app\models\OrderLogisticsDistrict;
+use app\models\OrderLogisticsTemplate;
+use app\models\OrderSeries;
+use app\models\OrderStyle;
 use app\services\ModelService;
 use Yii;
 use app\models\OrderPlatForm;
@@ -1146,7 +1153,7 @@ class OrderController extends Controller
         $goods_attr_id=$order_information['goods_attr_id'];
         $order_no=$order_information['order_no'];
         $sku=explode('+',$order_information['sku']);
-        $ordergoodsinformation=GoodsOrder::Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
+        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
         if (!$ordergoodsinformation){
             $code = 500;
             return Json::encode([
@@ -1452,7 +1459,7 @@ class OrderController extends Controller
             $goods_attr_id=$order_information['goods_attr_id'];
             $order_no=$order_information['order_no'];
             $sku=explode('+',$order_information['sku']);
-            $ordergoodsinformation=GoodsOrder::Getordergoodsinformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
+            $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
             if (!$ordergoodsinformation){
                 $code = 1000;
                 return Json::encode([
@@ -1541,7 +1548,7 @@ class OrderController extends Controller
               }else{
                   $goods_data['pay_term']=0;
               }
-              if ($order_information['paytime']!=0){
+              if (!$order_information['paytime']==0){
                   $goods_data['paytime']=$order_information['paytime'];
               }
               if (!OrderPlatForm::find()
@@ -2304,7 +2311,7 @@ class OrderController extends Controller
             ]);
         }
 
-         if(array_key_exists('sku', $postData)){
+         if(array_key_exists('sku', $postData) || !$postData['sku']==0){
             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
                 ->andWhere(['sku'=>$postData['sku']])
@@ -4051,11 +4058,15 @@ class OrderController extends Controller
             $code=1000;
             if (!$sku ||! $order_no)
             {
-
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
+                $order_no=Yii::$app->request->get('order_no','');
+                $sku=Yii::$app->request->get('sku','');
+                if (!$order_no || !$sku)
+                {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
             if (!$OrderGoods)
@@ -4077,26 +4088,36 @@ class OrderController extends Controller
             }
             $three_category=GoodsCategory::find()
                 ->select('path,title,parent_title')
-                ->where(['id'=>$Goods->category_id])
+                ->where(['id'=>$OrderGoods->category_id])
                 ->one();
+
+            if (!$three_category)
+            {
+                $three_category=GoodsCategory::find()
+                    ->select('path,title,parent_title')
+                    ->where(['id'=>$Goods->category_id])
+                    ->one();
+            }
+
             $category_arr=explode(',',$three_category->path);
             $first_category=GoodsCategory::find()
                 ->select('path,title,parent_title')
                 ->where(['id'=>$category_arr[0]])
                 ->one();
             $category=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
-            $brand=GoodsBrand::findOne($Goods->brand_id);
-            $serie=Series::find()
-                ->select('series')
-                ->where(['id'=>$Goods->series_id])
-                ->one();
+            $brand=OrderGoodsBrand::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+            if (!$brand)
+            {
+                $brand=GoodsBrand::findOne($Goods->brand_id);
+            }
+            $serie=OrderSeries::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
             if ($serie)
             {
                 $series=$serie->series;
             }else{
                 $series='';
             }
-            $sty=Style::findOne($Goods->style_id);
+            $sty=OrderStyle::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
             if ($sty)
             {
                 $style= $sty->style;
@@ -4104,15 +4125,16 @@ class OrderController extends Controller
             {
                 $style='';
             }
-
-            $attr=GoodsAttr::find()
+            $attr=OrderGoodsAttr::find()
                 ->select('name,value,unit')
-                ->where(['goods_id'=>$Goods->id])
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
                 ->asArray()
                 ->all();
-            $goods_image=GoodsImage::find()
+            $goods_image=OrderGoodsImage::find()
                 ->select('image')
-                ->where(['goods_id'=>$Goods->id])
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
                 ->asArray()
                 ->all();
             $market_price=$OrderGoods->market_price;
@@ -4122,15 +4144,23 @@ class OrderController extends Controller
             $purchase_price_decoration_company=$Goods->purchase_price_decoration_company;
             $purchase_price_manager=$Goods->purchase_price_manager;
             $purchase_price_designer=$Goods->purchase_price_designer;
-            $logisticsTemplate=LogisticsTemplate::find()
-                ->where(['id'=>$Goods->logistics_template_id])
+            $logisticsTemplate=OrderLogisticsTemplate::find()
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
                 ->asArray()
                 ->one();
+            if (!$logisticsTemplate)
+            {
+                $logisticsTemplate=LogisticsTemplate::find()
+                    ->where(['id'=>$Goods->logistics_template_id])
+                    ->asArray()
+                    ->one();
+            }
             $logisticsTemplate['delivery_cost_default']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_default']*0.01);
             $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
-            $logisticsDistrict=LogisticsDistrict::find()
+            $logisticsDistrict=OrderLogisticsDistrict::find()
                 ->select('district_name')
-                ->where(['template_id'=>$logisticsTemplate['id']])
+                ->where(['order_template_id'=>$logisticsTemplate['id']])
                 ->asArray()
                 ->all();
             $after_sale=explode(',',$Goods->after_sale_services);
@@ -5360,7 +5390,7 @@ class OrderController extends Controller
                                     'data'=>$operation
                                 ]
                             );
-//                            $data[$k]['status']='售后结束';
+//                            $data[$k]['status']='售后完成';
                             break;
                     }
                     break;
