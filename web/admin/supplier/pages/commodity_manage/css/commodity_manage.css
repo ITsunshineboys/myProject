@@ -87,12 +87,6 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
   -webkit-appearance:textfield;
 }
-.stock{
-  width: 50px;
-  border-radius: 3px;
-  border: 1px solid #666F80;
-  text-align: center;
-}
 
 /*表格内容结束*/
 

@@ -82,7 +82,7 @@
                 <td ng-if="show_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="show_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="show_8">¥{{item.purchase_price_designer}}</td><!--string-to-number2-->
-                <td ng-if="show_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
+                <td ng-if="show_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="form-control" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="show_10">{{item.sold_number}}</td>
                 <td ng-if="show_11" class="green">{{item.status}}</td>
                 <td ng-if="show_12">{{item.online_time}}</td>
@@ -274,7 +274,7 @@
                 <td ng-if="down_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="down_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="down_8">¥{{item.purchase_price_designer}}</td>
-                <td ng-if="down_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="stock" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
+                <td ng-if="down_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="form-control" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="down_10">{{item.sold_number}}</td>
                 <td ng-if="down_11" class="red">{{item.status}}</td>
                 <td ng-if="down_12">{{item.offline_time}}</td>
@@ -458,7 +458,7 @@
                 <td ng-if="wait_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="wait_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="wait_8">¥{{item.purchase_price_designer}}</td>
-                <td ng-if="wait_9"><input type="number" class="stock"
+                <td ng-if="wait_9"><input type="number" class="form-control"
                                           ng-change="change_right_number(item.id,item.left_number)"
                                           ng-model="item.left_number" string-to-number2></td>
                 <td ng-if="wait_10">{{item.sold_number}}</td>
