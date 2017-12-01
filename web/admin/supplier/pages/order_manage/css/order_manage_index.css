@@ -6,38 +6,8 @@
     cursor: pointer;
 }
 
-section{
-    padding-left: 40px;
-}
 /*选项卡开始*/
-.tab{
-    /*margin-left: 40px;*/
-    width: 90%;
-    height: 60px;
-    border-bottom: 1px solid #E6E9F0;
 
-}
-.tab>ul{
-    list-style: none;
-    padding: 0;
-}
-.tab ul:after{
-    content: "";
-    display: table;
-    clear: both;
-}
-.tab>ul>li{
-    float: left;
-    height: 60px;
-    line-height: 60px;
-    margin-right: 25px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.tab_blue{
-    color: #5677FC;
-    border-bottom: 1px solid #5677FC ;
-}
 .font_blue{
     cursor: pointer;
     color: #5677FC;
@@ -117,19 +87,7 @@ section{
     border-radius: 2px;
     padding: 10px;
 }
-.dropdown-menu > li:hover{
-    background-color: #f5f5f5;
-    cursor: pointer;
-}
-.dropdown-menu > li {
-    display: block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: 400;
-    line-height: 1.42857143;
-    color: #333;
-    white-space: nowrap;
-}
+
 .btn_menu_right{
     display: inline-block;
     float: right;
@@ -192,10 +150,6 @@ table .sortpic .glyphicon-triangle-bottom {
     margin-top: -4px;
 }
 
-
-.active{
-    color: #1B7CEE!important;
-}
 
 /*查看样式*/
 .view{
@@ -267,12 +221,7 @@ table .sortpic .glyphicon-triangle-bottom {
 .txt_red{
     color: #FF5722;
 }
-.search_float{
-    float: right;
-}
-.search_rgiht{
-    margin-right: 30px;
-}
+
 .dl_active4{
     background-color: #E6E9F0!important;
 }

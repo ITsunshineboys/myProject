@@ -1,10 +1,11 @@
 <link rel="stylesheet" href="pages/shop_decoration/css/shop_decoration.css">
 <div ng-controller="shop_decoration_ctrl">
-    <section>
         <!--Banner、推荐选项卡开始-->
-        <div class="myTab">
-            <span ng-click="banner_tab()" class="{{b_tab_class}}">Banner</span>
-            <span ng-click="recommend_tab()" class="{{r_tab_class}}">推荐</span>
+        <div class="tab clearfix">
+            <ul>
+                <li ng-click="banner_tab()" ng-class="{'active':(b_show_table_flag==true)}">Banner</li>
+                <li ng-click="recommend_tab()" ng-class="{'active':(r_show_table_flag==true)}">推荐</li>
+            </ul>
         </div>
         <!--Banner、推荐选项卡结束-->
 
@@ -14,10 +15,10 @@
             <!-- Tab tools -->
             <div class="tab_tools clearfix">
                 <div class="pull-left">
-                    <button class="btn btn-primary pull-left" type="submit" ng-click="banner_save_btn()" data-target="#banner_save_modal" data-toggle="modal"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
-                    <button class="btn btn-info pull-left" ng-click="banner_clear_add()" type="submit" data-toggle="modal" data-target="#banner_add_modal"><i class="glyphicon glyphicon-plus"></i>添加</button>
-                    <button class="btn btn-default pull-left" type="submit" ng-modal="selectAll_modal" ng-click="selectAll(selectAll_modal)">全选</button>
-                    <button class="btn btn-default pull-left" type="submit" data-target="#banner_del_modal" data-toggle="modal" ng-click="delete_all()">删除</button>
+                    <button class="btn btn-info " ng-click="banner_save_btn()" data-target="#banner_save_modal" data-toggle="modal"><i class="iconfont icon-save"></i> 保存</button>
+                    <button class="btn btn-primary btn_left" ng-click="banner_clear_add()"  data-toggle="modal" data-target="#banner_add_modal"><i class="iconfont icon-add"></i> 添加</button>
+                    <button class="btn btn-default btn_left" ng-modal="selectAll_modal" ng-click="selectAll(selectAll_modal)">全选</button>
+                    <button class="btn btn-default btn_left" data-target="#banner_del_modal" data-toggle="modal" ng-click="delete_all()">删除</button>
                 </div>
                 <div class="pull-right">
                     <!-- 筛选菜单 -->
@@ -388,5 +389,4 @@
             </div>
             <!--删除模态框结束-->
         </div>
-    </section>
 </div>

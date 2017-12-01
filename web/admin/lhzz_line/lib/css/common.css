@@ -382,10 +382,6 @@ select.form-control:focus {
     margin-top: 20px;
 }
 
-.search .input-group {
-    width: 240px;
-}
-
 .search .input-group .form-control {
     padding-right: 30px;
     border-top-right-radius: 4px;
@@ -395,7 +391,7 @@ select.form-control:focus {
 .search .input-group span {
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 7px;
     color: #ababab;
     z-index: 100;
 }

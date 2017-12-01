@@ -82,7 +82,7 @@
             <!--错误提示-->
             <div class="error_red" ng-show="error_flag" ng-bind="error_flag_txt"></div>
             <!--登录按钮-->
-            <button class="login_btn btn-info" ng-disabled="isLoading" ng-click="supplier_login()">
+            <button class="btn btn-primary login_btn" ng-disabled="isLoading" ng-click="supplier_login()">
                 <span ng-if="!isLoading">登录</span>
                 <span class="loading" ng-if="isLoading">
                     <span></span>

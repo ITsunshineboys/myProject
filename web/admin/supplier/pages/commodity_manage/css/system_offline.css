@@ -1,13 +1,6 @@
 body{
     color: #666F80;
 }
-/*主体内容*/
-section{
-    padding: 40px 0 0 40px;
-}
-ul{
-    padding-left: 0;
-}
 .row_left{
     padding-left: 0;
 }
@@ -28,7 +21,7 @@ ul{
     height: 120px;
 }
 hr{
-    margin: 5px;
+    margin: 10px 0;
     color: #ABABAB;
 }
 
@@ -38,13 +31,14 @@ hr{
 }
 
 .show_city{
-    height: 400px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
 }
-
+.show_city span{
+    padding: 20px 5px;
+}
 .dl_active3{
     background-color: #E6E9F0!important;
 }

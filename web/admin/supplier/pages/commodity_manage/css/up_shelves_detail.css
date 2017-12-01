@@ -5,12 +5,6 @@ body{
 .form-control{
   color: #999!important;
 }
-section{
-  padding:40px 0 0 40px;
-}
-ul{
-  padding-left: 0;
-}
 .row{
   margin-bottom: 20px;
 }

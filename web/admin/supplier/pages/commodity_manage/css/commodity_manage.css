@@ -1,34 +1,5 @@
-
-/*头部结束*/
-section{
-  padding-left: 40px;
-}
-/*选项卡开始*/
-.tab{
-  width: 90%;
-  height: 60px;
-  margin-left: 40px;
-  border-bottom: 1px solid #E6E9F0 ;
-}
-.tab ul{
-  list-style: none;
-  padding: 0;
-}
-.tab ul:after{
-  content: "";
-  display: table;
-  clear: both;
-}
-.tab ul li{
-  float: left;
-  height: 60px;
-  line-height: 60px;
-  margin-right: 25px;
-  cursor: pointer;
-}
-.tab_blue{
-  color: #5677FC;
-  border-bottom: 1px solid #5677FC ;
+.table {
+  table-layout: fixed;
 }
 /*上架选项卡*/
 .on_menu{
@@ -55,28 +26,7 @@ section{
   border: 0!important;
   color: #666F80;
 }
-/*选项卡结束*/
 
-/*操作菜单开始*/
-.operating{
-  margin-top: 35px;
-  width: 90%;
-  height: 35px;
-  position: relative;
-}
-.operating ul{
-  list-style: none;
-  padding: 0;
-  float: left;
-}
-.operating ul:after{
-  content: "";
-  display: table;
-  clear: both;
-}
-.btn_left{
-  margin-left: 10px;
-}
 .add_ul li{
   float: left;
   height: 35px;
@@ -87,68 +37,15 @@ section{
   padding: 10px;
   font-size: 12px;
 }
-.search_box{
-  display: inline-block;
-  float: right;
-  margin-right: 50px;
-  position: relative;
-}
-.search_input{
-  width: 250px;
-  height: 35px;
-  border:1px solid #BFC0C2;
-  border-radius: 20px;
-  outline: 0;
-  padding-left: 1rem;
-}
-.search{
-  position: absolute;
-  top:50%;
-  transform: translateY(-50%);
-  right:20px;
-  color: #BFC0C2;
-}
-.menu{
-  float: right;
-  height: 35px;
-  text-align: center;
-  border: 1px solid #666F80;
-  border-radius: 3px;
-  padding: 10px;
-  top:0!important;
-}
-.search_txt{
-  float: right;
-}
-.search_txt1{
-  float: right;
-  margin-right: 10px;
-}
-.dropdown-menu > li:hover{
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-.dropdown-menu > li {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color: #333;
-  white-space: nowrap;
-}
-/*操作菜单结束*/
 
 /*表格内容开始*/
 .reason_width{
-  display: inline-block;
-  max-width: 60px!important;
-  height: 40px;
-  line-height: 40px;
-  overflow: hidden;
-  text-overflow:ellipsis;
+  word-break: keep-all;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .blue{
   color: #5677FC;
 }
@@ -196,17 +93,7 @@ input::-webkit-inner-spin-button{
   border: 1px solid #666F80;
   text-align: center;
 }
-table{
-  width: 90%;
-  color: #7A8599
-;
-}
-table tr{
-  height: 40px;
-}
-.table_content{
-  border-top:1px solid #e6e6e6;
-}
+
 /*表格内容结束*/
 
 /*添加模态框开始*/
@@ -270,74 +157,6 @@ table tr{
   width: 180px!important;
 }
 
-.lastul li{
-  padding: 6px 7px 8px 7px;
-  text-align: start;
-  margin:  9px 9px 9px 0;
-  border: 1px solid #5677FC;
-  color: #5677FC;
-  position: relative;
-}
-
-.lastul img{
-  position: absolute;
-  width: 24px;
-  left: 92px;
-  top: 7px;
-}
-/*分页处理*/
-.pages{
-  /*width: 90%;*/
-  margin: 30px auto ;
-  /*outline: 1px solid red;*/
-  overflow: hidden;
-  padding-left: 0;
-  list-style: none;
-}
-
-.pages>div{
-  float: left;
-  overflow: hidden;
-}
-
-.pages li{
-  float: left;
-  margin-right: 10px;
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #999;
-  line-height: 12px;
-  padding: 6px 18px;
-  background-color: white;
-  border: 1px solid #5677FC;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.pages .jumpto{
-  border: none;
-  padding:0 0 0 5px;
-}
-
-.jumpto input{
-  height: 25px;
-  width: 62px;
-}
-
-.pagenum{
-  padding-left: 9px!important;
-  padding-right: 9px!important;
-}
-
-#omit,#off{
-  border:none;!important;
-  padding:6px 0 0 0;
-  cursor: default;
-}
-
-.active{
-  background:#487af8!important;
-  color: white!important;
-}
 .dl_active3{
   background-color: #E6E9F0!important;
 }

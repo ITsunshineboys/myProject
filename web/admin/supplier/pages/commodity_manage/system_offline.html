@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="pages/commodity_manage/css/system_offline.css"/>
 <div ng-controller="system_offline" class="container_left">
-    <section>
         <!--商品分类-->
         <div class="row">
             <div class="col-sm-2 control-label">
@@ -154,33 +153,33 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-2 col-sm-5 control-label row_left">
+            <div class="col-sm-offset-2 col-sm-10 control-label row_left">
                 <span class="col-sm-2 control-label">快递方式</span>
                 <span class="col-sm-10 control-label">{{logistics_delivery_method}}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-2 col-sm-5 control-label row_left">
+            <div class="col-sm-offset-2 col-sm-10 control-label row_left">
                 <span class="col-sm-2 control-label">城市选择</span>
                 <span class="col-sm-2 control-label" ng-repeat="item in logistics_district_names_arr.slice(0,3)">{{item}}</span>
-                <span class="col-sm-1 control-label" ng-if='logistics_district_names_arr.length>3' style="color: #5677FC;padding: 0" data-toggle="modal" data-target="#show_city">查看</span>
+                <a class="col-sm-1 control-label" ng-if='logistics_district_names_arr.length>3' style="padding: 0" data-toggle="modal" data-target="#show_city">查看</a>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-2 col-sm-5 control-label row_left">
+            <div class="col-sm-offset-2 col-sm-10 control-label row_left">
                 <span class="col-sm-2 control-label">是否包邮</span>
                 <span class="col-sm-10 control-label" ng-if="delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0">包邮</span>
                 <span class="col-sm-10 control-label" ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">不包邮</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-2 col-sm-5 control-label row_left" ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
+            <div class="col-sm-offset-2 col-sm-10 control-label row_left" ng-if="!(delivery_number_default==0&&delivery_cost_default==0&&delivery_number_delta==0&&delivery_cost_delta==0)">
                 <span class="col-sm-2 control-label">收费金额</span>
                 <span class="col-sm-10 control-label">默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</span>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-2 col-sm-5 control-label row_left">
+            <div class="col-sm-offset-2 col-sm-10 control-label row_left">
                 <span class="col-sm-offset-2 col-sm-10 control-label">每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</span>
             </div>
         </div>
@@ -236,7 +235,6 @@
                 <button class="btn btn-default" ui-sref="commodity_manage({down_flag:true})">返回</button>
             </div>
         </div>
-    </section>
     <!--查看城市模态框-->
     <div class="modal fade" id="show_city" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
@@ -254,5 +252,4 @@
             </div>
         </div>
     </div>
-
 </div>

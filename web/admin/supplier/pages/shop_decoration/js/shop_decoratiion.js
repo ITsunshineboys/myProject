@@ -16,7 +16,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
 	$scope.upload_txt='上传';
   $scope.banner_tab=function () {
 	  $scope.show_hide_menu();
-    $scope.b_tab_class='bottom_border';
     $scope.r_tab_class='';
     $scope.b_show_table_flag=true;
     $scope.r_show_table_flag=false;
@@ -24,7 +23,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
   $scope.recommend_tab=function () {
 	  $scope.show_hide_menu();
     $scope.b_tab_class='';
-    $scope.r_tab_class='bottom_border';
     $scope.b_show_table_flag=false;
     $scope.r_show_table_flag=true;
   };
@@ -171,14 +169,14 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
       url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
-	    $scope.upload_dis=false;
-	    $scope.upload_txt='上传';
       console.log(response);
       if(!response.data.data){
         $scope.banner_add_img_flag="上传图片格式不正确，请重新上传"
       }else{
         $scope.banner_add_img_flag='';
         $scope.banner_add_img_src=response.data.data.file_path;
+	      $scope.upload_dis=false;
+	      $scope.upload_txt='上传';
       }
     },function (error) {
       console.log(error)
@@ -267,14 +265,14 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
       url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
-	    $scope.upload_dis=false;
-	    $scope.upload_txt='上传';
       console.log(response);
       if(!response.data.data){
         $scope.banner_edit_img_flag="上传图片格式不正确，请重新上传"
       }else{
         $scope.banner_edit_img_flag='';
         $scope.banner_edit_img_src=response.data.data.file_path;
+	      $scope.upload_dis=false;
+	      $scope.upload_txt='上传';
       }
     },function (error) {
       console.log(error)

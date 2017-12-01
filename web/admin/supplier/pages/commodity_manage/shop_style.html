@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="pages/commodity_manage/css/shop_style.css"/>
 <div ng-controller="shop_style_ctrl" class="container_left">
-    <section>
         <form class="form-horizontal" name="form" novalidate>
             <!--商品分类-->
             <div class="row">
@@ -141,8 +140,10 @@
                     <span>上传图片</span>
                 </div>
                 <div class="col-sm-10 control-label">
-                    <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
-                    <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
+                    <div class="img_box">
+                        <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
+                        <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
+                    </div>
                     <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
                     <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                     <p class="warning" ng-if="!!cover_flag">
@@ -159,10 +160,14 @@
                 </div>
                 <div class="col-sm-10 control-label">
                     <div class="img_list" ng-repeat="item in upload_img_arr">
-                        <img class="img_size" ng-src="{{item}}">
-                        <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)">&times;</span>
+                        <div class="img_box">
+                            <img class="img_size" ng-src="{{item}}">
+                            <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)">
+                                <span>x</span>
+                            </span>
+                        </div>
                     </div>
-                    <img class="img_size" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
+                    <img class="img_add" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
                     <p class="prompt_txt">图片大小694×400，5M内，可上传5张图片，支持JPG、PNG、JPEG</p>
                     <p class="warning" ng-if="!!img_flag">
                         <span class="glyphicon glyphicon-asterisk"></span>
@@ -200,10 +205,10 @@
                 <div class="col-sm-2 control-label">
                 <span>商品物流</span>
                 </div>
-                <div class="col-sm-4 control-label">
+                <div class="col-sm-6 control-label">
                     <span class="red_txt" ng-if="logistics_flag2">请先添加物流模板</span>
                 <div ng-if="logistics_flag1">
-                    <select class="form-control" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
+                    <select style="width: 60%" class="form-control" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
                     <br/>
                     <div>
                         <span class="margin_r">快递方式</span>
@@ -212,7 +217,7 @@
                         <br/>
                         <span  class="margin_r">城市选择</span>
                         <span class="template_span" ng-repeat="item in district_names.slice(0,3)">{{item}}</span>
-                        <span ng-if="district_names.length>3" style="color: #5677FC" data-toggle="modal" data-target="#show_city">查看</span>
+                        <a ng-if="district_names.length>3"  data-toggle="modal" data-target="#show_city">查看</a>
                         <br/>
                         <br/>
                         <span class="margin_r">是否包邮</span>
@@ -276,12 +281,11 @@
             <!--按钮-->
             <div class="row">
                 <div class="col-sm-12 control-label">
-                    <button class="btn btn-primary" ng-click="add_goods_confirm(form.$valid,form.$error.required)" data-toggle="modal" data-target="{{success_variable}}">确认</button>
+                    <button class="btn btn-primary" ng-click="add_goods_confirm(form.$valid,form.$error.required)" data-toggle="modal" data-target="{{success_variable}}" ng-disabled="upload_dis">确认</button>
                     <button class="btn btn-default btn_left" ui-sref="commodity_manage">返回</button>
                 </div>
             </div>
         </form>
-    </section>
     <!--添加成功-->
     <div class="modal fade" id="on_shelves_add_success" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">

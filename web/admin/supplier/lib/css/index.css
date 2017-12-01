@@ -1,81 +1,50 @@
-.nav_box {
-    width: 200px;
-    height: 100% !important;
-    overflow: visible !important;
+/* header start */
+#header {
     position: fixed;
-    left: 0;
     top: 0;
-    z-index: 200;
-    background-color: #F5F7FA;
+    left: 200px;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    background-color: #fff;
+    border-bottom: 1px solid #E6E9F0;
 }
 
-.nav_box .logo {
-    width: auto;
-    height: 150px;
-    text-align: center;
-    line-height: 150px;
+#header .breadcrumb {
+    margin-left: 25px;
 }
 
-.nav_box dl {
-    height: auto;
-    margin: 0;
+#header button {
+    margin-right: 40px;
+    font-size: 30px;
+    outline: none;
+    border: none;
+    background-color: transparent;
 }
 
-.nav_box dl a {
-    color: #ABABAB;
+/* header end */
+
+#content {
+    padding: 100px 40px 40px 240px;
+    width: 100%;
 }
 
-.nav_box dt {
-    height: 40px;
-    padding-left: 14px;
-    padding-right: 10px;
-    font-size: 16px;
-    position: relative;
-    line-height: 40px;
+.dropdown-menu > li:hover{
+    background-color: #f5f5f5;
     cursor: pointer;
-    background-color: #F5F7FA;;
 }
-
-.dl_active {
-    background-color: #E6E9F0 !important;
+.dropdown-menu > li {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
 }
-
-.a_active {
-    color: #5677FC !important;
-}
-
-.nav_box dt > a:hover {
-    color: #5677FC;
-}
-
-.nav_box dd {
-    margin: 0;
-    height: 30px;
-    position: relative;
-    line-height: 30px;
-    background-color: #F5F7FA;
-    padding-left: 44px;
-
-}
-
-.nav_box dd:hover {
-    background-color: #E6E9F0;
-    transition: all .3s linear;
-
-}
-
-.nav_box dd a {
-    color: #ABABAB;
-    font-size: 16px;
-    line-height: 20px;
-}
-
-.nav_box dd:hover a {
-    color: #5677FC;
-}
-
-.nav_box dt img {
-    position: absolute;
-    left: 15px;
-    top: 15px;
+.btn_left{
+    margin-left: 15px;
 }

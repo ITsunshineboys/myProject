@@ -1,7 +1,6 @@
 <script src="js/up_shelves_detail_ctrl.js"></script>
 <link rel="stylesheet" href="pages/commodity_manage/css/up_shelves_detail.css"/>
 <div ng-controller="up_shelves_detail_ctrl" class="container_left">
-    <section>
         <form class="form-horizontal" name="form" novalidate>
         <!--商品分类-->
         <div class="row">
@@ -227,9 +226,9 @@
                 <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>商品物流</span>
             </div>
-            <div class="col-sm-4 control-label">
+            <div class="col-sm-6 control-label">
             <span class="red_txt" ng-if="logistics_null==true">*物流模板为空，请先添加物流模板</span>
-            <select class="form-control" ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
+            <select style="width: 60%" class="form-control" ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
             <div class="red_txt" ng-if="logistics_red==true">*上一个物流模板已被删除，请选择新的模板</div>
             <br>
             <div ng-if="logistics_status==true">
@@ -326,7 +325,6 @@
             </div>
         </div>
         </form>
-    </section>
     <!--保存成功模态框-->
     <div class="modal fade" id="change_ok" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
