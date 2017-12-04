@@ -481,7 +481,7 @@ class Goods extends ActiveRecord
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
             ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.title', $title], ['goods.status' => self::STATUS_ONLINE]])
+            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title], ['goods.status' => self::STATUS_ONLINE]])
             ->all();
         return $all;
     }

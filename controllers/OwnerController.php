@@ -50,14 +50,14 @@ class OwnerController extends Controller
     const PRICE_UNITS = 100;
     const DEFAULT_CITY_CODE = 510100;
 
-    const WEAK_MATERIAL   = ['网线', '线管', '底盒'];
-    const STRING_MATERIAL = ['电线', '线管', '底盒'];
-    const WATERWAY_MATERIAL = ['PPR水管', 'PVC管'];
-    const WATERPROOF_MATERIAL = ['防水涂料'];
-    const CARPENTRY_MATERIAL = ['石膏板', '龙骨', '丝杆','细木工板'];
-    const LATEX_MATERIAL = ['腻子', '乳胶漆底漆', '乳胶漆面漆', '阴角线', '石膏粉'];
-    const TILER_MATERIAL = ['水泥', '自流平', '河沙'];
-    const BACKMAN_MATERIAL = ['水泥','河沙','空心砖'];
+    const WEAK_MATERIAL   = [32,30,40];
+    const STRING_MATERIAL = [43,30,40];
+    const WATERWAY_MATERIAL = [33,37];
+    const WATERPROOF_MATERIAL = [56];
+    const CARPENTRY_MATERIAL = [22,9,12,13];
+    const LATEX_MATERIAL = [38,24,25,28,5];
+    const TILER_MATERIAL = [172,36,6];
+    const BACKMAN_MATERIAL = [172,6,177];
     /**
      * work category details
      */
