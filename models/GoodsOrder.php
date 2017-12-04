@@ -3104,6 +3104,11 @@ class GoodsOrder extends ActiveRecord
                     $OrderGoods->create_time=time();
                     $OrderGoods->category_id=$Goods['category_id'];
                     $OrderGoods->after_sale_services=$Goods['after_sale_services'];
+                    $OrderGoods->platform_price=$Goods['platform_price'];
+                    $OrderGoods->purchase_price_decoration_company=$Goods['purchase_price_decoration_company'];
+                    $OrderGoods->purchase_price_manager=$Goods['purchase_price_manager'];
+                    $OrderGoods->purchase_price_designer=$Goods['purchase_price_designer'];
+                    $OrderGoods->subtitle=$Goods['subtitle'];
                     if (!$OrderGoods->save(false))
                     {
                         $tran->rollBack();

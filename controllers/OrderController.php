@@ -5512,8 +5512,13 @@ class OrderController extends Controller
 
     public  function  actionTest123()
     {
-       $data= Yii::$app->request->post();
-        return Json::encode($data);
+        $request=Yii::$app->request;
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
+        $data= Goods::find()
+           ->where(['sku'=>$sku])
+           ->one();
+        var_dump($data);
     }
 
 
