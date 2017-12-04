@@ -101,8 +101,29 @@ ALTER TABLE `order_goodslist` ADD `platform_price` bigint(20) NOT NULL DEFAULT '
 ALTER TABLE `order_goodslist` ADD  `purchase_price_decoration_company` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
 ALTER TABLE `order_goodslist` ADD  `purchase_price_manager` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
 ALTER TABLE `order_goodslist` ADD  `purchase_price_designer` bigint(20) NOT NULL DEFAULT '0' COMMENT 'unit: fen';
-
 ALTER TABLE `order_goodslist` ADD  `subtitle` varchar(100) NOT NULL DEFAULT '';
+
+
+CREATE TABLE `brainpower_inital_supervise` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `province` varchar(20) DEFAULT NULL COMMENT '省',
+  `province_code` int(20) DEFAULT NULL COMMENT '省编码',
+  `city` varchar(20) DEFAULT NULL COMMENT '市',
+  `city_code` int(20) DEFAULT NULL COMMENT '市编码',
+  `district` varchar(20) DEFAULT NULL COMMENT '区',
+  `district_code` int(20) DEFAULT NULL COMMENT '区编码',
+  `street` varchar(100) DEFAULT NULL COMMENT '街道地址',
+  `toponymy` varchar(20) DEFAULT NULL COMMENT '小区名称',
+  `image` varchar(255) NOT NULL COMMENT '图片名称',
+  `add_time` int(11) DEFAULT NULL COMMENT '添加时间',
+  `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `house_type_name` varchar(50) DEFAULT NULL COMMENT '户型名称',
+  `recommend_name` varchar(50) NOT NULL COMMENT '推荐名称',
+  `status` tinyint(2) DEFAULT '0' COMMENT '0-下架 1-上架',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+ALTER TABLE `brainpower_inital_supervise` ADD  `effect_id` int(11) NOT NULL;
 
 
 

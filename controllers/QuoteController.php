@@ -1277,36 +1277,42 @@ class QuoteController extends Controller
     public function actionHomepageAdd()
     {
         $request = \Yii::$app->request;
-        $province_code = District::findByCode(trim($request->post('province')));
-        $city_code = District::findByCode(trim($request->post('city')));
-        $district_code = District::findByCode(trim($request->post('district')));
+        $effect = Effect::find()
+            ->asArray()
+            ->where(['district_code'=>(int)trim($request->post('district',''))])
+            ->andWhere(['toponymy'=>trim($request->post('toponymy',''))])
+            ->andWhere(['street'=>trim($request->post('street',''))])
+            ->andWhere(['!=','type',2])
+            ->one();
+
+
         $add_item = new BrainpowerInitalSupervise();
         $add_item->recommend_name  = trim($request->post('recommend_name',''));
-        $add_item->district_code   = trim($request->post('district',''));
-        $add_item->toponymy        = trim($request->post('toponymy',''));
-        $add_item->street          = trim($request->post('street',''));
-        $add_item->house_type_name = trim($request->post('house_type_name',''));
         $add_item->image           = trim($request->post('image',''));
-        $add_item->province_code   = trim($request->post('province',''));
-        $add_item->city_code       = trim($request->post('city',''));
+        $add_item->district_code   = $effect['district_code'];
+        $add_item->toponymy        = $effect['toponymy'];
+        $add_item->street          = $effect['street'];
+        $add_item->house_type_name = $effect['particulars'];
+        $add_item->province_code   = $effect['province_code'];
+        $add_item->city_code       = $effect['city_code'];
+        $add_item->province        = $effect['province'];
+        $add_item->city            = $effect['city'];
+        $add_item->district        = $effect['district'];
+        $add_item->effect_id       = $effect['id'];
         $add_item->add_time        = time();
-        $add_item->province        = $province_code['name'];
-        $add_item->city            = $city_code['name'] ;
-        $add_item->district        = $district_code['name'];
+
         $code = 1000;
-        if (!$add_item->validate()){
+        if (!$add_item->save()){
             return Json::encode([
-               'code' =>  $code,
-                'msg' => '请求的参数不正确'
+               'code' => $code,
+                'mag' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if ($add_item->save()){
-            return Json::encode([
-               'code' => 200,
-                'mag' => 'ok'
-            ]);
-        }
+        return Json::encode([
+            'code' => 200,
+            'mag' => 'ok',
+        ]);
     }
 
     /**
@@ -1343,37 +1349,42 @@ class QuoteController extends Controller
     {
         $request = \Yii::$app->request;
         $id = trim($request->post('id',''));
-        $province_code = District::findByCode(trim($request->post('province')));
-        $city_code = District::findByCode(trim($request->post('city')));
-        $district_code = District::findByCode(trim($request->post('district')));
+        $effect = Effect::find()
+            ->asArray()
+            ->where(['district_code'=>(int)trim($request->post('district',''))])
+            ->andWhere(['toponymy'=>trim($request->post('toponymy',''))])
+            ->andWhere(['street'=>trim($request->post('street',''))])
+            ->andWhere(['!=','type',2])
+            ->one();
 
         $add_item = new BrainpowerInitalSupervise();
         $item = $add_item->findOne(['id'=>$id]);
         $item->recommend_name  = trim($request->post('recommend_name',''));
-        $item->district_code   = trim($request->post('district',''));
-        $item->toponymy        = trim($request->post('toponymy',''));
-        $item->street          = trim($request->post('street',''));
-        $item->house_type_name = trim($request->post('house_type_name',''));
         $item->image           = trim($request->post('image',''));
-        $item->province_code   = trim($request->post('province',''));
-        $item->city_code       = trim($request->post('city',''));
-        $item->province        = $province_code['name'];
-        $item->city            = $city_code['name'] ;
-        $item->district        = $district_code['name'];
+        $item->district_code   = $effect['district_code'];
+        $item->toponymy        = $effect['toponymy'];
+        $item->street          = $effect['street'];
+        $item->house_type_name = $effect['particulars'];
+        $item->province_code   = $effect['province_code'];
+        $item->city_code       = $effect['city_code'];
+        $item->province        = $effect['province'];
+        $item->city            = $effect['city'];
+        $item->district        = $effect['district'];
+        $item->effect_id       = $effect['id'];
+
+
         $code = 1000;
-        if (!$item->validate()){
+        if (!$item->save()){
             return Json::encode([
-                'code' =>  $code,
-                'msg' => '请求的参数不正确'
+                'code' => $code,
+                'mag' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 
-        if ($item->save()){
-            return Json::encode([
-                'code' => 200,
-                'mag' => 'ok'
-            ]);
-        }
+        return Json::encode([
+            'code' => 200,
+            'mag' => 'ok',
+        ]);
     }
 
     /**
