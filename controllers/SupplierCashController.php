@@ -682,14 +682,9 @@ class SupplierCashController extends Controller
 
     public function actionTest()
     {
-        $data = WorkerOrder::dataeveryday(strtotime('2017-11-20'), strtotime('2017-11-29'));
-        var_dump($data);die;
-        foreach ($data as $v){
-            if((date('w',strtotime($v))!=6) && (date('w',strtotime($v))!=0)){
-              $value[]=$v;
-            }
-        }
-        var_dump(implode(',',$value));
+//       $url='http://restapi.amap.com/v4/geofence/meta?key=d318385d372e9c95778cade0f8dff4e5';
+//       $data=StringService::httpPost($url);
+//       var_dump($data);
     }
 
 }
