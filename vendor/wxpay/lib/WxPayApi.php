@@ -114,7 +114,7 @@ class WxPayApi
         $response = self::postXmlCurlByApp($xml, $url, false, $timeOut);
         $result = WxPayResults::Init($response);
         self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
-        var_dump($response);exit;
+//        var_dump($response);exit;
         return $result;
     }
     /**
