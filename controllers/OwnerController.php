@@ -1958,7 +1958,7 @@ class OwnerController extends Controller
      */
     public function actionTest()
     {
-        var_dump(Apartment::find()->asArray()->all());
+        var_dump(GoodsCategory::find()->asArray()->all());
     }
 
 }
