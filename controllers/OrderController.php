@@ -183,16 +183,16 @@ class OrderController extends Controller
             if ($request->isPost) {
                 $consignee = trim($request->post('consignee',''),'');
                 $mobile= trim($request->post('mobile',''),'');
-                $districtcode=trim($request->post('districtcode',''),'');
+                $districtCode=trim($request->post('districtcode',''),'');
                 $region=trim($request->post('region',''));
-                if (!$districtcode || !$region  || !$mobile || !$consignee ) {
+                if (!$districtCode || !$region  || !$mobile || !$consignee ) {
                     $code=1000;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }else{
-                    $data=Addressadd::insertaddress($mobile,$consignee,$region,$districtcode);
+                    $data=Addressadd::InsertAddress($mobile,$consignee,$region,$districtCode);
                     if (!$data){
                         $code=500;
                         return Json::encode([
@@ -228,7 +228,7 @@ class OrderController extends Controller
         public function actionGetaddress(){
             $request = Yii::$app->request;
             $address_id=$request ->get('address_id');
-            $user_address=Addressadd::getaddress($address_id);
+            $user_address=Addressadd::GetAddress($address_id);
             if ($user_address){
                 return Json::encode([
                     'code' => 200,
@@ -274,7 +274,7 @@ class OrderController extends Controller
                     ]);
                 }
             }
-            $res=Invoice::addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
+            $res=Invoice::AddInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
             if ($res)
             {
                 $code=200;
@@ -294,8 +294,8 @@ class OrderController extends Controller
             }
         }
 
-         /**
-         * 无登录app-获取商品信息
+        /**
+         * 线下店app-获取商品信息
          * @return string
          */
         public function actionGetgoodsdata(){
@@ -314,7 +314,7 @@ class OrderController extends Controller
                     ]);
                 }
             }
-            $data=GoodsOrder::getlinegoodsdata($goods_id,$goods_num);
+            $data=GoodsOrder::GetLineGoodsData($goods_id,$goods_num);
            if (is_numeric($data))
            {
                $code=$data;
@@ -349,7 +349,7 @@ class OrderController extends Controller
             ]);
         }
         $model = new Invoice();
-        $data=$model->getlineinvoice($invoice_id);
+        $data=$model->GetLineInvoice($invoice_id);
         if ($data){
             return Json::encode([
                 'code' => 200,
@@ -406,7 +406,7 @@ class OrderController extends Controller
             ]);
         }
         $out_trade_no =GoodsOrder::SetOrderNo();
-        $res=Alipay::effect_earnstsubmit($post,$phone,$out_trade_no);
+        $res=Alipay::EffectEarnestSubmit($post,$phone,$out_trade_no);
            if (!$res)
         {
             $code=1000;
@@ -554,6 +554,7 @@ class OrderController extends Controller
             ]);
         }
 
+        //若发票未填-添加发票操作
         $invoice=Invoice::findOne($invoice_id);
         if (!$invoice)
         {
@@ -579,6 +580,7 @@ class OrderController extends Controller
             $freight=0;
         }
         $return_insurance=0;
+        //判断金额是否正确
         $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
         if (!$iscorrect_money)
         {
@@ -600,7 +602,7 @@ class OrderController extends Controller
     }
 
     /**
-     * 支付宝线下店商城异步返回操作
+     * 支付宝线下店商城异步返回操作-购买回调
      */
    public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
@@ -821,7 +823,7 @@ class OrderController extends Controller
             }
             $openid=(new PayService())->GetOpenid();
             $model=new Wxpay();
-            $data=$model->Wxlineapipay($orders,$openid);
+            $data=$model->WxLineApiPay($orders,$openid);
             $code=200;
             return Json::encode([
                 'code'=>$code,
@@ -844,6 +846,7 @@ class OrderController extends Controller
         if ($arr['result_code']=='SUCCESS')
         {
             $transaction_id=$arr['transaction_id'];
+            //查询订单
             $result = Wxpay::Queryorder($transaction_id);
             if (!$result)
             {

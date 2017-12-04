@@ -63,7 +63,7 @@ class Alipay extends  ActiveRecord
      * @param $out_trade_no
      * @return bool
      */
-    public  static function  effect_earnstsubmit($post,$phone,$out_trade_no)
+    public  static function  EffectEarnestSubmit($post,$phone,$out_trade_no)
     {
 //        $notify_url=Yii::$app->request->hostInfo."/".self::EFFECT_NOTIFY;
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::EFFECT_NOTIFY;

@@ -35,7 +35,7 @@ class Wxpay  extends ActiveRecord
        /**
          *无登录-微信公众号支付接口
          */
-       public function Wxlineapipay($orders,$openid){
+       public function WxLineApiPay($orders,$openid){
             ini_set('date.timezone','Asia/Shanghai');
             //打印输出数组信息
             function printf_info($data)

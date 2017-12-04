@@ -3,9 +3,7 @@
 namespace app\models;
 
 use Yii;
-use yii\base\Model;
 use yii\db\ActiveRecord;
-use app\models\LogisticsDistrict;
 
 
 class Addressadd extends  ActiveRecord
@@ -29,7 +27,7 @@ class Addressadd extends  ActiveRecord
      * @param $districtcode
      * @return int
      */
-     public static function insertaddress($mobile,$consignee,$region,$districtcode){
+     public static function InsertAddress($mobile,$consignee,$region,$districtcode){
          $addresstoken= md5($mobile.$consignee.date('Y-m-d H:i:s', time()));
          $data=self::find()
              ->where(['mobile'=>$mobile,'consignee'=>$consignee,'district'=>$districtcode])
@@ -95,7 +93,7 @@ class Addressadd extends  ActiveRecord
      * @param $addresstoken
      * @return array|null
      */
-    public static function getaddress($addressid){
+    public static function GetAddress($addressid){
         $array  = self::find()->select('id,mobile,consignee,region,district')->where(['id' => $addressid])->limit(1)->asArray()->all();
         if ($array){
             foreach ($array as $k=>$v){

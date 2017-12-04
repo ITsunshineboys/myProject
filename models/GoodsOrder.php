@@ -939,7 +939,7 @@ class GoodsOrder extends ActiveRecord
      * @param $goods_num
      * @return array|bool
      */
-    public static  function Getlinegoodsdata($goods_id,$goods_num){
+    public static  function GetLineGoodsData($goods_id,$goods_num){
         $array  =(new Query())
             ->from(Goods::tableName().' AS a')
             ->select('a.supplier_id,a.title,a.subtitle,b.shop_name,c.name,a.logistics_template_id,a.platform_price,a.market_price,a.cover_image,b.icon,c.name,a.sku')

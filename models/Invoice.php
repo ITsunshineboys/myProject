@@ -33,7 +33,7 @@ class Invoice extends ActiveRecord
      * @param   线下商城添加发票信息
      * @return array
      */
-    public static function addinvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card)
+    public static function AddInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card)
     {
             $array=array();
             $creat_time=date('Y-m-d H:i:s',time());
@@ -135,7 +135,7 @@ class Invoice extends ActiveRecord
    /**
      * 获取线下店商城-发票信息
      */
-    public function  getlineinvoice($invoice_id){
+    public function  GetLineInvoice($invoice_id){
         $array  = self::find()
             ->select('invoice_content,invoice_header')->where(['id' => $invoice_id])
             ->one();

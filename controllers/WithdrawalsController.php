@@ -783,9 +783,11 @@ class WithdrawalsController extends Controller
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
-            if (($startTime && !StringService::checkDate($startTime))
+            if (
+                ($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ){
+            )
+            {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
