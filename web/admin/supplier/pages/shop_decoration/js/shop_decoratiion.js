@@ -6,6 +6,10 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         icon: 'icon-icon_dianpuzhuangxiu',
     }];
   $scope.myng=$scope;
+  $scope.filter=false;
+  $scope.b_menu_flag=false;
+  $scope.r_menu_flag=false;
+  $scope.banner_menu_flag=false;
   $scope.banner_list=[];//Banner
   $scope.recommend_list=[];//推荐
   $scope.delete_arr=[];//删除个数数组
@@ -19,13 +23,25 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     $scope.r_tab_class='';
     $scope.b_show_table_flag=true;
     $scope.r_show_table_flag=false;
+    $scope.filter=false;
+	  $scope.b_menu_flag=false;
+	  $scope.r_menu_flag=false;
   };
   $scope.recommend_tab=function () {
 	  $scope.show_hide_menu();
     $scope.b_tab_class='';
     $scope.b_show_table_flag=false;
     $scope.r_show_table_flag=true;
+	  $scope.filter=false;
+	  $scope.b_menu_flag=false;
+	  $scope.r_menu_flag=false;
   };
+  //menu切换
+  $scope.menu_change=function () {
+    $scope.filter==false?$scope.filter=true:$scope.filter=false;
+	  $scope.b_show_table_flag==true?$scope.b_menu_flag=true:$scope.b_menu_flag=false;
+	  $scope.r_show_table_flag==true?$scope.r_menu_flag=true:$scope.r_menu_flag=false;
+  }
 
   /*判断类型为Banner还是推荐，请求列表接口*/
   $scope.judgment=function () {

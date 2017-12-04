@@ -128,20 +128,20 @@
                         <span class="iconfont icon-search"></span>
                     </div>
                     <button class="btn btn-default" ng-click="wait_send_search_btn()">搜索</button>
-                    <span class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-shaixuan"></i></span>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><input type="checkbox"  ng-model="waitsend_1" ng-click="waitsend_all(waitsend_1)">订单编号</li>
-                        <li><input type="checkbox"  ng-model="waitsend_2" ng-click="waitsend_all(waitsend_2)">商品编号</li>
-                        <li><input type="checkbox"  ng-model="waitsend_3" ng-click="waitsend_all(waitsend_3)">商品名称</li>
-                        <li><input type="checkbox"  ng-model="waitsend_4" ng-click="waitsend_all(waitsend_4)">订单金额</li>
-                        <li><input type="checkbox"  ng-model="waitsend_5" ng-click="waitsend_all(waitsend_5)">下单时间</li>
-                        <li><input type="checkbox"  ng-model="waitsend_6" ng-click="waitsend_all(waitsend_6)">用户</li>
-                        <li><input type="checkbox"  ng-model="waitsend_7" ng-click="waitsend_all(waitsend_7)">绑定手机</li>
-                        <li><input type="checkbox"  ng-model="waitsend_8" ng-click="waitsend_all(waitsend_8)">订单状态</li>
-                        <li><input type="checkbox"  ng-model="waitsend_9" ng-click="waitsend_all(waitsend_9)">异常</li>
-                        <li><input type="checkbox"  ng-model="waitsend_10" ng-click="waitsend_all(waitsend_10)">评论</li>
-                        <li><input type="checkbox"  ng-model="waitsend_11" ng-click="waitsend_all(waitsend_11)">详情</li>
-                        <li><input type="checkbox"  ng-model="waitsend_12" ng-click="waitsend_all(waitsend_12)">操作</li>
+                    <button class="btn btn-default" ng-click="filter=!filter" ng-class="{'btn-focus':filter}"><i class="iconfont icon-shaixuan"></i></button>
+                    <ul ng-show="filter" class="filter">
+                        <li><label><input type="checkbox"  ng-model="waitsend_1" ng-click="waitsend_all(waitsend_1)">订单编号</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_2" ng-click="waitsend_all(waitsend_2)">商品编号</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_3" ng-click="waitsend_all(waitsend_3)">商品名称</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_4" ng-click="waitsend_all(waitsend_4)">订单金额</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_5" ng-click="waitsend_all(waitsend_5)">下单时间</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_6" ng-click="waitsend_all(waitsend_6)">用户</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_7" ng-click="waitsend_all(waitsend_7)">绑定手机</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_8" ng-click="waitsend_all(waitsend_8)">订单状态</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_9" ng-click="waitsend_all(waitsend_9)">异常</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_10" ng-click="waitsend_all(waitsend_10)">评论</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_11" ng-click="waitsend_all(waitsend_11)">详情</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitsend_12" ng-click="waitsend_all(waitsend_12)">操作</label></li>
                     </ul>
                 </div>
             </div>
@@ -237,20 +237,20 @@
                         <span class="iconfont icon-search"></span>
                     </div>
                     <button class="btn btn-default" ng-click="wait_send_search_btn()">搜索</button>
-                    <span class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-shaixuan"></i></span>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><input type="checkbox"  ng-model="waitreceive_1" ng-click="waitsend_all(waitreceive_1)">订单编号</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_2" ng-click="waitsend_all(waitreceive_2)">商品编号</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_3" ng-click="waitsend_all(waitreceive_3)">商品名称</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_4" ng-click="waitsend_all(waitreceive_4)">订单金额</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_5" ng-click="waitsend_all(waitreceive_5)">下单时间</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_6" ng-click="waitsend_all(waitreceive_6)">用户</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_7" ng-click="waitsend_all(waitreceive_7)">绑定手机</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_8" ng-click="waitsend_all(waitreceive_8)">订单状态</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_9" ng-click="waitsend_all(waitreceive_9)">异常</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_10" ng-click="waitsend_all(waitreceive_10)">评论</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_11" ng-click="waitsend_all(waitreceive_11)">详情</li>
-                        <li><input type="checkbox"  ng-model="waitreceive_12" ng-click="waitsend_all(waitreceive_12)">操作</li>
+                    <button class="btn btn-default" ng-click="filter=!filter" ng-class="{'btn-focus':filter}"><i class="iconfont icon-shaixuan"></i></button>
+                    <ul class="filter" ng-show="filter">
+                        <li><label><input type="checkbox"  ng-model="waitreceive_1" ng-click="waitsend_all(waitreceive_1)">订单编号</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_2" ng-click="waitsend_all(waitreceive_2)">商品编号</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_3" ng-click="waitsend_all(waitreceive_3)">商品名称</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_4" ng-click="waitsend_all(waitreceive_4)">订单金额</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_5" ng-click="waitsend_all(waitreceive_5)">下单时间</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_6" ng-click="waitsend_all(waitreceive_6)">用户</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_7" ng-click="waitsend_all(waitreceive_7)">绑定手机</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_8" ng-click="waitsend_all(waitreceive_8)">订单状态</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_9" ng-click="waitsend_all(waitreceive_9)">异常</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_10" ng-click="waitsend_all(waitreceive_10)">评论</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_11" ng-click="waitsend_all(waitreceive_11)">详情</label></li>
+                        <li><label><input type="checkbox"  ng-model="waitreceive_12" ng-click="waitsend_all(waitreceive_12)">操作</label></li>
                     </ul>
                 </div>
             </div>
