@@ -1,18 +1,9 @@
 /*顶部导航*/
-* {
-    outline: none;
-}
-
 textarea{
     resize: none;
 }
 
 /*内容开始*/
-section {
-    padding: 40px 0 0 40px;
-    color: #666F80;
-}
-
 h3 {
     color: rgba(102, 111, 128, 1);
     font-weight: bold;

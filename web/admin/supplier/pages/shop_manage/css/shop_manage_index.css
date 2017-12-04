@@ -1,49 +1,7 @@
-/*顶部导航*/
-li{
-    list-style: none;
-}
-
-.order_manage{
-    font-size: 14px;
-    color: #2F3033;
-    line-height: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/*顶部导航结束*/
-
-section{
-    padding-left: 40px;
-}
 /*选项卡开始*/
-.tab{
-    width: 90%;
-    height: 60px;
-    border-bottom: 1px solid #E6E9F0;
-    margin-bottom: 16px;
-
-}
-.tab>ul{
-    list-style: none;
-    padding: 0;
-}
-.tab ul:after{
-    content: "";
-    display: table;
-    clear: both;
-}
-.tab>ul>li{
-    float: left;
-    height: 60px;
-    line-height: 60px;
-    margin-right: 25px;
-    cursor: pointer;
-    font-weight: bold;
-}
 .tab_blue{
-    color: #5677FC;
-    border-bottom: 1px solid #5677FC ;
+    color: #4094F6;
+    border-bottom: 1px solid #4094F6;
 }
 
 /*内容开始*/

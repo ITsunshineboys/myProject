@@ -175,6 +175,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             {name: '绑定手机', value: false},
             {name: '订单状态', value: true},
             {name: '异常', value: false},
+            {name: '评论', value: false},
             {name: '详情', value: true},
             {name: '操作', value: false}
         ];

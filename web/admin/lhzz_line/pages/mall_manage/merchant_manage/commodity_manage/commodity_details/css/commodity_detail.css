@@ -1,13 +1,4 @@
 /*头部开始*/
-.shop_manage{
-    color: #2F3033;
-    line-height: 14px;
-    font-weight: bold;
-}
-.commodity_manage{
-    color: #8D9199;
-}
-
 .goodattrs>div:not(:first-child){
     margin-top: 15px;
 }

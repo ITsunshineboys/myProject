@@ -78,7 +78,6 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
     /*重设商家logo*/
     $scope.resetLogo = () => {
         if (!$scope.picwarning) {
-            let url = baseUrl+"/mall/supplier-icon-reset";
             let data = {id: +id, icon: $scope.classicon || result.icon};
             _ajax.post('/mall/supplier-icon-reset',data,function (res) {
                 $('#suresave').modal('show');

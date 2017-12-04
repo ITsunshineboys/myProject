@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="pages/supplier_wallet/css/frozen_money.css">
 <div ng-controller="frozen_money_ctrl">
     <section>
-        <div class="btns">
-            <select id="time_choose" ng-model="params.time_type">
+        <div class="search form-inline clearfix">
+            <select class="form-control" ng-model="params.time_type">
                 <option value="all">全部时间</option>
                 <option value="today">今天</option>
                 <option value="week">本周</option>
@@ -12,32 +12,35 @@
             </select>
 
             <input ng-if="params.time_type == 'custom'" id="start_time" ng-model="params.start_time" ngc-lay-date
-                   class="time_interval" type="text" placeholder="开始时间" max-date="{{params.end_time}}">
+                   class="form-control" type="text" placeholder="开始时间" max-date="{{params.end_time}}">
             <input ng-if="params.time_type == 'custom'" id="stop_time" ng-model="params.end_time" ngc-lay-date
-                   class="time_interval" type="text" placeholder="结束时间" min-date="{{params.start_time}}">
+                   class="form-control" type="text" placeholder="结束时间" min-date="{{params.start_time}}">
         </div>
 
-        <table>
+        <table class="table table-responsive table-hover">
+            <thead>
             <tr>
-                <td>
+                <th ng-click="sortTime()">
                     操作时间
-                    <span class="sortpic" ng-click="sortTime()">
-                        <i class="glyphicon glyphicon-triangle-top" ng-class="{'active':params.sort_time == 1}"></i>
-                        <i class="glyphicon glyphicon-triangle-bottom"
-                           ng-class="{'active':params.sort_time == 2}"></i>
+                    <span class="sort">
+                        <i class="iconfont icon-up" ng-class="{'active':params.sort_time == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params.sort_time == 2}"></i>
                     </span>
-                </td>
-                <td>冻结金额</td>
-                <td>冻结原因</td>
+                </th>
+                <th>冻结金额</th>
+                <th>冻结原因</th>
             </tr>
-
+            </thead>
+            <tbody>
             <tr class="table_content" ng-repeat="item in frozendetail track by $index">
                 <td ng-bind="item.create_time"></td>
                 <td ng-bind="item.freeze_money"></td>
                 <td>
-                    <span class="frozen_reason" data-toggle="modal" data-target="#frozen_reason" ng-bind="item.freeze_reason" ng-click="showReason(item.freeze_reason)"></span>
+                    <span class="frozen_reason" data-toggle="modal" data-target="#frozen_reason"
+                          ng-bind="item.freeze_reason" ng-click="showReason(item.freeze_reason)"></span>
                 </td>
             </tr>
+            </tbody>
         </table>
         <tm-pagination conf="pageConfig"></tm-pagination>
     </section>

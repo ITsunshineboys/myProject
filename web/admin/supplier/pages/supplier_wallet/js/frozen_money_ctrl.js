@@ -82,7 +82,7 @@ frozen_money.controller("frozen_money_ctrl", function (_ajax, $rootScope, $scope
         $scope.params.sort_time = $scope.params.sort_time == 2 ? 1 : 2;
         $scope.params.sort_money = '';      // 订单金额排序
         $scope.pageConfig.currentPage = 1;
-        tableList()
+        tableList();
     };
 
 

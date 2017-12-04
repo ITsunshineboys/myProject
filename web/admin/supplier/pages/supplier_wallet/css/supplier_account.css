@@ -1,22 +1,9 @@
-* {
-    outline: none;
-}
-
 /*内容开始*/
-section{
-    padding-left: 40px;
-    color: #666F80;
-}
-
 section>div:not(:first-child){
     margin-top:18px;
 }
 
 /*商家名称*/
-.supplier_name{
-    margin-top: 93px;
-}
-
 .margin_left_86{
     margin-left: 86px;
 }

@@ -2,7 +2,7 @@
 <div ng-controller="shopmanage_ctrl">
     <section>
         <!--选项卡-->
-        <div class="tab">
+        <div class="tab clearfix">
             <ul>
                 <li ng-class="{'tab_blue':basic_flag}"  ng-click="tabFunc('basic_flag')">基本信息</li>
                 <li ng-class="{'tab_blue':level_flag}" ng-click="tabFunc('level_flag')">店铺资质</li>
@@ -168,7 +168,7 @@
         <!----------品牌授权-------------->
         <div ng-show='authorize_flag'>
             <div class="apply_brand">
-                <button class="btn btn-info pull-left" ui-sref="apply_brand"><i class="glyphicon glyphicon-plus"></i>申请品牌</button>
+                <button class="btn btn-primary" ui-sref="apply_brand"><i class="iconfont icon-add"></i>申请品牌</button>
             </div>
 
             <div class="store_mag_table">

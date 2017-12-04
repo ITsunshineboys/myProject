@@ -1,18 +1,6 @@
-* {
-    outline: none;
-}
-
 /*内容开始*/
-section{
-    padding-left: 40px;
-}
-
 .red_mark{
     color: red;
-}
-
-.money{
-    margin-top: 90px;
 }
 
 .input_style{
@@ -37,7 +25,7 @@ form>div:not(:first-child){
 }
 
 .btn_group{
-    margin-top: 273px!important;
+    margin-top: 82px!important;
 }
 
 #back{
