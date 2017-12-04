@@ -136,6 +136,8 @@ class ShippingCart extends \yii\db\ActiveRecord
                         ->shop_name,
                     'goods'=>$Goods,
                 ];
+            }else{
+                $mix[]=[];
             }
         }
         $invalid_goods=(new Query())
@@ -155,7 +157,7 @@ class ShippingCart extends \yii\db\ActiveRecord
            }
        }
         return [
-            'normal_goods'=>$mix?$mix:[],
+            'normal_goods'=>$mix,
             'invalid_goods'=>$invalid_goods
         ];
     }
