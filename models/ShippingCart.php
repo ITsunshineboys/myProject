@@ -98,6 +98,7 @@ class ShippingCart extends \yii\db\ActiveRecord
                 $money='platform_price';
                 break;
         }
+        $mix=[];
         foreach ($supIds as $supId)
         {
 //           $supplier=Supplier::find()
@@ -136,10 +137,9 @@ class ShippingCart extends \yii\db\ActiveRecord
                         ->shop_name,
                     'goods'=>$Goods,
                 ];
-            }else{
-                $mix[]=[];
             }
         }
+
         $invalid_goods=(new Query())
             ->from(self::tableName().' as s')
             ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status")
