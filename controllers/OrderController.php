@@ -21,16 +21,12 @@ use app\models\EffectEarnest;
 use app\models\EffectMaterial;
 use app\models\EffectPicture;
 use app\models\GoodsComment;
-use app\models\GoodsAttr;
 use app\models\GoodsBrand;
-use app\models\GoodsImage;
 use app\models\GoodsStat;
 use app\models\Jpush;
 use app\models\GoodsCategory;
 use app\models\Role;
-use app\models\Series;
 use app\models\ShippingCart;
-use app\models\Style;
 use app\models\DeletedGoodsComment;
 use app\models\LogisticsTemplate;
 use app\models\UploadForm;
@@ -57,7 +53,6 @@ use yii\db\Query;
 use yii\db\Exception;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\web\Controller;
 use app\services\AuthService;
 class OrderController extends Controller
@@ -5425,6 +5420,7 @@ class OrderController extends Controller
 
 
     /**
+     * 测试接口-获取商品
      * @return string
      */
     public  function  actionFindSupplierGoods()
@@ -5452,7 +5448,6 @@ class OrderController extends Controller
                 'data'=>$Goods
             ]
         );
-
     }
 
 

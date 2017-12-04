@@ -126,14 +126,17 @@ class ShippingCart extends \yii\db\ActiveRecord
                     unset($list[$money]);
                 }
             }
-            $mix[]=[
-                'shop_name'=>Supplier::find()
-                    ->select(['shop_name'])
-                    ->where(['id'=>$supId])
-                    ->one()
-                    ->shop_name,
-                'goods'=>$Goods,
-            ];
+            if ($Goods)
+            {
+                $mix[]=[
+                    'shop_name'=>Supplier::find()
+                        ->select(['shop_name'])
+                        ->where(['id'=>$supId])
+                        ->one()
+                        ->shop_name,
+                    'goods'=>$Goods,
+                ];
+            }
         }
         $invalid_goods=(new Query())
             ->from(self::tableName().' as s')
@@ -152,7 +155,7 @@ class ShippingCart extends \yii\db\ActiveRecord
            }
        }
         return [
-            'normal_goods'=>$mix,
+            'normal_goods'=>$mix?$mix:[],
             'invalid_goods'=>$invalid_goods
         ];
     }
