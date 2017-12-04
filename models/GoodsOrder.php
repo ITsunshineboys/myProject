@@ -1125,7 +1125,7 @@ class GoodsOrder extends ActiveRecord
             $goods_num+=$arr[$k]['goods_number'];
         }
         $output['goods_num']=$goods_num;
-        if ($output['status']=='待付款'){
+        if ($output['status']==self::ORDER_TYPE_DESC_UNPAID){
             $time=time();
             $pay_term=(strtotime($output['create_time'])+24*60*60);
             if (($pay_term-$time)<0){

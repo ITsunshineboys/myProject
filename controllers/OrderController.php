@@ -1170,7 +1170,7 @@ class OrderController extends Controller
         $invoice_id=$order_information['invoice_id'];
         $address=Addressadd::find()->where(['id'=>$address_id])->asArray()->one();
         if (!$address){
-            $code = 500;
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => '收货地址不存在'
@@ -1179,7 +1179,7 @@ class OrderController extends Controller
         $address['district']=LogisticsDistrict::getdistrict($address['district']);
         $invoice=Invoice::find()->where(['id'=>$invoice_id])->asArray()->one();
         if (!$invoice){
-            $code = 500;
+            $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => '发票信息为空'
@@ -1234,7 +1234,7 @@ class OrderController extends Controller
         if ($order_information['shipping_type']==1){
             $goods_data['shipping_way']='送货上门';
         }
-        if ($order_information['status']=='待付款'){
+        if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
             $goods_data['pay_term']=$order_information['pay_term'];
         }else{
             $goods_data['pay_term']=0;
@@ -1548,7 +1548,7 @@ class OrderController extends Controller
                   $goods_data['shipping_way']='送货上门';
               }
               $goods_data['pay_name']=$order_information['pay_name'];
-              if ($order_information['status']=='待付款'){
+              if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
                   $goods_data['pay_term']=$order_information['pay_term'];
               }else{
                   $goods_data['pay_term']=0;
@@ -5315,14 +5315,14 @@ class OrderController extends Controller
         switch ($GoodsOrder->order_refer)
         {
             case 1:
-//                    $status='待付款';
+                //     待付款
                 $operation[]=[
                     'name'=>'关闭订单，线下退款',
                     'value'=>2
                 ];
                 break;
             case 2:
-//                    $status='待付款';
+                //     待付款
                 $operation[]=[
                     'name'=>'关闭订单，退款',
                     'value'=>1
@@ -5424,7 +5424,9 @@ class OrderController extends Controller
     }
 
 
-
+    /**
+     * @return string
+     */
     public  function  actionFindSupplierGoods()
     {
         $user = Yii::$app->user->identity;

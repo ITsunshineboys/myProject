@@ -88,19 +88,33 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      */
    public  static  function  pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
-        $select = array_diff($select, self::FIELDS_ADMIN);
-//        $select .=",group_concat(spec order by spec)";
+        $select = array_diff($select, self::FIELDS_EXTRA);
+//        $select ="transaction_no,uid,role_id,access_type,access_money,create_time,order_no,sku";
         $offset = ($page - 1) * $size;
         $Accessdetaillist=self::find()
             ->select($select)
-            ->where($where)
+//            ->where($where)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
+            ->groupBy('transaction_no')
             ->asArray()
             ->all();
          foreach ($Accessdetaillist as &$list) {
-            $list['access_type']=self::findAccessType($list['access_type']);
+             $list['access_type']=self::findAccessType($list['access_type']);
+             if ($list['access_type']==self::ACCESS_TYPE_DESC_PAYMENT_BUY)
+             {
+                 $accessList=self::find()
+                     ->where(['transaction_no'=>$list['transaction_no']])
+                     ->asArray()
+                     ->all();
+                     $list['access_money']=0;
+                     foreach ($accessList as &$aList)
+                     {
+                         $list['access_money']+=$aList['access_money'];
+                     }
+             }
+
              if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_CASH
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_PAYMENT_BUY
@@ -116,6 +130,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         $total=self::find()
             ->select($select)
             ->where($where)
+            ->groupBy('transaction_no')
             ->asArray()
             ->count();
         if ($total>0)
