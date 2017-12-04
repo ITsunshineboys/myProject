@@ -59,13 +59,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="row form_box">
-                            <span class="col-md-12 form_txt" ng-if="btnclick">保存成功</span>
-                            <span class="col-md-12 form_txt" ng-if="!btnclick">商品属性名称不能重复</span>
+                            <span class="col-md-12 form_txt">{{backInfo}}</span>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" ng-click="btnclick?modalBack():''" data-dismiss="modal" >确认</button>
-                        <!--<button type="button" class="btn btn-primary"  data-dismiss="modal" >确认</button>-->
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

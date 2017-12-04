@@ -1,12 +1,5 @@
 let edit_attribute = angular.module("edit_attribute_module", []);
-edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state) {
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    }
-
+edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $http, $stateParams, $state, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -81,16 +74,7 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
             $scope.iswarning = true;
         } else {
             $scope.iswarning = false;
-            /*重名搁置*/
-            // for(let i=0;i<$scope.propattrs.length-1;i++){
-            // 	if(obj==$scope.propattrs[i].name){
-            // 		console.log('重名了')
-            // 	}
-            // }
         }
-        // console.log(obj)
-
-
     }
 
     /*下拉框添加失去焦点判断*/
@@ -112,8 +96,15 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
         typesarr = [];
         unitsarr = [];
         unit_value_arr = [];
-        // names 获取当前的所有name
+
         for (let i = 0; i < $scope.propattrs.length; i++) {
+            if($scope.propattrs[i].name==''){
+                $scope.backInfo = '属性名称不能为空';
+                $scope.btnclick = false;
+                $("#success_modal").modal("show");
+                return;
+            }
+
             namesarr.push($scope.propattrs[i].name);
             valuesarr.push($scope.propattrs[i].value);
             typesarr.push($scope.propattrs[i].addition_type);
@@ -144,7 +135,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
             }
         }
 
-        let url = baseUrl + "/mall/goods-attr-add";
         let data = {
             category_id: +$scope.propid,
             "names[]": namesarr,
@@ -152,15 +142,16 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
             "units[]": unit_value_arr,
             "addition_types[]": typesarr
         };
-        $http.post(url, data, config).then(function (res) {
-            console.log(res);
-            if (res.data.code == 200) {
+
+        _ajax.post('/mall/goods-attr-add',data,function (res) {
+            if(res.code == 200){
+                $scope.backInfo = '保存成功';
                 $scope.btnclick = true;
-                $("#success_modal").modal("show");
-            } else if (res.data.code == 1009) {
+            } else{
+                $scope.backInfo = res.msg;
                 $scope.btnclick = false;
-                $("#success_modal").modal("show");
             }
+            $("#success_modal").modal("show");
         })
     }
 
