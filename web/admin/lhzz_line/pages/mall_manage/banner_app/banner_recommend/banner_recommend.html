@@ -155,11 +155,11 @@
                                 <span class="shop_left">商品编号不能为空</span>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>商品编号</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <div class="input-group">
                                         <input class="form-control" id="shop_add_num_input" type="text" ng-model="shop_model" name="shop_num_name" required ng-blur="num_blur=!!shop_form.shop_num_name.$error"/>
                                         <span class="input-group-btn">
@@ -169,25 +169,25 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>商品标题</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <input class="still form-control" name="shop_title_name" disabled="disabled" ng-model="recommend_shop_title" type="text" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>商品链接</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                 <input class="still form-control" ng-model="recommend_shop_url" type="text"  disabled="disabled"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <i class="red">*</i>
                                     <span>是否启用</span>
                                 </div>
@@ -199,15 +199,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{upload_img_src}}"/>
                                     <img id="modal_img2" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
                                 </div>
-                                <div class="col-sm-offset-2 img_txt">
+                                <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
                                     <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                                 </div>
@@ -240,25 +240,25 @@
                                 <button class="btn btn-primary">链接</button>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>名称</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <input class="form-control" type="text" ng-model="recommend_link_title" name="link_title_name" required ng-blur="link_title_blur=!!link_form.link_title_name.$error" ng-class="{'border_red':(link_form.link_title_name.$invalid &&link_submitted)||(link_form.link_title_name.$error.required && link_title_blur)}"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>链接</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                 <input class="form-control" type="text"  ng-model="recommend_link_url" name="link_link_name" required ng-blur="link_link_blur=!!link_form.link_link_name.$error" ng-class="{'border_red':(link_form.link_link_name.$invalid &&link_submitted)||(link_form.link_link_name.$error.required && link_link_blur)}"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>是否启用</span>
                                 </div>
@@ -270,15 +270,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{upload_link_img_src}}"/>
                                     <img id="modal_link_img2" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
                                 </div>
-                                <div class="col-sm-offset-2 img_txt">
+                                <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
                                     <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                                 </div>
@@ -408,11 +408,11 @@
                                 <span class="shop_left">商品编号不能为空</span>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>商铺编号</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="edit_shop_num" ng-model="myng.shop_edit_sku"  required ng-class="{'border_red':(edit_form.edit_shop_num.$invalid &&submitted)||(edit_form.edit_shop_num.$error.required && edit_shop_num_blur)}" ng-blur="edit_shop_num_blur=!!edit_form.edit_shop_num.$error"/>
                                         <span class="input-group-btn">
@@ -422,25 +422,25 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>商品链接</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <input ng-model="recommend_shop_edit_url" type="text" disabled="disabled"  class="still form-control"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>标题</span>
                                 </div>
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                 <input name="edit_shop_title" class="still form-control" disabled="disabled" ng-model="myng.recommend_shop_edit_title" type="text" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>是否启用</span>
                                 </div>
@@ -452,15 +452,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-10 control-label">
+                                <div class="col-sm-9 control-label">
                                     <img id="modal_edit_img"  ng-if="!upload_img_src" ng-src="{{myng.recommend_shop_edit_img}}"/>
                                     <img id="modal_edit_img2" ng-if="!!upload_img_src" ngf-src="data.file" />
                                 </div>
-                                <div class="col-sm-offset-2 img_txt">
+                                <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
                                     <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                                 </div>
@@ -469,25 +469,25 @@
                         <!--链接-->
                         <div class="modal-body" ng-if="edit_item.from_type=='链接'">
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>名称</span>
                                 </div>
-                                <div class="col-sm-10 control-label">
+                                <div class="col-sm-9 control-label">
                                     <input class="form-control" type="text" ng-model="myng.link_edit_title" name="edit_link_title" required ng-class="{'border_red':(edit_form.edit_link_title.$invalid &&submitted)||(edit_form.edit_link_title.$error.required && edit_link_title_blur)}" ng-blur="edit_link_title_blur=!!edit_form.edit_link_title.$error"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>链接</span>
                                 </div>
-                                <div class="col-sm-10 control-label">
+                                <div class="col-sm-9 control-label">
                                     <input class="form-control" type="text" ng-model="myng.link_edit_url" name="edit_link_link" required ng-class="{'border_red':(edit_form.edit_link_link.$invalid &&submitted)||(edit_form.edit_link_link.$error.required && edit_link_link_blur)}" ng-blur="edit_link_link_blur=!!edit_form.edit_link_link.$error"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>是否启用</span>
                                 </div>
@@ -499,15 +499,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-sm-2 control-label">
+                                <div class="col-sm-3 control-label">
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-10 control-label">
+                                <div class="col-sm-9 control-label">
                                     <img id="modal_edit_link_img"  ng-if="!upload_link_img_src" ng-src="{{myng.link_edit_img}}" />
                                     <img id="modal_edit_link_img2" ng-if="!!upload_link_img_src" ngf-src="data.file" />
                                 </div>
-                                <div class="col-sm-offset-2 img_txt">
+                                <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
                                     <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
                                 </div>
