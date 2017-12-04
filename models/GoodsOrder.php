@@ -842,7 +842,7 @@ class GoodsOrder extends ActiveRecord
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
             if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
+                $arr[$k]['unusual']=self::ORDER_TYPE_DESC_APPLYREFUND;
             }else if ($arr[$k]['is_unusual']==0){
                 $arr[$k]['unusual']='无异常';
             }else if($arr[$k]['is_unusual']==2){
@@ -852,13 +852,13 @@ class GoodsOrder extends ActiveRecord
             switch ($type)
             {
                 case 'supplier':
-                    if($arr[$k]['status']=='待发货')
+                    if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED)
                     {
                         $arr[$k]['handle']='发货';
                     }
                     break;
                 case 'lhzz':
-                    if($arr[$k]['status']=='待发货' || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']=='待收货' || $arr[$k]['status']=='已完成')
+                    if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
                     {
                         $arr[$k]['handle']='平台介入';
                     }
@@ -2424,7 +2424,7 @@ class GoodsOrder extends ActiveRecord
             $arr[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
             $arr[$k]['handle']='';
             if ($arr[$k]['is_unusual']==1){
-                $arr[$k]['unusual']='申请退款';
+                $arr[$k]['unusual']=self::ORDER_TYPE_DESC_APPLYREFUND;
             }else if ($arr[$k]['is_unusual']==0){
                 $arr[$k]['unusual']='无异常';
             }else if($arr[$k]['is_unusual']==2){
@@ -2540,7 +2540,7 @@ class GoodsOrder extends ActiveRecord
                     if ($arr[$k]['is_unusual']==1){
                         $arr[$k]['status_type']=7; //待收货
                         $arr[$k]['status_code']=self::ORDER_TYPE_UNRECEIVED.'_'.self::ORDER_TYPE_APPLYREFUND;
-                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_申请退款';
+                        $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNRECEIVED.'_'.self::ORDER_TYPE_DESC_APPLYREFUND;
                     }
                     if ($user->last_role_id_app==6)
                     {
@@ -2566,8 +2566,8 @@ class GoodsOrder extends ActiveRecord
                     break;
                 case  self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER:
                     $arr[$k]['status_type']=10; //售后结束
-                    $arr[$k]['status_code']='after_sale_completed';
-                    $arr[$k]['status_desc']='售后完成';
+                    $arr[$k]['status_code']=self::ORDER_TYPE_CUSTOMER_SERVICE_OVER;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
                     break;
                 case self::ORDER_TYPE_DESC_COMPLETED:
                     $arr[$k]['status_type']=11; //已完成
@@ -3018,7 +3018,6 @@ class GoodsOrder extends ActiveRecord
             $code=1000;
             return $code;
         }
-
         $tran = Yii::$app->db->beginTransaction();
         $role_money=self::GetRoleMoney($user->last_role_id_app);
         $time=time();
@@ -3399,7 +3398,7 @@ class GoodsOrder extends ActiveRecord
                   {
                       $logistics_template['delivery_number_delta']=1;
                   }
-                  $addnum=ceil(($cost['num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
+                  $addnum=ceil(($cost['goods_num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
                   $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
                   $freight+=$money;
               }
