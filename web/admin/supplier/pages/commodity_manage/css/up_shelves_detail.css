@@ -28,6 +28,13 @@ body{
 .img_size{
   width: 100%;
 }
+.erm_box{
+  width: 130px;
+  height: 107px;
+}
+.erm_size{
+  width:100%;
+}
 .img_box{
   display: inline-block;
   width: 100px;
@@ -35,6 +42,7 @@ body{
   background-color: #F6F6F6;
   overflow: hidden;
   position: relative;
+  margin-right: 10px;
 }
 .prompt_txt{
   font-size: 12px;

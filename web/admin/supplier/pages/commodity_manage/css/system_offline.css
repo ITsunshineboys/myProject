@@ -22,8 +22,15 @@ body{
     margin-top: 5px;
 }
 .img_size{
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
+}
+.erm_box{
+    width: 130px;
+    height: 107px;
+}
+.erm_img{
+    width: 100%;
 }
 hr{
     margin: 10px 0;
