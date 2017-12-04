@@ -34,9 +34,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         }else if ($stateParams.tabflag=='waitpay_flag'||$stateParams.tabflag=='finish_flag'||$stateParams.tabflag=='cancel_flag') {
             $scope.tabFunc($stateParams.tabflag);
         } else {
-            $scope.tabFunc('all_flag');
-            // tableList()
-            // return;
+            $scope.all_flag = true;
         }
     });
 
@@ -162,7 +160,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             sort_time: 2,                  // 下单时间排序
             type: 'all'                  // 订单类型
         };
-        // tableList();
+        tableList();
     }
 
     /*待付款列表*/
