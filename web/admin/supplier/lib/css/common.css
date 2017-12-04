@@ -428,6 +428,7 @@ select.form-control:focus {
 
 .search .form-group .filter > li,
 .search .form-group .filter > div {
+    display: block;
     padding: 3px 10px;
     color: #333;
     white-space: nowrap;
