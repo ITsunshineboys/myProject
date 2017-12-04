@@ -159,6 +159,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
   $scope.secondclass=[];//二级分类数组
   $scope.subClass = function (pid) {
     console.log(pid)
+    pid!=0?$scope.two_select_flag=true:($scope.two_select_flag=false,$scope.three_select_flag=false);
     $scope.down_two=pid;
     $scope.params.pid=$scope.down_two;
     $scope.table.roles=[];//清空全选状态
@@ -171,6 +172,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
   /*分类选择三级下拉框*/
   $scope.three_class=[];//二级分类数组
   $scope.three_Class = function (pid) {
+    console.log(pid)
+    pid!=0?$scope.three_select_flag=true:$scope.three_select_flag=false;
     if(pid==0){
       pid=$scope.down_two
     }
