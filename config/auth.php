@@ -192,6 +192,16 @@ return [
     'withdrawals/set-bank-card'=>[6],
     'withdrawals/find-bank-card'=>[6],
     'withdrawals/find-balance'=>[6],
+    'supplieraccount/owner-account-list'=>[1],
+    'supplieraccount/owner-account-detail'=>[1],
+    'supplieraccount/owner-freeze-money'=>[1],
+    'supplieraccount/owner-apply-freeze'=>[1],
+    'supplieraccount/owner-freeze-list'=>[1],
+    'supplieraccount/owner-freeze-taw'=>[1],
+    'supplier-cash/owner-cash-index'=>[1],
+    'supplier-cash/owner-cashed-list'=>[1],
+    'supplier-cash/owner-cashed-detail'=>[1],
+    'supplier-cash/owner-do-cash-deal'=>[1],
 
     // wei
     'quote/labor-cost-list' => [1],
