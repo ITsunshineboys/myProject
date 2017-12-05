@@ -171,36 +171,41 @@
                 <button class="btn btn-primary" ui-sref="apply_brand"><i class="iconfont icon-add"></i>申请品牌</button>
             </div>
 
-            <div class="store_mag_table">
-                <table>
-                    <tr>
-                        <td>品牌名称</td>
-                        <td>申请日期</td>
-                        <td>授权期限</td>
-                        <td>状态</td>
-                        <td>审核备注</td>
-                        <td>详情</td>
-                    </tr>
-                    <tr class="table_content" ng-repeat="obj in authList">
-                        <td>{{obj.brand_name}}</td>
-                        <td>{{obj.create_time}}</td>
-                        <td>{{obj.authorization_start}} 至 {{obj.authorization_end}}</td>
-                        <td>
-                            <span class="status-blue" ng-if="obj.review_status == 0">等待审核</span>
-                            <span class="status-red" ng-if="obj.review_status == 1">审核不通过</span>
-                            <span class="status-green" ng-if="obj.review_status == 2">审核通过</span>
-                        </td>
-                        <td>
-                            <a href="javascript: void (0);" ng-if="obj.review_note != ''" ng-click="showInfo(obj.review_note)">{{obj.review_note}}</a>
-                            <span ng-if="obj.review_note == ''">无</span>
-                        </td>
-                        <td>
-                            <a href="javascript: void (0);" ng-click="goDetails(obj)">查看</a>
-                        </td>
-                    </tr>
-                </table>
+            <!--<div class="store_mag_table">-->
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th>品牌名称</th>
+                    <th>申请日期</th>
+                    <th>授权期限</th>
+                    <th>状态</th>
+                    <th>审核备注</th>
+                    <th>详情</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table_content" ng-repeat="obj in authList">
+                    <td>{{obj.brand_name}}</td>
+                    <td>{{obj.create_time}}</td>
+                    <td>{{obj.authorization_start}} 至 {{obj.authorization_end}}</td>
+                    <td>
+                        <span class="status-blue" ng-if="obj.review_status == 0">等待审核</span>
+                        <span class="status-red" ng-if="obj.review_status == 1">审核不通过</span>
+                        <span class="status-green" ng-if="obj.review_status == 2">审核通过</span>
+                    </td>
+                    <td>
+                        <a href="javascript: void (0);" ng-if="obj.review_note != ''"
+                           ng-click="showInfo(obj.review_note)">{{obj.review_note}}</a>
+                        <span ng-if="obj.review_note == ''">无</span>
+                    </td>
+                    <td>
+                        <a href="javascript: void (0);" ng-click="goDetails(obj)">查看</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
                 <tm-pagination conf="pageConfig"></tm-pagination>
-            </div>
+            <!--</div>-->
         </div>
     </section>
 
@@ -212,8 +217,8 @@
                     <h4 class="modal-title">详情</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row form_box">
-                        <span class="col-md-12 form_txt">保存成功</span>
+                    <div class="row">
+                        <span class="col-md-12">保存成功</span>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -140,21 +140,21 @@
 
 /*品牌授权表格*/
 /*表格部分*/
-.store_mag_table{
-    margin-top: 9px;
-}
+/*.store_mag_table{*/
+    /*margin-top: 9px;*/
+/*}*/
 
-table{
-    width: 90%;
-    color: #7A8599;
-}
+/*table{*/
+    /*width: 90%;*/
+    /*color: #7A8599;*/
+/*}*/
 
-table tr{
-    height: 40px;
-}
-.table_content{
-    border-top: 1px solid #e6e6e6;
-}
+/*table tr{*/
+    /*height: 40px;*/
+/*}*/
+/*.table_content{*/
+    /*border-top: 1px solid #e6e6e6;*/
+/*}*/
 
 #delivery_service_score{
     margin-left: -14px;

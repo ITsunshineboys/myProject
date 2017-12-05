@@ -1,17 +1,6 @@
-/*头部开始*/
-.shop_manage {
-    color: #2F3033;
-    line-height: 14px;
-    font-weight: bold;
-}
 
-.commodity_manage {
-    color: #8D9199;
-}
-
-/*头部结束*/
 hr {
-    margin: 0 auto;
+    margin: 10px 0;
 }
 
 input {
@@ -34,8 +23,8 @@ input {
     margin-left: 85px;
 }
 
-.margin_top {
-    margin-top: 20px;
+table {
+    margin:20px auto 0;
 }
 
 .inline_block {

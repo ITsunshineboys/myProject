@@ -1,27 +1,25 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/edit_attribute/css/edit_attribute.css">
 <div ng-controller="edit_attribute_ctrl">
         <div class="top_title">
-            <span style="margin-right: 80px">分类名称</span>
+            <span>分类名称</span>
             <span ng-bind="titles"></span>
         </div>
         <hr>
         <div class="add_box">
-            <button class="btn btn-default" ng-click=selectAdd()><i class="iconfont icon-add"></i>下拉添加</button>
-            <button class="btn btn-default" ng-click="generalAdd()"><i class="iconfont icon-add"></i>普通添加</button>
+            <button class="btn btn-primary" ng-click=selectAdd()><i class="iconfont icon-add"></i>下拉添加</button>
+            <button class="btn btn-primary" ng-click="generalAdd()"><i class="iconfont icon-add"></i>普通添加</button>
         </div>
         <!--属性设置-->
-        <div class="margin_top">
+
             <table>
                 <tr ng-if="propattrs.length">
-                    <td style="padding-right: 90px">属性设置</td>
-                    <td style="text-align: center">属性名称</td>
+                    <td>属性名称</td>
                     <td>属性内容</td>
                     <td>单位</td>
                 </tr>
 
                 <form name="attr_form" novalidate action="">
                 <tr ng-repeat="item in propattrs">
-                    <td>&nbsp;</td>
                     <td class="padding_right">
                         <span >
                           <img src="pages/mall_manage/style_manage/edit_attribute/images/red.png" alt="">
@@ -41,7 +39,7 @@
                 </tr>
                 </form>
             </table>
-        </div>
+
         <!--保存 返回-->
         <div class="bottom">
             <button class="btn btn-primary" ng-click=saveProp()><i class="iconfont icon-save"></i>保存</button>
@@ -58,19 +56,15 @@
                         <h4 class="modal-title">提示</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="row form_box">
-                            <span class="col-md-12 form_txt">{{backInfo}}</span>
+                        <div class="row">
+                            <span class="col-md-12">{{backInfo}}</span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" ng-click="btnclick?modalBack():''" data-dismiss="modal" >确认</button>
+                        <button type="button" class="btn btn-primary" ng-click="btnclick?modalBack():''" data-dismiss="modal">确认</button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
-
-
-
+                </div>
+            </div>
+        </div>
     </section>
 </div>

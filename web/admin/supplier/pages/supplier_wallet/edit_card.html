@@ -5,58 +5,70 @@
             <div class="money bank_user">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>银行开户名</span>
-                <input type="text" placeholder="请输入开户名" ng-model="carddetail.username" name="bank_username" id="bank_username" class="input_style"
-                       required ng-blur="bank_usernamejudge=!!backcard_form.bank_username.$error" ng-class={'tored':backcard_form.bank_username.$invalid&&alljudgefalse||backcard_form.bank_username.$error.required&&bank_usernamejudge}>
+                <input type="text" placeholder="请输入开户名" ng-model="carddetail.username" name="bank_username"
+                       id="bank_username" class="input_style"
+                       required ng-blur="bank_usernamejudge=!!backcard_form.bank_username.$error"
+                       ng-class={'tored':backcard_form.bank_username.$invalid&&alljudgefalse||backcard_form.bank_username.$error.required&&bank_usernamejudge}>
             </div>
 
             <div class="money">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>银行账号</span>
-                <input type="text" placeholder="请输入银行账号" ng-model="carddetail.bankcard" name="back_account" id="back_account" class="input_style"
-                       required ng-blur="back_accountjudge=!!backcard_form.back_account.$error" ng-class={'tored':backcard_form.back_account.$invalid&&alljudgefalse||backcard_form.back_account.$error.required&&back_accountjudge}>
+                <input type="text" placeholder="请输入银行账号" ng-model="carddetail.bankcard" name="back_account"
+                       id="back_account" class="input_style"
+                       required ng-blur="back_accountjudge=!!backcard_form.back_account.$error"
+                       ng-class={'tored':backcard_form.back_account.$invalid&&alljudgefalse||backcard_form.back_account.$error.required&&back_accountjudge}>
             </div>
 
             <div class="money">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>开户银行</span>
-                <input type="text" placeholder="请输入开户银行" ng-model="carddetail.bankname" name="bank" id="bank" class="input_style"
-                       required ng-blur="bankjudge=!!backcard_form.bank.$error" ng-class={'tored':backcard_form.bank.$invalid&&alljudgefalse||backcard_form.bank.$error.required&&bankjudge}>
+                <input type="text" placeholder="请输入开户银行" ng-model="carddetail.bankname" name="bank" id="bank"
+                       class="input_style"
+                       required ng-blur="bankjudge=!!backcard_form.bank.$error"
+                       ng-class={'tored':backcard_form.bank.$invalid&&alljudgefalse||backcard_form.bank.$error.required&&bankjudge}>
             </div>
 
             <div class="money district">
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>开户行所在地</span>
-                <input type="text" placeholder="请输入开户行所在地" ng-model="carddetail.position" name="back_district" id="back_district" class="input_style"
-                       required ng-blur="back_districtjudge=!!backcard_form.back_district.$error" ng-class={'tored':backcard_form.back_district.$invalid&&alljudgefalse||backcard_form.back_district.$error.required&&back_districtjudge}>
+                <input type="text" placeholder="请输入开户行所在地" ng-model="carddetail.position" name="back_district"
+                       id="back_district" class="input_style"
+                       required ng-blur="back_districtjudge=!!backcard_form.back_district.$error"
+                       ng-class={'tored':backcard_form.back_district.$invalid&&alljudgefalse||backcard_form.back_district.$error.required&&back_districtjudge}>
             </div>
 
             <div class="money district">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>开户所在支行</span>
-            <input type="text" placeholder="请输入开户所在支行" ng-model="carddetail.bankbranch" name="bank_branch" id="bank_branch" class="input_style"
-                   required ng-blur="bank_branchjudge=!!backcard_form.bank_branch.$error" ng-class={'tored':backcard_form.bank_branch.$invalid&&alljudgefalse||backcard_form.bank_branch.$error.required&&bank_branchjudge}>
-</div>
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span>开户所在支行</span>
+                <input type="text" placeholder="请输入开户所在支行" ng-model="carddetail.bankbranch" name="bank_branch"
+                       id="bank_branch" class="input_style"
+                       required ng-blur="bank_branchjudge=!!backcard_form.bank_branch.$error"
+                       ng-class={'tored':backcard_form.bank_branch.$invalid&&alljudgefalse||backcard_form.bank_branch.$error.required&&bank_branchjudge}>
+            </div>
 
             <div class="btn_group">
-                <button class="btn btn-primary pull-left" ng-click="sureEditCard(backcard_form.$valid,backcard_form.$error.required)">确认</button>
+                <button class="btn btn-primary pull-left"
+                        ng-click="sureEditCard(backcard_form.$valid,backcard_form.$error.required)">确认
+                </button>
                 <button class="btn btn-default" id="back" ui-sref="supplier_account">返回</button>
             </div>
         </form>
     </section>
 
-    <div class="modal customer_modal detail_modal fade" id="edit_card" data-backdrop="static" data-keyboard="false">
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="edit_card">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">提示</h4>
                 </div>
-                <div class="modal-body body_font">
-                    <div>
-                        <span>添加/修改成功</span>
-                    </div>
+                <div class="modal-body">
+                    <p>添加/修改成功</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal" ng-click="successSure()">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="successSure()">确认</button>
                 </div>
             </div>
         </div>
