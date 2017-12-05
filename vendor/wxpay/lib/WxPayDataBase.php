@@ -135,25 +135,15 @@ class WxPayDataBase
     public function MakeSignAPP()
     {
         ksort($this->values);
-        $xml = "<xml>";
-        foreach ($this->values as $key=>$val)
-        {
-            $xml.="<".$key.">".$val."</".$key.">";
-        }
-        $xml.="</xml>";
-        var_dump($xml);
         //签名步骤一：按字典序排序参数
-
         $string = $this->ToUrlParams();
-        echo $string;
         //签名步骤二：在string后加入KEY
         $string = $string . "&key=".WxPayConfig::APP_KEY;
         //签名步骤三：MD5加密
         $string = md5($string);
         //签名步骤四：所有字符转为大写
         $result = strtoupper($string);
-//        return $result;
-        echo $result;die;
+        return $result;
     }
 
     /**
