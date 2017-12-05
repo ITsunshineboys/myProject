@@ -433,7 +433,12 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         $scope.wjparams.time_type = res.data.time_types[0].value;//待发货
     })
     //监听时间类型
-    $scope.wait_send_type=function () {
+    $scope.wait_send_type=function (value) {
+        console.log(value);
+        if(value=='custom'){
+            $scope.wjparams.start_time=''
+            $scope.wjparams.end_time='';
+        }
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         //恢复到默认图片
         $scope.sort_money_img='lib/images/arrow_default.png';

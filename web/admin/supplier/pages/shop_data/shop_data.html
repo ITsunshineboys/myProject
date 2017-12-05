@@ -8,7 +8,7 @@
             <li>访问量：{{total_viewed_number}}</li>
         </ul>
         <div>
-            <select  name="province" ng-model="params.time_type" ng-change="time_change()" class="form-control" ng-options="item.value as item.name for item in time"></select>
+            <select  name="province" ng-model="params.time_type" ng-change="time_change(params.time_type)" class="form-control" ng-options="item.value as item.name for item in time"></select>
             <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
             <input ng-if="params.time_type=='custom'" id="stop_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
         </div>

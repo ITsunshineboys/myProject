@@ -115,7 +115,7 @@
     <div ng-if="waitsend_flag">
         <div class="search form-inline clearfix">
             <div class="form-group pull-left">
-                <select  name="province" ng-model="wjparams.time_type" ng-change="wait_send_type()" class="form-control" ng-options="item.value as item.name for item in time"></select>
+                <select  name="province" ng-model="wjparams.time_type" ng-change="wait_send_type(wjparams.time_type)" class="form-control" ng-options="item.value as item.name for item in time"></select>
                 <input ng-if="wjparams.time_type=='custom'" id="start_time1"  ng-model="wjparams.start_time" max-date="{{wjparams.end_time}}"  ng-change="wait_send_change_time()" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
                 <input ng-if="wjparams.time_type=='custom'" id="stop_time1"   ng-model="wjparams.end_time"  min-date="{{wjparams.start_time}}" ng-change="wait_send_change_time()" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
             </div>
@@ -224,7 +224,7 @@
     <div ng-if="waitreceive_flag">
         <div class="search form-inline clearfix">
             <div class="form-group pull-left">
-                <select  name="province" ng-model="wjparams.time_type" ng-change="wait_send_type()" class="form-control" ng-options="item.value as item.name for item in time"></select>
+                <select  name="province" ng-model="wjparams.time_type" ng-change="wait_send_type(wjparams.time_type)" class="form-control" ng-options="item.value as item.name for item in time"></select>
                 <input ng-if="wjparams.time_type=='custom'" id='wait_receive_begin_time' ng-model="wjparams.start_time" max-date="{{wjparams.end_time}}" ng-change="wait_send_change_time()" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
                 <input ng-if="wjparams.time_type=='custom'" id='wait_receive_end_time'  ng-model="wjparams.end_time"  min-date="{{wjparams.start_time}}" ng-change="wait_send_change_time()" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
             </div>

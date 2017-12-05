@@ -39,8 +39,12 @@ angular.module('shop_data_module',[])
       $scope.params.time_type = res.data.time_types[0].value;
   });
   //监听开始和结束时间
-    $scope.time_change=function () {
-        $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+    $scope.time_change=function (value) {
+	    if(value=='custom'){
+		    $scope.params.start_time='';
+		    $scope.params.end_time='';
+      }
+	    $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         tablePages();
     };
 
