@@ -368,7 +368,7 @@ class SupplierCashController extends Controller
         }
 
         $page = (int)$request->get('page', 1);
-        $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
+        $page_size = (int)$request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $paginationData = OwnerCashManager::getCashListAll($where,$page, $page_size);
         return json_encode([
             'code' => 200,

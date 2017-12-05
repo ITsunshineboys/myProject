@@ -35,6 +35,7 @@ class EngineeringStandardCraft  extends ActiveRecord
      */
     public static function findByAll($project='',$code =510100,$select=[])
     {
+        $select = 'id,material,project_details';
         $row =  self::find()
             ->asArray()
             ->select($select)

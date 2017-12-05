@@ -329,8 +329,7 @@ class OwnerController extends Controller
         $weak_current_points = $all + $secondary_bedroom + $other;
 
         //查询弱电所需要材料
-        $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL,$goods_select);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -342,12 +341,10 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $weak_current = BasisDecorationService::judge($judge,$post);
+        $weak_current = BasisDecorationService::judge($goods,$post);
 
         //当地工艺
-        $craft_select = 'id,material,project_details';
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city'],$craft_select);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city']);
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -419,8 +416,7 @@ class OwnerController extends Controller
         $weak_current_points = $all + $secondary_bedroom + $kitchen + $toilet + $other;
 
         //查询弱电所需要材料
-        $goods_select ='goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::STRING_MATERIAL,$goods_select);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::STRING_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -573,8 +569,7 @@ class OwnerController extends Controller
         $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
 
         //查询弱电所需要材料
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
-        $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL,$select);
+        $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -622,8 +617,7 @@ class OwnerController extends Controller
 
 
         //防水所需材料
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::WATERPROOF_MATERIAL,$select);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::WATERPROOF_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -766,8 +760,7 @@ class OwnerController extends Controller
         $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
 
         //材料
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL,$select);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -950,8 +943,8 @@ class OwnerController extends Controller
 //        腻子天数 腻子面积÷【每天做腻子面积】
         $putty_day = $putty_area / $putty;
 
-        $select = 'goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name';
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL,$select);
+
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1198,8 +1191,7 @@ class OwnerController extends Controller
         $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
 
         //材料费
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL,$select);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1426,8 +1418,7 @@ class OwnerController extends Controller
         $labor_cost['worker_kind'] = $labor['worker_kind'];
 
         //材料费
-        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL,$select);
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
