@@ -1,6 +1,7 @@
-body{
+body {
     background-color: #F6F6F6 !important;
 }
+
 input[type="radio"] {
     display: none;
 }
@@ -27,7 +28,6 @@ button {
     margin-top: 5rem;
 }
 
-
 /***********
 小区信息
 ************/
@@ -41,24 +41,28 @@ button {
     top: 1.7rem;
 }
 
-.title{
+.title {
     padding-left: 1.1rem;
     font-size: 1.6rem;
     color: #666;
     margin: 0;
 }
-.sub_title{
+
+.sub_title {
     font-size: 1.4rem;
     color: #666;
 }
-.list_box{
+
+.list_box {
     margin-top: 1.6rem;
 }
-.input_box{
+
+.input_box {
     margin-left: 1.6rem;
     position: relative;
 }
-.input_box input{
+
+.input_box input {
     display: block;
     padding: .3rem 3rem;
     color: #666;
@@ -69,19 +73,21 @@ button {
     margin-top: -0.3rem;
 }
 
-.input_box img{
+.input_box img {
     position: absolute;
     left: 1.2rem;
     top: 0.6rem;
 }
+
 /*小区选择-end*/
 
 /*小区地址-start*/
-.list_box .info{
+.list_box .info {
     font-size: 1.4rem;
     color: #999;
     margin-left: 1.6rem;
 }
+
 /*小区地址-end*/
 
 /***********
@@ -122,7 +128,7 @@ button {
     color: #999;
 }
 
-.huxing div{
+.huxing div {
     width: 8rem;
     height: 8rem;
     overflow: hidden;
@@ -138,13 +144,14 @@ button {
     height: 100%;
 }
 
-.huxing.active{
+.huxing.active {
     color: #333;
 }
 
-.huxing.active div{
+.huxing.active div {
     border: 2px solid #333;
 }
+
 /*户型选择-end*/
 
 /*层高飘窗-start*/
@@ -159,45 +166,50 @@ button {
     border-top: 2px solid #dcdcdc;
 }
 
-.comment_height ul li span{
+.comment_height ul li span {
     color: #999;
     margin-left: 1.6rem;
 }
+
 /*层高飘窗-end*/
 
 /*楼梯选择-start*/
-.comment_height ul li span.choose_span{
+.comment_height ul li span.choose_span {
     margin-left: 0;
     color: #666;
 }
 
-.choose_stairs label{
+.choose_stairs label {
     margin-left: 1.6rem;
 }
-.comment_height ul li span.have{
+
+.comment_height ul li span.have {
     margin-left: 0.3rem;
     font-weight: normal;
     color: #666;
 }
 
-.comment_height ul li span.no{
+.comment_height ul li span.no {
     margin-left: 0.3rem;
     font-weight: normal;
     color: #999;
 }
 
-.choose_stairs label img{
+.choose_stairs label img {
     margin-top: -0.2rem;
 }
-.choose_stairs label .check_img{
+
+.choose_stairs label .check_img {
     margin-top: -0.2rem;
 }
-.structure{
+
+.structure {
     border: 2px solid #dcdcdc;
     width: 100%;
     padding: 1.2rem 1.2rem 0 1.2rem;
     border-radius: .3rem;
 }
+
 .structure ul {
 }
 
@@ -213,11 +225,11 @@ button {
     font-weight: 400;
 }
 
-.structure ul li label img{
+.structure ul li label img {
     margin-top: -0.2rem;
 }
 
-.structure ul li label .check_img{
+.structure ul li label .check_img {
     margin-top: -0.1rem;
 }
 
@@ -239,12 +251,10 @@ button {
 }
 
 .decoration {
-    margin-bottom: 0;
-    padding-left: 0;
     margin-top: 0.8rem;
 }
 
-.decoration li:last-child {
+.decoration > div:last-child {
     border-bottom: none;
     margin-bottom: 0;
 }
@@ -281,9 +291,8 @@ button {
     border-radius: 2.5rem;
 }
 
-.decoration li {
+.decoration > div {
     font-size: 1.2rem;
-    /*margin-left: 1rem;*/
     color: #888;
     position: relative;
     border-bottom: 2px solid #efefef;
@@ -291,13 +300,13 @@ button {
     padding-top: .4rem;
 }
 
-.decoration li span {
+.decoration > div span {
     font-size: 1rem;
     color: #999;
     line-height: 2.2rem;
 }
 
-.decoration li span.brand {
+.decoration > div span.brand {
     color: #666;
 }
 
@@ -362,7 +371,7 @@ button {
     width: 100%;
     height: 4rem;
     margin-bottom: 0 !important;
-    box-shadow: 0 -1px 0 rgba(0,0,0,0.2)
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2)
 }
 
 .primary_btn {
@@ -378,7 +387,7 @@ button {
     border: 2px solid #333;
 }
 
-.series ul{
+.series ul {
     padding-left: 0;
 }
 
@@ -459,6 +468,7 @@ button {
     margin-left: 2rem;
     border-radius: .3rem;
 }
+
 .tag {
     color: #06CB7E;
 }
@@ -490,25 +500,19 @@ button {
     vertical-align: middle;
 }
 
-.masonry {
+.basis_decoration {
     position: relative;
     margin-top: 1.2rem;
     background-color: white;
 }
 
-.masonry .column {
-    float: left;
+.basis_decoration .grid {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 14.3rem;
-    margin-right: 0.7rem;
-}
-
-.masonry .column:first-child {
-    margin-left: 0;
-}
-
-.masonry .box {
-    margin-bottom: .7rem;
     padding: .5rem .8rem;
+    background-color: #ffffff;
     border: 2px solid #E5E5E5;
     border-radius: .3rem;
 }
@@ -525,4 +529,121 @@ button {
     background-color: #fff;
     padding: 1.2rem;
     position: relative;
+}
+
+/* loading */
+#loading {
+    position: relative;
+    margin-top: 1rem;
+    width: 100%;
+    height: 80px;
+}
+
+#loading-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 20px;
+    width: 100px;
+    margin-left: -50px;
+}
+
+.object {
+    width: 20px;
+    height: 20px;
+    background-color: #000;
+    -moz-border-radius: 50% 50% 50% 50%;
+    -webkit-border-radius: 50% 50% 50% 50%;
+    border-radius: 50% 50% 50% 50%;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    position: absolute;
+}
+
+#object_one {
+    -webkit-animation: object 2s linear infinite;
+    animation: object 2s linear infinite;
+}
+
+#object_two {
+    -webkit-animation: object 2s linear infinite -.4s;
+    animation: object 2s linear infinite -.4s;
+}
+
+#object_three {
+    -webkit-animation: object 2s linear infinite -.8s;
+    animation: object 2s linear infinite -.8s;
+}
+
+#object_four {
+    -webkit-animation: object 2s linear infinite -1.2s;
+    animation: object 2s linear infinite -1.2s;
+}
+
+#object_five {
+    -webkit-animation: object 2s linear infinite -1.6s;
+    animation: object 2s linear infinite -1.6s;
+}
+
+@-webkit-keyframes object {
+    0% {
+        left: 100px;
+        top: 0
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    90% {
+        width: 40px;
+        height: 15px;
+    }
+    95% {
+        left: 100px;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    100% {
+        left: 100px;
+        top: 0;
+    }
+
+}
+
+@keyframes object {
+    0% {
+        left: 100px;
+        top: 0
+    }
+    80% {
+        left: 0;
+        top: 0;
+    }
+    85% {
+        left: 0;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    90% {
+        width: 40px;
+        height: 15px;
+    }
+    95% {
+        left: 100px;
+        top: -20px;
+        width: 20px;
+        height: 20px;
+    }
+    100% {
+        left: 100px;
+        top: 0;
+    }
 }

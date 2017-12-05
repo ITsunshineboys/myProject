@@ -41,7 +41,8 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
         series: "",                         // 系列ID
         style: ""                           // 风格ID
     };
-
+    $scope.isLoading = true;    // 加载动画显示
+    $scope.materials = [];
     // 样板间信息
     _ajax.get("/owner/case-list", $scope.params, function (res) {
         console.log(res, "样板间");
@@ -68,7 +69,29 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
         }
         params.series = activeTemp.case_picture[0].series_id;
         params.style = activeTemp.case_picture[0].style_id;
-        materials();
+
+        // 材料分类
+        _ajax.get("/owner/classify", {}, function (res) {
+            console.log(res, "材料分类");
+            let data = res.data;
+            let tempArray = data.pid.stair;
+            let primary = [];
+            let others = [];
+            for (let i of tempArray) {
+                i.cost = 0;   // 商品总价
+                i.second_level = [];    // 二级分类
+                i.count = 0; // 商品项
+                if (i.title === "辅材" || i.title === "主要材料") {
+                    primary.push(i);
+                } else {
+                    others.push(i);
+                }
+            }
+            $scope.classData = data.pid;    // 材料分类;
+            let tempCls = primary.concat(others);
+            sessionStorage.setItem("materials_bak", JSON.stringify(tempCls));
+            materials();
+        });
     });
 
     // 楼梯、系列和风格数据
@@ -82,29 +105,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             intro: data.show.series[0].intro,
             theme: data.show.series[0].theme
         };
-    });
-
-    // 材料分类
-    $scope.materials = [];
-    _ajax.get("/owner/classify", {}, function (res) {
-        console.log(res, "材料分类");
-        let data = res.data;
-        let tempArray = data.pid.stair;
-        let primary = [];
-        let others = [];
-        for (let i of tempArray) {
-            i.goods = [];
-            i.totalMoney = 0;
-            i.second_level = [];
-            if (i.title === "辅材" || i.title === "主要材料") {
-                primary.push(i);
-            } else {
-                others.push(i);
-            }
-        }
-        $scope.classData = data.pid;    // 材料分类;
-        $scope.materials = primary.concat(others);
-        sessionStorage.setItem("materials_bak", JSON.stringify($scope.materials));
     });
 
     // 户型选择
@@ -233,71 +233,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             series: $scope.activeObj.case_picture[0].series_id,
             style: $scope.activeObj.case_picture[0].series_id
         };
-        for (let material of $scope.materials) {
-            for (let goods of material.goods) {
-                for (let second of $scope.classData.level) {
-                    // 遍历二级分类 判断二级标题是否相等
-                    if (second.title === goods.goods_second) {
-                        let temp = {
-                            id: second.id,
-                            title: second.title,
-                            three_level: []
-                        };
-                        // 二级分类数组为0，则直接添加
-                        if (material.second_level.length === 0) {
-                            material.second_level.push(temp);
-                            let tempLevel = {
-                                id: goods.category_id,
-                                title: goods.goods_three,
-                                goods_detail: []
-                            };
-                            material.second_level[0].three_level.push(tempLevel);
-                            material.second_level[0].three_level[0].goods_detail.push(goods);
-                        } else {
-                            let flag = true;
-                            // 遍历二级分类数组
-                            for (let secondLevel of material.second_level) {
-                                // 若已有相同二级分类，则不做添加
-                                if (secondLevel.id === second.id) {
-                                    flag = false;
-                                    let bool = true;
-                                    for (let three of secondLevel.three_level) {
-                                        // 判断三级分类是否相同,若相同则添加商品
-                                        if (three.title === goods.goods_three) {
-                                            bool = false;
-                                            three.goods_detail.push(goods);
-                                            break;
-                                        }
-                                    }
-                                    if (bool) {
-                                        let tempLevel = {
-                                            id: goods.category_id,
-                                            title: goods.goods_three,
-                                            goods_detail: []
-                                        };
-                                        secondLevel.three_level.push(tempLevel);
-                                        secondLevel.three_level[secondLevel.three_level.length - 1].goods_detail.push(goods);
-                                    }
-                                    break;
-                                }
-                            }
-                            if (flag) {
-                                material.second_level.push(temp);
-                                let tempLevel = {
-                                    id: goods.category_id,
-                                    title: goods.goods_three,
-                                    goods_detail: []
-                                };
-                                material.second_level[material.second_level.length - 1].three_level.push(tempLevel);
-                                material.second_level[material.second_level.length - 1].three_level[0].goods_detail.push(goods);
-                            }
-                        }
-                        break
-                    }
-                }
-            }
-        }
-
         sessionStorage.setItem("huxing", JSON.stringify(huxing));
         sessionStorage.setItem("materials", JSON.stringify($scope.materials));
         switch (index) {
@@ -312,8 +247,26 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
         }
     };
 
+    $scope.$on('ngRepeatFinished', function () {
+        $timeout(function () {
+            let $grid = $('#basis_decoration').find('.grid');
+            let cur_height = [0, 0];
+            $grid.each(function () {
+                let min = parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[1] : cur_height[0];
+                let minIndex = cur_height[0] > cur_height[1] ? 1 : 0;
+                $(this).css({
+                    'top': min,
+                    'left': minIndex * ($(window).width() * 0.471),
+                });
+                cur_height[minIndex] += $(this).outerHeight() + 20;
+                $('#basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
+            });
+        })
+    });
+
     // 材料
     function materials() {
+        $scope.isLoading = true;
         $scope.price = 0;               // 原价
         $scope.preferential = 0;        // 优惠价
         let workerMoney = 0;            // 工人费用
@@ -323,6 +276,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             let data = res.data;
             if (data === null) {
                 $scope.activeObj.type = 0;
+                $scope.isLoading = false;
                 return;
             }
 
@@ -335,7 +289,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             $scope.activeObj.type = 1;
 
             if (mySwiper !== undefined) {
-                mySwiper.destroy(true,true);
+                mySwiper.destroy(true, true);
             }
             if (sessionStorage.getItem("materials") === null) {
                 $scope.roomPicture = data.images.effect_images;
@@ -349,14 +303,62 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                 $scope.price = workerMoney;
                 $scope.preferential = workerMoney;
 
-                for (let obj of materials) {    // 遍历材料
+                // 遍历材料
+                for (let obj of materials) {
+                    // 遍历一级分类
                     for (let o of $scope.materials) {
-                        // 遍历一级分类  判断分类标题是否相等
+                        // 判断两者一级标题是否相等
                         if (obj.goods_first === o.title) {
-                            o.goods.push(obj);
+                            // 判断 materials 是否有二级分类
+                            if (o.second_level.length === 0) {
+                                // 遍历二级分类
+                                for (let cls of $scope.classData.level) {
+                                    // 判断商品二级分类是否相等
+                                    if (obj.goods_second === cls.title) {
+                                        let tempSecondInfo = {
+                                            id: cls.id,
+                                            title: obj.goods_second,
+                                            cost: parseFloat(obj.cost),
+                                            goods_detail: []
+                                        };
+                                        tempSecondInfo.goods_detail.push(obj);
+                                        o.second_level.push(tempSecondInfo);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                let flag = true;
+                                // 遍历 materials 的二级分类
+                                for (let cls of o.second_level) {
+                                    if (obj.goods_second === cls.title) {
+                                        cls.cost += parseFloat(obj.cost);
+                                        cls.goods_detail.push(obj);
+                                        flag = false;
+                                        break;
+                                    }
+                                }
+                                // 如果 materials 的二级分类没有相同，则遍历分类数据
+                                if (flag) {
+                                    for (let cls of $scope.classData.level) {
+                                        // 判断商品二级分类是否相等
+                                        if (obj.goods_second === cls.title) {
+                                            let tempSecondInfo = {
+                                                id: cls.id,
+                                                title: obj.goods_second,
+                                                cost: parseFloat(obj.cost),
+                                                goods_detail: []
+                                            };
+                                            tempSecondInfo.goods_detail.push(obj);
+                                            o.second_level.push(tempSecondInfo);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                             break;
                         }
                     }
+
                     let tempObj = {
                         one_title: obj.goods_first,
                         two_title: obj.goods_second,
@@ -373,16 +375,14 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                 }
 
                 for (let obj of $scope.materials) {
-                    for (let o of obj.goods) {
-                        obj.totalMoney += parseFloat(o.cost);
+                    for (let o of obj.second_level) {
+                        obj.cost += o.cost;
+                        obj.count += o.goods_detail.length;
                     }
                 }
             } else {
                 $scope.roomPicture = JSON.parse(sessionStorage.getItem("roomPicture"));
                 $scope.materials = JSON.parse(sessionStorage.getItem("materials"));
-                for (let material of $scope.materials) {
-                    material.second_level = [];
-                }
                 let worker = JSON.parse(sessionStorage.getItem("worker"));
                 for (let obj of worker) {
                     workerMoney += parseFloat(obj.worker_price);
@@ -391,41 +391,28 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                 $scope.preferential = workerMoney;
 
                 for (let obj of $scope.materials) {    // 遍历材料
-                    if (obj.goods.length === 0) {
+                    if (obj.count === 0) {
                         continue;
                     }
-                    for (let o of obj.goods) {
-                        let tempObj = {
-                            one_title: o.goods_first,
-                            two_title: o.goods_second,
-                            three_title: o.goods_three,
-                            price: o.cost,
-                            procurement: o.procurement
-                        };
-                        let tempFreight = {
-                            goods_id: o.id,
-                            num: o.quantity
-                        };
-                        params.list.push(tempObj);
-                        freightParams.goods.push(tempFreight);
-                    }
-                }
-
-                for (let obj of $scope.materials) {
-                    obj.totalMoney = 0;
-                    for (let o of obj.goods) {
-                        obj.totalMoney += parseFloat(o.cost);
+                    for (let second of obj.second_level) {
+                        for (o of second.goods_detail) {
+                            let tempObj = {
+                                one_title: o.goods_first,
+                                two_title: o.goods_second,
+                                three_title: o.goods_three,
+                                price: o.cost,
+                                procurement: o.procurement
+                            };
+                            let tempFreight = {
+                                goods_id: o.id,
+                                num: o.quantity
+                            };
+                            params.list.push(tempObj);
+                            freightParams.goods.push(tempFreight);
+                        }
                     }
                 }
             }
-
-            $timeout(function () {
-                mySwiper = new Swiper("#swiperList", {
-                    autoplay: 3000,
-                    loop: true,
-                    pagination: ".swiper-pagination"
-                });
-            });
 
             // 系数
             _ajax.post("/owner/coefficient", params, function (res) {
@@ -443,12 +430,21 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             });
 
             $timeout(function () {
+                mySwiper = new Swiper("#swiperList", {
+                    autoplay: 3000,
+                    loop: true,
+                    pagination: ".swiper-pagination"
+                });
+
                 if (sessionStorage.getItem("roomScroll") !== null) {
                     let roomScroll = sessionStorage.getItem("roomScroll");
                     $location.hash(roomScroll);
                     $anchorScroll();
                 }
-            })
+                $scope.isLoading = false;
+            });
+
+            console.log($scope.materials);
         })
     }
 }]);

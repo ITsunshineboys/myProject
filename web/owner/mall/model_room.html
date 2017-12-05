@@ -38,7 +38,7 @@
                     <div>
                         <img ng-src="{{obj.house_image}}"/>
                     </div>
-                    <span>{{obj.particulars}} {{obj.area}}<sup>2</sup></span>
+                    <span>{{obj.particulars}} {{obj.area}}m<sup>2</sup></span>
                 </li>
             </ul>
         </div>
@@ -141,54 +141,53 @@
         <!--轮播图-->
     </div>
 
+    <div id="loading" ng-if="isLoading">
+        <div id="loading-center">
+            <div class="object" id="object_one"></div>
+            <div class="object" id="object_two" style="left:20px;"></div>
+            <div class="object" id="object_three" style="left:40px;"></div>
+            <div class="object" id="object_four" style="left:60px;"></div>
+            <div class="object" id="object_five" style="left:80px;"></div>
+        </div>
+    </div>
+
     <!--材料选择-->
     <div class="background_w clearfix item_masonry" ng-show="activeObj.type == 1">
         <div class="shu"></div>
         <span class="title">材料选择</span>
         <span class="comment_edit">点击以下版块查看详情</span>
-        <div id="masonry" class="masonry clearfix">
-            <!--辅材-->
-            <div class="column">
-                <div class="box" ng-repeat="obj in materials" id="{{obj.id}}" ng-if="$even == true" ng-click="editMaterial(obj.id,$index)">
-                    <h1 class="title_p" ng-if="obj.title == '辅材'">
+        <div id="basis_decoration" class="basis_decoration" ng-if="!isLoading">
+            <div class="grid" ng-repeat="obj in materials" id="{{obj.id}}" ng-click="editMaterial(obj.id, $index)" water>
+                <div ng-if="obj.count != 0">
+                    <h1 class="title_p" ng-if="obj.id == 1">
                         基础装修
-                        <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
+                        <span>{{obj.second_level.length + '项'}}</span>
                     </h1>
-                    <h1 class="title_p" ng-if="obj.title != '辅材'">
+                    <h1 class="title_p" ng-if="obj.id == 14">
                         {{obj.title}}
-                        <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
+                        <span>{{obj.second_level.length + '项'}}</span>
                     </h1>
-                    <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
-                    <ul class="decoration" ng-show="obj.goods.length != 0">
-                        <li ng-repeat="data in obj.goods">
-                            <span ng-show="$parent.$index == 0">{{data.goods_second}}</span>
-                            <span ng-show="$parent.$index != 0">{{data.goods_three}}</span>
-                            <br ng-show="$parent.$index != 0">
-                            <span class="brand" ng-show="$parent.$index != 0">{{data.name}}</span>
-                            <span class="pic_q">{{'¥' + data.cost}}</span>
-                        </li>
-                    </ul>
-                    <a class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</a>
-                </div>
-            </div>
-            <div class="column">
-                <div class="box" ng-repeat="obj in materials" id="{{obj.id}}" ng-if="$odd == true" ng-click="editMaterial(obj.id, $index)">
-                    <h1 class="title_p">
+                    <h1 class="title_p" ng-if="obj.id != 1 && obj.id != 14">
                         {{obj.title}}
-                        <span ng-show="obj.goods.length != 0">{{obj.goods.length + '项'}}</span>
+                        <span>{{obj.count + '项'}}</span>
                     </h1>
-                    <span class="pic" ng-show="obj.goods.length != 0">{{'¥' + obj.totalMoney.toFixed(2)}}</span>
-                    <ul class="decoration" ng-show="obj.goods.length != 0">
-                        <li ng-repeat="data in obj.goods">
-                            <span ng-show="$parent.$index == 1">{{data.goods_second}}</span>
-                            <span ng-show="$parent.$index != 1">{{data.goods_three}}</span>
-                            <br ng-show="$parent.$index != 1">
-                            <span class="brand" ng-show="$parent.$index != 1">{{data.name}}</span>
-                            <span class="pic_q">{{'¥' + data.cost}}</span>
-                        </li>
-                    </ul>
-                    <a class="edit-btn" ng-show="obj.goods.length == 0">点击编辑</a>
+                    <span class="pic">{{'¥' + obj.cost.toFixed(2)}}</span>
+                    <div class="decoration">
+                        <div ng-repeat="second in obj.second_level">
+                            <div ng-if="obj.id == 1 || obj.id == 14">
+                                <span>{{second.title}}</span>
+                                <span class="pic_q">{{'¥' + second.cost.toFixed(2)}}</span>
+                            </div>
+                            <div ng-if="obj.id != 1 && obj.id != 14" ng-repeat="data in second.goods_detail">
+                                <span class="brand">{{data.title}}</span>
+                                <br>
+                                <span>{{data.name}}</span>
+                                <span class="pic_q">{{'¥' + data.cost.toFixed(2)}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <a class="edit-btn" ng-show="obj.count == 0">点击编辑</a>
             </div>
         </div>
     </div>

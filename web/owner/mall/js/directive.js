@@ -1,19 +1,13 @@
-angular.module("directives", [])
-    .directive('water',function ($timeout) {
-        return {
-            restrict: "EA",
-            // scope:false,
-            link:function (scope,element,attrs) {
-                console.log(element)
-                console.log(element.find('div'))
-                if(scope.$last === true){
-                    $timeout(function () {
-                        scope.$emit('ngRepeatFinished')
-                    },300)
-                }
+app.directive('water', function ($timeout) {
+    return {
+        restrict: "A",
+        link: function (scope, element, attrs) {
+            if (scope.$last) {
+                scope.$emit('ngRepeatFinished');
             }
         }
-    })
+    }
+})
     .directive('tmPagination', function () {
         return {
             restrict: 'EA',
@@ -226,4 +220,4 @@ angular.module("directives", [])
                 });
             }
         };
-    })
+    });

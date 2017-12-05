@@ -355,21 +355,21 @@ angular.module('all_controller', [])
         // })
         //监听页面是否加载完成操作DOM
         $scope.$on('ngRepeatFinished', function () {
-            let $grid = $('.grid')
-            console.log($grid)
-            let cur_height = [0, 0]
-            $grid.each(function () {
-                console.log(cur_height)
-                let min = parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[1] : cur_height[0]
-                let minIndex = cur_height[0] > cur_height[1] ? 1 : 0
-                $(this).css({
-                    'top': min,
-                    'left': minIndex * ($(window).width() * 0.471),
+            $timeout(function () {
+                let $grid = $('#basis_decoration').find('.grid');
+                let cur_height = [0, 0];
+                $grid.each(function () {
+                    let min = parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[1] : cur_height[0];
+                    let minIndex = cur_height[0] > cur_height[1] ? 1 : 0;
+                    $(this).css({
+                        'top': min,
+                        'left': minIndex * ($(window).width() * 0.471),
+                    });
+                    cur_height[minIndex] += $(this).outerHeight() + 20;
+                    $('#basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
                 })
-                cur_height[minIndex] += $(this).outerHeight() + 20
-                $('.basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
-            })
-        })
+            }, 300)
+        });
         //跳转内页
         $scope.go_inner = function (item, index) {
             if (item.title == '辅材') {
