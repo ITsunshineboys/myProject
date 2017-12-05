@@ -151,9 +151,9 @@ class PayService
         $jsapi->SetPrepayid($UnifiedOrderResult['prepay_id']);
         $timeStamp = time();
         $jsapi->SetTimeStamp("$timeStamp");
-        $jsapi->SetNonceStr(WxPayApi::getNonceStr());
+        $jsapi->SetNonceStr($UnifiedOrderResult['nonce_str']);
         $jsapi->SetPackage("Sign=WXPay");
-        $jsapi->SetAppPaySign($jsapi->MakeSignAPP());
+        $jsapi->SetAppPaySign($UnifiedOrderResult['sign']);
         $parameters = json_encode($jsapi->GetValues());
         return $parameters;
     }
