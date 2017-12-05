@@ -327,7 +327,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
         .state("add_store", {       //添加商家
             url: "/add_store",
-            templateUrl: "pages/mall_manage/merchant_manage/add_store/add_store.html"
+            templateUrl: "pages/mall_manage/merchant_manage/add_store/add_store.html",
+            css: "pages/mall_manage/merchant_manage/add_store/css/add_store.css"
         })
         .state("store_detail", {    //商家详情
             params: {"store": null, "authorize_flag": null},

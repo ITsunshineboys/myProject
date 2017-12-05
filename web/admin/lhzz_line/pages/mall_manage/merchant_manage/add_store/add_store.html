@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="pages/mall_manage/merchant_manage/add_store/css/add_store.css">
 <div ng-controller="addstore">
     <form name="storeform" novalidate>
         <div class="add_store_content">
@@ -229,29 +228,45 @@
             </div>
 
             <div class="btns">
-                <button data-toggle="modal" data-target={{suremodal}} type="submit"
-                        ng-click="sureAddStore(storeform.$valid,storeform.$error.required)">确认
-                </button>
-                <button ui-sref="store_mag">返回</button>
+                <button type="submit" class="btn btn-primary" ng-click="sureAddStore(storeform.$valid,storeform.$error.required)">确认</button>
+                <button class="btn btn-default" ui-sref="store_mag">返回</button>
             </div>
         </div>
     </form>
 
-    <!--添加成功提示模态框-->
-    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">添加成功</h6>
-                </div>
 
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="sure()">确认</button>
+    <!--<div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">-->
+        <!--<div class="modal-dialog">-->
+            <!--<div class="modal-content" id="save_content">-->
+                <!--<div class="modal-header" id="save_header">-->
+                    <!--<h4 class="modal-title" id="tishi">-->
+                        <!--提示-->
+                    <!--</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body" id="save_body">-->
+                    <!--<h6 id="tishi_wenzi">添加成功</h6>-->
+                <!--</div>-->
+
+                <!--<div class="btn_modal_two">-->
+                    <!--<button id="caozuo_sure" data-dismiss="modal" ng-click="sure()">确认</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--添加成功提示模态框-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="suremodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>添加成功</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sure()">确认</button>
                 </div>
             </div>
         </div>

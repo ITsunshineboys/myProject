@@ -168,64 +168,27 @@ hr{
     left: 18px;
 }
 
+
+/*默认法人身份证号*/
+.default_company_type span:last-child{
+    margin-left: 60px;
+}
+
+/*默认法人身份证*/
+.default_cla_pic{
+    margin-top: 24px;
+}
+
+.default_cla_pic img{
+    vertical-align: top;
+    margin-left: 20px;
+}
+
+
 /*底部按钮*/
 .btns{
     margin-top: 93px;
     margin-left: 146px;
-}
-
-.btns button{
-    clear: both;
-    width: 80px;
-    height: 34px;
-    border: 1px solid #487AF8;
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border-radius: 3px;
-    margin-right: 34px;
-}
-
-.btns button:last-child{
-    border: 1px solid rgb(194, 194, 194);
-    color: rgb(102, 111, 128);
-    background-color: white;
-    border-radius: 3px;
-    margin-right: 34px;
-}
-
-/*确认提示框*/
-#save_content{
-    width: 636px;
-    height: 256px;
-}
-
-#tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
-#caozuo_sure{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #487AF8;
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    margin-top: 54px;
-}
-
-#caozuo_sure{
-    float: right;
-    margin-right: 40px;
 }
 
 .tored{
@@ -243,17 +206,4 @@ hr{
     margin-left: 87px;
 }
 
-
-.default_company_type span:last-child{
-    margin-left: 60px;
-}
-
-.default_cla_pic{
-    margin-top: 24px;
-}
-
-.default_cla_pic img{
-    vertical-align: top;
-    margin-left: 20px;
-}
 

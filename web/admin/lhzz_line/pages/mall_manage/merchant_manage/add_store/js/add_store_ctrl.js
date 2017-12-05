@@ -1,17 +1,9 @@
-var add_store = angular.module("addstoreModule", ['ngFileUpload']);
-add_store.controller("addstore", function ($scope, $http, Upload, $location, $anchorScroll, $window, $state,$rootScope,_ajax) {
+angular.module("addstoreModule", ['ngFileUpload']).controller("addstore", function ($scope, $http, Upload, $location, $anchorScroll, $window, $state,$rootScope,_ajax) {
     cascadeData();
     const picpath = 'pages/mall_manage/merchant_manage/add_store/images/default.png'
     const phone_pattern = /^1[3|4|5|7|8][0-9]{9}$/;
     const legal_pattern=/^[\u0391-\uFFE5A-Za-z]+$/;
     const id_pattern = /(^[0-9]{15}$)|(^[0-9]{18}$)|(^[0-9]{17}([0-9]|X|x)$)/;
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -349,7 +341,6 @@ add_store.controller("addstore", function ($scope, $http, Upload, $location, $an
                 wrongScroll('companyname');
                 break;
             case 200:
-                console.log('成功添加');
                 $("#suremodal").modal("show");
                 break;
             case 1038:
