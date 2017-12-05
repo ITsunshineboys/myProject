@@ -180,11 +180,6 @@ app.controller('commodity_offline', ['_ajax','$scope', '$stateParams','$http', f
         })
     }
 
-    // /*取消批量上架*/
-    // $scope.cancelplliangonline = function () {
-    //     $scope.table.roles.length = 0;
-    // }
-
     $scope.showOffReason = (obj) => {
         $scope.offreason = obj;
     }

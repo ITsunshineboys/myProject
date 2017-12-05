@@ -2,7 +2,7 @@
     <!--全选、上架-->
     <button class="btn btn-default" ng-click=checkAll()>全选</button>
     <button class="btn btn-default" data-toggle="modal" data-target="#piliangonline_modal" ng-click="batchOnline()">
-        上架{{table.roles}}
+        上架
     </button>
 
     <div class="form-group pull-right">
@@ -148,7 +148,7 @@
 
             <div class="modal-footer" ng-show="table.roles.length">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="surepiliangonline()">确认</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelplliangonline()">取消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
 
             <div class="modal-footer" ng-show="!table.roles.length">
