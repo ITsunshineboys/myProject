@@ -115,6 +115,7 @@ class WxPayDataBase
      */
     public function MakeSign()
     {
+        var_dump($this->values);die;
         //签名步骤一：按字典序排序参数
         ksort($this->values);
         $string = $this->ToUrlParams();
@@ -134,7 +135,6 @@ class WxPayDataBase
      */
     public function MakeSignAPP()
     {
-        var_dump($this->values);die;
         ksort($this->values);
         //签名步骤一：按字典序排序参数
         $string = $this->ToUrlParams();

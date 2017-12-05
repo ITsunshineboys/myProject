@@ -153,7 +153,7 @@ class PayService
         $jsapi->SetTimeStamp("$timeStamp");
         $jsapi->SetNonceStr(WxPayApi::getNonceStr());
         $jsapi->SetPackage("Sign=WXPay");
-        $jsapi->SetAppPaySign($jsapi->MakeSignAPP());
+        $jsapi->SetAppPaySign($jsapi->MakeSign());
         $parameters = json_encode($jsapi->GetValues());
         return $parameters;
     }
