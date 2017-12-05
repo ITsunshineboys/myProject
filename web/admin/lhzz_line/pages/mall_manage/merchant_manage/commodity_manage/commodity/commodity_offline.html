@@ -1,8 +1,8 @@
 <div class="search form-inline clearfix">
     <!--全选、上架-->
     <button class="btn btn-default" ng-click=checkAll()>全选</button>
-    <button class="btn btn-default" data-toggle="modal" data-target="#piliangonline_modal" ng-click="piliangshangjia()">
-        上架
+    <button class="btn btn-default" data-toggle="modal" data-target="#piliangonline_modal" ng-click="batchOnline()">
+        上架{{table.roles}}
     </button>
 
     <div class="form-group pull-right">
@@ -80,10 +80,7 @@
         <td ng-if="menu_list[10].value" class="red">{{item.status}}</td>
         <td ng-if="menu_list[11].value">{{item.offline_time}}</td>
         <td ng-if="menu_list[12].value">{{item.operator}}</td>
-        <td ng-if="menu_list[13].value"><img class="goodpic"
-                                             ng-src="{{ item.cover_image}}"
-                                             alt=""></td>
-
+        <td ng-if="menu_list[13].value"><img class="goodpic" ng-src="{{ item.cover_image}}" alt=""></td>
         <td ng-if="menu_list[14].value" data-toggle="modal" data-target="#show_reason"
             ng-click="showOffReason(item.offline_reason)"><span class="off_reason">{{item.offline_reason}}</span>
         </td>
@@ -96,52 +93,49 @@
 </table>
 <tm-pagination conf="pageConfig"></tm-pagination>
 
-<!--上架模态框-->
-<div class="modal fade" id="up_shelves_modal" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog">
+<!--单个上架 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="up_shelves_modal">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body">
                 <span>是否确认上架1件商品</span>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" ng-click="sureGoodOnline()">确认</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    取消
-                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureGoodOnline()'>确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div>
     </div>
 </div>
+
 <!--上架被移除 模态框-->
-<div class="modal fade" id="up_not_shelves_modal">
-    <div class="modal-dialog">
+<div class="modal fade" tabindex="-1" role="dialog" id="up_not_shelves_modal">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body">
                 <span>{{cantonline}}</span>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认
-                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认</button>
             </div>
         </div>
     </div>
 </div>
-<!--批量上架模态框-->
-<div class="modal fade" id="piliangonline_modal">
-    <div class="modal-dialog">
+
+<!--批量上架 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="piliangonline_modal">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body" ng-show="table.roles.length">
@@ -153,26 +147,23 @@
             </div>
 
             <div class="modal-footer" ng-show="table.roles.length">
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="surepiliangonline()">
-                    确认
-                </button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelplliangonline()">取消
-                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="surepiliangonline()">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelplliangonline()">取消</button>
             </div>
+
             <div class="modal-footer" ng-show="!table.roles.length">
-                <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
             </div>
         </div>
     </div>
 </div>
 
-
 <!-- 下架原因-详情 -->
-<div class="modal customer_modal detail_modal fade" id="show_reason" tabindex="-1" role="dialog"
-     data-backdrop="static" data-keyboard="false">
+<div class="modal fade" tabindex="-1" role="dialog" id="show_reason">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">详情</h4>
             </div>
             <div class="modal-body">
@@ -181,6 +172,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div>
+

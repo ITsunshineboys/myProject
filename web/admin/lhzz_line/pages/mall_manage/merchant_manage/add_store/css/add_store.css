@@ -1,15 +1,19 @@
 /*表单内容*/
-.add_store_content{
+* {
+    outline: none;
+}
+
+.add_store_content {
     font-size: 14px;
     color: #666F80;
 }
 
-.sel_group{
+.sel_group {
     display: inline-block;
     margin-left: 59px;
 }
 
-.sel_group select{
+.sel_group select {
     width: 106px;
     height: 31px;
     border-radius: 3px;
@@ -17,18 +21,18 @@
     line-height: 31px;
 }
 
-#sec_select,#third_select{
+#sec_select, #third_select {
     margin-left: 9px;
 }
 
 /*单位类型*/
-.company_type{
+.company_type {
     font-size: 14px;
     color: #666F80;
     margin-top: 24px;
 }
 
-.company_type select{
+.company_type select {
     width: 245px;
     height: 31px;
     margin-left: 87px;
@@ -38,12 +42,12 @@
 }
 
 /*店铺名称*/
-.red_mark{
-    color:red;
+.red_mark {
+    color: red;
     margin-left: -17px;
 }
 
-.company_type input{
+.company_type input {
     margin-left: 87px;
     width: 245px;
     height: 31px;
@@ -54,59 +58,59 @@
     line-height: 31px;
 }
 
-.company_type p{
+.company_type p {
     font-size: 12px;
     margin-left: 164px;
     margin-top: 5px;
 }
 
 /*是否支持无登录购买*/
-.without_log_buy{
+.without_log_buy {
     margin-top: 24px
 }
 
-.radiogroup{
+.radiogroup {
     margin-left: 17px;
 }
 
 /*分割线*/
-hr{
-    margin-top: 32px!important;
-    margin-bottom: 27px!important;
+hr {
+    margin-top: 32px !important;
+    margin-bottom: 27px !important;
 }
 
 /*公司名称*/
-#companyname{
+#companyname {
     margin-left: 55px;
 }
 
 /*社会信用代码*/
-#registercode{
+#registercode {
     margin-left: 13px;
 }
 
 /*上传营业执照*/
-.cla_pic{
+.cla_pic {
     height: 220px;
     margin-top: 8px;
 }
 
-.upload_pic{
+.upload_pic {
     display: inline;
 }
 
-#cla_pic_uploadpic{
+#cla_pic_uploadpic {
     position: relative;
     top: 46px;
     width: 120px;
     left: 58px;
 }
 
-.upload_tishi{
+.upload_tishi {
     font-size: 12px;
 }
 
-.upload_pic h6{
+.upload_pic h6 {
     font-size: 12px;
     width: 300px;
     color: #BFC0C2;
@@ -115,14 +119,14 @@ hr{
     left: 148px;
 }
 
-.upload{
+.upload {
     width: 300px;
     position: relative;
     top: 43px;
     left: 172px;
 }
 
-#upload_btn{
+#upload_btn {
     width: 67px;
     height: 24px;
     border: 1px solid #BFC0C2;
@@ -135,7 +139,7 @@ hr{
     background-color: white;
 }
 
-.reload_tishi{
+.reload_tishi {
     width: 300px;
     font-size: 12px;
     color: red;
@@ -145,64 +149,63 @@ hr{
 }
 
 /*登录账户*/
- .login_account{
-     margin-top: 38px;
- }
+.login_account {
+    margin-top: 38px;
+}
 
- /*法人身份证号*/
-#idcard{
+/*法人身份证号*/
+#idcard {
     margin-left: 59px;
 }
 
-#idfront{
+#idfront {
     position: relative;
     top: 46px;
     width: 120px;
     left: 18px;
 }
 
-#idback{
+#idback {
     position: relative;
     top: 46px;
     width: 120px;
     left: 18px;
 }
-
 
 /*默认法人身份证号*/
-.default_company_type span:last-child{
+.default_company_type span:last-child {
     margin-left: 60px;
 }
 
 /*默认法人身份证*/
-.default_cla_pic{
+.default_cla_pic {
     margin-top: 24px;
 }
 
-.default_cla_pic img{
+.default_cla_pic img {
     vertical-align: top;
     margin-left: 20px;
 }
 
-
 /*底部按钮*/
-.btns{
+.btns {
     margin-top: 93px;
     margin-left: 146px;
 }
 
-.tored{
+.tored {
     border: 1px solid red !important;
 }
 
-.picstyle{
-    height: 120px!important;
+.picstyle {
+    height: 120px !important;
 }
-.warningred{
+
+.warningred {
     color: red;
 }
 
-.mar_left{
+.mar_left {
     margin-left: 87px;
 }
 

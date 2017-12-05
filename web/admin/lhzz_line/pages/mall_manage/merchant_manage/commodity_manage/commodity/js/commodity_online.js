@@ -152,6 +152,12 @@ app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', fu
         $scope.offline_reason = '';
     }
 
+
+    //批量下架
+    $scope.batchOffline = () => {
+        $scope.batch_offlinereason = '';
+    }
+
     /*确认批量下架*/
     $scope.surepiliangoffline = function () {
         let batchoffids = $scope.table.roles.join(',');
@@ -168,7 +174,6 @@ app.controller('commodity_online', ['_ajax','$scope', '$stateParams','$http', fu
     /*取消批量下架*/
     $scope.cancelplliangoffline = function () {
         $scope.batch_offlinereason = '';
-        $scope.table.roles.length = 0;
     }
 
 

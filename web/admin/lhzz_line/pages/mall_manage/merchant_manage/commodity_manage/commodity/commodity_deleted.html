@@ -70,70 +70,11 @@
             <td ng-if="menu_list[10].value" class="green">{{item.status}}</td>
             <td ng-if="menu_list[11].value">{{item.delete_time}}</td>
             <td ng-if="menu_list[12].value">{{item.operator}}</td>
-            <td ng-if="menu_list[13].value"><img class="goodpic"
-                                                 ng-src="{{ item.cover_image}}"
-                                                 alt=""></td>
+            <td ng-if="menu_list[13].value"><img class="goodpic" ng-src="{{ item.cover_image}}" alt=""></td>
             <td ng-if="menu_list[14].value" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">查看</td>
         </tr>
         </tbody>
     </table>
     <tm-pagination conf="pageConfig"></tm-pagination>
 
-    <!--单个下架 模态框-->
-    <div class="modal fade" id="down_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">下架原因</h4>
-                </div>
-                <div class="modal-body">
-                    <span style="margin-right: 50px;vertical-align: top">下架原因（选填）</span>
-                    <textarea cols="30" rows="10" ng-model="offline_reason"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureGoodOffline()'>确认
-                    </button>
-                    <button type="button" class="btn btn-defalut" data-dismiss="modal" ng-click='cancelSingleOffline()'>取消</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-
-
-    <!--批量下架 模态框-->
-    <div class="modal fade" id="alloff_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="piliangxiajia_content">
-                <div class="modal-header" id="piliangxiajia_header">
-                    <h4 class="modal-title" id="piliangxiajiacaozuo">
-                        下架操作
-                    </h4>
-                </div>
-                <div class="modal-body" id="piliangxiajia_body" ng-show="table.roles.length">
-                    <h6 id="piliangxiajia_fenlei">下架
-                        {{table.roles.length}}个分类
-                    </h6>
-                    <h6 id="piliangxiajia_reason">下架原因（选填）</h6>
-                    <textarea name="" id="piliangxiajia_textarea" cols="43" rows="14"
-                              placeholder="请填写下架原因，如选择多个则为批量备注" ng-model="batch_offlinereason"></textarea>
-                </div>
-
-                <div class="modal-body" ng-show="!table.roles.length">
-                    请选择商品下架
-                </div>
-                <div class="btn_modal" ng-show="table.roles.length">
-                    <button id="piliang_cancel" data-dismiss="modal" ng-click="cancelplliangoffline()">取消</button>
-                    <button id="piliang_sure" data-dismiss="modal" ng-click="surepiliangoffline()">确认</button>
-                </div>
-
-                <div class="modal-footer" ng-show="!table.roles.length">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
-                </div>
-
-
-            </div>
-        </div>
-    </div>

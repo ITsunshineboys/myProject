@@ -163,8 +163,6 @@ app.controller('commodity_wait', ['_ajax','$scope', '$stateParams','$http', func
     /*等待上架确认批量上架*/
     $scope.surewaitonline = function () {
         let batchids = $scope.table.roles.join(',');
-        let url = baseUrl+"/mall/goods-enable-batch";
-        let data = {ids: batchids};
         _ajax.post('/mall/goods-enable-batch',{ids: batchids},function (res) {
             /*由于某些原因不能上架*/
             if (res.code != 200) {
@@ -180,11 +178,6 @@ app.controller('commodity_wait', ['_ajax','$scope', '$stateParams','$http', func
                 tableList()
             }
         })
-    }
-
-    /*等待上架 取消批量上架*/
-    $scope.cancelWaitOnline = function () {
-       $scope.table.roles.length = 0
     }
 
 

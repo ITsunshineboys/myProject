@@ -1,5 +1,4 @@
  <div class="search form-inline clearfix">
-        <!--全选、上架-->
             <button class="btn btn-default" ng-click=checkAll()>全选</button>
             <button class="btn btn-default" data-toggle="modal" data-target="#allwaitonline_modal"
                     ng-click="allwaitToOnline()">上架
@@ -83,10 +82,7 @@
             <td ng-if="menu_list[9].value">{{item.sold_number}}</td>
             <td ng-if="menu_list[10].value" class="blue">{{item.status}}</td>
             <td ng-if="menu_list[11].value">{{item.publish_time}}</td>
-            <td ng-if="menu_list[12].value"><img class="goodpic"
-                                                 ng-src="{{item.cover_image}}"
-                                                 alt=""></td>
-
+            <td ng-if="menu_list[12].value"><img class="goodpic" ng-src="{{item.cover_image}}" alt=""></td>
             <td ng-if="menu_list[13].value" data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span
                     class="wait_check" ng-bind="item.reason||'点击输入'"
                     ng-click="checkReason(item.id,item.reason)"></span></td>
@@ -121,77 +117,66 @@
         </div>
     </div>
 
-    <!--上架模态框-->
-    <div class="modal fade" id="waitup_shelves_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">提示</h4>
-                </div>
-                <div class="modal-body">
-                    <span>是否确认上架1件商品</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" ng-click="sureWaitToOnline()">确认</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelGoodOnline()">
-                        取消
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+ <!--上架模态框-->
+ <div class="modal fade" tabindex="-1" role="dialog" id="waitup_shelves_modal">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">提示</h4>
+             </div>
+             <div class="modal-body">
+                 <span>是否确认上架1件商品</span>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureWaitToOnline()">确认</button>
+                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+             </div>
+         </div>
+     </div>
+ </div>
 
 
-    <!--等待上架 上架被移除模态框-->
-    <div class="modal fade" id="waitup_not_shelves_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">提示</h4>
-                </div>
-                <div class="modal-body">
-                    <span>{{waitcantonline}}</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+ <!--等待上架 上架被移除模态框-->
+ <div class="modal fade" tabindex="-1" role="dialog" id="waitup_not_shelves_modal">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">提示</h4>
+             </div>
+             <div class="modal-body">
+                 <span>{{waitcantonline}}</span>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureCantOnline()">确认</button>
+             </div>
+         </div>
+     </div>
+ </div>
 
+ <!--批量上架模态框-->
+ <div class="modal fade" tabindex="-1" role="dialog" id="allwaitonline_modal">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">提示</h4>
+             </div>
+             <div class="modal-body" ng-show="table.roles.length">
+                 是否确认上架{{table.roles.length}}个商品
+             </div>
 
-    <!--批量上架模态框-->
-    <div class="modal fade" id="allwaitonline_modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title">提示</h4>
-                </div>
-                <div class="modal-body" ng-show="table.roles.length">
-                    是否确认上架{{table.roles.length}}个商品
-                </div>
-
-                <div class="modal-body" ng-show="!table.roles.length">
-                    请选择商品上架
-                </div>
-
-                <div class="modal-footer" ng-show="table.roles.length">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="surewaitonline()">
-                        确认
-                    </button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelWaitOnline()">
-                        取消
-                    </button>
-                </div>
-                <div class="modal-footer" ng-show="!table.roles.length">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">确认</button>
-                </div>
-            </div>
-        </div>
-    </div>
+             <div class="modal-body" ng-show="!table.roles.length">
+                 请选择商品上架
+             </div>
+             <div class="modal-footer" ng-show="table.roles.length">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="surewaitonline()">确认</button>
+                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelWaitOnline()">取消</button>
+             </div>
+             <div class="modal-footer" ng-show="!table.roles.length">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+             </div>
+         </div>
+     </div>
+ </div>
