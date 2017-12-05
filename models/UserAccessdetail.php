@@ -93,7 +93,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         $offset = ($page - 1) * $size;
         $Accessdetaillist=self::find()
             ->select($select)
-//            ->where($where)
+            ->where($where)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
