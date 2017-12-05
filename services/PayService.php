@@ -155,6 +155,7 @@ class PayService
         $jsapi->SetPackage("Sign=WXPay");
         $jsapi->SetAppPaySign($jsapi->MakeSignAPP());
         $parameters = json_encode($jsapi->GetValues());
+        var_dump($parameters);exit;
         return $parameters;
     }
 
