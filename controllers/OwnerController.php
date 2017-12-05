@@ -630,14 +630,12 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $waterproof = BasisDecorationService::judge($judge, $post);
-
-        $points = Points::findByOne('id,title',"title = '防水'");
+        $waterproof = BasisDecorationService::judge($goods, $post);
 
 
+        $points = Points::findByOne('id,title',"id = 69");
         //厨房
-        $kitchen = ProjectView::find()->asArray()->where(['project'=>'厨房面积'])->andWhere(['parent_project'=>'面积比例'])->one();
+        $kitchen = ProjectView::find()->asArray()->where(['project'=>'厨房面积'])->andWhere(['points_id'=>68])->one();
         $kitchen_ = $kitchen['project_value'] / 100;
 
         $p = ProjectView::find()->asArray()->where(['project'=>'厨房防水高度'])->andWhere(['points_id'=>$points['id']])->one();
@@ -650,7 +648,7 @@ class OwnerController extends Controller
 
 
         //卫生间
-        $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['parent_project'=>'面积比例'])->one();
+        $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['points_id'=>68])->one();
         $toilet_ = $toilet['project_value'] / 100;
         $toilet_p = ProjectView::find()->asArray()->where(['project'=>'卫生间防水高度'])->andWhere(['points_id'=>$points['id']])->one();
         if (!$toilet_p){
