@@ -138,7 +138,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      */
     public static function getallapply(){
 
-        return $sum=(new Query())->from('effect_earnest')->where(['status'=>self::STATUS_PAYED])->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where(['type'=>self::STATUS_NO])->count('*');
     }
 
 
