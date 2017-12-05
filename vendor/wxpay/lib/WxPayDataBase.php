@@ -55,7 +55,7 @@ class WxPayDataBase
      **/
     public function ToXml()
     {
-        var_dump($this->values);die;
+
         if(!is_array($this->values)
             || count($this->values) <= 0)
         {
