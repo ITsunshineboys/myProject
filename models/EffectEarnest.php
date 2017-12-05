@@ -276,8 +276,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
-            $effect_earnest->phone=$name;
-            $effect_earnest->name=$phone;
+            $effect_earnest->phone=$phone;
+            $effect_earnest->name=$name;
             $effect_earnest->transaction_no=$transaction_no;
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
