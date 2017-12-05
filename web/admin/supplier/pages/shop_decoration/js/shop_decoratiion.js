@@ -39,8 +39,8 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
   //menu切换
   $scope.menu_change=function () {
     $scope.filter==false?$scope.filter=true:$scope.filter=false;
-	  $scope.b_show_table_flag==true?$scope.b_menu_flag=true:$scope.b_menu_flag=false;
-	  $scope.r_show_table_flag==true?$scope.r_menu_flag=true:$scope.r_menu_flag=false;
+	  (!!$scope.filter&&!!$scope.b_show_table_flag)?$scope.b_menu_flag=true:$scope.b_menu_flag=false;
+	  (!!$scope.filter&&!!$scope.r_show_table_flag)?$scope.r_menu_flag=true:$scope.r_menu_flag=false;
   }
 
   /*判断类型为Banner还是推荐，请求列表接口*/
@@ -488,7 +488,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
   }
   $scope.show_hide_menu();
     $scope.show_all = function (m) {
-        console.log(m)
         m === true ? $scope[m] = true : $scope[m] = false;
     };
 });
