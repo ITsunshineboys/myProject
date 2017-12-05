@@ -84,7 +84,6 @@ class WxPayApi
      */
     public static function AppUnifiedOrder($inputObj, $timeOut = 6)
     {
-        var_dump($inputObj->ToXml());exit;
         $url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
         //检测必填参数
         if(!$inputObj->IsOut_trade_noSet()) {
