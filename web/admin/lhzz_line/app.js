@@ -322,7 +322,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
         .state("store_mag", {       //商家管理
             url: "/store_mag",
-            templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_mag.html"
+            templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_mag.html",
+            css: "pages/mall_manage/merchant_manage/store_mag/css/store_mag.css"
         })
         .state("add_store", {       //添加商家
             url: "/add_store",

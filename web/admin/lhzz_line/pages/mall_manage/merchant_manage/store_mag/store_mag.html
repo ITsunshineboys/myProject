@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="pages/mall_manage/merchant_manage/store_mag/css/store_mag.css">
 <div ng-controller="store_mag">
             <!--商家管理按钮组-->
             <div class="search form-inline clearfix">
@@ -24,7 +23,7 @@
                 <span class="btn-group-span">店铺类型</span>
                 <select name="" class="form-control" ng-options="item.id as item.storetype for item in storetype_arr"
                         ng-model="params.shop_type" ng-change="selectType(typeselect)">
-                    <!--<option value="456">全部</option>-->
+
                 </select>
 
                 <span class="btn-group-span">状态</span>
@@ -36,7 +35,7 @@
                 <div class="form-group pull-right">
                     <div class="input-group">
                         <input class="form-control" type="text" ng-model="keyword" placeholder="搜索商家编号或名称">
-                        <span class="glyphicon glyphicon-search"></span>
+                        <span class="iconfont icon-search"></span>
                     </div>
                     <button class="btn btn-default" ng-click="searchStore()">查询</button>
                 </div>
@@ -81,17 +80,17 @@
                         <td>{{item.shop_name}}</td>
                         <td>{{item.type_shop}}</td>
                         <td>{{item.category_name}}</td>
-                        <td style="text-align: center">{{item.sales_amount_month | currency:"¥"}}</td>
-                        <td style="text-align: center">{{item.sales_volumn_month}}</td>
-                        <td class="running" ng-class="{tored:item.status=='已闭店'}">{{item.status}}</td>
-                        <td class="color_blue clickstyle" ui-sref="store_detail({store:item})">查看</td>
+                        <td>{{item.sales_amount_month | currency:"¥"}}</td>
+                        <td>{{item.sales_volumn_month}}</td>
+                        <td class="color-green" ng-class="{'color-red':item.status=='已闭店'}">{{item.status}}</td>
+                        <td class="color-blue clickstyle" ui-sref="store_detail({store:item})">查看</td>
                         <td>
-                            <span class="color_blue" ui-sref="commodity.online({id:item.id})">商品管理</span>
-                            <a class="color_blue" ui-sref="order.all({id: item.id})">订单管理</a>
-                            <a class="color_blue" ui-sref="store_data({id: item.id})">数据</a>
+                            <span class="color-blue" ui-sref="commodity.online({id:item.id})">商品管理</span>
+                            <a class="color-blue" ui-sref="order.all({id: item.id})">订单管理</a>
+                            <a class="color-blue" ui-sref="store_data({id: item.id})">数据</a>
                         </td>
-                        <td class="color_blue clickstyle">
-                            <span data-toggle="modal" data-target="#bidian_tishi"
+                        <td class="color-blue click-style">
+                            <span data-toggle="modal" data-target="#close-store"
                                   ng-click=changeStatus(item.id,item.status)
                                   ng-bind="item.status=='正常营业'?'闭店':'开店'"></span>
                         </td>
@@ -99,47 +98,44 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <tm-pagination conf="pageConfig"></tm-pagination>
             </div>
 
 
-    <!--闭店提示模态框-->
-    <div class="modal fade" id="bidian_tishi" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">是否确认{{storestatus=='已闭店'?'开启':'关闭'}}店铺</h6>
-                </div>
 
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click=sureCloseStore()>确认</button>
-                    <button id="caozuo_cancel" data-dismiss="modal">取消</button>
+    <!--闭/开店提示模态框-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="close-store">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>是否确认{{storestatus=='已闭店'?'开启':'关闭'}}店铺</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureCloseStore()">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
     </div>
 
+
     <!--解封提示框-->
-    <div class="modal fade" id="unblock_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="unblock_content">
-                <div class="modal-header" id="unblock_header">
-                    <h4 class="modal-title" id="unblock_tishi">
-                        提示
-                    </h4>
+    <div class="modal fade" tabindex="-1" role="dialog" id="unblock_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <h6 id="unbolck_warning">此账号已被封号，请先解禁账号</h6>
+                    <p>此账号已被封号，请先解禁账号</p>
                 </div>
-
-                <div class="btn_modal_two">
-                    <button id="unblock_sure" data-dismiss="modal">确认</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>

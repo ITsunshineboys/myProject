@@ -2,8 +2,7 @@
  * Created by hulingfangzi on 2017/7/27.
  */
 /*商家管理*/
-var store_mag = angular.module("storemagModule", []);
-store_mag.controller("store_mag", function ($scope, $http,$rootScope,_ajax) {
+angular.module("storemagModule", []).controller("store_mag", function ($scope, $http,$rootScope,_ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',

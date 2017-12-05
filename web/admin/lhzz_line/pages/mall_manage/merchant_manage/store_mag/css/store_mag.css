@@ -1,79 +1,25 @@
 .btn-group-span{
-    margin-left: 15px!important;
+    margin-left: 15px;
 }
 
-.color_blue{
-    color: rgb(86, 119, 252) !important;
+.color-blue{
+    color: rgb(86, 119, 252);
 }
 
-.running{
-    color: #26c6da!important;
+.content table .color-green{
+    color: #26c6da;
 }
 
-
-/*
-闭店提示模态框
-保存提示框
-解封账号提示框
-*/
-#save_content,#unblock_content,#unblock_content{
-    width: 636px;
-    height: 256px;
+.content table .color-red{
+    color: red;
 }
 
-#tishi,#unblock_tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi,#unbolck_warning{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
-#caozuo_sure,#caozuo_cancel,#unblock_sure{
-    width: 84px;
-    height: 36px;
-    padding-left: 5px;
-    line-height: 36px;
-    font-size: 12px;
-    color: #5e6166;
-    background-color: white;
-    margin-top: 54px;
-    border: 1px solid #487AF8;
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border-radius: 3px;
-}
-
-
-#caozuo_cancel{
-    border: 1px solid rgb(194, 194, 194);
-    color: rgb(102, 111, 128);
-    background-color: white;
-}
-
-#caozuo_sure{
-    margin-left: 410px;
-    margin-right: 20px;
-}
-
-#unblock_sure{
-    margin-left:512px;
-    margin-right:20px;
-}
-
-.tored{
-    color: red!important;
-}
-
-.clickstyle{
+.click-style{
     cursor: pointer;
 }
 
 .active{
-    color: #1B7CEE!important;
+    color: #1B7CEE;
 }
 
 
