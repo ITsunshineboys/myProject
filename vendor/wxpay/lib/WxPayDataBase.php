@@ -145,14 +145,15 @@ class WxPayDataBase
         //签名步骤一：按字典序排序参数
 
         $string = $this->ToUrlParams();
-        echo $string;die;
+        echo $string;
         //签名步骤二：在string后加入KEY
         $string = $string . "&key=".WxPayConfig::APP_KEY;
         //签名步骤三：MD5加密
         $string = md5($string);
         //签名步骤四：所有字符转为大写
         $result = strtoupper($string);
-        return $result;
+//        return $result;
+        echo $result;die;
     }
 
     /**
