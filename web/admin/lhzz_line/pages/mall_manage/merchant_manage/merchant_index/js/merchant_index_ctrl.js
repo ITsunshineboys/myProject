@@ -1,8 +1,6 @@
 /**
  * Created by hulingfangzi on 2017/7/27.
  */
-/*商城管理 首页*/
-
 var mall_mag = angular.module("mallmagModule",[]);
 mall_mag.controller("mall_mag",function ($scope,$http,$rootScope,_ajax) {
     $rootScope.crumbs = [{
@@ -13,6 +11,7 @@ mall_mag.controller("mall_mag",function ($scope,$http,$rootScope,_ajax) {
         name:'商城数据'
     }];
 
+    /*获取商城数据*/
     _ajax.get('/mall/index-admin',{},function (res) {
         $scope.result = res.data.index_admin;
     })

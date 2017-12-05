@@ -317,7 +317,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state("merchant_index", {  //商城管理首页
             url: "/merchant_index",
-            templateUrl: "pages/mall_manage/merchant_manage/merchant_index/merchant_index.html"
+            templateUrl: "pages/mall_manage/merchant_manage/merchant_index/merchant_index.html",
+            css: "pages/mall_manage/merchant_manage/merchant_index/css/merchant_index.css"
         })
         .state("store_mag", {       //商家管理
             url: "/store_mag",
