@@ -115,9 +115,20 @@ class WxPayDataBase
      */
     public function MakeSign()
     {
-        var_dump($this->values);die;
-        //签名步骤一：按字典序排序参数
         ksort($this->values);
+        $xml = "<xml>";
+        foreach ($this->values as $key=>$val)
+        {
+            if (is_numeric($val)){
+                $xml.="<".$key.">".$val."</".$key.">";
+            }else{
+                $xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
+            }
+        }
+        $xml.="</xml>";
+        var_dump($xml);die;
+        //签名步骤一：按字典序排序参数
+
         $string = $this->ToUrlParams();
         //签名步骤二：在string后加入KEY
         $string = $string . "&key=".WxPayConfig::KEY;
