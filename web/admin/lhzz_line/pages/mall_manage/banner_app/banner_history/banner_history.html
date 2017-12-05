@@ -1,15 +1,10 @@
 <link rel="stylesheet" href="pages/mall_manage/banner_app/banner_history/css/banner_history.css">
 <div ng-controller="banner_history_ctrl">
     <div class="city">
-        <div class="formDiv">
-            <select name="province" ng-model="params.time_type" ng-change="type_change()" class="time_select"
-                    ng-options="item.value as item.name for item in time">
-            </select>
-            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"
-                   ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date class="start_stop_time"
-                   type="text" placeholder="开始时间">
-            <input ng-if="params.time_type=='custom'" id="end_time" ng-change="time_change()" ng-model="params.end_time"
-                   min-date="{{params.start_time}}" ngc-lay-date class="start_stop_time" type="text" placeholder="结束时间">
+        <div class="form-inline clearfix">
+            <select name="province" ng-model="params.time_type" ng-change="type_change(params.time_type)" class="form-control" ng-options="item.value as item.name for item in time"></select>
+            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()" ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date class="form-control" type="text" placeholder="开始时间">
+            <input ng-if="params.time_type=='custom'" id="end_time" ng-change="time_change()" ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date class="form-control" type="text" placeholder="结束时间">
         </div>
     </div>
     <!--选择城市结束-->

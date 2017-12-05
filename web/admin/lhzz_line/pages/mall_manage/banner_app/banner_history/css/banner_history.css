@@ -2,40 +2,6 @@
   margin-bottom: 20px;
 }
 
-.formDiv{
-  display: inline-block;
-}
-
-.time_select{
-  width: 190px;
-  height: 32px;
-  font-size: 12px;
-  color: #666F80;
-  border-radius: 3px;
-  border: 1px solid #BFC0C2;
-}
-.start_stop_time{
-  width: 150px;
-  margin-right: 10px;
-  height: 32px;
-  font-size: 12px;
-  color: #666F80;
-  padding: 0;
-  border: 1px solid #BFC0C2;
-  border-radius: 3px;
-
-}
-.search{
-  display: inline-block;
-  text-decoration: none;
-  width: 60px;
-  height: 32px;
-  line-height: 32px;
-  text-align: center;
-  border: 1px solid #BFC0C2;
-  border-radius: 3px;
-}
-
 .table{
   table-layout:fixed;
 }

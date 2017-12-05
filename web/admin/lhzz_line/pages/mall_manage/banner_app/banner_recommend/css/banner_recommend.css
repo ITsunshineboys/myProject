@@ -25,13 +25,7 @@
   width: 10px;
   height: 16px;
 }
-#shop_details_img,#link_details_img,#modal_edit_img,#modal_edit_img2{
-  max-width: 200px!important;
-  max-height: 150px!important;
-}
-.ng-hide:not(.ng-hide-animate){
-  display: inline-block!important;
-}
+
 .head_nav_font_weight{
   font-weight: bold;
 }
@@ -87,14 +81,8 @@
   table-layout:fixed;
 }
 .tab_history{
-  width: 85px;
-  display: inline-block;
-  height: 34px;
-  line-height: 34px;
-  text-align: center;
-  font-family: Helvetica;
   font-size: 12px;
-  color: #3F94F6;
+  line-height: 34px;
 }
 
 .tab_class{
@@ -113,11 +101,13 @@
   line-height: 35px;
   cursor: pointer;
 }
-#modal_img,#modal_img2,#modal_link_img,#modal_link_img2,#modal_edit_link_img,#modal_edit_link_img2{
-  display: inline-block!important;
-  max-width: 240px!important;
-  max-height: 140px!important;
-  border: 1px solid #ccc;
+.img_box{
+  width: 254px;
+  height: 137px;
+  overflow: hidden;
+}
+.img_width{
+  width: 100%;
 }
 .modal_red{
   color:red;

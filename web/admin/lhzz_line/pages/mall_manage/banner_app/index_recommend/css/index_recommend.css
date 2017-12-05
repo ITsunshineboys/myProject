@@ -27,12 +27,13 @@
   width: 10px;
   height: 16px;
 }
-#shop_details_img,#link_details_img,#modal_edit_img,#modal_edit_img2{
-  max-width: 200px!important;
-  max-height: 150px!important;
+.img_box{
+  width: 167px;
+  height: 144px;
+  overflow: hidden;
 }
-.ng-hide:not(.ng-hide-animate){
-  display: inline-block!important;
+.img_width{
+  width: 100%;
 }
 .bottom_blue{
   color:#3F94F6;
@@ -90,14 +91,8 @@
   table-layout:fixed;
 }
 .tab_history{
-  width: 85px;
-  display: inline-block;
-  height: 34px;
-  text-align: center;
   line-height: 34px;
-  font-family: Helvetica;
   font-size: 12px;
-  color: #3F94F6;
 }
 
 /*Table内容-*/
