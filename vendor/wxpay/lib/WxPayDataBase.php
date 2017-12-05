@@ -134,6 +134,7 @@ class WxPayDataBase
      */
     public function MakeSignAPP()
     {
+        ksort($this->values);
         $xml = "<xml>";
         foreach ($this->values as $key=>$val)
         {
@@ -142,7 +143,7 @@ class WxPayDataBase
         $xml.="</xml>";
         var_dump($xml);die;
         //签名步骤一：按字典序排序参数
-        ksort($this->values);
+
         $string = $this->ToUrlParams();
         //签名步骤二：在string后加入KEY
         $string = $string . "&key=".WxPayConfig::APP_KEY;
