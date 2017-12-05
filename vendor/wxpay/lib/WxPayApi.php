@@ -110,6 +110,7 @@ class WxPayApi
         //签名
         $inputObj->SetAppSign();
         $xml = $inputObj->ToXml();
+        var_dump($xml);die;
         $startTimeStamp = self::getMillisecond();//请求开始时间
         $response = self::postXmlCurlByApp($xml, $url, false, $timeOut);
         $result = WxPayResults::Init($response);
@@ -426,7 +427,7 @@ class WxPayApi
         $inputObj->SetSign();//签名
         $xml = $inputObj->ToXml();
 
-        var_dump($xml);die;
+
         $startTimeStamp = self::getMillisecond();//请求开始时间
         $response = self::postXmlCurl($xml, $url, false, $timeOut);
         return $response;
