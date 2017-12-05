@@ -75,7 +75,7 @@
             <tr ng-repeat="item in up_list_arr">
                 <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
                 <td ng-if="show_1">{{item.sku}}</td>
-                <td ng-if="show_2">{{item.title}}</td>
+                <td ng-if="show_2" class="reason_width">{{item.title}}</td>
                 <td ng-if="show_3">¥{{item.supplier_price}}</td>
                 <td ng-if="show_5">¥{{item.platform_price}}</td>
                 <td ng-if="show_4">¥{{item.market_price}}</td>
@@ -267,7 +267,7 @@
             <tr class="table_content" ng-repeat="item in down_list_arr">
                 <!--<td><input type="checkbox" ng-checked="off_selectAll" ng-model="item.state"></td>-->
                 <td ng-if="down_1">{{item.sku}}</td>
-                <td ng-if="down_2">{{item.title}}</td>
+                <td ng-if="down_2" class="reason_width">{{item.title}}</td>
                 <td ng-if="down_3">¥{{item.supplier_price}}</td>
                 <td ng-if="down_5">¥{{item.platform_price}}</td>
                 <td ng-if="down_4">¥{{item.market_price}}</td>
