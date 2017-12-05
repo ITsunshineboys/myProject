@@ -141,10 +141,11 @@ class WxPayDataBase
             $xml.="<".$key.">".$val."</".$key.">";
         }
         $xml.="</xml>";
-        var_dump($xml);die;
+        var_dump($xml);
         //签名步骤一：按字典序排序参数
 
         $string = $this->ToUrlParams();
+        echo $string;die;
         //签名步骤二：在string后加入KEY
         $string = $string . "&key=".WxPayConfig::APP_KEY;
         //签名步骤三：MD5加密
