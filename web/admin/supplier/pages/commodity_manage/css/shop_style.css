@@ -1,6 +1,9 @@
 body{
     color: #666F80!important;
 }
+.cursor{
+    cursor: pointer;
+}
 .form-control{
     color: #999!important;
 }

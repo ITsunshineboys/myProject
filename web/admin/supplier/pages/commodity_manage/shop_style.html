@@ -70,7 +70,7 @@
                     <span>属性设置</span>
                 </div>
                 <div class="col-sm-3 control-label">
-                    <span class="glyphicon glyphicon-plus" ng-click="add_own_attrs()"></span>
+                    <span class="glyphicon glyphicon-plus cursor" ng-click="add_own_attrs()"></span>
                     <span>属性名称</span>
                 </div>
                 <div class="col-sm-3 control-label">
@@ -118,7 +118,7 @@
                 <div class="row" ng-repeat="item in own_attrs_arr track by $index">
                     <div class="col-sm-offset-2 col-sm-3">
                         <img src="pages/commodity_manage/image/red.png" alt=""/>
-                        <span  class="glyphicon glyphicon-minus" ng-click="del_own_attrs($index)"></span>
+                        <span  class="glyphicon glyphicon-minus cursor" ng-click="del_own_attrs($index)"></span>
                         <input class="form-control own_attr_name" type="text" maxlength="6" ng-change="own_input_change(item.name)" placeholder="请勿输入重复属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'error':form.{{item.name_model}}.$invalid &&submitted||(form.{{item.name_model}}.$error.required && submitted) ||own_submitted}"/>
                     </div>
                     <div class="col-sm-3">
