@@ -42,7 +42,11 @@ index_recommend_history.controller("index_recommend_history_ctrl", function ($ro
         $scope.selectValue = res.data.time_types[0].value;
     })
     //监听时间类型
-    $scope.type_change=function () {
+    $scope.type_change=function (value) {
+        if(value=='custom'){
+            $scope.params.start_time='';
+            $scope.params.end_time='';
+        }
         $scope.Config.currentPage = 1; //页数跳转到第一页
         tablePages();
     }

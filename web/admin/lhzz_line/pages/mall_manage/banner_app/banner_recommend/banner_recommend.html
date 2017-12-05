@@ -25,38 +25,33 @@
 
         <!--Table操作（增删改查）开始-->
 
-        <div class="tab_tools clearfix tab_class">
-            <div class="pull-left">
-                <button class="btn btn-info pull-left" type="submit" ng-click="save_btn_ok()" data-toggle="modal" data-target="#my_modal_save"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>
-                <button class="btn btn-primary pull-left btn_left" ng-click="clear_add_content()" type="submit" data-toggle="modal" data-target="#recommend_shop_modal_add"><i class="glyphicon glyphicon-plus"></i>添加</button>
-                <button class="btn btn-default pull-left btn_left"  ng-modal="selectAll"  ng-click="all(selectAll)">全选</button>
-                <button class="btn btn-default pull-left btn_left"  data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</button>
-                <button class="btn btn-default pull-left btn_left" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</button>
-                <a class="tab_history" ui-sref="banner_history"><i class="glyphicon glyphicon-home"></i> 历史数据</a>
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-left">
+                <button class="btn btn-info" ng-click="save_btn_ok()" data-toggle="modal" data-target="#my_modal_save"><i class="iconfont icon-save"></i> 保存</button>
+                <button class="btn btn-primary btn_left" ng-click="clear_add_content()" type="submit" data-toggle="modal" data-target="#recommend_shop_modal_add"><i class="iconfont icon-add"></i> 添加</button>
+                <button class="btn btn-default btn_left"  ng-modal="selectAll"  ng-click="all(selectAll)">全选</button>
+                <button class="btn btn-default btn_left"  data-toggle="modal" data-target="#{{del_or_stop}}" ng-click="delete_batch_del()">删除</button>
+                <button class="btn btn-default btn_left" data-toggle="modal" data-target="#{{stop_flag}}" ng-click="disable_batch()">停用</button>
+                <a class="tab_history" ui-sref="banner_history"><i class="iconfont icon-shuju1"></i> 历史数据</a>
             </div>
-            <div class="pull-right">
-                <!-- 筛选菜单 -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle btn_list" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-th-list"></i>
-                    </button>
-                    <!--Menu-->
-                    <ul class="dropdown-menu dropdown-menu-right btn_list_menu">
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_1" ng-click="show_all(show_1)">类型</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_2" ng-click="show_all(show_2)">商品编号</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_3" ng-click="show_all(show_3)">名称</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_4" ng-click="show_all(show_4)">来源商家</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_5" ng-click="show_all(show_5)">上架浏览</li>
-                        <!--<li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_6" ng-click="show_all(show_6)">上架销量</li>-->
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_7" ng-click="show_all(show_7)">是否启用</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_8" ng-click="show_all(show_8)">创建时间</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_9" ng-click="show_all(show_9)">图片</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_10" ng-click="show_all(show_10)">库存</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_11" ng-click="show_all(show_11)">供货价格</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_12" ng-click="show_all(show_12)">平台价格</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_13" ng-click="show_all(show_13)">市场价格</li>
-                        <li><input class="btn_list_menu_checkbox" type="checkbox"  ng-model="show_14" ng-click="show_all(show_14)">操作</li>
-                    </ul>
-                </div>
+            <div class="form-group pull-right">
+                <button class="btn btn-default" ng-click="filter=!filter" ng-class="{'btn-focus':filter}"><i class="iconfont icon-shaixuan"></i></button>
+                <ul ng-show="filter" class="filter">
+                    <li><label><input type="checkbox"  ng-model="show_1" ng-click="show_all(show_1)">类型</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_2" ng-click="show_all(show_2)">商品编号</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_3" ng-click="show_all(show_3)">名称</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_4" ng-click="show_all(show_4)">来源商家</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_5" ng-click="show_all(show_5)">上架浏览</label></li>
+                    <!--<li><input type="checkbox"  ng-model="show_6" ng-click="show_all(show_6)">上架销量</li>-->
+                    <li><label><input type="checkbox"  ng-model="show_7" ng-click="show_all(show_7)">是否启用</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_8" ng-click="show_all(show_8)">创建时间</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_9" ng-click="show_all(show_9)">图片</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_10" ng-click="show_all(show_10)">库存</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_11" ng-click="show_all(show_11)">供货价格</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_12" ng-click="show_all(show_12)">平台价格</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_13" ng-click="show_all(show_13)">市场价格</label></li>
+                    <li><label><input type="checkbox"  ng-model="show_14" ng-click="show_all(show_14)">操作</label></li>
+                </ul>
             </div>
         </div>
         <!--Table操作（增删改查）结束-->
@@ -88,7 +83,7 @@
                     <td ><input type="checkbox" ng-checked="selectAll" ng-model="item.state" ng-click="my_check(item)"></td>
                     <td ng-if="show_1">{{item.from_type}}</td>
                     <td ng-if="show_2">{{item.sku=='0' ? '无':item.sku}}</td>
-                    <td ng-if="show_3">{{item.title}}</td>
+                    <td ng-if="show_3" class="ellipsis">{{item.title}}</td>
                     <td ng-if="show_4" class="blue">{{item.supplier_name==''?'链接':item.supplier_name}}</td>
                     <td ng-if="show_5">{{item.viewed_number}}</td>
                     <!--<td ng-if="show_6">{{item.sold_number}}</td>-->
@@ -203,18 +198,20 @@
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-9">
-                                    <img id="modal_img"  ng-if="!!upload_img_src" ng-src="{{upload_img_src}}"/>
-                                    <img id="modal_img2" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
+                                <div class="col-sm-9 img_box">
+                                    <img class="img_width" ng-if="!!upload_img_src" ng-src="{{upload_img_src}}"/>
+                                    <img class="img_width" ng-if="!upload_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
                                 </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
-                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button ng-click="recommend_shop_add_btn(shop_form.$valid)" data-dismiss="{{variable_add_modal}}" id="recommend_shop_add_btn" type="button" class="btn btn-primary">确认</button>
+                            <button ng-click="recommend_shop_add_btn(shop_form.$valid)" data-dismiss="{{variable_add_modal}}" id="recommend_shop_add_btn" type="button" class="btn btn-primary" ng-disabled="upload_dis">确认</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear_add_content()">取消</button>
                         </div>
                     </form>
@@ -274,18 +271,20 @@
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-9">
-                                    <img id="modal_link_img"  ng-if="!!upload_link_img_src" ng-src="{{upload_link_img_src}}"/>
-                                    <img id="modal_link_img2" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
+                                <div class="col-sm-9 img_box">
+                                    <img class="img_width" ng-if="!!upload_link_img_src" ng-src="{{upload_link_img_src}}"/>
+                                    <img class="img_width" ng-if="!upload_link_img_src" src="pages/mall_manage/banner_app/banner_recommend/images/default.png"/>
                                 </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
-                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="{{variable_link_add_modal}}" ng-click="recommend_link_add_btn(link_form.$valid)">确认</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="{{variable_link_add_modal}}" ng-click="recommend_link_add_btn(link_form.$valid)" ng-disabled="upload_dis">确认</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear_add_content()">取消</button>
                         </div>
                     </form>
@@ -456,13 +455,15 @@
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-9 control-label">
-                                    <img id="modal_edit_img"  ng-if="!upload_img_src" ng-src="{{myng.recommend_shop_edit_img}}"/>
-                                    <img id="modal_edit_img2" ng-if="!!upload_img_src" ngf-src="data.file" />
+                                <div class="col-sm-9 control-label img_box">
+                                    <img class="img_width"  ng-if="!upload_img_src" ng-src="{{myng.recommend_shop_edit_img}}"/>
+                                    <img class="img_width" ng-if="!!upload_img_src" ngf-src="data.file" />
                                 </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_flag">{{img_flag}}</p>
-                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                 </div>
                             </div>
                         </div>
@@ -503,18 +504,20 @@
                                     <i class="red">*</i>
                                     <span>图片</span>
                                 </div>
-                                <div class="col-sm-9 control-label">
-                                    <img id="modal_edit_link_img"  ng-if="!upload_link_img_src" ng-src="{{myng.link_edit_img}}" />
-                                    <img id="modal_edit_link_img2" ng-if="!!upload_link_img_src" ngf-src="data.file" />
+                                <div class="col-sm-9 control-label img_box">
+                                    <img class="img_width"  ng-if="!upload_link_img_src" ng-src="{{myng.link_edit_img}}" />
+                                    <img class="img_width" ng-if="!!upload_link_img_src" ngf-src="data.file" />
                                 </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-offset-3 img_txt">
                                     <p class="modal_red" ng-if="!!img_link_flag">{{img_link_flag}}</p>
-                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">上传</button>
+                                    <button class="btn btn-default btn_top" ngf-pattern="image/*" ng-change="upload_link(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="{{variable_modal}}" ng-click="recommend_shop_edit(edit_form.$valid)">确认</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="{{variable_modal}}" ng-click="recommend_shop_edit(edit_form.$valid)" ng-disabled="upload_dis">确认</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         </div>
                     </form>
@@ -564,8 +567,8 @@
                             <p class="col-sm-12">图片 : </p>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
-                                <img id="shop_details_img" ng-src="{{shop_details_img}}" >
+                            <div class="col-sm-12 img_box">
+                                <img class="img_width" ng-src="{{shop_details_img}}" >
                             </div>
                         </div>
                     </div>
@@ -600,8 +603,8 @@
                             <p class="col-sm-12">图片 : </p>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12">
-                                <img id="link_details_img" ng-src="{{link_details_img}}"/>
+                            <div class="col-sm-12 img_box">
+                                <img class="img_width" ng-src="{{link_details_img}}"/>
                             </div>
                         </div>
                     </div>

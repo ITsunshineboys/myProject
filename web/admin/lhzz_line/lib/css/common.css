@@ -439,6 +439,7 @@ select.form-control:focus {
     width: 100%;
     margin-bottom:0;
     font-weight: normal;
+    cursor: pointer;
 }
 
 .search .form-group .btn-focus{

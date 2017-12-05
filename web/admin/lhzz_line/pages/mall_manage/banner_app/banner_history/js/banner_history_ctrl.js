@@ -44,7 +44,12 @@ banner_history.controller("banner_history_ctrl", function ($rootScope,$scope, $h
         console.log(error)
     });
     //监听时间类型
-    $scope.type_change=function () {
+    $scope.type_change=function (value) {
+        console.log(value)
+      if(value=='custom'){
+         $scope.params.start_time='';
+         $scope.params.end_time='';
+      }
         $scope.Config.currentPage = 1; //页数跳转到第一页
         tablePages();
     }

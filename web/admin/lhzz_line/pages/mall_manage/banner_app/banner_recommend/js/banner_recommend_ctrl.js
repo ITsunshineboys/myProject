@@ -10,7 +10,8 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
 
   $scope.myng=$scope;//原形继承转换，解决ng-model 无效问题
   $scope.shop_rep=[];
-
+  $scope.upload_txt="上传";
+  $scope.upload_dis=false;
   //选择城市开始
   //初始化省市区县;
   $http.get('districts2.json').then(function (response) {
@@ -68,6 +69,8 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     if(!$scope.data.file){
       return
     }
+    $scope.upload_txt="上传中...";
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -79,6 +82,8 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
+        $scope.upload_txt="上传";
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)
@@ -93,7 +98,8 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
     if(!$scope.data.file){
       return
     }
-    console.log($scope.data);
+    $scope.upload_txt="上传中...";
+    $scope.upload_dis=true;
     Upload.upload({
       url:baseUrl+'/site/upload',
       data:{'UploadForm[file]':file}
@@ -104,6 +110,8 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
       }else{
         $scope.img_link_flag='';
         $scope.upload_link_img_src=response.data.data.file_path;
+        $scope.upload_txt="上传";
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)
