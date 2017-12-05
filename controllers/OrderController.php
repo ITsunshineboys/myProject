@@ -3453,6 +3453,7 @@ class OrderController extends Controller
          $orders=explode(',',$postData['list']);
         if (!is_array($orders))
         {
+            echo 1;die;
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -3461,6 +3462,7 @@ class OrderController extends Controller
         }
         $orderAmount=GoodsOrder::CalculationCost($orders);
         if ($postData['total_amount']*100  != $orderAmount){
+            echo $orderAmount;die;
             $code=1000;
             return Json::encode([
                 'code' => $code,
