@@ -24,6 +24,13 @@ class WxPayDataBase
         return $sign;
     }
 
+    public  function  SetAppSign()
+    {
+        $sign = $this->MakeSignAPP();
+        $this->values['sign'] = $sign;
+        return $sign;
+    }
+
     /**
      * 获取签名，详见签名生成算法的值
      * @return 值

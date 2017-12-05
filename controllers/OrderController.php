@@ -1596,7 +1596,7 @@ class OrderController extends Controller
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
         $code=1000;
-        if ($shipping_type!=1){
+        if (!$shipping_type==1){
             if (!$sku|| !$waybillnumber || !$order_no) {
                 return Json::encode([
                     'code' => $code,
@@ -2368,7 +2368,7 @@ class OrderController extends Controller
         }
         $postData=yii::$app->request->get();
         $uploadsData=FileService::uploadMore();
-        if ($uploadsData !=1000){
+        if (!$uploadsData ==1000){
             if (is_numeric($uploadsData)){
                 $code=$uploadsData;
                 return Json::encode([
@@ -2551,7 +2551,7 @@ class OrderController extends Controller
         }
         $postData = Yii::$app->request->get();
         $uploadsData=FileService::uploadMore();
-        if ($uploadsData !=1000){
+        if (!$uploadsData ==1000){
             if (is_numeric($uploadsData)){
                 $code=$uploadsData;
                 return Json::encode([
@@ -2590,7 +2590,7 @@ class OrderController extends Controller
         }
         $postData = Yii::$app->request->post();
         $code=Supplier::CheckOrderJurisdiction($user,$postData);
-        if ($code !=200){
+        if (!$code ==200){
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -2723,7 +2723,7 @@ class OrderController extends Controller
         }
         $postData['order_no']=$order_no;
         $code=Supplier::CheckOrderJurisdiction($user,$postData);
-        if ($code !=200){
+        if (!$code ==200){
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -2784,7 +2784,7 @@ class OrderController extends Controller
         }
         $postData['order_no']=$order_no;
         $code=Supplier::CheckOrderJurisdiction($user,$postData);
-        if ($code !=200){
+        if (!$code ==200){
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -2841,7 +2841,7 @@ class OrderController extends Controller
         }
         $postData['order_no']=$order_no;
         $code=User::CheckOrderJurisdiction($user,$postData);
-        if ($code !=200){
+        if (!$code ==200){
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -3491,7 +3491,7 @@ class OrderController extends Controller
                     $orders=explode(',',urldecode($post['passback_params']));
                     $total_amount=$post['total_amount'];
                     $orderAmount=GoodsOrder::CalculationCost($orders);
-//                    if ($total_amount*100!=$orderAmount)
+//                    if (!$total_amount*100==$orderAmount)
 //                    {
 //                        echo 'fail';
 //                        exit;
