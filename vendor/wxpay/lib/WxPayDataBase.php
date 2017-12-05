@@ -133,17 +133,6 @@ class WxPayDataBase
      */
     public function MakeSignAPP()
     {
-        $xml = "<xml>";
-        foreach ($this->values as $key=>$val)
-        {
-            if (is_numeric($val)){
-                $xml.="<".$key.">".$val."</".$key.">";
-            }else{
-                $xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
-            }
-        }
-        $xml.="</xml>";
-        var_dump($xml);exit;
         //签名步骤一：按字典序排序参数
         ksort($this->values);
         $string = $this->ToUrlParams();
