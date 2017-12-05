@@ -198,7 +198,6 @@ class BasisDecorationService
         }
 
 
-
         $goods_id = [];
         foreach ($goods as $one) {
             switch ($one) {
@@ -237,7 +236,30 @@ class BasisDecorationService
                     break;
             }
         }
+        $electricity = self::plumberFormula($points,$material,$goods_value,$goods_price,$goods_procurement,$spool,$spool_value,$spool_price,$spool_procurement,$bottom_case,$bottom_procurement);
 
+        return $electricity;
+
+    }
+
+    /**
+     * 水电工 计算公式
+     * @param $points
+     * @param $material
+     * @param $goods_value
+     * @param $goods_price
+     * @param $goods_procurement
+     * @param $spool
+     * @param $spool_value
+     * @param $spool_price
+     * @param $spool_procurement
+     * @param $bottom_case
+     * @param $bottom_procurement
+     * @return mixed
+     */
+
+    public static function plumberFormula($points,$material,$goods_value,$goods_price,$goods_procurement,$spool,$spool_value,$spool_price,$spool_procurement,$bottom_case,$bottom_procurement)
+    {
         //线路个数计算 ,线路费用计算
         $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
         $electricity['wire_cost'] = round($electricity['wire_quantity'] * $goods_price,2);
@@ -255,7 +277,7 @@ class BasisDecorationService
 
         //总费用
         $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
-     return  $electricity;
+        return  $electricity;
     }
 
     /**
