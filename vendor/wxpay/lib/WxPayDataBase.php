@@ -76,8 +76,8 @@ class WxPayDataBase
     }
 
     /**
-     * 将xml转为array
-     * @param string $xml
+     * @param $xml
+     * @return array|mixed
      * @throws WxPayException
      */
     public function FromXml($xml)
@@ -117,7 +117,14 @@ class WxPayDataBase
     {
         ksort($this->values);
         //签名步骤一：按字典序排序参数
+        $xml = "<xml>";
+        foreach ($this->values as $key=>$val)
+        {
+                $xml.="<".$key.">".$val."</".$key.">";
 
+        }
+        $xml.="</xml>";
+        var_dump($xml);die;
         $string = $this->ToUrlParams();
         //签名步骤二：在string后加入KEY
         $string = $string . "&key=".WxPayConfig::KEY;

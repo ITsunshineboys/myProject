@@ -95,18 +95,15 @@ class WxPayApi
         }else if(!$inputObj->IsTrade_typeSet()) {
             throw new WxPayException("缺少统一支付接口必填参数trade_type！");
         }
-
         //异步通知url未设置，则使用配置文件中的url
         if(!$inputObj->IsNotify_urlSet()){
             $inputObj->SetNotify_url(WxPayConfig::NOTIFY_URL);//异步通知url
         }
-
         $inputObj->SetAppid(WxPayConfig::APP_APPID);//公众账号ID
         $inputObj->SetMch_id(WxPayConfig::APP_MCHID);//商户号
         $inputObj->SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);//终端ip
         //$inputObj->SetSpbill_create_ip("1.1.1.1");
         $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
-
         //签名
         $inputObj->SetAppSign();
         $xml = $inputObj->ToXml();
