@@ -55,6 +55,7 @@ class WxPayDataBase
      **/
     public function ToXml()
     {
+        var_dump($this->values);die;
         if(!is_array($this->values)
             || count($this->values) <= 0)
         {
@@ -65,13 +66,12 @@ class WxPayDataBase
         foreach ($this->values as $key=>$val)
         {
             if (is_numeric($val)){
-                $xml.="<".$this->values[$key].">".$this->values[$val]."</".$this->values[$key].">";
+                $xml.="<".$key.">".$val."</".$key.">";
             }else{
-                $xml.="<".$this->values[$key]."><![CDATA[".$this->values[$val]."]]></".$this->values[$key].">";
+                $xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
             }
         }
         $xml.="</xml>";
-        var_dump($xml);die;
         return $xml;
     }
 
