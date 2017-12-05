@@ -50,25 +50,31 @@ class OwnerController extends Controller
     const PRICE_UNITS = 100;
     const DEFAULT_CITY_CODE = 510100;
 
-    const WEAK_MATERIAL   = [32,30,40];
-    const STRING_MATERIAL = [43,30,40];
-    const WATERWAY_MATERIAL = [33,37];
-    const WATERPROOF_MATERIAL = [56];
-    const CARPENTRY_MATERIAL = [22,9,12,13];
-    const LATEX_MATERIAL = [38,24,25,28,5];
-    const TILER_MATERIAL = [172,36,6];
-    const BACKMAN_MATERIAL = [172,6,177];
+
     /**
-     * work category details
+     * 基础装修有计算公式的必要材料id
+     */
+    const WEAK_MATERIAL      = [32,30,40];       // 弱电材料id
+    const STRING_MATERIAL    = [43,30,40];       // 强电材料id
+    const WATERWAY_MATERIAL  = [33,37];          // 水路材料id
+    const WATERPROOF_MATERIAL= [56];             // 防水材料id
+    const CARPENTRY_MATERIAL = [22,9,12,13];     // 木作材料id
+    const LATEX_MATERIAL     = [38,24,25,28,5];  // 乳胶漆材料id
+    const TILER_MATERIAL     = [172,36,6];       // 泥工材料id
+    const BACKMAN_MATERIAL   = [172,6,177];      // 杂工材料id
+
+
+    /**
+     * 工种类型 id
      */
     const WORK_CATEGORY = [
-        'plumber'           => '水电工',
-        'waterproof_worker' => '防水工',
-        'woodworker'        => '木工',
-        'painters'          => '油漆工',
-        'mason'             => '泥瓦工',
-        'backman'           => '杂工',
-        'backman_'           => '泥工',
+        'plumber'           => 2,  // 水电工id
+        'waterproof_worker' => 3,  // 防水工id
+        'woodworker'        => 1,  // 木工id
+        'painters'          => 4,  // 油漆工id
+        'mason'             => 5,  // 泥瓦工id
+        'backman'           => 6,  // 杂工id
+//        'backman_'          => '泥工',
     ];
 
     /**
@@ -83,12 +89,12 @@ class OwnerController extends Controller
     ];
 
     /**
-     * 工种
+     *   工种 id
      */
     const PROJECT_DETAILS = [
-        'weak_current'      => '弱电',
-        'strong_current'    => '强电',
-        'waterway'          => '水路',
+        'weak_current'      => 2,
+        'strong_current'    => 1,
+        'waterway'          => 3,
         'waterproof'        => '防水',
         'carpentry'         => '木作',
         'emulsion_varnish'  => '乳胶漆',
@@ -118,7 +124,7 @@ class OwnerController extends Controller
         'kitchen' => '厨房',
         'toilet'  => '卫生间',
         'hall'    => '客厅',
-        'bedroom' => '卧室',
+//        'bedroom' => '卧室',
         'master_bedroom' => '主卧',
         'secondary_bedroom' => '次卧',
     ];
@@ -290,24 +296,29 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //      点位 和 材料查询
-        $points = Points::findByOne('id,title',['title'=>self::PROJECT_DETAILS['weak_current']]);
+        $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['weak_current']]);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
+
         $other = 0;
         foreach ($weak_points as $one_points){
+
             if ($one_points['title'] == self::ROOM_DETAIL['hall']){
                 $all = $one_points['count'] * $post['hall'];
             }
 
             if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom']){
-                if ($post['bedroom'] == 1){
-                    $secondary_bedroom = 0;
-                }elseif ($post['bedroom'] == 2){
-                    $secondary_bedroom = (int)$one_points['count'] * 1;
-                }elseif ($post['bedroom'] > 2){
-                    $secondary_bedroom = (int)$one_points['count'] * ($post['bedroom'] - 1);
+                switch ($post['bedroom']) {
+                    case $post['bedroom'] == 1:
+                        $secondary_bedroom = 0;
+                        break;
+                    case $post['bedroom'] == 2:
+                        $secondary_bedroom = (int)$one_points['count'] * 1;
+                        break;
+                    case $post['bedroom'] > 2:
+                        $secondary_bedroom = (int)$one_points['count'] * ($post['bedroom'] - 1);
+                        break;
                 }
-
             }
 
             if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall']){
@@ -367,7 +378,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //强电点位
-        $points = Points::findByOne('id,title',['title'=>self::PROJECT_DETAILS['strong_current']]);
+        $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['strong_current']]);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
         $other = 0;
@@ -378,7 +389,7 @@ class OwnerController extends Controller
             }
 
             // 次卧
-            if ($one_points['title'] == '次卧室'){
+            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom']){
                 if ($post['bedroom'] == 1){
                     $secondary_bedroom =  0 ;
                 }elseif ($post['bedroom'] == 2){
@@ -400,7 +411,7 @@ class OwnerController extends Controller
             }
 
 
-            if ($one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] != '次卧室' && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] != self::ROOM_DETAIL['toilet']){
+            if ($one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] != self::ROOM_DETAIL['toilet']){
                 $other +=  $one_points['count'];
             }
         }
@@ -456,77 +467,93 @@ class OwnerController extends Controller
         $post = \Yii::$app->request->get();
         //人工价格
         $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
-        if ($waterway_labor != null){
-            $worker_kind_details = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
-            foreach ($worker_kind_details as $one_){
-                if ($one_['worker_kind_details'] == '强电点位'){
-                    $strong = $one_['quantity'];
-                }
+        $worker_kind_details = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
+        foreach ($worker_kind_details as $one_){
+            if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['strong_current']){
+                $strong = $one_['quantity'];
+            }
 
-                if ($one_['worker_kind_details'] == '弱电点位'){
-                    $weak = $one_['quantity'];
-                }
+            if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['weak_current']){
+                $weak = $one_['quantity'];
+            }
 
-                if ($one_['worker_kind_details'] == '水路点位'){
-                    $waterway = $one_['quantity'];
-                }
+            if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['waterway']){
+                $waterway = $one_['quantity'];
             }
         }
-        $points = Points::find()->asArray()->select('id,title,count')->where(['in','title',['水路','弱电','强电']])->andWhere(['level'=>1])->all();
+
+        $points = Points::find()->asArray()->select('id,title,count')->where(['in','id',[1,2,3]])->andWhere(['level'=>1])->all();
         $w_orh = 0;
         foreach ($points  as $p){
-            if ($p['title'] == '水路'){
+            if ($p['id'] == self::PROJECT_DETAILS['waterway']){
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
-                    if ($one['title'] == '卫生间'){
-                        $toilet_waterway_points = $one['count'] * $post['toilet'];
-                    }
-                    if ($one['title'] == '厨房'){
-                        $kitchen_waterway_points = $post['kitchen'] * $one['count'];
-                    }
-
-                    if ($one['title'] != '卫生间' && $one['title'] != '厨房'){
-                        $w_orh += $one['count'];
+                    switch ($one){
+                        case $one['title'] == self::ROOM_DETAIL['toilet']:
+                            $toilet_waterway_points = $one['count'] * $post['toilet'];
+                            break;
+                        case $one['title'] == self::ROOM_DETAIL['kitchen']:
+                            $kitchen_waterway_points = $post['kitchen'] * $one['count'];
+                            break;
+                        case $one['title'] != self::ROOM_DETAIL['toilet'] && $one['title'] != self::ROOM_DETAIL['kitchen']:
+                            $w_orh += $one['count'];
+                            break;
                     }
                 }
                 $waterway_count = $toilet_waterway_points + $kitchen_waterway_points + $w_orh;
             }
-            if ($p['title'] == '弱电'){
+
+
+            if ($p['id'] == self::PROJECT_DETAILS['weak_current']){
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
-                    if ($one['title'] == '主卧'){
-                        $room_weak_points = $one['count'];
-                    }
-                    if ($one['title'] == '次卧'){
-                        $croom_weak_points = $one['count'] * ($post['bedroom'] - 1);
-                    }
-                    if ($one['title'] == '客厅'){
-                        $hall_weak__points = $one['count'] * $post['hall'];
+                    switch ($one){
+                        case $one['title'] == self::ROOM_DETAIL['master_bedroom']:
+                            $room_weak_points = $one['count'];
+                            break;
+                        case $one['title'] == self::ROOM_DETAIL['secondary_bedroom']:
+                            $croom_weak_points = $one['count'] * ($post['bedroom'] - 1);
+                            break;
+                        case $one['title'] == self::ROOM_DETAIL['hall']:
+                            $hall_weak__points = $one['count'] * $post['hall'];
+                            break;
                     }
                 }
                 $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
             }
-            if ($p['title'] == '强电'){
+
+
+            if ($p['id'] == self::PROJECT_DETAILS['strong_current']){
                 $id = $p['id'];
                 $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
                 foreach ($_waterway as $one){
-                    if ($one['title'] == '次卧室'){
-                        if ($post['bedroom'] <= 1){
-                            $ciwoshi = 0;
-                        }elseif($post['bedroom'] == 2){
-                            $ciwoshi = 1;
-                        }elseif ($post['bedroom'] > 2){
-                            $ciwoshi = $post['bedroom'] - 2;
-                        }
-                        $croom_strong_points = $one['count'] * $ciwoshi;
-                    } elseif ($one['title'] == '客厅'){
-                        $hall_strong_points = $one['count'] * ($post['hall']-1);
-                    } elseif ($one['title'] == '卫生间'){
-                        $toilet_strong_points = $one['count'] * ($post['toilet']-1);
-                    } elseif ($one['title'] == '厨房'){
-                        $kitchen_strong_points = $one['count'] * ($post['kitchen']-1);
+
+                    switch ($one){
+                        case $one['title'] == self::ROOM_DETAIL['secondary_bedroom']:
+                            switch ($post['bedroom']){
+                                case $post['bedroom'] <= 1:
+                                    $ciwoshi = 0;
+                                    break;
+                                case $post['bedroom'] == 2:
+                                    $ciwoshi = 1;
+                                    break;
+                                case $post['bedroom'] > 2:
+                                    $ciwoshi = $post['bedroom'] - 2;
+                                    break;
+                            }
+                            $croom_strong_points = $one['count'] * $ciwoshi;
+                            break;
+                        case $one['title'] == self::ROOM_DETAIL['hall']:
+                            $hall_strong_points = $one['count'] * ($post['hall']-1);
+                            break;
+                        case $one['title'] == self::ROOM_DETAIL['toilet']:
+                            $toilet_strong_points = $one['count'] * ($post['toilet']-1);
+                            break;
+                        case $one['title'] == self::ROOM_DETAIL['kitchen']:
+                            $kitchen_strong_points = $one['count'] * ($post['kitchen']-1);
+                            break;
                     }
                 }
 
@@ -588,12 +615,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //人工价格
-        $_select = 'id,univalence,worker_kind';
-        $__select = 'quantity,worker_kind_details';
-        $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker'],$_select);
-        if ($waterproof_labor){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area'],$__select);
-        }
+        $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker']);
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area']);
         $worker_price = !isset($waterproof_labor['univalence']) ? $waterproof_labor['univalence'] : LaborCost::WATERPROOF_PRICE;
         $worker_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERPROOF_DAY_AREA;
 

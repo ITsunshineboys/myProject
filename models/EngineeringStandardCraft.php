@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
 
 class EngineeringStandardCraft  extends ActiveRecord
 {
+    const PRICE_CONVERSION = 100;
     const FIELDS_ADMIN =[
         'id',
         'district_code',
@@ -34,11 +35,18 @@ class EngineeringStandardCraft  extends ActiveRecord
      */
     public static function findByAll($project='',$code =510100,$select=[])
     {
-        return self::find()
+        $row =  self::find()
             ->asArray()
             ->select($select)
-            ->where(['and', ['district_code' => $code], ['project' => $project]])
+            ->where(['district_code'=>$code])
+            ->andWhere(['points_id'=>$project])
             ->all();
+
+        foreach ($row as &$one){
+            $one['material'] = $one['material'] / self::PRICE_CONVERSION;
+        }
+
+        return $row;
     }
 
     public static function findByList(){
