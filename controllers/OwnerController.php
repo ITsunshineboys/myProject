@@ -358,7 +358,7 @@ class OwnerController extends Controller
 
 
         //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_current_points, $weak_current, $craft);
+        $material_price = BasisDecorationService::quantity($weak_current_points,$weak_current,$craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
         return Json::encode([
