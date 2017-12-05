@@ -65,12 +65,13 @@ class WxPayDataBase
         foreach ($this->values as $key=>$val)
         {
             if (is_numeric($val)){
-                $xml.="<".$key.">".$val."</".$key.">";
+                $xml.="<".$this->values[$key].">".$this->values[$val]."</".$this->values[$key].">";
             }else{
-                $xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
+                $xml.="<".$this->values[$key]."><![CDATA[".$this->values[$val]."]]></".$this->values[$key].">";
             }
         }
         $xml.="</xml>";
+        var_dump($xml);die;
         return $xml;
     }
 
