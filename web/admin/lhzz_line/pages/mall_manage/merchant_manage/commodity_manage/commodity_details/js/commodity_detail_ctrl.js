@@ -256,6 +256,11 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         },200)
     }
 
+    /*下架原因清空*/
+    $scope.offlineGood = function () {
+        $scope.offline_reason = ''
+    }
+
 
     $scope.backPage = function () {
         history.go(-1);

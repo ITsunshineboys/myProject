@@ -183,7 +183,7 @@
 
                 <div ng-if='online_btn'>
                     <span class="btn btn-primary" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)"><i class="iconfont icon-save"></i>保存</span>
-                    <span class="btn btn-default" data-toggle="modal" data-target="#down_shelves_reason_modal">下架</span>
+                    <span class="btn btn-default" data-toggle="modal" data-target="#down_shelves_reason_modal" ng-click="offlineGood()">下架</span>
                     <span class="btn btn-default" ng-click='backPage()'>返回</span>
                 </div>
 
@@ -201,48 +201,52 @@
 
 
     <!--下架原因模态框-->
-    <div class="modal fade" id="down_shelves_reason_modal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">下架原因</h4>
+ <div class="modal fade" tabindex="-1" role="dialog" id="down_shelves_reason_modal">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">下架原因</h4>
+             </div>
+             <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        下架原因（选填）
+                    </div>
+                    <div class="col-md-8">
+                        <textarea class="form-control" rows="10" ng-model="offline_reason"></textarea>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <span id='reason'>下架原因（选填）</span>
-                    <textarea cols="30" rows="10" ng-model="offline_reason"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureGoodOffline()'>确认
-                    </button>
-                    <button type="button" class="btn btn-defalut" data-dismiss="modal">取消</button>
-                </div>
-            </div>
-        </div>
-    </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureGoodOffline()">确认</button>
+                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+             </div>
+         </div>
+     </div>
+ </div>
 
-    <!--保存成功提示模态框-->
-    <div class="modal fade" id='savesuremodal' data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content_end">
-                <div class="modal-header" id="save_header_end">
-                    <h4 class="modal-title" id="tishi_end">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body_end">
-                    <h6 id="save_wenzi">保存成功</h6>
-                </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure_end" data-dismiss="modal" ng-click="sureSaveDetail()">确认</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--保存成功 模态框-->
+ <div class="modal fade" tabindex="-1" role="dialog" id="savesuremodal">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">提示</h4>
+             </div>
+             <div class="modal-body">
+                 <p>保存成功</p>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureSaveDetail()">确认</button>
+             </div>
+         </div>
+     </div>
+ </div>
 
 
+
+<!--城市展示-->
     <div id="cityModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
