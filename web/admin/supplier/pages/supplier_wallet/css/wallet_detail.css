@@ -1,39 +1,8 @@
-section{
-  padding: 40px 0 0 40px;
-  width: 95%;
-}
-section div{
-  margin:20px 0;
-}
-section div:nth-child(1){
-  margin: 0;
-}
-section div span:nth-child(1){
-  display: inline-block;
-  width: 100px;
-  margin-right: 50px;
+.row{
+  margin-bottom: 15px;
 }
 span{
   color: #666F80;
-}
-.remark_left{
-  float: left;
-}
-.remark_right{
-  float: left;
-  width: 80%;
-}
-.remark:after{
-  content: '';
-  display: table;
-  clear: both;
-}
-.sign_out{
-  margin: 60px -65px 0 0 ;
-  line-height: 20px;
-}
-.wallet_bold{
-  font-weight: bold;
 }
 .btn_top{
   margin-top: 20px

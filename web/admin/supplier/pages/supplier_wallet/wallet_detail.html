@@ -1,65 +1,65 @@
 <link rel="stylesheet" href="pages/supplier_wallet/css/wallet_detail.css">
 <div ng-controller="wallet_detail_ctrl">
-    <section>
-        <div>
-            <span>商家名称</span>
-            <span>{{wallet_detail.supplier_name}}</span>
+        <div class="row">
+            <span class="col-sm-2">商家名称</span>
+            <span class="col-sm-10">{{wallet_detail.supplier_name}}</span>
         </div>
-        <div>
-            <span>开户银行</span>
-            <span>{{wallet_detail.bank_name}}</span>
+        <div class="row">
+            <span class="col-sm-2">开户银行</span>
+            <span class="col-sm-10">{{wallet_detail.bank_name}}</span>
         </div>
-        <div>
-            <span>银行账号</span>
-            <span>{{wallet_detail.card_no}}</span>
+        <div class="row">
+            <span class="col-sm-2">银行账号</span>
+            <span class="col-sm-10">{{wallet_detail.card_no}}</span>
         </div>
-        <div>
-            <span>开户行所在地</span>
-            <span>{{wallet_detail.position}}</span>
+        <div class="row">
+            <span class="col-sm-2">开户行所在地</span>
+            <span class="col-sm-10">{{wallet_detail.position}}</span>
         </div>
-        <div>
-            <span>开户所在支行</span>
-            <span>{{wallet_detail.bank_branch}}</span>
+        <div class="row">
+            <span class="col-sm-2">开户所在支行</span>
+            <span class="col-sm-10">{{wallet_detail.bank_branch}}</span>
         </div>
-        <div>
-            <span>开户名</span>
-            <span>{{wallet_detail.username}}</span>
+        <div class="row">
+            <span class="col-sm-2">开户名</span>
+            <span class="col-sm-10">{{wallet_detail.username}}</span>
         </div>
-        <div>
-            <span>提现金额</span>
-            <span>{{wallet_detail.cash_money}}</span>
+        <div class="row">
+            <span class="col-sm-2">提现金额</span>
+            <span class="col-sm-10">{{wallet_detail.cash_money}}</span>
         </div>
-        <div>
-            <span>申请时间</span>
-            <span>{{wallet_detail.apply_time}}</span>
+        <div class="row">
+            <span class="col-sm-2">申请时间</span>
+            <span class="col-sm-10">{{wallet_detail.apply_time}}</span>
         </div>
         <hr>
-        <div>
-            <span>实到账余额</span>
-            <span>{{wallet_detail.real_money}}</span>
+        <div class="row">
+            <span class="col-sm-2">实到账余额</span>
+            <span class="col-sm-10">{{wallet_detail.real_money}}</span>
         </div>
-        <div>
-            <span>扣除费用</span>
-            <span>{{wallet_detail.lost_money}}</span>
+        <div class="row">
+            <span class="col-sm-2">扣除费用</span>
+            <span class="col-sm-10">{{wallet_detail.lost_money}}</span>
         </div>
-        <div>
-            <span>状态</span>
-            <span>{{wallet_detail.status}}</span>
+        <div class="row">
+            <span class="col-sm-2">状态</span>
+            <span class="col-sm-10">{{wallet_detail.status}}</span>
         </div>
-        <div>
-            <span>处理时间</span>
-            <span>{{wallet_detail.handle_time}}</span>
+        <div class="row">
+            <span class="col-sm-2">处理时间</span>
+            <span class="col-sm-10">{{wallet_detail.handle_time}}</span>
         </div>
-        <div>
-            <span>交易单号</span>
-            <span>{{wallet_detail.transaction_no}}</span>
+        <div class="row">
+            <span class="col-sm-2">交易单号</span>
+            <span class="col-sm-10">{{wallet_detail.transaction_no}}</span>
         </div>
-        <div class="remark">
-            <span class="remark_left" >备注</span>
-            <span class="remark_right">{{wallet_detail.supplier_reason}}</span>
+        <div class="row">
+            <span class="col-sm-2">备注</span>
+            <span class="col-sm-10">{{wallet_detail.supplier_reason}}</span>
         </div>
-        <div>
-            <button class="btn btn-default btn_top" ng-click="wallet_back()">返回</button>
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-default btn_top" ng-click="wallet_back()">返回</button>
+            </div>
         </div>
-    </section>
 </div>

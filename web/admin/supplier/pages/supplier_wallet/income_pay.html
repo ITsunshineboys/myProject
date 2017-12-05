@@ -1,29 +1,29 @@
 <link rel="stylesheet" href="pages/supplier_wallet/css/income_pay.css">
 <div ng-controller="income_pay_ctrl">
-    <section>
-        <div class="select_top">
+        <div class="search form-inline clearfix">
             <!--时间-->
-            <select  name="province" ng-model="params.time_type" ng-change="time_status_change()" class="time_select" ng-options="item.value as item.name for item in time">
-            </select>
-            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="start_stop_time" type="text" placeholder="开始时间">
-            <input ng-if="params.time_type=='custom'" id="end_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="start_stop_time" type="text"  placeholder="结束时间">
+            <select  name="province" ng-model="params.time_type" ng-change="time_status_change()" class="form-control" ng-options="item.value as item.name for item in time"></select>
+            <input ng-if="params.time_type=='custom'" id="start_time" ng-change="time_change()"  ng-model="params.start_time" max-date="{{params.end_time}}" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
+            <input ng-if="params.time_type=='custom'" id="end_time"  ng-change="time_change()"  ng-model="params.end_time" min-date="{{params.start_time}}" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
             <!--类型-->
-            <span class="type_right">类型选择</span>
-            <select ng-model="params.type" class="time_select" ng-change="status_change()" ng-options="items.id as items.value for items in status_arr"></select>
+            <span class="type_margin">类型选择</span>
+            <select ng-model="params.type" class="form-control" ng-change="status_change()" ng-options="items.id as items.value for items in status_arr"></select>
             <!--搜索-->
-            <div class="search_box">
-                <div class="search_div">
-                    <input type="text" class="outline_z" placeholder="搜索订单号或交易单号" ng-model="income_search">
-                    <i class="glyphicon glyphicon-search search_logo"></i>
+            <div class="form-group pull-right">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="搜索订单号或交易单号" ng-model="income_search">
+                    <span class="iconfont icon-search"></span>
                 </div>
-                <button class="btn btn-default search_btn" ng-click="search_click()">搜索</button>
+                <button class="btn btn-default btn_left" ng-click="search_click()">搜索</button>
             </div>
         </div>
         <!-- 表格 -->
-        <table class="table table-responsive">
+        <table class="table table-hover table-responsive">
             <thead>
             <tr>
-                <th>时间 <img ng-src="{{time_src}}" ng-click="time_sort()" class="img_size"></th>
+                <th>
+                    <span>时间</span>
+                    <img ng-src="{{time_src}}" ng-click="time_sort()" class="img_size"></th>
                 <th>金额</th>
                 <th>交易单号</th>
                 <th>订单号</th>
@@ -65,5 +65,4 @@
                 </div>
             </div>
         </div>
-    </section>
 </div>
