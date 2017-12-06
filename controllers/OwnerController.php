@@ -914,6 +914,7 @@ class OwnerController extends Controller
 
 
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
+        var_dump($goods);die;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -937,7 +938,7 @@ class OwnerController extends Controller
             ]);
         }
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $post);
-        var_dump($series_and_style);die;
+
         foreach ($crafts as $craft) {
 
             switch ($craft) {
