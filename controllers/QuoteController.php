@@ -1997,7 +1997,7 @@ class QuoteController extends Controller
         //engineering_standard_carpentry_coefficient
 //       var_dump(AssortGoods::deleteAll([]));
 
-        var_dump(Points::find()->asArray()->all());
+        var_dump(GoodsCategory::find()->asArray()->where(['title'=>'石膏粉'])->one());
 
 
     }
