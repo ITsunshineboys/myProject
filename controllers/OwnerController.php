@@ -914,7 +914,6 @@ class OwnerController extends Controller
 
 
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
-        var_dump($goods);die;
         if ($goods == null){
             $code = 1061;
             return Json::encode([
