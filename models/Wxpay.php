@@ -17,6 +17,7 @@ class Wxpay  extends ActiveRecord
         const  PAY_CANCEL_URL='/line/#!/order_commodity';
         const  PAY_SUCESS_URL='/line/#!/pay_success';
         const  PAY_FAIL_URL='/line/#!/order_commodity';
+        const  ORDER_APP_PAY_URL='/order/wx-notify-database';
         const  EFFECT_BODY='样板间申请费';
         const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
         const  ACCESS_TOKEN='access_token';
@@ -141,6 +142,28 @@ class Wxpay  extends ActiveRecord
             }
             return false;
         }
+
+    /**
+     * 查询订单
+     * @param $transaction_id
+     * @return bool
+     */
+    public static function QueryApporder($transaction_id)
+    {
+        $input = new WxPayOrderQuery();
+        $input->SetTransaction_id($transaction_id);
+        $result = WxPayApi::orderQueryApp($input);
+        if(array_key_exists("return_code", $result)
+            && array_key_exists("result_code", $result)
+            && $result["return_code"] == "SUCCESS"
+            && $result["result_code"] == "SUCCESS")
+        {
+            return true;
+        }
+        return false;
+    }
+
+
 
         /**
          * 重写回调处理函数
@@ -313,6 +336,9 @@ class Wxpay  extends ActiveRecord
         return  Json::decode($jsApiParameters);
     }
 
+    /**
+     * @return mixed
+     */
     public  static  function  OrderWebPay()
     {
         ini_set('date.timezone','Asia/Shanghai');

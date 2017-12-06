@@ -146,6 +146,37 @@ class WxPayApi
 
     /**
      *
+     * 查询订单，WxPayOrderQuery中out_trade_no、transaction_id至少填一个
+     * appid、mchid、spbill_create_ip、nonce_str不需要填入
+     * @param WxPayOrderQuery $inputObj
+     * @param int $timeOut
+     * @throws WxPayException
+     * @return 成功时返回，其他抛异常
+     */
+    public static function orderQueryApp($inputObj, $timeOut = 6)
+    {
+        $url = "https://api.mch.weixin.qq.com/pay/orderquery";
+        //检测必填参数
+        if(!$inputObj->IsOut_trade_noSet() && !$inputObj->IsTransaction_idSet()) {
+            throw new WxPayException("订单查询接口中，out_trade_no、transaction_id至少填一个！");
+        }
+        $inputObj->SetAppid(WxPayConfig::APP_APPID);//公众账号ID
+        $inputObj->SetMch_id(WxPayConfig::APP_MCHID);//商户号
+        $inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+
+        $inputObj->SetAppSign();//签名
+        $xml = $inputObj->ToXml();
+
+        $startTimeStamp = self::getMillisecond();//请求开始时间
+        $response = self::postXmlCurlByApp($xml, $url, false, $timeOut);
+        $result = WxPayResults::Init($response);
+        self::reportAppCostTime($url, $startTimeStamp, $result);//上报请求花费时间
+
+        return $result;
+    }
+
+    /**
+     *
      * 关闭订单，WxPayCloseOrder中out_trade_no必填
      * appid、mchid、spbill_create_ip、nonce_str不需要填入
      * @param WxPayCloseOrder $inputObj

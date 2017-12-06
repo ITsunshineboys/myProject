@@ -926,6 +926,8 @@ class OrderController extends Controller
         }
     }
 
+
+
     /**
      *微信线下支付异步操作
      */
@@ -4921,6 +4923,143 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+
+    public  function  actionWxNotifyDatabase()
+    {
+        //获取通知的数据
+        $xml = file_get_contents("php://input");
+        $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $msg=Json::decode($data);
+        if ($msg['result_code']=='SUCCESS'){
+            $transaction_id=$msg['transaction_id'];
+            $result = Wxpay::QueryApporder($transaction_id);
+            if (!$result)
+            {
+                return false;
+            }
+            $orders= explode('&',$msg['attach']);;
+            $total_amount=$msg['total_fee'];
+            $orderAmount=GoodsOrder::CalculationCost($orders);
+                    if (!$total_amount==$orderAmount)
+                    {
+                        return false;
+                    }
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $Ord= GoodsOrder::find()
+                    ->where(['order_no'=>$orders[0]])
+                    ->one();
+                $role_id=$Ord->role_id;
+                $user=User::findOne($Ord->user_id);
+                $role=Role::GetRoleByRoleId($role_id,$user);
+                switch ($role_id)
+                {
+                    case 2:
+                        $role_number=$role->worker_type_id;
+                        break;
+                    case 3:
+                        $role_number=$role->decoration_company_id;
+                        break;
+                    case 4:
+                        $role_number=$role->decoration_company_id;
+                        break;
+                    case 5:
+                        $role_number=$role->id;
+                        break;
+                    case 6:
+                        $role_number=$role->shop_no;
+                        break;
+                    case 7:
+                        $role_number=$role->aite_cube_no;
+                        break;
+                }
+                $transaction_no=GoodsOrder::SetTransactionNo($role_number);
+                foreach ($orders as $k =>$v){
+                    $GoodsOrder=GoodsOrder::find()
+                        ->where(['order_no'=>$orders[$k]])
+                        ->one();
+                    $OrderGoods=OrderGoods::find()
+                        ->where(['order_no'=>$orders[$k]])
+                        ->asArray()
+                        ->all();
+                    foreach ($OrderGoods as &$Goods)
+                    {
+                        if ($Goods['order_status']!=0)
+                        {
+                            echo 'fail';
+                            exit;
+                        }
+                        $date=date('Ymd',time());
+                        $GoodsStat=GoodsStat::find()
+                            ->where(['supplier_id'=>$GoodsOrder->supplier_id])
+                            ->andWhere(['create_date'=>$date])
+                            ->one();
+                        if (!$GoodsStat)
+                        {
+                            $GoodsStat=new GoodsStat();
+                            $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
+                            $GoodsStat->sold_number=$Goods['goods_number'];
+                            $GoodsStat->amount_sold=$GoodsOrder->amount_order;
+                            $GoodsStat->create_date=$date;
+                            if ($GoodsStat->save(false))
+                            {
+                                $code=500;
+                                $tran->rollBack();
+                                return $code;
+                            }
+                        }else{
+                            $GoodsStat->sold_number+=$Goods['goods_number'];
+                            $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
+                            if ($GoodsStat->save(false))
+                            {
+                                $code=500;
+                                $tran->rollBack();
+                                return $code;
+                            }
+                        }
+                    }
+                    if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
+                    {
+                        echo 'fail';
+                        exit;
+                    }
+                    $GoodsOrder->pay_status=1;
+                    $GoodsOrder->pay_name='微信APP支付';
+                    $res=$GoodsOrder->save(false);
+                    if (!$res)
+                    {
+                        $tran->rollBack();
+                        echo 'fail';
+                        die;
+                    }
+                    $access=new UserAccessdetail();
+                    $access->uid=$user->id;
+                    $access->role_id=$role_id;
+                    $access->access_type=7;
+                    $access->access_money=$GoodsOrder['amount_order'];
+                    $access->create_time=time();
+                    $access->order_no=$orders[$k];
+                    $access->transaction_no=$transaction_no;
+                    $res3=$access->save(false);
+                    if ( !$res3){
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                }
+
+
+                $tran->commit();
+            }catch (Exception $e){
+                $tran->rollBack();
+                echo 'fail';
+                die;
+            }
+            echo 'success';
+        }
+    }
+
 
 
     /**
