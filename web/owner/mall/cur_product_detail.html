@@ -83,8 +83,8 @@
                             <ul>
                                 <li><span>产品编码</span><span class="comment_num">{{cur_params.code}}</span></li>
                                 <li><span>产品品牌</span><span class="comment_num">{{check_goods.name}}</span></li>
-                                <li ng-if="cur_params.series_name != ''"><span>系列</span><span class="comment_num">{{cur_params.series_name}}</span></li>
-                                <li ng-if="cur_params.style_name != ''"><span>风格</span><span class="comment_num">{{cur_params.style_name}}</span></li>
+                                <li ng-if="cur_params.series_name != ''"><span>系列</span><span class="comment_num">{{check_goods.series_name}}</span></li>
+                                <li ng-if="cur_params.style_name != ''"><span>风格</span><span class="comment_num">{{check_goods.style_name}}</span></li>
                                 <li ng-repeat="item in cur_params.attrs"><span>{{item.name}}</span><span class="comment_num">{{item.value}}</span></li>
                             </ul>
                         </div>

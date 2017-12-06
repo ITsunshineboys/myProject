@@ -1,12 +1,28 @@
 app.directive('water', function ($timeout) {
-    return {
-        restrict: "A",
-        link: function (scope, element, attrs) {
-            if (scope.$last) {
-                scope.$emit('ngRepeatFinished');
+    // return {
+        // restrict: "A",
+        // link: function (scope, element, attrs) {
+        //     if (scope.$last) {
+        //         // scope.$emit('ngRepeatFinished');
+        //         $timeout(function () {
+        //             scope.$emit('ngRepeatFinished')
+        //         }, 300)
+        //     }
+        // }
+        return {
+            restrict: "EA",
+            // scope:false,
+            link: function (scope, element, attrs) {
+                console.log(element)
+                console.log(element.find('div'))
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit('ngRepeatFinished')
+                    }, 300)
+                }
             }
         }
-    }
+    // }
 })
     .directive('tmPagination', function () {
         return {

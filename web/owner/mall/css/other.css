@@ -409,3 +409,7 @@ a:hover{
     font-size:40px;
     line-height: 6rem;
 }
+.goods_detail{
+    position: relative;
+    height:4rem;
+}
