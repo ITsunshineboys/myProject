@@ -434,7 +434,7 @@ class EffectController extends Controller
         $user_info=User::find()->where(['id'=>$user->getId()])->asArray()->one();
         $effect_earnet=EffectEarnest::find()->where(['id'=>$save_id])->one();
         $effect_earnet->create_time=time();
-        $effect_earnet->username=$user_info['nickname'];
+        $effect_earnet->name=$user_info['nickname'];
         $effect_earnet->phone=$user_info['mobile'];
         $effect_earnet->type=0;
         if(!$effect_earnet->save(false)){
