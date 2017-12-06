@@ -1551,6 +1551,7 @@ class OrderController extends Controller
               if (!$order_information['paytime']==0){
                   $goods_data['paytime']=$order_information['paytime'];
               }
+              //1:无平台介入  2：有平台进入
               if (!OrderPlatForm::find()
                   ->where(['order_no'=>$order_no,'sku'=>$sku])
                   ->one())
@@ -1559,6 +1560,8 @@ class OrderController extends Controller
               }else{
                   $is_platform=2;
               }
+
+              //1: 无退款  2：有退款
               if (!OrderRefund::find()
                   ->where(['order_no'=>$order_no,'sku'=>$sku])
                   ->one())
@@ -2610,6 +2613,87 @@ class OrderController extends Controller
         }
     }
 
+
+    /**
+     * 订单售后详情--大后台，商家后台
+     * @return string
+     */
+    public function actionAfterSaleDetailAdmin()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $order_no=trim($request->get('order_no',''));
+        $sku=trim($request->get('sku',''));
+        if(!$order_no || !$sku){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $role=Supplier::tableName();
+        $OrderAfterSale=OrderAfterSale::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one();
+        if (!$OrderAfterSale){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (!array_key_exists($OrderAfterSale->type,OrderAfterSale::AFTER_SALE_SERVICES))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        switch ($OrderAfterSale->supplier_handle){
+            case 0:
+                $data=OrderAfterSale::findUnhandleAfterSale($OrderAfterSale);
+                break;
+            case 1:
+                $data=OrderAfterSale::findHandleAfterSaleAgree($OrderAfterSale,$role);
+                break;
+            case 2:
+                $data=OrderAfterSale::findHandleAfterSaleDisagree($OrderAfterSale,$role);
+                break;
+        }
+        if (is_numeric($data)){
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=200;
+        $postData = Yii::$app->request->get();
+        $after_sale_detail=OrderAfterSale::FindAfterSaleData($postData,$user);
+        if (is_numeric($after_sale_detail)){
+            $code=$after_sale_detail;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>[
+                'after_sale_detail'=>$after_sale_detail,
+                'after_sale_progress'=>$data
+            ]
+        ]);
+    }
      /**售后详情
      * @return array|string
      */
@@ -5419,6 +5503,62 @@ class OrderController extends Controller
     }
 
 
+    public function actionCloseOrder()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
+        $reason=$request->post('reason','');
+        $code=1000;
+        if(!$order_no || !$sku || !$reason)
+        {
+
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg' =>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        if (!$OrderGoods)
+        {
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg' =>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        //1:售后中  2：售后完成
+        if ($OrderGoods->customer_service==2  || $OrderGoods->order_status==2)
+        {
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg' =>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        //关闭订单操作
+        $code=OrderAfterSale::CloseOrder($order_no,$sku,$reason);
+        return Json::encode(
+            [
+                'code'=>$code,
+                'msg' =>$code==200?'ok':Yii::$app->params['errorCodes'][$code],
+            ]
+        );
+
+    }
+
     /**
      * 测试接口-获取商品
      * @return string
@@ -5480,7 +5620,6 @@ class OrderController extends Controller
 //                'msg' => Yii::$app->params['errorCodes'][$code]
 //            ]);
 //        }
-
     }
 
 
@@ -5510,16 +5649,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public  function  actionTest123()
-    {
-        $request=Yii::$app->request;
-        $order_no=$request->post('order_no');
-        $sku=$request->post('sku');
-        $data= Goods::find()
-           ->where(['sku'=>$sku])
-           ->one();
-        var_dump($data);
-    }
+
 
 
 

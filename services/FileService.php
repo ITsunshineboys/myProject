@@ -244,7 +244,16 @@ class FileService
                 $code = 500;
                 return $code;
             }
-            $data[] = UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
+            $imagePath = '/' .UploadForm::DIR_PUBLIC . '/' . $ymdDirs . '/' . $file;
+            if (!empty(Yii::$app->params['online']['commonApi']['user'])) {
+                if (in_array($model->file->extension, Yii::$app->params['uploadPublic']['compress']['extensions'])
+                    && $model->file->size > Yii::$app->params['uploadPublic']['compress']['minSize']
+                ) {
+                    $compressedImageUri = self::compressImage([Yii::$app->request->hostInfo . '/' . $imagePath]);
+                    $compressedImageUri && $imagePath = $compressedImageUri;
+                }
+            }
+            $data[]=$imagePath;
         }
         return $data;
     }

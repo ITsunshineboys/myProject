@@ -1307,4 +1307,42 @@ class OrderAfterSale extends ActiveRecord
             return $code;
         }
     }
+
+
+    /**
+     * 关闭订单操作
+     * @param $order_no
+     * @param $sku
+     * @param $reason
+     * @return int
+     */
+    public  static  function  CloseOrder($order_no,$sku,$reason)
+    {
+        //关闭订单操作
+
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            $OrderGoods->order_status=2;
+            if (!$OrderGoods->save(false)){
+                $tran->rollBack();
+            }
+            $after=new OrderAfterSaleHandleLog();
+            $after->order_no=$order_no;
+            $after->sku=$sku;
+            $after->handle=1;
+            $after->reason=$reason;
+            if (!$after->save(false))
+            {
+                $tran->rollBack();
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
 }
