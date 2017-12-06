@@ -36,4 +36,16 @@ class ProjectView extends ActiveRecord
                 'project_value'=>$rows
             ],['id'=>$id])->execute();
     }
+
+    public static function findByOne($project,$points_id)
+    {
+        $row =  self::find()
+                ->asArray()
+                ->where(['project'=>$project])
+                ->andWhere(['points_id'=>$points_id])
+                ->one();
+        $row['project_value'] =  $row['project_value'] / 100;
+
+        return $row;
+    }
 }
