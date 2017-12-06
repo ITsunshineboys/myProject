@@ -176,6 +176,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
         return sprintf('%.2f',(float)$sum*0.01);
     }
 
+    /**
+     * app 申请或保存样板间
+     * @param $uid
+     * @param $post
+     * @return bool|string
+     */
     public static function appAddEffect($uid,$post){
 
         $effects=Effect::find()
@@ -206,7 +212,11 @@ class EffectEarnest extends \yii\db\ActiveRecord
         $tran=\Yii::$app->db->beginTransaction();
         try{
             $particulars=Effect::chinanum($post['bedroom']).'室'.Effect::chinanum($post['sittingRoom_diningRoom']).'厅'.Effect::chinanum($post['kitchen']).'厨'.Effect::chinanum($post['toilet']).'卫';
-
+            if(!isset($post['street'])){
+               $street=null;
+            }else{
+                $street=$post['street'];
+            }
             if(!isset($post['district_code'])){
                 $district_code=null;
             }else{
@@ -227,7 +237,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 'district'      => $district,
                 'district_code' => $district_code,
                 'toponymy'      => $post['toponymy'],
-                'street'        => $post['street'],
+                'street'        => $street,
                 'particulars'   => $particulars,
                 'stairway'      => $post['stairway'],
                 'add_time'      => time(),
