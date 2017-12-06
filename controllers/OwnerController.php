@@ -96,7 +96,7 @@ class OwnerController extends Controller
         'strong_current'    => 1,
         'waterway'          => 3,
         'waterproof'        => '防水',
-        'carpentry'         => '木作',
+        'carpentry'         => 4,
         'emulsion_varnish'  => '乳胶漆',
         'oil_paint'         => '油漆',
         'tiler'             => '泥工',
@@ -702,8 +702,7 @@ class OwnerController extends Controller
     public function actionCarpentry()
     {
         $post = \Yii::$app->request->get();
-        $_select = 'id,univalence,worker_kind';
-        $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker'],$_select);
+        $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker']);
         if ($labor_cost){
             $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
             foreach ($worker_kind_details as $one_labor) {
@@ -720,7 +719,6 @@ class OwnerController extends Controller
         $worker_price = !isset($labor_cost['univalence']) ? $labor_cost['univalence'] : LaborCost::CARPENTRY_PRICE;
         $_flat = !isset($flat) ? $flat :WorkerCraftNorm::CARPENTRY_DAY_FLAT;
         $_modelling = !isset($modelling) ? $modelling :WorkerCraftNorm::CARPENTRY_DAY_MODELLING;
-
 
         $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
         if ($carpentry_add == null){
@@ -739,7 +737,7 @@ class OwnerController extends Controller
 
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
-        $labour_charges['worker_kind'] = self::WORK_CATEGORY['woodworker'];
+        $labour_charges['worker_kind'] = $labor_cost['worker_kind'];
 
         //材料
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL);
@@ -768,7 +766,6 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);

@@ -611,6 +611,7 @@ class BasisDecorationService
         foreach ($crafts as $craft) {
 
            if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_sculpt']){
+
                $plasterboard_sculpt = $craft['material'];
            }
 
