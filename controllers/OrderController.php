@@ -993,16 +993,6 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-//        $lhzz=Lhzz::find()
-//            ->where(['uid' => $user->id])
-//            ->one()['id'];
-//        if (!$lhzz){
-//            $code=1010;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
                 $request = Yii::$app->request;
                 $page=trim($request->get('page',1));
                 $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
@@ -1395,7 +1385,6 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-
             if($startTime==$endTime){
                 list($startTime, $endTime) =ModelService::timeDeal($startTime);
             }else{
@@ -1430,11 +1419,11 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * 商家后台获取订单详情
-     * @return string
-     */
-    public function actionGetsupplierorderdetails(){
+        /**
+         * 商家后台获取订单详情
+         * @return string
+         */
+        public function actionGetsupplierorderdetails(){
             $request=Yii::$app->request;
             $order_no=trim($request->post('order_no',''));
             $sku=trim($request->post('sku',''));
@@ -1500,7 +1489,7 @@ class OrderController extends Controller
                     break;
             }
 
-            $goods_data=array();
+             $goods_data=array();
               if ($order_information['goods_name']=='+'){
                   $goods_data['goods_name']='';
               }else{
@@ -2315,7 +2304,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
          if(array_key_exists('sku', $postData) || !$postData['sku']==0){
             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
@@ -2679,7 +2667,7 @@ class OrderController extends Controller
         }
         $code=200;
         $postData = Yii::$app->request->get();
-        $after_sale_detail=OrderAfterSale::FindAfterSaleData($postData,$user);
+        $after_sale_detail=OrderAfterSale::GetAfterSaleData($postData,$user);
         if (is_numeric($after_sale_detail)){
             $code=$after_sale_detail;
             return Json::encode([
@@ -4542,7 +4530,6 @@ class OrderController extends Controller
             $code=1000;
             if (!$sku ||  !$order_no)
             {
-
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
@@ -4825,53 +4812,6 @@ class OrderController extends Controller
                 ]);
             }
         }
-
-
-//    public function actionDelData()
-//    {
-//        $request=Yii::$app->request;
-////        $order_no=$request->post('order_no');
-//        $GoodsOrder=GoodsOrder::Find()->all();
-//        foreach ($GoodsOrder as &$list)
-//        {
-//            $list->delete();
-//            $OrderGoods=OrderGoods::find()->all();
-//            foreach ($OrderGoods as &$OrderGood)
-//            {
-//                $OrderGood->delete();
-//            }
-//            $UserAccessDetail=UserAccessdetail::find()->all();
-//            foreach ($UserAccessDetail as &$UserAccess)
-//            {
-//                $UserAccess->delete();
-//            }
-//            $express=Express::find()->all();
-//            foreach ($express as &$expres)
-//            {
-//                $expres->delete();
-//            }
-//            $orderPlatForm=OrderPlatForm::find()->all();
-//            foreach ($orderPlatForm as &$orderPlatForms)
-//            {
-//                $orderPlatForms->delete();
-//            }
-//            $orderaftersale=OrderAfterSale::find()->all();
-//            foreach ($orderaftersale as &$orderaftersales)
-//            {
-//                $orderaftersales->delete();
-//            }
-//            $orderaftersaleimage=OrderAfterSaleImage::find()->all();
-//            foreach ($orderaftersaleimage as &$orderaftersaleimages)
-//            {
-//                $orderaftersaleimages->delete();
-//            }
-//            $orderRefunds=OrderRefund::find()->all();
-//            foreach ($orderRefunds as &$orderRefund)
-//            {
-//                $orderRefund->delete();
-//            }
-//        }
-//    }
 
     /**
      * 去付款-微信app支付
@@ -5730,6 +5670,9 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
     public  function  actionFindAfterSaleDetail()
     {
         $request=Yii::$app->request;

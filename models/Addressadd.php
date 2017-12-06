@@ -118,7 +118,7 @@ class Addressadd extends  ActiveRecord
     public static function UserAddressAdd($district_code,$region,$consignee,$mobile,$user_id,$default)
     {
             $address_count=self::find()->where(['uid'=>$user_id])->count();
-            if ($address_count>=6){
+            if ($address_count>=10){
                 $code=1026;
                 return $code;
             }

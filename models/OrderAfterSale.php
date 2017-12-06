@@ -215,6 +215,57 @@ class OrderAfterSale extends ActiveRecord
         return $data;
     }
 
+
+    /**
+     * 获取售后信息
+     * @param $postData
+     * @param $user
+     * @return array|int|null|ActiveRecord
+     */
+    public  static function GetAfterSaleData($postData,$user)
+    {
+        if(!array_key_exists('order_no', $postData) || !array_key_exists('sku', $postData)){
+            $code=1000;
+            return $code;
+        }
+
+        $goodsOrder=GoodsOrder::find()
+            ->select(['supplier_id'])
+            ->where(['order_no'=>$postData['order_no']])
+            ->one();
+        if (!$goodsOrder){
+            $code=1000;
+            return $code;
+        }
+        $data=self::find()
+            ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
+            ->select('id,type,description,create_time')
+            ->asArray()
+            ->one();
+        //'1. 退货  2.换货  3.上门维修  4. 上门换货   5.上门退货  ',
+        $data['type']=self::AFTER_SALE_SERVICES[$data['type']];
+        $data['image']=OrderAfterSaleImage::find()
+            ->where(['after_sale_id'=>$data['id']])
+            ->select('image')
+            ->asArray()
+            ->all();
+        if ($data['create_time'] !=0){
+            $data['create_time']=date('Y-m-d H:i',$data['create_time']);
+        }
+//        switch ($data['supplier_handle']){
+//            case 0:
+//                $data['supplier_handle']='未处理';
+//                break;
+//            case 1:
+//                $data['supplier_handle']='同意';
+//                break;
+//            case 2:
+//                $data['supplier_handle']='驳回';
+//                break;
+//        }
+        return $data;
+    }
+
     /**
      * @param $postData
      * @return int|void

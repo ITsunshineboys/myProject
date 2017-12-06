@@ -361,7 +361,7 @@ class Wxpay  extends ActiveRecord
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
-        $input->SetNotify_url(Yii::$app->request->hostInfo.self::EFFECT_NOTIFY_URL);
+        $input->SetNotify_url(Yii::$app->request->hostInfo.self::ORDER_APP_PAY_URL);
         $input->SetTrade_type("APP");
         $order = WxPayApi::AppUnifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParametersApp($order);

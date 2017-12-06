@@ -303,7 +303,6 @@ class Express extends ActiveRecord
       public  static  function  findRemainingTime($express)
       {
           $time=time();
-
           $RemainingTime=$express->create_time+15*24*60*60-$time;
           return $RemainingTime;
       }
