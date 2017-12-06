@@ -4880,11 +4880,11 @@ class OrderController extends Controller
             }
             $orders= explode('&',$msg['attach']);;
             $total_amount=$msg['total_fee'];
-            $orderAmount=GoodsOrder::CalculationCost($orders);
-                    if (!$total_amount==$orderAmount)
-                    {
-                        return false;
-                    }
+//            $orderAmount=GoodsOrder::CalculationCost($orders);
+//                    if (!$total_amount==$orderAmount)
+//                    {
+//                        return false;
+//                    }
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $Ord= GoodsOrder::find()
@@ -5359,7 +5359,6 @@ class OrderController extends Controller
      */
     public function actionDelInvalidGoods()
     {
-
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
