@@ -5723,11 +5723,10 @@ class OrderController extends Controller
             ->where(['uid' => $user->id])
             ->andWhere(['default'=>1])
             ->asArray()
-            ->all();
-        foreach ($addressList as &$list) {
-            $list['district_code'] = $list['district'];
-            $list['district'] = LogisticsDistrict::getdistrict($list['district']);
-        }
+            ->one();
+            $addressList['district_code'] = $addressList['district'];
+            $addressList['district'] = LogisticsDistrict::getdistrict($addressList['district']);
+
         $code=200;
         return Json::encode([
             'code' => $code,

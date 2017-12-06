@@ -243,6 +243,7 @@ class OrderAfterSale extends ActiveRecord
             ->asArray()
             ->one();
         //'1. 退货  2.换货  3.上门维修  4. 上门换货   5.上门退货  ',
+        $data['type_id']=$data['type'];
         $data['type']=self::AFTER_SALE_SERVICES[$data['type']];
         $data['image']=OrderAfterSaleImage::find()
             ->where(['after_sale_id'=>$data['id']])
