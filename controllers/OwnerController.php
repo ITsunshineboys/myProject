@@ -937,6 +937,7 @@ class OwnerController extends Controller
             ]);
         }
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $post);
+        var_dump($series_and_style);die;
         foreach ($crafts as $craft) {
 
             switch ($craft) {
