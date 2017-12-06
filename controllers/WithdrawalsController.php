@@ -1048,7 +1048,7 @@ class WithdrawalsController extends Controller
         $user=Yii::$app->user->identity;
         if (!$user)
         {
-            $code=403;
+            $code=1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1071,6 +1071,80 @@ class WithdrawalsController extends Controller
             'msg' => 'ok',
             'data'=>$data
         ]);
+    }
+
+
+    public  function  actionWxRechargeDatabase()
+    {
+        //获取通知的数据
+        $xml = file_get_contents("php://input");
+        $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $msg=Json::decode($data);
+        if ($msg['result_code']=='SUCCESS'){
+            $transaction_id=$msg['transaction_id'];
+            $result = Wxpay::QueryApporder($transaction_id);
+            if (!$result)
+            {
+                return false;
+            }
+            $arr= explode(',',base64_decode($msg['attach']));
+            $role_id=$arr[0];
+            $uid=$arr[1];
+            $transaction_no=$arr[2];
+            $access=UserAccessdetail::find()->where(['transaction_no'=>$transaction_no])->one();
+            $user=User::find()->where(['id'=>$uid])->one();
+            if (!$user)
+            {
+               return true;
+            }
+            if ($access)
+            {
+                return true;
+            }
+            $tran=Yii::$app->db->beginTransaction();
+            try{
+                $role=Role::GetRoleByRoleId($role_id,$user);
+                $role->balance=$role->balance+$msg['total_fee'];
+                $role->availableamount=$role->availableamount+$msg['total_fee'];
+                $res1=$role->save(false);
+                if (!$res1)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $accessDetail=new UserAccessdetail();
+                $accessDetail->uid=$uid;
+                $accessDetail->role_id=$role_id;
+                $accessDetail->access_type=1;
+                $accessDetail->access_money=$msg['total_fee'];
+                $accessDetail->create_time=time();
+                $accessDetail->transaction_no=$transaction_no;
+                $res2=$role->save(false);
+                if (!$res2)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $tran->commit();
+                echo 'success';
+            }catch (Exception $e)
+            {
+                $tran->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
     }
 
 

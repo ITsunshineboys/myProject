@@ -4878,7 +4878,7 @@ class OrderController extends Controller
             {
                 return false;
             }
-            $orders= explode('&',$msg['attach']);;
+            $orders= explode(',',base64_decode($msg['attach']));
             $total_amount=$msg['total_fee'];
 //            $orderAmount=GoodsOrder::CalculationCost($orders);
 //                    if (!$total_amount==$orderAmount)
@@ -4927,8 +4927,7 @@ class OrderController extends Controller
                     {
                         if ($Goods['order_status']!=0)
                         {
-                            echo 'fail';
-                            exit;
+                           return false;
                         }
                         $date=date('Ymd',time());
                         $GoodsStat=GoodsStat::find()
@@ -4946,7 +4945,7 @@ class OrderController extends Controller
                             {
                                 $code=500;
                                 $tran->rollBack();
-                                return $code;
+                                return false;
                             }
                         }else{
                             $GoodsStat->sold_number+=$Goods['goods_number'];
@@ -4955,14 +4954,13 @@ class OrderController extends Controller
                             {
                                 $code=500;
                                 $tran->rollBack();
-                                return $code;
+                                return false;
                             }
                         }
                     }
                     if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                     {
-                        echo 'fail';
-                        exit;
+                        return false;
                     }
                     $GoodsOrder->pay_status=1;
                     $GoodsOrder->pay_name='微信APP支付';
@@ -4970,8 +4968,7 @@ class OrderController extends Controller
                     if (!$res)
                     {
                         $tran->rollBack();
-                        echo 'fail';
-                        die;
+                        return false;
                     }
                     $access=new UserAccessdetail();
                     $access->uid=$user->id;
@@ -4984,8 +4981,7 @@ class OrderController extends Controller
                     $res3=$access->save(false);
                     if ( !$res3){
                         $tran->rollBack();
-                        $code=500;
-                        return $code;
+                        return false;
                     }
                 }
 
@@ -4993,10 +4989,9 @@ class OrderController extends Controller
                 $tran->commit();
             }catch (Exception $e){
                 $tran->rollBack();
-                echo 'fail';
-                die;
+                return false;
             }
-            echo 'success';
+            return true;
         }
     }
 

@@ -384,10 +384,12 @@ class Wxpay  extends ActiveRecord
                 echo "<font color='#00ff55;'>$key</font> : $value <br/>";
             }
         }
+        $out_trade_no=GoodsOrder::SetTransactionNo($user->aite_cube_no);
         //、获取用户openid
         $tools = new PayService();
         $input = new WxPayUnifiedOrder();
-        $attach=base64_encode($user->last_role_id_app.','.$user->id);
+
+        $attach= base64_encode("{$user->last_role_id_app},{$user->id},{$user->id},{$out_trade_no}");
         $input->SetBody('艾特智造-充值');
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::APP_MCHID.date("YmdHis"));
@@ -395,7 +397,7 @@ class Wxpay  extends ActiveRecord
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");
-        $input->SetNotify_url(Yii::$app->request->hostInfo.self::ORDER_APP_PAY_URL);
+        $input->SetNotify_url(Yii::$app->request->hostInfo.self::WX_RECHARGE_URL);
         $input->SetTrade_type("APP");
         $order = WxPayApi::AppUnifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParametersApp($order);
