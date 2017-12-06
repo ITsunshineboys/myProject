@@ -481,6 +481,7 @@ class OwnerController extends Controller
 
         $points = Points::find()->asArray()->select('id,title,count')->where(['in','id',[1,2,3]])->andWhere(['level'=>1])->all();
         $w_orh = 0;
+
         foreach ($points  as $p){
             if ($p['id'] == self::PROJECT_DETAILS['waterway']){
                 $id = $p['id'];
@@ -497,10 +498,11 @@ class OwnerController extends Controller
                             $w_orh += $one['count'];
                             break;
                     }
+
                 }
+
                 $waterway_count = $toilet_waterway_points + $kitchen_waterway_points + $w_orh;
             }
-
 
             if ($p['id'] == self::PROJECT_DETAILS['weak_current']){
                 $id = $p['id'];
@@ -520,7 +522,6 @@ class OwnerController extends Controller
                 }
                 $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
             }
-
 
             if ($p['id'] == self::PROJECT_DETAILS['strong_current']){
                 $id = $p['id'];
@@ -553,7 +554,7 @@ class OwnerController extends Controller
                             break;
                     }
                 }
-
+//
                 $qita = 0;
                 foreach ($_waterway as $one_){
                     $qita += $one_['count'];
@@ -561,6 +562,8 @@ class OwnerController extends Controller
                 $strong_count =$croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points + $qita;
             }
         }
+
+
 
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
         $waterway_ = BasisDecorationService::laborFormula($waterway_count,$waterway);
