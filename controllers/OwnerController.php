@@ -92,14 +92,14 @@ class OwnerController extends Controller
      *   工种 id
      */
     const PROJECT_DETAILS = [
-        'weak_current'      => 2,
-        'strong_current'    => 1,
-        'waterway'          => 3,
-        'waterproof'        => '防水',
+        'weak_current'      => 2,//弱电Id
+        'strong_current'    => 1,//强电id
+        'waterway'          => 3,//水路id
+        'waterproof'        => 69,//TODO 防水-修改 防水id
         'carpentry'         => 4,
         'emulsion_varnish'  => '乳胶漆',
-        'oil_paint'         => '油漆',
-        'tiler'             => '泥工',
+        'oil_paint'         => 5,//TODO 油漆 -> 油漆id
+        'tiler'             => 6,//TODO 泥工 -> 泥作id
     ];
 
     /**
