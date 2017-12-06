@@ -857,7 +857,7 @@ angular.module("all_controller", ['ngCookies'])
             url: baseUrl+"/supplier/goods",
             params:{
                 supplier_id:+$scope.supplier_id,
-                "sort[]":"sold_number:4",
+                "sort[]":"platform_price:4",
             }
         }).then(function successCallback (response) {
             console.log(response);
@@ -883,7 +883,7 @@ angular.module("all_controller", ['ngCookies'])
                                     url: baseUrl+"/supplier/goods",
                                     params:{
                                         supplier_id:+$scope.supplier_id,
-                                        "sort[]":"sold_number:4",
+                                        "sort[]":"platform_price:4",
                                         page:$scope.paramsMore
                                     }
                                 }).then(function successCallback (response) {
