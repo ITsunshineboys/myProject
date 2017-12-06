@@ -1314,7 +1314,7 @@ class GoodsOrder extends ActiveRecord
                     return $code;
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $trans->rollBack();
             $code=500;
             return $code;
@@ -1658,7 +1658,6 @@ class GoodsOrder extends ActiveRecord
         $supplier=Supplier::find()
             ->where(['id'=>$supplier_id])
             ->one();
-        $time=time();
         $role_number=$supplier->shop_no;
         $transaction_no= self::SetTransactionNo($role_number);
         $orderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
