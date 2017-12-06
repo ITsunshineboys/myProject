@@ -958,7 +958,7 @@ class OwnerController extends Controller
                     break;
             }
 
-        }var_dump($gypsum_powder_craft);die;
+        }
 
 //        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft,$putty_area);
