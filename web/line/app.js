@@ -40,7 +40,7 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
             })
 
             .state("details", {   //某个商品详细列表
-                url: "/details?id&flag",
+                url: "/details?id&flag&pid",
                 views: {
                     "": {templateUrl: "details.html"}
                 },
@@ -81,11 +81,6 @@ angular.module("app", ["ui.router","ngAnimate", "all_controller"])
                     'address_id':''
                 }*/
             })
-
-
-
-
-
 
 
             .state("invoice", {    //发票信息
