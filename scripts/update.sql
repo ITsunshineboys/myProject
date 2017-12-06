@@ -125,6 +125,7 @@ CREATE TABLE `brainpower_inital_supervise` (
 
 ALTER TABLE `brainpower_inital_supervise` ADD  `effect_id` int(11) NOT NULL;
 
+--12.6
 
 ALTER TABLE `engineering_standard_craft` ADD  `points_id`  int(11) NOT NULL DEFAULT '0';
 
@@ -145,6 +146,10 @@ update engineering_standard_craft set points_id=4 where id=34;
 update engineering_standard_craft set points_id=4 where id=35;
 update engineering_standard_craft set points_id=4 where id=36;
 update engineering_standard_craft set points_id=4 where id=37;
+
+
+update points set title='主卧' where title='主卧室';
+update points set title='次卧' where title='次卧室';
 
 
 

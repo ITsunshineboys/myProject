@@ -125,8 +125,8 @@ class OwnerController extends Controller
         'toilet'  => '卫生间',
         'hall'    => '客厅',
 //        'bedroom' => '卧室',
-        'master_bedroom' => '主卧室',
-        'secondary_bedroom' => '次卧室',
+        'master_bedroom' => '主卧',
+        'secondary_bedroom' => '次卧',
     ];
 
     /**
