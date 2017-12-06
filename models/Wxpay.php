@@ -18,6 +18,7 @@ class Wxpay  extends ActiveRecord
         const  PAY_SUCESS_URL='/line/#!/pay_success';
         const  PAY_FAIL_URL='/line/#!/order_commodity';
         const  ORDER_APP_PAY_URL='/order/wx-notify-database';
+        const  WX_RECHARGE_URL='/withdrawals/wx-recharge-database';
         const  EFFECT_BODY='样板间申请费';
         const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
         const  ACCESS_TOKEN='access_token';
@@ -358,6 +359,39 @@ class Wxpay  extends ActiveRecord
         $input->SetAttach($attach);
         $input->SetOut_trade_no(WxPayConfig::APP_MCHID.date("YmdHis"));
         $input->SetTotal_fee($total_amount*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("goods");
+        $input->SetNotify_url(Yii::$app->request->hostInfo.self::ORDER_APP_PAY_URL);
+        $input->SetTrade_type("APP");
+        $order = WxPayApi::AppUnifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParametersApp($order);
+        return  Json::decode($jsApiParameters);
+    }
+
+    /**
+     * @param $money
+     * @param $user
+     * @return mixed
+     */
+    public  static  function  UserRecharge($money,$user)
+    {
+        ini_set('date.timezone','Asia/Shanghai');
+        //打印输出数组信息
+        function printf_info($data)
+        {
+            foreach($data as $key=>$value){
+                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+            }
+        }
+        //、获取用户openid
+        $tools = new PayService();
+        $input = new WxPayUnifiedOrder();
+        $attach=base64_encode($user->last_role_id_app.','.$user->id);
+        $input->SetBody('艾特智造-充值');
+        $input->SetAttach($attach);
+        $input->SetOut_trade_no(WxPayConfig::APP_MCHID.date("YmdHis"));
+        $input->SetTotal_fee($money*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("goods");

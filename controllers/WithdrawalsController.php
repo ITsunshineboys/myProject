@@ -1039,6 +1039,40 @@ class WithdrawalsController extends Controller
         ]);
     }
 
+    /**
+     * 移动端-用户充值-微信
+     * @return string
+     */
+    public function actionWxPayRecharge()
+    {
+        $user=Yii::$app->user->identity;
+        if (!$user)
+        {
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $money=$request->post('money');
+        if (!$money)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=Wxpay::UserRecharge($money,$user);
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
+
 
      /**
      * 用户充值 支付宝 APP支付 异步返回
