@@ -635,29 +635,15 @@ class OwnerController extends Controller
 
         $points = Points::findByOne('id,title',"id = 69");
         //厨房
-        $kitchen = ProjectView::find()->asArray()->where(['project'=>'厨房面积'])->andWhere(['points_id'=>68])->one();
-        $kitchen_ = $kitchen['project_value'] / 100;
-
-        $p = ProjectView::find()->asArray()->where(['project'=>'厨房防水高度'])->andWhere(['points_id'=>$points['id']])->one();
-        if (!$p){
-            $_kitchen_height = EngineeringUniversalCriterion::KITCHEN_HEIGHT;
-        }else{
-            $_kitchen_height = $p['project_value'];
-        }
-        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_,$_kitchen_height, $post['area'], $post['kitchen']);
-
+        $kitchen_ = ProjectView::findByOne('厨房面积',68);
+        $_kitchen_height = ProjectView::findByOne('厨房防水高度',$points['id']);
+        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_['project_value'],$_kitchen_height['project_value'], $post['area'], $post['kitchen']);
 
         //卫生间
-        $toilet = ProjectView::find()->asArray()->where(['project'=>'卫生间面积'])->andWhere(['points_id'=>68])->one();
-        $toilet_ = $toilet['project_value'] / 100;
-        $toilet_p = ProjectView::find()->asArray()->where(['project'=>'卫生间防水高度'])->andWhere(['points_id'=>$points['id']])->one();
-        if (!$toilet_p){
-            $_toilet_height = EngineeringUniversalCriterion::TOILET_HEIGHT;
-        }else{
-            $_toilet_height = $toilet_p['project_value'];
-        }
+        $toilet_ = ProjectView::findByOne('卫生间面积',68);
+        $_toilet_height = ProjectView::findByOne('卫生间防水高度',$points['id']);
+        $toilet_area = BasisDecorationService::waterproofArea($toilet_['project_value'],$_toilet_height['project_value'], $post['area'], $post['toilet']);
 
-        $toilet_area = BasisDecorationService::waterproofArea($toilet_,$_toilet_height, $post['area'], $post['toilet']);
 
         //总面积
         $apartment = Apartment::find()
@@ -667,8 +653,7 @@ class OwnerController extends Controller
             ->andWhere(['project_name'=>'其他防水面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
-        $qita = !empty($apartment['project_value'])?$apartment['project_value']:1;
-        $total_area = $kitchen_area + $toilet_area + $qita;
+        $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
 
 
         //当地工艺
@@ -682,10 +667,9 @@ class OwnerController extends Controller
         }
 
 
-
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
         $labor_all_cost['price'] = BasisDecorationService::p($total_area,$worker_day_points,$worker_price);
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['waterproof_worker'];
+        $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
 
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
