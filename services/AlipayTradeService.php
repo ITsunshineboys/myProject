@@ -87,10 +87,10 @@ class AlipayTradeService {
         $aop->charset = "UTF-8";
         $aop->signType = "RSA2";
         $aop->alipayrsaPublicKey = $this->alipay_public_key;
-//        $biz_content=$builder->getBizContent();
+        //        $biz_content=$builder->getBizContent();
         $biz_content=$builder->getBizContentApp();
         $request = new AlipayTradeAppPayRequest();
-//SDK已经封装掉了公共参数，这里只需要传入业务参数
+        //SDK已经封装掉了公共参数，这里只需要传入业务参数
         $bizcontent =$biz_content;
         $request->setNotifyUrl($notify_url);
         $request->setBizContent($bizcontent);

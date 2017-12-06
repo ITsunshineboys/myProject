@@ -20,6 +20,14 @@ class WxPayJsApiPay extends WxPayDataBase
         $this->values['appId'] = $value;
     }
     /**
+     * 设置微信分配的公众账号ID
+     * @param string $value
+     **/
+    public function SetAppidAPP($value)
+    {
+        $this->values['appid'] = $value;
+    }
+    /**
      * 获取微信分配的公众账号ID的值
      * @return 值
      **/
@@ -44,6 +52,14 @@ class WxPayJsApiPay extends WxPayDataBase
     public function SetTimeStamp($value)
     {
         $this->values['timeStamp'] = $value;
+    }
+    /**
+     * 设置支付时间戳
+     * @param string $value
+     **/
+    public function SetTimeStampAPP($value)
+    {
+        $this->values['timestamp'] = $value;
     }
     /**
      * 获取支付时间戳的值
@@ -77,6 +93,14 @@ class WxPayJsApiPay extends WxPayDataBase
     public function SetNonceStr($value)
     {
         $this->values['nonceStr'] = $value;
+    }
+    /**
+     * 随机字符串
+     * @param string $value
+     **/
+    public function SetNonceStrAPP($value)
+    {
+        $this->values['noncestr'] = $value;
     }
     /**
      * 获取notify随机字符串值
@@ -161,7 +185,7 @@ class WxPayJsApiPay extends WxPayDataBase
      **/
     public function SetAppPaySign($value)
     {
-        $this->values['Sign'] = $value;
+        $this->values['sign'] = $value;
     }
 
     /**

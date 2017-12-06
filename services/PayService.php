@@ -138,7 +138,6 @@ class PayService
      */
     public function GetJsApiParametersApp($UnifiedOrderResult)
     {
-
         if(!array_key_exists("appid", $UnifiedOrderResult)
             || !array_key_exists("prepay_id", $UnifiedOrderResult)
             || $UnifiedOrderResult['prepay_id'] == "")
@@ -146,14 +145,13 @@ class PayService
             throw new WxPayException("参数错误");
         }
         $jsapi = new WxPayJsApiPay();
-        $jsapi->SetAppid($UnifiedOrderResult["appid"]);
+        $jsapi->SetAppidAPP($UnifiedOrderResult["appid"]);
         $jsapi->SetPartnerid($UnifiedOrderResult["mch_id"]);
         $jsapi->SetPrepayid($UnifiedOrderResult['prepay_id']);
         $timeStamp = time();
-        $jsapi->SetTimeStamp("$timeStamp");
-        $jsapi->SetNonceStr(WxPayApi::getNonceStr());
+        $jsapi->SetTimeStampAPP("$timeStamp");
+        $jsapi->SetNonceStrAPP(WxPayApi::getNonceStr());
         $jsapi->SetPackage("Sign=WXPay");
-        $jsapi->SetSignType("MD5");
         $jsapi->SetAppPaySign($jsapi->MakeSignAPP());
         $parameters = json_encode($jsapi->GetValues());
         return $parameters;
