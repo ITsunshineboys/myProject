@@ -22,11 +22,16 @@ class ProjectView extends ActiveRecord
 
     public static function findByAll($select = [] , $where = [])
     {
-        return self::find()
+        $row = self::find()
             ->asArray()
             ->select($select)
             ->where($where)
             ->all();
+        foreach ($row as &$one){
+            $one['project_value'] = $one['project_value'] / 100;
+        }
+
+        return $row;
     }
 
     public static function findByUpdate($rows,$id)

@@ -151,7 +151,7 @@ class OwnerController extends Controller
         'live' => '生活配套',
     ];
 
-    const AREA_PROPORTION = '面积比例';
+    const AREA_PROPORTION = 68;
 
     const OTHER_AREA = [
         'waterproof_area'=> '防水面积',
@@ -798,23 +798,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //工人一天单价
-        $_select = 'id,univalence,worker_kind';
-        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters'],$_select);
-        if ($labor_costs == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
         foreach ($worker_kind_details as $_labor_cost) {
             switch ($_labor_cost) {
                 case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_primer_area']:
@@ -833,7 +818,7 @@ class OwnerController extends Controller
         }
 
         // 面积比例
-        $points_where = ['title'=>self::AREA_PROPORTION];
+        $points_where = ['id'=>self::AREA_PROPORTION];
         $points = Points::findByOne([],$points_where);
         if ($points == null){
             $code = 1058;
@@ -859,6 +844,7 @@ class OwnerController extends Controller
                 $bedroom_area = $one_proportion;
             }
         }
+
         //卧室底漆面积
         $bedroom_primer_area = BasisDecorationService::paintedArea($post['area'],$bedroom_area['project_value'],$post['bedroom'],self::WALL_HIGH,self::WALL);
 
