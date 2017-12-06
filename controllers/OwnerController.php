@@ -566,7 +566,7 @@ class OwnerController extends Controller
         $weak_     = BasisDecorationService::laborFormula($weak_count,$weak);
         $strong_   = BasisDecorationService::laborFormula($strong_count,$strong);
         $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_) * $waterway_labor['univalence'];
-        $labor_all_cost['worker_kind'] = self::WORK_CATEGORY['plumber'];
+        $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
 
         //查询弱电所需要材料
         $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL);
