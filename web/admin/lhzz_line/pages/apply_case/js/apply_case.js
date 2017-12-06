@@ -41,7 +41,7 @@ angular.module('apply_case',[])
                     $scope.cur_all_apply = res.data.all_apply
                     $scope.cur_all_earnest = res.data.all_earnest
                     $scope.apply_list = res.data['0'].list
-                    $scope.Config.totalItems = res.data['0'].total_page
+                    $scope.Config.totalItems = res.data['0'].count
                 })
             };
             $scope.params = {
