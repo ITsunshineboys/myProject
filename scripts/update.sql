@@ -126,4 +126,25 @@ CREATE TABLE `brainpower_inital_supervise` (
 ALTER TABLE `brainpower_inital_supervise` ADD  `effect_id` int(11) NOT NULL;
 
 
+ALTER TABLE `engineering_standard_craft` ADD  `points_id`  int(11) NOT NULL DEFAULT '0';
+
+update engineering_standard_craft set points_id=2 where id=1;
+update engineering_standard_craft set points_id=2 where id=2;
+update engineering_standard_craft set points_id=1 where id=3;
+update engineering_standard_craft set points_id=1 where id=4;
+update engineering_standard_craft set points_id=3 where id=5;
+update engineering_standard_craft set points_id=3 where id=6;
+update engineering_standard_craft set points_id=69 where id=7;
+update engineering_standard_craft set points_id=4 where id=8;
+update engineering_standard_craft set points_id=4 where id=9;
+update engineering_standard_craft set points_id=4 where id=10;
+update engineering_standard_craft set points_id=4 where id=11;
+update engineering_standard_craft set points_id=4 where id=32;
+update engineering_standard_craft set points_id=4 where id=33;
+update engineering_standard_craft set points_id=4 where id=34;
+update engineering_standard_craft set points_id=4 where id=35;
+update engineering_standard_craft set points_id=4 where id=36;
+update engineering_standard_craft set points_id=4 where id=37;
+
+
 
