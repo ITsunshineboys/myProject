@@ -1074,6 +1074,9 @@ class WithdrawalsController extends Controller
     }
 
 
+    /**
+     * @return bool|string
+     */
     public  function  actionWxRechargeDatabase()
     {
         //获取通知的数据
