@@ -88,7 +88,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
     {
 
         if ($insert) {
-            $this->earnest = self::INSET_EARNST;
             $this->create_time = time();
             $this->status = 0;
         }
@@ -278,6 +277,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest->effect_id=$id;
             $effect_earnest->phone=$phone;
             $effect_earnest->name=$name;
+            $effect_earnest->earnest =0;
             $effect_earnest->transaction_no=$transaction_no;
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
