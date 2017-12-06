@@ -4,6 +4,7 @@ namespace app\controllers;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\models\EffectMaterial;
+use app\models\User;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
@@ -352,7 +353,7 @@ class EffectController extends Controller
         ]);
     }
     /**
-     * app 申请样板间
+     * app 保存/申请样板间
      * @return string
      */
     public function actionAppApplyEffect(){
@@ -410,7 +411,7 @@ class EffectController extends Controller
             ]);
     }
     /**
-     * app 去装修
+     * app 保存方案 去装修
      * @return string
      */
     public function actionGoDecoration(){
@@ -430,8 +431,11 @@ class EffectController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $user_info=User::find()->where(['id'=>$user->getId()])->asArray()->one();
         $effect_earnet=EffectEarnest::find()->where(['id'=>$save_id])->one();
         $effect_earnet->create_time=time();
+        $effect_earnet->username=$user_info['nickname'];
+        $effect_earnet->phone=$user_info['mobile'];
         $effect_earnet->type=0;
         if(!$effect_earnet->save(false)){
             $code=500;
