@@ -125,8 +125,8 @@ class OwnerController extends Controller
         'toilet'  => '卫生间',
         'hall'    => '客厅',
 //        'bedroom' => '卧室',
-        'master_bedroom' => '主卧',
-        'secondary_bedroom' => '次卧',
+        'master_bedroom' => '主卧室',
+        'secondary_bedroom' => '次卧室',
     ];
 
     /**
@@ -380,7 +380,7 @@ class OwnerController extends Controller
         $weak_points = Points::findByPid('title,count',$weak_where);
         $other = 0;
         foreach ($weak_points as $one_points){
-            var_dump($weak_points);
+
             //客厅
             if ($one_points['title'] == self::ROOM_DETAIL['hall']){
                 $all = $one_points['count'] * $post['hall'];
@@ -412,7 +412,7 @@ class OwnerController extends Controller
             if ($one_points['title'] != self::ROOM_DETAIL['hall'] && $one_points['title'] == self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['kitchen'] && $one_points['title'] != self::ROOM_DETAIL['toilet']){
                 $other +=  $one_points['count'];
             }
-        }die;
+        }
         //  弱电总点位
         $weak_current_points = $all + $secondary_bedroom + $kitchen + $toilet + $other;
 
