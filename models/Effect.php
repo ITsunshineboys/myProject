@@ -399,7 +399,12 @@ class Effect extends ActiveRecord
     }
 
 
-
+    /**
+     * 数组按照键值分组
+     * @param $arr
+     * @param $key
+     * @return array
+     */
     public static function array_group_by($arr, $key)
     {
         $grouped = [];
