@@ -128,6 +128,10 @@ angular.module("all_controller", ['ngCookies'])
         if(sessionStorage.getItem('invoiceInfo') != null){
             sessionStorage.removeItem('invoiceInfo')
         }
+        if(sessionStorage.getItem('minute') != null){
+            sessionStorage.removeItem('minute')
+        }
+
 
         $http({   //轮播接口调用
             method: 'get',
@@ -204,7 +208,7 @@ angular.module("all_controller", ['ngCookies'])
     //分类详情控制器
     .controller("minute_class_ctrl", function ($rootScope,$scope,$http ,$state,$stateParams) {
         $rootScope.baseUrl = baseUrl;
-        $scope.pid = $stateParams.pid;
+        $scope.pid = sessionStorage.getItem('minute') || $stateParams.pid;
         $scope.id = $stateParams.id;
         $scope.search_flag = true;
         $scope.details = '';
@@ -243,10 +247,11 @@ angular.module("all_controller", ['ngCookies'])
         //点击左侧分类列表菜单获取右边数据
         $scope.getTitle = function (item) {
             //首页列表点击分类列表传值id获取数据(一级id查去二级)
-            $scope.pid = item.id;
+            sessionStorage.setItem('minute',item.id);
+            $scope.pid = sessionStorage.getItem('minute');
             $http({
                 method: 'get',
-                url:  baseUrl+'/mall/categories?pid=' + item.id
+                url:  baseUrl+'/mall/categories?pid=' + sessionStorage.getItem('minute')
             }).then(function successCallback(response) {
                 $scope.details = response.data.data.categories;
             });
