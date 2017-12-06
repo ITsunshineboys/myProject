@@ -939,7 +939,7 @@ class OwnerController extends Controller
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $post);
 
         foreach ($crafts as $craft) {
-            var_dump($craft);
+
             switch ($craft) {
                 case $craft['project_details'] == BasisDecorationService::GOODS_NAME['putty']:
                     $putty_craft = $craft;
@@ -957,7 +957,8 @@ class OwnerController extends Controller
                     $gypsum_powder_craft = $craft;
                     break;
             }
-        }die;
+
+        }var_dump($gypsum_powder_craft);die;
 
 //        腻子费用
         $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft,$putty_area);
