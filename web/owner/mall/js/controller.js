@@ -2089,52 +2089,6 @@ angular.module('all_controller', [])
                     $scope.cur_header = '智能报价'
                     if (sessionStorage.getItem('materials') != null) {
                         sessionStorage.setItem('worker', JSON.stringify($scope.all_worker))
-                        // let arr = []
-                        // for (let [key, value] of $scope.all_goods.entries()) {
-                        //     arr.push({
-                        //         id: value.id,
-                        //         title: value.title,
-                        //         goods: []
-                        //     })
-                        // }
-                        // for (let [key, value] of $scope.all_goods.entries()) {
-                        //     for (let [key1, value1] of value.second_level.entries()) {
-                        //         for (let [key2, value2] of value1.three_level.entries()) {
-                        //             for (let [key3, value3] of value2.goods_detail.entries()) {
-                        //                 for (let [key4, value4] of arr.entries()) {
-                        //                     if (value3.quantity != 0) {
-                        //                         if (value.id == value4.id && value3.quantity != 0) {
-                        //                             if (value3.goods_id == undefined) {
-                        //                                 value4.goods.push({
-                        //                                     cost: value3.cost.toFixed(2),
-                        //                                     procurement: value3.procurement.toFixed(2),
-                        //                                     goods_id: value3.id,
-                        //                                     name: value3.name,
-                        //                                     id: value3.id,
-                        //                                     goods_three: value2.title,
-                        //                                     goods_second: value1.title,
-                        //                                     goods_first: value.title,
-                        //                                     quantity: value3.quantity,
-                        //                                     shop_name: value3.shop_name,
-                        //                                     goods_name: value3.goods_name,
-                        //                                     category_id: value3.category_id,
-                        //                                     cover_image: value3.cover_image,
-                        //                                     style_id: value3.style_id,
-                        //                                     series_id: value3.series_id,
-                        //                                     platform_price: +value3.platform_price,
-                        //                                     purchase_price_decoration_company: +value3.purchase_price_decoration_company,
-                        //                                 })
-                        //                             } else {
-                        //                                 value4.goods.push(value3)
-                        //                             }
-                        //                         }
-                        //                     }
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // }
-                        // console.log(arr)
                         sessionStorage.setItem('materials', JSON.stringify($scope.all_goods))
                         $state.go('modelRoom', JSON.parse(sessionStorage.getItem('huxingParams')))
                     } else {

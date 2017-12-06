@@ -3119,6 +3119,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             $scope.cur_choose_index = 0
             $scope.basic_attr = ''//商品基本属性
             $scope.other_attr = ''//商品额外属性
+            $scope.material_category = {}
             //获取一级、二级和三级分类
             _ajax.get('/quote/assort-goods', {}, function (res) {
                 console.log(res)
@@ -3188,7 +3189,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                     $scope.level_two = res.data.categories
                     $scope.cur_level_two1 = $scope.level_two[0]
                     _ajax.get('/quote/assort-goods', {
-                        pid: $scope.cur_level_two.id
+                        pid: $scope.cur_level_two1.id
                     }, function (res) {
                         console.log(res)
                         $scope.level_three = res.data.categories
@@ -3218,7 +3219,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.other_attr = ''//商品额外属性
         $scope.get_material = function () {
             _ajax.post('/quote/decoration-add-classify', {
-                classify: $scope.cur_level_three1.title
+                classify:$scope.material_category.third_level==undefined?$scope.cur_level_three1.title:$scope.material_category.third_level
             }, function (res) {
                 console.log(res)
                 $scope.basic_attr = res.goods
