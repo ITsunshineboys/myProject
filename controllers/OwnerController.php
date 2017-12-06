@@ -99,7 +99,7 @@ class OwnerController extends Controller
         'carpentry'         => 4,
         'emulsion_varnish'  => '乳胶漆',
         'oil_paint'         => 5,//TODO 油漆 -> 油漆id
-        'tiler'             => 6,//TODO 泥工 -> 泥作id
+        'tiler'             => 6,//TODO 泥工 -> 泥工id
     ];
 
     /**

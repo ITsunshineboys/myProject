@@ -1996,6 +1996,6 @@ class QuoteController extends Controller
     {
         //engineering_standard_carpentry_coefficient
 //       var_dump(AssortGoods::deleteAll([]));
-       var_dump(AssortGoods::find()->asArray()->all());
+       var_dump(Points::find()->asArray()->all());
     }
 }
