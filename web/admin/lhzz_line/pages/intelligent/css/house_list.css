@@ -4,71 +4,8 @@
     font-weight:bold;
     margin-bottom:30px;
 }
-
-.house_list table{
-    font-size:14px;
-}
 .house_list table th{
     border: 0 !important;
     font-weight:normal!important;
     color: #7A8599;
-}
-.house_list table td{
-    color: #666F80;
-}
-/*分页处理*/
-.pages{
-    width: 90%;
-    margin: 20px auto 0;
-    /*outline: 1px solid red;*/
-    overflow: hidden;
-    padding-left: 0;
-    list-style: none;
-}
-
-.pages>div{
-    float: left;
-    overflow: hidden;
-}
-
-.pages li{
-    float: left;
-    margin-right: 10px;
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #999;
-    line-height: 12px;
-    padding: 6px 18px;
-    background-color: white;
-    border: 1px solid #5677FC;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.pages #jumpto{
-    border: none;
-    padding:0 0 0 5px;
-}
-#jumpt {
-    border: none;
-    padding:0 0 0 5px;
-}
-#jumpt input{
-    height: 25px;
-    width: 62px;
-}
-#jumpto input{
-    height: 25px;
-    width: 62px;
-}
-
-.pagenum{
-    padding-left: 9px!important;
-    padding-right: 9px!important;
-}
-
-#omit,#off{
-    border:none;!important;
-    padding:6px 0 0 0;
-    cursor: default;
 }
