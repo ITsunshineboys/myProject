@@ -8,7 +8,7 @@
     <!--</div>-->
     <!--</header>-->
     <!--选项卡-->
-    <div class="tab clearfix">
+    <div class="tab  clearfix">
         <ul>
             <li ng-class="{'active':(normal_flag==true)}"  ng-click="normal()">正常</li>
             <li ng-class="{'active':(close_flag==true)}" ng-click="close()">关闭</li>
@@ -21,7 +21,7 @@
                 <span class="glyphicon glyphicon-plus"></span>
                 <span>添加</span>
             </button>
-        <!--<span class="border"  ui-sref="add_user">添加新用户</span>-->
+
         <button class="btn btn-default btn_right" data-toggle="modal" data-target="#{{more_modal}}" ng-click="change_model ()" >关闭</button>
         <span class="sort_choose">分类选择:</span>
         <select class="time_select" name="province"  ng-model="params.time_type" ng-change="getAccount()" class="time_select" ng-options="item.str as item.name for item in time_type">
