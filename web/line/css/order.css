@@ -495,13 +495,14 @@ header span{
 
 #agreement_span{
     display: inline-block;
-    /*width: 18rem;*/
+    width: 19rem;
     position: absolute;
     right: 2.5rem;
     overflow: hidden;
-    /*white-space: normal;*/
-    /*text-overflow: ellipsis;*/
+    white-space: normal;
+    text-overflow: ellipsis;
     color: #666;
+    font-size: 1.25rem;
 }
 .input_agrenmt{
     width: 1rem;
