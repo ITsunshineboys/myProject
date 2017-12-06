@@ -12,6 +12,9 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
     }, {
         name: '添加品牌'
     }];
+  $scope.trademark_txt='上传';
+  $scope.logo_txt='上传'
+  $scope.upload_dis=false;
   $scope.myng=$scope;
 	//上传商标注册证
   $scope.upload_img_src='';
@@ -22,6 +25,8 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
     if(!$scope.data.file){
       return
     }
+    $scope.trademark_txt='上传...';
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -33,6 +38,8 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
+        $scope.trademark_txt='上传';
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)
@@ -48,6 +55,8 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
     if(!$scope.data.file){
       return
     }
+    $scope.logo_txt='上传...'
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -59,6 +68,8 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
       }else{
         $scope.img_logo_flag='';
         $scope.upload_logo_src=response.data.data.file_path;
+        $scope.logo_txt='上传'
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)

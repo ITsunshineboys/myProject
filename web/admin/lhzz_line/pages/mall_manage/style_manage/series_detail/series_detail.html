@@ -1,86 +1,113 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/series_detail/css/series_detail.css">
 <div ng-controller="series_detail">
-    <div class="series_detail_content">
-        <!--系列名称-->
-        <form name="form" novalidate>
-        <div class="series_name">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>系列名称</span>
-            <input name="ser_name" required ng-class="{'border_red':(form.ser_name.$invalid &&submitted)||(form.ser_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.ser_name.$error" maxlength=10 type="text" placeholder="请输入系列名称" ng-model="ser_name">
-            <span id="limitword">*限1~10个字符</span>
-            <p class="red_mark" ng-if="name_flag">
-                <span class="glyphicon glyphicon-asterisk"></span>
-                该系列名称已存在，请重新填写
-            </p>
-        </div>
-
-        <!--创建时间-->
-        <div class="create_time">
-            <span>创建时间</span>
-            <span >{{sec_time}}</span>
-        </div>
-        <!--状态-->
-        <div class="state">
-            <span>状态</span>
-            <span class="red_mark" ng-if="items.status=='0'">关闭</span>
-            <span class="color_skyblue" ng-if="items.status=='1'">启用中</span>
-        </div>
-
-        <!--系列标签-->
-        <div class="series_tag">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>系列标签</span>   <!-- ng-class="'add_vis'" -->
-            <img ng-click="ser_label_add()" ng-class="{'add_vis':ser_label_arr.length>=6}"  src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
-            <ul class="tags">
-                <li ng-repeat="item in ser_label_arr track by $index">
-                    <input ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
-                    <img ng-if="ser_label_arr.length!=1" ng-click="ser_close_label($index)" src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
-                </li>
-                <span>*限1~3个字符,最多6个标签</span>
-            </ul>
-        </div>
-        <!--所处等级-->
-        <div class="present_level">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>所处等级</span>
-            <select name="" id="level_select" ng-model="myng.series_grade" ng-options="list.id as list.num for list in list_ser ">
-            </select>
-        </div>
-
-        <!--系列介绍-->
-        <div class="series_intro">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span>系列介绍</span>
-            <textarea name="ser_intro" ng-change="change_txts()" maxlength="70" required ng-class="{'border_red':(form.ser_intro.$invalid &&submitted)||(form.ser_intro.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_intro.$error" placeholder="请输入添加风格的介绍内容" ng-model="ser_intro"></textarea>
-            <span class="word_num">{{ser_intro.length}}/70</span>
-        </div>
-
-        <!--按钮-->
-        <div class="btn_sure">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="ser_det_ok(form.$valid)">保存</button>
-            <button class="btn btn-default btn_left" ui-sref="style_index">返回</button>
-        </div>
-        </form>
+  <!--系列名称-->
+  <form class="form-horizontal" name="form" novalidate>
+    <div class="row">
+      <div class="col-sm-2 control-label">
+        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+        <span>系列名称</span>
+      </div>
+      <div class="col-sm-2">
+        <input name="ser_name" class="form-control" required ng-class="{'error':(form.ser_name.$invalid &&submitted)||(form.ser_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.ser_name.$error" maxlength=10 type="text" placeholder="请输入系列名称" ng-model="ser_name">
+        <p class="red_mark" ng-if="name_flag">
+          <span class="glyphicon glyphicon-asterisk red_mark"></span>
+          该系列名称已存在，请重新填写
+        </p>
+      </div>
+      <div class="col-sm-8 control-label">
+        <span class="limitword">*限1~10个字符</span>
+      </div>
     </div>
 
-    <!--确认提示框-->
-    <div class="modal fade" id="{{sur_id}}" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">保存成功</h6>
-                </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="ser_det_return()">确认</button>
-                </div>
-            </div>
-        </div>
+    <!--创建时间-->
+    <div class="row">
+      <div class="col-sm-2 control-label">
+        <span>创建时间</span>
+      </div>
+      <div class="col-sm-10 control-label">
+        <span>{{sec_time}}</span>
+      </div>
     </div>
+    <!--状态-->
+    <div class="row">
+      <div class="col-sm-2 control-label">
+        <span>状态</span>
+      </div>
+      <div class="col-sm-10 control-label">
+        <span class="color_red" ng-if="items.status=='0'">关闭</span>
+        <span class="color_skyblue" ng-if="items.status=='1'">启用中</span>
+      </div>
+    </div>
+
+    <!--系列标签-->
+    <div class="row">
+      <div class="col-sm-2 control-label">
+        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+        <span>系列标签</span>
+      </div>
+      <div class="col-sm-10 control-label">
+        <img class="add_img" ng-click="ser_label_add()" ng-class="{'add_vis':ser_label_arr.length>=6}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
+        <ul class="tags">
+          <li ng-repeat="item in ser_label_arr track by $index">
+            <input class="form-control" ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
+            <img ng-if="ser_label_arr.length!=1" ng-click="ser_close_label($index)" src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
+          </li>
+          <div class="inline_b control-label">
+            <span class="limitword">*限1~3个字符,最多6个标签</span>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <!--所处等级-->
+    <div class="row">
+      <div class="col-sm-2 control-label">
+        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+        <span>所处等级</span>
+      </div>
+      <div class="col-sm-2 control-label">
+        <select class="form-control" id="level_select" ng-model="myng.series_grade" ng-options="list.id as list.num for list in list_ser "></select>
+      </div>
+    </div>
+
+    <!--系列介绍-->
+    <div class="row series_intro">
+      <div class="col-sm-2 control-label">
+        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+        <span>系列介绍</span>
+      </div>
+      <div class="col-sm-8 control-label">
+        <textarea class="form-control ser_text" name="ser_intro" ng-change="change_txts()" maxlength="70" required ng-class="{'border_red':(form.ser_intro.$invalid &&submitted)||(form.ser_intro.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_intro.$error" placeholder="请输入添加风格的介绍内容" ng-model="ser_intro"></textarea>
+        <span class="word_num">{{ser_intro.length}}/70</span>
+      </div>
+    </div>
+
+    <!--按钮-->
+    <div class="row">
+      <div class="col-sm-12 control-label btn_fix">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="ser_det_ok(form.$valid)">保存</button>
+        <button class="btn btn-default btn_left" ui-sref="style_index">返回</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--确认提示框-->
+<div class="modal fade" id="{{sur_id}}" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content" id="save_content">
+      <div class="modal-header" id="save_header">
+        <h4 class="modal-title" id="tishi">
+          提示
+        </h4>
+      </div>
+      <div class="modal-body" id="save_body">
+        <h6 id="tishi_wenzi">保存成功</h6>
+      </div>
+
+      <div class="btn_modal_two">
+        <button id="caozuo_sure" data-dismiss="modal" ng-click="ser_det_return()">确认</button>
+      </div>
+    </div>
+  </div>
 </div>
 </div>

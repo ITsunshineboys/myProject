@@ -1,16 +1,19 @@
 ;
 let online_edit = angular.module("onlineeditModule",['ngFileUpload']);
 online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
-    $rootScope.crumbs = [{
-        name: '商城管理',
-        icon: 'icon-shangchengguanli',
-        link: $rootScope.mall_click
-    }, {
-        name: '品牌管理',
-        link: 'brand_index',
-    }, {
-        name: '品牌详情'
-    }];
+  $rootScope.crumbs = [{
+      name: '商城管理',
+      icon: 'icon-shangchengguanli',
+      link: $rootScope.mall_click
+  }, {
+      name: '品牌管理',
+      link: 'brand_index',
+  }, {
+      name: '品牌详情'
+  }];
+  $scope.trademark_txt='上传';
+  $scope.logo_txt='上传'
+  $scope.upload_dis=false;
   $scope.myng=$scope;
   $scope.now_edit_list=[];
   $scope.now_edit_list=$stateParams.on_shelves_list;//当前那条数据
@@ -31,6 +34,8 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
     if(!$scope.data.file){
       return
     }
+    $scope.trademark_txt='上传...';
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -42,6 +47,8 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
+        $scope.trademark_txt='上传';
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)
@@ -56,6 +63,8 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
     if(!$scope.data.file){
       return
     }
+    $scope.logo_txt='上传...';
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -67,6 +76,8 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
       }else{
         $scope.img_logo_flag='';
         $scope.upload_logo_src=response.data.data.file_path;
+        $scope.logo_txt='上传';
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)

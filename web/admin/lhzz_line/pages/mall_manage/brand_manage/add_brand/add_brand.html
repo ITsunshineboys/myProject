@@ -30,9 +30,7 @@
                 <img ng-if="!!upload_img_src" ng-src="{{ upload_img_src}}"/>
                 <img ng-if="!upload_img_src" src="pages/mall_manage/brand_manage/add_brand/image/default.png"/>
                 <p class="img_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
-                <div ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file">
-                    <button class="btn btn-default">上传</button>
-                </div>
+                <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{trademark_txt}}</button>
                 <p class="red_mark warning" ng-if="!!img_flag">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     {{img_flag}}
@@ -50,9 +48,7 @@
                 <img ng-if="!!upload_logo_src" ng-src="{{ upload_logo_src}}"/>
                 <img ng-if="!upload_logo_src" src="pages/mall_manage/brand_manage/add_brand/image/default.png"/>
                 <p class="img_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
-                <div ngf-pattern="image/*" ng-change="upload_logo(logo_data.file)"  ngf-select="" ngf-multiple="false" ng-model="logo_data.file">
-                    <buttn class="btn btn-default">上传</buttn>
-                </div>
+                <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_logo(logo_data.file)"  ngf-select="" ngf-multiple="false" ng-model="logo_data.file" ng-disabled="upload_dis">{{logo_txt}}</button>
                 <p class="red_mark warning" ng-if="!!img_logo_flag">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>
                     {{img_logo_flag}}
@@ -103,7 +99,7 @@
         <!--按钮组-->
         <div class="row btn_top">
           <div class="col-sm-12">
-            <button class="btn btn-primary" ng-click="add_brand_ok(add_brand_form.$valid,add_brand_form.$error.required)">确认</button>
+            <button class="btn btn-primary" ng-click="add_brand_ok(add_brand_form.$valid,add_brand_form.$error.required)" ng-disabled="upload_dis">确认</button>
             <button class="btn btn-default btn_left" ui-sref="brand_index({down_flag:true})">返回</button>
           </div>
         </div>

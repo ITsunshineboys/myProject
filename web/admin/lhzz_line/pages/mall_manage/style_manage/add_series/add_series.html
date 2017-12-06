@@ -33,7 +33,9 @@
                     <img ng-if="ser_label_arr.length!=1" ng-click="close_label($index)" src="pages/mall_manage/style_manage/add_style/image/close.png" class="closetag">
                   </li>
                 </ul>
-                <span class="img_txt">*限1~3个字符,最多6个标签</span>
+                <div class="control-label inline_b">
+                  <span class="img_txt">*限1~3个字符,最多6个标签</span>
+                </div>
               </div>
             </div>
 
@@ -54,7 +56,7 @@
                 <span class="glyphicon glyphicon-asterisk red_mark" ></span>
                 <span>系列介绍</span>
               </div>
-              <div class="col-sm-10 control-label">
+              <div class="col-sm-8 control-label">
                 <textarea class="form-control" name="ser_txt"  ng-change="change_txts()" maxlength="70" required ng-class="{'border_red':(form.ser_txt.$invalid &&submitted)||(form.ser_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_txt.$error" placeholder="请输入添加系列的介绍内容" ng-model="ser_intro"></textarea>
                 <span class="word_num">{{ser_intro.length}}/70</span>
               </div>

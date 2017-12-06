@@ -1,53 +1,71 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/style_detail/css/style_detail.css">
 <div ng-controller="style_detail">
-    <div class="series_detail_content">
-        <form name="form" novalidate>
+        <form class="form-horizontal" name="form" novalidate>
         <!--系列名称-->
-        <div class="series_name">
+        <div class="row">
+            <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格名称</span>
-            <input name="style_name" required ng-class="{'border_red':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error" maxlength=10 type="text" placeholder="请输入系列名称" ng-model="style_name">
-            <span id="limitword">*限1~10个字符</span>
+            </div>
+            <div class="col-sm-2">
+            <input class="form-control" name="style_name" required ng-class="{'error':(form.style_name.$invalid &&submitted)||(form.style_name.$error.required && title_blur || name_flag)}" ng-blur="title_blur=!!form.style_name.$error" maxlength=10 type="text" placeholder="请输入系列名称" ng-model="style_name">
             <p class="red_mark" ng-show="name_flag">
                 <span class="glyphicon glyphicon-asterisk"></span>
                 该风格名称已存在，请重新填写
             </p>
+            </div>
+            <div class="col-sm-8 control-label">
+                <span class="limitword">*限1~10个字符</span>
+            </div>
         </div>
 
         <!--创建时间-->
-        <div class="create_time">
-            <span>创建时间</span>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span>创建时间</span>
+            </div>
+            <div class="col-sm-10 control-label">
             <span>{{style_item.creation_time}}</span>
+            </div>
         </div>
 
         <!--状态-->
-        <div class="state">
+        <div class="row">
+            <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>状态</span>
-            <span class="red_mark" ng-if="style_item.status=='0'">关闭</span>
+            </div>
+            <div class="col-sm-2 control-label">
+            <span class="color_red" ng-if="style_item.status=='0'">关闭</span>
             <span class="color_skyblue" ng-if="style_item.status=='1'">启用中</span>
+            </div>
         </div>
 
         <!--系列标签-->
-        <div class="series_tag">
+        <div class="row">
+            <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格标签</span>
-            <img ng-click="label_add()" ng-class="{'vis':style_label_arr.length>=6}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
+            </div>
+            <div class="col-sm-10 control-label">
+            <img class="add_img" ng-click="label_add()" ng-class="{'vis':style_label_arr.length>=6}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
             <ul class="tags">
                 <li ng-repeat="item in style_label_arr track by $index">
-                    <input ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
+                    <input class="form-control" ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
                     <img ng-if="style_label_arr.length!=1" ng-click="close_label($index)" src="pages/mall_manage/style_manage/add_style/image/close.png" class="closetag">
                 </li>
-                <span>*限1~3个字符,最多6个标签</span>
+                <span class="limitword">*限1~3个字符,最多6个标签</span>
             </ul>
+            </div>
         </div>
 
         <!--风格效果图-->
-        <div class="brand_logo">
+        <div class="row">
+            <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格效果图</span>
-
-            <div class="pic_right">
+            </div>
+            <div class="col-sm-10 control-label">
                 <div class="img_list" ng-repeat="item in img_list">
                     <img ng-src="{{item}}" class="logo">
                     <div class="img_times" ng-click="del_img(item)">&times;</div>
@@ -62,17 +80,23 @@
         </div>
 
         <!--风格介绍-->
-        <div class="series_intro">
+        <div class="row series_intro">
+            <div class="col-sm-2 control-label">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格介绍</span>
-            <textarea name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_txt"></textarea>
+            </div>
+            <div class="col-sm-8 control-label">
+            <textarea class="form-control ser_text" name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_txt"></textarea>
             <span class="word_num">{{style_txt.length}}/70</span>
+            </div>
         </div>
 
         <!--按钮-->
-        <div class="btn_sure">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="style_det_ok(form.$valid)">保存</button>
-            <button class="btn btn-default btn_left" ui-sref="style_index({showstyle:true})">返回</button>
+        <div class="row">
+            <div class="col-sm-12 control-label btn_fix">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="style_det_ok(form.$valid)">保存</button>
+                <button class="btn btn-default btn_left" ui-sref="style_index({showstyle:true})">返回</button>
+            </div>
         </div>
         </form>
     </div>
@@ -96,5 +120,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

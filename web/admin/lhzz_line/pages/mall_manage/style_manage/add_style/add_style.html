@@ -63,7 +63,7 @@
             <span class="glyphicon glyphicon-asterisk red_mark" ></span>
             <span>风格介绍</span>
           </div>
-          <div class="col-sm-10 control-label">
+          <div class="col-sm-8 control-label">
             <textarea class="form-control" name="style_txt" maxlength="70" ng-change="change_txts()" required ng-class="{'border_red':(form.style_txt.$invalid &&submitted)||(form.style_txt.$error.required && area_blur)}" ng-blur="area_blur=!!form.style_txt.$error" placeholder="请输入添加风格的介绍内容" ng-model="style_intro"></textarea>
             <span class="word_num">{{style_intro.length}}/70</span>
           </div>

@@ -14,7 +14,6 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.down_shelves_list=[];
     $scope.firstclass=[]; //一级分类
     $scope.brand_review_list=[];//列表循环数组
-    $scope.application_num=[];//申请个数
     $scope.types=[];//品牌使用审核
     /*品牌审核结束*/
 
@@ -93,7 +92,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
     $scope.params.page=1;
     $scope.params.status='1';
-    $scope.params.pid='0'
+    $scope.params.pid='0';
     $scope.params['sort[]']='online_time:3';//上架时间，降序
   }
 
@@ -104,7 +103,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.down_flag=false;
     $scope.check_flag=false;
     $scope.firstselect=0;
-
+    $scope.two_select_flag=false;
+    $scope.three_select_flag=false;
     $scope.table.roles=[];//清空全选状态
     $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
@@ -120,7 +120,8 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     $scope.on_flag=false;
     $scope.check_flag=false;
     $scope.firstselect=0;
-
+    $scope.two_select_flag=false;
+    $scope.three_select_flag=false;
     $scope.table.roles=[];//清空全选状态
     $scope.wjConfig.currentPage=1;
     $scope.time_img='lib/images/sort_down.png';//时间排序图片
@@ -314,18 +315,20 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
         }
     };
     let brand_Pages=function () {
-      $scope.application_num=null;
         $scope.brand_params.page=$scope.brand_Config.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/brand-application-review-list',$scope.brand_params,function (res) {
           console.log(res);
           $scope.brand_review_list=res.data.brand_application_review_list.details;
           $scope.brand_Config.totalItems = res.data.brand_application_review_list.total;
-          for(let[key,value] of res.data.brand_application_review_list.details.entries()){
+          if($scope.brand_params.review_status=='0'||$scope.brand_params.review_status=='-1'){
+            $scope.application_num=null;
+            for(let[key,value] of res.data.brand_application_review_list.details.entries()){
               if(value.review_status==0){
                 $scope.application_num++;
               }
+            }
           }
-        })
+        });
     };
     $scope.brand_params = {
         page: 1,                        // 当前页数

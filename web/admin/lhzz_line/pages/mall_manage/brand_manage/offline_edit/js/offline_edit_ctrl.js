@@ -12,11 +12,14 @@ offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$statePa
     }, {
         name: '品牌详情'
     }];
+  $scope.trademark_txt='上传';
+  $scope.logo_txt='上传'
+  $scope.upload_dis=false;
 	$scope.myng=$scope;
-    $scope.now_edit_list=[];
+  $scope.now_edit_list=[];
 	$scope.now_edit_list=$stateParams.down_shelves_list;//当前那条数据
-	 console.log($scope.now_edit_list);
-	 $scope.online_time_flag=$stateParams.online_time_flag;//排序的类型
+	console.log($scope.now_edit_list);
+	$scope.online_time_flag=$stateParams.online_time_flag;//排序的类型
 	/*===============进入页面显示的数据==================*/
 	$scope.brand_name_model=$scope.now_edit_list.name;//品牌名称
 	$scope.upload_img_src=$scope.now_edit_list.certificate;//商品注册证
@@ -33,6 +36,8 @@ offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$statePa
     if(!$scope.data.file){
       return
     }
+    $scope.trademark_txt='上传...';
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -44,6 +49,8 @@ offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$statePa
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
+        $scope.trademark_txt='上传';
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)
@@ -58,6 +65,8 @@ offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$statePa
     if(!$scope.data.file){
       return
     }
+    $scope.logo_txt='上传...'
+    $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
       url:baseUrl+'/site/upload',
@@ -69,6 +78,8 @@ offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$statePa
       }else{
         $scope.img_logo_flag='';
         $scope.upload_logo_src=response.data.data.file_path;
+        $scope.logo_txt='上传'
+        $scope.upload_dis=false;
       }
     },function (error) {
       console.log(error)
