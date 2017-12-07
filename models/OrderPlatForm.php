@@ -160,6 +160,7 @@ class OrderPlatForm extends ActiveRecord
     }
 
     /**
+     * 关闭订单，退款
      * @param $order_no
      * @param $handle_type
      * @param $reason
@@ -285,7 +286,6 @@ class OrderPlatForm extends ActiveRecord
                     return $code;
                 }
             }else{
-
                 $GoodsStat->sold_number-=$OrderGoods->goods_number;
                 $GoodsStat->amount_sold-=(($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight);
                 if (!$GoodsStat->save(false))
