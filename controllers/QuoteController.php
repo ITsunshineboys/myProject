@@ -1468,10 +1468,11 @@ class QuoteController extends Controller
     public function actionDecorationAddClassify()
     {
         $one_goods = trim(\Yii::$app->request->post('classify',''));
-        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
+//        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         //TODO 修改
         $one_goods_id=GoodsCategory::find()->select('id')->asArray()->where(['title'=>$one_goods])->one();
-        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,  $one_goods_id['id'],$select);
+        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,  $one_goods_id['id']);
+
         if (!isset($goods['0'])){
             $code = 1000;
             return Json::encode([
