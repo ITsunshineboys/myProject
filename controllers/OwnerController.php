@@ -1739,8 +1739,9 @@ class OwnerController extends Controller
                 ->select('id')
                 ->asArray()
                 ->one();
+            var_dump($effect_id);
             $data['effect_id']=$effect_id['id'];
-        }
+        }die;
 
 
         return Json::encode([
