@@ -634,7 +634,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $waterproof = BasisDecorationService::judge($goods, $post);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $waterproof = BasisDecorationService::judge($judge, $post);
 
 
         $points = Points::findByOne('id,title',"id = 69");
@@ -757,8 +758,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $goods_price = BasisDecorationService::judge($goods, $post);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $goods_price = BasisDecorationService::judge($judge, $post);
 
 
         //当地工艺
