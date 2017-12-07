@@ -95,11 +95,11 @@ class OwnerController extends Controller
         'weak_current'      => 2,//弱电Id
         'strong_current'    => 1,//强电id
         'waterway'          => 3,//水路id
-        'waterproof'        => 69,//TODO 防水-修改 防水id
+        'waterproof'        => 69,// 防水-修改 防水id
         'carpentry'         => 4,
         'emulsion_varnish'  => '乳胶漆',
-        'oil_paint'         => 5,//TODO 油漆 -> 油漆id
-        'tiler'             => 6,//TODO 泥工 -> 泥工id
+        'oil_paint'         => 5,// 油漆 -> 油漆id
+        'tiler'             => 6,//泥工 -> 泥工id
     ];
 
     /**

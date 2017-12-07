@@ -151,5 +151,7 @@ update engineering_standard_craft set points_id=4 where id=37;
 update points set title='主卧' where title='主卧室';
 update points set title='次卧' where title='次卧室';
 
+update points set title='主卧' where id=65 //ac
+update points set title='次卧' where id=66 //ac
 
 
