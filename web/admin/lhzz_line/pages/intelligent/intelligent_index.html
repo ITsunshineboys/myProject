@@ -1,6 +1,7 @@
 <div class="intelligent_index">
-        <button ng-click="go_general_manage()"><i style="margin-right: 5px;" class="fa fa-cog" aria-hidden="true"></i>通用管理</button>
-      <form action="">
+    <button ng-click="go_general_manage()"><i style="margin-right: 5px;" class="fa fa-cog" aria-hidden="true"></i>通用管理
+    </button>
+    <form action="">
         <label>
             选择省份
             <select ng-model="ctrlScope.cur_province" ng-options="item.id as item.name for item in province"
@@ -8,18 +9,18 @@
         </label>
         <label>
             选择城市
-            <select ng-model="ctrlScope.cur_city" ng-options="item.id as item.name for item in city" ng-change="getCounty()"></select>
+            <select ng-model="ctrlScope.cur_city" ng-options="item.id as item.name for item in city"
+                    ng-change="getCounty()"></select>
         </label>
-      </form>
-    </div>
-  <div class="all_btn">
+    </form>
+</div>
+<div class="all_btn">
     <button ng-click="go_worker_list()">资费/做工标准</button>
     <button ng-click="go_engineering()">工程标准</button>
     <button ng-click="goHouseList()">小区列表</button>
-      <button ng-click="go_home_manage()">首页管理</button>
+    <button ng-click="go_home_manage()">首页管理</button>
     <button ng-click="go_goods_manage()">智能报价配套商品管理</button>
     <button ng-click="goSupportGoods()">案例/社区店配套商品管理</button>
-      <button ng-click="go_coefficient_manage()">系数管理</button>
-      <button ng-click="go_add_material()">材料添加项</button>
-      <!--<button ng-click="go_house_area()">户型面积</button>-->
-  </div>
+    <button ng-click="go_coefficient_manage()">系数管理</button>
+    <button ng-click="go_add_material()">材料添加项</button>
+</div>

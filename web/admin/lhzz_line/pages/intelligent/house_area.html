@@ -1,6 +1,4 @@
 <div class="house_area">
-    <!--<h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{cur_province.name}}-{{cur_city.name}}-->
-    <!--</h6>-->
     <form novalidate name="cur_house_area">
         <div class="row" style="margin-bottom: 20px;margin-top: 90px;">
             <div class="col-md-1 text-right">
@@ -29,8 +27,8 @@
             <p class="col-md-7">*0＜X≤180的整数字</p>
         </div>
         <div class="from-group submit" ng-class="{'else_submit':(all_area_range.length<12?true:false)}">
-            <button class="remove" type="submit" ng-click="save_area(cur_house_area.$valid)">确认</button>
-            <button type="button" ng-click="return_general_manage()">返回</button>
+            <button class="btn btn-primary" type="submit" ng-click="save_area(cur_house_area.$valid)">确认</button>
+            <button type="button" class="btn btn-default" ng-click="return_general_manage()">返回</button>
         </div>
     </form>
 </div>

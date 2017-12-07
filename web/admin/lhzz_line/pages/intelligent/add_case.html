@@ -1,22 +1,27 @@
 <div class="add_case">
-    <form class="form-horizontal" name="curForm" novalidate >
+    <form class="form-horizontal" name="curForm" novalidate>
         <div class="all">
             <h1>户型信息</h1>
             <div class="form-group">
-                <label class="col-md-2 col-sm-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
+                <label class="col-md-2 col-sm-2 text-left"><i
+                        class="glyphicon glyphicon-asterisk red_mark"></i>户型名称</label>
                 <div class="col-md-3 col-sm-2">
                     <input ng-class="{'error':(curForm.houseName.$invalid&&submitted) || ((curForm.houseName.$error.required || curForm.houseName.$error.pattern)&&change)}"
                            ng-pattern="/^[\d\D]{1,12}$/" ng-blur="change=!!curForm.houseName.$error" autocomplete="off"
-                           type="text" id="houseName" name="houseName" required placeholder="请输入户型名称" minlength="1" maxlength="12"
+                           type="text" id="houseName" name="houseName" required placeholder="请输入户型名称" minlength="1"
+                           maxlength="12"
                            ng-model="cur_house_information.house_type_name" class="form-control">
                 </div>
                 <p class="col-md-6 col-md-offset-1">*限1~12个字符</p>
             </div>
             <div class="form-group">
-                <label class="col-md-2 col-sm-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
+                <label class="col-md-2 col-sm-2 text-left"><i
+                        class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
                 <div class="col-md-3 col-sm-2">
-                    <input id="houseArea" autocomplete="off" type="text" name="houseArea" ng-pattern="/^[1-9]$|^[1-9]\d$|^1[0-7]\d$|^[1-9]\.\d{1,2}$|^[1-9]\d\.\d{1,2}$|^1[0-7]\d.\d{1,2}$|^180$/"
-                           required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
+                    <input id="houseArea" autocomplete="off" type="text" name="houseArea"
+                           ng-pattern="/^[1-9]$|^[1-9]\d$|^1[0-7]\d$|^[1-9]\.\d{1,2}$|^[1-9]\d\.\d{1,2}$|^1[0-7]\d.\d{1,2}$|^180$/"
+                           required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值"
+                           ng-blur="change1=!!curForm.houseArea.$error"
                            ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
@@ -26,28 +31,40 @@
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
                 <div class="col-md-4">
                     <label for="room" class="col-md-6 left_house_type">
-                        <input id="room" type="text" disabled class="form-control" ng-model="cur_house_information.cur_room">
+                        <input id="room" type="text" disabled class="form-control"
+                               ng-model="cur_house_information.cur_room">
                         <span>室</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',6,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_room',6,1)"></button>
+                        <button class="glyphicon glyphicon-minus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_room',1,0)"></button>
                     </label>
                     <label for="hall" class="col-md-6 right_house_type">
-                        <input id="hall" type="text" disabled class="form-control" ng-model="cur_house_information.cur_hall">
+                        <input id="hall" type="text" disabled class="form-control"
+                               ng-model="cur_house_information.cur_hall">
                         <span>厅</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_hall',3,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_hall',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_hall',3,1)"></button>
+                        <button class="glyphicon glyphicon-minus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_hall',1,0)"></button>
                     </label>
                     <label for="toilet" class="col-md-6 left_house_type">
-                        <input id="toilet" type="text" disabled class="form-control" ng-model="cur_house_information.cur_toilet">
+                        <input id="toilet" type="text" disabled class="form-control"
+                               ng-model="cur_house_information.cur_toilet">
                         <span>卫</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_toilet',4,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_toilet',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_toilet',4,1)"></button>
+                        <button class="glyphicon glyphicon-minus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_toilet',1,0)"></button>
                     </label>
                     <label for="kitchen" class="col-md-6 right_house_type">
-                        <input id="kitchen" type="text" disabled class="form-control" ng-model="cur_house_information.cur_kitchen">
+                        <input id="kitchen" type="text" disabled class="form-control"
+                               ng-model="cur_house_information.cur_kitchen">
                         <span>厨</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_kitchen',2,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_kitchen',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_kitchen',2,1)"></button>
+                        <button class="glyphicon glyphicon-minus btn" type="button"
+                                ng-click="change_cur_quantity('cur_house_information.cur_kitchen',1,0)"></button>
                     </label>
                 </div>
             </div>
@@ -56,29 +73,42 @@
                 <div class="col-md-3">
                     <div style="width: 100px;height: 100px;">
                         <!--<img src="pages\intelligent\images\default.png" ng-if="!data.file" alt=""  width="100px" height="100px">-->
-                        <img ng-src="{{ cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
-                        <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                        <img ng-src="{{ cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''"
+                             src="pages\intelligent\images\default.png" width="100px" height="100px">
+                        <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"
+                             width="100px" height="100px">
                     </div>
                     <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
-                    <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*"  ngf-select="" ng-disabled="upload_status" ngf-multiple="false" ng-model="data.file">
-                        {{upload_txt}}</button>
-                    <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}</p>
+                    <button type="button" class="btn btn-default" ng-change="upload(data.file)" ngf-pattern="image/*"
+                            ngf-select="" ng-disabled="upload_status" ngf-multiple="false" ng-model="data.file">
+                        {{upload_txt}}
+                    </button>
+                    <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}
+                    </p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>是否有楼梯</label>
                 <div class="col-md-4 special_radio">
-                    <label for="have_stair" ng-click="cur_house_information.have_stair = 1;cur_house_information.stair = 1" class="col-md-3">
-                        <input id="have_stair" type="radio" ng-checked="cur_house_information.have_stair==1" name="if_stair">
+                    <label for="have_stair"
+                           ng-click="cur_house_information.have_stair = 1;cur_house_information.stair = 1"
+                           class="col-md-3">
+                        <input id="have_stair" type="radio" ng-checked="cur_house_information.have_stair==1"
+                               name="if_stair">
                         有
                     </label>
-                    <label for="no_stair" ng-click="cur_house_information.have_stair = 0;cur_house_information.stair = 0" class="col-md-3">
-                        <input id="no_stair" type="radio" ng-checked="cur_house_information.have_stair==0" name="if_stair">
+                    <label for="no_stair"
+                           ng-click="cur_house_information.have_stair = 0;cur_house_information.stair = 0"
+                           class="col-md-3">
+                        <input id="no_stair" type="radio" ng-checked="cur_house_information.have_stair==0"
+                               name="if_stair">
                         无
                     </label>
                     <div class="row col-md-12 structure" ng-if="cur_house_information.have_stair == 1">
-                        <label for="structure{{item.id}}" ng-click="cur_house_information.stair=+item.id" class="col-md-4" ng-repeat="item in cur_all_stair">
-                            <input  type="radio" ng-checked="cur_house_information.stair == item.id" id="structure{{item.id}}"  name="stair_structure">
+                        <label for="structure{{item.id}}" ng-click="cur_house_information.stair=+item.id"
+                               class="col-md-4" ng-repeat="item in cur_all_stair">
+                            <input type="radio" ng-checked="cur_house_information.stair == item.id"
+                                   id="structure{{item.id}}" name="stair_structure">
                             {{item.attribute}}
                         </label>
                     </div>
@@ -108,8 +138,11 @@
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>飘窗</label>
                 <div class="col-md-3">
-                    <input id="window" autocomplete="off" type="text" required ng-pattern="/^\d$|^1\d$|^20$|^\d\.\d{1,2}$|^1\d\.\d{1,2}$/" ng-blur="change2=!!curForm.window.$error"
-                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house_information.window" name="window"
+                    <input id="window" autocomplete="off" type="text" required
+                           ng-pattern="/^\d$|^1\d$|^20$|^\d\.\d{1,2}$|^1\d\.\d{1,2}$/"
+                           ng-blur="change2=!!curForm.window.$error"
+                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house_information.window"
+                           name="window"
                            ng-class="{'error':(curForm.window.$invalid&&submitted) ||(
                            (curForm.window.$error.required || curForm.window.$error.pattern)&&change2)}">
                 </div>
@@ -122,13 +155,15 @@
             <div class="form-group">
                 <label class="col-md-2 text-left">系列选择</label>
                 <div class="col-md-3">
-                    <select class="form-control" ng-model="ctrlScope.cur_series" ng-options="item.series for item in cur_all_series"></select>
+                    <select class="form-control" ng-model="ctrlScope.cur_series"
+                            ng-options="item.series for item in cur_all_series"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left">风格选择</label>
                 <div class="col-md-3">
-                    <select class="form-control" ng-model="ctrlScope.cur_style" ng-options="item.style for item in cur_all_style"></select>
+                    <select class="form-control" ng-model="ctrlScope.cur_style"
+                            ng-options="item.style for item in cur_all_style"></select>
                 </div>
             </div>
             <div class="form-group">
@@ -138,11 +173,14 @@
                         <img ng-src="{{item}}" width="100px" height="100px">
                         <div class="text-center" ng-if="all_upload_status" ng-click="upload_delete(item)">&times;</div>
                     </div>
-                    <div style="width: 100px;height: 100px;display: inline-block" ngf-pattern="image/*" ng-change="arr_upload(data.file)"  ngf-select="" ng-model="data.file" ngf-multiple="false" ng-if="all_drawing.length<6">
+                    <div style="width: 100px;height: 100px;display: inline-block" ngf-pattern="image/*"
+                         ng-change="arr_upload(data.file)" ngf-select="" ng-model="data.file" ngf-multiple="false"
+                         ng-if="all_drawing.length<6">
                         <img src="pages/intelligent/images/add.png" alt="" width="100px" height="100px">
                     </div>
                     <p class="upload_msg">图片大小347x190，5M内，可传1-6张图片，支持JPG、PNG、JPGE</p>
-                    <p class="pic_error" ng-if="!!pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{pic_error}}</p>
+                    <p class="pic_error" ng-if="!!pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{pic_error}}
+                    </p>
                 </div>
             </div>
             <span></span>
@@ -158,11 +196,17 @@
                             <div class="form-group">
                                 <label class="col-md-2 text-left goods">{{item3.title}}</label>
                                 <div class="col-md-3">
-                                    <input type="text" ng-blur="determine_goods_code(item3)" ng-class="{'error': (curForm['good{{item3.id}}'].$error.pattern)||!!item3.flag}" name="good{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码" class="form-control" ng-model="item3.good_id">
+                                    <input type="text" ng-blur="determine_goods_code(item3)"
+                                           ng-class="{'error': (curForm['good{{item3.id}}'].$error.pattern)||!!item3.flag}"
+                                           name="good{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码"
+                                           class="form-control" ng-model="item3.good_id">
                                     <p class="error_word" ng-if="item3.msg!=''">{{item3.msg}}</p>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="text" ng-class="{'error': (curForm['quantity{{item3.id}}'].$error.pattern)}" name="quantity{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量" class="form-control" ng-model="item3.good_quantity">
+                                    <input type="text"
+                                           ng-class="{'error': (curForm['quantity{{item3.id}}'].$error.pattern)}"
+                                           name="quantity{{item3.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量"
+                                           class="form-control" ng-model="item3.good_quantity">
                                 </div>
                                 <p class="col-md-5">*整数</p>
                             </div>
@@ -176,41 +220,43 @@
                             <div class="form-group">
                                 <label class="col-md-2 text-left goods">{{item2.worker_kind}}</label>
                                 <div class="col-md-3">
-                                    <input type="text" placeholder="请输入用人费用" class="form-control" ng-model="item2.price">
+                                    <input type="text" placeholder="请输入用人费用" class="form-control"
+                                           ng-model="item2.price">
                                 </div>
-                                <p class="col-md-2" >元</p>
+                                <p class="col-md-2">元</p>
                                 <p class="col-md-5">*整数</p>
                             </div>
                         </li>
                         <!--<li>-->
-                            <!--<div class="form-group">-->
-                                <!--<label class="col-md-2 text-left goods">杂工选项</label>-->
-                                <!--<div class="col-md-3">-->
-                                    <!--<div class="form-group backman" ng-repeat="item in backman_option track by $index">-->
-                                    <!--<p class="col-md-4" ng-if="item.name!='有无建渣点'">{{item.name}}</p>-->
-                                    <!--<div class="col-md-8" ng-if="item.name!='有无建渣点'">-->
-                                        <!--<input type="text" placeholder="请输入数值" class="form-control" ng-model="item.num">-->
-                                    <!--</div>-->
-                                        <!--<span class="unit1" ng-if="item.name!='有无建渣点'">m<sup ng-if="item.name!='补烂'">2</sup></span>-->
-                                        <!--<label class="col-md-12" ng-click="item.num = 1" ng-if="item.name=='有无建渣点'">-->
-                                        <!--<input type="radio" name="building_slag" ng-checked="item.num == 1">-->
-                                        <!--小区有建渣点-->
-                                        <!--</label>-->
-                                        <!--<label class="col-md-12" ng-click="item.num = 0" ng-if="item.name=='有无建渣点'">-->
-                                        <!--<input type="radio" name="building_slag" ng-checked="item.num == 0">-->
-                                        <!--小区无建渣点-->
-                                        <!--</label>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-md-2 text-left goods">杂工选项</label>-->
+                        <!--<div class="col-md-3">-->
+                        <!--<div class="form-group backman" ng-repeat="item in backman_option track by $index">-->
+                        <!--<p class="col-md-4" ng-if="item.name!='有无建渣点'">{{item.name}}</p>-->
+                        <!--<div class="col-md-8" ng-if="item.name!='有无建渣点'">-->
+                        <!--<input type="text" placeholder="请输入数值" class="form-control" ng-model="item.num">-->
+                        <!--</div>-->
+                        <!--<span class="unit1" ng-if="item.name!='有无建渣点'">m<sup ng-if="item.name!='补烂'">2</sup></span>-->
+                        <!--<label class="col-md-12" ng-click="item.num = 1" ng-if="item.name=='有无建渣点'">-->
+                        <!--<input type="radio" name="building_slag" ng-checked="item.num == 1">-->
+                        <!--小区有建渣点-->
+                        <!--</label>-->
+                        <!--<label class="col-md-12" ng-click="item.num = 0" ng-if="item.name=='有无建渣点'">-->
+                        <!--<input type="radio" name="building_slag" ng-checked="item.num == 0">-->
+                        <!--小区无建渣点-->
+                        <!--</label>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
                         <!--</li>-->
                     </ul>
                 </div>
             </div>
         </div>
         <div class="from-group submit">
-            <button class="remove" type="button" ng-click="get_case_tips(curForm.$valid,curForm.$error)">确认</button>
-            <button type="button" ng-click="houseReturn()">返回</button>
+            <button class=" btn btn-primary" type="button" ng-click="get_case_tips(curForm.$valid,curForm.$error)">确认
+            </button>
+            <button type="button" class=" btn btn-default" ng-click="houseReturn()">返回</button>
         </div>
     </form>
 </div>

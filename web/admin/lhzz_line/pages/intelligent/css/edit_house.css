@@ -16,11 +16,6 @@
 }
 
 /*编辑户型样式*/
-.edit_house input,.edit_house input:focus{
-    outline:0!important;
-    border-color: #ccc;
-    box-shadow:none;
-}
 .edit_house .form-horizontal .form-group{
     margin-left:0px!important;
 }

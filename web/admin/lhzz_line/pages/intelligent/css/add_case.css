@@ -1,9 +1,4 @@
 /*编辑户型样式*/
-.add_case input,.add_case input:focus{
-    outline:0!important;
-    border-color: #ccc;
-    box-shadow:none;
-}
 .add_case .form-horizontal .form-group{
     margin-left:0px!important;
 }
@@ -22,16 +17,6 @@
 }
 .add_case .form-group{
     margin-top:30px !important;
-}
-.add_case button{
-    width:70px;
-    height: 32px;
-    font-size:12px;
-    background: none;
-    border:.5px solid #ccc;
-    margin-left:10px;
-    margin-right:10px;
-    border-radius:2px;
 }
 .add_case .remove{
     border-color: #3F94F6!important;
@@ -59,18 +44,19 @@
     position: relative;
 }
 .add_case .left_house_type button,.add_case .right_house_type button{
-    width:32px;
+    /*width:32px;*/
     position: absolute;
     top: 0;
     height: 100%!important;
     margin-left:0!important;
     margin-right:0!important;
+    border:1px solid #ccc;
 }
 .add_case button:first-of-type{
     right:0;
 }
 .add_case  button:last-of-type{
-    right:32px;
+    right:39px;
 }
 .add_case .left_house_type input,.add_case .right_house_type input{
     font-size:16px;
@@ -99,13 +85,6 @@
 }
 .add_case .special_radio > label:last-of-type{
     width:140px;
-}
-.add_case .button{
-    width: 75px !important;
-    height: 25px !important;
-    margin-top:5px;
-    margin-left:0!important;
-    padding-left:0!important;
 }
 .add_case .upload_msg{
     font-size:12px;

@@ -19,7 +19,7 @@
                         class="form-control"></select>
             </p>
             <p class="col-md-6">
-                <button class="remove" ng-click="get_material()">抓取材料</button>
+                <button class="btn btn-primary" ng-click="get_material()">抓取材料</button>
             </p>
         </div>
         <div class="row" ng-if="!is_add_material">
@@ -27,7 +27,7 @@
             <p class="col-md-2">{{material_category.second_level}}</p>
             <p class="col-md-2">{{material_category.third_level}}</p>
             <p class="col-md-6">
-                <button class="remove" ng-click="get_material()">抓取材料</button>
+                <button class="btn btn-primary" ng-click="get_material()">抓取材料</button>
             </p>
         </div>
         <div style="margin-top: 60px;" ng-if="!!basic_attr">
@@ -135,8 +135,8 @@
             </div>
         </div>
         <div class="from-group submit">
-            <button class="remove" type="submit" ng-click="save_material(material_detail.$valid)">确认</button>
-            <button type="button" ng-click="material_return()">返回</button>
+            <button class="btn btn-primary" type="submit" ng-click="save_material(material_detail.$valid)">确认</button>
+            <button type="button" class="btn btn-default" ng-click="material_return()">返回</button>
         </div>
     </form>
 </div>
