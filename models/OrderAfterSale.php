@@ -498,22 +498,24 @@ class OrderAfterSale extends ActiveRecord
             ];
             return ['data'=>$data,'platform'=>$RefundData];
         }
-
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            $OrderGoods=OrderGoods::find()
-                ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-                ->one();
-            $OrderGoods->customer_service=1;
-            $res=$OrderGoods->save(false);
-            if (!$res){
+        $OrderGoods=OrderGoods::find()
+            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+            ->one();
+        if (!$OrderGoods->customer_service==1)
+        {
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $OrderGoods->customer_service=1;
+                $res=$OrderGoods->save(false);
+                if (!$res){
+                    $tran->rollBack();
+                }
+                $tran->commit();
+            }catch (Exception $e){
                 $tran->rollBack();
+                $code=500;
+                return $code;
             }
-            $tran->commit();
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return $code;
         }
         $res=[];
         switch ($PlatForm->handle)
@@ -1467,6 +1469,21 @@ class OrderAfterSale extends ActiveRecord
             {
                 $tran->rollBack();
                 $code=1000;
+                return $code;
+            }
+            $time=time();
+            $OrderPlatForm=new self;
+            $OrderPlatForm->order_no=$order_no;
+            $OrderPlatForm->sku=$sku;
+            $OrderPlatForm->handle=OrderPlatForm::PLATFORM_CLOSE_ORDER;
+            $OrderPlatForm->reasons=$reason;
+            $OrderPlatForm->creat_time=$time;
+            $OrderPlatForm->refund_result=2;
+            $OrderPlatForm->refund_time=$time;
+            $res=$OrderPlatForm->save(false);
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
                 return $code;
             }
 

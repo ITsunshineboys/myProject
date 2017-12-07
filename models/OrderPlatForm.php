@@ -387,6 +387,7 @@ class OrderPlatForm extends ActiveRecord
     }
 
     /**
+     * 售后平台介入
      * @param $order_no
      * @param $handle_type
      * @param $reason
@@ -411,6 +412,16 @@ class OrderPlatForm extends ActiveRecord
                 $code=500;
                 $tran->rollBack();
                 return $code;
+            }
+            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+            if (!$OrderGoods)
+            {
+                $tran->rollBack();
+            }
+            $OrderGoods->customer_service=1;
+            if (!$OrderGoods->save(false))
+            {
+                $tran->rollBack();
             }
             $tran->commit();
             $code=200;
