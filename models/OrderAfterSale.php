@@ -232,7 +232,6 @@ class OrderAfterSale extends ActiveRecord
             $code=1000;
             return $code;
         }
-
         $goodsOrder=GoodsOrder::find()
             ->select(['supplier_id'])
             ->where(['order_no'=>$postData['order_no']])
