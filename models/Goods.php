@@ -493,11 +493,11 @@ class Goods extends ActiveRecord
             ->where($where)
             ->all();
 
-//        foreach ($all as &$one_goods) {
-//            $one_goods['platform_price'] =  $one_goods['platform_price'] / 100;
-//            $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
-//            $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
-//        }
+        foreach ($all as &$one_goods) {
+            $one_goods['platform_price'] =  $one_goods['platform_price'] / 100;
+            $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
+            $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
+        }
         return $all;
     }
 
