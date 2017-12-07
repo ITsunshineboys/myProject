@@ -22,11 +22,11 @@
             <span class="invoice_rise">发票抬头</span>
             <div class="invoice_radio">
                 <label >
-                    <input type="radio" name="invoice_radio"  ng-model="check_in" value="1">
+                    <input type="radio" name="invoice_radio" ng-maxlength="15"  ng-model="check_in" value="1">
                     个人
                 </label>
                 <label >
-                    <input type="radio" name="invoice_radio" ng-model="check_in" value="2">
+                    <input type="radio" name="invoice_radio" ng-maxlength="20" ng-model="check_in" value="2">
                     单位
                 </label>
             </div>

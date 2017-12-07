@@ -482,27 +482,33 @@ header span{
     width: 1.2rem;
     height: 1.2rem;
     margin-right: 0.6rem;
-    /*background-color: #0a67fb;*/
-    /*background-color: #0a67fb;*/
 }
 .agreement_span{
     color: #333;
 }
 .more_details li {
     position: relative;
-    /*width: 10rem;*/
 }
-
 #agreement_span{
     display: inline-block;
-    width: 19rem;
-    position: absolute;
-    right: 2.5rem;
-    overflow: hidden;
-    white-space: normal;
-    text-overflow: ellipsis;
+    width: 18rem;
+    white-space: nowrap;
     color: #666;
+    margin-left: 3rem;
     font-size: 1.25rem;
+    text-align: right;
+}
+.header-span{
+    display: inline-block;
+}
+.header-invoice{
+    display: inline-block;
+    max-width: 16rem;
+    word-wrap: break-word;
+    white-space: normal;
+    vertical-align: top;
+    text-align: left;
+
 }
 .input_agrenmt{
     width: 1rem;

@@ -862,12 +862,17 @@ angular.module("all_controller", ['ngCookies'])
         }).then(function successCallback (response) {
             console.log(response);
             $scope.supplier_goods=response.data.data.supplier_goods;
+
             setTimeout(function () {
                 // 获取滚动条高度
                 $(document).ready(function () {
                     $scope.paramsMore = 1;
                     var pagesFlag = true;
                     $(window).scroll(function(e){
+                        console.log($scope.vm.activeTab);
+                        if($scope.vm.activeTab != 2){
+                            return
+                        }
                         // $scope.sorllMore = $(this).scrollHeight();
                         var node = $('.recommend_div');
                         if(node.length == 0){
