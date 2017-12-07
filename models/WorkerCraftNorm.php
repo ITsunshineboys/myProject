@@ -61,7 +61,7 @@ class WorkerCraftNorm extends ActiveRecord
     {
         return self::find()
             ->asArray()
-            ->select('quantity,worker_kind_details')
+            ->select('id,quantity,worker_kind_details')
             ->where(['labor_cost_id'=>$id])
             ->all();
     }
