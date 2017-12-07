@@ -88,7 +88,7 @@
                         <span>{{item.name}}</span>
                     </div>
                     <div class="col-sm-3">
-                        <input class="form-control" ng-model="item.value" type="text" string-to-number2 maxlength="10" placeholder="请输入属性内容" id="attr_name" name="attr_name" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " required ng-class="{'error':(form.attr_name.$invalid && submitted)||(form.attr_name.$error.required && attrs_blur)}" ng-blur="attrs_blur=!!form.attr_name.$error"/>
+                        <input class="form-control" ng-model="item.value" type="text" maxlength="10" placeholder="请输入属性内容" id="attr_name{{$index}}" name="attr_name{{$index}}" ng-keyup="testNumber(item)" required ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}" ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
                     </div>
                     <div class="col-sm-1 control-label">
                         <span>{{item.unit}}</span>
@@ -194,7 +194,7 @@
                         <input class="form-control price_stock_input" type="text" ng-model="supplier_price" ng-change="my_supplier_price(supplier_price)" id="supplier_price" name="supplier_price" required ng-class="{'error':(form.supplier_price.$invalid && submitted)||(form.supplier_price.$error.required && supplier_blur) || price_flag}" ng-blur="supplier_blur=!!form.supplier_price.$error"/>
                         <input class="form-control price_stock_input" type="text" ng-model="platform_price" ng-change="my_platform_price(platform_price)" id="platform_price" name="platform_price" required ng-class="{'error':(form.platform_price.$invalid && submitted)||(form.platform_price.$error.required && plat_blur) || price_flag}" ng-blur="plat_blur=!!form.platform_price.$error"/>
                         <input class="form-control price_stock_input" type="text" ng-model="market_price"   ng-change="my_market_price(market_price)" id="market_price" name="market_price" required ng-class="{'error':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}" ng-blur="market_blur=!!form.market_price.$error"/>
-                        <input class="form-control price_stock_input" type="text" string-to-number2 onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" ng-model="left_number" id="left_number" name="left_number" required ng-class="{'error':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
+                        <input class="form-control price_stock_input" type="text" ng-model="left_number" ng-keyup="leftNumber(left_number)"  id="left_number" name="left_number" required ng-class="{'error':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
                     </div>
                     <div class="prompt_txt">*价格，供货价≤平台价≤市场价</div>
                 </div>

@@ -9,6 +9,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	}];
 	$scope.upload_txt='上传';
 	$scope.upload_dis=false;
+	$scope.price_flag = false;//价格flag
 	$scope.myng = $scope;
 	$scope.logistics = [];//物流模块列表
 	$scope.goods_all_attrs = [];//所有属性数据
@@ -60,8 +61,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.goods_select_value = [];//下拉框的值
 	$scope.pass_attrs_name = [];//名称
 	$scope.pass_attrs_value = [];//值
-	$scope.attr_name = []
-	$scope.attr_value = []
 	$scope.goods_select_attrs_value = [];//下拉框值
 
 	$scope.goods_select_value_pass = [];//传值的下拉框值
@@ -77,11 +76,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				$scope.goods_input_attrs.push(value);
 			}
 		}
-		//循环输入框名称和值
-		for (let [key, value] of $scope.goods_input_attrs.entries()) {
-			$scope.attr_name.push(value.name);
-			$scope.attr_value.push(value.value);
-		}
+
 		//循环下拉框的值
 		for (let [key, value] of $scope.goods_select_attrs.entries()) {
 			$scope.goods_select_attrs_value.push(value.value);//下拉框的值
@@ -89,6 +84,15 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		}
 	})
 
+	//判断属性是否为数字
+	$scope.testNumber=function (item) {
+		item.value = item.value.replace(/[^\d]/g,'');
+	};
+	$scope.leftNumber=function (value) {
+		if(value!==undefined){
+			$scope.left_number = value.replace(/[^\d]/g,'')
+		}
+	};
 	/*----------------自己添加的属性--------------------*/
 	$scope.own_attrs_arr = [];//自定义数组
 	//添加属性
@@ -182,15 +186,17 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 	//价格、库存
 
+
 	//市场价
-	$scope.price_flag = false;
 	$scope.my_market_price = function (value) {
 		let reg_value = reg.test(value);
+
 		if (!reg_value) {
 			$scope.price_flag = true;
 		} else {
-			(+$scope.market_price >= +$scope.platform_price) && (+$scope.market_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
+			(+$scope.market_price >= +$scope.platform_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
 		}
+		console.log(reg_value)
 	};
 	//平台价
 	$scope.my_platform_price = function (value) {
@@ -198,7 +204,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		if (!reg_value) {
 			$scope.price_flag = true;
 		} else {
-			(+$scope.platform_price <= +$scope.market_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
+			(+$scope.market_price >= +$scope.platform_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
 		}
 	};
 	//供货商价
@@ -208,9 +214,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		console.log(reg_value)
 		if (!reg_value) {
 			$scope.price_flag = true;
-			// console.log(111)
 		} else {
-			(+$scope.supplier_price <= +$scope.platform_price) && (+$scope.supplier_price <= +$scope.market_price) ? $scope.price_flag = false : $scope.price_flag = true;
+			(+$scope.market_price >= +$scope.platform_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
 		}
 	};
 	/*---------------物流模板--------------------*/

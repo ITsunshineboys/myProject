@@ -183,7 +183,16 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       for(let [key,value] of $scope.goods_select_attrs.entries()){
           $scope.goods_select_attrs_value.push(value.value);//下拉框的值
       }
-  })
+  });
+	//判断属性是否为数字
+	$scope.testNumber=function (item) {
+		item.value = item.value.replace(/[^\d]/g,'')
+	}
+	$scope.leftNumber=function (value) {
+		if(value!==undefined){
+			$scope.left_number = value.replace(/[^\d]/g,'')
+		}
+	};
   /*----------------自己添加的属性--------------------*/
   $scope.own_attrs_arr=[];//自定义数组
   //添加属性
@@ -272,7 +281,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       if(!reg_value){
         $scope.price_flag=true;
       }else{
-          (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+          (+$scope.market_price>=+$scope.platform_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
       }
   };
   //平台价
@@ -281,7 +290,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       if(!reg_value){
         $scope.price_flag=true;
       }else{
-          (+$scope.platform_price<=+$scope.market_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+	      (+$scope.market_price>=+$scope.platform_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
       }
   };
   //供货商价
@@ -290,7 +299,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
       if(!reg_value){
           $scope.price_flag=true;
       }else{
-          (+$scope.supplier_price<=+$scope.platform_price)&&(+$scope.supplier_price<=+$scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+	      (+$scope.market_price>=+$scope.platform_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
       }
 
   };
