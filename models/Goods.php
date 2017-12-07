@@ -474,6 +474,12 @@ class Goods extends ActiveRecord
     public static function priceDetail($level, $title, $city = self::DEFAULT_CITY)
     {
         $select = 'goods.supplier_id,goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
+        //TODO 修改
+        if(is_array($title)){
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title], ['goods.status' => self::STATUS_ONLINE]];
+        }else{
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['gc.id'=>$title], ['goods.status' => self::STATUS_ONLINE]];
+        }
 
         $all = self::find()
             ->asArray()
@@ -483,8 +489,9 @@ class Goods extends ActiveRecord
             ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
             ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
             ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
-            ->where(['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title], ['goods.status' => self::STATUS_ONLINE]])
+            ->where($where)
             ->all();
+
         foreach ($all as &$one_goods) {
             $one_goods['platform_price'] =  $one_goods['platform_price'] / 100;
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
