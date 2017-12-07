@@ -1,5 +1,5 @@
 <div class="distribution_detail row">
-    <form name="count_profit">
+    <form name="count_profit" novalidate>
         <div class="row">
             <p class="col-md-2">手机号</p>
             <p class="col-md-10">{{myself.mobile}}</p>
@@ -37,9 +37,9 @@
         <div class="row">
             <p class="col-md-2">收益</p>
             <div class="col-md-2">
-                <input type="text" ng-pattern="/^0\.\d[1-9]$|^0\.[1-9]$|^[1-9]\d{0,4}\.\d{1,2}$|^[1-9]\d{0,4}$|^[1-9]\d{5}\.\d$|^[1-9]\d{5}$|^[1-9]\d{6,7}$/" name="profit" maxlength="8" placeholder="请输入金额" ng-model="ctrlScope.profit"
+                <input type="text" maxlength="8"  ng-pattern="/^0(\.\d{1,2})?$|^[1-9]\d{5}(\.\d{1})?$|^[1-9]\d{0,4}(\.\d{1,2})?$|^[1-9]\d{6,7}$/" required ng-blur="flag = !!count_profit.profit.$error" name="profit" maxlength="8" placeholder="请输入金额" ng-model="ctrlScope.profit"
                        class="form-control">
-                <p style="margin-top: 10px;font-size: 12px;" ng-if="count_profit.profit.$invalid&&submitted" ng-class="{'error':count_profit.profit.$invalid&&submitted}">金额小数点最多两位</p>
+                <p style="margin-top: 10px;font-size: 12px;" ng-if="count_profit.profit.$invalid&&submitted" ng-class="{'error':(count_profit.profit.$invalid&&submitted)||(count_profit.profit.$error.pattern&&count_profit.profit.$error.required)&&flag}">金额小数点最多两位</p>
             </div>
         </div>
         <div class="from-group submit">
