@@ -1892,7 +1892,7 @@ class OwnerController extends Controller
                         $ma = $detail['attribute'];
                     }
                 }
-
+                $condition_stairs=[];
                 foreach ($stairs_price as &$one_stairs_price) {
                     if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
                         $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
