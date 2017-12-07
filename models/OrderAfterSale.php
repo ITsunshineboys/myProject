@@ -1435,25 +1435,38 @@ class OrderAfterSale extends ActiveRecord
     public  static  function  CloseOrder($order_no,$sku,$reason)
     {
         //关闭订单操作
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-            $OrderGoods->order_status=2;
-            if (!$OrderGoods->save(false)){
-                $tran->rollBack();
+
+            switch ($OrderGoods->order_status)
+            {
+                case 0:
+                    $OrderGoods->order_status=2;
+                    if (!$OrderGoods->save(false)){
+                        $tran->rollBack();
+                    }
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    $tran->rollBack();
+                    return 1000;
+                    break;
             }
-//            $after=new OrderAfterSaleHandleLog();
-//            $after->order_no=$order_no;
-//            $after->sku=$sku;
-//            $after->handle=1;
-//            if (!empty($reason))
-//            {
-//                $after->reason=$reason;
-//            }
-//            if (!$after->save(false))
-//            {
-//                $tran->rollBack();
-//            }
+            $orderPlatForm=OrderPlatForm::find()
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
+                ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
+                ->one();
+            if ($orderPlatForm)
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+
             $tran->commit();
             $code=200;
             return $code;
