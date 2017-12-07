@@ -147,11 +147,12 @@ update engineering_standard_craft set points_id=4 where id=35;
 update engineering_standard_craft set points_id=4 where id=36;
 update engineering_standard_craft set points_id=4 where id=37;
 
-
+-- test 2017.12.6 yr
 update points set title='主卧' where title='主卧室';
 update points set title='次卧' where title='次卧室';
 
-update points set title='主卧' where id=65 //ac
-update points set title='次卧' where id=66 //ac
+-- ac 2017.12.7 yr
+update points set title='主卧' where id=65;
+update points set title='次卧' where id=66;
 
 
