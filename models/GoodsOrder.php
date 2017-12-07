@@ -3242,10 +3242,7 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
-
-
                     $money+=($Goods["{$role_money}"]*$goods['goods_num']);
-
                 }
                 $total+=($money+$supplier['freight']*100);
                 $GoodsOrder=new GoodsOrder();

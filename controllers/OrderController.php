@@ -2922,7 +2922,12 @@ class OrderController extends Controller
             ]);
         }
 
-        $code=OrderAfterSale::userConfirm($OrderAfterSale);
+        $type=trim($request->post('type',''));
+        if (!$type)
+        {
+            $type='';
+        }
+        $code=OrderAfterSale::userConfirm($OrderAfterSale,$type);
         if ($code==200){
             return Json::encode([
                 'code'=>$code,

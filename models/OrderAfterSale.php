@@ -1317,6 +1317,12 @@ class OrderAfterSale extends ActiveRecord
             if ($type=='received')
             {
                 $OrderAfterSale->supplier_express_confirm=1;
+                $express=Express::findOne($OrderAfterSale->buyer_express_id);
+                $express->receive_time=time();
+                if (!$express->save(false))
+                {
+                    $tran->rollBack();
+                }
             }else{
                 $OrderAfterSale->supplier_confirm=1;
                 $OrderAfterSale->supplier_confirm_time=time();
@@ -1338,14 +1344,26 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return int
      */
-    public static  function  userConfirm($OrderAfterSale)
+    public static  function  userConfirm($OrderAfterSale,$type)
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $OrderAfterSale->buyer_confirm=1;
-            $OrderAfterSale->worker_name='';
-            $OrderAfterSale->worker_mobile='';
-            $OrderAfterSale->buyer_confirm_time=time();
+            if ($type=='received')
+            {
+                $OrderAfterSale->buyer_express_confirm=1;
+                $express=Express::findOne($OrderAfterSale->supplier_express_id);
+                $express->receive_time=time();
+                if (!$express->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }else{
+                $OrderAfterSale->buyer_confirm=1;
+                $OrderAfterSale->worker_name='';
+                $OrderAfterSale->worker_mobile='';
+                $OrderAfterSale->buyer_confirm_time=time();
+            }
+
             $res=$OrderAfterSale->save(false);
             if (!$res){
                 $tran->rollBack();
