@@ -62,6 +62,7 @@ header span{
 }
 .address_content span:nth-child(6){
     color: #6C6C6C;
+    margin-left: 1rem;
 }
 .bag_div{
     background-color: #F6F6F6;
