@@ -1997,7 +1997,7 @@ class QuoteController extends Controller
         //engineering_standard_carpentry_coefficient
 //       var_dump(AssortGoods::deleteAll([]));
 
-        var_dump(Goods::find()->asArray()->all());
+        var_dump(EngineeringStandardCraft::find()->asArray()->all());
 
 
     }
