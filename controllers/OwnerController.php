@@ -341,7 +341,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $weak_current = BasisDecorationService::judge($goods,$post);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $weak_current = BasisDecorationService::judge($judge,$post);
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city']);
@@ -634,7 +635,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $waterproof = BasisDecorationService::judge($goods, $post);
+        $judge = BasisDecorationService::priceConversion($goods);
+        $waterproof = BasisDecorationService::judge($judge, $post);
 
 
         $points = Points::findByOne('id,title',"id = 69");
@@ -925,7 +927,9 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $goods_price = BasisDecorationService::priceConversion($goods);
+
+        $judge = BasisDecorationService::priceConversion($goods);
+        $goods_price = BasisDecorationService::judge($judge, $post);
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['emulsion_varnish'], $post['city']);
