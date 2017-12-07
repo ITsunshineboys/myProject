@@ -156,9 +156,9 @@ update points set title='主卧' where id=65;
 update points set title='次卧' where id=66;
 
 -- all 2017.12.7 hyz
-ALTER TABLE  `order_platform_handle modify` column handle tinyint(1) NOT NULL comment '1:关闭
-订单退款 2：关闭订单线下退款 3：退货 4.换货 5：上门维修 6：上门退货 7：上门换货    8:关闭订
-单';
+
+ALTER TABLE `order_platform_handle` modify column handle tinyint(1) NOT NULL comment '1:关闭订单退款 2：关闭订单线下退款 3：退货 4.换货 5：上门维修 6：上门退货 7：上门换货    8:关闭订单';
+
 
 
 
