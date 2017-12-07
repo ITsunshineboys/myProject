@@ -300,10 +300,13 @@ class OrderPlatForm extends ActiveRecord
     }
 
 
+    /**
+     * 通过售后type  获取平台介入handle
+     * @param $aftersaletype
+     * @return int
+     */
     public  static  function  GetAfterHandleType($aftersaletype)
     {
-
-
         switch ($aftersaletype)
         {
             case OrderAfterSale::RETURN_ON_LINE:

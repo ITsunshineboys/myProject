@@ -459,13 +459,47 @@ class OrderAfterSale extends ActiveRecord
         if (!$PlatForm){
             return ['data'=>$data,'platform'=>[]];
         }
+
         //判断是否是关闭了订单
         $PlatFormCloseOrder=OrderPlatForm::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-            ->andWhere(['handle'=>$handle])
+            ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
             ->one();
+        if ($PlatFormCloseOrder)
+        {
+            $CloseOrderData[]=[
+                'type'=>'关闭订单',
+                'value'=>$PlatFormCloseOrder->reasons,
+                'time'=>date('Y-m-d H:i',$PlatFormCloseOrder->creat_time),
+                'phone'=>'',
+                'content'=>'',
+                'number'=>'',
+                'code'=>'',
+                'status'=>'over'
+            ];
+            return ['data'=>$data,'platform'=>$CloseOrderData];
+        }
 
         //判断是否是关闭了订单并退款
+        $PlatFormRefund=OrderPlatForm::find()
+            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+            ->andWhere(['handle'=>OrderPlatForm::PLATFORM_REFUND])
+            ->one();
+        if ($PlatFormRefund)
+        {
+            $RefundData[]=[
+                'type'=>'关闭订单,退款',
+                'value'=>$PlatFormRefund->reasons,
+                'time'=>date('Y-m-d H:i',$PlatFormRefund->creat_time),
+                'phone'=>'',
+                'content'=>'',
+                'number'=>'',
+                'code'=>'',
+                'status'=>'over'
+            ];
+            return ['data'=>$data,'platform'=>$RefundData];
+        }
+
         $tran = Yii::$app->db->beginTransaction();
         try{
             $OrderGoods=OrderGoods::find()
@@ -1408,19 +1442,18 @@ class OrderAfterSale extends ActiveRecord
             if (!$OrderGoods->save(false)){
                 $tran->rollBack();
             }
-            $after=new OrderAfterSaleHandleLog();
-            $after->order_no=$order_no;
-            $after->sku=$sku;
-            $after->handle=1;
-            if (!empty($reason))
-            {
-                $after->reason=$reason;
-            }
-
-            if (!$after->save(false))
-            {
-                $tran->rollBack();
-            }
+//            $after=new OrderAfterSaleHandleLog();
+//            $after->order_no=$order_no;
+//            $after->sku=$sku;
+//            $after->handle=1;
+//            if (!empty($reason))
+//            {
+//                $after->reason=$reason;
+//            }
+//            if (!$after->save(false))
+//            {
+//                $tran->rollBack();
+//            }
             $tran->commit();
             $code=200;
             return $code;
