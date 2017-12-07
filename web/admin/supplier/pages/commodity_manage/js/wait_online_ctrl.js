@@ -4,6 +4,10 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     let reg=/^\d+(\.\d{1,2})?$/;
 	$scope.goods_all_attrs=[];//所有属性数据
 	$scope.logistics=[];//物流模块列表
+    $scope.series_null_flag=false;
+    $scope.style_null_arr=false;
+    $scope.series_null_arr=[];
+    $scope.style_null_arr=[];
     $rootScope.crumbs = [{
         name: '商品管理',
         icon: 'icon-shangpinguanli',
@@ -120,6 +124,22 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 					$scope.style_model=value.id;
 				}
 			}
+            // if(!!res.data.goods_view.series_name){
+            //     let series_null_flag= $scope.series_null_arr.findIndex(function (value) {
+            //         return $scope.detail_ser==value
+            //     });
+            //     series_null_flag===-1?$scope.series_null_flag=true:$scope.series_null_flag=false;
+            // }else{
+            //     $scope.series_model=true;
+            // }
+            // if(!!res.data.goods_view.style_name){
+            //     let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
+            //         return $scope.detail_style==value
+            //     });
+            //     style_null_flag===-1?$scope.style_null_flag=true:$scope.style_null_flag=false;
+            // }else{
+            //     $scope.style_model=true;
+            // }
 		},function (err) {
 			console.log(err);
 		});
@@ -326,10 +346,10 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     };
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
+		// console.log($scope.upload_cover_src);
+		// console.log($scope.price_flag);
         let description = UE.getEditor('editor').getContent();//富文本编辑器
-		console.log($scope.upload_cover_src);
-		console.log($scope.price_flag);
-		if(valid && $scope.upload_cover_src && !$scope.price_flag){
+		if(valid && $scope.upload_cover_src && !$scope.price_flag  ){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票
@@ -397,16 +417,18 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				$scope.pass_attrs_value=[];
 			}
 			/*判断是默认属性是 下拉框还是普通文本框*/
-			if($scope.goods_input_attrs[0]!=undefined){
-				for(let[key,value] of $scope.goods_input_attrs.entries()){
-					$scope.pass_attrs_name.push(value.name);
-					$scope.pass_attrs_value.push(value.value);
-				}
-			}
-			if($scope.goods_select_attrs[0]!=undefined){
-				$scope.pass_attrs_name.push($scope.goods_select_name);
-				$scope.pass_attrs_value.push($scope.goods_select_model);
-			}
+            if($scope.goods_input_attrs[0]!=undefined){
+                for(let[key,value] of $scope.goods_input_attrs.entries()){
+                    $scope.pass_attrs_name.push(value.name);
+                    $scope.pass_attrs_value.push(value.value);
+                }
+            }
+            if($scope.goods_select_attrs[0]!=undefined){
+                for(let[key,value] of $scope.goods_select_attrs.entries()){
+                    $scope.pass_attrs_name.push(value.name);
+                    $scope.pass_attrs_value.push(value.selected);
+                }
+            }
 			console.log($scope.pass_attrs_name);
 			console.log($scope.pass_attrs_value);
 			$http.post(baseUrl+'/mall/goods-edit',{

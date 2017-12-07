@@ -1205,6 +1205,9 @@ angular.module("all_controller", ['ngCookies'])
             $('.modal-backdrop').remove();
             $('body').removeClass('modal-open')
         });
+        // $scope.backShop = function () {
+        //     $state.go('product_details')
+        // }
         $scope.show_harvest = false;
         $scope.show_address = true; //显示第一个
         $scope.mall_id = $stateParams.mall_id;
@@ -1218,7 +1221,6 @@ angular.module("all_controller", ['ngCookies'])
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
         $scope.address_id  = $stateParams.address_id;//地址ID
         if($stateParams.show_address !== ''){
-
             $scope.harvestNum = $stateParams.harvestNum;//收获人号码
             $scope.harvestName = $stateParams.harvestName;//收货人名字
             $scope.harvestAddress = $stateParams.harvestAddress;//收货人地址
