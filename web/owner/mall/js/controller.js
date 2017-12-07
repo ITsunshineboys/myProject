@@ -788,6 +788,20 @@ angular.module('all_controller', [])
             if (sessionStorage.getItem('huxingParams') != null && ($rootScope.curState_name == 'nodata.main_material' || $rootScope.curState_name == 'nodata.basics_decoration' || $rootScope.curState_name == 'nodata.other_material')) {
                 $rootScope.goPrev(JSON.parse(sessionStorage.getItem('huxingParams')))
             } else {
+                $timeout(function () {
+                    var mySwiper = new Swiper('.swiper-container', {
+                        direction: 'horizontal',
+                        loop: true,
+                        autoplay: 1000,
+                        autoplayDisableOnInteraction: false,
+                        observer: true,
+                        observeParents: true,
+                        effect: 'slide',
+
+                        // 如果需要分页器
+                        pagination: '.swiper-pagination',
+                    })
+                }, 0)
                 $rootScope.goPrev()
             }
         }
