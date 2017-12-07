@@ -634,8 +634,7 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $waterproof = BasisDecorationService::judge($judge, $post);
+        $waterproof = BasisDecorationService::judge($goods, $post);
 
 
         $points = Points::findByOne('id,title',"id = 69");
@@ -927,8 +926,7 @@ class OwnerController extends Controller
             ]);
         }
 
-        $judge = BasisDecorationService::priceConversion($goods);
-        $goods_price = BasisDecorationService::judge($judge, $post);
+        $goods_price = BasisDecorationService::priceConversion($goods);
 
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['emulsion_varnish'], $post['city']);
