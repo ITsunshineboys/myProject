@@ -1040,7 +1040,7 @@ class OwnerController extends Controller
         //工人一天单价
         $_select = 'id,univalence,worker_kind';
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason'],$_select);
-        var_dump($labor_costs);die;
+
         if ($labor_costs == null){
             $code = 1056;
             return Json::encode([
@@ -1048,6 +1048,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        var_dump($labor_costs);die;
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
         if ($worker_kind_details == null){
             $code = 1057;
