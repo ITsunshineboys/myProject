@@ -1739,7 +1739,7 @@ class OwnerController extends Controller
                 ->select('id')
                 ->asArray()
                 ->one();
-            $data['effect_id']=$effect_id;
+            $data['effect_id']=$effect_id['id'];
         }
 
 
