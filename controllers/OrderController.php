@@ -2684,6 +2684,7 @@ class OrderController extends Controller
             ]
         ]);
     }
+
      /**售后详情
      * @return array|string
      */
@@ -4870,6 +4871,9 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * @return bool
+     */
     public  function  actionWxNotifyDatabase()
     {
         //获取通知的数据
@@ -5203,7 +5207,6 @@ class OrderController extends Controller
                 $freight+=$money;
             }
         }
-
 //            foreach ($costs as &$cost)
 //            {
 //                foreach ($Good as &$list)
@@ -5671,42 +5674,6 @@ class OrderController extends Controller
             ]
         );
     }
-
-
-    /**
-     * @return string
-     */
-    public  function  actionFindAfterSaleDetail()
-    {
-        $request=Yii::$app->request;
-        $order_no=$request->post('order_no');
-        $sku=$request->post('sku');
-        if (!$order_no || !$sku)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-//        if ($user->last_role_id_app !=6 && $user->last_role_id_app!=1)
-//        {
-//            $code=1034;
-//            return Json::encode([
-//                'code' => $code,
-//                'msg' => Yii::$app->params['errorCodes'][$code]
-//            ]);
-//        }
-    }
-
 
     /**
      * 获取默认地址

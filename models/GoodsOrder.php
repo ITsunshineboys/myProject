@@ -1382,6 +1382,9 @@ class GoodsOrder extends ActiveRecord
             case  7:
                 $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
                 break;
+            case  8:
+                $code=OrderPlatForm::platformHandCloseOrder($order_no,$handle_type,$reason,$sku);
+                break;
         }
         return $code;
     }

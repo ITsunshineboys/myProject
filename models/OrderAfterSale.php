@@ -1448,6 +1448,10 @@ class OrderAfterSale extends ActiveRecord
                     }
                     break;
                 case 1:
+                    $OrderGoods->customer_service=2;
+                    if (!$OrderGoods->save(false)){
+                        $tran->rollBack();
+                    }
                     break;
                 case 2:
                     $tran->rollBack();
@@ -1469,7 +1473,7 @@ class OrderAfterSale extends ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch (Exception $e){
+        }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return $code;

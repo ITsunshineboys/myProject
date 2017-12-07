@@ -56,21 +56,6 @@ class OrderPlatForm extends ActiveRecord
             $trans = \Yii::$app->db->beginTransaction();
             try {
 
-                $OrderPlatForm=new self;
-                $OrderPlatForm->order_no=$order_no;
-                $OrderPlatForm->sku=$sku;
-                $OrderPlatForm->handle=$handle_type;
-                $OrderPlatForm->reasons=$reason;
-                $OrderPlatForm->creat_time=$time;
-                $OrderPlatForm->refund_result=2;
-                $OrderPlatForm->refund_type=2;
-                $OrderPlatForm->refund_time=$time;
-                $res=$OrderPlatForm->save(false);
-                if (!$res){
-                    $code=500;
-                    $trans->rollBack();
-                    return $code;
-                }
                 $OrderGoods=OrderGoods::find()
                     ->where(['order_no'=>$order_no])
                     ->andWhere(['sku'=>$sku])
@@ -101,6 +86,22 @@ class OrderPlatForm extends ActiveRecord
                         $trans->rollBack();
                         return $code;
                     }
+                }
+
+                $OrderPlatForm=new self;
+                $OrderPlatForm->order_no=$order_no;
+                $OrderPlatForm->sku=$sku;
+                $OrderPlatForm->handle=$handle_type;
+                $OrderPlatForm->reasons=$reason;
+                $OrderPlatForm->creat_time=$time;
+                $OrderPlatForm->refund_result=2;
+                $OrderPlatForm->refund_type=2;
+                $OrderPlatForm->refund_time=$time;
+                $res=$OrderPlatForm->save(false);
+                if (!$res){
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
                 }
                 $OrderGoods->order_status=2;
                 $res2=$OrderGoods->save(false);
@@ -262,6 +263,47 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
+
+            //减少销量，减少销售额，增加库存.减少商品销量
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$supplier->id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$supplier->id;
+                $GoodsStat->sold_number=$OrderGoods->goods_number;
+                $GoodsStat->amount_sold=(($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight);
+                $GoodsStat->create_date=$date;
+                if (!$GoodsStat->save(false))
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }else{
+
+                $GoodsStat->sold_number-=$OrderGoods->goods_number;
+                $GoodsStat->amount_sold-=(($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight);
+                if (!$GoodsStat->save(false))
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+            $Goods=Goods::find()->where(['sku'=>$sku])->one();
+            $Goods->left_number+=$OrderGoods->goods_number;
+            $Goods->sold_number-=$OrderGoods->goods_number;
+            if (!$Goods->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
             $tran->commit();
             $code=200;
             return $code;
@@ -271,6 +313,79 @@ class OrderPlatForm extends ActiveRecord
             return $code;
         }
     }
+
+
+    /**
+     * 平台介入关闭订单
+     * @param $order_no
+     * @param $handle_type
+     * @param $reason
+     * @param $sku
+     * @return int
+     */
+    public  static  function  platformHandCloseOrder($order_no,$handle_type,$reason,$sku)
+    {
+            //关闭订单操作
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+
+            switch ($OrderGoods->order_status)
+            {
+                case 0:
+                    $OrderGoods->order_status=2;
+                    if (!$OrderGoods->save(false)){
+                        $tran->rollBack();
+                    }
+                    break;
+                case 1:
+                    $OrderGoods->customer_service=2;
+                    if (!$OrderGoods->save(false)){
+                        $tran->rollBack();
+                    }
+                    break;
+                case 2:
+                    $tran->rollBack();
+                    return 1000;
+                    break;
+            }
+            $orderPlatForm=OrderPlatForm::find()
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
+                ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
+                ->one();
+            if ($orderPlatForm)
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+            $time=time();
+            $OrderPlatForm=new self;
+            $OrderPlatForm->order_no=$order_no;
+            $OrderPlatForm->sku=$sku;
+            $OrderPlatForm->handle=$handle_type;
+            $OrderPlatForm->reasons=$reason;
+            $OrderPlatForm->creat_time=$time;
+            $OrderPlatForm->refund_result=2;
+            $OrderPlatForm->refund_time=$time;
+            $res=$OrderPlatForm->save(false);
+            if (!$res){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
     /**
      * @param $order_no
      * @param $handle_type
@@ -284,12 +399,14 @@ class OrderPlatForm extends ActiveRecord
         $tran=\Yii::$app->db->beginTransaction();
         try{
             $OrderPlatForm=new self;
+            $OrderPlatForm->order_no=$order_no;
+            $OrderPlatForm->sku=$sku;
             $OrderPlatForm->handle=$handle_type;
             $OrderPlatForm->reasons=$reason;
             $OrderPlatForm->creat_time=$time;
             $OrderPlatForm->refund_result=2;
             $OrderPlatForm->refund_time=$time;
-            $res=$OrderPlatForm->save();
+            $res=$OrderPlatForm->save(false);
             if (!$res){
                 $code=500;
                 $tran->rollBack();
