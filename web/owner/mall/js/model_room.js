@@ -211,14 +211,19 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             material: [],                                               // 商品信息
         };
         for (let obj of $scope.materials) {
-            for (let o of obj.goods) {
-                let tempObj = {
-                    goods_id: o.goods_id,
-                    count: o.quantity,
-                    price: o.cost,
-                    first_cate_id: obj.id
-                };
-                payParams.material.push(tempObj);
+            if (obj.count === 0) {
+                continue
+            }
+            for (let second of obj.second_level) {
+                for (let o of second.goods_detail) {
+                    let tempObj = {
+                        goods_id: o.goods_id,
+                        count: o.quantity,
+                        price: o.cost,
+                        first_cate_id: obj.id
+                    };
+                    payParams.material.push(tempObj);
+                }
             }
         }
         sessionStorage.setItem("payParams", JSON.stringify(payParams));
