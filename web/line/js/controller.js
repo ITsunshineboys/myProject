@@ -1122,16 +1122,17 @@ angular.module("all_controller", ['ngCookies'])
                     });
                     // 模态框确认按钮 == 跳转保存数据
                     $scope.jumpOrder = function () {
-                        setTimeout(function () {
-                            $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                                harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                                harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                                platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                                goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                                mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                                regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id,address_id:$scope.address_id
-                            }))
-                        },300);
+                        history.go(-1)
+                        // setTimeout(function () {
+                        //     $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                        //         harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                        //         harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                        //         platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                        //         goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                        //         mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                        //         regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage,supplier_id:$scope.supplier_id,address_id:$scope.address_id
+                        //     }))
+                        // },300);
                     }
                 }
             }
@@ -1170,16 +1171,17 @@ angular.module("all_controller", ['ngCookies'])
                         sessionStorage.setItem('invoiceInfo', JSON.stringify(invoiceObj));
                     });
                     $scope.jumpOrder = function () {
-                        setTimeout(function () {
-                            $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
-                                harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
-                                harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
-                                platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
-                                goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
-                                mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
-                                regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage
-                            }))
-                        },300);
+                        history.go(-1)
+                        // setTimeout(function () {
+                        //     $state.go('order_commodity',({invoice_id:$scope.invoice_id,invoice_name:$scope.invoice_name,invoice_number:$scope.invoice_number,
+                        //         harvestNum:$scope.harvestNum,harvestName:$scope.harvestName,
+                        //         harvestAddress:$scope.harvestAddress,title:$scope.title,subtitle:$scope.subtitle,shop_name:$scope.shop_name,
+                        //         platform_price:$scope.platform_price,cover_image:$scope.cover_image,icon:$scope.icon,
+                        //         goods_num:$scope.goods_num,show_address:$scope.show_address,show_harvest:$scope.show_harvest,shopNum:$scope.shopNum,
+                        //         mall_id:$scope.mall_id, consigneeName:$scope.consigneeName,mobile:$scope.mobile,districtMore:$scope.districtMore,
+                        //         regionMore:$scope.regionMore,leaveMessage:$scope.leaveMessage
+                        //     }))
+                        // },300);
                     }
                 }
             }
@@ -1217,7 +1219,7 @@ angular.module("all_controller", ['ngCookies'])
         sessionStorage.setItem('mall_id',$stateParams.mall_id);
         $scope.shopNum = $stateParams.shopNum;
         $scope.leaveMessage = $stateParams.leaveMessage ; //买家留言
-        $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
+        // $scope.invoice_id  = $stateParams.invoice_id;//纳税人识别号ID
         $scope.supplier_id  = $stateParams.supplier_id;//商家ID
         $scope.address_id  = $stateParams.address_id;//地址ID
         if($stateParams.show_address !== ''){
@@ -1419,6 +1421,11 @@ angular.module("all_controller", ['ngCookies'])
         }
 
         // 获取发票信息
+        let invoice_id = sessionStorage.getItem('invoiceInfo');
+        if (invoice_id != null) {
+            $scope.invoice_id = JSON.parse(invoice_id).invoice_id
+        }
+        // console.log($scope.invoice_id);
         if($scope.invoice_id != undefined){
             $http({
                 method: 'get',
