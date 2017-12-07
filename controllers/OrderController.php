@@ -5486,14 +5486,6 @@ class OrderController extends Controller
                 ];
                 break;
         }
-        $operation[]=[
-            'name'=>'关闭订单，线下退款',
-            'value'=>2
-        ];
-        $operation[]=[
-            'name'=>'关闭订单，退款',
-            'value'=>1
-        ];
         if ($GoodsOrder->pay_status==0 && $OrderGoods->order_status==0)
         {
             $code=200;
@@ -5550,7 +5542,14 @@ class OrderController extends Controller
                             );
                             break;
                         case 1:
-//                            $data[$k]['status']='售后中';
+                            $code=200;
+                            return Json::encode(
+                                [
+                                    'code'=>$code,
+                                    'msg'=>'ok',
+                                    'data'=>$operation
+                                ]
+                            );
                             break;
                         case 2:
                             $code=200;
@@ -5561,6 +5560,7 @@ class OrderController extends Controller
                                     'data'=>$operation
                                 ]
                             );
+                            break;
 //                            $data[$k]['status']='售后完成';
                             break;
                     }
@@ -5581,6 +5581,10 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * 关闭订单操作
+     * @return string
+     */
     public function actionCloseOrder()
     {
         $user = Yii::$app->user->identity;
@@ -5596,7 +5600,7 @@ class OrderController extends Controller
         $sku=$request->post('sku');
         $reason=$request->post('reason','');
         $code=1000;
-        if(!$order_no || !$sku || !$reason)
+        if(!$order_no || !$sku )
         {
 
             return Json::encode(

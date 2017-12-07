@@ -1401,7 +1401,11 @@ class OrderAfterSale extends ActiveRecord
             $after->order_no=$order_no;
             $after->sku=$sku;
             $after->handle=1;
-            $after->reason=$reason;
+            if (!empty($reason))
+            {
+                $after->reason=$reason;
+            }
+
             if (!$after->save(false))
             {
                 $tran->rollBack();
