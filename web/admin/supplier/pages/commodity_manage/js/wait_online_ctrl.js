@@ -136,7 +136,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.goods_select_value=[];//下拉框的值
 	$scope.pass_attrs_name=[];//名称
 	$scope.pass_attrs_value=[];//值
-
+    $scope.goods_select_attrs_value=[]
 	$http.get(baseUrl+'/mall/goods-attrs-admin',{
 		params:{
 			goods_id:+$scope.goods_id
@@ -147,26 +147,22 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		// console.log('属性');
 		// console.log($scope.goods_all_attrs);
 		//循环所有获取到的属性值，判断是普通文本框还是下拉框
-		for( let [key,value] of $scope.goods_all_attrs.entries()){
-			if(value.addition_type==1){
-				$scope.goods_select_attrs.push(value);
-			}else{
-				$scope.goods_input_attrs.push(value);
-			}
-		}
-
-		//循环添加名称和值
-		for(let [key,value] of $scope.goods_input_attrs.entries()){
-			$scope.attr_name=value.name;
-			$scope.attr_value=value.value;
-		}
-
-		//循环下拉框的value
-		for(let [key,value] of $scope.goods_select_attrs.entries()){
-			$scope.goods_select_name=value.name;//名称
-			$scope.goods_select_value=value.value;//下拉框
-			$scope.goods_select_model=$scope.goods_select_value[0];
-		}
+        for( let [key,value] of $scope.goods_all_attrs.entries()){
+            if(value.addition_type==1){
+                $scope.goods_select_attrs.push(value);
+            }else{
+                $scope.goods_input_attrs.push(value);
+            }
+        }
+        //循环添加名称和值
+        for(let [key,value] of $scope.goods_input_attrs.entries()){
+            $scope.attr_name=value.name;
+            $scope.attr_value=value.value;
+        }
+        //循环下拉框的value
+        for(let [key,value] of $scope.goods_select_attrs.entries()){
+            $scope.goods_select_attrs_value.push(value.value);//下拉框的值
+        }
 	},function (err) {
 		console.log(err)
 	});
