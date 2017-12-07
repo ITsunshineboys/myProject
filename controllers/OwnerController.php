@@ -1730,7 +1730,7 @@ class OwnerController extends Controller
             'code' =>200,
             'msg'=>'ok',
             'data'=> BrainpowerInitalSupervise::find()
-                ->select('id,image,district_code,street,toponymy')
+                ->select('id,image,district_code,street,toponymy,house_type_name')//TODO 新增 house_type_name 优化
                 ->where(['status'=>BrainpowerInitalSupervise::STATUS_OPEN])
                 ->orderBy(['sort' => SORT_ASC])
                 ->all()
@@ -1745,6 +1745,7 @@ class OwnerController extends Controller
         $code     = (int)trim(Yii::$app->request->get('code',''));
         $street   = trim(Yii::$app->request->get('street',''));
         $toponymy = trim(Yii::$app->request->get('toponymy',''));
+
 
         $effect = Effect::findByCode($code,$street,$toponymy);
         if ($effect == null) {
