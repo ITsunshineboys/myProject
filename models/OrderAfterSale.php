@@ -18,7 +18,11 @@ class OrderAfterSale extends ActiveRecord
         4=> '上门换货',
         5=> '上门退货',
     ];
-
+    const RETURN_ON_LINE=1;
+    const EXCHANGE_ON_LINE=2;
+    const REPAIR_DOOR=3;
+    const EXCHANGE_DOOR=4;
+    const RETURN_DOOR=5;
     const GOODS_AFTER_SALE_SERVICES = [
         0=>'提供发票',
         1=> '上门安装',
@@ -446,13 +450,22 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>'over'
         ];
-
+        //通过售后的类型获取是否过该类型下的平台介入
+        $handle=OrderPlatForm::GetAfterHandleType($OrderAfterSale->type);
         $PlatForm=OrderPlatForm::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+            ->andWhere(['handle'=>$handle])
             ->one();
         if (!$PlatForm){
             return ['data'=>$data,'platform'=>[]];
         }
+        //判断是否是关闭了订单
+        $PlatFormCloseOrder=OrderPlatForm::find()
+            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+            ->andWhere(['handle'=>$handle])
+            ->one();
+
+        //判断是否是关闭了订单并退款
         $tran = Yii::$app->db->beginTransaction();
         try{
             $OrderGoods=OrderGoods::find()

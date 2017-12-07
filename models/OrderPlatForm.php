@@ -20,7 +20,14 @@ class OrderPlatForm extends ActiveRecord
         6 => '上门退货',
         7 => '上门换货'
     ];
-
+    const PLATFORM_REFUND=1;
+    const PLATFORM_REFUND_DOOR=2;
+    const PLATFORM_RETURN=3;
+    const PLATFORM_EXCHANGE=4;
+    const PLATFORM_REPAIR_DOOR=5;
+    const PLATFORM_RETURN_DOOR=6;
+    const PLATFORM_EXCHANGE_DOOR=7;
+    const PLATFORM_CLOSE_ORDER=8;
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -290,6 +297,32 @@ class OrderPlatForm extends ActiveRecord
             $tran->rollBack();
             return $code;
         }
+    }
+
+
+    public  static  function  GetAfterHandleType($aftersaletype)
+    {
+
+
+        switch ($aftersaletype)
+        {
+            case OrderAfterSale::RETURN_ON_LINE:
+               $data= self::PLATFORM_RETURN;
+                break;
+            case OrderAfterSale::EXCHANGE_ON_LINE:
+                $data=  self::PLATFORM_EXCHANGE;
+                break;
+            case OrderAfterSale::REPAIR_DOOR:
+                $data=  self::PLATFORM_REPAIR_DOOR;
+                break;
+            case OrderAfterSale::EXCHANGE_DOOR:
+                $data=  self::PLATFORM_EXCHANGE_DOOR;
+                break;
+            case OrderAfterSale::RETURN_DOOR:
+                $data=  self::PLATFORM_RETURN_DOOR;
+                break;
+        }
+        return $data;
     }
 
 
