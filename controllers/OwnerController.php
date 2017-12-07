@@ -1038,8 +1038,8 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->get();
         //工人一天单价
-        $_select = 'id,univalence,worker_kind';
-        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason'],$_select);
+//        $_select = 'id,univalence,worker_kind';
+        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason']);
 
         if ($labor_costs == null){
             $code = 1056;
@@ -1050,6 +1050,7 @@ class OwnerController extends Controller
         }
 
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+
         if ($worker_kind_details == null){
             $code = 1057;
             return Json::encode([
