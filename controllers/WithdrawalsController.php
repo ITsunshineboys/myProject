@@ -1452,7 +1452,7 @@ class WithdrawalsController extends Controller
             $code=1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => '您尚未设置支付密码'
+                'msg' => '您还未设置交易密码，请先去设置'
             ]);
         }
         if (!Yii::$app->getSecurity()->validatePassword($pay_password, $pwd)==true){
