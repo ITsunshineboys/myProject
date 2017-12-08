@@ -585,8 +585,10 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $waterway_current = BasisDecorationService::judge($goods, $post);
+        $judge = BasisDecorationService::priceConversion($goods);
+
+        $waterway_current = BasisDecorationService::judge($judge, $post);
+
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterway'], $post['city']);
