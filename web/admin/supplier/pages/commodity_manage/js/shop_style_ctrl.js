@@ -62,7 +62,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.pass_attrs_name = [];//名称
 	$scope.pass_attrs_value = [];//值
 	$scope.goods_select_attrs_value = [];//下拉框值
-
 	$scope.goods_select_value_pass = [];//传值的下拉框值
 	//大后台添加的属性
 	_ajax.get('/mall/category-attrs', {category_id: +$scope.category_id}, function (res) {
@@ -90,6 +89,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			item.value = item.value.replace(/[^\d]/g,'');
 		}
 	};
+	//库存
 	$scope.leftNumber=function (value) {
 		if(value!==undefined){
 			$scope.left_number = value.replace(/[^\d]/g,'')
