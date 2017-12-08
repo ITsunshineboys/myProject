@@ -1718,6 +1718,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
    /**
      * 获取物流信息
      * @return string
@@ -1822,6 +1823,51 @@ class OrderController extends Controller
         ]);
     }
 
+    public  function  actionAfterFindExpress()
+    {
+        $request=Yii::$app->request;
+        $waybillnumber=trim($request->get('waybillnumber',''));
+        if (!$waybillnumber)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $express=Express::find()
+            ->select('waybillnumber,waybillname,create_time')
+            ->where(['waybillnumber'=>$waybillnumber])
+            ->asArray()
+            ->one();
+        if (!$express)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+                $list=Express::Findexresslist($waybillnumber,'-1');
+                if (is_numeric($list))
+                {
+                    $code=$list;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            $waybillname= $express['waybillname'];
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data' => [
+                    'list'=>$list,
+                    'waybillname'=>$waybillname,
+                    'waybillnumber'=>$express['waybillnumber']
+                ],
+            ]);
+    }
     /**
      * @return string
      */
