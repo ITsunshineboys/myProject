@@ -93,7 +93,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
                     $trans->commit();
                     $code=200;
                     return $code;
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $trans->rollBack();
                     $code=500;
                     return $code;
