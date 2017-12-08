@@ -1015,7 +1015,8 @@ angular.module('all_controller', [])
                 }
                 $scope.platform_status = 0
             }
-            $scope.params.category_id = $scope.cur_goods.category_id
+
+            $scope.cur_goods!=undefined?$scope.params.category_id = $scope.cur_goods.category_id:''
             $scope.params['sort[]'] = str + ($scope.platform_status == 0 ? ($scope.rate_status == 0 ? '' : ($scope.rate_status == 1 ? ':3' : ':4')) : ($scope.platform_status == 1 ? ':3' : ':4'))
             tablePages()
         }
