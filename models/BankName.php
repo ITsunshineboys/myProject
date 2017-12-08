@@ -15,7 +15,10 @@ class BankName extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'bank_name';
+        if (empty(Yii::$app->params['online']['basicDbName'])) {
+            return 'bank_name';
+        }
+        return Yii::$app->params['online']['basicDbName'] . '.bank_name';
     }
 
 
