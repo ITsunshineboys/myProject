@@ -300,6 +300,11 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                     mySwiper.destroy(true, true);
                 } catch (e) {
                     console.log(e);
+                    mySwiper = new Swiper("#swiperList", {
+                        autoplay: 3000,
+                        loop: true,
+                        pagination: ".swiper-pagination"
+                    });
                     mySwiper.destroy(true, true);
                 }
             }
