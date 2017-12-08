@@ -1252,7 +1252,7 @@ class WithdrawalsController extends Controller
             if ($post['trade_status'] == 'TRADE_SUCCESS'){
                 $out_trade_no=$post['out_trade_no'];
                 $total_amount=$post['total_amount'];
-                $passback_params=explode(',',urldecode($post['passback_params']));
+                $passback_params=explode(',',base64_decode($post['passback_params']));
                 $role_id=$passback_params[0];
                 $uid=$passback_params[1];
                 $access=UserAccessdetail::find()->where(['transaction_no'=>$out_trade_no])->one();
