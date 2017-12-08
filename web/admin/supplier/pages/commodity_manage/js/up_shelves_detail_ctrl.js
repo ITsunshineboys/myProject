@@ -186,7 +186,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
   });
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
-		item.value = item.value.replace(/[^\d]/g,'')
+		if(item.value!==undefined){
+			item.value = item.value.replace(/[^\d]/g,'')
+		}
 	}
 	$scope.leftNumber=function (value) {
 		if(value!==undefined){

@@ -86,7 +86,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
-		item.value = item.value.replace(/[^\d]/g,'');
+		if(item.value!==undefined){
+			item.value = item.value.replace(/[^\d]/g,'');
+		}
 	};
 	$scope.leftNumber=function (value) {
 		if(value!==undefined){
