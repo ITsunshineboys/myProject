@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="row" ng-if="series_null_flag">
-                <div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择风格</div>
+                <div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择系列</div>
             </div>
             <!--选择风格-->
             <div class="row" ng-if="styles_arr.length>0">
@@ -227,9 +227,9 @@
                     <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                     <span>商品物流</span>
                 </div>
-                <div class="col-sm-4 control-label">
+                <div class="col-sm-6 control-label">
                     <span class="red_txt" ng-if="logistics_null==true">*物流模板为空，请先添加物流模板</span>
-                    <select class="form-control" ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
+                    <select class="form-control" style="width: 60%" ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
                     <div class="red_txt" ng-if="logistics_red==true">*上一个物流模板已被删除，请选择新的模板</div>
                     <br>
                     <div ng-if="logistics_status==true">
@@ -239,7 +239,7 @@
                         <br/>
                         <span  class="margin_r">城市选择</span>
                         <span class="template_span" ng-repeat="item in district_names.slice(0,3)">{{item}}</span>
-                        <span ng-if="district_names.length>3" style="color: #5677FC" data-toggle="modal" data-target="#show_city">查看</span>
+                        <a ng-if="district_names.length>3" data-toggle="modal" data-target="#show_city">查看</a>
                         <br/>
                         <br/>
                         <span class="margin_r">是否包邮</span>

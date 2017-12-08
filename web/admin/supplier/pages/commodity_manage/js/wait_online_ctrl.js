@@ -8,6 +8,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     $scope.style_null_arr=false;
     $scope.series_null_arr=[];
     $scope.style_null_arr=[];
+	let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
     $rootScope.crumbs = [{
         name: '商品管理',
         icon: 'icon-shangpinguanli',
@@ -67,29 +68,30 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			$scope.replacement_check=true;
 		}
 	}
+	/*-------------------限制特殊字符----------------------------*/
+	$scope.g_name_change=function (value) {
+		let reg_value=pattern.test(value)
+		reg_value?$scope.g_flag=false:$scope.g_flag=true;
+	}
+	$scope.d_name_change=function (value) {
+		let reg_value=pattern.test(value)
+		reg_value?$scope.d_flag=false:$scope.d_flag=true;
+	}
 
 	/*-----------------品牌、系列、风格 获取-----------------*/
 	$scope.brands_arr=[];
 	$scope.series_arr=[];
 	$scope.styles_arr=[];
-	$http.get(baseUrl+'/mall/category-brands-styles-series',{
-		params:{
-			category_id:+goods_item.category_id
-		}
-	}).then(function (res) {
+	_ajax.get('/mall/category-brands-styles-series',{category_id:+goods_item.category_id},function (res) {
 		/*品牌、系列、风格 下拉框开始*/
-		$scope.brands_arr=res.data.data.category_brands_styles_series.brands;
-		$scope.series_arr=res.data.data.category_brands_styles_series.series;
-		$scope.styles_arr=res.data.data.category_brands_styles_series.styles;
-		//商品详情接口，获取品牌、系列、风格名称、重置 第一项下拉框
-		$http.get(baseUrl+'/mall/goods-view',{
-			params:{
-				id:$scope.goods_id
-			}
-		}).then(function (res) {
-			$scope.detail_brand=res.data.data.goods_view.brand_name;//品牌名称
-			$scope.detail_ser=res.data.data.goods_view.series_name;//系列名称
-			$scope.detail_style=res.data.data.goods_view.style_name;//风格名称
+		$scope.brands_arr=res.data.category_brands_styles_series.brands;
+		$scope.series_arr=res.data.category_brands_styles_series.series;
+		$scope.styles_arr=res.data.category_brands_styles_series.styles;
+		_ajax.get('/mall/goods-view',{id:$scope.goods_id},function (res) {
+			console.log(res);
+			$scope.detail_brand=res.data.goods_view.brand_name;//品牌名称
+			$scope.detail_ser=res.data.goods_view.series_name;//系列名称
+			$scope.detail_style=res.data.goods_view.style_name;//风格名称
 			//循环品牌列表
 			for(let [key,value] of $scope.brands_arr.entries()){
 				if(value.name==$scope.detail_brand){
@@ -101,6 +103,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			}
 			//循环系列列表
 			for(let [key,value] of $scope.series_arr.entries()){
+				$scope.series_null_arr.push(value.series);
 				if(value.series==$scope.detail_ser){
 					$scope.series_arr.splice(key,1);
 					$scope.series_arr.unshift(value);
@@ -110,6 +113,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			}
 			//循环风格列表
 			for(let [key,value] of $scope.styles_arr.entries()){
+				$scope.style_null_arr.push(value.style);
 				if(value.style==$scope.detail_style){
 					$scope.styles_arr.splice(key,1);
 					$scope.styles_arr.unshift(value);
@@ -117,28 +121,24 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 					$scope.style_model=value.id;
 				}
 			}
-            // if(!!res.data.goods_view.series_name){
-            //     let series_null_flag= $scope.series_null_arr.findIndex(function (value) {
-            //         return $scope.detail_ser==value
-            //     });
-            //     series_null_flag===-1?$scope.series_null_flag=true:$scope.series_null_flag=false;
-            // }else{
-            //     $scope.series_model=true;
-            // }
-            // if(!!res.data.goods_view.style_name){
-            //     let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
-            //         return $scope.detail_style==value
-            //     });
-            //     style_null_flag===-1?$scope.style_null_flag=true:$scope.style_null_flag=false;
-            // }else{
-            //     $scope.style_model=true;
-            // }
-		},function (err) {
-			console.log(err);
-		});
-
-	},function (err) {
-		console.log(err);
+			if(!!res.data.goods_view.series_name){
+				let series_null_flag= $scope.series_null_arr.findIndex(function (value) {
+					return $scope.detail_ser==value
+				});
+				console.log(series_null_flag);
+				series_null_flag===-1?$scope.series_null_flag=true:$scope.series_null_flag=false;
+			}else{
+				$scope.series_model=true;
+			}
+			if(!!res.data.goods_view.style_name){
+				let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
+					return $scope.detail_style==value
+				});
+				style_null_flag===-1?$scope.style_null_flag=true:$scope.style_null_flag=false;
+			}else{
+				$scope.style_model=true;
+			}
+		})
 	});
 	/*==================品牌、系列、风格 下拉框结束===========================*/
 
@@ -269,26 +269,36 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	_ajax.post('/mall/logistics-templates-supplier',{},function (res) {
 		console.log('物流模块');
 		console.log(res);
-		$scope.logistics=res.data.logistics_templates_supplier;
-		for(let [key,value] of $scope.logistics.entries()){
-			if(value.id==$scope.logistics_template_id){
-				$scope.logistics.splice(key,1);
-				$scope.logistics.unshift(value)
+		if(res.data.logistics_templates_supplier.length>0) {
+			$scope.logistics = res.data.logistics_templates_supplier;
+			for (let [key, value] of $scope.logistics.entries()) {
+				if (value.id == $scope.logistics_template_id) {
+					$scope.logistics.splice(key, 1);
+					$scope.logistics.unshift(value);
+					$scope.logistics_status=true;
+					$scope.logistics_red=false;
+				}else if(value.id!=$scope.logistics_template_id){  //判断该商品的物流模板是否删除，如果删除，显示提示文字
+					$scope.logistics_red=true;
+					$scope.logistics_status=true;
+				}
 			}
-		}
-		$scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
-		$scope.$watch('shop_logistics',function (newVal,oldVal) {
-			_ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
-				console.log('物流详情');
-				console.log(res);
-				$scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
-				$scope.district_names=res.data.logistics_template.district_names;//地区名
-				$scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费
-				$scope.delivery_number_default=res.data.logistics_template.delivery_number_default;//默认运费的数量
-				$scope.delivery_cost_delta=res.data.logistics_template.delivery_cost_delta;//增加件费用
-				$scope.delivery_number_delta=res.data.logistics_template.delivery_number_delta;//增加件的数量
+			$scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
+			$scope.$watch('shop_logistics',function (newVal,oldVal) {
+				_ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
+					console.log('物流详情');
+					console.log(res);
+					$scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
+					$scope.district_names=res.data.logistics_template.district_names;//地区名
+					$scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费
+					$scope.delivery_number_default=res.data.logistics_template.delivery_number_default;//默认运费的数量
+					$scope.delivery_cost_delta=res.data.logistics_template.delivery_cost_delta;//增加件费用
+					$scope.delivery_number_delta=res.data.logistics_template.delivery_number_delta;//增加件的数量
+				});
 			});
-		});
+		}else{
+			$scope.logistics_null=true;//显示“添加物流模板”提示字
+			$scope.logistics_status=false;//隐藏select
+		}
 	});
     //市场价
     $scope.price_flag=false;
@@ -321,7 +331,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
     let description = UE.getEditor('editor').getContent();//富文本编辑器
-		if(valid && $scope.upload_cover_src && !$scope.price_flag  ){
+		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag &&!!$scope.series_model && !!$scope.style_model){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票

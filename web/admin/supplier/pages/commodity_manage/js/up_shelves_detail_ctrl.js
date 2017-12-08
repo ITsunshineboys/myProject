@@ -25,7 +25,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
 	$scope.series_null_arr=[];
 	$scope.style_null_arr=[];
   let reg=/^\d+(\.\d{1,2})?$/;
-    let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
+  let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
   $scope.myng=$scope;
   let goods_item=$stateParams.item;//点击对应的那条数据
   console.log(goods_item);
@@ -140,7 +140,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
           }else{
 	          $scope.series_model=true;
           }
-          if(!!res.data.goods_view.style_name){
+	      if(!!res.data.goods_view.style_name){
             let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
               return $scope.detail_style==value
             });
@@ -274,7 +274,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl",function ($rootScope,$scop
         $scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
     })
   };
-
 
   //市场价
   $scope.price_flag=false;
