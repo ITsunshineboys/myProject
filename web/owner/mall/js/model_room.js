@@ -299,8 +299,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             if (mySwiper !== undefined) {
                 try {
                     mySwiper.destroy(true, true);
-                } catch (e) {
-                    console.log(e);
                 }
             }
             if (sessionStorage.getItem("materials") === null) {
