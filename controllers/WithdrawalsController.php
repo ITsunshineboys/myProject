@@ -836,11 +836,93 @@ class WithdrawalsController extends Controller
 
 
     /**
+     * 大后台收支明细
+     * @return string
+     */
+    public  function actionAdminUserAccessDetail()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        if (!$supplier)
+        {
+            $code=1010;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $transaction_no=trim($request->post('transaction_no',''));
+        if (!$transaction_no)
+        {
+            $transaction_no=$request->get('transaction_no');
+            if (!$transaction_no)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $accessDetail=UserAccessdetail::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one();
+        if (!$accessDetail){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        switch ($accessDetail['access_type'])
+        {
+            case 1:
+                $data=UserAccessdetail::findRechargeDetail($accessDetail);
+                break;
+            case 2:
+                $type='Debit';
+                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
+                break;
+            case 6:
+                $type='Goods';
+                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
+                break;
+            case 7:
+                $type='Goods';
+                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
+                break;
+        }
+        if (is_numeric($data))
+        {
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 商家收支明细详情
      * @return string
      */
     public function  actionSupplierAccessDetail()
     {
-
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -917,8 +999,8 @@ class WithdrawalsController extends Controller
 
 
 
-        /**
-     *
+    /**
+     *查询提现金额
      * @return string
      */
     public  function  actionCheckCashMoney()
@@ -966,43 +1048,47 @@ class WithdrawalsController extends Controller
         ]);
     }
 
+        /**
+         * 验证商家支付密码
+         * @return string
+         */
         public  function  actionCheckSupplierPayPwd()
-    {
-        $user=Yii::$app->user->identity;
-        if (!$user)
         {
-            $code=1052;
+            $user=Yii::$app->user->identity;
+            if (!$user)
+            {
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $request=Yii::$app->request;
+            $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+            $pay_pwd=trim($request->post('pay_pwd'));
+            if (!$pay_pwd)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            if (Yii::$app->getSecurity()->validatePassword($pay_pwd,$supplier->pay_password)==false){
+                $code=1055;
+                return Json::encode([
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $code=200;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg' => 'ok'
             ]);
         }
-        $request=Yii::$app->request;
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-        $pay_pwd=trim($request->post('pay_pwd'));
-        if (!$pay_pwd)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        if (Yii::$app->getSecurity()->validatePassword($pay_pwd,$supplier->pay_password)==false){
-            $code=1055;
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        $code=200;
-        return Json::encode([
-            'code' => $code,
-            'msg' => 'ok'
-        ]);
-    }
 
     
     /**
@@ -1014,7 +1100,7 @@ class WithdrawalsController extends Controller
         $user=Yii::$app->user->identity;
         if (!$user)
         {
-            $code=403;
+            $code=1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1075,6 +1161,7 @@ class WithdrawalsController extends Controller
 
 
     /**
+     * 微信充值数据库操作
      * @return bool|string
      */
     public  function  actionWxRechargeDatabase()
@@ -1157,7 +1244,6 @@ class WithdrawalsController extends Controller
      */
     public  function  actionAliPayUserRechargeDatabase()
     {
-       
         $post=Yii::$app->request->post();
         $model=new Alipay();
         $alipaySevice=$model->Alipaylinenotify();
@@ -1230,8 +1316,6 @@ class WithdrawalsController extends Controller
             echo "fail";    //请不要修改或删除
         }
     }
-
-
      /**解绑银行卡
      * @return string
      */
@@ -1320,7 +1404,7 @@ class WithdrawalsController extends Controller
 
     }
 
-   /**
+    /**
      * 用户提现申请
      * @return string
      */
@@ -1456,7 +1540,7 @@ class WithdrawalsController extends Controller
                 'msg' => 'ok',
                 'data'=>date('Y-m-d h:i',$time+21*60*60*3)
             ]);
-        }catch (Exception $e){
+        }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return Json::encode([
@@ -1498,7 +1582,10 @@ class WithdrawalsController extends Controller
     }
 
 
-
+    /**
+     * App交易详情
+     * @return string
+     */
    public  function  actionAppTransactionDetailData()
     {
         $user = Yii::$app->user->identity;
@@ -1724,6 +1811,7 @@ class WithdrawalsController extends Controller
     }
 
    /**
+    * 获取身份证
      * @return string
      */
     public  function  actionFindIdCard()
@@ -1786,7 +1874,7 @@ class WithdrawalsController extends Controller
     }
 
 
-       /**
+    /**
      * 通过银行卡号获取银行卡信息
      * @return string
      */

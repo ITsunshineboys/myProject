@@ -423,22 +423,26 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>''
         ];
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            $OrderGoods=OrderGoods::find()
-                ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-                ->one();
-            $OrderGoods->customer_service=2;
-            $res=$OrderGoods->save(false);
-            if (!$res){
+        $OrderGoods=OrderGoods::find()
+            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+            ->one();
+        if (!$OrderGoods->customer_service==2)
+        {
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $OrderGoods->customer_service=2;
+                $res=$OrderGoods->save(false);
+                if (!$res){
+                    $tran->rollBack();
+                }
+                $tran->commit();
+            }catch (\Exception $e){
                 $tran->rollBack();
+                $code=500;
+                return $code;
             }
-            $tran->commit();
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return $code;
         }
+
         $data[]=[
             'type'=>'售后完成',
             'value'=>'',
@@ -459,25 +463,25 @@ class OrderAfterSale extends ActiveRecord
             return ['data'=>$data,'platform'=>[]];
         }
 
-        //判断是否是关闭了订单
-        $PlatFormCloseOrder=OrderPlatForm::find()
-            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-            ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
-            ->one();
-        if ($PlatFormCloseOrder)
-        {
-            $CloseOrderData[]=[
-                'type'=>'关闭订单',
-                'value'=>$PlatFormCloseOrder->reasons,
-                'time'=>date('Y-m-d H:i',$PlatFormCloseOrder->creat_time),
-                'phone'=>'',
-                'content'=>'',
-                'number'=>'',
-                'code'=>'',
-                'status'=>'over'
-            ];
-            return ['data'=>$data,'platform'=>$CloseOrderData];
-        }
+//        //判断是否是关闭了订单
+//        $PlatFormCloseOrder=OrderPlatForm::find()
+//            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+//            ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
+//            ->one();
+//        if ($PlatFormCloseOrder)
+//        {
+//            $CloseOrderData[]=[
+//                'type'=>'关闭订单',
+//                'value'=>$PlatFormCloseOrder->reasons,
+//                'time'=>date('Y-m-d H:i',$PlatFormCloseOrder->creat_time),
+//                'phone'=>'',
+//                'content'=>'',
+//                'number'=>'',
+//                'code'=>'',
+//                'status'=>'over'
+//            ];
+//            return ['data'=>$data,'platform'=>$CloseOrderData];
+//        }
 
         //判断是否是关闭了订单并退款
         $PlatFormRefund=OrderPlatForm::find()
@@ -521,22 +525,114 @@ class OrderAfterSale extends ActiveRecord
         switch ($PlatForm->handle)
         {
             case 3:
-                $res=self::ReturnGoodsHandleDetail($res,$OrderAfterSale,$role);
+                $res=self::ReturnGoodsHandleDetail($res,$OrderAfterSale,$role,self::AFTER_SALE_HANDLE_DISAGREE);
                 break;
             case 4:
-                $res=self::ExangeGoodsHandleDetail($res,$OrderAfterSale,$role);
+                $res=self::ExangeGoodsHandleDetail($res,$OrderAfterSale,$role,self::AFTER_SALE_HANDLE_DISAGREE);
                 break;
             case 5:
-                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role,'repair');
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role,'repair',self::AFTER_SALE_HANDLE_DISAGREE);
                 break;
             case 6:
-                $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale,$role);
+                $res=self::ToDoorReturnGoodsHandleDetail($res,$OrderAfterSale,$role,self::AFTER_SALE_HANDLE_DISAGREE);
                 break;
             case 7:
-                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role,'exchange');
+                $res=self::RepairGoodsHandleDetail($res,$OrderAfterSale,$role,'exchange',self::AFTER_SALE_HANDLE_DISAGREE);
                 break;
         }
         return ['data'=>$data,'platform'=>$res];
+    }
+
+    /**
+     * @param $OrderAfterSale
+     * @return array
+     */
+    public  static  function  CheckIsCloseOrder($OrderAfterSale,$data,$stage)
+    {
+        $code=1000;
+        switch ($stage)
+        {
+            case 'user_unshipped':
+                if (!$OrderAfterSale->buyer_express_id)
+                {
+                    $code=200;
+                }
+                break;
+            case 'supplier_unconfirm_received':
+                if (!$OrderAfterSale->supplier_express_confirm==1)
+                {
+                    $code=200;
+                }
+                break;
+            case 'supplier_unshipped':
+                if (!$OrderAfterSale->supplier_express_id)
+                {
+                    $code=200;
+                }
+                break;
+            case 'user_unconfirm_received':
+                if (!$OrderAfterSale->buyer_express_confirm)
+                {
+                    $code=200;
+                }
+                break;
+            case 'supplier_unsend':
+                if (!$OrderAfterSale->supplier_send_man)
+                {
+                    $code=200;
+                }
+                break;
+            case 'user_unconfirm_exchange':
+                if ($OrderAfterSale->buyer_confirm!=1)
+                {
+                    $code=200;
+                }
+
+                break;
+            case 'supplier_unconfirm_retunrn_to_door':
+                if (!$OrderAfterSale->supplier_confirm)
+                {
+                    $code=200;
+                }
+                break;
+        }
+        if ($code==200)
+        {
+            //判断是否是关闭了订单
+            $PlatFormCloseOrder=OrderPlatForm::find()
+                ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+                ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
+                ->one();
+            if ($PlatFormCloseOrder)
+            {
+                $data[]=[
+                    'type'=>'关闭订单',
+                    'value'=>$PlatFormCloseOrder->reasons,
+                    'time'=>date('Y-m-d H:i',$PlatFormCloseOrder->creat_time),
+                    'phone'=>'',
+                    'content'=>'',
+                    'number'=>'',
+                    'code'=>'',
+                    'status'=>'in'
+                ];
+                $data[]=[
+                    'type'=>'售后完成',
+                    'value'=>'',
+                    'time'=>date('Y-m-d H:i',$PlatFormCloseOrder->creat_time),
+                    'phone'=>'',
+                    'content'=>'',
+                    'number'=>'',
+                    'code'=>'',
+                    'status'=>'over'
+                ];
+                return $data;
+            }else{
+                return 1000;
+            }
+        }else{
+            return $code;
+        }
+
     }
 
     /**
@@ -567,19 +663,19 @@ class OrderAfterSale extends ActiveRecord
         ];
         switch ($OrderAfterSale->type){
             case 1:
-                $data=self::ReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
+                $data=self::ReturnGoodsHandleDetail($data,$OrderAfterSale,$role,self::AFTER_SALE_HANDLE_AGREE);
                 break;
             case 2:
-                $data=self::ExangeGoodsHandleDetail($data,$OrderAfterSale,$role);
+                $data=self::ExangeGoodsHandleDetail($data,$OrderAfterSale,$role,self::AFTER_SALE_HANDLE_AGREE);
                 break;
             case 3:
-                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role,'repair');
+                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role,'repair',self::AFTER_SALE_HANDLE_AGREE);
                 break;
             case 4:
-                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role,'exchange');
+                $data=self::RepairGoodsHandleDetail($data,$OrderAfterSale,$role,'exchange',self::AFTER_SALE_HANDLE_AGREE);
                 break;
             case 5:
-                $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role);
+                $data=self::ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role,self::AFTER_SALE_HANDLE_AGREE);
                 break;
         }
         return [
@@ -593,7 +689,7 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static  function  ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role)
+    public static  function  ToDoorReturnGoodsHandleDetail($data,$OrderAfterSale,$role,$action)
     {
         if (!$OrderAfterSale->supplier_send_man){
 
@@ -626,6 +722,16 @@ class OrderAfterSale extends ActiveRecord
                     break;
             }
             return $data;
+        }
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unsend');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
         }
         $data[]=[
             'type'=>'商家已派出工作人员',
@@ -667,6 +773,16 @@ class OrderAfterSale extends ActiveRecord
             }
 
             return $data;
+        }
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unconfirm_retunrn_to_door');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
         }
         $data[]=[
             'type'=>'商家已确认',
@@ -759,7 +875,7 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static function RepairGoodsHandleDetail($data,$OrderAfterSale,$role,$type)
+    public static function RepairGoodsHandleDetail($data,$OrderAfterSale,$role,$type,$action)
     {
         if (!$OrderAfterSale->supplier_send_man){
             switch ($role)
@@ -791,6 +907,25 @@ class OrderAfterSale extends ActiveRecord
             }
 
             return $data;
+        }
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unsend');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
+        }
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unsend');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
         }
         $data[]=[
             'type'=>'商家已派出工作人员',
@@ -849,6 +984,24 @@ class OrderAfterSale extends ActiveRecord
             }
             return $data;
         }
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unconfirm_exchange');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
+        }
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unconfirm_exchange');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
+        }
         $data[]=[
             'type'=>'顾客已确认',
             'value' =>'',
@@ -889,12 +1042,195 @@ class OrderAfterSale extends ActiveRecord
         ];
         return $data;
     }
+
+//    public  static function  ReturnGoodsHandleDetailDisAgree($data,$OrderAfterSale,$role)
+//    {
+//        if (!$OrderAfterSale->buyer_express_id){
+//            switch ($role)
+//            {
+//                case 'user':
+//                    $data[]=[
+//                        'type'=>'顾客待发货',
+//                        'value' =>'',
+//                        'time'=>'',
+//                        'phone'=>'',
+//                        'content'=>'',
+//                        'number'=>'',
+//                        'code'=>'user_unshipped',
+//                        'status'=>'in'
+//                    ];
+//                    break;
+//                case 'supplier':
+//                    $data[]=[
+//                        'type'=>'顾客待发货',
+//                        'value' =>'',
+//                        'time'=>'',
+//                        'phone'=>'',
+//                        'content'=>'',
+//                        'number'=>'',
+//                        'code'=>'',
+//                        'status'=>'in'
+//                    ];
+//                    break;
+//            }
+//            return $data;
+//        }
+//        $buyer_express=Express::find()
+//            ->where(['id'=>$OrderAfterSale->buyer_express_id])
+//            ->one();
+//        $data[]=[
+//            'type'=>'顾客已发货',
+//            'value' =>'快递',
+//            'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+//            'phone'=>'',
+//            'content'=>$buyer_express->waybillname,
+//            'number'=>$buyer_express->waybillnumber,
+//            'code'=>'shipped',
+//            'status'=>''
+//        ];
+//        $time=15*24*60*60+$buyer_express->create_time-time();
+//        if ($time<0){
+//            $tran = Yii::$app->db->beginTransaction();
+//            try{
+//                $OrderAfterSale->supplier_express_confirm=1;
+//                $res1=$OrderAfterSale->save(false);
+//                $buyer_express->receive_time=time();
+//                $res2=$buyer_express->save(false);
+//                if (!$res1 || !$res2){
+//                    $code=500;
+//                    return $code;
+//                }
+//                $tran->commit();
+//            }catch (Exception $e){
+//                $tran->rollBack();
+//                $code=500;
+//                return $code;
+//            }
+//        }
+//        if ($OrderAfterSale->supplier_express_confirm!=1){
+//
+//            switch ($role)
+//            {
+//
+//                case 'user':
+//                    $data[]=[
+//                        'type'=>'商家确认收货',
+//                        'value' =>'剩余确认时间',
+//                        'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+//                        'content'=>$time,
+//                        'phone'=>'',
+//                        'number'=>'',
+//                        'code'=>'countdown',
+//                        'status'=>'in'
+//                    ];
+//                    break;
+//                case 'supplier':
+//                    $data[]=[
+//                        'type'=>'商家确认收货',
+//                        'value' =>'剩余确认时间',
+//                        'time'=>date('Y-m-d H:i',$buyer_express->create_time),
+//                        'content'=>$time,
+//                        'phone'=>'',
+//                        'number'=>'',
+//                        'code'=>'supplier_unconfirm_received',
+//                        'status'=>'in'
+//                    ];
+//                    break;
+//            }
+//            return $data;
+//        }
+//        $data[]=[
+//            'type'=>'商家已收货',
+//            'value' =>'',
+//            'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+//            'content'=>'',
+//            'phone'=>'',
+//            'number'=>'',
+//            'code'=>'',
+//            'status'=>''
+//        ];
+//        $OrderGoods=OrderGoods::find()
+//            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+//            ->one();
+//        if ($OrderGoods->customer_service!=2){
+//            $tran = Yii::$app->db->beginTransaction();
+//            try{
+//                $GoodsOrder=GoodsOrder::find()
+//                    ->where(['order_no'=>$OrderAfterSale->order_no])
+//                    ->one();
+//                $user=User::find()
+//                    ->where(['id'=>$GoodsOrder->user_id])
+//                    ->one();
+//                $user->balance=($user->balance+$OrderGoods->goods_price*$OrderGoods->goods_number);
+//                $res=$user->save(false);
+//                if (!$res){
+//                    $tran->rollBack();
+//                }
+//                $supplier=Supplier::find()
+//                    ->where(['id'=>$GoodsOrder->supplier_id])
+//                    ->one();
+//                $supplier->balance=($supplier->balance-$OrderGoods->supplier_price*$OrderGoods->goods_number);
+//                $supplier->availableamount=$supplier->availableamount-$OrderGoods->supplier_price*$OrderGoods->goods_number;
+//                $res2=$supplier->save(false);
+//                if (!$res2){
+//                    $tran->rollBack();
+//                }
+//                $role_number=$supplier->shop_no;
+//                $transaction_no=GoodsOrder::SetTransactionNo($role_number);
+//                $supplier_accessdetail=new UserAccessdetail();
+//                $supplier_accessdetail->uid=$user->id;
+//                $supplier_accessdetail->role_id=6;
+//                $supplier_accessdetail->access_type=2;
+//                $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+//                $supplier_accessdetail->order_no=$OrderGoods->order_no;
+//                $supplier_accessdetail->sku=$OrderGoods->sku;
+//                $supplier_accessdetail->create_time=time();
+//                $supplier_accessdetail->transaction_no=$transaction_no;
+//                $res3=$supplier_accessdetail->save(false);
+//                if (!$res3){
+//                    $tran->rollBack();
+//                }
+//                $OrderGoods->customer_service=2;
+//                $res4=$OrderGoods->save(false);
+//                if (!$res4){
+//                    $tran->rollBack();
+//                }
+//                $tran->commit();
+//            }catch (Exception $e){
+//                $tran->rollBack();
+//                $code=500;
+//                return $code;
+//            }
+//        }
+//        $data[]=[
+//            'type'=>'退款结果',
+//            'value' =>'成功',
+//            'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+//            'phone'=>'',
+//            'content'=>'已退至顾客钱包',
+//            'number'=>'',
+//            'code'=>'',
+//            'status'=>''
+//        ];
+//        $data[]=[
+//            'type'=>'售后完成',
+//            'value' =>'',
+//            'time'=>date('Y-m-d H:i',$buyer_express->receive_time),
+//            'phone'=>'',
+//            'content'=>'已退至顾客钱包',
+//            'number'=>'',
+//            'code'=>'',
+//            'status'=>'over'
+//        ];
+//        return $data;
+//    }
     /**
+     * 同意退货
      * @param $data
      * @param $OrderAfterSale
      * @return array|int
      */
-    public  static  function  ReturnGoodsHandleDetail($data,$OrderAfterSale,$role)
+    public  static  function  ReturnGoodsHandleDetail($data,$OrderAfterSale,$role,$action)
     {
 
         if (!$OrderAfterSale->buyer_express_id){
@@ -927,6 +1263,16 @@ class OrderAfterSale extends ActiveRecord
             }
             return $data;
         }
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unshipped');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
+        }
+
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
             ->one();
@@ -990,6 +1336,16 @@ class OrderAfterSale extends ActiveRecord
                     break;
             }
             return $data;
+        }
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unconfirm_received');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
         }
         $data[]=[
             'type'=>'商家已收货',
@@ -1081,7 +1437,7 @@ class OrderAfterSale extends ActiveRecord
      * @param $OrderAfterSale
      * @return array|int
      */
-    public static  function  ExangeGoodsHandleDetail($data,$OrderAfterSale,$role)
+    public static  function  ExangeGoodsHandleDetail($data,$OrderAfterSale,$role,$action)
     {
         if (!$OrderAfterSale->buyer_express_id){
             switch ($role)
@@ -1112,6 +1468,15 @@ class OrderAfterSale extends ActiveRecord
                     break;
             }
             return $data;
+        }
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unshipped');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
         }
         $buyer_express=Express::find()
             ->where(['id'=>$OrderAfterSale->buyer_express_id])
@@ -1146,7 +1511,17 @@ class OrderAfterSale extends ActiveRecord
                 return $code;
             }
 
-        if (!$OrderAfterSale->supplier_express_confirm){
+            if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+            {
+                $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unconfirm_received');
+                if (!is_numeric($code))
+                {
+                    $data=$code;
+                    return $data;
+                }
+            }
+
+            if (!$OrderAfterSale->supplier_express_confirm){
                 $day=floor($time/(24*60*60));
                 $hour=floor(($time-$day*(24*60*60))/(60*60));
                 $min=floor(($time-$day*(24*60*60)-$hour*3600)/60);
@@ -1179,7 +1554,7 @@ class OrderAfterSale extends ActiveRecord
                         break;
                 }
 
-            return $data;
+                return $data;
             }
             $data[]=[
                 'type'=>'商家已收货',
@@ -1221,6 +1596,16 @@ class OrderAfterSale extends ActiveRecord
                 }
                 return $data;
             }
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unshipped');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
+        }
         $supplier_express=Express::find()
             ->where(['id'=>$OrderAfterSale->supplier_express_id])
             ->one();
@@ -1242,7 +1627,7 @@ class OrderAfterSale extends ActiveRecord
                     $OrderAfterSale->buyer_express_confirm=1;
                     $res1=$OrderAfterSale->save(false);
                     $supplier_express->receive_time=time();
-                    $res2=$supplier_express->save();
+                    $res2=$supplier_express->save(false);
                     if (!$res1 || !$res2){
                         $tran->rollBack();
                         $code=500;
@@ -1256,6 +1641,16 @@ class OrderAfterSale extends ActiveRecord
                 return $code;
             }
 
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unconfirm_received');
+            if (!is_numeric($code))
+            {
+                $data=$code;
+                return $data;
+            }
+        }
             if (!$OrderAfterSale->buyer_express_confirm){
                 switch ($role)
                 {

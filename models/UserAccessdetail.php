@@ -114,7 +114,6 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                          $list['access_money']+=$aList['access_money'];
                      }
              }
-
              if ($list['access_type']==self::ACCESS_TYPE_DESC_DEBIT
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_CASH
                 ||$list['access_type']==self::ACCESS_TYPE_DESC_PAYMENT_BUY
@@ -181,7 +180,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         return $type;
     }
 
-       /**
+    /**
      * 充值类收支明细
      * @param array $accessDetail
      * @return array

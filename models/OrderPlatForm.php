@@ -55,7 +55,6 @@ class OrderPlatForm extends ActiveRecord
             $time=time();
             $trans = \Yii::$app->db->beginTransaction();
             try {
-
                 $OrderGoods=OrderGoods::find()
                     ->where(['order_no'=>$order_no])
                     ->andWhere(['sku'=>$sku])
@@ -87,7 +86,6 @@ class OrderPlatForm extends ActiveRecord
                         return $code;
                     }
                 }
-
                 $OrderPlatForm=new self;
                 $OrderPlatForm->order_no=$order_no;
                 $OrderPlatForm->sku=$sku;
@@ -158,7 +156,6 @@ class OrderPlatForm extends ActiveRecord
                 return $code;
             }
     }
-
     /**
      * 关闭订单，退款
      * @param $order_no
@@ -178,7 +175,6 @@ class OrderPlatForm extends ActiveRecord
         $time=time();
         $tran=\Yii::$app->db->beginTransaction();
         try{
-
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
             if (!$OrderGoods)
             {
@@ -199,11 +195,9 @@ class OrderPlatForm extends ActiveRecord
             $res2=$OrderGoods->save(false);
             if (!$res2){
                 $code=500;
-
                 $tran->rollBack();
                 return $code;
             }
-
             $OrderPlatForm=new self;
             $OrderPlatForm->handle=$handle_type;
             $OrderPlatForm->reasons=$reason;
@@ -235,7 +229,6 @@ class OrderPlatForm extends ActiveRecord
                 $code=500;
                 $tran->rollBack();
                 return $code;
-
             }
             $supplier=Supplier::find()
                 ->where(['id'=>$GoodsOrder->supplier_id])
@@ -264,8 +257,6 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
-
             //减少销量，减少销售额，增加库存.减少商品销量
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
@@ -426,7 +417,7 @@ class OrderPlatForm extends ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch(Exception $e){
+        }catch(\Exception $e){
             $code=500;
             $tran->rollBack();
             return $code;

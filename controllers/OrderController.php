@@ -5379,7 +5379,7 @@ class OrderController extends Controller
            $Good=Goods::findOne($list['goods_id']);
            if ($Good)
            {
-               if($Good->status!=2)
+               if(!$Good->status==2)
                {
                    $Goods[]=$Good->id;
                }
@@ -5419,7 +5419,7 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => 'ok'
             ]);
-        }catch (Exception $e){
+        }catch (\Exception $e){
             $tran->rollBack();
             $code=500;
             return Json::encode([
