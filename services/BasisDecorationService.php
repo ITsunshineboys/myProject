@@ -1813,6 +1813,7 @@ class BasisDecorationService
 
     public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost,$blockboard)
     {
+
         $material_total = [];
         foreach ($goods_price as &$one_goods_price) {
             switch ($one_goods_price) {

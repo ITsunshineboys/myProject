@@ -43,9 +43,9 @@ class EngineeringStandardCraft  extends ActiveRecord
             ->andWhere(['points_id'=>$project])
             ->all();
 
-        foreach ($row as &$one){
-            $one['material'] = $one['material'] / self::PRICE_CONVERSION;
-        }
+//        foreach ($row as &$one){
+//            $one['material'] = $one['material'] / self::PRICE_CONVERSION;
+//        }
 
         return $row;
     }
