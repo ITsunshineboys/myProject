@@ -300,8 +300,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                     mySwiper.destroy(true, true);
                 } catch (e) {
                     console.log(e);
-                    mySwiper = new Swiper("#swiperList");
-                    mySwiper.destroy(true, true);
                 }
             }
             if (sessionStorage.getItem("materials") === null) {
@@ -447,7 +445,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                     loop: true,
                     pagination: ".swiper-pagination"
                 });
-
+                mySwiper.reLoop();
                 if (sessionStorage.getItem("roomScroll") !== null) {
                     let roomScroll = sessionStorage.getItem("roomScroll");
                     $location.hash(roomScroll);
