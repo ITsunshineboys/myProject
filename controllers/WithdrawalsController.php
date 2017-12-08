@@ -1447,7 +1447,7 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        var_dump($pay_password);die;
+        var_dump($pwd);die;
         if (!Yii::$app->getSecurity()->validatePassword($pay_password, $pwd)==true){
             $code=1055;
             return Json::encode([
