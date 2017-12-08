@@ -168,6 +168,12 @@ class UserBankInfo extends \yii\db\ActiveRecord
             {
                 $cardType=1;
             }
+            $bankInfolog=BankinfoLog::find()->where(['bankcard'=>$bankcard])->one();
+            if ($bankInfolog)
+            {
+                $code=1074;
+                return $code;
+            }
             $trans = \Yii::$app->db->beginTransaction();
             try {
                 $log=new BankinfoLog();
