@@ -168,7 +168,14 @@ class UserBankInfo extends \yii\db\ActiveRecord
             {
                 $cardType=1;
             }
-            $bankInfolog=BankinfoLog::find()->where(['bankcard'=>$bankcard])->one();
+            $bankInfolog=(new Query())
+                ->from(self::tableName().' as B')
+                ->leftJoin(BankinfoLog::tableName().' as L','B.log_id=L.id')
+                ->where(['B.uid'=>$user->id])
+                ->andWhere(['B.role_id'=>$user->last_role_id_app])
+                ->andWhere(['L.bankcard'=>$bankcard])
+                ->select('L.bankcard')
+                ->one();
             if ($bankInfolog)
             {
                 $code=1074;
