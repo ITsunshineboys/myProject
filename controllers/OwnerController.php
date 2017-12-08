@@ -1383,7 +1383,6 @@ class OwnerController extends Controller
 
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
-        var_dump($craft);die;
         if ($craft == null){
             $code = 1062;
             return Json::encode([
