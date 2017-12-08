@@ -298,6 +298,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             console.log(mySwiper);
             if (mySwiper !== undefined) {
                 console.log(typeof mySwiper.destroy);
+                console.log(typeof mySwiper.detachEvents);
                 mySwiper.destroy(true, true);
             }
             if (sessionStorage.getItem("materials") === null) {
