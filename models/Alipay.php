@@ -147,7 +147,7 @@ class Alipay extends  ActiveRecord
         $return_url='';
         $notify_url="https://".$_SERVER["SERVER_NAME"]."/withdrawals/ali-pay-user-recharge-database";
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);
-        $passback_params=base64_encode($user->last_role_id_app.','.$user->id);
+        $passback_params=urlencode($user->last_role_id_app.','.$user->id);
         //超时时间
         $timeout_express="1m";
         $payRequestBuilder = new AlipayTradeWapPayContentBuilder();
