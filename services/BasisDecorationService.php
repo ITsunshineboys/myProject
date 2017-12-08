@@ -663,6 +663,7 @@ class BasisDecorationService
 //          个数=个数1+个数2
 //          个数1：（造型长度÷【1.5m】）
 //          个数2：（平顶面积÷【1.5m²】）
+
             $keel_cost['quantity'] = ceil($modelling_length / $keel_sculpt + $flat_area /$keel_area);
 //          主龙骨费用：个数×商品价格
             $keel_cost['cost'] = round($keel_cost['quantity'] * $goods_price['platform_price'],2);
@@ -700,8 +701,10 @@ class BasisDecorationService
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】
             $pole_cost['quantity'] = ceil($modelling_length / $screw_rod_sculpt + $flat_area / $screw_rod_area);
+
 //            丝杆费用：个数×抓取的商品价格
             $pole_cost['cost'] = round($pole_cost['quantity'] * $goods_price['platform_price'],2);
+
             $pole_cost['procurement'] = round($pole_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
         }
         return $pole_cost;
