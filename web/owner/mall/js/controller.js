@@ -467,6 +467,7 @@ angular.module('all_controller', [])
                     $scope.check_goods['title'] = $scope.add_three_level.title
                     $scope.check_goods['category_id'] = $scope.add_three_level.category_id
                     $scope.check_goods['path'] = $scope.add_three_level.path
+                    $scope.check_goods['shop_name'] = res.data.goods_view.supplier.shop_name
                 }
                 $scope.sale_services = res.data.goods_view.after_sale_services
                 $scope.aftermarket = []
@@ -668,7 +669,8 @@ angular.module('all_controller', [])
                                         goods_name: $scope.check_goods.goods_name,
                                         series_name: $scope.check_goods.series_name,
                                         style_name: $scope.check_goods.style_name,
-                                        title:$scope.check_goods.title
+                                        title:$scope.check_goods.title,
+                                        category_id:$scope.check_goods.category_id
                                     })
                                 }else{
                                     value1.goods_detail[index].cost += $scope.check_goods.cost
