@@ -1,78 +1,22 @@
-/*ͷ����ʼ*/
-/*header{*/
-    /*height: 60px;*/
-    /*line-height: 60px;*/
-    /*padding-left: 40px;*/
-    /*border-bottom: 1px solid #E6E9F0 ;*/
-/*}*/
-/*.shop_manage{*/
-    /*font-size: 14px;*/
-    /*color: #2F3033;*/
-    /*line-height: 14px;*/
-    /*font-weight: 700;*/
-/*}*/
-/*.manage_child{*/
-    /*font-size: 14px;*/
-    /*color: #8D9199;*/
-    /*line-height: 14px;*/
-/*}*/
-/*header img{*/
-    /*margin-left:80%;*/
-/*}*/
-/*ͷ������*/
-
-section{
-    padding-left: 40px;
-    margin-top: 90px;
+.form-horizontal .control-label{
+    text-align: left;
 }
-.class_name{
-    margin-top: 20px;
-    color: #666F80;
+.row{
+    margin-bottom: 20px;
 }
-.class_name img{
+.red_ico{
     margin-left: -25px;
 }
-.class_name input{
-    margin-left: 85px;
-    width: 245px;
-    height: 31px;
-    border-radius:3px ;
-    border: 1px solid #666F80;
-    padding-left: 5px;
-}
-.class_name span:nth-child(4){
+.img_txt{
     margin-left: 12px;
     color: #ABABAB;
 }
-.distribution{
-    margin-top: 30px;
-    color: #666F80;
+.c_label{
+    font-weight: normal;
+    cursor: pointer;
 }
-.distribution input{
-    margin-left: 85px;
-}
-.distribution>span:nth-child(3){
-    margin-left: 10px;
-}
-.distribution>span:nth-child(5){
-    margin-left: 10px;
-}
-.distribution_div{
-    width: 567px;
-    height: 208px;
-    border: 1px solid #ABABAB;
-    margin-left: 145px;
-    margin-top: 20px;
-    padding-top: 20px;
-}
-.distribution_div>span:nth-child(3){
-    margin-left:35px;
-}
-.distribution_div>span:nth-child(8){
-    margin-left:10px;
-}
-.distribution_div input{
-    margin-left:65px;
+.clear_left_col{
+    padding-left: 0;
 }
 .left_way{
     margin-left: 26px!important;
@@ -106,18 +50,7 @@ section{
     position: fixed;
     bottom: 40px;
 }
-.btn_back button{
-    width:80px;
-    height:34px;
-    background-color: white;
-    border: 1px solid #5E6166;
-    margin-left: 10px;
-    outline: none;
-}
-.btn_back button:nth-child(1){
-    color:#487AF8;
 
-}
 .city_ul{
     height: 600px!important;
 }
@@ -151,9 +84,8 @@ section{
     /*overflow:hidden;*/
     /*text-overflow:ellipsis;*/
 /*}*/
-.span_left{
+.red_mark{
     color: red;
-    margin-left:150px;
 }
 
 .dl_active3{
