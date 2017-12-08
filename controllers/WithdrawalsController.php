@@ -1289,8 +1289,7 @@ class WithdrawalsController extends Controller
                     $accessDetail->access_money=$total_amount*100;
                     $accessDetail->create_time=time();
                     $accessDetail->transaction_no=$out_trade_no;
-                    $res2=$role->save(false);
-                    if (!$res2)
+                    if ($role->save(false))
                     {
                         $tran->rollBack();
                         $code=500;
