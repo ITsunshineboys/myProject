@@ -11,16 +11,8 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 if (YII_DEBUG) {
 
-    $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';
-
-    $allow_origin = array(
-        'http://cross.local.com:808',
-        'http://localhost:808'
-    );
-
-    if(in_array($origin, $allow_origin)){
-        header('Access-Control-Allow-Origin:'.$origin);
-    }
+    header('Access-Control-Allow-Origin: http://cross.local.com:808');
+    header("Access-Control-Allow-Credentials: true");
 }
 
 (new yii\web\Application($config))->run();
