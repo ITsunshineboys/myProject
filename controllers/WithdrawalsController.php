@@ -1213,7 +1213,7 @@ class WithdrawalsController extends Controller
                 $accessDetail->access_money=$msg['total_fee'];
                 $accessDetail->create_time=time();
                 $accessDetail->transaction_no=$transaction_no;
-                $res2=$role->save(false);
+                $res2=$accessDetail->save(false);
                 if (!$res2)
                 {
                     $tran->rollBack();
