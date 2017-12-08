@@ -615,7 +615,8 @@ angular.module('all_controller', [])
                                             goods_name: $scope.check_goods.goods_name,
                                             series_name: $scope.check_goods.series_name,
                                             style_name: $scope.check_goods.style_name,
-                                            title:$scope.check_goods.title
+                                            title:$scope.check_goods.title,
+                                            category_id:$scope.check_goods.category_id
                                         })
                                         value1.cost += $scope.check_goods.cost - $scope.cur_goods.cost
                                         value.cost += $scope.check_goods.cost - $scope.cur_goods.cost
