@@ -2,9 +2,6 @@
 body{
     color: #666f80;
 }
-section{
-    padding:40px 0 0 40px;
-}
 ul{
     padding-left: 0;
 }
@@ -118,14 +115,6 @@ input::-webkit-inner-spin-button{
 
 .done_stuff,.offline_time{
     margin-top: 30px;
-}
-
-.btn_left{
-    margin-left: 20px;
-}
-.border_red{
-    border: 1px solid red!important;
-    outline: 0;
 }
 
 .people_time_right{

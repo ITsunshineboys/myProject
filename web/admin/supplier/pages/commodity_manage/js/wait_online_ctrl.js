@@ -1,9 +1,9 @@
 var wait_online = angular.module("wait_online_Module",["ngFileUpload"]);
-wait_online.controller("wait_online",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window) {
+wait_online.controller("wait_online",function ($rootScope,$scope,$http,$stateParams,$state,Upload,$location,$anchorScroll,$window,_ajax) {
     $scope.config=$rootScope.config;//富文本编辑器配置
     let reg=/^\d+(\.\d{1,2})?$/;
-	$scope.goods_all_attrs=[];//所有属性数据
-	$scope.logistics=[];//物流模块列表
+		$scope.goods_all_attrs=[];//所有属性数据
+		$scope.logistics=[];//物流模块列表
     $scope.series_null_flag=false;
     $scope.style_null_arr=false;
     $scope.series_null_arr=[];
@@ -15,14 +15,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     },{
         name: '商品详情',
     }];
-	const config = {
-		headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-		transformRequest: function (data) {
-			return $.param(data)
-		}
-	};
-    $scope.upload_txt='上传';
-    $scope.upload_dis=false;
+  $scope.upload_txt='上传';
+  $scope.upload_dis=false;
 	$scope.myng=$scope;
 	let goods_item=$stateParams.item;//点击对应的那条数据
 	console.log(goods_item);
@@ -52,7 +46,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.operator=goods_item.operator;//操作人员
 	$scope.offline_time=goods_item.offline_time;//下架时间
 	$scope.reason=goods_item.reason;//下架时间
-
 
 	for(let[key,value] of $scope.after_sale_services.entries()){
 		if(value==1){
@@ -156,36 +149,28 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.goods_select_value=[];//下拉框的值
 	$scope.pass_attrs_name=[];//名称
 	$scope.pass_attrs_value=[];//值
-    $scope.goods_select_attrs_value=[]
-	$http.get(baseUrl+'/mall/goods-attrs-admin',{
-		params:{
-			goods_id:+$scope.goods_id
-		}
-	}).then(function (res) {
-		console.log(res);
-		$scope.goods_all_attrs=res.data.data.goods_attrs_admin;
-		// console.log('属性');
-		// console.log($scope.goods_all_attrs);
-		//循环所有获取到的属性值，判断是普通文本框还是下拉框
-        for( let [key,value] of $scope.goods_all_attrs.entries()){
-            if(value.addition_type==1){
-                $scope.goods_select_attrs.push(value);
-            }else{
-                $scope.goods_input_attrs.push(value);
-            }
-        }
-        //循环添加名称和值
-        for(let [key,value] of $scope.goods_input_attrs.entries()){
-            $scope.attr_name=value.name;
-            $scope.attr_value=value.value;
-        }
-        //循环下拉框的value
-        for(let [key,value] of $scope.goods_select_attrs.entries()){
-            $scope.goods_select_attrs_value.push(value.value);//下拉框的值
-        }
-	},function (err) {
-		console.log(err)
-	});
+  $scope.goods_select_attrs_value=[];
+  _ajax.get('/mall/goods-attrs-admin',{goods_id:+$scope.goods_id},function (res) {
+	  console.log(res);
+	  $scope.goods_all_attrs=res.data.goods_attrs_admin;
+	  //循环所有获取到的属性值，判断是普通文本框还是下拉框
+	  for( let [key,value] of $scope.goods_all_attrs.entries()){
+		  if(value.addition_type==1){
+			  $scope.goods_select_attrs.push(value);
+		  }else{
+			  $scope.goods_input_attrs.push(value);
+		  }
+	  }
+	  //循环添加名称和值
+	  for(let [key,value] of $scope.goods_input_attrs.entries()){
+		  $scope.attr_name=value.name;
+		  $scope.attr_value=value.value;
+	  }
+	  //循环下拉框的value
+	  for(let [key,value] of $scope.goods_select_attrs.entries()){
+		  $scope.goods_select_attrs_value.push(value.value);//下拉框的值
+	  }
+  })
 	/*----------------自己添加的属性--------------------*/
 	$scope.own_attrs_arr=[];//自定义数组
 	//添加属性
@@ -199,9 +184,19 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		console.log(index);
 		$scope.own_attrs_arr.splice(index,1);
 	};
-	/*---------------------------------属性获取结束---------------------------------*/
+	//判断属性是否为数字
+	$scope.testNumber=function (item) {
+		if(item.value!==undefined){
+			item.value = item.value.replace(/[^\d]/g,'');
+		}
+	};
+	//库存
+	$scope.leftNumber=function (value) {
+		if(value!==undefined){
+			$scope.left_number = value.replace(/[^\d]/g,'')
+		}
+	};
 	/*----------------上传封面图-----------------------*/
-	//$scope.upload_cover_src='';
     $scope.data = {
         file:null
     };
@@ -228,7 +223,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
             $scope.upload_cover_src='';
         })
     };
-	/*================封面图片结束=================*/
+
 	/*------------------------上传多张图片--------------------------*/
 	//上传图片
     $scope.data = {
@@ -261,13 +256,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     };
 	//删除图片
 	$scope.del_img=function (item) {
-		$http.post(baseUrl+'/site/upload-delete',{
-			file_path:item
-		},config).then(function (res) {
-			console.log(res);
+		_ajax.post('/site/upload-delete',{file_path:item},function (res) {
 			$scope.upload_img_arr.splice($scope.upload_img_arr.indexOf(item),1);
-		},function (err) {
-			console.log(err);
 		})
 	};
 
@@ -276,44 +266,29 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.invoice_check=true;
 
 	//物流模块
-	$http.post(baseUrl+'/mall/logistics-templates-supplier',{},config).then(function (res) {
-		console.log('物流模板')
+	_ajax.post('/mall/logistics-templates-supplier',{},function (res) {
+		console.log('物流模块');
 		console.log(res);
-		$scope.logistics=res.data.data.logistics_templates_supplier;
-		//把当前商品添加时的所属的物流模板 前置到第一
+		$scope.logistics=res.data.logistics_templates_supplier;
 		for(let [key,value] of $scope.logistics.entries()){
 			if(value.id==$scope.logistics_template_id){
 				$scope.logistics.splice(key,1);
 				$scope.logistics.unshift(value)
 			}
 		}
-		$scope.shop_logistics=res.data.data.logistics_templates_supplier[0].id;
+		$scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
 		$scope.$watch('shop_logistics',function (newVal,oldVal) {
-			$http.get(baseUrl+'/mall/logistics-template-view',{
-				params:{
-					id:+newVal
-				}
-			}).then(function (res) {
+			_ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
 				console.log('物流详情');
 				console.log(res);
-				$scope.logistics_method=res.data.data.logistics_template.delivery_method;//快递方式
-				$scope.district_names=res.data.data.logistics_template.district_names;//地区名
-				$scope.delivery_cost_default=res.data.data.logistics_template.delivery_cost_default;//默认运费
-				$scope.delivery_number_default=res.data.data.logistics_template.delivery_number_default;//默认运费的数量
-				$scope.delivery_cost_delta=res.data.data.logistics_template.delivery_cost_delta;//增加件费用
-				$scope.delivery_number_delta=res.data.data.logistics_template.delivery_number_delta;//增加件的数量
-				console.log($scope.district_names);
-				if($scope.district_names.length > 3){
-					$scope.viewTo = true
-				}else{
-					$scope.viewTo = false
-				}
-			},function (err) {
-				console.log(err);
+				$scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
+				$scope.district_names=res.data.logistics_template.district_names;//地区名
+				$scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费
+				$scope.delivery_number_default=res.data.logistics_template.delivery_number_default;//默认运费的数量
+				$scope.delivery_cost_delta=res.data.logistics_template.delivery_cost_delta;//增加件费用
+				$scope.delivery_number_delta=res.data.logistics_template.delivery_number_delta;//增加件的数量
 			});
 		});
-	},function (err) {
-		console.log(err)
 	});
     //市场价
     $scope.price_flag=false;
@@ -322,7 +297,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         if(!reg_value){
             $scope.price_flag=true;
         }else{
-            (+$scope.market_price>=+$scope.platform_price)&&(+$scope.market_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+            (+$scope.market_price>=+$scope.platform_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
         }
     };
     //平台价
@@ -331,7 +306,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         if(!reg_value){
             $scope.price_flag=true;
         }else{
-            (+$scope.platform_price <= $scope.market_price)&&(+$scope.platform_price >= $scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
+	        (+$scope.market_price>=+$scope.platform_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
         }
     };
     //供货商价
@@ -340,15 +315,12 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         if(!reg_value){
             $scope.price_flag=true;
         }else{
-            (+$scope.supplier_price <= $scope.platform_price)&&(+$scope.supplier_price <= $scope.market_price)?$scope.price_flag=false:$scope.price_flag=true;
+	        (+$scope.market_price>=+$scope.platform_price)&&(+$scope.platform_price>=+$scope.supplier_price)?$scope.price_flag=false:$scope.price_flag=true;
         }
-
     };
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
-		// console.log($scope.upload_cover_src);
-		// console.log($scope.price_flag);
-        let description = UE.getEditor('editor').getContent();//富文本编辑器
+    let description = UE.getEditor('editor').getContent();//富文本编辑器
 		if(valid && $scope.upload_cover_src && !$scope.price_flag  ){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
@@ -431,7 +403,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
             }
 			console.log($scope.pass_attrs_name);
 			console.log($scope.pass_attrs_value);
-			$http.post(baseUrl+'/mall/goods-edit',{
+			_ajax.post('/mall/goods-edit',{
 				id:+$scope.goods_id, //id
 				title:$scope.goods_name,//名称
 				subtitle:$scope.des_name,//特色
@@ -449,18 +421,15 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				after_sale_services:$scope.after_sale_services.join(','),//售后服务
 				left_number:+$scope.left_number,//库存
 				description:description//描述
-			},config).then(function (res) {
+			},function (res) {
 				console.log(res);
-			},function (err) {
-				console.log(err);
-			})
+			});
 		}else{
 			$scope.submitted=true;
 		}
 		//名称输入框为空， 文本框变红，并跳转到对于的位置
 		if(!valid){
 			$scope.submitted = true;
-			// if(value.$invalid=true){
 			for (let [key, value] of error.entries()) {
 				if (value.$invalid) {
 					$anchorScroll.yOffset = 150;

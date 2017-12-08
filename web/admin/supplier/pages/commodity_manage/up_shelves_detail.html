@@ -122,10 +122,10 @@
                 <div class="col-sm-offset-2 col-sm-3">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
                     <span class="glyphicon glyphicon-minus cursor" ng-click="del_own_attrs($index)"></span>
-                    <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请输入属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'error':form.{{item.name_model}}.$invalid &&submitted||(form.{{item.name_model}}.$error.required && submitted)}"/>
+                    <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请输入属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'error':form[item.name_model].$invalid &&submitted||(form[item.name_model].$error.required)}"/>
                 </div>
                 <div class="col-sm-3">
-                    <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'error':form.{{item.value_model}}.$invalid &&submitted||(form.{{item.value_model}}.$error.required && submitted)}"/>
+                    <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
                 </div>
                 <div class="col-sm-1">
                     <span class="unit">&nbsp;</span>
