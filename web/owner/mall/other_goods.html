@@ -4,7 +4,7 @@
         <div class="sheet_material">
             <ul class="wall_ul">
                 <li ng-repeat="item in cur_item.second_level">
-                    <div ng-class="{'cur_animate':is_delete_btn}" class="goods_detail" data-target="#myModal" data-toggle="modal" ng-repeat="item1 in item.goods_detail"
+                    <div ng-class="{'cur_animate':is_delete_btn}" class="goods_detail" data-target="#myModal" data-toggle="{{cur_content}}" ng-repeat="item1 in item.goods_detail"
                          ng-click="get_basic_details(item1)">
                         <div class="wall_span_brand">
                             <span class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br>

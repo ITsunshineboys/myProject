@@ -31,17 +31,19 @@ body{
 .wall_brand{
    color: #959292;
     font-size: 1.1rem;
+    position: absolute;
+    bottom: 1rem;
 }
 .wall_span_brand{
     float: left;
-    width: 10rem;
 }
 .wall_money{
     font-size: 1.2rem;
     color: #D9AD65;
+    float: right;
     position: absolute;
-    top: .8rem;
     right: 0;
+    top: 1rem;
 }
 button.close{
     -webkit-appearance: none;
@@ -174,6 +176,7 @@ button.close{
     color: #4A4A4A;
     font-size: 1.3rem;
     font-family: PingFangSC-Regular;
+    position: absolute;
 }
 .first_top{
     margin-top: 4.5rem!important;
@@ -411,5 +414,5 @@ a:hover{
 }
 .goods_detail{
     position: relative;
-    height:4rem;
+    height:6rem;
 }

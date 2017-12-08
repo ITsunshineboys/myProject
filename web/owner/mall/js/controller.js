@@ -1286,7 +1286,7 @@ angular.module('all_controller', [])
                 //生成材料数据(同步请求)
                 $q.all([
                     //弱电
-                    $http.get('/owner/weak-current', {
+                    $http.get(baseUrl+'/owner/weak-current', {
                         params: data
                     }).then(function (res) {
                         console.log('弱电')
@@ -1325,6 +1325,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1338,7 +1339,7 @@ angular.module('all_controller', [])
                         }
                     }),
                     //强电
-                    $http.get('/owner/strong-current', {
+                    $http.get(baseUrl+'/owner/strong-current', {
                         params: data
                     }).then(function (res) {
                         console.log('强电')
@@ -1377,6 +1378,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1390,7 +1392,7 @@ angular.module('all_controller', [])
                         }
                     }),
                     //水路
-                    $http.get('/owner/waterway', {
+                    $http.get(baseUrl+'/owner/waterway', {
                         params: data
                     }).then(function (res) {
                         console.log('水路')
@@ -1429,6 +1431,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1444,7 +1447,7 @@ angular.module('all_controller', [])
                         $scope.all_worker.push(res.data.data.waterway_labor_price)
                     }),
                     //防水
-                    $http.get('/owner/waterproof', {
+                    $http.get(baseUrl+'/owner/waterproof', {
                         params: data
                     }).then(function (res) {
                         console.log('防水')
@@ -1483,6 +1486,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1500,7 +1504,7 @@ angular.module('all_controller', [])
                         $scope.all_worker.push(res.data.data.waterproof_labor_price)
                     }),
                     //木作
-                    $http.get('/owner/carpentry', {
+                    $http.get(baseUrl+'/owner/carpentry', {
                         params: data
                     }).then(function (res) {
                         console.log('木作')
@@ -1539,6 +1543,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1554,7 +1559,7 @@ angular.module('all_controller', [])
                         $scope.all_worker.push(res.data.data.carpentry_labor_price)
                     }),
                     //乳胶漆
-                    $http.get('/owner/coating', {
+                    $http.get(baseUrl+'/owner/coating', {
                         params: data
                     }).then(function (res) {
                         console.log('乳胶漆')
@@ -1593,6 +1598,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1610,7 +1616,7 @@ angular.module('all_controller', [])
                         $scope.all_worker.push(res.data.data.coating_labor_price)
                     }),
                     //添加材料项
-                    $http.post('/owner/add-materials', {
+                    $http.post(baseUrl+'/owner/add-materials', {
                         area: data.area,      //面积
                         series: data.series,   //系列
                         style: data.style,  //风格
@@ -1652,6 +1658,7 @@ angular.module('all_controller', [])
                                         value.procurement += value2.procurement
                                         value1.procurement += value2.procurement
                                         if (index == -1) {
+                                            value2.quantity = +value2.quantity
                                             value1.goods_detail.push(value2)
                                             value.count++
                                         } else {
@@ -1667,7 +1674,7 @@ angular.module('all_controller', [])
                 ]).then(function () {//计算总费用
                     $q.all([
                         // 主要材料及其他
-                        $http.get('/owner/assort-facility', {
+                        $http.get(baseUrl+'/owner/assort-facility', {
                             params: data2
                         }).then(function (res) {
                             console.log('主要材料及其他')
@@ -1711,6 +1718,7 @@ angular.module('all_controller', [])
                                             value.procurement += value2.procurement
                                             value1.procurement += value2.procurement
                                             if (index == -1) {
+                                                value2.quantity = +value2.quantity
                                                 value1.goods_detail.push(value2)
                                                 value.count++
                                             } else {
@@ -1724,7 +1732,7 @@ angular.module('all_controller', [])
                             }
                         }),
                         //泥作
-                        $http.get('/owner/mud-make', {
+                        $http.get(baseUrl+'/owner/mud-make', {
                             params: data1
                         }).then(function (res) {
                             console.log('泥作')
@@ -1763,6 +1771,7 @@ angular.module('all_controller', [])
                                             value.procurement += value2.procurement
                                             value1.procurement += value2.procurement
                                             if (index == -1) {
+                                                value2.quantity = +value2.quantity
                                                 value1.goods_detail.push(value2)
                                                 value.count++
                                             } else {
@@ -1839,7 +1848,7 @@ angular.module('all_controller', [])
             $scope.all_price += all_worker_price
             $scope.discount_price += all_worker_price
             //计算运费
-            $http.post('/order/calculation-freight', {
+            $http.post(baseUrl+'/order/calculation-freight', {
                 goods: arr
             }, config).then(function (res) {
                 console.log(res)
@@ -1849,7 +1858,7 @@ angular.module('all_controller', [])
                 }
             })
             //计算价格
-            $http.post('/owner/coefficient', {
+            $http.post(baseUrl+'/owner/coefficient', {
                 list: arr1
             }, config).then(function (res) {
                 console.log(res)

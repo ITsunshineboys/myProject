@@ -12,9 +12,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                 }
             }
         ]
-        // $scope.baseUrl = 'http://test.cdlhzz.cn'
-        // $scope.baseUrl = 'http://ac.cdlhzz.cn'
-        $scope.baseUrl = ''
         //添加小区部分
         /*分页配置*/
         $scope.Config = {
