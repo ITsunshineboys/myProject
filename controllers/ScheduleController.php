@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use app\services\ScheduleAuthService;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use yii\log\Logger;
 
 class ScheduleController extends Controller
 {
@@ -76,6 +78,7 @@ class ScheduleController extends Controller
         }
 
         Yii::$app->cache->delete($key);
+        StringService::writeLog('test', time(), '', Logger::LEVEL_INFO);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
