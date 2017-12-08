@@ -297,9 +297,11 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             $scope.activeObj.type = 1;
             console.log(mySwiper);
             if (mySwiper !== undefined) {
-                console.log(typeof mySwiper.destroy);
-                console.log(typeof mySwiper.detachEvents);
-                mySwiper.destroy(true, true);
+                try {
+                    mySwiper.destroy(true, true);
+                } catch (e) {
+                    console.log(e);
+                }
             }
             if (sessionStorage.getItem("materials") === null) {
                 $scope.roomPicture = data.images.effect_images;
