@@ -1820,6 +1820,10 @@ class OwnerController extends Controller
         }
         $effect_where = 'effect_id = '.$effect['id'];
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
+        //TODO 要求 数量必须是Int 类型
+        foreach ($data as &$v){
+            $v['goods_quantity']=(int)$v['goods_quantity'];
+        }
 //        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where([])->all();
         $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
 

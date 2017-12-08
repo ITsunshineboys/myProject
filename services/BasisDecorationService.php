@@ -196,8 +196,6 @@ class BasisDecorationService
                     break;
             }
         }
-
-
         $goods_id = [];
         foreach ($goods as $one) {
             switch ($one) {
@@ -237,6 +235,7 @@ class BasisDecorationService
             }
         }
         $electricity = self::plumberFormula($points,$material,$goods_value,$goods_price,$goods_procurement,$spool,$spool_value,$spool_price,$spool_procurement,$bottom_case,$bottom_procurement);
+
 
         return $electricity;
 
