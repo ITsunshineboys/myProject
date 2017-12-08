@@ -2032,7 +2032,27 @@ class WithdrawalsController extends Controller
 
     }
 
-//    public  function action
+    public  function actionFindUserAccessDetail()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserAccessdetail::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['role_id'=>$user->last_role_id_app])
+            ->one();
+        $code=200;
+        return json_encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$data
+        ]);
+    }
 
 
 
