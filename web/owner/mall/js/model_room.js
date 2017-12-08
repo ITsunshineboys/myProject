@@ -295,12 +295,13 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                 goods: []
             };
             $scope.activeObj.type = 1;
-            console.log(mySwiper);
             if (mySwiper !== undefined) {
                 try {
                     mySwiper.destroy(true, true);
                 } catch (e) {
                     console.log(e);
+                    mySwiper = new Swiper("#swiperList");
+                    mySwiper.destroy(true, true);
                 }
             }
             if (sessionStorage.getItem("materials") === null) {
