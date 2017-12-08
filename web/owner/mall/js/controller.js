@@ -1808,7 +1808,6 @@ angular.module('all_controller', [])
                 }
             }
         }
-
         //获取价格
         function get_all_price() {
             let arr = [], arr1 = []
