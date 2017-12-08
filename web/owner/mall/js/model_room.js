@@ -451,6 +451,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                     loop: true,
                     pagination: ".swiper-pagination"
                 });
+                mySwiper.update();
                 mySwiper.reLoop();
                 if (sessionStorage.getItem("roomScroll") !== null) {
                     let roomScroll = sessionStorage.getItem("roomScroll");
