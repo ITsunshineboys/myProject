@@ -956,12 +956,15 @@ class BasisDecorationService
      */
     public static function nothingBuildingScrap($get_area,$craft)
     {
+
         $clear_12 = 0;
         $vehicle_12_area = 0;
         $clear_24 = 0;
         $vehicle_24_area = 0;
         $vehicle_cost = 0;
-        foreach ($craft as $one_craft) {
+
+        foreach ($craft as &$one_craft) {
+
             switch ($one_craft) {
                 case $one_craft['project_details'] == self::BACKMAN_DETAILS['clear_12']:
                     $clear_12 = $one_craft['material'];
@@ -979,7 +982,9 @@ class BasisDecorationService
                     $vehicle_cost = $one_craft['material'];
                     break;
             }
+
         }
+
 //            运到小区楼下费用=（12墙拆除面积）×【40】
         $transportation_cost['12_wall'] = $get_area['12_dismantle'] * $clear_12;
 //            单独外运费用=（12墙拆除面积÷【20】）×【300】

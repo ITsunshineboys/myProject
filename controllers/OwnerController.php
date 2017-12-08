@@ -1344,8 +1344,11 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $post = \Yii::$app->request->post();
-        $_select = 'id,univalence,worker_kind';
-        $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman'],$_select);
+//        $_select = 'id,univalence,worker_kind';
+
+        $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
+
+
         if ($labor == null){
             $code = 1056;
             return Json::encode([
@@ -1387,7 +1390,6 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
         if ($post['building_scrap'] == 'true') {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
