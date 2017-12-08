@@ -1962,6 +1962,7 @@ angular.module('all_controller', [])
 
         /*基础装修内页*/
         //杂工选项
+        $scope.building_scrap = false
         if (sessionStorage.getItem('huxing') != null) {
             console.log(JSON.parse(sessionStorage.getItem('huxing')))
             $scope.area = JSON.parse(sessionStorage.getItem('huxing')).area
