@@ -295,7 +295,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                 goods: []
             };
             $scope.activeObj.type = 1;
-
+            console.log(mySwiper);
             if (mySwiper !== undefined) {
                 mySwiper.destroy(true, true);
             }
