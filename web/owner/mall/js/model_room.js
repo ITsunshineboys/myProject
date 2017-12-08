@@ -108,8 +108,13 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
     });
 
     // 户型选择
-    let huxingFlag = true;
+    let huxingFlag = false;
     $scope.huxingFun = function (obj) {
+        // 若数据未加载完成，不允许点击其他户型
+        if (huxingFlag) {
+            return
+        }
+        huxingFlag = true;
         let openId = sessionStorage.getItem("openId"),
             materials_bak = sessionStorage.getItem("materials_bak"),
             huxingParams = sessionStorage.getItem("huxingParams"),
@@ -134,10 +139,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             }
             params.series = obj.case_picture[0].series_id;
             params.style = obj.case_picture[0].style_id;
-            if (huxingFlag) {
-                huxingFlag = false;
-                materials();
-            }
+            materials();
         } else {
             if (obj.stairway === "1") {
                 params.stairway = obj.stairway;
@@ -154,6 +156,7 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
             $scope.activeObj.case_picture = angular.copy(tempArray);
             params.series = $scope.seriesList[0].id;
             params.style = $scope.styleList[0].id;
+            huxingFlag = false;
         }
     };
 
@@ -418,13 +421,12 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                     }
                 }
             }
-
             // 系数
             _ajax.post("/owner/coefficient", params, function (res) {
                 let data = res.data;
                 $scope.price += parseFloat(data.total_prices);
                 $scope.preferential += parseFloat(data.special_offer);
-                huxingFlag = true;
+                huxingFlag = false;
             });
 
             // 运费
@@ -448,8 +450,6 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
                 }
                 $scope.isLoading = false;
             });
-
-            console.log($scope.materials);
         })
     }
 }]);
