@@ -3,6 +3,9 @@ namespace app\controllers;
 
 
 
+use app\models\BrandCategory;
+use app\models\GoodsBrand;
+use app\models\GoodsCategory;
 use app\models\OwnerCashManager;
 use app\models\Supplier;
 use app\models\SupplierCashregister;
@@ -833,5 +836,46 @@ class SupplieraccountController extends  Controller{
             'code' => $code,
             'msg' =>$code==200?'ok': Yii::$app->params['errorCodes'][$code]
         ]);
+    }
+
+    /**
+     * 商家后台品牌列表
+     * @return string
+     */
+    public function actionSupplierBrandList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier_id=Supplier::find()->select('id')->where(['uid'=>$user->getId()])->one();
+        $where="supplier_id={$supplier_id->id}";
+        $sort_time=(int)Yii::$app->request->get('sort_time',2);
+        switch ($sort_time)
+        {
+            case 1:
+                $sort='create_time asc';
+                break;
+            case 2:
+                $sort='create_time desc';
+                break;
+        }
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
+        $total=(int)GoodsBrand::find()->where($where)->asArray()->count();
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $sort),
+                'total' =>$total ,
+                'total_page'=>ceil($total/$size)
+
+            ],
+        ]);
+
     }
 }
