@@ -1056,7 +1056,6 @@ class BasisDecorationService
 //        水泥费用：个数×抓取的商品价格
         $cement['cost'] = round($cement['quantity'] * $goods['platform_price'],2);
         $cement['procurement'] = round($cement['quantity'] * $goods['purchase_price_decoration_company'],2);
-
         return $cement;
     }
 
@@ -1108,10 +1107,12 @@ class BasisDecorationService
      */
     public static function riverSandCost($get_area,$goods,$craft,$goods_attr)
     {
+
         if ($get_area && $goods && $craft) {
             foreach ($craft as $one_craft) {
                 if ($one_craft['project_details'] == self::BACKMAN_DETAILS['12_river_sand_dosage']) {
                     $river_sand_12 = $one_craft['material'];
+
                 }
                 if ($one_craft['project_details'] == self::BACKMAN_DETAILS['24_river_sand_dosage']) {
                     $river_sand_24 = $one_craft['material'];
@@ -1119,6 +1120,7 @@ class BasisDecorationService
                 if ($one_craft['project_details'] == self::BACKMAN_DETAILS['repair_river_sand_dosage']) {
                     $river_sand_repair = $one_craft['material'];
                 }
+
             }
 
             $value = '';

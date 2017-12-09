@@ -61,7 +61,7 @@ class OwnerController extends Controller
     const CARPENTRY_MATERIAL = [22,9,12,13];     // 木作材料id
     const LATEX_MATERIAL     = [38,24,25,28,5];  // 乳胶漆材料id
     const TILER_MATERIAL     = [172,36,6];       // 泥工材料id
-    const BACKMAN_MATERIAL   = [172,6,177];      // 杂工材料id
+    const BACKMAN_MATERIAL   = [172,6,3];      // 杂工材料id
 
 
     /**
@@ -1357,6 +1357,7 @@ class OwnerController extends Controller
             ]);
         }
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
+
         if ($worker_kind_details == null){
             $code = 1057;
             return Json::encode([
@@ -1382,7 +1383,8 @@ class OwnerController extends Controller
         $total_day = BasisDecorationService::wallArea($post,$worker_kind_details,$_area);
 
 //        清运建渣费用
-        $craft = EngineeringStandardCraft::findByAll($labor['worker_kind'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll($labor['id'], $post['city']);
+
         if ($craft == null){
             $code = 1062;
             return Json::encode([
@@ -1395,6 +1397,7 @@ class OwnerController extends Controller
         } else {
             $building_scrap = BasisDecorationService::nothingBuildingScrap($post, $craft);
         }
+
 
 //        总人工费
         $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
@@ -1413,7 +1416,9 @@ class OwnerController extends Controller
                 ]
             ]);
         }
+
         $goods_price = BasisDecorationService::priceConversion($goods);
+
         foreach ($goods_price as $max) {
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
@@ -1458,6 +1463,7 @@ class OwnerController extends Controller
                         ]);
                     }
                     //河沙费用
+
                     $river_sand_cost = BasisDecorationService::riverSandCost($post, $max, $craft, $goods_attr);
                     $max['quantity'] = $river_sand_cost['quantity'];
                     $max['cost'] = $river_sand_cost['cost'];
