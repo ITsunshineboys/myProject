@@ -407,7 +407,7 @@ class SupplierController extends Controller
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
-        if ($Supplier)
+        if (!$Supplier)
         {
             return Json::encode([
                 'code' => 1000,
