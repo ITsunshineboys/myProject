@@ -1029,4 +1029,127 @@ class SupplieraccountController extends  Controller{
         ]);
 
     }
+    /**
+     * 商家分类管理
+     * @return string
+     */
+    public function actionSupplierCateList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier_id=Supplier::find()->select('id')->where(['uid'=>$user->getId()])->one();
+        $where="supplier_id={$supplier_id->id}";
+        $sort_time=(int)Yii::$app->request->get('sort_time',2);
+        switch ($sort_time)
+        {
+            case 1:
+                $sort='create_time asc';
+                break;
+            case 2:
+                $sort='create_time desc';
+                break;
+        }
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
+        $total = (int)GoodsCategory::find()->where($where)->asArray()->count();
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'details' => $total > 0 ? SupplierCashManager::Catepagination($where, SupplierCashManager::SUPPLIER_CATE_LIST, $page, $size, $sort) : [],
+                'total_page'=>ceil($total/$size),
+                'total' => $total,
+                ]
+        ]);
+    }
+    /**
+     * 商家分类详情
+     * @return string
+     */
+    public function actionSupplierCateView(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $cate_id=(int)Yii::$app->request->get('cate_id');
+        if(!$cate_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=SupplierCashManager::categoryview($cate_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $data
+
+        ]);
+    }
+    /**
+     * 商家编辑分类
+     * @return string
+     */
+    public function actionSupplierCateEdit(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code = 1000;
+
+        $id = (int)Yii::$app->request->post('id', 0);
+        $category = GoodsCategory::findOne($id);
+        if (!$category) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $category->title = trim(Yii::$app->request->post('title', ''));
+        $category->icon = trim(Yii::$app->request->post('icon', ''));
+        $category->description= Yii::$app->request->post('description');
+        $pid = (int)Yii::$app->request->post('pid', '');
+        $category->setLevelPath($pid);
+        $category->pid = $pid;
+        $category->approve_time=0;
+        $category->reject_time=0;
+        $category->review_status=0;
+
+
+        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
+        if ($checkSameLevelResult != 200) {
+            return Json::encode([
+                'code' => $checkSameLevelResult,
+                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
+            ]);
+        }
+
+        if (!$category->save()) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+        ]);
+    }
 }
