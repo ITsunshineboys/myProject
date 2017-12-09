@@ -173,4 +173,28 @@ update engineering_standard_craft set points_id=6 where id=30;
 update engineering_standard_craft set points_id=6 where id=31;
 
 
+--all 2017.12.9  hyz
+
+CREATE TABLE `line_supplier` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) NOT NULL,
+  `district_code` int(6) NOT NULL,
+  `address` varchar(100) NOT NULL COMMENT '详细地址',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1：已关闭  2：已开启',
+  `mobile` bigint(20) NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='线下体验店商家表';
+
+
+CREATE TABLE `line_supplier_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `line_supllier_id` int(11) NOT NULL COMMENT '线下体验店id',
+  `goods_id` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:已关闭  2：已开启',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线下体验店商品表';
+
+
 
