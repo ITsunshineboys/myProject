@@ -18,6 +18,17 @@ class SupplierCashManager extends ActiveRecord
     const  GOODS_ORDER = 'goods_order';
     const  ROLE_ID = 6;
 
+    const SUPPLIER_BRAND_VIEW=[
+        'id',
+        'name',
+        'logo',
+        'certificate',
+        'create_time',
+        'approve_time',
+        'reject_time',
+        'review_status',
+        'reason',
+    ];
     const FIELDS_ADMIN=[
 
     ];
@@ -424,5 +435,82 @@ class SupplierCashManager extends ActiveRecord
             return $code;
         }
 
+    }
+
+    /**
+     * 商家品牌列表
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param array $orderBy
+     * @return array|ActiveRecord[]
+     */
+    public static function pagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    {
+        $offset = ($page - 1) * $size;
+        $brandList = GoodsBrand::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        foreach ($brandList as &$brand) {
+            if (isset($brand['create_time'])) {
+                $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
+            }
+
+
+            if (isset($brand['review_status'])) {
+                $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
+            }
+
+            if (isset($brand['approve_time']) || isset($brand['reject_time'])) {
+                $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
+                if (isset($brand['approve_time'])) {
+                    unset($brand['approve_time']);
+                }
+                if (isset($brand['reject_time'])) {
+                    unset($brand['reject_time']);
+                }
+            }
+
+
+        }
+
+        return $brandList;
+    }
+
+    /**
+     * 商家品牌详情
+     * @param $id
+     * @return array|null|ActiveRecord
+     */
+    public static function brandview($id){
+
+        $brand = GoodsBrand::find()
+            ->select(self::SUPPLIER_BRAND_VIEW)
+            ->asArray()
+            ->where(['id'=>$id])
+            ->one();
+        $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
+        $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
+       if($brand){
+           if ($brand['approve_time']!=0 || $brand['reject_time']!=0 ) {
+               $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
+               if (isset($brand['approve_time'])) {
+                   unset($brand['approve_time']);
+               }
+               if (isset($brand['reject_time'])) {
+                   unset($brand['reject_time']);
+               }
+           }
+           unset($brand['approve_time']);
+           unset($brand['reject_time']);
+           $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
+       }
+        return $brand;
     }
 }

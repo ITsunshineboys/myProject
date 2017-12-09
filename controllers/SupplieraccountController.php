@@ -8,6 +8,7 @@ use app\models\GoodsBrand;
 use app\models\GoodsCategory;
 use app\models\OwnerCashManager;
 use app\models\Supplier;
+use app\models\SupplierCashManager;
 use app\models\SupplierCashregister;
 use app\models\User;
 use app\models\UserAccessdetail;
@@ -870,11 +871,161 @@ class SupplieraccountController extends  Controller{
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'details' => GoodsBrand::pagination($where, GoodsBrand::$adminFields, $page, $size, $sort),
+                'details' => SupplierCashManager::pagination($where, SupplierCashManager::SUPPLIER_BRAND_VIEW, $page, $size, $sort),
                 'total' =>$total ,
                 'total_page'=>ceil($total/$size)
 
             ],
+        ]);
+
+    }
+    /**
+     * 商家品牌详情
+     * @return string
+     */
+    public function actionSupplierBrandView(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $brand_id=(int)Yii::$app->request->get('brand_id');
+        if(!$brand_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=SupplierCashManager::brandview($brand_id);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $data
+
+        ]);
+
+    }
+
+    /**
+     * 商家修改品牌
+     * @return string
+     */
+    public function actionSupplierBrandEdit(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+
+        $brand_id=(int)Yii::$app->request->post('brand_id');
+        if(!$brand_id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $categoryIds = trim(Yii::$app->request->post('category_ids', ''));
+        $categoryIds = trim($categoryIds, ',');
+        if (!$categoryIds) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $brand = GoodsBrand::findOne($brand_id);
+        $brand->name = trim(Yii::$app->request->post('name', ''));
+        $brand->certificate = trim(Yii::$app->request->post('certificate', ''));
+        $brand->logo = trim(Yii::$app->request->post('logo', ''));
+        $brand->review_status=0;
+        $brand->reject_time=0;
+        $brand->approve_time=0;
+
+        $transaction = Yii::$app->db->beginTransaction();
+
+        //更新 good-brand表
+        if (!$brand->save()) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        //删除 brand_category 的旧数据
+        $categoryIdsArr = explode(',', $categoryIds);
+        $categoryIdsArrOld = BrandCategory::categoryIdsByBrandId($brand->id);
+        if (!StringService::checkArrayIdentity($categoryIdsArrOld, $categoryIdsArr)) {
+            $deletedNum = BrandCategory::deleteAll(
+                [
+                    'brand_id' => $brand->id,
+                ]
+            );
+
+            if ($deletedNum == 0) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            foreach ($categoryIdsArr as $categoryId) {
+                $category = GoodsCategory::findOne($categoryId);
+                if (!$category || $category->level != GoodsCategory::LEVEL3) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                //生成 brand_category 新数据
+                $brandCategory = new BrandCategory;
+                $brandCategory->brand_id = $brand->id;
+                $brandCategory->category_id = $categoryId;
+                list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+                $brandCategory->category_id_level1 = $rootCategoryId;
+                $brandCategory->category_id_level2 = $parentCategoryId;
+
+                $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
+                if (!$brandCategory->validate()) {
+                    $transaction->rollBack();
+
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                if (!$brandCategory->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+            }
+        }
+
+        $transaction->commit();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
         ]);
 
     }
