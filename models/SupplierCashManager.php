@@ -18,7 +18,7 @@ class SupplierCashManager extends ActiveRecord
     const  GOODS_ORDER = 'goods_order';
     const  ROLE_ID = 6;
 
-    const SUPPLIER_BRAND_VIEW=[
+    const SUPPLIER_BRAND_VIEW = [
         'id',
         'name',
         'logo',
@@ -29,7 +29,23 @@ class SupplierCashManager extends ActiveRecord
         'review_status',
         'reason',
     ];
-    const FIELDS_ADMIN=[
+    const SUPPLIER_CATE_LIST = [
+        'id',
+        'title',
+        'icon',
+        'pid',
+        'parent_title',
+        'level',
+        'create_time',
+        'approve_time',
+        'reject_time',
+        'review_status',
+        'reason',
+        'path',
+        'supplier_name',
+        'path'
+    ];
+    const FIELDS_ADMIN = [
 
     ];
 
@@ -44,7 +60,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $status int 状态
      * @return array
      */
-    public static function getCashList($user,$where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function getCashList($user, $where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
 
         $query = (new Query())
@@ -76,10 +92,10 @@ class SupplierCashManager extends ActiveRecord
         $data = ModelService::pageDeal($arr, $count, $page, $size);
 
         $data['supplier_id'] = Supplier::find()
-        ->select('id')
-        ->where(['uid'=>$user])
-        ->asArray()
-        ->one()['id'];
+            ->select('id')
+            ->where(['uid' => $user])
+            ->asArray()
+            ->one()['id'];
 
         return $data;
     }
@@ -90,10 +106,10 @@ class SupplierCashManager extends ActiveRecord
      * @param $cash_id
      * @return array|bool
      */
-    public static function GetCash($transaction_no,$supplier_id)
+    public static function GetCash($transaction_no, $supplier_id)
     {
 
-        $query =UserCashregister::find()
+        $query = UserCashregister::find()
             ->asArray()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::ROLE_ID]);
 
@@ -146,7 +162,9 @@ class SupplierCashManager extends ActiveRecord
     {
         return (new Query())->from(self::SUPPLIER)->where(['id' => $supplier_id])->one();
     }
-    public static function GetUser($user_id){
+
+    public static function GetUser($user_id)
+    {
         return (new Query())->from(OwnerCashManager::USER)->where(['id' => $user_id])->one();
     }
 
@@ -273,7 +291,7 @@ class SupplierCashManager extends ActiveRecord
 
         $query = (new Query())
             ->from(self::GOODS_ORDER . ' g')
-            ->select(['g.id', 'g.order_no', 'g.paytime', 's.shop_name', 'g.supplier_id', 'o.sku', 'o.goods_name', 'o.goods_price', 'o.goods_number', 'o.freight','s.shop_no'])
+            ->select(['g.id', 'g.order_no', 'g.paytime', 's.shop_name', 'g.supplier_id', 'o.sku', 'o.goods_name', 'o.goods_price', 'o.goods_number', 'o.freight', 's.shop_no'])
             ->leftJoin(self::SUPPLIER . ' s', 'g.supplier_id = s.id')
             ->leftJoin(OrderGoods::tableName() . ' o', 'o.order_no=g.order_no')
             ->where($where)
@@ -306,15 +324,15 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
 
         $query = (new Query())
-                ->from(self::USER_CASHREGISTER . ' as g')
-                ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
-                ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money','g.transaction_no','g.handle_time'])
-                ->where($where)
-                ->orderBy('g.handle_time');
+            ->from(self::USER_CASHREGISTER . ' as g')
+            ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
+            ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money', 'g.transaction_no', 'g.handle_time'])
+            ->where($where)
+            ->orderBy('g.handle_time');
 
 
         $count = $query->count();
@@ -324,9 +342,9 @@ class SupplierCashManager extends ActiveRecord
             ->limit($pagination->limit)
             ->all();
         foreach ($arr as &$v) {
-            if(!$v['handle_time']){
-                $v['handle_time']='-';
-            }else{
+            if (!$v['handle_time']) {
+                $v['handle_time'] = '-';
+            } else {
                 $v['handle_time'] = date('Y-m-d H:i', $v['handle_time']);
             }
             $v['apply_time'] = date('Y-m-d H:i', $v['apply_time']);
@@ -362,7 +380,7 @@ class SupplierCashManager extends ActiveRecord
             ->where(['id' => $cash_id, 'role_id' => self::ROLE_ID])
             ->select(['cash_money', 'uid', 'status', 'transaction_no'])
             ->one();
-        $code=1000;
+        $code = 1000;
         $cash_money = $supplier_cash['cash_money'];
         $supplier_uid = (int)$supplier_cash['uid'];
         $old_status = (int)$supplier_cash['status'];
@@ -426,12 +444,12 @@ class SupplierCashManager extends ActiveRecord
             }
 
             $trans->commit();
-            $code=200;
+            $code = 200;
             return $code;
 
         } catch (Exception $e) {
             $trans->rollBack();
-            $code=500;
+            $code = 500;
             return $code;
         }
 
@@ -488,29 +506,137 @@ class SupplierCashManager extends ActiveRecord
      * @param $id
      * @return array|null|ActiveRecord
      */
-    public static function brandview($id){
+    public static function brandview($id)
+    {
 
         $brand = GoodsBrand::find()
             ->select(self::SUPPLIER_BRAND_VIEW)
             ->asArray()
-            ->where(['id'=>$id])
+            ->where(['id' => $id])
             ->one();
         $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
         $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
-       if($brand){
-           if ($brand['approve_time']!=0 || $brand['reject_time']!=0 ) {
-               $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
-               if (isset($brand['approve_time'])) {
-                   unset($brand['approve_time']);
-               }
-               if (isset($brand['reject_time'])) {
-                   unset($brand['reject_time']);
-               }
-           }
-           unset($brand['approve_time']);
-           unset($brand['reject_time']);
-           $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
-       }
+        if ($brand) {
+            if ($brand['approve_time'] != 0 || $brand['reject_time'] != 0) {
+                $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
+                if (isset($brand['approve_time'])) {
+                    unset($brand['approve_time']);
+                }
+                if (isset($brand['reject_time'])) {
+                    unset($brand['reject_time']);
+                }
+            }
+            unset($brand['approve_time']);
+            unset($brand['reject_time']);
+            $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
+        }
         return $brand;
+    }
+
+    /**
+     * 分类列表
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param array $orderBy
+     * @return array|ActiveRecord[]
+     */
+    public static function Catepagination($where = [], $select = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = ['id' => SORT_ASC])
+    {
+        $offset = ($page - 1) * $size;
+        $categoryList = GoodsCategory::find()
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->asArray()
+            ->all();
+        foreach ($categoryList as &$category) {
+            if (isset($category['create_time'])) {
+                $category['create_time'] = date('Y-m-d H:i', $category['create_time']);
+            }
+
+            if (isset($category['level']) && isset($category['path'])) {
+                $category['titles'] = '';
+                if ($category['level'] == GoodsCategory::LEVEL3) {
+                    $path = trim($category['path'], ',');
+                    list($rootId, $parentId, $id) = explode(',', $path);
+                    $rootCategory = GoodsCategory::findOne($rootId);
+                    $category['titles'] = $rootCategory->title
+                        . GoodsCategory::SEPARATOR_TITLES
+                        . $category['parent_title']
+                        . GoodsCategory::SEPARATOR_TITLES
+                        . $category['title'];
+                } elseif ($category['level'] == GoodsCategory::LEVEL2) {
+                    $category['titles'] = $category['parent_title']
+                        . GoodsCategory::SEPARATOR_TITLES
+                        . $category['title'];
+                } elseif ($category['level'] == GoodsCategory::LEVEL1) {
+                    $category['titles'] = $category['title'];
+                }
+
+                $category['level'] = GoodsCategory::$levels[$category['level']];
+            }
+
+            if (isset($category['review_status'])) {
+                $category['review_status'] = \Yii::$app->params['reviewStatuses'][$category['review_status']];
+            }
+
+        }
+
+        return $categoryList;
+    }
+
+    /**
+     * 分类详情
+     * @param $cate_id
+     * @return array|null|ActiveRecord
+     */
+    public static function categoryview($cate_id)
+    {
+        $category = GoodsCategory::find()
+            ->select(self::SUPPLIER_CATE_LIST)
+            ->asArray()
+            ->where(['id' => $cate_id])
+            ->one();
+        if ($category) {
+
+            if (isset($category['level']) && isset($category['path'])) {
+                $category['titles'] = '';
+                if ($category['level'] == GoodsCategory::LEVEL3) {
+                    $path = trim($category['path'], ',');
+                    list($rootId, $parentId, $id) = explode(',', $path);
+                    $rootCategory = GoodsCategory::findOne($rootId);
+                    $category['titles'] = $rootCategory->title
+                        . GoodsCategory::SEPARATOR_TITLES
+                        . $category['parent_title']
+                        . GoodsCategory::SEPARATOR_TITLES
+                        . $category['title'];
+                } elseif ($category['level'] == GoodsCategory::LEVEL2) {
+                    $category['titles'] = $category['parent_title']
+                        . GoodsCategory::SEPARATOR_TITLES
+                        . $category['title'];
+                } elseif ($category['level'] == GoodsCategory::LEVEL1) {
+                    $category['titles'] = $category['title'];
+                }
+                $category['level'] = GoodsCategory::$levels[$category['level']];
+            }
+            $category['create_time'] = date('Y-m-d H:i', $category['create_time']);
+            $category['review_status'] = \Yii::$app->params['reviewStatuses'][$category['review_status']];
+            if (isset($category['approve_time']) || isset($category['reject_time'])) {
+                $category['review_time'] = date('Y-m-d H:i', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
+                if (isset($category['approve_time'])) {
+                    unset($category['approve_time']);
+                }
+                if (isset($category['reject_time'])) {
+                    unset($category['reject_time']);
+                }
+            }
+            unset($category['approve_time']);
+            unset($category['reject_time']);
+        }
+        return $category;
     }
 }
