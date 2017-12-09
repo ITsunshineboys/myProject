@@ -415,7 +415,7 @@ class SupplierController extends Controller
             ]);
         }
         $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
-        $three_category=GoodsCategory::findOne(Supplier::TYPE_SHOP[$Supplier['category_id']]);
+        $three_category=GoodsCategory::findOne($Supplier['category_id']);
         $Supplier['category']='';
         if ($three_category)
         {
@@ -426,6 +426,13 @@ class SupplierController extends Controller
                 ->one();
             $Supplier['category']=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
         }
+        unset($Supplier['category_id']);
+            return Json::encode(
+            [
+                'code' => 200,
+                'msg' => 'OK',
+                'data' => $Supplier,
+            ]);
     }
 
 
