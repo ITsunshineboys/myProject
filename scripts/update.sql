@@ -159,6 +159,18 @@ update points set title='次卧' where id=66;
 
 ALTER TABLE `order_platform_handle` modify column handle tinyint(1) NOT NULL comment '1:关闭订单退款 2：关闭订单线下退款 3：退货 4.换货 5：上门维修 6：上门退货 7：上门换货    8:关闭订单';
 
+--op test 2017.12.9 yr
+update engineering_standard_craft set points_id=6 where id=21;
+update engineering_standard_craft set points_id=6 where id=22;
+update engineering_standard_craft set points_id=6 where id=23;
+update engineering_standard_craft set points_id=6 where id=24;
+update engineering_standard_craft set points_id=6 where id=25;
+update engineering_standard_craft set points_id=6 where id=26;
+update engineering_standard_craft set points_id=6 where id=27;
+update engineering_standard_craft set points_id=6 where id=28;
+update engineering_standard_craft set points_id=6 where id=29;
+update engineering_standard_craft set points_id=6 where id=30;
+update engineering_standard_craft set points_id=6 where id=31;
 
 
 
