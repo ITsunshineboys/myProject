@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\GoodsCategory;
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
@@ -393,4 +394,39 @@ class SupplierController extends Controller
                 ],
             ]);
     }
+
+    /**
+     * 通过店铺号获取商家信息
+     * @return string
+     */
+    public  function  actionGetSupplierInfoByShopNo()
+    {
+        $shop_no = trim(Yii::$app->request->get('shop_no', ''));
+        $Supplier=Supplier::find()
+            ->select('shop_name,nickname,type_shop,category_id,district_code,district_name')
+            ->where(['shop_no'=>$shop_no])
+            ->asArray()
+            ->one();
+        if (!$Supplier)
+        {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => Yii::$app->params['errorCodes'][1000],
+            ]);
+        }
+        $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
+        $three_category=GoodsCategory::findOne(Supplier::TYPE_SHOP[$Supplier['category_id']]);
+        $Supplier['category']='';
+        if ($three_category)
+        {
+            $category_arr=explode(',',$three_category->path);
+            $first_category=GoodsCategory::find()
+                ->select('path,title,parent_title')
+                ->where(['id'=>$category_arr[0]])
+                ->one();
+            $Supplier['category']=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
+        }
+    }
+
+
 }
