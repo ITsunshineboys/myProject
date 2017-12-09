@@ -135,6 +135,31 @@ class LogisticsDistrict extends ActiveRecord
         return $position;
     }
 
+    /**
+     * 通过  district_code  获取 模糊 code
+     * @param $district_code
+     * @return string
+     */
+    public  static  function  GetVagueDistrictCode($district_code)
+    {
+        $pro=substr($district_code,0,2);
+        $ci=substr($district_code,2,2);
+        $dis=substr($district_code,4,2);
+        if ($pro==0)
+        {
+            $code=0;
+        }else{
+            if ($ci==0){
+                $code=$pro.'0000';
+            }else if($dis==0){
+                $code=$pro.$ci.'00';
+            }else{
+                $code=$district_code;
+            }
+        }
+        return $code;
+    }
+
 
     /**
      *

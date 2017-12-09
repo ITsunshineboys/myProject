@@ -162,4 +162,22 @@ class LineSupplier extends \yii\db\ActiveRecord
         }
     }
 
+
+    public  static  function  FindLineSupplierByDistrictCode($district_code)
+    {
+        $data=(new Query())
+            ->from(self::tableName().' as L')
+            ->select('S.shop_name,L.district_code,L.mobile,L.address,L.id as Line_id')
+            ->leftJoin(Supplier::tableName().' as S','S.id=L.supplier_id')
+            ->where(" L.district_code  like '%{$district_code}%'")
+            ->all();
+        foreach ($data as &$list)
+        {
+            $list['district']=LogisticsDistrict::getdistrict($list['district_code']).$list['address'];
+            unset($list['address']);
+            unset($list['district_code']);
+        }
+        return $data;
+
+    }
 }

@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use app\models\GoodsCategory;
+use app\models\LineSupplier;
+use app\models\LineSupplierGoods;
+use app\models\LogisticsDistrict;
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
@@ -396,14 +399,14 @@ class SupplierController extends Controller
     }
 
     /**
-     * 通过店铺号获取商家信息
+     * 通过店铺号获取线下体验店添加商家信息
      * @return string
      */
     public  function  actionGetSupplierInfoByShopNo()
     {
         $shop_no = trim(Yii::$app->request->get('shop_no', ''));
         $Supplier=Supplier::find()
-            ->select('shop_name,nickname,type_shop,category_id,district_code,district_name')
+            ->select('shop_name,type_shop,category_id,district_code,id')
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
@@ -412,6 +415,16 @@ class SupplierController extends Controller
             return Json::encode([
                 'code' => 1000,
                 'msg' => '没有此商家,请重新输入',
+            ]);
+        }
+        $line_supplier=LineSupplier::find()
+            ->where(['supplier_id'=>$Supplier['id']])
+            ->one();
+        if ($line_supplier)
+        {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => '商家编号重复,请重新输入',
             ]);
         }
         $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
@@ -427,6 +440,7 @@ class SupplierController extends Controller
             $Supplier['category']=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
         }
         unset($Supplier['category_id']);
+        unset($Supplier['id']);
         return Json::encode(
         [
             'code' => 200,
@@ -434,6 +448,275 @@ class SupplierController extends Controller
             'data' => $Supplier,
         ]);
     }
+
+
+    /**
+     * 线下体验店商家列表
+     * @return string
+     */
+    public  function  actionLineSupplierList()
+    {
+        $request=\Yii::$app->request;
+        $keyword=$request->get('keyword','');
+        $status=$request->get('status','');
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
+        $district_code=$request->get('district_code',0);
+        if (!is_numeric($district_code))
+        {
+            $district_code=0;
+        }
+        $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
+        $where="L.district_code  like '%{$district_code}%' ";
+        if ($keyword)
+        {
+            $where .=" and  CONCAT(S.shop_name,S.shop_no) like '%{$keyword}%'";
+        }
+        if ($status==1 || $status==2)
+        {
+            $where .=" and  L.status={$status}";
+        }
+        $data=LineSupplier::pagination($where,$page,$size);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 添加线下体验店商家
+     * @return string
+     */
+    public  function  actionAddLineSupplier()
+    {
+        $post=\Yii::$app->request->post();
+        if (!array_key_exists('shop_no',$post))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $supplier=Supplier::find()
+            ->where(['shop_no'=>$post['shop_no']])
+            ->one();
+        if (!$supplier)
+        {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => '没有此商家,请重新输入',
+            ]);
+        }
+        $line_supplier=LineSupplier::find()
+            ->where(['supplier_id'=>$supplier->id])
+            ->one();
+        if ($line_supplier)
+        {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => '商家编号重复,请重新输入',
+            ]);
+        }
+        $code=Supplier::AddLineSupplier($post,$supplier->id);
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+    /**
+     * 开启或者关闭线下体验店
+     * @return string
+     */
+    public  function  actionSwitchLineSupplierStatus()
+    {
+        $code=LineSupplier::SwitchLineSupplierStatus(\Yii::$app->request->post());
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+    /**
+     * 通过店铺号获取线下体验店编辑商家信息
+     * @return string
+     */
+    public  function  actionGetEditSupplierInfoByShopNo()
+    {
+        $shop_no = trim(Yii::$app->request->get('shop_no', ''));
+        $Supplier=Supplier::find()
+            ->select('shop_name,type_shop,category_id,id')
+            ->where(['shop_no'=>$shop_no])
+            ->asArray()
+            ->one();
+        if (!$Supplier)
+        {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => '没有此商家,请重新输入',
+            ]);
+        }
+        $line_supplier=LineSupplier::find()
+            ->where(['supplier_id'=>$Supplier['id']])
+            ->one();
+        if ($line_supplier)
+        {
+            $Supplier['mobile']=$line_supplier['mobile'];
+            $Supplier['district_code']=$line_supplier['district_code'];
+            $Supplier['address']=$line_supplier['address'];
+        }
+        $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
+        $three_category=GoodsCategory::findOne($Supplier['category_id']);
+        $Supplier['category']='';
+        if ($three_category)
+        {
+            $category_arr=explode(',',$three_category->path);
+            $first_category=GoodsCategory::find()
+                ->select('path,title,parent_title')
+                ->where(['id'=>$category_arr[0]])
+                ->one();
+            $Supplier['category']=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
+
+        }
+        unset($Supplier['category_id']);
+        unset($Supplier['id']);
+        return Json::encode(
+            [
+                'code' => 200,
+                'msg' => 'OK',
+                'data' => $Supplier,
+            ]);
+    }
+
+
+    /**
+     * 编辑线下体验店商家
+     * @return string
+     */
+    public  function  actionUpLineSupplier()
+    {
+        $post=\Yii::$app->request->post();
+        if (!array_key_exists('shop_no',$post))
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $supplier=Supplier::find()
+            ->where(['shop_no'=>$post['shop_no']])
+            ->one();
+        if (!$supplier)
+        {
+            return Json::encode([
+                'code' => 1000,
+                'msg' => '没有此商家,请重新输入',
+            ]);
+        }
+        $code=Supplier::UpLineSupplier($post,$supplier->id);
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+    /**
+     * 线下体验店商品列表
+     * @return string
+     */
+    public  function  actionLineSupplierGoodsList()
+    {
+        $request=\Yii::$app->request;
+        $keyword=$request->get('keyword','');
+        $status=$request->get('status','');
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
+        $district_code=$request->get('district_code',0);
+        if (!is_numeric($district_code))
+        {
+            $district_code=0;
+        }
+        $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
+        $where="L.district_code  like '%{$district_code}%' ";
+        if ($keyword)
+        {
+            $where .=" and  CONCAT(S.shop_name,S.shop_no) like '%{$keyword}%'";
+        }
+        if ($status==1 || $status==2)
+        {
+            $where .=" and  L.status={$status}";
+        }
+        $data=LineSupplier::pagination($where,$page,$size);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 通过sku（商品编号）  获取店铺名称 and商品名称
+     * @return string
+     */
+    public  function   actionFindSupplierLineGoods()
+    {
+        $sku=\Yii::$app->request->get('sku');
+        $goods=Goods::find()
+            ->select('title,supplier_id,id')
+            ->where(['sku'=>$sku])
+            ->one();
+        if (!$goods)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '没有此商品，请重新输入',
+            ]);
+        }
+//        $lineSupplierGoods=LineSupplierGoods::find()->where(['goods_id'=>])
+        $supplier=Supplier::findOne($goods->supplier_id);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' =>[
+                'goods_name'=>$goods->title,
+                'shop_name'=>$supplier->shop_name
+            ]
+        ]);
+
+    }
+
+    /**
+     * 通过地区编号获取线下体验店商家信息
+     * @return string
+     */
+    public  function   actionFindSupplierLineByDistrictCode()
+    {
+        $district_code=\Yii::$app->request->get('district_code',0);
+        $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
+        $data=LineSupplier::FindLineSupplierByDistrictCode($district_code);
+        return Json::encode([
+            'code'=>200,
+            'msg' =>'ok',
+            'data' =>$data
+        ]);
+    }
+
+    public  function  actionAddLineSupplierGoods()
+    {
+            echo 1;die;
+    }
+
+
+
+
+
 
 
 }

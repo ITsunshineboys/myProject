@@ -3965,6 +3965,7 @@ class OrderController extends Controller
                 $res1=$delete->save(false);
                 if (!$res1)
                 {
+                    $tran->rollBack();
                     return Json::encode([
                         'code' => $code,
                         'msg'  => Yii::$app->params['errorCodes'][$code]
@@ -3973,6 +3974,7 @@ class OrderController extends Controller
                 $res2=$comment->delete();
                 if (!$res2)
                 {
+                    $tran->rollBack();
                     return Json::encode([
                         'code' => $code,
                         'msg'  => Yii::$app->params['errorCodes'][$code]
@@ -3982,6 +3984,7 @@ class OrderController extends Controller
                 $res3=$OrderGoods->save(false);
                 if (!$res3)
                 {
+                    $tran->rollBack();
                     return Json::encode([
                         'code' => $code,
                         'msg'  => Yii::$app->params['errorCodes'][$code]
@@ -4423,6 +4426,7 @@ class OrderController extends Controller
             $express->create_time=$time;
             if (!$express->save(false))
             {
+                $tran->rollBack();
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],

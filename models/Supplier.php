@@ -917,4 +917,101 @@ class Supplier extends ActiveRecord
             return $code;
         }
     }
+
+
+    /**
+     * 添加线下体验店
+     * @param $post
+     * @param $supplier_id
+     * @return int
+     */
+    public  static  function  AddLineSupplier($post,$supplier_id)
+    {
+        if (
+            !array_key_exists('district_code',$post)
+            ||!array_key_exists('address',$post)
+            ||!array_key_exists('mobile',$post))
+        {
+            $code=1000;
+            return $code;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        $time=time();
+        try{
+            $LineSupplier=new LineSupplier();
+            $LineSupplier->supplier_id=$supplier_id;
+            $LineSupplier->district_code=$post['district_code'];
+            $LineSupplier->address=$post['address'];
+            $LineSupplier->status=1;
+            $LineSupplier->mobile=$post['mobile'];
+            $LineSupplier->create_time=$time;
+            if (!$LineSupplier->validate())
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            if (!$LineSupplier->save())
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            };
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
+    /**
+     * 编辑线下体验店
+     * @param $post
+     * @param $supplier_id
+     * @return int
+     */
+    public  static  function  UpLineSupplier($post,$supplier_id)
+    {
+        if (
+            !array_key_exists('district_code',$post)
+            ||!array_key_exists('address',$post)
+            ||!array_key_exists('mobile',$post))
+        {
+            $code=1000;
+            return $code;
+        }
+        $LineSupplier=LineSupplier::find()
+            ->where(['supplier_id'=>$supplier_id])
+            ->one();
+        if (!$LineSupplier)
+        {
+           $code=1000;
+           return $code;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $LineSupplier->district_code=$post['district_code'];
+            $LineSupplier->address=$post['address'];
+            $LineSupplier->mobile=$post['mobile'];
+            if (!$LineSupplier->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            };
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
 }
