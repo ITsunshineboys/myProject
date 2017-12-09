@@ -852,9 +852,33 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id=Supplier::find()->select('id')->where(['uid'=>$user->getId()])->one();
-        $where="supplier_id={$supplier_id->id}";
+
         $sort_time=(int)Yii::$app->request->get('sort_time',2);
+
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+            if (!$supplier) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where = "supplier_id = {$supplier->id}";
+        } else {
+            $where = "supplier_id !=0 ";
+            $pid = (int)Yii::$app->request->get('pid', 0);
+            if ($pid > 0) {
+                $categoryIds = GoodsCategory::level23Ids($pid);
+                if (!$categoryIds) {
+                    $where .= ' and 0';
+                } else {
+                    $ids = BrandCategory::brandIdsByCategoryIds($categoryIds);
+                    $where .= ' and id in (' . implode(',', $ids) . ')';
+                }
+            }
+        }
         switch ($sort_time)
         {
             case 1:
@@ -1042,8 +1066,29 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $supplier_id=Supplier::find()->select('id')->where(['uid'=>$user->getId()])->one();
-        $where="supplier_id={$supplier_id->id}";
+        if ($user->login_role_id == Yii::$app->params['supplierRoleId']) {
+            $supplier = Supplier::find()->where(['uid' => $user->id])->one();
+            if (!$supplier) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $where = "supplier_id = {$supplier->id}";
+        } else {
+            $where = "supplier_id !=0 ";
+            $pid = (int)Yii::$app->request->get('pid', 0);
+            if ($pid > 0) {
+                $ids = GoodsCategory::level23Ids($pid, false, false);
+                if (!$ids) {
+                    $where .= ' and 0';
+                } else {
+                    $where .= ' and id in (' . implode(',', $ids) . ')';
+                }
+            }
+        }
         $sort_time=(int)Yii::$app->request->get('sort_time',2);
         switch ($sort_time)
         {
@@ -1152,4 +1197,6 @@ class SupplieraccountController extends  Controller{
             'msg' => 'OK',
         ]);
     }
+
+
 }
