@@ -407,11 +407,11 @@ class SupplierController extends Controller
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
-        if (!$Supplier)
+        if ($Supplier)
         {
             return Json::encode([
                 'code' => 1000,
-                'msg' => Yii::$app->params['errorCodes'][1000],
+                'msg' => '没有此商家,请重新输入',
             ]);
         }
         $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
@@ -427,12 +427,12 @@ class SupplierController extends Controller
             $Supplier['category']=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
         }
         unset($Supplier['category_id']);
-            return Json::encode(
-            [
-                'code' => 200,
-                'msg' => 'OK',
-                'data' => $Supplier,
-            ]);
+        return Json::encode(
+        [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $Supplier,
+        ]);
     }
 
 
