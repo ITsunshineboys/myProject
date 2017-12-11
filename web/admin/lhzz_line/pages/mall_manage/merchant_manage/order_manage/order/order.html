@@ -7,6 +7,7 @@
             <li ng-click="show()" ui-sref-active="active" ui-sref=".unreceived">待收货{{orderNum.unreceiveed}}</li>
             <li ng-click="show()" ui-sref-active="active" ui-sref=".completed">已完成{{orderNum.completed}}</li>
             <li ng-click="show()" ui-sref-active="active" ui-sref=".cancel">已取消{{orderNum.canceled}}</li>
+            <li ng-click="show()" ui-sref-active="active" ui-sref=".after_sales">售后{{orderNum.customer_service}}</li>
         </ul>
         <a ng-if="showDel" ui-sref="comments_del({id: id})">已删除评论</a>
     </div>
