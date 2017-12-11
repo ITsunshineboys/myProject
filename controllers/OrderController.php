@@ -5583,60 +5583,64 @@ class OrderController extends Controller
                     );
                     break;
                 case 1:
-                    switch($OrderGoods->customer_service){
-                        case 0:
-                            $operation[]=[
-                                'name'=>'退货',
-                                'value'=>3
-                            ];
-                            $operation[]=[
-                                'name'=>'换货',
-                                'value'=>4
-                            ];
-                            $operation[]=[
-                                'name'=>'上门维修',
-                                'value'=>5
-                            ];
-                            $operation[]=[
-                                'name'=>'上门退货',
-                                'value'=>6
-                            ];
-                            $operation[]=[
-                                'name'=>'上门换货',
-                                'value'=>7
-                            ];
-                            $code=200;
-                            return Json::encode(
-                                [
-                                    'code'=>$code,
-                                    'msg'=>'ok',
-                                    'data'=>$operation
-                                ]
-                            );
-                            break;
-                        case 1:
-                            $code=200;
-                            return Json::encode(
-                                [
-                                    'code'=>$code,
-                                    'msg'=>'ok',
-                                    'data'=>$operation
-                                ]
-                            );
-                            break;
-                        case 2:
-                            $code=200;
-                            return Json::encode(
-                                [
-                                    'code'=>$code,
-                                    'msg'=>'ok',
-                                    'data'=>$operation
-                                ]
-                            );
-                            break;
+                    if ($GoodsOrder->order_refer==2)
+                    {
+                        switch($OrderGoods->customer_service){
+                            case 0:
+                                $operation[]=[
+                                    'name'=>'退货',
+                                    'value'=>3
+                                ];
+                                $operation[]=[
+                                    'name'=>'换货',
+                                    'value'=>4
+                                ];
+                                $operation[]=[
+                                    'name'=>'上门维修',
+                                    'value'=>5
+                                ];
+                                $operation[]=[
+                                    'name'=>'上门退货',
+                                    'value'=>6
+                                ];
+                                $operation[]=[
+                                    'name'=>'上门换货',
+                                    'value'=>7
+                                ];
+                                $code=200;
+                                return Json::encode(
+                                    [
+                                        'code'=>$code,
+                                        'msg'=>'ok',
+                                        'data'=>$operation
+                                    ]
+                                );
+                                break;
+                            case 1:
+                                $code=200;
+                                return Json::encode(
+                                    [
+                                        'code'=>$code,
+                                        'msg'=>'ok',
+                                        'data'=>$operation
+                                    ]
+                                );
+                                break;
+                            case 2:
+                                $code=200;
+                                return Json::encode(
+                                    [
+                                        'code'=>$code,
+                                        'msg'=>'ok',
+                                        'data'=>$operation
+                                    ]
+                                );
+                                break;
 //                            $data[$k]['status']='售后完成';
-                            break;
+                                break;
+                        }
                     }
+
                     break;
                 case 2:
 //                    $data[$k]['status']='已取消';
