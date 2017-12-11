@@ -2,13 +2,13 @@
  * Created by xl on 2017/8/10 0010.
  */
 var account_comment = angular.module("account_comment", [])
-    .controller("account_comment_ctrl", function ($rootScope,$scope, $http, $state) {
-        let command_acunt =  JSON.parse(sessionStorage.getItem('comment_account'));
+    .controller("account_comment_ctrl", function ($rootScope, $scope, $http, $state) {
+        let command_acunt = JSON.parse(sessionStorage.getItem('comment_account'));
         $rootScope.crumbs = [{
             name: '账户管理',
             icon: 'icon-zhanghuguanli',
             link: -1
-        },{
+        }, {
             name: '账户详情',
         }];
         $scope.icon = command_acunt.icon;
