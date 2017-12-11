@@ -964,11 +964,11 @@ class WithdrawalsController extends Controller
                     break;
                 case 2:
                     $type='Debit';
-                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type,$role_id);
+                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
                     break;
                 case 6:
                     $type='Goods';
-                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type,$role_id);;
+                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
                     break;
             }
             if (is_numeric($data))
