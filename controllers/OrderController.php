@@ -5612,11 +5612,31 @@ class OrderController extends Controller
                                 break;
                             case 2:
                                 $code=200;
+                                $data[]=[
+                                    'name'=>'退货',
+                                    'value'=>3,
+                                ];
+                                $data[]=[
+                                    'name'=>'换货',
+                                    'value'=>4,
+                                ];
+                                $data[]=[
+                                    'name'=>'上门维修',
+                                    'value'=>5,
+                                ];
+                                $data[]=[
+                                    'name'=>'上门退货',
+                                    'value'=>6,
+                                ];
+                                $data[]=[
+                                    'name'=>'上门换货',
+                                    'value'=>7,
+                                ];
                                 return Json::encode(
                                     [
                                         'code'=>$code,
                                         'msg'=>'ok',
-                                        'data'=>$operation
+                                        'data'=>$data
                                     ]
                                 );
                                 break;
