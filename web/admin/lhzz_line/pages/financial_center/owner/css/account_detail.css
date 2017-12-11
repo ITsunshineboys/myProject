@@ -1,0 +1,11 @@
+/*账户详情样式*/
+.account_detail .row {
+    margin-bottom: 20px;
+}
+.account_detail .remove{
+    border-color: #3F94F6!important;
+    color: #3F94F6;
+}
+.account_detail .error{
+    border-color: red;
+}

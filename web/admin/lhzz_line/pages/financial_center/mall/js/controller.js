@@ -246,6 +246,89 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 tablePages4()
             }
         }
+        //收支明细列表
+        /*分页配置*/
+        $scope.keyword5 = ''
+        $scope.all_time_type = [
+            {name: '全部时间', str: 'all'},
+            {name: '今天', str: 'today'},
+            {name: '本周', str: 'week'},
+            {name: '本月', str: 'month'},
+            {name: '本年', str: 'year'},
+            {name: '自定义', str: 'custom'}
+        ]
+        $scope.all_type = [
+            {num:0,str:'全部'},
+            {num:1,str:'充值'},
+            {num:2,str:'扣款'},
+            {num:3,str:'已提现'},
+            {num:4,str:'提现中'},
+            {num:5,str:'驳回'},
+            {num:6,str:'贷款'},
+            {num:7,str:'使用'}
+        ]
+        $scope.Config5 = {
+            showJump: true,
+            itemsPerPage: 12,
+            currentPage: 1,
+            onChange: function () {
+                tablePages5();
+            }
+        }
+        let tablePages5 = function () {
+            $scope.params5.page = $scope.Config5.currentPage;//点击页数，传对应的参数
+            _ajax.get('/supplieraccount/supplier-access-detail-list', $scope.params5, function (res) {
+                console.log(res)
+                $scope.money_list = res.data.list
+                $scope.Config5.totalItems = res.data.count
+            })
+        };
+        $scope.params5 = {
+            time_type: 'all',
+            uid:'',
+            keyword:'',
+            sort_time:1,
+            type:0,
+            time_start:'',
+            time_end:''
+        };
+        $scope.changeMoneyList = function (index) {
+            if($scope.params5.uid != ''){
+                $scope.Config5.currentPage = 1
+                if(index == 1){
+                    if($scope.params5.time_type != 'custom'){
+                        $scope.params5.time_start = ''
+                        $scope.params5.time_end = ''
+                        tablePages5()
+                    }else{
+                        if($scope.params5.time_start!=''||$scope.params5.time_end!=''){
+                            tablePages5()
+                        }
+                    }
+                }else{
+                    tablePages5()
+                }
+                $scope.keyword5 = ''
+                $scope.params5.keyword = ''
+            }
+        }
+        $scope.$watch('keyword5',function (newVal,oldVal) {
+            if(newVal == ''&&$scope.params5.uid!=''){
+                $scope.params5.keyword = newVal
+                tablePages5()
+            }
+        })
+        //关键词查询
+        $scope.inquire = function () {
+            if($scope.keyword5!=''){
+                $scope.params5.keyword = $scope.keyword5
+                $scope.params5.time_type = 'all'
+                $scope.params5.type = 0
+                $scope.params5.time_start = ''
+                $scope.params5.time_end = ''
+                tablePages5()
+            }
+        }
         //返回前一页
         $scope.go_prev1 = function () {
             $rootScope.crumbs = [
@@ -899,5 +982,25 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 }
             ]
             $state.go('mall_finance.withdraw')
+        }
+      // 跳转商家提现列表
+        $scope.goMoneyList = function () {
+            $scope.params5.uid = $scope.cur_account_detail.uid
+            tablePages5()
+            $state.go('mall_finance.money_list')
+        }
+        // 查看货款详情
+        $scope.getMoneyDetail = function (item) {
+            let all_modal = function ($scope, $uibModalInstance) {
+                $scope.money_detail = item
+                $scope.common_house = function () {
+                    $uibModalInstance.close()
+                }
+            }
+            all_modal.$inject = ['$scope', '$uibModalInstance']
+            $uibModal.open({
+                 templateUrl: 'pages/intelligent/money_detail_modal.html',
+                 controller: all_modal
+            })
         }
     })

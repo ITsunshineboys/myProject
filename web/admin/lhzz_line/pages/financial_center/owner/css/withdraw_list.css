@@ -1,0 +1,42 @@
+/*商家提现管理样式*/
+.withdraw_list{
+    padding-left:40px;
+    padding-right:40px;
+    padding-top:40px;
+}
+.withdraw_list span{
+    margin-right:15px;
+}
+.withdraw_list > div{
+    margin-bottom:20px;
+}
+.withdraw_list table{
+    font-size:14px;
+}
+.withdraw_list table th{
+    border: 0 !important;
+    font-weight:normal!important;
+    color: #7A8599;
+}
+.withdraw_list table td{
+    color: #666F80;
+}
+.withdraw_list button{
+    padding:5px 10px;
+    height: 30px;
+    margin-right:20px;
+    font-size:14px;
+    background:none;
+    border:.5px solid #ccc;
+    border-radius:2px;
+}
+/*.apply_case_index .form-control{*/
+/*padding:20px 12px;*/
+/*}*/
+/*.apply_case_index td{*/
+/*padding-top:15px !important;*/
+/*padding-bottom:15px !important;*/
+/*}*/
+/*.apply_case_index td input{*/
+
+/*}*/

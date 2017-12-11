@@ -1,0 +1,30 @@
+<div class="owner_finance">
+    <div>
+    <h1>提现信息</h1>
+    <div class="row">
+        <div class="col-md-2">
+            <p>历史已提现</p>
+            <p>{{owner_finance_data.cashes_all | currency:'￥'}}</p>
+        </div>
+        <div class="col-md-2 col-md-offset-1" ng-click="go_withdraw(1)">
+            <p>今日已提现</p>
+            <p>{{owner_finance_data.cashes_today | currency:'￥'}}</p>
+            <p><a ui-sref="withdraw_manage({time_type:'today',status:2})">查看详情</a></p>
+        </div>
+        <div class="col-md-2 col-md-offset-1" ng-click="go_withdraw(2)">
+            <p>已处理提现</p>
+            <p>{{owner_finance_data.payed_cashes_count}}</p>
+            <p><a ui-sref="withdraw_manage({time_type:'all',status:2})">查看详情</a></p>
+        </div>
+        <div class="col-md-2 col-md-offset-1" ng-click="go_withdraw(3)">
+            <p>未处理提现</p>
+            <p>{{owner_finance_data.not_payed_cashes_count}}</p>
+            <p><a ui-sref="withdraw_manage({time_type:'all',status:1})">查看详情</a></p>
+        </div>
+    </div>
+    </div>
+    <div>
+    <h1>账户管理</h1>
+    <button class="btn btn-default">管理</button>
+    </div>
+</div>
