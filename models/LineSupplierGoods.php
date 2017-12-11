@@ -108,7 +108,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
     {
         $code=1000;
         if (
-            !array_key_exists('Line_id',$post)
+            !array_key_exists('line_id',$post)
             ||!array_key_exists('sku',$post)
             ||!array_key_exists('status',$post)
         )
@@ -124,7 +124,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             return $code;
         }
-        $LineSupplier=LineSupplierGoods::findOne($post['Line_id']);
+        $LineSupplier=LineSupplierGoods::findOne($post['line_id']);
         if (!$LineSupplier)
         {
             return $code;
