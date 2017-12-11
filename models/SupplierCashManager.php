@@ -28,6 +28,7 @@ class SupplierCashManager extends ActiveRecord
         'reject_time',
         'review_status',
         'status',
+        'shop_name',
         'reason',
     ];
     const SUPPLIER_CATE_LIST = [
