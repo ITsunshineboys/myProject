@@ -3764,7 +3764,6 @@ class OrderController extends Controller
               $supplier_id=Supplier::find()->where(['uid'=>$user->id])->one()->id;
 
             }
-
             $all=(new Query())
                 ->from(GoodsOrder::tableName().' as g')
                 ->select('g.id')
