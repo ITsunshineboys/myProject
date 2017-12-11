@@ -906,15 +906,21 @@ class GoodsOrder extends ActiveRecord
             $after=OrderAfterSale::find()->where(['order_no'=>$arr[$k]['order_no']])->one();
             if ($after)
             {
+
                 if ($arr[$k]['order_refer']==2)
                 {
-                    $arr[$k]['handle']='平台介入';
-                    $arr[$k]['have_handle']=1;
+                    if ($after->supplier_handle==0  || $after->supplier_handle==1)
+                    {
+                        $arr[$k]['handle']='';
+                        $arr[$k]['have_handle']=2;
+                    }else{
+                        $arr[$k]['handle']='平台介入';
+                        $arr[$k]['have_handle']=1;
+                    }
                 }else{
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
                 }
-
             }else{
                 $arr[$k]['handle']='平台介入';
                 $arr[$k]['have_handle']=1;
