@@ -12,176 +12,193 @@
     </section>
 
 
-
-        <!--基本信息-->
-        <div class="tab-panel" ng-show="basic_flag">
-            <div class="shop_name">
-                <span>店铺名称</span>
-                <span ng-bind="shop_name"></span>
-            </div>
-
-            <!--店铺号-->
-            <div class="shop_num">
-                <span>店铺号</span>
-                <span ng-bind="result.shop_no"></span>
-            </div>
-
-            <!--开店时间-->
-            <div class="shop_name">
-                <span>开店时间</span>
-                <span ng-bind="result.create_time"></span>
-            </div>
-
-            <!--登录账号-->
-            <div class="shop_name">
-                <span>登录账号</span>
-                <span ng-bind="result.mobile"></span>
-            </div>
-            <!--店铺状态-->
-            <div class="shop_name">
-                <span>店铺状态</span>
-                <span ng-bind="result.status_desc"></span>
-            </div>
-
-            <!--店铺logO-->
-            <div class="shop_logo">
-                <span>店铺logo</span>
-                <img ng-src="{{ result.icon}}" alt="店铺logo"/>
-            </div>
-            <hr/>
-
-            <!--店铺评分-->
-            <div class="shop_store">
-                <span>店铺评分</span>
-                <ul>
-                    <li><span>综合评分</span><span ng-bind="result.comprehensive_score"></span></li>
-                    <li><span>店家服务</span><span ng-bind="result.store_service_score"></span></li>
-                    <li><span>物流速度</span><span ng-bind="result.logistics_speed_score"></span></li>
-                    <li><span>配送员服务</span><span ng-bind="result.delivery_service_score"></span></li>
-                </ul>
-            </div>
-
-            <!--&lt;!&ndash;关注粉丝&ndash;&gt;-->
-            <!--<div class="shop_name">-->
-            <!--<span>关注粉丝</span>-->
-            <!--<span ng-bind="result.follower_number"></span>-->
-            <!--</div>-->
-            <!--按钮-->
-            <div class="btn_back">
-                <button class="btn btn-default" ui-sref="store_mag">返回</button>
-            </div>
-
+    <!--基本信息-->
+    <div class="tab-panel" ng-show="basic_flag">
+        <div class="shop_name">
+            <span>店铺名称</span>
+            <span ng-bind="shop_name"></span>
         </div>
-        <!---------------------店铺资质-------------------->
-        <div class="tab-panel store_level" ng-show="aptitude_flag">
-            <div class="shop_name">
-                <span>单位类型</span>
-                <span ng-bind="result.type_org"></span>
-            </div>
-            <!--店铺号-->
-            <div class="shop_num">
-                <span>商家分类</span>
-                <span ng-bind="category_name" id='storeclass'></span>
-            </div>
 
-            <!--店铺类型-->
-            <div class="shop_name">
-                <span>店铺类型</span>
-                <span ng-bind="type_shop"></span>
-            </div>
-            <!--资质日期-->
-            <div class="shop_name">
-                <span>资质日期</span>
-                <span>{{result.create_time}}至{{onemoreyear}}</span>
-            </div>
-            <!--保证金-->
-            <div class="shop_money">
-                <span>质保金</span>
-                <span>{{result.quality_guarantee_deposit | currency:'¥'}}</span>
-                <span>已免除</span>
-            </div>
-
-            <!--&lt;!&ndash;是否支持线下体验店&ndash;&gt;-->
-            <!--<div class="offline_store">-->
-            <!--<span>是否支持线下体验店</span>-->
-            <!--<span ng-bind="support_offline_shop"></span>-->
-            <!--</div>-->
-
-            <hr/>
-            <!--公司名称-->
-            <div class="shop_name">
-                <span>公司名称</span>
-                <span ng-bind="result.name"></span>
-            </div>
-            <!--社会信用代码-->
-            <div class="shop_credit">
-                <span>社会信用代码</span>
-                <span ng-bind="result.licence"></span>
-            </div>
-            <!--营业执照-->
-            <div class="shop_license">
-                <span>营业执照</span>
-                <img src="{{ result.licence_image}}" alt="营业执照"/>
-            </div>
-            <hr/>
-            <!--法人名称-->
-            <div class="shop_name">
-                <span>法人名称</span>
-                <span ng-bind="result.legal_person"></span>
-            </div>
-            <!--法人身份证号-->
-            <div class="shop_card">
-                <span>法人身份证号</span>
-                <span ng-bind="result.identity_no"></span>
-            </div>
-            <!--法人身份证正面-->
-            <div class="shop_face">
-                <span>法人身份证正面</span>
-                <img src="{{ result.identity_card_front_image}}" alt=""/>
-            </div>
-            <!--法人身份证反面-->
-            <div class="shop_face">
-                <span>法人身份证反面</span>
-                <img src="{{ result.identity_card_back_image}}" alt=""/>
-            </div>
-            <!--按钮-->
-            <div class="btn_back">
-                <button class="btn btn-default" ui-sref="store_mag">返回</button>
-            </div>
+        <!--店铺号-->
+        <div class="shop_num">
+            <span>店铺号</span>
+            <span ng-bind="result.shop_no"></span>
         </div>
-        <!--品牌授权-->
-        <div ng-show="authorize_flag">
-            <table class="table table-responsive table-hover">
-                <thead>
-                <tr>
-                    <th>品牌详情</th>
-                    <th>申请日期</th>
-                    <th>授权日期</th>
-                    <th>状态</th>
-                    <th>审核备注</th>
-                    <th>详情</th>
-                </tr>
-                </thead>
 
-                <tbody>
-                <tr ng-repeat="item in listdata">
-                    <td ng-bind="item.brand_name"></td>
-                    <td ng-bind="item.create_time"></td>
-                    <td>{{item.authorization_start}} 至 {{item.authorization_end}}</td>
-                    <td ng-bind="item.review_status_desc"></td>
-                    <td ng-if="!item.review_note">
-                        <span ng-bind="item.review_note" class="review_note"></span>
-                    </td>
-                    <td ng-if="item.review_note" data-toggle="modal" data-target=".bs-example-modal-md"
-                        ng-click="showNote(item.review_note)">
-                        <span ng-bind="item.review_note" class="review_note"></span>
-                    </td>
-                    <td><a ui-sref="merchant_details({itemdetail:item,store:store})">查看</a></td>
-                </tr>
-                </tbody>
-            </table>
-            <tm-pagination conf="pageConfig"></tm-pagination>
+        <!--开店时间-->
+        <div class="shop_name">
+            <span>开店时间</span>
+            <span ng-bind="result.create_time"></span>
         </div>
+
+        <!--登录账号-->
+        <div class="shop_name">
+            <span>登录账号</span>
+            <span ng-bind="result.mobile"></span>
+        </div>
+        <!--店铺状态-->
+        <div class="shop_name">
+            <span>店铺状态</span>
+            <span ng-bind="result.status_desc"></span>
+        </div>
+
+        <!--店铺logO-->
+        <div class="shop_logo">
+            <span>店铺logo</span>
+            <img ng-src="{{ result.icon}}" alt="店铺logo"/>
+        </div>
+        <hr/>
+
+        <!--店铺评分-->
+        <div class="shop_store">
+            <span>店铺评分</span>
+            <ul>
+                <li><span>综合评分</span><span ng-bind="result.comprehensive_score"></span></li>
+                <li><span>店家服务</span><span ng-bind="result.store_service_score"></span></li>
+                <li><span>物流速度</span><span ng-bind="result.logistics_speed_score"></span></li>
+                <li><span>配送员服务</span><span ng-bind="result.delivery_service_score"></span></li>
+            </ul>
+        </div>
+
+        <!--关注粉丝-->
+        <div class="shop_name">
+            <span>关注粉丝</span>
+            <span ng-bind="result.follower_number"></span>
+        </div>
+
+        <!--是否是线下店-->
+        <div class="shop_name">
+            <span>是否是线下店</span>
+            <span ng-bind="result.follower_number"></span>
+        </div>
+
+        <!--线下店地址-->
+        <div class="shop_name">
+            <span>线下店地址</span>
+            <span ng-bind="result.follower_number"></span>
+        </div>
+
+        <!--电话-->
+        <div class="shop_name">
+            <span>电话</span>
+            <span ng-bind="result.follower_number"></span>
+        </div>
+
+        <div class="btn_back">
+            <button class="btn btn-default" ui-sref="store_mag">返回</button>
+        </div>
+
+    </div>
+    <!---------------------店铺资质-------------------->
+    <div class="tab-panel store_level" ng-show="aptitude_flag">
+        <div class="shop_name">
+            <span>单位类型</span>
+            <span ng-bind="result.type_org"></span>
+        </div>
+        <!--店铺号-->
+        <div class="shop_num">
+            <span>商家分类</span>
+            <span ng-bind="category_name" id='storeclass'></span>
+        </div>
+
+        <!--店铺类型-->
+        <div class="shop_name">
+            <span>店铺类型</span>
+            <span ng-bind="type_shop"></span>
+        </div>
+        <!--资质日期-->
+        <div class="shop_name">
+            <span>资质日期</span>
+            <span>{{result.create_time}}至{{onemoreyear}}</span>
+        </div>
+        <!--保证金-->
+        <div class="shop_money">
+            <span>质保金</span>
+            <span>{{result.quality_guarantee_deposit | currency:'¥'}}</span>
+            <span>已免除</span>
+        </div>
+
+        <!--&lt;!&ndash;是否支持线下体验店&ndash;&gt;-->
+        <!--<div class="offline_store">-->
+        <!--<span>是否支持线下体验店</span>-->
+        <!--<span ng-bind="support_offline_shop"></span>-->
+        <!--</div>-->
+
+        <hr/>
+        <!--公司名称-->
+        <div class="shop_name">
+            <span>公司名称</span>
+            <span ng-bind="result.name"></span>
+        </div>
+        <!--社会信用代码-->
+        <div class="shop_credit">
+            <span>社会信用代码</span>
+            <span ng-bind="result.licence"></span>
+        </div>
+        <!--营业执照-->
+        <div class="shop_license">
+            <span>营业执照</span>
+            <img src="{{ result.licence_image}}" alt="营业执照"/>
+        </div>
+        <hr/>
+        <!--法人名称-->
+        <div class="shop_name">
+            <span>法人名称</span>
+            <span ng-bind="result.legal_person"></span>
+        </div>
+        <!--法人身份证号-->
+        <div class="shop_card">
+            <span>法人身份证号</span>
+            <span ng-bind="result.identity_no"></span>
+        </div>
+        <!--法人身份证正面-->
+        <div class="shop_face">
+            <span>法人身份证正面</span>
+            <img src="{{ result.identity_card_front_image}}" alt=""/>
+        </div>
+        <!--法人身份证反面-->
+        <div class="shop_face">
+            <span>法人身份证反面</span>
+            <img src="{{ result.identity_card_back_image}}" alt=""/>
+        </div>
+        <!--按钮-->
+        <div class="btn_back">
+            <button class="btn btn-default" ui-sref="store_mag">返回</button>
+        </div>
+    </div>
+    <!--品牌授权-->
+    <div ng-show="authorize_flag">
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>品牌详情</th>
+                <th>申请日期</th>
+                <th>授权日期</th>
+                <th>状态</th>
+                <th>审核备注</th>
+                <th>详情</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr ng-repeat="item in listdata">
+                <td ng-bind="item.brand_name"></td>
+                <td ng-bind="item.create_time"></td>
+                <td>{{item.authorization_start}} 至 {{item.authorization_end}}</td>
+                <td ng-bind="item.review_status_desc"></td>
+                <td ng-if="!item.review_note">
+                    <span ng-bind="item.review_note" class="review_note"></span>
+                </td>
+                <td ng-if="item.review_note" data-toggle="modal" data-target=".bs-example-modal-md"
+                    ng-click="showNote(item.review_note)">
+                    <span ng-bind="item.review_note" class="review_note"></span>
+                </td>
+                <td><a ui-sref="merchant_details({itemdetail:item,store:store})">查看</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+    </div>
     <!--模态框-->
     <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
         <div class="modal-dialog modal-lg" role="document">

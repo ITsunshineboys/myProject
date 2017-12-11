@@ -5,7 +5,7 @@ add_user.controller("add_user_ctrl",function ($rootScope,$scope,$http,$statePara
     $rootScope.crumbs = [{
         name: '账户管理',
         icon: 'icon-zhanghuguanli',
-        link: 'account_index'
+        link: -1
     },{
         name: '添加账户',
     }];

@@ -12,7 +12,6 @@ var app = angular.module("app", ["ng.ueditor", "ui.router","onsaleeditModule", "
     "brand_index_module",
     "brand_check_module",
     "edit_attribute_module",
-    "account_index_module",
     "add_user_module",
     "checklist-model",
     //王杰 结束
@@ -110,34 +109,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         /*---------------------------王杰结束--------------------------------------*/
 
         /*---------------------------谢力开始--------------------------------------*/
-        .state("account_index", {   //账户管理
-            url: "/account_index",
-            templateUrl: "pages/account_manage/account_index/account_index.html",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                role_names: 'role_names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            }
-        })
         .state("add_user", {   //账户管理——添加新用户
             url: "/add_user",
             templateUrl: "pages/account_manage/add_user/add_user.html"
@@ -385,21 +356,21 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
         })
 
-        .state('account',{
+        .state('account',{ //账户管理
             abstract:true,
             url:'/account_mag',
             templateUrl:'pages/account_manage/account_mag/account.html',
             controller:'account'
         })
 
-        .state('account.normal',{
+        .state('account.normal',{ //正常
             url:'/account_normal',
             templateUrl:'pages/account_manage/account_mag/account_normal.html',
             css: 'pages/account_manage/account_mag/css/account.css',
             controller:'account_normal'
         })
 
-        .state('account.closed',{
+        .state('account.closed',{ //关闭
             url:'/account_closed',
             templateUrl:'pages/account_manage/account_mag/account_closed.html',
             css: 'pages/account_manage/account_mag/css/account.css',

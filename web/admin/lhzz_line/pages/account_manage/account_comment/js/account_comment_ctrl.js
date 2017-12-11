@@ -7,7 +7,7 @@ var account_comment = angular.module("account_comment", [])
         $rootScope.crumbs = [{
             name: '账户管理',
             icon: 'icon-zhanghuguanli',
-            link: 'account_index'
+            link: -1
         },{
             name: '账户详情',
         }];
@@ -71,8 +71,8 @@ var account_comment = angular.module("account_comment", [])
 
             }
         };
+
         $scope.back_page = function () {
-            console.log(11);
-            $state.go("account_index")
+            history.go(-1)
         }
     });

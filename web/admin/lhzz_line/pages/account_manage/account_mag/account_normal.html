@@ -1,0 +1,120 @@
+<div class="search form-inline  clearfix">
+    <button class="btn btn-default" ui-sref="add_user">添加新用户</button>
+    <button class="btn btn-default" ng-click="batchClose()">关闭</button>
+    <select class="form-control" ng-model="params.time_type">
+        <option value="all">全部时间</option>
+        <option value="today">今天</option>
+        <option value="week">本周</option>
+        <option value="month">本月</option>
+        <option value="year">本年</option>
+        <option value="custom">自定义</option>
+    </select>
+    <input id="startTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="开始时间"
+           ngc-lay-date ng-model="params.start_time" max-date="{{params.end_time}}">
+    <input id="endTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="结束时间"
+           ngc-lay-date ng-model="params.end_time" min-date="{{params.start_time}}">
+    <div class="form-group pull-right">
+        <div class="input-group">
+            <input class="form-control" type="text" ng-model="table.keyword" placeholder="搜索昵称或手机号">
+            <span class="glyphicon glyphicon-search"></span>
+        </div>
+        <button class="btn btn-default" ng-click="search()">查询</button>
+    </div>
+</div>
+
+<div class="content">
+    <table class="table table-responsive table-hover">
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>绑定手机号</th>
+            <th>昵称</th>
+            <th>魔方号</th>
+            <th ng-click=sortTime()>
+                <span>注册时间</span>
+                <span class="sort">
+                            <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
+                            <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
+                        </span>
+            </th>
+            <th>状态</th>
+            <th>拥有角色</th>
+            <th>详情</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="item in listdata">
+            <td><input type="checkbox" checklist-model="table.roles" checklist-value="item.id"></td>
+            <td ng-bind="item.mobile"></td>
+            <td ng-bind="item.nickname"></td>
+            <td ng-bind="item.aite_cube_no"></td>
+            <td ng-bind="item.create_time"></td>
+            <td ng-bind="item.status"></td>
+            <td ng-bind="item.role_names.join('，')"></td>
+            <td class="word-blue" ng-click="checkAccount(item)">查看</td>
+            <td class="word-blue" data-toggle="modal" data-target="#close_modal" ng-click="closeModal(item.id)">关闭</td>
+        </tr>
+        </tbody>
+    </table>
+    <tm-pagination conf="pageConfig"></tm-pagination>
+</div>
+
+<!--单个关闭模态框-->
+<div class="modal fade" id="close_modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">关闭原因</h4>
+            </div>
+            <div class="modal-body">
+                <span style="vertical-align: top">关闭原因（选填）</span>
+                <textarea style="margin-left: 50px" name="" placeholder="资料违规,请重新修改"  ng-model="singleclose_reason" cols="50" rows="10"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="singleClose(item.id)">确认</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="cancelClose()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--批量关闭模态框-->
+<div class="modal fade" id="batch-modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">关闭原因</h4>
+            </div>
+            <span>关闭个数：{{table.roles.length}}个</span>
+            <div class="modal-body">
+                <span>关闭原因（选填）</span>
+                <textarea name="" placeholder="资料违规,请重新修改"  ng-model="batchclose_reason" cols="50" rows="10"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"  ng-click="sureBatchClose()">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelClose()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--提示先选择再关闭-->
+<div class="modal fade" id="warning-modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>请至少勾选一个账户</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+
+            </div>
+        </div>
+    </div>
+</div>

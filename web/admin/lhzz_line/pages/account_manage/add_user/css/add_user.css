@@ -1,18 +1,9 @@
-/*头部开始*/
-header{
-  height: 60px;
-  line-height: 60px;
-  padding-left: 40px;
-  border-bottom: 1px solid #E6E9F0 ;
-}
 .shop_manage{
   color: #2F3033;
   line-height: 14px;
   font-weight: bold;
 }
-header img{
-  margin-left:70%;
-}
+
 /*头部结束*/
 section{
   padding-left: 40px;
@@ -45,22 +36,11 @@ section{
   border-radius: 3px;
   padding-left: 5px;
 }
-.btn_style{
-  display: inline-block;
-  width: 80px;
-  height: 35px;
-  text-align: center;
-  line-height: 35px;
-  border: 1px solid #ddd;
-  background-color: #F2F4FF;
-  color: #487AF8;
-  margin-top: 300px;
-  margin-right: 20px;
-  border-radius: 3px;
-  font-size: 12px;
+
+.btns{
+  margin-top: 200px;
 }
-/*.modal-backdrop {*/
-  /*display: none!important;*/
-  /*opacity: 0 !important;*/
-  /*filter: alpha(opacity=0) !important;*/
-/*}*/
+
+.btns button{
+  margin-right: 15px;
+}
