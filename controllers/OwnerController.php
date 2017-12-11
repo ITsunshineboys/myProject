@@ -637,8 +637,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $waterproof = BasisDecorationService::judge($judge, $post);
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $waterproof = BasisDecorationService::judge($goods, $post);
 
 
         $points = Points::findByOne('id,title',"id = 69");

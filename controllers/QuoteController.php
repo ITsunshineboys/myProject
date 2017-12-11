@@ -1470,7 +1470,7 @@ class QuoteController extends Controller
         $one_goods = trim(\Yii::$app->request->post('classify',''));
 //        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         //TODO 修改
-        $one_goods_id=GoodsCategory::find()->select('id')->asArray()->where(['title'=>$one_goods])->one();
+        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['title'=>$one_goods])->one();
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,  $one_goods_id['id']);
 
         if (!isset($goods['0'])){
@@ -1480,11 +1480,8 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        foreach ($goods as &$one_goods){
-            $one_goods['supplier_price'] = $one_goods['supplier_price'] / 100;
-            $one_goods['platform_price'] = $one_goods['platform_price'] / 100;
-            $one_goods['market_price'] = $one_goods['market_price'] / 100;
-        }
+
+
         $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['0']['id']);
         return Json::encode([
             'code' => 200,
