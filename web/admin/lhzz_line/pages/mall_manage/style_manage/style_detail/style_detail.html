@@ -94,30 +94,27 @@
         <!--按钮-->
         <div class="row">
             <div class="col-sm-12 control-label btn_fix">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="style_det_ok(form.$valid)">保存</button>
+                <button class="btn btn-primary" ng-click="style_det_ok(form.$valid)">保存</button>
                 <button class="btn btn-default btn_left" ui-sref="style_index({showstyle:true})">返回</button>
             </div>
         </div>
         </form>
-    </div>
 
     <!--确认提示框-->
-    <div class="modal fade" id="{{sur_id}}" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">保存成功</h6>
-                </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="style_go()">确认</button>
-                </div>
+      <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">提示</h4>
             </div>
+            <div class="modal-body">
+              保存成功
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="style_go()">确认</button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>

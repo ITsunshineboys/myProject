@@ -49,7 +49,7 @@
         <img class="add_img" ng-click="ser_label_add()" ng-class="{'add_vis':ser_label_arr.length>=6}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
         <ul class="tags">
           <li ng-repeat="item in ser_label_arr track by $index">
-            <input class="form-control" ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
+            <input class="form-control" ng-model="item.num" name="{{item.label_name}}" required ng-class="{'error':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
             <img ng-if="ser_label_arr.length!=1" ng-click="ser_close_label($index)" src="pages/mall_manage/style_manage/series_detail/image/close.png" alt="" class="closetag">
           </li>
           <div class="inline_b control-label">
@@ -76,7 +76,7 @@
         <span>系列介绍</span>
       </div>
       <div class="col-sm-8 control-label">
-        <textarea class="form-control ser_text" name="ser_intro" ng-change="change_txts()" maxlength="70" required ng-class="{'border_red':(form.ser_intro.$invalid &&submitted)||(form.ser_intro.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_intro.$error" placeholder="请输入添加风格的介绍内容" ng-model="ser_intro"></textarea>
+        <textarea class="form-control ser_text" name="ser_intro" ng-change="change_txts()" maxlength="70" required ng-class="{'error':(form.ser_intro.$invalid &&submitted)||(form.ser_intro.$error.required && area_blur)}" ng-blur="area_blur=!!form.ser_intro.$error" placeholder="请输入添加风格的介绍内容" ng-model="ser_intro"></textarea>
         <span class="word_num">{{ser_intro.length}}/70</span>
       </div>
     </div>
@@ -84,30 +84,27 @@
     <!--按钮-->
     <div class="row">
       <div class="col-sm-12 control-label btn_fix">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#suremodal" ng-click="ser_det_ok(form.$valid)">保存</button>
+        <button class="btn btn-primary" ng-click="ser_det_ok(form.$valid)">保存</button>
         <button class="btn btn-default btn_left" ui-sref="style_index">返回</button>
       </div>
     </div>
   </form>
-</div>
-
-<!--确认提示框-->
-<div class="modal fade" id="{{sur_id}}" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog">
-    <div class="modal-content" id="save_content">
-      <div class="modal-header" id="save_header">
-        <h4 class="modal-title" id="tishi">
-          提示
-        </h4>
-      </div>
-      <div class="modal-body" id="save_body">
-        <h6 id="tishi_wenzi">保存成功</h6>
-      </div>
-
-      <div class="btn_modal_two">
-        <button id="caozuo_sure" data-dismiss="modal" ng-click="ser_det_return()">确认</button>
+  <!--确认提示框-->
+  <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">提示</h4>
+        </div>
+        <div class="modal-body">
+          保存成功
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="ser_det_return()">确认</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-</div>
+

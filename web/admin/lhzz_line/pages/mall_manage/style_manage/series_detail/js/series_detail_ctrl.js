@@ -97,7 +97,8 @@ series_detail.controller("series_detail",function ($rootScope,$scope,$http,$stat
   $scope.tran_arr=[];
     $scope.ser_det_ok=function (valid) {
       if(valid && !$scope.name_flag){
-        $scope.sur_id='suremodal';
+        $('#suremodal').modal('show');
+        console.log($scope.sur_id)
         for(let[key,value] of $scope.ser_label_arr.entries()){
           if(value.num!=''){
             $scope.tran_arr.push(value.num);//标签组
@@ -117,12 +118,11 @@ series_detail.controller("series_detail",function ($rootScope,$scope,$http,$stat
         console.log('error')
       }
     };
-
-    //点击模态框确认按钮
+  //点击模态框确认按钮
   $scope.ser_det_return=function () {
+    console.log(1111)
     setTimeout(function () {
       $state.go('style_index');
-    },300)
+    },300);
   };
-
 });

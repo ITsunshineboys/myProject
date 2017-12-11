@@ -105,7 +105,7 @@ style_detail.controller("style_detail",function ($rootScope,$scope,$http,$state,
   $scope.tran_arr=[];
 	$scope.style_det_ok=function (valid) {
 		  if(valid && !$scope.name_flag && $scope.img_list!=''){
-        $scope.sur_id="suremodal";
+        $('#suremodal').modal('show');
         for(let[key,value] of $scope.style_label_arr.entries()){
           if(value.num!=''){
             $scope.tran_arr.push(value.num);//标签组
