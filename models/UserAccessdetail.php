@@ -332,16 +332,30 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->all();
 
         $goods_name='';
+        $amount_order=0;
+        $sku='';
+        $order_no='';
         foreach ($accessDetailList as &$List)
         {
-            $goods=OrderGoods::find()->where(['order_no'=>$list->order_no])->one();
-            $goods_name.=$list[''];
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$List->order_no])
+                ->all();
+            $sku.=1;
+            $GoodsOrder=GoodsOrder::FindByOrderNo($List->order_no);
+            $amount_order+=$GoodsOrder->amount_order;
+            $goods_name=$OrderGoods[0]->goods_name;
         }
-        $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
-        $OrderGoods=OrderGoods::find()
-            ->where(['order_no'=>$accessDetail['order_no']])
-            ->andWhere(['sku'=>$accessDetail['sku']])
-            ->asArray()
-            ->one();
+        if (count($accessDetailList)>1 )
+        {
+            $goods_name=$goods_name.'...';
+        }
+        $data[]=[
+            'name'=>'商品名称',
+            'value'=>$goods_name,
+        ];
+        $data[]=[
+            'name'=>'结算金额',
+            'value'=>$amount_order,
+        ];
     }
 }
