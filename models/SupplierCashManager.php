@@ -27,6 +27,7 @@ class SupplierCashManager extends ActiveRecord
         'approve_time',
         'reject_time',
         'review_status',
+        'status',
         'reason',
     ];
     const SUPPLIER_CATE_LIST = [
@@ -479,7 +480,9 @@ class SupplierCashManager extends ActiveRecord
             if (isset($brand['create_time'])) {
                 $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
             }
-
+            if (isset($brand['status'])) {
+                $brand['status'] = GoodsBrand::$statuses[$brand['status']];
+            }
 
             if (isset($brand['review_status'])) {
                 $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];

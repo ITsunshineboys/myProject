@@ -47,7 +47,14 @@ class SupplieraccountController extends  Controller{
         'owner-apply-freeze',
         'owner-freeze-list',
         'owner-freeze-taw',
-        'Owner-access-detail-list'
+        'Owner-access-detail-list',
+        'supplier-brand-list',
+        'supplier-brand-view',
+        'supplier-brand-edit',
+        'supplier-cate-list',
+        'supplier-cate-view',
+        'supplier-cate-edit',
+        'supplier-access-detail-list'
     ];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
@@ -789,7 +796,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => 'ok',
                 'data' => [
                     'freeze_money' => $freezed_money,
-                    'id' => $user->id
+                    'user_id' => $user->id
                 ]
             ]);
         }
