@@ -213,8 +213,9 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      * @param array $accessDetail
      * @return int
      */
-    public static  function findAccessDetail($accessDetail=[],$type,$role_id)
+    public static  function findAccessDetail($accessDetail=[],$type)
     {
+
         $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$accessDetail['order_no']])
@@ -320,5 +321,18 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                ];
            }
             return $data;
+    }
+
+
+    public  static  function  GetPaymentBuyDetail($accessDetail,$type,$role_id,$transaction_no)
+    {
+
+        $accessDetailList=self::find()->where(['']);
+        $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
+        $OrderGoods=OrderGoods::find()
+            ->where(['order_no'=>$accessDetail['order_no']])
+            ->andWhere(['sku'=>$accessDetail['sku']])
+            ->asArray()
+            ->one();
     }
 }

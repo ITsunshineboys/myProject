@@ -838,6 +838,7 @@ class GoodsOrder extends ActiveRecord
             ->orderBy($sort)
             ->limit($size)
             ->all();
+        var_dump($OrderList);die;
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
