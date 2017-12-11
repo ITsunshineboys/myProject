@@ -21,6 +21,7 @@ class SupplierCashManager extends ActiveRecord
     const SUPPLIER_BRAND_VIEW = [
         'id',
         'name',
+        'supplier_id',
         'logo',
         'certificate',
         'create_time',
@@ -28,7 +29,6 @@ class SupplierCashManager extends ActiveRecord
         'reject_time',
         'review_status',
         'status',
-        'shop_name',
         'reason',
     ];
     const SUPPLIER_CATE_LIST = [
@@ -522,9 +522,10 @@ class SupplierCashManager extends ActiveRecord
             ->asArray()
             ->where(['id' => $id])
             ->one();
-        $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
-        $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
         if ($brand) {
+            $brand['apply_people']=Supplier::find()->where(['id'=>$brand['supplier_id']])->select('shop_name')->one()['shop_name'];
+            $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
+            $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
             if ($brand['approve_time'] != 0 || $brand['reject_time'] != 0) {
                 $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
                 if (isset($brand['approve_time'])) {
