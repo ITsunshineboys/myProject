@@ -327,7 +327,16 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     public  static  function  GetPaymentBuyDetail($accessDetail,$type,$role_id,$transaction_no)
     {
 
-        $accessDetailList=self::find()->where(['']);
+        $accessDetailList=self::find()
+            ->where(['transaction_no'=>$transaction_no])
+            ->all();
+
+        $goods_name='';
+        foreach ($accessDetailList as &$List)
+        {
+            $goods=OrderGoods::find()->where(['order_no'=>$list->order_no])->one();
+            $goods_name.=$list[''];
+        }
         $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$accessDetail['order_no']])

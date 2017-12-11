@@ -903,6 +903,23 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['role_id']='工人采购价';
                     break;
             }
+            $after=OrderAfterSale::find()->where(['order_no'=>$arr[$k]['order_no']])->one();
+            if ($after)
+            {
+                if ($arr[$k]['order_refer']==2)
+                {
+                    $arr[$k]['handle']='平台介入';
+                    $arr['have_handle']=1;
+                }else{
+
+                    $arr[$k]['handle']='';
+                    $arr['have_handle']=2;
+                }
+
+            }else{
+                $arr[$k]['handle']='平台介入';
+                $arr['have_handle']=1;
+            }
             unset($arr[$k]['consignee_mobile']);
             $amount_order[$k]  = $arr[$k]['amount_order'];
             $create_time[$k]  = $arr[$k]['create_time'];
