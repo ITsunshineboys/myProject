@@ -3,11 +3,11 @@
     </p>
     <div class="search form-inline clearfix">
         <select ng-model="params.time_type" ng-options="item.value as item.name for item in time_types"
-                ng-change="getWithdraw()" class="form-control"></select>
-        <input ng-if="params.time_type == 'custom'" ng-model="params.time_start" ng-change="getWithdraw()"
+                ng-change="getWithdraw(1)" class="form-control"></select>
+        <input ng-if="params.time_type == 'custom'" ng-model="params.time_start" ng-change="getWithdraw(1)"
                max-date="{{params.time_end}}" id="start_time" class="form-control" placeholder="开始时间" type="text"
                ngc-lay-date>
-        <input ng-if="params.time_type == 'custom'" ng-model="params.time_end" ng-change="getWithdraw()"
+        <input ng-if="params.time_type == 'custom'" ng-model="params.time_end" ng-change="getWithdraw(1)"
                min-date="{{params.time_start}}" id="end_time" class="form-control" placeholder="结束时间" type="text"
                ngc-lay-date>
         <span>状态选择</span>
@@ -15,7 +15,7 @@
                 ng-options="item.num as item.status for item in all_status"></select>
         <div class="form-group pull-right">
             <div class="input-group">
-                <input class="form-control" ng-model="keyword" placeholder="搜索订单号或交易单号" type="text">
+                <input class="form-control" ng-model="keyword" placeholder="搜索业主名称或魔方号" type="text">
                 <span class="glyphicon glyphicon-search"></span>
             </div>
             <button class="btn btn-default" ng-click="inquire()">查询</button>
@@ -30,40 +30,39 @@
             <th>扣除费用</th>
             <th>状态</th>
             <th>商家名称</th>
-            <th>商家编号</th>
+            <th>魔方号</th>
             <th>详情</th>
         </tr>
-        <tr ng-repeat="item in shop_withdraw_list">
+        <tr ng-repeat="item in withdraw_list">
             <td>{{item.apply_time}}</td>
-            <td ng-if="item.handle_time!=''">{{item.handle_time}}</td>
-            <td ng-if="item.handle_time==''">-</td>
+            <td>{{item.handle_time}}</td>
             <td>{{item.cash_money}}</td>
             <td>{{item.real_money}}</td>
             <td>{{item.lost_money}}</td>
             <td>{{item.status}}</td>
-            <td>{{item.shop_name}}</td>
-            <td>{{item.shop_no}}</td>
+            <td>{{item.nickname}}</td>
+            <td>{{item.aite_cube_no}}</td>
             <td><a ui-sref="withdraw_detail({transaction_no:item.transaction_no})">查看</a></td>
         </tr>
     </table>
     <tm-pagination conf="Config"></tm-pagination>
-    <div class="modal fade" id="remarks" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title text-left">备注</h4>
-                </div>
-                <div class="modal-body row">
-                    <p class="col-md-3">备注(选填)</p>
-                    <textarea ng-model="cur_item.remark" class="col-md-9" placeholder="请填写备注项" cols="30"
-                              rows="10"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>
-                    <button type="button" data-dismiss="modal">取消</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    <!--<div class="modal fade" id="remarks" tabindex="-1" role="dialog">-->
+        <!--<div class="modal-dialog" role="document">-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-header">-->
+                    <!--&lt;!&ndash;<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>&ndash;&gt;-->
+                    <!--<h4 class="modal-title text-left">备注</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body row">-->
+                    <!--<p class="col-md-3">备注(选填)</p>-->
+                    <!--<textarea ng-model="cur_item.remark" class="col-md-9" placeholder="请填写备注项" cols="30"-->
+                              <!--rows="10"></textarea>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>-->
+                    <!--<button type="button" data-dismiss="modal">取消</button>-->
+                <!--</div>-->
+            <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+        <!--</div>&lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+    <!--</div>&lt;!&ndash; /.modal &ndash;&gt;-->
 </div>

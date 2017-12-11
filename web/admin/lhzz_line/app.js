@@ -607,17 +607,23 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css:'pages/financial_center/owner/css/owner_finance.css',
             controller:'owner_finance_ctrl'
         })
-        .state('withdraw_manage',{
+        .state('withdraw_manage',{//业主提现管理
             url:'/withdraw_manage?time_type&status',
             templateUrl:'pages/financial_center/owner/withdraw_manage.html',
             css:'pages/financial_center/owner/css/withdraw_manage.css',
             controller:'withdraw_manage_ctrl'
         })
-        .state('withdraw_detail',{
+        .state('withdraw_detail',{//业主提现详情
             url:'/withdraw_detail?transaction_no',
             templateUrl:'pages/financial_center/owner/withdraw_manage_detail.html',
             css:'pages/financial_center/owner/css/account_detail.css',
             controller:'withdraw_detail_ctrl'
+        })
+        .state('account',{//账户管理
+            url:'/account',
+            templateUrl:'pages/financial_center/owner/account.html',
+            css:'pages/financial_center/owner/css/account.css',
+            controller:'account_ctrl'
         })
         /*=============== 廖欢 start ===============*/
         .state('home', {  // 首页

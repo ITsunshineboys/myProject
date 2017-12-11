@@ -2,7 +2,7 @@
     <form novalidate name="account_detail">
     <div class="row">
         <p class="col-md-1">业主名称</p>
-        <p class="col-md-11">{{all_withdraw_detail.supplier_name}}</p>
+        <p class="col-md-11">{{all_withdraw_detail.nickname}}</p>
     </div>
     <div class="row">
         <p class="col-md-1">开户银行</p>
@@ -32,7 +32,7 @@
         <p class="col-md-1">申请时间</p>
         <p class="col-md-11">{{all_withdraw_detail.apply_time}}</p>
     </div>
-    <div style="margin-top: 20px;" ng-if="cur_status!='提现中'">
+    <div style="margin-top: 20px;" ng-if="all_withdraw_detail.status!='提现中'">
         <div class="row">
             <p class="col-md-1">实到帐金额</p>
             <p class="col-md-11">{{all_withdraw_detail.real_money | currency:'￥'}}</p>
@@ -58,42 +58,42 @@
             <p class="col-md-11">{{all_withdraw_detail.supplier_reason}}</p>
         </div>
     </div>
-    <div style="margin-top: 20px;" ng-if="cur_status=='提现中'">
+    <div style="margin-top: 20px;" ng-if="all_withdraw_detail.status=='提现中'">
         <div class="row">
             <p class="col-md-1">选择处理方式</p>
             <p class="col-md-1">
-                <select class="form-control" ng-model="ctrlScope.cur_deal_style" ng-options="item.name for item in deal_style"></select>
+                <select class="form-control" ng-model="params.status" ng-options="item.num as item.status for item in all_status"></select>
             </p>
             <p class="col-md-10"></p>
         </div>
-        <div class="row" ng-if="cur_deal_style.name=='提现'">
+        <div class="row" ng-if="params.status == 2">
             <p class="col-md-1">实到帐金额</p>
             <p class="col-md-2">
-                <input type="text" name="cur_account_money" ng-model="ctrlScope.cur_account_money" required
+                <input type="text" name="cur_account_money" ng-model="params.real_money" required
                        ng-blur="flag = !!account_detail.cur_account_money.$error"
                        class="form-control" placeholder="请输入实到帐金额"
                        ng-pattern="/^0.[1-9]\d?$|^0.0\d$|^[1-9]\d{0,}(.\d{1,2})?$/"
                 ng-class="{'error':(account_detail.cur_account_money.$invalid&&submitted)||
-                (cur_deal_style.name=='提现'&&(account_detail.cur_account_money.$error.required||account_detail.cur_account_money.$error.pattern)&&flag)}">
+                (params.status == 1&&(account_detail.cur_account_money.$error.required||account_detail.cur_account_money.$error.pattern)&&flag)}">
             </p>
             <p class="col-md-9">元</p>
         </div>
-        <div class="row" ng-if="cur_deal_style.name=='提现'">
+        <div class="row" ng-if="params.status == 2">
             <p class="col-md-1">扣除费用</p>
-            <p class="col-md-2">{{(all_withdraw_detail.cash_money - cur_account_money).toFixed(2)}}</p>
+            <p class="col-md-2">{{(all_withdraw_detail.cash_money - params.real_money).toFixed(2)}}</p>
             <p class="col-md-9">元</p>
         </div>
         <div class="row">
             <p class="col-md-1">备注</p>
             <p class="col-md-5">
-                <textarea ng-model="ctrlScope.withdraw_remark" cols="40" rows="8" class="form-control"></textarea>
+                <textarea ng-model="params.reason" cols="40" rows="8" class="form-control"></textarea>
             </p>
             <p class="col-md-6"></p>
         </div>
     </div>
     <div class="from-group submit">
-        <button class="btn btn-primary" ng-if="cur_status=='提现中'" type="button" ng-click="save_withdraw_detail(account_detail.$valid)">确认</button>
-        <button type="button" class="btn btn-default" ng-click="go_prev()">返回</button>
+        <button class="btn btn-primary" ng-if="all_withdraw_detail.status=='提现中'" type="button" ng-click="saveWithdraw(account_detail.$valid)">确认</button>
+        <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
     </div>
     </form>
 </div>
