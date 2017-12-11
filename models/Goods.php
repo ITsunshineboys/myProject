@@ -441,11 +441,12 @@ class Goods extends ActiveRecord
      * @param array $select recommend fields default all fields
      * @return array|bool|ActiveRecord[]
      */
-    public static function findBySkuAll($sku, $select = [])
+    public static function findBySkuAll($sku)
     {
         if (!$sku) {
             return false;
         }
+        $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
         $rows = self::find()
             ->asArray()
             ->select($select)

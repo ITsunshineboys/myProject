@@ -1646,6 +1646,7 @@ class OwnerController extends Controller
         }
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
+        var_dump($material);exit;
 
 
         //  楼梯信息
@@ -1745,7 +1746,7 @@ class OwnerController extends Controller
             'code' =>200,
             'msg'=>'ok',
             'data'=> BrainpowerInitalSupervise::find()
-                ->select('id,image,district_code,street,toponymy,house_type_name')//TODO 新增 house_type_name 优化
+                ->select('id,image,district_code,street,toponymy,house_type_name,effect_id')//TODO 新增 effect_id
                 ->where(['status'=>BrainpowerInitalSupervise::STATUS_OPEN])
                 ->orderBy(['sort' => SORT_ASC])
                 ->all()
@@ -1762,6 +1763,7 @@ class OwnerController extends Controller
         $code     = (int)trim(Yii::$app->request->get('code',''));
         $street   = trim(Yii::$app->request->get('street',''));
         $toponymy = trim(Yii::$app->request->get('toponymy',''));
+        $id = (int)trim(Yii::$app->request->get('id',''));
 
 
         $effect = Effect::findByCode($code,$street,$toponymy);
@@ -1783,7 +1785,10 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-           'data'=>$effect,
+           'data'=>[
+               'list' => $effect,
+               'id' => $id,
+           ],
         ]);
 
     }
@@ -1830,7 +1835,7 @@ class OwnerController extends Controller
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where($effect_where)->all();
         //TODO 要求 数量必须是Int 类型
         foreach ($data as &$v){
-            $v['goods_quantity']=(int)$v['goods_quantity'];
+            $v['goods_quantity'] = (int)$v['goods_quantity'];
         }
 //        $backman_data = WorksBackmanData::find()->select('backman_option,backman_value')->where([])->all();
         $worker_data = WorksWorkerData::find()->select([])->where($effect_where)->all();
@@ -1839,8 +1844,8 @@ class OwnerController extends Controller
             foreach ($data as $one_goods) {
                 $sku [] = $one_goods['goods_code'];
             }
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
-            $goods  = Goods::findBySkuAll($sku, $select);
+
+            $goods  = Goods::findBySkuAll($sku);
             if ($goods == null) {
                 return Json::encode([
                     'code' => 200,
