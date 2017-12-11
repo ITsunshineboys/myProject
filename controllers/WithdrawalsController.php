@@ -2048,6 +2048,13 @@ class WithdrawalsController extends Controller
     }
 
 
+    public  function  actionTest()
+    {
+//        $bank=BankName::find()->where("  name  like '%{$bank_name}%'")->one();
+       var_dump(BankName::tableName());
+    }
+
+
 
 
 
