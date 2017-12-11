@@ -1641,7 +1641,8 @@ class OwnerController extends Controller
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
-        
+
+
         //  楼梯信息
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
@@ -1662,7 +1663,7 @@ class OwnerController extends Controller
         $goods_material = [];
         foreach ($material as $one){
             if($one != null){
-                $goods_material[] =   $one;
+                $goods_material [] = $one;
             }
         }
 
