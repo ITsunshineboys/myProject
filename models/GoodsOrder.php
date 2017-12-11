@@ -911,7 +911,6 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['handle']='平台介入';
                     $arr[$k]['have_handle']=1;
                 }else{
-
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
                 }

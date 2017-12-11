@@ -1523,7 +1523,7 @@ class WithdrawalsController extends Controller
             $UserAccessdetail=new UserAccessdetail();
             $UserAccessdetail->access_type=4;
             $UserAccessdetail->uid=$user->id;
-            $UserAccessdetail->role_id=6;
+            $UserAccessdetail->role_id=$role_id;
             $UserAccessdetail->access_money=$money*100;
             $UserAccessdetail->create_time=$time;
             $UserAccessdetail->transaction_no=$transaction_no;
