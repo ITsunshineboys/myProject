@@ -1,0 +1,38 @@
+<link rel="stylesheet" href="pages/mall_manage/new_brand_class_manage/new_brand_class/css/new_brand.css">
+<div ng-controller="new_brand_ctrl">
+  <div class="search form-inline clearfix">
+    <div class="form-group pull-left">
+      <span>状态选择</span>
+      <select class="form-control" ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+      <select class="form-control" ng-show="two_select_flag" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
+      <select class="form-control" ng-show="three_select_flag" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+    </div>
+  </div>
+  <tabel class="table table-hover table-responsive">
+    <thead>
+    <tr>
+      <th>品牌LOGO</th>
+      <th>品牌名称</th>
+      <th>申请时间</th>
+      <th>申请人</th>
+      <th>状态</th>
+      <th>审核备注</th>
+      <th>详情</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in ">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+  </tabel>
+  <tm-pagination conf="Config"></tm-pagination>
+</div>

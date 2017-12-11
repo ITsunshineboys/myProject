@@ -14,6 +14,8 @@ var app = angular.module("app", ["ng.ueditor", "ui.router","onsaleeditModule", "
     "edit_attribute_module",
     "add_user_module",
     "checklist-model",
+    "new_brand_module",
+    "new_class_module",
     //王杰 结束
 ]);
 /*路由拦截*/
@@ -99,13 +101,25 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/mall_manage/style_manage/add_style/add_style.html",
             params: {style_arr: ''}
         })
-
         .state("style_detail", {
             /*系列/风格/属性管理-风格-风格详情*/
             url: "/style_detail",
             templateUrl: "pages/mall_manage/style_manage/style_detail/style_detail.html",
             params: {style_item: '', page: ''}
         })
+        .state("new_brand_class", {          /*新品牌/分类管理*/
+          abstract: true,
+          url: "/new_brand_class",
+          templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_class_tab.html"
+        })
+      .state("new_brand_class.new_brand", {          /*新品牌管理*/
+        url: "/new_brand",
+        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand.html"
+      })
+      .state("new_brand_class.new_class", {          /*新分类管理*/
+        url: "/new_class",
+        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class.html"
+      })
         /*---------------------------王杰结束--------------------------------------*/
 
         /*---------------------------谢力开始--------------------------------------*/
