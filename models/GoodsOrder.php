@@ -861,6 +861,7 @@ class GoodsOrder extends ActiveRecord
                     if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
                     {
                         $arr[$k]['handle']='平台介入';
+                        $arr[$k]['have_handle']=1;
                     }
                     break;
             }
@@ -902,6 +903,27 @@ class GoodsOrder extends ActiveRecord
                 case 2:
                     $arr[$k]['role_id']='工人采购价';
                     break;
+            }
+            $after=OrderAfterSale::find()->where(['order_no'=>$arr[$k]['order_no']])->one();
+            if ($after)
+            {
+                if ($arr[$k]['order_refer']==2)
+                {
+                    if ($after->supplier_handle==0  || $after->supplier_handle==1)
+                    {
+                        $arr[$k]['handle']='';
+                        $arr[$k]['have_handle']=2;
+                    }else{
+                        $arr[$k]['handle']='平台介入';
+                        $arr[$k]['have_handle']=1;
+                    }
+                }else{
+                    $arr[$k]['handle']='';
+                    $arr[$k]['have_handle']=2;
+                }
+            }else{
+                $arr[$k]['handle']='平台介入';
+                $arr[$k]['have_handle']=1;
             }
             unset($arr[$k]['consignee_mobile']);
             $amount_order[$k]  = $arr[$k]['amount_order'];

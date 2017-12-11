@@ -1,0 +1,23 @@
+<div class="freeze_money">
+    <form name="freeze_money" novalidate>
+    <div class="row">
+        <p class="col-md-1 text-left" style="margin: 8px 0 12px!important;"><i class="glyphicon glyphicon-asterisk red_mark"></i>冻结金额</p>
+        <div class="col-md-2">
+            <input name="money" ng-class="{'error':(freeze_money.money.$invalid&&submitted) || ((freeze_money.money.$error.required || freeze_money.money.$error.pattern)&&change)}" maxlength="8"
+                ng-model="ctrlScope.cur_freeze_money"  ng-blur="change=!!freeze_money.money.$error" required class="form-control" ng-pattern="/^[1-9]\d{0,8}(\.\d{1,2})?$|^0\.[1-9]\d?$|^0\.0[1-9]$/">
+            <p class="red_mark" ng-if="overrun"><i class="glyphicon glyphicon-asterisk"></i>冻结金额超出可提现限额,请重新填写</p>
+        </div>
+        <p class="col-md-9" style="margin: 8px 0 12px!important;">*可冻结金额：{{cur_account_detail.cashwithdrawal_money | currency:'￥'}}</p>
+    </div>
+    <div class="row">
+        <p class="col-md-1" style="padding-left: 20px;margin: 8px 0 12px!important;">冻结原因</p>
+        <div class="col-md-3">
+            <textarea ng-model="ctrlScope.cur_freeze_remark" cols="30" rows="10" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="from-group submit">
+        <button class="btn btn-primary" type="button" ng-click="save_freeze_money(freeze_money.$valid)">确认</button>
+        <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
+    </div>
+    </form>
+</div>

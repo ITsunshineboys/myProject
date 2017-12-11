@@ -3,27 +3,21 @@
 namespace app\controllers;
 
 
-use app\models\Effect;
-use app\models\EffectEarnest;
-use app\models\EffectPicture;
+
 use app\models\OwnerCashManager;
-use app\models\Series;
-use app\models\Style;
+
 use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
-use app\models\UserBankInfo;
 use app\models\UserCashregister;
-use app\models\WorkerOrder;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
-use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
 use app\services\AuthService;
-use yii\web\Request;
+
 
 class SupplierCashController extends Controller
 {
@@ -320,7 +314,7 @@ class SupplierCashController extends Controller
         $timeType = trim(htmlspecialchars($request->get('time_type', '')), '');
 
         $status = trim(htmlspecialchars($request->get('status', '')), '');
-        $search = trim(htmlspecialchars($request->get('search', '')), '');
+        $search = trim(htmlspecialchars($request->get('keyword', '')), '');
         $code = 1000;
 
         if ($status==1 || $status==0){

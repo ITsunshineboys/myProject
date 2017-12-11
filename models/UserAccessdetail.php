@@ -324,15 +324,101 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     }
 
 
-    public  static  function  GetPaymentBuyDetail($accessDetail,$type,$role_id,$transaction_no)
+    /**
+     * @param $accessDetail
+     * @param $type
+     * @param $role_id
+     * @param $transaction_no
+     * @return array
+     */
+    public  static  function  GetPaymentBuyDetail($transaction_no)
     {
 
-        $accessDetailList=self::find()->where(['']);
-        $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
-        $OrderGoods=OrderGoods::find()
-            ->where(['order_no'=>$accessDetail['order_no']])
-            ->andWhere(['sku'=>$accessDetail['sku']])
-            ->asArray()
-            ->one();
+        $accessDetailList=self::find()
+            ->where(['transaction_no'=>$transaction_no])
+            ->all();
+
+        $goods_name='';
+        $amount_order=0;
+        $sku=[];
+        $order_no=[];
+        $add_time='';
+        $pay_time='';
+        $pay_name='';
+        foreach ($accessDetailList as &$List)
+        {
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$List->order_no])
+                ->all();
+            foreach ($OrderGoods as &$orderGood)
+            {
+                $sku[]=$OrderGoods->sku;
+            }
+            $GoodsOrder=GoodsOrder::FindByOrderNo($List->order_no);
+            $order_no[]=$GoodsOrder->order_no;
+            $amount_order+=$GoodsOrder->amount_order;
+            $goods_name=$OrderGoods[0]->goods_name;
+        }
+        if (count($accessDetailList)>0)
+        {
+            if (count($sku)>2)
+            {
+                $sku=$sku[0].','.$sku[1].','.$sku[2].',...';
+            }elseif(count($sku)==2){
+                $sku=$sku[0].','.$sku[1];
+            }else
+            {
+                $sku=$sku[0];
+            }
+            if (count($order_no)>2)
+            {
+                $order_no=$order_no[0].','.$order_no[1].','.$order_no[2].',...';
+            }elseif(count($sku)==2){
+                $order_no=$order_no[0].','.$order_no[1];
+            }else
+            {
+                $order_no=$order_no[0];
+            }
+
+            if (count($accessDetailList)>1 )
+            {
+                $goods_name=$goods_name.',...';
+            }
+            $add_time=$GoodsOrder->create_time;
+            $pay_time=$accessDetailList[0]->create_time;
+            $pay_name=$GoodsOrder->pay_name;
+
+        }
+
+        $data[]=[
+            'name'=>'商品名称',
+            'value'=>$goods_name,
+        ];
+        $data[]=[
+            'name'=>'结算金额',
+            'value'=>$amount_order,
+        ];
+        $data[]=[
+            'name'=>'商品编号',
+            'value'=>$sku,
+        ];
+        $data[]=[
+            'name'=>'订单号',
+            'value'=>$order_no,
+        ];
+        $data[]=[
+            'name'=>'下单时间',
+            'value'=>$add_time,
+        ];
+        $data[]=[
+            'name'=>'付款方式',
+            'value'=>$pay_name,
+        ];
+        $data[]=[
+            'name'=>'付款时间',
+            'value'=>$pay_time,
+        ];
+
+        return $data;
     }
 }

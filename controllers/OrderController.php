@@ -2613,6 +2613,7 @@ class OrderController extends Controller
                 ]);
             }
         }
+
         $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$uploadsData);
         if($code==200){
             return Json::encode([
@@ -3814,7 +3815,7 @@ class OrderController extends Controller
                 ->from(GoodsOrder::tableName().' as g')
                 ->select('g.id')
                 ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("o.order_status=2  and g.supplier_id={$supplier_id}")
+                ->where("o.order_status=2 and o.customer_service=0  and g.supplier_id={$supplier_id}")
                 ->count();
             $customer_service=(new Query())
                 ->from(GoodsOrder::tableName().' as g')
@@ -5542,6 +5543,7 @@ class OrderController extends Controller
                 ]
             );
         }
+
         switch ($GoodsOrder->order_refer)
         {
             case 1:
@@ -5561,6 +5563,7 @@ class OrderController extends Controller
         }
         if ($GoodsOrder->pay_status==0 && $OrderGoods->order_status==0)
         {
+
             $code=200;
             return Json::encode(
                 [
@@ -5587,32 +5590,13 @@ class OrderController extends Controller
                     {
                         switch($OrderGoods->customer_service){
                             case 0:
-                                $operation[]=[
-                                    'name'=>'退货',
-                                    'value'=>3
-                                ];
-                                $operation[]=[
-                                    'name'=>'换货',
-                                    'value'=>4
-                                ];
-                                $operation[]=[
-                                    'name'=>'上门维修',
-                                    'value'=>5
-                                ];
-                                $operation[]=[
-                                    'name'=>'上门退货',
-                                    'value'=>6
-                                ];
-                                $operation[]=[
-                                    'name'=>'上门换货',
-                                    'value'=>7
-                                ];
+
                                 $code=200;
                                 return Json::encode(
                                     [
                                         'code'=>$code,
                                         'msg'=>'ok',
-                                        'data'=>$operation
+                                        'data'=>[]
                                     ]
                                 );
                                 break;
@@ -5622,17 +5606,37 @@ class OrderController extends Controller
                                     [
                                         'code'=>$code,
                                         'msg'=>'ok',
-                                        'data'=>$operation
+                                        'data'=>[]
                                     ]
                                 );
                                 break;
                             case 2:
                                 $code=200;
+                                $data[]=[
+                                    'name'=>'退货',
+                                    'value'=>3,
+                                ];
+                                $data[]=[
+                                    'name'=>'换货',
+                                    'value'=>4,
+                                ];
+                                $data[]=[
+                                    'name'=>'上门维修',
+                                    'value'=>5,
+                                ];
+                                $data[]=[
+                                    'name'=>'上门退货',
+                                    'value'=>6,
+                                ];
+                                $data[]=[
+                                    'name'=>'上门换货',
+                                    'value'=>7,
+                                ];
                                 return Json::encode(
                                     [
                                         'code'=>$code,
                                         'msg'=>'ok',
-                                        'data'=>$operation
+                                        'data'=>$data
                                     ]
                                 );
                                 break;

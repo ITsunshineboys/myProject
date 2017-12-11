@@ -154,7 +154,7 @@ class TestController extends Controller
     }
 
     /**
-     * Test mba2
+     * Test
      */
     public function actionTest()
     {

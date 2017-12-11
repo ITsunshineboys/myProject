@@ -202,6 +202,13 @@ return [
     'supplier-cash/owner-cashed-list'=>[1],
     'supplier-cash/owner-cashed-detail'=>[1],
     'supplier-cash/owner-do-cash-deal'=>[1],
+    'supplieraccount/supplier-brand-view'=>[1,6],
+    'supplieraccount/supplier-brand-list'=>[1,6],
+    'supplieraccount/supplier-brand-edit'=>[1],
+    'supplieraccount/supplier-cate-list'=>[1,6],
+    'supplieraccount/supplier-cate-view'=>[1,6],
+    'supplieraccount/supplier-cate-edit'=>[1],
+    'supplieraccount/supplier-access-detail-list'=>[1],
 
     // wei
     'quote/labor-cost-list' => [1],

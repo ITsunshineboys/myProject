@@ -887,10 +887,8 @@ class WithdrawalsController extends Controller
                 $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
                 break;
             case 7:
-                $type=UserAccessdetail::ACCESS_CODE_PAYMENT_BUY;
-                $role_id=7;
-                $data=UserAccessdetail::GetPaymentBuyDetail($accessDetail,$type,$role_id);
-//                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
+//                $type=UserAccessdetail::ACCESS_CODE_PAYMENT_BUY;
+                $data=UserAccessdetail::GetPaymentBuyDetail($transaction_no);
                 break;
         }
         if (is_numeric($data))
@@ -1523,7 +1521,7 @@ class WithdrawalsController extends Controller
             $UserAccessdetail=new UserAccessdetail();
             $UserAccessdetail->access_type=4;
             $UserAccessdetail->uid=$user->id;
-            $UserAccessdetail->role_id=6;
+            $UserAccessdetail->role_id=$role_id;
             $UserAccessdetail->access_money=$money*100;
             $UserAccessdetail->create_time=$time;
             $UserAccessdetail->transaction_no=$transaction_no;

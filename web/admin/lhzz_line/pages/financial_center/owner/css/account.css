@@ -1,0 +1,30 @@
+/*账户管理样式*/
+.account > div{
+    margin-bottom:20px;
+}
+.account p {
+    margin-bottom: 20px;
+    font-size:14px;
+}
+.account table{
+    font-size:14px;
+}
+.account table th{
+    border: 0 !important;
+    font-weight:normal!important;
+    color: #7A8599;
+}
+.account table td{
+    color: #666F80;
+}
+.account .modal-content{
+    padding:40px!important;
+}
+.account .modal button{
+    width:80px;
+    height: 30px;
+}
+.account .other_btn{
+    border:1px solid #5677FC;
+    color: #5677FC;
+}

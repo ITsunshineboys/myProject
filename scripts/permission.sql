@@ -48,6 +48,17 @@ INSERT INTO `role_permission` VALUES (1,1,'time-types','site'),(2,2,'time-types'
 ,(283,1,'owner-cashed-list','supplier-cash')
 ,(284,1,'owner-cashed-detail','supplier-cash')
 ,(285,1,'owner-do-cash-deal','supplier-cash')
+,(286,1,'supplier-brand-view','supplieraccount')
+,(287,1,'supplier-brand-list','supplieraccount')
+,(288,1,'supplier-brand-edit','supplieraccount')
+,(289,1,'supplier-cate-list','supplieraccount')
+,(290,1,'supplier-cate-view','supplieraccount')
+,(291,1,'supplier-cate-edit','supplieraccount')
+,(292,1,'supplier-access-detail-list','supplieraccount')
+,(293,6,'supplier-brand-view','supplieraccount')
+,(294,6,'supplier-brand-list','supplieraccount')
+,(296,6,'supplier-cate-list','supplieraccount')
+,(295,6,'supplier-cate-view','supplieraccount')
 ;
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -85,6 +96,13 @@ INSERT INTO `lhzz_permission` VALUES (1,'time-types','site',''),(2,'recommend-ad
 ,(180,'owner-cashed-list','supplier-cash','')
 ,(181,'owner-cashed-detail','supplier-cash','')
 ,(182,'owner-do-cash-deal','supplier-cash','')
+,(183,'supplier-brand-view','supplieraccount','')
+,(184,'supplier-brand-list','supplieraccount','')
+,(185,'supplier-brand-edit','supplieraccount','')
+,(186,'supplier-cate-list','supplieraccount','')
+,(187,'supplier-cate-view','supplieraccount','')
+,(188,'supplier-cate-edit','supplieraccount','')
+,(189,'supplier-access-detail-list','supplieraccount','')
 ;
 /*!40000 ALTER TABLE `lhzz_permission` ENABLE KEYS */;
 UNLOCK TABLES;

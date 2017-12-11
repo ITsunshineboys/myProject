@@ -30,10 +30,13 @@ class LaborCost extends ActiveRecord
             'waterway'=>'水路'
         ];
 
-    const WEAK_CURRENT_PRICE = 300;
-    const WATERPROOF_PRICE = 350;
-    const CARPENTRY_PRICE = 240;
-    const PRICE_CONVERT = 100;
+    const UNIT = [
+      1 => '元/天',
+    ];
+//    const WEAK_CURRENT_PRICE = 300;
+//    const WATERPROOF_PRICE = 350;
+//    const CARPENTRY_PRICE = 240;
+//    const PRICE_CONVERT = 100;
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -91,24 +94,30 @@ class LaborCost extends ActiveRecord
      * labor const list
      * @return array|ActiveRecord[]
      */
-    public static function LaborCostList($select = [] , $group = [])
+    public static function LaborCostList($select,$where)
     {
         return  self::find()
             ->distinct()
             ->select($select)
-            ->groupBy($group)
+            ->where($where)
+//            ->groupBy('worker_kind')
             ->asArray()
             ->all();
     }
 
 
-    public static function workerKind($select = [],$province,$city,$worker_kind)
+    public static function workerKind($select = [],$id)
     {
-        return self::find()
+        $row =  self::find()
             ->asArray()
             ->select($select)
-            ->where(['and',['province_code'=>$province],['city_code'=>$city],['worker_kind'=>$worker_kind]])
+            ->where(['id'=>$id])
             ->one();
+
+        $row['univalence'] = $row['univalence'] / 100;
+        $row['unit'] = self::UNIT[$row['unit']];
+
+        return $row;
     }
 }
 

@@ -595,6 +595,30 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/financial_center/mall/recorded_detail.html',
             css: 'pages/financial_center/mall/css/withdraw_manage.css'
         })
+        .state('mall_finance.money_list',{//收支列表
+            url:'money_list',
+            templateUrl:'pages/financial_center/mall/money_list.html',
+            css:'pages/financial_center/mall/css/account.css'
+        })
+            /*业主财务中心*/
+        .state('owner_finance',{//业主财务中心主页
+            url:'/owner_finance',
+            templateUrl:'pages/financial_center/owner/owner_finance.html',
+            css:'pages/financial_center/owner/css/owner_finance.css',
+            controller:'owner_finance_ctrl'
+        })
+        .state('withdraw_manage',{
+            url:'/withdraw_manage?time_type&status',
+            templateUrl:'pages/financial_center/owner/withdraw_manage.html',
+            css:'pages/financial_center/owner/css/withdraw_manage.css',
+            controller:'withdraw_manage_ctrl'
+        })
+        .state('withdraw_detail',{
+            url:'/withdraw_detail?transaction_no',
+            templateUrl:'pages/financial_center/owner/withdraw_manage_detail.html',
+            css:'pages/financial_center/owner/css/account_detail.css',
+            controller:'withdraw_detail_ctrl'
+        })
         /*=============== 廖欢 start ===============*/
         .state('home', {  // 首页
             url: '/home',

@@ -50,10 +50,10 @@ class SupplieraccountController extends  Controller{
         'Owner-access-detail-list',
         'supplier-brand-list',
         'supplier-brand-view',
-        'supplier-brand-edit',
+//        'supplier-brand-edit',
         'supplier-cate-list',
         'supplier-cate-view',
-        'supplier-cate-edit',
+//        'supplier-cate-edit',
         'supplier-access-detail-list'
     ];
     const STATUS_OFFLINE = 0;
