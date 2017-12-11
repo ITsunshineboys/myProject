@@ -154,10 +154,11 @@ class QuoteController extends Controller
      */
     public function actionLaborCostList()
     {
+        $city = trim(\Yii::$app->request->get('city',''));
         return Json::encode([
             'code'=> 200,
             'msg'=> 'ok',
-            'list' => LaborCost::LaborCostList('worker_kind','worker_kind'),
+            'list' => LaborCost::LaborCostList('id,worker_kind',"city_code={$city}"),
         ]);
     }
 
@@ -167,12 +168,14 @@ class QuoteController extends Controller
      */
     public function actionLaborCostEditList()
     {
-        $request = \Yii::$app->request;
-        $province = trim($request->get('province',''));
-        $city = trim($request->get('city',''));
-        $worker_kind = trim($request->get('worker_kind',''));
-        $select = 'id,province,city,univalence,worker_kind';
-        $labor_cost = LaborCost::workerKind($select,$province,$city,$worker_kind);
+        $id = (int)trim(\Yii::$app->request->get('id',''));
+
+        $select = 'id,province,city,univalence,worker_kind,unit';
+        $labor_cost = LaborCost::workerKind($select,$id);
+        $labor_cost['location'] = $labor_cost['province']. '-' .$labor_cost['city'];
+        unset($labor_cost['province']);
+        unset($labor_cost['city']);
+
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
         return Json::encode([
             'code' => 200,
@@ -192,7 +195,7 @@ class QuoteController extends Controller
         foreach ($post['else'] as $one_post){
             if ($one_post['quantity']){
                 $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
-                $worker_craft_norm->quantity = $one_post['quantity'];
+                $worker_craft_norm->quantity = $one_post['quantity'] * 100;
                 $worker = $worker_craft_norm->save();
             }
         }
@@ -205,7 +208,7 @@ class QuoteController extends Controller
         }
 
         $labor_cost = LaborCost::findOne($post['id']);
-        $labor_cost->univalence = $post['univalence'];
+        $labor_cost->univalence = $post['univalence'] * 100;
         if (!$labor_cost->save()){
             $code = 1000;
             return Json::encode([
@@ -224,6 +227,7 @@ class QuoteController extends Controller
      * @return string
      */
     public function actionProjectNormList(){
+        $city = trim(\Yii::$app->request->get('city',''));
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',

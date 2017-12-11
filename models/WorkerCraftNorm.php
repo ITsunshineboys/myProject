@@ -19,6 +19,13 @@ class WorkerCraftNorm extends ActiveRecord
     const CARPENTRY_DAY_MODELLING = 10;
     const CARPENTRY_DAY_FLAT = 10;
 
+    const UNIT = [
+      0 => '',
+      1 => 'M/天',
+      2 => 'M²/天',
+      3 => '个/天',
+    ];
+
     /**
      * @inheritdoc
      */
@@ -34,7 +41,18 @@ class WorkerCraftNorm extends ActiveRecord
      */
     public static function findById($id)
     {
-        return self::findAll(['labor_cost_id'=>$id]);
+        $row =  self::find()
+            ->asArray()
+            ->select('id,quantity,labor_cost_id,worker_kind_details,unit')
+            ->where(['labor_cost_id'=>$id])
+            ->All();
+
+        foreach ($row as &$one){
+            $one['quantity'] = $one['quantity'] / 100;
+            $one['unit'] = self::UNIT[$one['unit']];
+        }
+
+        return $row;
     }
 
     /**
