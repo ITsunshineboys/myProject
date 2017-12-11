@@ -1,4 +1,4 @@
-app.controller('owner_finance_ctrl',function ($scope,_ajax) {
+app.controller('owner_finance_ctrl',function ($rootScope,$state,$scope,_ajax) {
     //面包屑
     $rootScope.crumbs = [
         {
