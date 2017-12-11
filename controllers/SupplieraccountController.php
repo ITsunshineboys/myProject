@@ -189,7 +189,7 @@ class SupplieraccountController extends  Controller{
 
 
     /**
-     * 商家账户详情
+     *大后台商家账户详情
      * @return array
      */
     public function actionAccountView(){
@@ -970,6 +970,7 @@ class SupplieraccountController extends  Controller{
         $brand->logo = trim(Yii::$app->request->post('logo', ''));
         $brand->review_status=0;
         $brand->reject_time=0;
+        $brand->create_time=time();
         $brand->approve_time=0;
 
         $transaction = Yii::$app->db->beginTransaction();
@@ -1156,7 +1157,7 @@ class SupplieraccountController extends  Controller{
         }
         $code = 1000;
 
-        $id = (int)Yii::$app->request->post('id', 0);
+        $id = (int)Yii::$app->request->post('cate_id', 0);
         $category = GoodsCategory::findOne($id);
         if (!$category) {
             return Json::encode([
@@ -1172,6 +1173,7 @@ class SupplieraccountController extends  Controller{
         $category->setLevelPath($pid);
         $category->pid = $pid;
         $category->approve_time=0;
+        $category->create_time=time();
         $category->reject_time=0;
         $category->review_status=0;
 
