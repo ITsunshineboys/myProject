@@ -494,6 +494,10 @@ class SupplierCashManager extends ActiveRecord
                     unset($brand['reject_time']);
                 }
             }
+            if (isset($brand['id'])) {
+                $brand['category_titles'] = BrandCategory::categoryNamesByBrandId($brand['id']);
+
+            }
 
 
         }
