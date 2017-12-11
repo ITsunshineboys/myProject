@@ -32,19 +32,6 @@ var account_comment = angular.module("account_comment", [])
         $scope.review_status_desc = command_acunt.review_status_desc;
         $scope.review_time = command_acunt.review_time;
         $scope.a = command_acunt.a;
-
-        //$http({
-        //    method: 'get',
-        //    url: baseUrl+'/mall/user-list'
-        //}).then(function successCallback(response) {
-        //    $scope.account = response.data.data.user_list.details;
-        //    for(let [key,value] of $scope.account.entries()){
-        //        value['names'] = value.role_names.join(',')
-        //    }
-        //    console.log(response);
-        //    console.log($scope.account);
-        //    //console.log($scope.second)
-        //});
         $scope.goJump = function () {
             if ($scope.review_status_desc == '已认证') {
                 console.log(11);
