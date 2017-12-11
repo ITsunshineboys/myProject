@@ -887,10 +887,8 @@ class WithdrawalsController extends Controller
                 $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
                 break;
             case 7:
-                $type=UserAccessdetail::ACCESS_CODE_PAYMENT_BUY;
-                $role_id=7;
-                $data=UserAccessdetail::GetPaymentBuyDetail($accessDetail,$type,$role_id);
-//                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
+//                $type=UserAccessdetail::ACCESS_CODE_PAYMENT_BUY;
+                $data=UserAccessdetail::GetPaymentBuyDetail($transaction_no);
                 break;
         }
         if (is_numeric($data))
