@@ -679,7 +679,16 @@ class SupplierController extends Controller
                 'msg' => '没有此商品，请重新输入',
             ]);
         }
-//        $lineSupplierGoods=LineSupplierGoods::find()->where(['goods_id'=>])
+        $lineSupplierGoods=LineSupplierGoods::find()->where(['goods_id'=>$goods->id])->one();
+        if ($lineSupplierGoods)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '此商品重复，请重新输入',
+            ]);
+        }
+
         $supplier=Supplier::findOne($goods->supplier_id);
         return Json::encode([
             'code'=>200,
