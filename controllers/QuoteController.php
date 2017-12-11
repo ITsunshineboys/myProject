@@ -231,7 +231,7 @@ class QuoteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'list'=>EngineeringStandardCraft::findByList(),
+            'list'=>EngineeringStandardCraft::findByList($city),
         ]);
     }
 
@@ -240,7 +240,7 @@ class QuoteController extends Controller
      * @return string
      */
     public function actionProjectNormEditList(){
-        $city = trim(\Yii::$app->request->get('city',''));
+        $city = (int)trim(\Yii::$app->request->get('city',''));
         $project = trim(\Yii::$app->request->get('project',''));
         return Json::encode([
             'code' => 200,
