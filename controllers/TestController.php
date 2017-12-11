@@ -154,7 +154,7 @@ class TestController extends Controller
     }
 
     /**
-     * Test ma
+     * Test mb
      */
     public function actionTest()
     {
