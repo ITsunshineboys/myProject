@@ -167,7 +167,7 @@ class LineSupplier extends \yii\db\ActiveRecord
     {
         $data=(new Query())
             ->from(self::tableName().' as L')
-            ->select('S.shop_name,L.district_code,L.mobile,L.address,L.id as Line_id')
+            ->select('S.shop_name,L.district_code,L.mobile,L.address,L.id as line_id')
             ->leftJoin(Supplier::tableName().' as S','S.id=L.supplier_id')
             ->where(" L.district_code  like '%{$district_code}%'")
             ->all();
@@ -178,6 +178,57 @@ class LineSupplier extends \yii\db\ActiveRecord
             unset($list['district_code']);
         }
         return $data;
+
+    }
+
+
+    /**
+     * 删除线下体验店商家
+     * @param $shop_no
+     * @return int
+     */
+    public  static  function  DelLineSupplier($shop_no)
+    {
+        $supplier=Supplier::find()->where(['shop_no'=>$shop_no])->one();
+        if (!$supplier)
+        {
+            $code=1000;
+            return $code;
+        }
+        $lineSupplier=LineSupplier::find()->where(['supplier_id'=>$supplier->id])->one();
+        if (!$lineSupplier)
+        {
+            $code=1000;
+            return $code;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $lineSupplierGoods=LineSupplierGoods::find()->where(['line_supplier_id'=>$lineSupplier->id])->all();
+            foreach ($lineSupplierGoods as &$list)
+            {
+                $res=$list->delete();
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }
+            $res1=$lineSupplier->delete();
+            if (!$res1)
+            {
+                $code=500;
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+
 
     }
 }

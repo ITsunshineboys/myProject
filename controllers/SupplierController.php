@@ -585,11 +585,11 @@ class SupplierController extends Controller
         unset($Supplier['category_id']);
         unset($Supplier['id']);
         return Json::encode(
-            [
-                'code' => 200,
-                'msg' => 'OK',
-                'data' => $Supplier,
-            ]);
+        [
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => $Supplier,
+        ]);
     }
 
 
@@ -646,13 +646,13 @@ class SupplierController extends Controller
         $where="L.district_code  like '%{$district_code}%' ";
         if ($keyword)
         {
-            $where .=" and  CONCAT(S.shop_name,S.shop_no) like '%{$keyword}%'";
+            $where .=" and  CONCAT(S.shop_name,S.shop_no,G.sku) like '%{$keyword}%'";
         }
         if ($status==1 || $status==2)
         {
-            $where .=" and  L.status={$status}";
+            $where .=" and  LG.status={$status}";
         }
-        $data=LineSupplier::pagination($where,$page,$size);
+        $data=LineSupplierGoods::pagination($where,$page,$size);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
@@ -708,10 +708,109 @@ class SupplierController extends Controller
         ]);
     }
 
+    /**
+     * 添加线下体验店商品
+     * @return string
+     */
     public  function  actionAddLineSupplierGoods()
     {
-            echo 1;die;
+        $post=Yii::$app->request->post();
+        $code=1000;
+        if (
+            !array_key_exists('line_id',$post)
+            ||!array_key_exists('sku',$post))
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $goods=Goods::find()->where(['sku'=>$post['sku']])->one();
+        if (!$goods)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' => '没有此商品,请重新输入',
+            ]);
+        }
+        $LineSupplierGoods=LineSupplierGoods::find()
+            ->where(['goods_id'=>$goods->id])
+            ->one();
+        if ($LineSupplierGoods)
+        {
+            return Json::encode([
+                'code' => $code,
+                'msg' =>'商品编号重复,请重新输入'
+            ]);
+        }
+         $code=LineSupplierGoods::AddLineGoods($post);
+         return Json::encode([
+             'code' => $code,
+             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+         ]);
     }
+
+
+    /**
+     * 编辑线下体验店商品
+     * @return string
+     */
+    public  function  actionUpLineSupplierGoods()
+    {
+        $post=Yii::$app->request->post();
+        $code=LineSupplierGoods::UpLineGoods($post);
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+    /**
+     * 开启 or  关闭 线下体验店品状态
+     * @return string
+     */
+    public  function  actionSwitchLineSupplierGoodsStatus()
+    {
+        $code=LineSupplierGoods::SwitchLineSupplierGoodsStatus(\Yii::$app->request->post());
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+    /**
+     * 删除线下体验店商家
+     * @return string
+     */
+    public  function  actionDelLineSupplier()
+    {
+        $code=LineSupplier::DelLineSupplier(\Yii::$app->request->post('shop_no'));
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+    /**
+     * 删除线下体验店商品
+     * @return string
+     */
+    public  function  actionDelLineSupplierGoods()
+    {
+        $code=LineSupplierGoods::DelLineSupplierGoods(\Yii::$app->request->post('line_goods_id'));
+        return Json::encode([
+            'code' => $code,
+            'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+
+
+
+
+
 
 
 

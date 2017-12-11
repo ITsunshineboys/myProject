@@ -242,4 +242,26 @@ class LogisticsDistrict extends ActiveRecord
             return $code;
         }
     }
+
+
+    /**
+     * @param $district_code
+     * @return string
+     */
+    public  static  function  GetLineDistrictByDistrictCode($district_code)
+    {
+        $pro=substr($district_code,0,2);
+        $ci=substr($district_code,2,2);
+        $dis=substr($district_code,4,2);
+        $code=Yii::$app->params['districts'][0];
+        if ($ci==0){
+            $position=$code[86][$pro.'0000'];
+        }else if($dis==0){
+            $position=$code[86][$pro.'0000'].'-'.$code[$pro.'0000'][$pro.$ci.'00'];
+        }else{
+            $position=$code[86][$pro.'0000'].'-'.$code[$pro.'0000'][$pro.$ci.'00'].'-'.$code[$pro.$ci.'00'][$pro.$ci.$dis];
+        }
+        return $position;
+    }
+
 }
