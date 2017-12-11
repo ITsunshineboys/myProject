@@ -197,4 +197,6 @@ CREATE TABLE `line_supplier_goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='线下体验店商品表';
 
 
+ALTER TABLE `line_supplier_goods` CHANGE `line_supllier_id`  `line_supplier_id`  int(11) NOT NULL COMMENT '线下体验店id';
+
 
