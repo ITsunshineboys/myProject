@@ -207,6 +207,7 @@ class WithdrawalsController extends Controller
             ]
         ]);
     }
+
      /**
      * 商家后台-查询银行卡信息
      * @return string
@@ -265,6 +266,7 @@ class WithdrawalsController extends Controller
             'data'=>$data
         ]);
     }
+
     /**
      * 判断是否设置过交易密码
      * @return string
@@ -483,11 +485,7 @@ class WithdrawalsController extends Controller
         }
     }
 
-    public  function  actionGetData()
-    {
-        $codeValidationRes = SmValidationService::validCode(13880414513,'register');
-        var_dump($codeValidationRes);
-    }
+
 
     /**
      * 获取可用余额-商家后台
@@ -858,10 +856,7 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $request = Yii::$app->request;
-        $transaction_no=trim($request->post('transaction_no',''));
-        if (!$transaction_no)
-        {
+            $request = Yii::$app->request;
             $transaction_no=$request->get('transaction_no');
             if (!$transaction_no)
             {
@@ -871,9 +866,7 @@ class WithdrawalsController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-        }
         $accessDetail=UserAccessdetail::find()
-            ->where(['uid'=>$user->id])
             ->andWhere(['transaction_no'=>$transaction_no])
             ->asArray()
             ->one();
@@ -890,16 +883,12 @@ class WithdrawalsController extends Controller
                 $data=UserAccessdetail::findRechargeDetail($accessDetail);
                 break;
             case 2:
-                $type='Debit';
+                $type=UserAccessdetail::ACCESS_CODE_DEBIT;
                 $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
                 break;
-            case 6:
-                $type='Goods';
-                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
-                break;
             case 7:
-                $type='Goods';
-                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
+                $type=UserAccessdetail::ACCESS_CODE_PAYMENT_BUY;
+                $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
                 break;
         }
         if (is_numeric($data))
@@ -967,6 +956,7 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $role_id=6;
             switch ($accessDetail['access_type'])
             {
                 case 1:
@@ -974,11 +964,11 @@ class WithdrawalsController extends Controller
                     break;
                 case 2:
                     $type='Debit';
-                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type);
+                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type,$role_id);
                     break;
                 case 6:
                     $type='Goods';
-                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type);;
+                    $data=UserAccessdetail::findAccessDetail($accessDetail,$type,$role_id);;
                     break;
             }
             if (is_numeric($data))
@@ -1315,6 +1305,9 @@ class WithdrawalsController extends Controller
             echo "fail";    //请不要修改或删除
         }
     }
+
+
+
      /**解绑银行卡
      * @return string
      */
@@ -1843,7 +1836,7 @@ class WithdrawalsController extends Controller
     }
 
 
-       /**
+    /**
      * 获取支行
      * @return string
      */

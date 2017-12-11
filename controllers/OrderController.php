@@ -3803,6 +3803,12 @@ class OrderController extends Controller
                 ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
                 ->where("o.order_status=2  and g.supplier_id={$supplier_id}")
                 ->count();
+            $customer_service=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier_id}")
+                ->count();
             $code=200;
             return Json::encode([
                 'code' => $code,
@@ -3813,7 +3819,8 @@ class OrderController extends Controller
                     'unshipped'=>$unshipped,
                     'unreceiveed'=>$unreceiveed,
                     'completed'=>$completed,
-                    'canceled'=>$canceled
+                    'canceled'=>$canceled,
+                    'customer_service'=>$customer_service
                 ]
             ]);
         }

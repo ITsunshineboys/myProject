@@ -42,6 +42,9 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     const ACCESS_TYPE_DESC_DISAGREE='驳回';
     const ACCESS_TYPE_DESC_PAYMENT_GOODS='货款';
     const ACCESS_TYPE_DESC_PAYMENT_BUY='使用';
+
+    const ACCESS_CODE_DEBIT='Debit';
+    const ACCESS_CODE_PAYMENT_BUY='Payment_buy';
     /**
      * @inheritdoc
      */
@@ -210,7 +213,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      * @param array $accessDetail
      * @return int
      */
-    public static  function findAccessDetail($accessDetail=[],$type)
+    public static  function findAccessDetail($accessDetail=[],$type,$role_id)
     {
         $GoodsOrder=GoodsOrder::findByOrderNo($accessDetail['order_no'])->toArray();
         $OrderGoods=OrderGoods::find()
@@ -218,7 +221,6 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->andWhere(['sku'=>$accessDetail['sku']])
             ->asArray()
             ->one();
-
             if (!$GoodsOrder || !$OrderGoods)
             {
                 $code=1000;
@@ -231,7 +233,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ];
 
             switch ($type){
-                case 'Debit':
+                case self::ACCESS_CODE_DEBIT:
                     $data[]=[
                         'name'=>'扣款金额',
                         'value'=>GoodsOrder::switchMoney($accessDetail['access_money']*0.01)
@@ -247,6 +249,13 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                         'value'=>GoodsOrder::switchMoney($OrderGoods['freight']*0.01)
                     ];
                     break;
+//                case self::ACCESS_CODE_PAYMENT_BUY:
+//                    switch ($role_id){
+//                        case 7:
+//
+//                            break;
+//                    }
+//                    break;
             }
 
             $data[]=[
