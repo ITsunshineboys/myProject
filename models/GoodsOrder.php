@@ -838,7 +838,6 @@ class GoodsOrder extends ActiveRecord
             ->orderBy($sort)
             ->limit($size)
             ->all();
-        var_dump($OrderList);die;
         $arr=self::getorderstatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
@@ -3057,7 +3056,7 @@ class GoodsOrder extends ActiveRecord
                 {
                     $count=1;
                 }
-                $freight=$supplier['freight']/$count;
+                $freight=($supplier['freight']/$count)*100;
                 foreach ($supplier['goods'] as &$goods)
                 {
                     if (
