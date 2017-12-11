@@ -909,16 +909,16 @@ class GoodsOrder extends ActiveRecord
                 if ($arr[$k]['order_refer']==2)
                 {
                     $arr[$k]['handle']='平台介入';
-                    $arr['have_handle']=1;
+                    $arr[$k]['have_handle']=1;
                 }else{
 
                     $arr[$k]['handle']='';
-                    $arr['have_handle']=2;
+                    $arr[$k]['have_handle']=2;
                 }
 
             }else{
                 $arr[$k]['handle']='平台介入';
-                $arr['have_handle']=1;
+                $arr[$k]['have_handle']=1;
             }
             unset($arr[$k]['consignee_mobile']);
             $amount_order[$k]  = $arr[$k]['amount_order'];
