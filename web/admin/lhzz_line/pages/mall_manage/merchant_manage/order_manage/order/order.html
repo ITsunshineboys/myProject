@@ -8,7 +8,7 @@
             <li ng-click="show()" ui-sref-active="active" ui-sref=".completed">已完成{{orderNum.completed}}</li>
             <li ng-click="show()" ui-sref-active="active" ui-sref=".cancel">已取消{{orderNum.canceled}}</li>
         </ul>
-        <a ng-if="showDel" ui-sref="comments_del({id: id})">已删除评论啦啦啦啦</a>
+        <a ng-if="showDel" ui-sref="comments_del({id: id})">已删除评论</a>
     </div>
     <div ui-view></div>
 </section>
