@@ -1342,10 +1342,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
 //        $_select = 'id,univalence,worker_kind';
-
         $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
-
-
         if ($labor == null){
             $code = 1056;
             return Json::encode([
@@ -1353,8 +1350,8 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
         if ($worker_kind_details == null){
             $code = 1057;
             return Json::encode([
@@ -1363,7 +1360,7 @@ class OwnerController extends Controller
             ]);
         }
 
-        $points = Points::findByOne('id,title',"title='杂工'");
+        $points = Points::findByOne('id,title',"id=7");
         $Apartment = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
@@ -1381,7 +1378,6 @@ class OwnerController extends Controller
 
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['id'], $post['city']);
-
         if ($craft == null){
             $code = 1062;
             return Json::encode([
@@ -1389,6 +1385,8 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+
         if ($post['building_scrap'] == 'true') {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
@@ -1413,10 +1411,9 @@ class OwnerController extends Controller
                 ]
             ]);
         }
+//        $goods_price = BasisDecorationService::priceConversion($goods);
 
-        $goods_price = BasisDecorationService::priceConversion($goods);
-
-        foreach ($goods_price as $max) {
+        foreach ($goods as $max) {
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
@@ -1533,8 +1530,8 @@ class OwnerController extends Controller
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
-        $goods_select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
-        $goods = Goods::findBySkuAll($codes,$goods_select);
+
+        $goods = Goods::findBySkuAll($codes);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1643,9 +1640,8 @@ class OwnerController extends Controller
         }
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
-        var_dump($material);exit;
 
-
+        
         //  楼梯信息
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
