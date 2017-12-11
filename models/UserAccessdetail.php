@@ -325,15 +325,11 @@ class UserAccessdetail extends \yii\db\ActiveRecord
 
 
     /**
-     * @param $accessDetail
-     * @param $type
-     * @param $role_id
      * @param $transaction_no
      * @return array
      */
     public  static  function  GetPaymentBuyDetail($transaction_no)
     {
-
         $accessDetailList=self::find()
             ->where(['transaction_no'=>$transaction_no])
             ->all();
@@ -352,7 +348,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 ->all();
             foreach ($OrderGoods as &$orderGood)
             {
-                $sku[]=$OrderGoods->sku;
+                $sku[]=$orderGood->sku;
             }
             $GoodsOrder=GoodsOrder::FindByOrderNo($List->order_no);
             $order_no[]=$GoodsOrder->order_no;
@@ -384,8 +380,8 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             {
                 $goods_name=$goods_name.',...';
             }
-            $add_time=$GoodsOrder->create_time;
-            $pay_time=$accessDetailList[0]->create_time;
+            $add_time=date('Y-m-d H:i',$GoodsOrder->create_time);
+            $pay_time=date('Y-m-d H:i',$accessDetailList[0]->create_time);
             $pay_name=$GoodsOrder->pay_name;
 
         }
