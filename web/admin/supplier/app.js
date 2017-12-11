@@ -5,6 +5,7 @@ const app = angular.module("app", ["ui.router", "ng.ueditor","shop_style", "frei
     "supplier_index","shop_decoration_module","supplier_wallet_module",
     "intelligent_directive","shop_data_module","wallet_detail_module","income_pay_module",
     "set_password_module","waitsend_detail_module","goods_detail_module",
+    "brand_index_module","add_brand_module",
   /*三阶段王杰---结束*/
   /*三阶段芳子---开始*/
     "supplier_accountModule","withdraw_depositModule",
@@ -63,6 +64,14 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/record_goods_detail",
             templateUrl: "pages/order_manage/record_goods_detail.html",
             params:{express_params:null},
+        })
+        .state("brand_index", {   //品牌管理
+          url: "/brand_index",
+          templateUrl: "pages/brand_manage/brand_index.html"
+        })
+        .state("add_brand", {   //添加品牌
+          url: "/add_brand",
+          templateUrl: "pages/brand_manage/add_brand.html"
         })
         /*--------------三阶段结束----王杰-----------------*/
 
@@ -129,10 +138,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/commodity_manage",
             templateUrl: "pages/commodity_manage/commodity_manage.html",
             params: {id: 'id', name: 'name', on_flag: '', down_flag: '',wait_flag:'', logistics_flag:''}
-        })
-        .state("brand_manage", {   //品牌管理
-            url: "/brand_manage",
-            templateUrl: "pages/brand_manage/brand_manage.html"
         })
         .state("class_manage", {   //分类管理
             url: "/class_manage",

@@ -1,0 +1,19 @@
+.img-size{
+    width: 30px;
+    height: 30px;
+}
+.red{
+    color: #FF5722;
+}
+.blue{
+    color: #5677FC;
+}
+.green{
+    color: #8BC34A;
+}
+.dl_active7 {
+    background-color: #E6E9F0 !important;
+}
+.a_active7{
+    color: #5677FC!important;
+}

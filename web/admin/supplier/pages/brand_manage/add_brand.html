@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="pages/brand_manage/css/add_brand.css">
+<div ng-controller="add_brand_ctrl">
+    <form class="form-horizontal" name="add_brand_form" novalidate>
+        <!--品牌名称-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                <span>品牌名称</span>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control"  ng-model="brand_name_model" placeholder="请输入品牌名称" required name="brand_title" id="brand_title" maxlength="10"  ng-class="{'error':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}" ng-blur="title_blur=!!add_brand_form.brand_title.$error">
+                <p class="red_mark" ng-if="myng.brand_name_flag">
+                    <span class="glyphicon glyphicon-asterisk"></span>
+                    该品牌名称已存在，请重新填写
+                </p>
+            </div>
+            <div class="col-sm-8 control-label">
+                <span class="img_txt">*限1~10个字符</span>
+            </div>
+        </div>
+        <hr/>
+        <!--商品注册证-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span>商标注册证</span>
+            </div>
+            <div class="col-sm-10 control-label">
+                <img class="img_size" ng-if="!!upload_img_src" ng-src="{{ upload_img_src}}"/>
+                <img class="img_size" ng-if="!upload_img_src" src="lib/images/default.png"/>
+                <p class="img_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
+                <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{trademark_txt}}</button>
+                <p class="red_mark warning" ng-if="!!img_flag">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    {{img_flag}}
+                </p>
+            </div>
+        </div>
+
+        <!--品牌LOGO-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span>品牌LOGO</span>
+            </div>
+            <div class="col-sm-10 control-label">
+                <img class="img_size" ng-if="!!upload_logo_src" ng-src="{{ upload_logo_src}}"/>
+                <img class="img_size" ng-if="!upload_logo_src" src="lib/images/default.png"/>
+                <p class="img_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
+                <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_logo(logo_data.file)"  ngf-select="" ngf-multiple="false" ng-model="logo_data.file" ng-disabled="upload_dis">{{logo_txt}}</button>
+                <p class="red_mark warning" ng-if="!!img_logo_flag">
+                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                    {{img_logo_flag}}
+                </p>
+            </div>
+        </div>
+        <hr/>
+        <!--选择品牌所在分类-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span>选择品牌所在分类</span>
+            </div>
+            <div class="col-sm-10 control-label ulright">
+                <!--一级-->
+                <ul>
+                    <li ng-repeat="n in details track by $index" ng-class="{'active':oneColor== n}" ng-click="getMore (n)">
+                        {{n.title}}
+                    </li>
+                </ul>
+                <!--二级-->
+                <ul >
+                    <li ng-repeat=" n in second track by $index" ng-class="{'active':twoColor== n}" ng-click="getMoreThree (n)">
+                        {{n.title}}
+                    </li>
+                </ul>
+                <!--三级-->
+                <ul class="thirdul">
+                    <li ng-repeat="n in three track by $index" ng-class="{'active':threeColor==n}">
+                        <label>
+                        <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
+                        {{n.title}}
+                        </label>
+                    </li>
+                </ul>
+                <!--添加的三级-->
+                <ul class="lastul">
+                    <li ng-repeat="item in item_check track by $index">
+                        {{item.title}}
+                        <img style="cursor: pointer" ng-click="delete_item(item)" src="lib/images/close.png" alt="">
+                    </li>
+                </ul>
+                <p class="warning red_mark " ng-if="!!sort_check">
+                    <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                    <span>请至少选择一个分类</span>
+                </p>
+            </div>
+        </div>
+        <!--按钮组-->
+        <div class="row btn_top">
+            <div class="col-sm-12">
+                <button class="btn btn-primary" ng-click="add_brand_ok(add_brand_form.$valid,add_brand_form.$error.required)" ng-disabled="upload_dis">确认</button>
+                <button class="btn btn-default btn_left" ui-sref="brand_index">返回</button>
+            </div>
+        </div>
+    </form>
+    <!--确认添加模态框-->
+    <div class="modal fade" id="add_brand_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    添加成功
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary " data-dismiss="modal" ng-click="add_ok()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="pages/brand_manage/css/brand_index.css">
+<div ng-controller="brand_index_ctrl">
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-primary" ui-sref="add_brand"><i class="iconfont icon-add"></i> 添加</button>
+        </div>
+    </div>
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th>品牌LOGO</th>
+            <th>品牌名称</th>
+            <th>申请时间</th>
+            <th>状态</th>
+            <th>审核备注</th>
+            <th>详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in brand_list">
+            <td><img class="img-size" ng-src="{{item.logo}}" alt=""></td>
+            <td>{{item.name}}</td>
+            <td>{{item.create_time}}</td>
+            <td ng-class="{'blue':item.review_status=='等待审核'}">{{item.review_status}}</td>
+            <td>{{item.reason}}</td>
+            <td><a href="">查看</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <tm-pagination conf="Config"></tm-pagination>
+</div>

@@ -105,7 +105,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     $scope.add_pass_sku=$scope.banner_add_sku;//把传过去的值重新定义，为确认按钮做判断
     //添加获取sku
     if(num===0){
-      $http.get(baseUrl+'/mall/goods-by-sku',{
+      $http.get('/mall/goods-by-sku',{
         params:{
           sku:+$scope.banner_add_sku
         }
@@ -140,7 +140,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         $scope.banner_edit_change_error=false;
       }
       //编辑获取sku
-      $http.get(baseUrl+'/mall/goods-by-sku',{
+      $http.get('/mall/goods-by-sku',{
         params:{
           sku:+$scope.banner_edit_sku
         }
@@ -182,7 +182,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
 	  $scope.upload_txt='上传中...';
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -278,7 +278,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
 	  $scope.upload_txt='上传中...';
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);

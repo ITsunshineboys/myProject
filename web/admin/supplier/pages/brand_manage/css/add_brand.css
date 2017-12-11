@@ -1,0 +1,78 @@
+body{
+    color: #666F80;
+}
+.ulright li{
+    cursor: pointer;
+}
+.ulright li label{
+    font-weight: normal;
+    width: 100%;
+    cursor: pointer;
+}
+.img_size{
+    width: 100px;
+    height: 100px;
+}
+.img_txt{
+    font-size: 12px;
+    color: #ABABAB;
+}
+.form-horizontal .control-label{
+    text-align:left;
+}
+.red_mark{
+    color:#E51C23;
+}
+hr{
+    margin:20px 0;
+}
+.warning{
+    font-size: 12px;
+    margin-top: 6px;
+}
+.btn_top{
+    margin-top: 20px;
+}
+.btn_left{
+    margin-left: 20px;
+}
+
+/*选择拥有系列的分类*/
+.ulright ul{
+    display: inline-block;
+    width: 160px;
+    height: 400px;
+    padding-left: 10px;
+    border: 1px solid #ABABAB;
+    margin-right: 10px;
+    vertical-align: top;
+    /*padding-bottom: 20px;*/
+    overflow: auto;
+}
+.ulright ul li{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ABABAB;
+}
+
+.thirdul{
+    width: 180px!important;
+}
+
+.lastul li{
+    padding: 7px;
+    text-align: start;
+    margin:  9px 9px 9px 0;
+    border: 1px solid #5677FC!important;
+    color: #5677FC;
+    position: relative;
+    cursor: inherit;
+}
+
+.lastul img{
+    position: absolute;
+    width: 24px;
+    right: 0;
+    top: 7px;
+}
+

@@ -24,7 +24,7 @@ app.controller("login_ctrl", function ($scope, $http, $document) {
             $scope.error_flag_txt='请输入密码';
         }else{
             $scope.isLoading = true;
-            $http.post(baseUrl + '/site/admin-login', {
+            $http.post('/site/admin-login', {
                 role_id: $scope.rolo_value,
                 username: $scope.phone_number,
                 password: $scope.password_number
@@ -65,7 +65,7 @@ app.controller("login_ctrl", function ($scope, $http, $document) {
                 });
             }, 1000);
             //获取忘记密码的验证码
-            $http.post(baseUrl + '/site/validation-code', {
+            $http.post('/site/validation-code', {
                 type: 'forgetPassword',
                 mobile: $scope.forget_mb
             }, config).then(function (res) {
@@ -88,7 +88,7 @@ app.controller("login_ctrl", function ($scope, $http, $document) {
                 $scope.new_pw_txt = '*该密码不符合规则，请重新设置';
             } else {
                 $scope.new_pw_txt = '';
-                $http.post(baseUrl + '/site/admin-forget-password', {
+                $http.post('/site/admin-forget-password', {
                     mobile: $scope.forget_mb,
                     new_password: $scope.forget_new_pw,
                     validation_code: $scope.forget_v_code
