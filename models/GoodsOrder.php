@@ -3056,7 +3056,7 @@ class GoodsOrder extends ActiveRecord
                 {
                     $count=1;
                 }
-                $freight=$supplier['freight']/$count;
+                $freight=($supplier['freight']/$count)*100;
                 foreach ($supplier['goods'] as &$goods)
                 {
                     if (

@@ -341,8 +341,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $weak_current = BasisDecorationService::judge($judge,$post);
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $weak_current = BasisDecorationService::judge($goods,$post);
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city']);
@@ -430,8 +430,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $strong_current = BasisDecorationService::judge($judge, $post);
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $strong_current = BasisDecorationService::judge($goods, $post);
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['strong_current'], $post['city']);
@@ -586,9 +586,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-
-        $waterway_current = BasisDecorationService::judge($judge, $post);
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $waterway_current = BasisDecorationService::judge($goods, $post);
 
 
         //当地工艺
@@ -637,8 +636,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $waterproof = BasisDecorationService::judge($judge, $post);
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $waterproof = BasisDecorationService::judge($goods, $post);
 
 
         $points = Points::findByOne('id,title',"id = 69");
@@ -761,8 +760,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $judge = BasisDecorationService::priceConversion($goods);
-        $goods_price = BasisDecorationService::judge($judge, $post);
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $goods_price = BasisDecorationService::judge($goods, $post);
 
 
         //当地工艺
@@ -862,7 +861,7 @@ class OwnerController extends Controller
         $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
 
 
-        $points = Points::findByOne('id,title',"title = '油漆'");
+        $points = Points::findByOne('id,title',"id = 5");
         $latex_paint_area = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
@@ -930,9 +929,7 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-
-        $goods_price = BasisDecorationService::priceConversion($goods);
-
+//        $goods_price = BasisDecorationService::priceConversion($goods);
         //当地工艺
         $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['emulsion_varnish'], $post['city']);
         if ($crafts == null){
@@ -942,7 +939,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods_price, $post);
+        $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods, $post);
 
         foreach ($crafts as $craft) {
 
@@ -1169,7 +1166,7 @@ class OwnerController extends Controller
         $total_day = ceil($tiling_day + $covering_layer_day);
         //总的人工费
         $total_labor_cost['price'] = $total_day * $labor_costs['univalence'];
-        $total_labor_cost['worker_kind'] = self::PROJECT_DETAILS['tiler'];
+        $total_labor_cost['worker_kind'] = $labor_costs['worker_kind'];
 
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL);
@@ -1184,8 +1181,8 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        $goods_price = BasisDecorationService::priceConversion($goods);
-        $goods_attr = BasisDecorationService::mudMakeMaterial($goods_price);
+//        $goods_price = BasisDecorationService::priceConversion($goods);
+        $goods_attr = BasisDecorationService::mudMakeMaterial($goods);
 
         $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
         if ($wall_brick == null){
@@ -1215,15 +1212,15 @@ class OwnerController extends Controller
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods_price, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
+        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
 
 //        自流平费用
         $self_leveling_area = $drawing_room_area;
-        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods_price, $self_leveling_craft, $goods_attr,BasisDecorationService::GOODS_NAME['self_leveling']);
+        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods, $self_leveling_craft, $goods_attr,BasisDecorationService::GOODS_NAME['self_leveling']);
 
         //        河沙费用
         $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods_price, $river_sand_craft, $goods_attr,BasisDecorationService::GOODS_NAME['river_sand']);
+        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods, $river_sand_craft, $goods_attr,BasisDecorationService::GOODS_NAME['river_sand']);
 
 
 
@@ -1300,7 +1297,7 @@ class OwnerController extends Controller
         $material_cost_total = $cement_cost['cost'] + $self_leveling_cost['cost'] + $river_sand_cost['cost'] + $wall_brick_cost['cost'] + $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] + $hall_wall_brick_cost['cost'];
 
         // 水泥，河沙，自流平信息
-        foreach ($goods_price as &$one_goods_price) {
+        foreach ($goods as &$one_goods_price) {
             switch ($one_goods_price) {
                 case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
                     $one_goods_price['quantity'] = $river_sand_cost['quantity'];
@@ -1345,10 +1342,7 @@ class OwnerController extends Controller
     {
         $post = \Yii::$app->request->post();
 //        $_select = 'id,univalence,worker_kind';
-
         $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
-
-
         if ($labor == null){
             $code = 1056;
             return Json::encode([
@@ -1356,8 +1350,8 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 
+        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
         if ($worker_kind_details == null){
             $code = 1057;
             return Json::encode([
@@ -1366,7 +1360,7 @@ class OwnerController extends Controller
             ]);
         }
 
-        $points = Points::findByOne('id,title',"title='杂工'");
+        $points = Points::findByOne('id,title',"id=7");
         $Apartment = Apartment::find()
             ->asArray()
             ->where(['<=','min_area',$post['area']])
@@ -1384,7 +1378,6 @@ class OwnerController extends Controller
 
 //        清运建渣费用
         $craft = EngineeringStandardCraft::findByAll($labor['id'], $post['city']);
-
         if ($craft == null){
             $code = 1062;
             return Json::encode([
@@ -1392,6 +1385,8 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
+
         if ($post['building_scrap'] == 'true') {
             $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
         } else {
@@ -1416,10 +1411,9 @@ class OwnerController extends Controller
                 ]
             ]);
         }
+//        $goods_price = BasisDecorationService::priceConversion($goods);
 
-        $goods_price = BasisDecorationService::priceConversion($goods);
-
-        foreach ($goods_price as $max) {
+        foreach ($goods as $max) {
             switch ($max) {
                 case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
@@ -1536,8 +1530,8 @@ class OwnerController extends Controller
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
-        $goods_select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.sku";
-        $goods = Goods::findBySkuAll($codes,$goods_select);
+
+        $goods = Goods::findBySkuAll($codes);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1646,7 +1640,7 @@ class OwnerController extends Controller
         }
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
-        var_dump($material);exit;
+
 
 
         //  楼梯信息
@@ -1669,7 +1663,7 @@ class OwnerController extends Controller
         $goods_material = [];
         foreach ($material as $one){
             if($one != null){
-                $goods_material[] =   $one;
+                $goods_material [] = $one;
             }
         }
 

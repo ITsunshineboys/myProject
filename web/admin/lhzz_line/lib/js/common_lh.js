@@ -4,7 +4,7 @@
  * @param params       请求参数
  * @param callback     回调函数
  */
-app.service('_ajax', function ($http, $state) {
+app.service('_ajax', ["$http", "$state", function ($http, $state) {
     this.get = function (url, params, callback) {
         $http({
             method: 'GET',
@@ -54,7 +54,7 @@ app.service('_ajax', function ($http, $state) {
             alert(response.statusText)
         })
     }
-})
+}])
 /**
  * 分页
  * config = {

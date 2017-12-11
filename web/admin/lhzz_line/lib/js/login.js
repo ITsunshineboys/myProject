@@ -26,7 +26,7 @@ app1.controller('login_ctrl',function ($scope,$http,$document) {
             $scope.error_txt='请输入密码';
         }else{
             $scope.isLoading = true;
-            $http.post(baseUrl+'/site/admin-login', {
+            $http.post('/site/admin-login', {
                 role_id: 1,
                 username: $scope.username,
                 password: $scope.password

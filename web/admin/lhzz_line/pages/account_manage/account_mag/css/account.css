@@ -1,0 +1,46 @@
+table {
+    margin-top: 40px;
+}
+
+#batch-modal textarea {
+    margin-left: 50px;
+}
+
+#batch-modal .modal-body span {
+    vertical-align: top;
+}
+
+#batch-modal .modal-content > span {
+    margin-left: 16px;
+}
+
+.word-blue{
+    color: #5677FC;
+}
+
+.close-reason span{
+    display: inline-block;
+    width: 50px;
+    border-radius: 3px;
+    border: 1px solid #666F80;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.open_modal .modal-body{
+    height: 100px;
+}
+
+.close_reason_modal .modal-body{
+    height: 240px;
+
+}
+.close_reason_modal .modal-body span:first-child{
+    margin-right: 30px
+}
+
+
+

@@ -1115,10 +1115,7 @@ class MallController extends Controller
             ]);
         }
 
-//        if ($goodsCategory->review_status == GoodsCategory::REVIEW_STATUS_APPROVE) {
-//            new EventHandleService();
-//            Yii::$app->trigger(Yii::$app->params['events']['mall']['category']['updateBatch']);
-//        }
+
 
         return Json::encode([
             'code' => 200,

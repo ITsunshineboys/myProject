@@ -1,75 +1,69 @@
 <link rel="stylesheet" href="pages/account_manage/add_user/css/add_user.css">
 <div ng-controller="add_user_ctrl">
-    <!--<header>-->
-        <!--<div>-->
-            <!--<i class="glyphicon glyphicon-home"></i>-->
-            <!--<span class="shop_manage">账户管理</span>-->
-            <!--<span style="color: #8D9199">>添加新用户</span>-->
-            <!--<img src="pages/account_manage/add_user/images/user.png" alt=""/>-->
-        <!--</div>-->
-    <!--</header>-->
     <section>
-        <form name="change_num" >
-        <div>
-            <img src="pages/account_manage/add_user/images/red.png" alt="">
-            <span class="title">新手机号</span>
-            <div class="inline_block">
-                <input type="text" placeholder="请输入新手机号"  name="new_num"
-                       onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"
-                       class="input_style"  ng-blur="getBlur()" ng-model="new_num" maxlength="11" >
-                <div>
+        <form name="change_num">
+            <div>
+                <img src="pages/account_manage/add_user/images/red.png" alt="">
+                <span class="title">新手机号</span>
+                <div class="inline_block">
+                    <input type="text" placeholder="请输入新手机号" name="new_num"
+                           onkeyup="this.value=this.value.replace(/[^\d]/g,'') "
+                           onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"
+                           class="input_style" ng-blur="getBlur()" ng-model="new_num" maxlength="11">
+                    <div>
 
-                    <span  ng-show="flag">
+                    <span ng-show="flag">
                         <img src="pages/account_manage/add_user/images/red.png" alt="">
                         <span>{{error}}</span>
                     </span>
-                    <br/>
-
-                    <!--<span  ng-show="change_num.new_num.$error.minlength && change_num.new_num.$dirty ">-->
-                         <!--<img src="pages/account_manage/add_user/images/red.png" alt="">-->
-                         <!--<span>最少为11位数</span>-->
-                    <!--</span>-->
+                        <br/>
+                    </div>
                 </div>
+                <span class="margin_left">*限11位数字</span>
             </div>
-            <span class="margin_left">*限11位整数数字</span>
-        </div>
 
-        <div class="margin_top">
-            <img src="pages/account_manage/add_user/images/red.png" alt="">
-            <span class="title">登录密码</span>
-            <div class="inline_block">
-                <input type="password" name="new_password" placeholder="请输入登录密码" class="input_style"
-                       maxlength="25"  ng-model="new_password"
-                       ng-blur="passwordBlur ()">
-                <div>
-                    <span  ng-show="strat" >
+            <div class="margin_top">
+                <img src="pages/account_manage/add_user/images/red.png" alt="">
+                <span class="title">登录密码</span>
+                <div class="inline_block">
+                    <input type="password" name="new_password" placeholder="请输入登录密码" class="input_style"
+                           maxlength="25" ng-model="new_password"
+                           ng-blur="passwordBlur()">
+                    <div>
+                    <span ng-show="strat">
                          <img src="pages/account_manage/add_user/images/red.png" alt="">
                          <span>{{comment}}</span>
                     </span>
+                    </div>
                 </div>
+                <span class="margin_left">*6-25个字符，包含大小写字母、数字</span>
             </div>
-            <span class="margin_left">*6-25个字符，包含大小写字母、数字</span>
-</div>
 
-        <span class="btn_style"  ng-click="changeNum ()">确定</span>
-        <span class="btn_style" ui-sref="account_index" ng-click="cancel()">取消</span>
-        <!--添加成功-->
-        <div class="modal fade" id="ok_modal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">提示</h4>
-                    </div>
-                    <div class="modal-body" style="height: 100px;">
-                        <span>{{comment}}</span>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="getBack ()">确定</button>
+            <div class="btns">
+                <button class="btn btn-primary" ng-click="changeNum()">确定</button>
+                <button class="btn btn-default" ui-sref="account.normal" ng-click="cancel()">取消</button>
+            </div>
+
+            <!--添加成功-->
+            <div class="modal fade" id="ok_modal" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">提示</h4>
+                        </div>
+                        <div class="modal-body" style="height: 100px;">
+                            <span>{{comment}}</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="getBack ()">
+                                确定
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
     </section>
 </div>
