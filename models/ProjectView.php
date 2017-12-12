@@ -46,7 +46,7 @@ class ProjectView extends ActiveRecord
     {
         $row = \Yii::$app->db->createCommand();
         return $row->update(self::TABLE_NAME,[
-                'project_value'=>$rows
+                'project_value'=>$rows * 100,
             ],['id'=>$id])->execute();
     }
 
