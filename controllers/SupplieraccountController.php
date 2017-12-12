@@ -1384,5 +1384,27 @@ class SupplieraccountController extends  Controller{
         ]);
     }
 
+    /**
+     * 业主收支明细下拉
+     * @return string
+     */
+    public function actionOwnerAccessStatus(){
+
+        $data=[
+            ['status'=>0,'value'=>'全部'],
+            ['status'=>1,'value'=>'充值'],
+            ['status'=>2,'value'=>'扣款'],
+            ['status'=>3,'value'=>'已提现'],
+            ['status'=>4,'value'=>'提现中'],
+            ['status'=>5,'value'=>'驳回'],
+            ['status'=>7,'value'=>'使用'],
+        ];
+    return Json::encode([
+        'code'=>200,
+        'msg'=>'ok',
+        'data'=>$data
+    ]);
+    }
+
 
 }
