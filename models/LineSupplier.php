@@ -231,4 +231,25 @@ class LineSupplier extends \yii\db\ActiveRecord
 
 
     }
+
+
+    public  static  function  _extraData($viewData)
+    {
+        $data=self::find()
+            ->where(['supplier_id'=>$viewData['id']])
+            ->asArray()
+            ->one();
+        if ($data)
+        {
+            $viewData['is__offline_shop']='是';
+            $viewData['line_district']=LogisticsDistrict::GetLineDistrictByDistrictCode($data['district_code']).'-'.$data['address'];
+            $viewData['line_mobile']=$data['mobile'];
+        }else{
+            $viewData['is__offline_shop']='否';
+            $viewData['line_district']='';
+            $viewData['line_mobile']='';
+        }
+        return $viewData;
+
+    }
 }

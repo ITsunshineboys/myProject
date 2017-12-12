@@ -714,7 +714,7 @@ class Supplier extends ActiveRecord
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_ADMIN_EXTRA))
             : $modelData;
         $this->_formatData($viewData);
-        return $viewData;
+        return LineSupplier::_extraData($viewData);
     }
 
     /**
