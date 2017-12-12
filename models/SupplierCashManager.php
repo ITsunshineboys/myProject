@@ -42,6 +42,7 @@ class SupplierCashManager extends ActiveRecord
         'approve_time',
         'reject_time',
         'review_status',
+        'supplier_id',
         'reason',
         'path',
         'supplier_name',
@@ -564,6 +565,9 @@ class SupplierCashManager extends ActiveRecord
             ->asArray()
             ->all();
         foreach ($categoryList as &$category) {
+            if(isset($category['supplier_id'])){
+                $category['apply_people']=Supplier::find()->where(['id'=>$category['supplier_id']])->select('shop_name')->one()['shop_name'];
+            }
             if (isset($category['create_time'])) {
                 $category['create_time'] = date('Y-m-d H:i', $category['create_time']);
             }
@@ -612,7 +616,9 @@ class SupplierCashManager extends ActiveRecord
             ->where(['id' => $cate_id])
             ->one();
         if ($category) {
-
+            if(isset($category['supplier_id'])){
+                $category['apply_people']=Supplier::find()->where(['id'=>$category['supplier_id']])->select('shop_name')->one()['shop_name'];
+            }
             if (isset($category['level']) && isset($category['path'])) {
                 $category['titles'] = '';
                 if ($category['level'] == GoodsCategory::LEVEL3) {
