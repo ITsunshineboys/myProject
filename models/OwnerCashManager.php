@@ -123,7 +123,7 @@ class OwnerCashManager extends ActiveRecord {
             ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
             ->where(['u.id'=>$user_id])
             ->one();
-        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => self::STATUS_CASHING])->sum('freeze_money');
+        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 0])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 2])->sum('cash_money');
         if($array){
             $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
