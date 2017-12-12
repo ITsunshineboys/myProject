@@ -553,7 +553,7 @@ class SupplieraccountController extends  Controller{
             $where.=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
         }
         if($status!=-1){
-            $where.= $status == self::STATUS_ONLINE ? ' and deadtime >0' : ' and  deadtime = 0';
+            $where.= $status == self::STATUS_ONLINE ? ' and  deadtime = 0':' and deadtime >0' ;
         }
         $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
 
