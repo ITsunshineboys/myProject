@@ -1,0 +1,26 @@
+.row{
+  margin-bottom: 20px;
+}
+.certificate-size{
+  width: 120px;
+  height: 120px;
+}
+.logo-size{
+  width: 120px;
+  height: 120px;
+}
+.remark-box{
+  position: relative;
+}
+.word-num{
+  position: absolute;
+  bottom: 0;
+  right: 15px;
+}
+.red_mark-txt{
+  height: 140px!important;
+  border-radius: 4px;
+}
+.btn-right{
+  margin-right: 15px;
+}

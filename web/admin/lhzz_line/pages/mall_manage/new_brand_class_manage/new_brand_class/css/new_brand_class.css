@@ -1,0 +1,13 @@
+.img-size{
+  width: 30px;
+  height: 30px;
+}
+table{
+  table-layout: fixed;
+}
+.ellipsis{
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

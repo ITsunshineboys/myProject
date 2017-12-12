@@ -1,19 +1,24 @@
-<link rel="stylesheet" href="pages/mall_manage/new_brand_class_manage/new_brand_class/css/new_brand.css">
+<link rel="stylesheet" href="pages/mall_manage/new_brand_class_manage/new_brand_class/css/new_brand_class.css">
 <div ng-controller="new_brand_ctrl">
   <div class="search form-inline clearfix">
     <div class="form-group pull-left">
       <span>状态选择</span>
       <select class="form-control" ng-model="firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-      <select class="form-control" ng-show="two_select_flag" ng-model="myng.secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
-      <select class="form-control" ng-show="three_select_flag" ng-model="myng.three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
+      <select class="form-control" ng-show="two_select_flag" ng-model="secselect" ng-options="item.id as item.title for item in secondclass" ng-change="three_Class(secselect)"></select>
+      <select class="form-control" ng-show="three_select_flag" ng-model="three_select" ng-options="item.id as item.title for item in three_class" ng-change="last_Class(three_select)"></select>
     </div>
   </div>
-  <tabel class="table table-hover table-responsive">
+  <table class="table table-hover table-responsive">
     <thead>
     <tr>
       <th>品牌LOGO</th>
       <th>品牌名称</th>
-      <th>申请时间</th>
+      <th>申请时间
+        <span class="sort" ng-click="sortClick()">
+           <i class="iconfont icon-up" ng-class="{'active':params.sort_time== 1}"></i>
+           <i class="iconfont icon-down" ng-class="{'active':params.sort_time == 2}"></i>
+        </span>
+      </th>
       <th>申请人</th>
       <th>状态</th>
       <th>审核备注</th>
@@ -22,17 +27,34 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="item in ">
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+    <tr ng-repeat="item in brand_list">
+      <td><img class="img-size" ng-src="{{item.logo}}" alt=""></td>
+      <td>{{item.name}}</td>
+      <td>{{item.create_time}}</td>
+      <td>{{item.apply_people}}</td>
+      <td ng-class="{'blue':item.review_status=='待审核','red':item.review_status=='不通过','green':item.review_status=='通过'}">{{item.review_status}}</td>
+      <td class="ellipsis"><a ng-click="remark(item.reason)">{{item.reason}}</a></td>
+      <td><a ui-sref="new_brand_check({brand_id:{{item.id}},review_status:item.review_status})">查看</a></td>
+      <td ng-if="item.review_status=='待审核'"><a ui-sref="new_brand_check({brand_id:{{item.id}},review_status:item.review_status})">审核</a></td>
     </tr>
     </tbody>
-  </tabel>
+  </table>
   <tm-pagination conf="Config"></tm-pagination>
+  <!--审核备注模态框-->
+  <div class="modal fade" id="check_modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">审核备注</h4>
+        </div>
+        <div class="modal-body">
+          {{modal_reason}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

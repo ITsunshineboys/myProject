@@ -16,6 +16,8 @@ var app = angular.module("app", ["ng.ueditor", "ui.router","onsaleeditModule", "
     "checklist-model",
     "new_brand_module",
     "new_class_module",
+    "new_brand_check_module",
+    "new_class_check_module"
     //王杰 结束
 ]);
 /*路由拦截*/
@@ -119,6 +121,14 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
       .state("new_brand_class.new_class", {          /*新分类管理*/
         url: "/new_class",
         templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class.html"
+      })
+      .state("new_brand_check", {          /*新品牌审核*/
+        url: "/new_brand_check?brand_id&review_status",
+        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_check.html",
+      })
+      .state("new_class_check", {          /*新分类审核*/
+        url: "/new_class_check?cate_id&review_status",
+        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class_check.html",
       })
         /*---------------------------王杰结束--------------------------------------*/
 
