@@ -299,6 +299,25 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         }
     }
 
+    public  static  function  _extraData($goods)
+    {
+        $lineGoods=self::find()->where(['goods_id'=>$goods['id']])->one();
+        if ($lineGoods)
+        {
+                $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
+            $goods['is_offline_goods']='是';
+            $goods['line_district']=LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier->district_code).'-'.$lineSupplier->address;
+            $goods['line_mobile']=$lineSupplier->mobile;
+        }else
+        {
+            $goods['is_offline_goods']='否';
+            $goods['line_district']='';
+            $goods['line_mobile']='';
+        }
+        return $goods;
+    }
+
+
 
 
 }

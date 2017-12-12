@@ -11,6 +11,7 @@ use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\GoodsRecommendViewLogSupplier;
+use app\models\LineSupplierGoods;
 use app\models\Series;
 use app\models\Style;
 use app\models\Supplier;
@@ -3896,6 +3897,7 @@ class MallController extends Controller
         }
 
         $data = $goods->adminView();
+        $data =LineSupplierGoods::_extraData($data);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
