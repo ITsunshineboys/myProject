@@ -2951,15 +2951,21 @@ class GoodsOrder extends ActiveRecord
     public static function SetOrderNo(){
         do {
             $code=date('md',time()).'1'.rand(10000,99999);
-        } while ( $code==GoodsOrder::find()->select('order_no')->where(['order_no'=>$code])->asArray()->one()['order_no']);
+        } while
+        (
+            !empty(GoodsOrder::find()
+                ->select('order_no')
+                ->where(['order_no'=>$code])
+                ->asArray()
+                ->one())
+        );
         return $code;
     }
 
 
     /**
      * 设置交易单号
-     * set  transaction no
-     * @param $supplier_id
+     * @param $role_number
      * @return string
      */
     public  static  function  SetTransactionNo($role_number)
@@ -2970,7 +2976,21 @@ class GoodsOrder extends ActiveRecord
         $day=date('d',$time);
         do{
             $transaction_no=$month.$day.$role_number.$rand;
-        }while ( $transaction_no==UserCashregister::find()->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no'] || $transaction_no==UserAccessdetail::find() ->select('transaction_no')->where(['transaction_no'=>$transaction_no])->asArray()->one()['transaction_no']);
+        }while
+        (
+            !empty(UserCashregister::find()
+                ->select('transaction_no')
+                ->where(['transaction_no'=>$transaction_no])
+                ->asArray()
+                ->one()
+            )
+            || !empty(UserAccessdetail::find()
+                ->select('transaction_no')
+                ->where(['transaction_no'=>$transaction_no])
+                ->asArray()
+                ->one()
+            )
+        );
         return $transaction_no;
     }
 
