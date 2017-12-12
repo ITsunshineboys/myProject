@@ -308,11 +308,13 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             $goods['is_offline_goods']='是';
             $goods['line_district']=LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier->district_code).'-'.$lineSupplier->address;
             $goods['line_mobile']=$lineSupplier->mobile;
+            $goods['line_supplier_name']=Supplier::findOne($lineSupplier->supplier_id)->shop_name;
         }else
         {
             $goods['is_offline_goods']='否';
             $goods['line_district']='';
             $goods['line_mobile']='';
+            $goods['line_supplier_name']='';
         }
         return $goods;
     }
