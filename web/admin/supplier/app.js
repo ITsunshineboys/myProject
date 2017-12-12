@@ -74,11 +74,11 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
           templateUrl: "pages/brand_manage/add_brand.html"
         })
 	      .state("edit_brand", {   //编辑品牌
-		      url: "/edit_brand",
+		      url: "/edit_brand?brand_id",
 		      templateUrl: "pages/brand_manage/edit_brand.html"
 	      })
-        .state("brand_detail", {   //编辑品牌
-          url: "/brand_detail",
+        .state("brand_detail", {   //品牌详情
+          url: "/brand_detail?brand_id",
           templateUrl: "pages/brand_manage/brand_detail.html"
         })
         /*--------------三阶段结束----王杰-----------------*/

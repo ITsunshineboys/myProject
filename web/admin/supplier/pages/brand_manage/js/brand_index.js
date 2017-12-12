@@ -2,7 +2,7 @@ angular.module("brand_index_module",[])
 	.controller("brand_index_ctrl",function ($rootScope,$scope,$http,_ajax) {
 	$rootScope.crumbs = [{
 		name: '品牌管理',
-		icon: 'icon-shuju',
+		icon: 'icon-Brand',
 	}];
 	/*分页配置*/
 	$scope.Config = {

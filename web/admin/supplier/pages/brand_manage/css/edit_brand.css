@@ -1,0 +1,68 @@
+.img-size{
+    width: 120px;
+    height: 120px;
+}
+.form-horizontal .control-label{
+    text-align: left;
+}
+.img_txt{
+    font-size: 12px;
+    color: #ABABAB;
+}
+.red_mark{
+    color:#E51C23;
+}
+
+.warning{
+    font-size: 12px;
+    margin-left: 16px;
+    margin-top: 6px;
+}
+
+.ulright ul{
+    display: inline-block;
+    width: 160px;
+    height: 400px;
+    padding-left: 10px;
+    border: 1px solid #ABABAB;
+    margin-right: 10px;
+    vertical-align: top;
+    overflow: auto;
+}
+
+.ulright ul li{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ABABAB;
+    cursor: pointer;
+}
+.ulright ul li label{
+    font-weight: normal;
+    width: 100%;
+    cursor: pointer;
+}
+
+.thirdul{
+    width: 180px!important;
+}
+
+.lastul li{
+    padding: 7px;
+    text-align: start;
+    margin:  9px 9px 9px 0;
+    border: 1px solid #5677FC !important;
+    color: #5677FC;
+    position: relative;
+    cursor: inherit!important;
+}
+
+.lastul img{
+    position: absolute;
+    width: 24px;
+    right: 0;
+    top: 7px;
+    cursor: pointer;
+}
+.active{
+    color: #5677FC;
+}

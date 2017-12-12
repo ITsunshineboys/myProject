@@ -9,13 +9,13 @@
         <div class="row">
             <div class="col-sm-2">商标注册证</div>
             <div class="col-sm-10">
-                <img class="certificate-size" ng-src="{{certificate}}" alt="">
+                <img class="img-size" ng-src="{{certificate}}">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-2">品牌LOGO</div>
             <div class="col-sm-10">
-                <img class="logo-size" ng-src="{{logo}}" alt="">
+                <img class="img-size" ng-src="{{logo}}">
             </div>
         </div>
         <hr>
@@ -40,17 +40,21 @@
         <hr>
         <div class="row">
             <div class="col-sm-2">审核状态</div>
-            <div class="col-sm-10">{{apply_people}}</div>
+            <div class="col-sm-10" ng-class="{'blue':review_status=='待审核','red':review_status=='不通过','green':review_status=='通过'}">{{review_status}}</div>
         </div>
-        <div class="row">
+        <div class="row" ng-if="review_status!='待审核'">
             <div class="col-sm-2">审核时间</div>
-            <div class="col-sm-10">{{apply_people}}</div>
+            <div class="col-sm-10">{{review_time}}</div>
         </div>
-        <div class="row">
+        <div class="row" ng-if="review_status!='待审核'">
             <div class="col-sm-2">审核备注</div>
-            <div class="col-sm-10">{{create_time}}</div>
+            <div class="col-sm-10">{{reason}}</div>
         </div>
     </from>
-    <button class="btn btn-primary btn-right" ng-if="pass_review_status=='不通过'" data-toggle="modal" data-target="#check_modal">编辑</button>
-    <button class="btn btn-default" ng-click="back_btn()">返回</button>
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-primary btn-right" ng-if="review_status=='不通过'" ui-sref="edit_brand({brand_id:brand_id})">编辑</button>
+            <button class="btn btn-default" ng-click="back_btn()">返回</button>
+        </div>
+    </div>
 </div>

@@ -32,7 +32,7 @@ angular.module("new_brand_check_module",[])
     },function (res) {
       console.log(res);
       $scope.name=res.data.name;//名称
-      $scope.certificate=res.data.certificate;//
+      $scope.certificate=res.data.certificate;//商标注册码
       $scope.logo=res.data.logo;//logo
       $scope.category_titles=res.data.category_titles;//所在分类
       $scope.apply_people=res.data.apply_people;//申请人
