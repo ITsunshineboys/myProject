@@ -2076,6 +2076,7 @@ class WithdrawalsController extends Controller
         $user->balance+=10000000;
         $user->availableamount+=10000000;
         $user->save(false);
+        echo 1;die;
     }
 
 
