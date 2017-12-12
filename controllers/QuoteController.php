@@ -279,7 +279,7 @@ class QuoteController extends Controller
      */
     public function actionProjectNormWoodworkList()
     {
-        $material = [22,9,12,13];
+        $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id
         $goods['specification']  = GoodsCategory::GoodsAttrValue($material);
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
@@ -306,7 +306,7 @@ class QuoteController extends Controller
         foreach ($post['value'] as $one_post){
             if (isset($one_post['id'])){
                 $value = EngineeringStandardCraft::findOne($one_post['id']);
-                $value->material = $one_post['value'];
+                $value->material = $one_post['value'] * 100;
                 $value->save();
             }
         }
@@ -317,21 +317,21 @@ class QuoteController extends Controller
                 $value->district_code   = $post['district_code'];
                 $value->project         = $post['project'];
                 $value->project_details = $one_post['name'];
-                $value->material        = $one_post['value'];
+                $value->material        = $one_post['value'] * 100;
                 $value->save();
             }
         }
 
         foreach ($post['specification'] as $one_specification){
             $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
-            $specification->value = $one_specification['value'];
+            $specification->value = $one_specification['value'] * 100;
             $specification->save();
         }
 
         foreach ($post['coefficient'] as $one_coefficient){
             if (isset($one_coefficient['id'])){
                 $coefficient = EngineeringStandardCarpentryCoefficient::findOne($one_coefficient['id']);
-                $coefficient->value = $one_coefficient['value'];
+                $coefficient->value = $one_coefficient['value'] * 100;
                 $coefficient->save();
             }
         }
@@ -340,7 +340,7 @@ class QuoteController extends Controller
             if (isset($one_coefficient['add_id'])){
                 $coefficient = new EngineeringStandardCarpentryCoefficient();
                 $coefficient->project  = $one_coefficient['add_id'];
-                $coefficient->value  = $one_coefficient['value'];
+                $coefficient->value  = $one_coefficient['value'] * 100;
                 $coefficient->coefficient  = $one_coefficient['coefficient'];
                 $coefficient->series_or_style  = $one_coefficient['series_or_style'];
                 $coefficient->save();
@@ -373,12 +373,37 @@ class QuoteController extends Controller
     public function actionCoefficientAdd()
     {
         $post = \Yii::$app->request->post();
-        CoefficientManagement::deleteAll();
-        $rows = [];
-        foreach ($post['value'] as $value){
-            $rows [] = $value;
+
+        $tr = \Yii::$app->db->beginTransaction();
+        try{
+            $del = CoefficientManagement::deleteAll();
+
+            if (!$del){
+                $tr->rollBack();
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            foreach ($post['value'] as $value){
+                $row = (new CoefficientManagement())->findByInsert($value);
+            }
+
+            if (!$row){
+                $tr->rollBack();
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $tr->commit();
+        }catch (\Exception $e) {
+            $tr->rollback();
         }
-        (new CoefficientManagement())->findByInsert($rows);
+
         return Json::encode([
             'code'=>200,
             'msg'=>'OK'
@@ -386,7 +411,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * plot list and pages
+     * 小区列表
      * @return string
      */
     public function actionPlotList()

@@ -20,28 +20,36 @@ class CoefficientManagement extends ActiveRecord
         return 'coefficient_management';
     }
 
-    public function rules()
-    {
-        return [
-            [['classify'],'string'],
-            [['coefficient'],'number']
-        ];
-    }
+//    public function rules()
+//    {
+//        return [
+//            [['coefficient','category_id'],'number']
+//        ];
+//    }
 
     public static function findByAll($select = [],$where = [])
     {
-        return self::find()
+        $row =  self::find()
             ->asArray()
             ->select($select)
             ->where($where)
             ->all();
+
+        foreach ($row as &$one){
+            $one['coefficient'] = $one['coefficient'] / 100;
+        }
+
+        return $row;
     }
 
     public static function findByInsert($rows)
     {
         $row = \Yii::$app->db->createCommand();
         return $row
-            ->batchInsert(self::TABLE_NAME,['classify','coefficient'],$rows)
+            ->insert(self::TABLE_NAME,[
+                'category_id' => $rows['id'],
+                'coefficient' => $rows['value'] * 100,
+            ])
             ->execute();
     }
 }
