@@ -1363,6 +1363,7 @@ class WithdrawalsController extends Controller
                 $bankInfo=UserBankInfo::find()
                     ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
                     ->one();
+                var_dump($bankInfo);die;
                 $bankInfo->selected=1;
                 $res1=$bankInfo->save(false);
                 if (!$res1)
