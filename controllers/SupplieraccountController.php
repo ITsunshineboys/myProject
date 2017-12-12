@@ -817,7 +817,7 @@ class SupplieraccountController extends  Controller{
         }
         $code = 1000;
 
-        $user_id = (int)(Yii::$app->request->get('id', ''));
+        $user_id = (int)(Yii::$app->request->get('user_id', ''));
         if (!$user_id) {
             return Json::encode([
                 'code' => $code,
