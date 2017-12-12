@@ -912,23 +912,23 @@ class WithdrawalsController extends Controller
      */
     public function  actionSupplierAccessDetail()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-        if (!$supplier)
-        {
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $user = Yii::$app->user->identity;
+//        if (!$user){
+//            $code=1052;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+//        if (!$supplier)
+//        {
+//            $code=1010;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $request = Yii::$app->request;
         $transaction_no=trim($request->post('transaction_no',''));
         if (!$transaction_no)
@@ -944,8 +944,8 @@ class WithdrawalsController extends Controller
             }
         }
         $accessDetail=UserAccessdetail::find()
-            ->where(['uid'=>$user->id])
-            ->andWhere(['role_id'=>6])
+//            ->where(['uid'=>$user->id])
+//            ->andWhere(['role_id'=>6])
             ->andWhere(['transaction_no'=>$transaction_no])
             ->asArray()
             ->one();
