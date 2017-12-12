@@ -76,7 +76,7 @@ class Supplier extends ActiveRecord
         'quality_guarantee_deposit',
         'licence',
         'licence_image',
-        'support_offline_shop',
+//        'support_offline_shop',
         'category_id',
         'type_shop',
     ];
