@@ -1170,6 +1170,9 @@ class SupplieraccountController extends  Controller{
 
             $where = "supplier_id = {$supplier->id}";
         } else {
+            $start_time=trim(Yii::$app->request->get('start_time'));
+            $end_time=trim(Yii::$app->request->get('end_time'));
+            $status=(int)(Yii::$app->request->get('status',-1));
             $where = "supplier_id !=0 ";
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
@@ -1180,6 +1183,32 @@ class SupplieraccountController extends  Controller{
                     $where .= ' and id in (' . implode(',', $ids) . ')';
                 }
             }
+            if(isset($status) && $status!=-1){
+                $where.=" and review_status=$status";
+            }
+            if (($start_time && !StringService::checkDate($start_time))
+                || ($end_time && !StringService::checkDate($end_time))
+            ){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if($start_time==$end_time){
+                list($start_time, $end_time) =ModelService::timeDeal($start_time);
+            }else{
+                $start_time && $end_time .= ' 23:59:59';
+            }
+            if ($start_time) {
+                $startTime = (int)strtotime($start_time);
+                $startTime && $where .= " and create_time >= {$startTime}";
+            }
+            if ($end_time) {
+                $endTime = (int)strtotime($end_time);
+                $endTime && $where .= " and create_time <= {$endTime}";
+            }
+
         }
         $sort_time=(int)Yii::$app->request->get('sort_time',2);
         switch ($sort_time)
