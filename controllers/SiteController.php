@@ -856,7 +856,7 @@ class SiteController extends Controller
         $res = ModelService::resetIcon(Yii::$app->user->identity, $icon);
         return Json::encode([
             'code' => $res,
-            'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res],
+            'msg' => 200 == $res ? Yii::$app->params['okMsgs']['resetIcon'] : Yii::$app->params['errorCodes'][$res],
         ]);
     }
 
