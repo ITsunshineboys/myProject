@@ -1203,6 +1203,7 @@ class WithdrawalsController extends Controller
                 $accessDetail->access_money=$msg['total_fee'];
                 $accessDetail->create_time=time();
                 $accessDetail->transaction_no=$transaction_no;
+                $accessDetail->recharge_pay_type=2;
                 $res2=$accessDetail->save(false);
                 if (!$res2)
                 {
@@ -1279,6 +1280,7 @@ class WithdrawalsController extends Controller
                     $accessDetail->access_money=$total_amount*100;
                     $accessDetail->create_time=time();
                     $accessDetail->transaction_no=$out_trade_no;
+                    $accessDetail->recharge_pay_type=1;
                     if (!$accessDetail->save(false))
                     {
                         $tran->rollBack();
