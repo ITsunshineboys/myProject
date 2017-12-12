@@ -101,10 +101,8 @@ class OwnerCashManager extends ActiveRecord {
                 $user['balance']=sprintf('%.2f',(float)$user['balance']*0.01);
                 $user['status']=$user['deadtime']>0?'已关闭':'正常';
             }
-        }else{
-            return null;
         }
-        $count=count($userList);
+        $count=User::find()->where($where)->count();
         return ModelService::pageDeal($userList,$count,$page,$size);
 
 
