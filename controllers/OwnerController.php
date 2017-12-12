@@ -65,6 +65,14 @@ class OwnerController extends Controller
 
 
     /**
+     * 有计算公式的材料id
+     * 所对应的三级分类
+     * 木地板,人造大理石,弯头,木门,浴霸,换气扇,吸顶灯,水龙头,床,床头柜,抽油烟机,灶具,立柜式空调,挂壁式空调,灯具,床垫,马桶,浴柜,花洒套装,淋浴隔断
+     */
+    const MATERIALS = [17,52,35,80,61,62,63,75,121,123,106,108,117,119,130,170,144,140,146,152];
+
+
+    /**
      * 工种类型 id
      */
     const WORK_CATEGORY = [
@@ -1618,8 +1626,7 @@ class OwnerController extends Controller
         $post = Yii::$app->request->get();
 
         // 有资料 计算公式
-        $materials = ['木地板1','人造大理石','弯头','木门','浴霸','换气扇','吸顶灯','水龙头','床','床头柜','抽油烟机','灶具','立柜式空调','挂壁式空调','灯具','床垫','马桶','浴柜','花洒套装','淋浴隔断'];
-        $goods = Goods::assortList($materials,$post['city']);
+        $goods = Goods::assortList(self::MATERIALS,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $material[]   = BasisDecorationService::formula($goods_price,$post);
 
