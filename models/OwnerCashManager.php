@@ -366,6 +366,12 @@ class OwnerCashManager extends ActiveRecord {
                 $user=Supplier::find()->where(['uid'=>$uid])->one();
             }elseif($role_id==7){
                 $user=User::find()->where(['id'=>$uid])->one();
+
+            }
+            if($user->availableamount<$freeze_money){
+                $code=1075;
+                $transaction->rollBack();
+                return $code;
             }
             $user->availableamount-=$freeze_money*100;
             if(!$user->update(false)){
