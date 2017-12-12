@@ -1,5 +1,5 @@
 angular.module('mall_finance', ['ui.bootstrap'])
-    .controller('mall_finance_ctrl', function ($scope, $http, $rootScope, $state, _ajax, $uibModal, $location) {
+    .controller('mall_finance_ctrl', function ($stateParams,$scope, $http, $rootScope, $state, _ajax, $uibModal, $location) {
         $rootScope.crumbs = [
             {
                 name: '财务中心',
@@ -264,8 +264,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             {num:3,str:'已提现'},
             {num:4,str:'提现中'},
             {num:5,str:'驳回'},
-            {num:6,str:'货款'},
-            {num:7,str:'使用'}
+            {num:6,str:'货款'}
         ]
         $scope.Config5 = {
             showJump: true,
@@ -287,7 +286,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             time_type: 'all',
             uid:'',
             keyword:'',
-            sort_time:1,
+            sort_time:2,
             type:0,
             time_start:'',
             time_end:''
@@ -305,11 +304,16 @@ angular.module('mall_finance', ['ui.bootstrap'])
                             tablePages5()
                         }
                     }
+                    $scope.keyword5 = ''
+                    $scope.params5.keyword = ''
+                }else if(index == 2){
+                    $scope.params5.sort_time = $scope.params5.sort_time==1?2:1
+                    tablePages5()
                 }else{
                     tablePages5()
+                    $scope.keyword5 = ''
+                    $scope.params5.keyword = ''
                 }
-                $scope.keyword5 = ''
-                $scope.params5.keyword = ''
             }
         }
         $scope.$watch('keyword5',function (newVal,oldVal) {
@@ -536,21 +540,52 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 $scope.common_house = function () {
                     $uibModalInstance.close()
                     tablePages()
-                    $rootScope.crumbs = [
-                        {
-                            name: '财务中心',
-                            icon: 'icon-caiwu',
-                            link: $rootScope.finance_click
-                        }, {
-                            name: '商城财务',
-                            link: function () {
-                                $state.go('mall_finance.index')
-                                $rootScope.crumbs.splice(2, 4)
+                    if($stateParams.index == 1){
+                        $rootScope.crumbs = [
+                            {
+                                name: '财务中心',
+                                icon: 'icon-caiwu',
+                                link: $rootScope.finance_click
+                            }, {
+                                name: '商城财务',
+                                link: function () {
+                                    $state.go('mall_finance.index')
+                                    $rootScope.crumbs.splice(2, 4)
+                                }
+                            }, {
+                                name: '账户管理',
+                                link: function () {
+                                    $state.go('mall_finance.account')
+                                    $rootScope.crumbs.splice(3, 3)
+                                }
+                            }, {
+                                name: '详情',
+                                link: function () {
+                                    $state.go('mall_finance.account_detail')
+                                    $rootScope.crumbs.splice(4, 2)
+                                }
+                            }, {
+                                name: '收支明细'
                             }
-                        }, {
-                            name: '商家提现管理',
-                        }
-                    ]
+                        ]
+                        tablePages5()
+                    }else{
+                        $rootScope.crumbs = [
+                            {
+                                name: '财务中心',
+                                icon: 'icon-caiwu',
+                                link: $rootScope.finance_click
+                            }, {
+                                name: '商城财务',
+                                link: function () {
+                                    $state.go('mall_finance.index')
+                                    $rootScope.crumbs.splice(2, 4)
+                                }
+                            }, {
+                                name: '商家提现管理',
+                            }
+                        ]
+                    }
                     $stateParams.index!=1?$state.go('mall_finance.withdraw'):history.go(-1)
                 }
             }
@@ -966,6 +1001,57 @@ angular.module('mall_finance', ['ui.bootstrap'])
         //商家提现管理详情返回
         $scope.go_prev = function () {
             $scope.submitted = false
+            if($stateParams.index != 1){
+                $rootScope.crumbs = [
+                    {
+                        name: '财务中心',
+                        icon: 'icon-caiwu',
+                        link: $rootScope.finance_click
+                    }, {
+                        name: '商城财务',
+                        link: function () {
+                            $state.go('mall_finance.index')
+                            $rootScope.crumbs.splice(2, 4)
+                        }
+                    }, {
+                        name: '商家提现管理',
+                    }
+                ]
+            }else{
+                $rootScope.crumbs = [
+                    {
+                        name: '财务中心',
+                        icon: 'icon-caiwu',
+                        link: $rootScope.finance_click
+                    }, {
+                        name: '商城财务',
+                        link: function () {
+                            $state.go('mall_finance.index')
+                            $rootScope.crumbs.splice(2, 4)
+                        }
+                    }, {
+                        name: '账户管理',
+                        link: function () {
+                            $state.go('mall_finance.account')
+                            $rootScope.crumbs.splice(3, 3)
+                        }
+                    }, {
+                        name: '详情',
+                        link: function () {
+                            $state.go('mall_finance.account_detail')
+                            $rootScope.crumbs.splice(4, 2)
+                        }
+                    }, {
+                        name: '收支明细'
+                    }
+                ]
+            }
+            $stateParams.index!=1?$state.go('mall_finance.withdraw'):history.go(-1)
+        }
+      // 跳转商家收支明细列表
+        $scope.goMoneyList = function () {
+            $scope.params5.uid = $scope.cur_account_detail.uid
+            tablePages5()
             $rootScope.crumbs = [
                 {
                     name: '财务中心',
@@ -978,15 +1064,21 @@ angular.module('mall_finance', ['ui.bootstrap'])
                         $rootScope.crumbs.splice(2, 4)
                     }
                 }, {
-                    name: '商家提现管理',
+                    name: '账户管理',
+                    link: function () {
+                        $state.go('mall_finance.account')
+                        $rootScope.crumbs.splice(3, 3)
+                    }
+                }, {
+                    name: '详情',
+                    link: function () {
+                        $state.go('mall_finance.account_detail')
+                        $rootScope.crumbs.splice(4, 2)
+                    }
+                }, {
+                    name: '收支明细'
                 }
             ]
-            $stateParams.index!=1?$state.go('mall_finance.withdraw'):history.go(-1)
-        }
-      // 跳转商家提现列表
-        $scope.goMoneyList = function () {
-            $scope.params5.uid = $scope.cur_account_detail.uid
-            tablePages5()
             $state.go('mall_finance.money_list')
         }
         // 查看货款详情
@@ -997,6 +1089,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     transaction_no:item.transaction_no
                 },function (res) {
                     console.log(res)
+                    $scope.mall_detail = res.data
                 })
                 $scope.common_house = function () {
                     $uibModalInstance.close()
@@ -1031,6 +1124,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                         }
                     ]
                     $scope.all_withdraw_detail = res.data
+                    $scope.cur_status = $scope.all_withdraw_detail.status
                     $state.go('mall_finance.withdraw_manage_detail',{index:1})
                 })
             }

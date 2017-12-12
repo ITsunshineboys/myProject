@@ -1,0 +1,41 @@
+<div class="account">
+    <div class="search form-inline clearfix">
+        <select ng-model="params.time_type" ng-change="getMoneyList(1)" class="form-control" ng-options="item.value as item.name for item in time_types"></select>
+        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="开始时间" ng-change="getMoneyList(1)" max-date="{{params.time_end}}" id="start_time" type="text" ng-model="params.time_start" class="form-control">
+        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="结束时间" ng-change="getMoneyList(1)" min-date="{{params.time_start}}" id="end_time" type="text" ng-model="params.time_end" class="form-control">
+        <span>类型选择</span>
+        <select ng-model="params.type" ng-change="getMoneyList()" class="form-control" ng-options="item.status as item.value for item in all_status"></select>
+        <div class="form-group pull-right">
+            <div class="input-group">
+                <input class="form-control" ng-model="vm.keyword" placeholder="搜索订单号或交易单号" type="text">
+                <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <button class="btn btn-default" ng-click="inquire()">查询</button>
+        </div>
+    </div>
+    <table class="table table-responsive table-hover">
+        <tr>
+            <th ng-click="getMoneyList(2)">
+                时间
+                <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':params.sort_time==1}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':params.sort_time==2}"></i>
+                </span>
+            </th>
+            <th>金额</th>
+            <th>交易单号</th>
+            <th>订单号</th>
+            <th>资金类型</th>
+            <th>详情</th>
+        </tr>
+        <tr ng-repeat="item in money_list">
+            <td>{{item.create_time}}</td>
+            <td>{{item.access_money}}</td>
+            <td>{{item.transaction_no}}</td>
+            <td>{{item.order_no}}</td>
+            <td>{{item.access_type}}</td>
+            <td><a ng-click="getMoneyDetail(item)">查看</a></td>
+        </tr>
+    </table>
+    <tm-pagination conf="Config"></tm-pagination>
+</div>

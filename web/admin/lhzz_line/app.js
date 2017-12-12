@@ -635,6 +635,30 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css:'pages/financial_center/owner/css/account.css',
             controller:'account_ctrl'
         })
+        .state('account_detail',{//财务账户管理详情
+            url:'/account_detail?id',
+            templateUrl:'pages/financial_center/owner/account_detail.html',
+            css:'pages/financial_center/owner/css/account_detail.css',
+            controller:'account_detail_ctrl'
+        })
+        .state('freeze_money',{//冻结金额
+            url:'/freeze_money?user_id',
+            templateUrl:'pages/financial_center/owner/freeze_money.html',
+            css:'pages/financial_center/owner/css/freeze_money.css',
+            controller:'freeze_money_ctrl'
+        })
+        .state('freeze_list',{//冻结金额
+            url:'/freeze_list?user_id',
+            templateUrl:'pages/financial_center/owner/freeze_list.html',
+            css:'pages/financial_center/owner/css/withdraw_list.css',
+            controller:'freeze_list_ctrl'
+        })
+        .state('money_list',{//收支明细
+            url:'/money_list?user_id',
+            templateUrl:'pages/financial_center/owner/money_list.html',
+            css:'pages/financial_center/owner/css/account.css',
+            controller:'money_list_ctrl'
+        })
         /*=============== 廖欢 start ===============*/
         .state('home', {  // 首页
             url: '/home',

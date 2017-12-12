@@ -1,13 +1,13 @@
 <div class="account">
     <div class="search form-inline clearfix">
         <span>状态</span>
-        <select ng-model="ctrlScope.cur_first_level" ng-options="item.id as item.title for item in first_level" ng-change="getCategory(1)"  class="form-control"></select>
+        <select ng-model="params.status" ng-change="getAccount()" ng-options="item.num as item.status for item in all_status" ng-change="getCategory(1)"  class="form-control"></select>
         <div class="form-group pull-right">
             <div class="input-group">
-                <input class="form-control" ng-model="ctrlScope.keyword" placeholder="搜索魔方号或名称" type="text">
+                <input class="form-control" ng-model="vm.keyword" placeholder="搜索魔方号或名称" type="text">
                 <span class="glyphicon glyphicon-search"></span>
             </div>
-            <button class="btn btn-default" ng-click="get_account_list()">搜索</button>
+            <button class="btn btn-default" ng-click="getAccountList()">搜索</button>
         </div>
     </div>
     <table class="table table-responsive table-hover">
@@ -20,32 +20,31 @@
             <th>操作</th>
         </tr>
         <tr ng-repeat="item in account_list">
-            <td>{{item.shop_no}}</td>
-            <td>{{item.shop_name}}</td>
-            <td>{{item.type_shop}}</td>
-            <td>{{item.category_name}}</td>
+            <td>{{item.aite_cube_no}}</td>
+            <td>{{item.nickname}}</td>
+            <td>{{item.mobile}}</td>
             <td>{{item.balance}}</td>
-            <td ng-style="{'color':item.status == '正常营业'?'#26C6DA':'#E8502E'}">{{item.status}}</td>
-            <td style="color: #5677FC;" ng-click="go_account_detail(item)">详情</td>
+            <td ng-class="{true:'blue',false:'red'}[item.status=='正常']">{{item.status}}</td>
+            <td><a ui-sref="account_detail({id:item.id})">详情</a></td>
         </tr>
     </table>
-    <tm-pagination conf="Config2"></tm-pagination>
-    <div class="modal fade" id="remarks" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                    <h4 class="modal-title text-left">备注</h4>
-                </div>
-                <div class="modal-body row">
-                    <p class="col-sm-3">备注(选填)</p>
-                    <textarea  ng-model="cur_item.remark" class="col-sm-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>
-                    <button type="button" data-dismiss="modal">取消</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    <tm-pagination conf="Config"></tm-pagination>
+    <!--<div class="modal fade" id="remarks" tabindex="-1" role="dialog">-->
+        <!--<div class="modal-dialog" role="document">-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-header">-->
+                    <!--&lt;!&ndash;<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>&ndash;&gt;-->
+                    <!--<h4 class="modal-title text-left">备注</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body row">-->
+                    <!--<p class="col-sm-3">备注(选填)</p>-->
+                    <!--<textarea  ng-model="cur_item.remark" class="col-sm-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>-->
+                    <!--<button type="button" data-dismiss="modal">取消</button>-->
+                <!--</div>-->
+            <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+        <!--</div>&lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+    <!--</div>&lt;!&ndash; /.modal &ndash;&gt;-->
 </div>

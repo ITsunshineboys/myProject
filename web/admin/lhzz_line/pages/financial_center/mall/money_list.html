@@ -15,7 +15,13 @@
     </div>
     <table class="table table-responsive table-hover">
         <tr>
-            <th>时间</th>
+            <th ng-click="changeMoneyList(2)">
+                时间
+                <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':params5.sort_time==1}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':params5.sort_time==2}"></i>
+                </span>
+            </th>
             <th>金额</th>
             <th>交易单号</th>
             <th>订单号</th>
