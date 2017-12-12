@@ -1461,7 +1461,7 @@ class OrderController extends Controller
             //获取收货详情
             $receive_details['consignee']=$order_information['consignee'];
             $receive_details['consignee_mobile']=$order_information['consignee_mobile'];
-            $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']);
+            $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']).$order_information['region'];
             $receive_details['region']=$order_information['region'];
             $receive_details['invoice_header']=$order_information['invoice_header'];
             $receive_details['invoice_type']=$order_information['invoice_type'];
