@@ -676,9 +676,8 @@ class SupplierCashController extends Controller
 
     public function actionTest()
     {
-//       $url='http://restapi.amap.com/v4/geofence/meta?key=d318385d372e9c95778cade0f8dff4e5';
-//       $data=StringService::httpPost($url);
-//       var_dump($data);
+        var_dump(User::find()->asArray()->where(['id'=>8])->one());
+
     }
 
 }
