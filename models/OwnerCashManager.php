@@ -11,12 +11,16 @@ use yii\db\Query;
 
 class OwnerCashManager extends ActiveRecord {
 
-
+    const STATUS_OWNER=[
+        0=>'已关闭',
+        1=>'正常'
+    ];
     const FIELDS_USER_MANAGER = [
         'id',
         'nickname',
         'aite_cube_no',
         'balance',
+        'status'
     ];
     const USER_CASHREGISTER='user_cashregister';
     const USER='user';
@@ -98,6 +102,7 @@ class OwnerCashManager extends ActiveRecord {
         if($userList){
             foreach ($userList as &$user){
                 $user['balance']=sprintf('%.2f',(float)$user['balance']*0.01);
+                $user['status']=self::STATUS_OWNER[$user['status']];
             }
         }else{
             return null;

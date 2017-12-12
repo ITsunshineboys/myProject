@@ -17,6 +17,11 @@ class SupplierCashManager extends ActiveRecord
     const  USER_CASHREGISTER = 'user_cashregister';
     const  GOODS_ORDER = 'goods_order';
     const  ROLE_ID = 6;
+    const STATUS_BRAND=[
+        '0' => '待审核',
+        '1' => '不通过',
+        '2' => '通过',
+    ];
 
     const SUPPLIER_BRAND_VIEW = [
         'id',
@@ -488,7 +493,7 @@ class SupplierCashManager extends ActiveRecord
             }
 
             if (isset($brand['review_status'])) {
-                $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
+                $brand['review_status'] = self::STATUS_BRAND[$brand['review_status']];
             }
 
             if (isset($brand['approve_time']) || isset($brand['reject_time'])) {
@@ -527,7 +532,7 @@ class SupplierCashManager extends ActiveRecord
         if ($brand) {
             $brand['apply_people']=Supplier::find()->where(['id'=>$brand['supplier_id']])->select('shop_name')->one()['shop_name'];
             $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
-            $brand['review_status'] = \Yii::$app->params['reviewStatuses'][$brand['review_status']];
+            $brand['review_status'] = self::STATUS_BRAND[$brand['review_status']];
             if ($brand['approve_time'] != 0 || $brand['reject_time'] != 0) {
                 $brand['review_time'] = date('Y-m-d H:i', $brand['approve_time'] > 0 ? $brand['approve_time'] : $brand['reject_time']);
                 if (isset($brand['approve_time'])) {
@@ -595,7 +600,7 @@ class SupplierCashManager extends ActiveRecord
             }
 
             if (isset($category['review_status'])) {
-                $category['review_status'] = \Yii::$app->params['reviewStatuses'][$category['review_status']];
+                $category['review_status'] = self::STATUS_BRAND[$category['review_status']];
             }
 
         }
@@ -640,7 +645,7 @@ class SupplierCashManager extends ActiveRecord
                 $category['level'] = GoodsCategory::$levels[$category['level']];
             }
             $category['create_time'] = date('Y-m-d H:i', $category['create_time']);
-            $category['review_status'] = \Yii::$app->params['reviewStatuses'][$category['review_status']];
+            $category['review_status'] = self::STATUS_BRAND[$category['review_status']];
             if (isset($category['approve_time']) || isset($category['reject_time'])) {
                 $category['review_time'] = date('Y-m-d H:i', $category['approve_time'] > 0 ? $category['approve_time'] : $category['reject_time']);
                 if (isset($category['approve_time'])) {
