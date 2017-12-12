@@ -1209,7 +1209,7 @@ class SupplieraccountController extends  Controller{
             $start_time=trim(Yii::$app->request->get('start_time'));
             $end_time=trim(Yii::$app->request->get('end_time'));
             $status=(int)(Yii::$app->request->get('status',-1));
-            $where = " and supplier_id !=0 ";
+            $where = "  supplier_id !=0 ";
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
                 $ids = GoodsCategory::level23Ids($pid, false, false);
