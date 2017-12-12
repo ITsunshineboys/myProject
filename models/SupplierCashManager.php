@@ -49,6 +49,7 @@ class SupplierCashManager extends ActiveRecord
         'review_status',
         'supplier_id',
         'reason',
+        'description',
         'path',
         'supplier_name',
         'path'
