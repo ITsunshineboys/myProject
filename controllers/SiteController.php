@@ -208,6 +208,12 @@ class SiteController extends Controller
                     new EventHandleService($event, $data);
                     Yii::$app->trigger($event);
                 }
+            } else {
+                $code = 1001;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
             }
         } else {
             $code = 1001;
