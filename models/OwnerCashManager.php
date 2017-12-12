@@ -16,6 +16,7 @@ class OwnerCashManager extends ActiveRecord {
         'nickname',
         'aite_cube_no',
         'balance',
+        'mobile',
         'deadtime'
     ];
     const USER_CASHREGISTER='user_cashregister';

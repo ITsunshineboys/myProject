@@ -566,6 +566,42 @@ class SupplieraccountController extends  Controller{
         ]);
 
     }
+
+    /**
+     * 账户关闭开启操作
+     * @return string
+     */
+    public function actionOwnerDeletedAccount(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user_id=(int)Yii::$app->request->get('user_id','');
+        if(!$user_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user=User::find()->where(['id'=>$user_id])->one();
+        $user->deadtime==0?$user->deadtime=time():$user->deadtime=0;
+        if(!$user->save()){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok'
+        ]);
+    }
     /**
      * 大后台商家收支明细
      * @return string
@@ -1173,7 +1209,7 @@ class SupplieraccountController extends  Controller{
             $start_time=trim(Yii::$app->request->get('start_time'));
             $end_time=trim(Yii::$app->request->get('end_time'));
             $status=(int)(Yii::$app->request->get('status',-1));
-            $where = "supplier_id !=0 ";
+            $where = " and supplier_id !=0 ";
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
                 $ids = GoodsCategory::level23Ids($pid, false, false);
@@ -1210,6 +1246,7 @@ class SupplieraccountController extends  Controller{
             }
 
         }
+
         $sort_time=(int)Yii::$app->request->get('sort_time',2);
         switch ($sort_time)
         {
