@@ -3809,7 +3809,7 @@ class OrderController extends Controller
                 ->from(GoodsOrder::tableName().' as g')
                 ->select('g.id')
                 ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier_id} ")
+                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier_id} and o.customer_service=0 ")
                 ->count();
             $canceled=(new Query())
                 ->from(GoodsOrder::tableName().' as g')
