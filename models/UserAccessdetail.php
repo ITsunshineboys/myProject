@@ -194,10 +194,22 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             'name'=>'充值金额',
             'value'=>$accessDetail['access_money']
         ];
-        $data[]=[
-            'name'=>'充值类型',
-            'value'=>'微信支付'
-        ];
+        switch ($accessDetail['recharge_pay_type'])
+        {
+            case 1:
+                $data[]=[
+                    'name'=>'充值类型',
+                    'value'=>'支付宝'
+                ];
+                break;
+            case 2:
+                $data[]=[
+                    'name'=>'充值类型',
+                    'value'=>'微信支付'
+                ];
+                break;
+        }
+
         $data[]=[
             'name'=>'充值时间',
             'value'=>date('Y-m-d H:i',$accessDetail['create_time'])

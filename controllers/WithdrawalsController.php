@@ -1641,10 +1641,22 @@ class WithdrawalsController extends Controller
         switch ($access['access_type'])
         {
             case 1:
-                $list[]=[
-                    'name'=>'充值方式',
-                    'value'=>'支付宝支付'
-                ];
+                switch ($access['recharge_pay_type'])
+                {
+                    case 1:
+                        $list[]=[
+                            'name'=>'充值方式',
+                            'value'=>'支付宝支付'
+                        ];
+                        break;
+                    case 2:
+                        $list[]=[
+                            'name'=>'充值方式',
+                            'value'=>'微信支付'
+                        ];
+                        break;
+                }
+
                 $list[]=[
                     'name'=>'时间',
                     'value'=>$access['create_time']
@@ -1655,6 +1667,8 @@ class WithdrawalsController extends Controller
                 ];
                 break;
             case 2:
+
+                //此处有改动未修复
                 $list[]=[
                     'name'=>'充值方式',
                     'value'=>'支付宝支付'
