@@ -257,7 +257,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         foreach ($post['material'] as $one_material){
             $material = EngineeringStandardCraft::findOne($one_material['id']);
-            $material->material = $one_material['material'];
+            $material->material = $one_material['material'] * 100;
             $edit_material = $material->save();
         }
         if (!$edit_material){
@@ -279,12 +279,12 @@ class QuoteController extends Controller
      */
     public function actionProjectNormWoodworkList()
     {
-        $material = ['石膏板', '龙骨', '丝杆','细木工板'];
-        $goods['specification']  = GoodsCategory::GoodsAttrValue(3,$material);
+        $material = [22,9,12,13];
+        $goods['specification']  = GoodsCategory::GoodsAttrValue($material);
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
-        $coefficient    = EngineeringStandardCarpentryCoefficient::findByAll();
-        $goods['find_specification']   = EngineeringStandardCarpentryCraft::findByAll();
+        $coefficient = EngineeringStandardCarpentryCoefficient::findByAll();
+        $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll();
 
         return Json::encode([
             'code' => 200,

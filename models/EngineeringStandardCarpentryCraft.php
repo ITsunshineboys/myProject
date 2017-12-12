@@ -16,6 +16,14 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
         'title',
         'value',
     ];
+
+    const UNIT = [
+        1 => '长度',
+        2 => '宽度',
+        3 => '根',
+        4 => '张',
+    ];
+
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -26,8 +34,15 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
 
     public static function findByAll()
     {
-        return self::find()
+        $row =  self::find()
             ->asArray()
             ->all();
+
+        foreach ($row as &$one){
+            $one['unit'] = self::UNIT[$one['unit']];
+            $one['value'] = $one['value'] / 100;
+        }
+
+        return $row;
     }
 }

@@ -1065,14 +1065,14 @@ class GoodsCategory extends ActiveRecord
     }
 
 
-    public static function GoodsAttrValue($level,$material)
+    public static function GoodsAttrValue($material)
     {
-        $select = "title,goods_attr.name,goods_attr.value";
+        $select = "goods_category.title,goods_attr.name,goods_attr.value";
         return self::find()
             ->asArray()
             ->select($select)
             ->leftJoin('goods_attr', 'goods_attr.category_id = goods_category.id')
-            ->where(['and',['level' => $level],['goods_id' => 0],['in', 'title', $material]])
+            ->where(['in', 'goods_category.id', $material])
             ->all();
     }
 

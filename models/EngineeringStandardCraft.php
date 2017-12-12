@@ -21,6 +21,12 @@ class EngineeringStandardCraft  extends ActiveRecord
       4 => 'L/M²',
       5 => 'M/M',
       6 => '元/M²',
+      7 => '张',
+      8 => 'M²',
+      9 => 'KG/M',
+      10 => '元/车',
+      11 => 'M²/车',
+      12 => '元',
     ];
 
     const FIELDS_ADMIN =[
@@ -53,7 +59,7 @@ class EngineeringStandardCraft  extends ActiveRecord
             ->asArray()
             ->select($select)
             ->where(['city_code'=>$code])
-            ->andWhere(['points_id'=>$project])
+            ->andWhere(['project'=>$project])
             ->all();
 
         foreach ($row as &$one){
