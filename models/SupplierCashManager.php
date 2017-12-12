@@ -478,6 +478,7 @@ class SupplierCashManager extends ActiveRecord
             ->asArray()
             ->all();
         foreach ($brandList as &$brand) {
+            $brand['apply_people']=Supplier::find()->where(['id'=>$brand['supplier_id']])->select('shop_name')->one()['shop_name'];
             if (isset($brand['create_time'])) {
                 $brand['create_time'] = date('Y-m-d H:i', $brand['create_time']);
             }
