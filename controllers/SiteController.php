@@ -454,7 +454,7 @@ class SiteController extends Controller
 
         $user = User::find()->where(['mobile' => $postData['mobile']])->one();
         if (!$user || $user->deadtime > 0 || !$user->checkDailyForgotPwdCnt()) {
-            $code = !$user ? 1010 : ($user->deadtime > 0 ? 1015 : 1016);
+            $code = !$user ? 1010 : ($user->deadtime > 0 ? 1015 : 1024);
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
