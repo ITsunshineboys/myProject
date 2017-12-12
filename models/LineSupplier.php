@@ -245,7 +245,7 @@ class LineSupplier extends \yii\db\ActiveRecord
             $viewData['line_district']=LogisticsDistrict::GetLineDistrictByDistrictCode($data['district_code']).'-'.$data['address'];
             $viewData['line_mobile']=$data['mobile'];
         }else{
-            $viewData['is__offline_shop']='否';
+            $viewData['is_offline_shop']='否';
             $viewData['line_district']='';
             $viewData['line_mobile']='';
         }
