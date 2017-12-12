@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="pages/brand_manage/css/brand_detail.css">
+<div ng-controller="brand_detail_ctrl">
+    <from class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-2">品牌名称</div>
+            <div class="col-sm-10">{{name}}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-2">商标注册证</div>
+            <div class="col-sm-10">
+                <img class="certificate-size" ng-src="{{certificate}}" alt="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">品牌LOGO</div>
+            <div class="col-sm-10">
+                <img class="logo-size" ng-src="{{logo}}" alt="">
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-2">选择品牌所在分类</div>
+            <div class="col-sm-10">
+                <div class="col-sm-2">一级分类</div>
+                <div class="col-sm-2">二级分类</div>
+                <div class="col-sm-2">三级分类</div>
+            </div>
+        </div>
+        <div class="row">
+            <div ng-repeat="item in category_titles">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
+                    <div class="col-sm-2">{{item.root_category_title}}</div>
+                    <div class="col-sm-2">{{item.parent_category_title}}</div>
+                    <div class="col-sm-8">{{item.level3_category_titles}}</div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-2">审核状态</div>
+            <div class="col-sm-10">{{apply_people}}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">审核时间</div>
+            <div class="col-sm-10">{{apply_people}}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">审核备注</div>
+            <div class="col-sm-10">{{create_time}}</div>
+        </div>
+    </from>
+    <button class="btn btn-primary btn-right" ng-if="pass_review_status=='不通过'" data-toggle="modal" data-target="#check_modal">编辑</button>
+    <button class="btn btn-default" ng-click="back_btn()">返回</button>
+</div>

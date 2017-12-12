@@ -5,7 +5,7 @@ const app = angular.module("app", ["ui.router", "ng.ueditor","ngFileUpload","ang
     "supplier_index","shop_decoration_module","supplier_wallet_module",
     "intelligent_directive","shop_data_module","wallet_detail_module","income_pay_module",
     "set_password_module","waitsend_detail_module","goods_detail_module",
-    "brand_index_module","add_brand_module",
+    "brand_index_module","add_brand_module","edit_brand_module","brand_detail_module",
   /*三阶段王杰---结束*/
   /*三阶段芳子---开始*/
     "supplier_accountModule","withdraw_depositModule",
@@ -72,6 +72,14 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("add_brand", {   //添加品牌
           url: "/add_brand",
           templateUrl: "pages/brand_manage/add_brand.html"
+        })
+	      .state("edit_brand", {   //编辑品牌
+		      url: "/edit_brand",
+		      templateUrl: "pages/brand_manage/edit_brand.html"
+	      })
+        .state("brand_detail", {   //编辑品牌
+          url: "/brand_detail",
+          templateUrl: "pages/brand_manage/brand_detail.html"
         })
         /*--------------三阶段结束----王杰-----------------*/
 

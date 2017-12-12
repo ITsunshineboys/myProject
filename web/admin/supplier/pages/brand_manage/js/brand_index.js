@@ -25,4 +25,15 @@ angular.module("brand_index_module",[])
 			$scope.Config.totalItems = res.data.total;
 		});
 	};
+		$scope.params.sort_time=2;//申请时间排序状态
+	//审核备注
+	$scope.remark=function (value) {
+		$scope.remark_value=value;
+		$("#remark_modal").modal('show');
+	}
+	//申请时间
+	$scope.sortClick=function () {
+		$scope.params.sort_time===2?$scope.params.sort_time=1:$scope.params.sort_time=2;
+		tablePages();
+	}
 });

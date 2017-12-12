@@ -2,14 +2,14 @@
     width: 30px;
     height: 30px;
 }
-.red{
-    color: #FF5722;
+table{
+    table-layout: fixed;
 }
-.blue{
-    color: #5677FC;
-}
-.green{
-    color: #8BC34A;
+.ellipsis{
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .dl_active7 {
     background-color: #E6E9F0 !important;

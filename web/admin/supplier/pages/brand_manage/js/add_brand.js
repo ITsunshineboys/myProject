@@ -1,5 +1,5 @@
 angular.module("add_brand_module",[])
-	.controller("add_brand_ctrl",function ($rootScope,$scope,$http,_ajax,$state,Upload,$location,$anchorScroll,$window,) {
+	.controller("add_brand_ctrl",function ($rootScope,$scope,$http,_ajax,$state,Upload,$location,$anchorScroll,$window) {
 		$rootScope.crumbs = [{
 			name: '品牌管理',
 			icon: 'icon-shangchengguanli',
@@ -10,6 +10,7 @@ angular.module("add_brand_module",[])
 		$scope.trademark_txt='上传';
 		$scope.logo_txt='上传'
 		$scope.upload_dis=false;
+		$scope.brand_name_flag=false;
 		//上传商标注册证
 		$scope.upload_img_src='';
 		$scope.data = {
@@ -188,7 +189,7 @@ angular.module("add_brand_module",[])
 					certificate: $scope.upload_img_src,
 					logo: $scope.upload_logo_src,
 					category_ids: $scope.ids_arr.join(',')
-				}, function (res) {
+				},function (res) {
 					console.log(res);
 					if(res.code==200){
 						$('#add_brand_modal').modal('show');
@@ -227,7 +228,7 @@ angular.module("add_brand_module",[])
 			}else{
 				$scope.sort_check='';
 			}
-		}
+		};
 		//模态框确认按钮
 		$scope.add_ok=function () {
 			setTimeout(function () {
