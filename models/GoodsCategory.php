@@ -1073,6 +1073,7 @@ class GoodsCategory extends ActiveRecord
             ->select($select)
             ->leftJoin('goods_attr', 'goods_attr.category_id = goods_category.id')
             ->where(['in', 'goods_category.id', $material])
+            ->groupBy('goods_category.title')
             ->all();
     }
 
