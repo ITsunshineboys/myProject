@@ -526,3 +526,20 @@ function _alert(title, info, fun) {
     });
     _alert.modal('show');
 }
+
+/**
+ * 秒转换为时分
+ * @param time  // 秒数
+ */
+function secondToDate(time) {
+    let h = Math.floor(time / 3600 % 24);
+    let m = Math.floor(time / 60 % 60);
+    let s = Math.floor(time % 60);
+    if (h < 10) {
+        h = '0' + h;
+    }
+    if (m < 10) {
+        m = '0' + m;
+    }
+    return h + '时' + m + '分';
+}

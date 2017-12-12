@@ -1,4 +1,4 @@
-app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $interval, $state, $stateParams, _ajax) {
+app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $interval, $state, $stateParams, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -16,9 +16,7 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
         order_no: $stateParams.orderNo, // 订单编号
         sku: $stateParams.sku           // 商品编号
     };
-    let orderType = $stateParams.status;
     $scope.isException = false; // 默认不显示异常记录
-    $scope.orderType = orderType;
     $scope.platformInter = $stateParams.type;
     $scope.params = params;
 
@@ -41,8 +39,6 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
                 }
             }, 1000);
         }
-        // 判断有无异常信息
-        $scope.isException = data.is_refund != 1;
         // 判断平台是否介入过
         $scope.isPlatform = data.is_platform == 2;
         if (data.is_refund != 1) {
@@ -61,10 +57,17 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
         }
     });
 
+    // 售后信息
+    _ajax.get('/order/after-sale-detail-admin', params, function (res) {
+        console.log(res, "售后信息");
+        let data = res.data;
+        $scope.sale_detail = data.after_sale_detail;    // 售后信息
+        $scope.sale_progress = data.after_sale_progress.data; // 售后进度
+        $scope.sale_progress_platform = data.after_sale_progress.platform; // 售后进度-平台介入
+    });
+
     // 已完成订单评论信息
-    if (orderType == '已完成') {
-        commentsFun()
-    }
+    commentsFun();
 
     // 显示评论图片原图
     $scope.showImage = function (src) {
@@ -108,22 +111,6 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
             window.history.go(-1);
         })
     };
-    /**
-     * 秒转换为时分
-     * @param time  // 秒数
-     */
-    function secondToDate(time) {
-        let h = Math.floor(time / 3600 % 24);
-        let m = Math.floor(time / 60 % 60);
-        let s = Math.floor(time % 60);
-        if (h < 10) {
-            h = '0' + h;
-        }
-        if (m < 10) {
-            m = '0' + m;
-        }
-        return h + '时' + m + '分';
-    }
 
     /**
      * 评论回复信息函数

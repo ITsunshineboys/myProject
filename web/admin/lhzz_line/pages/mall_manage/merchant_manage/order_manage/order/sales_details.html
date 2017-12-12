@@ -20,7 +20,11 @@
         <div class="form-group">
             <label class="col-xs-2 control-label">用户</label>
             <div class="col-xs-10">
-                <p class="form-control-static">{{orderDetails.username}}</p>
+                <span>{{orderDetails.username}}</span>
+                <a href="javascript:void (0);" class="btn btn-primary">
+                    <i class="iconfont icon-information"></i>
+                    <span>沟通</span>
+                </a>
             </div>
         </div>
         <div class="form-group">
@@ -70,7 +74,7 @@
                 <p class="form-control-static">{{orderDetails.create_time}}</p>
             </div>
         </div>
-        <div class="form-group" ng-if="orderType != '待付款'">
+        <div class="form-group">
             <label class="col-xs-2 control-label">付款时间</label>
             <div class="col-xs-10">
                 <p class="form-control-static">{{orderDetails.paytime}}</p>
@@ -82,13 +86,7 @@
                 <p class="form-control-static">{{orderDetails.complete_time}}</p>
             </div>
         </div>
-        <div class="form-group" ng-if="orderType == '待付款'">
-            <label class="col-xs-2 control-label">剩余付款时间</label>
-            <div class="col-xs-10">
-                <p class="form-control-static">{{payTerm}}</p>
-            </div>
-        </div>
-        <div class="form-group" ng-if="orderType != '待付款' && orderType != '待发货'">
+        <div class="form-group">
             <label class="col-xs-2 control-label">配送方式</label>
             <div class="col-xs-10">
                 <p class="form-control-static">
@@ -100,9 +98,9 @@
     <hr>
     <div class="goods-details">
         <div class="form-group">
-            <label class="col-xs-2 control-label">
+            <div class="col-xs-2 control-label">
                 <h3>商品详情</h3>
-            </label>
+            </div>
             <div class="col-xs-10">
                 <a ui-sref="goods_details({orderNo: params.order_no,sku: params.sku})" class="btn btn-primary">
                     <i class="iconfont icon-yanjing"></i>
@@ -191,7 +189,7 @@
         </div>
     </div>
     <hr/>
-    <div class="exce-record" ng-if="isException && orderType != '待收货' && receiving.length != 0">
+    <div class="exce-record" ng-if="receiving.length != 0">
         <div class="form-group">
             <div class="col-xs-12 title">
                 <h3>异常记录-待发货</h3>
@@ -212,7 +210,7 @@
             </div>
         </div>
     </div>
-    <div class="exce-record" ng-if="isException && orderType != '待发货' && delivery.length != 0">
+    <div class="exce-record" ng-if="delivery.length != 0">
         <div class="form-group">
             <div class="col-xs-12 title">
                 <h3>异常记录-待收货</h3>
@@ -233,46 +231,8 @@
             </div>
         </div>
     </div>
-    <hr ng-if="isException"/>
-    <div class="exce-record" ng-if="isPlatform">
-        <div class="form-group">
-            <div class="col-xs-12 title">
-                <h3>平台介入</h3>
-                <i class="iconfont icon-arrow pointer" ng-class="{'icon-arrow-up': isShowPlatform}"
-                   ng-click="isShowPlatform = !isShowPlatform"></i>
-            </div>
-        </div>
-        <div ng-if="isShowPlatform">
-            <div class="row list">
-                <div class="col-xs-2 stage">操作类型</div>
-                <div class="col-xs-4">
-                    <p>
-                        <span ng-if="platformInfo.handle == 1">关闭订单退款</span>
-                        <span ng-if="platformInfo.handle == 2">关闭订单线下退款</span>
-                        <span ng-if="platformInfo.handle == 3">退货</span>
-                        <span ng-if="platformInfo.handle == 4">换货</span>
-                        <span ng-if="platformInfo.handle == 5">上门维修</span>
-                        <span ng-if="platformInfo.handle == 6">上门退货</span>
-                        <span ng-if="platformInfo.handle == 7">上门换货</span>
-                        <span class="pull-right">{{platformInfo.handle_time}}</span>
-                    </p>
-                    <p class="exce-info">{{platformInfo.reasons}}</p>
-                </div>
-            </div>
-            <div class="row list">
-                <div class="col-xs-2 stage">退款结果</div>
-                <div class="col-xs-4">
-                    <p>
-                        <span>{{platformInfo.refund_result}}</span>
-                        <span class="pull-right">{{platformInfo.refund_time}}</span>
-                    </p>
-                    <p class="exce-info">{{platformInfo.refund_type}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr ng-if="isPlatform" />
-    <div class="receive-detail" ng-if="orderType == '已完成' && comments.length != 0">
+    <hr ng-if="delivery.length != 0 || receiving.length != 0"/>
+    <div class="receive-detail" ng-if="comments.length != 0">
         <div class="form-group">
             <div class="col-xs-12 title">
                 <h3>评论回复</h3>
@@ -317,7 +277,102 @@
             <div class="col-xs-10">{{comments.reply}} <a href="javascript:void (0);" ng-click="delComments()" ng-if="comments.length != 0">删除</a></div>
         </div>
     </div>
-    <hr ng-if="orderType == '已完成' && comments.length != 0"/>
+    <hr ng-if="comments.length != 0"/>
+    <div class="sales-info">
+        <div class="form-group">
+            <div class="col-xs-12 title">
+                <h3>售后信息</h3>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">服务类型</label>
+            <div class="col-xs-10">
+                <p class="form-control-static">{{sale_detail.type}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label">问题描述</label>
+            <div class="col-xs-10">
+                <p class="form-control-static">{{sale_detail.description}}</p>
+                <img ng-repeat="str in sale_detail.image" ng-src="{{str.image}}" ng-click="showImage(obj.image)">
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="exce-record">
+        <div class="form-group">
+            <div class="col-xs-12 title">
+                <h3>售后进度</h3>
+                <i class="iconfont icon-arrow pointer" ng-class="{'icon-arrow-up': isShowSales}"
+                   ng-click="isShowSales = !isShowSales"></i>
+            </div>
+        </div>
+        <div ng-if="isShowSales">
+            <div class="row list" ng-repeat="obj in sale_progress">
+                <div class="col-xs-2 stage">{{obj.type}}</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span>{{obj.value}}</span>
+                        <span class="pull-right">{{obj.time}}</span>
+                    </p>
+                    <div class="exce-info" ng-if="obj.code == 'user_unconfirm_received'">
+                        <p>剩余确认时间</p>
+                        <p>{{obj.content}}</p>
+                    </div>
+                    <p class="exce-info" ng-if="obj.code == 'supplier_unconfirm_received'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'supplier_unconfirm_received'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'user_unconfirm_repair'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'user_unconfirm_exchange'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'supplier_unconfirm_retunrn_to_door'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'shipped'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'confirm'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'supplier_unsend'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'send'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'express'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'unexpress'">{{obj.content}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr ng-if="sale_progress_platform.length != 0">
+    <div class="exce-record" ng-if="sale_progress_platform.length != 0">
+        <div class="form-group">
+            <div class="col-xs-12 title">
+                <h3>平台介入</h3>
+                <i class="iconfont icon-arrow pointer" ng-class="{'icon-arrow-up': isShowPlatform}"
+                   ng-click="isShowPlatform = !isShowPlatform"></i>
+            </div>
+        </div>
+        <div ng-if="isShowPlatform">
+            <div class="row list">
+                <div class="col-xs-2 stage">操作类型</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span ng-if="platformInfo.handle == 1">关闭订单退款</span>
+                        <span ng-if="platformInfo.handle == 2">关闭订单线下退款</span>
+                        <span ng-if="platformInfo.handle == 3">退货</span>
+                        <span ng-if="platformInfo.handle == 4">换货</span>
+                        <span ng-if="platformInfo.handle == 5">上门维修</span>
+                        <span ng-if="platformInfo.handle == 6">上门退货</span>
+                        <span ng-if="platformInfo.handle == 7">上门换货</span>
+                        <span class="pull-right">{{platformInfo.handle_time}}</span>
+                    </p>
+                    <p class="exce-info">{{platformInfo.reasons}}</p>
+                </div>
+            </div>
+            <div class="row list">
+                <div class="col-xs-2 stage">退款结果</div>
+                <div class="col-xs-4">
+                    <p>
+                        <span>{{platformInfo.refund_result}}</span>
+                        <span class="pull-right">{{platformInfo.refund_time}}</span>
+                    </p>
+                    <p class="exce-info">{{platformInfo.refund_type}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr ng-if="platformInter == 1" />
     <div class="receive-detail" ng-if="platformInter == 1">
         <div class="form-group">
             <div class="col-xs-12 title">
@@ -338,6 +393,7 @@
         </div>
     </div>
     <div class="operation">
+        <button class="btn btn-primary">关闭订单</button>
         <button class="btn btn-primary" ng-if="platformInter == 1" ng-click="confirmAction()">确认</button>
         <a class="btn btn-default" href="javascript: history.go(-1);">返回</a>
     </div>
