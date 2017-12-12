@@ -29,9 +29,15 @@ class EngineeringStandardCarpentryCoefficient extends ActiveRecord
 
     public static function findByAll()
     {
-        return self::find()
+        $row =  self::find()
             ->asArray()
             ->All();
+
+        foreach ($row as &$one){
+            $one['value'] = $one['value'] / 100;
+        }
+
+        return $row;
     }
 
 }
