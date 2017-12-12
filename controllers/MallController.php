@@ -1579,7 +1579,7 @@ class MallController extends Controller
             if (isset($brand->errors['name'])) {
                 $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
                 if ($customErrCode !== false) {
-                    $code = $customErrCode;
+                    $code = (int)$customErrCode;
                 }
             }
 
