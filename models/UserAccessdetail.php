@@ -404,7 +404,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         ];
         $data[]=[
             'name'=>'结算金额',
-            'value'=>$amount_order,
+            'value'=>GoodsOrder::switchMoney($amount_order*0.01),
         ];
         $data[]=[
             'name'=>'商品编号',
