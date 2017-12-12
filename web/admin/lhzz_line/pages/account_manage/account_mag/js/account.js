@@ -4,6 +4,6 @@
 app.controller('account', ['$rootScope', '$scope', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $state, $stateParams, _ajax) {
     $rootScope.crumbs = [{
         name: '账户管理',
-        icon: 'icon-zhanghuguanli'
+        icon: 'icon-shangchengguanli'
     }];
 }]);
