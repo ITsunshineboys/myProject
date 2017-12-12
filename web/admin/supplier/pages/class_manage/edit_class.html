@@ -5,8 +5,8 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" placeholder="请输入名称" ng-model="class_name" ng-class="{tored:showtishi}"
-                   ng-blur="addClassName()" maxlength=10>
+            <input type="text" ng-model="class.title" ng-class="{tored:showtishi}"
+                   ng-blur="checkClassName()" maxlength=10>
             <span>*限1~10个字符,不含特殊字符</span>
             <h6 ng-if="showtishi" ng-bind="tishi"></h6>
         </div>
@@ -18,13 +18,12 @@
             <span class="each_title">分类所属</span>
             <div class="class-remind">
                 <span>一级分类</span>
-                <span ng-if="showsub">二级分类</span>
+                <span>二级分类</span>
                 <div>
-                    <select name="" class="belong first_select" ng-model="firstselect" ng-change="subClass(firstselect)">
-                        <option value="" selected="selected" value="0">当前</option>
-                        <option ng-repeat="item in firstclass" value={{item.id}}>{{item.title}}</option>
+                    <select name="" class="belong first_select" ng-options="item.id as item.title for item in firstclass"
+                            ng-model="firstselect" ng-change="subClass(firstselect)">
                     </select>
-                    <select name="suoshukuang" class="belong" ng-show="showsub" ng-model="secselect">
+                    <select name="suoshukuang" class="belong" ng-model="secselect">
                         <option value="0">当前</option>
                         <option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>
                     </select>
@@ -72,22 +71,21 @@
 
 </div>
 
-<!--保存提示模态框-->
-<div class="modal fade" id="save_tishi">
-    <div class="modal-dialog">
-        <div class="modal-content" id="save_content">
-            <div class="modal-header" id="save_header">
-                <h4 class="modal-title" id="tishi">
-                    提示
-                </h4>
-            </div>
-            <div class="modal-body" id="save_body">
-                <h6 id="tishi_wenzi">{{save_msg}}</h6>
-            </div>
 
-            <div class="btn_modal_two">
-                <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
-                <button id="caozuo_sure" data-dismiss="modal" ng-if="!success_flag">确认</button>
+<!--保存提示模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="save_tishi">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{save_msg}}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
+                <button class="btn btn-primary" data-dismiss="modal" ng-if="!success_flag">确认</button>
             </div>
         </div>
     </div>

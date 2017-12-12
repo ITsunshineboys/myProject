@@ -3,59 +3,50 @@
         <div class="form-group">
             <span class="col-md-1 control-label">分类名称</span>
             <div class="col-md-10 form-control-static">
-                <span>香蕉水</span>
-                <!--<span ng-bind="datail.title"></span>-->
+                <span ng-bind="detail.title"></span>
             </div>
         </div>
 
         <div class="form-group">
             <span class="col-md-1 control-label">分类所属</span>
             <div class="col-md-11 form-control-static">
-                <span>防水材料-来来来材料</span>
-                <!--<span ng-bind="detail.titles"></span>-->
+                <span ng-bind="detail.titles"></span>
             </div>
         </div>
 
         <div class="form-group">
             <span class="col-md-1 control-label padding-out">分类图片</span>
             <div class="col-md-11 form-inline">
-                <img ng-src="pages/class_manage/images/default.png" class="pic-style" alt="">
-                <!--<img ng-src="detail.icon" class="pic-style" alt="">-->
+                <img ng-src="detail.icon" class="pic-style" alt="">
             </div>
         </div>
 
         <div class="form-group">
             <span class="col-md-1 control-label padding-out">分类描述</span>
             <div class="col-md-11 form-inline">
-                <!--<div ng-bind-html="detail.description | toHtml"></div>-->
+                <div ng-bind-html="detail.description | toHtml"></div>
             </div>
         </div>
 
         <div class="form-group">
             <span class="col-md-1 control-label">审核状态</span>
-            <div class="col-md-11 form-control-static">
-                不通过
-            </div>
-            <!--<div class="col-md-11 form-control-static" ng-bind="detail.review_status"></div>-->
+            <div class="col-md-11 form-control-static" ng-bind="detail.review_status"></div>
         </div>
 
         <div ng-if="detail.review_status!='待审核'">
         <div class="form-group">
             <span class="col-md-1 control-label">审核时间</span>
-            <div class="col-md-11 form-control-static">2017-05-16</div>
-            <!--<div class="col-md-11 form-control-static" ng-bind="detail.review_time"></div>-->
+            <div class="col-md-11 form-control-static" ng-bind="detail.review_time"></div>
         </div>
 
         <div class="form-group">
             <span class="col-md-1 control-label">审核备注</span>
-            <div class="col-md-11 form-control-static">3333333333</div>
-            <!--<div class="col-md-11 form-control-static" ng-bind="detail.reason"></div>-->
+            <div class="col-md-11 form-control-static" ng-bind="detail.reason"></div>
         </div>
         </div>
 
         <div class="btn-group btns">
-            <!--<button class="btn btn-primary" ui-sref="edit_class" ng-if="detail.review_status=='不通过'">编辑</button>-->
-            <button class="btn btn-primary" ui-sref="edit_class({id:id})">编辑</button>
+            <button class="btn btn-primary" ui-sref="edit_class({id:id,title:title})" ng-if="detail.review_status=='不通过'">编辑</button>
             <button class="btn btn-default" ui-sref="class_manage">返回</button>
         </div>
     </form>

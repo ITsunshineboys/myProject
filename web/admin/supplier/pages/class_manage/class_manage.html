@@ -10,7 +10,7 @@
             <th>分类图片</th>
             <th>分类名称</th>
             <th>分类级别</th>
-            <th>申请时间
+            <th ng-click="sortTime()">申请时间
                 <span class="sort">
                             <i class="iconfont icon-up" ng-class="{'active':params.sort_time == 1}"></i>
                             <i class="iconfont icon-down" ng-class="{'active':params.sort_time == 2}"></i>
@@ -24,11 +24,11 @@
         <tbody>
         <tr ng-repeat="item in datalist">
             <td ng-bind="item.parent_title"></td>
-            <td><img ng-src="{{item.icon}}"></td>
+            <td><img class="pic-style" ng-src="{{item.icon}}"></td>
             <td ng-bind="item.title"></td>
             <td ng-bind="item.level"></td>
             <td ng-bind="item.create_time"></td>
-            <td ng-bind="item.review_status" ng-class="{'pass-green':item.review_status=='已通过','fail-red':item.review_status=='不通过','wait-blue':item.review_status=='等待审核'}"></td>
+            <td ng-bind="item.review_status" ng-class="{'pass-green':item.review_status=='通过','fail-red':item.review_status=='不通过','wait-blue':item.review_status=='等待审核'}"></td>
             <td>
             <span class="remark" data-toggle="modal" data-target="#remark"
                   ng-bind="item.reason" ng-click="showRemark(item.reason)"></span>

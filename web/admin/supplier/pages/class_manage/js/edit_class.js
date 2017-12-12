@@ -13,11 +13,14 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
         name: '编辑分类'
     }];
 
-    $scope.id = $stateParams.id
-    let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
+    $scope.id = $stateParams.id;
+    $scope.class = {
+        title: $stateParams.title
+    }
+
     let pid;
+    let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
     let iconpath = 'pages/class_manage/images/default.png';
-    $scope.showsub = false; /*初始无二级下拉选项*/
     $scope.showtishi = false;
     $scope.idarr = [];
     $scope.picwarning = false;
@@ -29,8 +32,8 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
     $scope.config = $rootScope.config;
 
     /*分类名称是否存在的判断*/
-    $scope.addClassName = function () {
-        if (!pattern.test($scope.class_name)||!$scope.class_name) {
+    $scope.checkClassName = function () {
+        if (!pattern.test($scope.class.title)||!$scope.class.title) {
             $scope.tishi = "您的输入不满足条件,请重新输入"
             $scope.showtishi = true;
         }else{
@@ -38,24 +41,28 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
         }
     }
 
-    /*分类所属 第一个下拉框的值*/
-    $scope.findParentClass =  (function () {
+    /*分类所属 下拉框默认*/
+    $scope.defaultClass =  (function () {
         _ajax.get('/mall/categories-manage-admin',{},function (res) {
-            console.log(res);
-            $scope.firstclass = res.data.categories.splice(1);
+            $scope.firstclass = res.data.categories;
+            $scope.firstselect = '1';
+        })
+
+        _ajax.get('/mall/categories-manage-admin',{pid:1},function (res) {
+            $scope.secondclass = res.data.categories;
+            $scope.secselect = '0';
         })
     })()
+
 
     /*一级选择后的二级*/
     $scope.subClass = function (obj) {
         if (obj != '') {
             $scope.showsub = true;
             _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
-                $scope.secondclass = res.data.categories.splice(1);
+                $scope.secondclass = res.data.categories;
                 $scope.secselect = '0';
             })
-        }else{
-            $scope.showsub = false;
         }
     }
 
@@ -88,12 +95,11 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
 
     /*确认添加分类*/
     $scope.sureaddclass = function () {
-        if (!pattern.test($scope.class_name)||!$scope.class_name) {
+        if (!pattern.test($scope.class.title)||!$scope.class.title) {
             $scope.tishi = "您的输入不满足条件,请重新输入"
             $scope.showtishi = true;
             return;
         }
-
 
         if($scope.iconpath == iconpath){
             $scope.picwarningtext = '请上传图片';
@@ -103,22 +109,21 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
 
         if($scope.showtishi==false&&$scope.picwarning==false&&$scope.classicon!=''){
             let description = UE.getEditor('editor').getContent();
-            if(!$scope.firstselect){
-                pid = 0;
-            }else if($scope.firstselect!=0&&$scope.secselect==0){
-                pid = $scope.firstselect;
-            }else if($scope.firstselect!=0&&$scope.secselect!=0){
-                pid = $scope.secselect;
-            }
-
-            let data =  {title:$scope.class_name,pid:pid,icon:$scope.classicon,description:description};
-            _ajax.post('/mall/category-add',data,function (res) {
+            $scope.firstselect != 0 && $scope.secselect == 0? pid = $scope.firstselect : pid = $scope.secselect;
+            let data =  {
+                cate_id:$stateParams.id,
+                title:$scope.class.title,
+                pid:pid,
+                icon:$scope.classicon,
+                description:description
+            };
+            _ajax.post('/supplieraccount/supplier-cate-edit',data,function (res) {
                 $("#save_tishi").modal("show");
                 if(res.code == 200){
                     $scope.save_msg="保存成功"
                     $scope.success_flag = true;
                 }else if(res.code == 1006){
-                    $scope.save_msg = res.data.msg;
+                    $scope.save_msg = res.msg;
                     $scope.success_flag = false;
                 }
             })

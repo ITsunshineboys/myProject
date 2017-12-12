@@ -145,8 +145,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/class_manage/css/class_detail.css',
             controller: 'class_detail'
         })
-        .state('edit_class', { // 分类详情
-            url: '/edit-class?id',
+        .state('edit_class', { // 编辑分类
+            url: '/edit-class?id?title',
             templateUrl: 'pages/class_manage/edit_class.html',
             css: 'pages/class_manage/css/edit_class.css',
             controller: 'edit_class'

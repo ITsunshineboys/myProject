@@ -11,8 +11,11 @@ app.controller('class_detail', ['$state', '$rootScope', '$scope', '$stateParams'
     }];
 
     $scope.id = $stateParams.id;
-    _ajax.get('/supplieraccout/supplier-cate-view',{cate_id:$stateParams.id},function (res) {
-            $scope.datail = res;
+
+    //详情数据
+    _ajax.get('/supplieraccount/supplier-cate-view',{cate_id:$stateParams.id},function (res) {
+        $scope.detail = res.data;
+        $scope.title = res.data.title; //分类名称
     })
 }]);
 
