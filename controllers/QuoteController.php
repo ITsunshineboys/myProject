@@ -1731,12 +1731,10 @@ class QuoteController extends Controller
      */
     public function actionCommonalityList()
     {
-        $select = 'id,title';
-        $where  = 'level = 1';
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-           'post'=> Points::findByPid($select,$where),
+           'post'=> Points::findByPid('id,title','level = 1'),
         ]);
     }
 
@@ -1879,8 +1877,8 @@ class QuoteController extends Controller
      */
     public function actionCommonalityElseList()
     {
-        $id = trim(\Yii::$app->request->post('id',''));
-        $select = 'id,project,project_value';
+        $id = trim(\Yii::$app->request->get('id',''));
+        $select = 'id,project,project_value,unit';
         $where = 'points_id  ='.$id;
         $area_select = 'id,min_area,max_area,project_name,project_value';
         return Json::encode([

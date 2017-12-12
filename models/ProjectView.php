@@ -12,6 +12,11 @@ use yii\db\ActiveRecord;
 class ProjectView extends ActiveRecord
 {
     const TABLE_NAME = 'project_view';
+    const UNIT = [
+      1 => 'M',
+      2 => '%',
+      3 => 'M²',
+    ];
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -29,6 +34,9 @@ class ProjectView extends ActiveRecord
             ->all();
         foreach ($row as &$one){
             $one['project_value'] = $one['project_value'] / 100;
+            if (isset($one['unit'])){
+                $one['unit'] = self::UNIT[$one['unit']];
+            }
         }
 
         return $row;
