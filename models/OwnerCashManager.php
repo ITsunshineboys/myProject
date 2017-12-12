@@ -355,7 +355,6 @@ class OwnerCashManager extends ActiveRecord {
         $model->freeze_reason =$feeze_seaon;
         $model->create_time = time();
 
-
         $transaction=\Yii::$app->db->beginTransaction();
         try{
 
@@ -370,10 +369,11 @@ class OwnerCashManager extends ActiveRecord {
                 $user=User::find()->where(['id'=>$uid])->one();
 
             }
-            if($user->availableamount<$freeze_money){
+            if($user->availableamount < $freeze_money*100){
                 $transaction->rollBack();
                 $code=1075;
                 return $code;
+
             }
             $user->availableamount-=$freeze_money*100;
             if(!$user->update(false)){
