@@ -1,4 +1,4 @@
-const app = angular.module("app", ["ui.router", "ng.ueditor","shop_style", "freight_template",
+const app = angular.module("app", ["ui.router", "ng.ueditor","ngFileUpload","angularCSS","shop_style", "freight_template",
     "systemoffline_Module", "wait_online_Module", "commodity_manage",
     "up_shelves_detail_module", "index_module", "shopmanageModule", "applybrandModule", "authorizedetailModule",
   /*三阶段王杰---开始*/
@@ -118,6 +118,34 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: "/express",
             templateUrl: "pages/order_manage/express.html"
         })
+        .state('class_manage', { // 分类管理
+            url: '/class-manage',
+            templateUrl: 'pages/class_manage/class_manage.html',
+            css: 'pages/class_manage/css/class_manage.css',
+            controller: 'class_manage'
+        })
+
+        .state('add_class', { // 添加分类
+            url: '/add-class',
+            templateUrl: 'pages/class_manage/add_class.html',
+            css: 'pages/class_manage/css/add_class.css',
+            controller: 'add_class'
+        })
+        .state('class_detail', { // 分类详情
+            url: '/class-detail?id',
+            templateUrl: 'pages/class_manage/class_detail.html',
+            css: 'pages/class_manage/css/class_detail.css',
+            controller: 'class_detail'
+        })
+        .state('edit_class', { // 分类详情
+            url: '/edit-class?id',
+            templateUrl: 'pages/class_manage/edit_class.html',
+            css: 'pages/class_manage/css/edit_class.css',
+            controller: 'edit_class'
+        })
+
+
+
         /*--------------三阶段结束----芳子-----------------*/
 
 
@@ -139,11 +167,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/commodity_manage/commodity_manage.html",
             params: {id: 'id', name: 'name', on_flag: '', down_flag: '',wait_flag:'', logistics_flag:''}
         })
-        .state("class_manage", {   //分类管理
-            url: "/class_manage",
-            templateUrl: "pages/class_manage/class_manage.html"
-        })
-
         .state("shop_style", {   //商品管理风格系类跳转
             url: "/shop_style",
             templateUrl: "pages/commodity_manage/shop_style.html",

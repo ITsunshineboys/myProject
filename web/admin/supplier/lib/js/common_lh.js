@@ -39,7 +39,7 @@ app.service('_ajax', function ($http) {
             let res = response.data;
             if (res.code === 403) {
                 window.location.href="login.html"
-            } else if (res.code === 200 ||res.code === 1000||res.code === 1001|| res.code === 1002 || res.code === 1007 || res.code === 1010|| res.code === 1020|| res.code === 1039|| res.code === 1040 || res.code === 1054 || res.code === 1055) {
+            } else if (res.code === 200 ||res.code === 1000||res.code === 1001|| res.code === 1002 || res.code === 1006 ||res.code === 1007 || res.code === 1010|| res.code === 1020|| res.code === 1039|| res.code === 1040 || res.code === 1054 || res.code === 1055) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }

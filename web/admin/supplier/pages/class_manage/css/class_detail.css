@@ -1,0 +1,17 @@
+.pic-style{
+    width: 120px;
+    height: 120px;
+}
+
+.padding-out{
+    padding-top: 0!important;
+}
+
+.btns{
+    margin-top: 20px;
+    margin-left: 52px;
+}
+
+.btns button{
+    margin-right: 10px;
+}

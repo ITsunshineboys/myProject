@@ -1,0 +1,94 @@
+<div class="class_detail">
+    <!--分类详情-->
+    <div class="cla_detail">
+        <!--分类名称-->
+        <div class="cla_name">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类名称</span>
+            <input type="text" placeholder="请输入名称" ng-model="class_name" ng-class="{tored:showtishi}"
+                   ng-blur="addClassName()" maxlength=10>
+            <span>*限1~10个字符,不含特殊字符</span>
+            <h6 ng-if="showtishi" ng-bind="tishi"></h6>
+        </div>
+        <div class="divider"></div>
+
+        <!--分类所属-->
+        <div class="cla_belong">
+            <span class="glyphicon glyphicon-asterisk red_mark"></span>
+            <span class="each_title">分类所属</span>
+            <div class="class-remind">
+                <span>一级分类</span>
+                <span ng-if="showsub">二级分类</span>
+                <div>
+                    <select name="" class="belong first_select" ng-model="firstselect" ng-change="subClass(firstselect)">
+                        <option value="" selected="selected" value="0">当前</option>
+                        <option ng-repeat="item in firstclass" value={{item.id}}>{{item.title}}</option>
+                    </select>
+                    <select name="suoshukuang" class="belong" ng-show="showsub" ng-model="secselect">
+                        <option value="0">当前</option>
+                        <option ng-repeat="item in secondclass" value={{item.id}}>{{item.title}}</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="cla_pic">
+        <span class="glyphicon glyphicon-asterisk red_mark"></span>
+        <span class="each_title">分类图片</span>
+        <div class="upload_pic">
+            <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
+            <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+            <div id="upload">
+                <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)" ngf-select=""
+                        ngf-multiple="false" ng-model="data.file" id="upload_btn">上传
+                </button>
+            </div>
+            <div class="red_mark warning" ng-show="picwarning">
+                <span class="glyphicon glyphicon-asterisk red_mark"></span>
+                <span>{{picwarningtext}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!--分类描述-->
+    <div class="cla_des">
+        <span class="each_title">分类描述</span>
+        <div id="edit_tool">
+            <div class="ueditor" ng-model="addclassdes" config="config" id="editor"></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+
+
+    <div class="btn_sure">
+        <!--#save_tishi-->
+        <button class="btn btn-primary" ng-click="sureaddclass()">确认</button>
+        <button class="btn btn-default" ui-sref="class_manage">返回</button>
+    </div>
+
+</div>
+
+<!--保存提示模态框-->
+<div class="modal fade" id="save_tishi">
+    <div class="modal-dialog">
+        <div class="modal-content" id="save_content">
+            <div class="modal-header" id="save_header">
+                <h4 class="modal-title" id="tishi">
+                    提示
+                </h4>
+            </div>
+            <div class="modal-body" id="save_body">
+                <h6 id="tishi_wenzi">{{save_msg}}</h6>
+            </div>
+
+            <div class="btn_modal_two">
+                <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
+                <button id="caozuo_sure" data-dismiss="modal" ng-if="!success_flag">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
