@@ -63,7 +63,8 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax,$state) {
         {id:5,name:'品牌管理',link:'brand_index'},
         {id:6,name:'分类管理',link:'class.online'},
         {id:7,name:'系列/风格/属性管理',link:'style_index'},
-        {id:8,name:'新品牌/新分类审核',link:'new_brand_class.new_brand'}
+        {id:8,name:'新品牌/新分类审核',link:'new_brand_class.new_brand'},
+        {id:9,name:'商家入驻审核',link:'settle_verify.wait'}
     ];
     //财务中心
     $scope.finance_obj=[

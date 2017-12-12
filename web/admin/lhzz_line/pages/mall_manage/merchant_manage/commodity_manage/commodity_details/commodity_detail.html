@@ -1,214 +1,243 @@
- <section>
-        <!--商品分类-->
-        <form name="gooddetail">
-            <div class="margin_top">
-                <span>商品分类</span>
-                <span class="margin_left" ng-bind="good_detail.category_title"></span>
-            </div>
-            <!--商品名称-->
-            <div class="margin_top">
-                <span>商品名称</span>
-                <span class="margin_left" ng-bind="good_detail.title"></span>
-            </div>
-            <!--商品特色-->
-            <div class="margin_top">
-                <span>商品特色</span>
-                <span class="margin_left" ng-bind="good_detail.subtitle"></span>
-            </div>
-            <!--选择品牌-->
-            <div class="margin_top">
-                <span>选择品牌</span>
-                <span class="margin_left" ng-bind="good_detail.brand_name"></span>
-            </div>
-            <!--系列-->
-            <div class="margin_top">
-                <span>系列</span>
-                <span class="margin_left_style" ng-bind="good_detail.series_name"></span>
-            </div>
-            <!--风格-->
-            <div class="margin_top">
-                <span>风格</span>
-                <span class="margin_left_style" ng-bind="good_detail.style_name"></span>
-            </div>
-            <!--商品属性-->
-            <div class="margin_top">
-                <span>商品属性</span>
-                <div class="margin_left inline_block goodattrs">
-                    <div ng-repeat="item in good_detail.attrs">
-                        <span ng-bind="item.name"></span>
-                        <span class="margin_left" ng-bind="item.value"></span>
-                    </div>
+<section>
+    <!--商品分类-->
+    <form name="gooddetail">
+        <div class="margin_top">
+            <span>商品分类</span>
+            <span class="margin_left" ng-bind="good_detail.category_title"></span>
+        </div>
+        <!--商品名称-->
+        <div class="margin_top">
+            <span>商品名称</span>
+            <span class="margin_left" ng-bind="good_detail.title"></span>
+        </div>
+        <!--商品特色-->
+        <div class="margin_top">
+            <span>商品特色</span>
+            <span class="margin_left" ng-bind="good_detail.subtitle"></span>
+        </div>
+        <!--选择品牌-->
+        <div class="margin_top">
+            <span>选择品牌</span>
+            <span class="margin_left" ng-bind="good_detail.brand_name"></span>
+        </div>
+        <!--系列-->
+        <div class="margin_top">
+            <span>系列</span>
+            <span class="margin_left_style" ng-bind="good_detail.series_name"></span>
+        </div>
+        <!--风格-->
+        <div class="margin_top">
+            <span>风格</span>
+            <span class="margin_left_style" ng-bind="good_detail.style_name"></span>
+        </div>
+        <!--商品属性-->
+        <div class="margin_top">
+            <span>商品属性</span>
+            <div class="margin_left inline_block goodattrs">
+                <div ng-repeat="item in good_detail.attrs">
+                    <span ng-bind="item.name"></span>
+                    <span class="margin_left" ng-bind="item.value"></span>
                 </div>
             </div>
-            <hr>
-            <!--上传图片-->
-            <div class="margin_top picarr">
-                <span>上传图片</span>
-                <div class="margin_left inline_block img_size coverimg">
-                    <img ng-src="{{ good_detail.cover_image}}" alt="">
-                    <div id="coverimg_span">封面图</div>
+        </div>
+        <hr>
+        <!--上传图片-->
+        <div class="margin_top picarr">
+            <span>上传图片</span>
+            <div class="margin_left inline_block img_size coverimg">
+                <img ng-src="{{ good_detail.cover_image}}" alt="">
+                <div id="coverimg_span">封面图</div>
+            </div>
+            <div class="inline_block pic" ng-repeat="item in good_detail.images track by $index">
+                <img ng-src="{{ item}}" alt="">
+            </div>
+        </div>
+        <!--价格/库存-->
+        <div class="margin_top">
+            <span>价格/库存</span>
+            <div class="margin_left inline_block">
+                <div>
+                    <span class="font_size">供货价格</span>
+                    <span class="font_size">平台价格</span>
+                    <span class="font_size">市场价格</span>
+                    <span class="font_size">库存</span>
                 </div>
-                <div class="inline_block pic" ng-repeat="item in good_detail.images track by $index">
-                    <img ng-src="{{ item}}" alt="">
+                <hr>
+                <div class="margin_top">
+                    <span class="font_size">{{good_detail.supplier_price | currency:"¥"}}</span>
+                    <span class="font_size">{{good_detail.platform_price | currency:"¥"}}</span>
+                    <span class="font_size">{{good_detail.market_price | currency:"¥"}}</span>
+                    <span class="font_size">{{good_detail.left_number}}</span>
                 </div>
             </div>
-            <!--价格/库存-->
-            <div class="margin_top">
-                <span>价格/库存</span>
-                <div class="margin_left inline_block">
-                    <div>
-                        <span class="font_size">供货价格</span>
-                        <span class="font_size">平台价格</span>
-                        <span class="font_size">市场价格</span>
-                        <span class="font_size">库存</span>
-                    </div>
-                    <hr>
-                    <div class="margin_top">
-                        <span class="font_size">{{good_detail.supplier_price | currency:"¥"}}</span>
-                        <span class="font_size">{{good_detail.platform_price | currency:"¥"}}</span>
-                        <span class="font_size">{{good_detail.market_price | currency:"¥"}}</span>
-                        <span class="font_size">{{good_detail.left_number}}</span>
-                    </div>
+        </div>
+        <!--采购价-->
+        <div class="margin_top">
+            <span>采购价</span>
+            <div id='buyprice' class="margin_left inline_block">
+                <div>
+                    <span class="">装修公司采购价</span>
+                    <span class="purchase_left">项目经理采购价</span>
+                    <span class="purchase_left">设计师采购价</span>
                 </div>
-            </div>
-            <!--采购价-->
-            <div class="margin_top">
-                <span>采购价</span>
-                <div id='buyprice'class="margin_left inline_block">
-                    <div>
-                        <span class="">装修公司采购价</span>
-                        <span class="purchase_left">项目经理采购价</span>
-                        <span class="purchase_left">设计师采购价</span>
-                    </div>
-                    <hr>
-                    <div class="margin_top" ng-if='!show_default&&!deleted_btn'>
-                        <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
-                             alt="">
-                        <input type="text" class="purchase_input" id="decoration" name="decoration"
-                               ng-model="allprice.purchase_price_decoration_company" required
-                               ng-change="decorationPrice()"
-                               ng-blur="decoration=!!gooddetail.decoration.$error"
-                               ng-class={'warning':(gooddetail.decoration.$invalid&&alljudgefalse)||(gooddetail.decoration.$error.required&&decoration)||price_flag}>
-                        <input type="text" class="purchase_input" id="manager" name="manager"
-                               ng-model="allprice.purchase_price_manager" required ng-change="managerPrice()"
-                               ng-blur="manager=!!gooddetail.manager.$error"
-                               ng-class={'warning':(gooddetail.manager.$invalid&&alljudgefalse)||(gooddetail.manager.$error.required&&manager)||price_flag}>
-                        <input type="text" class="purchase_input" id="designer" name="designer"
-                               ng-model="allprice.purchase_price_designer" required ng-change="designerPrice()"
-                               ng-blur="manager=!!gooddetail.designer.$error"
-                               ng-class={'warning':(gooddetail.designer.$invalid&&alljudgefalse)||(gooddetail.designer.$error.required&&manager)||price_flag}>
-                    </div>
-
-
-                    <div class="margin_top" ng-if='show_default||deleted_btn'>
-                        <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
-                             alt="">
-                        <span class="purchase_input_default">{{allprice.purchase_price_decoration_company | currency:"¥"}}</span>
-                        <span class="purchase_input_default">{{allprice.purchase_price_manager | currency:"¥"}}</span>
-                        <span class="purchase_input_default">{{allprice.purchase_price_designer | currency:"¥"}}</span>
-                    </div>
-                    <p id='price_rule'>*价格，供货价≤装修公司采购价≤项目经理采购价/设计师采购价≤平台价≤市场价</p>
-                </div>
-            </div>
-            <!--物流模块-->
-            <div class="margin_top">
-                <span>商品物流</span>
-                <div class="margin_left inline_block">
-                    <div>
-                        <span ng-bind="name"></span>
-                    </div>
-                    <div class="margin_top">
-                        <span>快递方式</span>
-                        <span class="margin_left" ng-bind="delivery_method"></span>
-                    </div>
-                    <div class="margin_top choosecity">
-                        <span>城市选择</span>
-                        <span class="margin_left" ng-bind="district_names"></span>
-                        <span ng-if="alldistricts.length > 3">...</span>
-                        <span ng-if="alldistricts.length > 3" data-toggle="modal"
-                              data-target="#cityModal">查看</span>
-                    </div>
-                    <div class="margin_top">
-                        <span>是否包邮</span>
-                        <span class="margin_left">不包邮</span>
-                    </div>
-                    <div class="margin_top">
-                        <span>收费金额</span>
-                        <div class="margin_left inline_block">
-                            <p>默认1件商品：¥{{delivery_cost_default}}</p>
-                            <p>每增加1件商品，运费增加：¥{{delivery_cost_delta}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-            <!--售后-->
-            <div class="margin_top afterservice" ng-show="show_service">
-                <span>售后</span>
-                <div class="margin_left inline_block">
-                    <div class="margin_top" ng-repeat="item in good_detail.after_sale_services">
-                        <p ng-show="afterserviceTest(item)">{{item}}</p>
-                    </div>
-                </div>
-            </div>
-            <!--保障-->
-            <div class="margin_top safeguard">
-                <span>保障</span>
-                <div class="margin_left inline_block">
-                    <div ng-repeat="item in good_detail.after_sale_services">
-                        <p ng-show="safeguardTest(item)">{{item}}</p>
-                    </div>
-
-                </div>
-            </div>
-            <hr>
-            <!--线下商城二维码-->
-            <div class="margin_top qrcode">
-                <span>线下商城二维码</span>
-                <div class="inline_block">
-                    <img ng-src="{{ good_detail.qr_code}}" alt="">
-                </div>
-            </div>
-            <hr>
-            <!--详细描述-->
-            <div class="margin_top">
-                <span>详细描述</span>
-                <div class="margin_left inline_block">
-                    <div ng-bind-html="good_detail.description | toHtml"></div>
-                </div>
-            </div>
-            <!--操作-->
-            <div class="btn_margin_top">
-
-                <div ng-if='online_btn'>
-                    <span class="btn btn-primary" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)"><i class="iconfont icon-save"></i>保存</span>
-                    <span class="btn btn-default" data-toggle="modal" data-target="#down_shelves_reason_modal" ng-click="offlineGood()">下架</span>
-                    <span class="btn btn-default" ng-click='backPage()'>返回</span>
+                <hr>
+                <div class="margin_top" ng-if='!show_default&&!deleted_btn'>
+                    <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
+                         alt="">
+                    <input type="text" class="purchase_input" id="decoration" name="decoration"
+                           ng-model="allprice.purchase_price_decoration_company" required
+                           ng-change="decorationPrice()"
+                           ng-blur="decoration=!!gooddetail.decoration.$error"
+                           ng-class={'warning':(gooddetail.decoration.$invalid&&alljudgefalse)||(gooddetail.decoration.$error.required&&decoration)||price_flag}>
+                    <input type="text" class="purchase_input" id="manager" name="manager"
+                           ng-model="allprice.purchase_price_manager" required ng-change="managerPrice()"
+                           ng-blur="manager=!!gooddetail.manager.$error"
+                           ng-class={'warning':(gooddetail.manager.$invalid&&alljudgefalse)||(gooddetail.manager.$error.required&&manager)||price_flag}>
+                    <input type="text" class="purchase_input" id="designer" name="designer"
+                           ng-model="allprice.purchase_price_designer" required ng-change="designerPrice()"
+                           ng-blur="manager=!!gooddetail.designer.$error"
+                           ng-class={'warning':(gooddetail.designer.$invalid&&alljudgefalse)||(gooddetail.designer.$error.required&&manager)||price_flag}>
                 </div>
 
-                <div ng-if='offline_btn||wait_btn'>
-                    <span class="btn btn-primary" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)"><i class="iconfont icon-save"></i>保存</span>
-                    <span class="btn btn-default" ng-click='backPage()'>返回</span>
-                </div>
 
-                <div ng-if='deleted_btn'>
-                    <span class="btn btn-default" ng-click='backPage()'>返回</span>
+                <div class="margin_top" ng-if='show_default||deleted_btn'>
+                    <img class="red_img" src="pages/mall_manage/merchant_manage/commodity_manage/images/red.png"
+                         alt="">
+                    <span class="purchase_input_default">{{allprice.purchase_price_decoration_company | currency:"¥"}}</span>
+                    <span class="purchase_input_default">{{allprice.purchase_price_manager | currency:"¥"}}</span>
+                    <span class="purchase_input_default">{{allprice.purchase_price_designer | currency:"¥"}}</span>
+                </div>
+                <p id='price_rule'>*价格，供货价≤装修公司采购价≤项目经理采购价/设计师采购价≤平台价≤市场价</p>
+            </div>
+        </div>
+        <!--物流模块-->
+        <div class="margin_top">
+            <span>商品物流</span>
+            <div class="margin_left inline_block">
+                <div>
+                    <span ng-bind="name"></span>
+                </div>
+                <div class="margin_top">
+                    <span>快递方式</span>
+                    <span class="margin_left" ng-bind="delivery_method"></span>
+                </div>
+                <div class="margin_top choosecity">
+                    <span>城市选择</span>
+                    <span class="margin_left" ng-bind="district_names"></span>
+                    <span ng-if="alldistricts.length > 3">...</span>
+                    <span ng-if="alldistricts.length > 3" data-toggle="modal"
+                          data-target="#cityModal">查看</span>
+                </div>
+                <div class="margin_top">
+                    <span>是否包邮</span>
+                    <span class="margin_left">不包邮</span>
+                </div>
+                <div class="margin_top">
+                    <span>收费金额</span>
+                    <div class="margin_left inline_block">
+                        <p>默认1件商品：¥{{delivery_cost_default}}</p>
+                        <p>每增加1件商品，运费增加：¥{{delivery_cost_delta}}</p>
+                    </div>
                 </div>
             </div>
-        </form>
-    </section>
+        </div>
+
+        <hr>
+        <!--售后-->
+        <div class="margin_top afterservice" ng-show="show_service">
+            <span>售后</span>
+            <div class="margin_left inline_block">
+                <div class="margin_top" ng-repeat="item in good_detail.after_sale_services">
+                    <p ng-show="afterserviceTest(item)">{{item}}</p>
+                </div>
+            </div>
+        </div>
+        <!--保障-->
+        <div class="margin_top safeguard">
+            <span>保障</span>
+            <div class="margin_left inline_block">
+                <div ng-repeat="item in good_detail.after_sale_services">
+                    <p ng-show="safeguardTest(item)">{{item}}</p>
+                </div>
+
+            </div>
+        </div>
+        <hr>
+        <!--线下商城二维码-->
+        <div class="margin_top qrcode">
+            <span>线下商城二维码</span>
+            <div class="inline_block">
+                <img ng-src="{{ good_detail.qr_code}}" alt="">
+            </div>
+        </div>
+        <hr>
+        <!--详细描述-->
+        <div class="margin_top">
+            <span>详细描述</span>
+            <div class="margin_left inline_block">
+                <div ng-bind-html="good_detail.description | toHtml"></div>
+            </div>
+        </div>
+        <hr>
+
+        <div class="margin_top">
+            <span>是否是线下商品</span>
+            <span class="margin_left" ng-bind="good_detail.is_offline_goods"></span>
+        </div>
+
+        <div ng-if="good_detail.is_offline_goods=='是'">
+            <div class="margin_top">
+                <span>线下店名称</span>
+                <span class="margin_left" ng-bind="good_detail.line_supplier_name"></span>
+            </div>
+
+            <div class="margin_top">
+                <span>线下店地址</span>
+                <span class="margin_left" ng-bind="good_detail.line_district"></span>
+            </div>
+
+            <div class="margin_top">
+                <span>电话</span>
+                <span class="margin_left" ng-bind="good_detail.line_mobile"></span>
+            </div>
+        </div>
 
 
-    <!--下架原因模态框-->
- <div class="modal fade" tabindex="-1" role="dialog" id="down_shelves_reason_modal">
-     <div class="modal-dialog" role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title">下架原因</h4>
-             </div>
-             <div class="modal-body">
+        <!--操作-->
+        <div class="btn_margin_top">
+
+            <div ng-if='online_btn'>
+                <span class="btn btn-primary" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)"><i
+                        class="iconfont icon-save"></i>保存</span>
+                <span class="btn btn-default" data-toggle="modal" data-target="#down_shelves_reason_modal"
+                      ng-click="offlineGood()">下架</span>
+                <span class="btn btn-default" ng-click='backPage()'>返回</span>
+            </div>
+
+            <div ng-if='offline_btn||wait_btn'>
+                <span class="btn btn-primary" ng-click="saveGoodDetail(gooddetail.$valid,gooddetail.$error.required)"><i
+                        class="iconfont icon-save"></i>保存</span>
+                <span class="btn btn-default" ng-click='backPage()'>返回</span>
+            </div>
+
+            <div ng-if='deleted_btn'>
+                <span class="btn btn-default" ng-click='backPage()'>返回</span>
+            </div>
+        </div>
+    </form>
+</section>
+
+
+<!--下架原因模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="down_shelves_reason_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">下架原因</h4>
+            </div>
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-md-3">
                         下架原因（选填）
@@ -217,52 +246,55 @@
                         <textarea class="form-control" rows="10" ng-model="offline_reason"></textarea>
                     </div>
                 </div>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureGoodOffline()">确认</button>
-                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-             </div>
-         </div>
-     </div>
- </div>
-
-<!--保存成功 模态框-->
- <div class="modal fade" tabindex="-1" role="dialog" id="savesuremodal">
-     <div class="modal-dialog" role="document">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                 <h4 class="modal-title">提示</h4>
-             </div>
-             <div class="modal-body">
-                 <p>保存成功</p>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureSaveDetail()">确认</button>
-             </div>
-         </div>
-     </div>
- </div>
-
-
-
-<!--城市展示-->
-    <div id="cityModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">城市选择</h4>
-                </div>
-                <div class="modal-body">
-                    <p class="city">
-                        <span ng-repeat="item in alldistricts">{{item}}</span>
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureGoodOffline()">确认
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             </div>
         </div>
     </div>
+</div>
+
+<!--保存成功 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="savesuremodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>保存成功</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureSaveDetail()">确认
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--城市展示-->
+<div id="cityModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">城市选择</h4>
+            </div>
+            <div class="modal-body">
+                <p class="city">
+                    <span ng-repeat="item in alldistricts">{{item}}</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 

@@ -69,22 +69,22 @@
         <!--是否是线下店-->
         <div class="shop_name">
             <span>是否是线下店</span>
-            <span ng-bind="result.follower_number"></span>
+            <span ng-bind="result.is_offline_shop"></span>
         </div>
 
         <!--线下店地址-->
-        <div class="shop_name">
+        <div class="shop_name" ng-if="result.line_district">
             <span>线下店地址</span>
-            <span ng-bind="result.follower_number"></span>
+            <span ng-bind="result.line_district"></span>
         </div>
 
         <!--电话-->
-        <div class="shop_name">
+        <div class="shop_name" ng-if="result.line_mobile">
             <span>电话</span>
-            <span ng-bind="result.follower_number"></span>
+            <span ng-bind="result.line_mobile"></span>
         </div>
 
-        <div class="btn_back">
+        <div class="btn_back" >
             <button class="btn btn-default" ui-sref="store_mag">返回</button>
         </div>
 

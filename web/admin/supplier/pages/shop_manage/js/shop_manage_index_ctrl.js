@@ -39,6 +39,7 @@ shopmanage.controller("shopmanage_ctrl", function ($rootScope,$scope, $state, $h
     function allDetail() {
         _ajax.get('/mall/supplier-view-admin', {}, function (res) {
             let data = res.data;
+            console.log(data)
             result = data.supplier_view_admin;
             $scope.result = data.supplier_view_admin;
             let year = String(Number(result.create_time.substring(0, 4)) + 1);

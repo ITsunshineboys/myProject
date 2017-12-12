@@ -69,11 +69,29 @@
                 </ul>
             </div>
 
-            <!--&lt;!&ndash;关注粉丝&ndash;&gt;-->
-            <!--<div>-->
-                <!--<span>关注粉丝</span>-->
-                <!--<span class="margin_left_86" ng-bind="result.follower_number"></span>-->
-            <!--</div>-->
+            <!--关注粉丝-->
+            <div>
+                <span>关注粉丝</span>
+                <span class="margin_left_86" ng-bind="result.follower_number"></span>
+            </div>
+
+            <!--是否是线下店-->
+            <div>
+                <span>是否是线下店</span>
+                <span class="margin_left_86" ng-bind="result.is_offline_shop"></span>
+            </div>
+
+            <!--线下店地址-->
+            <div ng-if="result.line_district">
+                <span>线下店地址</span>
+                <span class="margin_left_86" ng-bind="result.line_district"></span>
+            </div>
+
+            <!--电话-->
+            <div ng-if="result.line_mobile">
+                <span>电话</span>
+                <span class="margin_left_86" ng-bind="result.line_mobile"></span>
+            </div>
 
 
             <button ng-click="resetLogo()" class="btn btn-primary pull-left" id="savebtn"><i class="glyphicon glyphicon-floppy-disk"></i>保存</button>

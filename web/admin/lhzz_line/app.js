@@ -400,6 +400,31 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/account_manage/account_mag/css/account.css',
             controller:'account_closed'
         })
+
+        .state('settle_verify',{ //商家入驻审核
+            abstract:true,
+            url:'/',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify.html',
+            controller:'settle_verify'
+        })
+
+        .state('settle_verify.wait',{ //商家入驻审核--等待
+            url:'/settle_verify_wait',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify_wait.html',
+            controller:'settle_verify_wait'
+        })
+
+        .state('settle_verify.pass',{ //商家入驻审核 -- 通过
+            url:'/settle_verify_pass',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify_pass.html',
+            controller:'settle_verify_pass'
+        })
+
+        .state('settle_verify.fail',{ //商家入驻审核 -- 未通过
+            url:'/settle_verify_fail',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify_fail.html',
+            controller:'settle_verify_fail'
+        })
         /*芳子-------------------------------------end*/
 
         //========================张放====================================
