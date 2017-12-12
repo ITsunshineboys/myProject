@@ -93,7 +93,7 @@ return [
         1075 => '冻结金额超出可提现限额，请重新填写',
     ],
     'okMsgs' => [
-        'resetIcon' => '上传头像成功',
+        'site/reset-icon' => '上传头像成功',
     ],
     'events' => [
         'supplier' => [
