@@ -449,3 +449,15 @@ select.form-control:focus {
 }
 
 /* filter end */
+
+/* color start */
+.blue{
+    color: #03A9F4;
+}
+.red{
+    color: #FF5722;
+}
+.green{
+    color: #8BC34A;
+}
+/* color end */
