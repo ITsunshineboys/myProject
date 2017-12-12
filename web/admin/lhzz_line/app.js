@@ -556,7 +556,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/financial_center/mall/css/withdraw_manage.css'
         })
         .state('mall_finance.withdraw_manage_detail', {//商家提现管理详情
-            url: 'withdraw_manage_detail',
+            url: 'withdraw_manage_detail?index',
             templateUrl: 'pages/financial_center/mall/withdraw_manage_detail.html',
             css: 'pages/financial_center/mall/css/account_detail.css'
         })
@@ -619,8 +619,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css:'pages/financial_center/owner/css/account_detail.css',
             controller:'withdraw_detail_ctrl'
         })
-        .state('account',{//账户管理
-            url:'/account',
+        .state('finance_account',{//财务账户管理
+            url:'/finance_account',
             templateUrl:'pages/financial_center/owner/account.html',
             css:'pages/financial_center/owner/css/account.css',
             controller:'account_ctrl'

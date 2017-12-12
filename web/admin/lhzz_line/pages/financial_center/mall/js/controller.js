@@ -264,7 +264,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
             {num:3,str:'已提现'},
             {num:4,str:'提现中'},
             {num:5,str:'驳回'},
-            {num:6,str:'贷款'},
+            {num:6,str:'货款'},
             {num:7,str:'使用'}
         ]
         $scope.Config5 = {
@@ -551,7 +551,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                             name: '商家提现管理',
                         }
                     ]
-                    $state.go('mall_finance.withdraw')
+                    $stateParams.index!=1?$state.go('mall_finance.withdraw'):history.go(-1)
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -981,7 +981,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                     name: '商家提现管理',
                 }
             ]
-            $state.go('mall_finance.withdraw')
+            $stateParams.index!=1?$state.go('mall_finance.withdraw'):history.go(-1)
         }
       // 跳转商家提现列表
         $scope.goMoneyList = function () {
@@ -993,14 +993,46 @@ angular.module('mall_finance', ['ui.bootstrap'])
         $scope.getMoneyDetail = function (item) {
             let all_modal = function ($scope, $uibModalInstance) {
                 $scope.money_detail = item
+                _ajax.get('/withdrawals/admin-user-access-detail',{
+                    transaction_no:item.transaction_no
+                },function (res) {
+                    console.log(res)
+                })
                 $scope.common_house = function () {
                     $uibModalInstance.close()
                 }
             }
             all_modal.$inject = ['$scope', '$uibModalInstance']
-            $uibModal.open({
-                 templateUrl: 'pages/intelligent/money_detail_modal.html',
-                 controller: all_modal
-            })
+            if(item.access_type == '货款'||item.access_type == '充值' ||item.access_type == '扣款'){
+                $uibModal.open({
+                    templateUrl: 'pages/financial_center/mall/money_detail_modal.html',
+                    controller: all_modal
+                })
+            }else{
+                _ajax.get('/supplier-cash/cash-action-detail', {
+                    transaction_no: item.transaction_no
+                }, function (res) {
+                    console.log(res)
+                    $rootScope.crumbs = [
+                        {
+                            name: '财务中心',
+                            icon: 'icon-caiwu',
+                            link: $rootScope.finance_click
+                        }, {
+                            name: '商城财务',
+                            link: function () {
+                                $state.go('mall_finance.index')
+                                $rootScope.crumbs.splice(2, 4)
+                            }
+                        }, {
+                            name: '商家提现管理',
+                        },{
+                            name:'商家提现管理详情'
+                        }
+                    ]
+                    $scope.all_withdraw_detail = res.data
+                    $state.go('mall_finance.withdraw_manage_detail',{index:1})
+                })
+            }
         }
     })
