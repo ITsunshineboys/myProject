@@ -387,7 +387,6 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             {
                 $order_no=$order_no[0];
             }
-
             if (count($accessDetailList)>1 )
             {
                 $goods_name=$goods_name.',...';
@@ -395,7 +394,6 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             $add_time=date('Y-m-d H:i',$GoodsOrder->create_time);
             $pay_time=date('Y-m-d H:i',$accessDetailList[0]->create_time);
             $pay_name=$GoodsOrder->pay_name;
-
         }
 
         $data[]=[
