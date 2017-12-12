@@ -102,7 +102,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#edit_modal" ng-disabled="upload_dis" ng-click="editBtn()">确认</button>
-                <button class="btn btn-default btn_left" ui-sref="brand_index">返回</button>
+                <button class="btn btn-default btn_left" ng-click="back_upper()">返回</button>
             </div>
         </div>
     </form>
@@ -117,7 +117,7 @@
                     <p>修改成功</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="back()">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="back_index()">确认</button>
                 </div>
             </div>
         </div>

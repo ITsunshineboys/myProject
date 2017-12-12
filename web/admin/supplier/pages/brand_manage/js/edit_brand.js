@@ -211,8 +211,12 @@ angular.module("edit_brand_module",[])
 				console.log(res);
 			})
 		};
+		//返回按钮
+		$scope.back_upper=function () {
+			history.go(-1);
+		}
 		//模态框确定
-		$scope.back=function () {
+		$scope.back_index=function () {
 			setTimeout(function () {
 				$state.go('brand_index');
 			},300)
