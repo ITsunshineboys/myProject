@@ -200,3 +200,7 @@ CREATE TABLE `line_supplier_goods` (
 ALTER TABLE `line_supplier_goods` CHANGE `line_supllier_id`  `line_supplier_id`  int(11) NOT NULL COMMENT '线下体验店id';
 
 
+--all 2017.12.12  hyz
+
+ALTER TABLE `user_accessdetail` ADD  `recharge_pay_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1:支付宝  2.微信'
+
