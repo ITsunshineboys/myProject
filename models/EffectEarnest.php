@@ -268,7 +268,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-            if(($uid && !isset($phone) && !isset($name)) && ($uid && $post['type']==1)){
+            if(($uid && !isset($phone) && !isset($name))){
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
                 $phone=$user['mobile'];
