@@ -183,8 +183,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      * @return bool|string
      */
     public static function appAddEffect($uid,$post){
-        var_dump($uid);
-        var_dump($post);die;
+
         $effects=Effect::find()
             ->select('sort_id')
             ->asArray()
@@ -309,7 +308,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $tran->commit();
             return $id;
         }catch (Exception $e){
-            var_dump($e);die;
             $tran->rollBack();
             return false;
         }
