@@ -2108,7 +2108,8 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = EngineeringStandardCarpentryCraft::find()->all();
+        $a = EngineeringStandardCarpentryCraft::find()->asArray()->all();
+        var_dump($a);exit;
 
 
     }
