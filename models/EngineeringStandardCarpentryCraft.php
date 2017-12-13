@@ -11,17 +11,9 @@ use yii\db\ActiveRecord;
 
 class EngineeringStandardCarpentryCraft extends ActiveRecord
 {
-    const FIELDS_ADMIN =[
-        'id',
-        'title',
-        'value',
-    ];
 
     const UNIT = [
         1 => 'm',
-//        2 => '宽度',
-//        3 => '根',
-//        4 => '张',
     ];
 
     /**
