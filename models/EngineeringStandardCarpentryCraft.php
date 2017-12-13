@@ -24,10 +24,12 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
         return 'engineering_standard_carpentry_craft';
     }
 
-    public static function findByAll()
+    public static function findByAll($where)
     {
         $row =  self::find()
             ->asArray()
+            ->select('id,title,value,unit')
+            ->where($where)
             ->all();
 
         foreach ($row as &$one){

@@ -280,12 +280,16 @@ class QuoteController extends Controller
      */
     public function actionProjectNormWoodworkList()
     {
+        $city = (int)trim(\Yii::$app->request->get('city',''));
+
         $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id
         $goods['specification']  = GoodsCategory::GoodsAttrValue($material);
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
-        $coefficient = EngineeringStandardCarpentryCoefficient::findByAll();
-        $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll();
+        $where = 'city_code='.$city;
+        $coefficient = EngineeringStandardCarpentryCoefficient::findByAll($where);
+        $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll($where);
+
 
         return Json::encode([
             'code' => 200,
@@ -315,7 +319,7 @@ class QuoteController extends Controller
         foreach ($post['value'] as $one_post){
             if (!isset($one_post['id'])){
                 $value = new EngineeringStandardCraft();
-                $value->city_code   = $post['district_code'];
+                $value->city_code   = $post['city_code'];
                 $value->project         = $post['project'];
                 $value->project_details = $one_post['name'];
                 $value->material        = $one_post['value'] * 100;
@@ -340,6 +344,7 @@ class QuoteController extends Controller
         foreach ($post['coefficient'] as $one_coefficient){
             if (isset($one_coefficient['add_id'])){
                 $coefficient = new EngineeringStandardCarpentryCoefficient();
+                $coefficient->city_code  = $post['city_code'];
                 $coefficient->project  = $one_coefficient['add_id'];
                 $coefficient->value  = $one_coefficient['value'] * 100;
                 $coefficient->coefficient  = $one_coefficient['coefficient'];

@@ -27,10 +27,12 @@ class EngineeringStandardCarpentryCoefficient extends ActiveRecord
         return 'engineering_standard_carpentry_coefficient';
     }
 
-    public static function findByAll()
+    public static function findByAll($where)
     {
         $row =  self::find()
             ->asArray()
+            ->select('id,project,value,coefficient,series_or_style')
+            ->where($where)
             ->All();
 
         foreach ($row as &$one){
