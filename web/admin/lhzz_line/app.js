@@ -1,9 +1,9 @@
-var app = angular.module("app", ["ng.ueditor", "ui.router","onsaleeditModule", "offsaleeditModule",
+var app = angular.module("app", ["ng.ueditor", "ui.router", "onsaleeditModule", "offsaleeditModule",
     "addclassModule", 'brand_details_module', 'account_comment', 'change_num', 'bind_record', 'operation_record',
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
     "choose_styleModule", "styledetailModule", "storedetailModule", "merchant_details", "intelligent_index",
-    'angularCSS', 'distribution', 'mall_finance','idcard_right',
+    'angularCSS', 'apply_case', 'distribution', 'mall_finance', 'idcard_right',
     //  王杰 开始
     "banner_recommend_module",
     "index_recommend_module",
@@ -135,17 +135,20 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         /*---------------------------谢力开始--------------------------------------*/
         .state("add_user", {   //账户管理——添加新用户
             url: "/add_user",
-            templateUrl: "pages/account_manage/add_user/add_user.html"
+            templateUrl: "pages/account_manage/user_list/add_user/add_user.html",
+            css: "pages/account_manage/user_list/add_user/css/add_user.css"
         })
+
         .state("account_comment", {
             url: "/account_comment?id",
-            templateUrl: "pages/account_manage/account_comment/account_comment.html",
-
+            templateUrl: "pages/account_manage/user_list/account_comment/account_comment.html",
+            css: "pages/account_manage/user_list/account_comment/css/account_comment.css"
         })
 
         .state("change_num", {  //更换手机号码
             url: "/change_num",
-            templateUrl: "pages/account_manage/account_comment/change_num.html",
+            templateUrl: "pages/account_manage/user_list/account_comment/change_num.html",
+            css: "pages/account_manage/user_list/account_comment/css/change_num.css",
             params: {
                 icon: 'icon',
                 nickname: 'nickname',
@@ -173,7 +176,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
         .state("bind_record", {
             url: "/bind_record?id",
-            templateUrl: "pages/account_manage/account_comment/bind_record.html",
+            templateUrl: "pages/account_manage/user_list/account_comment/bind_record.html",
+            css: "pages/account_manage/user_list/account_comment/css/bind_record.css",
             params: {
                 icon: 'icon',
                 nickname: 'nickname'
@@ -202,7 +206,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
         .state("operation_record", {
             url: "/operation_record",
-            templateUrl: "pages/account_manage/account_comment/operation_record.html",
+            templateUrl: "pages/account_manage/user_list/account_comment/operation_record.html",
+            css: "pages/account_manage/user_list/account_comment/css/operation_record.css",
             params: {
                 icon: 'icon',
                 nickname: 'nickname'
@@ -231,7 +236,8 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
         .state("idcard_right", {
             url: "/idcard_right?id",
-            templateUrl: "pages/account_manage/account_comment/idcard_right.html",
+            templateUrl: "pages/account_manage/user_list/account_comment/idcard_right.html",
+            css: "pages/account_manage/user_list/account_comment/css/idcard_right.css",
             params: {
                 icon: 'icon',
                 nickname: 'nickname'
@@ -272,7 +278,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         /*---------------------------谢力结束--------------------------------------*/
 
 
-        /*芳子------------------------------------start*/
+        /*=============== 芳子 start ===============*/
         .state('class', { // 分类管理
             abstract: true,
             url: '/class_mag',
@@ -294,7 +300,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
 
         .state("onsale_edit", {
-            params: {item:null},
+            params: {item: null},
             url: "/onsale_edit",
             templateUrl: "pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
         })
@@ -307,7 +313,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("add_class", {
             url: "/add_class",
             templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html",
-            css:"pages/mall_manage/class_manage/add_class/css/add_class.css"
+            css: "pages/mall_manage/class_manage/add_class/css/add_class.css"
         })
 
         .state("merchant_index", {  //商城管理首页
@@ -368,7 +374,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
 
         .state('commodity_detail', { // 商品详情
-            params:{id:null,storeid: null},
+            params: {id: null, storeid: null},
             url: '/commodity_detail',
             templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail.html',
             css: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail.css',
@@ -380,27 +386,67 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
         })
 
-        .state('account',{ //账户管理
-            abstract:true,
-            url:'/account_mag',
-            templateUrl:'pages/account_manage/account_mag/account.html',
-            controller:'account'
+        .state('account_user_list', { //账户管理 - 用户列表
+            abstract: true,
+            url: '/account_mag_list',
+            templateUrl: 'pages/account_manage/user_list/account_mag/user_list.html',
+            controller: 'account_user_list'
         })
 
-        .state('account.normal',{ //正常
-            url:'/account_normal',
-            templateUrl:'pages/account_manage/account_mag/account_normal.html',
-            css: 'pages/account_manage/account_mag/css/account.css',
-            controller:'account_normal'
+        .state('account_user_list.normal', { //正常
+            url: '/account_user_list_normal',
+            templateUrl: 'pages/account_manage/user_list/account_mag/user_list_closed.html',
+            css: 'pages/account_manage/user_list/account_mag/css/user_list.css',
+            controller: 'account_user_list_normal'
         })
 
-        .state('account.closed',{ //关闭
-            url:'/account_closed',
-            templateUrl:'pages/account_manage/account_mag/account_closed.html',
-            css: 'pages/account_manage/account_mag/css/account.css',
-            controller:'account_closed'
+        .state('account_user_list.closed', { //关闭
+            url: '/account_user_list_closed',
+            templateUrl: 'pages/account_manage/user_list/account_mag/user_list_normal.html',
+            css: 'pages/account_manage/user_list/account_mag/css/user_list.css',
+            controller: 'account_user_list_closed'
         })
-        /*芳子-------------------------------------end*/
+
+        // .state('user_verify', { //账户管理 - 用户审核
+        //     abstract: true,
+        //     url: '/user_verify',
+        //     templateUrl: 'pages/account_manage/user_verify/user_verify.html',
+        //     controller: 'user_verify'
+        // })
+        //
+        // .state('user_verify.wait', { // 用户审核 - 等待
+        //     url: '/settle_verify',
+        //     templateUrl: 'pages/mall_manage/merchant_settle/settle_verify.html',
+        //     controller: 'settle_verify'
+        // })
+        //
+        // .state('settle_verify.wait', { //商家入驻审核--等待
+        //     url: '/settle_verify_wait',
+        //     templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_wait.html',
+        //     css: 'pages/mall_manage/merchant_settle/css/settle_verify.css',
+        //     controller: 'settle_verify_wait'
+        // })
+
+        .state('settle_verify.pass', { //商家入驻审核 -- 通过
+            url: '/settle_verify_pass',
+            templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_pass.html',
+            controller: 'settle_verify_pass'
+        })
+
+        .state('settle_verify.fail', { //商家入驻审核 -- 未通过
+            url: '/settle_verify_fail',
+            templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_fail.html',
+            controller: 'settle_verify_fail'
+        })
+
+        .state('verify_detail', { //商家入驻审核 -- 详情
+            url: '/verify_detail',
+            templateUrl: 'pages/mall_manage/merchant_settle/verify_detail.html',
+            css: 'pages/mall_manage/merchant_settle/css/verify_detail.css',
+            controller: 'verify_detail'
+        })
+
+        /*=============== 芳子 end ===============*/
 
         //========================张放====================================
         //智能报价
@@ -610,59 +656,59 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/financial_center/mall/recorded_detail.html',
             css: 'pages/financial_center/mall/css/withdraw_manage.css'
         })
-        .state('mall_finance.money_list',{//收支列表
-            url:'money_list',
-            templateUrl:'pages/financial_center/mall/money_list.html',
-            css:'pages/financial_center/mall/css/account.css'
+        .state('mall_finance.money_list', {//收支列表
+            url: 'money_list',
+            templateUrl: 'pages/financial_center/mall/money_list.html',
+            css: 'pages/financial_center/mall/css/account.css'
         })
-            /*业主财务中心*/
-        .state('owner_finance',{//业主财务中心主页
-            url:'/owner_finance',
-            templateUrl:'pages/financial_center/owner/owner_finance.html',
-            css:'pages/financial_center/owner/css/owner_finance.css',
-            controller:'owner_finance_ctrl'
+        /*业主财务中心*/
+        .state('owner_finance', {//业主财务中心主页
+            url: '/owner_finance',
+            templateUrl: 'pages/financial_center/owner/owner_finance.html',
+            css: 'pages/financial_center/owner/css/owner_finance.css',
+            controller: 'owner_finance_ctrl'
         })
-        .state('withdraw_manage',{//业主提现管理
-            url:'/withdraw_manage?time_type&status',
-            templateUrl:'pages/financial_center/owner/withdraw_manage.html',
-            css:'pages/financial_center/owner/css/withdraw_manage.css',
-            controller:'withdraw_manage_ctrl'
+        .state('withdraw_manage', {//业主提现管理
+            url: '/withdraw_manage?time_type&status',
+            templateUrl: 'pages/financial_center/owner/withdraw_manage.html',
+            css: 'pages/financial_center/owner/css/withdraw_manage.css',
+            controller: 'withdraw_manage_ctrl'
         })
-        .state('withdraw_detail',{//业主提现详情
-            url:'/withdraw_detail?transaction_no',
-            templateUrl:'pages/financial_center/owner/withdraw_manage_detail.html',
-            css:'pages/financial_center/owner/css/account_detail.css',
-            controller:'withdraw_detail_ctrl'
+        .state('withdraw_detail', {//业主提现详情
+            url: '/withdraw_detail?transaction_no',
+            templateUrl: 'pages/financial_center/owner/withdraw_manage_detail.html',
+            css: 'pages/financial_center/owner/css/account_detail.css',
+            controller: 'withdraw_detail_ctrl'
         })
-        .state('finance_account',{//财务账户管理
-            url:'/finance_account',
-            templateUrl:'pages/financial_center/owner/account.html',
-            css:'pages/financial_center/owner/css/account.css',
-            controller:'account_ctrl'
+        .state('finance_account', {//财务账户管理
+            url: '/finance_account',
+            templateUrl: 'pages/financial_center/owner/account.html',
+            css: 'pages/financial_center/owner/css/account.css',
+            controller: 'account_ctrl'
         })
-        .state('account_detail',{//财务账户管理详情
-            url:'/account_detail?id',
-            templateUrl:'pages/financial_center/owner/account_detail.html',
-            css:'pages/financial_center/owner/css/account_detail.css',
-            controller:'account_detail_ctrl'
+        .state('account_detail', {//财务账户管理详情
+            url: '/account_detail?id',
+            templateUrl: 'pages/financial_center/owner/account_detail.html',
+            css: 'pages/financial_center/owner/css/account_detail.css',
+            controller: 'account_detail_ctrl'
         })
-        .state('freeze_money',{//冻结金额
-            url:'/freeze_money?user_id',
-            templateUrl:'pages/financial_center/owner/freeze_money.html',
-            css:'pages/financial_center/owner/css/freeze_money.css',
-            controller:'freeze_money_ctrl'
+        .state('freeze_money', {//冻结金额
+            url: '/freeze_money?user_id',
+            templateUrl: 'pages/financial_center/owner/freeze_money.html',
+            css: 'pages/financial_center/owner/css/freeze_money.css',
+            controller: 'freeze_money_ctrl'
         })
-        .state('freeze_list',{//冻结金额
-            url:'/freeze_list?user_id',
-            templateUrl:'pages/financial_center/owner/freeze_list.html',
-            css:'pages/financial_center/owner/css/withdraw_list.css',
-            controller:'freeze_list_ctrl'
+        .state('freeze_list', {//冻结金额
+            url: '/freeze_list?user_id',
+            templateUrl: 'pages/financial_center/owner/freeze_list.html',
+            css: 'pages/financial_center/owner/css/withdraw_list.css',
+            controller: 'freeze_list_ctrl'
         })
-        .state('money_list',{//收支明细
-            url:'/money_list?user_id',
-            templateUrl:'pages/financial_center/owner/money_list.html',
-            css:'pages/financial_center/owner/css/account.css',
-            controller:'money_list_ctrl'
+        .state('money_list', {//收支明细
+            url: '/money_list?user_id',
+            templateUrl: 'pages/financial_center/owner/money_list.html',
+            css: 'pages/financial_center/owner/css/account.css',
+            controller: 'money_list_ctrl'
         })
         /*=============== 廖欢 start ===============*/
         .state('home', {  // 首页

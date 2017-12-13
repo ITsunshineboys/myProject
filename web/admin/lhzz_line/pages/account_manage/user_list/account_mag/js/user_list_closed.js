@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2017/11/27/027.
  */
-app.controller('account_closed', ['$scope', '$stateParams', '_ajax', '$state', function ($scope, $stateParams, _ajax, $state) {
+app.controller('account_user_list_closed', ['$scope', '$stateParams', '_ajax', '$state', function ($scope, $stateParams, _ajax, $state) {
     /*默认参数*/
     $scope.params = {
         status: 0, //关闭

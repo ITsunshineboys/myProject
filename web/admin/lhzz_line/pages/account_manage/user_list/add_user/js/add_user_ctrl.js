@@ -48,7 +48,7 @@ add_user.controller("add_user_ctrl",function ($rootScope,$scope,$http,$statePara
         $scope.getBack = function () {
             if($scope.codeMobile == 200){
                 setTimeout(function () {
-                    $state.go('account_index')
+                    $state.go('account_user_list.normal')
                 },300)
             }
         }

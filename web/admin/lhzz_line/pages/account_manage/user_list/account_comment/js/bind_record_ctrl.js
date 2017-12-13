@@ -6,7 +6,7 @@ var bind_record= angular.module("bind_record",[])
         $rootScope.crumbs = [{
             name: '账户管理',
             icon: 'icon-zhanghuguanli',
-            link: 'account_index'
+            link: 'account_user_list.normal'
         },{
             name:'账户详情',
             link:'account_comment'
