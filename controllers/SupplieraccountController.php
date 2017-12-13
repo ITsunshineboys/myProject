@@ -14,6 +14,7 @@ use app\models\User;
 use app\models\UserAccessdetail;
 use app\models\UserCashregister;
 use app\models\UserFreezelist;
+use app\models\UserRole;
 use app\services\AuthService;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -1422,6 +1423,121 @@ class SupplieraccountController extends  Controller{
         'msg'=>'ok',
         'data'=>$data
     ]);
+    }
+
+    /**
+     * 用户审核列表
+     * @return string
+     */
+    public function actionOwnerAuditList(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+
+        $status=(int)(\Yii::$app->request->get('status',0));
+        $keyword=trim(\Yii::$app->request->get('keyword',''),'');
+        $timeType = trim(Yii::$app->request->get('time_type', ''));
+
+        $where=" ur.role_id=7 ";
+        if(!$keyword){
+            if ($timeType == 'custom') {
+                $startTime = trim(Yii::$app->request->get('start_time', ''));
+                $endTime = trim(Yii::$app->request->get('end_time', ''));
+                if (($startTime && !StringService::checkDate($startTime))
+                    || ($endTime && !StringService::checkDate($endTime))
+                ) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+                if($startTime==$endTime){
+                    list($startTime, $endTime) =ModelService::timeDeal($startTime);
+                }else{
+                    $endTime && $endTime .= ' 23:59:59';
+                }
+            } else {
+                list($startTime, $endTime) = StringService::startEndDate($timeType);
+
+
+            }
+            if ($startTime) {
+                $startTime = (int)strtotime($startTime);
+                $startTime && $where .= " and ur.review_apply_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = (int)(strtotime($endTime));
+                $endTime && $where .= " and ur.review_apply_time <= {$endTime}";
+            }
+            if(isset($status)){
+                $where .=" and ur.review_status=$status ";
+            }
+        }else{
+            $where.= " and CONCAT(u.nickname,u.aite_cube_no) like '%{$status}%'";
+        }
+        $sort=(int)(Yii::$app->request->get('sort','2'));
+            switch ($sort)
+            {
+                case 1:
+                    $sort='ur.review_time asc';
+                    break;
+                case 2:
+                    $sort='ur.review_time desc';
+                    break;
+            }
+
+
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', UserFreezelist::PAGE_SIZE_DEFAULT);
+
+        $paginationData = UserRole::pagination($where, $page, $size,$sort);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+    }
+    public function actionAuditView(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $id=(int)Yii::$app->request->get('id','');
+        if(!$id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserRole::userauditview($id);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+    public function actionOwnerDoAudit(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=1000;
+        $status=(int)Yii::$app->request->get('status','');
     }
 
 

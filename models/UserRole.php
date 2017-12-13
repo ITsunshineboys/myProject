@@ -9,6 +9,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\Pagination;
 use yii\db\ActiveRecord;
 use app\models\Role;
 use app\services\ModelService;
@@ -17,7 +18,18 @@ use yii\db\Query;
 class UserRole extends ActiveRecord
 {
     const CACHE_KEY_PREFIX_ROLES_STATUS = 'roles_status_';
-    const FIELDS_EXTRA = [];
+    const FIELDS_EXTRA = [
+        'user_id',
+        'review_time',
+        'review_status',
+        'review_remark',
+        'reviewer_uid',
+    ];
+    const REVIEW_STATUS=[
+        0 =>'待审核',
+        1 =>'审核不通过',
+        2 =>'审核通过',
+    ];
     /**
      * Get roles status by user id
      *
@@ -182,5 +194,56 @@ class UserRole extends ActiveRecord
         return ModelService::pageDeal($List, $total, $page, $size);
     }
 
+    /**
+     * @param array $where
+     * @param int $page
+     * @param int $size
+     * @param $orderBy
+     * @return array
+     */
+    public static function pagination($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy){
+
+        $select = 'ur.*,u.nickname,u.mobile,u.aite_cube_no';
+        $UserRoleList = (new Query())
+            ->from('user_role as ur')
+            ->leftJoin('user as u','u.id=ur.user_id')
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy);
+        $total=(int)$UserRoleList->count();
+        $pagination = new Pagination(['totalCount' => $total, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $arr = $UserRoleList->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        foreach ($arr as &$UserRole) {
+            $UserRole['review_time']=date('Y-m-d H:i:s',$UserRole['review_time']);
+            $UserRole['review_status']=self::REVIEW_STATUS[$UserRole['review_status']];
+            $UserRole['handle_name']=User::find()->asArray()->select('nickname')->where(['id'=>$UserRole['reviewer_uid']])->one()['nickname'];
+        }
+
+        return ModelService::pageDeal($arr, $total, $page, $size);
+
+    }
+
+    public static function userauditview($id){
+        $audits=(new Query())
+            ->from('user_role as ur')
+            ->leftJoin('user as u','u.id = ur.user_id')
+            ->select('ur.*,u.nickname,u.aite_cube_no,u.identity_card_front_image,u.identity_card_back_image,u.mobile')
+            ->where(['ur.id'=>$id])
+            ->one();
+
+       if($audits){
+           $audits['review_apply_time']=date('Y-m-d H:i:s',$audits['review_apply_time']);
+           $audits['review_time']=date('Y-m-d H:i:s',$audits['review_time']);
+           $audits['review_status']=self::REVIEW_STATUS[$audits['review_status']];
+           $audits['handle_name']=User::find()->asArray()->select('nickname')->where(['id'=>$audits['reviewer_uid']])->one()['nickname'];
+
+           return $audits;
+       }else{
+           return null;
+       }
+
+    }
 
 }
