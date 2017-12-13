@@ -2108,7 +2108,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = EngineeringStandardCarpentryCraft::find()->asArray()->all();
+        $a = CoefficientManagement::deleteAll(['category_id'=>2]);
         var_dump($a);exit;
 
 
