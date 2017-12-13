@@ -2004,13 +2004,14 @@ class QuoteController extends Controller
     }
 
     /**
-     * Goods management list
+     * 智能报价配套商品管理 列表
      * @return string
      */
     public function actionGoodsManagementList()
     {
+        $city = (int)trim(\Yii::$app->request->get('city',''));
         $select = 'title,pid,path,category_id as id,quantity';
-        $where = 'state = 1';
+        $where = 'state = 1  and city_code = '.$city;
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
