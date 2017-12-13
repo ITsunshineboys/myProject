@@ -2107,11 +2107,11 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        //engineering_standard_carpentry_coefficient
-//       var_dump(AssortGoods::deleteAll([]));
-
-        var_dump(EngineeringStandardCraft::find()->asArray()->all());
-
+        //engineering_standard_carpentry_craft
+        $a = EngineeringStandardCarpentryCraft::findOne(['id'=>1]);
+        $a->title = '龙骨抓取规格';
+        $a->save();
+        var_dump($a);exit;
 
     }
 }
