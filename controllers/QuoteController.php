@@ -2020,19 +2020,38 @@ class QuoteController extends Controller
     }
 
     /**
-     * goods management add
+     * 智能报价配套商品管理 添加
      * @return string
      */
     public function actionGoodsManagementAdd()
     {
         $post = \Yii::$app->request->post();
-        (new AssortGoods())->deleteAll(['state'=>1]);
-        foreach($post['add_item'] as $management) {
-            AssortGoods::findByInsert($management);
+        $tr = \Yii::$app->db->beginTransaction();
+        try {
+            $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
+            //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
+            if (!$del){
+                $tr->rollBack();
+                return 500;
+            }
+
+            foreach($post['add_item'] as $management) {
+                $add = AssortGoods::findByInsert($management,$post['city']);
+            }
+
+            if (!$add){
+                $tr->rollBack();
+                return 500;
+            }
+            $tr->commit();
+        } catch (\Exception $e) {
+            //回滚
+            $tr->rollBack();
         }
+
         return Json::encode([
-           'code'=>200,
-           'msg'=>'ok',
+            'code' => 200,
+            'msg' => 'ok',
         ]);
     }
 

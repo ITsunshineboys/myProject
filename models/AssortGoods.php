@@ -54,7 +54,7 @@ class AssortGoods extends ActiveRecord
             ->all();
     }
 
-    public static function findByInsert($post)
+    public static function findByInsert($post,$city)
     {
         $db = \Yii::$app->db;
         $res = $db
@@ -66,6 +66,7 @@ class AssortGoods extends ActiveRecord
                 'path'=> $post['path'],
                 'state'=> 1,
                 'quantity'=> $post['quantity'],
+                'city'=> $city,
             ])
             ->execute();
         return $res;
