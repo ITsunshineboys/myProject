@@ -375,7 +375,7 @@ class EffectController extends Controller
         }
         $code=EffectEarnest::appAddEffect($uid,$post);
         if(!$code){
-            $code=1000;
+            $code=500;
             return Json::encode([
                 'code' =>$code,
                 'msg' =>\Yii::$app->params['errorCodes'][$code]

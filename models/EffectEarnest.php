@@ -280,7 +280,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 $earnest=8900;
                 $transaction_no=GoodsOrder::SetTransactionNo($phone);
             }
-
+            var_dump($name);
+            var_dump($phone);die;
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
