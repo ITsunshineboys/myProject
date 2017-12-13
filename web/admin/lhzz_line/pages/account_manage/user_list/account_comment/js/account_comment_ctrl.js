@@ -7,7 +7,7 @@ var account_comment = angular.module("account_comment", [])
         $rootScope.crumbs = [{
             name: '账户管理',
             icon: 'icon-zhanghuguanli',
-            link: -1
+            link: $rootScope.account_click
         }, {
             name: '账户详情',
         }];

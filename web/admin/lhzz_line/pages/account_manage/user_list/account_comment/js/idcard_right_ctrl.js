@@ -5,8 +5,8 @@ var idcard_right= angular.module("idcard_right",[])
     .controller("card_right_ctrl",function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
         $rootScope.crumbs = [{
             name: '账户管理',
-            icon: 'icon-zhanghuguanli'
-            // link: 'merchant_index'
+            icon: 'icon-zhanghuguanli',
+            link: $rootScope.account_click
         }];
         $scope.id = $stateParams.id;
         $scope.icon = $stateParams.icon;
