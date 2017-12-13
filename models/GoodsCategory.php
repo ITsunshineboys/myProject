@@ -804,6 +804,7 @@ class GoodsCategory extends ActiveRecord
      */
     public function validateReviewStatusEdit($attribute)
     {
+        $this->refresh();
         if ($this->$attribute == self::REVIEW_STATUS_APPROVE) {
             return true;
         }

@@ -1100,8 +1100,15 @@ class SupplieraccountController extends  Controller{
         $brand->create_time=time();
         $brand->approve_time=0;
 
-        if(GoodsBrand::find()->where(['name' =>  $brand->name])->exists()){
-            $code=1007;
+        $brand->scenario = GoodsBrand::SCENARIO_EDIT;
+        if (!$brand->validate()) {
+            if (isset($brand->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = (int)$customErrCode;
+                }
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1341,8 +1348,15 @@ class SupplieraccountController extends  Controller{
         $category->reject_time=0;
         $category->review_status=0;
 
-        if(GoodsCategory::find()->where(['title' =>  $category->title])->exists()){
-            $code=1006;
+        $category->scenario = GoodsCategory::SCENARIO_EDIT;
+        if (!$category->validate()) {
+            if (isset($category->errors['title'])) {
+                $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
+                if ($customErrCode !== false) {
+                    $code = (int)$customErrCode;
+                }
+            }
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
