@@ -1481,7 +1481,19 @@ class SupplieraccountController extends  Controller{
         }else{
             $where.= " and CONCAT(u.nickname,u.aite_cube_no) like '%{$status}%'";
         }
+
         $sort=(int)(Yii::$app->request->get('sort','2'));
+        if($status==0){
+            switch ($sort)
+            {
+                case 1:
+                    $sort='ur.review_apply_time asc';
+                    break;
+                case 2:
+                    $sort='ur.review_apply_time desc';
+                    break;
+            }
+        }else{
             switch ($sort)
             {
                 case 1:
@@ -1491,6 +1503,8 @@ class SupplieraccountController extends  Controller{
                     $sort='ur.review_time desc';
                     break;
             }
+        }
+
 
 
         $page = (int)Yii::$app->request->get('page', 1);
