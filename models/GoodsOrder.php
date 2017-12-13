@@ -2131,7 +2131,7 @@ class GoodsOrder extends ActiveRecord
                 $where='z.order_status=1 and z.customer_service!=0';
                 break;
             case self::ORDER_TYPE_UNCOMMENT:
-                $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=2   and  z.comment_id=0';
+                $where='a.pay_status=1 and z.order_status=1 and z.shipping_status=2   and  z.comment_id=0  and z.customer_service=0';
                 break;
         }
         return $where;
