@@ -1,12 +1,4 @@
 /*申请样板间主页样式*/
-.apply_case_index{
-    padding-left:40px;
-    padding-right:40px;
-    padding-top:40px;
-}
-.apply_case_index span{
-    margin-right:15px;
-}
 .apply_case_index > div{
     margin-bottom:20px;
 }
@@ -24,32 +16,6 @@
 }
 .apply_case_index table td{
     color: #666F80;
-}
-.apply_case_index button{
-    padding:5px 10px;
-    height: 30px;
-    margin-right:20px;
-    font-size:14px;
-    background:none;
-    border:.5px solid #ccc;
-    border-radius:2px;
-}
-/*.apply_case_index .form-control{*/
-    /*padding:20px 12px;*/
-/*}*/
-/*.apply_case_index td{*/
-    /*padding-top:15px !important;*/
-    /*padding-bottom:15px !important;*/
-/*}*/
-/*.apply_case_index td input{*/
-
-/*}*/
-.apply_case_index .modal-content{
-    padding:40px!important;
-}
-.apply_case_index .modal button{
-    width:80px;
-    height: 30px;
 }
 .apply_case_index .other_btn{
     border:.5px solid #5677FC;

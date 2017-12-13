@@ -45,15 +45,15 @@
     <div class="row" id="accordion2">
         <h3 class="col-md-12">材料信息</h3>
         <div class="col-md-12" ng-repeat="item in material">
-            <p class="col-md-6">{{item[0]}}</p>
-            <p class="col-md-6" style="text-align: right;" ng-if="item[2].index == $index&&item[2].cur_index == 0" ng-click="item[2].cur_index = 1" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-down" ></i></p>
-            <p class="col-md-6" style="text-align: right;" ng-if="item[2].index == $index&&item[2].cur_index == 1" ng-click="item[2].cur_index = 0" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-up" ></i></p>
-            <div class="col-md-12 materials" ng-repeat="item1 in item[1]" id="cur_index{{$parent.$index}}" ng-if="item[2].index == $parent.$index&&item[2].cur_index == 1">
+            <p class="col-md-6">{{item.first_level}}</p>
+            <p class="col-md-6" style="text-align: right;" ng-if="!item.flag" ng-click="item.flag = !item.flag" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-down" ></i></p>
+            <p class="col-md-6" style="text-align: right;" ng-if="item.flag" ng-click="item.flag = !item.flag" data-toggle="collapse" data-parent="#accordion2" href="#cur_index{{$index}}"><i class="glyphicon glyphicon-chevron-up" ></i></p>
+            <div class="col-md-12 materials" ng-repeat="item1 in item.goods" id="cur_index{{$parent.$index}}" ng-if="item.flag">
                 <p class="col-md-2">{{item1.cate_level3}}</p>
                 <p class="col-md-2">{{item1.brand}}</p>
                 <p class="col-md-2">总价：{{item1.price}}</p>
                 <p class="col-md-2">数量:{{item1.count}}</p>
-                <p class="col-md-2" style="color: #5677FC;" ng-click="go_goods_detail(item1)">详情</p>
+                <p class="col-md-2"><a ui-sref="commodity_detail({id:item1.goods_id})">详情</a></p>
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
         </p>
     </div>
     <div class="from-group submit">
-        <button class="btn btn-primary" type="button" ng-click="save_remark()">确认</button>
-    <button type="button" class="btn btn-default" ng-click="go_index()">返回</button>
+        <button class="btn btn-primary" type="button" ng-click="editRemark()">确认</button>
+    <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
 </div>
 </div>

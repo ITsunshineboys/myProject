@@ -1,14 +1,8 @@
 <div class="withdraw_list">
-    <div class="row">
-        <div class="col-md-2">
+    <div class="search form-inline clearfix">
             <select ng-model="params.time_type" ng-change="getFreezeList()" ng-options="item.value as item.name for item in time_types" class="form-control"></select>
-        </div>
-        <div class="col-md-2">
             <input ng-if="params3.time_type == 'custom'" ng-change="getFreezeList()" ng-model="params3.start_time" id="start_time" class="form-control" placeholder="开始时间" type="text" ngc-lay-date>
-        </div>
-        <div class="col-md-2">
             <input ng-if="params3.time_type == 'custom'" ng-change="getFreezeList()" ng-model="params3.end_time" id="end_time" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
-        </div>
     </div>
     <table class="table table-responsive table-hover">
         <tr>

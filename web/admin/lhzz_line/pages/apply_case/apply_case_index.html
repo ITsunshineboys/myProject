@@ -1,18 +1,15 @@
 <div class="apply_case_index">
-    <p><span>今日新申请：{{cur_today_apply}}</span><span>今日定金：{{cur_today_earnest}}</span><span>总申请：{{cur_all_apply}}</span><span>总定金：{{cur_all_earnest}}</span></p>
-    <div class="row">
-        <div class="col-md-2">
-        <select ng-model="params.time_type" ng-options="item.str as item.name for item in time_type" ng-change="getApplyCase()" class="form-control"></select>
-        </div>
-        <div class="col-md-2">
-        <input ng-if="params.time_type == 'custom'" ng-model="params.start_time" id="start_time" class="form-control" ng-change="getApplyCase()" max-date="{{params.end_time}}" placeholder="开始时间" type="text" ngc-lay-date>
-        </div>
-        <div class="col-md-2">
-        <input ng-if="params.time_type == 'custom'" ng-model="params.end_time" id="end_time" class="form-control" ng-change="getApplyCase()" min-date="{{params.start_time}}" placeholder="结束时间" type="text" ngc-lay-date>
-        </div>
-        <button class="pull-right" ng-click="update_keyword()">查询</button>
-        <div class="col-md-2 pull-right">
-        <input class="form-control" ng-model="ctrlScope.keyword" placeholder="搜索手机号、姓名或交易单号" type="text">
+    <p><span>今日新申请：{{total_data.today_apply}}</span><span>今日定金：{{total_data.today_earnest|currency:'￥'}}</span><span>总申请：{{total_data.all_apply}}</span><span>总定金：{{total_data.today_earnest}}</span></p>
+    <div class=" search form-inline clearfix">
+        <select ng-model="params.time_type" ng-options="item.value as item.name for item in time_types" ng-change="getCase()" class="form-control"></select>
+        <input ng-if="params.time_type == 'custom'" ng-model="params.time_start" id="start_time" class="form-control" ng-change="getCase()" max-date="{{params.time_end}}" placeholder="开始时间" type="text" ngc-lay-date>
+        <input ng-if="params.time_type == 'custom'" ng-model="params.time_end" id="end_time" class="form-control" ng-change="getCase()" min-date="{{params.time_start}}" placeholder="结束时间" type="text" ngc-lay-date>
+        <div class="form-group pull-right">
+            <div class="input-group">
+                <input class="form-control" style="width: 228px;" ng-model="vm.keyword" placeholder="搜索手机号、姓名或交易单号" type="text">
+                <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <button class="btn btn-default" ng-click="inquire()">查询</button>
         </div>
     </div>
     <table class="table table-responsive table-hover">
@@ -21,20 +18,22 @@
             <th>手机号</th>
             <th>交易单号</th>
             <th>定金</th>
+            <th>类型</th>
             <th>申请时间</th>
             <th>详情</th>
             <th>备注</th>
         </tr>
-        <tr ng-repeat="item in apply_list">
+        <tr ng-repeat="item in case_list">
             <td>{{item.name}}</td>
             <td>{{item.phone}}</td>
             <td>{{item.transaction_no}}</td>
             <td>{{item.earnest | currency:'￥'}}</td>
+            <td>{{item.item}}</td>
             <td>{{item.create_time}}</td>
-            <td style="color: #5677FC;" ng-click="get_detail(item)">查看</td>
+            <td><a ui-sref="case_detail({id:item.id})">查看</a></td>
             <td>
                 <div class="col-sm-5" style="padding-left: 0!important;">
-                <input data-toggle="modal" ng-click="replace_remarks(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remark">
+                <input data-toggle="modal" ng-click="getRemark(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remark">
                 </div>
             </td>
         </tr>
@@ -48,10 +47,10 @@
                 </div>
                 <div class="modal-body row">
                     <p class="col-md-3">备注(选填)</p>
-                    <textarea  ng-model="cur_item.remark" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
+                    <textarea  ng-model="cur_remark.remark" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>
+                    <button type="button" class="other_btn" ng-click="editRemark()" data-dismiss="modal">确认</button>
                     <button type="button" data-dismiss="modal">取消</button>
                 </div>
             </div><!-- /.modal-content -->
