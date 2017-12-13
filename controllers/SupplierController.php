@@ -974,6 +974,73 @@ class SupplierController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
+    public  static function actionSupplierBeAuditedApplyHandle()
+    {
+
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $status=Yii::$app->request->post('status');
+
+        if ($status!=1 || $status!=2)
+        {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier_id=Yii::$app->request->post('supplier_id');
+        $supplier=Supplier::findOne($supplier_id);
+        if (!$supplier) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user_role=UserRole::find()
+             ->where(['user_id'=>$supplier->uid])
+             ->andWhere(['role_id'=>6])
+             ->one();
+        $tran = Yii::$app->db->beginTransaction();
+        $time=time();
+        try{
+            $user_role->review_status=$status;
+            $user_role->review_time=$time;
+            if (!$user_role->save(false))
+            {
+                $tran->rollBack();
+            }
+            $supplier->status=4;
+            if (!$supplier->save(false))
+            {
+                $tran->rollBack();
+            }
+            $tran->commit();
+            return Json::encode([
+                'code' =>  200,
+                'msg'  => 'ok'
+            ]);
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
 
 
 
