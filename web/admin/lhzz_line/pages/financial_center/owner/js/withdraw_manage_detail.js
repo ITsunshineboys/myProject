@@ -40,7 +40,7 @@ app.controller('withdraw_detail_ctrl', function ($uibModal,$rootScope, $state, $
 
         $scope.common_house = function () {
         $uibModalInstance.close()
-        sessionStorage.getItem('index')==null?$state.go('withdraw_manage'):history.go(-1)
+        history.go(-1)
     }
 }
 all_modal.$inject = ['$scope', '$uibModalInstance']
@@ -51,15 +51,19 @@ all_modal.$inject = ['$scope', '$uibModalInstance']
             $scope.params.cash_id = $scope.all_withdraw_detail.id
             _ajax.post('/supplier-cash/owner-do-cash-deal',$scope.params,function (res) {
                 console.log(res)
+                $scope.submitted = false
                 $uibModal.open({
                     templateUrl: 'pages/intelligent/cur_model.html',
                     controller: all_modal
                 })
             })
+        }else{
+            $scope.submitted = true
         }
     }
     // 返回上一页
     $scope.goPrev = function () {
+        $scope.submitted = false
         history.go(-1)
     }
 })

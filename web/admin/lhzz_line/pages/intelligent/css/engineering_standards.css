@@ -3,6 +3,14 @@
     padding-left:40px;
     padding-right:40px;
 }
+.engineering_standards h6{
+    font-size:16px;
+    margin-bottom:30px;
+    margin-top:30px;
+    padding-bottom:20px;
+    border-bottom:.5px solid #ccc;
+    font-weight:bold;
+}
 .engineering_standards button{
     width:80px;
     height: 32px;

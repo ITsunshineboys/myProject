@@ -1,12 +1,13 @@
-<div class="engineering_standards">     
+<div class="engineering_standards">
+    <h6 class="location text-left"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
     <table class="table table-responsive table-hover">
         <tr>
             <th>名称</th>
             <th>操作</th>
         </tr>
-        <tr ng-repeat="item in all_project">
-            <td>{{item.project}}工艺</td>
-            <td style="color: #5677FC;" ng-click="get_process(item)">编辑</td>
+        <tr ng-repeat="item in process_list">
+            <td>{{item.project}}</td>
+            <td><a ng-click="goEngineeringDetail(item)">编辑</a></td>
         </tr>
     </table>
 </div>

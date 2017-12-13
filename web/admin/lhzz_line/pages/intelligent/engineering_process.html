@@ -1,51 +1,36 @@
 <div class="engineering_process">
     <form name="engineering_process">
-    <div ng-repeat="item in process_list" ng-class="{'bottom_style':process_list.length>1,'last_style':$index==process_list.length-1}">
+    <div ng-repeat="item in cur_process_list">
         <div class="row" ng-repeat="item1 in item">
-        <!--<p class="col-md-2" ng-if="!item1.options"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.project_details}}</p>-->
-            <!--<p class="col-md-2" ng-if="!!item1.options">{{item1.title}}</p>-->
-        <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.project_info}}</p>
+        <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.project_details}}</p>
         <p class="col-md-3 enter">
             <select ng-model="item1.value" class="form-control" ng-options="item2 for item2 in item1.options.split(',')" ng-if="!!item1.options"></select>
             <input ng-if="!item1.options" class="form-control" name="{{item1.name}}" ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/" ng-blur="item1.flag = !!engineering_process[item1.name].$error" required
                    ng-class="{'error':(engineering_process[item1.name].$invalid&&submitted) || ((engineering_process[item1.name].$error.required || engineering_process[item1.name].$error.pattern)&&item1.flag)}"
                    ng-model="item1.material" type="text">
         </p>
-        <p class="col-md-1 text-left">{{item1.cur_unit.split('2')[0]}}<sup ng-if="item1.cur_unit.indexOf('2')!=-1">2</sup>{{item1.cur_unit.split('2')[1]}}</p>
+        <p class="col-md-1 text-left">{{item1.unit}}</p>
             <p class="col-md-6">*>0的数字，精确到小数点后两位</p>
         </div>
     </div>
-        <div ng-repeat="item1 in all_series" ng-if="cur_item_project == '木作'" style="padding-top: 20px;padding-bottom: 20px;border-top: .5px solid #ccc;">
-            <h4>系列系数-{{$index+1}}</h4>
+        <div ng-repeat="item in series_and_style" ng-if="project_name == '木作工艺'" style="padding-top: 20px;padding-bottom: 20px;border-top: .5px solid #ccc;">
+            <h4 ng-if="$index<3">系列系数-{{$index+1}}</h4>
+            <h4 ng-if="$index>=3">风格系数-{{$index-2}}</h4>
             <ul style="padding-left: 0!important;">
-                <li ng-repeat="item2 in item1" class="row">
-                    <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item2.series}}</p>
+                <li ng-repeat="item1 in item" class="row">
+                    <p class="col-md-2" ng-if="item1.series_or_style == 0"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.series}}</p>
+                    <p class="col-md-2" ng-if="item1.series_or_style == 1"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.style}}</p>
                     <p class="col-md-3 enter">
-                        <input name="{{item2.name}}" required ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
-                               ng-blur="item2.flag = !!engineering_process[item2.name].$error" required type="text"
+                        <input name="item{{item.series_or_style}}{{item.coefficient}}{{$index}}" required ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
+                               ng-blur="item2.flag = !!engineering_process['item'+item.series_or_style+item.coefficient+$index].$error" required type="text"
                                ng-model="item2.value" class="form-control "
-                               ng-class="{'error':(engineering_process[item2.name].$invalid&&submitted) || ((engineering_process[item2.name].$error.required || engineering_process[item2.name].$error.pattern)&&item2.flag)}">
+                               ng-class="{'error':(engineering_process['item'+item.series_or_style+item.coefficient+$index].$invalid&&submitted) || ((engineering_process['item'+item.series_or_style+item.coefficient+$index].$error.required || engineering_process['item'+item.series_or_style+item.coefficient+$index].$error.pattern)&&item2.flag)}">
                     </p>
                     <p class="col-md-6 col-md-offset-1">*>0的数字，精确到小数点后两位</p>
                 </li>
             </ul>
         </div>
-        <div ng-repeat="item1 in all_style" ng-if="cur_item_project == '木作'" style="padding-top: 20px;padding-bottom: 20px;border-top: .5px solid #ccc;">
-            <h4>风格系数-{{$index+1}}</h4>
-            <ul style="padding-left: 0!important;">
-                <li ng-repeat="item2 in item1" class="row">
-                    <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item2.style}}</p>
-                    <p class="col-md-3 enter">
-                        <input name="{{item2.name}}" maxlength="4" required ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
-                               ng-blur="item2.flag = !!engineering_process[item2.name].$error" required type="text"
-                               ng-model="item2.value" class="form-control "
-                               ng-class="{'error':(engineering_process[item2.name].$invalid&&submitted) || ((engineering_process[item2.name].$error.required || engineering_process[item2.name].$error.pattern)&&item2.flag)}">
-                    </p>
-                    <p class="col-md-6 col-md-offset-1">*>0的数字，精确到小数点后两位</p>
-                </li>
-            </ul>
-        </div>
-        <div class="from-group" ng-class="{'submit':cur_item_project != '木作'}">
+        <div class="from-group">
             <button class="btn btn-primary" type="button" ng-click="get_engineering_process(engineering_process.$valid,engineering_process.$error)">确认</button>
             <button type="button" class="btn btn-default" ng-click="return_engineering()">返回</button>
         </div>

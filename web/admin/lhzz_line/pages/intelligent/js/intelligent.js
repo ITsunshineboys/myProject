@@ -2445,510 +2445,510 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
             }
         }
 
-        /*工程标准*/
-        //    工程标准主页
-        $scope.go_engineering = function () {
-            _ajax.get('/quote/project-norm-list', {}, function (res) {
-                console.log(res)
-                $scope.all_project = res.list
-                $rootScope.crumbs = [
-                    {
-                        name: '智能报价',
-                        icon: 'icon-baojia',
-                        link: function () {
-                            $state.go('intelligent.intelligent_index')
-                            $rootScope.crumbs.splice(1, 4)
-                        }
-                    }, {
-                        name: '工程标准',
-                    }
-                ]
-                $state.go('intelligent.engineering_standards')
-            })
-        }
-        //工程标准编辑
-        $scope.get_process = function (item) {
-            console.log(item)
-            $scope.process_list = []
-            $rootScope.crumbs = [
-                {
-                    name: '智能报价',
-                    icon: 'icon-baojia',
-                    link: function () {
-                        $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1, 4)
-                    }
-                }, {
-                    name: '工程标准',
-                    link: function () {
-                        $state.go('intelligent.engineering_standards')
-                        $rootScope.crumbs.splice(2, 3)
-                    }
-                }, {
-                    name: item.project + '工艺'
-                }
-            ]
-            $scope.cur_item_project = item.project
-            $scope.four_title = ''
-            _ajax.get('/quote/project-norm-edit-list', {
-                city: $scope.cur_city,
-                project: item.project
-            }, function (res) {
-                console.log(res)
-                let arr = res.list
-                //简单0处理
-                for (let [key, value] of arr.entries()) {
-                    if (value.material == 0) {
-                        value.material = ''
-                    }
-                    value['flag'] = false
-                    value['name'] = 'name' + value.id
-                }
-                //不同板块处理
-                if (item.project == '强电' || item.project == '弱电' || item.project == '水路') {
-                    for (let [key, value] of arr.entries()) {
-                        value.cur_unit = 'm/点位'
-                        value.project_info = value.project_details + '用料'
-                    }
-                    $scope.process_list.push(arr)
-                } else if (item.project == '防水') {
-                    for (let [key, value] of arr.entries()) {
-                        value.cur_unit = 'kg/m2'
-                        value.project_info = value.project_details + '用料'
-                    }
-                    $scope.process_list.push(arr)
-                } else if (item.project == '乳胶漆') {
-                    for (let [key, value] of arr.entries()) {
-                        if (value.project_details.indexOf('腻子') != -1) {
-                            value.project_info = '1平方腻子用量'
-                            value.cur_unit = 'kg/m2'
-                        } else if (value.project_details.indexOf('底漆') != -1 || value.project_details.indexOf('面漆') != -1) {
-                            value.project_info = '1平方'+ value.project_details + '用量'
-                            value.cur_unit = 'L/m2'
-                        } else if (value.project_details.indexOf('阴角线') != -1) {
-                            value.project_info = '1米阴角线用量'
-                            value.cur_unit = 'm/m'
-                        } else if (value.project_details.indexOf('石膏粉') != -1) {
-                            value.project_info = '1平方石膏粉费用'
-                            value.cur_unit = '元/m2'
-                        }
-                    }
-                    $scope.process_list.push(arr)
-                } else if (item.project == '泥工') {
-                    for (let [key, value] of arr.entries()) {
-                        value.project_info = value.project_details + '用量'
-                            value.cur_unit = 'kg/m2'
-                    }
-                    $scope.process_list.push(arr)
-                } else if (item.project == '杂工') {
-                    let arr1 = [], arr2 = [], arr3 = []
-                    for (let [key, value] of arr.entries()) {
-                        if (value.project_details.indexOf('水泥') != -1) {
-                            if (value.project_details.indexOf('补烂') != -1) {
-                                value.cur_unit = 'kg/m'
-                                value.project_info = '补烂水泥用量'
-                                arr1.push(value)
-                            } else {
-                                if(value.project_details.indexOf('12墙')!=-1){
-                                    value.project_info = '12墙新建水泥用量'
-                                }else{
-                                    value.project_info = '24墙新建水泥用量'
-                                }
-                                value.cur_unit = 'kg/m2'
-                                arr1.push(value)
-                            }
-                        } else if (value.project_details.indexOf('河沙') != -1) {
-                            if (value.project_details.indexOf('补烂') != -1) {
-                                value.cur_unit = 'kg/m'
-                                value.project_info = '补烂河沙用量'
-                                arr2.push(value)
-                            } else {
-                                if(value.project_details.indexOf('12墙')!=-1){
-                                    value.project_info = '12墙新建河沙用量'
-                                }else{
-                                    value.project_info = '24墙新建河沙用量'
-                                }
-                                value.cur_unit = 'kg/m2'
-                                arr2.push(value)
-                            }
-                        } else {
-                            if (value.project_details.indexOf('清运') != -1) {
-                                if(value.project_details.indexOf('12墙')!=-1){
-                                    value.project_info = '12墙建渣运到楼下'
-                                }else{
-                                    value.project_info = '24墙建渣运到楼下'
-                                }
-                                value.cur_unit = '元'
-                                arr3.push(value)
-                            } else if (value.project_details.indexOf('面积') != -1) {
-                                if(value.project_details.indexOf('12墙')!=-1){
-                                    value.project_info = '运渣车-车拉12墙面积'
-                                }else{
-                                    value.project_info = '运渣车-车拉24墙面积'
-                                }
-                                value.cur_unit = 'm2/车'
-                                arr3.push(value)
-                            } else if (value.project_details.indexOf('费用') != -1) {
-                                value.project_info = '运渣车-车费用'
-                                value.cur_unit = '元/车'
-                                arr3.push(value)
-                            }
-                        }
-                    }
-                    $scope.process_list = [arr1, arr2, arr3]
-                } else if (item.project == '木作') {
-                    let arr4 = [], arr5 = [], arr6 = [], arr9 = []
-                    _ajax.get('/quote/project-norm-woodwork-list', {}, function (res) {
-                        console.log(res)
-                        $scope.cur_norm = res.specification.find_specification
-                        $scope.all_norm = res.specification.specification
-                        let arr1 = angular.copy(res.series),
-                            arr2 = angular.copy(res.series),
-                            arr3 = angular.copy(res.series),
-                            arr7 = angular.copy(res.style),
-                            arr8 = angular.copy(res.style)
-                        //系列
-
-                        for (let [key1, value1] of arr1.entries()) {
-                            value1['name'] = 'series01' + value1.id
-                            if (res.coefficient.length != 0) {
-                                for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.id) {
-                                        if (+value.series_or_style == 0 && +value.coefficient == 1) {
-                                            value1['series_or_style'] = 0
-                                            value1['cur_id'] = value.id
-                                            value1['coefficient'] = 1
-                                            value1['value'] = value.value
-                                        }
-                                    } else {
-                                        if (value1.value == undefined) {
-                                            value1['series_or_style'] = 0
-                                            value1['coefficient'] = 1
-                                            value1['value'] = ''
-                                        }
-                                    }
-                                }
-                            } else {
-                                value1['series_or_style'] = 0
-                                value1['coefficient'] = 1
-                                value1['value'] = ''
-                            }
-                        }
-                        for (let [key1, value1] of arr2.entries()) {
-                            value1['name'] = 'series02' + value1.id
-                            if (res.coefficient.length != 0) {
-                                for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.id) {
-                                        if (+value.series_or_style == 0 && +value.coefficient == 2) {
-                                            value1['series_or_style'] = 0
-                                            value1['cur_id'] = value.id
-                                            value1['coefficient'] = 2
-                                            value1['value'] = value.value
-                                        }
-                                    } else {
-                                        if (value1.value == undefined) {
-                                            value1['series_or_style'] = 0
-                                            value1['coefficient'] = 2
-                                            value1['value'] = ''
-                                        }
-                                    }
-                                }
-                            } else {
-                                value1['series_or_style'] = 0
-                                value1['coefficient'] = 2
-                                value1['value'] = ''
-                            }
-                        }
-                        for (let [key1, value1] of arr3.entries()) {
-                            value1['name'] = 'series03' + value1.id
-                            if (res.coefficient.length != 0) {
-                                for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.id) {
-                                        if (+value.series_or_style == 0 && +value.coefficient == 3) {
-                                            value1['series_or_style'] = 0
-                                            value1['cur_id'] = value.id
-                                            value1['coefficient'] = 3
-                                            value1['value'] = value.value
-                                        }
-                                    } else {
-                                        if (value1.value == undefined) {
-                                            value1['series_or_style'] = 0
-                                            value1['coefficient'] = 3
-                                            value1['value'] = ''
-                                        }
-                                    }
-                                }
-                            } else {
-                                value1['series_or_style'] = 0
-                                value1['coefficient'] = 3
-                                value1['value'] = ''
-                            }
-                        }
-                        //风格
-                        for (let [key1, value1] of arr7.entries()) {
-                            value1['name'] = 'style11' + value1.id
-                            if (res.coefficient.length != 0) {
-                                for (let [key, value] of res.coefficient.entries()) {
-                                    if (value.project == value1.id) {
-                                        if (+value.series_or_style == 1 && +value.coefficient == 1) {
-                                            value1['series_or_style'] = 1
-                                            value1['cur_id'] = value.id
-                                            value1['coefficient'] = 1
-                                            value1['value'] = value.value
-                                        }
-                                    } else {
-                                        if (value1.value == undefined) {
-                                            value1['series_or_style'] = 1
-                                            value1['coefficient'] = 1
-                                            value1['value'] = ''
-                                        }
-                                    }
-                                }
-                            } else {
-                                value1['series_or_style'] = 1
-                                value1['coefficient'] = 1
-                                value1['value'] = ''
-                            }
-                        }
-
-                        for (let [key1, value1] of arr8.entries()) {
-                            value1['name'] = 'style12' + value1.id
-                            if (res.coefficient.length != 0) {
-                                for (let [key, value] of res.coefficient.entries()) {
-                                        if (value.project == value1.id) {
-                                            if (+value.series_or_style == 1 && +value.coefficient == 2) {
-                                                value1['series_or_style'] = 1
-                                                value1['cur_id'] = value.id
-                                                value1['coefficient'] = 2
-                                                value1['value'] = value.value
-                                            }
-                                        } else {
-                                            if (value1.value == undefined) {
-                                                value1['series_or_style'] = 1
-                                                value1['coefficient'] = 2
-                                                value1['value'] = ''
-                                            }
-                                        }
-                                }
-                            } else {
-                                value1['series_or_style'] = 1
-                                value1['coefficient'] = 2
-                                value1['value'] = ''
-                            }
-                        }
-                        $scope.all_series = [arr1, arr2, arr3]
-                        $scope.all_style = [arr7, arr8]
-                        console.log($scope.all_style)
-                        console.log($scope.all_series)
-                        for (let [key, value] of $scope.all_norm.entries()) {
-                            for (let [key1, value1] of $scope.cur_norm.entries()) {
-                                if (value.title.indexOf(value1.title)!=-1) {
-                                    if(value1.title == '木工板'){
-                                        if(value.name == value1.unit){
-                                            value1['options'] = value.value
-                                        }
-                                    }else{
-                                        value1['options'] = value.value
-                                    }
-                                    console.log(value1.value)
-                                    if(value1.value==0){
-                                        value1.value = '其它'
-                                    }
-                                }
-                            }
-                        }
-                        console.log($scope.cur_norm)
-                        for (let [key, value] of $scope.cur_norm.entries()) {
-                            if(value.value == '其它'){
-                                value.value = value.value
-                            }else{
-                                value.value = parseFloat(value.value) + ''
-                            }
-                            value.cur_unit = 'm'
-                            if (value.title == '石膏板') {
-                                value.project_info = value.title + '抓取规格'
-                                arr4.push(value)
-                            } else if (value.title == '龙骨') {
-                                value.project_info = value.title + '抓取规格'
-                                arr5.push(value)
-                            } else if (value.title == '丝杆') {
-                                value.project_info = value.title + '抓取规格'
-                                arr6.push(value)
-                            }else if(value.title == '木工板'){
-                                if(value.unit == '长度'){
-                                    value.project_info = '细木工板抓取长度'
-                                }else if(value.unit == '宽度'){
-                                    value.project_info = '细木工板抓取宽度'
-                                }
-                                arr9.push(value)
-                            }
-                        }
-                        for (let [key, value] of arr.entries()) {
-                            if (value.project_details.indexOf('长度') != -1) {
-                                value.cur_unit = 'm'
-                            } else if (value.project_details.indexOf('面积') != -1) {
-                                value.cur_unit = 'm2'
-                            } else {
-                                value.cur_unit = '张'
-                            }
-                            if (value.project_details.indexOf('石膏板') != -1) {
-                                if(value.project_details.indexOf('面积')!=-1){
-                                    value.project_info = '1张石膏板做平顶面积'
-                                }else if(value.project_details.indexOf('长度')!=-1){
-                                    value.project_info = '1张石膏板做造型长度'
-                                }else{
-                                    value.project_info = value.project_details
-                                }
-                                arr4.push(value)
-                            } else if (value.project_details.indexOf('龙骨') != -1) {
-                                value.project_info = '1根' + value.project_details
-                                arr5.push(value)
-                            } else if (value.project_details.indexOf('丝杆') != -1) {
-                                value.project_info = '1根' + value.project_details
-                                arr6.push(value)
-                            }else if (value.project_details.indexOf('木工板') != -1) {
-                                value.project_info = value.project_details
-                                arr9.unshift(value)
-                            }
-                        }
-                        $scope.process_list = [arr9,arr4, arr5, arr6]
-                        console.log($scope.process_list)
-                        console.log(arr)
-                        console.log($scope.all_series)
-                    })
-                }
-                $state.go('intelligent.engineering_process')
-            })
-        }
-        //工程标准保存
-        $scope.get_engineering_process = function (valid) {
-            let all_modal = function ($scope, $uibModalInstance) {
-                $scope.cur_title = '保存成功'
-                $scope.common_house = function () {
-                    $uibModalInstance.close()
-                    $rootScope.crumbs = [
-                        {
-                            name: '智能报价',
-                            icon: 'icon-baojia',
-                            link: function () {
-                                $state.go('intelligent.intelligent_index')
-                                $rootScope.crumbs.splice(1, 4)
-                            }
-                        }, {
-                            name: '工程标准'
-                        }
-                    ]
-                    $state.go('intelligent.engineering_standards')
-                }
-            }
-            all_modal.$inject = ['$scope', '$uibModalInstance']
-            let arr = [], arr1 = [], arr2 = []
-            if ($scope.cur_item_project != '木作') {
-                for (let [key, value] of $scope.process_list.entries()) {
-                    for (let [key1, value1] of value.entries()) {
-                        arr.push({id: value1.id, material: value1.material})
-                    }
-                }
-            } else {
-                console.log($scope.all_series)
-                for (let [key, value] of $scope.all_series.entries()) {
-                    for (let [key1, value1] of value.entries()) {
-                        if (value1.cur_id != undefined) {
-                            arr.push({
-                                id: value1.cur_id,
-                                value: value1.value
-                            })
-                        } else {
-                            arr.push({
-                                // project: value1.series,
-                                value: value1.value,
-                                add_id: value1.id,
-                                coefficient: value1.coefficient,
-                                series_or_style: value1.series_or_style
-                            })
-                        }
-                    }
-                }
-                for (let [key, value] of $scope.all_style.entries()) {
-                    for (let [key1, value1] of value.entries()) {
-                        if (value1.cur_id != undefined) {
-                            arr.push({
-                                id: value1.cur_id,
-                                value: value1.value
-                            })
-                        } else {
-                            arr.push({
-                                // project: value1.style,
-                                value: value1.value,
-                                add_id: value1.id,
-                                coefficient: value1.coefficient,
-                                series_or_style: value1.series_or_style
-                            })
-                        }
-                    }
-                }
-                for (let [key, value] of $scope.process_list.entries()) {
-                    for (let [key1, value1] of value.entries()) {
-                        if (value1.options != undefined) {
-                            arr1.push({
-                                id: value1.id,
-                                value: value1.value
-                            })
-                        } else {
-                            arr2.push({
-                                id: value1.id,
-                                value: value1.material
-                            })
-                        }
-                    }
-                }
-            }
-            console.log(arr)
-            console.log(arr1)
-            console.log(arr2)
-            if (valid) {
-                if ($scope.cur_item_project != '木作') {
-                    _ajax.post('/quote/project-norm-edit', {
-                        material: arr
-                    }, function (res) {
-                        console.log(res)
-                        $uibModal.open({
-                            templateUrl: 'pages/intelligent/cur_model.html',
-                            controller: all_modal
-                        })
-                    })
-                } else {
-                    _ajax.post('/quote/project-norm-woodwork-edit', {
-                        value: arr2,
-                        specification: arr1,
-                        coefficient: arr
-                    }, function (res) {
-                        $uibModal.open({
-                            templateUrl: 'pages/intelligent/cur_model.html',
-                            controller: all_modal
-                        })
-                    })
-                }
-            } else {
-                $scope.submitted = true
-            }
-        }
-        //工程标准返回
-        $scope.return_engineering = function () {
-            $rootScope.crumbs = [
-                {
-                    name: '智能报价',
-                    icon: 'icon-baojia',
-                    link: function () {
-                        $state.go('intelligent.intelligent_index')
-                        $rootScope.crumbs.splice(1, 4)
-                    }
-                }, {
-                    name: '工程标准'
-                }
-            ]
-            $state.go('intelligent.engineering_standards')
-        }
+        // /*工程标准*/
+        // //    工程标准主页
+        // $scope.go_engineering = function () {
+        //     _ajax.get('/quote/project-norm-list', {}, function (res) {
+        //         console.log(res)
+        //         $scope.all_project = res.list
+        //         $rootScope.crumbs = [
+        //             {
+        //                 name: '智能报价',
+        //                 icon: 'icon-baojia',
+        //                 link: function () {
+        //                     $state.go('intelligent.intelligent_index')
+        //                     $rootScope.crumbs.splice(1, 4)
+        //                 }
+        //             }, {
+        //                 name: '工程标准',
+        //             }
+        //         ]
+        //         $state.go('intelligent.engineering_standards')
+        //     })
+        // }
+        // //工程标准编辑
+        // $scope.get_process = function (item) {
+        //     console.log(item)
+        //     $scope.process_list = []
+        //     $rootScope.crumbs = [
+        //         {
+        //             name: '智能报价',
+        //             icon: 'icon-baojia',
+        //             link: function () {
+        //                 $state.go('intelligent.intelligent_index')
+        //                 $rootScope.crumbs.splice(1, 4)
+        //             }
+        //         }, {
+        //             name: '工程标准',
+        //             link: function () {
+        //                 $state.go('intelligent.engineering_standards')
+        //                 $rootScope.crumbs.splice(2, 3)
+        //             }
+        //         }, {
+        //             name: item.project + '工艺'
+        //         }
+        //     ]
+        //     $scope.cur_item_project = item.project
+        //     $scope.four_title = ''
+        //     _ajax.get('/quote/project-norm-edit-list', {
+        //         city: $scope.cur_city,
+        //         project: item.project
+        //     }, function (res) {
+        //         console.log(res)
+        //         let arr = res.list
+        //         //简单0处理
+        //         for (let [key, value] of arr.entries()) {
+        //             if (value.material == 0) {
+        //                 value.material = ''
+        //             }
+        //             value['flag'] = false
+        //             value['name'] = 'name' + value.id
+        //         }
+        //         //不同板块处理
+        //         if (item.project == '强电' || item.project == '弱电' || item.project == '水路') {
+        //             for (let [key, value] of arr.entries()) {
+        //                 value.cur_unit = 'm/点位'
+        //                 value.project_info = value.project_details + '用料'
+        //             }
+        //             $scope.process_list.push(arr)
+        //         } else if (item.project == '防水') {
+        //             for (let [key, value] of arr.entries()) {
+        //                 value.cur_unit = 'kg/m2'
+        //                 value.project_info = value.project_details + '用料'
+        //             }
+        //             $scope.process_list.push(arr)
+        //         } else if (item.project == '乳胶漆') {
+        //             for (let [key, value] of arr.entries()) {
+        //                 if (value.project_details.indexOf('腻子') != -1) {
+        //                     value.project_info = '1平方腻子用量'
+        //                     value.cur_unit = 'kg/m2'
+        //                 } else if (value.project_details.indexOf('底漆') != -1 || value.project_details.indexOf('面漆') != -1) {
+        //                     value.project_info = '1平方'+ value.project_details + '用量'
+        //                     value.cur_unit = 'L/m2'
+        //                 } else if (value.project_details.indexOf('阴角线') != -1) {
+        //                     value.project_info = '1米阴角线用量'
+        //                     value.cur_unit = 'm/m'
+        //                 } else if (value.project_details.indexOf('石膏粉') != -1) {
+        //                     value.project_info = '1平方石膏粉费用'
+        //                     value.cur_unit = '元/m2'
+        //                 }
+        //             }
+        //             $scope.process_list.push(arr)
+        //         } else if (item.project == '泥工') {
+        //             for (let [key, value] of arr.entries()) {
+        //                 value.project_info = value.project_details + '用量'
+        //                     value.cur_unit = 'kg/m2'
+        //             }
+        //             $scope.process_list.push(arr)
+        //         } else if (item.project == '杂工') {
+        //             let arr1 = [], arr2 = [], arr3 = []
+        //             for (let [key, value] of arr.entries()) {
+        //                 if (value.project_details.indexOf('水泥') != -1) {
+        //                     if (value.project_details.indexOf('补烂') != -1) {
+        //                         value.cur_unit = 'kg/m'
+        //                         value.project_info = '补烂水泥用量'
+        //                         arr1.push(value)
+        //                     } else {
+        //                         if(value.project_details.indexOf('12墙')!=-1){
+        //                             value.project_info = '12墙新建水泥用量'
+        //                         }else{
+        //                             value.project_info = '24墙新建水泥用量'
+        //                         }
+        //                         value.cur_unit = 'kg/m2'
+        //                         arr1.push(value)
+        //                     }
+        //                 } else if (value.project_details.indexOf('河沙') != -1) {
+        //                     if (value.project_details.indexOf('补烂') != -1) {
+        //                         value.cur_unit = 'kg/m'
+        //                         value.project_info = '补烂河沙用量'
+        //                         arr2.push(value)
+        //                     } else {
+        //                         if(value.project_details.indexOf('12墙')!=-1){
+        //                             value.project_info = '12墙新建河沙用量'
+        //                         }else{
+        //                             value.project_info = '24墙新建河沙用量'
+        //                         }
+        //                         value.cur_unit = 'kg/m2'
+        //                         arr2.push(value)
+        //                     }
+        //                 } else {
+        //                     if (value.project_details.indexOf('清运') != -1) {
+        //                         if(value.project_details.indexOf('12墙')!=-1){
+        //                             value.project_info = '12墙建渣运到楼下'
+        //                         }else{
+        //                             value.project_info = '24墙建渣运到楼下'
+        //                         }
+        //                         value.cur_unit = '元'
+        //                         arr3.push(value)
+        //                     } else if (value.project_details.indexOf('面积') != -1) {
+        //                         if(value.project_details.indexOf('12墙')!=-1){
+        //                             value.project_info = '运渣车-车拉12墙面积'
+        //                         }else{
+        //                             value.project_info = '运渣车-车拉24墙面积'
+        //                         }
+        //                         value.cur_unit = 'm2/车'
+        //                         arr3.push(value)
+        //                     } else if (value.project_details.indexOf('费用') != -1) {
+        //                         value.project_info = '运渣车-车费用'
+        //                         value.cur_unit = '元/车'
+        //                         arr3.push(value)
+        //                     }
+        //                 }
+        //             }
+        //             $scope.process_list = [arr1, arr2, arr3]
+        //         } else if (item.project == '木作') {
+        //             let arr4 = [], arr5 = [], arr6 = [], arr9 = []
+        //             _ajax.get('/quote/project-norm-woodwork-list', {}, function (res) {
+        //                 console.log(res)
+        //                 $scope.cur_norm = res.specification.find_specification
+        //                 $scope.all_norm = res.specification.specification
+        //                 let arr1 = angular.copy(res.series),
+        //                     arr2 = angular.copy(res.series),
+        //                     arr3 = angular.copy(res.series),
+        //                     arr7 = angular.copy(res.style),
+        //                     arr8 = angular.copy(res.style)
+        //                 //系列
+        //
+        //                 for (let [key1, value1] of arr1.entries()) {
+        //                     value1['name'] = 'series01' + value1.id
+        //                     if (res.coefficient.length != 0) {
+        //                         for (let [key, value] of res.coefficient.entries()) {
+        //                             if (value.project == value1.id) {
+        //                                 if (+value.series_or_style == 0 && +value.coefficient == 1) {
+        //                                     value1['series_or_style'] = 0
+        //                                     value1['cur_id'] = value.id
+        //                                     value1['coefficient'] = 1
+        //                                     value1['value'] = value.value
+        //                                 }
+        //                             } else {
+        //                                 if (value1.value == undefined) {
+        //                                     value1['series_or_style'] = 0
+        //                                     value1['coefficient'] = 1
+        //                                     value1['value'] = ''
+        //                                 }
+        //                             }
+        //                         }
+        //                     } else {
+        //                         value1['series_or_style'] = 0
+        //                         value1['coefficient'] = 1
+        //                         value1['value'] = ''
+        //                     }
+        //                 }
+        //                 for (let [key1, value1] of arr2.entries()) {
+        //                     value1['name'] = 'series02' + value1.id
+        //                     if (res.coefficient.length != 0) {
+        //                         for (let [key, value] of res.coefficient.entries()) {
+        //                             if (value.project == value1.id) {
+        //                                 if (+value.series_or_style == 0 && +value.coefficient == 2) {
+        //                                     value1['series_or_style'] = 0
+        //                                     value1['cur_id'] = value.id
+        //                                     value1['coefficient'] = 2
+        //                                     value1['value'] = value.value
+        //                                 }
+        //                             } else {
+        //                                 if (value1.value == undefined) {
+        //                                     value1['series_or_style'] = 0
+        //                                     value1['coefficient'] = 2
+        //                                     value1['value'] = ''
+        //                                 }
+        //                             }
+        //                         }
+        //                     } else {
+        //                         value1['series_or_style'] = 0
+        //                         value1['coefficient'] = 2
+        //                         value1['value'] = ''
+        //                     }
+        //                 }
+        //                 for (let [key1, value1] of arr3.entries()) {
+        //                     value1['name'] = 'series03' + value1.id
+        //                     if (res.coefficient.length != 0) {
+        //                         for (let [key, value] of res.coefficient.entries()) {
+        //                             if (value.project == value1.id) {
+        //                                 if (+value.series_or_style == 0 && +value.coefficient == 3) {
+        //                                     value1['series_or_style'] = 0
+        //                                     value1['cur_id'] = value.id
+        //                                     value1['coefficient'] = 3
+        //                                     value1['value'] = value.value
+        //                                 }
+        //                             } else {
+        //                                 if (value1.value == undefined) {
+        //                                     value1['series_or_style'] = 0
+        //                                     value1['coefficient'] = 3
+        //                                     value1['value'] = ''
+        //                                 }
+        //                             }
+        //                         }
+        //                     } else {
+        //                         value1['series_or_style'] = 0
+        //                         value1['coefficient'] = 3
+        //                         value1['value'] = ''
+        //                     }
+        //                 }
+        //                 //风格
+        //                 for (let [key1, value1] of arr7.entries()) {
+        //                     value1['name'] = 'style11' + value1.id
+        //                     if (res.coefficient.length != 0) {
+        //                         for (let [key, value] of res.coefficient.entries()) {
+        //                             if (value.project == value1.id) {
+        //                                 if (+value.series_or_style == 1 && +value.coefficient == 1) {
+        //                                     value1['series_or_style'] = 1
+        //                                     value1['cur_id'] = value.id
+        //                                     value1['coefficient'] = 1
+        //                                     value1['value'] = value.value
+        //                                 }
+        //                             } else {
+        //                                 if (value1.value == undefined) {
+        //                                     value1['series_or_style'] = 1
+        //                                     value1['coefficient'] = 1
+        //                                     value1['value'] = ''
+        //                                 }
+        //                             }
+        //                         }
+        //                     } else {
+        //                         value1['series_or_style'] = 1
+        //                         value1['coefficient'] = 1
+        //                         value1['value'] = ''
+        //                     }
+        //                 }
+        //
+        //                 for (let [key1, value1] of arr8.entries()) {
+        //                     value1['name'] = 'style12' + value1.id
+        //                     if (res.coefficient.length != 0) {
+        //                         for (let [key, value] of res.coefficient.entries()) {
+        //                                 if (value.project == value1.id) {
+        //                                     if (+value.series_or_style == 1 && +value.coefficient == 2) {
+        //                                         value1['series_or_style'] = 1
+        //                                         value1['cur_id'] = value.id
+        //                                         value1['coefficient'] = 2
+        //                                         value1['value'] = value.value
+        //                                     }
+        //                                 } else {
+        //                                     if (value1.value == undefined) {
+        //                                         value1['series_or_style'] = 1
+        //                                         value1['coefficient'] = 2
+        //                                         value1['value'] = ''
+        //                                     }
+        //                                 }
+        //                         }
+        //                     } else {
+        //                         value1['series_or_style'] = 1
+        //                         value1['coefficient'] = 2
+        //                         value1['value'] = ''
+        //                     }
+        //                 }
+        //                 $scope.all_series = [arr1, arr2, arr3]
+        //                 $scope.all_style = [arr7, arr8]
+        //                 console.log($scope.all_style)
+        //                 console.log($scope.all_series)
+        //                 for (let [key, value] of $scope.all_norm.entries()) {
+        //                     for (let [key1, value1] of $scope.cur_norm.entries()) {
+        //                         if (value.title.indexOf(value1.title)!=-1) {
+        //                             if(value1.title == '木工板'){
+        //                                 if(value.name == value1.unit){
+        //                                     value1['options'] = value.value
+        //                                 }
+        //                             }else{
+        //                                 value1['options'] = value.value
+        //                             }
+        //                             console.log(value1.value)
+        //                             if(value1.value==0){
+        //                                 value1.value = '其它'
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //                 console.log($scope.cur_norm)
+        //                 for (let [key, value] of $scope.cur_norm.entries()) {
+        //                     if(value.value == '其它'){
+        //                         value.value = value.value
+        //                     }else{
+        //                         value.value = parseFloat(value.value) + ''
+        //                     }
+        //                     value.cur_unit = 'm'
+        //                     if (value.title == '石膏板') {
+        //                         value.project_info = value.title + '抓取规格'
+        //                         arr4.push(value)
+        //                     } else if (value.title == '龙骨') {
+        //                         value.project_info = value.title + '抓取规格'
+        //                         arr5.push(value)
+        //                     } else if (value.title == '丝杆') {
+        //                         value.project_info = value.title + '抓取规格'
+        //                         arr6.push(value)
+        //                     }else if(value.title == '木工板'){
+        //                         if(value.unit == '长度'){
+        //                             value.project_info = '细木工板抓取长度'
+        //                         }else if(value.unit == '宽度'){
+        //                             value.project_info = '细木工板抓取宽度'
+        //                         }
+        //                         arr9.push(value)
+        //                     }
+        //                 }
+        //                 for (let [key, value] of arr.entries()) {
+        //                     if (value.project_details.indexOf('长度') != -1) {
+        //                         value.cur_unit = 'm'
+        //                     } else if (value.project_details.indexOf('面积') != -1) {
+        //                         value.cur_unit = 'm2'
+        //                     } else {
+        //                         value.cur_unit = '张'
+        //                     }
+        //                     if (value.project_details.indexOf('石膏板') != -1) {
+        //                         if(value.project_details.indexOf('面积')!=-1){
+        //                             value.project_info = '1张石膏板做平顶面积'
+        //                         }else if(value.project_details.indexOf('长度')!=-1){
+        //                             value.project_info = '1张石膏板做造型长度'
+        //                         }else{
+        //                             value.project_info = value.project_details
+        //                         }
+        //                         arr4.push(value)
+        //                     } else if (value.project_details.indexOf('龙骨') != -1) {
+        //                         value.project_info = '1根' + value.project_details
+        //                         arr5.push(value)
+        //                     } else if (value.project_details.indexOf('丝杆') != -1) {
+        //                         value.project_info = '1根' + value.project_details
+        //                         arr6.push(value)
+        //                     }else if (value.project_details.indexOf('木工板') != -1) {
+        //                         value.project_info = value.project_details
+        //                         arr9.unshift(value)
+        //                     }
+        //                 }
+        //                 $scope.process_list = [arr9,arr4, arr5, arr6]
+        //                 console.log($scope.process_list)
+        //                 console.log(arr)
+        //                 console.log($scope.all_series)
+        //             })
+        //         }
+        //         $state.go('intelligent.engineering_process')
+        //     })
+        // }
+        // //工程标准保存
+        // $scope.get_engineering_process = function (valid) {
+        //     let all_modal = function ($scope, $uibModalInstance) {
+        //         $scope.cur_title = '保存成功'
+        //         $scope.common_house = function () {
+        //             $uibModalInstance.close()
+        //             $rootScope.crumbs = [
+        //                 {
+        //                     name: '智能报价',
+        //                     icon: 'icon-baojia',
+        //                     link: function () {
+        //                         $state.go('intelligent.intelligent_index')
+        //                         $rootScope.crumbs.splice(1, 4)
+        //                     }
+        //                 }, {
+        //                     name: '工程标准'
+        //                 }
+        //             ]
+        //             $state.go('intelligent.engineering_standards')
+        //         }
+        //     }
+        //     all_modal.$inject = ['$scope', '$uibModalInstance']
+        //     let arr = [], arr1 = [], arr2 = []
+        //     if ($scope.cur_item_project != '木作') {
+        //         for (let [key, value] of $scope.process_list.entries()) {
+        //             for (let [key1, value1] of value.entries()) {
+        //                 arr.push({id: value1.id, material: value1.material})
+        //             }
+        //         }
+        //     } else {
+        //         console.log($scope.all_series)
+        //         for (let [key, value] of $scope.all_series.entries()) {
+        //             for (let [key1, value1] of value.entries()) {
+        //                 if (value1.cur_id != undefined) {
+        //                     arr.push({
+        //                         id: value1.cur_id,
+        //                         value: value1.value
+        //                     })
+        //                 } else {
+        //                     arr.push({
+        //                         // project: value1.series,
+        //                         value: value1.value,
+        //                         add_id: value1.id,
+        //                         coefficient: value1.coefficient,
+        //                         series_or_style: value1.series_or_style
+        //                     })
+        //                 }
+        //             }
+        //         }
+        //         for (let [key, value] of $scope.all_style.entries()) {
+        //             for (let [key1, value1] of value.entries()) {
+        //                 if (value1.cur_id != undefined) {
+        //                     arr.push({
+        //                         id: value1.cur_id,
+        //                         value: value1.value
+        //                     })
+        //                 } else {
+        //                     arr.push({
+        //                         // project: value1.style,
+        //                         value: value1.value,
+        //                         add_id: value1.id,
+        //                         coefficient: value1.coefficient,
+        //                         series_or_style: value1.series_or_style
+        //                     })
+        //                 }
+        //             }
+        //         }
+        //         for (let [key, value] of $scope.process_list.entries()) {
+        //             for (let [key1, value1] of value.entries()) {
+        //                 if (value1.options != undefined) {
+        //                     arr1.push({
+        //                         id: value1.id,
+        //                         value: value1.value
+        //                     })
+        //                 } else {
+        //                     arr2.push({
+        //                         id: value1.id,
+        //                         value: value1.material
+        //                     })
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     console.log(arr)
+        //     console.log(arr1)
+        //     console.log(arr2)
+        //     if (valid) {
+        //         if ($scope.cur_item_project != '木作') {
+        //             _ajax.post('/quote/project-norm-edit', {
+        //                 material: arr
+        //             }, function (res) {
+        //                 console.log(res)
+        //                 $uibModal.open({
+        //                     templateUrl: 'pages/intelligent/cur_model.html',
+        //                     controller: all_modal
+        //                 })
+        //             })
+        //         } else {
+        //             _ajax.post('/quote/project-norm-woodwork-edit', {
+        //                 value: arr2,
+        //                 specification: arr1,
+        //                 coefficient: arr
+        //             }, function (res) {
+        //                 $uibModal.open({
+        //                     templateUrl: 'pages/intelligent/cur_model.html',
+        //                     controller: all_modal
+        //                 })
+        //             })
+        //         }
+        //     } else {
+        //         $scope.submitted = true
+        //     }
+        // }
+        // //工程标准返回
+        // $scope.return_engineering = function () {
+        //     $rootScope.crumbs = [
+        //         {
+        //             name: '智能报价',
+        //             icon: 'icon-baojia',
+        //             link: function () {
+        //                 $state.go('intelligent.intelligent_index')
+        //                 $rootScope.crumbs.splice(1, 4)
+        //             }
+        //         }, {
+        //             name: '工程标准'
+        //         }
+        //     ]
+        //     $state.go('intelligent.engineering_standards')
+        // }
 
         /*系数管理*/
         //跳转系数管理
@@ -2980,9 +2980,6 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
                             let index = arr.findIndex(function (item) {
                                 return item.title == value1.title
                             })
-                            console.log(arr.find(function (item) {
-                                return item.title == value1.title
-                            }))
                             arr.splice(index, 1)
                         }
                         $scope.all_coefficient.push({

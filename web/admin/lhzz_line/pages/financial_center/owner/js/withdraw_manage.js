@@ -58,6 +58,10 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
                     tablePages()
                 }
+            }else{
+                $scope.params.time_start = ''
+                $scope.params.time_end = ''
+                tablePages()
             }
         }else{
             tablePages()
@@ -66,7 +70,7 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
         $scope.params.keyword = ''
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal == ''){
+        if(newVal == ''&&oldVal!=''){
             $scope.params.keyword = ''
             tablePages()
         }

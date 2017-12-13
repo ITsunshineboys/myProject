@@ -4,15 +4,15 @@
     <form novalidate name="cur_coefficient">
         <div class="row" style="margin-bottom: 20px;">
             <div class="col-md-1 text-right">
-                <button type="button" ng-click="add_coefficient()" class="text-center btn btn-default"><i class="glyphicon glyphicon-plus"></i></button>
+                <button type="button" ng-click="addCoefficient()" class="text-center"><i class="glyphicon glyphicon-plus"></i></button>
             </div>
         </div>
         <div class="row" ng-repeat="item in all_coefficient" style="margin-bottom: 20px;">
             <div class="col-md-1 text-right">
-                <button type="button" class="text-center btn btn-default" ng-click="remove_coefficient(item)"><i class="glyphicon glyphicon-minus"></i></button>
+                <button type="button" class="text-center" ng-click="removeCoefficient(item)"><i class="glyphicon glyphicon-minus"></i></button>
             </div>
             <div class="col-md-2">
-                <select ng-disabled="!$last" ng-model="item.cur_category" class="form-control" ng-options="m.title for m in item.category"></select>
+                <select ng-disabled="!$last" ng-model="item.category_id" class="form-control" ng-options="item1.id as item1.title for item1 in item.options"></select>
             </div>
             <div class="col-md-2">
                 <input type="text" name="name{{$index}}" placeholder="请输入小于1的数字" ng-model="item.coefficient" class="form-control" required
@@ -23,8 +23,8 @@
             <p class="col-md-7">*0＜X≤1的数字，精确到小数点后两位</p>
         </div>
         <div class="from-group" style="margin-top:100px;">
-            <button class="btn btn-primary" type="submit" ng-click="save_coefficient(cur_coefficient.$valid)">确认</button>
-            <button type="button" class="btn btn-default" ng-click="go_index()">返回</button>
+            <button class="btn btn-primary" type="submit" ng-click="saveCoefficient(cur_coefficient.$valid)">确认</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>
