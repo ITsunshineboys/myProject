@@ -12,11 +12,12 @@ use Yii;
 use yii\db\ActiveRecord;
 use app\models\Role;
 use app\services\ModelService;
+use yii\db\Query;
 
 class UserRole extends ActiveRecord
 {
     const CACHE_KEY_PREFIX_ROLES_STATUS = 'roles_status_';
-
+    const FIELDS_EXTRA = [];
     /**
      * Get roles status by user id
      *
@@ -146,4 +147,32 @@ class UserRole extends ActiveRecord
             ->where(['user_id' => $userId, 'review_status' => $reviewStatus])
             ->column();
     }
+
+    /**
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param $size
+     * @param string $orderBy
+     * @return array
+     */
+    public static function paginationBySupplier($where = [], $select = [], $page = 1, $size = Supplier::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    {
+
+        $select = array_diff($select, self::FIELDS_EXTRA);
+        $offset = ($page - 1) * $size;
+        $supplierList = (new Query())
+            ->from(self::tableName().' as U')
+            ->leftJoin(Supplier::tableName(). ' as S','U.user_id=S.uid')
+            ->select($select)
+            ->where($where)
+            ->orderBy($orderBy)
+            ->offset($offset)
+            ->limit($size)
+            ->all();
+        $total = self::find()->where($where)->count();
+        return ModelService::pageDeal($supplierList, $total, $page, $size);
+    }
+
+
 }

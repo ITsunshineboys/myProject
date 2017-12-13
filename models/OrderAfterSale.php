@@ -1617,7 +1617,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$supplier_express->waybillname,
             'number'=>$supplier_express->waybillnumber,
-            'code'=>'',
+            'code'=>'shipped',
             'status'=>''
         ];
 
