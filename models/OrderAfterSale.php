@@ -388,7 +388,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>'',
+            'code'=>'unhandle',
             'status'=>'in'
         ];
          return [
