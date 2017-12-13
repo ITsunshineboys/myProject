@@ -1110,7 +1110,6 @@ class GoodsOrder extends ActiveRecord
             $output['goods_name']=$arr[$k]['goods_name'];
             $output['waybillnumber']=$arr[$k]['waybillnumber'];
             $output['waybillname']=$arr[$k]['waybillname'];
-
             if (!empty($output['waybillnumber']) && !empty($output['waybillnumber']))
             {
                 $output['shipping_way']=$output['waybillname'].'('.$output['waybillnumber'].')';
@@ -1665,7 +1664,9 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['pay_term']=$pay_term-$time;
                 }
             }
-            if ($data[$k]['status']==self::ORDER_TYPE_DESC_CANCEL)
+            if ($data[$k]['status']==self::ORDER_TYPE_DESC_CANCEL
+                ||$data[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN
+                ||$data[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER)
             {
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
