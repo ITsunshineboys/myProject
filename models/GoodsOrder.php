@@ -2905,7 +2905,12 @@ class GoodsOrder extends ActiveRecord
             $output['amount_order']=GoodsOrder::switchMoney($freight+$amount_order);
             $output['consignee']=$arr[0]['consignee'];
             $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
+
             $output['invoice_information']=$arr[0]['invoice_content'].'-'.$arr[0]['invoice_header'];
+            if (empty($arr[0]['invoice_header']))
+            {
+                $output['invoice_information']=$arr[0]['invoice_content'];
+            }
             $output['invoicer_card']=$arr[0]['invoicer_card'];
             $output['consignee_mobile']=$arr[0]['consignee_mobile'];
             $output['invoice_header_type']=$arr[0]['invoice_header_type'];

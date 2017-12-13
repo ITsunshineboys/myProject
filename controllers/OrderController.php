@@ -2299,10 +2299,9 @@ class OrderController extends Controller
         $user->save(false);
     }
 
-
       /**
-         * 余额支付
-         * @return string
+       * 余额支付
+       * @return string
       */
       public  function  actionBalancePay(){
         $user = Yii::$app->user->identity;
