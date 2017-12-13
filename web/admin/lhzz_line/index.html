@@ -37,7 +37,10 @@
     </dl>
 
     <dl>
-        <dt ui-sref="account_user_list.normal" ng-class="{on:other_flag=='account_user_list.normal'}" ng-click="other_display('account_user_list.normal')"><i class="iconfont icon-zhanghuguanli i_width"></i>账户管理</dt>
+        <!--<dt ui-sref="account_user_list.normal" ng-class="{on:other_flag=='account_user_list.normal'}" ng-click="other_display('account_user_list.normal')"><i class="iconfont icon-zhanghuguanli i_width"></i>账户管理</dt>-->
+
+        <dt ng-click="account_click()" ng-class="{on:account_flag}"><i class="iconfont icon-zhanghuguanli i_width"></i>账户管理</dt>
+        <dd ng-repeat="item in account_obj" ng-click="account_repeat(item)" ng-class="{true:'show',false:'hide'}[account_flag]"><a ng-class="{dd_on: account_active == item.id}" ng-bind="item.name"></a></dd>
     </dl>
     <dl>
         <dt ui-sref="distribution.index" ng-class="{on:other_flag=='distribution.index'}" ng-click="other_display('distribution.index')"><i class="iconfont icon-fenxiao i_width"></i>分销</dt>
@@ -158,6 +161,11 @@
 <script src="pages/account_manage/user_list/account_mag/js/user_list.js"></script>                                          <!--账户管理-用户列表-->
 <script src="pages/account_manage/user_list/account_mag/js/user_list_normal.js"></script>                                   <!--用户列表-正常-->
 <script src="pages/account_manage/user_list/account_mag/js/user_list_closed.js"></script>                                   <!--用户列表-已关闭-->
+<script src="pages/account_manage/user_verify/js/user_verify.js"></script>                                                  <!--账户管理-用户审核-->
+<script src="pages/account_manage/user_verify/js/user_verify_wait.js"></script>                                             <!--等待审核-->
+<script src="pages/account_manage/user_verify/js/user_verify_pass.js"></script>                                             <!--审核通过-->
+<script src="pages/account_manage/user_verify/js/user_verify_fail.js"></script>                                             <!--审核失败-->
+
 <script src="pages/mall_manage/merchant_settle/js/settle_verify.js"></script>                                   <!--商家入驻审核-->
 <script src="pages/mall_manage/merchant_settle/js/settle_verify_wait.js"></script>                              <!--等待审核-->
 <script src="pages/mall_manage/merchant_settle/js/settle_verify_pass.js"></script>                              <!--审核通过-->
