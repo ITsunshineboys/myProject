@@ -1620,6 +1620,47 @@ class QuoteController extends Controller
     }
 
     /**
+     * 材料添加项  一键抓取sku
+     * @return string
+     */
+    public function actionDecorationUp()
+    {
+        $decoration = DecorationAdd::find()->asArray()->All();
+        $goods = [];
+        foreach ($decoration as $one){
+            $goods [] = $one['three_materials'];
+        }
+
+        $category_id = GoodsCategory::find()->select('id')->asArray()->where(['in','title',$goods])->all();
+        $id = [];
+        foreach ($category_id as $one_id){
+            $id [] = $one_id['id'];
+        }
+        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$id);
+
+        foreach ($decoration as $value){
+            foreach ($goods as $one_goods){
+                if ($value['three_materials'] ==  $one_goods['title']){
+                    $edit = DecorationAdd::findByUpdate($one_goods['sku'],$value['id']);
+                }
+            }
+        }
+
+        if (!$edit){
+            $code = 1000;
+            return Json::encode([
+               'code' => $code,
+               'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        return Json::encode([
+           'code'=> 200,
+           'msg'=> 'ok',
+        ]);
+    }
+
+    /**
      * decoration delete
      * @return string
      */
@@ -2015,6 +2056,7 @@ class QuoteController extends Controller
         ]);
 
     }
+
 
     /**
      * 测试功能

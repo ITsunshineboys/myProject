@@ -153,4 +153,13 @@ class DecorationAdd extends ActiveRecord
             'details' => $List
         ];
     }
+
+    public static function findByUpdate($sku, $id)
+    {
+        return \Yii::$app->db->createCommand()
+            ->update(self::tableName(),[
+                'sku'=>$sku,
+            ],['id'=>$id])
+            ->execute();
+    }
 }
