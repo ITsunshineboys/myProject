@@ -928,6 +928,24 @@ class SupplierController extends Controller
                 $shop_type='专卖店';
                 break;
         }
+        switch ($Supplier->type_org)
+        {
+            case 0:
+                $type_org='个体工商户';
+                break;
+            case 1:
+                $type_org='企业';
+                break;
+        }
+        $reviewer=User::find()
+            ->where(['id'=>$user_role->reviewer_uid])
+            ->select('nickname')->one();
+        if ($reviewer)
+        {
+            $reviewer_name=$reviewer->nickname;
+        }else{
+            $reviewer_name='';
+        }
 
         return Json::encode([
             'code' => 200,
@@ -936,10 +954,23 @@ class SupplierController extends Controller
                 'category' =>$category ,
                 'shop_name'=>$Supplier->shop_name,
                 'shop_type'=>$shop_type,
-                'name'=>$Supplier->name
+                'name'=>$Supplier->name,
+                'licence'=>$Supplier->licence,
+                'type_org'=>$type_org,
+                'licence_image'=>$Supplier->licence,
+                'legal_person'=>$user->legal_person,
+                'identity_no'=>$user->identity_no,
+                'identity_card_front_image'=>$user->identity_card_front_image,
+                'identity_card_back_image'=>$user->identity_card_back_image,
+                'mobile'=>$user->mobile,
+                'aite_cube_no'=>$user->aite_cube_no,
+                'create_time'=>date('Y-m-d H:i',$Supplier->create_time),
+                'review_apply_time'=>date('Y-m-d H:i',$user_role->review_apply_time),
+                'review_status'=>$user_role->review_status,
+                'review_remark'=>$user_role->review_remark,
+                'reviewer_name'=>$reviewer_name,
             ]
         ]);
-
     }
 
 
