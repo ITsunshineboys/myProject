@@ -681,7 +681,7 @@ class OrderAfterSale extends ActiveRecord
         }
         return [
             'data'=>$data,
-            'platform'=>[]
+            'platform'=>[],
         ];
     }
 

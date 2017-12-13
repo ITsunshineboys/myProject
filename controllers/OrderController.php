@@ -2719,6 +2719,7 @@ class OrderController extends Controller
                 $data=OrderAfterSale::findHandleAfterSaleDisagree($OrderAfterSale,$role);
                 break;
         }
+
         if (is_numeric($data)){
             $code=$data;
             return Json::encode([
@@ -2736,12 +2737,21 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+                if ($OrderGoods->customer_service==2)
+                {
+                    $state='over';
+                }else
+                {
+                    $state='in';
+                }
         return Json::encode([
             'code'=>$code,
             'msg'=>'ok',
             'data'=>[
                 'after_sale_detail'=>$after_sale_detail,
-                'after_sale_progress'=>$data
+                'after_sale_progress'=>$data,
+                'state'=>$state
             ]
         ]);
     }
