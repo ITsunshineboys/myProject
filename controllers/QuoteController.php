@@ -358,10 +358,12 @@ class QuoteController extends Controller
      */
     public function actionCoefficientList()
     {
+        $city = (int)trim(\Yii::$app->request->get('city',''));
+        $where = 'city_code = '.$city;
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'coefficient'=>CoefficientManagement::findByAll(),
+            'coefficient'=>CoefficientManagement::findByAll('category_id,coefficient',$where),
            'list'=> GoodsCategory::findByHeadTitle(),
         ]);
     }
