@@ -216,6 +216,7 @@ class UserRole extends ActiveRecord
             ->limit($pagination->limit)
             ->all();
         foreach ($arr as &$UserRole) {
+            $UserRole['review_apply_time']=date('Y-m-d H:i:s',$UserRole['review_apply_time']);
             $UserRole['review_time']=date('Y-m-d H:i:s',$UserRole['review_time']);
             $UserRole['review_status']=self::REVIEW_STATUS[$UserRole['review_status']];
             $UserRole['handle_name']=User::find()->asArray()->select('nickname')->where(['id'=>$UserRole['reviewer_uid']])->one()['nickname'];
