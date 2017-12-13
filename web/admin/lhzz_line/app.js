@@ -444,15 +444,22 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/intelligent/add_support_goods.html',
             css: 'pages/intelligent/css/add_support_goods.css'
         })
-        .state('intelligent.worker_price_list', {//智能报价工人资费列表
-            url: 'worker_price_list',
+        // .state('intelligent.worker_price_list', {//智能报价工人资费列表
+        //     url: 'worker_price_list',
+        //     templateUrl: 'pages/intelligent/worker_price_list.html',
+        //     css: 'pages/intelligent/css/worker_price_list.css'
+        // })
+        .state('worker_price_list', {//智能报价工人资费列表
+            url: '/worker_price_list?city&province',
             templateUrl: 'pages/intelligent/worker_price_list.html',
-            css: 'pages/intelligent/css/worker_price_list.css'
+            css: 'pages/intelligent/css/worker_price_list.css',
+            controller:'worker_price_ctrl'
         })
-        .state('intelligent.edit_worker', {//智能报价工人资费编辑
-            url: 'edit_worker',
+        .state('edit_worker', {//智能报价工人资费编辑
+            url: '/edit_worker?id',
             templateUrl: 'pages/intelligent/edit_worker.html',
-            css: 'pages/intelligent/css/edit_worker.css'
+            css: 'pages/intelligent/css/edit_worker.css',
+            controller:'edit_worker_ctrl'
         })
         .state('intelligent.home_manage', {//智能报价首页管理
             url: 'home_manage',

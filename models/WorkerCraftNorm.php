@@ -21,8 +21,8 @@ class WorkerCraftNorm extends ActiveRecord
 
     const UNIT = [
       0 => '',
-      1 => 'M/天',
-      2 => 'M²/天',
+      1 => 'm/天',
+      2 => 'm²/天',
       3 => '个/天',
     ];
 

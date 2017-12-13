@@ -6,9 +6,9 @@
             <th >工种名称</th>
             <th>详情</th>
         </tr>
-        <tr ng-repeat="item in cur_worker_list">
+        <tr ng-repeat="item in worker_list">
             <td class="text-left">{{item.worker_kind}}</td>
-            <td class="text-left edit" ng-click="edit_worker(item)">编辑</td>
+            <td class="text-left"><a ui-sref="edit_worker({id:item.id})">编辑</a></td>
         </tr>
         </tbody>
     </table>
