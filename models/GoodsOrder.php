@@ -926,6 +926,20 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['have_handle']=1;
             }
             unset($arr[$k]['consignee_mobile']);
+            unset($arr[$k]['id']);
+            unset($arr[$k]['address_id']);
+            unset($arr[$k]['user_id']);
+            unset($arr[$k]['market_price']);
+            unset($arr[$k]['supplier_price']);
+            unset($arr[$k]['order_id']);
+            unset($arr[$k]['return_insurance']);
+            unset($arr[$k]['consignee']);
+            unset($arr[$k]['shipping_type']);;
+            unset($arr[$k]['send_time']);;
+            unset($arr[$k]['complete_time']);;
+            unset($arr[$k]['RemainingTime']);;
+            unset($arr[$k]['pay_term']);;
+            unset($arr[$k]['shipping_type']);
             $amount_order[$k]  = $arr[$k]['amount_order'];
             $create_time[$k]  = $arr[$k]['create_time'];
         }
