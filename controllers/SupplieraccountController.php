@@ -1100,7 +1100,7 @@ class SupplieraccountController extends  Controller{
         $brand->create_time=time();
         $brand->approve_time=0;
 
-        $brand->scenario = GoodsBrand::SCENARIO_EDIT;
+        $brand->scenario = GoodsBrand::SCENARIO_NEWEDIT;
         if (!$brand->validate()) {
             if (isset($brand->errors['name'])) {
                 $customErrCode = ModelService::customErrCode($brand->errors['name'][0]);
@@ -1348,7 +1348,7 @@ class SupplieraccountController extends  Controller{
         $category->reject_time=0;
         $category->review_status=0;
 
-        $category->scenario = GoodsCategory::SCENARIO_EDIT;
+        $category->scenario = GoodsCategory::SCENARIO_NEWEDIT;
         if (!$category->validate()) {
             if (isset($category->errors['title'])) {
                 $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
