@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="pages/commodity_manage/css/wait_online.css"/>
 <div ng-controller="wait_online" class="container_left">
     <section>
@@ -19,7 +18,10 @@
                     <span>商品名称</span>
                 </div>
                 <div class="col-sm-4">
-                    <input class="form-control" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required ng-class="{'error':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)|| g_flag}" ng-blur="title_blur=!!form.goods_name.$error"/>
+                    <input class="form-control" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name"
+                           ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required
+                           ng-class="{'error':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)|| g_flag}"
+                           ng-blur="title_blur=!!form.goods_name.$error"/>
                 </div>
                 <div class="col-sm-6 control-label">
                     <span>*限1~32个字符，不含特殊字符</span>
@@ -32,7 +34,10 @@
                     <span>商品特色</span>
                 </div>
                 <div class="col-sm-4">
-                    <input class="form-control" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name" ng-change="d_name_change(des_name)" id="des_name" name="des_name" required ng-class="{'error':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}" ng-blur="des_blur=!!form.des_name.$error"/>
+                    <input class="form-control" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name"
+                           ng-change="d_name_change(des_name)" id="des_name" name="des_name" required
+                           ng-class="{'error':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}"
+                           ng-blur="des_blur=!!form.des_name.$error"/>
                 </div>
                 <div class="col-sm-6 control-label">
                     <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
@@ -43,7 +48,8 @@
                     <span>选择品牌</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                    <select class="form-control" ng-model="myng.brand_model"
+                            ng-options="item.id as item.name for item in brands_arr"></select>
                 </div>
             </div>
             <!--选择系列-->
@@ -52,7 +58,8 @@
                     <span>选择系列</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
+                    <select class="form-control" ng-model="myng.series_model"
+                            ng-options="item.id as item.series for item in series_arr"></select>
                 </div>
             </div>
             <div class="row" ng-if="series_null_flag">
@@ -64,7 +71,8 @@
                     <span>选择风格</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr"></select>
+                    <select class="form-control" ng-model="myng.style_model"
+                            ng-options="item.id as item.style for item in styles_arr"></select>
                 </div>
             </div>
             <div class="row" ng-if="style_null_flag">
@@ -77,7 +85,7 @@
                     <span>属性设置</span>
                 </div>
                 <div class="col-sm-3 control-label">
-                    <span class="glyphicon glyphicon-plus pointer"  ng-click="add_own_attrs()"></span>
+                    <span class="glyphicon glyphicon-plus pointer" ng-click="add_own_attrs()"></span>
                     <span>属性名称</span>
                 </div>
                 <div class="col-sm-3 control-label">
@@ -94,7 +102,11 @@
                         <span ng-model="myng.attr_name">{{item.name}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <input class="form-control" ng-model="item.value"  type="text" maxlength="6" placeholder="请输入属性内容" id="attr_name{{$index}}" name="attr_name{{$index}}" ng-keyup="testNumber(item)" required ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}" ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
+                        <input class="form-control" ng-model="item.value" type="text" maxlength="6"
+                               placeholder="请输入属性内容" id="attr_name{{$index}}" name="attr_name{{$index}}"
+                               ng-keyup="testNumber(item)" required
+                               ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}"
+                               ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
                     </div>
                     <div class="col-sm-1 control-label">
                         <span class="unit">{{item.unit}}</span>
@@ -111,7 +123,8 @@
                         <span style="display: inline-block;width: 140px">{{item.name}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <select class="form-control"  ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
+                        <select class="form-control" ng-model="item.selected"
+                                ng-options="items for items in goods_select_attrs_value[$index]"></select>
                     </div>
                     <div class="col-sm-1 control-label">
                         <span class="unit">{{item.unit}}</span>
@@ -125,10 +138,14 @@
                     <div class="col-sm-offset-2 col-sm-3">
                         <img src="pages/commodity_manage/image/red.png" alt=""/>
                         <span class="glyphicon glyphicon-minus pointer" ng-click="del_own_attrs($index)"></span>
-                        <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请输入属性名称" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'error':form[item.name_model].$invalid &&submitted||(form[item.name_model].$error.required)}"/>
+                        <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请输入属性名称"
+                               ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required
+                               ng-class="{'error':form[item.name_model].$invalid &&submitted||(form[item.name_model].$error.required)}"/>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
+                        <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容"
+                               ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required
+                               ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
                     </div>
                     <div class="col-sm-1">
                         <span class="unit">&nbsp;</span>
@@ -150,7 +167,10 @@
                     <img class="img_size" ng-if="!!upload_cover_src" ng-src="{{upload_cover_src}}"/>
                     <img class="img_size" ng-if="!upload_cover_src" src="pages/commodity_manage/image/default.png"/>
                     <p class="prompt_txt">图片大小5M内，支持JPG、PNG、JPEG</p>
-                    <button  class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">{{upload_txt}}</button>
+                    <button class="btn btn-default" ngf-pattern="image/*" ng-change="upload_cover(data.file)"
+                            ngf-select="" ngf-multiple="false" ng-model="data.file" ng-disabled="upload_dis">
+                        {{upload_txt}}
+                    </button>
                     <p class="warning" ng-if="!!cover_flag">
                         <span class="glyphicon glyphicon-asterisk"></span>
                         {{cover_flag}}
@@ -168,7 +188,9 @@
                         <img class="img_size" ng-src="{{item}}" class="logo">
                         <span ng-if="completeUpload" class="img_times" ng-click="del_img(item)">&times;</span>
                     </div>
-                    <img class="img_size" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/commodity_manage/image/plus.png">
+                    <img class="img_size" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*"
+                         ng-change="upload(data.file)" ngf-select="" ngf-multiple="false" ng-model="data.file"
+                         src="pages/commodity_manage/image/plus.png">
                     <p class="prompt_txt">图片大小694×400，5M内，可上传3张图片，支持JPG、PNG、JPEG</p>
                     <p class="warning" ng-if="!!img_flag">
                         <span class="glyphicon glyphicon-asterisk"></span>
@@ -192,10 +214,24 @@
                     </ul>
                     <p></p>
                     <div>
-                        <input class="form-control price_stock_input" type="text" ng-model="supplier_price" ng-change="my_supplier_price(supplier_price)" id="supplier_price" name="supplier_price" required ng-class="{'error':(form.supplier_price.$invalid && submitted)||(form.supplier_price.$error.required && supplier_blur) || price_flag}" ng-blur="supplier_blur=!!form.supplier_price.$error"/>
-                        <input class="form-control price_stock_input" type="text" ng-model="platform_price" ng-change="my_platform_price(platform_price)" id="platform_price" name="platform_price" required ng-class="{'error':(form.platform_price.$invalid && submitted)||(form.platform_price.$error.required && plat_blur) || price_flag}" ng-blur="plat_blur=!!form.platform_price.$error"/>
-                        <input class="form-control price_stock_input" type="text" ng-model="market_price"  ng-change="my_market_price(market_price)" id="market_price" name="market_price" required ng-class="{'error':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}" ng-blur="market_blur=!!form.market_price.$error"/>
-                        <input class="form-control price_stock_input" type="text" ng-model="left_number" ng-keyup="leftNumber(left_number)" id="left_number" name="left_number" required ng-class="{'error':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}" ng-blur="left_blur=!!form.left_number.$error"/>
+                        <input class="form-control price_stock_input" type="text" ng-model="supplier_price"
+                               ng-change="my_supplier_price(supplier_price)" id="supplier_price" name="supplier_price"
+                               required
+                               ng-class="{'error':(form.supplier_price.$invalid && submitted)||(form.supplier_price.$error.required && supplier_blur) || price_flag}"
+                               ng-blur="supplier_blur=!!form.supplier_price.$error"/>
+                        <input class="form-control price_stock_input" type="text" ng-model="platform_price"
+                               ng-change="my_platform_price(platform_price)" id="platform_price" name="platform_price"
+                               required
+                               ng-class="{'error':(form.platform_price.$invalid && submitted)||(form.platform_price.$error.required && plat_blur) || price_flag}"
+                               ng-blur="plat_blur=!!form.platform_price.$error"/>
+                        <input class="form-control price_stock_input" type="text" ng-model="market_price"
+                               ng-change="my_market_price(market_price)" id="market_price" name="market_price" required
+                               ng-class="{'error':(form.market_price.$invalid && submitted)||(form.market_price.$error.required && market_blur) || price_flag}"
+                               ng-blur="market_blur=!!form.market_price.$error"/>
+                        <input class="form-control price_stock_input" type="text" ng-model="left_number"
+                               ng-keyup="leftNumber(left_number)" id="left_number" name="left_number" required
+                               ng-class="{'error':(form.left_number.$invalid && submitted)||(form.left_number.$error.required && left_blur)}"
+                               ng-blur="left_blur=!!form.left_number.$error"/>
                     </div>
                     <span class="prompt_txt">*价格，供货价≤平台价≤市场价</span>
                 </div>
@@ -229,7 +265,9 @@
                 </div>
                 <div class="col-sm-6 control-label">
                     <span class="red_txt" ng-if="logistics_null==true">*物流模板为空，请先添加物流模板</span>
-                    <select class="form-control" style="width: 60%" ng-if="logistics_status==true" ng-model="myng.shop_logistics" ng-options="item.id as item.name for item in logistics"></select>
+                    <select class="form-control" style="width: 60%" ng-if="logistics_status==true"
+                            ng-model="myng.shop_logistics"
+                            ng-options="item.id as item.name for item in logistics"></select>
                     <div class="red_txt" ng-if="logistics_red==true">*上一个物流模板已被删除，请选择新的模板</div>
                     <br>
                     <div ng-if="logistics_status==true">
@@ -237,7 +275,7 @@
                         <span>{{logistics_method}}</span>
                         <br/>
                         <br/>
-                        <span  class="margin_r">城市选择</span>
+                        <span class="margin_r">城市选择</span>
                         <span class="template_span" ng-repeat="item in district_names.slice(0,3)">{{item}}</span>
                         <a ng-if="district_names.length>3" data-toggle="modal" data-target="#show_city">查看</a>
                         <br/>
@@ -251,7 +289,7 @@
                             <span class="margin_r">收费金额</span>
                             <div style="display: inline-block; vertical-align: top;">
                                 <p>默认{{delivery_number_default}}件商品:￥{{delivery_cost_default}}</p>
-                                <p >每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</p>
+                                <p>每增加{{delivery_number_delta}}件商品，运费增加:￥{{delivery_cost_delta}}</p>
                             </div>
                         </div>
                     </div>
@@ -266,7 +304,7 @@
                 <div class="col-sm-10 control-label">
                     <ul class="aftermark_ul">
                         <li><input type="checkbox" ng-model="myng.door_service_check"/><span>上门维修</span></li>
-                        <li><input type="checkbox" ng-model="myng.door_return_check" /><span>上门退货</span></li>
+                        <li><input type="checkbox" ng-model="myng.door_return_check"/><span>上门退货</span></li>
                         <li><input type="checkbox" ng-model="myng.door_replacement_check"/><span>上门换货</span></li>
                         <li><input type="checkbox" ng-model="myng.return_check"/><span>退货</span></li>
                         <li><input type="checkbox" ng-model="myng.replacement_check"/><span>换货</span></li>
@@ -280,8 +318,9 @@
                 </div>
                 <div class="col-sm-10 control-label">
                     <ul class="aftermark_ul">
-                        <li><input type="checkbox" ng-model="myng.invoice_check" ng-checked="true" disabled="disabled"/><span>提供发票</span></li>
-                        <li><input type="checkbox"  ng-model="myng.door_instal_model"/><span>上门安装</span></li>
+                        <li><input type="checkbox" ng-model="myng.invoice_check" ng-checked="true" disabled="disabled"/><span>提供发票</span>
+                        </li>
+                        <li><input type="checkbox" ng-model="myng.door_instal_model"/><span>上门安装</span></li>
                     </ul>
                 </div>
             </div>
@@ -302,26 +341,58 @@
                     <span>详情描述</span>
                 </div>
                 <div class="col-sm-10 control-label">
-                    <div class="ueditor" ng-model="detail_description"  config="config" id="editor"></div>
+                    <div class="ueditor" ng-model="detail_description" config="config" id="editor"></div>
                 </div>
             </div>
-            <!--操作人员，下架时间-->
-            <div ng-if="show_flag" class="row">
-                <div class="col-sm-offset-2 col-sm-10 control-label">
-                    <span class="people_time_right">操作人员</span>
-                    <span>{{operator}}</span>
+
+            <!--线下店信息-->
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>是否是线下商品</span>
                 </div>
-                <div class="col-sm-offset-2 col-sm-10 control-label">
-                    <span class="people_time_right">下架时间</span>
-                    <span>{{offline_time}}</span>
+                <div class="col-sm-10 control-label" ng-bind="line_goods.is_offline_goods"></div>
+            </div>
+
+            <div ng-if="line_goods.is_offline_goods=='是'">
+                <div class="row">
+                    <div class="col-sm-2 control-label">
+                        <span>线下店名称</span>
+                    </div>
+                    <div class="col-sm-10 control-label" ng-bind="line_goods.line_supplier_name"></div>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-2 control-label">
+                        <span>线下店地址</span>
+                    </div>
+                    <div class="col-sm-10 control-label" ng-bind="line_goods.line_district"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-2 control-label">
+                        <span>电话</span>
+                    </div>
+                    <div class="col-sm-10 control-label" ng-bind="line_goods.line_mobile"></div>
+                </div>
+            </div>
+
+            <!--审核备注-->
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>审核备注</span>
+                </div>
+                <div class="col-sm-10 control-label" ng-bind="reason"></div>
             </div>
 
             <!--按钮-->
             <div class="row">
                 <div class="col-sm-12 control-label">
-                    <button class="btn btn-primary" data-target="{{change_ok}}" data-toggle="modal" ng-click="edit_confirm(form.$valid,form.$error.required)">保存</button>
-                    <button class="btn btn-default btn_left" ng-hide="show_flag" data-toggle="modal" data-target="#down_ok">下架</button>
+                    <button class="btn btn-primary" data-target="{{change_ok}}" data-toggle="modal"
+                            ng-click="edit_confirm(form.$valid,form.$error.required)">保存
+                    </button>
+                    <button class="btn btn-default btn_left" ng-hide="show_flag" data-toggle="modal"
+                            data-target="#down_ok">下架
+                    </button>
                     <button class="btn btn-default btn_left" ng-click="back_wait()">返回</button>
                 </div>
             </div>
@@ -359,7 +430,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal" ng-click="down_btn(goods_id)">确认</button>
-                    <button class="btn btn-default" data-dismiss="modal" >取消</button>
+                    <button class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
@@ -369,7 +440,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">已选择地区</h4>
                 </div>
                 <div class="modal-body show_city">

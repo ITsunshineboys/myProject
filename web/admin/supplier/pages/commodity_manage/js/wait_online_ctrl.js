@@ -46,7 +46,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.after_sale_services=goods_item.after_sale_services;//售后、保障
 	$scope.operator=goods_item.operator;//操作人员
 	$scope.offline_time=goods_item.offline_time;//下架时间
-	$scope.reason=goods_item.reason;//下架时间
+	$scope.reason=goods_item.reason;//审核备注
 
 	for(let[key,value] of $scope.after_sale_services.entries()){
 		if(value==1){
@@ -88,10 +88,11 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		$scope.series_arr=res.data.category_brands_styles_series.series;
 		$scope.styles_arr=res.data.category_brands_styles_series.styles;
 		_ajax.get('/mall/goods-view',{id:$scope.goods_id},function (res) {
-			console.log(res);
 			$scope.detail_brand=res.data.goods_view.brand_name;//品牌名称
 			$scope.detail_ser=res.data.goods_view.series_name;//系列名称
 			$scope.detail_style=res.data.goods_view.style_name;//风格名称
+			$scope.line_goods = res.data.goods_view.line_goods;//线下店信息
+
 			//循环品牌列表
 			for(let [key,value] of $scope.brands_arr.entries()){
 				if(value.name==$scope.detail_brand){
