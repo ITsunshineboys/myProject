@@ -1113,4 +1113,22 @@ class GoodsCategory extends ActiveRecord
             ->where(['id'=>$id])
             ->one();
     }
+
+
+    public  static  function  GetCateGoryById($category_id)
+    {
+        $category=GoodsCategory::findOne($category_id);
+        if ($category)
+        {
+            $category_arr=explode(',',$category->path);
+            $first_category=GoodsCategory::find()
+                ->select('path,title,parent_title')
+                ->where(['id'=>$category_arr[0]])
+                ->one();
+            return $first_category->title.'-'.$category->parent_title.'-'.$category->title;
+        }else{
+            return '';
+        }
+
+    }
 }

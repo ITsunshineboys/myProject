@@ -834,7 +834,7 @@ class SupplierController extends Controller
             ]);
         }
 
-        $where="U.role_id=".Yii::$app->params['supplierRoleId'];
+        $where="L.role_id=".Yii::$app->params['supplierRoleId'];
         if ($timeType == 'custom') {
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
@@ -855,31 +855,39 @@ class SupplierController extends Controller
 
         if ($startTime) {
             $startTime = strtotime($startTime);
-            $startTime && $where .= " and U.review_apply_time >= {$startTime}";
+            $startTime && $where .= " and L.review_apply_time >= {$startTime}";
         }
 
         if ($endTime) {
             $endTime = strtotime($endTime);
-            $endTime && $where .= " and U.review_apply_time <= {$endTime}";
+            $endTime && $where .= " and L.review_apply_time <= {$endTime}";
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $keyword=$request->get('keyword');
         if ($keyword)
         {
-                $where .=" and CONCAT(U.mobile,S.shop_no) like '%{$keyword}%'";
+                $where .=" and CONCAT(U.mobile,S.shop_name,U.aite_cube_no) like '%{$keyword}%'";
         }
         $sort = Yii::$app->request->get('sort', []);
-//        $model = new UserStatus;
-//        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
-        $shop_type=$request->get('shop_type',0);
-        $where.='';
+        $model = new UserRole();
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy)
+        {
+            $orderBy='L.'.$orderBy;
+        }
+        $review_status=$request->get('review_status',3);
+        if (in_array($review_status,[0,1,2]))
+        {
+            $where.=' and  L.review_status='.$review_status;
+        }
+        $select='L.review_apply_time,L.review_status,U.mobile,S.shop_name,S.type_shop,S.category_id';
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'list' => UserRole::paginationBySupplier($where, Supplier::PAGE_SIZE_DEFAULT, $page, $size)
-            ],
+                'list' => UserRole::paginationBySupplier($where,$select,  $page, $size,$orderBy)
+            ]
         ]);
 
     }

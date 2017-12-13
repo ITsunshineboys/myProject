@@ -156,22 +156,30 @@ class UserRole extends ActiveRecord
      * @param string $orderBy
      * @return array
      */
-    public static function paginationBySupplier($where = [], $select = [], $page = 1, $size = Supplier::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function paginationBySupplier($where = [], $select = [], $page = 1, $size = Supplier::PAGE_SIZE_DEFAULT, $orderBy = 'L.id DESC')
     {
-
-        $select = array_diff($select, self::FIELDS_EXTRA);
         $offset = ($page - 1) * $size;
-        $supplierList = (new Query())
-            ->from(self::tableName().' as U')
-            ->leftJoin(Supplier::tableName(). ' as S','U.user_id=S.uid')
+        $List = (new Query())
+            ->from(self::tableName().' as L')
+            ->leftJoin(Supplier::tableName(). ' as S','L.user_id=S.uid')
+            ->leftJoin(User::tableName().' as U','U.id=L.user_id')
             ->select($select)
             ->where($where)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
             ->all();
-        $total = self::find()->where($where)->count();
-        return ModelService::pageDeal($supplierList, $total, $page, $size);
+        foreach ($List as &$list)
+        {
+            $list['category']=GoodsCategory::GetCateGoryById($list['category_id']);
+            $list['review_apply_time']=date('Y-m-d H:i',$list['review_apply_time']);
+        }
+        $total = (new Query())
+            ->from(self::tableName().' as L')
+            ->leftJoin(Supplier::tableName(). ' as S','L.user_id=S.uid')
+            ->leftJoin(User::tableName().' as U','U.id=L.user_id')
+            ->where($where)->count();
+        return ModelService::pageDeal($List, $total, $page, $size);
     }
 
 
