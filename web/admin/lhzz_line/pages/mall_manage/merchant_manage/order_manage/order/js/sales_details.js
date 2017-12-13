@@ -16,7 +16,6 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
         order_no: $stateParams.orderNo, // 订单编号
         sku: $stateParams.sku           // 商品编号
     };
-    $scope.isException = false; // 默认不显示异常记录
     $scope.platformInter = $stateParams.type;
     $scope.params = params;
 
@@ -27,20 +26,6 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
         $scope.orderDetails = data.goods_data;          // 订单详情信息
         $scope.goodsDetails = data.goods_value;         // 商品详情信息
         $scope.receiveDetails = data.receive_details;   // 收货详情信息
-        if (data.goods_data.pay_term <= 0) {
-            $scope.payTerm = '00时00分'
-        } else {
-            let time = data.goods_data.pay_term;
-            let term = $interval(function () {
-                time -= 1;
-                $scope.payTerm = secondToDate(time);
-                if (time < 1) {
-                    $interval.cancel(term);
-                }
-            }, 1000);
-        }
-        // 判断平台是否介入过
-        $scope.isPlatform = data.is_platform == 2;
         if (data.is_refund != 1) {
             _ajax.post('/order/find-unusual-list-lhzz', params, function (res) {
                 console.log(res, '异常信息');
@@ -48,23 +33,10 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
                 $scope.delivery = res.data[1];  // 待收货异常记录
             })
         }
-        // 平台介入信息
-        if (data.is_platform == 2) {
-            _ajax.post('/order/getplatformdetail', params, function (res) {
-                console.log(res, '平台介入信息');
-                $scope.platformInfo = res.data
-            })
-        }
     });
 
     // 售后信息
-    _ajax.get('/order/after-sale-detail-admin', params, function (res) {
-        console.log(res, "售后信息");
-        let data = res.data;
-        $scope.sale_detail = data.after_sale_detail;    // 售后信息
-        $scope.sale_progress = data.after_sale_progress.data; // 售后进度
-        $scope.sale_progress_platform = data.after_sale_progress.platform; // 售后进度-平台介入
-    });
+    saleDetail();
 
     // 已完成订单评论信息
     commentsFun();
@@ -106,11 +78,35 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
     });
 
     $scope.confirmAction = function () {
-        _ajax.post('/order/platformhandlesubmit', $scope.interOper,function (res) {
+        _ajax.post('/order/platformhandlesubmit', $scope.interOper, function (res) {
             console.log(res, '平台介入操作');
             window.history.go(-1);
         })
     };
+
+    // 关闭订单模态框和数据初始化
+    $scope.close_order = function () {
+        $scope.close_order_params = {
+            order_no: $stateParams.orderNo,
+            sku: $stateParams.sku,
+            reason: ''
+        };
+        $('#closeOrderModal').modal('show');
+    };
+
+    // 确认关闭订单
+    $scope.enter_close_order = function () {
+        _ajax.post('/order/close-order', $scope.close_order_params, function (res) {
+            history.back();
+        })
+    };
+
+    $scope.$watch('sale_temp_time', function (n, o) {
+        if (n === o) return;
+        if (n <= 0) {
+            saleDetail();
+        }
+    });
 
     /**
      * 评论回复信息函数
@@ -120,5 +116,47 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
             console.log(res, '评论回复');
             $scope.comments = res.data;
         })
+    }
+
+    /**
+     * 售后信息
+     */
+    function saleDetail() {
+        _ajax.get('/order/after-sale-detail-admin', params, function (res) {
+            console.log(res, "售后信息");
+            let data = res.data;
+            $scope.sale_detail = data.after_sale_detail;    // 售后信息
+            $scope.sale_progress = data.after_sale_progress.data; // 售后进度
+            $scope.sale_progress_platform = data.after_sale_progress.platform; // 售后进度-平台介入
+            $scope.is_close_order = data.state === 'in';
+            $scope.sale_progress_time = '00天00时00分00秒';
+            // 判断是否有平台介入
+            if ($scope.sale_progress_platform.length === 0) {   // 没有
+                salesTimer($scope.sale_progress)
+            } else {
+                salesTimer($scope.sale_progress_platform)
+            }
+        });
+    }
+
+    /**
+     * 售后进度计时器
+     * @param array 数组
+     */
+    function salesTimer(array) {
+        // 遍历数组，查询倒计时，并实现
+        for (let obj of array) {
+            if (obj.code === 'user_unconfirm_received' || obj.code === 'supplier_unconfirm_received') {
+                $scope.sale_temp_time = obj.content;
+                let clear_interval = $interval(function () {
+                    $scope.sale_temp_time--;
+                    obj.content = secondToDate($scope.sale_temp_time, 'day');
+                    if ($scope.sale_temp_time < 1) {
+                        clear_interval.clear()
+                    }
+                }, 1000);
+                break;
+            }
+        }
     }
 }]);

@@ -274,7 +274,10 @@
         </div>
         <div class="form-group">
             <div class="col-xs-2">店家回复</div>
-            <div class="col-xs-10">{{comments.reply}} <a href="javascript:void (0);" ng-click="delComments()" ng-if="comments.length != 0">删除</a></div>
+            <div class="col-xs-10">
+                {{comments.reply}}
+                <a href="javascript:void (0);" ng-click="delComments()" ng-if="comments.length != 0">删除</a>
+            </div>
         </div>
     </div>
     <hr ng-if="comments.length != 0"/>
@@ -315,26 +318,14 @@
                         <span>{{obj.value}}</span>
                         <span class="pull-right">{{obj.time}}</span>
                     </p>
-                    <div class="exce-info" ng-if="obj.code == 'user_unconfirm_received'">
-                        <p>剩余确认时间</p>
-                        <p>{{obj.content}}</p>
-                    </div>
-                    <p class="exce-info" ng-if="obj.code == 'supplier_unconfirm_received'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'supplier_unconfirm_received'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'user_unconfirm_repair'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'user_unconfirm_exchange'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'supplier_unconfirm_retunrn_to_door'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'shipped'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'confirm'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'supplier_unsend'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'send'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'express'">{{obj.content}}</p>
-                    <p class="exce-info" ng-if="obj.code == 'unexpress'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code != 'shipped'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'shipped'">
+                        <a ui-sref="express({orderNo: params.order_no, waybillnumber: obj.number, type: 'sales'})">{{obj.content + '(' + obj.number + ')'}}</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-    <hr ng-if="sale_progress_platform.length != 0">
     <div class="exce-record" ng-if="sale_progress_platform.length != 0">
         <div class="form-group">
             <div class="col-xs-12 title">
@@ -344,30 +335,17 @@
             </div>
         </div>
         <div ng-if="isShowPlatform">
-            <div class="row list">
-                <div class="col-xs-2 stage">操作类型</div>
+            <div class="row list" ng-repeat="obj in sale_progress_platform">
+                <div class="col-xs-2 stage">{{obj.type}}</div>
                 <div class="col-xs-4">
                     <p>
-                        <span ng-if="platformInfo.handle == 1">关闭订单退款</span>
-                        <span ng-if="platformInfo.handle == 2">关闭订单线下退款</span>
-                        <span ng-if="platformInfo.handle == 3">退货</span>
-                        <span ng-if="platformInfo.handle == 4">换货</span>
-                        <span ng-if="platformInfo.handle == 5">上门维修</span>
-                        <span ng-if="platformInfo.handle == 6">上门退货</span>
-                        <span ng-if="platformInfo.handle == 7">上门换货</span>
-                        <span class="pull-right">{{platformInfo.handle_time}}</span>
+                        <span>{{obj.value}}</span>
+                        <span class="pull-right">{{obj.time}}</span>
                     </p>
-                    <p class="exce-info">{{platformInfo.reasons}}</p>
-                </div>
-            </div>
-            <div class="row list">
-                <div class="col-xs-2 stage">退款结果</div>
-                <div class="col-xs-4">
-                    <p>
-                        <span>{{platformInfo.refund_result}}</span>
-                        <span class="pull-right">{{platformInfo.refund_time}}</span>
+                    <p class="exce-info" ng-if="obj.code != 'shipped'">{{obj.content}}</p>
+                    <p class="exce-info" ng-if="obj.code == 'shipped'">
+                        <a ui-sref="express({orderNo: params.order_no, waybillnumber: obj.number, type: 'sales'})">{{obj.content + '(' + obj.number + ')'}}</a>
                     </p>
-                    <p class="exce-info">{{platformInfo.refund_type}}</p>
                 </div>
             </div>
         </div>
@@ -393,11 +371,39 @@
         </div>
     </div>
     <div class="operation">
-        <button class="btn btn-primary">关闭订单</button>
+        <button class="btn btn-primary" ng-if="is_close_order" ng-click="close_order()">关闭订单</button>
         <button class="btn btn-primary" ng-if="platformInter == 1" ng-click="confirmAction()">确认</button>
         <a class="btn btn-default" href="javascript: history.go(-1);">返回</a>
     </div>
 </form>
+
+
+<!-- 关闭订单模态框 -->
+<div id="closeOrderModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">关闭订单操作</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">关闭理由</label>
+                        <div class="col-xs-9">
+                            <textarea class="form-control" cols="30" rows="10" ng-model="close_order_params.reason"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary" ng-click="enter_close_order()">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 图片浏览模态框 -->
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-img" role="document">

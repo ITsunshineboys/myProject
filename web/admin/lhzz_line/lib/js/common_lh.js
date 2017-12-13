@@ -530,16 +530,28 @@ function _alert(title, info, fun) {
 /**
  * 秒转换为时分
  * @param time  // 秒数
+ * @param dataType // 时间类型  dataType = 'day' or dataType = 'time'
  */
-function secondToDate(time) {
+function secondToDate(time, dataType) {
+    let d = Math.floor(time / 3600 /24);
     let h = Math.floor(time / 3600 % 24);
     let m = Math.floor(time / 60 % 60);
     let s = Math.floor(time % 60);
+    if (d <10) {
+        d = '0' + d;
+    }
     if (h < 10) {
         h = '0' + h;
     }
     if (m < 10) {
         m = '0' + m;
     }
-    return h + '时' + m + '分';
+    if (s < 10) {
+        s = '0' + s;
+    }
+    if (dataType == 'day') {
+        return d + '天' + h + '时' + m + '分' + s + '秒';
+    } else {
+        return h + '时' + m + '分';
+    }
 }
