@@ -3,40 +3,38 @@
     <div class="detail">
     <div class="row">
         <p class="col-md-2">工种名称</p>
-        <p class="col-md-10">{{cur_worker.worker_kind}}</p>
+        <p class="col-md-10">{{basic_data.worker_kind}}</p>
     </div>
     <div class="row">
         <p class="col-md-2">所在区域</p>
-        <p class="col-md-10">{{province_name}}-{{city_name}}</p>
+        <p class="col-md-10">{{basic_data.location}}</p>
     </div>
     </div>
     <div class="choose_item">
     <div class="row">
         <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>每日费用</p>
         <p class="col-md-2 enter">
-            <input class="form-control" name="daily_cost" ng-model="ctrlScope.daily_cost" type="text" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="change=!!edit_worker.daily_cost.$error"
+            <input class="form-control" name="daily_cost" ng-model="basic_data.univalence" type="text" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="change=!!edit_worker.daily_cost.$error"
                 required   ng-class="{'error':(edit_worker.daily_cost.$invalid&&submitted) || ((edit_worker.daily_cost.$error.required || edit_worker.daily_cost.$error.pattern)&&change)}">
         </p>
-        <p class="col-md-1 text-left">元/天</p>
+        <p class="col-md-1 text-left">{{basic_data.unit}}</p>
         <p class="col-md-7">*>0的数字，精确到小数点后两位</p>
     </div>
-    <div class="row" ng-repeat="item in other_items">
+    <div class="row" ng-repeat="item in other_data">
         <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item.worker_kind_details}}</p>
         <p class="col-md-2 enter">
-            <input class="form-control" name="{{item.name}}" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="item.flag = !!edit_worker[item.name].$error" required
-                   ng-class="{'error':(edit_worker[item.name].$invalid&&submitted) || ((edit_worker[item.name].$error.required || edit_worker[item.name].$error.pattern)&&item.flag)}"
+            <input class="form-control" name="item{{$index}}" ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/" ng-blur="item.flag = !!edit_worker['item'+$index].$error" required
+                   ng-class="{'error':(edit_worker['item'+$index].$invalid&&submitted) || ((edit_worker['item'+$index].$error.required || edit_worker['item'+$index].$error.pattern)&&item.flag)}"
                    ng-model="item.quantity" type="text">
         </p>
-        <p class="col-md-1 text-left" ng-if="item.worker_kind_details.indexOf('长度')!=-1">m/天</p>
-        <p class="col-md-1 text-left" ng-if="item.worker_kind_details.indexOf('面积')!=-1">m<sup>2</sup>/天</p>
-        <p class="col-md-1 text-left" ng-if="item.worker_kind_details.indexOf('长度')==-1&&item.worker_kind_details.indexOf('面积')==-1">个/天</p>
+        <p class="col-md-1 text-left">{{item.unit}}</p>
         <p class="col-md-7" ng-if="item.worker_kind_details.indexOf('长度')==-1&&item.worker_kind_details.indexOf('面积')==-1">*>0的整数数字</p>
         <p class="col-md-7" ng-if="item.worker_kind_details.indexOf('长度')!=-1||item.worker_kind_details.indexOf('面积')!=-1">*>0的数字，精确到小数点后两位</p>
     </div>
     </div>
     <div class="from-group submit">
-        <button class="btn btn-primary" type="button" ng-click="get_worker_tips(edit_worker.$valid,edit_worker.$error)">确认</button>
-        <button type="button" class="btn btn-default" ng-click="returnWorkerList()">返回</button>
+        <button class="btn btn-primary" type="button" ng-click="saveWorkerPrice(edit_worker.$valid)">确认</button>
+        <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
     </div>
     </form>
 </div>
