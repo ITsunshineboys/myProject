@@ -1,36 +1,31 @@
 <div class="search form-inline clearfix">
-    <div class="col-md-5">
-        <select class="form-control" ng-model="params.time_type">
-            <option value="all">全部时间</option>
-            <option value="today">今天</option>
-            <option value="week">本周</option>
-            <option value="month">本月</option>
-            <option value="year">本年</option>
-            <option value="custom">自定义</option>
-        </select>
-        <input id="startTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="开始时间"
-               ngc-lay-date ng-model="params.start_time" max-date="{{params.end_time}}">
-        <input id="endTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="结束时间"
-               ngc-lay-date ng-model="params.end_time" min-date="{{params.start_time}}">
+    <select class="form-control" ng-model="params.time_type">
+        <option value="all">全部时间</option>
+        <option value="today">今天</option>
+        <option value="week">本周</option>
+        <option value="month">本月</option>
+        <option value="year">本年</option>
+        <option value="custom">自定义</option>
+    </select>
+    <input id="startTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="开始时间"
+           ngc-lay-date ng-model="params.start_time" max-date="{{params.end_time}}">
+    <input id="endTime" ng-if="params.time_type == 'custom'" class="form-control" type="text" placeholder="结束时间"
+           ngc-lay-date ng-model="params.end_time" min-date="{{params.start_time}}">
 
-    </div>
+    <!--<div class="col-md-2">-->
+    <!--<span class="btn-group-span">店铺类型</span>-->
+    <!--<select name="" class="form-control" ng-options="item.id as item.storetype for item in storetype_arr"-->
+    <!--ng-model="params.shop_type" ng-change="selectType(typeselect)">-->
 
-    <div class="col-md-2">
-        <span class="btn-group-span">店铺类型</span>
-        <select name="" class="form-control" ng-options="item.id as item.storetype for item in storetype_arr"
-                ng-model="params.shop_type" ng-change="selectType(typeselect)">
+    <!--</select>-->
+    <!--</div>-->
 
-        </select>
-    </div>
-
-    <div class="col-md-5">
-        <div class="form-group pull-right">
-            <div class="input-group">
-                <input class="form-control" type="text" ng-model="keyword" placeholder="搜索商家编号或名称">
-                <span class="iconfont icon-search"></span>
-            </div>
-            <button class="btn btn-default" ng-click="searchStore()">查询</button>
+    <div class="form-group pull-right">
+        <div class="input-group">
+            <input class="form-control" type="text" ng-model="keyword" placeholder="搜索魔方号、手机号或店铺名称查询">
+            <span class="iconfont icon-search"></span>
         </div>
+        <button class="btn btn-default" ng-click="search()">查询</button>
     </div>
 </div>
 
@@ -39,7 +34,14 @@
     <thead>
     <tr>
         <th>绑定手机</th>
-        <th>申请时间</th>
+        <th ng-click="sortTime()">
+            申请时间
+            <span class="sort">
+                    <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
+                </span>
+
+        </th>
         <th>店铺名称</th>
         <th>店铺类型</th>
         <th>所属类目</th>
@@ -48,14 +50,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+    <tr ng-repeat="item in listdata">
+        <td ng-bind="item.mobile"></td>
+        <td ng-bind="item.review_apply_time"></td>
+        <td ng-bind="item.shop_name"></td>
+        <td ng-bind="item.type_shop"></td>
+        <td ng-bind="item.category"></td>
+        <td ng-bind="item.review_status==0?'待审核':item.review_status==1?'审核不通过':'审核通过'"></td>
         <td ui-sref="verify_detail">查看</td>
     </tr>
     </tbody>
 </table>
+<tm-pagination conf="pageConfig"></tm-pagination>
