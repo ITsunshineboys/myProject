@@ -1492,7 +1492,8 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'shipped',
             'status'=>''
         ];
-            $time=15*24*60*60+$buyer_express->create_time-time();
+//            $time=15*24*60*60+$buyer_express->create_time-time();
+            $time=2*60+$buyer_express->create_time-time();
             $tran = Yii::$app->db->beginTransaction();
             try{
                 if ($time<0){
