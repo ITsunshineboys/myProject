@@ -1,4 +1,4 @@
-var app = angular.module("app", ["ng.ueditor", "ui.router","onsaleeditModule", "offsaleeditModule",
+var app = angular.module("app", ["ng.ueditor", "ui.router", "onsaleeditModule", "offsaleeditModule",
     "addclassModule", 'brand_details_module', 'account_comment', 'change_num', 'bind_record', 'operation_record',
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
@@ -110,9 +110,9 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             params: {style_item: '', page: ''}
         })
         .state("new_brand_class", {          /*新品牌/分类管理*/
-          abstract: true,
-          url: "/new_brand_class",
-          templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_class_tab.html"
+            abstract: true,
+            url: "/new_brand_class",
+            templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_class_tab.html"
         })
       .state("new_brand_class.new_brand", {          /*新品牌管理*/
         url: "/new_brand",
@@ -294,7 +294,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
 
         .state("onsale_edit", {
-            params: {item:null},
+            params: {item: null},
             url: "/onsale_edit",
             templateUrl: "pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
         })
@@ -307,7 +307,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("add_class", {
             url: "/add_class",
             templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html",
-            css:"pages/mall_manage/class_manage/add_class/css/add_class.css"
+            css: "pages/mall_manage/class_manage/add_class/css/add_class.css"
         })
 
         .state("merchant_index", {  //商城管理首页
@@ -368,7 +368,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
 
         .state('commodity_detail', { // 商品详情
-            params:{id:null,storeid: null},
+            params: {id: null, storeid: null},
             url: '/commodity_detail',
             templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail.html',
             css: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail.css',
@@ -380,26 +380,61 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/mall_manage/style_manage/edit_attribute/edit_attribute.html"
         })
 
-        .state('account',{ //账户管理
+        .state('account', { //账户管理
+            abstract: true,
+            url: '/account_mag',
+            templateUrl: 'pages/account_manage/account_mag/account.html',
+            controller: 'account'
+        })
+
+        .state('account.normal', { //正常
+            url: '/account_normal',
+            templateUrl: 'pages/account_manage/account_mag/account_normal.html',
+            css: 'pages/account_manage/account_mag/css/account.css',
+            controller: 'account_normal'
+        })
+
+        .state('account.closed', { //关闭
+            url: '/account_closed',
+            templateUrl: 'pages/account_manage/account_mag/account_closed.html',
+            css: 'pages/account_manage/account_mag/css/account.css',
+            controller: 'account_closed'
+        })
+
+        .state('settle_verify',{ //商家入驻审核
             abstract:true,
-            url:'/account_mag',
-            templateUrl:'pages/account_manage/account_mag/account.html',
-            controller:'account'
+            url:'/settle_verify',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify.html',
+            controller:'settle_verify'
         })
 
-        .state('account.normal',{ //正常
-            url:'/account_normal',
-            templateUrl:'pages/account_manage/account_mag/account_normal.html',
-            css: 'pages/account_manage/account_mag/css/account.css',
-            controller:'account_normal'
+        .state('settle_verify.wait',{ //商家入驻审核--等待
+            url:'/settle_verify_wait',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify_wait.html',
+            css:'pages/mall_manage/merchant_settle/css/settle_verify.css',
+            controller:'settle_verify_wait'
         })
 
-        .state('account.closed',{ //关闭
-            url:'/account_closed',
-            templateUrl:'pages/account_manage/account_mag/account_closed.html',
-            css: 'pages/account_manage/account_mag/css/account.css',
-            controller:'account_closed'
+        .state('settle_verify.pass',{ //商家入驻审核 -- 通过
+            url:'/settle_verify_pass',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify_pass.html',
+            controller:'settle_verify_pass'
         })
+
+        .state('settle_verify.fail',{ //商家入驻审核 -- 未通过
+            url:'/settle_verify_fail',
+            templateUrl:'pages/mall_manage/merchant_settle/settle_verify_fail.html',
+            controller:'settle_verify_fail'
+        })
+
+        .state('verify_detail',{ //商家入驻审核 -- 详情
+            url:'/verify_detail',
+            templateUrl:'pages/mall_manage/merchant_settle/verify_detail.html',
+            controller:'verify_detail'
+        })
+
+
+
         /*芳子-------------------------------------end*/
 
         //========================张放====================================
@@ -515,31 +550,19 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/goods_manage.css'
         })
         //样板间申请
-        // .state('apply_case', {
-        //     url: '/apply_case/',
-        //     templateUrl: 'pages/apply_case/index.html'
-        // })
-        // .state('apply_case.index', {//样板间申请主页
-        //     url: 'index',
-        //     templateUrl: 'pages/apply_case/apply_case_index.html',
-        //     css: 'pages/apply_case/css/apply_case_index.css'
-        // })
-        // .state('apply_case.case_detail', {//样板间申请详情
-        //     url: 'case_detail',
-        //     templateUrl: 'pages/apply_case/case_detail.html',
-        //     css: 'pages/apply_case/css/case_detail.css'
-        // })
-        .state('apply_case_index',{//装修申请
-            url:'/apply_case_index',
-            templateUrl:'pages/apply_case/apply_case_index.html',
-            css: 'pages/apply_case/css/apply_case_index.css',
-            controller:'apply_case_ctrl'
+        .state('apply_case', {
+            url: '/apply_case/',
+            templateUrl: 'pages/apply_case/index.html'
         })
-        .state('case_detail',{//申请详情
-            url:'/case_detail?id',
-            templateUrl:'pages/apply_case/case_detail.html',
-            css: 'pages/apply_case/css/case_detail.css',
-            controller:'case_detail_ctrl'
+        .state('apply_case.index', {//样板间申请主页
+            url: 'index',
+            templateUrl: 'pages/apply_case/apply_case_index.html',
+            css: 'pages/apply_case/css/apply_case_index.css'
+        })
+        .state('apply_case.case_detail', {//样板间申请详情
+            url: 'case_detail',
+            templateUrl: 'pages/apply_case/case_detail.html',
+            css: 'pages/apply_case/css/case_detail.css'
         })
         //分销
         .state('distribution', {
@@ -720,6 +743,18 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'order_cancel'
         })
+        .state('order.after_sales', {   // 售后订单
+            url: '/after-sales',
+            templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/after_sales.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+            controller: 'after_sales'
+        })
+        .state('sales_details', {   // 售后详情
+            url: '/sales-details?orderNo&sku&type',
+            templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/sales_details.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
+            controller: 'sales_details'
+        })
         .state('comments_del', {  // 删除评论列表
             url: '/order/comments?id',
             templateUrl: 'pages/mall_manage/merchant_manage/order_manage/comments_del/comments_del.html',
@@ -768,19 +803,17 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'storeDataCtrl'
         })
+        .state('offline_shop', {    // 线下体验店
+            abstract: true,
+            url: '/offline-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/offline_shop.html'
+        })
+        .state('offline_shop.shop', {   // 体验店
+            url: '/offline-shop/experience-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/experience_shop.html'
+        })
     /*=============== 廖欢 end ===============*/
 })
-// .run(function ($rootScope,$state,$stateParams) {
-//     $rootScope.$state = $state;
-//     $rootScope.$stateParams = $stateParams;
-//     $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
-//         $rootScope.previousState_name = fromState.name;
-//         $rootScope.previousState_params = fromParams;
-//     });
-//     $rootScope.back = function() {//实现返回的函数
-//         $state.go($rootScope.previousState_name,$rootScope.previousState_params);
-//     };
-// })
     .directive('wdatePicker', function () {
         return {
             restrict: "A",
@@ -800,10 +833,10 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     })
     .run(["$rootScope", "$state", function ($rootScope, $state) {
         $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
-            document.body.scrollTop = document.documentElement.scrollTop = 0
-            $rootScope.fromState_name = fromState.name
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            $rootScope.fromState_name = fromState.name;
             $rootScope.curState_name = toState.name
-        })
+        });
         $rootScope.goPrev = function () {
             $state.go($rootScope.fromState_name)
         }
