@@ -781,6 +781,18 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'order_cancel'
         })
+        .state('order.after_sales', {   // 售后订单
+            url: '/after-sales',
+            templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/after_sales.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+            controller: 'after_sales'
+        })
+        .state('sales_details', {   // 售后详情
+            url: '/sales-details?orderNo&sku&type',
+            templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/sales_details.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
+            controller: 'sales_details'
+        })
         .state('comments_del', {  // 删除评论列表
             url: '/order/comments?id',
             templateUrl: 'pages/mall_manage/merchant_manage/order_manage/comments_del/comments_del.html',
@@ -794,7 +806,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'order_details'
         })
         .state('express', {   // 物流详情
-            url: '/order/express?orderNo&sku',
+            url: '/order/express?orderNo&sku&waybillnumber&type',
             templateUrl: 'pages/mall_manage/merchant_manage/order_manage/express/order_express.html',
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
             controller: 'express'
@@ -829,19 +841,17 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'storeDataCtrl'
         })
+        .state('offline_shop', {    // 线下体验店
+            abstract: true,
+            url: '/offline-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/offline_shop.html'
+        })
+        .state('offline_shop.shop', {   // 体验店
+            url: '/offline-shop/experience-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/experience_shop.html'
+        })
     /*=============== 廖欢 end ===============*/
 })
-// .run(function ($rootScope,$state,$stateParams) {
-//     $rootScope.$state = $state;
-//     $rootScope.$stateParams = $stateParams;
-//     $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
-//         $rootScope.previousState_name = fromState.name;
-//         $rootScope.previousState_params = fromParams;
-//     });
-//     $rootScope.back = function() {//实现返回的函数
-//         $state.go($rootScope.previousState_name,$rootScope.previousState_params);
-//     };
-// })
     .directive('wdatePicker', function () {
         return {
             restrict: "A",
@@ -861,10 +871,10 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
     })
     .run(["$rootScope", "$state", function ($rootScope, $state) {
         $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
-            document.body.scrollTop = document.documentElement.scrollTop = 0
-            $rootScope.fromState_name = fromState.name
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            $rootScope.fromState_name = fromState.name;
             $rootScope.curState_name = toState.name
-        })
+        });
         $rootScope.goPrev = function () {
             $state.go($rootScope.fromState_name)
         }
