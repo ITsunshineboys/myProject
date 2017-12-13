@@ -2108,8 +2108,8 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = EngineeringStandardCarpentryCraft::findOne(['id'=>3]);
-        $a->title = '石膏板抓取规格';
+        $a = EngineeringStandardCarpentryCraft::findOne(['id'=>4]);
+        $a->title = '细木工板抓取长度';
         $a->save();
         var_dump($a);exit;
 
