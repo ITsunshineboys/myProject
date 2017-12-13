@@ -1491,15 +1491,16 @@ class QuoteController extends Controller
     }
 
     /**
-     * Decoration list
+     * 材料添加项 列表
      * @return string
      */
     public function actionDecorationList()
     {
-        $page = (int)\Yii::$app->request->get('page', 1);
-        $size = (int)\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT);
-        $where  = [];
-        $select = [];
+        $page = (int)trim(\Yii::$app->request->get('page', 1));
+        $size = (int)trim(\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT));
+        $city = (int)trim(\Yii::$app->request->get('city', DecorationAdd::PAGE_SIZE_DEFAULT));
+        $where  = 'city_code = '.$city;
+        $select = 'three_materials,add_time,correlation_message';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
         return Json::encode([
             'code' => 200,
