@@ -71,7 +71,11 @@ class OrderAfterSale extends ActiveRecord
             ->select('user_id,pay_status')
             ->where(['order_no'=>$postData['order_no']])
             ->one();
-       var_dump($GoodsOrder);die;
+        if (!$GoodsOrder)
+        {
+            $code=1000;
+            return $code;
+        }
         if ($GoodsOrder->user_id!=$user->id){
             $code=1034;
             return $code;
