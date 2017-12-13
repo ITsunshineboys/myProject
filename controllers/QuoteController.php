@@ -37,6 +37,7 @@ use app\models\WorksWorkerData;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
+use function GuzzleHttp\Psr7\try_fopen;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -1130,14 +1131,17 @@ class QuoteController extends Controller
     }
 
     /**
-     * assort goods list
+     * 案例/社区商品配套管理 列表
      * @return string
      */
     public function actionAssortGoodsList()
     {
+        $city = (int)trim(\Yii::$app->request->get('city',''));
+        $where = 'city_code='.$city;
         $goods_list = AssortGoods::find()
             ->select(['title','category_id as id','pid','path'])
             ->where(['state'=>0])
+            ->andWhere($where)
             ->asArray()
             ->all();
         $goods_classify = GoodsCategory::find()
@@ -1154,23 +1158,35 @@ class QuoteController extends Controller
     }
 
     /**
-     * add assort goods administration
+     * 案例/社区商品配套管理 添加
      * @return string
      */
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-        (new AssortGoods())->deleteAll(['state'=>0]);
-        foreach($post['assort'] as $management) {
-            $add = AssortGoods::add($management);
+        $tr = \Yii::$app->db->beginTransaction();
+        try {
+            $del = (new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
+            if (!$del){
+                $tr->rollBack();
+                return 500;
+            }
+
+            foreach($post['assort'] as $management) {
+                $add = AssortGoods::add($management,$post['city']);
+            }
+
+            if (!$add){
+                $tr->rollBack();
+                return 500;
+            }
+            $tr->commit();
+        } catch (\Exception $e) {
+            //回滚
+            $tr->rollBack();
         }
-        if (!$add){
-            $code = 1000;
-            return Json::encode([
-               'code'=> $code,
-               'msg'=> \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
+
         return Json::encode([
            'code' => 200,
            'msg' => 'ok',

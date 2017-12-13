@@ -27,7 +27,7 @@ class AssortGoods extends ActiveRecord
      * @param $post
      * @return int
      */
-    public static function add($add)
+    public static function add($add,$city)
     {
         $db= \Yii::$app->db;
         $res = $db
@@ -39,6 +39,7 @@ class AssortGoods extends ActiveRecord
                 'path'=>$add['path'],
                 'state'=>0,
                 'quantity'=>0,
+                'city_code'=>$city,
             ])
             ->execute();
         return $res;
