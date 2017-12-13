@@ -407,25 +407,49 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'account_user_list_closed'
         })
 
-        // .state('user_verify', { //账户管理 - 用户审核
-        //     abstract: true,
-        //     url: '/user_verify',
-        //     templateUrl: 'pages/account_manage/user_verify/user_verify.html',
-        //     controller: 'user_verify'
-        // })
-        //
-        // .state('user_verify.wait', { // 用户审核 - 等待
-        //     url: '/settle_verify',
-        //     templateUrl: 'pages/mall_manage/merchant_settle/settle_verify.html',
-        //     controller: 'settle_verify'
-        // })
-        //
-        // .state('settle_verify.wait', { //商家入驻审核--等待
-        //     url: '/settle_verify_wait',
-        //     templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_wait.html',
-        //     css: 'pages/mall_manage/merchant_settle/css/settle_verify.css',
-        //     controller: 'settle_verify_wait'
-        // })
+        .state('account_user_verify', { //账户管理 - 用户审核
+            abstract: true,
+            url: '/account_user_verify',
+            templateUrl: 'pages/account_manage/user_verify/user_verify.html',
+            controller: 'account_user_verify'
+        })
+
+        .state('account_user_verify.wait', { // 用户审核 - 等待
+            url: '/account_user_verify_wait',
+            templateUrl: 'pages/account_manage/user_verify/user_verify_wait.html',
+            controller: 'account_user_verify_wait'
+        })
+
+        .state('account_user_verify.pass', { // 用户审核 - 通过
+            url: '/account_user_verify_pass',
+            templateUrl: 'pages/account_manage/user_verify/user_verify_pass.html',
+            controller: 'account_user_verify_pass'
+        })
+
+        .state('account_user_verify.fail', { // 用户审核 - 未通过
+            url: '/account_user_verify_fail',
+            templateUrl: 'pages/account_manage/user_verify/user_verify_fail.html',
+            controller: 'account_user_verify_fail'
+        })
+
+        .state('user_verify_detail', { // 用户审核 - 详情
+            url: '/user_verify_detail?id',
+            templateUrl: 'pages/account_manage/user_verify/user_verify_detail.html',
+            css: 'pages/account_manage/user_verify/css/user_verify_detail.css',
+            controller: 'user_verify_detail'
+        })
+
+        .state('settle_verify', { //商家入驻审核
+            url: '/settle_verify',
+            templateUrl: 'pages/mall_manage/merchant_settle/settle_verify.html',
+            controller: 'settle_verify'
+        })
+
+        .state('settle_verify.wait', { //商家入驻审核 -- 等待
+            url: '/settle_verify_wait',
+            templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_wait.html',
+            controller: 'settle_verify_wait'
+        })
 
         .state('settle_verify.pass', { //商家入驻审核 -- 通过
             url: '/settle_verify_pass',

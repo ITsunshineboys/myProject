@@ -1,0 +1,105 @@
+ <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <span class="col-md-2 control-label">名称</span>
+            <div class="col-md-10 form-control-static" >
+                <span ng-bind="detail.nickname"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">身份证号</span>
+            <div class="col-md-10 form-control-static">
+             <span ng-bind=""></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">身份证正面</span>
+            <div class="col-md-10 form-control-static">
+                <img ng-src="{{detail.identity_card_front_image}}" alt="身份证正面">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">身份证反面</span>
+            <div class="col-md-10 form-control-static">
+                <img ng-src="{{detail.identity_card_back_image}}" alt="身份证反面">
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">绑定手机</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="detail.mobile"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">魔方号</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="detail.aite_cube_no"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">申请时间</span>
+            <div class="col-md-10 form-control-static">
+                <span ng-bind="detail.review_apply_time"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核状态</span>
+            <div class="col-md-2 form-control-static">
+                <select class="form-control" ng-model="params.status">
+                    <option value="2">通过</option>
+                    <option value="1">不通过</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核备注</span>
+            <div class="col-md-8 form-control-static">
+                <textarea class="form-control" rows="5" placeholder="请输入操作理由"></textarea>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核状态</span>
+            <div class="col-md-10 form-control-static">
+                <span>不通过</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核备注</span>
+            <div class="col-md-10 form-control-static">
+                <span>45455</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">审核时间</span>
+            <div class="col-md-10 form-control-static">
+                <span>45455</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">操作人</span>
+            <div class="col-md-10 form-control-static">
+                <span>45455</span>
+            </div>
+        </div>
+
+
+        <div class="btns">
+            <button class="btn btn-primary">确认</button>
+            <button class="btn btn-default">返回</button>
+        </div>
+
+    </form>

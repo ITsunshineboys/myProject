@@ -37,8 +37,6 @@
     </dl>
 
     <dl>
-        <!--<dt ui-sref="account_user_list.normal" ng-class="{on:other_flag=='account_user_list.normal'}" ng-click="other_display('account_user_list.normal')"><i class="iconfont icon-zhanghuguanli i_width"></i>账户管理</dt>-->
-
         <dt ng-click="account_click()" ng-class="{on:account_flag}"><i class="iconfont icon-zhanghuguanli i_width"></i>账户管理</dt>
         <dd ng-repeat="item in account_obj" ng-click="account_repeat(item)" ng-class="{true:'show',false:'hide'}[account_flag]"><a ng-class="{dd_on: account_active == item.id}" ng-bind="item.name"></a></dd>
     </dl>
@@ -171,6 +169,7 @@
 <script src="pages/account_manage/user_verify/js/user_verify_wait.js"></script>                                             <!--等待审核-->
 <script src="pages/account_manage/user_verify/js/user_verify_pass.js"></script>                                             <!--审核通过-->
 <script src="pages/account_manage/user_verify/js/user_verify_fail.js"></script>                                             <!--审核失败-->
+<script src="pages/account_manage/user_verify/js/user_verify_detail.js"></script>                                           <!--用户审核详情-->
 
 <script src="pages/mall_manage/merchant_settle/js/settle_verify.js"></script>                                   <!--商家入驻审核-->
 <script src="pages/mall_manage/merchant_settle/js/settle_verify_wait.js"></script>                              <!--等待审核-->

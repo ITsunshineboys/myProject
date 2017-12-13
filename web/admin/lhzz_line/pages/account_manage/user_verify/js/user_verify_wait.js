@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2017/12/13/013.
  */
-app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$stateParams','_ajax', function ($rootScope, $scope, $state, $stateParams, _ajax) {
+app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$stateParams', '_ajax', function ($rootScope, $scope, $state, $stateParams, _ajax) {
     /*请求参数*/
     $scope.params = {
         time_type: 'all',               // 时间类型
@@ -10,7 +10,7 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
         page: 1,                        // 当前页数
         keyword: '',                    // 关键字查询
         status: 0,                      // 审核状态
-        sort: 2                         //排序规则 默认按申请时间降序排列
+        sort: 2                         //排序规则 默认按审核时间降序排列
     }
 
     /*分页配置*/
@@ -35,7 +35,7 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
             $scope.keyword = '';                // 关键字查询
             $scope.params.start_time = '';     // 自定义开始时间
             $scope.params.end_time = '';       // 自定义结束时间
-            $scope.params.sort = 2;            //申请时间排序
+            $scope.params.sort = 2;            //审核时间排序
             $scope.pageConfig.currentPage = 1;
             tableList();
         }
@@ -49,7 +49,7 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
         }
         if ($scope.params.end_time != '') {
             $scope.keyword = '';        // 关键字查询
-            $scope.params.sort = 2;     //申请时间排序
+            $scope.params.sort = 2;     //审核时间排序
             $scope.pageConfig.currentPage = 1;
             tableList();
         }
@@ -62,7 +62,7 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
         }
         if ($scope.params.start_time != '') {
             $scope.keyword = '';        // 关键字查询
-            $scope.params.sort = 2;     //申请时间排序
+            $scope.params.sort = 2;     //审核时间排序
             $scope.pageConfig.currentPage = 1;
             tableList();
         }
@@ -73,12 +73,12 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
         $scope.params.time_type = 'all';   // 时间类型
         $scope.params.start_time = '';     // 自定义开始时间
         $scope.params.end_time = '';       // 自定义结束时间
-        $scope.params.sort = 2;            //申请时间排序
+        $scope.params.sort = 2;            //审核时间排序
         $scope.pageConfig.currentPage = 1;
         tableList();
     };
 
-    // 申请时间排序
+    // 审核时间排序
     $scope.sortTime = function () {
         $scope.params.sort = $scope.params.sort == 2 ? 1 : 2;
         $scope.pageConfig.currentPage = 1;
@@ -95,5 +95,4 @@ app.controller('account_user_verify_wait', ['$rootScope', '$scope', '$state', '$
             $scope.listdata = res.data.list;
         })
     }
-
 }]);
