@@ -673,6 +673,10 @@ class User extends ActiveRecord implements IdentityInterface
         if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
             $code = self::setPaypassword_secend($postData, $user);
         }
+        if ($key=='forge_pay_password')
+        {
+            $code = self::setPaypassword_secend($postData, $user);
+        }
         return $code;
     }
 
@@ -771,7 +775,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @param $user
      * @return int
      */
-    private function setPaypassword_secend($postData, $user)
+    private static function setPaypassword_secend($postData, $user)
     {
         if (!array_key_exists('pay_pwd', $postData) || !array_key_exists('role_id', $postData)) {
             $code = 1000;
