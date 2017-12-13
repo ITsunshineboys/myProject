@@ -7,6 +7,7 @@ use app\models\LineSupplier;
 use app\models\LineSupplierGoods;
 use app\models\LogisticsDistrict;
 use app\models\Role;
+use app\models\User;
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
@@ -819,6 +820,7 @@ class SupplierController extends Controller
 
 
     /**
+     * 商家入驻列表
      * @return string
      */
     public  function  actionSupplierBeAuditedList()
@@ -881,12 +883,60 @@ class SupplierController extends Controller
         {
             $where.=' and  L.review_status='.$review_status;
         }
-        $select='L.review_apply_time,L.review_status,U.mobile,S.shop_name,S.type_shop,S.category_id';
+        $select='L.review_apply_time,L.review_status,U.mobile,S.shop_name,S.type_shop,S.category_id,S.id,S.shop_no,U.aite_cube_no,L.review_remark';
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
                 'list' => UserRole::paginationBySupplier($where,$select,  $page, $size,$orderBy)
+            ]
+        ]);
+    }
+
+
+    public  function  actionSupplierBeAuditedDetail()
+    {
+        $supplier_id=Yii::$app->request->get('supplier_id');
+        $Supplier=Supplier::findOne($supplier_id);
+        if (!$Supplier)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $category=GoodsCategory::GetCateGoryById($Supplier->category_id);
+        $user=User::findOne($Supplier->uid);
+        $user_role=UserRole::find()
+            ->where(['user_id'=>$user->id])
+            ->andWhere(['role_id'=>6])
+            ->one();
+        //0:旗舰店, 1:自营店, 2:专营店, 3:专卖店
+        switch ($Supplier->type_shop)
+        {
+            case  0:
+                $shop_type='旗舰店';
+                break;
+            case  1:
+                $shop_type='自营店';
+                break;
+            case  2:
+                $shop_type='专营店';
+                break;
+            case  3:
+                $shop_type='专卖店';
+                break;
+        }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'category' =>$category ,
+                'shop_name'=>$Supplier->shop_name,
+                'shop_type'=>$shop_type,
+                'name'=>$Supplier->name
             ]
         ]);
 
