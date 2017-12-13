@@ -4,7 +4,7 @@
 app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stateParams','$state','$location','$anchorScroll','$window','$rootScope', function (_ajax,$rootScope,$scope,$http,$stateParams,$state,$location,$anchorScroll,$window,$rootScope) {
     if($stateParams.storeid == null){
         $rootScope.crumbs = [{
-            name: '申请样板间',
+            name: '装修申请',
             icon: 'icon-yangbanjian',
             link: 'apply_case.index'
         }, {
@@ -35,11 +35,10 @@ app.controller('commodity_detail', ['_ajax','$rootScope','$scope','$http','$stat
         purchase_price_designer:$scope.purchase_price_designer
     }
 
-    // console.log($rootScope)
     $rootScope.fromState_name=='commodity.online'?  $scope.online_btn = true:$scope.online_btn = false;
     $rootScope.fromState_name=='commodity.offline'? $scope.offline_btn = true:$scope.offline_btn = false;
     $rootScope.fromState_name=='commodity.wait'?    $scope.wait_btn = true:$scope.wait_btn = false;
-    $rootScope.fromState_name=='commodity.deleted' || $rootScope.fromState_name=='apply_case.case_detail'? $scope.deleted_btn = true:$scope.deleted_btn = false;
+    $rootScope.fromState_name=='commodity.deleted' || $rootScope.fromState_name=='case_detail'? $scope.deleted_btn = true:$scope.deleted_btn = false;
 
 
 

@@ -403,7 +403,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state('settle_verify',{ //商家入驻审核
             abstract:true,
-            url:'/',
+            url:'/settle_verify',
             templateUrl:'pages/mall_manage/merchant_settle/settle_verify.html',
             controller:'settle_verify'
         })
@@ -411,6 +411,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state('settle_verify.wait',{ //商家入驻审核--等待
             url:'/settle_verify_wait',
             templateUrl:'pages/mall_manage/merchant_settle/settle_verify_wait.html',
+            css:'pages/mall_manage/merchant_settle/css/settle_verify.css',
             controller:'settle_verify_wait'
         })
 
@@ -425,6 +426,15 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl:'pages/mall_manage/merchant_settle/settle_verify_fail.html',
             controller:'settle_verify_fail'
         })
+
+        .state('verify_detail',{ //商家入驻审核 -- 详情
+            url:'/verify_detail',
+            templateUrl:'pages/mall_manage/merchant_settle/verify_detail.html',
+            controller:'verify_detail'
+        })
+
+
+
         /*芳子-------------------------------------end*/
 
         //========================张放====================================
