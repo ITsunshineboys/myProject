@@ -194,7 +194,6 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }else{
             $sort_id=0;
         }
-
         $province=District::findByCode($post['province_code'])->name;
         $city=District::findByCode($post['city_code'])->name;
         if(isset($post['district_code'])){
@@ -269,15 +268,13 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-            if($post['type']==1){
-                $name='';
-                $phone='';
-
-            }else{
+            if(isset($uid) && !isset($phone) && !isset($name)){
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
                 $phone=$user['mobile'];
-
+            }elseif(!isset($uid)){
+                $name=$post['name'];
+                $phone=$post['phone'];
             }
 
             $effect_earnest=new EffectEarnest();

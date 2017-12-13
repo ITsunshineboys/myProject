@@ -360,7 +360,20 @@ class EffectController extends Controller
         $user = Yii::$app->user->identity;
 
         $post=Yii::$app->request->post();
-        $code=EffectEarnest::appAddEffect($user->getId(),$post);
+        if(!isset($user) && $post['type']==1){
+            $code=1052;
+            return Json::encode([
+                'code' =>$code,
+                'msg' =>\Yii::$app->params['errorCodes'][$code]
+
+            ]);
+        }
+        if (!$user){
+            $uid='';
+        }else{
+            $uid=$user->getId();
+        }
+        $code=EffectEarnest::appAddEffect($uid,$post);
         if(!$code){
             $code=1000;
             return Json::encode([

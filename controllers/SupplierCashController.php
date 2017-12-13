@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 
+use app\models\EffectEarnest;
 use app\models\OwnerCashManager;
 
 use app\models\Supplier;
@@ -681,7 +682,7 @@ class SupplierCashController extends Controller
 //       $user->availableamount=99889865;
 //       $user->save(false);
 //       var_dump($user);die;
-      var_dump(UserCashregister::find()->where(['id'=>22])->one()->delete());
+      var_dump(EffectEarnest::find()->asArray()->where(['item'=>1])->all());
     }
 
 }
