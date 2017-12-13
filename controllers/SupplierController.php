@@ -6,6 +6,7 @@ use app\models\GoodsCategory;
 use app\models\LineSupplier;
 use app\models\LineSupplierGoods;
 use app\models\LogisticsDistrict;
+use app\models\Role;
 use app\services\ExceptionHandleService;
 use app\models\Supplier;
 use app\models\Goods;
@@ -817,8 +818,71 @@ class SupplierController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
+    public  function  actionSupplierBeAuditedList()
+    {
+        $request=\Yii::$app->request;
+        $code = 1000;
+        $timeType = trim(Yii::$app->request->get('time_type'));
+        !$timeType && $timeType = 'all';
+        if (!in_array($timeType, array_keys(Yii::$app->params['timeTypes']))) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
+        $where="U.role_id=".Yii::$app->params['supplierRoleId'];
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
 
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $endTime && $endTime .= ' 23:59:59';
+        } else {
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+        }
+
+        if ($startTime) {
+            $startTime = strtotime($startTime);
+            $startTime && $where .= " and U.review_apply_time >= {$startTime}";
+        }
+
+        if ($endTime) {
+            $endTime = strtotime($endTime);
+            $endTime && $where .= " and U.review_apply_time <= {$endTime}";
+        }
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+        $keyword=$request->get('keyword');
+        if ($keyword)
+        {
+                $where .=" and CONCAT(U.mobile,S.shop_no) like '%{$keyword}%'";
+        }
+        $sort = Yii::$app->request->get('sort', []);
+//        $model = new UserStatus;
+//        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        $shop_type=$request->get('shop_type',0);
+        $where.='';
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'list' => UserRole::paginationBySupplier($where, Supplier::PAGE_SIZE_DEFAULT, $page, $size)
+            ],
+        ]);
+
+    }
 
 
 
