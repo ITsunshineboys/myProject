@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<section>
+    <div class="tab clearfix">
+        <ul>
+            <li ui-sref-active="active" ui-sref=".wait">等待审核</li>
+            <li ui-sref-active="active" ui-sref=".pass">审核通过</li>
+            <li ui-sref-active="active" ui-sref=".fail">审核未通过</li>
+        </ul>
+    </div>
+    <div ui-view></div>
+</section>

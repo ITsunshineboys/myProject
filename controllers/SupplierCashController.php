@@ -9,6 +9,7 @@ use app\models\OwnerCashManager;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
+use app\models\UserAccessdetail;
 use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -676,10 +677,11 @@ class SupplierCashController extends Controller
 
     public function actionTest()
     {
-       $user=User::find()->where(['id'=>8])->one();
-       $user->availableamount=99889865;
-       $user->save(false);
-       var_dump($user);die;
+//       $user=User::find()->where(['id'=>8])->one();
+//       $user->availableamount=99889865;
+//       $user->save(false);
+//       var_dump($user);die;
+      var_dump(UserCashregister::find()->where(['id'=>22])->one()->delete());
     }
 
 }

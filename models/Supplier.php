@@ -52,6 +52,11 @@ class Supplier extends ActiveRecord
         self::STATUS_ONLINE => self::STATUS_DESC_ONLINE_ADMIN,
         self::STATUS_WAIT_REVIEW => self::STATUS_DESC_WAIT_REVIEW,
         self::STATUS_NOT_APPROVED => self::STATUS_DESC_NOT_APPROVED,
+
+
+
+
+
         self::STATUS_APPROVED => self::STATUS_DESC_ONLINE_APP,
     ];
     const STATUSES_ONLINE_OFFLINE = [

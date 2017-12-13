@@ -248,6 +248,7 @@ class OwnerCashManager extends ActiveRecord {
             ->where(['id' => $cash_id, 'role_id' => self::OWNER_ROLE])
             ->select(['cash_money', 'uid', 'status', 'transaction_no'])
             ->one();
+
         $code=1000;
         $cash_money = $owner_cash['cash_money'];
         $user_id = (int)$owner_cash['uid'];
@@ -267,10 +268,10 @@ class OwnerCashManager extends ActiveRecord {
             $real_money && $real_money *= 100;
             $real_money > $cash_money && $real_money = $cash_money;
         }
+
         $supplier_accessdetail = UserAccessdetail::find()
             ->where(['transaction_no' => $transaction_no, 'role_id' => self::OWNER_ROLE])
             ->one();
-
 
         if (!$supplier_accessdetail) {
             return $code;

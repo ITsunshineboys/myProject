@@ -16,6 +16,7 @@ class GoodsBrand extends ActiveRecord
 {
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const SCENARIO_NEWEDIT = 'new_edit';
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_TOGGLE_STATUS = 'toggle';
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
@@ -258,6 +259,7 @@ class GoodsBrand extends ActiveRecord
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON, self::SCENARIO_TOGGLE_STATUS]],
+            ['review_status', 'validateStatusEdit', 'on' => [self::SCENARIO_NEWEDIT,]],
         ];
     }
 
@@ -306,6 +308,7 @@ class GoodsBrand extends ActiveRecord
      */
     public function validateReviewStatusEdit($attribute)
     {
+        $this->refresh();
         if ($this->$attribute == self::REVIEW_STATUS_APPROVE) {
             return true;
         }
@@ -313,6 +316,23 @@ class GoodsBrand extends ActiveRecord
         $this->addError($attribute);
         return false;
     }
+
+
+    /**
+     * @param $attribute
+     * @return bool
+     */
+    public function validateStatusEdit($attribute)
+    {
+        $this->refresh();
+        if ($this->$attribute == self::REVIEW_STATUS_REJECT) {
+            return true;
+        }
+
+        $this->addError($attribute);
+        return false;
+    }
+
 
     /**
      * Could review only once
