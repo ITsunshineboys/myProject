@@ -272,9 +272,11 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
                 $phone=$user['mobile'];
+                $effect_earnest=0;
             }elseif(!isset($uid)){
                 $name=$post['name'];
                 $phone=$post['phone'];
+                $effect_earnest=8900;
             }
 
             $effect_earnest=new EffectEarnest();
@@ -282,7 +284,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest->effect_id=$id;
             $effect_earnest->phone=$phone;
             $effect_earnest->name=$name;
-            $effect_earnest->earnest =0;
+            $effect_earnest->earnest =$effect_earnest;
             $effect_earnest->transaction_no='';
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
