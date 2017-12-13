@@ -1332,6 +1332,21 @@ class Goods extends ActiveRecord
 
         GoodsStat::updateDailyViewedNumberAndIpNumberBySupplierId($this->supplier_id, $ip);
 
+        $lineSupplierGoods=LineSupplierGoods::find()->where(['goods_id'=>$this->id])->one();
+        if ($lineSupplierGoods)
+        {
+            $lineSupplier=LineSupplier::findOne($lineSupplierGoods->line_supplier_id);
+            $line_goods['is_offline_goods']='是';
+            $line_goods['line_district']=LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier->district_code).'-'.$lineSupplier->address;
+            $line_goods['line_mobile']=$lineSupplier->mobile;
+            $line_goods['line_supplier_name']=Supplier::findOne($lineSupplier->supplier_id)->shop_name;
+        }else
+        {
+            $line_goods['is_offline_goods']='否';
+            $line_goods['line_district']='';
+            $line_goods['line_mobile']='';
+            $line_goods['line_supplier_name']='';
+        }
         return [
             'status' => $this->status,
             'title' => $this->title,
@@ -1362,6 +1377,7 @@ class Goods extends ActiveRecord
                 'total' => GoodsComment::find()->where(['goods_id' => $this->id])->count(),
                 'latest' => $goodsComment ? $goodsComment : new \stdClass,
             ],
+            'line_goods'=>$line_goods
         ];
     }
 

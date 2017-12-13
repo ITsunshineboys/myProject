@@ -3857,8 +3857,8 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
         $data = $goods->view(Yii::$app->request->userIP);
+
 //        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
         return Json::encode([
             'code' => 200,
