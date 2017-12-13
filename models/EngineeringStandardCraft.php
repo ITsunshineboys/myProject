@@ -18,7 +18,7 @@ class EngineeringStandardCraft  extends ActiveRecord
       1 => 'm/点位',
       2 => 'kg/m²',
       3 => 'm',
-      4 => 'l/m²',
+      4 => 'L/m²',
       5 => 'm/m',
       6 => '元/m²',
       7 => '张',
