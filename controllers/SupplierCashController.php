@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 
+use app\models\ChatRecord;
 use app\models\EffectEarnest;
 use app\models\OwnerCashManager;
 
@@ -682,7 +683,7 @@ class SupplierCashController extends Controller
 //       $user->availableamount=99889865;
 //       $user->save(false);
 //       var_dump($user);die;
-      var_dump(EffectEarnest::find()->asArray()->where(['item'=>1])->all());
+      var_dump(ChatRecord::find()->asArray()->all());
     }
 
 }
