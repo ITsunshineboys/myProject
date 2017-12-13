@@ -1527,6 +1527,8 @@ class SupplieraccountController extends  Controller{
             'data'=>$data
         ]);
     }
+
+
     public function actionOwnerDoAudit(){
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -1537,7 +1539,30 @@ class SupplieraccountController extends  Controller{
             ]);
         }
         $code=1000;
-        $status=(int)Yii::$app->request->get('status','');
+        $status=(int)Yii::$app->request->post('status','');
+        $id=(int)Yii::$app->request->post('id','');
+        $review_remark=trim(Yii::$app->request->post('remark'));
+        if(!$id){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user_audit=UserRole::find()->where(['id'=>$id])->one();
+        $user_audit->review_status=$status;
+        $user_audit->review_time=time();
+        $user_audit->review_remark=$review_remark;
+        if(!$user_audit->save(false)){
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+        ]);
     }
 
 
