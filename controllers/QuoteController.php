@@ -315,7 +315,7 @@ class QuoteController extends Controller
         foreach ($post['value'] as $one_post){
             if (!isset($one_post['id'])){
                 $value = new EngineeringStandardCraft();
-                $value->district_code   = $post['district_code'];
+                $value->city_code   = $post['district_code'];
                 $value->project         = $post['project'];
                 $value->project_details = $one_post['name'];
                 $value->material        = $one_post['value'] * 100;

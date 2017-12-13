@@ -18,10 +18,10 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
     ];
 
     const UNIT = [
-        1 => '长度',
-        2 => '宽度',
-        3 => '根',
-        4 => '张',
+        1 => 'm',
+//        2 => '宽度',
+//        3 => '根',
+//        4 => '张',
     ];
 
     /**
