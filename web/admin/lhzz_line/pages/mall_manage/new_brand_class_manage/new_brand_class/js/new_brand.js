@@ -1,5 +1,12 @@
 angular.module("new_brand_module",[])
   .controller("new_brand_ctrl",function ($rootScope,$scope,$http,_ajax) {
+    $rootScope.crumbs = [{
+      name: '商城管理',
+      icon: 'icon-shangchengguanli',
+      link: $rootScope.mall_click
+    }, {
+      name: '新品牌/新分类审核'
+    }];
     $scope.Config = {
       showJump: true,
       itemsPerPage: 12,
