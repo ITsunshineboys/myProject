@@ -673,7 +673,7 @@ class User extends ActiveRecord implements IdentityInterface
         if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
             $code = self::setPaypassword_secend($postData, $user);
         }
-        if ($key=='forge_pay_password')
+        if ($key=='forget_pay_password')
         {
             $code = self::setPaypassword_secend($postData, $user);
         }
