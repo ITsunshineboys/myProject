@@ -358,13 +358,7 @@ class EffectController extends Controller
      */
     public function actionAppApplyEffect(){
         $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+
         $post=Yii::$app->request->post();
         $code=EffectEarnest::appAddEffect($user->getId(),$post);
         if(!$code){
