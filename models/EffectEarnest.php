@@ -268,20 +268,19 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 }
 
             }
-            if(isset($uid) && !isset($phone) && !isset($name)){
+            if($uid && !isset($phone) && !isset($name)){
                 $user=User::find()->where(['id'=>$uid])->select('nickname,mobile')->asArray()->one();
                 $name=$user['nickname'];
                 $phone=$user['mobile'];
                 $earnest=0;
                 $transaction_no='';
-            }elseif(!isset($uid)){
+            }elseif(!$uid){
                 $name=$post['name'];
                 $phone=$post['phone'];
                 $earnest=8900;
                 $transaction_no=GoodsOrder::SetTransactionNo($phone);
             }
-            var_dump($name);
-            var_dump($phone);die;
+
             $effect_earnest=new EffectEarnest();
             $effect_earnest->uid=$uid;
             $effect_earnest->effect_id=$id;
