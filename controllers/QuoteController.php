@@ -395,7 +395,7 @@ class QuoteController extends Controller
                 ]);
             }
             foreach ($post['value'] as $value){
-                $row = (new CoefficientManagement())->findByInsert($value);
+                $row = (new CoefficientManagement())->findByInsert($value,$post['city']);
             }
 
             if (!$row){

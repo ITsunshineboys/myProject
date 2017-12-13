@@ -42,12 +42,13 @@ class CoefficientManagement extends ActiveRecord
         return $row;
     }
 
-    public static function findByInsert($rows)
+    public static function findByInsert($rows,$city)
     {
         $row = \Yii::$app->db->createCommand();
         return $row
             ->insert(self::TABLE_NAME,[
                 'category_id' => $rows['id'],
+                'city_code' => $city,
                 'coefficient' => $rows['value'] * 100,
             ])
             ->execute();
