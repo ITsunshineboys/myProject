@@ -61,7 +61,6 @@ class OrderAfterSale extends ActiveRecord
             $code=1000;
             return $code;
         }
-
         if (!array_key_exists($postData['type'], self::AFTER_SALE_SERVICES))
         {
             $code=1000;
