@@ -183,7 +183,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
      * @return bool|string
      */
     public static function appAddEffect($uid,$post){
-
+        var_dump($uid);
+        var_dump($post);die;
         $effects=Effect::find()
             ->select('sort_id')
             ->asArray()
@@ -273,10 +274,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 $name=$user['nickname'];
                 $phone=$user['mobile'];
                 $earnest=0;
+                $transaction_no='';
             }elseif(!isset($uid)){
                 $name=$post['name'];
                 $phone=$post['phone'];
                 $earnest=8900;
+                $transaction_no=GoodsOrder::SetTransactionNo($phone);
             }
 
             $effect_earnest=new EffectEarnest();
@@ -285,7 +288,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect_earnest->phone=$phone;
             $effect_earnest->name=$name;
             $effect_earnest->earnest =$earnest;
-            $effect_earnest->transaction_no='';
+            $effect_earnest->transaction_no=$transaction_no;
             $effect_earnest->requirement=$post['requirement'];
             $effect_earnest->original_price=$post['original_price']*100;
             $effect_earnest->sale_price=$post['sale_price']*100;
