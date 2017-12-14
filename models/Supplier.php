@@ -255,14 +255,14 @@ class Supplier extends ActiveRecord
                 return $code;
             }
 
-//            $supplier->shop_no = Yii::$app->params['supplierRoleId']
-//                . (Yii::$app->params['offsetGeneral'] + $supplier->id);
-//            if (!$supplier->save()) {
-//                $transaction->rollBack();
-//
-//                $code = 500;
-//                return $code;
-//            }
+            $supplier->shop_no = Yii::$app->params['supplierRoleId']
+                . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+            if (!$supplier->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
 
             UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['supplierRoleId']]);
             $userRole = new UserRole;
