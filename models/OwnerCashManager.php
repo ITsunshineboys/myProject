@@ -282,18 +282,21 @@ class OwnerCashManager extends ActiveRecord {
         }
 
         $time = time();
+
+        $user_cash=UserCashregister::find()->where(['id'=>$cash_id])->one();
+        $user_cash->status=$status;
+        $user_cash->supplier_reason=$reason;
+        $user_cash->real_money=$real_money;
+        $user_cash->handle_time=$time;
         $trans = \Yii::$app->db->beginTransaction();
+
         try {
-            \Yii::$app->db->createCommand()
-                ->update(self::USER_CASHREGISTER, [
-                    'status' => $status,
-                    'supplier_reason' => $reason,
-                    'real_money' => $real_money,
-                    'handle_time' => $time
-                ], [
-                    'id' => $cash_id
-                ])
-                ->execute();
+            $a = $user_cash->save(false);
+            if (!$a){
+                $trans->rollBack();
+                return 500;
+            }
+
             //提现失败
             if ($status == SupplierCashController::CASH_STATUS_FAIL) {
                 //钱退回供货商
@@ -316,9 +319,6 @@ class OwnerCashManager extends ActiveRecord {
                     $code=500;
                     return $code;
                 }
-
-
-
             }
             //提现成功
             if ($status == SupplierCashController::CASH_STATUS_DONE) {
@@ -335,7 +335,6 @@ class OwnerCashManager extends ActiveRecord {
             return $code;
 
         } catch (Exception $e) {
-
             $trans->rollBack();
             $code=500;
             return $code;
