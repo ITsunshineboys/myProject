@@ -3905,15 +3905,14 @@ class OrderController extends Controller
                 ]);
             }
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-            $Goods=Goods::findBySku($sku,'after_sale_services');
-            if (!$OrderGoods || !$Goods)
+            if (!$OrderGoods )
             {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $arr=explode(',',$Goods->after_sale_services);
+            $arr=explode(',',$OrderGoods->after_sale_services);
             $data=[];
             foreach ($arr as $k =>$v)
             {
@@ -3930,6 +3929,14 @@ class OrderController extends Controller
                         'value'=>$value
                     ];
                 }
+            }
+            if ($data==[])
+            {
+                $code=1044;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
             $code=200;
             return Json::encode([
