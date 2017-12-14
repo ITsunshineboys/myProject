@@ -1522,6 +1522,11 @@ class SupplieraccountController extends  Controller{
             'data'=>$paginationData
         ]);
     }
+
+    /**
+     * 用户审核详情
+     * @return string
+     */
     public function actionAuditView(){
         $user = Yii::$app->user->identity;
         if (!$user){
@@ -1547,7 +1552,10 @@ class SupplieraccountController extends  Controller{
         ]);
     }
 
-
+    /**
+     * 用户审核操作
+     * @return string
+     */
     public function actionOwnerDoAudit(){
         $user = Yii::$app->user->identity;
         if (!$user){
