@@ -5837,7 +5837,7 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
-                'data'=>''
+                'data'=>[]
             ]);
         }
             $addressList['district_code'] = $addressList['district'];
