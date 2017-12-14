@@ -510,7 +510,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/add_drawing.css'
         })
         .state('add_support_goods', {//智能报价案列/社区店配套商品管理
-            url: '/add_support_goods',
+            url: '/add_support_goods?city',
             templateUrl: 'pages/intelligent/add_support_goods.html',
             css: 'pages/intelligent/css/add_support_goods.css',
             controller:'support_goods_ctrl'
