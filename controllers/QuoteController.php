@@ -1525,24 +1525,17 @@ class QuoteController extends Controller
 //        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
 
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
-        if (!isset($goods['0'])){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-                'goods' => [],
-                'goods_attr' => [],
-            ]);
-        } else {
-            $max = BasisDecorationService::profitMargin($goods);
+        if (isset($goods['0'])) {
+            $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
-                'goods'=> $max,
-                'goods_attr'=> $goods_attr,
-            ]);
         }
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'goods'=> $max,
+            'goods_attr'=> $goods_attr,
+        ]);
 
     }
 
