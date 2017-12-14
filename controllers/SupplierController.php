@@ -1002,7 +1002,7 @@ class SupplierController extends Controller
 
         $review_remark=Yii::$app->request->post('review_remark');
 
-        if ($status!=1 || $status!=2 )
+        if ($status!=1 && $status!=2 )
         {
             $code = 1000;
             return Json::encode([
