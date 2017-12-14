@@ -293,7 +293,7 @@ class OwnerCashManager extends ActiveRecord {
             //提现失败
             if ($status == SupplierCashController::CASH_STATUS_FAIL) {
                 //钱退回供货商
-                $user = User::find()->where(['uid' => $user_id])->one();
+                $user = User::find()->where(['id' => $user_id])->one();
                 if (!$user) {
                     return $code;
                 }
@@ -331,6 +331,7 @@ class OwnerCashManager extends ActiveRecord {
             return $code;
 
         } catch (Exception $e) {
+
             $trans->rollBack();
             $code=500;
             return $code;
