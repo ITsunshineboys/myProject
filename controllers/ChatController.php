@@ -375,7 +375,7 @@ class ChatController extends Controller
         }
 
        foreach ($data as $k=>&$v){
-
+           $v['content']=ChatRecord::userTextDecode($v['content']);
             $all=ChatRecord::find()->asArray()->where(['send_uid'=>$v['lxr'],'to_uid'=>$u_id])->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
 
           $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['lxr']])->one();
