@@ -667,15 +667,17 @@ class User extends ActiveRecord implements IdentityInterface
             return $code;
         }
         $key = trim(htmlspecialchars($postData['key']), '');
-        if (Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
-            $code = self::setPaypassword_first($postData, $user);
-        }
-        if (Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
-            $code = self::setPaypassword_secend($postData, $user);
-        }
         if ($key=='forget_pay_password')
         {
             $code = self::setPaypassword_secend($postData, $user);
+        }else
+        {
+            if (\Yii::$app->getSecurity()->validatePassword(self::FIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
+                $code = self::setPaypassword_first($postData, $user);
+            }
+            if (\Yii::$app->getSecurity()->validatePassword(self::UNFIRST_SET_PAYPASSWORD . $user->id . date('Y-m-d', time()), $key) == true) {
+                $code = self::setPaypassword_secend($postData, $user);
+            }
         }
         return $code;
     }
@@ -825,7 +827,7 @@ class User extends ActiveRecord implements IdentityInterface
         } catch (\InvalidArgumentException $e) {
             $code = 1000;
             return $code;
-        } catch (ServerErrorHttpException $e) {
+        } catch (\ServerErrorHttpException $e) {
             $code = 500;
             return $code;
         } catch (\Exception $e) {
