@@ -158,7 +158,6 @@ class UserChat extends \yii\db\ActiveRecord
      */
     public static function sendTextMessage($content, $username,$send_uid,$send_role_id,$to_uid)
     {
-
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {

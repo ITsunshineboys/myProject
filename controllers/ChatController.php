@@ -230,7 +230,7 @@ class ChatController extends Controller
         }
         list($u_id, $role_id) = $user;
         $code=1000;
-        $message=trim(\Yii::$app->request->post('message'));
+        $message=trim(\Yii::$app->request->post('message'));var_dump($message);die;
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
