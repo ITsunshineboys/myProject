@@ -118,14 +118,6 @@
     margin-top: 10px;
 }
 
-/*.reload_tishi{*/
-    /*width: 300px;*/
-    /*font-size: 12px;*/
-    /*color: red;*/
-    /*position: relative;*/
-    /*top: 49px;*/
-    /*left: 172px;*/
-/*}*/
 
 /*分类描述*/
 .cla_des{
@@ -161,49 +153,6 @@
     margin-bottom: 20px;
 }
 
-.btn_sure button{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #c2c2c2;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    color: #5e6166;
-    background-color: white;
-    margin-right: 20px;
-}
-
-/*保存提示框*/
-#save_content{
-    width: 636px;
-    height: 256px;
-}
-
-#tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
-#caozuo_sure{
-    width: 84px;
-    height: 36px;
-    border: 1px solid #c2c2c2;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 36px;
-    font-size: 12px;
-    color: #5e6166;
-    background-color: white;
-    margin-left: 511px;
-    margin-top: 54px;
-}
 
 /*下架提示模态框*/
 #shuru_content{
@@ -249,22 +198,6 @@
     padding-bottom: 10px;
 }
 
-#shuru_cancel, #shuru_sure{
-    float: right;
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #5677FC;
-    line-height: 12px;
-    padding: 6px 18px;
-    background-color: white;
-    border: 1px solid #5677FC;
-    border-radius: 3px;
-}
-
-#shuru_cancel{
-    margin-left: 15px;
-}
-
 .cla_name h6{
     color: red;
     margin-left: 172px;
@@ -274,9 +207,5 @@
     position: relative!important;
     top:-362px;
     left: 0;
-}
-
-.tored{
-    border: 1px solid red!important;
 }
 

@@ -6,7 +6,7 @@
         <div class="cla_name">
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span class="each_title">分类名称</span>
-            <input type="text" ng-model="item.title" ng-class="{tored:show_class_warning}" ng-blur="addClassName()" maxlength=10>
+            <input type="text" ng-model="item.title" ng-class="{red:show_class_warning}" ng-blur="addClassName()" maxlength=10>
             <span>*限1~10个字符</span>
             <h6 ng-show="show_class_warning" ng-bind="class_warning"></h6>
         </div>
@@ -64,30 +64,9 @@
         </div>
 
         <div class="btn_sure">
-            <button ng-click="saveclass()">保存</button>
-            <button data-toggle="modal" data-target="#shuru_modal">下架</button>
-            <button  ui-sref="class.online">返回</button>
-        </div>
-    </div>
-
-    <!--保存提示模态框-->
-    <div class="modal fade" id="save_tishi" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">{{save_msg}}</h6>
-                </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
-                    <button id="caozuo_sure" data-dismiss="modal" ng-if="!success_flag">确认</button>
-                </div>
-            </div>
+            <button class="btn btn-primary" ng-click="saveclass()">保存</button>
+            <button class="btn btn-default"  data-toggle="modal" data-target="#shuru_modal">下架</button>
+            <button class="btn btn-default"  ui-sref="class.online">返回</button>
         </div>
     </div>
 
@@ -106,9 +85,9 @@
                               placeholder="请填写下架原因，如选择多个则为批量备注"></textarea>
                 </div>
 
-                <div class="btn_modal">
-                    <button id="shuru_cancel" data-dismiss="modal" ng-click="cancelOffInEdit()">取消</button>
-                    <button id="shuru_sure" data-dismiss="modal" ng-click="sureoffline()">确认</button>
+                <div class="btn_modal pull-right">
+                    <button class="btn btn-primary" data-dismiss="modal" ng-click="sureoffline()">确认</button>
+                    <button class="btn btn-default" data-dismiss="modal" ng-click="cancelOffInEdit()">取消</button>
                 </div>
             </div>
         </div>

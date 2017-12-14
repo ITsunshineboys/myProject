@@ -395,14 +395,14 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state('account_user_list.normal', { //正常
             url: '/account_user_list_normal',
-            templateUrl: 'pages/account_manage/user_list/account_mag/user_list_closed.html',
+            templateUrl: 'pages/account_manage/user_list/account_mag/user_list_normal.html',
             css: 'pages/account_manage/user_list/account_mag/css/user_list.css',
             controller: 'account_user_list_normal'
         })
 
         .state('account_user_list.closed', { //关闭
             url: '/account_user_list_closed',
-            templateUrl: 'pages/account_manage/user_list/account_mag/user_list_normal.html',
+            templateUrl: 'pages/account_manage/user_list/account_mag/user_list_closed.html',
             css: 'pages/account_manage/user_list/account_mag/css/user_list.css',
             controller: 'account_user_list_closed'
         })
