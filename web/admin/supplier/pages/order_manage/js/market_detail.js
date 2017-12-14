@@ -235,7 +235,7 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 				sku:$stateParams.sku
 			},function (res) {
 				console.log(res);
-				if(res.data.code==200){
+				if(res.code==200){
 					saleDetail();
 				}else{
 					$scope.track_flag=true;
