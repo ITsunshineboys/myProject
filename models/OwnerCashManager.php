@@ -59,7 +59,11 @@ class OwnerCashManager extends ActiveRecord {
      */
     public static function getOwnerCashed(){
         $data=UserCashregister::find()
-            ->where(['status'=>self::STATUS_CASHED,'role_id'=>self::OWNER_ROLE])
+            ->where([
+                'status' => [SupplierCashController::CASH_STATUS_DONE, SupplierCashController::CASH_STATUS_FAIL],
+                'role_id' => self::OWNER_ROLE
+
+            ])
             ->count();
 
         return $data;
