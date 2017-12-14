@@ -3905,14 +3905,19 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-            if (!$OrderGoods)
+            if (!$OrderGoods || !$GoodsOrder)
             {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $supplier=Supplier::find()
+                ->select('uid')
+                ->where(['id'=>$GoodsOrder->supplier_id])
+                ->one();
             $arr=explode(',',$OrderGoods->after_sale_services);
             $data=[];
             foreach ($arr as $k =>$v)
@@ -3950,7 +3955,11 @@ class OrderController extends Controller
                         'cover_image'=>$OrderGoods->cover_image,
                         'goods_price'=>GoodsOrder::switchMoney($OrderGoods->goods_price*0.01)
                     ],
-                    'after_sale'=>$data
+                    'after_sale'=>$data,
+                    'user'=>[
+                        'uid'=>$supplier->uid,
+                        'to_role_id'=>Yii::$app->params['supplierRoleId']
+                    ]
                 ]
             ]);
         }
