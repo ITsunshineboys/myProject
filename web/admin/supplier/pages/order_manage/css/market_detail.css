@@ -1,0 +1,41 @@
+hr{
+    margin: 10px 0;
+}
+h3 {
+    color: rgba(102, 111, 128, 1);
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0;
+    height: 35px;
+    line-height: 35px;
+}
+.row{
+    margin-bottom: 20px;
+}
+.hr_p{
+    border-bottom: 1px solid #eee;
+}
+.total{
+    color: #FF9800!important;
+}
+.shipping_way{
+    color: #487AF8;
+}
+.img_box{
+    width: 100px;
+    height: 100px;
+}
+.img_box img{
+    width: 100%;
+}
+.score{
+    color: #979899;
+}
+.arrow_class{
+    color: #5677FC;
+    cursor: pointer;
+    font-size:26px;
+}
+.btn-right{
+    margin-right: 15px;
+}

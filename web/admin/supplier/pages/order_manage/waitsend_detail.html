@@ -310,7 +310,7 @@
         </div>
 
         <!--按钮组-->
-        <div ng-if="is_unusual=='1'">
+        <div ng-if="status=='待发货 '&& is_unusual=='1'">
             <div class="row">
                 <div class="col-sm-1 control-label">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#agree_modal" >同意</button>
@@ -334,7 +334,7 @@
             </div>
         </div>
         <!--待收货-->
-        <div ng-if=" status=='待收货' && is_unusual!='1'">
+        <div ng-if="status=='待收货' && is_unusual=='1'">
             <div class="row">
                 <div class="col-sm-1 control-label">
                     <button class="btn btn-default"  ng-click="back_list()">返回</button>

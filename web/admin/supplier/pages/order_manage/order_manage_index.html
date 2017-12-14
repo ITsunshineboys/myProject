@@ -15,6 +15,7 @@
             <li ng-class="{'active':finish_flag}" ng-click="tabFunc('finish_flag')">已完成{{listcount.completed}}
             </li>
             <li ng-class="{'active':cancel_flag}" ng-click="tabFunc('cancel_flag')">已取消{{listcount.canceled}}</li>
+            <li ng-class="{'active':market_flag}" ng-click="tabChange('market_flag')">售后{{listcount.customer_service}}</li>
         </ul>
     </div>
     <!--表格-->
@@ -99,12 +100,9 @@
                 <td ng-if="menu_list[8].value" ng-bind="item.unusual" ng-class={txt_red:item.unusual!='无异常'}></td>
                 <td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>
                 <!--<td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>-->
-                <td ng-if="menu_list[10].value" class="view"
-                    ng-click=viewDetail(item.order_no,item.sku,item.status)>查看
-                </td>
-                <td ng-if="menu_list[11].value&&item.handle=='发货'" ng-bind="item.handle" class="font_blue"
-                    ng-click="wait_send_ship(item.shipping_type,item.order_no,item.sku)"></td>
-                <td ng-if="menu_list[11].value&&!item.handle" ng-bind="item.handle"></td>
+                <td ng-if="menu_list[10].value" class="view" ><a ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</a></td>
+                <td ng-if="menu_list[11].value&&item.handle=='发货'"><a ng-bind="item.handle" ng-click="wait_send_ship(item.shipping_type,item.order_no,item.sku)"></a></td>
+                <td ng-if="menu_list[11].value&&!item.handle"><a ng-bind="item.handle"></a></td>
             </tr>
             </tbody>
             </table>
@@ -289,8 +287,65 @@
         <!--分页-->
         <tm-pagination conf="wjConfig"></tm-pagination>
     </div>
-</div>
-
-        <!--------------------王杰结束-------------------------------->
-
+    <!--售后-->
+    <div ng-if="market_flag">
+        <div>
+            <span>总销量:</span>
+            <span></span>
+            <span>总金额</span>
+            <span></span>
+        </div>
+        <div class="search form-inline clearfix">
+            <div class="form-group pull-left">
+                <select  name="province" ng-model="wjparams.time_type" ng-change="wait_send_type(wjparams.time_type)" class="form-control" ng-options="item.value as item.name for item in time"></select>
+                <input ng-if="wjparams.time_type=='custom'" id='market_begin_time' ng-model="wjparams.start_time" max-date="{{wjparams.end_time}}" ng-change="wait_send_change_time()" ngc-lay-date  class="form-control" type="text" placeholder="开始时间">
+                <input ng-if="wjparams.time_type=='custom'" id='market_end_time'  ng-model="wjparams.end_time"  min-date="{{wjparams.start_time}}" ng-change="wait_send_change_time()" ngc-lay-date  class="form-control" type="text"  placeholder="结束时间">
+            </div>
+            <div class="form-group pull-right">
+                <div class="input-group">
+                   <input type="text" class="form-control" ng-model="myng.m_search" placeholder="搜索订单号或商品名称">
+                    <span class="iconfont icon-search"></span>
+                </div>
+                <button class="btn btn-default" ng-click="marketSearch()">搜索</button>
+            </div>
+        </div>
+        <table class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>订单编号</th>
+                <th>商品编号</th>
+                <th>商品名称</th>
+                <th>订单金额
+                    <span class="sort" ng-click="marketSortMoney()">
+                        <i class="iconfont icon-up" ng-class="{'active':wjparams.sort_money == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':wjparams.sort_money == 2}"></i>
+                    </span>
+                </th>
+                <th>下单时间
+                    <span class="sort" ng-click="marketSortTime()">
+                        <i class="iconfont icon-up" ng-class="{'active':wjparams.sort_time == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':wjparams.sort_time == 2}"></i>
+                    </span>
+                </th>
+                <th>用户</th>
+                <th>订单状态</th>
+                <th>评论</th>
+                <th>详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in market_list">
+                <td>{{item.order_no}}</td>
+                <td>{{item.sku}}</td>
+                <td>{{item.goods_name}}</td>
+                <td>{{item.amount_order | currency:"¥"}}</td>
+                <td>{{item.create_time}}</td>
+                <td>{{item.user_name}}</td>
+                <td>{{item.status}}</td>
+                <td>{{item.comment_grade}}</td>
+                <td><a ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

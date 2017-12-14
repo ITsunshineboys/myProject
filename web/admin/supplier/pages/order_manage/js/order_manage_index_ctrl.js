@@ -46,6 +46,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         $scope.waitreceive_flag = false;
         $scope.finish_flag = false;
         $scope.cancel_flag = false;
+        $scope.market_flag=false;
         $scope[obj] = true;
         if($scope.waitsend_flag==true){   //-----------待发货
             //初始化时间类型为all,和自定义开始结束时间为空
@@ -59,7 +60,6 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.wjparams.keyword='';
             $scope.wjparams.sort_money='';
             $scope.wjparams.sort_time=2;
-            //待发货列表数据
             tablePages();
         }else if($scope.waitreceive_flag==true){//-----------待收货
             $scope.sort_money_img='lib/images/arrow_default.png';
@@ -72,8 +72,16 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.wjparams.keyword='';
             $scope.wjparams.sort_money='';
             $scope.wjparams.sort_time=2;
-            //列表数据
             tablePages();
+        }else{
+	        $scope.wjparams.time_type='all';
+	        $scope.wjparams.type='customer_service';
+	        $scope.wjparams.start_time='';
+	        $scope.wjparams.end_time='';
+	        $scope.w_search='';
+	        $scope.wjparams.keyword='';
+	        $scope.wjparams.sort_money='';
+	        tablePages();
         }
     };
 
@@ -85,6 +93,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         $scope.waitreceive_flag = false;
         $scope.finish_flag = false;
         $scope.cancel_flag = false;
+	      $scope.market_flag = false;
         $scope[obj] = true;
         allTableInit[obj]();
     };
@@ -362,20 +371,23 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
      */
     $scope.viewDetail = (order_no, sku, status) => {
         if ($scope.finish_flag) {
-            tabflag = 'finish_flag'
+            tabflag = 'finish_flag';
             $state.go('done_detail', {order_no: order_no, sku: sku, tabflag: tabflag})
         } else if ($scope.cancel_flag) {
-            tabflag = 'cancel_flag'
+            tabflag = 'cancel_flag';
             $state.go('cancel_detail', {order_no: order_no, sku: sku, tabflag: tabflag});
         } else if ($scope.waitpay_flag) {
-            tabflag = 'waitpay_flag'
+            tabflag = 'waitpay_flag';
             $state.go('waitpay_detail', {order_no: order_no, sku: sku, tabflag: tabflag});
         } else if($scope.waitsend_flag){
-            tabflag = 'waitsend_flag'
+            tabflag = 'waitsend_flag';
             $state.go('waitsend_detail',{order_no:order_no,sku:sku,tabflag:tabflag});
         } else if($scope.waitreceive_flag){
-            tabflag = 'waitreceive_flag'
+            tabflag = 'waitreceive_flag';
             $state.go('waitsend_detail',{order_no:order_no,sku:sku,tabflag:tabflag});
+        }else if($scope.market_flag){
+	        tabflag = 'market_flag';
+	        $state.go('market_detail',{order_no:order_no,sku:sku,tabflag:tabflag});
         } else if ($scope.all_flag) {
             tabflag = 'all_flag'
             if (status == "待付款") {
@@ -386,6 +398,8 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
                 $state.go('cancel_detail', {order_no: order_no, sku: sku, tabflag: tabflag});
             }else if(status == '待发货'||status == '待收货'){
                 $state.go('waitsend_detail',{order_no: order_no, sku: sku, tabflag: tabflag});
+            }else{
+	            $state.go('market_detail',{order_no: order_no, sku: sku, tabflag: tabflag});
             }
         }
     }
@@ -410,8 +424,10 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             console.log(res);
             if($scope.waitsend_flag==true){
                 $scope.waitsend_list=res.data.details;
-            }else{
+            }else if($scope.waitreceive_flag==true){
                 $scope.wait_receive_list=res.data.details;
+            }else{
+	            $scope.market_list=res.data.details;
             }
             $scope.wjConfig.totalItems = res.data.count;
         })
@@ -430,7 +446,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
     //时间类型
     _ajax.get('/site/time-types',{},function (res) {
         $scope.time = res.data.time_types;
-        $scope.wjparams.time_type = res.data.time_types[0].value;//待发货
+        $scope.wjparams.time_type = res.data.time_types[0].value;
     })
     //监听时间类型
     $scope.wait_send_type=function (value) {
@@ -554,7 +570,37 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.track_flag=true;
             $scope.track_font='快递单号不能为空'
         }
+    }
 
+    /*------------------------------售后------------------------------------*/
+    //订单金额排序
+    $scope.marketSortMoney=function () {
+	    $scope.wjparams.sort_money = $scope.wjparams.sort_money == 2 ? 1 : 2;
+	    $scope.wjparams.sort_time = '';
+	    $scope.wjConfig.currentPage = 1;
+	    tablePages();
+    };
+    //订单时间排序
+    $scope.marketSortTime=function () {
+	    $scope.wjparams.sort_time = $scope.wjparams.sort_time == 2 ? 1 : 2;
+	    $scope.wjparams.sort_money = '';
+	    $scope.wjConfig.currentPage = 1;
+	    tablePages();
+    };
+    //售后搜索
+    $scope.marketSearch=function () {
+	    $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+	    $scope.wjparams.keyword=$scope.m_search;
+	    console.log($scope.m_search)
+	    //初始化"全部时间"
+	    _ajax.get('/site/time-types',{},function (res) {
+		    $scope.time = res.data.time_types;
+		    $scope.wjparams.time_type = res.data.time_types[0].value;//待发货
+	    })
+	    //恢复到默认图片
+	    $scope.wjparams.sort_time=2;//默认按时间排序
+	    $scope.wjparams.sort_money='';//初始化金额排序
+	    tablePages();
     }
     /*待发货表格Menu切换 开始*/
     $scope.waitsend_1 = true;

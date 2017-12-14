@@ -3,17 +3,30 @@ h3 {
     color: rgba(102, 111, 128, 1);
     font-weight: bold;
     font-size: 16px;
+    margin: 0;
+}
+.row{
+    margin-bottom: 20px;
+}
+.padding_left_zero{
+    padding-left: 0;
+}
+.li_bottom{
+    margin-bottom: 10px;
+}
+.zero_bottom{
+    margin-bottom: 0;
+}
+.money_hr{
+    margin: 10px 0;
+    padding-left: 0;
 }
 
 /*——订单详情——*/
-.order_detail > div, .good_detail > div {
-    margin-top: 20px;
-}
+
 
 /*订单号*/
-.order_num span:last-child {
-    margin-left: 97px;
-}
+
 
 .order_state span:last-child {
     margin-left: 83px;

@@ -1,78 +1,80 @@
 <link rel="stylesheet" href="pages/order_manage/css/cancel_detail.css">
 <div ng-controller="cancel_detail_ctrl">
     <section>
-        <div class="order_detail">
-            <h3>订单详情</h3>
-
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>订单详情</h3>
+            </div>
+        </div>
             <!--订单号-->
-            <div class="order_num">
-                <span>订单号</span>
-                <span ng-bind="order_no"></span>
+            <div class="row">
+                <div class="col-sm-2">订单号</div>
+                <div class="col-sm-10" ng-bind="order_no"></div>
             </div>
 
             <!--订单状态-->
-            <div class="order_state">
-                <span>订单状态</span>
-                <span ng-bind="order_detail.status"></span>
+            <div class="row">
+                <div class="col-sm-2">订单状态</div>
+                <div class="col-sm-10" ng-bind="order_detail.status"></div>
             </div>
 
             <!--用户-->
-            <div class="user">
-                <span>用户</span>
-                <span ng-bind="order_detail.username"></span>
+            <div class="row">
+                <div class="col-sm-2">用户</div>
+                <div class="col-sm-10" ng-bind="order_detail.username"></div>
             </div>
-
 
             <!--订单金额-->
-            <div class="order_money">
-                <span>订单金额</span>
-                <ul>
-                    <li>总金额</li>
-                    <li ng-bind="order_detail.role"></li>
-                    <li>运费</li>
-                </ul>
-
-                <ul>
-                    <li id="total">{{order_detail.amount_order | currency:"¥"}}</li>
-                    <li>{{order_detail.goods_price | currency:"¥"}}</li>
-                    <li>{{order_detail.freight | currency:"¥"}}</li>
-                </ul>
+            <div class="row zero_bottom">
+                <div class="col-sm-2">订单金额</div>
+                <span class="col-sm-2">总金额</span>
+                <span class="col-sm-2" ng-bind="order_detail.role"></span>
+                <span class="col-sm-2">运费</span>
+            </div>
+            <div class="row zero_bottom">
+                <div class="col-sm-2"></div>
+                <hr class="col-sm-6 money_hr">
+            </div>
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <span class="col-sm-2" id="total">{{order_detail.amount_order | currency:"¥"}}</span>
+                <span class="col-sm-2">{{order_detail.goods_price | currency:"¥"}}</span>
+                <span class="col-sm-2">{{order_detail.freight | currency:"¥"}}</span>
             </div>
 
             <!--供货价-->
-            <div class="supplier_money">
-                <span>供货价</span>
-                <span>{{order_detail.supplier_price | currency:"¥"}}</span>
+            <div class="row">
+                <div class="col-sm-2">供货价</div>
+                <div class="col-sm-10">{{order_detail.supplier_price | currency:"¥"}}</div>
             </div>
-
             <!--供货价-->
-            <div class="market_money">
-                <span>市场价</span>
-                <span>{{order_detail.market_price | currency:"¥"}}</span>
+            <div class="row">
+                <div class="col-sm-2">市场价</div>
+                <div class="col-sm-10">{{order_detail.market_price | currency:"¥"}}</div>
             </div>
 
             <!--商品个数-->
-            <div class="order_state">
-                <span>商品个数</span>
-                <span ng-bind="order_detail.goods_number"></span>
+            <div class="row">
+                <div class="col-sm-2">商品个数</div>
+                <div class="col-sm-10" ng-bind="order_detail.goods_number"></div>
             </div>
 
             <!--付款方式-->
-            <div class="order_state">
-                <span>付款方式</span>
-                <span ng-bind="order_detail.pay_name"></span>
+            <div class="row">
+                <div class="col-sm-2">付款方式</div>
+                <div class="col-sm-10" ng-bind="order_detail.pay_name"></div>
             </div>
 
             <!--下单时间-->
-            <div class="order_state">
-                <span>下单时间</span>
-                <span ng-bind="order_detail.create_time"></span>
+            <div class="row">
+                <div class="col-sm-2">下单时间</div>
+                <div class="col-sm-10" ng-bind="order_detail.create_time"></div>
             </div>
 
             <!--付款时间-->
-            <div class="order_state">
-                <span>付款时间</span>
-                <span ng-bind="order_detail.paytime"></span>
+            <div class="row">
+                <div class="col-sm-2">付款时间</div>
+                <div class="col-sm-10" ng-bind="order_detail.paytime"></div>
             </div>
 
             <!--待收货的情况-->
@@ -91,29 +93,30 @@
                 </div>
             </div>
 
-
-        </div>
         <hr>
 
         <!-----商品详情----->
-        <div class="good_detail">
-            <h3>商品详情</h3>
-            <button class="view_good" ui-sref="record_goods_detail({express_params})">
-                <span class="glyphicon glyphicon-eye-open"></span>
-                查看商品
-            </button>
-
-
+        <div class="row">
+            <div class="col-sm-2">
+                <h3>商品详情</h3>
+            </div>
+            <div class="col-sm-10">
+                <button class="btn btn-primary" ui-sref="record_goods_detail({express_params})">
+                    <i class="iconfont icon-yanjing"></i>
+                    <span>查看商品</span>
+                </button>
+            </div>
+        </div>
             <!--商品名称-->
-            <div class="order_state">
-                <span>商品名称</span>
-                <span ng-bind="goods_value.goods_name"></span>
+            <div class="row">
+                <div class="col-sm-2">商品名称</div>
+                <div class="col-sm-10" ng-bind="goods_value.goods_name"></div>
             </div>
 
             <!--商品编号-->
-            <div class="order_state">
-                <span>商品编号</span>
-                <span ng-bind="sku"></span>
+            <div class="row">
+                <div class="col-sm-2">商品编号</div>
+                <div class="col-sm-10" ng-bind="sku"></div>
             </div>
 
             <!--商品属性-->
@@ -127,74 +130,78 @@
                     <!--</li>-->
                 <!--</ul>-->
             <!--</div>-->
-        </div>
         <hr/>
 
         <!---收货详情---->
-        <div class="order_detail">
-            <h3>收货详情</h3>
-
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>收货详情</h3>
+            </div>
+        </div>
             <!--收货人-->
-            <div class="market_money">
-                <span>收货人</span>
-                <span ng-bind="receive_details.consignee"></span>
+            <div class="row">
+                <div class="col-sm-2">收货人</div>
+                <div class="col-sm-10" ng-bind="receive_details.consignee"></div>
             </div>
 
             <!--收货地址-->
-            <div class="order_state">
-                <span>收货地址</span>
-                <span ng-bind="receive_details.district"></span>
+            <div class="row">
+                <div class="col-sm-2">收货地址</div>
+                <div class="col-sm-10" ng-bind="receive_details.district"></div>
             </div>
 
             <!--电话-->
-            <div class="phonenum">
-                <span>电话</span>
-                <span ng-bind="receive_details.consignee_mobile"></span>
+            <div class="row">
+                <div class="col-sm-2">电话</div>
+                <div class="col-sm-10" ng-bind="receive_details.consignee_mobile"></div>
             </div>
 
             <!--留言-->
-            <div class="phonenum" ng-if="receive_details.buyer_message!=''">
-                <span>留言</span>
-                <span ng-bind="receive_details.buyer_message"></span>
+            <div class="row" ng-if="receive_details.buyer_message!=''">
+                <div class="col-sm-2">留言</div>
+                <div class="col-sm-10" ng-bind="receive_details.buyer_message"></div>
             </div>
 
             <!--发票类型-->
-            <div class="order_state">
-                <span>发票类型</span>
-                <span ng-bind="receive_details.invoice_type"></span>
+            <div class="row">
+                <div class="col-sm-2">发票类型</div>
+                <div class="col-sm-10" ng-bind="receive_details.invoice_type"></div>
             </div>
 
             <!--抬头-->
-            <div class="phonenum">
-                <span>抬头</span>
-                <span ng-bind="receive_details.invoice_header"></span>
+            <div class="row">
+                <div class="col-sm-2">抬头</div>
+                <div class="col-sm-10" ng-bind="receive_details.invoice_header"></div>
             </div>
 
             <!--纳税人识别码-->
-            <div class="udid" ng-if="receive_details.invoicer_card!=''">
-                <span>纳税人识别码</span>
-                <span ng-bind="receive_details.invoicer_card"></span>
+            <div class="row" ng-if="receive_details.invoicer_card!=''">
+                <div class="col-sm-2">纳税人识别码</div>
+                <div class="col-sm-10" ng-bind="receive_details.invoicer_card"></div>
             </div>
 
             <!--发票内容-->
-            <div class="order_state">
-                <span>发票内容</span>
-                <span ng-bind="receive_details.invoice_content" ui-sref="done_detail">明细</span>
+            <div class="row">
+                <div class="col-sm-2">发票内容</div>
+                <div class="col-sm-10" ng-bind="receive_details.invoice_content" ui-sref="done_detail">明细</div>
             </div>
-        </div>
+
         <hr ng-if="show_abnormal||show_plat" />
 
         <!--异常记录-待发货-->
-        <div class='order_manage' ng-if="show_abnormal&&unshipped">
-            <h3 class="abnormal_title">异常记录-待发货</h3>
-            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="send" ng-click="abnormal('send')"></span>
-            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!send" ng-click="abnormal('send')"></span>
-            <ul class="abnormal_waitsend" ng-show="send">
-                <li ng-repeat="item in unshipped_detail">
-                    <span ng-bind="item.type"></span>
-                    <span ng-bind="item.value"></span>
-                    <span ng-bind="item.time"></span>
-                    <p ng-bind="item.content"></p>
+        <div class='row' ng-if="show_abnormal&&unshipped">
+            <div class="col-sm-12 li_bottom">
+                <h3 class="abnormal_title">异常记录-待发货</h3>
+                <span class="glyphicon glyphicon-chevron-down arrows pointer" ng-show="send" ng-click="abnormal('send')"></span>
+                <span class="glyphicon glyphicon-chevron-up arrows pointer" ng-show="!send" ng-click="abnormal('send')"></span>
+            </div>
+
+            <ul class="col-sm-12 padding_left_zero" ng-show="send">
+                <li class="col-sm-8 padding_left_zero li_bottom" ng-repeat="item in unshipped_detail">
+                    <span class="col-sm-4" ng-bind="item.type"></span>
+                    <span class="col-sm-4 padding_left_zero" ng-bind="item.value"></span>
+                    <span class="col-sm-4" ng-bind="item.time"></span>
+                    <p class="col-sm-offset-4" ng-bind="item.content"></p>
                 </li>
             </ul>
         </div>
@@ -239,8 +246,7 @@
                 </li>
             </ul>
         </div>
-
-        <div class="btn_group">
+        <div class="row">
             <button class="btn btn-default" id="back" ui-sref="order_manage({tabflag:tabflag})">返回</button>
         </div>
     </section>
