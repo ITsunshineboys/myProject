@@ -17,6 +17,7 @@ use app\models\DecorationMessage;
 use app\models\DecorationParticulars;
 use app\models\District;
 use app\models\Effect;
+use app\models\EffectEarnest;
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCarpentryCraft;
@@ -1504,8 +1505,14 @@ class QuoteController extends Controller
         $size = (int)trim(\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT));
         $city = (int)trim(\Yii::$app->request->get('city', DecorationAdd::PAGE_SIZE_DEFAULT));
         $where  = 'city_code = '.$city;
-        $select = 'id,three_materials,add_time,correlation_message';
+        $select = 'id,c_id,add_time,correlation_message';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
+        foreach ($decoration_add['details'] as &$one){
+            $category_name = GoodsCategory::find()->asArray()->select('title')->where(['id'=>$one['c_id']])->one();
+            $one['three_materials'] = $category_name['title'];
+            unset($one['c_id']);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
@@ -1568,21 +1575,18 @@ class QuoteController extends Controller
     }
 
     /**
-     * decoration add
+     * 材料添加项 添加
      * @return string
      */
     public function actionDecorationAdd()
     {
         $post = \Yii::$app->request->post();
         $decoration_add = new DecorationAdd();
-        $decoration_add->province_code = $post['province'];
-        $decoration_add->city_code     = $post['city'];
-        $decoration_add->one_materials = $post['one_name'];
-        $decoration_add->two_materials = $post['two_name'];
-        $decoration_add->three_materials = $post['three_name'];
+        $decoration_add->city_code = $post['city'];
         $decoration_add->correlation_message = $post['message'];
-        $decoration_add->sku           = $post['code'];
-        $decoration_add->add_time      = time();
+        $decoration_add->c_id = $post['category_id'];
+        $decoration_add->sku  = $post['sku'];
+        $decoration_add->add_time = time();
 
         if (!$decoration_add->save()){
             $code = 1000;
@@ -1591,7 +1595,6 @@ class QuoteController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
 
         $id = $decoration_add->attributes['id'];
         foreach ($post['add'] as $one_post){
@@ -1645,21 +1648,21 @@ class QuoteController extends Controller
     public function actionDecorationUp()
     {
         $decoration = DecorationAdd::find()->asArray()->All();
-        $goods = [];
+        $c_id = [];
         foreach ($decoration as $one){
-            $goods [] = $one['three_materials'];
+            $c_id [] = $one['c_id'];
         }
 
-        $category_id = GoodsCategory::find()->select('id')->asArray()->where(['in','title',$goods])->all();
-        $id = [];
-        foreach ($category_id as $one_id){
-            $id [] = $one_id['id'];
+        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$c_id);
+        $g_c = array_values(Effect::array_group_by($goods,'title'));
+        foreach ($g_c as $v){
+            $goods_c [] = BasisDecorationService::profitMargin($v);
         }
-        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$id);
+
 
         foreach ($decoration as $value){
-            foreach ($goods as $one_goods){
-                if ($value['three_materials'] ==  $one_goods['title']){
+            foreach ($goods_c as $one_goods){
+                if ($value['c_id'] ==  $one_goods['category_id']){
                     $edit = DecorationAdd::findByUpdate($one_goods['sku'],$value['id']);
                 }
             }

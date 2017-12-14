@@ -34,13 +34,13 @@ class DecorationAdd extends ActiveRecord
         return 'decoration_add';
     }
 
-    public function rules()
-    {
-        return [
-            [['one_materials','two_materials','three_materials','correlation_message'],'string','max' => 100],
-            [['province_code','city_code','sku'],'number'],
-        ];
-    }
+//    public function rules()
+//    {
+//        return [
+//            [['one_materials','two_materials','three_materials','correlation_message'],'string','max' => 100],
+//            [['province_code','city_code','sku'],'number'],
+//        ];
+//    }
 
     /**
      * 防水查询
