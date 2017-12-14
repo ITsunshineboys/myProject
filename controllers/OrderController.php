@@ -5838,16 +5838,15 @@ class OrderController extends Controller
                 'code' => 200,
                 'msg' => 'ok',
                 'data'=>[
-                    'id'=>'',
-                    'uid'=>'',
+                    'id'=>1,
+                    'uid'=>1,
                     'consignee'=>'',
                     'zipcode'=>'',
                     'mobile'=>'',
                     'district'=>'',
                     'addresstoken'=>'',
-                    'default'=>'',
+                    'default'=>1,
                     'district_code'=>''
-
                 ]
             ]);
         }
