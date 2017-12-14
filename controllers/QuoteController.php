@@ -384,7 +384,7 @@ class QuoteController extends Controller
 
 //        $tr = \Yii::$app->db->beginTransaction();
 //        try{
-//            $del = CoefficientManagement::deleteAll();
+             CoefficientManagement::deleteAll();
 //            if (!$del){
 ////                $tr->rollBack();
 //                $code = 1000;
