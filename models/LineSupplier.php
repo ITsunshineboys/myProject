@@ -84,14 +84,14 @@ class LineSupplier extends \yii\db\ActiveRecord
 
         foreach ($List as &$list)
         {
-            $list['type_shop']=Supplier::TYPE_SHOP[$list['type_shop']];
-
+                $list['type_shop']=Supplier::TYPE_SHOP[$list['type_shop']];
                 $category_arr=explode(',',$list['path']);
                 $first_category=GoodsCategory::find()
                     ->select('path,title,parent_title')
                     ->where(['id'=>$category_arr[0]])
                     ->one();
                 $list['category']=$first_category->title.'-'.$list['parent_title'].'-'.$list['title'];
+                $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
                 unset($list['title']);
                 unset($list['path']);
                 unset($list['parent_title']);
