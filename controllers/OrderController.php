@@ -3396,265 +3396,265 @@ class OrderController extends Controller
     }
 
 
-    /**
-     * 大后台获取异常信息
-     * @return string
-     */
-    public  function actionFindUnusualListLhzz()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $request=Yii::$app->request;
-        $order_no=trim($request->post('order_no',''));
-        $sku=trim($request->post('sku',''));
-        if (!$order_no || !$sku)
+        /**
+         * 大后台获取异常信息
+         * @return string
+         */
+        public  function actionFindUnusualListLhzz()
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-
-        if (!$GoodsOrder)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-
-        switch ($GoodsOrder->order_refer)
-        {
-            case 1:
-                $refund_type='线下已退款';
-                break;
-            case 2:
-                $refund_type='已退至顾客钱包';
-                break;
-        }
-
-        $unshipped=OrderRefund::find()
-            ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
-            ->asArray()
-            ->one();
-        if ($unshipped)
-        {
-            if($unshipped['create_time'])
-            {
-                $unshipped['create_time']=date('Y-m-d H:i',$unshipped['create_time']);
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
-            if ($unshipped['refund_time'])
+            $request=Yii::$app->request;
+            $order_no=trim($request->post('order_no',''));
+            $sku=trim($request->post('sku',''));
+            if (!$order_no || !$sku)
             {
-                $unshipped['refund_time']=date('Y-m-d H:i',$unshipped['refund_time']);
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
-            if ($unshipped['handle_time'])
+
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+
+            if (!$GoodsOrder)
             {
-                $unshipped['handle_time']=date('Y-m-d H:i',$unshipped['handle_time']);
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
-            if ($unshipped['handle']==0)
+
+            switch ($GoodsOrder->order_refer)
             {
-                $arr1[]=[
-                    'type'=>'取消原因',
-                    'value'=>$unshipped['apply_reason'],
-                    'content'=>'',
-                    'time'=>$unshipped['create_time'],
-                    'stage'=>$unshipped['order_type']
-                ];
-            }else {
-                $arr1[] = [
-                    'type' => '取消原因',
-                    'value' => $unshipped['apply_reason'],
-                    'content' => '',
-                    'time' => $unshipped['create_time'],
-                    'stage' => $unshipped['order_type']
-                ];
-                switch ($unshipped['handle']) {
-                    case 1:
-                        $type = '同意';
-                        $reason = '';
-                        $complete_time = $unshipped['refund_time'];
-                        $result = '成功';
-                        break;
-                    case 2:
-                        $type = '驳回';
-                        $reason = $unshipped['handle_reason'];
-                        $complete_time = $unshipped['handle_time'];
-                        $result = '失败';
-                        break;
+                case 1:
+                    $refund_type='线下已退款';
+                    break;
+                case 2:
+                    $refund_type='已退至顾客钱包';
+                    break;
+            }
+
+            $unshipped=OrderRefund::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
+                ->asArray()
+                ->one();
+            if ($unshipped)
+            {
+                if($unshipped['create_time'])
+                {
+                    $unshipped['create_time']=date('Y-m-d H:i',$unshipped['create_time']);
                 }
-                $arr1[] = [
-                    'type' => '商家反馈',
-                    'value' => $type,
-                    'content' => $reason,
-                    'time' => $unshipped['handle_time'],
-                    'stage' => $unshipped['order_type']
-                ];
-                $arr1[] = [
-                    'type' => '退款结果',
-                    'value' => $result,
-                    'content' => '',
-                    'time' => $complete_time,
-                    'stage' => $unshipped['order_type']
-                ];
-                if ($unshipped['handle'] == 1) {
-                    $arr1[] =
-                    [
-                        'type' => '退款去向',
-                        'value' => $refund_type,
+                if ($unshipped['refund_time'])
+                {
+                    $unshipped['refund_time']=date('Y-m-d H:i',$unshipped['refund_time']);
+                }
+                if ($unshipped['handle_time'])
+                {
+                    $unshipped['handle_time']=date('Y-m-d H:i',$unshipped['handle_time']);
+                }
+                if ($unshipped['handle']==0)
+                {
+                    $arr1[]=[
+                        'type'=>'取消原因',
+                        'value'=>$unshipped['apply_reason'],
+                        'content'=>'',
+                        'time'=>$unshipped['create_time'],
+                        'stage'=>$unshipped['order_type']
+                    ];
+                }else {
+                    $arr1[] = [
+                        'type' => '取消原因',
+                        'value' => $unshipped['apply_reason'],
+                        'content' => '',
+                        'time' => $unshipped['create_time'],
+                        'stage' => $unshipped['order_type']
+                    ];
+                    switch ($unshipped['handle']) {
+                        case 1:
+                            $type = '同意';
+                            $reason = '';
+                            $complete_time = $unshipped['refund_time'];
+                            $result = '成功';
+                            break;
+                        case 2:
+                            $type = '驳回';
+                            $reason = $unshipped['handle_reason'];
+                            $complete_time = $unshipped['handle_time'];
+                            $result = '失败';
+                            break;
+                    }
+                    $arr1[] = [
+                        'type' => '商家反馈',
+                        'value' => $type,
+                        'content' => $reason,
+                        'time' => $unshipped['handle_time'],
+                        'stage' => $unshipped['order_type']
+                    ];
+                    $arr1[] = [
+                        'type' => '退款结果',
+                        'value' => $result,
                         'content' => '',
                         'time' => $complete_time,
                         'stage' => $unshipped['order_type']
                     ];
+                    if ($unshipped['handle'] == 1) {
+                        $arr1[] =
+                        [
+                            'type' => '退款去向',
+                            'value' => $refund_type,
+                            'content' => '',
+                            'time' => $complete_time,
+                            'stage' => $unshipped['order_type']
+                        ];
+                    }
                 }
+                $data[]=$arr1;
+            }else{
+                $data[]=[];
             }
-            $data[]=$arr1;
-        }else{
-            $data[]=[];
-        }
-        $unreceived=OrderRefund::find()
-            ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
-            ->asArray()
-            ->one();
-        if ($unreceived)
-        {
-            if($unreceived['create_time'])
+            $unreceived=OrderRefund::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
+                ->asArray()
+                ->one();
+            if ($unreceived)
             {
-                $unreceived['create_time']=date('Y-m-d H:i',$unreceived['create_time']);
-            }
-            if ($unreceived['refund_time'])
-            {
-                $unreceived['refund_time']=date('Y-m-d H:i',$unreceived['refund_time']);
-            }
-            if ($unreceived['handle_time'])
-            {
-                $unreceived['handle_time']=date('Y-m-d H:i',$unreceived['handle_time']);
-            }
-            if ($unreceived['handle']==0)
-            {
-                $arr2[]=[
-                    'type'=>'取消原因',
-                    'value'=>$unreceived['apply_reason'],
-                    'content'=>'',
-                    'time'=>$unreceived['create_time'],
-                    'stage'=>$unreceived['order_type']
-                ];
-            }else {
-                $arr2[] = [
-                    'type' => '取消原因',
-                    'value' => $unreceived['apply_reason'],
-                    'content' => '',
-                    'time' => $unreceived['create_time'],
-                    'stage' => $unreceived['order_type']
-                ];
-                switch ($unreceived['handle']) {
-                    case 1:
-                        $type = '同意';
-                        $reason = '';
-                        $complete_time = $unreceived['refund_time'];
-                        $result = '成功';
-                        break;
-                    case 2:
-                        $type = '驳回';
-                        $reason = $unreceived['handle_reason'];
-                        $complete_time = $unreceived['handle_time'];
-                        $result = '失败';
-                        break;
+                if($unreceived['create_time'])
+                {
+                    $unreceived['create_time']=date('Y-m-d H:i',$unreceived['create_time']);
                 }
-                $arr2[] = [
-                    'type' => '商家反馈',
-                    'value' => $type,
-                    'content' => $reason,
-                    'time' => $unreceived['handle_time'],
-                    'stage' => $unreceived['order_type']
-                ];
-                $arr2[] = [
-                    'type' => '退款结果',
-                    'value' => $result,
-                    'content' => '',
-                    'time' => $complete_time,
-                    'stage' => $unreceived['order_type']
-                ];
-                if ($unreceived['handle'] == 1) {
+                if ($unreceived['refund_time'])
+                {
+                    $unreceived['refund_time']=date('Y-m-d H:i',$unreceived['refund_time']);
+                }
+                if ($unreceived['handle_time'])
+                {
+                    $unreceived['handle_time']=date('Y-m-d H:i',$unreceived['handle_time']);
+                }
+                if ($unreceived['handle']==0)
+                {
+                    $arr2[]=[
+                        'type'=>'取消原因',
+                        'value'=>$unreceived['apply_reason'],
+                        'content'=>'',
+                        'time'=>$unreceived['create_time'],
+                        'stage'=>$unreceived['order_type']
+                    ];
+                }else {
                     $arr2[] = [
-                        'type' => '退款去向',
-                        'value' => $refund_type,
+                        'type' => '取消原因',
+                        'value' => $unreceived['apply_reason'],
+                        'content' => '',
+                        'time' => $unreceived['create_time'],
+                        'stage' => $unreceived['order_type']
+                    ];
+                    switch ($unreceived['handle']) {
+                        case 1:
+                            $type = '同意';
+                            $reason = '';
+                            $complete_time = $unreceived['refund_time'];
+                            $result = '成功';
+                            break;
+                        case 2:
+                            $type = '驳回';
+                            $reason = $unreceived['handle_reason'];
+                            $complete_time = $unreceived['handle_time'];
+                            $result = '失败';
+                            break;
+                    }
+                    $arr2[] = [
+                        'type' => '商家反馈',
+                        'value' => $type,
+                        'content' => $reason,
+                        'time' => $unreceived['handle_time'],
+                        'stage' => $unreceived['order_type']
+                    ];
+                    $arr2[] = [
+                        'type' => '退款结果',
+                        'value' => $result,
                         'content' => '',
                         'time' => $complete_time,
                         'stage' => $unreceived['order_type']
                     ];
+                    if ($unreceived['handle'] == 1) {
+                        $arr2[] = [
+                            'type' => '退款去向',
+                            'value' => $refund_type,
+                            'content' => '',
+                            'time' => $complete_time,
+                            'stage' => $unreceived['order_type']
+                        ];
+                    }
                 }
+                $data[]=$arr2;
+            }else{
+                $data[]=[];
             }
-            $data[]=$arr2;
-        }else{
-            $data[]=[];
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok',
+                'data'=>$data
+            ]);
         }
-        $code=200;
-        return Json::encode([
-            'code' => $code,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
 
-   /**
-     * 去付款支付宝app支付
-     * @return string
-     */
-    public  function actionAppOrderAliPay()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $postData = Yii::$app->request->post();
-        if (!array_key_exists('list',$postData)
-         || !array_key_exists('total_amount',$postData))
+       /**
+         * 去付款支付宝app支付
+         * @return string
+         */
+        public  function actionAppOrderAliPay()
         {
-            $code=1000;
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $postData = Yii::$app->request->post();
+            if (!array_key_exists('list',$postData)
+             || !array_key_exists('total_amount',$postData))
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+             $orders=explode(',',$postData['list']);
+            if (!is_array($orders))
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $orderAmount=GoodsOrder::CalculationCost($orders);
+            if ( !$postData['total_amount']*100 == $orderAmount){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            };
+           $data=Alipay::OrderAppPay($orderAmount,$postData['list']);
+            $code=200;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg' => 'ok',
+                'data'=>$data
             ]);
         }
-         $orders=explode(',',$postData['list']);
-        if (!is_array($orders))
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $orderAmount=GoodsOrder::CalculationCost($orders);
-        if ( !$postData['total_amount']*100 == $orderAmount){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        };
-       $data=Alipay::OrderAppPay($orderAmount,$postData['list']);
-        $code=200;
-        return Json::encode([
-            'code' => $code,
-            'msg' => 'ok',
-            'data'=>$data
-        ]);
-    }
 
 
        /**
@@ -4436,119 +4436,119 @@ class OrderController extends Controller
         }
 
 
-    /**
-     * 售后发货
-     * @return string
-     */
-    public function  actionAfterSaleDelivery()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code = 1000;
-        $request = Yii::$app->request;
-        $waybillnumber=$request->post('waybillnumber');
-        $order_no=$request->post('order_no');
-        $sku=$request->post('sku');
-        $role=$request->post('role');
-        if (!$role)
+        /**
+         * 售后发货
+         * @return string
+         */
+        public function  actionAfterSaleDelivery()
         {
-            $role='user';
-        }
-        if (!$waybillnumber || !$order_no || !$sku)
-        {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $waybillname=(new Express())->GetExpressName($waybillnumber);
-        if (!$waybillname)
-        {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $orderAfterSale=OrderAfterSale::find()
-            ->where(['order_no'=>$order_no,'sku'=>$sku])
-            ->one();
-        if (!$orderAfterSale)
-        {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $tran = Yii::$app->db->beginTransaction();
-        $time=time();
-        try{
-            $express=new Express();
-            $express->waybillnumber=$waybillnumber;
-            $express->waybillname=$waybillname;
-            $express->create_time=$time;
-            if (!$express->save(false))
-            {
-                $tran->rollBack();
+            $user = Yii::$app->user->identity;
+            if (!$user){
+                $code=1052;
                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
+                    'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
-            };
-            switch ($role)
-            {
-                case 'user':
-                    $orderAfterSale->buyer_express_id=$express->id;
-                    break;
-                case 'supplier':
-                    $orderAfterSale->supplier_express_id=$express->id;
-                    break;
             }
-            if (!$orderAfterSale->save(false))
+            $code = 1000;
+            $request = Yii::$app->request;
+            $waybillnumber=$request->post('waybillnumber');
+            $order_no=$request->post('order_no');
+            $sku=$request->post('sku');
+            $role=$request->post('role');
+            if (!$role)
+            {
+                $role='user';
+            }
+            if (!$waybillnumber || !$order_no || !$sku)
             {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
-            };
-            $tran->commit();
-            return Json::encode([
-                'code' =>  200,
-                'msg'  => 'ok'
-            ]);
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-    }
-
-
-            /**
-             * 获取openID1-微信
-             * @return string
-             */
-            public function actionGetOpenId()
+            }
+            $waybillname=(new Express())->GetExpressName($waybillnumber);
+            if (!$waybillname)
             {
-                    $tools = new PayService();
-                    $code=Yii::$app->request->post('code','');
-                    $openid = $tools->getOpenidFromMp($code);
-
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $orderAfterSale=OrderAfterSale::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            if (!$orderAfterSale)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $tran = Yii::$app->db->beginTransaction();
+            $time=time();
+            try{
+                $express=new Express();
+                $express->waybillnumber=$waybillnumber;
+                $express->waybillname=$waybillname;
+                $express->create_time=$time;
+                if (!$express->save(false))
+                {
+                    $tran->rollBack();
                     return Json::encode([
-                        'code' => 200,
-                        'msg'  => 'ok',
-                        'data'=>$openid
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
                     ]);
-
+                };
+                switch ($role)
+                {
+                    case 'user':
+                        $orderAfterSale->buyer_express_id=$express->id;
+                        break;
+                    case 'supplier':
+                        $orderAfterSale->supplier_express_id=$express->id;
+                        break;
+                }
+                if (!$orderAfterSale->save(false))
+                {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                };
+                $tran->commit();
+                return Json::encode([
+                    'code' =>  200,
+                    'msg'  => 'ok'
+                ]);
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
+        }
+
+
+        /**
+         * 获取openID1-微信
+         * @return string
+         */
+        public function actionGetOpenId()
+        {
+                $tools = new PayService();
+                $code=Yii::$app->request->post('code','');
+                $openid = $tools->getOpenidFromMp($code);
+
+                return Json::encode([
+                    'code' => 200,
+                    'msg'  => 'ok',
+                    'data'=>$openid
+                ]);
+
+        }
 
 
     /**
@@ -5832,7 +5832,7 @@ class OrderController extends Controller
             ->andWhere(['default'=>1])
             ->asArray()
             ->one();
-        if ($addressList)
+        if (!$addressList)
         {
             $code=1000;
             return Json::encode([
