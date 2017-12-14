@@ -1588,7 +1588,7 @@ class OrderController extends Controller
                 'goods_data'=>$goods_data,
                 'goods_value'=>$ordergoodsinformation,
                 'receive_details'=>$receive_details,
-                'is_unusual'=>$is_unusual,
+                'is_unusual'=>$order_information['is_unusual'],
                 'is_platform'=>$is_platform,
                 'is_refund'=>$is_refund
             );
