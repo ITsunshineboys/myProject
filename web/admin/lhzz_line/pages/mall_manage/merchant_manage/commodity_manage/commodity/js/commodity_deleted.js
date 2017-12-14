@@ -1,5 +1,5 @@
 /**
- * Created by Administrator on 2017/10/25/025.
+ * Created by tiger on 2017/10/25/025.
  */
 app.controller('commodity_deleted', ['_ajax','$scope', '$stateParams','$http', function (_ajax, $scope, $stateParams,$http) {
     $scope.storeid = $stateParams.id;

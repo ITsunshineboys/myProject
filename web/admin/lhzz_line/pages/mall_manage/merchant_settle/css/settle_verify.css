@@ -5,3 +5,13 @@
 .search .form-group .form-control {
     width: 272px;
 }
+
+.remark {
+    display: inline-block;
+    width: 50px;
+    color: #3F51B5;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

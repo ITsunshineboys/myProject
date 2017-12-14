@@ -98,6 +98,12 @@ app.controller('settle_verify_fail', ['$rootScope', '$scope', '$state', '$stateP
         tableList();
     };
 
+
+    //显示审核备注
+    $scope.tempRemark = function (obj) {
+        $scope.remark = obj;
+    }
+
     /*列表数据获取*/
     function tableList() {
         $scope.params.keyword = $scope.keyword;
