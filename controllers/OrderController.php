@@ -5827,6 +5827,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        //default=1000
         $addressList = Addressadd::find()
             ->where(['uid' => $user->id])
             ->andWhere(['default'=>1])
@@ -5845,7 +5846,7 @@ class OrderController extends Controller
                     'mobile'=>'',
                     'district'=>'',
                     'addresstoken'=>'',
-                    'default'=>1,
+                    'default'=>1000,
                     'district_code'=>''
                 ]
             ]);
