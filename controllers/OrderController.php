@@ -5834,10 +5834,10 @@ class OrderController extends Controller
             ->one();
         if (!$addressList)
         {
-            $code=1000;
             return Json::encode([
-                'code' => $code,
-                'msg' => '收货地址不存在'
+                'code' => 200,
+                'msg' => 'ok',
+                'data'=>''
             ]);
         }
             $addressList['district_code'] = $addressList['district'];
