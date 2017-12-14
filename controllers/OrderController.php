@@ -4817,7 +4817,6 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-
             $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
             if ($orders==500 || $orders==1000)
             {

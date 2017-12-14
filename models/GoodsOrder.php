@@ -2255,6 +2255,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 $order_money=$GoodsOrder->amount_order;
                 $GoodsOrder->pay_status=1;
+                $GoodsOrder->paytime=time();
                 $res=$GoodsOrder->save(false);
                 if ($user->last_role_id_app==0)
                 {
