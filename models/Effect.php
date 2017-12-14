@@ -227,7 +227,7 @@ class Effect extends ActiveRecord
             $data['particulars_view']=null;
         }
         if($array['earnest']==0){
-            unset($array['earnest']);
+            $earnest=0;
             unset($array['transaction_no']);
         }else{
             $earnest=sprintf('%.2f',(float)$array['earnest']*0.01);
