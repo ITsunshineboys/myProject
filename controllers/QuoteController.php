@@ -1549,6 +1549,13 @@ class QuoteController extends Controller
         if (isset($goods['0'])) {
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
+        } else {
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'goods'=> [],
+                'goods_attr'=> [],
+            ]);
         }
 
         return Json::encode([
@@ -1731,7 +1738,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * decoration edit
+     *  材料添加项 修改
      * @return string
      */
     public function actionDecorationEdit()
