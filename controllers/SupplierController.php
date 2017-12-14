@@ -103,8 +103,8 @@ class SupplierController extends Controller
             ]);
         }
 
-        $supplier && Supplier::deleteAll(['id' => $supplier->id]);
-        $code = Supplier::add($user, Yii::$app->request->post());
+//        $supplier && Supplier::deleteAll(['id' => $supplier->id]);
+        $code = Supplier::certificationApplication($supplier, $user, Yii::$app->request->post());
         if (200 != $code) {
             return Json::encode([
                 'code' => $code,
