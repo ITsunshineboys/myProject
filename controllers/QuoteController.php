@@ -1677,17 +1677,9 @@ class QuoteController extends Controller
         foreach ($decoration as $value){
             foreach ($goods_c as $one_goods){
                 if ($value['c_id'] ==  $one_goods['category_id']){
-                    $edit = DecorationAdd::findByUpdate($one_goods['sku'],$value['id']);
+                    DecorationAdd::findByUpdate($one_goods['sku'],$value['id']);
                 }
             }
-        }
-
-        if (!$edit){
-            $code = 1000;
-            return Json::encode([
-               'code' => $code,
-               'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
         }
 
         return Json::encode([
