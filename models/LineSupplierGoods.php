@@ -304,7 +304,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         $lineGoods=self::find()->where(['goods_id'=>$goods['id']])->one();
         if ($lineGoods)
         {
-                $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
+            $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
             $goods['is_offline_goods']='是';
             $goods['line_district']=LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier->district_code).'-'.$lineSupplier->address;
             $goods['line_mobile']=$lineSupplier->mobile;

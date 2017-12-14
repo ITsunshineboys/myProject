@@ -894,6 +894,9 @@ class SupplierController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
     public  function  actionSupplierBeAuditedDetail()
     {
         $supplier_id=Yii::$app->request->get('supplier_id');
