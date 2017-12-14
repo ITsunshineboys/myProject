@@ -320,7 +320,7 @@ class OrderAfterSale extends ActiveRecord
             $after_sale->supplier_handle_reason=$postData['reject_reason'];
             $after_sale->supplier_handle_time=time();
             $after_sale->complete_time=time();
-            $res=$after_sale->save();
+            $res=$after_sale->save(false);
             if (!$res){
                 $tran->rollBack();
                 $code=500;

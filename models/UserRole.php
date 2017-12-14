@@ -184,6 +184,11 @@ class UserRole extends ActiveRecord
         foreach ($List as &$list)
         {
             $list['category']=GoodsCategory::GetCateGoryById($list['category_id']);
+
+            if ($list['review_time']!=0)
+            {
+                $list['review_time']=date('Y-m-d H:i',$list['review_time']);
+            }
             $list['review_apply_time']=date('Y-m-d H:i',$list['review_apply_time']);
             switch ($list['type_shop'])
             {

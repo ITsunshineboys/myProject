@@ -883,7 +883,7 @@ class SupplierController extends Controller
         {
             $where.=' and  L.review_status='.$review_status;
         }
-        $select='L.review_apply_time,L.review_status,U.mobile,S.shop_name,S.type_shop,S.category_id,S.id,S.shop_no,U.aite_cube_no,L.review_remark';
+        $select='L.review_apply_time,L.review_status,U.mobile,S.shop_name,S.type_shop,S.category_id,S.id,S.shop_no,U.aite_cube_no,L.review_remark,L.review_time';
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',

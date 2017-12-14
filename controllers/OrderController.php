@@ -4797,136 +4797,136 @@ class OrderController extends Controller
         }
     }
 
-        /**
-         * app购买商品
-         * @return string
-         */
-        public function actionAppBuyGoods()
+    /**
+     * app购买商品
+     * @return string
+     */
+    public function actionAppBuyGoods()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user)
         {
-            $user = Yii::$app->user->identity;
-            if (!$user)
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request=Yii::$app->request;
+        $suppliers=Json::decode($request->post('suppliers'));
+        $total_amount=$request->post('total_amount');
+        $address_id=$request->post('address_id');
+        $pay_way=$request->post('pay_way');
+        if(!$suppliers  ||  !$total_amount || !$address_id || !$pay_way)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
+        if ($orders==500 || $orders==1000)
+        {
+            $code=$orders;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg'  =>'ok',
+            'data' =>$orders
+        ]);
+    }
+
+    /**
+     * 测试收货
+     * @return int|string
+     */
+    public function  actionTestConfirmReceipt()
+    {
+        $request=Yii::$app->request;
+        $order_no=$request->post('order_no');
+        $sku=$request->post('sku');
+        $orderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        $goodsOrder=GoodsOrder::find()
+            ->where(['order_no'=>$order_no])
+            ->one();
+        $supplier=Supplier::findOne($goodsOrder->supplier_id);
+        if (!$goodsOrder || !$supplier )
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $orderGoods->order_status=1;
+            $orderGoods->shipping_status=2;
+            $res=$orderGoods->save(false);
+            if (!$res)
             {
-                $code=1052;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+                $tran->rollBack();
             }
-            $request=Yii::$app->request;
-            $suppliers=Json::decode($request->post('suppliers'));
-            $total_amount=$request->post('total_amount');
-            $address_id=$request->post('address_id');
-            $pay_way=$request->post('pay_way');
-            if(!$suppliers  ||  !$total_amount || !$address_id || !$pay_way)
+            $transaction_no=GoodsOrder::SetTransactionNo($supplier->shop_no);
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$supplier->uid;
+            $supplier_accessdetail->role_id=6;
+            $supplier_accessdetail->access_type=6;
+            $supplier_accessdetail->access_money=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
+            $supplier_accessdetail->order_no=$order_no;
+            $supplier_accessdetail->sku=$sku;
+            $supplier_accessdetail->create_time=time();
+            $supplier_accessdetail->transaction_no=$transaction_no;
+            $res2=$supplier_accessdetail->save(false);
+            if (!$res2)
             {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
+                $tran->rollBack();
+                $code=500;
+                return $code;
             }
-            $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
-            if ($orders==500 || $orders==1000)
+            $supplier->availableamount+=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
+            $supplier->balance+=$orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number;
+            $res3=$supplier->save(false);
+            if (!$res3)
             {
-                $code=$orders;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
+                $tran->rollBack();
+                $code=500;
+                return $code;
             }
+            $express=Express::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->one();
+            if ($express)
+            {
+                $express->receive_time=time();
+                if (!$express->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }
+            $tran->commit();
             $code=200;
             return Json::encode([
                 'code' => $code,
-                'msg'  =>'ok',
-                'data' =>$orders
+                'msg'  => 'ok'
+            ]);
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
-        /**
-         * 测试收货
-         * @return int|string
-         */
-        public function  actionTestConfirmReceipt()
-        {
-            $request=Yii::$app->request;
-            $order_no=$request->post('order_no');
-            $sku=$request->post('sku');
-            $orderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-            $goodsOrder=GoodsOrder::find()
-                ->where(['order_no'=>$order_no])
-                ->one();
-            $supplier=Supplier::findOne($goodsOrder->supplier_id);
-            if (!$goodsOrder || !$supplier )
-            {
-                $code=1000;
-                return Json::encode(
-                    [
-                        'code'=>$code,
-                        'msg'=>Yii::$app->params['errorCodes'][$code]
-                    ]
-                );
-            }
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $orderGoods->order_status=1;
-                $orderGoods->shipping_status=2;
-                $res=$orderGoods->save(false);
-                if (!$res)
-                {
-                    $tran->rollBack();
-                }
-                $transaction_no=GoodsOrder::SetTransactionNo($supplier->shop_no);
-                $supplier_accessdetail=new UserAccessdetail();
-                $supplier_accessdetail->uid=$supplier->uid;
-                $supplier_accessdetail->role_id=6;
-                $supplier_accessdetail->access_type=6;
-                $supplier_accessdetail->access_money=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
-                $supplier_accessdetail->order_no=$order_no;
-                $supplier_accessdetail->sku=$sku;
-                $supplier_accessdetail->create_time=time();
-                $supplier_accessdetail->transaction_no=$transaction_no;
-                $res2=$supplier_accessdetail->save(false);
-                if (!$res2)
-                {
-                    $tran->rollBack();
-                    $code=500;
-                    return $code;
-                }
-                $supplier->availableamount+=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
-                $supplier->balance+=$orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number;
-                $res3=$supplier->save(false);
-                if (!$res3)
-                {
-                    $tran->rollBack();
-                    $code=500;
-                    return $code;
-                }
-                $express=Express::find()
-                    ->where(['order_no'=>$order_no,'sku'=>$sku])
-                    ->one();
-                if ($express)
-                {
-                    $express->receive_time=time();
-                    if (!$express->save(false))
-                    {
-                        $tran->rollBack();
-                    }
-                }
-                $tran->commit();
-                $code=200;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => 'ok'
-                ]);
-            }catch (\Exception $e){
-                $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-        }
+    }
 
     /**
      * 去付款-微信app支付
