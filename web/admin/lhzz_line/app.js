@@ -783,6 +783,18 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'order_cancel'
         })
+        .state('order.after_sales', {   // 售后订单
+            url: '/after-sales',
+            templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/after_sales.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
+            controller: 'after_sales'
+        })
+        .state('sales_details', {   // 售后详情
+            url: '/sales-details?orderNo&sku&type',
+            templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/sales_details.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
+            controller: 'sales_details'
+        })
         .state('comments_del', {  // 删除评论列表
             url: '/order/comments?id',
             templateUrl: 'pages/mall_manage/merchant_manage/order_manage/comments_del/comments_del.html',
@@ -796,7 +808,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'order_details'
         })
         .state('express', {   // 物流详情
-            url: '/order/express?orderNo&sku',
+            url: '/order/express?orderNo&sku&waybillnumber&type',
             templateUrl: 'pages/mall_manage/merchant_manage/order_manage/express/order_express.html',
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
             controller: 'express'
@@ -830,6 +842,15 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/mall_manage/data_page/data_page.html',
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'storeDataCtrl'
+        })
+        .state('offline_shop', {    // 线下体验店
+            abstract: true,
+            url: '/offline-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/offline_shop.html'
+        })
+        .state('offline_shop.shop', {   // 体验店
+            url: '/offline-shop/experience-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/experience_shop.html'
         })
     /*=============== 廖欢 end ===============*/
 })

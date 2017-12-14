@@ -14,7 +14,8 @@
         <div class="form-group">
             <label class="col-xs-2 control-label">订单状态</label>
             <div class="col-xs-10">
-                <p class="form-control-static">{{orderDetails.status}}</p>
+                <p class="form-control-static" ng-if="is_close_order">售后中</p>
+                <p class="form-control-static" ng-if="!is_close_order">售后完成</p>
             </div>
         </div>
         <div class="form-group">
@@ -297,7 +298,9 @@
             <label class="col-xs-2 control-label">问题描述</label>
             <div class="col-xs-10">
                 <p class="form-control-static">{{sale_detail.description}}</p>
-                <img ng-repeat="str in sale_detail.image" ng-src="{{str.image}}" ng-click="showImage(obj.image)">
+                <p class="img-list">
+                    <img ng-repeat="str in sale_detail.image" ng-src="{{str.image}}" ng-click="showImage(str.image)">
+                </p>
             </div>
         </div>
     </div>

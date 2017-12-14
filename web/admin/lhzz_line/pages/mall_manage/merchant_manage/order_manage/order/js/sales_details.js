@@ -101,13 +101,6 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
         })
     };
 
-    $scope.$watch('sale_temp_time', function (n, o) {
-        if (n === o) return;
-        if (n <= 0) {
-            saleDetail();
-        }
-    });
-
     /**
      * 评论回复信息函数
      */
@@ -136,6 +129,14 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
             } else {
                 salesTimer($scope.sale_progress_platform)
             }
+
+            let clear_watch = $scope.$watch('sale_temp_time', function (n, o) {
+                if (n === o) return;
+                if (n <= 0) {
+                    saleDetail();
+                    clear_watch();
+                }
+            });
         });
     }
 
@@ -149,10 +150,11 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
             if (obj.code === 'user_unconfirm_received' || obj.code === 'supplier_unconfirm_received') {
                 $scope.sale_temp_time = obj.content;
                 let clear_interval = $interval(function () {
-                    $scope.sale_temp_time--;
-                    obj.content = secondToDate($scope.sale_temp_time, 'day');
                     if ($scope.sale_temp_time < 1) {
-                        clear_interval.clear()
+                        $interval.cancel(clear_interval)
+                    } else {
+                        $scope.sale_temp_time--;
+                        obj.content = secondToDate($scope.sale_temp_time, 'day');
                     }
                 }, 1000);
                 break;

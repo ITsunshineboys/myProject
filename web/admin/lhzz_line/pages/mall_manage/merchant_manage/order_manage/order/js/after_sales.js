@@ -115,7 +115,7 @@ app.controller('after_sales', ['$scope', '$stateParams', '_ajax', function ($sco
         _ajax.get('/order/find-order-list', $scope.params, function (res) {
             $scope.pageConfig.totalItems = res.data.count;
             $scope.list = res.data.details;
-            console.log(res);
+            console.log(res, "售后订单列表");
         })
     }
 }]);
