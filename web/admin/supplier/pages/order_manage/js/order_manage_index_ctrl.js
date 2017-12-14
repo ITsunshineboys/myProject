@@ -29,7 +29,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
     /*选项卡数字获取*/
     _ajax.get('/order/get-order-num', {}, function (res) {
         $scope.listcount = res.data;
-        if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag'){
+        if($stateParams.tabflag=='waitreceive_flag' || $stateParams.tabflag=='waitsend_flag' || $stateParams.tabflag=='market_flag'){
             $scope.tabChange($stateParams.tabflag);
         }else if ($stateParams.tabflag=='waitpay_flag'||$stateParams.tabflag=='finish_flag'||$stateParams.tabflag=='cancel_flag') {
             $scope.tabFunc($stateParams.tabflag);
@@ -49,9 +49,10 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         $scope.market_flag=false;
         $scope[obj] = true;
         if($scope.waitsend_flag==true){   //-----------待发货
-            //初始化时间类型为all,和自定义开始结束时间为空
+	        //初始化时间类型为all,和自定义开始结束时间为空
             $scope.sort_money_img='lib/images/arrow_default.png';
             $scope.sort_time_img='lib/images/arrow_down.png';
+	          $scope.wjConfig.currentPage=1
             $scope.wjparams.time_type='all';
             $scope.wjparams.type='unshipped';
             $scope.wjparams.start_time='';
@@ -62,8 +63,9 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.wjparams.sort_time=2;
             tablePages();
         }else if($scope.waitreceive_flag==true){//-----------待收货
-            $scope.sort_money_img='lib/images/arrow_default.png';
+	          $scope.sort_money_img='lib/images/arrow_default.png';
             $scope.sort_time_img='lib/images/arrow_down.png';
+	          $scope.wjConfig.currentPage=1
             $scope.wjparams.time_type='all';
             $scope.wjparams.type='unreceived';
             $scope.wjparams.start_time='';
@@ -74,6 +76,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.wjparams.sort_time=2;
             tablePages();
         }else{
+	        $scope.wjConfig.currentPage=1
 	        $scope.wjparams.time_type='all';
 	        $scope.wjparams.type='customer_service';
 	        $scope.wjparams.start_time='';
@@ -415,7 +418,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         itemsPerPage: 12,
         currentPage: 1,
         onChange: function () {
-            // tablePages();
+            tablePages();
         }
     }
     let tablePages=function () {

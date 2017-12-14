@@ -320,7 +320,8 @@
         </div>
 
         <!--评论回复-->
-        <div class="row">
+        <div ng-if="comment_flag">
+        <div class="row" >
             <div class="col-sm-12 control-label">
                 <h3>评论回复</h3>
             </div>
@@ -367,7 +368,7 @@
                 <a href="">删除</a>
             </div>
         </div>
-
+        </div>
         <!--售后信息-->
         <div class="row">
             <div class="col-sm-12 control-label">
@@ -414,34 +415,72 @@
                 <span class="col-sm-2 control-label">{{items.type}}</span>
                 <span class="col-sm-2 control-label">{{items.value}}</span>
                 <span class="col-sm-8 control-label">{{items.time}}</span>
-                <span ng-if="items.code!='shipped'" class="col-sm-offset-2 col-sm-10 control-label">
+                <span ng-if="items.code!='shipped'&&items.code!='countdown'&&items.code!='unconfirm' && items.code!='supplier_unconfirm_received'" class="col-sm-offset-2 col-sm-10 control-label">
                     {{items.content}}
                 </span>
-                <span ng-if="items.code=='shipped'" class="col-sm-offset-2 col-sm-10 control-label">
+                <span ng-if="items.code=='countdown'|| items.code=='supplier_unconfirm_received'" class="col-sm-offset-2 col-sm-10 control-label score_small" >
                     {{items.content}}
-                    <span>({{items.number}})</span>
                 </span>
+                <span ng-if="!!items.phone" class="col-sm-offset-2 col-sm-10 control-label score_small" >
+                    {{items.phone}}
+                </span>
+                <a ng-if="items.code=='shipped'" class="col-sm-offset-2 col-sm-10 control-label">
+                    {{items.content}}({{items.number}})
+                </a>
             </div>
         </div>
+        <!--平台介入-->
+        <div ng-if="after_sale_progress_platform.length!=0">
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <h3>平台介入</h3>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <i class="iconfont icon-arrow-copy arrow_class" ng-if='unplatform_img_flag_up' ng-click="arrow_platform()"></i>
+                    <i class="iconfont icon-arrow arrow_class" ng-if='unplatform_img_flag_down' ng-click="arrow_platform()"></i>
+                </div>
+            </div>
+            <div class="row" ng-repeat="items in after_sale_progress_platform" ng-if="unplatform_ul_flag">
+                <span class="col-sm-2 control-label">{{items.type}}</span>
+                <span class="col-sm-2 control-label">{{items.value}}</span>
+                <span class="col-sm-8 control-label">{{items.time}}</span>
+                <span ng-if="items.code!='shipped'&&items.code!='countdown'&&items.code!='unconfirm' && items.code!='supplier_unconfirm_received'" class="col-sm-offset-2 col-sm-10 control-label">
+                    {{items.content}}
+                </span>
+                <span ng-if="items.code=='unconfirm'" class="col-sm-offset-2 col-sm-10 control-label score_small" >
+                    &nbsp;
+                </span>
+                <span ng-if="items.code=='countdown'|| items.code=='supplier_unconfirm_received'" class="col-sm-offset-2 col-sm-10 control-label score_small" >
+                    {{items.content}}
+                </span>
+                <span ng-if="!!items.phone" class="col-sm-offset-2 col-sm-10 control-label score_small" >
+                    {{items.phone}}
+                </span>
+                <a ng-if="items.code=='shipped'" class="col-sm-offset-2 col-sm-10 control-label">
+                    {{items.content}}({{items.number}})
+                </a>
+            </div>
+        </div>
+
         <!--code:unhandle-->
         <div class="row" ng-if="btn_status=='unhandle'">
             <div class="col-sm-12">
-                <button class="btn btn-primary btn-right">同意</button>
-                <button class="btn btn-default btn-right">驳回</button>
+                <button class="btn btn-primary btn-right" data-target="#agree_modal" data-toggle="modal">同意</button>
+                <button class="btn btn-default btn-right" data-toggle="modal" data-target="#turn_down_modal">驳回</button>
                 <button class="btn btn-default" ng-click="back_list()">返回</button>
             </div>
         </div>
         <!--code:supplier_unconfirm_received-->
         <div class="row" ng-if="btn_status=='supplier_unconfirm_received'">
             <div class="col-sm-12">
-                <button class="btn btn-primary btn-right">收货</button>
+                <button class="btn btn-primary btn-right" data-toggle="modal" data-target="#receiving_confirm_modal">收货</button>
                 <button class="btn btn-default" ng-click="back_list()">返回</button>
             </div>
         </div>
         <!--code:supplier_unshipped-->
         <div class="row" ng-if="btn_status=='supplier_unshipped'">
             <div class="col-sm-12">
-                <button class="btn btn-primary btn-right">发货</button>
+                <button class="btn btn-primary btn-right" data-target="#track_confirm_modal" data-toggle="modal">发货</button>
                 <button class="btn btn-default" ng-click="back_list()">返回</button>
             </div>
         </div>
@@ -449,37 +488,53 @@
         <!--code:supplier_unsend-->
         <div class="row" ng-if="btn_status=='supplier_unsend'">
             <div class="col-sm-12">
-                <button class="btn btn-primary btn-right">派出人员</button>
+                <button class="btn btn-primary btn-right" data-target="#send_staff_modal" data-toggle="modal">派出人员</button>
+                <button class="btn btn-default" ng-click="back_list()">返回</button>
+            </div>
+        </div>
+
+        <!--code:supplier_unconfirm_retunrn_to_door-->
+        <div class="row" ng-if="btn_status=='supplier_unconfirm_retunrn_to_door'">
+            <div class="col-sm-12">
+                <button class="btn btn-primary btn-right" data-target="#supplier_confirm_modal" data-toggle="modal">确认</button>
                 <button class="btn btn-default" ng-click="back_list()">返回</button>
             </div>
         </div>
         <!--售后完成-->
-        <div class="row" ng-if="btn_status==''">
+        <div class="row" ng-if="btn_status==''||btn_status=='countdown' ||btn_status=='unconfirm' ">
             <div class="col-sm-12">
                 <button class="btn btn-default" ng-click="back_list()">返回</button>
             </div>
         </div>
 
         <!--驳回模态框-->
-        <div class="modal customer_modal detail_modal fade" id="turn_down" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" id="turn_down_modal" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">驳回操作</h4>
                     </div>
-                    <div class="modal-body body_font">
-                        <span class="">驳回原因（选填）</span>
-                        <textarea class="ver_top" placeholder="请填写驳回原因" cols="30" rows="10" ng-model='turn_down_txt'></textarea>
+                    <form class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-2 control-label">
+                                <span>驳回理由</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" placeholder="请填写驳回订单的原因" ng-model='turn_down_txt' cols="30" rows="10"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" data-dismiss="modal" ng-click='turn_down_confirm()'>确认</button>
+                        <button class="btn btn-primary" data-dismiss="modal" ng-click='turnDown()'>确认</button>
                         <button class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
         <!--同意模态框-->
-        <div class="modal customer_modal detail_modal fade" id="agree_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" id="agree_modal" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -495,42 +550,102 @@
                 </div>
             </div>
         </div>
-        <!--确认发货模态框-->
-        <div class="modal customer_modal fade" id="wait_send_confirm_modal" data-backdrop="static" data-keyboard="false">
+        <!--确认模态框-->
+        <div class="modal fade" id="supplier_confirm_modal" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">提示</h4>
                     </div>
                     <div class="modal-body body_font">
-                        <span>是否确认发货</span>
+                        <span>是否确认?</span>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" data-dismiss="modal" ng-click="ship_confirm_btn()">确认</button>
+                        <button class="btn btn-primary" data-dismiss="modal" ng-click='supplier_confirm()' >确认</button>
+                        <button class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--确认收货模态框-->
+        <div class="modal fade" id="receiving_confirm_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body body_font">
+                        <span>是否确认收货</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal" ng-click="receiving_confirm_btn()">确认</button>
                         <button class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
                 </div>
             </div>
         </div>
         <!--快递单号发货模态框-->
-        <div class="modal customer_modal fade" id="track_confirm_modal" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">发货操作</h4>
-                    </div>
-                    <div class="modal-body body_font">
-                        <p class='track_p' ng-if='track_flag'>{{track_font}}</p>
-                        <div>
-                            <span class='track_span'>*</span>
-                            <span class='track_span'>快递单号</span>
-                            <input type="text" class="delivery_input" ng-model="delivery_input_model">
+        <div class="modal fade" id="track_confirm_modal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <from class="form-horizontal">
+                <div class="modal-header">
+                    <h4 class="modal-title">发货操作</h4>
+                </div>
+                <div class="modal-body">
+                    <p class='col-sm-12 track_p' ng-if='track_flag'>{{track_font}}</p>
+                    <div class="row">
+                        <div class="col-sm-2 control-label">
+                            <span class='red'>*</span>
+                            <span>快递单号</span>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="ship_input_model">
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal" ng-click='ship()'>确认</button>
+                    <button class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+                </from>
+            </div>
+        </div>
+    </div>
+        <!--派出人员模态框-->
+        <div class="modal fade" id="send_staff_modal" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <from class="form-horizontal">
+                    <div class="modal-header">
+                        <h4 class="modal-title">派出人员</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-2 control-label">
+                                <span class='red'>*</span>
+                                <span>姓名</span>
+                            </div>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="send_name" ng-class="{'error':name_show_flag}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 control-label">
+                            <span class='red'>*</span>
+                            <span>电话</span>
+                            </div>
+                            <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="send_phone" ng-class="{'error':phone_show_flag}">
+                            </div>
+                        </div>
+                        <p class="col-sm-offset-2 red" ng-if="phone_txt_flag">*请输入正确的电话号码</p>
+                    </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary"  ng-click='track_confirm_btn()'>确认</button>
+                        <button class="btn btn-primary"  ng-click="send_staff()">确认</button>
                         <button class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
+                    </from>
                 </div>
             </div>
         </div>
