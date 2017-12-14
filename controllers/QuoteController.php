@@ -284,8 +284,21 @@ class QuoteController extends Controller
     {
         $city = (int)trim(\Yii::$app->request->get('city',''));
 
-        $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id
-        $goods['specification']  = GoodsCategory::GoodsAttrValue($material);
+        $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id   13
+        $goods_ = Goods::priceDetail(3,$material);
+        $category = array_values(Effect::array_group_by($goods_,'title'));
+        foreach ($category as $v){
+            $goods_c [] = BasisDecorationService::profitMargin($v);
+        }
+
+        $id = [];
+        foreach ($goods_c as $one){
+            $id [] = $one['id'];
+        }
+        $goods['specification'] = GoodsCategory::attrValue($id);
+
+
+
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
         $where = 'city_code='.$city;
@@ -302,6 +315,7 @@ class QuoteController extends Controller
             'coefficient'=>$coefficient
         ]);
     }
+
 
     /**
      * 工程标准修改 木作修改

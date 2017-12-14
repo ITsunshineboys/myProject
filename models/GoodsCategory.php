@@ -1086,13 +1086,27 @@ class GoodsCategory extends ActiveRecord
 
     public static function GoodsAttrValue($material)
     {
-        $select = "goods_category.title,goods_attr.name,goods_attr.value";
+        $select = "goods.id,goods_category.title,goods_attr.name,goods_attr.value";
         return self::find()
             ->asArray()
             ->select($select)
             ->leftJoin('goods_attr', 'goods_attr.category_id = goods_category.id')
+            ->leftJoin('goods', 'goods.category_id = goods_category.id')
             ->where(['in', 'goods_category.id', $material])
             ->groupBy('goods_category.title')
+            ->all();
+    }
+
+    public static function attrValue($material)
+    {
+        $select = "goods_attr.id,goods_category.title,goods_attr.name,goods_attr.value";
+        return self::find()
+            ->asArray()
+            ->select($select)
+            ->leftJoin('goods_attr', 'goods_attr.category_id = goods_category.id')
+            ->leftJoin('goods', 'goods.category_id = goods_category.id')
+            ->where(['in', 'goods_attr.goods_id', $material])
+//            ->groupBy('goods_category.title')
             ->all();
     }
 
