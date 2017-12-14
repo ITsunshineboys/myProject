@@ -1461,9 +1461,11 @@ class WithdrawalsController extends Controller
             $code=1055;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data'=>$user->mobile
             ]);
         }
+
         $userBankInfo=UserBankInfo::find()
             ->where(['id'=>$bank_id,'uid'=>$user->id])
             ->one();
