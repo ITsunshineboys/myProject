@@ -2032,7 +2032,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         $tr = \Yii::$app->db->beginTransaction();
         try {
-            $del = (new AssortGoods())->deleteAll(['and',['state'=>1],['city_code'=>$post['city']]]);
+            $del = (new AssortGoods())->deleteAll(['and',['state'=>1]]);
             //(new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
             if (!$del){
                 $tr->rollBack();
