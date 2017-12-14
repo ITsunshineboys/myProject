@@ -5399,10 +5399,11 @@ class OrderController extends Controller
         }
         $data=[];
         $market_price=0;
-        $discount_price=0;
+
         foreach ($supplier_ids as &$supplier_id)
         {
             $sup_goods=[];
+            $discount_price=0;
             foreach ($Goods as &$Good)
             {
                 if ($Good['supplier_id']==$supplier_id)
