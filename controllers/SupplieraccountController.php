@@ -1565,7 +1565,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $username=User::find()->select('nickname')->where(['id'=>$user->getId()])->one();
+
         $code=1000;
         $status=(int)Yii::$app->request->post('status','');
         $id=(int)Yii::$app->request->post('id','');
@@ -1580,7 +1580,7 @@ class SupplieraccountController extends  Controller{
         $user_audit->review_status=$status;
         $user_audit->review_time=time();
         $user_audit->review_remark=$review_remark;
-        $user_audit->nickname=$username->nickname;
+        $user_audit->reviewer_uid=$user->getId();
         if(!$user_audit->save(false)){
             $code=500;
             return Json::encode([
