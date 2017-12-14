@@ -594,6 +594,7 @@ class OrderAfterSale extends ActiveRecord
                 }
 
                 break;
+                //此处代码单词写错，不易更改
             case 'supplier_unconfirm_retunrn_to_door':
                 if (!$OrderAfterSale->supplier_confirm)
                 {
@@ -975,6 +976,7 @@ class OrderAfterSale extends ActiveRecord
                     }
                     break;
                 case 'supplier':
+                    //unconfirm ::未确认
                     $data[]=[
                         'type'=>'顾客待确认',
                         'value' =>'',
@@ -982,7 +984,7 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'0',
                         'number'=>'',
-                        'code'=>'',
+                        'code'=>'unconfirm',
                         'status'=>'in'
                     ];
                     break;
