@@ -4609,9 +4609,6 @@ class OrderController extends Controller
     public  function  actionTestOpenId()
     {
         $tools = new PayService();
-//        $code=Yii::$app->request->get('code');
-//        if (!$code)
-//        {
             $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
             $url=$http_type."ac.cdlhzz.cn/order/return-url";
             $baseUrl = urlencode($url);
@@ -4619,11 +4616,6 @@ class OrderController extends Controller
 //            $this->redirect($urls);
             header("Location: {$urls}");
 
-//            return Json::encode([ Yii::$app->session['openId']);
-//        }else{
-//            $openid = $tools->getOpenidFromMp($code);
-//            Yii::$app->session['openId']=$openid;
-//        }
 
     }
 
@@ -5425,7 +5417,6 @@ class OrderController extends Controller
                     ];
                     $market_price+=($Good["market_price"]*$Good['goods_num']);
                     $discount_price+=($Good["{$goods_price}"]*$Good['goods_num']);
-
                 }
             }
 
@@ -5450,8 +5441,9 @@ class OrderController extends Controller
                     'goods'=>$sup_goods
                 ];
 
+            $all_money+=$discount_price;
         }
-        $all_money+=$discount_price;
+
         $freight=GoodsOrder::CalculationFreight($goods);
         return Json::encode([
             'code'=>200,

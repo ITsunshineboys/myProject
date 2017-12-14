@@ -169,4 +169,11 @@ class TestController extends Controller
     {
         return $this->render('wx');
     }
+
+
+    public  function  actionReturnPost()
+    {
+        $data =Yii::$app->request->post();
+        echo json_encode($data);
+    }
 }
