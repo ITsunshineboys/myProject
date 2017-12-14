@@ -1465,6 +1465,7 @@ class WithdrawalsController extends Controller
                 'data'=>$user->mobile
             ]);
         }
+
         $userBankInfo=UserBankInfo::find()
             ->where(['id'=>$bank_id,'uid'=>$user->id])
             ->one();
