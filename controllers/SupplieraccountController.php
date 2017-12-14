@@ -1484,7 +1484,7 @@ class SupplieraccountController extends  Controller{
                 $where .=" and ur.review_status=$status ";
             }
         }else{
-            $where.= " and CONCAT(u.nickname,u.aite_cube_no) like '%{$keyword}%'";
+            $where.= " and CONCAT(u.nickname,u.mobile) like '%{$keyword}%'";
         }
 
         $sort=(int)(Yii::$app->request->get('sort','2'));
