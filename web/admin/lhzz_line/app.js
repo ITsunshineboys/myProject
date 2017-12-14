@@ -851,11 +851,31 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state('offline_shop', {    // 线下体验店
             abstract: true,
             url: '/offline-shop',
-            templateUrl: 'pages/mall_manage/offline_shop/offline_shop.html'
+            templateUrl: 'pages/mall_manage/offline_shop/offline_shop.html',
+            controller: 'offline_shop'
+
         })
         .state('offline_shop.shop', {   // 体验店
             url: '/offline-shop/experience-shop',
-            templateUrl: 'pages/mall_manage/offline_shop/experience_shop.html'
+            templateUrl: 'pages/mall_manage/offline_shop/experience_shop.html',
+            controller: 'experience_shop'
+        })
+        .state('offline_shop.goods', {  // 体验商品
+            url: '/offline-shop/experience-goods',
+            templateUrl: 'pages/mall_manage/offline_shop/experience_goods.html',
+            controller: 'experience_goods'
+        })
+        .state('add_experience_shop', { // 添加线下店
+            url: '/offline-shop/add-shop',
+            templateUrl: 'pages/mall_manage/offline_shop/add_experience_shop.html',
+            css: 'pages/mall_manage/offline_shop/css/experience.css',
+            controller: 'add_experience_shop'
+        })
+        .state('edit_experience_shop', { // 编辑线下店
+            url: '/offline-shop/edit-shop?shopNo',
+            templateUrl: 'pages/mall_manage/offline_shop/edit_experience_shop.html',
+            css: 'pages/mall_manage/offline_shop/css/experience.css',
+            controller: 'edit_experience_shop'
         })
     /*=============== 廖欢 end ===============*/
 })

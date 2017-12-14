@@ -1,0 +1,63 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left">商家编号</label>
+        <div class="col-xs-3">
+            <p class="form-control-static">{{shopNo}}</p>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label text-left">商家名称</label>
+            <div class="col-xs-10">
+                <p class="form-control-static">{{shop_data.shop_name}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label text-left">店铺类型</label>
+            <div class="col-xs-10">
+                <p class="form-control-static">{{shop_data.type_shop}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label text-left">所属类目</label>
+            <div class="col-xs-10">
+                <p class="form-control-static">{{shop_data.category}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label text-left">选择区域</label>
+            <div class="col-xs-10">
+                <select class="form-control inline-block"
+                        ng-options="obj.code as obj.value for obj in province"
+                        ng-model="select_district.province_code"
+                        ng-change="cityList()"></select>
+                <select class="form-control inline-block"
+                        ng-options="obj.code as obj.value for obj in city"
+                        ng-model="select_district.city_code"
+                        ng-change="districtList()"></select>
+                <select class="form-control inline-block"
+                        ng-options="obj.code as obj.value for obj in district"
+                        ng-model="params.district_code"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label text-left">详细地址</label>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" placeholder="请输入商家地址" maxlength="45" ng-class="{error: reg.address}" ng-model="params.address">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1 control-label text-left">电话</label>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" placeholder="请输入联系电话" maxlength="11" ng-class="{error: reg.phone}" ng-model="params.mobile">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-primary" ng-click="add_experience_shop()">确认</button>
+            <a type="button" class="btn btn-default" href="javascript: history.back();">返回</a>
+        </div>
+    </div>
+</form>

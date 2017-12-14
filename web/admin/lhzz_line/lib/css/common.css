@@ -17,8 +17,16 @@ ul {
     list-style: none;
 }
 
+.text-left {
+    text-align: left !important;
+}
+
 .pointer { /* pointer */
     cursor: pointer !important;
+}
+
+.inline-block {
+    display: inline-block;
 }
 
 /* btn start */
@@ -129,7 +137,7 @@ select.form-control:focus {
 /* select end */
 
 /* table start */
-.table{
+.table {
     margin-top: 15px;
 }
 
@@ -406,7 +414,6 @@ select.form-control:focus {
 
 /* search end */
 
-
 /* filter start */
 .search .form-group .filter {
     position: absolute;
@@ -417,7 +424,7 @@ select.form-control:focus {
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
 .search .form-group .filter > div:hover,
@@ -435,14 +442,14 @@ select.form-control:focus {
 }
 
 .search .form-group .filter > div > label,
-.search .form-group .filter > li > label{
+.search .form-group .filter > li > label {
     width: 100%;
-    margin-bottom:0;
+    margin-bottom: 0;
     font-weight: normal;
     cursor: pointer;
 }
 
-.search .form-group .btn-focus{
+.search .form-group .btn-focus {
     color: #333;
     background-color: #d4d4d4;
     border-color: #8c8c8c;
@@ -472,13 +479,23 @@ select.form-control:focus {
 /* icon-arrow-up end */
 
 /* color start */
-.blue{
+.blue {
     color: #03A9F4;
 }
-.red{
+
+.red {
     color: #FF5722;
 }
-.green{
+
+.green {
     color: #8BC34A;
+}
+
+.error-tips {
+    color: #ff0000
+}
+
+input.error {
+    border-color: #ff0000;
 }
 /* color end */

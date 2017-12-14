@@ -1,10 +1,12 @@
 <div class="search form-inline clearfix">
-    <a class="btn btn-primary" ui-sref="add_experience_shop">新添加</a>
+    <button class="btn btn-primary">新添加</button>
     <span>选择区域</span>
     <select class="form-control" ng-options="obj.code as obj.value for obj in province"
-            ng-model="select_district.province_code"></select>
+            ng-model="select_district.province_code"
+            ng-change="select_province(select_district.province_code, 1)"></select>
     <select class="form-control" ng-if="select_district.province_code != 0"
-            ng-options="obj.code as obj.value for obj in city" ng-model="select_district.city_code"></select>
+            ng-options="obj.code as obj.value for obj in city" ng-model="select_district.city_code"
+            ng-change="select_province(select_district.city_code, 2)"></select>
     <select class="form-control" ng-if="select_district.city_code != 0"
             ng-options="obj.code as obj.value for obj in district" ng-model="select_district.district_code"></select>
     <span>状态</span>
@@ -15,7 +17,7 @@
     </select>
     <div class="form-group pull-right">
         <div class="input-group">
-            <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索商家编号或名称">
+            <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索商品编号名称、线下店或商家名称">
             <span class="iconfont icon-search"></span>
         </div>
         <button class="btn btn-default" ng-click="search()">查询</button>
@@ -25,11 +27,11 @@
     <table class="table table-responsive table-hover">
         <thead>
         <tr>
-            <th>商家编号</th>
-            <th>商家名称</th>
+            <th>商品编号</th>
+            <th>商品名称</th>
+            <th>所在线下店</th>
+            <th>所属商家</th>
             <th>所在区域</th>
-            <th>店铺类型</th>
-            <th>所属类目</th>
             <th>状态</th>
             <th>详情</th>
             <th>操作</th>
@@ -37,22 +39,21 @@
         </thead>
         <tbody>
         <tr ng-repeat="obj in list">
-            <td>{{obj.shop_no}}</td>
-            <td>{{obj.shop_name}}</td>
+            <td>{{obj.sku}}</td>
+            <td>{{obj.goods_name}}</td>
+            <td>{{obj.line_shop_name}}</td>
+            <td>{{obj.supplier_shop_name}}</td>
             <td>{{obj.district}}</td>
-            <td>{{obj.type_shop}}</td>
-            <td>{{obj.category}}</td>
             <td>
                 <span class="blue" ng-if="obj.status == 2">已开启</span>
                 <span class="red" ng-if="obj.status == 1">已关闭</span>
             </td>
             <td>
-                <a ui-sref="edit_experience_shop({shopNo: obj.shop_no})">查看</a>
+                <a href="javascript: void (0);">查看</a>
             </td>
             <td>
-                <a href="javascript: void (0);" ng-if="obj.status == 2" ng-click="open_or_close(1, obj.shop_no)">关闭</a>
-                <a href="javascript: void (0);" ng-if="obj.status == 1" ng-click="open_or_close(2, obj.shop_no)">开启</a>
-                <a href="javascript: void (0);" ng-click="del_shop(obj.shop_no)">删除</a>
+                <a href="javascript: void (0);">关闭</a>
+                <a href="javascript: void (0);">删除</a>
             </td>
         </tr>
         </tbody>
