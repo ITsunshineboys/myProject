@@ -226,6 +226,7 @@ class Supplier extends ActiveRecord
         if (!$supplier->validate()) {
             $code = 1000;
 
+            echo 1;die;
             if (isset($supplier->errors['shop_name'])) {
                 $customErrCode = ModelService::customErrCode($supplier->errors['shop_name'][0]);
                 if ($customErrCode !== false) {
