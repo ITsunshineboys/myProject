@@ -57,7 +57,7 @@
         <td ng-bind="item.type_shop"></td>
         <td ng-bind="item.category"></td>
         <td ng-bind="item.review_status==0?'待审核':item.review_status==1?'审核不通过':'审核通过'"></td>
-        <td ui-sref="verify_detail">查看</td>
+        <td class="blue" ui-sref="verify_detail({id:item.supplier_id})">审核</td>
     </tr>
     </tbody>
 </table>

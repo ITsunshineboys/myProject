@@ -467,7 +467,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
 
         .state('verify_detail', { //商家入驻审核 -- 详情
-            url: '/verify_detail',
+            url: '/verify_detail?id',
             templateUrl: 'pages/mall_manage/merchant_settle/verify_detail.html',
             css: 'pages/mall_manage/merchant_settle/css/verify_detail.css',
             controller: 'verify_detail'
