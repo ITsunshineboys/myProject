@@ -192,6 +192,172 @@ class Supplier extends ActiveRecord
     }
 
     /**
+     * Supplier applies for certification
+     *
+     * @param Supplier $sup supplier who applies for certification
+     * @param ActiveRecord $user user
+     * @param array $attrs attributes to add
+     * @param ActiveRecord $operator operator default null
+     * @return int
+     */
+    public static function certificationApplication(Supplier $sup, ActiveRecord $user, array $attrs, ActiveRecord $operator = null)
+    {
+        $supplier = $sup ? $sup : new self;
+        $supplier->type_org = isset($attrs['type_org']) ? (int)$attrs['type_org'] : 0;
+        $supplier->category_id = isset($attrs['category_id']) ? (int)$attrs['category_id'] : 0;
+        $supplier->type_shop = isset($attrs['type_shop']) ? (int)$attrs['type_shop'] : 0;
+        $supplier->name = isset($attrs['name']) ? trim($attrs['name']) : '';
+        $supplier->licence = isset($attrs['licence']) ? trim($attrs['licence']) : '';
+        $supplier->licence_image = isset($attrs['licence_image']) ? trim($attrs['licence_image']) : '';
+        $supplier->uid = $user->id;
+        $supplier->create_time = time();
+        $supplier->status = isset($attrs['status']) ? (int)$attrs['status'] : self::STATUS_WAIT_REVIEW;
+        $supplier->shop_name = isset($attrs['shop_name']) ? trim($attrs['shop_name']) : '';
+        $supplier->shop_name .= self::TYPE_SHOP[$supplier->type_shop];
+//        $supplier->support_offline_shop = isset($attrs['support_offline_shop'])
+//            ? (int)$attrs['support_offline_shop']
+//            : self::OFFLINE_SHOP_NOT_SUPPORT;
+        $supplier->support_offline_shop = self::OFFLINE_SHOP_NOT_SUPPORT;
+        $supplier->icon = Yii::$app->params['user']['deault_icon_path'];
+        $supplier->quality_guarantee_deposit = isset($attrs['quality_guarantee_deposit'])
+            ? (int)$attrs['quality_guarantee_deposit']
+            : Yii::$app->params['supplier']['quality_guarantee_deposit'];
+
+        $supplier->scenario = self::SCENARIO_ADD;
+        if (!$supplier->validate()) {
+            $code = 1000;
+
+            if (isset($supplier->errors['shop_name'])) {
+                $customErrCode = ModelService::customErrCode($supplier->errors['shop_name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
+            } elseif (isset($supplier->errors['name'])) {
+                $customErrCode = ModelService::customErrCode($supplier->errors['name'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
+            } elseif (isset($supplier->errors['licence'])) {
+                $customErrCode = ModelService::customErrCode($supplier->errors['licence'][0]);
+                if ($customErrCode !== false) {
+                    $code = $customErrCode;
+                }
+            }
+
+            return $code;
+        }
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            if (!$supplier->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+
+            $supplier->shop_no = Yii::$app->params['supplierRoleId']
+                . (Yii::$app->params['offsetGeneral'] + $supplier->id);
+            if (!$supplier->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+
+            UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['supplierRoleId']]);
+            $userRole = new UserRole;
+            $userRole->user_id = $user->id;
+            $userRole->role_id = Yii::$app->params['supplierRoleId'];
+            $userRole->review_apply_time = time();
+            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
+            if ($operator) {
+                $userRole->review_time = time();
+                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+                $userRole->reviewer_uid = $operator->id;
+
+                $supplier->status = self::STATUS_OFFLINE;
+                if (!$supplier->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return $code;
+                }
+            }
+            if (!$userRole->save()) {
+                $transaction->rollBack();
+
+                $code = 500;
+                return $code;
+            }
+
+            $user->refresh();
+            if (empty($user->identity_no)) {
+                $user->legal_person = isset($attrs['legal_person']) ? trim($attrs['legal_person']) : '';
+                $user->identity_no = isset($attrs['identity_card_no']) ? trim($attrs['identity_card_no']) : '';
+                $user->identity_card_front_image = isset($attrs['identity_card_front_image'])
+                    ? trim($attrs['identity_card_front_image'])
+                    : '';
+                $user->identity_card_back_image = isset($attrs['identity_card_back_image'])
+                    ? trim($attrs['identity_card_back_image'])
+                    : '';
+
+                if (!$user->validateIdentity($operator)) {
+                    $transaction->rollBack();
+
+                    $code = 1000;
+                    return $code;
+                }
+
+                if (User::checkIdentityExisting($user->identity_no)) {
+                    $transaction->rollBack();
+
+                    $code = 1038;
+                    return $code;
+                }
+
+                if (!$user->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return $code;
+                }
+
+                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']])->one();
+                if (!$userRole) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return $code;
+                }
+
+                $userRole->review_time = time();
+                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+                if ($operator) {
+                    $userRole->reviewer_uid = $operator->id;
+                }
+                if (!$userRole->save()) {
+                    $transaction->rollBack();
+
+                    $code = 500;
+                    return $code;
+                }
+            }
+
+            Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
+
+            $transaction->commit();
+            $code = 200;
+            return $code;
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return $code;
+        }
+    }
+
+    /**
      * Add supplier and have it certificated if necessary
      *
      * @param ActiveRecord $user user
