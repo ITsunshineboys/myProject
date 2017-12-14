@@ -13,7 +13,7 @@ app.controller('engineering_standards_ctrl',function ($uibModal,$state,$statePar
         }
     ]
     //请求省市数据
-    $http.get('districts2.json').then(function (res) {
+    $http.get('city.json').then(function (res) {
         console.log(res)
         $scope.province_name = res.data[0]['86'][$stateParams.province]
         $scope.city_name = res.data[0][$stateParams.province][$stateParams.city]

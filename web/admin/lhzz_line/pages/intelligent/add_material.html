@@ -2,7 +2,8 @@
     <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}
     </h6>
     <div class="form-group">
-        <button ng-click="go_material_detail()"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加新材料</button>
+        <button ui-sref="material_detail({status:0})"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加新材料</button>
+        <button ng-click="refresh()" ng-disabled="status_words=='刷新中...'">{{status_words}}</button>
     </div>
     <table class="table table-responsive table-hover">
         <tr>
@@ -16,9 +17,9 @@
             <td>{{item.three_materials}}</td>
             <td>{{item.add_time}}</td>
             <td>{{item.correlation_message}}</td>
-            <td style="color:#5677FC;" ng-click="edit_material(item)">编辑</td>
-            <td style="color: #5677FC;" ng-click="delete_material(item)">删除</td>
+            <td><a ui-sref="material_detail({status:1,id:item.id})">编辑</a></td>
+            <td><a ng-click="deleteMaterial(item)">删除</a></td>
         </tr>
     </table>
-    <tm-pagination conf="Config1"></tm-pagination>
+    <tm-pagination conf="Config"></tm-pagination>
 </div>

@@ -12,6 +12,7 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
             name: '智能报价商品管理'
         }
     ]
+    //获取省市
     $http.get('city.json').then(function (res) {
         console.log(res)
         $scope.province_name = res.data[0]['86'][$stateParams.province]
@@ -108,24 +109,67 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
         console.log(item)
         if(item.flag == false){
             console.log(1);
-            let index = $scope.support_goods_list.findIndex(function (item1) {
+            let index = $scope.goods_management_list.findIndex(function (item1) {
                 return item.id == item1.id
             })
-            index!=-1?$scope.support_goods_list.splice(index,1):''
+            index!=-1?$scope.goods_management_list.splice(index,1):''
         }else{
             console.log(2);
-            $scope.support_goods_list.push(item)
+            item['quantity'] = ''
+            $scope.goods_management_list.push(item)
         }
     }
     //删除项
     $scope.removeCategory = function (item) {
-        let index = $scope.support_goods_list.findIndex(function (item1) {
+        let index = $scope.goods_management_list.findIndex(function (item1) {
             return item1.id == item.id
         })
         let index1 = $scope.level_three.findIndex(function (item1) {
             return item1.id == item.id
         })
-        $scope.support_goods_list.splice(index,1)
+        $scope.goods_management_list.splice(index,1)
         $scope.level_three[index1].flag = false
+    }
+    //保存
+    $scope.saveCategory = function (valid) {
+        console.log($scope.goods_management_list);
+        let arr = []
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.cur_title = '保存成功'
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+                history.go(-1)
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        for(let [key,value] of $scope.goods_management_list.entries()){
+            arr.push({
+                id:value.id,
+                path:value.path,
+                pid:value.pid,
+                title:value.title,
+                quantity:value.quantity
+            })
+        }
+        if(valid){
+            _ajax.post('/quote/goods-management-add',{
+                city:$stateParams.city,
+                add_item:arr
+            },function (res) {
+                console.log(res)
+                $scope.submitted = false
+                $uibModal.open({
+                    templateUrl: 'pages/intelligent/cur_model.html',
+                    controller: all_modal
+                })
+            })
+        }else{
+            $scope.submitted = true
+        }
+    }
+    //返回前一页
+    $scope.goPrev = function () {
+        $scope.submitted = false
+        history.go(-1)
     }
 })

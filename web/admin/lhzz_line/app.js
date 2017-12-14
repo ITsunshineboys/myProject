@@ -558,15 +558,17 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/coefficient_manage.css',
             controller:'coefficient_manage_ctrl'
         })
-        .state('intelligent.add_material', {//添加材料项
-            url: 'add_material',
+        .state('add_material', {//添加材料项
+            url: '/add_material?city&province',
             templateUrl: 'pages/intelligent/add_material.html',
-            css: 'pages/intelligent/css/add_material.css'
+            css: 'pages/intelligent/css/add_material.css',
+            controller:'add_material_ctrl'
         })
-        .state('intelligent.material_detail', {//添加材料详情
-            url: 'material_detail',
+        .state('material_detail', {//添加材料详情
+            url: '/material_detail?status&id',
             templateUrl: 'pages/intelligent/material_detail.html',
-            css: 'pages/intelligent/css/material_detail.css'
+            css: 'pages/intelligent/css/material_detail.css',
+            controller:'material_detail_ctrl'
         })
         .state('intelligent.house_area', {//房屋面积编辑
             url: 'house_area',
