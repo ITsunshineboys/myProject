@@ -247,6 +247,7 @@ class OwnerCashManager extends ActiveRecord {
      * @return int
      */
     public static function doCash($cash_id, $status, $reason, $real_money){
+        var_dump($real_money);die;
         $owner_cash = (new Query())
             ->from(self::USER_CASHREGISTER)
             ->where(['id' => $cash_id, 'role_id' => self::OWNER_ROLE])
@@ -282,7 +283,7 @@ class OwnerCashManager extends ActiveRecord {
         }
 
         $time = time();
-        var_dump($real_money);die;
+
         $user_cash=UserCashregister::find()->where(['id'=>$cash_id])->one();
         $user_cash->status=$status;
         $user_cash->supplier_reason=$reason;
