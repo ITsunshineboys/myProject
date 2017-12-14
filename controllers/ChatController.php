@@ -232,7 +232,7 @@ class ChatController extends Controller
         $code=1000;
         $message=trim(\Yii::$app->request->post('message'));
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
-        $message=ChatRecord::userTextEncode($message);var_dump($message);die;
+        $message=ChatRecord::userTextEncode($message);
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user['username']);
