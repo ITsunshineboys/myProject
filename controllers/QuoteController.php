@@ -2106,7 +2106,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = CoefficientManagement::find()->asArray()->all();
+        $a = AssortGoods::find()->asArray()->all();
         var_dump($a);exit;
 
 
