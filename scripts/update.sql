@@ -206,7 +206,3 @@ ALTER TABLE `user_accessdetail` ADD  `recharge_pay_type` tinyint(1) NOT NULL DEF
 
 --all 2017.12.13 yr
 ALTER TABLE `chat_record` ADD  `length` int(11) NOT NULL DEFAULT '0' COMMENT '语音长度';
-
-
---all 2017.12.14  hyz
-ALTER TABLE `order_goodslist` modify column after_sale_services set('0', '1', '2', '3', '4', '5', '6') not null DEFAULT '0' comment '0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货';

@@ -414,9 +414,10 @@ class SupplierController extends Controller
             ->one();
         if (!$Supplier)
         {
+            $code=1076;
             return Json::encode([
-                'code' => 1000,
-                'msg' => '没有此商家,请重新输入',
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $line_supplier=LineSupplier::find()
@@ -424,9 +425,10 @@ class SupplierController extends Controller
             ->one();
         if ($line_supplier)
         {
+            $code=1077;
             return Json::encode([
-                'code' => 1000,
-                'msg' => '商家编号重复,请重新输入',
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
@@ -506,9 +508,10 @@ class SupplierController extends Controller
             ->one();
         if (!$supplier)
         {
+            $code=1076;
             return Json::encode([
-                'code' => 1000,
-                'msg' => '没有此商家,请重新输入',
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $line_supplier=LineSupplier::find()
@@ -516,9 +519,10 @@ class SupplierController extends Controller
             ->one();
         if ($line_supplier)
         {
+            $code=1077;
             return Json::encode([
                 'code' => 1000,
-                'msg' => '商家编号重复,请重新输入',
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $code=Supplier::AddLineSupplier($post,$supplier->id);
