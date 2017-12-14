@@ -66,7 +66,7 @@ class AssortGoods extends ActiveRecord
                 'path'=> $post['path'],
                 'state'=> 1,
                 'quantity'=> $post['quantity'],
-                'city'=> $city,
+                'city_code'=> $city,
             ])
             ->execute();
         return $res;
