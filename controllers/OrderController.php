@@ -1243,6 +1243,26 @@ class OrderController extends Controller
         ]);
     }
 
+
+    public  function  actionPlatformUp()
+    {
+        $request    = Yii::$app->request;
+        $order_no   = trim($request->post('order_no',''));
+        $sku        = trim($request->post('sku',''));
+        $handle_type= trim($request->post('handle_type',''));
+
+        $OrderPlatForm=OrderPlatForm::find()
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->one();
+        $OrderPlatForm->handle=$handle_type;
+        $res=$OrderPlatForm->save(false);
+        if (!$res){
+            $code=500;
+            return $code;
+        }
+    }
+
    /**
      * 订单平台介入-操作
      * @return int|string
@@ -5627,26 +5647,47 @@ class OrderController extends Controller
                                 break;
                             case 2:
                                 $code=200;
-                                $data[]=[
-                                    'name'=>'退货',
-                                    'value'=>3,
-                                ];
-                                $data[]=[
-                                    'name'=>'换货',
-                                    'value'=>4,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门维修',
-                                    'value'=>5,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门退货',
-                                    'value'=>6,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门换货',
-                                    'value'=>7,
-                                ];
+                                $orderAfterSale=OrderAfterSale::find()
+                                    ->select('type')
+                                    ->where(['order_no'=>$order_no])
+                                    ->andWhere(['sku'=>$sku])
+                                    ->one();
+                                //1. 退货  2.换货  3.上门维修  4. 上门换货   5.上门退货
+                                switch ($orderAfterSale->type)
+                                {
+                                    case 1:
+                                        $data[]=[
+                                            'name'=>'退货',
+                                            'value'=>3,
+                                        ];
+                                        break;
+                                    case 2:
+                                        $data[]=[
+                                            'name'=>'换货',
+                                            'value'=>4,
+                                        ];
+                                        break;
+                                    case 3:
+                                        $data[]=[
+                                            'name'=>'上门维修',
+                                            'value'=>5,
+                                        ];
+                                        break;
+                                    case 4:
+                                        $data[]=[
+                                            'name'=>'上门换货',
+                                            'value'=>7,
+                                        ];
+                                        break;
+                                    case 5:
+                                        $data[]=[
+                                            'name'=>'上门退货',
+                                            'value'=>6,
+                                        ];
+                                        break;
+                                    case 6:
+                                        break;
+                                }
                                 return Json::encode(
                                     [
                                         'code'=>$code,

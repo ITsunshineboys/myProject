@@ -459,7 +459,6 @@ class OrderAfterSale extends ActiveRecord
             'status'=>'over'
         ];
         //通过售后的类型获取是否过该类型下的平台介入
-        echo $OrderAfterSale->type;die;
         $handle=OrderPlatForm::GetAfterHandleType($OrderAfterSale->type);
         $PlatForm=OrderPlatForm::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
