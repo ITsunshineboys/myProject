@@ -958,6 +958,7 @@ class SupplierController extends Controller
             'msg' => 'OK',
             'data' => [
                 'category' =>$category ,
+                'shop_no'=>$Supplier->shop_no,
                 'shop_name'=>$Supplier->shop_name,
                 'shop_type'=>$shop_type,
                 'name'=>$Supplier->name,

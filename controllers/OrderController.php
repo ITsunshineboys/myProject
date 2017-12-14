@@ -3905,7 +3905,7 @@ class OrderController extends Controller
                 ]);
             }
             $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-            if (!$OrderGoods )
+            if (!$OrderGoods)
             {
                 return Json::encode([
                     'code' => $code,
