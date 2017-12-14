@@ -946,7 +946,13 @@ class SupplierController extends Controller
         }else{
             $reviewer_name='';
         }
-
+        $review_time=$user_role->review_time;
+        if ($review_time!=0)
+        {
+            $review_time=date('Y-m-d H:i',$user_role->review_time);
+        }else{
+            $review_time='';
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
@@ -965,7 +971,7 @@ class SupplierController extends Controller
                 'mobile'=>$user->mobile,
                 'aite_cube_no'=>$user->aite_cube_no,
                 'review_apply_time'=>date('Y-m-d H:i',$user_role->review_apply_time),
-                'review_time'=>date('Y-m-d H:i',$user_role->review_time),
+                'review_time'=>$review_time,
                 'review_status'=>$user_role->review_status,
                 'review_remark'=>$user_role->review_remark,
                 'reviewer_name'=>$reviewer_name,
