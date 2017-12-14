@@ -2893,6 +2893,7 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $output['order_no']=$arr[0]['order_no'];
+            $output['status_type']=$arr[0]['status_type'];
             $output['status_code']=$arr[0]['status_code'];
             $output['status_desc']=$arr[0]['status_desc'];
             $output['buyer_message']=$arr[0]['buyer_message'];
