@@ -24,10 +24,10 @@ class GoodsAttr extends ActiveRecord
     const UNITS = [
         '无',
         'L',
-        'M',
-        'M^2',
-        'Kg',
-        'MM'
+        'm',
+        'm²',
+        'kg',
+        'mm'
     ];
 
     const ADDITION_TYPES = [

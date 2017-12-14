@@ -34,6 +34,7 @@ use app\models\WorkerCraftNorm;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
+use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
@@ -1513,17 +1514,16 @@ class QuoteController extends Controller
     }
 
     /**
-     * decoration ass classify
+     * 材料添加项 材料抓取
      * @return string
      */
     public function actionDecorationAddClassify()
     {
-        $one_goods = trim(\Yii::$app->request->post('classify',''));
+        $category_id = (int)trim(\Yii::$app->request->get('category_id',''));
 //        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         //TODO 修改
-        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['title'=>$one_goods])->one();
-        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,  $one_goods_id['id']);
-
+//        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
+        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
         if (!isset($goods['0'])){
             $code = 1000;
             return Json::encode([
@@ -1531,13 +1531,13 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        $max = BasisDecorationService::profitMargin($goods);
 
-
-        $goods_attr = GoodsAttr::frontDetailsByGoodsId($goods['0']['id']);
+        $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'goods'=> $goods['0'],
+            'goods'=> $max,
             'goods_attr'=> $goods_attr,
         ]);
     }
