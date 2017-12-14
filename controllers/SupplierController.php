@@ -965,7 +965,7 @@ class SupplierController extends Controller
                 'mobile'=>$user->mobile,
                 'aite_cube_no'=>$user->aite_cube_no,
                 'review_apply_time'=>date('Y-m-d H:i',$user_role->review_apply_time),
-                'review_time'=>date('Y-m-d H:i',$Supplier->review_time),
+                'review_time'=>date('Y-m-d H:i',$user_role->review_time),
                 'review_status'=>$user_role->review_status,
                 'review_remark'=>$user_role->review_remark,
                 'reviewer_name'=>$reviewer_name,
