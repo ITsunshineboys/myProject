@@ -1504,7 +1504,7 @@ class QuoteController extends Controller
         $size = (int)trim(\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT));
         $city = (int)trim(\Yii::$app->request->get('city', DecorationAdd::PAGE_SIZE_DEFAULT));
         $where  = 'city_code = '.$city;
-        $select = 'three_materials,add_time,correlation_message';
+        $select = 'id,three_materials,add_time,correlation_message';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
         return Json::encode([
             'code' => 200,
@@ -1523,23 +1523,20 @@ class QuoteController extends Controller
 //        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         //TODO 修改
 //        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
-        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
-        if (!isset($goods['0'])){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $max = BasisDecorationService::profitMargin($goods);
 
-        $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
+        $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
+        if (isset($goods['0'])) {
+            $max        = BasisDecorationService::profitMargin($goods);
+            $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
+        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
             'goods'=> $max,
             'goods_attr'=> $goods_attr,
         ]);
+
     }
 
     /**

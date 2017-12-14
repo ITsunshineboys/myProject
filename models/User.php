@@ -596,16 +596,30 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function totalNumberStat()
     {
-        $totalUserNumber = UserRole::totalNumber();
+        $totalOwner = self::totalNumber();
+        $totalDesigner = Designer::totalNumber();
+        $totalSupplier = Supplier::totalNumber();
+        $totalManager = Manager::totalNumber();
+        $totalWorker = Worker::totalNumber();
+        $totalDecorationCompany = DecorationCompany::totalNumber();
+
+        $totalUserNumber = $totalOwner
+            + $totalDesigner
+            + $totalSupplier
+            + $totalManager
+            + $totalWorker
+            + $totalDecorationCompany;
+
         $totalAuthorizedUserNumber = UserRole::totalAuthorizedUserNumber();
+
         return [
             'total_number_user' => $totalUserNumber,
-            'total_number_owner' => self::totalNumber(),
-            'total_number_designer' => Designer::totalNumber(),
-            'total_number_supplier' => Supplier::totalNumber(),
-            'total_number_manager' => Manager::totalNumber(),
-            'total_number_worker' => Worker::totalNumber(),
-            'total_number_decoration_company' => DecorationCompany::totalNumber(),
+            'total_number_owner' => $totalOwner,
+            'total_number_designer' => $totalDesigner,
+            'total_number_supplier' => $totalSupplier,
+            'total_number_manager' => $totalManager,
+            'total_number_worker' => $totalWorker,
+            'total_number_decoration_company' => $totalDecorationCompany,
             'total_number_authorized_user' => $totalAuthorizedUserNumber,
             'total_number_unauthorized_user' => $totalUserNumber - $totalAuthorizedUserNumber,
         ];
