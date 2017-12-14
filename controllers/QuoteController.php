@@ -382,23 +382,23 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
 
-        $tr = \Yii::$app->db->beginTransaction();
-        try{
-//            $del = CoefficientManagement::deleteAll();
-//            if (!$del){
+//        $tr = \Yii::$app->db->beginTransaction();
+//        try{
+            $del = CoefficientManagement::deleteAll();
+            if (!$del){
 //                $tr->rollBack();
-//                $code = 1000;
-//                return Json::encode([
-//                    'code' => $code,
-//                    'msg'  => \Yii::$app->params['errorCodes'][$code]
-//                ]);
-//            }
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             foreach ($post['value'] as $value){
                 $row = (new CoefficientManagement())->findByInsert($value,$post['city']);
             }
 
             if (!$row){
-                $tr->rollBack();
+//                $tr->rollBack();
                 $code = 1000;
                 return Json::encode([
                     'code' => $code,
@@ -406,10 +406,10 @@ class QuoteController extends Controller
                 ]);
             }
 
-            $tr->commit();
-        }catch (\Exception $e) {
-            $tr->rollback();
-        }
+//            $tr->commit();
+//        }catch (\Exception $e) {
+//            $tr->rollback();
+//        }
 
         return Json::encode([
             'code'=>200,
