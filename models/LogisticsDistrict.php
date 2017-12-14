@@ -150,9 +150,9 @@ class LogisticsDistrict extends ActiveRecord
             $code=0;
         }else{
             if ($ci==0){
-                $code=$pro.'0000';
+                $code=$pro;
             }else if($dis==0){
-                $code=$pro.$ci.'00';
+                $code=$pro.$ci;
             }else{
                 $code=$district_code;
             }
