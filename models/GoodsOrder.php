@@ -2830,8 +2830,8 @@ class GoodsOrder extends ActiveRecord
                 }else{
                     $list[$k]['automatic_receive_time']=$arr[$k]['RemainingTime'];
                 }
-                $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
-                $list[$k]['goods_id']=$arr[$k]['goods_id'];
+//                $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
+//                $list[$k]['goods_id']=$arr[$k]['goods_id'];
                 $list[$k]['sku']=$arr[$k]['sku'];
                 $list[$k]['goods_name']=$arr[$k]['goods_name'];
                 $list[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
