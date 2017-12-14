@@ -683,7 +683,7 @@ class SupplierCashController extends Controller
 //       $user->availableamount=99889865;
 //       $user->save(false);
 //       var_dump($user);die;
-      var_dump(ChatRecord::find()->asArray()->all());
+      var_dump(UserCashregister::find()->asArray()->all());
 
     }
 
