@@ -581,7 +581,6 @@ class SupplierController extends Controller
             $Supplier['dis']=(string)$line_supplier['district_code'];
             $Supplier['district_code']=$line_supplier['district_code'];
             $Supplier['address']=$line_supplier['address'];
-            $Supplier['mobile']=$line_supplier['mobile'];
         }
         $Supplier['type_shop']=Supplier::TYPE_SHOP[$Supplier['type_shop']];
         $three_category=GoodsCategory::findOne($Supplier['category_id']);
