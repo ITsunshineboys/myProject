@@ -282,7 +282,7 @@ class OwnerCashManager extends ActiveRecord {
         }
 
         $time = time();
-
+        var_dump($real_money);die;
         $user_cash=UserCashregister::find()->where(['id'=>$cash_id])->one();
         $user_cash->status=$status;
         $user_cash->supplier_reason=$reason;
