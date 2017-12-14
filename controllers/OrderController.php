@@ -1577,10 +1577,10 @@ class OrderController extends Controller
               ->where(['order_no'=>$order_no,'sku'=>$sku])
               ->one())
           {
-                $is_unusual=0;
+//                $is_unusual=0;
                 $is_refund=1;
           }else{
-                $is_unusual=1;
+//                $is_unusual=1;
                 $is_refund=2;
           }
           $goods_data['create_time']=$order_information['create_time'];
