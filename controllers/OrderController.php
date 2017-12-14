@@ -3940,7 +3940,7 @@ class OrderController extends Controller
                         'goods_name'=>$OrderGoods->goods_name,
                         'goods_number'=>$OrderGoods->goods_number,
                         'cover_image'=>$OrderGoods->cover_image,
-                        'goods_price'=>$OrderGoods->goods_price
+                        'goods_price'=>GoodsOrder::switchMoney($OrderGoods->goods_price*0.01)
                     ],
                     'after_sale'=>$data
                 ]
