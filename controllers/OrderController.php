@@ -3914,9 +3914,10 @@ class OrderController extends Controller
                 ]);
             }
             $arr=explode(',',$Goods->after_sale_services);
+            $data=[];
             foreach ($arr as $k =>$v)
             {
-              if ($arr[$k]==0 ||$arr[$k]==1 )
+                if ($arr[$k]==0 ||$arr[$k]==1 )
                 {
                     unset($arr[$k]);
                 }
