@@ -990,7 +990,9 @@ class SupplierController extends Controller
         }
         $status=Yii::$app->request->post('status');
 
-        if ($status!=1 || $status!=2)
+        $review_remark=Yii::$app->request->post('review_remark');
+
+        if ($status!=1 || $status!=2 )
         {
             $code = 1000;
             return Json::encode([
@@ -1016,6 +1018,7 @@ class SupplierController extends Controller
         try{
             $user_role->review_status=$status;
             $user_role->review_time=$time;
+            $user_role->review_remark=$review_remark;
             if (!$user_role->save(false))
             {
                 $tran->rollBack();
