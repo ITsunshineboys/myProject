@@ -1480,13 +1480,13 @@ class SupplieraccountController extends  Controller{
                 $endTime = (int)(strtotime($endTime));
                 $endTime && $where .= " and $time <= {$endTime}";
             }
-            if(isset($status)){
-                $where .=" and ur.review_status=$status ";
-            }
+
         }else{
             $where.= " and CONCAT(u.nickname,u.mobile) like '%{$keyword}%'";
         }
-
+        if(isset($status)){
+            $where .=" and ur.review_status=$status ";
+        }
         $sort=(int)(Yii::$app->request->get('sort','2'));
         if($status==0){
             switch ($sort)
