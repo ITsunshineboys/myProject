@@ -2308,6 +2308,9 @@ class OrderController extends Controller
     }
 
 
+    /**
+     * @return string
+     */
     public  function  actionBalanceAdd()
     {
         $user = Yii::$app->user->identity;
@@ -5829,6 +5832,14 @@ class OrderController extends Controller
             ->andWhere(['default'=>1])
             ->asArray()
             ->one();
+        if ($addressList)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '收货地址不存在'
+            ]);
+        }
             $addressList['district_code'] = $addressList['district'];
             $addressList['district'] = LogisticsDistrict::getdistrict($addressList['district']);
 
