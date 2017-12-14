@@ -1445,6 +1445,11 @@ class SupplieraccountController extends  Controller{
         $timeType = trim(Yii::$app->request->get('time_type', ''));
 
         $where=" ur.role_id=7 ";
+        if($status==0){
+            $time='ur.review_apply_time';
+        }else{
+            $time='ur.review_time';
+        }
         if(!$keyword){
             if ($timeType == 'custom') {
                 $startTime = trim(Yii::$app->request->get('start_time', ''));
@@ -1469,17 +1474,17 @@ class SupplieraccountController extends  Controller{
             }
             if ($startTime) {
                 $startTime = (int)strtotime($startTime);
-                $startTime && $where .= " and ur.review_apply_time >= {$startTime}";
+                $startTime && $where .= " and $time >= {$startTime}";
             }
             if ($endTime) {
                 $endTime = (int)(strtotime($endTime));
-                $endTime && $where .= " and ur.review_apply_time <= {$endTime}";
+                $endTime && $where .= " and $time <= {$endTime}";
             }
             if(isset($status)){
                 $where .=" and ur.review_status=$status ";
             }
         }else{
-            $where.= " and CONCAT(u.nickname,u.aite_cube_no) like '%{$status}%'";
+            $where.= " and CONCAT(u.nickname,u.aite_cube_no) like '%{$keyword}%'";
         }
 
         $sort=(int)(Yii::$app->request->get('sort','2'));
