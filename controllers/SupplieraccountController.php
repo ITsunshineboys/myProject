@@ -98,7 +98,7 @@ class SupplieraccountController extends  Controller{
     public function actionCategory(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -129,7 +129,7 @@ class SupplieraccountController extends  Controller{
     public function actionAccountList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -204,7 +204,7 @@ class SupplieraccountController extends  Controller{
     public function actionAccountView(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -238,7 +238,7 @@ class SupplieraccountController extends  Controller{
     public function actionFreezeMoney(){
             $user = Yii::$app->user->identity;
             if (!$user){
-                $code=1052;
+                $code=403;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
@@ -273,7 +273,7 @@ class SupplieraccountController extends  Controller{
     public function actionApplyFreeze(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -307,7 +307,7 @@ class SupplieraccountController extends  Controller{
     public function actionFreezeList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -374,7 +374,7 @@ class SupplieraccountController extends  Controller{
     public function actionFreezeReason(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -409,7 +409,7 @@ class SupplieraccountController extends  Controller{
 
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -440,7 +440,7 @@ class SupplieraccountController extends  Controller{
 
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -506,7 +506,7 @@ class SupplieraccountController extends  Controller{
     public function actionCashedView(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -539,7 +539,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerAccountList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -576,7 +576,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerDeletedAccount(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -611,7 +611,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierAccessDetailList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -696,7 +696,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerAccessDetailList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -780,7 +780,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerAccountDetail(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -811,7 +811,7 @@ class SupplieraccountController extends  Controller{
     {
         $user = Yii::$app->user->identity;
         if (!$user) {
-            $code = 1052;
+            $code = 403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -848,7 +848,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerApplyFreeze(){
         $user = Yii::$app->user->identity;
         if (!$user) {
-            $code = 1052;
+            $code = 403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -881,7 +881,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerFreezeList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -945,7 +945,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerFreezeTaw(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -975,7 +975,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierBrandList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1039,7 +1039,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierBrandView(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1070,7 +1070,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierBrandEdit(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1220,7 +1220,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierCateList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1309,7 +1309,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierCateView(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1338,7 +1338,7 @@ class SupplieraccountController extends  Controller{
     public function actionSupplierCateEdit(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1432,7 +1432,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerAuditList(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1530,7 +1530,7 @@ class SupplieraccountController extends  Controller{
     public function actionAuditView(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1559,7 +1559,7 @@ class SupplieraccountController extends  Controller{
     public function actionOwnerDoAudit(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
