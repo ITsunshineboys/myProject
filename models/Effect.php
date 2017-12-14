@@ -229,6 +229,8 @@ class Effect extends ActiveRecord
         if($array['earnest']==0){
             unset($array['earnest']);
             unset($array['transaction_no']);
+        }else{
+            $earnest=sprintf('%.2f',(float)$array['earnest']*0.01);
         }
         if(isset($array['district'])){
             $array['address']=$array['city'].$array['district'].$array['street'];
@@ -237,7 +239,7 @@ class Effect extends ActiveRecord
         }
         $array['item']=EffectEarnest::EFFECT_LOGIN[$array['item']];
         $array['create_time']=date('Y-m-d',$array['create_time']);
-        $array['earnest']=sprintf('%.2f',(float)$array['earnest']*0.01);
+        $array['earnest']=$earnest;
         $array['sale_price']=sprintf('%.2f',(float)$array['sale_price']*0.01);
         $array['original_price']=sprintf('%.2f',(float)$array['original_price']*0.01);
         unset($array['city']);
