@@ -4,7 +4,9 @@ namespace app\controllers;
 
 use app\models\Carousel;
 use app\models\Goods;
+use app\models\Supplier;
 use app\models\User;
+use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use Yii;
 use yii\filters\AccessControl;
@@ -175,5 +177,18 @@ class TestController extends Controller
     {
         $data =Yii::$app->request->post();
         echo json_encode($data);
+    }
+
+
+    public  function  actionUpData()
+    {
+        $supplier=Supplier::findOne(Yii::$app->request->post('supplier_id'));
+        $role_id=Yii::$app->request->post('role_id');
+        $UserRole=UserRole::find()
+            ->where(['user_id'=>$supplier->uid])
+            ->andWhere(['role_id'=>$role_id])
+            ->one();
+        $UserRole->review_status=0;
+        $UserRole->save(false);
     }
 }
