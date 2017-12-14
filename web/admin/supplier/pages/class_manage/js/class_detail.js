@@ -4,7 +4,7 @@
 app.controller('class_detail', ['$state', '$rootScope', '$scope', '$stateParams', '_ajax', function ($state, $rootScope, $scope, $stateParams, _ajax) {
     $rootScope.crumbs = [{
         name: '分类管理',
-        icon: 'icon-shangchengguanli',
+        icon: 'icon-classification',
         link: 'class_manage'
     },{
         name: '分类详情'

@@ -4,7 +4,7 @@
 app.controller('add_class', ['$state', '$rootScope', '$scope', '$stateParams', '_ajax', 'Upload', function ($state, $rootScope, $scope, $stateParams, _ajax, Upload) {
     $rootScope.crumbs = [{
         name: '分类管理',
-        icon: 'icon-shangchengguanli',
+        icon: 'icon-classification',
         link: 'class_manage'
     }, {
         name: '添加分类'
