@@ -2486,7 +2486,14 @@ class GoodsOrder extends ActiveRecord
             $supplier=Supplier::find()
                 ->where(['id'=>$arr[$k]['supplier_id']])
                 ->one();
-            $arr[$k]['shop_name']=$supplier->shop_name;
+            if ($supplier)
+            {
+                $arr[$k]['shop_name']=$supplier->shop_name;
+            }else
+            {
+                $arr[$k]['shop_name']='';
+            }
+
             if ($role=='user')
             {
                 $arr[$k]['uid']=$supplier->uid;
