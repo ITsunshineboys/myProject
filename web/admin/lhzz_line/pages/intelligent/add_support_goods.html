@@ -1,24 +1,25 @@
 <div class="ulright">
+    <h6 class="location text-left"><i style="margin-right: 5px;font-size: 20px;" class="fa fa-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
     <ul>
-        <li ng-repeat="item in level_one" ng-class="{'cur_select':cur_level_one==item}" ng-click="go_detail(item,1)">{{item.title}}</li>
+        <li ng-repeat="item in level_one" ng-class="{'cur_select':cur_level_one==item}" ng-click="getCategory(item,1)">{{item.title}}</li>
     </ul>
 
     <ul>
-        <li ng-repeat="item in level_two" ng-class="{'cur_select':cur_level_two==item}" ng-click="go_detail(item,2)">{{item.title}}</li>
+        <li ng-repeat="item in level_two" ng-class="{'cur_select':cur_level_two==item}" ng-click="getCategory(item,2)">{{item.title}}</li>
     </ul>
 
     <ul class="thirdul" style="overflow: auto">
-        <li ng-repeat="item in level_three"><input ng-click="item_check(item)" type="checkbox" ng-model="item.complete">{{item.title}}</li>
+        <li ng-repeat="item in level_three"><input ng-click="chooseCategory(item)" type="checkbox" ng-model="item.flag">{{item.title}}</li>
     </ul>
 
     <ul class="lastul" style="overflow: auto">
-        <li ng-repeat="item in check_item track by $index">
+        <li ng-repeat="item in support_goods_list track by $index">
             {{item.title}}
-            <img src="pages/intelligent/images/close.png" alt="" ng-click="delete_check(item)">
+            <img src="pages/intelligent/images/close.png" alt="" ng-click="removeCategory(item)">
         </li>
     </ul>
     <div class="from-group submit">
-        <button class="btn btn-primary" ng-click="save_support_goods()">保存</button>
-        <button ng-click="go_index()" class="btn btn-default">返回</button>
+        <button class="btn btn-primary" ng-click="saveCategory()">保存</button>
+        <button ng-click="goPrev()" class="btn btn-default">返回</button>
     </div>
 </div>

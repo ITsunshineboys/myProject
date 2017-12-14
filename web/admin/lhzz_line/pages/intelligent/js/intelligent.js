@@ -232,7 +232,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         })
         //获取省市县数据(JSON)
         //初始化省市区县
-        $http.get('districts2.json').then(function (response) {
+        $http.get('city.json').then(function (response) {
             console.log((response.data[0]['86']))
             let arr = []
             let arr1 = []
@@ -265,7 +265,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         //根据省动态获取市、区县
         $scope.getCity = function () {
             console.log($scope.cur_province)
-            $http.get('districts2.json').then(function (response) {
+            $http.get('city.json').then(function (response) {
                 let arr1 = []
                 let arr2 = []
                 console.log(response.data[0])
@@ -293,7 +293,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.getCounty = function () {
             console.log($scope.cur_city)
             // $scope.city_name = $scope.province[22].name
-            $http.get('districts2.json').then(function (response) {
+            $http.get('city.json').then(function (response) {
                 console.log(response.data[0])
                 $scope.city_name = response.data[0][$scope.cur_province][$scope.cur_city]
                 let arr2 = []

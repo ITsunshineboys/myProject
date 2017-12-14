@@ -13,7 +13,7 @@ app.controller('coefficient_manage_ctrl', function ($uibModal, $state, $statePar
         }
     ]
     //请求省市数据
-    $http.get('districts2.json').then(function (res) {
+    $http.get('city.json').then(function (res) {
         console.log(res)
         $scope.province_name = res.data[0]['86'][$stateParams.province]
         $scope.city_name = res.data[0][$stateParams.province][$stateParams.city]
@@ -26,7 +26,7 @@ app.controller('coefficient_manage_ctrl', function ($uibModal, $state, $statePar
         $scope.all_coefficient = []
         $scope.all_category = angular.copy(res.list)
         for (let [key, value] of res.coefficient.entries()) {
-            let arr1 = $scope.all_category
+            let arr1 = angular.copy($scope.all_category)
             for(let [key1,value1] of $scope.all_coefficient.entries()){
                 let index = arr1.findIndex(function (item) {
                     return value1.category_id == item.id
@@ -39,6 +39,7 @@ app.controller('coefficient_manage_ctrl', function ($uibModal, $state, $statePar
                 options: arr1
             })
         }
+        console.log($scope.all_coefficient);
     })
     //添加项
     $scope.addCoefficient = function () {
