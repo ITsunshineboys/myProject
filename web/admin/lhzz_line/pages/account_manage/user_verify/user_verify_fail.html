@@ -48,7 +48,7 @@
         <td ng-bind="item.review_time"></td>
         <td ng-bind="item.review_status"></td>
         <td ng-bind="item.handle_name"></td>
-        <td class="blue">查看</td>
+        <td class="blue" ui-sref="user_verify_detail({id:item.id})">查看</td>
     </tr>
     </tbody>
 </table>

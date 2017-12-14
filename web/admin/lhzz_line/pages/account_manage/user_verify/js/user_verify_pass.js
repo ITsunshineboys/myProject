@@ -86,7 +86,7 @@ app.controller('account_user_verify_pass', ['$rootScope', '$scope', '$state', '$
     };
 
 
-    /*列表数据获取*/
+    // 列表数据获取
     function tableList() {
         $scope.params.keyword = $scope.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;

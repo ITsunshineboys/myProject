@@ -9,3 +9,7 @@
 .btns button{
     margin-right: 10px;
 }
+
+.form-group .form-control-static .pic-style {
+    height: 120px;
+}

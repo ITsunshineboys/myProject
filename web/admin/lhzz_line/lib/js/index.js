@@ -7,6 +7,8 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
                 sessionStorage.removeItem('mall_menu');
                 sessionStorage.removeItem('mall_dd_menu');
                 sessionStorage.removeItem('finance_dd_menu');
+                sessionStorage.removeItem('account_menu');
+                sessionStorage.removeItem('account_dd_menu');
                 sessionStorage.removeItem('other_menu');
                 window.location.href = 'login.html'
             }
