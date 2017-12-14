@@ -384,15 +384,15 @@ class QuoteController extends Controller
 
         $tr = \Yii::$app->db->beginTransaction();
         try{
-//            $del = CoefficientManagement::deleteAll();
-//            if (!$del){
-//                $tr->rollBack();
-//                $code = 1000;
-//                return Json::encode([
-//                    'code' => $code,
-//                    'msg'  => \Yii::$app->params['errorCodes'][$code]
-//                ]);
-//            }
+            $del = CoefficientManagement::deleteAll();
+            if (!$del){
+                $tr->rollBack();
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             foreach ($post['value'] as $value){
                 $row = (new CoefficientManagement())->findByInsert($value,$post['city']);
             }
