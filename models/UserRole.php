@@ -248,7 +248,7 @@ class UserRole extends ActiveRecord
         $audits=(new Query())
             ->from('user_role as ur')
             ->leftJoin('user as u','u.id = ur.user_id')
-            ->select('ur.*,u.nickname,u.aite_cube_no,u.identity_card_front_image,u.identity_card_back_image,u.mobile')
+            ->select('ur.*,u.nickname,u.aite_cube_no,u.identity_no,u.identity_card_front_image,u.identity_card_back_image,u.mobile')
             ->where(['ur.id'=>$id])
             ->one();
 
