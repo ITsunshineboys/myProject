@@ -293,7 +293,7 @@ angular.module('intelligent_index', ['ngFileUpload', 'ui.bootstrap', 'ngDraggabl
         $scope.getCounty = function () {
             console.log($scope.cur_city)
             // $scope.city_name = $scope.province[22].name
-            $http.get('city.json').then(function (response) {
+            $http.get('districts2.json').then(function (response) {
                 console.log(response.data[0])
                 $scope.city_name = response.data[0][$scope.cur_province][$scope.cur_city]
                 let arr2 = []

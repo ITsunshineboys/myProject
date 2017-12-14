@@ -67,11 +67,11 @@
             </div>
         </div>
         <div class="row" style="margin-top: 60px;border-bottom: 1px solid #ccc;margin-bottom: 40px;">
-            <p class="col-md-1" ng-click="tab_status = 0" style="margin-bottom: 0;"><span class="tab_title" ng-class="{'cur_choose':tab_status == 0}">系列相关</span>
+            <p class="col-md-1" ng-click="changeTab(1)" style="margin-bottom: 0;"><span class="tab_title" ng-class="{'cur_choose':tab_status == 0}">系列相关</span>
             </p>
-            <p class="col-md-1" ng-click="tab_status = 1" style="margin-bottom: 0;"><span class="tab_title" ng-class="{'cur_choose':tab_status == 1}">风格相关</span>
+            <p class="col-md-1" ng-click="changeTab(2)" style="margin-bottom: 0;"><span class="tab_title" ng-class="{'cur_choose':tab_status == 1}">风格相关</span>
             </p>
-            <p class="col-md-1" ng-click="tab_status = 2" style="margin-bottom: 0;" ><span class="tab_title" ng-class="{'cur_choose':tab_status == 2}">户型相关</span>
+            <p class="col-md-1" ng-click="changeTab()" style="margin-bottom: 0;" ><span class="tab_title" ng-class="{'cur_choose':tab_status == 2}">户型相关</span>
             </p>
         </div>
         <div class="row" ng-if="tab_status == 0">
@@ -132,7 +132,7 @@
             </div>
         </div>
         <div class="from-group submit">
-            <button class="btn btn-primary" type="submit" ng-click="save_material(material_detail.$valid)">确认</button>
+            <button class="btn btn-primary" type="submit" ng-click="saveMaterial(material_detail.$valid)">确认</button>
             <button type="button" class="btn btn-default" ng-click="material_return()">返回</button>
         </div>
     </form>

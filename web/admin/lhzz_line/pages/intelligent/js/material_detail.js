@@ -68,6 +68,42 @@ app.controller('material_detail_ctrl', function ($rootScope,_ajax, $scope, $stat
             console.log(res);
         })
     }
+    //切换tab
+    $scope.changeTab = function (index) {
+        $scope.submitted = false
+        //初始化其余项数据
+        if(index == 1){
+            $scope.tab_status = 0
+            for(let [key,value] of $scope.all_style.entries()){
+                value['quantity'] = ''
+                value['flag'] = false
+            }
+            for(let [key,value] of $scope.area_range.entries()){
+                value['quantity'] = ''
+                value['flag'] = false
+            }
+        }else if(index == 2){
+            $scope.tab_status = 1
+            for(let [key,value] of $scope.all_series.entries()){
+                value['quantity'] = ''
+                value['flag'] = false
+            }
+            for(let [key,value] of $scope.area_range.entries()){
+                value['quantity'] = ''
+                value['flag'] = false
+            }
+        }else{
+            $scope.tab_status = 2
+            for(let [key,value] of $scope.all_series.entries()){
+                value['quantity'] = ''
+                value['flag'] = false
+            }
+            for(let [key,value] of $scope.all_style.entries()){
+                value['quantity'] = ''
+                value['flag'] = false
+            }
+        }
+    }
     //改变分类
     $scope.getCategory = function (index) {
         if (index == 1) {
@@ -116,4 +152,67 @@ app.controller('material_detail_ctrl', function ($rootScope,_ajax, $scope, $stat
         })
     }
     //保存添加材料详情
+    $scope.saveMaterial = function (valid) {
+        let arr = [],arr1 = [],arr2 = []
+        //系列相关
+        for (let [key,value] of $scope.all_series.entries()){
+            arr.push({
+                series:value.id,
+                quantity:value.quantity
+            })
+        }
+        //风格相关
+        for (let [key,value] of $scope.all_style.entries()){
+            arr1.push({
+                style:value.id,
+                quantity:value.quantity
+            })
+        }
+        //户型相关
+        for (let [key,value] of $scope.area_range.entries()){
+            arr2.push({
+                min_area:value.min_area,
+                max_area:value.max_area,
+                quantity:value.quantity
+            })
+        }
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.cur_title = '保存成功'
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+                history.go(-1)
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        let next_all_modal = function ($scope, $uibModalInstance) {
+            $scope.cur_title = '抓取材料信息错误，请重新抓取'
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+            }
+        }
+        next_all_modal.$inject = ['$scope', '$uibModalInstance']
+        if($scope.basic_attr !=''){
+            if(valid){
+                _ajax.post('/quote/decoration-add',{
+                    city:$stateParams.city,
+                    code:$scope.basic_attr.sku,
+                    c_id:$scope.cur_level_three.id,
+                    message:$scope.tab_status == 0?'系列相关':($scope.tab_status == 1?'风格相关':'户型相关'),
+                    add:$scope.tab_status == 0?arr:($scope.tab_status == 1?arr1:arr2)
+                },function (res) {
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                })
+            }else{
+                $scope.submitted = true
+            }
+        }else{
+            $uibModal.open({
+                templateUrl: 'pages/intelligent/cur_model.html',
+                controller: next_all_modal
+            })
+        }
+    }
 })

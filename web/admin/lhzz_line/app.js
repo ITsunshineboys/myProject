@@ -565,7 +565,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'add_material_ctrl'
         })
         .state('material_detail', {//添加材料详情
-            url: '/material_detail?status&id',
+            url: '/material_detail?status&id&city',
             templateUrl: 'pages/intelligent/material_detail.html',
             css: 'pages/intelligent/css/material_detail.css',
             controller:'material_detail_ctrl'

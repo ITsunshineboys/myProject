@@ -13,6 +13,7 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         }
     ]
     $scope.status_words = '刷新材料抓取'
+    $scope.city = $stateParams.city
     //请求省市数据
     $http.get('city.json').then(function (res) {
         console.log(res)

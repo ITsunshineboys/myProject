@@ -1,11 +1,11 @@
 <div class="engineering_process">
     <form name="engineering_process">
-    <div ng-repeat="item in cur_process_list">
+    <div ng-repeat="item in cur_process_list" ng-class="{'bottom_style':!$last}" >
         <div class="row" ng-repeat="item1 in item">
         <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.project_details}}</p>
         <p class="col-md-3 enter">
-            <select ng-model="item1.value" class="form-control" ng-options="item2 for item2 in item1.options.split(',')" ng-if="!!item1.options"></select>
-            <input ng-if="!item1.options" class="form-control" name="{{item1.name}}" ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/" ng-blur="item1.flag = !!engineering_process[item1.name].$error" required
+            <select ng-model="item1.material" class="form-control" ng-options="item2 for item2 in item1.options.split(',')" ng-if="item1.options!=undefined"></select>
+            <input ng-if="item1.options==undefined" class="form-control" name="{{item1.name}}" ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/" ng-blur="item1.flag = !!engineering_process[item1.name].$error" required
                    ng-class="{'error':(engineering_process[item1.name].$invalid&&submitted) || ((engineering_process[item1.name].$error.required || engineering_process[item1.name].$error.pattern)&&item1.flag)}"
                    ng-model="item1.material" type="text">
         </p>
@@ -21,18 +21,18 @@
                     <p class="col-md-2" ng-if="item1.series_or_style == 0"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.series}}</p>
                     <p class="col-md-2" ng-if="item1.series_or_style == 1"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item1.style}}</p>
                     <p class="col-md-3 enter">
-                        <input name="item{{item.series_or_style}}{{item.coefficient}}{{$index}}" required ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
-                               ng-blur="item2.flag = !!engineering_process['item'+item.series_or_style+item.coefficient+$index].$error" required type="text"
-                               ng-model="item2.value" class="form-control "
-                               ng-class="{'error':(engineering_process['item'+item.series_or_style+item.coefficient+$index].$invalid&&submitted) || ((engineering_process['item'+item.series_or_style+item.coefficient+$index].$error.required || engineering_process['item'+item.series_or_style+item.coefficient+$index].$error.pattern)&&item2.flag)}">
+                        <input name="item{{item1.series_or_style}}{{item1.coefficient}}{{$index}}" required ng-pattern="/^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
+                               ng-blur="item1.flag = !!engineering_process['item'+item1.series_or_style+item1.coefficient+$index].$error" required type="text"
+                               ng-model="item1.value" class="form-control "
+                               ng-class="{'error':(engineering_process['item'+item1.series_or_style+item1.coefficient+$index].$invalid&&submitted) || ((engineering_process['item'+item1.series_or_style+item1.coefficient+$index].$error.required || engineering_process['item'+item1.series_or_style+item1.coefficient+$index].$error.pattern)&&item1.flag)}">
                     </p>
                     <p class="col-md-6 col-md-offset-1">*>0的数字，精确到小数点后两位</p>
                 </li>
             </ul>
         </div>
         <div class="from-group">
-            <button class="btn btn-primary" type="button" ng-click="get_engineering_process(engineering_process.$valid,engineering_process.$error)">确认</button>
-            <button type="button" class="btn btn-default" ng-click="return_engineering()">返回</button>
+            <button class="btn btn-primary" type="button" ng-click="saveData(engineering_process.$valid,engineering_process.$error)">确认</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>

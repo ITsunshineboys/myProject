@@ -18,6 +18,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
     let arr = [],arr1 = [],arr2 = [],arr3 = []
     console.log($stateParams)
     $scope.project_name = $stateParams.project
+    $scope.cur_process_list = []
     //风格、系列以及楼梯结构
     _ajax.post('/quote/series-and-style', {}, function (res) {
         console.log(res)
@@ -30,7 +31,6 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         project:$stateParams.project
     },function (res) {
         console.log(res)
-        $scope.cur_process_list = []
         if($stateParams.project == '杂工工艺'){
             //水泥整合
             for(let [key,value] of res.list.entries()){
@@ -76,57 +76,151 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                     arr3.push(value)
                 }
             }
-            $scope.cur_process_list = [arr,arr1,arr2,arr3]
+            _ajax.get('/quote/project-norm-woodwork-list',{
+                city:$stateParams.city
+            },function (res) {
+                console.log(res)
+                let arr4 = angular.copy($scope.all_series),
+                    arr5 = angular.copy($scope.all_series),
+                    arr6 = angular.copy($scope.all_series),
+                    arr7 = angular.copy($scope.all_style),
+                    arr8 = angular.copy($scope.all_style)
+                let options = angular.copy(res.specification.find_specification)
+                //系数1
+                for(let [key,value] of arr4.entries()){
+                    let index = res.coefficient.findIndex(function (item) {
+                        return item.project == value.id&&item.series_or_style == '0'&&item.coefficient=='1'
+                    })
+                    value['series_or_style'] = 0
+                    value['cur_id'] = value.id
+                    value['coefficient'] = 1
+                    value['value'] = (index==-1?'':res.coefficient[index].value)
+                }
+                //系数2
+                for(let [key,value] of arr5.entries()){
+                    let index = res.coefficient.findIndex(function (item) {
+                        return item.project == value.id&&item.series_or_style == 0&&item.coefficient==2
+                    })
+                    value['series_or_style'] = 0
+                    value['cur_id'] = value.id
+                    value['coefficient'] = 2
+                    value['value'] = (index==-1?'':res.coefficient[index].value)
+                }
+                //系数3
+                for(let [key,value] of arr6.entries()){
+                    let index = res.coefficient.findIndex(function (item) {
+                        return item.project == value.id&&item.series_or_style == 0&&item.coefficient==3
+                    })
+                    value['series_or_style'] = 0
+                    value['cur_id'] = value.id
+                    value['coefficient'] = 3
+                    value['value'] = (index==-1?'':res.coefficient[index].value)
+                }//风格1
+                for(let [key,value] of arr7.entries()){
+                    let index = res.coefficient.findIndex(function (item) {
+                        return item.project == value.id&&item.series_or_style == 1&&item.coefficient==1
+                    })
+                    value['series_or_style'] = 1
+                    value['cur_id'] = value.id
+                    value['coefficient'] = 1
+                    value['value'] = (index==-1?'':res.coefficient[index].value)
+                }
+                //风格2
+                for(let [key,value] of arr8.entries()){
+                    let index = res.coefficient.findIndex(function (item) {
+                        return item.project == value.id&&item.series_or_style == 1&&item.coefficient==2
+                    })
+                    value['series_or_style'] = 1
+                    value['cur_id'] = value.id
+                    value['coefficient'] = 2
+                    value['value'] = (index==-1?'':res.coefficient[index].value)
+                }
+                $scope.series_and_style = [arr4,arr5,arr6,arr7,arr8]
+                console.log($scope.series_and_style)
+                for(let [key,value] of options.entries()){
+                    for(let [key1,value1] of res.specification.specification.entries()){
+                        if((value.title.indexOf('龙骨')!=-1&&value1.title.indexOf('龙骨')!=-1)||
+                            (value.title.indexOf('丝杆')!=-1&&value1.title.indexOf('丝杆')!=-1)||
+                            (value.title.indexOf('石膏')!=-1&&value1.title.indexOf('石膏')!=-1)||
+                            (value.title.indexOf('细木工板')!=-1&&value1.title.indexOf('细木工板')!=-1&&value.title.indexOf(value1.name)!=-1)
+                        ){
+                            value['options'] = value1.value
+                            value['project_details'] = value.title
+                            value['material'] = value.value + ''
+                        }
+                    }
+                }
+                //细木工板整合
+                for(let [key,value] of options.entries()){
+                    if(value.title.indexOf('细木工板')!=-1){
+                        arr.push(value)
+                    }
+                }
+                //石膏整合
+                for(let [key,value] of options.entries()){
+                    if(value.title.indexOf('石膏')!=-1){
+                        arr1.unshift(value)
+                    }
+                }
+                //龙骨整合
+                for(let [key,value] of options.entries()){
+                    if(value.title.indexOf('龙骨')!=-1){
+                        arr2.unshift(value)
+                    }
+                }
+                //丝杆整合
+                for(let [key,value] of options.entries()){
+                    if(value.title.indexOf('丝杆')!=-1){
+                        arr3.unshift(value)
+                    }
+                }
+                $scope.cur_process_list = [arr,arr1,arr2,arr3]
+            })
         }else {
             arr.push(res.list)
             $scope.cur_process_list = arr
         }
         console.log($scope.cur_process_list)
     })
-    if($stateParams.project=='木作工艺'){
-        _ajax.get('/quote/project-norm-woodwork-list',{},function (res) {
-            console.log(res)
-            let arr4 = angular.copy($scope.all_series),
-                arr5 = angular.copy($scope.all_series),
-                arr6 = angular.copy($scope.all_series),
-                arr7 = angular.copy($scope.all_style),
-                arr8 = angular.copy($scope.all_style)
-            //系数1
-            for(let [key,value] of arr4.entries()){
-                value['series_or_style'] = 0
-                value['cur_id'] = value.id
-                value['coefficient'] = 1
-                value['value'] = ''
+    //保存数据
+    $scope.saveData = function (valid) {
+        let all_modal = function ($scope, $uibModalInstance) {
+                    $scope.cur_title = '保存成功'
+                    $scope.common_house = function () {
+                        $uibModalInstance.close()
+                        history.go(-1)
+                    }
+                }
+                all_modal.$inject = ['$scope', '$uibModalInstance']
+        let arr = [],arr1 = [],arr2 = []
+        for(let [key,value] of $scope.cur_process_list.entries()){
+            for(let [key1,value1] of value.entries()){
+                if($stateParams.project == '木作工艺'){
+                    arr.push({
+                        id:value1.id,
+                        value:value1.material
+                    })
+                }else{
+                    arr.push({
+                        id:value1.id,
+                        material:value1.material
+                    })
+                }
             }
-            //系数2
-            for(let [key,value] of arr5.entries()){
-                value['series_or_style'] = 0
-                value['cur_id'] = value.id
-                value['coefficient'] = 2
-                value['value'] = ''
+        }
+        if(valid){
+            if($stateParams.project == '木作工艺'){
+
+            }else{
+
             }
-            //系数3
-            for(let [key,value] of arr6.entries()){
-                value['series_or_style'] = 0
-                value['cur_id'] = value.id
-                value['coefficient'] = 3
-                value['value'] = ''
-            }//风格1
-            for(let [key,value] of arr7.entries()){
-                value['series_or_style'] = 1
-                value['cur_id'] = value.id
-                value['coefficient'] = 1
-                value['value'] = ''
-            }
-            //风格2
-            for(let [key,value] of arr8.entries()){
-                value['series_or_style'] = 1
-                value['cur_id'] = value.id
-                value['coefficient'] = 2
-                value['value'] = ''
-            }
-            $scope.series_and_style = [arr4,arr5,arr6,arr7,arr8]
-            console.log($scope.series_and_style)
-        })
+        }else{
+            $scope.submitted = true
+        }
+    }
+    //返回前一页
+    $scope.goPrev = function () {
+        $scope.submitted = false
+        history.go(-1)
     }
 })
