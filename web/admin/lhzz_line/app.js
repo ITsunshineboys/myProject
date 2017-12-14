@@ -448,18 +448,21 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state('settle_verify.wait', { //商家入驻审核 -- 等待
             url: '/settle_verify_wait',
             templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_wait.html',
+            css: 'pages/mall_manage/merchant_settle/css/settle_verify.css',
             controller: 'settle_verify_wait'
         })
 
         .state('settle_verify.pass', { //商家入驻审核 -- 通过
             url: '/settle_verify_pass',
             templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_pass.html',
+            css: 'pages/mall_manage/merchant_settle/css/settle_verify.css',
             controller: 'settle_verify_pass'
         })
 
         .state('settle_verify.fail', { //商家入驻审核 -- 未通过
             url: '/settle_verify_fail',
             templateUrl: 'pages/mall_manage/merchant_settle/settle_verify_fail.html',
+            css: 'pages/mall_manage/merchant_settle/css/settle_verify.css',
             controller: 'settle_verify_fail'
         })
 

@@ -17,8 +17,8 @@ app.controller('settle_verify_wait', ['$rootScope', '$scope', '$state', '$stateP
         end_time: '',                   // 自定义结束时间
         page: 1,                        // 当前页数
         keyword: '',                    // 关键字查询
-        review_status: 0,               // 审核状态
-        'sort[]': 'review_apply_time: 3' //排序规则 默认按申请时间降序排列
+        review_status: 0,               // 审核状态 - 等待审核
+        'sort[]': 'review_apply_time:3' //排序规则 默认按申请时间降序排列
     }
 
     /*分页配置*/
@@ -77,7 +77,7 @@ app.controller('settle_verify_wait', ['$rootScope', '$scope', '$state', '$stateP
             $scope.keyword = '';        // 关键字查询
             $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
             $scope.pageConfig.currentPage = 1;
-            tableList()
+            tableList();
         }
     });
 
@@ -88,7 +88,7 @@ app.controller('settle_verify_wait', ['$rootScope', '$scope', '$state', '$stateP
         $scope.params.end_time = '';       // 自定义结束时间
         $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
         $scope.pageConfig.currentPage = 1;
-        tableList()
+        tableList();
     };
 
     //时间排序
@@ -98,52 +98,15 @@ app.controller('settle_verify_wait', ['$rootScope', '$scope', '$state', '$stateP
         tableList();
     };
 
-
-
     /*列表数据获取*/
     function tableList() {
         $scope.params.keyword = $scope.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
-        // _ajax.get('/supplier/supplier-be-audited-list',$scope.params,function (res) {
-            // $scope.pageConfig.totalItems = res.data.list.count;
-            // $scope.listdata = res.data.list.list;
-            let data = {
-                "data": {
-                    "list": {
-                        "list": [
-                            {
-                                "review_apply_time": "1970-01-01 08:00",
-                                "review_status": "0",
-                                "mobile": "15208280987",
-                                "shop_name": "何友志",
-                                "type_shop": "旗舰店",
-                                "category_id": "12",
-                                "category": "辅材-板材类-澳松板"
-                            },
-                            {
-                                "review_apply_time": "1970-01-01 08:00",
-                                "review_status": "2",
-                                "mobile": "18208142446",
-                                "shop_name": "邵恒",
-                                "type_shop": "旗舰店",
-                                "category_id": "10",
-                                "category": "辅材-板材类-龙骨"
-                            }
-                        ],
-                        "total_page": 1,
-                        "count": "2",
-                        "page": 1
-                    }
-                }
-            }
-
-           $scope.listdata = data.data.list.list
-
-
-            console.log(res);
-        // })
+        _ajax.get('/supplier/supplier-be-audited-list', $scope.params, function (res) {
+            $scope.pageConfig.totalItems = res.data.list.count;
+            $scope.listdata = res.data.list.list;
+        })
     }
-
 
 
     // $scope.storetype_arr = [{storetype: "全部", id: -1}, {storetype: "旗舰店", id: 0}, {

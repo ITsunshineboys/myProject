@@ -34,7 +34,14 @@ app.controller('user_verify_detail', ['$rootScope', '$scope', '$state', '$stateP
     }
 
     // 返回
-    $scope.backPage = function () {
-        history.go(-1);
+    $scope.backPage = function (obj) {
+        if(arguments[0]=='modal'){
+            setTimeout(function () {
+              $state.go('account_user_verify.wait');
+            },200)
+        }else{
+            history.go(-1);
+        }
+
     }
 }]);

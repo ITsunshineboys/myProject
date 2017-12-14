@@ -1,3 +1,7 @@
 .form-inline .col-md-5 {
     padding-left: 0;
 }
+
+.search .form-group .form-control {
+    width: 272px;
+}

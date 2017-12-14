@@ -65,7 +65,7 @@
         <div class="form-group">
             <span class="col-md-2 control-label">审核备注</span>
             <div class="col-md-8 form-control-static">
-                <textarea class="form-control" rows="5" placeholder="请填写不通过/通过原因"></textarea>
+                <textarea class="form-control" rows="5" ng-model="params.remark" placeholder="请填写不通过/通过原因"></textarea>
             </div>
         </div>
     </div>
@@ -118,7 +118,7 @@
                 <p>审核成功</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="backPage('modal')">确认</button>
             </div>
         </div>
     </div>
