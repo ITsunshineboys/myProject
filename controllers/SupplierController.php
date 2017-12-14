@@ -572,6 +572,13 @@ class SupplierController extends Controller
         if ($line_supplier)
         {
             $Supplier['mobile']=$line_supplier['mobile'];
+
+            $pro=substr($line_supplier['district_code'],0,2);
+            $ci=substr($line_supplier['district_code'],2,2);
+            $dis=substr($line_supplier['district_code'],4,2);
+            $Supplier['pro']=$pro.'0000';
+            $Supplier['ci']=$pro.$ci.'00';
+            $Supplier['dis']=$line_supplier['district_code'];
             $Supplier['district_code']=$line_supplier['district_code'];
             $Supplier['address']=$line_supplier['address'];
         }

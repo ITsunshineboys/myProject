@@ -1444,6 +1444,7 @@ class WithdrawalsController extends Controller
         $pwd=$role->pay_password;
         if ($money*100>$availableamount){
             $code=1054;
+
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
