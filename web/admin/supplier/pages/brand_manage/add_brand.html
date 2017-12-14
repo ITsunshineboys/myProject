@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-2">
                 <input type="text" class="form-control"  ng-model="brand_name_model" placeholder="请输入品牌名称" required name="brand_title" id="brand_title" maxlength="10"  ng-class="{'error':(add_brand_form.brand_title.$invalid &&submitted)||(add_brand_form.brand_title.$error.required && title_blur)}" ng-blur="title_blur=!!add_brand_form.brand_title.$error">
-                <p class="red_mark" ng-if="brand_name_flag">
+                <p class="warning red_mark" ng-if="brand_name_flag">
                     <span class="glyphicon glyphicon-asterisk"></span>
                     该品牌名称已存在，请重新填写
                 </p>

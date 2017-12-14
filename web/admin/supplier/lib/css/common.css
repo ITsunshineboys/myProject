@@ -163,6 +163,7 @@ select.form-control:focus {
     line-height: 8px;
     color: #7a859970;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .table thead tr th .sort i,

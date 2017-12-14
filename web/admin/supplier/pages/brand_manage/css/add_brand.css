@@ -75,6 +75,9 @@ hr{
     right: 0;
     top: 7px;
 }
+.active {
+    color: #5677FC;
+}
 .dl_active7 {
     background-color: #E6E9F0 !important;
 }
