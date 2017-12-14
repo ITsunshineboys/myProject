@@ -2713,7 +2713,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        var_dump($OrderAfterSale->supplier_handle);die;
         switch ($OrderAfterSale->supplier_handle){
             case 0:
                 $data=OrderAfterSale::findUnhandleAfterSale($OrderAfterSale);

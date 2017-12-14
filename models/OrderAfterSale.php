@@ -527,6 +527,7 @@ class OrderAfterSale extends ActiveRecord
             }
         }
         $res=[];
+        var_dump($PlatForm->handle);die;
         switch ($PlatForm->handle)
         {
             case 3:
