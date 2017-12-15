@@ -49,6 +49,5 @@ class DecorationMessage extends ActiveRecord
         return $rows->update(self::TABLE_NAME,[
             'quantity' => $row,
         ],['id'=>$id])->execute();
-        var_dump($rows);die;
     }
 }
