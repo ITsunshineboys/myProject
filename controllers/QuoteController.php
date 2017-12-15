@@ -1756,9 +1756,6 @@ class QuoteController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        $dm=[];
-
         foreach ($post['add'] as $one_post){
             $a = DecorationMessage::find()->asArray()->where(['id'=>$one_post['id']])->one();//TODO 添加 查询
             switch ($a){
