@@ -1722,7 +1722,7 @@ class QuoteController extends Controller
     {
         $id = trim(\Yii::$app->request->post('id',''));
         $sku = DecorationAdd::findOne($id)->toArray();//TODO 修改
-        $goods_cate=GoodsCategory::GetCategory($sku['c_id']);
+        $goods_cate=GoodsCategory::GetCategory($sku['c_id']);//TODO 新增分类 1 2 3 级
         $sku['goods_cate']=$goods_cate;
         $message_select = 'id,quantity,style_id,series_id,min_area,max_area';
         $where = 'decoration_add_id='.$sku['id'];
@@ -2151,7 +2151,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = AssortGoods::find()->asArray()->all();
+        $a = Points::find()->asArray()->all();
         var_dump($a);exit;
 
 
