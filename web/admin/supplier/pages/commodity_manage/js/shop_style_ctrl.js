@@ -112,6 +112,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		for (let [key, value1] of $scope.goods_all_attrs.entries()) {
 			if (input_value == value1.name) {
 				$scope.own_submitted = true;
+				break;
 			} else {
 				$scope.own_submitted = false;
 			}
@@ -300,6 +301,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 		/*判断必填项，全部ok，调用添加接口*/
 		if (valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1 && !$scope.g_flag && !$scope.d_flag) {
+			console.log($scope.own_submitted);
 			let description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.success_variable = '#on_shelves_add_success';
 			/*循环自己添加的属性*/
