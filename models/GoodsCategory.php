@@ -1145,4 +1145,27 @@ class GoodsCategory extends ActiveRecord
         }
 
     }
+    
+
+
+    public  static  function  GetCategory($category_id)
+    {
+        $category=GoodsCategory::findOne($category_id);
+        if ($category)
+        {
+            $category_arr=explode(',',$category->path);
+            $first_category=GoodsCategory::find()
+                ->select('path,title,parent_title')
+                ->where(['id'=>$category_arr[0]])
+                ->one();
+            return [
+                'one_category'=>$first_category->title,
+                'two_categor'=>$category->parent_title,
+                'three_category'=>$category->title
+
+            ];
+        }else{
+            return [];
+        }
+    }
 }
