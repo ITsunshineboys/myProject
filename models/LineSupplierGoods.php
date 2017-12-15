@@ -169,7 +169,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
     public static function pagination($where = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
         $orderBy = 'LG.id DESC';
-        $select ="LG.id as line_goods_id,LG.line_supplier_id,G.sku,G.title as goods_name,L.district_code,LG.status,S.shop_name as supplier_shop_name";
+        $select ="LG.id as line_goods_id,LG.line_supplier_id,G.sku,G.title as goods_name,L.district_code,LG.status,L.id as line_id,S.shop_name as supplier_shop_name";
         $offset = ($page - 1) * $size;
         $List = (new Query())
             ->from(self::tableName().' as LG')
