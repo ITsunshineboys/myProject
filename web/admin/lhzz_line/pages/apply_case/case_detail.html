@@ -7,8 +7,8 @@
         <p class="col-md-10">{{particulars_view.phone}}</p>
         <p class="col-md-2">申请时间</p>
         <p class="col-md-10">{{particulars_view.create_time}}</p>
-        <p class="col-md-2" ng-if="particulars_view.item == '无登录申请'">申请金额</p>
-        <p class="col-md-10" ng-if="particulars_view.item == '无登录申请'">{{particulars_view.earnest | currency:'￥'}}</p>
+        <p class="col-md-2" ng-if="particulars_view.earnest != undefined">申请金额</p>
+        <p class="col-md-10" ng-if="particulars_view.earnest != undefined">{{particulars_view.earnest | currency:'￥'}}</p>
         <p class="col-md-2" ng-if="particulars_view.transaction_no!=undefined">交易单号</p>
         <p class="col-md-10" ng-if="particulars_view.transaction_no!=undefined">{{particulars_view.transaction_no}}</p>
         <p class="col-md-2">类型</p>

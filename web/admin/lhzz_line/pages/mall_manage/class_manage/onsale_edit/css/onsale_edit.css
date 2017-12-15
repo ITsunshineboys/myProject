@@ -1,211 +1,45 @@
 /*input的placeholder的颜色配置*/
-::-webkit-input-placeholder{ /* WebKit browsers */
-   color: #999;
-}
-
-:-moz-placeholder{ /* Mozilla Firefox 4 to 18 */
+::-webkit-input-placeholder { /* WebKit browsers */
     color: #999;
 }
 
-::-moz-placeholder{ /* Mozilla Firefox 19+ */
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
     color: #999;
 }
 
-:-ms-input-placeholder{ /* Internet Explorer 10+ */
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #999;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10+ */
     color: #999;
 }
 
 /*分类表单*/
-.cla_detail{
-    padding-top: 56px;
-    padding-left: 26px;
-    font-size: 14px;
-}
-
-.red_mark{
-    color: red;
-    font-size: 14px;
-}
-
-.each_title{
-    margin-right: 95px;
-}
-
-.cla_detail input{
+.form-group .form-control-static input {
     width: 244px;
-    height: 28px;
-    border: 1px solid #BFC0C2;
-    border-radius: 3px;
-    padding-left: 5px;
 }
 
-.divider{
-    height: 1px;
-    width: 90%;
-    margin: 26px 0 19px 19px;
-    background-color: #BFC0C2;
+.form-horizontal .control-label {
+    text-align: left;
 }
 
-/*分类所属*/
-.cla_belong{
-    margin-top: 34px;
-}
-
-.belong{
-    width: 244px;
-    height: 28px;
-    color: #666F80;
-    border-radius: 3px;
-    border: 1px solid #BFC0C2;
-}
-
-.first_select{
-    margin-right: 10px;
-}
-
-/*分类图片*/
-.cla_pic{
-    margin-top: 66px;
-}
-
-.upload_pic{
-    display: inline-block;
-    vertical-align: top;
-}
-
-.upload_pic img{
+.form-group .col-md-10 img {
     width: 120px;
     height: 120px;
 }
 
-
-.upload_tishi{
-    font-size: 12px;
-}
-
-.upload_pic h6{
+.form-group .col-md-10 h6 {
     font-size: 12px;
     color: #ABABAB;
-    margin-top: 10px;
 }
 
-#upload {
-    width: 67px;
-    height: 24px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 24px;
-    color: #666F80;
-    background-color: #FFFFFF;
-    border-radius: 3px;
-    margin-top: 4px;
+.btns button {
+    margin-right: 15px;
 }
 
-#upload_btn{
-    width: 67px;
-    height: 24px;
-    border: 1px solid #BFC0C2;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 24px;
-    font-size: 12px;
-    color: #BFC0C2;
-    background-color: white;
-}
-
-.warning{
+.warning {
     font-size: 12px;
     margin-top: 10px;
-}
-
-
-/*分类描述*/
-.cla_des{
-    margin-top: 32px;
-}
-
-.cla_des .each_title{
-    margin-left: 16px;
-}
-
-#edit_tool{
-    display: inline-block;
-    width: 623px;
-    height: 337px;
-}
-
-/*确认信息*/
-.info{
-    margin-top: 40px;
-    margin-left: 165px;
-}
-
-.info p{
-    margin-bottom: 16px;
-}
-
-.info p span:first-child{
-    margin-right: 40px;
-}
-
-.btn_sure{
-    margin-left: 164px;
-    margin-bottom: 20px;
-}
-
-
-/*下架提示模态框*/
-#shuru_content{
-    width: 635px !important;
-    padding-left: 40px !important;
-    padding-right: 40px !important;
-    overflow: hidden;
-    padding-top: 40px;
-}
-
-#shuru_xiajiareason{
-    padding: 40px 0 20px 0;
-    font-family: Helvetica-Bold;
-    font-size: 18px;
-    color: #2F3033;
-    line-height: 18px;
-    font-weight: bold;
-}
-
-#shuru_header{
-    padding: 0 !important;
-}
-
-#shuru_body{
-    padding: 0px !important;
-}
-
-#shuru_reason{
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-#shuru_textarea{
-    float: right;
-    margin-top: -27px;
-}
-
-.btn_modal{
-    height: 60px;
-    margin-top: 290px;
-    overflow: hidden;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.cla_name h6{
-    color: red;
-    margin-left: 172px;
-}
-
-#describclass{
-    position: relative!important;
-    top:-362px;
-    left: 0;
 }
 

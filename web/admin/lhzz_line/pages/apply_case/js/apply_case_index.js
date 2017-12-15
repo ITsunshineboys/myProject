@@ -80,8 +80,8 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
     //编辑备注
     $scope.editRemark = function () {
         _ajax.post('/effect/effect-view',{
-            id:$scope.cur_item.id,
-            remark:$scope.cur_item.remark
+            id:$scope.cur_remark.id,
+            remark:$scope.cur_remark.remark
         },function (res) {
             console.log(res)
             tablePages()
