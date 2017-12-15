@@ -2797,22 +2797,28 @@ class GoodsOrder extends ActiveRecord
      */
     public static  function GetOrderDetailsData($arr=[],$user)
     {
-        $list=[];
-        $supplier_price=0;
-        $market_price=0;
-        $amount_order=0;
-        $goods_num=0;
-        $freight=0;
-        if($arr)
-        {
-            $arr=self::SwitchStatus_desc($arr,$user);
-            foreach ($arr as $k =>$v){
-                $amount_order+=($arr[$k]['goods_price']*$arr[$k]['goods_number'])*0.01;
-                $supplier_price+=$arr[$k]['supplier_price']*0.01;
-                $market_price+=$arr[$k]['market_price']*0.01;
-                $freight+=$arr[$k]['freight']*0.01;
-                $arr[$k]['return_insurance']=self::switchMoney($arr[$k]['return_insurance']*0.01);
-                $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
+        $list = [];
+        $supplier_price = 0;
+        $market_price = 0;
+        $amount_order = 0;
+        $goods_num = 0;
+        $freight = 0;
+        if ($arr) {
+            $arr = self::SwitchStatus_desc($arr, $user);
+            foreach ($arr as $k => $v) {
+                $amount_order += ($arr[$k]['goods_price'] * $arr[$k]['goods_number']) * 0.01;
+                $supplier_price += $arr[$k]['supplier_price'] * 0.01;
+                $market_price += $arr[$k]['market_price'] * 0.01;
+                $freight += $arr[$k]['freight'] * 0.01;
+                if (empty($arr[$k]['username'])) {
+                    $username = $arr[$k]['consignee'];
+                }else
+                {
+                    $username =$arr[$k]['username'];
+                }
+
+                $arr[$k]['return_insurance'] = self::switchMoney($arr[$k]['return_insurance'] * 0.01);
+                $arr[$k]['goods_price'] = self::switchMoney($arr[$k]['goods_price'] * 0.01);
                 // switch ($arr[$k]['shipping_type']){
                 //     case 0:
                 //         $arr[$k]['shipping_type']='快递物流';
@@ -2821,126 +2827,168 @@ class GoodsOrder extends ActiveRecord
                 //         $arr[$k]['shipping_type']='送货上门';
                 //         break;
                 // }
-                $list[$k]['return_insurance']=sprintf('%.2f', (float)$arr[$k]['return_insurance']*0.01);
-                $list[$k]['goods_price']=$arr[$k]['goods_price'];
-                if ($arr[$k]['send_time']==0){
-                    $list[$k]['send_time']=$arr[$k]['send_time'];
-                }else{
-                    $list[$k]['send_time']=date('Y-m-d H:i',$arr[$k]['send_time']);
-                }
-                if ($arr[$k]['complete_time']==0){
-                    $list[$k]['complete_time']=$arr[$k]['complete_time'];
-                }else{
-                    $list[$k]['complete_time']=date('Y-m-d H:i',$arr[$k]['complete_time']);
-                }
-                if ($arr[$k]['RemainingTime']<=0){
-                    $list[$k]['automatic_receive_time']=0;
-                }else{
-                    $list[$k]['automatic_receive_time']=$arr[$k]['RemainingTime'];
-                }
-//                $list[$k]['goods_attr_id']=$arr[$k]['goods_attr_id'];
-//                $list[$k]['goods_id']=$arr[$k]['goods_id'];
-                $list[$k]['sku']=$arr[$k]['sku'];
-                $list[$k]['goods_name']=$arr[$k]['goods_name'];
-                $list[$k]['waybillnumber']=$arr[$k]['waybillnumber'];
-                $list[$k]['waybillname']=$arr[$k]['waybillname'];
-                $list[$k]['shipping_type']=$arr[$k]['shipping_type'];
-                $list[$k]['username']=$user->nickname;
-                if (empty($list[$k]['username'])) {
-                    $list['username'] = $list['consignee'];
-                }
-                $list[$k]['comment_grade']=$arr[$k]['comment_grade'];
-                $list[$k]['cover_image']=$arr[$k]['cover_image'];
-                $list[$k]['goods_number']=$arr[$k]['goods_number'];
-                $refund=OrderRefund::find()
-                    ->where(['order_no'=>$arr[$k]['order_no'],'sku'=>$arr[$k]['sku']])
-                    ->asArray()
-                    ->all();
-                if (!$refund)
-                {
-                    $list[$k]['refund_status']=0;
-                    $list[$k]['apply_refund_time']=0;
-                    $list[$k]['apply_refund_reason']='';
-                }else{
-                    $list[$k]['refund_status']=2;
-                    $list[$k]['apply_refund_time']=0;
-                    $list[$k]['apply_refund_reason']='';
-                    foreach ($refund as &$refundList)
-                    {
-                        if ($refundList['handle']==0){
-                            $list[$k]['refund_status']=1;
-                            $list[$k]['apply_refund_time']=date('Y-m-d H:i',$refundList['create_time']);
-                            $list[$k]['apply_refund_reason']=$refundList['apply_reason'];
-                        }
-                    }
-                    $after_sale=OrderAfterSale::find()
-                        ->where(['order_no'=>$arr[$k]['order_no'],'sku'=>$arr[$k]['sku']])
-                        ->asArray()
-                        ->all();
-                    if (!$after_sale)
-                    {
-                        $list[$k]['aftersale_status']=0;
-                        $list[$k]['aftersale_type']='';
-                        $list[$k]['apply_aftersale_time']=0;
-                        $list[$k]['apply_aftersale_reason']='';
-                    }else
-                    {
-                        $list[$k]['aftersale_status']=2;
-                        $list[$k]['aftersale_type']='';
-                        $list[$k]['apply_aftersale_time']=0;
-                        $list[$k]['apply_aftersale_reason']='';
-                        foreach ($after_sale as &$afterSale)
-                        {
-                            if ($afterSale['supplier_handle']==0)
-                            {
-                                $list[$k]['aftersale_status']=1;                          $list[$k]['aftersale_type']=OrderAfterSale::AFTER_SALE_SERVICES[$afterSale['type']];
-                                $list[$k]['apply_aftersale_time']=$afterSale['create_time'];                               $list[$k]['apply_aftersale_reason']=$afterSale['description'];
-                            }
-                        }
-                    }
-                }
-            }
-            $output['order_no']=$arr[0]['order_no'];
-            $output['status_type']=$arr[0]['status_type'];
-            $output['status_code']=$arr[0]['status_code'];
-            $output['status_desc']=$arr[0]['status_desc'];
-            $output['buyer_message']=$arr[0]['buyer_message'];
-            $output['pay_name']=$arr[0]['pay_name'];
-            $output['create_time']=$arr[0]['create_time'];
-            $output['paytime']=date('Y-m-d H:i',$arr[0]['paytime']);
-            $output['pay_term']=$arr[0]['pay_term'];
-            $output['freight']=GoodsOrder::switchMoney($freight);
-            $output['original_price']=GoodsOrder::switchMoney($market_price*$arr[0]['goods_number']);
-            $output['discount_price']=GoodsOrder::switchMoney($amount_order);
-            $output['amount_order']=GoodsOrder::switchMoney($freight+$amount_order);
-            $output['consignee']=$arr[0]['consignee'];
-            $output['district']=LogisticsDistrict::getdistrict($arr[0]['district_code']).$arr[0]['region'];
 
-            $output['invoice_information']=$arr[0]['invoice_content'].'-'.$arr[0]['invoice_header'];
-            if (empty($arr[0]['invoice_header']))
-            {
-                $output['invoice_information']=$arr[0]['invoice_content'];
+                if ($arr[$k]['send_time'] == 0) {
+                    $send_time = $arr[$k]['send_time'];
+                } else {
+                    $send_time = date('Y-m-d H:i', $arr[$k]['send_time']);
+                }
+                if ($arr[$k]['complete_time'] == 0) {
+                    $complete_time = $arr[$k]['complete_time'];
+                } else {
+                    $complete_time = date('Y-m-d H:i', $arr[$k]['complete_time']);
+                }
+                if ($arr[$k]['RemainingTime'] <= 0) {
+                    $automatic_receive_time = '';
+                } else {
+                    $automatic_receive_time= $arr[$k]['RemainingTime'];
+                }
+                $refund=self::GetRefundData($arr[$k]['order_no'],$arr[$k]['sku']);
+                $after=self::GetAfterSaleData($arr[$k]['order_no'],$arr[$k]['sku']);
+                $list[]=[
+                    'goods_price'=>$arr[$k]['goods_price'],
+                    'send_time'=>$send_time,
+                    'complete_time'=>$complete_time,
+                    'automatic_receive_time'=>$automatic_receive_time,
+                    'sku'=> $arr[$k]['sku'],
+                    'goods_name'=>$arr[$k]['goods_name'],
+                    'waybillnumber'=>$arr[$k]['waybillnumber'],
+                    'waybillname'=>$arr[$k]['waybillname'],
+                    'shipping_type'=>$arr[$k]['shipping_type'],
+                    'username'=>$username,
+                    'comment_grade'=>$arr[$k]['comment_grade'],
+                    'cover_image'=>$arr[$k]['cover_image'],
+                    'goods_number'=>$arr[$k]['goods_number'],
+                    'refund_status'=>$refund['refund_status'],
+                    'apply_refund_time'=>$refund['apply_refund_time'],
+                    'apply_refund_reason'=>$refund['apply_refund_reason'],
+                    'aftersale_status'=>$after['aftersale_status'],
+                    'aftersale_type'=>$after['aftersale_type'],
+                    'apply_aftersale_time'=>$after['apply_aftersale_time'],
+                    'apply_aftersale_reason'=>$after['apply_aftersale_reason'],
+                ];
             }
-            $output['invoicer_card']=$arr[0]['invoicer_card'];
-            $output['consignee_mobile']=$arr[0]['consignee_mobile'];
-            $output['invoice_header_type']=$arr[0]['invoice_header_type'];
-            if($user->last_role_id_app==6)
-            {
-                $output['uid']=$arr[0]['user_id'];
-                $output['to_role_id']=$arr[0]['role_id'];
-            }else{
-                $output['uid']=Supplier::find()
+            $output['order_no'] = $arr[0]['order_no'];
+            $output['status_type'] = $arr[0]['status_type'];
+            $output['status_code'] = $arr[0]['status_code'];
+            $output['status_desc'] = $arr[0]['status_desc'];
+            $output['buyer_message'] = $arr[0]['buyer_message'];
+            $output['pay_name'] = $arr[0]['pay_name'];
+            $output['create_time'] = $arr[0]['create_time'];
+            $output['paytime'] = date('Y-m-d H:i', $arr[0]['paytime']);
+            $output['pay_term'] = $arr[0]['pay_term'];
+            $output['freight'] = GoodsOrder::switchMoney($freight);
+            $output['original_price'] = GoodsOrder::switchMoney($market_price * $arr[0]['goods_number']);
+            $output['discount_price'] = GoodsOrder::switchMoney($amount_order);
+            $output['amount_order'] = GoodsOrder::switchMoney($freight + $amount_order);
+            $output['consignee'] = $arr[0]['consignee'];
+            $output['district'] = LogisticsDistrict::getdistrict($arr[0]['district_code']) . $arr[0]['region'];
+            $output['invoice_information'] = $arr[0]['invoice_content'] . '-' . $arr[0]['invoice_header'];
+            if (empty($arr[0]['invoice_header'])) {
+                $output['invoice_information'] = $arr[0]['invoice_content'];
+            }
+            $output['invoicer_card'] = $arr[0]['invoicer_card'];
+            $output['consignee_mobile'] = $arr[0]['consignee_mobile'];
+            $output['invoice_header_type'] = $arr[0]['invoice_header_type'];
+            if ($user->last_role_id_app == 6) {
+                $output['uid'] = $arr[0]['user_id'];
+                $output['to_role_id'] = $arr[0]['role_id'];
+            } else {
+                $output['uid'] = Supplier::find()
                     ->select('uid')
-                    ->where(['id'=>$arr[0]['supplier_id']])
+                    ->where(['id' => $arr[0]['supplier_id']])
                     ->asArray()
                     ->one()['uid'];
-                $output['to_role_id']=6;
+                $output['to_role_id'] = 6;
             }
-            $output['list']=$list;
+            $output['send_time']=$send_time;
+            $output['complete_time']=$complete_time;
+            $output['refund_status']=$refund['refund_status'];
+            $output['apply_refund_time']=$refund['apply_refund_time'];
+            $output['apply_refund_reason']=$refund['apply_refund_reason'];
+            $output['aftersale_status']=$after['aftersale_status'];
+            $output['aftersale_type']=$after['aftersale_type'];
+            $output['apply_aftersale_time']=$after['apply_aftersale_time'];
+            $output['apply_aftersale_reason']=$after['apply_aftersale_reason'];
+            $output['list'] = $list;
             return $output;
         }else{
             $arr=[];
             return $arr;
+        }
+    }
+
+    /**
+     * @param $order_no
+     * @param $sku
+     * @return array
+     */
+    public  static  function  GetAfterSaleData($order_no,$sku)
+    {
+        $after_sale = OrderAfterSale::find()
+            ->where(['order_no' => $order_no, 'sku' => $sku])
+            ->asArray()
+            ->one();
+        if (!$after_sale) {
+            $data=[
+                'aftersale_status'=>0,
+                'aftersale_type'=>'',
+                'apply_aftersale_time'=>'',
+                'apply_aftersale_reason'=>'',
+            ];
+        } else {
+            $data=[
+                'aftersale_status'=>2,
+                'aftersale_type'=>'',
+                'apply_aftersale_time'=>'',
+                'apply_aftersale_reason'=>'',
+            ];
+                if ($after_sale['supplier_handle'] == 0) {
+                    $data=[
+                        'aftersale_status'=>1,
+                        'aftersale_type'=>OrderAfterSale::AFTER_SALE_SERVICES[$after_sale['type']],
+                        'apply_aftersale_time'=>$after_sale['create_time'],
+                        'apply_aftersale_reason'=>$after_sale['description'],
+                    ];
+                }
+        }
+        return $data;
+    }
+
+    /**
+     * @param $order_no
+     * @param $sku
+     * @return array
+     */
+    public  static function  GetRefundData($order_no,$sku)
+    {
+        $refund=OrderRefund::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->asArray()
+            ->one();
+        if (!$refund)
+        {
+            //无退款记录
+            return [
+                'refund_status'=>0,
+                'apply_refund_time'=>'',
+                'apply_refund_reason'=>'',
+            ];
+        }else{
+            $data=[
+                'refund_status'=>2,
+                'apply_refund_time'=>'',
+                'apply_refund_reason'=>'',
+            ];
+            if ($refund['handle']==0)
+            {
+                $data=[
+                    'refund_status'=>1,
+                    'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
+                    'apply_refund_reason'=>$refund['apply_reason'],
+                ];
+            }
+            return $data;
         }
     }
     /**
