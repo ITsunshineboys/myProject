@@ -1793,7 +1793,10 @@ class QuoteController extends Controller
 
         foreach ($post['add'] as $one_post) {
             if (isset($one_post['id'])) {
-                $dm = DecorationMessage::findByUpdate($one_post['quantity'], $one_post['id']);
+                $rows=DecorationMessage::find()->where(['id'=>$one_post['id']])->one();
+                $rows->quantity=$one_post['quantity'];
+                $dm=$rows->save(false);
+
             } elseif (isset($one_post['style'])) {
                 $dm = \Yii::$app->db->createCommand()
                     ->update(DecorationMessage::tableName(), [
@@ -1815,7 +1818,7 @@ class QuoteController extends Controller
                     ], ['decoration_add_id' => $one_post['id']])->execute();
             }
 
-//        }
+        }
             if (!$dm) {
                 $code = 1000;
                 return Json::encode([
@@ -1829,7 +1832,6 @@ class QuoteController extends Controller
                 'msg' => 'ok',
             ]);
         }
-    }
 
     /**
      * commonality  list
