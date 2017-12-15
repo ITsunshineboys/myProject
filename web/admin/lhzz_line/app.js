@@ -3,7 +3,7 @@ var app = angular.module("app", ["ng.ueditor", "ui.router","ngFileUpload",
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
     "choose_styleModule", "styledetailModule", "storedetailModule", "merchant_details", "intelligent_index",
-    'angularCSS',  'distribution', 'mall_finance', 'idcard_right',
+    'angularCSS', 'distribution', 'mall_finance', 'idcard_right',
     //  王杰 开始
     "banner_recommend_module",
     "index_recommend_module",
@@ -109,27 +109,32 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/mall_manage/style_manage/style_detail/style_detail.html",
             params: {style_item: '', page: ''}
         })
-        .state("new_brand_class", {          /*新品牌/分类管理*/
-          abstract: true,
-          url: "/new_brand_class",
-          templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_class_tab.html"
+        .state("new_brand_class", {
+            /*新品牌/分类管理*/
+            abstract: true,
+            url: "/new_brand_class",
+            templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_class_tab.html"
         })
-      .state("new_brand_class.new_brand", {          /*新品牌管理*/
-        url: "/new_brand",
-        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand.html"
-      })
-      .state("new_brand_class.new_class", {          /*新分类管理*/
-        url: "/new_class",
-        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class.html"
-      })
-      .state("new_brand_check", {          /*新品牌审核*/
-        url: "/new_brand_check?brand_id&review_status",
-        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_check.html",
-      })
-      .state("new_class_check", {          /*新分类审核*/
-        url: "/new_class_check?cate_id&review_status",
-        templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class_check.html",
-      })
+        .state("new_brand_class.new_brand", {
+            /*新品牌管理*/
+            url: "/new_brand",
+            templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand.html"
+        })
+        .state("new_brand_class.new_class", {
+            /*新分类管理*/
+            url: "/new_class",
+            templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class.html"
+        })
+        .state("new_brand_check", {
+            /*新品牌审核*/
+            url: "/new_brand_check?brand_id&review_status",
+            templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_brand_check.html",
+        })
+        .state("new_class_check", {
+            /*新分类审核*/
+            url: "/new_class_check?cate_id&review_status",
+            templateUrl: "pages/mall_manage/new_brand_class_manage/new_brand_class/new_class_check.html",
+        })
         /*---------------------------王杰结束--------------------------------------*/
 
         /*---------------------------谢力开始--------------------------------------*/
@@ -521,19 +526,19 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/add_support_goods?city&province&name',
             templateUrl: 'pages/intelligent/add_support_goods.html',
             css: 'pages/intelligent/css/add_support_goods.css',
-            controller:'support_goods_ctrl'
+            controller: 'support_goods_ctrl'
         })
         .state('worker_price_list', {//智能报价工人资费列表
             url: '/worker_price_list?city&province',
             templateUrl: 'pages/intelligent/worker_price_list.html',
             css: 'pages/intelligent/css/worker_price_list.css',
-            controller:'worker_price_ctrl'
+            controller: 'worker_price_ctrl'
         })
         .state('edit_worker', {//智能报价工人资费编辑
             url: '/edit_worker?id',
             templateUrl: 'pages/intelligent/edit_worker.html',
             css: 'pages/intelligent/css/edit_worker.css',
-            controller:'edit_worker_ctrl'
+            controller: 'edit_worker_ctrl'
         })
         .state('intelligent.home_manage', {//智能报价首页管理
             url: 'home_manage',
@@ -549,31 +554,31 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/engineering_standards?city&province',
             templateUrl: 'pages/intelligent/engineering_standards.html',
             css: 'pages/intelligent/css/engineering_standards.css',
-            controller:'engineering_standards_ctrl'
+            controller: 'engineering_standards_ctrl'
         })
         .state('engineering_process', {//工程标准编辑
             url: '/engineering_process?city&project',
             templateUrl: 'pages/intelligent/engineering_process.html',
             css: 'pages/intelligent/css/engineering_process.css',
-            controller:'engineering_process_ctrl'
+            controller: 'engineering_process_ctrl'
         })
         .state('coefficient_manage', {//系数管理
             url: '/coefficient_manage?city&province',
             templateUrl: 'pages/intelligent/coefficient_manage.html',
             css: 'pages/intelligent/css/coefficient_manage.css',
-            controller:'coefficient_manage_ctrl'
+            controller: 'coefficient_manage_ctrl'
         })
         .state('add_material', {//添加材料项
             url: '/add_material?city&province',
             templateUrl: 'pages/intelligent/add_material.html',
             css: 'pages/intelligent/css/add_material.css',
-            controller:'add_material_ctrl'
+            controller: 'add_material_ctrl'
         })
         .state('material_detail', {//添加材料详情
             url: '/material_detail?status&id&city',
             templateUrl: 'pages/intelligent/material_detail.html',
             css: 'pages/intelligent/css/material_detail.css',
-            controller:'material_detail_ctrl'
+            controller: 'material_detail_ctrl'
         })
         .state('intelligent.house_area', {//房屋面积编辑
             url: 'house_area',
@@ -602,20 +607,20 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/goods_manage?city&province',
             templateUrl: 'pages/intelligent/goods_manage.html',
             css: 'pages/intelligent/css/goods_manage.css',
-            controller:'goods_manage_ctrl'
+            controller: 'goods_manage_ctrl'
         })
         //样板间申请
-        .state('apply_case_index',{//装修申请
-            url:'/apply_case_index',
-            templateUrl:'pages/apply_case/apply_case_index.html',
+        .state('apply_case_index', {//装修申请
+            url: '/apply_case_index',
+            templateUrl: 'pages/apply_case/apply_case_index.html',
             css: 'pages/apply_case/css/apply_case_index.css',
-            controller:'apply_case_ctrl'
+            controller: 'apply_case_ctrl'
         })
-        .state('case_detail',{//申请详情
-            url:'/case_detail?id',
-            templateUrl:'pages/apply_case/case_detail.html',
+        .state('case_detail', {//申请详情
+            url: '/case_detail?id',
+            templateUrl: 'pages/apply_case/case_detail.html',
             css: 'pages/apply_case/css/case_detail.css',
-            controller:'case_detail_ctrl'
+            controller: 'case_detail_ctrl'
         })
         //分销
         .state('distribution', {
@@ -868,11 +873,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/mall_manage/offline_shop/experience_shop.html',
             controller: 'experience_shop'
         })
-        .state('offline_shop.goods', {  // 体验商品
-            url: '/offline-shop/experience-goods',
-            templateUrl: 'pages/mall_manage/offline_shop/experience_goods.html',
-            controller: 'experience_goods'
-        })
         .state('add_experience_shop', { // 添加线下店
             url: '/offline-shop/add-shop',
             templateUrl: 'pages/mall_manage/offline_shop/add_experience_shop.html',
@@ -884,6 +884,23 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/mall_manage/offline_shop/edit_experience_shop.html',
             css: 'pages/mall_manage/offline_shop/css/experience.css',
             controller: 'edit_experience_shop'
+        })
+        .state('offline_shop.goods', {  // 体验商品
+            url: '/offline-shop/experience-goods',
+            templateUrl: 'pages/mall_manage/offline_shop/experience_goods.html',
+            controller: 'experience_goods'
+        })
+        .state('add_experience_goods', { // 添加线下商品
+            url: '/offline-shop/add-goods',
+            templateUrl: 'pages/mall_manage/offline_shop/add_experience_goods.html',
+            css: 'pages/mall_manage/offline_shop/css/experience.css',
+            controller: 'add_experience_goods'
+        })
+        .state('edit_experience_goods', { // 编辑线下商品
+            url: '/offline-shop/edit-goods?id&sku',
+            templateUrl: 'pages/mall_manage/offline_shop/edit_experience_goods.html',
+            css: 'pages/mall_manage/offline_shop/css/experience.css',
+            controller: 'edit_experience_goods'
         })
     /*=============== 廖欢 end ===============*/
 })

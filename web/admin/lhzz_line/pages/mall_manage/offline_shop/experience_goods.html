@@ -1,23 +1,23 @@
 <div class="search form-inline clearfix">
-    <button class="btn btn-primary">新添加</button>
+    <a class="btn btn-primary" ui-sref="add_experience_goods">新添加</a>
     <span>选择区域</span>
     <select class="form-control" ng-options="obj.code as obj.value for obj in province"
-            ng-model="select_district.province_code"
-            ng-change="select_province(select_district.province_code, 1)"></select>
-    <select class="form-control" ng-if="select_district.province_code != 0"
-            ng-options="obj.code as obj.value for obj in city" ng-model="select_district.city_code"
-            ng-change="select_province(select_district.city_code, 2)"></select>
-    <select class="form-control" ng-if="select_district.city_code != 0"
-            ng-options="obj.code as obj.value for obj in district" ng-model="select_district.district_code"></select>
+            ng-model="search_params.province_code" ng-change="listenProvince(search_params.province_code)"></select>
+    <select class="form-control" ng-if="search_params.province_code != 0"
+            ng-options="obj.code as obj.value for obj in city" ng-model="search_params.city_code"
+            ng-change="listenCity(search_params.city_code)"></select>
+    <select class="form-control" ng-if="search_params.city_code != 0"
+            ng-options="obj.code as obj.value for obj in district" ng-model="search_params.district_code"
+            ng-change="listenDistrict(search_params.district_code)"></select>
     <span>状态</span>
-    <select class="form-control" ng-model="params.status">
+    <select class="form-control" ng-model="params.status" ng-change="statusFun()">
         <option value="0">全部</option>
         <option value="1">已关闭</option>
         <option value="2">已开启</option>
     </select>
     <div class="form-group pull-right">
         <div class="input-group">
-            <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索商品编号名称、线下店或商家名称">
+            <input class="form-control" type="text" ng-model="search_params.keyword" placeholder="搜索商品编号名称、线下店或商家名称">
             <span class="iconfont icon-search"></span>
         </div>
         <button class="btn btn-default" ng-click="search()">查询</button>
@@ -49,11 +49,12 @@
                 <span class="red" ng-if="obj.status == 1">已关闭</span>
             </td>
             <td>
-                <a href="javascript: void (0);">查看</a>
+                <a href="javascript: void (0);" ui-sref="edit_experience_goods({id: obj.line_id, sku: obj.sku})">查看</a>
             </td>
             <td>
-                <a href="javascript: void (0);">关闭</a>
-                <a href="javascript: void (0);">删除</a>
+                <a href="javascript: void (0);" ng-if="obj.status == 2" ng-click="open_or_close(1, obj.line_goods_id)">关闭</a>
+                <a href="javascript: void (0);" ng-if="obj.status == 1" ng-click="open_or_close(2, obj.line_goods_id)">开启</a>
+                <a href="javascript: void (0);" ng-click="del_goods(obj.line_goods_id)">删除</a>
             </td>
         </tr>
         </tbody>

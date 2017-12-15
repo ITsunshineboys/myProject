@@ -1,0 +1,72 @@
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left">商品编号</label>
+        <div class="col-xs-10">
+            <p class="form-control-static">{{sku}}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left">商品名称</label>
+        <div class="col-xs-10">
+            <p class="form-control-static">{{shop_data.goods_name}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left">所属店铺</label>
+        <div class="col-xs-10">
+            <p class="form-control-static">{{shop_data.belong_shop_name}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left">选择区域</label>
+        <div class="col-xs-10">
+            <select class="form-control inline-block"
+                    ng-options="obj.code as obj.value for obj in province"
+                    ng-model="select_district.province_code"
+                    ng-change="cityList()"></select>
+            <select class="form-control inline-block"
+                    ng-options="obj.code as obj.value for obj in city"
+                    ng-model="select_district.city_code"
+                    ng-change="districtList()"></select>
+            <select class="form-control inline-block"
+                    ng-options="obj.code as obj.value for obj in district"
+                    ng-model="select_district.district_code"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left no-warp">选择线下店</label>
+        <div class="col-xs-10">
+            <div class="dropdown">
+                <button class="form-control" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-class="{error: params.line_id == ''}">
+                    {{line_shop_info.name}}
+                    <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu">
+                    <p><input type="text" class="form-control" placeholder="请输入店铺名称" ng-model="shop_params.keyword"></p>
+                    <ul>
+                        <li ng-repeat="obj in shop_list" ng-click="select_shop(obj)">{{obj.shop_name}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left no-warp">线下店地址</label>
+        <div class="col-xs-10">
+            <p class="form-control-static">{{line_shop_info.address}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-1 control-label text-left">电话</label>
+        <div class="col-xs-10">
+            <p class="form-control-static">{{line_shop_info.mobile}}</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-primary" ng-click="edit_experience_goods()">确认</button>
+            <a type="button" class="btn btn-default" href="javascript: history.back();">返回</a>
+        </div>
+    </div>
+</form>
