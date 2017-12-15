@@ -1573,7 +1573,7 @@ class QuoteController extends Controller
      */
     public function actionHouseTypeList()
     {
-        $select = 'min_area,max_area';
+        $select = 'id,min_area,max_area';
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
@@ -1756,36 +1756,36 @@ class QuoteController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        foreach ($post['add'] as $one_post){
-            $a = DecorationMessage::find()->where(['id'=>$one_post['id']])->one();//TODO 添加 查询
-            switch ($a){
-                case $a['series_id'] != null:
-                    $a->quantity=$one_post['quantity'];
 
-//                    $dm = \Yii::$app->db->createCommand()
-//                        ->update(DecorationMessage::tableName(), [
-//                            'series_id' => $a['series_id'],//TODO series -> series_id
-//                            'quantity' => $one_post['quantity'],
-//                        ],['id'=>$a['id']])->execute();
+        foreach ($post['add'] as $one_post){
+            switch ($one_post){
+//                case $one_post['id']:
+//                    $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
 //                    break;
-                case $a['style_id'] != null:
-                    $a->quantity=$one_post['quantity'];
+                case isset($one_post['series']) != null:
+                    $dm = \Yii::$app->db->createCommand()
+                        ->update(DecorationMessage::tableName(), [
+                            'series_id' => $one_post['series'],
+                            'quantity' => $one_post['quantity'],
+                        ],['id'=>$one_post['id']])->execute();
                     break;
-                case $a['min_area'] != null:
-                    $a->quantity=$one_post['quantity'];
-                    $a->max_area=$one_post['max_area'];
-                    $a->min_area=$one_post['min_area'];
-//                    $dm = \Yii::$app->db->createCommand()
-//                        ->update(DecorationMessage::tableName(), [
-//                            'min_area' => $one_post['min_area'],
-//                            'max_area' => $one_post['min_area'],
-//                            'quantity' => $one_post['quantity'],
-//                        ],['id'=>$a['id']])->execute();
+                case isset($one_post['style']) != null:
+                    $dm = \Yii::$app->db->createCommand()
+                        ->update(DecorationMessage::tableName(), [
+                            'style_id' => $one_post['style'],
+                            'quantity' => $one_post['quantity'],
+                        ],['id'=>$one_post['id']])->execute();
+                    break;
+                case isset($one_post['min_area']) != null:
+                    $dm = \Yii::$app->db->createCommand()
+                        ->update(DecorationMessage::tableName(), [
+                            'min_area' => $one_post['min_area'],
+                            'max_area' => $one_post['max_area'],
+                            'quantity' => $one_post['quantity'],
+                        ],['id'=>$one_post['id']])->execute();
                     break;
             }
-            $dm=$a->save();
         }
-
         if (!$dm){
             $code = 1000;
             return Json::encode([
