@@ -122,11 +122,14 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         $goods=Goods::find()->where(['sku'=>$post['sku']])->one();
         if (!$goods)
         {
+            var_dump(1);die;
             return $code;
         }
         $LineSupplier=LineSupplierGoods::findOne($post['line_id']);
         if (!$LineSupplier)
         {
+
+            var_dump(2);die;
             return $code;
         }
         $LineSupplierGoods=LineSupplierGoods::find()
@@ -134,6 +137,8 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             ->one();
         if (!$LineSupplierGoods)
         {
+
+            var_dump(3);die;
             return $code;
         }
         $tran = Yii::$app->db->beginTransaction();
