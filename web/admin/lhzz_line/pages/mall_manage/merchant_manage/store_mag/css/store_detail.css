@@ -1,4 +1,18 @@
 /*ͷ����ʼ*/
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.form-horizontal .form-control-static {
+    text-align: left;
+}
+
+.form-group .form-control-static .score {
+    padding-left: 0;
+}
+
+
 .shop_manage {
     font-size: 14px;
     color: #2F3033;
