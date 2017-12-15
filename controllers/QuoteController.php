@@ -1748,7 +1748,7 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         $decoration_add = DecorationAdd::findOne($post['id']);
         $decoration_add->correlation_message = $post['message'];
-        $decoration_add->sku           = $post['code'];
+        $decoration_add->sku           = $post['sku'];
         if (!$decoration_add->save()){
             $code = 1000;
             return Json::encode([
