@@ -117,7 +117,6 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         }
         if ((int)$post['status']!=1 && (int)$post['status']!=2)
         {
-            var_dump(1);die;
             return $code;
         }
         $goods=Goods::find()->where(['sku'=>$post['sku']])->one();
@@ -125,7 +124,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             return $code;
         }
-        $LineSupplier=LineSupplierGoods::findOne($post['line_id']);
+        $LineSupplier=LineSupplier::findOne($post['line_id']);
         if (!$LineSupplier)
         {
             return $code;
