@@ -616,6 +616,7 @@ class SupplierController extends Controller
                 ->where(['id'=>$category_arr[0]])
                 ->one();
             $Supplier['category']=$first_category->title.'-'.$three_category->parent_title.'-'.$three_category->title;
+            $Supplier['status']=$line_supplier->status;
 
         }
         unset($Supplier['category_id']);
@@ -1091,7 +1092,7 @@ class SupplierController extends Controller
 
     public  function  actionGetUpSupplierLineGoods()
     {
-        $sku=Yii::$app->request->post('sku');
+        $sku=Yii::$app->request->get('sku');
         $Goods=Goods::find()
             ->where(['sku'=>$sku])
             ->one();
@@ -1159,6 +1160,7 @@ class SupplierController extends Controller
                 'line_id'=>$lineSupplier->id,
                 'district'=>LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier->district_code),
                 'mobile'=>$lineSupplier->mobile,
+                'status'=>$lineGoods->status,
             ]
         ]);
     }
