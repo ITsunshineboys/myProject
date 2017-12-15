@@ -871,7 +871,7 @@ class SupplierController extends Controller
 
             if (($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ) {
+            ){
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],

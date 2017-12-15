@@ -163,6 +163,10 @@ class LineSupplier extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * @param $district_code
+     * @return array
+     */
     public  static  function  FindLineSupplierByDistrictCode($district_code)
     {
         $data=(new Query())
