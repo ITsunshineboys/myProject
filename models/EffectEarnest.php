@@ -110,6 +110,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
         foreach ($effectList as &$effect) {
             $effect['item']=self::EFFECT_LOGIN[$effect['item']];
+            if($effect['earnest']==0){
+                unset($effect['earnest']);
+            }
+            if($effect['transaction_no']==''){
+                unset($effect['transaction_no']);
+            }
             if(isset($effect['create_time'])){
                 $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
             }
