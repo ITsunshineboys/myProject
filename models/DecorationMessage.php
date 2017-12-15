@@ -45,14 +45,10 @@ class DecorationMessage extends ActiveRecord
 
     public static function findByUpdate($row,$id)
     {
-
-        $rows=self::find()->where(['decoration_add_id'=>$id])->one();
-        $rows->quantity=(int)$row;
-        $res=$rows->save(false);
-//        $rows = \Yii::$app->db->createCommand();
-//        $res= $rows->update(self::TABLE_NAME,[
-//            'quantity' => $row,
-//        ],['id'=>$id])->execute();
+        $rows = \Yii::$app->db->createCommand();
+        $res= $rows->update(self::TABLE_NAME,[
+            'quantity' => $row,
+        ],['decoration_add_id'=>$id])->execute();
         return $res;
     }
 }

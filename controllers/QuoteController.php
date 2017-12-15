@@ -1798,20 +1798,20 @@ class QuoteController extends Controller
                     ->update(DecorationMessage::tableName(), [
                         'series_id' => $one_post['series'],
                         'quantity' => $one_post['quantity'],
-                    ],['id'=>$one_post['id']])->execute();
+                    ],['decoration_add_id'=>$one_post['id']])->execute();
             }elseif (isset($one_post['series'])){
                 $dm = \Yii::$app->db->createCommand()
                     ->update(DecorationMessage::tableName(), [
                         'style_id' => $one_post['style'],
                         'quantity' => $one_post['quantity'],
-                    ],['id'=>$one_post['id']])->execute();
+                    ],['decoration_add_id'=>$one_post['id']])->execute();
             }elseif (isset($one_post['min_area']) ){
                 $dm = \Yii::$app->db->createCommand()
                     ->update(DecorationMessage::tableName(), [
                         'min_area' => $one_post['min_area'],
                         'max_area' => $one_post['max_area'],
                         'quantity' => $one_post['quantity'],
-                    ],['id'=>$one_post['id']])->execute();
+                    ],['decoration_add_id'=>$one_post['id']])->execute();
             }
 
         }
