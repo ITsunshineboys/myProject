@@ -2297,9 +2297,13 @@ class OrderController extends Controller
                     $where ="a.supplier_id={$supplier->id}";
                 }else{
                     $where=GoodsOrder::GetTypeWhere($type);
-                    $where .=" and a.supplier_id={$supplier->id}  and order_refer = 2";
+                    $where .=" and a.supplier_id={$supplier->id}  and a.order_refer = 2";
                 }
                 break;
+        }
+        if ($type=='all')
+        {
+            $where.=' and z.customer_service=0';
         }
         $sort=' a.create_time  desc';
         $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
