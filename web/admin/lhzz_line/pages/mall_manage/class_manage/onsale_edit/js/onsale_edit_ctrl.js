@@ -1,8 +1,7 @@
 /**
  * Created by hulingfangzi on 2017/7/27.
  */
-/*已上架 编辑*/
-angular.module("onsaleeditModule", ['ngFileUpload']).controller("onsaleEdit", function ($scope, $state, $stateParams, $http, Upload, $rootScope, _ajax) {
+app.controller('onsale_edit', ['$state','$scope', '$stateParams','$http', '$rootScope', 'Upload', '_ajax', function ($state, $scope, $stateParams, $http, $rootScope, Upload, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -109,6 +108,7 @@ angular.module("onsaleeditModule", ['ngFileUpload']).controller("onsaleEdit", fu
 
     /*编辑里的下架*/
     $scope.sureoffline = function () {
+        console.log(123123123123)
         _ajax.post('/mall/category-status-toggle', {
             id: $scope.item.id,
             offline_reason: $scope.offlinereason
@@ -166,4 +166,4 @@ angular.module("onsaleeditModule", ['ngFileUpload']).controller("onsaleEdit", fu
             })
         }
     }
-})
+}])

@@ -1,4 +1,4 @@
-var app = angular.module("app", ["ng.ueditor", "ui.router", "onsaleeditModule", "offsaleeditModule",
+var app = angular.module("app", ["ng.ueditor", "ui.router","ngFileUpload","offsaleeditModule",
     "addclassModule", 'brand_details_module', 'account_comment', 'change_num', 'bind_record', 'operation_record',
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
@@ -301,9 +301,12 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state("onsale_edit", {
             params: {item: null},
-            url: "/onsale_edit",
-            templateUrl: "pages/mall_manage/class_manage/onsale_edit/onsale_edit.html"
+            url: '/onsale_edit',
+            css: 'pages/mall_manage/class_manage/onsale_edit/css/onsale_edit.css',
+            templateUrl: 'pages/mall_manage/class_manage/onsale_edit/onsale_edit.html',
+            controller: 'onsale_edit'
         })
+
         .state("offsale_edit", {
             params: {item: null},
             url: "/offsale_edit",

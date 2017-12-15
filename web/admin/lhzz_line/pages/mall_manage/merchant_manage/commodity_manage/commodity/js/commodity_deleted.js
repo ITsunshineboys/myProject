@@ -123,7 +123,5 @@ app.controller('commodity_deleted', ['_ajax','$scope', '$stateParams','$http', f
             $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })
     }
+}])
 
-
-}]);
-;
