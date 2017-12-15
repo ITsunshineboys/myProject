@@ -1757,7 +1757,7 @@ class QuoteController extends Controller
             ]);
         }
 
-
+        $dm=[];
         foreach ($post['add'] as $one_post){
             switch ($one_post){
 //                case $one_post['id']:
