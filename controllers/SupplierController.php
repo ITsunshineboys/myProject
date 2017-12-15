@@ -1123,6 +1123,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
         if (!$lineSupplier)
         {
@@ -1132,13 +1133,32 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $lineShop=Supplier::findOne($lineSupplier->supplier_id);
+        if (!$lineShop)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $pro=substr($lineSupplier->district_code,0,2);
+        $ci=substr($lineSupplier->district_code,2,2);
+        $dis=substr($lineSupplier->district_code,4,2);
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
             'data'=>[
                 'goods_name'=>$Goods->title,
                 'belong_shop_name'=>$belongSupplier->shop_name,
-                ''
+                'pro'=>$pro.'0000',
+                'ci'=>$pro.$ci.'00',
+                'dis'=>$pro.$ci.$dis,
+                'line_shop_name'=>$lineShop->shop_name,
+                'line_id'=>$lineSupplier->id,
+                'district'=>LogisticsDistrict::GetLineDistrictByDistrictCode($lineSupplier->district_code),
+                'mobile'=>$lineSupplier->mobile,
             ]
         ]);
     }
