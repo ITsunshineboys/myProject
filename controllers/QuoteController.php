@@ -1786,7 +1786,7 @@ class QuoteController extends Controller
                     break;
             }
         }
-
+        var_dump($dm);die;
         if (!$dm){
             $code = 1000;
             return Json::encode([
@@ -1795,7 +1795,6 @@ class QuoteController extends Controller
 
             ]);
         }
-
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
