@@ -206,3 +206,9 @@ ALTER TABLE `user_accessdetail` ADD  `recharge_pay_type` tinyint(1) NOT NULL DEF
 
 --all 2017.12.13 yr
 ALTER TABLE `chat_record` ADD  `length` int(11) NOT NULL DEFAULT '0' COMMENT '语音长度';
+
+--all 2017.12.15 yr
+
+update points set title='强电路点位' where title='强电';
+update points set title='弱电路点位' where title='弱电';
+update points set title='水路点位' where title='水路';
