@@ -78,6 +78,7 @@ class ShippingCart extends \yii\db\ActiveRecord
                 ->toArray()
             ['supplier_id'];
         }
+        var_dump($supplierIds);die;
         $supIds=[];
         foreach ($supplierIds as &$supplierId)
         {

@@ -1089,6 +1089,60 @@ class SupplierController extends Controller
         }
     }
 
+    public  function  actionGetUpSupplierLineGoods()
+    {
+        $sku=Yii::$app->request->post('sku');
+        $Goods=Goods::find()
+            ->where(['sku'=>$sku])
+            ->one();
+        if (!$Goods)
+        {
+            $code=1078;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lineGoods=LineSupplierGoods::find()
+            ->where(['goods_id'=>$Goods->id])
+            ->one();
+        if (!$lineGoods)
+        {
+            $code=1078;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $belongSupplier=Supplier::findOne($Goods->supplier_id);
+        if (!$belongSupplier)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
+        if (!$lineSupplier)
+        {
+            $code=1076;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data'=>[
+                'goods_name'=>$Goods->title,
+                'belong_shop_name'=>$belongSupplier->shop_name,
+                ''
+            ]
+        ]);
+    }
+
 
 
 
