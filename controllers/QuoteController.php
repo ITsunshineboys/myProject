@@ -1761,7 +1761,7 @@ class QuoteController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $dm=[];
+
         foreach ($post['add'] as $one_post){
             switch ($one_post){
                 case $one_post['id']:
