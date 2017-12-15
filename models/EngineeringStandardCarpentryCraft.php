@@ -35,6 +35,9 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
         foreach ($row as &$one){
             $one['unit'] = self::UNIT[$one['unit']];
             $one['value'] = $one['value'] / 100;
+            if($one['value']==0){
+                $one['value']='其它';//TODO 修改
+            }
         }
 
         return $row;
