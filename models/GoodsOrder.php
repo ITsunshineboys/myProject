@@ -838,7 +838,7 @@ class GoodsOrder extends ActiveRecord
             ->orderBy($sort)
             ->limit($size)
             ->all();
-        $arr=self::getorderstatus($OrderList);
+        $arr=self::GetOrderStatus($OrderList);
         foreach ($arr AS $k =>$v){
             $arr[$k]['handle']='';
             if ($arr[$k]['is_unusual']==1){
@@ -1069,12 +1069,12 @@ class GoodsOrder extends ActiveRecord
                z.cover_image,
                a.role_id,
                z.is_unusual';
-        $array=self::getorderlist()
+        $array=self::GetOrderList()
             ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
             ->select($select)
             ->where(['a.order_no'=>$order_no,'z.sku'=>$sku])
             ->all();
-        $arr=self::getorderstatus($array);
+        $arr=self::GetOrderStatus($array);
         if(!$arr){
             return null;
         }
@@ -1550,7 +1550,7 @@ class GoodsOrder extends ActiveRecord
      * @param $data
      * @return mixed
      */
-    public static function  getorderstatus($data)
+    public static function  GetOrderStatus($data)
     {
         foreach ($data as $k =>$v){
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
@@ -1758,7 +1758,7 @@ class GoodsOrder extends ActiveRecord
     /**
      * @return $this
      */
-    public static function getorderlist()
+    public static function GetOrderList()
     {
         $getorderlist  =(new Query())
             ->from(self::tableName().' AS a')
@@ -2332,7 +2332,7 @@ class GoodsOrder extends ActiveRecord
             ->select($select)
             ->where($where)
             ->all();
-        $arr=self::getorderstatus($OrderList);
+        $arr=self::GetOrderStatus($OrderList);
         $arr=self::findOrderData($arr,$user,$role);
         if ($type=='all' || $type=='unpaid')
         {
@@ -2724,7 +2724,7 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function  FindUserOrderDetails($postData,$user)
     {
-        $array=self::getorderlist()
+        $array=self::GetOrderList()
             ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
             ->select('
            a.pay_name,
@@ -2783,7 +2783,7 @@ class GoodsOrder extends ActiveRecord
         if(!$array){
             return null;
         }
-        $arr=self::getorderstatus($array);
+        $arr=self::GetOrderStatus($array);
         if(!$arr){
             return null;
         }
