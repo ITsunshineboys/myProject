@@ -100,10 +100,10 @@ class SupplierController extends Controller
                     'user_id' => $user->id,
                     'role_id' => Yii::$app->params['supplierRoleId'],
                 ])
-                ->andWhere(['in', 'review_status', [Role::AUTHENTICATION_STATUS_APPROVED, Role::AUTHENTICATION_STATUS_REJECTED]])
+                ->andWhere(['in', 'review_status', [Role::AUTHENTICATION_STATUS_APPROVED]])
                 ->one();
             if ($userRole) {
-                $code = 500;
+                $code = 1000;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
