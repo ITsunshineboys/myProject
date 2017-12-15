@@ -1761,32 +1761,33 @@ class QuoteController extends Controller
             switch ($one_post){
                 case $one_post['id']:
                 $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
-                break;
-                case isset($one_post['series']) != null:
-                    $dm = \Yii::$app->db->createCommand()
-                        ->update(DecorationMessage::tableName(), [
-                            'series_id' => $one_post['series'],
-                            'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post['id']])->execute();
-                    break;
-                case isset($one_post['style']) != null:
-                    $dm = \Yii::$app->db->createCommand()
-                        ->update(DecorationMessage::tableName(), [
-                            'style_id' => $one_post['style'],
-                            'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post['id']])->execute();
-                    break;
-                case isset($one_post['min_area']) != null:
-                    $dm = \Yii::$app->db->createCommand()
-                        ->update(DecorationMessage::tableName(), [
-                            'min_area' => $one_post['min_area'],
-                            'max_area' => $one_post['max_area'],
-                            'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post['id']])->execute();
-                    break;
+                var_dump($dm);
+//                break;
+//                case isset($one_post['series']) != null:
+//                    $dm = \Yii::$app->db->createCommand()
+//                        ->update(DecorationMessage::tableName(), [
+//                            'series_id' => $one_post['series'],
+//                            'quantity' => $one_post['quantity'],
+//                        ],['id'=>$one_post['id']])->execute();
+//                    break;
+//                case isset($one_post['style']) != null:
+//                    $dm = \Yii::$app->db->createCommand()
+//                        ->update(DecorationMessage::tableName(), [
+//                            'style_id' => $one_post['style'],
+//                            'quantity' => $one_post['quantity'],
+//                        ],['id'=>$one_post['id']])->execute();
+//                    break;
+//                case isset($one_post['min_area']) != null:
+//                    $dm = \Yii::$app->db->createCommand()
+//                        ->update(DecorationMessage::tableName(), [
+//                            'min_area' => $one_post['min_area'],
+//                            'max_area' => $one_post['max_area'],
+//                            'quantity' => $one_post['quantity'],
+//                        ],['id'=>$one_post['id']])->execute();
+//                    break;
             }
-        }
-        var_dump($dm);die;
+        }die;
+
         if (!$dm){
             $code = 1000;
             return Json::encode([
