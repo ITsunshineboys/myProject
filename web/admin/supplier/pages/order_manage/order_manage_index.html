@@ -97,7 +97,7 @@
                 <td ng-if="menu_list[5].value" ng-bind="item.user_name"></td>
                 <td ng-if="menu_list[6].value" ng-bind="item.mobile"></td>
                 <td ng-if="menu_list[7].value" ng-bind="item.status"></td>
-                <td ng-if="menu_list[8].value" ng-bind="item.unusual" ng-class={txt_red:item.unusual!='无异常'}></td>
+                <td ng-if="menu_list[8].value" ng-bind="item.unusual" ng-class={red:item.unusual!='无异常'}></td>
                 <td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>
                 <!--<td ng-if="menu_list[9].value" ng-bind="item.comment_grade"></td>-->
                 <td ng-if="menu_list[10].value" class="view" ><a ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</a></td>
@@ -146,8 +146,18 @@
                 <th ng-if="waitsend_1">订单编号</th>
                 <th ng-if="waitsend_2">商品编号</th>
                 <th ng-if="waitsend_3">商品名称</th>
-                <th ng-if="waitsend_4">订单金额<img ng-src="{{sort_money_img}}" ng-click="sort_money_click()"  class="sortpic"></th>
-                <th ng-if="waitsend_5">下单时间<img ng-src="{{sort_time_img}}" ng-click="sort_time_click()"  class="sortpic"></th>
+                <th ng-if="waitsend_4">订单金额
+                    <span class="sort" ng-click="sort_money_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':wjparams.sort_money == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':wjparams.sort_money == 2}"></i>
+                    </span>
+                </th>
+                <th ng-if="waitsend_5">下单时间
+                    <span class="sort" ng-click="sort_time_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':wjparams.sort_time == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':wjparams.sort_time == 2}"></i>
+                    </span>
+                </th>
                 <th ng-if="waitsend_6">用户</th>
                 <th ng-if="waitsend_7">绑定手机</th>
                 <th ng-if="waitsend_8">订单状态</th>
@@ -167,7 +177,7 @@
                 <td ng-if="waitsend_6">{{item.user_name}}</td>
                 <td ng-if="waitsend_7">{{item.mobile}}</td>
                 <td ng-if="waitsend_8">{{item.status}}</td>
-                <td ng-if="waitsend_9" ng-show="item.unusual !='无异常'" class="txt_red">{{item.unusual}}</td>
+                <td ng-if="waitsend_9" ng-show="item.unusual !='无异常'" class="red">{{item.unusual}}</td>
                 <td ng-if="waitsend_9" ng-show="item.unusual=='无异常'">{{item.unusual}}</td>
                 <td ng-if="waitsend_10">{{item.comment_grade}}</td>
                 <td ng-if="waitsend_11"><a ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</a></td>
@@ -205,10 +215,14 @@
                 </div>
                 <div class="modal-body body_font">
                     <p class='track_p' ng-if='track_flag'>{{track_font}}</p>
-                    <div>
-                        <span class="track_red">*</span>
-                        <span class='track_span'>快递单号</span>
-                        <input type="text" class="delivery_input" ng-model="delivery_input_model">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <span class="red">*</span>
+                            <span class='track_span'>快递单号</span>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" ng-model="delivery_input_model">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -255,8 +269,18 @@
                 <th ng-if="waitreceive_1">订单编号</th>
                 <th ng-if="waitreceive_2">商品编号</th>
                 <th ng-if="waitreceive_3">商品名称</th>
-                <th ng-if="waitreceive_4">订单金额<img ng-src="{{sort_money_img}}" ng-click="sort_money_click()"  class="sortpic"></th>
-                <th ng-if="waitreceive_5">下单时间<img ng-src="{{sort_time_img}}" ng-click="sort_time_click()"  class="sortpic" ></th>
+                <th ng-if="waitreceive_4">订单金额
+                    <span class="sort" ng-click="sort_money_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':wjparams.sort_money == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':wjparams.sort_money == 2}"></i>
+                    </span>
+                </th>
+                <th ng-if="waitreceive_5">下单时间
+                    <span class="sort" ng-click="sort_time_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':wjparams.sort_time == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':wjparams.sort_time == 2}"></i>
+                    </span>
+                </th>
                 <th ng-if="waitreceive_6">用户</th>
                 <th ng-if="waitreceive_7">绑定手机</th>
                 <th ng-if="waitreceive_8">订单状态</th>
@@ -276,7 +300,7 @@
                 <td ng-if="waitreceive_6">{{item.user_name}}</td>
                 <td ng-if="waitreceive_7">{{item.mobile}}</td>
                 <td ng-if="waitreceive_8">{{item.status}}</td>
-                <td ng-if="waitreceive_9" ng-show="item.unusual!='无异常'" class="txt_red">{{item.unusual}}</td>
+                <td ng-if="waitreceive_9" ng-show="item.unusual!='无异常'" class="red">{{item.unusual}}</td>
                 <td ng-if="waitreceive_9" ng-show="item.unusual=='无异常'">{{item.unusual}}</td>
                 <td ng-if="waitreceive_10">{{item.comment_grade}}</td>
                 <td ng-if="waitreceive_11"><a ng-click="viewDetail(item.order_no,item.sku,item.status)">查看</a></td>
@@ -347,5 +371,6 @@
             </tr>
             </tbody>
         </table>
+        <tm-pagination conf="wjConfig"></tm-pagination>
     </div>
 </div>

@@ -1,282 +1,54 @@
-/*顶部导航*/
-textarea{
-    resize: none;
+hr{
+    margin: 10px 0;
 }
-
-/*内容开始*/
 h3 {
     color: rgba(102, 111, 128, 1);
     font-weight: bold;
     font-size: 16px;
+    margin: 0;
+    height: 35px;
+    line-height: 35px;
 }
-
-/*——订单详情——*/
-.order_detail > div, .good_detail > div {
-    margin-top: 20px;
+.form-horizontal .control-label{
+    text-align: left;
 }
-
-/*订单号*/
-.order_num span:last-child {
-    margin-left: 97px;
+.row{
+    margin-bottom: 20px;
 }
-
-.order_state span:last-child {
-    margin-left: 83px;
+.hr_p{
+    border-bottom: 1px solid #eee;
 }
-
-/*用户*/
-.user span:last-child {
-    margin-left: 111px;
-}
-
-/*订单金额*/
-.order_money ul:nth-child(2) {
-    display: inline-block;
-    margin-left: 84px;
-    vertical-align: text-top;
-    padding: 0;
-    margin-bottom: 10px;
-    border-bottom: 2px solid whitesmoke;
-
-}
-
-.order_money ul li {
-    list-style: none;
-    float: left;
-    width: 98px;
-}
-
-.order_money > ul:last-child {
-    margin-left: 102px;
-}
-
-/*供货价*/
-.supplier_money {
-    margin-top: 40px !important;
-}
-
-.supplier_money span:last-child {
-    margin-left: 97px;
-}
-
-/*市场价*/
-.market_money span:last-child {
-    margin-left: 97px;
-}
-
-/*剩余付款时间*/
-.left_paytime span:last-child {
-    margin-left: 56px;
-}
-
-/*————订单详情————*/
-.good_detail h3 {
-    display: inline;
-}
-
-.view_good {
-    margin-left: 74px;
-    width: 95px;
-    height: 28px;
-    background: #F2F4FF;
+.arrow_class{
     color: #487AF8;
-    border: 1px solid #487AF8;
-    border-radius: 3px;
+    cursor: pointer;
+    font-size:26px;
 }
 
-.good_attr {
-    display: inline-block;
-    vertical-align: text-top;
-    margin-left: 83px;
-    padding: 0;
-    list-style: none;
-}
-
-.good_attr li {
-    margin-bottom: 14px;
-}
-
-/*电话*/
-.phonenum span:last-child {
-    margin-left: 112px;
-}
-
-/*纳税人识别码*/
-.udid span:last-child {
-    margin-left: 56px;
-}
-
-#back {
-    margin-left: 10px;
-}
-
-/*模态框*/
-.red_mark {
-    color: red;
-}
-
-#express_name {
-    width: 247px;
-    height: 30px;
-    margin-left: 44px;
-    border-radius: 3px;
-    padding-left: 10px;
-    line-height: 30px;
-}
 
 #send_modal modal-body {
     color: #666F80;
-}
-
-.express_num {
-    margin-top: 38px;
-}
-
-.express_num input {
-    vertical-align: text-top;
-    width: 360px;
-    height: 30px;
-    margin-left: 72px;
-    border: 1px solid rgb(169, 169, 169);
-    border-radius: 3px;
-}
-
-.warning {
-    width: 522px;
-    height: 30px;
-    background: #FFF2F2;
-    color: #E82A2A;
-    border: 1px solid #E82A2A;
-    border-radius: 3px;
-    font-weight: bold;
-    padding: 16px 0 16px 10px;
-    margin-bottom: 20px;
-    line-height: 0;
 }
 
 #total {
     color: #FF9800;
 }
 
-.text_blue {
-    color: #5677FC;
-}
-
-.abnormal_waitsend {
-    margin-top: 20px;
-    padding: 0;
-}
-
-.abnormal_waitsend li span:nth-child(2) {
-    margin-left: 83px;
-}
-
-.abnormal_waitsend li span:nth-child(3) {
-    margin-left: 176px;
-}
-
-.abnormal_waitsend li p {
-    margin-top: 16px;
-    margin-left: 142px;
-}
-
-.abnormal_title {
-    display: inline;
-}
-
 .arrows {
     color: #5677FC;
     margin-left: 55px;
 }
-
-.abnormal {
-    margin-top: 90px;
-}
-
-/*评论回复*/
-.comment {
-    margin-top: 20px;
-}
-
-.comment span:nth-child(2) {
-    margin-left: 83px;
-}
-
-.comment_pic {
-    margin-left: 130px;
-}
-
-.comment_pic img {
-    width: 120px;
-    margin-left: 10px;
-}
-
-.good_score {
-    list-style: none;
-    margin-top: 22px;
-    margin-left: 102px;
-}
-
-.good_score li {
-    padding: 0;
-}
-
-.score_head span:last-child {
-    margin-left: 52px;
-}
-
-.starlist {
-    margin-top: 12px;
-}
-
-.stars {
-    display: inline;
-    vertical-align: text-top;
-    margin-left: 12px;
-}
-
-.express_service {
-    margin-left: -15px;
-}
-
-.stars span {
-    color: #FF5722;
-}
-
-.store_reply {
-    position: relative;
-    margin-top: 22px;
-}
-
-.store_reply p{
-    display: inline;
-    vertical-align: top;
-    margin-left: 83px;
-}
-
-.store_reply .reply_text{
-    display: inline-block;
-    position: relative;
-    vertical-align: text-top;
-    margin-left: 83px;
-    border-radius: 3px;
-
-}
-
-#textcount{
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-}
-
-.btn_group {
-    margin-top: 43px;
-    margin-bottom: 43px;
-}
-
-.border_warning{
+.border_red{
     border: 1px solid red;
 }
+#textcount{
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+}
+.btn-right{
+    margin-right: 15px;
+}
+
 
 /* 评论图片放大 */
 .modal-img {

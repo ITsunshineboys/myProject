@@ -3,11 +3,10 @@
  */
 let done_detail = angular.module("done_detailModule", []);
 done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $stateParams) {
-    let store_service_score;//商家评分
-    let logistics_speed_score; //物流速度
-    let shipping_score;//配送人员服务
-
     $scope.tabflag = $stateParams.tabflag; //页面跳转
+	  $scope.order_no = $stateParams.order_no; //订单号
+	  $scope.sku = $stateParams.sku;//商品编号
+    $scope.statename='done_detail';
     $scope.textcount = '';
     $scope.sp = {
         textcount: $scope.textcount
@@ -40,8 +39,7 @@ done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $
     };
 
 
-    $scope.order_no = $stateParams.order_no; //订单号
-    $scope.sku = $stateParams.sku;//商品编号
+
     // 物流页面传参
     $scope.express_params = {
         order_no: $scope.order_no,
@@ -99,32 +97,22 @@ done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $
             sku: $stateParams.sku
         };
         _ajax.post("/order/get-comment", data, function (res) {
+            console.log(res);
             /*判断有无评论*/
             if (res.data.length === 0) {
                 $scope.showcomment = false;
             } else {
                 $scope.showcomment = true;
                 $scope.comment = res.data;
-                store_service_score = $scope.comment.store_service_score;
-                logistics_speed_score = $scope.comment.logistics_speed_score;
-                shipping_score = $scope.comment.shipping_score;
-                scoreToStar(store_service_score, logistics_speed_score, shipping_score);
+                $scope.store_service_score = $scope.comment.store_service_score;
+	              $scope.logistics_speed_score = $scope.comment.logistics_speed_score;
+	              $scope.shipping_score = $scope.comment.shipping_score;
                 !$scope.comment.reply == true ? $scope.show_storecomment = false : $scope.show_storecomment = true;
             }
 
             /*是否显示保存按钮*/
             $scope.showcomment && !$scope.show_storecomment ? $scope.showbtn = true : $scope.showbtn = false;
         });
-    }
-
-    /*评分处理*/
-    function scoreToStar(a, b, c) {
-        $scope.store_service_score_arr = [];
-        $scope.logistics_speed_score_arr = [];
-        $scope.shipping_score_arr = [];
-        $scope.store_service_score_arr.length = (Number(a)) / 2;
-        $scope.logistics_speed_score_arr.length = (Number(b)) / 2;
-        $scope.shipping_score_arr.length = (Number(c)) / 2;
     }
 
     /*保存商家评论*/
@@ -150,6 +138,6 @@ done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $
 
     /*已完成图片放大显示*/
     $scope.showImgs = (src) => {
-        $scope.showImg = baseUrl+'/'+ src;
+        $scope.showImg = src;
     }
 });

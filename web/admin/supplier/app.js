@@ -55,15 +55,13 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/supplier_wallet/set_password.html",
             params:{code_status:null}
         })
-        .state("waitsend_detail", {   //待发货详情
-            url: "/waitsend_detail",
+        .state("waitsend_detail", {   //待发货或待收货详情
+            url: "/waitsend_detail?order_no&sku&tabflag",
             templateUrl: "pages/order_manage/waitsend_detail.html",
-            params:{order_no:null,sku:null,tabflag:null}
         })
         .state("record_goods_detail", {   //记录商品详情
-            url: "/record_goods_detail",
-            templateUrl: "pages/order_manage/record_goods_detail.html",
-            params:{express_params:null},
+            url: "/record_goods_detail?order_no&sku&tabflag&statename",
+            templateUrl: "pages/order_manage/record_goods_detail.html"
         })
         .state("market_detail", {   //售后订单详情
           url: "/market_detail?order_no&sku&tabflag",
@@ -111,23 +109,19 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: "pages/order_manage/order_manage_index.html"
         })
         .state("waitpay_detail", {   //待付款订单详情
-            params:{order_no:null,sku:null,tabflag:null},
-            url: "/waitpay_detail",
+            url: "/waitpay_detail?order_no&sku&tabflag",
             templateUrl: "pages/order_manage/waitpay_detail.html"
         })
         .state("done_detail", {     //已完成订单详情
-            params:{order_no:null,sku:null,tabflag:null},
-            url: "/done_detail",
+            url: "/done_detail?order_no&sku&tabflag",
             templateUrl: "pages/order_manage/done_detail.html"
         })
         .state("cancel_detail", {   //已取消订单详情
-            params:{order_no:null,sku:null,tabflag:null},
-            url: "/cancel_detail",
+            url: "/cancel_detail?order_no&sku&tabflag",
             templateUrl: "pages/order_manage/cancel_detail.html"
         })
         .state("express", {        //物流详情
-            params:{express_params:null},
-            url: "/express",
+            url: "/express?order_no&sku&tabflag&statename",
             templateUrl: "pages/order_manage/express.html"
         })
         .state('class_manage', { // 分类管理

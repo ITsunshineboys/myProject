@@ -8,7 +8,7 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($rootScope, $scope, _a
     $scope.order_no = $stateParams.order_no; //订单号
     $scope.sku = $stateParams.sku;//商品编号
     $scope.tabflag = $stateParams.tabflag; //页面跳转
-
+    $scope.statename='waitpay_detail'
     $rootScope.crumbs = [{
         name: '订单管理',
         icon: 'icon-dingdanguanli',
@@ -17,15 +17,6 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($rootScope, $scope, _a
     },{
         name: '订单详情',
     }];
-
-
-    $scope.express_params = {
-        order_no:$scope.order_no,
-        sku:$scope.sku,
-        statename:'waitpay_detail',
-        tabflag:$stateParams.tabflag
-    };
-
 
     /*订单详情
      * 商品详情

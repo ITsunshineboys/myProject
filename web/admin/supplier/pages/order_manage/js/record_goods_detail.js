@@ -1,17 +1,13 @@
 angular.module('goods_detail_module',[])
 .controller('goods_detail_ctrl',function ($rootScope,$scope,$http,$state,$stateParams,_ajax) {
-  console.log($stateParams.express_params)
-  $scope.order_no=$stateParams.express_params.order_no;
-  $scope.sku=$stateParams.express_params.sku;
-  $scope.tabflag=$stateParams.express_params.tabflag;
-  let statename = $stateParams.express_params.statename;
+  $scope.order_no=$stateParams.order_no;
+  $scope.sku=$stateParams.sku;
+  $scope.tabflag=$stateParams.tabflag;
+  let statename = $stateParams.statename;
   //返回上一个页面
     $scope.backPage = function () {
-        if(statename=='waitsend_detail'){
-            $state.go('waitsend_detail',{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
-        }else{
-            $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
-        }
+	    console.log(statename);
+	    $state.go(statename,{order_no:$scope.order_no,sku:$scope.sku,tabflag:$scope.tabflag})
     };
     //返回订单
     $scope.back_list=function () {
@@ -29,8 +25,8 @@ angular.module('goods_detail_module',[])
         name:'记录商品详情'
     }];
   _ajax.post("/order/getsupplierorderdetails",{
-      order_no:$stateParams.express_params.order_no,
-      sku:$stateParams.express_params.sku
+      order_no:$stateParams.order_no,
+      sku:$stateParams.sku
   },function (res) {
       $scope.item=res.data;
   })

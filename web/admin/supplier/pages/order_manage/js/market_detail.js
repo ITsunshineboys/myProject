@@ -1,8 +1,12 @@
 let market_detail = angular.module("market_detail_module", []);
 market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$interval,$http,$stateParams,$state,_ajax) {
 	$scope.myng=$scope;
+	$scope.order_no=$stateParams.order_no
+	$scope.sku=$stateParams.sku
 	$scope.tabflag=$stateParams.tabflag;
-	console.log($scope.tabflag);
+	$scope.statename='market_detail';
+	/*物流页面传值*/
+
 	let phone_reg = /^1[3|4|5|7|8][0-9]{9}$/;//手机号
 	//返回按钮
 	$scope.back_list=function () {
@@ -15,9 +19,6 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 	}, {
 		name: '订单详情',
 	}];
-		// console.log($stateParams.order_no)
-		// console.log($stateParams.sku)
-		// console.log($stateParams.tabflag)
 	//详情数据
 	_ajax.post('/order/getsupplierorderdetails',{
 		order_no:$stateParams.order_no,
@@ -81,13 +82,7 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 			$scope.is_unusual_list_msg=res.data;
 			// console.log(res);
 		});
-		/*物流页面传值*/
-		$scope.express_params = {
-			order_no: $scope.item.goods_data.order_no,
-			sku: $scope.item.goods_data.sku,
-			statename: "waitsend_detail",
-			tabflag:$stateParams.tabflag
-		}
+
 	});
 	//评论信息
 	_ajax.post('/order/get-comment',{
@@ -281,10 +276,10 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 			console.log(res);
 			setTimeout(function () {
 				$state.go('order_manage');
-			},300)
+			},300);
 		});
 	}
-	//收货按钮
+	//顾客退货，收货按钮
 	$scope.receiving=function () {
 		_ajax.post('/order/after-sale-supplier-confirm',{
 			order_no:$stateParams.order_no,
@@ -293,7 +288,7 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 		},function (res) {
 			console.log(res);
 			saleDetail();
-		})
+		});
 	};
 	//派出人员按钮
 	$scope.send_staff=function () {
@@ -312,15 +307,12 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 				},function (res) {
 					console.log(res);
 					$('#send_staff_modal').modal('hide');
-					// setTimeout(function () {
-					// 	$state.go('order_manage')
-					// },300)
 					saleDetail();
 				})
 			}
 		}
 	}
-	//确认按钮
+	//上门退货，code:supplier_unconfirm_retunrn_to_door  收货按钮
 	$scope.supplier_confirm=function () {
 		_ajax.post('/order/after-sale-supplier-confirm',{
 			order_no:$stateParams.order_no,

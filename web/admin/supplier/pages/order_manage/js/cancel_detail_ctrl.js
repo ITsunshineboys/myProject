@@ -4,11 +4,13 @@
 let cancel_detail = angular.module("cancel_detailModule", []);
 cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _ajax, $stateParams) {
     $scope.tabflag = $stateParams.tabflag; //页面跳转
+	  $scope.order_no = $stateParams.order_no; //订单号
+	  $scope.sku = $stateParams.sku;//商品编号
+	  $scope.statename="cancel_detail"
     $scope.send = true;
     $scope.receive = true;
     $scope.plat_send = true;
-    $scope.order_no = $stateParams.order_no; //订单号
-    $scope.sku = $stateParams.sku;//商品编号
+
     $rootScope.crumbs = [{
         name: '订单管理',
         icon: 'icon-dingdanguanli',
@@ -30,13 +32,7 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _aja
 
     let abnormal_result;
 
-    /*物流页面跳转传参*/
-    $scope.express_params = {
-        order_no: $scope.order_no,
-        sku: $scope.sku,
-        statename: "cancel_detail",
-        tabflag:$stateParams.tabflag
-    }
+
 
     /*异常记录-待发货
      * 异常记录-待收货

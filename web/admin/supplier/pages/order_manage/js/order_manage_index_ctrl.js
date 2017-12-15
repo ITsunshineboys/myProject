@@ -48,10 +48,9 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         $scope.cancel_flag = false;
         $scope.market_flag=false;
         $scope[obj] = true;
+	      totalNumber();
         if($scope.waitsend_flag==true){   //-----------待发货
 	        //初始化时间类型为all,和自定义开始结束时间为空
-            $scope.sort_money_img='lib/images/arrow_default.png';
-            $scope.sort_time_img='lib/images/arrow_down.png';
 	          $scope.wjConfig.currentPage=1
             $scope.wjparams.time_type='all';
             $scope.wjparams.type='unshipped';
@@ -63,8 +62,6 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.wjparams.sort_time=2;
             tablePages();
         }else if($scope.waitreceive_flag==true){//-----------待收货
-	          $scope.sort_money_img='lib/images/arrow_default.png';
-            $scope.sort_time_img='lib/images/arrow_down.png';
 	          $scope.wjConfig.currentPage=1
             $scope.wjparams.time_type='all';
             $scope.wjparams.type='unreceived';
@@ -98,6 +95,7 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         $scope.cancel_flag = false;
 	      $scope.market_flag = false;
         $scope[obj] = true;
+	      totalNumber();
         allTableInit[obj]();
     };
 
@@ -410,8 +408,6 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
     /*------------------------待发货开始-----------------------------------*/
     $scope.waitsend_list={};
     $scope.wait_receive_list={};
-    $scope.sort_time_img='lib/images/arrow_down.png';//时间默认图片
-    $scope.sort_money_img='lib/images/arrow_default.png';//金额默认图片
     /*分页配置*/
     $scope.wjConfig = {
         showJump: true,
@@ -460,8 +456,6 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
         }
         $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         //恢复到默认图片
-        $scope.sort_money_img='lib/images/arrow_default.png';
-        $scope.sort_time_img='lib/images/arrow_down.png';
         $scope.w_search='';//清空搜索框内容
         $scope.wjparams.keyword=''
         tablePages();
@@ -481,43 +475,20 @@ ordermanage.controller("ordermanage_ctrl", function ($rootScope,$scope, $statePa
             $scope.time = res.data.time_types;
             $scope.wjparams.time_type = res.data.time_types[0].value;//待发货
         })
-        //恢复到默认图片
-        $scope.sort_money_img='lib/images/arrow_default.png';
-        $scope.sort_time_img='lib/images/arrow_down.png';
         $scope.wjparams.sort_time=2;//默认按时间排序
         $scope.wjparams.sort_money='';//初始化金额排序
         tablePages();
     };
     //点击时间排序
     $scope.sort_time_click=function () {
-        $scope.wjparams.sort_money='';//初始化金额排序
-        $scope.sort_money_img='lib/images/arrow_default.png';//金额默认图片
-        if($scope.sort_time_img=='lib/images/arrow_default.png'){
-            $scope.sort_time_img='lib/images/arrow_down.png';
-            $scope.wjparams.sort_time=2;
-        }else if($scope.sort_time_img=='lib/images/arrow_down.png'){ //------> 升序
-            $scope.sort_time_img='lib/images/arrow_up.png';
-            $scope.wjparams.sort_time=1;
-        }else{                                                //-------> 降序
-            $scope.sort_time_img='lib/images/arrow_down.png';
-            $scope.wjparams.sort_time=2;
-        }
+      $scope.wjparams.sort_money='';//初始化金额排序
+	    $scope.wjparams.sort_time==2?$scope.wjparams.sort_time=1:$scope.wjparams.sort_time=2;
         tablePages();
     }
     //点击金额排序
     $scope.sort_money_click=function () {
-        $scope.wjparams.sort_time='';//初始化时间排序
-        $scope.sort_time_img='lib/images/arrow_default.png';//时间默认图片
-        if($scope.sort_money_img=='lib/images/arrow_default.png'){  //-------> 默认降序
-            $scope.sort_money_img='lib/images/arrow_down.png';
-            $scope.wjparams.sort_money=2;
-        }else if($scope.sort_money_img=='lib/images/arrow_down.png'){//------> 升序
-            $scope.sort_money_img='lib/images/arrow_up.png';
-            $scope.wjparams.sort_money=1;
-        }else if($scope.sort_money_img=='lib/images/arrow_up.png'){//-------->降序
-            $scope.sort_money_img='lib/images/arrow_down.png';
-            $scope.wjparams.sort_money=2;
-        }
+      $scope.wjparams.sort_time='';//初始化时间排序
+	    $scope.wjparams.sort_money==2?$scope.wjparams.sort_money=1:$scope.wjparams.sort_money=2;
         tablePages();
     }
     //发货按钮,判断弹出的模态框

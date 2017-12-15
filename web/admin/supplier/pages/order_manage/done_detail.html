@@ -1,116 +1,179 @@
 <link rel="stylesheet" href="pages/order_manage/css/done_detail.css">
 <div ng-controller="done_detail_ctrl">
     <section>
-        <div class="order_detail">
-            <h3>订单详情</h3>
-
-            <!--订单号-->
-            <div class="order_num">
-                <span>订单号</span>
-                <span ng-bind="order_no"></span>
+        <div class="row">
+            <div class="col-sm-12 control-label">
+                <h3>订单详情</h3>
             </div>
-
-            <!--订单状态-->
-            <div class="order_state">
+        </div>
+        <!--订单号-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span>订单号</span>
+            </div>
+            <div class="col-sm-10 control-label">
+                <span>{{order_no}}</span>
+            </div>
+        </div>
+        <!--订单状态-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>订单状态</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.status"></span>
             </div>
-
-            <!--用户-->
-            <div class="user">
+        </div>
+        <!--用户-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>用户</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.username"></span>
             </div>
-
-
-            <!--订单金额-->
-            <div class="order_money">
+        </div>
+        <!--订单金额-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>订单金额</span>
-                <ul>
-                    <li>总金额</li>
-                    <li ng-bind="order_detail.role"></li>
-                    <li>运费</li>
-                </ul>
-
-                <ul>
-                    <li id="total">{{order_detail.amount_order | currency:"¥"}}</li>
-                    <li>{{order_detail.goods_price | currency:"¥"}}</li>
-                    <li>{{order_detail.freight | currency:"¥"}}</li>
-                </ul>
             </div>
+            <div class="col-sm-2 control-label">
+                <span>总金额</span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <span ng-bind="order_detail.role"></span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <span>运费</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-6 hr_p"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-sm-2 control-label">
+                <span id="total">{{order_detail.amount_order | currency:"¥"}}</span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <span>{{order_detail.goods_price | currency:"¥"}}</span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <span>{{order_detail.freight | currency:"¥"}}</span>
+            </div>
+        </div>
 
-            <!--供货价-->
-            <div class="supplier_money">
+        <!--供货价-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>供货价</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span>{{order_detail.supplier_price | currency:"¥"}}</span>
             </div>
+        </div>
 
-            <!--供货价-->
-            <div class="market_money">
+        <!--市场价-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>市场价</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span>{{order_detail.market_price | currency:"¥"}}</span>
             </div>
+        </div>
 
-            <!--商品个数-->
-            <div class="order_state">
+        <!--商品个数-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>商品个数</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.goods_number"></span>
             </div>
+        </div>
 
-            <!--付款方式-->
-            <div class="order_state">
+        <!--付款方式-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>付款方式</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.pay_name"></span>
             </div>
+        </div>
 
-            <!--下单时间-->
-            <div class="order_state">
+        <!--下单时间-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>下单时间</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.create_time"></span>
             </div>
+        </div>
 
-            <!--付款时间-->
-            <div class="order_state">
+        <!--付款时间-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>付款时间</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.paytime"></span>
             </div>
+        </div>
 
-            <!--完成时间-->
-            <div class="order_state">
+        <!--完成时间-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>完成时间</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="order_detail.complete_time"></span>
             </div>
+        </div>
 
-            <!--配送方式-->
-            <div class="order_state">
+        <!--配送方式-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>配送方式</span>
-                <span class="text_blue" ui-sref="express({express_params})" ng-bind="order_detail.shipping_way"></span>
             </div>
-
-
+            <div class="col-sm-3 control-label">
+                <a ng-bind="order_detail.shipping_way" ui-sref="express({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})"></a>
+            </div>
         </div>
         <hr>
 
         <!-----商品详情----->
-        <div class="good_detail">
-            <h3>商品详情</h3>
-            <button class="view_good" ui-sref="record_goods_detail({express_params})">
-                <span class="glyphicon glyphicon-eye-open"></span>
-                查看商品
-            </button>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <h3>商品详情</h3>
+            </div>
+            <div class="col-sm-10 control-label">
+                <button class="btn btn-primary" ui-sref="record_goods_detail({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">
+                    <i class="iconfont icon-yanjing"></i>
+                    <span>查看商品</span>
+                </button>
+            </div>
+        </div>
 
-
-            <!--商品名称-->
-            <div class="order_state">
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>商品名称</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="goods_value.goods_name"></span>
             </div>
+        </div>
 
-            <!--商品编号-->
-            <div class="order_state">
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>商品编号</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="sku"></span>
             </div>
+        </div>
 
             <!--商品属性-->
             <!--<div class="order_state">-->
@@ -123,155 +186,199 @@
                     <!--</li>-->
                 <!--</ul>-->
             <!--</div>-->
-        </div>
         <hr/>
 
         <!---收货详情---->
-        <div class="order_detail">
-            <h3>收货详情</h3>
+        <div class="row">
+            <div class="col-sm-12 control-label">
+                <h3>收货详情</h3>
+            </div>
+        </div>
 
-            <!--收货人-->
-            <div class="market_money">
+        <!--收货人-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>收货人</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.consignee"></span>
             </div>
+        </div>
 
-            <!--收货地址-->
-            <div class="order_state">
+        <!--收货地址-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>收货地址</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.district"></span>
             </div>
+        </div>
 
-            <!--电话-->
-            <div class="phonenum">
+        <!--电话-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>电话</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.consignee_mobile"></span>
             </div>
+        </div>
 
-            <!--留言-->
-            <div class="phonenum" ng-if="receive_details.buyer_message!=''">
+        <!--留言-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>留言</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.buyer_message"></span>
             </div>
+        </div>
 
-            <!--发票类型-->
-            <div class="order_state">
+        <!--发票类型-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>发票类型</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.invoice_type"></span>
             </div>
+        </div>
 
-            <!--抬头-->
-            <div class="phonenum">
+        <!--抬头-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>抬头</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.invoice_header"></span>
             </div>
+        </div>
 
-            <!--纳税人识别码-->
-            <div class="udid" ng-if="receive_details.invoicer_card!=''">
+        <!--纳税人识别码-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>纳税人识别码</span>
+            </div>
+            <div class="col-sm-10 control-label">
                 <span ng-bind="receive_details.invoicer_card"></span>
             </div>
+        </div>
 
-            <!--发票内容-->
-            <div class="order_state">
+        <!--发票内容-->
+        <div class="row">
+            <div class="col-sm-2 control-label">
                 <span>发票内容</span>
-                <span ng-bind="receive_details.invoice_content">明细</span>
+            </div>
+            <div class="col-sm-10 control-label">
+                <span ng-bind="receive_details.invoice_content"></span>
             </div>
         </div>
-        <hr ng-if="show_abnormal||show_plat" />
 
-        <!--异常记录-待发货-->
-        <div class='order_manage' ng-if="show_abnormal&&unshipped">
-            <h3 class="abnormal_title">异常记录-待发货</h3>
-            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="send" ng-click="abnormal('send')"></span>
-            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!send" ng-click="abnormal('send')"></span>
-            <ul class="abnormal_waitsend" ng-show="send">
-                <li ng-repeat="item in unshipped_detail">
-                    <span ng-bind="item.type"></span>
-                    <span ng-bind="item.value"></span>
-                    <span ng-bind="item.time"></span>
-                    <p ng-bind="item.content"></p>
-                </li>
-            </ul>
+        <!--待发货异常详情-->
+        <div ng-if="show_abnormal&&unshipped">
+            <hr>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <h3>异常记录-待发货</h3>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <i class="iconfont icon-arrow-copy arrow_class" ng-show="!send" ng-click="abnormal('send')"></i>
+                    <i class="iconfont icon-arrow arrow_class" ng-show="send"  ng-click="abnormal('send')"></i>
+                </div>
+            </div>
+            <div class="row" ng-repeat="items in unshipped_detail" ng-show="!send">
+                <span class="col-sm-2 control-label">{{items.type}}</span>
+                <span class="col-sm-2 control-label">{{items.value}}</span>
+                <span class="col-sm-8 control-label">{{items.time}}</span>
+                <span class="col-sm-offset-2 col-sm-10 control-label">{{items.content}}</span>
+            </div>
         </div>
 
-        <!--异常记录-待收货-->
-        <div class='order_manage abnormal' ng-if="show_abnormal&&unreceived">
-            <h3 class="abnormal_title">异常记录-待收货</h3>
-            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="receive"
-                  ng-click="abnormal('receive')"></span>
-            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!receive"
-                  ng-click="abnormal('receive')"></span>
-            <ul class="abnormal_waitsend" ng-show="receive">
-                <li ng-repeat="item in unreceived_detail">
-                    <span ng-bind="item.type"></span>
-                    <span ng-bind="item.value"></span>
-                    <span ng-bind="item.time"></span>
-                    <p ng-bind="item.content"></p>
-                </li>
-            </ul>
+        <!--待收货异常详情-->
+        <div ng-if="show_abnormal&&unreceived">
+            <hr>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <h3>异常记录-待收货</h3>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <i class="iconfont icon-arrow-copy arrow_class" ng-show="!receive" ng-click="abnormal('receive')"></i>
+                    <i class="iconfont icon-arrow arrow_class" ng-show="receive" ng-click="abnormal('receive')"></i>
+                </div>
+            </div>
+            <div class="row" ng-repeat="items in unreceived_detail" ng-show="!receive">
+                <span class="col-sm-2 control-label">{{items.type}}</span>
+                <span class="col-sm-2 control-label">{{items.value}}</span>
+                <span class="col-sm-8 control-label">{{items.time}}</span>
+                <span class="col-sm-offset-2 col-sm-10 control-label">{{items.content}}</span>
+            </div>
         </div>
-        <!--<hr ng-if="show_abnormal"/>-->
 
         <!--评论回复-->
-        <div class="order_detail" ng-if="showcomment">
-            <h3>评论详情</h3>
-
-            <div class="comment">
-                <span>顾客评论</span>
-                <span>{{comment.name}}：{{comment.content}}</span>
+        <div ng-if="showcomment">
+            <div class="row" >
+                <div class="col-sm-12 control-label">
+                    <h3>评论详情</h3>
+                </div>
             </div>
-
-            <div class="comment_pic">
-                <img ng-src="{{item.image}}" alt="" ng-repeat="item in comment.image" data-toggle="modal" data-target="#myModal" ng-click="showImgs(item.image)">
-
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <span>顾客评论</span>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span>{{comment.name}}：{{comment.content}}</span>
+                </div>
             </div>
-
-            <ul class="good_score">
-                <li class="score_head">
-                    <span>商品评分</span>
-                    <span ng-bind="comment.score"></span>
-                </li>
-                <li class="starlist">
-                    <span>店家服务</span>
-                    <ul class="stars">
-                        <span class="glyphicon glyphicon-star" ng-repeat="item in store_service_score_arr track by $index"></span>
-                    </ul>
-                </li>
-                <li class="starlist">
-                    <span>物流速度</span>
-                    <ul class="stars">
-                        <span class="glyphicon glyphicon-star" ng-repeat="item in logistics_speed_score_arr track by $index"></span>
-                    </ul>
-                </li>
-                <li class="starlist">
-                    <span>配送人员服务</span>
-                    <ul class="stars express_service">
-                        <span class="glyphicon glyphicon-star"  ng-repeat="item in shipping_score_arr track by $index"></span>
-                    </ul>
-                </li>
-            </ul>
-
-        </div>
-
-        <!--店家回复-->
-        <div class="order_state store_reply" ng-if="showcomment">
-            <span>店家回复</span>
-            <div class="reply_text" ng-if="!show_storecomment">
-                <textarea name="text" id="text" cols="90" rows="10" ng-model="sp.textcount" maxlength=70 ng-class={border_warning:emptywarning} ng-change="checkEmpty()"></textarea>
-                <span id="textcount"><span ng-bind="sp.textcount.length"></span>/70</span>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                </div>
+                <div class="col-sm-10 control-label">
+                    <img ng-src="{{item.image}}" alt="" ng-repeat="item in comment.image" data-toggle="modal" data-target="#myModal" ng-click="showImgs(item.image)">
+                </div>
             </div>
-
-            <p ng-if="show_storecomment" ng-bind="comment.reply"></p>
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                </div>
+                <div class="col-sm-2 control-label">商品评分</div>
+                <div class="col-sm-8 control-label" ng-bind="comment.score"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-2 control-label score">店家服务</div>
+                <div class="col-sm-8 control-label">
+                    <star max="5" readonly="true" rating-value="store_service_score/2"></star>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-2 control-label score">物流速度</div>
+                <div class="col-sm-8 control-label">
+                    <star max="5" readonly="true" rating-value="logistics_speed_score/2"></star>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-2 control-label score">配送人员服务</div>
+                <div class="col-sm-8 control-label">
+                    <star max="5" readonly="true" rating-value="shipping_score/2"></star>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 control-label">店家回复</div>
+                <div class="col-sm-10 reply_text" ng-if="!show_storecomment">
+                    <textarea name="text" class="form-control" id="text" cols="90" rows="10" ng-model="sp.textcount" maxlength=70 ng-class={border_red:emptywarning} ng-change="checkEmpty()"></textarea>
+                    <span id="textcount"><span ng-bind="sp.textcount.length"></span>/70</span>
+                </div>
+                <div class="col-sm-10 control-label" ng-if="show_storecomment" ng-bind="comment.reply"></div>
+            </div>
         </div>
-
-        <div class="btn_group">
-            <button class="btn btn-primary pull-left" type="submit" data-toggle="modal" data-target={{savemodal}} ng-if="showbtn" ng-click="saveStoreComment()">保存
-            </button>
-            <button class="btn btn-default" id="back" ui-sref="order_manage({tabflag:tabflag})">返回</button>
-
+        <div class="row">
+            <div class="col-sm-12 control-label">
+                <button class="btn btn-primary btn-right" type="submit" data-toggle="modal" data-target={{savemodal}} ng-if="showbtn" ng-click="saveStoreComment()">保存</button>
+                <button class="btn btn-default" id="back" ui-sref="order_manage({tabflag:tabflag})">返回</button>
+            </div>
         </div>
-
     </section>
 
     <div class="modal customer_modal detail_modal fade" id="send_modal" data-backdrop="static" data-keyboard="false">
@@ -298,7 +405,7 @@
         <div class="modal-dialog modal-img" role="document">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">							<span aria-hidden="true">&times;</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                     </button>
                     <img ng-src="{{showImg}}">
                 </div>

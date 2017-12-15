@@ -40,27 +40,27 @@
                 <div class="col-sm-2 control-label">
                     <span>订单金额</span>
                 </div>
-                <div class="col-sm-1 control-label">
+                <div class="col-sm-2 control-label">
                     <span>总金额</span>
                 </div>
-                <div class="col-sm-1 control-label">
+                <div class="col-sm-2 control-label">
                     <span>{{role}}</span>
                 </div>
-                <div class="col-sm-8 control-label">
+                <div class="col-sm-2 control-label">
                     <span>运费</span>
                 </div>
             </div>
             <div class="row">
-                <p class="col-sm-offset-2 col-sm-3 hr_p"></p>
+                <div class="col-sm-offset-2 col-sm-6 hr_p"></div>
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-1 control-label">
+                <div class="col-sm-offset-2 col-sm-2 control-label">
                     <span class="total">{{amount_order | currency:"¥"}}</span>
                 </div>
-                <div class="col-sm-1 control-label">
+                <div class="col-sm-2 control-label">
                     <span>{{goods_price | currency:"¥"}}</span>
                 </div>
-                <div class="col-sm-1 control-label">
+                <div class="col-sm-2 control-label">
                     <span>{{freight | currency:"¥"}}</span>
                 </div>
             </div>
@@ -130,8 +130,8 @@
                 <span>配送方式</span>
                 </div>
                 <div class="col-sm-3 control-label">
-                <span class='shipping_way' ng-if="shipping_way!='送货上门'" ui-sref="express({express_params})">{{shipping_way}}</span>
-                <span class='shipping_way' ng-if="shipping_way=='送货上门'" ui-sref="express({express_params})">{{shipping_way}}</span>
+                <a ng-if="shipping_way!='送货上门'" ui-sref="express({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">{{shipping_way}}</a>
+                <a ng-if="shipping_way=='送货上门'" ui-sref="express({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">{{shipping_way}}</a>
                 </div>
                 <div class="col-sm-7 control-label">
                 <span class="change_num" ng-if="shipping_way!='送货上门'" data-toggle="modal" data-target="#change_track_modal" ng-click='clear_track()'>修改单号</span>
@@ -145,7 +145,7 @@
                 <h3>商品详情</h3>
             </div>
             <div class="col-sm-10 control-label">
-                <button class="btn btn-primary" ui-sref="record_goods_detail({express_params})">
+                <button class="btn btn-primary" ui-sref="record_goods_detail({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">
                     <i class="glyphicon glyphicon-eye-open"></i>
                     <span>查看商品</span>
                 </button>
@@ -278,8 +278,8 @@
                     <h3>异常记录-待发货</h3>
                 </div>
                 <div class="col-sm-10 control-label">
-                    <i class="glyphicon glyphicon-chevron-up arrow_class" ng-if="unshipped_img_flag_up" ng-click="arrow_unshipped()"></i>
-                    <i class="glyphicon glyphicon-chevron-down arrow_class" ng-if="unshipped_img_flag_down" ng-click="arrow_unshipped()"></i>
+                    <i class="iconfont icon-arrow-copy arrow_class" ng-if="unshipped_img_flag_up" ng-click="arrow_unshipped()"></i>
+                    <i class="iconfont icon-arrow arrow_class" ng-if="unshipped_img_flag_down" ng-click="arrow_unshipped()"></i>
                 </div>
             </div>
             <div class="row" ng-repeat="items in item.list" ng-if="unshipped_ul_flag">
@@ -297,8 +297,8 @@
                     <h3>异常记录-待收货</h3>
                 </div>
                 <div class="col-sm-10 control-label">
-                    <i class="glyphicon glyphicon-chevron-up arrow_class" ng-if='unreceived_img_flag_up' ng-click="arrow_unreceived()"></i>
-                    <i class="glyphicon glyphicon-chevron-down arrow_class" ng-if='unreceived_img_flag_down' ng-click="arrow_unreceived()"></i>
+                    <i class="iconfont icon-arrow-copy arrow_class" ng-if='unreceived_img_flag_up' ng-click="arrow_unreceived()"></i>
+                    <i class="iconfont icon-arrow arrow_class" ng-if='unreceived_img_flag_down' ng-click="arrow_unreceived()"></i>
                 </div>
             </div>
             <div class="row" ng-repeat="items in item.list" ng-if="unreceived_ul_flag">
@@ -334,8 +334,6 @@
             </div>
         </div>
         <!--待收货-->
-        {{status}}
-        {{is_unusual}}
         <div ng-if="status=='待收货' && is_unusual=='0'">
             <div class="row">
                 <div class="col-sm-1 control-label">
@@ -386,11 +384,17 @@
                     <div class="modal-header">
                         <h4 class="modal-title">发货操作</h4>
                     </div>
-                    <div class="modal-body body_font">
+                    <div class="modal-body">
                         <p class='track_p' ng-if='track_change_flag'>{{track_change_font}}</p>
-                        <span class='track_span track_red'>*</span>
-                        <span class='track_span'>快递单号</span>
-                        <input type="text" class="delivery_input" ng-model="track_input_model">
+                        <div class="row">
+                            <div class="col-sm-2 track_height">
+                                <span class='track_red'>*</span>
+                                <span>快递单号</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="track_input_model">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary" ng-click="change_track_btn()">确认</button>

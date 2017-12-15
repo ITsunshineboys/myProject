@@ -25,15 +25,14 @@
             </div>
 
             <!--订单金额-->
-            <div class="row zero_bottom">
+            <div class="row">
                 <div class="col-sm-2">订单金额</div>
                 <span class="col-sm-2">总金额</span>
                 <span class="col-sm-2" ng-bind="order_detail.role"></span>
                 <span class="col-sm-2">运费</span>
             </div>
-            <div class="row zero_bottom">
-                <div class="col-sm-2"></div>
-                <hr class="col-sm-6 money_hr">
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-6 hr_p"></div>
             </div>
             <div class="row">
                 <div class="col-sm-2"></div>
@@ -47,7 +46,7 @@
                 <div class="col-sm-2">供货价</div>
                 <div class="col-sm-10">{{order_detail.supplier_price | currency:"¥"}}</div>
             </div>
-            <!--供货价-->
+            <!--市场价-->
             <div class="row">
                 <div class="col-sm-2">市场价</div>
                 <div class="col-sm-10">{{order_detail.market_price | currency:"¥"}}</div>
@@ -79,20 +78,16 @@
 
             <!--待收货的情况-->
             <!--完成时间-->
-            <div>
-                <div class="order_state" ng-if="order_detail.complete_time">
-                    <span>完成时间</span>
-                    <span ng-bind="order_detail.complete_time"></span>
-                </div>
-
-                <!--配送方式-->
-                <div class="order_state express_method" ng-if="order_detail.shipping_way">
-                    <span>配送方式</span>
-                    <span class="text_blue" ui-sref="express({express_params})"
-                          ng-bind="order_detail.shipping_way"></span>
-                </div>
+            <div class="row" ng-if="order_detail.complete_time">
+                <div class="col-sm-2">完成时间</div>
+                <a class="col-sm-10" ng-bind="order_detail.complete_time"></a>
             </div>
 
+            <!--配送方式-->
+            <div class="row" ng-if="order_detail.shipping_way">
+                <div class="col-sm-2">配送方式</div>
+                <a class="col-sm-10" ui-sref="express({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})" ng-bind="order_detail.shipping_way"></a>
+            </div>
         <hr>
 
         <!-----商品详情----->
@@ -101,7 +96,7 @@
                 <h3>商品详情</h3>
             </div>
             <div class="col-sm-10">
-                <button class="btn btn-primary" ui-sref="record_goods_detail({express_params})">
+                <button class="btn btn-primary" ui-sref="record_goods_detail({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">
                     <i class="iconfont icon-yanjing"></i>
                     <span>查看商品</span>
                 </button>
@@ -120,16 +115,15 @@
             </div>
 
             <!--商品属性-->
-            <!--<div class="order_state">-->
-                <!--<span>商品属性</span>-->
-
-                <!--<ul class="good_attr">-->
-                    <!--<li ng-repeat="item in goods_value.attr">-->
-                        <!--<span ng-bind="item.name"></span>-->
-                        <!--<span ng-bind="item.value"></span>-->
-                    <!--</li>-->
-                <!--</ul>-->
-            <!--</div>-->
+            <div class="order_state">
+                <span>商品属性</span>
+                <ul class="good_attr">
+                    <li ng-repeat="item in goods_value.attr">
+                        <span ng-bind="item.name"></span>
+                        <span ng-bind="item.value"></span>
+                    </li>
+                </ul>
+            </div>
         <hr/>
 
         <!---收货详情---->
@@ -189,65 +183,64 @@
         <hr ng-if="show_abnormal||show_plat" />
 
         <!--异常记录-待发货-->
-        <div class='row' ng-if="show_abnormal&&unshipped">
-            <div class="col-sm-12 li_bottom">
-                <h3 class="abnormal_title">异常记录-待发货</h3>
-                <span class="glyphicon glyphicon-chevron-down arrows pointer" ng-show="send" ng-click="abnormal('send')"></span>
-                <span class="glyphicon glyphicon-chevron-up arrows pointer" ng-show="!send" ng-click="abnormal('send')"></span>
+        <div  ng-if="show_abnormal&&unshipped">
+            <div class="row">
+                <div class="col-sm-2 control-label">
+                    <h3>异常记录-待发货</h3>
+                </div>
+                <div class="col-sm-10 control-label">
+                    <span class="iconfont icon-arrow-copy arrows" ng-show="!send" ng-click="abnormal('send')"></span>
+                    <span class="iconfont icon-arrow arrows" ng-show="send" ng-click="abnormal('send')"></span>
+                </div>
             </div>
-
-            <ul class="col-sm-12 padding_left_zero" ng-show="send">
-                <li class="col-sm-8 padding_left_zero li_bottom" ng-repeat="item in unshipped_detail">
-                    <span class="col-sm-4" ng-bind="item.type"></span>
-                    <span class="col-sm-4 padding_left_zero" ng-bind="item.value"></span>
-                    <span class="col-sm-4" ng-bind="item.time"></span>
-                    <p class="col-sm-offset-4" ng-bind="item.content"></p>
-                </li>
-            </ul>
+            <div class="row" ng-repeat="items in unshipped_detail" ng-if="!send">
+                <span class="col-sm-2 control-label">{{items.type}}</span>
+                <span class="col-sm-2 control-label">{{items.value}}</span>
+                <span class="col-sm-8 control-label">{{items.time}}</span>
+                <span class="col-sm-offset-2 col-sm-10 control-label">{{items.content}}</span>
+            </div>
         </div>
 
         <!--异常记录-待收货-->
-        <div class='order_manage abnormal' ng-if="show_abnormal&&unreceived">
-            <h3 class="abnormal_title">异常记录-待收货</h3>
-            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="receive"
-                  ng-click="abnormal('receive')"></span>
-            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!receive"
-                  ng-click="abnormal('receive')"></span>
-            <ul class="abnormal_waitsend" ng-show="receive">
-                <li ng-repeat="item in unreceived_detail">
-                    <span ng-bind="item.type"></span>
-                    <span ng-bind="item.value"></span>
-                    <span ng-bind="item.time"></span>
-                    <p ng-bind="item.content"></p>
-                </li>
-            </ul>
+        <div ng-if="show_abnormal&&unreceived">
+            <div class='row'>
+                <h3 class="col-sm-2">异常记录-待收货</h3>
+                <span class="col-sm-10 iconfont icon-arrow-copy arrows" ng-show="!receive" ng-click="abnormal('receive')"></span>
+                <span class="col-sm-10 iconfont icon-arrow arrows" ng-show="receive" ng-click="abnormal('receive')"></span>
+            </div>
+            <div class="row" ng-repeat="items in unreceived_detail" ng-if="!receive">
+                <span class="col-sm-2 control-label">{{items.type}}</span>
+                <span class="col-sm-2 control-label">{{items.value}}</span>
+                <span class="col-sm-8 control-label">{{items.time}}</span>
+                <span class="col-sm-offset-2 col-sm-10 control-label">{{items.content}}</span>
+            </div>
         </div>
         <hr ng-if="show_abnormal"/>
 
         <!--平台介入-->
-        <div class='order_manage abnormal' ng-if="show_plat">
-            <h3 class="abnormal_title">平台介入</h3>
-            <span class="glyphicon glyphicon-chevron-down arrows" ng-show="plat_send"
-                  ng-click="abnormal('plat_send')"></span>
-            <span class="glyphicon glyphicon-chevron-up arrows" ng-show="!plat_send"
-                  ng-click="abnormal('plat_send')"></span>
-            <ul class="abnormal_waitsend" ng-show="plat_send">
-                <li>
-                    <span>操作类型</span>
-                    <span ng-bind="handle_type"></span>
-                    <span ng-bind="platforminfo.handle_time"></span>
-                    <p ng-bind="platforminfo.reasons"></p>
-                </li>
-                <li class="refund">
-                    <span>退款结果</span>
-                    <span ng-bind="platforminfo.refund_result"></span>
-                    <span ng-bind="platforminfo.refund_time"></span>
-                    <p ng-bind="platforminfo.refund_type"></p>
-                </li>
-            </ul>
+        <div ng-if="show_plat">
+            <div class='row'>
+                <h3 class="col-sm-2">平台介入</h3>
+                <span class="col-sm-10 iconfont icon-arrow-copy arrows" ng-show="!plat_send" ng-click="abnormal('plat_send')"></span>
+                <span class="col-sm-10 iconfont icon-arrow arrows" ng-show="plat_send" ng-click="abnormal('plat_send')"></span>
+            </div>
+            <div class="row" ng-if="!plat_send">
+                <span class="col-sm-2 control-label">操作类型</span>
+                <span class="col-sm-2 control-label">{{handle_type}}</span>
+                <span class="col-sm-8 control-label">{{platforminfo.handle_time}}</span>
+                <span class="col-sm-offset-2 col-sm-10 control-label">{{platforminfo.reasons}}</span>
+            </div>
+            <div class="row" ng-if="!plat_send">
+                <span class="col-sm-2 control-label">退款结果</span>
+                <span class="col-sm-2 control-label">{{platforminfo.refund_result}}</span>
+                <span class="col-sm-8 control-label">{{platforminfo.refund_time}}</span>
+                <span class="col-sm-offset-2 col-sm-10 control-label">{{platforminfo.refund_type}}</span>
+            </div>
         </div>
         <div class="row">
-            <button class="btn btn-default" id="back" ui-sref="order_manage({tabflag:tabflag})">返回</button>
+            <div class="col-sm-12">
+                <button class="btn btn-default" id="back" ui-sref="order_manage({tabflag:tabflag})">返回</button>
+            </div>
         </div>
     </section>
 </div>

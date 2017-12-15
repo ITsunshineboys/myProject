@@ -3,6 +3,9 @@ let waitsend_detail = angular.module("waitsend_detail_module", []);
 waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, $http, $stateParams,$state,_ajax) {
   $scope.myng=$scope;
   $scope.tabflag=$stateParams.tabflag;
+  $scope.order_no=$stateParams.order_no;
+  $scope.sku=$stateParams.sku;
+  $scope.statename='waitsend_detail';
   console.log($scope.tabflag)
   //返回按钮
   $scope.back_list=function () {
@@ -76,13 +79,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       },function (res) {
           $scope.is_unusual_list_msg=res.data;
       })
-      /*物流页面传值*/
-      $scope.express_params = {
-          order_no: $scope.item.goods_data.order_no,
-          sku: $scope.item.goods_data.sku,
-          statename: "waitsend_detail",
-          tabflag:$stateParams.tabflag
-      }
+
   })
 
   // 同意按钮
@@ -119,8 +116,8 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       })
     };
     //显示隐藏待发货异常记录
-    $scope.unshipped_ul_flag=true;
-    $scope.unshipped_img_flag_up=true;
+    $scope.unshipped_ul_flag=false;
+    $scope.unshipped_img_flag_down=true;
     $scope.arrow_unshipped=function () {
         if($scope.unshipped_ul_flag==true){
             $scope.unshipped_ul_flag=false;
@@ -133,8 +130,8 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
         }
     }
     //显示隐藏待收货异常记录
-    $scope.unreceived_ul_flag=true;
-    $scope.unreceived_img_flag_up=true;
+    $scope.unreceived_ul_flag=false;
+    $scope.unreceived_img_flag_down=true;
     $scope.arrow_unreceived=function () {
         if($scope.unreceived_ul_flag==true){
             $scope.unreceived_ul_flag=false;
@@ -201,7 +198,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
                           setTimeout(function () {
                               $state.go('order_manage',{wait_send_flag:true});
                           },300)
-                      }else if(res.data.code==1000){
+                      }else if(res.code==1000){
                           $scope.track_flag=true;
                           $scope.track_font='快递单号错误，请重新输入';//快递单号-显示
                       }
