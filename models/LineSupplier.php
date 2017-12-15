@@ -167,13 +167,14 @@ class LineSupplier extends \yii\db\ActiveRecord
      * @param $district_code
      * @return array
      */
-    public  static  function  FindLineSupplierByDistrictCode($district_code)
+    public  static  function  FindLineSupplierByDistrictCode($district_code,$keyword)
     {
         $data=(new Query())
             ->from(self::tableName().' as L')
             ->select('S.shop_name,L.district_code,L.mobile,L.address,L.id as line_id')
             ->leftJoin(Supplier::tableName().' as S','S.id=L.supplier_id')
             ->where(" L.district_code  like '%{$district_code}%'")
+            ->andWhere(" S.shop_name  like '%{$keyword}%'")
             ->all();
         foreach ($data as &$list)
         {

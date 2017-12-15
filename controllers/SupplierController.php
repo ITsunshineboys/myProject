@@ -749,8 +749,9 @@ class SupplierController extends Controller
     public  function   actionFindSupplierLineByDistrictCode()
     {
         $district_code=\Yii::$app->request->get('district_code',0);
+        $keyword=\Yii::$app->request->get('keyword','');
         $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
-        $data=LineSupplier::FindLineSupplierByDistrictCode($district_code);
+        $data=LineSupplier::FindLineSupplierByDistrictCode($district_code,$keyword);
         return Json::encode([
             'code'=>200,
             'msg' =>'ok',
