@@ -214,6 +214,16 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
         console.log(index);
         $scope.own_attrs_arr.splice(index, 1);
     };
+	$scope.own_input_change = function (input_value) {
+		for (let [key, value1] of $scope.goods_all_attrs.entries()) {
+			if (input_value == value1.name) {
+				$scope.own_submitted = true;
+				break;
+			} else {
+				$scope.own_submitted = false;
+			}
+		}
+	}
     /*---------------------------------属性获取结束---------------------------------*/
 
     /*----------------上传封面图-----------------------*/
@@ -358,7 +368,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.edit_confirm = function (valid, error) {
         console.log($scope.series_model);
         console.log($scope.style_model);
-        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag && !!$scope.series_model && !!$scope.style_model) {
+        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.own_submitted&& !$scope.g_flag && !$scope.d_flag && !!$scope.series_model && !!$scope.style_model) {
             let description = UE.getEditor('editor').getContent();//富文本编辑器
             $scope.change_ok = '#change_ok';//编辑成功
             $scope.after_sale_services = [];
