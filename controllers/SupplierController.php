@@ -1093,6 +1093,7 @@ class SupplierController extends Controller
     public  function  actionGetUpSupplierLineGoods()
     {
         $sku=Yii::$app->request->get('sku');
+        $line_id=Yii::$app->request->get('line_id');
         $Goods=Goods::find()
             ->where(['sku'=>$sku])
             ->one();
@@ -1125,7 +1126,7 @@ class SupplierController extends Controller
             ]);
         }
 
-        $lineSupplier=LineSupplier::findOne($lineGoods->line_supplier_id);
+        $lineSupplier=LineSupplier::findOne($line_id);
         if (!$lineSupplier)
         {
             $code=1076;
