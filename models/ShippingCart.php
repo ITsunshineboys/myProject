@@ -74,9 +74,12 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
         foreach ($data as  &$list)
         {
-            $supplierIds[]=Goods::findOne($list['goods_id'])
-                ->toArray()
-            ['supplier_id'];
+            $go=Goods::findOne($list['goods_id']);
+            if ($go)
+            {
+                $supplierIds[]=$go->toArray()['supplier_id'];
+            }
+
         }
         $supIds=[];
         foreach ($supplierIds as &$supplierId)
