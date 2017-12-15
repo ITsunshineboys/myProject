@@ -473,20 +473,21 @@ class SupplierController extends Controller
         $pro=substr($district_code,0,2);
         $ci=substr($district_code,2,2);
         $dis=substr($district_code,4,2);
-        if ($pro==0)
-        {
-            $code=0;
-        }else{
-            if ($ci==0){
-                $code=$pro;
-            }else if($dis==0){
-                $code=$pro.$ci;
-            }else{
-                $code=$district_code;
-            }
-        }
+//        if ($pro==0)
+//        {
+//            $code=0;
+//        }else{
+//            if ($ci==0){
+//                $code=$pro;
+//            }else if($dis==0){
+//                $code=$pro.$ci;
+//            }else{
+//                $code=$district_code;
+//            }
+//        }
+        $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
 //        $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
-        $where="L.district_code  like '%{$code}%' ";
+        $where="L.district_code  like '%{$district_code}%' ";
         if ($keyword)
         {
             $where .=" and  CONCAT(S.shop_name,S.shop_no) like '%{$keyword}%'";
