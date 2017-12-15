@@ -4,9 +4,9 @@
             <th>名称</th>
             <th>操作</th>
         </tr>
-        <tr ng-repeat="item in all_general_manage">
+        <tr ng-repeat="item in general_list">
             <td>{{item.title}}</td>
-            <td style="color: #5677FC;" ng-click="go_general_detail(item)">编辑</td>
+            <td style="color: #5677FC;"><a ng-click="goGeneralDetail(item)">编辑</a></td>
         </tr>
     </table>
 </div>

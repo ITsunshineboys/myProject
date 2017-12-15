@@ -1,11 +1,11 @@
 <div class="general_detail">
-    <h6 class="location">总点位:{{cur_general_count.count}}</h6>
+    <h6 class="location">总点位:{{total_count.count}}</h6>
     <div class="row">
         <p class="col-md-1">一级标题</p>
         <div class="col-md-6">
             <div class="row">
                 <p class="col-md-1 text-right" style="margin: 0!important;">
-                    <button type="button" ng-click="add_first_title()" class="text-center"><i
+                    <button type="button" ng-click="addOneTitle()" class="text-center"><i
                             class="glyphicon glyphicon-plus"></i></button>
                 </p>
                 <p class="col-md-4" style="margin: 0!important;padding-top: 5px;padding-bottom: 5px;">一级内容</p>
@@ -21,19 +21,19 @@
                 <p class="col-md-3 col-md-offset-1" ng-if="item.differentiate!=undefined&&!(+item.differentiate)">
                     {{item.title}}</p>
                 <p class="col-md-1 text-right" style="margin: 0!important;"
-                   ng-if="!!+item.differentiate||item.differentiate==undefined">
+                   ng-if="item.differentiate==1">
                     <button type="button" class="text-center" ng-click="remove_first_title($index,item)"><i
                             class="glyphicon glyphicon-minus"></i></button>
                 </p>
-                <p class="col-md-3" ng-if="!!+item.differentiate||item.differentiate==undefined">
+                <p class="col-md-3" ng-if="item.differentiate==1">
                     <input type="text" name="one_title{{index}}"
                            ng-change="item.flag = (item.title==''?true:false)"
                            ng-class="{'error':item.flag}"
                            placeholder="请输入标题" ng-model="item.title" class="form-control">
                 </p>
-                <p class="col-md-3" ng-if="!!+item.differentiate||item.differentiate==undefined"
+                <p class="col-md-3" ng-if="item.differentiate==1"
                    style="margin: 0!important;">
-                    <button class="get_second_title" ng-click="save_general_manage('',1,item)">生成二级标题</button>
+                    <button class="get_second_title" ng-click="getTwoTitle(item)">生成二级标题</button>
                 </p>
             </div>
         </div>

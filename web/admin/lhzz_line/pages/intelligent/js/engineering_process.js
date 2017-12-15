@@ -92,7 +92,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == '0'&&item.coefficient=='1'
                     })
                     value['series_or_style'] = 0
-                    value['cur_id'] = value.id
+                    value['cur_id'] = res.coefficient[index].id
                     value['coefficient'] = 1
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -102,7 +102,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 0&&item.coefficient==2
                     })
                     value['series_or_style'] = 0
-                    value['cur_id'] = value.id
+                    value['cur_id'] = res.coefficient[index].id
                     value['coefficient'] = 2
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -112,7 +112,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 0&&item.coefficient==3
                     })
                     value['series_or_style'] = 0
-                    value['cur_id'] = value.id
+                    value['cur_id'] = res.coefficient[index].id
                     value['coefficient'] = 3
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }//风格1
@@ -121,7 +121,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 1&&item.coefficient==1
                     })
                     value['series_or_style'] = 1
-                    value['cur_id'] = value.id
+                    value['cur_id'] = res.coefficient[index].id
                     value['coefficient'] = 1
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -131,7 +131,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 1&&item.coefficient==2
                     })
                     value['series_or_style'] = 1
-                    value['cur_id'] = value.id
+                    value['cur_id'] = res.coefficient[index].id
                     value['coefficient'] = 2
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -184,6 +184,8 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
     })
     //保存数据
     $scope.saveData = function (valid) {
+        console.log($scope.cur_process_list);
+        // console.log($scope.series_and_style);
         let all_modal = function ($scope, $uibModalInstance) {
                     $scope.cur_title = '保存成功'
                     $scope.common_house = function () {
@@ -195,24 +197,62 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         let arr = [],arr1 = [],arr2 = []
         for(let [key,value] of $scope.cur_process_list.entries()){
             for(let [key1,value1] of value.entries()){
-                if($stateParams.project == '木作工艺'){
+                if(value1.options == undefined){
                     arr.push({
                         id:value1.id,
                         value:value1.material
                     })
                 }else{
-                    arr.push({
+                    arr1.push({
                         id:value1.id,
-                        material:value1.material
+                        value:value1.material=='其它'?0:value1.material
                     })
+                }
+            }
+        }
+        if($scope.series_and_style!=undefined){
+            for(let [key,value] of $scope.series_and_style.entries()){
+                for(let [key1,value1] of value.entries()){
+                    if(value1.cur_id != undefined){
+                        arr2.push({
+                            id:value1.cur_id,
+                            value:value1.value
+                        })
+                    }else{
+                        arr2.push({
+                            add_id:value1.id,
+                            value:value1.value,
+                            coefficient:value1.coefficient,
+                            series_or_style:value1.series_or_style
+                        })
+                    }
                 }
             }
         }
         if(valid){
             if($stateParams.project == '木作工艺'){
-
+                _ajax.post('/quote/project-norm-woodwork-edit',{
+                    city_code:$stateParams.city,
+                    value:arr,
+                    specification:arr1,
+                    coefficient:arr2
+                },function (res) {
+                    console.log(res);
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                })
             }else{
-
+                _ajax.post('/quote/project-norm-edit',{
+                    material:arr
+                },function (res) {
+                    console.log(res);
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                })
             }
         }else{
             $scope.submitted = true

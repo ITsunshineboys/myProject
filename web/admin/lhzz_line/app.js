@@ -518,7 +518,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/add_drawing.css'
         })
         .state('add_support_goods', {//智能报价案列/社区店配套商品管理
-            url: '/add_support_goods?city&province',
+            url: '/add_support_goods?city&province&name',
             templateUrl: 'pages/intelligent/add_support_goods.html',
             css: 'pages/intelligent/css/add_support_goods.css',
             controller:'support_goods_ctrl'
@@ -580,20 +580,23 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/intelligent/house_area.html',
             css: 'pages/intelligent/css/house_area.css'
         })
-        .state('intelligent.general_manage', {//通用管理列表
-            url: 'general_manage',
+        .state('general_manage', {//通用管理列表
+            url: '/general_manage',
             templateUrl: 'pages/intelligent/general_manage.html',
-            css: 'pages/intelligent/css/engineering_standards.css'
+            css: 'pages/intelligent/css/engineering_standards.css',
+            controller:'general_manage_ctrl'
         })
-        .state('intelligent.general_detail', {//通用管理详情
-            url: 'general_detail',
+        .state('general_detail', {//通用管理详情
+            url: '/general_detail?id',
             templateUrl: 'pages/intelligent/general_detail.html',
-            css: 'pages/intelligent/css/general_detail.css'
+            css: 'pages/intelligent/css/general_detail.css',
+            controller:'general_detail_ctrl'
         })
-        .state('intelligent.else_general_manage', {//其他通用管理
-            url: 'else_general_manage',
+        .state('else_general_manage', {//其他通用管理
+            url: '/else_general_manage?id',
             templateUrl: 'pages/intelligent/else_general_manage.html',
-            css: 'pages/intelligent/css/else_general_manage.css'
+            css: 'pages/intelligent/css/else_general_manage.css',
+            controller:'else_general_ctrl'
         })
         .state('goods_manage', {//智能报价商品管理
             url: '/goods_manage?city&province',

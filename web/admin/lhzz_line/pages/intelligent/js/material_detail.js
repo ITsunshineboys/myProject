@@ -250,13 +250,13 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
         //户型相关
         for (let [key, value] of $scope.area_range.entries()) {
             if(value.area_id == undefined){
-                arr1.push({
+                arr2.push({
                     min_area: value.min_area,
                     max_area: value.max_area,
                     quantity: value.quantity
                 })
             }else{
-                arr1.push({
+                arr2.push({
                     id: value.area_id,
                     quantity: value.quantity
                 })
