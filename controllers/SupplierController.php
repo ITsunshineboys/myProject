@@ -96,14 +96,24 @@ class SupplierController extends Controller
         $user = Yii::$app->user->identity;
 
         $supplier = Supplier::find()->where(['uid' => $user->id])->one();
-        if ($supplier && $supplier->status == Supplier::STATUS_APPROVED) {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        if ($supplier) {
+            $userRole = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
+            if (!$userRole) {
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if ($userRole->review_status != Role::AUTHENTICATION_STATUS_IN_PROCESS) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
 
-//        $supplier && Supplier::deleteAll(['id' => $supplier->id]);
         $code = Supplier::certificationApplication($supplier, $user, Yii::$app->request->post());
         if (200 != $code) {
             return Json::encode([
