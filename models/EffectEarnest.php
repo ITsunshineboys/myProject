@@ -112,6 +112,8 @@ class EffectEarnest extends \yii\db\ActiveRecord
             $effect['item']=self::EFFECT_LOGIN[$effect['item']];
             if($effect['earnest']==0){
                 unset($effect['earnest']);
+            }else{
+                $effect['earnest']=sprintf('%.2f',(float)$effect['earnest']*0.01);
             }
             if($effect['transaction_no']==''){
                 unset($effect['transaction_no']);
@@ -119,7 +121,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             if(isset($effect['create_time'])){
                 $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
             }
-            $effect['earnest']=sprintf('%.2f',(float)$effect['earnest']*0.01);
+
         }
 
         $total = (int)self::find()->where($where)->asArray()->count();
