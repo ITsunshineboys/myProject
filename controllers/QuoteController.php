@@ -1756,12 +1756,12 @@ class QuoteController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
+        $dm=[];
         foreach ($post['add'] as $one_post){
             switch ($one_post){
-//                case $one_post['id']:
-//                    $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
-//                    break;
+                case $one_post['id']:
+                $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
+                break;
                 case isset($one_post['series']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
@@ -1786,6 +1786,7 @@ class QuoteController extends Controller
                     break;
             }
         }
+
         if (!$dm){
             $code = 1000;
             return Json::encode([
