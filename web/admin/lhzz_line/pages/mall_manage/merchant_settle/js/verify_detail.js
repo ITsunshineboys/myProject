@@ -33,6 +33,13 @@ app.controller('verify_detail', ['$rootScope', '$scope', '$state', '$stateParams
         })
     }
 
+    // 显示图片原图
+    $scope.showImage = function (src) {
+        $scope.showImg = src;
+        $('#myModal').modal('show')
+    };
+
+
     // 返回
     $scope.backPage = function (obj) {
         if(arguments[0]=='modal'){

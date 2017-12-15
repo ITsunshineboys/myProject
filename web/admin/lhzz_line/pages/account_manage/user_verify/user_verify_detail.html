@@ -16,14 +16,14 @@
     <div class="form-group">
         <span class="col-md-2 control-label">身份证正面</span>
         <div class="col-md-10 form-control-static">
-            <img ng-src="{{detail.identity_card_front_image}}" class="pic-style" alt="身份证正面">
+            <img ng-src="{{detail.identity_card_front_image}}" ng-click="showImage(detail.identity_card_front_image)" class="pic-style" alt="身份证正面">
         </div>
     </div>
 
     <div class="form-group">
         <span class="col-md-2 control-label">身份证反面</span>
         <div class="col-md-10 form-control-static">
-            <img ng-src="{{detail.identity_card_back_image}}" class="pic-style" alt="身份证反面">
+            <img ng-src="{{detail.identity_card_back_image}}" ng-click="showImage(detail.identity_card_back_image)" class="pic-style" alt="身份证反面">
         </div>
     </div>
 
@@ -74,7 +74,7 @@
         <div class="form-group">
             <span class="col-md-2 control-label">审核状态</span>
             <div class="col-md-10 form-control-static">
-                <span ng-bind="detail.review_status"></span>
+                <span ng-bind="detail.review_status" ng-class="{'red':detail.review_status=='审核不通过','green':detail.review_status=='审核通过'}"></span>
             </div>
         </div>
 
@@ -119,6 +119,18 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="backPage('modal')">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 图片浏览模态框 -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-img" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img ng-src="{{showImg}}">
             </div>
         </div>
     </div>

@@ -33,6 +33,13 @@ app.controller('user_verify_detail', ['$rootScope', '$scope', '$state', '$stateP
         })
     }
 
+    // 显示图片原图
+    $scope.showImage = function (src) {
+        $scope.showImg = src;
+        $('#myModal').modal('show')
+    };
+
+
     // 返回
     $scope.backPage = function (obj) {
         if(arguments[0]=='modal'){
@@ -42,6 +49,5 @@ app.controller('user_verify_detail', ['$rootScope', '$scope', '$state', '$stateP
         }else{
             history.go(-1);
         }
-
     }
 }]);
