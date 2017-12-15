@@ -2860,11 +2860,11 @@ class GoodsOrder extends ActiveRecord
                     'cover_image'=>$arr[$k]['cover_image'],
                     'goods_number'=>$arr[$k]['goods_number'],
                     'refund_status'=>$refund['refund_status'],
-                    'apply_refund_time'=>$refund['apply_refund_time'],
+                    'apply_refund_time'=>$refund['apply_refund_time']==''?0:$refund['apply_refund_time'],
                     'apply_refund_reason'=>$refund['apply_refund_reason'],
                     'aftersale_status'=>$after['aftersale_status'],
                     'aftersale_type'=>$after['aftersale_type'],
-                    'apply_aftersale_time'=>$after['apply_aftersale_time'],
+                    'apply_aftersale_time'=>$after['apply_aftersale_time']==''?0:$after['apply_aftersale_time'],
                     'apply_aftersale_reason'=>$after['apply_aftersale_reason'],
                 ];
             }
