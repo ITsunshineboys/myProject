@@ -1551,8 +1551,8 @@ class QuoteController extends Controller
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
         } else {
             return Json::encode([
-                'code' => 200,
-                'msg' => 'ok',
+                'code' => 1000,
+                'msg' => '商品详情有误',
                 'goods'=> [],
                 'goods_attr'=> [],
             ]);
@@ -1716,7 +1716,9 @@ class QuoteController extends Controller
     public function actionDecorationEditList()
     {
         $id = trim(\Yii::$app->request->post('id',''));
-        $sku = DecorationAdd::findOne($id);
+        $sku = DecorationAdd::findOne($id)->toArray();//TODO 修改
+        $goods_cate=GoodsCategory::GetCategory($sku['c_id']);
+        $sku['goods_cate']=$goods_cate;
         $message_select = 'id,quantity,style_id,series_id,min_area,max_area';
         $where = 'decoration_add_id='.$sku['id'];
         $decoration_message = DecorationMessage::findById($message_select,$where);
