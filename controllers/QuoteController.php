@@ -1791,8 +1791,8 @@ class QuoteController extends Controller
 //            }
 //        }
         foreach ($post['add'] as $one_post){
-            if($one_post['id']){
-                $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
+            if(isset($post['id'])){
+                $dm = DecorationMessage::findByUpdate($one_post['quantity'],$post['id']);
             }elseif (isset($one_post['style'])){
                 $dm = \Yii::$app->db->createCommand()
                     ->update(DecorationMessage::tableName(), [
