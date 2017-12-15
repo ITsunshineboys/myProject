@@ -1749,7 +1749,7 @@ class QuoteController extends Controller
         $decoration_add = DecorationAdd::findOne($post['id']);
         $decoration_add->correlation_message = $post['message'];
         $decoration_add->sku           = $post['sku'];
-        if (!$decoration_add->save()){
+        if (!$decoration_add->save(false)){
             $code = 1000;
             return Json::encode([
                 'code' => $code,
@@ -1758,32 +1758,31 @@ class QuoteController extends Controller
         }
 
         $dm=[];
+
         foreach ($post['add'] as $one_post){
-            switch ($one_post){
-//                case $one_post['id']:
-//                    $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
-//                    break;
-                case isset($one_post['series']) != null:
+            $a = DecorationMessage::find()->asArray()->where(['id'=>$one_post['id']])->one();//TODO 添加 查询
+            switch ($a){
+                case isset($a['series_id']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
-                            'series_id' => $one_post['series'],
+                            'series_id' => $a['series_id'],//TODO series -> series_id
                             'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post['id']])->execute();
+                        ],['id'=>$a['id']])->execute();
                     break;
-                case isset($one_post['style']) != null:
+                case isset($a['style_id']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
-                            'style_id' => $one_post['style'],
+                            'style_id' => $a['style_id'],//TODO style -> style_id
                             'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post['id']])->execute();
+                        ],['id'=>$a['id']])->execute();
                     break;
-                case isset($one_post['min_area']) != null:
+                case isset($a['min_area']) != null:
                     $dm = \Yii::$app->db->createCommand()
                         ->update(DecorationMessage::tableName(), [
                             'min_area' => $one_post['min_area'],
                             'max_area' => $one_post['max_area'],
                             'quantity' => $one_post['quantity'],
-                        ],['id'=>$one_post['id']])->execute();
+                        ],['id'=>$a['id']])->execute();
                     break;
             }
         }
