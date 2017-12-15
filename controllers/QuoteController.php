@@ -1852,7 +1852,7 @@ class QuoteController extends Controller
      */
     public function actionCommonalityTitle()
     {
-        $id = trim(\Yii::$app->request->post('id',''));
+        $id = trim(\Yii::$app->request->get('id',''));
         $count = Points::findOne(['id'=>$id]);
         $select = 'id,title,differentiate,count';
         $where  = 'pid='.$id;
