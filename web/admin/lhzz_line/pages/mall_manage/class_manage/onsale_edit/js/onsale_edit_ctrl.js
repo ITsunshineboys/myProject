@@ -15,24 +15,18 @@ app.controller('onsale_edit', ['$state','$scope', '$stateParams','$http', '$root
 
     let pid;
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
-    $scope.changescope = $scope;
-    $scope.show_class_warning = false;
-    $scope.picwarning = false;
-    $scope.idarr = [];
-    $scope.firstclass = [];
-    /*一级下拉框*/
-    $scope.subClass = [];
-    /*二级下拉框*/
     $scope.item = $stateParams.item;
     $scope.iconpath = $stateParams.item.icon;
-    /*图片路径*/
-    $scope.savemodal = '';
-    //分类路径处理
-    let onlinepath = $stateParams.item.path.split(",");
+    $scope.changescope = $scope;
+    $scope.show_class_warning = false;    // 分类错误提示
+    $scope.picwarning = false;            // 图片错误提示
+    $scope.firstclass = [];               // 一级下拉框
+    $scope.subClass = [];                 // 二级下拉框
+    let onlinepath = $stateParams.item.path.split(",");   //分类路径处理
     onlinepath.splice(onlinepath.length - 1, onlinepath.length);
     $scope.finalpatharr = onlinepath;
     $scope.offlinereason = '';
-    $scope.config = $rootScope.config; //富文本编辑器配置
+    $scope.config = $rootScope.config;
 
 
     /*分类名称是否存在的判断*/

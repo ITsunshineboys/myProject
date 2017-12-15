@@ -14,27 +14,20 @@ app.controller('offsale_edit', ['$state', '$scope', '$stateParams', '$http', '$r
     }];
 
     let pid;
-    let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;  //分类名称正则
-    $scope.show_class_warning = false; //分类名称错误提示
-    $scope.firstclass = [];
-    /*一级下拉框*/
-    $scope.subClass = [];
-    /*二级下拉框*/
-    $scope.item = $stateParams.item;  //列表传参
-    //分类路径处理
-    let onlinepath = $stateParams.item.path.split(",");
+    let pattern = /^[\u4E00-\u9FA5A-Za-z0-9]+$/;  // 分类名称正则
+    $scope.show_class_warning = false;        // 分类名称错误提示
+    $scope.show_picwarning = false;           // 图片错误提示
+    $scope.firstclass = [];                   // 一级下拉框
+    $scope.subClass = [];                     // 二级下拉框
+    $scope.item = $stateParams.item;          // 列表传参
+    $scope.iconpath = $stateParams.item.icon;
+    let onlinepath = $stateParams.item.path.split(",");    // 分类路径处理
     onlinepath.splice(onlinepath.length - 1, onlinepath.length);
     $scope.finalpatharr = onlinepath;
-    $scope.iconpath = $stateParams.item.icon;
-    /*图片路径*/
-    $scope.show_picwarning = false;
     $scope.selectscope = $scope;
+    $scope.config = $rootScope.config;         // 富文本编辑器
 
-
-    /*富文本编辑器*/
-    $scope.config = $rootScope.config;
-
-    /*分类名称是否存在的判断*/
+    /*分类名称失焦判断*/
     $scope.addClassName = function () {
         if (!pattern.test($scope.item.title) || $scope.item.title == '') {
             $scope.class_warning = "您的输入不满足条件,请重新输入"
@@ -74,9 +67,11 @@ app.controller('offsale_edit', ['$state', '$scope', '$stateParams', '$http', '$r
     $scope.subClass = function (obj) {
         _ajax.get('/mall/categories-manage-admin', {pid: obj}, function (res) {
             $scope.secondclass = res.data.categories.splice(1);
-            $scope.secselect = $scope.secondclass[0].id
+            $scope.secselect = $scope.secondclass[0].id;
         })
     }
+
+
     //上传图片
     $scope.data = {
         file: null
