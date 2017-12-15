@@ -74,12 +74,10 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
         foreach ($data as  &$list)
         {
-            $supplierIds[]=Goods::findOne($list['goods_id']);
-//            $supplierIds[]=Goods::findOne($list['goods_id'])
-//                ->toArray()
-//            ['supplier_id'];
+            $supplierIds[]=Goods::findOne($list['goods_id'])
+                ->toArray()
+            ['supplier_id'];
         }
-        var_dump($supplierIds);die;
         $supIds=[];
         foreach ($supplierIds as &$supplierId)
         {
