@@ -1162,7 +1162,6 @@ class GoodsCategory extends ActiveRecord
                 'one_category'=>$first_category->title,
                 'two_categor'=>$category->parent_title,
                 'three_category'=>$category->title
-
             ];
         }else{
             return [];
