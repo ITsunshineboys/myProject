@@ -1,4 +1,4 @@
-var app = angular.module("app", ["ng.ueditor", "ui.router","ngFileUpload","offsaleeditModule",
+var app = angular.module("app", ["ng.ueditor", "ui.router","ngFileUpload",
     "addclassModule", 'brand_details_module', 'account_comment', 'change_num', 'bind_record', 'operation_record',
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
@@ -299,7 +299,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'class_offline'
         })
 
-        .state("onsale_edit", {
+        .state("onsale_edit", { //  已上架分类 - 编辑
             params: {item: null},
             url: '/onsale_edit',
             css: 'pages/mall_manage/class_manage/onsale_edit/css/onsale_edit.css',
@@ -307,13 +307,15 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'onsale_edit'
         })
 
-        .state("offsale_edit", {
+        .state("offsale_edit", { //  已下架分类 - 编辑
             params: {item: null},
             url: "/offsale_edit",
-            templateUrl: "pages/mall_manage/class_manage/offsale_edit/offsale_edit.html"
+            css: 'pages/mall_manage/class_manage/onsale_edit/css/onsale_edit.css',
+            templateUrl: "pages/mall_manage/class_manage/offsale_edit/offsale_edit.html",
+            controller: 'offsale_edit'
         })
 
-        .state("add_class", {
+        .state("add_class", {  //添加分类
             url: "/add_class",
             templateUrl: "pages/mall_manage/class_manage/add_class/add_class.html",
             css: "pages/mall_manage/class_manage/add_class/css/add_class.css"

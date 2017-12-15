@@ -197,6 +197,12 @@ class GoodsComment extends ActiveRecord
             $supplier=Supplier::find()
                 ->where(['id'=>$goods->supplier_id])
                 ->one();
+            if (!$supplier)
+            {
+                $code=1000;
+                $tran->rollBack();
+                return $code;
+            }
             $supplier->comprehensive_score=$list['score'];
             $supplier->logistics_speed_score=$list['logistics_speed_score'];
             $res2=$supplier->save(false);

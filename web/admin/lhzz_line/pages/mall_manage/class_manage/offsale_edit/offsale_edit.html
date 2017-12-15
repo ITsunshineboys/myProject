@@ -1,100 +1,115 @@
-<link rel="stylesheet" href="pages/mall_manage/class_manage/offsale_edit/css/offsale_edit.css">
-<div ng-controller="offsaleEdit">
-    <!--分类详情-->
-    <div class="cla_detail">
-        <!--分类名称-->
-        <div class="cla_name">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span class="each_title">分类名称</span>
-            <input type="text" ng-model="item.title" ng-class="{tored:show_class_warning}" ng-blur="addClassName()" maxlength=10>
-            <span>*限1~10个字符</span>
-            <h6 ng-if="show_class_warning" ng-bind="class_warning"></h6>
-        </div>
-        <span></span>
-        <div class="divider"></div>
+<!--分类详情-->
+<form class="form-horizontal" role="form">
+    <!--&lt;!&ndash;分类名称&ndash;&gt;-->
+    <!--<div class="cla_name">-->
+    <!--<span class="glyphicon glyphicon-asterisk red_mark"></span>-->
+    <!--<span class="each_title">分类名称</span>-->
+    <!--<input type="text" ng-model="item.title" ng-class="{tored:show_class_warning}" ng-blur="addClassName()"-->
+    <!--maxlength=10>-->
+    <!--<span>*限1~10个字符</span>-->
+    <!--<h6 ng-if="show_class_warning" ng-bind="class_warning"></h6>-->
+    <!--</div>-->
 
-        <!--分类所属-->
-        <div class="cla_belong" ng-if="finalpatharr.length>1">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span class="each_title">分类所属</span>
-            <select name="" class="belong first_select" ng-if="finalpatharr.length>1"  ng-model="selectscope.firstselect"  ng-change="subClass(firstselect)">
-                <option ng-repeat="item in firstclass" value={{item.id}} >{{item.title}}</option>
+
+    <div class="form-group">
+        <div class="col-md-2 control-label">
+            <span class="glyphicon glyphicon-asterisk red"></span>
+            分类名称
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" ng-model="item.title" ng-class="{'error':show_class_warning}"
+                   ng-blur="addClassName()" maxlength=10>
+        </div>
+        <div class="col-md-1 control-label">*限1~10个字符</div>
+    </div>
+    <div class="form-group" ng-if="show_class_warning">
+        <div class="col-md-2"></div>
+        <div class="red col-md-2" ng-bind="class_warning"></div>
+    </div>
+    <hr/>
+
+    <div class="form-group search form-inline" ng-if="finalpatharr.length>1">
+        <div class="col-md-2 control-label">
+            <span class="glyphicon glyphicon-asterisk red"></span>
+            分类所属
+        </div>
+        <div class="col-md-8">
+            <select class="form-control" ng-if="finalpatharr.length>1" ng-model="selectscope.firstselect"
+                    ng-change="subClass(firstselect)">
+                <option ng-repeat="item in firstclass" value={{item.id}}>{{item.title}}</option>
             </select>
-            <select name="suoshukuang" class="belong" ng-if="finalpatharr.length>2" ng-model="selectscope.secselect" ng-options="item.id as item.title for item in secondclass">
-            </select>
+            <select class="form-control" ng-if="finalpatharr.length>2" ng-model="selectscope.secselect"
+                    ng-options="item.id as item.title for item in secondclass"></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-2 control-label">
+            <span class="glyphicon glyphicon-asterisk red"></span>
+            分类图片
         </div>
 
-        <div class="cla_pic">
-            <span class="glyphicon glyphicon-asterisk red_mark"></span>
-            <span class="each_title">分类图片</span>
-            <div class="upload_pic">
-                <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
-                <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
-                <div id="upload">
-                    <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" id="upload_btn">上传</button>
-                </div>
-                <div class="red_mark warning" ng-show="show_picwarning">
-                    <span class="glyphicon glyphicon-asterisk red_mark"></span>
-                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                </div>
+        <div class="col-md-10">
+            <img ng-src="{{iconpath}}" alt="">
+            <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
+            <div id="upload">
+                <button type="button" class="btn btn-default" ngf-pattern="image/*" ng-change="upload(data.file)"
+                        ngf-select=""
+                        ngf-multiple="false" ng-model="data.file">上传
+                </button>
             </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <!--分类描述-->
-        <div class="cla_des">
-            <span class="each_title">分类描述</span>
-            <div id="edit_tool">
-                <div class="ueditor" ng-model="item.description" config="config" id='editor'></div>
-            </div>
-        </div>
-        <div class="divider"></div>
-
-        <!--下架原因-->
-        <div class="cla_des">
-            <span class="each_title">下架原因</span>
-            <textarea name="" id="why_offline" cols="86" rows="10" placeholder="请输入下架原因" ng-model="item.offline_reason"></textarea>
-        </div>
-        <div class="divider"></div>
-
-        <div class="info">
-            <p>
-                <span>操作人员</span>
-                <span ng-bind="item.offline_person"></span>
-            </p>
-
-            <p>
-                <span>下架时间</span>
-                <span ng-bind="item.offline_time"></span>
-            </p>
-        </div>
-
-        <div class="btn_sure">
-            <button ng-click="saveclass()">保存</button>
-            <button ui-sref="class.offline">返回</button>
-        </div>
-
-        <!--保存提示模态框-->
-        <div class="modal fade" id="save_tishi">
-            <div class="modal-dialog">
-                <div class="modal-content" id="save_content">
-                    <div class="modal-header" id="save_header">
-                        <h4 class="modal-title" id="tishi">
-                            提示
-                        </h4>
-                    </div>
-                    <div class="modal-body" id="save_body">
-                        <h6 id="tishi_wenzi">{{save_msg}}</h6>
-                    </div>
-
-                    <div class="btn_modal_two">
-                        <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
-                        <button id="caozuo_sure" data-dismiss="modal" ng-if="!success_flag">确认</button>
-                    </div>
-                </div>
+            <div ng-show="show_picwarning" class="red warning">
+                <span class="glyphicon glyphicon-asterisk"></span>
+                <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
             </div>
         </div>
     </div>
-</div>
-</div>
+    <hr/>
+
+
+    <div class="form-group">
+        <div class="col-md-2 control-label">
+            分类描述
+        </div>
+
+        <div class="col-md-10 control-label">
+            <div class="ueditor" ng-model="item.description" config="config" id="editor"></div>
+        </div>
+    </div>
+
+    <hr/>
+
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">下架原因</span>
+        <div class="col-md-6 form-control-static">
+            <textarea class="form-control" rows="5" ng-model="item.offline_reason" placeholder="请输入下架原因"></textarea>
+        </div>
+    </div>
+
+
+    <hr/>
+
+    <div class="form-group">
+        <div class="col-md-2 control-label">
+            添加人员
+        </div>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="item.online_person"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-2 control-label">
+            下架时间
+        </div>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="item.offline_time"></span>
+        </div>
+    </div>
+
+    <div class="btns">
+        <button class="btn btn-primary" ng-click="saveclass()">保存</button>
+        <button class="btn btn-default" ui-sref="class.offline">返回</button>
+    </div>
+</form>
