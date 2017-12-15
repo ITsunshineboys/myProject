@@ -701,22 +701,23 @@ class SupplierController extends Controller
             ->one();
         if (!$goods)
         {
-            $code=1000;
+            $code=1078;
             return Json::encode([
                 'code' => $code,
-                'msg' => '没有此商品，请重新输入',
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $lineSupplierGoods=LineSupplierGoods::find()->where(['goods_id'=>$goods->id])->one();
+        $lineSupplierGoods=LineSupplierGoods::find()
+            ->where(['goods_id'=>$goods->id])
+            ->one();
         if ($lineSupplierGoods)
         {
-            $code=1000;
+            $code=1079;
             return Json::encode([
                 'code' => $code,
-                'msg' => '此商品重复，请重新输入',
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
         $supplier=Supplier::findOne($goods->supplier_id);
         return Json::encode([
             'code'=>200,
