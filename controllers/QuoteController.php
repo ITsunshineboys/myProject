@@ -258,7 +258,7 @@ class QuoteController extends Controller
      */
     public function actionProjectNormEdit(){
         $post = \Yii::$app->request->post();
-        foreach ($post['value'] as $one_material){
+        foreach ($post['material'] as $one_material){
             $material = EngineeringStandardCraft::findOne($one_material['id']);
             $material->material = $one_material['value'] * 100;
             $edit_material = $material->save();
