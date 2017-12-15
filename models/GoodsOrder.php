@@ -2839,7 +2839,7 @@ class GoodsOrder extends ActiveRecord
                     $complete_time = date('Y-m-d H:i', $arr[$k]['complete_time']);
                 }
                 if ($arr[$k]['RemainingTime'] <= 0) {
-                    $automatic_receive_time = '';
+                    $automatic_receive_time = 0;
                 } else {
                     $automatic_receive_time= $arr[$k]['RemainingTime'];
                 }

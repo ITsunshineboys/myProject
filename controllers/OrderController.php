@@ -2422,7 +2422,6 @@ class OrderController extends Controller
                 }
             }
         }
-
          $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
          if($arr)
          {
