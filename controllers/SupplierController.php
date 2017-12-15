@@ -99,6 +99,7 @@ class SupplierController extends Controller
         if ($supplier) {
             $userRole = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
             if (!$userRole) {
+                StringService::writeLog('test', Yii::$app->params['supplierRoleId'], 'supplier-certification');
                 $code = 500;
                 return Json::encode([
                     'code' => $code,
