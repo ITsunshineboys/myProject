@@ -23,8 +23,8 @@ app.controller('order_all', ['$scope', '$stateParams', '_ajax', function ($scope
         keyword: '',                    // 关键字查询
         start_time: '',                 // 自定义开始时间
         end_time: '',                   // 自定义结束时间
-        sort_money: 2,                  // 订单金额排序
-        sort_time: '',                  // 下单时间排序
+        sort_money: '',                  // 订单金额排序
+        sort_time: 2,                  // 下单时间排序
         type: 'all'                  // 订单类型
     };
 
@@ -50,8 +50,8 @@ app.controller('order_all', ['$scope', '$stateParams', '_ajax', function ($scope
             $scope.params.keyword = '';        // 关键字查询
             $scope.params.start_time = '';     // 自定义开始时间
             $scope.params.end_time = '';       // 自定义结束时间
-            $scope.params.sort_money = 2;      // 订单金额排序
-            $scope.params.sort_time = '';      // 下单时间排序
+            $scope.params.sort_money = '';      // 订单金额排序
+            $scope.params.sort_time = 2;      // 下单时间排序
             $scope.pageConfig.currentPage = 1;
             orderList();
         }
@@ -62,8 +62,8 @@ app.controller('order_all', ['$scope', '$stateParams', '_ajax', function ($scope
         $scope.params.time_type = 'all';   // 时间类型
         $scope.params.start_time = '';     // 自定义开始时间
         $scope.params.end_time = '';       // 自定义结束时间
-        $scope.params.sort_money = 2;      // 订单金额排序
-        $scope.params.sort_time = '';      // 下单时间排序
+        $scope.params.sort_money = '';      // 订单金额排序
+        $scope.params.sort_time = 2;      // 下单时间排序
         $scope.pageConfig.currentPage = 1;
         orderList()
     };
@@ -76,8 +76,8 @@ app.controller('order_all', ['$scope', '$stateParams', '_ajax', function ($scope
         }
         if ($scope.params.end_time != '') {
             $scope.params.keyword = '';        // 关键字查询
-            $scope.params.sort_money = 2;      // 订单金额排序
-            $scope.params.sort_time = '';      // 下单时间排序
+            $scope.params.sort_money = '';     // 订单金额排序
+            $scope.params.sort_time = 2;      // 下单时间排序
             $scope.pageConfig.currentPage = 1;
             orderList()
         }
@@ -89,8 +89,8 @@ app.controller('order_all', ['$scope', '$stateParams', '_ajax', function ($scope
         }
         if ($scope.params.start_time != '') {
             $scope.params.keyword = '';        // 关键字查询
-            $scope.params.sort_money = 2;      // 订单金额排序
-            $scope.params.sort_time = '';      // 下单时间排序
+            $scope.params.sort_money = '';      // 订单金额排序
+            $scope.params.sort_time = 2;      // 下单时间排序
             $scope.pageConfig.currentPage = 1;
             orderList()
         }
