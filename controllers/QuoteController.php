@@ -345,7 +345,12 @@ class QuoteController extends Controller
 
         foreach ($post['specification'] as $one_specification){
             $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
-            $specification->value = $one_specification['value'] * 100;
+            if(is_numeric($specification['value'])){
+                $specification->value = $one_specification['value'] * 100;
+            }else{
+                $specification->value =$one_specification['value'];
+            }
+
             $specification->save();
         }
 
