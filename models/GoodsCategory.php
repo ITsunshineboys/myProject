@@ -1160,7 +1160,7 @@ class GoodsCategory extends ActiveRecord
                 ->one();
             return [
                 'one_category'=>$first_category->title,
-                'two_categor'=>$category->parent_title,
+                'two_category'=>$category->parent_title,
                 'three_category'=>$category->title
             ];
         }else{
