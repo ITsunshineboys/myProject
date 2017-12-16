@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Carousel;
 use app\models\Goods;
+use app\models\GoodsOrder;
+use app\models\OrderGoods;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserRole;
@@ -190,5 +192,32 @@ class TestController extends Controller
             ->one();
         $UserRole->review_status=0;
         $UserRole->save(false);
+    }
+
+    public  function  actionDelInvalidData()
+    {
+        $GoodsOrder=GoodsOrder::find()->all();
+        foreach ($GoodsOrder as &$list)
+        {
+            $supplier=Supplier::findOne($list['supplier_id']);
+            if (!$supplier)
+            {
+                $OrderGoods=OrderGoods::find()->where(['order_no'=>$list->order_no])->all();
+                foreach ($OrderGoods as &$orderGoods)
+                {
+                    $res1=$orderGoods->delete();
+                    if (!$res1)
+                    {
+                        echo 2;
+                    }
+                }
+                $res=$list->delete();
+                if (!$res)
+                {
+                    echo 2;
+                }
+            }
+        }
+        echo 1;
     }
 }
