@@ -1023,7 +1023,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array|null
      */
-    public static function Getorderinformation($order_no,$sku){
+    public static function GetOrderInformation($order_no,$sku){
         $select='a.pay_name,
                z.order_status,
                z.customer_service,

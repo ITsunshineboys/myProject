@@ -149,7 +149,6 @@ class OrderController extends Controller
         $data=Yii::$app->params['districts'];
         return Json::encode($data[0][86]);
     }
-
     /**
      * 获取城市
      * @return string
@@ -167,90 +166,136 @@ class OrderController extends Controller
         $data=Yii::$app->params['districts'];
         return Json::encode($data[0][$code]);
     }
-
-       /**
-         * 无登录app-添加收货地址
-         * @return string
-         */
-        public function actionAdduseraddress()
-        {
-            $request = Yii::$app->request;
-            if ($request->isPost) {
-                $consignee = trim($request->post('consignee',''),'');
-                $mobile= trim($request->post('mobile',''),'');
-                $districtCode=trim($request->post('districtcode',''),'');
-                $region=trim($request->post('region',''));
-                if (!$districtCode || !$region  || !$mobile || !$consignee ) {
-                    $code=1000;
+    /**
+     * 无登录app-添加收货地址
+     * @return string
+     */
+    public function actionAdduseraddress()
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $consignee = trim($request->post('consignee',''),'');
+            $mobile= trim($request->post('mobile',''),'');
+            $districtCode=trim($request->post('districtcode',''),'');
+            $region=trim($request->post('region',''));
+            if (!$districtCode || !$region  || !$mobile || !$consignee ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }else{
+                $data=Addressadd::InsertAddress($mobile,$consignee,$region,$districtCode);
+                if (!$data){
+                    $code=500;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
                     ]);
-                }else{
-                    $data=Addressadd::InsertAddress($mobile,$consignee,$region,$districtCode);
-                    if (!$data){
-                        $code=500;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }else
-                    {
-                        return Json::encode([
-                            'code' => 200,
-                            'msg' => 'ok',
-                            'data'=>[
-                                'address_id'=>$data
-                            ]
-                        ]);
-                    }
+                }else
+                {
+                    return Json::encode([
+                        'code' => 200,
+                        'msg' => 'ok',
+                        'data'=>[
+                            'address_id'=>$data
+                        ]
+                    ]);
                 }
-            }else
-            {
-                $code=500;
+            }
+        }else
+        {
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => 0
+            ]);
+        }
+    }
+    /**
+     * 无登录app-确认订单页面-获取收货地址
+     * @return string
+     */
+    public function actionGetaddress(){
+        $request = Yii::$app->request;
+        $address_id=$request ->get('address_id');
+        $user_address=Addressadd::GetAddress($address_id);
+        if ($user_address){
+            return Json::encode([
+                'code' => 200,
+                'msg'  => 'ok',
+                'data' => $user_address
+            ]);
+        }else{
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+    }
+    /**
+     * 无登录app-添加发票信息
+     * @return string
+     */
+    public function actionOrderinvoicelineadd(){
+        $request = \Yii::$app->request;
+        $invoice_type        = trim($request->post('invoice_type'));
+        $invoice_header_type = trim($request->post('invoice_header_type'));
+        $invoice_header      = trim($request->post('invoice_header'));
+        $invoice_content     = trim($request->post('invoice_content'));
+        if (!$invoice_type||!$invoice_header||!$invoice_content )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $invoicer_card =trim($request->post('invoicer_card'));
+        if ($invoicer_card){
+            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+            if ($isMatched==false){
+                $code=1000;
                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                    'data' => 0
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
         }
-
-        /**
-         * 无登录app-确认订单页面-获取收货地址
-         * @return string
-         */
-        public function actionGetaddress(){
-            $request = Yii::$app->request;
-            $address_id=$request ->get('address_id');
-            $user_address=Addressadd::GetAddress($address_id);
-            if ($user_address){
-                return Json::encode([
-                    'code' => 200,
-                    'msg'  => 'ok',
-                    'data' => $user_address
-                ]);
-            }else{
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                    'data' => null
-                ]);
-            }
+        $res=Invoice::AddInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
+        if ($res)
+        {
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  =>'ok',
+                'data' =>[
+                    'invoice_id'=>$res
+                ]
+            ]);
+        }else{
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+            ]);
         }
-
-       /**
-         * 无登录app-添加发票信息
-         * @return string
-         */
-        public function actionOrderinvoicelineadd(){
-            $request = \Yii::$app->request;
-            $invoice_type        = trim($request->post('invoice_type'));
-            $invoice_header_type = trim($request->post('invoice_header_type'));
-            $invoice_header      = trim($request->post('invoice_header'));
-            $invoice_content     = trim($request->post('invoice_content'));
-            if (!$invoice_type||!$invoice_header||!$invoice_content )
+    }
+    /**
+     * 线下店app-获取商品信息
+     * @return string
+     */
+    public function actionGetgoodsdata(){
+        $request = Yii::$app->request;
+        $goods_id=trim($request->post('goods_id'));
+        $goods_num=trim($request->post('goods_num'));
+        if (!$goods_id || !$goods_num){
+            $goods_id=$request->get('goods_id');
+            $goods_num=$request->get('goods_num');
+            if (!$goods_id || !$goods_num)
             {
                 $code=1000;
                 return Json::encode([
@@ -258,74 +303,23 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $invoicer_card =trim($request->post('invoicer_card'));
-            if ($invoicer_card){
-                $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
-                if ($isMatched==false){
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
-            $res=Invoice::AddInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
-            if ($res)
-            {
-                $code=200;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  =>'ok',
-                    'data' =>[
-                        'invoice_id'=>$res
-                    ]
-                ]);
-            }else{
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
         }
-
-        /**
-         * 线下店app-获取商品信息
-         * @return string
-         */
-        public function actionGetgoodsdata(){
-            $request = Yii::$app->request;
-            $goods_id=trim($request->post('goods_id'));
-            $goods_num=trim($request->post('goods_num'));
-            if (!$goods_id || !$goods_num){
-                $goods_id=$request->get('goods_id');
-                $goods_num=$request->get('goods_num');
-                if (!$goods_id || !$goods_num)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
-            $data=GoodsOrder::GetLineGoodsData($goods_id,$goods_num);
-           if (is_numeric($data))
-           {
-               $code=$data;
-               return Json::encode([
-                   'code' => $code,
-                   'msg'  => Yii::$app->params['errorCodes'][$code]
-               ]);
-           }else{
-               return Json::encode([
-                   'code' => 200,
-                   'msg'  =>'ok',
-                   'data'=>$data
-               ]);
-           }
-    }
-
+        $data=GoodsOrder::GetLineGoodsData($goods_id,$goods_num);
+       if (is_numeric($data))
+       {
+           $code=$data;
+           return Json::encode([
+               'code' => $code,
+               'msg'  => Yii::$app->params['errorCodes'][$code]
+           ]);
+       }else{
+           return Json::encode([
+               'code' => 200,
+               'msg'  =>'ok',
+               'data'=>$data
+           ]);
+       }
+}
     /**
      * 无登录app-获取发票信息
      * @return string
@@ -360,8 +354,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * 判断是否是微信登录
      */
@@ -384,7 +376,6 @@ class OrderController extends Controller
         }
 
     }
-
     /**
      * 智能报价-样板间支付定金提交
      * @return string
@@ -416,7 +407,6 @@ class OrderController extends Controller
             'msg' => 'ok'
         ]);
     }
-
     /**
      * 样板间支付订单异步返回
      */
@@ -518,7 +508,6 @@ class OrderController extends Controller
             echo "fail";    //请不要修改或删除
         }
     }
-
     /**
      * 线下店商城支付宝支付提交订单
      */
@@ -595,7 +584,6 @@ class OrderController extends Controller
                 ]);
             }
     }
-
     /**
      * 支付宝线下店商城异步返回操作-购买回调
      */
@@ -629,7 +617,6 @@ class OrderController extends Controller
             echo "fail";  //请不要修改或删除
         }
     }
-
     /**
      * 获取支付测试数据
      * @return string
@@ -642,7 +629,6 @@ class OrderController extends Controller
             'data' => $data
         ]);
     }
-
      /**
      * wxpay effect sub
      * 微信样板间支付
@@ -686,7 +672,6 @@ class OrderController extends Controller
             'data' => $res
         ]);
     }
-
     /**
      *提交订单-线下店商城-微信支付
      */
@@ -743,70 +728,48 @@ class OrderController extends Controller
             'data'=>$url
         ]);
     }
-
-
-
-         /**
-         * 获取openID2-微信
-         * @return string
-         */
-        public function  actionWxLinePay()
-        {
-            $orders=array(
-                'address_id'=> Yii::$app->session['address_id'],
-                'invoice_id'=> Yii::$app->session['invoice_id'],
-                'goods_id'=> Yii::$app->session['goods_id'],
-                'goods_num'=> Yii::$app->session['goods_num'],
-                'order_price'=> Yii::$app->session['order_price'],
-                'goods_name'=> Yii::$app->session['goods_name'],
-                'pay_name'=> Yii::$app->session['pay_name'],
-                'supplier_id'=> Yii::$app->session['supplier_id'],
-                'freight'=> Yii::$app->session['freight'],
-                'return_insurance'=> Yii::$app->session['return_insurance'],
-                'body'=> Yii::$app->session['body'],
-                'order_no'=> Yii::$app->session['order_no'],
-                'buyer_message'=> Yii::$app->session['buyer_message'],
-                'total_amount'=> Yii::$app->session['total_amount']
-            );
-                if (! Yii::$app->session['address_id']
-                    || !Yii::$app->session['goods_id']
-                    || !Yii::$app->session['goods_num']
-                    || !Yii::$app->session['order_price']
-                    || !Yii::$app->session['pay_name']
-                    || !Yii::$app->session['supplier_id']
-                    || !Yii::$app->session['freight']
-                    || !Yii::$app->session['order_no']
-                    || !Yii::$app->session['total_amount']
-                )
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $address=Addressadd::findOne(Yii::$app->session['address_id']);
-                {
-                    if (!$address)
-                    {
-                        $code=1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg'  => Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-                }
-            $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
-            if (!$invoice)
+     /**
+     * 获取openID2-微信
+     * @return string
+     */
+    public function  actionWxLinePay()
+    {
+        $orders=array(
+            'address_id'=> Yii::$app->session['address_id'],
+            'invoice_id'=> Yii::$app->session['invoice_id'],
+            'goods_id'=> Yii::$app->session['goods_id'],
+            'goods_num'=> Yii::$app->session['goods_num'],
+            'order_price'=> Yii::$app->session['order_price'],
+            'goods_name'=> Yii::$app->session['goods_name'],
+            'pay_name'=> Yii::$app->session['pay_name'],
+            'supplier_id'=> Yii::$app->session['supplier_id'],
+            'freight'=> Yii::$app->session['freight'],
+            'return_insurance'=> Yii::$app->session['return_insurance'],
+            'body'=> Yii::$app->session['body'],
+            'order_no'=> Yii::$app->session['order_no'],
+            'buyer_message'=> Yii::$app->session['buyer_message'],
+            'total_amount'=> Yii::$app->session['total_amount']
+        );
+            if (! Yii::$app->session['address_id']
+                || !Yii::$app->session['goods_id']
+                || !Yii::$app->session['goods_num']
+                || !Yii::$app->session['order_price']
+                || !Yii::$app->session['pay_name']
+                || !Yii::$app->session['supplier_id']
+                || !Yii::$app->session['freight']
+                || !Yii::$app->session['order_no']
+                || !Yii::$app->session['total_amount']
+            )
             {
-                $address=Addressadd::findOne(Yii::$app->session['address_id']);
-                $in=new Invoice();
-                $in->invoice_type=1;
-                $in->invoice_header_type=1;
-                $in->invoice_header=$address->consignee;
-                $in->invoice_content='明细';
-                $res=$in->save(false);
-                if (!$res)
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $address=Addressadd::findOne(Yii::$app->session['address_id']);
+            {
+                if (!$address)
                 {
                     $code=1000;
                     return Json::encode([
@@ -814,19 +777,37 @@ class OrderController extends Controller
                         'msg'  => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                $orders['invoice_id']=$in->id;
             }
-            $openid=(new PayService())->GetOpenid();
-            $model=new Wxpay();
-            $data=$model->WxLineApiPay($orders,$openid);
-            $code=200;
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>'ok',
-                'data'=>$data
-            ]);
+        $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
+        if (!$invoice)
+        {
+            $address=Addressadd::findOne(Yii::$app->session['address_id']);
+            $in=new Invoice();
+            $in->invoice_type=1;
+            $in->invoice_header_type=1;
+            $in->invoice_header=$address->consignee;
+            $in->invoice_content='明细';
+            $res=$in->save(false);
+            if (!$res)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $orders['invoice_id']=$in->id;
         }
-
+        $openid=(new PayService())->GetOpenid();
+        $model=new Wxpay();
+        $data=$model->WxLineApiPay($orders,$openid);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action
@@ -925,9 +906,6 @@ class OrderController extends Controller
             return false;
         }
     }
-
-
-
     /**
      *微信线下支付异步操作
      */
@@ -963,7 +941,6 @@ class OrderController extends Controller
             return false;
         }
     }
-
     /**
      * 获取订单状态
      * find order type
@@ -977,8 +954,6 @@ class OrderController extends Controller
             'data'=>$order_type_list
         ]);
     }
-
-
      /**
      * 大后台订单列表
      * find order list by admin user
@@ -1108,8 +1083,6 @@ class OrderController extends Controller
                 'data'=>$paginationData
             ]);
     }
-
-
     /**
      *大后台之查看订单详情
      */
@@ -1130,7 +1103,7 @@ class OrderController extends Controller
             }
         }
         //获取订单信息
-        $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
+        $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
         if (!$order_information) {
             $code = 500;
             return Json::encode([
@@ -1242,8 +1215,6 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
-
-
     public  function  actionPlatformUp()
     {
         $request    = Yii::$app->request;
@@ -1262,8 +1233,7 @@ class OrderController extends Controller
             return $code;
         }
     }
-
-   /**
+    /**
      * 订单平台介入-操作
      * @return int|string
      */
@@ -1345,7 +1315,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * supplier order list
      * @return string
@@ -1438,7 +1407,6 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-
     /**
      * 商家后台获取订单详情
      * @return string
@@ -1455,7 +1423,7 @@ class OrderController extends Controller
             ]);
         }
         //获取订单信息
-        $order_information=GoodsOrder::Getorderinformation($order_no,$sku);
+        $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
         if (!$order_information) {
             $code = 1000;
             return Json::encode([
@@ -1599,8 +1567,6 @@ class OrderController extends Controller
                 'data' =>$data
           ]);
 }
-
-
     /**
      * 去发货--商家后台
      * @return string
@@ -1693,7 +1659,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * 修改快递单号
      * @return string
@@ -1740,8 +1705,7 @@ class OrderController extends Controller
             ]);
         }
     }
-
-   /**
+    /**
      * 获取物流信息
      * @return string
      */
@@ -1844,7 +1808,6 @@ class OrderController extends Controller
             ],
         ]);
     }
-
     /**
      * @return string
      */
@@ -1928,7 +1891,6 @@ class OrderController extends Controller
         }
         return $user->getId();
     }
-
     /**
      * @param $user
      * @return mixed|string
@@ -1948,8 +1910,6 @@ class OrderController extends Controller
         }
         return $lhzz['id'];
     }
-
-
     /**
      * user apply refund
      * @return string
@@ -2077,7 +2037,6 @@ class OrderController extends Controller
                ]);
            }
     }
-
    /**
      * get refund list
      * by order_no and sku
@@ -2118,7 +2077,6 @@ class OrderController extends Controller
                 'data'=>$arr
         ]);
     }
-
     /**退款处理
      * @return string
      */
@@ -2210,9 +2168,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
-
      /**获取退款详情
      * @return string
      */
@@ -2252,7 +2207,6 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
-
     /**
      * app端  用户获取订单列表
      * @return string
@@ -2314,8 +2268,6 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-
-
     /**
      * @return string
      */
@@ -2334,12 +2286,11 @@ class OrderController extends Controller
         $user->availableamount=100000000;
         $user->save(false);
     }
-
-  /**
-   * 余额支付
-   * @return string
-  */
-  public  function  actionBalancePay(){
+    /**
+    * 余额支付
+    * @return string
+    */
+    public  function  actionBalancePay(){
     $user = Yii::$app->user->identity;
     if (!$user){
         $code=1052;
@@ -2377,8 +2328,7 @@ class OrderController extends Controller
             'msg' => Yii::$app->params['errorCodes'][$code]
         ]);
     }
-}
-
+    }
     /**
      * 获取订单详情
      * @return string
@@ -2441,7 +2391,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
    /**
      * 用户去评论
      * @return string
@@ -2480,8 +2429,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
    /**
      * get order comment
      * @return int|string
@@ -2563,8 +2510,6 @@ class OrderController extends Controller
             'data'=>$comment
         ]);
     }
-
-
     /**
      * @return string
      */
@@ -2593,8 +2538,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * @return string
      */
@@ -2623,7 +2566,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
     /**
      *用户申请售后
      * @return string
@@ -2663,8 +2605,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * 商家售后操作-- 同意  or  驳回
      * @return string
@@ -2699,8 +2639,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * 订单售后详情--大后台，商家后台
      * @return string
@@ -2791,7 +2729,6 @@ class OrderController extends Controller
             ]
         ]);
     }
-
      /**售后详情
      * @return array|string
      */
@@ -2862,10 +2799,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
-
-
-
     /**
      * 售后详情 -- 商家派出人员
      * 上门服务
@@ -2924,7 +2857,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
      /**售后详情 -- 商家确认
      * 上门服务
      * @return string
@@ -2985,8 +2917,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**订单详情 -- 用户确认
      * 上门服务
      * @return string
@@ -3157,8 +3087,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
      /**
      * 用户确认收货
      * @return string
@@ -3188,7 +3116,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * 商家获取异常状态
      * @return string
@@ -3402,8 +3329,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
-
     /**
      * 大后台获取异常信息
      * @return string
@@ -3613,7 +3538,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
    /**
      * 去付款支付宝app支付
      * @return string
@@ -3663,8 +3587,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
-
    /**
      * 支付宝APP支付付款数据库操作--异步返回
      */
@@ -3804,8 +3726,6 @@ class OrderController extends Controller
             echo "fail";    //请不要修改或删除
         }
     }
-
-
     /**
      * 获取订单数量
      * @return string
@@ -3885,8 +3805,6 @@ class OrderController extends Controller
             ]
         ]);
     }
-
-
    /**
      * 用户申请售后详情
      * @return string
@@ -3970,7 +3888,6 @@ class OrderController extends Controller
             ]
         ]);
     }
-
     /**
      * 删除评论操作
      * @return string
@@ -4089,9 +4006,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
-
      /**
      * 已删除评论列表
      * @return string
@@ -4157,7 +4071,6 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-
     /**
      * 删除评论详情
      * @return string
@@ -4252,7 +4165,6 @@ class OrderController extends Controller
         ]);
 
     }
-
     /**
      * 订单详情-商品详情
      * @return string
@@ -4451,8 +4363,6 @@ class OrderController extends Controller
             ]
         ]);
     }
-
-
     /**
      * 售后发货
      * @return string
@@ -4547,8 +4457,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * 获取openID1-微信
      * @return string
@@ -4566,8 +4474,6 @@ class OrderController extends Controller
             ]);
 
     }
-
-
     /**
      * @return string
      */
@@ -4605,22 +4511,18 @@ class OrderController extends Controller
                 ]);
          }
      }
-
-
-     public  function  actionReturnUrl()
-     {
-         $tools = new PayService();
-         $code=Yii::$app->request->get('code');
-         $openid = $tools->getOpenidFromMp($code);
-         Yii::$app->session['openId']=$openid;
-         echo $openid;
-     }
-
+    public  function  actionReturnUrl()
+    {
+     $tools = new PayService();
+     $code=Yii::$app->request->get('code');
+     $openid = $tools->getOpenidFromMp($code);
+     Yii::$app->session['openId']=$openid;
+     echo $openid;
+    }
     public  function  actionRetOpenId()
     {
         echo Yii::$app->session['openId'];exit;
     }
-
     public  function  actionTestOpenId2()
     {
         $tools = new PayService();
@@ -4630,7 +4532,6 @@ class OrderController extends Controller
         $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
         file_get_contents($urls);
     }
-
     public  function  actionTestOpenId()
     {
         $tools = new PayService();
@@ -4643,129 +4544,124 @@ class OrderController extends Controller
 
 
     }
-
-        /**
-         * 提醒发货接口
-         * @return string
-         */
-        public function actionRemindSendGoods()
+    /**
+     * 提醒发货接口
+     * @return string
+     */
+    public function actionRemindSendGoods()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $order_no=Yii::$app->request->post('order_no','');
+        $sku=Yii::$app->request->post('sku','');
+        $code=1000;
+        if (!$sku ||  !$order_no)
         {
-            $user = Yii::$app->user->identity;
-            if (!$user){
-                $code=1052;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $order_no=Yii::$app->request->post('order_no','');
-            $sku=Yii::$app->request->post('sku','');
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        if (!$GoodsOrder || !$OrderGoods)
+        {
             $code=1000;
-            if (!$sku ||  !$order_no)
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $cache = Yii::$app->cache;
+        $data = $cache->get(GoodsOrder::REMIND_SEND_GOODS.$user->id.$order_no);
+        if (!$data)
+        {
+            $cacheData=GoodsOrder::REMIND_SEND_GOODS.$user->id;
+            $end_time=strtotime(date('Y-m-d',time()+23*60*60+59*60))-time();
+            $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id.$order_no,$cacheData,$end_time);
+            if (!$res)
             {
+                $code=500;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-            $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-            if (!$GoodsOrder || !$OrderGoods)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $cache = Yii::$app->cache;
-            $data = $cache->get(GoodsOrder::REMIND_SEND_GOODS.$user->id.$order_no);
-            if (!$data)
-            {
-                $cacheData=GoodsOrder::REMIND_SEND_GOODS.$user->id;
-                $end_time=strtotime(date('Y-m-d',time()+23*60*60+59*60))-time();
-                $res= $cache->set(GoodsOrder::REMIND_SEND_GOODS.$user->id.$order_no,$cacheData,$end_time);
-                if (!$res)
-                {
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
 
-                $tran = Yii::$app->db->beginTransaction();
-                try{
-                    $supplier=Supplier::find()
-                        ->where(['id'=>$GoodsOrder->supplier_id])
-                        ->one();
-                    $supplier_user=User::find()
-                        ->where(['id'=>$supplier->uid])
-                        ->one();
-                    $content = "订单号{$order_no},{$OrderGoods->goods_name}...";
-                    $record=new UserNewsRecord();
-                    $record->uid=$supplier_user->id;
-                    $record->role_id=6;
-                    $record->title='请尽快发货';
-                    $record->content=$content;
-                    $record->send_time=time();
-                    $record->order_no=$order_no;
-                    $record->sku=$sku;
-                    if (!$record->save(false))
-                    {
-                        $code=500;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-                    $tran->commit();
-                }catch (Exception $e){
-                    $tran->rollBack();
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $registration_id=$supplier_user->registration_id;
-                $push=new Jpush();
-                $extras = [
-                    'role_id'=>6,
-                    'order_no'=>$order_no,
-                    'sku'=>$sku,
-                    'type'=>GoodsOrder::STATUS_DESC_DETAILS,
-                ];
-                //推送附加字段的类型
-                $m_time = '86400';//离线保留时间
-                $receive = ['registration_id'=>[$registration_id]];//设备的id标识
-                $title='请尽快发货';
-                $result = $push->push($receive,$title,$content,$extras, $m_time);
-                if (!$result)
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $supplier=Supplier::find()
+                    ->where(['id'=>$GoodsOrder->supplier_id])
+                    ->one();
+                $supplier_user=User::find()
+                    ->where(['id'=>$supplier->uid])
+                    ->one();
+                $content = "订单号{$order_no},{$OrderGoods->goods_name}...";
+                $record=new UserNewsRecord();
+                $record->uid=$supplier_user->id;
+                $record->role_id=6;
+                $record->title='请尽快发货';
+                $record->content=$content;
+                $record->send_time=time();
+                $record->order_no=$order_no;
+                $record->sku=$sku;
+                if (!$record->save(false))
                 {
-                    $code=1000;
+                    $code=500;
                     return Json::encode([
                         'code' => $code,
                         'msg' => \Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
-                return Json::encode([
-                    'code' =>  200,
-                    'msg'  => '提醒发货',
-                    'data' =>$end_time
-                ]);
-            }else{
-                $code=200;
+                $tran->commit();
+            }catch (Exception $e){
+                $tran->rollBack();
+                $code=500;
                 return Json::encode([
                     'code' => $code,
-                    'msg'  =>'你已经提醒过发货了'
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+            $registration_id=$supplier_user->registration_id;
+            $push=new Jpush();
+            $extras = [
+                'role_id'=>6,
+                'order_no'=>$order_no,
+                'sku'=>$sku,
+                'type'=>GoodsOrder::STATUS_DESC_DETAILS,
+            ];
+            //推送附加字段的类型
+            $m_time = '86400';//离线保留时间
+            $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+            $title='请尽快发货';
+            $result = $push->push($receive,$title,$content,$extras, $m_time);
+            if (!$result)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            return Json::encode([
+                'code' =>  200,
+                'msg'  => '提醒发货',
+                'data' =>$end_time
+            ]);
+        }else{
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  =>'你已经提醒过发货了'
+            ]);
         }
-
-
-
-
+    }
     /**
      * 删除购物车商品
      * @return string
@@ -4813,7 +4709,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * app购买商品
      * @return string
@@ -4858,7 +4753,6 @@ class OrderController extends Controller
             'data' =>$orders
         ]);
     }
-
     /**
      * 测试收货
      * @return int|string
@@ -4944,7 +4838,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * 去付款-微信app支付
      * @return string
@@ -4995,8 +4888,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
-
     /**
      * @return bool
      */
@@ -5129,9 +5020,6 @@ class OrderController extends Controller
             return true;
         }
     }
-
-
-
     /**
      * 获取购物车列表
      * @return string
@@ -5170,8 +5058,6 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-
-
     /**
      * 添加购物车-app端
      * @return string
@@ -5241,8 +5127,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * 计算运费
      * @return string
@@ -5353,7 +5237,6 @@ class OrderController extends Controller
             'data'=>GoodsOrder::switchMoney($freight*0.01)
         ]);
     }
-
     /**
      * 订单详情页-获取商品信息
      * @return string
@@ -5481,8 +5364,6 @@ class OrderController extends Controller
             ]
         ]);
     }
-
-
     /**
      * 清空失效商品
      * @return string
@@ -5555,8 +5436,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
-
     /**
      * 获取平台介入操作状态
      * @return string
@@ -5737,8 +5616,6 @@ class OrderController extends Controller
             }
         }
     }
-
-
     /**
      * 关闭订单操作
      * @return string
@@ -5798,7 +5675,6 @@ class OrderController extends Controller
         );
 
     }
-
     /**
      * 测试接口-获取商品
      * @return string
@@ -5829,7 +5705,6 @@ class OrderController extends Controller
             ]
         );
     }
-
     /**
      * 获取默认地址
      * @return string
@@ -5878,9 +5753,4 @@ class OrderController extends Controller
             'data'=>$addressList
         ]);
     }
-
-
-
-
-
 }
