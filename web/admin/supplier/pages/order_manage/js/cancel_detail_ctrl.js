@@ -51,7 +51,7 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _aja
             order_no: $stateParams.order_no,
             sku: +$stateParams.sku
         };
-        _ajax.post("/order/getsupplierorderdetails", data, function (res) {
+        _ajax.get("/order/getsupplierorderdetails", data, function (res) {
             $scope.order_detail = res.data.goods_data; //订单详情
             $scope.goods_value = res.data.goods_value; //商品详情
             $scope.receive_details = res.data.receive_details;//收货详情
@@ -59,6 +59,24 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _aja
             $scope.is_platform = res.data.is_platform;//平台是否介入
             abnormalHandle();
             $scope.is_platform == 1?$scope.show_plat = false:platAbnormalHandle();//是否显示平台记录
+	          $scope.attr=$scope.goods_value.attr;//商品属性
+          if(!!$scope.attr.length){
+	          for(let[key,value] of $scope.attr.entries()){
+		          if(value.unit==0){
+			          value.unit=''
+		          }else if(value.unit==1){
+			          value.unit='L'
+		          }else if(value.unit==2){
+			          value.unit='M'
+		          }else if(value.unit==3){
+			          value.unit='M²'
+		          }else if(value.unit==4){
+			          value.unit='Kg'
+		          }else if(value.unit==5){
+			          value.unit='MM'
+		          }
+	          }
+          }
         });
     }
 

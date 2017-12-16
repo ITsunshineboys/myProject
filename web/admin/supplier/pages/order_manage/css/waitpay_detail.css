@@ -13,16 +13,9 @@ h3 {
 .row{
     margin-bottom: 20px;
 }
-
-.good_attr {
-    display: inline-block;
-    vertical-align: text-top;
-    margin-left: 83px;
-    padding: 0;
-}
-
-.good_attr li {
-    margin-bottom: 14px;
+.attr_span{
+    padding-left: 0;
+    margin-bottom: 10px;
 }
 
 #total{

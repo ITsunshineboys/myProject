@@ -103,15 +103,17 @@
         </div>
 
         <!--商品属性-->
-        <div class="order_state">
-            <span>商品属性</span>
-
-            <ul class="good_attr">
-                <li ng-repeat="item in goods_value.attr">
-                    <span ng-bind="item.name"></span>
-                    <span ng-bind="item.value"></span>
-                </li>
-            </ul>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span>商品属性</span>
+            </div>
+            <div class="col-sm-4 control-label">
+                <div ng-repeat="item in attr">
+                    <span class="col-sm-6 attr_span" ng-if="item.unit==''">{{item.name}}</span>
+                    <span class="col-sm-6 attr_span" ng-if="item.unit!=''">{{item.name}}{{'( '+item.unit+' )'}}</span>
+                    <span class="col-sm-6 attr_span">{{item.value}}</span>
+                </div>
+            </div>
         </div>
         <hr/>
 

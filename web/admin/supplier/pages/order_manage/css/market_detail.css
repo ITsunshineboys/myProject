@@ -35,6 +35,10 @@ h3 {
     font-size: 12px;
     color: #979899;
 }
+.attr_span{
+    padding-left: 0;
+    margin-bottom: 10px;
+}
 .arrow_class{
     color: #487AF8;
     cursor: pointer;

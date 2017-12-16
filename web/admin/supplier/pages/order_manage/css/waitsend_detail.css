@@ -13,6 +13,10 @@ h3 {
 .hr_p{
     border-bottom: 1px solid #eee;
 }
+.attr_span{
+    padding-left: 0;
+    margin-bottom: 10px;
+}
 .arrow_class{
     color: #487AF8;
     cursor: pointer;
@@ -53,11 +57,7 @@ h3 {
     color: red;
 }
 
-/*属性*/
-.attr_span{
-    display: inline-block;
-    width: 80px;
-}
+
 
 .ver_top{
     vertical-align: top;

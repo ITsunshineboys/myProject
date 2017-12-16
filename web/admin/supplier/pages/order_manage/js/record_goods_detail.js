@@ -24,7 +24,7 @@ angular.module('goods_detail_module',[])
     },{
         name:'记录商品详情'
     }];
-  _ajax.post("/order/getsupplierorderdetails",{
+  _ajax.get("/order/getsupplierorderdetails",{
       order_no:$stateParams.order_no,
       sku:$stateParams.sku
   },function (res) {

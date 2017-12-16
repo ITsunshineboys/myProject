@@ -19,7 +19,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       name: '订单详情',
   }];
     //详情数据
-  _ajax.post('/order/getsupplierorderdetails',{
+  _ajax.get('/order/getsupplierorderdetails',{
       order_no:$stateParams.order_no,
       sku:$stateParams.sku
   },function (res) {
@@ -47,7 +47,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       $scope.goods_name=$scope.item.goods_value.goods_name;//商品名称
       $scope.sku=$scope.item.goods_data.sku;//商品编号
       //$scope.goods_id=$stateParams.item.goods_value.goods_id;//商品编号
-      //$scope.attr=$scope.item.goods_value.attr[0];
+      $scope.attr=$scope.item.goods_value.attr;
       //收货详情
       $scope.consignee=$scope.item.receive_details.consignee;//收货人
       $scope.district=$scope.item.receive_details.district;//收获地址
@@ -57,21 +57,24 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       $scope.invoice_header=$scope.item.receive_details.invoice_header;//抬头
       $scope.invoicer_card=$scope.item.receive_details.invoicer_card;//纳税人识别码
       $scope.invoice_content=$scope.item.receive_details.invoice_content;//发票内容
-      // for(let[key,value] of $scope.attr.entries()){
-      //     if(value.unit==0){
-      //         value.unit=''
-      //     }else if(value.unit==1){
-      //         value.unit='L'
-      //     }else if(value.unit==2){
-      //         value.unit='M'
-      //     }else if(value.unit==3){
-      //         value.unit='M²'
-      //     }else if(value.unit==4){
-      //         value.unit='Kg'
-      //     }else if(value.unit==5){
-      //         value.unit='MM'
-      //     }
-      // }
+      if(!!$scope.attr.length){
+	      for(let[key,value] of $scope.attr.entries()){
+		      if(value.unit==0){
+			      value.unit=''
+		      }else if(value.unit==1){
+			      value.unit='L'
+		      }else if(value.unit==2){
+			      value.unit='M'
+		      }else if(value.unit==3){
+			      value.unit='M²'
+		      }else if(value.unit==4){
+			      value.unit='Kg'
+		      }else if(value.unit==5){
+			      value.unit='MM'
+		      }
+	      }
+      }
+
       //异常
       _ajax.post('/order/find-unusual-list',{
           order_no:$scope.order_no,

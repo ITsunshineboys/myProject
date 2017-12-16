@@ -13,7 +13,10 @@ h3 {
 .row{
     margin-bottom: 20px;
 }
-
+.attr_span{
+    padding-left: 0;
+    margin-bottom: 10px;
+}
 .money_hr{
     margin: 10px 0;
     padding-left: 0;
