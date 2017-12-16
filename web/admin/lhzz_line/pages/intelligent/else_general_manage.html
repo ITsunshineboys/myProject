@@ -1,69 +1,65 @@
 <div class="else_general_manage">
     <form novalidate name="else_general_manage" >
-        <div style="margin-top: 50px;" ng-if="cur_edit_item.title != '泥作'">
-            <div class="row" ng-repeat="item in main_item" style="margin-bottom: 10px;">
+        <div style="margin-top: 50px;" ng-if="project_name != '泥作'">
+            <div class="row" ng-repeat="item in basic_data" style="margin-bottom: 10px;">
                 <p class="col-md-2" style="margin:5px 0!important;"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{item.project}}</p>
                 <p class="col-md-2">
-                    <input type="text" name="main_item{{index}}" required ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/"
+                    <input type="text" name="main_item{{$index}}" required ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/"
                            ng-model="item.project_value" class="form-control" ng-blur="item.flag = !!else_general_manage['main_item'+$index].$error"
                     ng-class="{'error':(else_general_manage['main_item'+$index].$invalid&&submitted)||((else_general_manage['main_item'+$index].$error.required||
                     else_general_manage['main_item'+$index].$error.pattern)&&item.flag)}"
                            autocomplete="off">
                 </p>
-                <p class="col-md-1" style="margin:5px 0!important;" ng-if="item.project.indexOf('百分比')!=-1">%</p>
-                <p class="col-md-1" style="margin:5px 0!important;"
-                   ng-if="item.project.indexOf('高度')!=-1||item.project.indexOf('长度')!=-1">m</p>
-                <p class="col-md-1" style="margin:5px 0!important;" ng-if="item.project.indexOf('面积')!=-1&&item.project.indexOf('百分比')==-1">m<sup>2</sup>
-                </p>
+                <p class="col-md-1" style="margin:5px 0!important;">{{item.unit}}</p>
                 <p class="col-md-7">*≥0的数字，精确到小数点后两位</p>
             </div>
         </div>
-        <div style="margin-top: 50px;" ng-if="cur_edit_item.title == '泥作'">
+        <div style="margin-top: 50px;" ng-if="project_name == '泥作'">
             <div class="row">
                 <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>贴墙砖相关</p>
                 <div class="col-md-10">
                     <div class="row">
                         <p class="col-md-2">层高高度</p>
                         <p class="col-md-2">贴墙砖高度</p>
-                    </div>  
-                    <div class="row" ng-repeat="item in main_item">
+                    </div>
+                    <div class="row" ng-repeat="item in basic_data">
                         <p class="col-md-2" style="margin: 5px 0 !important;">{{item.project}}</p>
                         <p class="col-md-2">
-                            <input type="text" name="height{{index}}" class="form-control" required ng-pattern="/^0.[1-9]\d?$|^0.0[1-9]$|^[1-9]\d{0,}(.\d{1,2})?$/"
-                                   ng-blur="item.flag = !!else_general_manage['height'+index].$error " autocomplete="off"
-                                   ng-class="{'error':(else_general_manage['height'+index].$invalid&&submitted)||((else_general_manage['height'+index].$error.required||else_general_manage['height'+index].$error.pattern)&&item.flag)}" ng-model="item.project_value" placeholder="请输入数值">
+                            <input type="text" name="height{{$index}}" class="form-control" required ng-pattern="/^\d{1,}(\.\d{1,2})?$/"
+                                   ng-blur="item.flag = !!else_general_manage['height'+$index].$error " autocomplete="off"
+                                   ng-class="{'error':(else_general_manage['height'+$index].$invalid&&submitted)||((else_general_manage['height'+$index].$error.required||else_general_manage['height'+$index].$error.pattern)&&item.flag)}" ng-model="item.project_value" placeholder="请输入数值">
                         </p>
-                        <p class="col-md-1">m</p>
+                        <p class="col-md-1">{{item.unit}}</p>
                         <p class="col-md-7">*≥0的数字，精确到小数点后两位</p>
                     </div>
                 </div>
             </div>
         </div>
-            <div class="row" style="margin-top: 50px;" ng-repeat="item in cur_area_range">
+            <div class="row" style="margin-top: 50px;" ng-repeat="item in area_data">
                 <p class="col-md-2"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型相关</p>
                 <div class="col-md-10">
                     <div class="row">
                        <p class="col-md-2">户型面积</p>
-                       <p class="col-md-2">{{item.title}}</p>
+                       <p class="col-md-2">{{item.project_name}}</p>
                     </div>
-                    <div class="row" ng-repeat="item1 in item.all_area_range">
+                    <div class="row" ng-repeat="item1 in item.else_area">
                        <p class="col-md-2" ng-if="+item1.min_area == 1" style="margin:5px 0!important;">{{+item1.max_area+1}}m<sup>2</sup>以下</p>
                         <p class="col-md-2" ng-if="+item1.min_area != 1" style="margin:5px 0!important;">{{item1.min_area}}m<sup>2</sup>~{{item1.max_area}}m<sup>2</sup></p>
                        <p class="col-md-2">
                            <input type="text" required  ng-pattern="regx" name="area_num{{$parent.$index}}{{$index}}" autocomplete="off"
-                                  ng-blur="item1.flag = !!else_general_manage['area_num'+$parent.$index+$index].$error" ng-model="item1.num"
+                                  ng-blur="item1.flag = !!else_general_manage['area_num'+$parent.$index+$index].$error" ng-model="item1.project_value"
                                   ng-class="{'error':(else_general_manage['area_num'+$parent.$index+$index].$invalid&&submitted)||((else_general_manage['area_num'+$parent.$index+$index].$error.required||
                                   else_general_manage['area_num'+$parent.$index+$index].$error.pattern)&&item1.flag)}" class="form-control" placeholder="请输入数值">
                        </p>
-                       <p class="col-md-1" ng-if="cur_edit_item.title != '杂工'" style="margin:5px 0!important;">m<sup ng-if="item.title.indexOf('面积')!=-1">2</sup></p>
-                       <p class="col-md-1" ng-if="cur_edit_item.title == '杂工'" style="margin:5px 0!important;">天</p>
+                       <p class="col-md-1" ng-if="project_name != '杂工'" style="margin:5px 0!important;">m²</p>
+                       <p class="col-md-1" ng-if="project_name == '杂工'" style="margin:5px 0!important;">天</p>
                         <p class="col-md-7">*≥0的数字，精确到小数点后两位</p>
                     </div>
                 </div>
             </div>
         <div class="from-group submit">
-            <button class="btn btn-primary" type="submit" ng-click="save_else_general(else_general_manage.$valid)">保存</button>
-            <button type="button" class="btn btn-default" ng-click="return_general_manage()">返回</button>
+            <button class="btn btn-primary" type="submit" ng-click="saveData(else_general_manage.$valid)">保存</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>

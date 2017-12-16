@@ -21,9 +21,9 @@ app.controller('general_manage_ctrl',function ($rootScope,_ajax,$scope,$statePar
         if(item.title.indexOf('点位')!=-1){
             $state.go('general_detail',{id:item.id})
         }else if(item.title == '户型面积'){
-
+            $state.go('house_area',{id:item.id})
         }else{
-            $state.go('else_general_manage')
+            $state.go('else_general_manage',{id:item.id,title:item.title})
         }
     }
 })

@@ -9,7 +9,7 @@
     font-weight:bold;
     margin-bottom:30px;
 }
-.house_area button{
+.house_area .row button{
     background: #000;
     color: #fff;
     border:0;
@@ -28,12 +28,9 @@
     width:70px;
     height: 32px;
     font-size:12px;
-    background: none;
-    border:.5px solid #ccc;
     margin-left:10px;
     margin-right:10px;
     border-radius:2px;
-    color: #000;
 }
 .house_area .remove{
     border-color: #3F94F6!important;
