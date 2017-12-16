@@ -2305,43 +2305,43 @@ class OrderController extends Controller
     * @return string
     */
     public  function  actionBalancePay(){
-    $user = Yii::$app->user->identity;
-    if (!$user){
-        $code=1052;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $postData = Yii::$app->request->post();
-    if(!array_key_exists('pay_password', $postData)){
-        $code=1000;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
-    {
-        $code=1055;
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>Yii::$app->params['errorCodes'][$code],
-            'data'=>$user->mobile
-        ]);
-    }
-    $code=GoodsOrder::orderBalanceSub($postData,$user);
-    if ($code==200){
-        return Json::encode([
-            'code'=>$code,
-            'msg'=>'ok'
-        ]);
-    }else{
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $postData = Yii::$app->request->post();
+        if(!array_key_exists('pay_password', $postData)){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
+        {
+            $code=1055;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>Yii::$app->params['errorCodes'][$code],
+                'data'=>$user->mobile
+            ]);
+        }
+        $code=GoodsOrder::orderBalanceSub($postData,$user);
+        if ($code==200){
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>'ok'
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     }
     /**
      * 获取订单详情
@@ -2940,7 +2940,8 @@ class OrderController extends Controller
             ]);
         }
     }
-    /**订单详情 -- 用户确认
+    /**
+     * 订单详情 -- 用户确认
      * 上门服务
      * @return string
      */
@@ -3857,10 +3858,15 @@ class OrderController extends Controller
         $sku=$request->post('sku','');
         if (!$order_no || !$sku)
         {
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $order_no=$request->get('order_no','');
+            $sku=$request->get('sku','');
+            if (!$order_no || !$sku)
+            {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
