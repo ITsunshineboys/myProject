@@ -145,7 +145,7 @@ class OrderController extends Controller
      */
     public  function  actionGetcity(){
         $request=Yii::$app->request;
-        $code=trim($request->post('code',''));
+        $code=trim($request->get('code',''));
         if (!$code){
             $c=1000;
             return Json::encode([
@@ -2358,11 +2358,14 @@ class OrderController extends Controller
         }
         $postData = Yii::$app->request->post();
         if(!array_key_exists('order_no', $postData)){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $postData = Yii::$app->request->get();
+            if(!array_key_exists('order_no', $postData)){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
          if(array_key_exists('sku', $postData) || !$postData['sku']==0){
             $record=UserNewsRecord::find()
