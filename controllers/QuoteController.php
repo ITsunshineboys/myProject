@@ -17,6 +17,7 @@ use app\models\DecorationMessage;
 use app\models\DecorationParticulars;
 use app\models\District;
 use app\models\Effect;
+
 use app\models\EffectPicture;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCarpentryCraft;
@@ -2004,6 +2005,49 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
          // 户型面积
+//        if (isset($post['apartment_area'])) {
+//            ApartmentArea::deleteAll([]);
+//            foreach ($post['apartment_area'] as $apartment_area){
+//                $add_apartment_area = ApartmentArea::findInset($apartment_area);
+//            }
+//            if (!$add_apartment_area) {
+//                $code = 1000;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => \Yii::$app->params['errorCodes'][$code],
+//                ]);
+//            }
+//            return Json::encode([
+//                'code' => 200,
+//                'msg' => 'OK',
+//            ]);
+//        } elseif (isset($post['else'])) {
+//            foreach ($post['else'] as $else){
+//                // 其它修改
+//                if (isset($else['value'])){
+//                    $value = $else['value'];
+//                    foreach ($value as $one_value){
+//                        ProjectView::findByUpdate($one_value['coefficient'],$one_value['id']);
+//                    }
+//                }
+//                if (isset($else['area'])){
+//                    foreach ($else['area'] as $one_else){
+//                        if (isset($one_else['id'])){
+//                            Apartment::findByUpdate($one_else['value'],$one_else['id']);
+//                        }
+//
+//                        if (isset($one_else['min_area'])) {
+//                            Apartment::findByInsert($one_else);
+//                        }
+//                    }
+//                }
+//            };
+//            return Json::encode([
+//                'code' => 200,
+//                'msg' => 'ok',
+//            ]);
+//        }
+    //TODO 修改
         if (isset($post['apartment_area'])) {
             ApartmentArea::deleteAll([]);
             foreach ($post['apartment_area'] as $apartment_area){
@@ -2016,24 +2060,15 @@ class QuoteController extends Controller
                     'msg' => \Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'OK',
-            ]);
-        } elseif (isset($post['else'])) {
-            foreach ($post['else'] as $else){
-                // 其它修改
-                if (isset($else['value'])){
-                    $value = $else['value'];
-                    foreach ($value as $one_value){
-                        ProjectView::findByUpdate($one_value['coefficient'],$one_value['id']);
-                    }
-                }
+        }elseif (isset($post['value'])) {
 
-                if (isset($else['area'])){
-                    foreach ($else['area'] as $one_else){
+            foreach ($post['value'] as $one_value) {
+                ProjectView::findByUpdate($one_value['coefficient'], $one_value['id']);
+            }
+        }elseif (isset($post['area'])){
+            foreach ($post['area'] as $one_else){
                         if (isset($one_else['id'])){
-                            Apartment::findByUpdate($one_else['value'],$one_else['id']);
+                             Apartment::findByUpdate($one_else['value'],$one_else['id']);
                         }
 
                         if (isset($one_else['min_area'])) {
@@ -2041,13 +2076,13 @@ class QuoteController extends Controller
                         }
                     }
                 }
-            };
-            return Json::encode([
+        return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
             ]);
         }
-    }
+
+
 
     /**
      * 智能报价配套商品管理 列表
