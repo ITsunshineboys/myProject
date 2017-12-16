@@ -178,7 +178,7 @@ class OrderController extends Controller
             }else{
                 $data=Addressadd::InsertAddress($mobile,$consignee,$region,$districtCode);
                 if (!$data){
-                    $code=500;
+                    $code=1000;
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code]
@@ -196,7 +196,7 @@ class OrderController extends Controller
             }
         }else
         {
-            $code=500;
+            $code=1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
