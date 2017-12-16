@@ -13,9 +13,9 @@ class ProjectView extends ActiveRecord
 {
     const TABLE_NAME = 'project_view';
     const UNIT = [
-      1 => 'M',
+      1 => 'm',
       2 => '%',
-      3 => 'M²',
+      3 => 'm²',
     ];
     /**
      * @return string 返回该AR类关联的数据表名
