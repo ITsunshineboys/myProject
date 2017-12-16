@@ -2304,6 +2304,8 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
+     *
+     * 计算运费
      * @param $orders
      * @return array|int
      */
