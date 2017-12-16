@@ -219,11 +219,10 @@ class OrderController extends Controller
                 'data' => $user_address
             ]);
         }else{
-            $code=500;
+            $code=1000;
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }
@@ -1512,6 +1511,7 @@ class OrderController extends Controller
           $goods_data['complete_time']=$order_information['complete_time'];
           if ($order_information['shipping_type']==1){
               $goods_data['shipping_way']='送货上门';
+              $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
           }
           $goods_data['pay_name']=$order_information['pay_name'];
           if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
