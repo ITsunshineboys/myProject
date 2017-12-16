@@ -65,7 +65,6 @@ class OrderController extends Controller
         'getsupplierorderdetails',
         'expressupdate',
         'supplierdelivery',
-        'getexpress',
         'getplatformdetail',
         'getorderdetailsall',
         'platformhandlesubmit',
@@ -1079,6 +1078,7 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
+
         if(!$order_no|| !$sku){
             $order_no=trim($request->get('order_no',''));
             $sku=trim($request->get('sku',''));
@@ -1204,6 +1204,11 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
+
+    /**
+     * 测试接口
+     * @return int
+     */
     public  function  actionPlatformUp()
     {
         $request    = Yii::$app->request;
@@ -2755,11 +2760,17 @@ class OrderController extends Controller
         $sku=trim($request->post('sku',''));
         $role=trim($request->post('role','user'));
         if(!$order_no || !$sku){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $order_no=trim($request->get('order_no',''));
+            $sku=trim($request->get('sku',''));
+            $role=trim($request->get('role','user'));
+            if (!$order_no || !$sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         if (!$role)
         {
