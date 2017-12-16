@@ -2992,6 +2992,15 @@ class OrderController extends Controller
                 'msg'  =>'商品不存在'
             ]);
         }
+        $supplier=Supplier::findOne($goods->supplier_id);
+        if (!$supplier)
+        {
+            $c=1000;
+            return Json::encode([
+                'code' =>  $c,
+                'msg'  =>'商家不存在'
+            ]);
+        }
         $LogisticsTemplate=LogisticsTemplate::findOne($goods->logistics_template_id);
         $freight=1000;
         $address=Addressadd::find()
