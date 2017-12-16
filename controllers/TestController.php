@@ -199,7 +199,7 @@ class TestController extends Controller
         $GoodsOrder=GoodsOrder::find()->all();
         foreach ($GoodsOrder as &$list)
         {
-            $supplier=Supplier::findOne($list['supplier_id']);
+            $supplier=Supplier::findOne($list->supplier_id);
             if (!$supplier)
             {
                 $OrderGoods=OrderGoods::find()->where(['order_no'=>$list->order_no])->all();
