@@ -1507,6 +1507,8 @@ class OrderController extends Controller
           $goods_data['market_price']=$order_information['market_price'];
           $goods_data['shipping_type']=$order_information['shipping_type'];
           $goods_data['shipping_way']=$order_information['shipping_way'];
+          $express=Express::find()->where(['order_no'=>$order_no])->andWhere(['sku'=>$sku])->one();
+          $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
           $goods_data['complete_time']=$order_information['complete_time'];
           if ($order_information['shipping_type']==1){
               $goods_data['shipping_way']='送货上门';

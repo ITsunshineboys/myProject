@@ -855,6 +855,7 @@ class GoodsOrder extends ActiveRecord
                     if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED)
                     {
                         $arr[$k]['handle']='发货';
+                        $arr[$k]['have_handle']=1;
                     }
                     break;
                 case 'lhzz':
@@ -904,7 +905,9 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['role_id']='工人采购价';
                     break;
             }
-            $after=OrderAfterSale::find()->where(['order_no'=>$arr[$k]['order_no']])->one();
+            $after=OrderAfterSale::find()
+                ->where(['order_no'=>$arr[$k]['order_no']])
+                ->one();
             if ($after)
             {
                 if ($arr[$k]['order_refer']==2)
@@ -943,7 +946,10 @@ class GoodsOrder extends ActiveRecord
             $amount_order[$k]  = $arr[$k]['amount_order'];
             $create_time[$k]  = $arr[$k]['create_time'];
         }
-
+//        $num=self::find()
+//            ->select('SUM(amount_order) as num')
+//            ->asArray()
+//            ->one();
         if ($arr){
 
             $count=(new Query())
