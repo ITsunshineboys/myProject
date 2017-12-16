@@ -336,11 +336,10 @@ class OrderController extends Controller
                 'data' => $data
             ]);
         }else{
-            $code=1050;
+            $code=1000;
             return Json::encode([
                 'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
     }
@@ -383,7 +382,7 @@ class OrderController extends Controller
         }
         $out_trade_no =GoodsOrder::SetOrderNo();
         $res=Alipay::EffectEarnestSubmit($post,$phone,$out_trade_no);
-           if (!$res)
+        if (!$res)
         {
             $code=1000;
             return json_encode([
@@ -1405,11 +1404,16 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         if(!$order_no || !$sku){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $order_no=trim($request->get('order_no',''));
+            $sku=trim($request->get('sku',''));
+            if (!$order_no || !$sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         //获取订单信息
         $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
@@ -1706,11 +1710,16 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         if (!$order_no  || !$sku) {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+            $order_no=trim($request->get('order_no',''));
+            $sku=trim($request->get('sku',''));
+            if (!$order_no  || !$sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
         if (!$GoodsOrder)
