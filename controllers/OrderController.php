@@ -140,7 +140,6 @@ class OrderController extends Controller
             ],
         ];
     }
-
     /**
      * 获取省份
      * @return string
@@ -587,7 +586,7 @@ class OrderController extends Controller
     /**
      * 支付宝线下店商城异步返回操作-购买回调
      */
-   public function actionAlipaylinenotify(){
+    public function actionAlipaylinenotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
         $alipaySevice=$model->Alipaylinenotify();
@@ -634,7 +633,7 @@ class OrderController extends Controller
      * 微信样板间支付
      * @return string
      */
-   public function actionWxpayEffectEarnstSub(){
+    public function actionWxpayEffectEarnstSub(){
         $request = \Yii::$app->request;
         $post=$request->post();
         $code=1000;
@@ -1275,7 +1274,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * 判断收货地址是否在指定区域内
      * @return string
@@ -2037,7 +2035,7 @@ class OrderController extends Controller
                ]);
            }
     }
-   /**
+    /**
      * get refund list
      * by order_no and sku
      * @return string
@@ -2391,7 +2389,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-   /**
+    /**
      * 用户去评论
      * @return string
      */
@@ -2429,7 +2427,7 @@ class OrderController extends Controller
             ]);
         }
     }
-   /**
+    /**
      * get order comment
      * @return int|string
      */
@@ -3538,7 +3536,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-   /**
+    /**
      * 去付款支付宝app支付
      * @return string
      */
@@ -3587,10 +3585,10 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
-   /**
+    /**
      * 支付宝APP支付付款数据库操作--异步返回
      */
-   public  function  actionAppOrderPayDatabase()
+    public  function  actionAppOrderPayDatabase()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -3805,7 +3803,7 @@ class OrderController extends Controller
             ]
         ]);
     }
-   /**
+    /**
      * 用户申请售后详情
      * @return string
      */
@@ -4477,7 +4475,7 @@ class OrderController extends Controller
     /**
      * @return string
      */
-     public function  actionFindOpenId()
+    public function  actionFindOpenId()
      {
           $url=Yii::$app->request->post('url','');
           if(!$url)
