@@ -57,14 +57,10 @@ use yii\web\Controller;
 use app\services\AuthService;
 class OrderController extends Controller
 {
-
-
     const WXPAY_LINE_GOODS='线下店商城';
     /**
      * Actions accessed by logged-in users
      */
-
-
     const ACCESS_LOGGED_IN_USER = [
         'getsupplierorderdetails',
         'expressupdate',
@@ -91,7 +87,6 @@ class OrderController extends Controller
         'after-sale-delivery',
         'find-shipping-cart-list',
     ];
-
     /**
      * @inheritdoc
      */
@@ -122,9 +117,6 @@ class OrderController extends Controller
             ],
         ];
     }
-
-
-
     /**
      * @inheritdoc
      */
