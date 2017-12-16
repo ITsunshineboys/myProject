@@ -2321,6 +2321,7 @@ class GoodsOrder extends ActiveRecord
         }
         return $orderAmount;
     }
+
     /**分页数据
      * @param array $where
      * @param array $select
@@ -2328,6 +2329,7 @@ class GoodsOrder extends ActiveRecord
      * @param int $size
      * @param $type
      * @param $user
+     * @param $role
      * @return array
      */
     public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
@@ -2364,6 +2366,11 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['comment_grade']='';
                 $GoodsOrder[$k]['handle']='';
                 $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
+                if(!$sup)
+                {
+                    $code=500;
+                    return $code;
+                }
                 $GoodsOrder[$k]['shop_name']=$sup->shop_name;
                 if ($role=='user')
                 {
