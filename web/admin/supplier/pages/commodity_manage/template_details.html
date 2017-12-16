@@ -21,16 +21,12 @@
             <div class="col-sm-2 control-label">
                 <span>配送方式</span>
             </div>
-            <div class="col-sm-2 control-label">
-                <label class="c_label">
-                    <input type="radio" name="radio" ng-checked="params.delivery_method == 0" ng-model="params.delivery_method" value="0"/>
-                    <span>快递物流</span>
+            <div class="col-sm-10 control-label">
+                <label class="radio-inline">
+                    <input type="radio" name="radio" ng-checked="params.delivery_method == 0" ng-model="params.delivery_method" value="0">快递物流
                 </label>
-            </div>
-            <div class="col-sm-2 control-label">
-                <label class="c_label">
-                    <input type="radio" name="radio" ng-checked="params.delivery_method == 1" ng-model="params.delivery_method" value="1"/>
-                    <span>送货上门</span>
+                <label class="radio-inline">
+                    <input type="radio" name="radio" ng-checked="params.delivery_method == 1" ng-model="params.delivery_method" value="1">送货上门
                 </label>
             </div>
         </div>
@@ -52,16 +48,12 @@
                         <div class="col-sm-2 col-sm-offset-2 control-label">
                             <span>收费方式</span>
                         </div>
-                        <div class="col-sm-1 control-label">
-                            <label class="c_label">
-                                <input type="radio" name="a" ng-click="packageMail = true" ng-checked="packageMail"/>
-                                <span class="input_span">不包邮</span>
+                        <div class="col-sm-8 control-label">
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" ng-click="packageMail = true" ng-checked="packageMail">不包邮
                             </label>
-                        </div>
-                        <div class="col-sm-1 control-label">
-                            <label class="c_label">
-                                <input type="radio" name="a" ng-click="packageMail = false" ng-checked="!packageMail"/>
-                                <span class="input_span">包邮</span>
+                            <label class="radio-inline">
+                                <input type="radio" name="inlineRadioOptions" ng-click="packageMail = false" ng-checked="!packageMail">包邮
                             </label>
                         </div>
                     </div>

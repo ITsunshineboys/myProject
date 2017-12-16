@@ -21,16 +21,12 @@
             <div class="col-sm-2 control-label">
                 <span>配送方式</span>
             </div>
-            <div class="col-sm-2 control-label">
-                <label class="c_label">
-                    <input type="radio" name="radio" ng-click="params.delivery_method = 0" ng-checked="params.delivery_method == 0 " ng-model="params.delivery_method"/>
-                    <span>快递物流</span>
+            <div class="col-sm-10 control-label">
+                <label class="radio-inline">
+                    <input type="radio" name="radio" ng-click="params.delivery_method = 0" ng-checked="params.delivery_method == 0 " ng-model="params.delivery_method">快递物流
                 </label>
-            </div>
-            <div class="col-sm-2 control-label">
-                <label class="c_label">
-                    <input type="radio" name="radio" ng-click="params.delivery_method = 1" ng-checked="params.delivery_method == 1" ng-model="params.delivery_method"/>
-                    <span>送货上门</span>
+                <label class="radio-inline">
+                    <input type="radio" name="radio" ng-click="params.delivery_method = 1" ng-checked="params.delivery_method == 1 " ng-model="params.delivery_method">送货上门
                 </label>
             </div>
         </div>
@@ -53,16 +49,12 @@
                     <div class="col-sm-2 col-sm-offset-2 control-label">
                         <span>收费方式</span>
                     </div>
-                    <div class="col-sm-1 control-label">
-                        <label class="c_label">
-                            <input type="radio" ng-click="hidden_way = true" ng-checked="hidden_way"/>
-                            <span>不包邮</span>
+                    <div class="col-sm-8">
+                        <label class="radio-inline">
+                            <input type="radio" name="inlineRadioOptions" ng-click="hidden_way = true" ng-checked="hidden_way">不包邮
                         </label>
-                    </div>
-                    <div class="col-sm-1 control-label">
-                        <label class="c_label">
-                            <input type="radio" ng-click="hidden_way = false" ng-checked="!hidden_way"/>
-                            <span>包邮</span>
+                        <label class="radio-inline">
+                            <input type="radio" name="inlineRadioOptions" ng-click="hidden_way = false" ng-checked="!hidden_way">包邮
                         </label>
                     </div>
                 </div>
@@ -117,8 +109,8 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" ng-click="addCity()">确认</button>
-                        <button class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" data-dismiss="modal" ng-click="addCity()">确认</button>
+                        <button class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
                 </div>
             </div>

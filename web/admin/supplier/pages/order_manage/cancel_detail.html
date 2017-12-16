@@ -82,7 +82,11 @@
                 <div class="col-sm-2">完成时间</div>
                 <a class="col-sm-10" ng-bind="order_detail.complete_time"></a>
             </div>
-
+            <!--&lt;!&ndash;发货时间&ndash;&gt;-->
+            <!--<div class="row" ng-if="order_detail.shipping_way">-->
+                <!--<div class="col-sm-2">发货时间</div>-->
+                <!--<span class="col-sm-10" ng-bind="order_detail.send_time"></span>-->
+            <!--</div>-->
             <!--配送方式-->
             <div class="row" ng-if="order_detail.shipping_way">
                 <div class="col-sm-2">配送方式</div>
