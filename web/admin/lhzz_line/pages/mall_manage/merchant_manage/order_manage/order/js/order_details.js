@@ -23,7 +23,7 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
     $scope.params = params;
 
     // 获取订单详情
-    _ajax.post('/order/getsupplierorderdetails', params, function (res) {
+    _ajax.get('/order/getsupplierorderdetails', params, function (res) {
         console.log(res, '订单详情');
         let data = res.data;
         $scope.orderDetails = data.goods_data;          // 订单详情信息

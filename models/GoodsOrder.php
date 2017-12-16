@@ -2324,7 +2324,8 @@ class GoodsOrder extends ActiveRecord
         return $orderAmount;
     }
 
-    /**分页数据
+    /**
+     * 分页数据
      * @param array $where
      * @param array $select
      * @param int $page
