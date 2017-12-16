@@ -23,7 +23,11 @@
             <tr>
                 <th>
                     <span>时间</span>
-                    <img ng-src="{{time_src}}" ng-click="time_sort()" class="img_size"></th>
+                    <span class="sort" ng-click="time_sort()">
+                        <i class="iconfont icon-up" ng-class="{'active':params.sort_time == 1}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params.sort_time == 2}"></i>
+                    </span>
+                </th>
                 <th>金额</th>
                 <th>交易单号</th>
                 <th>订单号</th>
@@ -38,7 +42,10 @@
                 <td>{{item.transaction_no}}</td>
                 <td>{{item.order_no}}</td>
                 <td>{{item.access_type}}</td>
-                <td class="blue" ng-click="show_click(item.transaction_no,item.access_type)">查看</td>
+                <td>
+                    <a ng-click="show_click(item.transaction_no,item.access_type)">查看</a>
+                </td>
+
             </tr>
             </tbody>
         </table>

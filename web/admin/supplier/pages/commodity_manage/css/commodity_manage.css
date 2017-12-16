@@ -78,15 +78,7 @@
   width: 30px;
   height: 30px;
 }
-.arrow_img_size{
-  width: 10px;
-  height: 16px;
-}
-/*清楚number上下箭头*/
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button{
-  -webkit-appearance:textfield;
-}
+
 
 /*表格内容结束*/
 

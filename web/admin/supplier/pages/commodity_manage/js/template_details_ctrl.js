@@ -2,10 +2,13 @@
  * Created by xl on 2017/8/7 0007.
  */
 app.controller("template_details_ctrl", ['$rootScope',"$scope", "$state", "$stateParams", "$http", "_ajax", function ($rootScope,$scope, $state, $stateParams, $http, _ajax) {
+    $scope.getBack = function () {
+      $state.go('commodity_manage', {logistics_flag: true})
+    };
     $rootScope.crumbs = [{
         name: '商品管理',
         icon: 'icon-shangpinguanli',
-        link: 'commodity_manage'
+        link: $scope.getBack
     },{
         name:'查看物流模板'
     }];
@@ -265,10 +268,6 @@ app.controller("template_details_ctrl", ['$rootScope',"$scope", "$state", "$stat
         });
     };
 
-    //返回上一页
-    $scope.getBack = function () {
-        $state.go('commodity_manage', {logistics_flag: true})
-    };
 
     $('#sed_modal').on('hidden.bs.modal', function () {
         $('body').addClass('modal-open');

@@ -1,127 +1,43 @@
-
-section{
-    padding-left: 40px;
+.form-horizontal .control-label{
+    text-align: left;
 }
-.class_name{
-    margin-top: 20px;
-    color: #666F80;
+.row{
+    margin-bottom: 20px;
 }
-.class_name img{
+.red_ico{
     margin-left: -25px;
 }
-.class_name input{
-    margin-left: 85px;
-    width: 245px;
-    height: 31px;
-    border-radius:3px ;
-    border: 1px solid #666F80;
-    padding-left: 5px;
+.c_label{
+    font-weight: normal;
+    cursor: pointer;
 }
-.class_name span:nth-child(4){
-    margin-left: 12px;
-    color: #ABABAB;
-}
-.distribution{
-    margin-top: 30px;
-    color: #666F80;
-}
-.distribution input{
-    margin-left: 85px;
-}
-.distribution > span:nth-child(3){
-    margin-left: 10px;
-}
-.distribution span:nth-child(5){
-    margin-left: 10px;
-}
-.distribution_div{
-    width: 567px;
-    border: 1px solid #ABABAB;
-    margin-left: 145px;
-    margin-top: 20px;
-    padding: 20px 5px;
-}
-.distribution_div > span:nth-child(3){
-    margin-left:35px;
-}
-.distribution_div span:nth-child(8){
-    margin-left:10px;
-}
-.distribution_div input{
-    margin-left:65px;
-}
-.distribution_div > div {
-    margin-top: 10px;
-}
-.left_way{
-    margin-left: 26px!important;
-}
-.input_span{
-    margin-left: 3px!important;
-}
-.charge{
-    width: 345px;
-    height: 100px;
-    border:1px solid #F5F7FA;
-    background-color: #F5F7FA;
-    margin-left:145px;
-    margin-top: 10px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-}
-.charge input{
-    width: 52px;
-    height: 31px;
-    border-radius: 3px;
-    border: 1px solid #ABABAB;
-    margin-left: 35px;
-
-}
-.charge input:nth-child(12){
-    margin-left: 40px;
+.input_width{
+    display: inline-block;
+    width: 50%;
 }
 
 .btn_back{
     position: fixed;
     bottom: 40px;
 }
-.btn_back button{
-    width:80px;
-    height:34px;
-    background-color: white;
-    border: 1px solid #5E6166;
-    margin-left: 10px;
-    outline: none;
-}
-.btn_back button:nth-child(1){
-    color:#487AF8;
 
-}
 .city_ul{
    height: 600px!important;
 }
-.input_left{
-    margin-left: 50px!important;
-}
-.input_left1{
-    margin-left: 35px!important;
-}
+
 .city_ul li{
     list-style: none;
     float: left;
-    /*margin-left: 50px;*/
-    width:155px;
+    width:150px;
     margin-bottom: 30px;
 }
 .sec_ul{
-    width: 350px;
-    /*background-color: #FFFEC6;*/
     height: 600px;
 }
 .sec_ul li {
     list-style: none;
     float: left;
-    width: 120px;
+    width: 150px;
     margin-bottom: 10px;
 }
 

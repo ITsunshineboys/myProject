@@ -1,68 +1,102 @@
 <link rel="stylesheet" href="pages/commodity_manage/css/template_details.css"/>
 <div ng-controller="template_details_ctrl" class="">
-    <!--<header>-->
-        <!--<div>-->
-            <!--<i class="glyphicon glyphicon-home"></i>-->
-            <!--<span class="shop_manage">商品管理 ></span>-->
-            <!--<span class="manage_child">物流模板详情</span>-->
-            <!--<img src="pages/commodity_manage/image/user.png" alt=""/>-->
-        <!--</div>-->
-    <!--</header>-->
     <section>
         <!--模板名称-->
-        <div class="class_name">
-            <img src="pages/commodity_manage/image/red.png" alt=""/>
-            <span>模板名称</span>
-            <input type="text"
-                   maxlength="10"
-                   onkeyup="this.value=this.value.replace(/[^\u4e00-\u9fa5\w]/g,'')"
-                   this.value=this.value.replace(/[^\u4e00-\u9fa5\w]/g,''
-                   ng-model="params.name" placeholder="请输入模板名称"/>
-            <span>*限1～10个字符，不含特殊字符</span>
+        <from class="form-horizontal" name="formNum" novalidate>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <img class="red_ico" src="pages/commodity_manage/image/red.png" alt=""/>
+                <span>模板名称</span>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" maxlength="10" onkeyup="this.value=this.value.replace(/[^\u4e00-\u9fa5\w]/g,'')" this.value=this.value.replace(/[^\u4e00-\u9fa5\w]/g,'' ng-model="params.name" placeholder="请输入模板名称"/>
+            </div>
+            <div class="col-sm-8 control-label">
+                <span>*限1～10个字符，不含特殊字符</span>
+            </div>
         </div>
 
         <!--配送方式-->
-        <div class="distribution">
-            <span>配送方式</span>
-
-            <input type="radio" name="radio" ng-checked="params.delivery_method == 0" ng-model="params.delivery_method"
-                   value="0"/>
-            <span>快递物流</span>
-            <input type="radio" name="radio" ng-checked="params.delivery_method == 1" ng-model="params.delivery_method"
-                   value="1"/>
-            <span>送货上门</span>
-
-            <div class="distribution_div">
-                <img src="pages/commodity_manage/image/red.png" alt=""/>
-                <span>服务地区选择</span>
-                <span class="city_more">
-                    <span ng-repeat="value in selectCity | limitTo: 3">{{value}}</span>
-                </span>
-                <a href="javascript: void(0);" ng-click="editCity()"><span>编辑</span></a>
-                <div ng-show="params.delivery_method == 0">
-                    <span class="left_way">收费方式</span>
-                    <input type="radio" name="a" ng-click="packageMail = true" ng-checked="packageMail"/>
-                    <span class="input_span">不包邮</span>
-                    <input type="radio" name="a" ng-click="packageMail = false" ng-checked="!packageMail"/>
-                    <span class="input_span">包邮</span>
-                    <div class="charge" ng-show="packageMail">
-                        <img src="pages/commodity_manage/image/red.png" alt=""/>
-                        <span>默认运费</span>
-                        <input type="text" ng-model="freight.number_default"/>
-                        <span>件</span>
-                        <input type="text" ng-model="freight.cost_default"/>
-                        <span>元</span>
-                        <br/><br/>
-                        <img src="pages/commodity_manage/image/red.png" alt=""/>
-                        <span>每增加</span>
-                        <input type="text" class="input_left" ng-model="freight.number_delta"/>
-                        <span>件</span>
-                        <input type="text" class="input_left1" ng-model="freight.cost_delta"/>
-                        <span>元</span>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-sm-2 control-label">
+                <span>配送方式</span>
+            </div>
+            <div class="col-sm-2 control-label">
+                <label class="c_label">
+                    <input type="radio" name="radio" ng-checked="params.delivery_method == 0" ng-model="params.delivery_method" value="0"/>
+                    <span>快递物流</span>
+                </label>
+            </div>
+            <div class="col-sm-2 control-label">
+                <label class="c_label">
+                    <input type="radio" name="radio" ng-checked="params.delivery_method == 1" ng-model="params.delivery_method" value="1"/>
+                    <span>送货上门</span>
+                </label>
             </div>
         </div>
+
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-2 control-label ">
+                    <img class="red_ico" src="pages/commodity_manage/image/red.png" alt=""/>
+                    <span>服务地区选择</span>
+                </div>
+                <div class="col-sm-8 control-label">
+                    <span class="city_more">
+                        <span ng-repeat="value in selectCity | limitTo: 3">{{value}}</span>
+                    </span>
+                    <a href="javascript: void(0);" ng-click="editCity()"><span>编辑</span></a>
+                </div>
+            </div>
+                <div ng-show="params.delivery_method == 0">
+                    <div class="row">
+                        <div class="col-sm-2 col-sm-offset-2 control-label">
+                            <span>收费方式</span>
+                        </div>
+                        <div class="col-sm-1 control-label">
+                            <label class="c_label">
+                                <input type="radio" name="a" ng-click="packageMail = true" ng-checked="packageMail"/>
+                                <span class="input_span">不包邮</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-1 control-label">
+                            <label class="c_label">
+                                <input type="radio" name="a" ng-click="packageMail = false" ng-checked="!packageMail"/>
+                                <span class="input_span">包邮</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div ng-show="packageMail">
+                        <div class="row">
+                            <div class="col-sm-2 col-sm-offset-2 control-label">
+                                <img class="red_ico" src="pages/commodity_manage/image/red.png" alt=""/>
+                                <span>默认运费</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input type="text" class="form-control input_width" ng-model="freight.number_default"/>
+                                <span>件</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input type="text" class="form-control input_width" ng-model="freight.cost_default"/>
+                                <span>元</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 col-sm-offset-2 control-label">
+                                <img class="red_ico" src="pages/commodity_manage/image/red.png" alt=""/>
+                                <span>每增加</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input type="text" class="form-control input_width" ng-model="freight.number_delta"/>
+                                <span>件</span>
+                            </div>
+                            <div class="col-sm-2 control-label">
+                                <input type="text" class="form-control input_width" ng-model="freight.cost_delta"/>
+                                <span>元</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
         <!--物流模板省份选择 模态框 -->
         <div class="modal fade" id="detate_modal">
@@ -78,13 +112,13 @@
                             <li ng-repeat="obj in cityList">
                                 <input type="checkbox" ng-checked="obj.isChecked" ng-click="provincesFun(obj)"/>
                                 <span>{{obj.name}}</span>
-                                <img src="pages/commodity_manage/image/down_red.png" ng-click="getMoreCity(obj)"/>
+                                <img class="pointer" src="pages/commodity_manage/image/down_red.png" ng-click="getMoreCity(obj)"/>
                             </li>
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal" ng-click="addCity()">确认</button>
-                        <button class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" data-dismiss="modal" ng-click="addCity()">确认</button>
+                        <button class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
                 </div>
             </div>
@@ -109,8 +143,8 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-default" ng-click="getCity()">确认</button>
-                        <button class="btn btn-primary" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" ng-click="getCity()">确认</button>
+                        <button class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
                 </div>
             </div>
@@ -118,8 +152,9 @@
 
         <!--按钮-->
         <div class="btn_back">
-            <button ng-click="getReally()">确认</button>
-            <button ng-click="getBack()">返回</button>
+            <button class="btn btn-primary" ng-click="getReally()">确认</button>
+            <button class="btn btn-default btn_left" ng-click="getBack()">返回</button>
         </div>
+        </from>
     </section>
 </div>

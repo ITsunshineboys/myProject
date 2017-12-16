@@ -59,12 +59,18 @@
                 <th ng-if="show_9">库存</th>
                 <th ng-if="show_10">
                     <span>销量</span>
-                    <img ng-click="up_sort_sale_click()" class="arrow_img_size" ng-src="{{up_sort_sale_img}}" alt="">
+                    <span class="sort" ng-click="up_sort_sale_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'sold_number:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'sold_number:3'}"></i>
+                    </span>
                 </th>
                 <th ng-if="show_11">状态</th>
                 <th ng-if="show_12">
                     <span>上架时间</span>
-                    <img ng-click="up_sort_time_click()"  class="arrow_img_size" ng-src="{{up_sort_time_img}}" alt="">
+                    <span class="sort" ng-click="up_sort_time_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'online_time:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'online_time:3'}"></i>
+                    </span>
                 </th>
                 <th ng-if="show_13">图片</th>
                 <th ng-if="show_14">详情</th>
@@ -81,7 +87,7 @@
                 <td ng-if="show_4">¥{{item.market_price}}</td>
                 <td ng-if="show_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="show_7">¥{{item.purchase_price_manager}}</td>
-                <td ng-if="show_8">¥{{item.purchase_price_designer}}</td><!--string-to-number2-->
+                <td ng-if="show_8">¥{{item.purchase_price_designer}}</td>
                 <td ng-if="show_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " class="form-control" ng-change="change_left_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="show_10">{{item.sold_number}}</td>
                 <td ng-if="show_11" class="green">{{item.status}}</td>
@@ -238,29 +244,35 @@
             <thead>
             <tr>
                 <!--<td>&nbsp;</td>-->
-                <td ng-if="down_1">商品编号</td>
-                <td ng-if="down_2">商品名称</td>
-                <td ng-if="down_3">供货价格</td>
-                <td ng-if="down_5">平台价格</td>
-                <td ng-if="down_4">市场价格</td>
-                <td ng-if="down_6">装修公司采购价格</td>
-                <td ng-if="down_7">项目经理采购价格</td>
-                <td ng-if="down_8">设计师采购价格</td>
-                <td ng-if="down_9">库存</td>
-                <td ng-if="down_10">
+                <th ng-if="down_1">商品编号</th>
+                <th ng-if="down_2">商品名称</th>
+                <th ng-if="down_3">供货价格</th>
+                <th ng-if="down_5">平台价格</th>
+                <th ng-if="down_4">市场价格</th>
+                <th ng-if="down_6">装修公司采购价格</th>
+                <th ng-if="down_7">项目经理采购价格</th>
+                <th ng-if="down_8">设计师采购价格</th>
+                <th ng-if="down_9">库存</th>
+                <th ng-if="down_10">
                     <span>销量</span>
-                    <img ng-click="down_sort_sale_click()" class="arrow_img_size" ng-src="{{down_sort_sale_img}}">
-                </td>
-                <td ng-if="down_11">状态</td>
-                <td ng-if="show_12">
+                    <span class="sort" ng-click="down_sort_sale_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'sold_number:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'sold_number:3'}"></i>
+                    </span>
+                </th>
+                <th ng-if="down_11">状态</th>
+                <th ng-if="show_12">
                     <span>下架时间</span>
-                    <img ng-click="down_sort_time_click()"  class="arrow_img_size" ng-src="{{down_sort_time_img}}" alt="">
-                </td>
-                <td ng-if="down_13">操作人员</td>
-                <td ng-if="down_14">图片</td>
-                <td ng-if="down_15">下架原因</td>
-                <td ng-if="down_16">详情</td>
-                <td ng-if="down_17">操作</td>
+                    <span class="sort" ng-click="down_sort_time_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'offline_time:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'offline_time:3'}"></i>
+                    </span>
+                </th>
+                <th ng-if="down_13">操作人员</th>
+                <th ng-if="down_14">图片</th>
+                <th ng-if="down_15">下架原因</th>
+                <th ng-if="down_16">详情</th>
+                <th ng-if="down_17">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -369,79 +381,56 @@
                     <span class="iconfont icon-search"></span>
                 </div>
                 <button class="btn btn-default" ng-click="wait_search_btn()">搜索</button>
-                <span class="btn btn-default dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="iconfont icon-shaixuan"></i></span>
-                <!--<span ng-click="wait_menu (wait_menu_flag)" class="menu glyphicon glyphicon-menu-hamburger"></span>-->
-                <!--Menu 切换-->
-                <!--<div class="on_menu" ng-if="wait_menu_flag">-->
-                    <ul class="dropdown-menu dropdown-menu-right filter">
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_1" ng-click="wait_a(wait_1)">商品编号</li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_2"
-                                   ng-click="wait_b(wait_2)">商品名称
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_3"
-                                   ng-click="wait_c(wait_3)">供货价格
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_4"
-                                   ng-click="wait_d(wait_4)">市场价格
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_5"
-                                   ng-click="wait_e(wait_5)">平台价格
-                        </li>
-                        <li><input type="checkbox" class="right_input" ng-model="wait_6" ng-click="wait_f(wait_6)">装饰公司采购价格
-                        </li>
-                        <li><input type="checkbox" class="right_input" ng-model="wait_7" ng-click="wait_g(wait_7)">项目经理采购价格
-                        </li>
-                        <li><input type="checkbox" class="right_input" ng-model="wait_8" ng-click="wait_h(wait_8)">设计师采购价格
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_9"
-                                   ng-click="wait_i(wait_9)">库存
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_10"
-                                   ng-click="wait_j(wait_10)">销量
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_11"
-                                   ng-click="wait_k(wait_11)">状态
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_12"
-                                   ng-click="wait_l(wait_12)">发布时间
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_13"
-                                   ng-click="wait_m(wait_13)">图片
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_14"
-                                   ng-click="wait_n(wait_14)">审核备注
-                        </li>
-                        <li><input type="checkbox" checked="checked" class="right_input" ng-model="wait_15"
-                                   ng-click="wait_o(wait_15)">详情
-                        </li>
-                    </ul>
-                <!--</div>-->
+                <button class="btn btn-default" ng-click="filter=!filter" ng-class="{'btn-focus':filter}"><i class="iconfont icon-shaixuan"></i></button>
+                <ul ng-show="filter" class="filter">
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_1" ng-click="show_all(wait_1)">商品编号</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_2" ng-click="show_all(wait_2)">商品名称</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_3" ng-click="show_all(wait_3)">供货价格</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_4" ng-click="show_all(wait_4)">市场价格</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_5" ng-click="show_all(wait_5)">平台价格</label></li>
+                    <li><label><input type="checkbox" class="right_input" ng-model="wait_6" ng-click="show_all(wait_6)">装饰公司采购价格</label></li>
+                    <li><label><input type="checkbox" class="right_input" ng-model="wait_7" ng-click="show_all(wait_7)">项目经理采购价格</label></li>
+                    <li><label><input type="checkbox" class="right_input" ng-model="wait_8" ng-click="show_all(wait_8)">设计师采购价格</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_9" ng-click="show_all(wait_9)">库存</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_10" ng-click="show_all(wait_10)">销量</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_11" ng-click="show_all(wait_11)">状态</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_12" ng-click="show_all(wait_12)">发布时间</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_13" ng-click="show_all(wait_13)">图片</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_14" ng-click="show_all(wait_14)">审核备注</label></li>
+                    <li><label><input type="checkbox" checked="checked" class="right_input" ng-model="wait_15" ng-click="show_all(wait_15)">详情</label></li>
+                </ul>
             </div>
         </div>
         <table class="table table-hover table-responsive">
             <thead>
             <tr>
-                <td ng-if="wait_1">商品编号</td>
-                <td ng-if="wait_2">商品名称</td>
-                <td ng-if="wait_3">供货价格</td>
-                <td ng-if="wait_4">市场价格</td>
-                <td ng-if="wait_5">平台价格</td>
-                <td ng-if="wait_6">装修公司采购价格</td>
-                <td ng-if="wait_7">项目经理采购价格</td>
-                <td ng-if="wait_8">设计师采购价格</td>
-                <td ng-if="wait_9">库存</td>
-                <td ng-if="wait_10">
-                    销量
-                    <img ng-click="up_sort_sale_click()" class="arrow_img_size" ng-src="{{up_sort_sale_img}}" alt="">
-                </td>
-                <td ng-if="wait_11">状态</td>
-                <td ng-if="wait_12">
+                <th ng-if="wait_1">商品编号</th>
+                <th ng-if="wait_2">商品名称</th>
+                <th ng-if="wait_3">供货价格</th>
+                <th ng-if="wait_4">市场价格</th>
+                <th ng-if="wait_5">平台价格</th>
+                <th ng-if="wait_6">装修公司采购价格</th>
+                <th ng-if="wait_7">项目经理采购价格</th>
+                <th ng-if="wait_8">设计师采购价格</th>
+                <th ng-if="wait_9">库存</th>
+                <th ng-if="wait_10">
+                    <span>销量</span>
+                    <span class="sort" ng-click="wait_sort_sale_click()">
+                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'sold_number:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'sold_number:3'}"></i>
+                    </span>
+                </th>
+                <th ng-if="wait_11">状态</th>
+                <th ng-if="wait_12">
                     <span>发布时间</span>
-                    <img ng-click="wait_time_sort()"  class="arrow_img_size" ng-src="{{wait_sort_time_img}}" alt="">
-                </td>
-                <td ng-if="wait_13">图片</td>
-                <td ng-if="wait_14">审核备注</td>
-                <td ng-if="wait_15">详情</td>
+                    <span class="sort" ng-click="wait_time_sort()">
+                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'publish_time:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'publish_time:3'}"></i>
+                    </span>
+                </th>
+                <th ng-if="wait_13">图片</th>
+                <th ng-if="wait_14">审核备注</th>
+                <th ng-if="wait_15">详情</th>
             </tr>
             </thead>
             <tbody>
@@ -454,23 +443,18 @@
                 <td ng-if="wait_6">¥{{item.purchase_price_decoration_company}}</td>
                 <td ng-if="wait_7">¥{{item.purchase_price_manager}}</td>
                 <td ng-if="wait_8">¥{{item.purchase_price_designer}}</td>
-                <td ng-if="wait_9"><input type="number" class="form-control"
-                                          ng-change="change_right_number(item.id,item.left_number)"
-                                          ng-model="item.left_number" string-to-number2></td>
+                <td ng-if="wait_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"  class="form-control" ng-change="change_right_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="wait_10">{{item.sold_number}}</td>
                 <td ng-if="wait_11">{{item.status}}</td>
                 <td ng-if="wait_12" class="sky_blue">{{item.publish_time}}</td>
-                <td ng-if="wait_13"><img class="img_cover_size" ng-src="{{item.cover_image}}"
-                                         alt=""></td>
-                <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)"
-                    data-target={{waiteModel}}>{{item.reason}}
-                </td>
+                <td ng-if="wait_13"><img class="img_cover_size" ng-src="{{item.cover_image}}" alt=""></td>
+                <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)" data-target={{waiteModel}}>{{item.reason}}</td>
                 <td ng-if="wait_15"><a ui-sref="wait_online({item:item,flag:1})">编辑</a></td>
             </tr>
             </tbody>
         </table>
         <!--分页开始-->
-        <tm-pagination conf="ConfigWait"></tm-pagination>
+        <tm-pagination conf="wjConfig"></tm-pagination>
         <!--分页结束-->
     </section>
     <!--审核备注模态框-->

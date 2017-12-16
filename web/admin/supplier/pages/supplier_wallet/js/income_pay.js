@@ -104,17 +104,11 @@ angular.module('income_pay_module',[])
 
     //时间排序
     $scope.params.sort_time=2;//默认降序
-    $scope.time_src='lib/images/arrow_down.png';//默认降序
+
     $scope.time_sort=function () {
-        //图标和排序
-        if($scope.time_src=='lib/images/arrow_down.png'){
-            $scope.params.sort_time=1;
-            $scope.time_src='lib/images/arrow_up.png';
-        }else{
-            $scope.time_src='lib/images/arrow_down.png';
-            $scope.params.sort_time=2;
-        }
-        $scope.wjConfig.currentPage = 1; //页数跳转到第一页
-        tablePages();
+      //图标和排序
+	    $scope.params.sort_time==2?$scope.params.sort_time=1:$scope.params.sort_time=2;
+      $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+      tablePages();
     };
 });

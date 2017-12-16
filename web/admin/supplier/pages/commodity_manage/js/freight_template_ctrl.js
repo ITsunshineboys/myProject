@@ -5,11 +5,13 @@ var shop_style= angular.module("freight_template",[])
     .controller("freight_template_ctrl",function ($rootScope,$scope,$http,$state,$stateParams ,$q,_ajax) {
         $scope.hidden_way = true;
         $scope.airHidden = true;
-         // /^[\u4E00-\u9FA5A-Za-z0-9]+$/;
+        $scope.getBack = function () {
+          $state.go('commodity_manage',{logistics_flag: true})
+        };
         $rootScope.crumbs = [{
             name: '商品管理',
             icon: 'icon-shangpinguanli',
-            link: 'commodity_manage'
+            link: $scope.getBack
         },{
             name:'添加物流模板'
         }];
@@ -236,10 +238,6 @@ var shop_style= angular.module("freight_template",[])
             });
         };
 
-        //返回上一页
-        $scope.getBack = function () {
-            $state.go('commodity_manage',{logistics_flag: true})
-        };
         $('#sed_modal').on('hidden.bs.modal', function () {
             $('body').addClass('modal-open');
         })
