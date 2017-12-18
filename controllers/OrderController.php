@@ -460,8 +460,41 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
-     * 线下店app-获取商品信息
+     * 线下店app-获取商品信息(新)
+     * @return string
+     */
+    public function actionGetGoodsInfo(){
+        $request = Yii::$app->request;
+        $goods_id=$request->get('goods_id');
+        $goods_num=$request->get('goods_num');
+        if (!$goods_id || !$goods_num)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=GoodsOrder::GetLineGoodsData($goods_id,$goods_num);
+        if (is_numeric($data))
+        {
+            $code=$data;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }else{
+            return Json::encode([
+                'code' => 200,
+                'msg'  =>'ok',
+                'data'=>$data
+            ]);
+        }
+    }
+    /**
+     * 线下店app-获取商品信息（旧）
      * @return string
      */
     public function actionGetgoodsdata(){
