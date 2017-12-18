@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\services\ModelService;
+use app\services\StringService;
 use Yii;
 use yii\db\Query;
 use yii\db\Exception;
@@ -278,10 +279,10 @@ class UserBankInfo extends \yii\db\ActiveRecord
            $freeze_money+=$list->freeze_money;
         }
         return [
-            'balance'=>GoodsOrder::switchMoney($balance->balance*0.01),
-            'availableamount'=>GoodsOrder::switchMoney($balance->availableamount*0.01),
-            'cash_money'=>GoodsOrder::switchMoney($cash_money*0.01),
-            'freeze_money'=>GoodsOrder::switchMoney($freeze_money*0.01)
+            'balance'=> StringService::formatPrice($balance->balance*0.01),
+            'availableamount'=> StringService::formatPrice($balance->availableamount*0.01),
+            'cash_money'=> StringService::formatPrice($cash_money*0.01),
+            'freeze_money'=> StringService::formatPrice($freeze_money*0.01)
         ];
     }
 

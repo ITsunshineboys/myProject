@@ -3202,7 +3202,6 @@ class OrderController extends Controller
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNSHIPPED])
             ->asArray()
             ->one();
-
         if ($unshipped)
         {
             if($unshipped['create_time'])
@@ -3781,7 +3780,10 @@ class OrderController extends Controller
         $supplier_id=Yii::$app->request->get('supplier_id');
         if (!$supplier_id)
         {
-          $supplier_id=Supplier::find()->where(['uid'=>$user->id])->one()->id;
+          $supplier_id=Supplier::find()
+              ->where(['uid'=>$user->id])
+              ->one()
+              ->id;
 
         }
         $all=(new Query())
@@ -3921,7 +3923,7 @@ class OrderController extends Controller
                     'goods_name'=>$OrderGoods->goods_name,
                     'goods_number'=>$OrderGoods->goods_number,
                     'cover_image'=>$OrderGoods->cover_image,
-                    'goods_price'=>GoodsOrder::switchMoney($OrderGoods->goods_price*0.01)
+                    'goods_price'=>StringService::formatPrice($OrderGoods->goods_price*0.01)
                 ],
                 'after_sale'=>$data,
                 'user'=>[
@@ -4325,8 +4327,8 @@ class OrderController extends Controller
                 ->asArray()
                 ->one();
         }
-        $logisticsTemplate['delivery_cost_default']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_default']*0.01);
-        $logisticsTemplate['delivery_cost_delta']=GoodsOrder::switchMoney($logisticsTemplate['delivery_cost_delta']*0.01);
+        $logisticsTemplate['delivery_cost_default']=StringService::formatPrice($logisticsTemplate['delivery_cost_default']*0.01);
+        $logisticsTemplate['delivery_cost_delta']=StringService::formatPrice($logisticsTemplate['delivery_cost_delta']*0.01);
         $logisticsDistrict=OrderLogisticsDistrict::find()
             ->select('district_name')
             ->where(['order_template_id'=>$logisticsTemplate['id']])
@@ -4390,13 +4392,13 @@ class OrderController extends Controller
                 'goods_attr'=>$attr,
                 'cover_image'=>$OrderGoods->cover_image,
                 'goods_image'=>$goods_image,
-                'market_price'=>GoodsOrder::switchMoney($market_price*0.01),
-                'supplier_price'=>GoodsOrder::switchMoney($supplier_price*0.01),
-                'platform_price'=>GoodsOrder::switchMoney($platform_price*0.01),
+                'market_price'=> StringService::formatPrice($market_price*0.01),
+                'supplier_price'=> StringService::formatPrice($supplier_price*0.01),
+                'platform_price'=> StringService::formatPrice($platform_price*0.01),
                 'left_number'=>$left_number,
-                'purchase_price_decoration_company'=>GoodsOrder::switchMoney($purchase_price_decoration_company*0.01),
-                'purchase_price_manager'=>GoodsOrder::switchMoney($purchase_price_manager*0.01),
-                'purchase_price_designer'=>GoodsOrder::switchMoney($purchase_price_designer*0.01),
+                'purchase_price_decoration_company'=> StringService::formatPrice($purchase_price_decoration_company*0.01),
+                'purchase_price_manager'=> StringService::formatPrice($purchase_price_manager*0.01),
+                'purchase_price_designer'=>StringService::formatPrice($purchase_price_designer*0.01),
                 'logisticsTemplate'=>$logisticsTemplate,
                 'logisticsDistrict'=>$logisticsDistrict,
                 'guarantee'=>$guarantee,
@@ -5277,7 +5279,7 @@ class OrderController extends Controller
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=>GoodsOrder::switchMoney($freight*0.01)
+            'data'=> StringService::formatPrice($freight*0.01)
         ]);
     }
     /**
@@ -5364,7 +5366,7 @@ class OrderController extends Controller
                         'subtitle'=>$Good['subtitle'],
                         'cover_image'=>$Good['cover_image'],
                         'goods_num'=>$Good['goods_num'],
-                        'goods_price'=>GoodsOrder::switchMoney($Good["{$goods_price}"]*0.01)
+                        'goods_price'=> StringService::formatPrice($Good["{$goods_price}"]*0.01)
                     ];
                     $market_price+=($Good["market_price"]*$Good['goods_num']);
                     $discount_price+=($Good["{$goods_price}"]*$Good['goods_num']);
@@ -5385,10 +5387,10 @@ class OrderController extends Controller
                 [
                     'supplier_id'=>$supplier_id,
                     'shop_name'=>$supplier->shop_name,
-                    'freight'=>GoodsOrder::switchMoney($sup_freight*0.01),
-                    'market_price'=>GoodsOrder::switchMoney($market_price*0.01),
-                    'discount_price'=>GoodsOrder::switchMoney($discount_price*0.01),
-                    'require_payment'=>GoodsOrder::switchMoney(($discount_price+$sup_freight)*0.01),
+                    'freight'=> StringService::formatPrice($sup_freight*0.01),
+                    'market_price'=> StringService::formatPrice($market_price*0.01),
+                    'discount_price'=> StringService::formatPrice($discount_price*0.01),
+                    'require_payment'=> StringService::formatPrice(($discount_price+$sup_freight)*0.01),
                     'goods'=>$sup_goods
                 ];
 
@@ -5401,9 +5403,9 @@ class OrderController extends Controller
             'msg'=>'ok',
             'data'=>[
                 'list'=>$data,
-                'freight'=>GoodsOrder::switchMoney($freight*0.01),
-                'all_money'=>GoodsOrder::switchMoney(($all_money+$freight)*0.01),
-                'availableamount'=>GoodsOrder::switchMoney($user->availableamount*0.01)
+                'freight'=> StringService::formatPrice($freight*0.01),
+                'all_money'=> StringService::formatPrice(($all_money+$freight)*0.01),
+                'availableamount'=> StringService::formatPrice($user->availableamount*0.01)
             ]
         ]);
     }

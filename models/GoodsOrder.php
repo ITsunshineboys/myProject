@@ -1015,10 +1015,10 @@ class GoodsOrder extends ActiveRecord
         }
         $array['goods_num']=$goods_num;
         $array['return_insurance']=0.00;
-        $array['platform_price']=self::switchMoney($array['platform_price']*0.01);
-        $array['market_price']=self::switchMoney($array['market_price']*0.01);
-        $array['freight']=self::switchMoney($array['freight']);
-        $array['allCost']=self::switchMoney($array['platform_price']*$goods_num+$array['freight']);
+        $array['platform_price']= StringService::formatPrice($array['platform_price']*0.01);
+        $array['market_price']= StringService::formatPrice($array['market_price']*0.01);
+        $array['freight']= StringService::formatPrice($array['freight']);
+        $array['allCost']= StringService::formatPrice($array['platform_price']*$goods_num+$array['freight']);
         return $array;
     }
 
@@ -1087,16 +1087,16 @@ class GoodsOrder extends ActiveRecord
         $output=array();
         $goods_num=0;
         foreach($arr as $k=>$v){
-            $output['amount_order']=self::switchMoney(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
-            $output['return_insurance']=self::switchMoney($arr[$k]['return_insurance']);
-            $output['freight']=self::switchMoney($arr[$k]['freight']*0.01);
+            $output['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            $output['return_insurance']= StringService::formatPrice($arr[$k]['return_insurance']);
+            $output['freight']= StringService::formatPrice($arr[$k]['freight']*0.01);
             $output['address_id']=$arr[$k]['address_id'];
             $output['invoice_id']=$arr[$k]['invoice_id'];
             $output['role_id']=$arr[$k]['role_id'];
             $output['goods_number']=$arr[$k]['goods_number'];
-            $output['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $output['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
-            $output['market_price']=self::switchMoney($arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $output['goods_price']= StringService::formatPrice($arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $output['supplier_price']= StringService::formatPrice($arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            $output['market_price']= StringService::formatPrice($arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
             $output['order_no']=$arr[$k]['order_no'];
             $output['buyer_message']=$arr[$k]['buyer_message'];
             $output['create_time']=$arr[$k]['create_time'];
@@ -2399,15 +2399,15 @@ class GoodsOrder extends ActiveRecord
                     $GoodsOrder[$k]['all_goods_num']=0;
                     foreach ($GoodsOrder[$k]['list'] as $key =>$val){
                         $GoodsOrder[$k]['all_freight']+=$GoodsOrder[$k]['list'][$key]['freight'];
-                        $GoodsOrder[$k]['list'][$key]['freight']=self::switchMoney($GoodsOrder[$k]['list'][$key]['freight']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['goods_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['market_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['supplier_price']=self::switchMoney($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['freight']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['freight']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['goods_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['market_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['supplier_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
                         unset($GoodsOrder[$k]['list'][$key]['order_status']);
                         $GoodsOrder[$k]['all_goods_num']+=$GoodsOrder[$k]['list'][$key]['goods_number'];
                     }
-                    $GoodsOrder[$k]['all_freight']=self::switchMoney($GoodsOrder[$k]['all_freight']*0.01);
+                    $GoodsOrder[$k]['all_freight']= StringService::formatPrice($GoodsOrder[$k]['all_freight']*0.01);
                     unset($GoodsOrder[$k]['pay_status']);
                     unset($GoodsOrder[$k]['supplier_id']);
                     $arr[]=$GoodsOrder[$k];
@@ -2421,14 +2421,14 @@ class GoodsOrder extends ActiveRecord
             if ($user->last_role_id_app==0)
             {
                 $user->last_role_id_app=7;
-                $arr[$key]['availableamount']=self::switchMoney($user->availableamount*0.01);
+                $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
             }else{
                 if ($user->last_role_id_app==7)
                 {
                     $user->last_role_id_app=7;
-                    $arr[$key]['availableamount']=self::switchMoney($user->availableamount*0.01);
+                    $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
                 }else{
-                    $arr[$key]['availableamount']=self::switchMoney(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
+                    $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
                 }
             }
             $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
@@ -2494,11 +2494,11 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
                 }
             }
-            $arr[$k]['amount_order']=self::switchMoney(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
-            $arr[$k]['goods_price']=self::switchMoney($arr[$k]['goods_price']*0.01);
-            $arr[$k]['market_price']=self::switchMoney($arr[$k]['market_price']*0.01);
-            $arr[$k]['supplier_price']=self::switchMoney($arr[$k]['supplier_price']*0.01);
-            $arr[$k]['freight']=self::switchMoney($arr[$k]['freight']*0.01);
+            $arr[$k]['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            $arr[$k]['goods_price']= StringService::formatPrice($arr[$k]['goods_price']*0.01);
+            $arr[$k]['market_price']= StringService::formatPrice($arr[$k]['market_price']*0.01);
+            $arr[$k]['supplier_price']= StringService::formatPrice($arr[$k]['supplier_price']*0.01);
+            $arr[$k]['freight']= StringService::formatPrice($arr[$k]['freight']*0.01);
             $supplier=Supplier::find()
                 ->where(['id'=>$arr[$k]['supplier_id']])
                 ->one();
@@ -2547,8 +2547,8 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['role_id']);
             unset($arr[$k]['pay_term']);
             $arr[$k]['list']=[$arr_list];
-            $arr[$k]['all_freight']=self::switchMoney($arr[$k]['freight']*0.01);
-            $arr[$k]['all_goods_num']=self::switchMoney($arr[$k]['goods_number']*0.01);
+            $arr[$k]['all_freight']= StringService::formatPrice($arr[$k]['freight']*0.01);
+            $arr[$k]['all_goods_num']= StringService::formatPrice($arr[$k]['goods_number']*0.01);
             unset($arr[$k]['freight']);
             unset($arr[$k]['goods_number']);
         }
@@ -2833,8 +2833,8 @@ class GoodsOrder extends ActiveRecord
                     $username =$arr[$k]['username'];
                 }
 
-                $arr[$k]['return_insurance'] = self::switchMoney($arr[$k]['return_insurance'] * 0.01);
-                $arr[$k]['goods_price'] = self::switchMoney($arr[$k]['goods_price'] * 0.01);
+                $arr[$k]['return_insurance'] =  StringService::formatPrice($arr[$k]['return_insurance'] * 0.01);
+                $arr[$k]['goods_price'] =  StringService::formatPrice($arr[$k]['goods_price'] * 0.01);
                 // switch ($arr[$k]['shipping_type']){
                 //     case 0:
                 //         $arr[$k]['shipping_type']='快递物流';
@@ -2893,10 +2893,10 @@ class GoodsOrder extends ActiveRecord
             $output['create_time'] = $arr[0]['create_time'];
             $output['paytime'] = date('Y-m-d H:i', $arr[0]['paytime']);
             $output['pay_term'] = $arr[0]['pay_term'];
-            $output['freight'] = GoodsOrder::switchMoney($freight);
-            $output['original_price'] = GoodsOrder::switchMoney($market_price * $arr[0]['goods_number']);
-            $output['discount_price'] = GoodsOrder::switchMoney($amount_order);
-            $output['amount_order'] = GoodsOrder::switchMoney($freight + $amount_order);
+            $output['freight'] = StringService::formatPrice($freight);
+            $output['original_price'] = StringService::formatPrice($market_price * $arr[0]['goods_number']);
+            $output['discount_price'] = StringService::formatPrice($amount_order);
+            $output['amount_order'] = StringService::formatPrice($freight + $amount_order);
             $output['consignee'] = $arr[0]['consignee'];
             $output['district'] = LogisticsDistrict::getdistrict($arr[0]['district_code']) . $arr[0]['region'];
             $output['invoice_information'] = $arr[0]['invoice_content'] . '-' . $arr[0]['invoice_header'];
@@ -3552,7 +3552,7 @@ class GoodsOrder extends ActiveRecord
 //                }
 //            }
 
-          return GoodsOrder::switchMoney($freight*0.01);
+          return  StringService::formatPrice($freight*0.01);
       }
 
 

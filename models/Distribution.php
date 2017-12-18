@@ -128,7 +128,7 @@ class Distribution extends ActiveRecord
             }
 
             $goodsOrder_count=$goodsOrder_online_count+$goodsOrder_line_count;
-            $goodsOrder_money=GoodsOrder::switchMoney($goodsOrder_online_money+$goodsOrder_line_money);
+            $goodsOrder_money=StringService::formatPrice($goodsOrder_online_money+$goodsOrder_line_money);
         }
 
         if ($parent)
@@ -141,7 +141,7 @@ class Distribution extends ActiveRecord
             'binding_count'=>$son_count,
             'order_count'=>$goodsOrder_count,
             'order_money'=>$goodsOrder_money,
-            'MyProfit'=>GoodsOrder::switchMoney($data['profit']*0.01),
+            'MyProfit'=>StringService::formatPrice($data['profit']*0.01),
             'mobile' => $mobile,
             'parent' => $parents,
             'son'=>$son

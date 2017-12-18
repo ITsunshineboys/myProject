@@ -509,7 +509,7 @@ class DistributionController extends Controller
 //                        $total_amount+=$consigneeOrder['amount_order']*0.01;
                     }
                 }
-                $list['subset_amount']=GoodsOrder::switchMoney($total_amount);
+                $list['subset_amount']= StringService::formatPrice($total_amount);
                 $list['order_subsetnum']=$order_subsetnum;
                 unset($list['profit']);
                 unset($list['parent_id']);
@@ -560,7 +560,7 @@ class DistributionController extends Controller
             ]);
         }
 //        $profit=$data['profit']==0?100.00:GoodsOrder::switchMoney($data['profit']*0.01);
-        $profit=$data['profit']==0?0.00:GoodsOrder::switchMoney($data['profit']*0.01);
+        $profit=$data['profit']==0?0.00: StringService::formatPrice($data['profit']*0.01);
         $subset=Distribution::find()
             ->select('mobile,applydis_time')
             ->where(['parent_id'=>$data['id']])
@@ -744,7 +744,7 @@ class DistributionController extends Controller
                             $list[]=[
                                 'mobile'=>$user->mobile,
                                 'order_no'=>$UserOrder['order_no'],
-                                'amount_order'=>GoodsOrder::switchMoney($UserOrder['amount_order']*0.01),
+                                'amount_order'=> StringService::formatPrice($UserOrder['amount_order']*0.01),
                                 'create_time'=>date('Y-m-d H:i',$UserOrder['paytime']),
                                 'remarks'=>$UserOrder['remarks']
                             ];
@@ -774,7 +774,7 @@ class DistributionController extends Controller
                         $list[]=[
                             'mobile'=>$subset['mobile'],
                             'order_no'=>$consigneeOrder['order_no'],
-                            'amount_order'=>GoodsOrder::switchMoney($consigneeOrder['amount_order']*0.01),
+                            'amount_order'=> StringService::formatPrice($consigneeOrder['amount_order']*0.01),
                             'create_time'=>date('Y-m-d H:i',$consigneeOrder['paytime']),
                             'remarks'=>$consigneeOrder['remarks']
                         ];
@@ -786,7 +786,7 @@ class DistributionController extends Controller
         }
         $page=trim($request->get('page',1));
         $size=trim($request->get('size', Distribution::PAGE_SIZE_DEFAULT));
-        $total_amount=GoodsOrder::switchMoney($total_amount);
+        $total_amount= StringService::formatPrice($total_amount);
         $total_orders=count($list);
         if ($list!=[]){
             foreach ($list as $key => $row)

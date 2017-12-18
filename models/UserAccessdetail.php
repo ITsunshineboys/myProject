@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use Yii;
 use app\services\ModelService;
 /**
@@ -249,17 +250,17 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 case self::ACCESS_CODE_DEBIT:
                     $data[]=[
                         'name'=>'扣款金额',
-                        'value'=>GoodsOrder::switchMoney($accessDetail['access_money']*0.01)
+                        'value'=> StringService::formatPrice($accessDetail['access_money']*0.01)
                     ];
                     break;
                 case 'Goods':
                     $data[]=[
                         'name'=>'货款金额',
-                        'value'=>GoodsOrder::switchMoney($OrderGoods['supplier_price']*0.01*$OrderGoods['goods_number'])
+                        'value'=> StringService::formatPrice($OrderGoods['supplier_price']*0.01*$OrderGoods['goods_number'])
                     ];
                     $data[]=[
                         'name'=>"运费金额",
-                        'value'=>GoodsOrder::switchMoney($OrderGoods['freight']*0.01)
+                        'value'=> StringService::formatPrice($OrderGoods['freight']*0.01)
                     ];
                     break;
 //                case self::ACCESS_CODE_PAYMENT_BUY:
@@ -402,7 +403,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         ];
         $data[]=[
             'name'=>'结算金额',
-            'value'=>GoodsOrder::switchMoney($amount_order*0.01),
+            'value'=> StringService::formatPrice($amount_order*0.01),
         ];
         $data[]=[
             'name'=>'商品编号',

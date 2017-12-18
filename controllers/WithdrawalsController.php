@@ -202,7 +202,7 @@ class WithdrawalsController extends Controller
             'msg' => 'ok',
             'data'=>[
                 'is_real'=>$is_real,
-                'balance'=>GoodsOrder::switchMoney($role->availableamount*0.01),
+                'balance'=> StringService::formatPrice($role->availableamount*0.01),
                 'list'=>$data
             ]
         ]);

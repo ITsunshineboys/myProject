@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\services\StringService;
 use Yii;
 use yii\db\Exception;
 use yii\db\Query;
@@ -124,7 +125,7 @@ class ShippingCart extends \yii\db\ActiveRecord
                 ->all();
             foreach ($Goods as &$list)
             {
-                $list['platform_price']=GoodsOrder::switchMoney($list[$money]*0.01);
+                $list['platform_price']= StringService::formatPrice($list[$money]*0.01);
                 if ($money!='platform_price')
                 {
                     unset($list[$money]);
@@ -153,7 +154,7 @@ class ShippingCart extends \yii\db\ActiveRecord
             ->all();
        foreach ($invalid_goods as &$list)
        {
-           $list['platform_price']=GoodsOrder::switchMoney($list[$money]*0.01);
+           $list['platform_price']= StringService::formatPrice($list[$money]*0.01);
            if ($money!='platform_price')
            {
                unset($list[$money]);
