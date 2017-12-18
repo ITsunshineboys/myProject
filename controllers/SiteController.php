@@ -393,12 +393,11 @@ class SiteController extends Controller
 
         $code = 1001;
         $model = new LoginForm;
-        StringService::writeLog('test', json_encode($postData), 'admin_login');
         if ($model->load($postData)) {
             if ($model->login()) {
                 $user = Yii::$app->user->identity;
                 if (!$user) {
-                    StringService::writeLog('test', 'not user', 'admin_login');
+                    StringService::writeLog('admin_login_failure', 'not user');
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],
@@ -417,7 +416,7 @@ class SiteController extends Controller
                     ->where(['user_id' => $user->id, 'role_id' => $role->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED])
                     ->one();
                 if (!$userRole) {
-                    StringService::writeLog('test', 'not user role', 'admin_login');
+                    StringService::writeLog('admin_login_failure', 'not user role');
                     return Json::encode([
                         'code' => $code,
                         'msg' => Yii::$app->params['errorCodes'][$code],
@@ -436,7 +435,7 @@ class SiteController extends Controller
             }
         }
 
-        StringService::writeLog('test', 'not login', 'admin_login');
+        StringService::writeLog('admin_login_failure', 'not login');
         return Json::encode([
             'code' => $code,
             'msg' => Yii::$app->params['errorCodes'][$code],
