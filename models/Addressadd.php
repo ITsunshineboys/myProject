@@ -295,7 +295,7 @@ class Addressadd extends  ActiveRecord
      */
     public  static  function  DelAddress($address_id)
     {
-        $address=Addressadd::findOne($address_id);
+        $address=self::findOne($address_id);
         if (!$address)
         {
             $code=1000;
@@ -313,7 +313,7 @@ class Addressadd extends  ActiveRecord
                     $code=500;
                     return $code;
                 }
-                $addressData=Addressadd::find()
+                $addressData=self::find()
                     ->where(['uid'=>$user->id])
                     ->andWhere(['default'=>0])
                     ->one();

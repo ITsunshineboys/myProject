@@ -181,7 +181,7 @@ class Distribution extends ActiveRecord
            if ($user[$k]){
                 $arr[$k]['order_num']=GoodsOrder::find()->where(['user_id'=>$user[$k]['id']])->count();
            }else{
-               $address[$k]=Addressadd::find()->select('mobile,id')->where(['mobile'=>$arr[$k]['mobile']])->asArray()->one();
+               $address[$k]=UserAddress::find()->select('mobile,id')->where(['mobile'=>$arr[$k]['mobile']])->asArray()->one();
                if (!$address[$k]){
                    $arr[$k]['order_num']=0;
                }
@@ -195,7 +195,7 @@ class Distribution extends ActiveRecord
                 if ($user_subset[$key]){
                     $dis[$key]['order_num']=GoodsOrder::find()->where(['user_id'=>$user_subset[$key]['id']])->count();
                 }else{
-                    $address_subset[$key]=Addressadd::find()->select('mobile,id')->where(['mobile'=>$dis[$key]['mobile']])->asArray()->one();
+                    $address_subset[$key]=UserAddress::find()->select('mobile,id')->where(['mobile'=>$dis[$key]['mobile']])->asArray()->one();
                     if (!$address_subset[$key]){
                         $dis[$key]['order_num']=0;
                     }
