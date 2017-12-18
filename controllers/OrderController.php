@@ -2757,6 +2757,10 @@ class OrderController extends Controller
             ]);
         }
         $postData = Yii::$app->request->post();
+        if (!$postData)
+        {
+            $postData = Yii::$app->request->get();
+        }
         $data=OrderAfterSale::FindAfterSaleData($postData,$user);
         if (is_numeric($data)){
             $code=$data;
