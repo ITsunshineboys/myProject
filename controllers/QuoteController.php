@@ -1163,6 +1163,7 @@ class QuoteController extends Controller
      */
     public function actionAssortGoodsList()
     {
+
         $city = (int)trim(\Yii::$app->request->get('city',''));
         $where = 'city_code='.$city;
         $goods_list = AssortGoods::find()
