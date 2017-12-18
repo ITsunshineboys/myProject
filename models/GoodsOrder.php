@@ -1189,7 +1189,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array|bool
      */
-    public  static  function  findshipping_type($order_no,$sku)
+    public  static  function  findShippingType($order_no,$sku)
     {
         $data=OrderGoods::find()
             ->select('shipping_type')
@@ -1436,7 +1436,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array|bool
      */
-    public static  function Getplatformdetail($order_no,$sku){
+    public static  function GetPlatFormDetail($order_no,$sku){
         $res=(new Query())
             ->from(OrderPlatForm::tableName())
             ->where(['order_no'=>$order_no])

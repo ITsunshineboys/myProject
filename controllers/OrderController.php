@@ -1236,7 +1236,7 @@ class OrderController extends Controller
         if (!is_numeric($user)) {
             return $user;
         }
-        $lhzz=self::lhzzidentity($user);
+        $lhzz=self::LhzzIdentity($user);
         if (!is_numeric($lhzz)){
             return $lhzz;
         }
@@ -1689,7 +1689,7 @@ class OrderController extends Controller
                 'msg' => '快递单号错误',
             ]);
         }
-        $code=Express::Expressupdate($waybillnumber,$waybillname,$sku,$order_no);
+        $code=Express::ExpressUpdate($waybillnumber,$waybillname,$sku,$order_no);
         if ($code==200){
             $code=200;
             return Json::encode([
@@ -1745,7 +1745,7 @@ class OrderController extends Controller
                 ->one();
         }else
         {
-            $shipping_type=GoodsOrder::findshipping_type($order_no,$sku);
+            $shipping_type=GoodsOrder::findShippingType($order_no,$sku);
             $express=Express::find()
                 ->select('waybillnumber,waybillname,create_time')
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
@@ -1776,7 +1776,7 @@ class OrderController extends Controller
         }
         switch ($shipping_type){
             case 0:
-                $list=Express::Findexresslist($order_no,$sku);
+                $list=Express::FindExpressList($order_no,$sku);
                 if (is_numeric($list))
                 {
                     $code=$list;
@@ -1787,7 +1787,7 @@ class OrderController extends Controller
                 }
                 break;
             case 1:
-                $list=Express::Findexpresslist_sendtohome($order_no,$sku);
+                $list=Express::FindExpressListSendToHome($order_no,$sku);
                 break;
         }
         if ($shipping_type==1)
@@ -1842,7 +1842,7 @@ class OrderController extends Controller
                         'msg' => Yii::$app->params['errorCodes'][$code],
                     ]);
                 }
-                $list=Express::Findexresslist($waybillnumber,'-1');
+                $list=Express::FindExpressList($waybillnumber,'-1');
                 if (is_numeric($list))
                 {
                     $code=$list;
@@ -1876,7 +1876,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $data=GoodsOrder::Getplatformdetail($order_no,$sku);
+        $data=GoodsOrder::GetPlatFormDetail($order_no,$sku);
         $code=200;
         return Json::encode([
             'code' => $code,
@@ -1901,7 +1901,7 @@ class OrderController extends Controller
      * @param $user
      * @return mixed|string
      */
-    public static function lhzzidentity($user)
+    public static function LhzzIdentity($user)
     {
         $lhzz=Lhzz::find()
             ->select('id')
@@ -2075,7 +2075,7 @@ class OrderController extends Controller
             ->andWhere(['sku'=>$sku])
             ->asArray()
             ->all();
-        $arr=OrderRefund::SetRefundparameter($order_refund);
+        $arr=OrderRefund::SetRefundParameter($order_refund);
         $code=200;
         return  Json::encode([
                 'code'=>$code,
@@ -3169,11 +3169,16 @@ class OrderController extends Controller
 
         if (!$order_no || !$sku)
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $order_no=trim($request->get('order_no',''));
+            $sku=trim($request->get('sku',''));
+            if (!$order_no || !$sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
         if (!$GoodsOrder )

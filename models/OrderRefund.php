@@ -33,7 +33,7 @@ class OrderRefund extends ActiveRecord
         return $data?$data:[];
     }
 
-    public  static  function  SetRefundparameter($order_refund)
+    public  static  function  SetRefundParameter($order_refund)
     {
         foreach ($order_refund as $k =>$v)
         {

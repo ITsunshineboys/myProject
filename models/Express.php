@@ -66,7 +66,7 @@ class Express extends ActiveRecord
      * @param $order_no
      * @return int
      */
-    public static function Expressupdate($waybillnumber,$waybillname,$sku,$order_no){
+    public static function ExpressUpdate($waybillnumber,$waybillname,$sku,$order_no){
         $tran = Yii::$app->db->beginTransaction();
         try{
             $express=self::find()
@@ -157,7 +157,7 @@ class Express extends ActiveRecord
      * @param $sku
      * @return int
      */
-    public static  function Findexresslist($order_no,$sku)
+    public static  function FindExpressList($order_no,$sku)
     {
          if ($sku=='-1')
         {
@@ -200,7 +200,7 @@ class Express extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public static  function Findexpresslist_sendtohome($order_no,$sku){
+    public static  function FindExpressListSendToHome($order_no,$sku){
         $order=(new Query())->from(OrderGoods::tableName())
             ->select('order_status,shipping_status')
             ->where(['order_no'=>$order_no,'sku'=>$sku])
