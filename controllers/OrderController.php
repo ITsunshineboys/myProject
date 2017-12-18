@@ -14,7 +14,6 @@ use app\models\UserAddress;
 use app\services\ModelService;
 use Yii;
 use app\models\OrderPlatForm;
-use app\models\Addressadd;
 use app\models\CommentImage;
 use app\models\CommentReply;
 use app\models\Effect;
@@ -718,7 +717,7 @@ class OrderController extends Controller
         $invoice=Invoice::findOne($invoice_id);
         if (!$invoice)
         {
-            $address=Addressadd::findOne($address_id);
+            $address=UserAddress::findOne($address_id);
             $in=new Invoice();
             $in->invoice_type=1;
             $in->invoice_header_type=1;
@@ -943,7 +942,7 @@ class OrderController extends Controller
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $address=Addressadd::findOne(Yii::$app->session['address_id']);
+            $address=UserAddress::findOne(Yii::$app->session['address_id']);
             {
                 if (!$address)
                 {
@@ -957,7 +956,7 @@ class OrderController extends Controller
         $invoice=Invoice::findOne(Yii::$app->session['invoice_id']);
         if (!$invoice)
         {
-            $address=Addressadd::findOne(Yii::$app->session['address_id']);
+            $address=UserAddress::findOne(Yii::$app->session['address_id']);
             $in=new Invoice();
             $in->invoice_type=1;
             $in->invoice_header_type=1;
@@ -1305,7 +1304,7 @@ class OrderController extends Controller
         //获取收货详情
         $address_id=$order_information['address_id'];
         $invoice_id=$order_information['invoice_id'];
-        $address=Addressadd::find()->where(['id'=>$address_id])->asArray()->one();
+        $address=UserAddress::find()->where(['id'=>$address_id])->asArray()->one();
         if (!$address){
             $code = 1000;
             return Json::encode([
@@ -3239,7 +3238,7 @@ class OrderController extends Controller
         }
         $LogisticsTemplate=LogisticsTemplate::findOne($goods->logistics_template_id);
         $freight=1000;
-        $address=Addressadd::find()
+        $address=UserAddress::find()
             ->where(['id'=>$address_id])
             ->one();
         $invoice=Invoice::find()
@@ -5969,7 +5968,7 @@ class OrderController extends Controller
             ]);
         }
         //default=1000
-        $addressList = Addressadd::find()
+        $addressList = UserAddress::find()
             ->where(['uid' => $user->id])
             ->andWhere(['default'=>1])
             ->asArray()

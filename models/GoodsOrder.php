@@ -210,7 +210,7 @@ class GoodsOrder extends ActiveRecord
             return false;
         }
         $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
-        $address=Addressadd::findOne($address_id);
+        $address=UserAddress::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (!$address  || !$invoice){
             return false;
@@ -504,7 +504,7 @@ class GoodsOrder extends ActiveRecord
          if (($freight*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
              return false;
          }
-        $address=Addressadd::findOne($address_id);
+        $address=UserAddress::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (! $address  || !$invoice){
             return false;
@@ -3149,7 +3149,7 @@ class GoodsOrder extends ActiveRecord
                 $pay_name='微信APP支付';
                 break;
         }
-        $address=Addressadd::findOne($address_id);
+        $address=UserAddress::findOne($address_id);
         if (!$address)
         {
             $code=1000;

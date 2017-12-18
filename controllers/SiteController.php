@@ -9,7 +9,6 @@ use app\models\Role;
 use app\models\UserAddress;
 use app\models\UserRole;
 use app\models\LogisticsDistrict;
-use app\models\Addressadd;
 use app\models\Invoice;
 use app\services\BasisDecorationService;
 use app\services\FileService;
@@ -1507,7 +1506,7 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $addressList = Addressadd::find()->where(['uid' => $user->id])->asArray()->all();
+        $addressList = UserAddress::find()->where(['uid' => $user->id])->asArray()->all();
         foreach ($addressList as &$list) {
             $list['district_code'] = $list['district'];
             $list['district'] = LogisticsDistrict::getdistrict($list['district']);
