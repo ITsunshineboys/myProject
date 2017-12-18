@@ -465,7 +465,7 @@ class OrderController extends Controller
      * 线下店app-获取商品信息(新)
      * @return string
      */
-    public function actionGetGoodsInfo(){
+    public function actionGetLineGoodsInfo(){
         $request = Yii::$app->request;
         $goods_id=$request->get('goods_id');
         $goods_num=$request->get('goods_num');
@@ -2786,6 +2786,10 @@ class OrderController extends Controller
             ]);
         }
         $postData = Yii::$app->request->get();
+        if (!$postData)
+        {
+            $postData=Yii::$app->request->post();
+        }
         $uploadsData=FileService::uploadMore();
         if (!$uploadsData ==1000){
             if (is_numeric($uploadsData)){
