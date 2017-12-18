@@ -1553,9 +1553,10 @@ class QuoteController extends Controller
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
         } else {
+            $code=1080;
             return Json::encode([
-                'code' => 1000,
-                'msg' => '商品详情有误',
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
                 'goods'=> [],
                 'goods_attr'=> [],
             ]);
