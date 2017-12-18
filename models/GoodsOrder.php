@@ -2490,7 +2490,7 @@ class GoodsOrder extends ActiveRecord
                 $arr[$k]['handle']='平台介入';
             }
             if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
-                if (!$arr[$k]['comment_id']){
+                if (!$arr[$k]['comment_id'] || $arr[$k]['comment_id']==0){
                     $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
                 }
             }
