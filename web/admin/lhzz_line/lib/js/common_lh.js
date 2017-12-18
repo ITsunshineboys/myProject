@@ -15,7 +15,7 @@ app.service('_ajax', ["$http", "$state", function ($http, $state) {
             if (res.code === 403) {
                 window.location.href = "login.html";
             } else if (res.code === 200 || res.code == 1007 || res.code == 1019|| res.code == 1010|| res.code == 1011
-                || res.code == 1043 || res.code == 1076 || res.code == 1077 || res.code == 1078 || res.code == 1079 || res.code == 1000) {
+                || res.code == 1043 || res.code == 1076 || res.code == 1077 || res.code == 1078 || res.code == 1079 || res.code == 1080) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }
@@ -43,7 +43,7 @@ app.service('_ajax', ["$http", "$state", function ($http, $state) {
                 window.location.href = "login.html";
             } else if (res.code === 200 || res.code == 1007 || res.code == 1009 || res.code == 1010 || res.code == 1011 ||res.code == 1019
                 || res.code == 1006 ||res.code == 1028 ||res.code == 1029 ||res.code == 1030 || res.code == 1037
-                || res.code == 1038 || res.code == 1012 || res.code == 1013 || res.code == 1014 || res.code == 1022 || res.code == 1042 || res.code == 1075) {
+                || res.code == 1038 || res.code == 1012 || res.code == 1013 || res.code == 1014 || res.code == 1022 || res.code == 1042 || res.code == 1075 || res.code == 1080) {
                 if (typeof callback === 'function') {
                     callback(res)
                 }

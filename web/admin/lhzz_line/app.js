@@ -497,20 +497,23 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/intelligent/intelligent_index.html',
             css: 'pages/intelligent/css/intelligent_index.css'
         })
-        .state('intelligent.house_list', {//智能报价小区列表
-            url: 'house_list',
+        .state('house_list', {//智能报价小区列表
+            url: '/house_list?city&province',
             templateUrl: 'pages/intelligent/house_list.html',
-            css: 'pages/intelligent/css/house_list.css'
+            css: 'pages/intelligent/css/house_list.css',
+            controller:'house_list_ctrl'
         })
-        .state('intelligent.add_house', {//智能报价添加/编辑小区
-            url: 'add_house',
+        .state('add_house', {//智能报价添加/编辑小区
+            url: '/add_house?id&city&index',
             templateUrl: 'pages/intelligent/add_house.html',
-            css: 'pages/intelligent/css/add_house.css'
+            css: 'pages/intelligent/css/add_house.css',
+            controller:'house_detail_ctrl'
         })
-        .state('intelligent.add_case', {//智能报价添加/编辑案例
-            url: 'add_case',
+        .state('add_case', {//智能报价添加/编辑案例
+            url: '/add_case?index&cur_index&city',
             templateUrl: 'pages/intelligent/add_case.html',
-            css: 'pages/intelligent/css/add_case.css'
+            css: 'pages/intelligent/css/add_case.css',
+            controller:'add_case_ctrl'
         })
         .state('intelligent.edit_house', {//智能报价添加/编辑普通小区
             url: 'edit_house',

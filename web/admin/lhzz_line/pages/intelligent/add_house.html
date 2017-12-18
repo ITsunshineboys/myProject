@@ -7,34 +7,34 @@
                 <div class="col-md-3">
                     <input type="text" name="districtName" ng-class="{'error':(submitForm.districtName.$invalid&&submitted) ||
                 (submitForm.districtName.$error.required&&change)}" ng-blur="change=!!submitForm.districtName.$error"
-                           ng-model="ctrlScope.house_name" class="form-control" required maxlength="14">
+                           ng-model="params.name" class="form-control" required maxlength="14">
                 </div>
                 <p class="col-md-7">*限1~14个字符</p>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>小区地址</label>
-                <div class="col-md-3">
+                <div class="col-md-3 basic_info">
                     <label>选择区县</label>
-                    <select ng-model="ctrlScope.cur_house_county" class="form-control"
-                            ng-options="item.id as item.name for item in house_county"></select>
+                    <select ng-model="params.region_code" class="form-control"
+                            ng-options="item.region_code as item.region_name for item in region_options"></select>
                     <!--<input type="text" class="form-control">-->
                     <label>详细地址</label>
                     <textarea class="form-control" name="address" ng-class="{'error':(submitForm.address.$invalid&&submitted) ||
                 (submitForm.address.$error.required&&change1)}" ng-blur="change1=!!submitForm.address.$error"
-                              placeholder="请输入详细地址" required ng-model="ctrlScope.address" cols="30" rows="5"></textarea>
-                    <span class="address_num">{{ctrlScope.cur_num}}/45</span>
+                              placeholder="请输入详细地址" required ng-model="params.address" cols="30" maxlength="45" rows="5"></textarea>
+                    <span class="address_num">{{params.address==undefined?0:params.address.length}}/45</span>
                 </div>
             </div>
         </div>
         <div class="all">
             <div class="house_msg_header form-group">
                 <h1 class="col-md-5">房屋信息</h1>
-                <div class="col-md-4">
+                <div class="col-md-4 info">
                     <p class="col-md-4 col-md-offset-4">
-                    <button class="btn btn-default" ng-click="add_ordinary_house()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
+                    <button class="btn btn-default" ng-click="addData()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
                     </p>
                     <p class="col-md-4">
-                    <button class="btn btn-default" ng-click="add_case()"><i class="glyphicon glyphicon-plus"></i>案例添加</button>
+                    <button class="btn btn-default" ng-click="addData(1)"><i class="glyphicon glyphicon-plus"></i>案例添加</button>
                     </p>
                 </div>
             </div>
@@ -52,18 +52,18 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="all_btn">
                         <p class="col-md-4" ng-show="$index!=0">
-                            <button ng-click="delete_house1(item)" class="btn btn-default"><i
+                            <button ng-click="deleteItem($index)" class="btn btn-default"><i
                                     class="glyphicon glyphicon-minus"></i></button>
                         </p>
                         <p class="col-md-4" ng-show="$index==0"></p>
                         <p ng-show="!$first" class="col-md-4">
-                            <button class="btn btn-primary" ng-click="house_sort(item,'up')"><i
+                            <button class="btn btn-primary" ng-click="move(item,$index)"><i
                                     class="glyphicon glyphicon-arrow-up"></i>上移
                             </button>
                         </p>
                         <p class="col-md-4" ng-show="$first"></p>
                         <p class="col-md-4" ng-if="house_informations.length!=1&&!$last">
-                            <button class="btn btn-primary" ng-click="house_sort(item,'down')"><i
+                            <button class="btn btn-primary" ng-click="move(item,$index,1)"><i
                                     class="glyphicon glyphicon-arrow-down"></i>下移
                             </button>
                         </p>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 edit">
-                    <a ng-click="go_to_edit(item,$index)">编辑</a>
+                    <a ng-click="goDetail(item,$index)">编辑</a>
                 </div>
             </div>
 
@@ -79,9 +79,9 @@
         <div class="all">
             <div class="house_msg_header form-group">
                 <h1 class="col-md-5">图纸信息</h1>
-                <div class="col-md-4">
+                <div class="col-md-4 info">
                     <p class="col-md-4 col-md-offset-4">
-                    <button class="btn btn-default" ng-click="add_drawing()"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
+                    <button class="btn btn-default" ng-click="addData(2)"><i class="glyphicon glyphicon-plus"></i>普通添加</button>
                     </p>
                 </div>
             </div>
@@ -97,13 +97,13 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="all_btn">
                         <p class="col-md-4">
-                        <button ng-click="delete_drawing(item)" class="btn btn-default"><i
+                        <button ng-click="deleteItem($index,1)" class="btn btn-default"><i
                                 class="glyphicon glyphicon-minus"></i></button>
                         </p>
                     </div>
                 </div>
                 <div class="col-md-3 edit">
-                    <a ng-click="go_to_drawing(item,$index)">编辑</a>
+                    <a ng-click="goDetail(item,$index)">编辑</a>
                 </div>
             </div>
         </div>

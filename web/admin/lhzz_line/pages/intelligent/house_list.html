@@ -2,22 +2,21 @@
     <div class="house_list">
         <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
         <div class="search form-inline clearfix">
-            <form class="form-inline clearfix">
-                <button class="btn btn-default" ng-click="go_to_add()">
+            <form>
+                <button class="btn btn-default" ui-sref="add_house({region_options:copy_region,city:city_code})">
                     <i class="iconfont icon-add"></i>
                     <span>添加小区</span>
                 </button>
-                <select class="form-control" ng-model="params.post" ng-change="getHouseList()" ng-options="item.id as item.name for item in county">
-                    <option value="全市"></option>
+                <select class="form-control" ng-model="params.post" ng-change="getHouseList()" ng-options="item.region_code as item.region_name for item in region_options">
                 </select>
                 <input type="text" class="form-control start_time" placeholder="开始时间" ng-model="params.min" max-date="{{params.max}}" ng-change="getHouseList(1)" id="start_time" ngc-lay-date>
                 <input type="text" class="form-control end_time" placeholder="结束时间" ng-model="params.max" min-date="{{params.min}}" ng-change="getHouseList(1)" id="end_time" ngc-lay-date>
                 <div class="form-group pull-right">
                     <div class="input-group">
-                        <input id="search" class="form-control" type="text" placeholder="搜索小区名称" ng-model="ctrlScope.search_txt">
+                        <input id="search" class="form-control" type="text" placeholder="搜索小区名称" ng-model="vm.keyword">
                         <span class="glyphicon glyphicon-search"></span>
                     </div>
-                    <button class="btn btn-default" ng-click="search_house()">查询</button>
+                    <button class="btn btn-default" ng-click="getKeywordHouseList()">查询</button>
                 </div>
             </form>
         </div>
@@ -29,12 +28,12 @@
                 <th>详情</th>
                 <th>操作</th>
             </tr>
-            <tr ng-repeat="item in house_detail">
+            <tr ng-repeat="item in house_list">
                 <td class="text-left">{{item.toponymy}}</td>
                 <td class="text-left">{{item.add_time}}</td>
                 <td class="text-left">{{item.district}}</td>
-                <td class="text-left" style="color: #3F94F6;" ng-click="go_edit_house(item)">编辑</td>
-                <td class="text-left" style="color: #3F94F6;" ng-click="delete_house(item)">删除</td>
+                <td class="text-left"><a ui-sref="add_house({id:item.id,region_options:region_options,index:1})">编辑</a></td>
+                <td class="text-left"><a ng-click="deleteItem(item)">删除</a></td>
             </tr>
         </table>
         <tm-pagination conf="Config"></tm-pagination>

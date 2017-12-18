@@ -10,7 +10,7 @@
                            ng-pattern="/^[\d\D]{1,12}$/" ng-blur="change=!!curForm.houseName.$error" autocomplete="off"
                            type="text" id="houseName" name="houseName" required placeholder="请输入户型名称" minlength="1"
                            maxlength="12"
-                           ng-model="cur_house_information.house_type_name" class="form-control">
+                           ng-model="cur_house.house_type_name" class="form-control">
                 </div>
                 <p class="col-md-6 col-md-offset-1">*限1~12个字符</p>
             </div>
@@ -20,7 +20,7 @@
                 <div class="col-md-3 col-sm-2">
                     <input id="houseArea" autocomplete="off" type="text" name="houseArea"
                            ng-pattern="/^[1-9]$|^[1-9]\d$|^1[0-7]\d$|^[1-9]\.\d{1,2}$|^[1-9]\d\.\d{1,2}$|^1[0-7]\d.\d{1,2}$|^180$/"
-                           required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值"
+                           required class="form-control" ng-model="cur_house.area" placeholder="请输入面积数值"
                            ng-blur="change1=!!curForm.houseArea.$error"
                            ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
                 </div>
@@ -32,7 +32,7 @@
                 <div class="col-md-4">
                     <label for="room" class="col-md-6 left_house_type">
                         <input id="room" type="text" disabled class="form-control"
-                               ng-model="cur_house_information.cur_room">
+                               ng-model="cur_house.cur_room">
                         <span>室</span>
                         <button class="glyphicon glyphicon-plus btn" type="button"
                                 ng-click="change_cur_quantity('cur_house_information.cur_room',6,1)"></button>
@@ -41,7 +41,7 @@
                     </label>
                     <label for="hall" class="col-md-6 right_house_type">
                         <input id="hall" type="text" disabled class="form-control"
-                               ng-model="cur_house_information.cur_hall">
+                               ng-model="cur_house.cur_hall">
                         <span>厅</span>
                         <button class="glyphicon glyphicon-plus btn" type="button"
                                 ng-click="change_cur_quantity('cur_house_information.cur_hall',3,1)"></button>
@@ -50,7 +50,7 @@
                     </label>
                     <label for="toilet" class="col-md-6 left_house_type">
                         <input id="toilet" type="text" disabled class="form-control"
-                               ng-model="cur_house_information.cur_toilet">
+                               ng-model="cur_house.cur_toilet">
                         <span>卫</span>
                         <button class="glyphicon glyphicon-plus btn" type="button"
                                 ng-click="change_cur_quantity('cur_house_information.cur_toilet',4,1)"></button>
@@ -59,7 +59,7 @@
                     </label>
                     <label for="kitchen" class="col-md-6 right_house_type">
                         <input id="kitchen" type="text" disabled class="form-control"
-                               ng-model="cur_house_information.cur_kitchen">
+                               ng-model="cur_house.cur_kitchen">
                         <span>厨</span>
                         <button class="glyphicon glyphicon-plus btn" type="button"
                                 ng-click="change_cur_quantity('cur_house_information.cur_kitchen',2,1)"></button>
@@ -73,9 +73,9 @@
                 <div class="col-md-3">
                     <div style="width: 100px;height: 100px;">
                         <!--<img src="pages\intelligent\images\default.png" ng-if="!data.file" alt=""  width="100px" height="100px">-->
-                        <img ng-src="{{ cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''"
+                        <img ng-src="{{ cur_house.cur_imgSrc}}" ng-if="cur_house.cur_imgSrc!=''"
                              src="pages\intelligent\images\default.png" width="100px" height="100px">
-                        <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"
+                        <img ng-if="cur_house.cur_imgSrc==''" src="pages\intelligent\images\default.png"
                              width="100px" height="100px">
                     </div>
                     <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
@@ -91,23 +91,23 @@
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>是否有楼梯</label>
                 <div class="col-md-4 special_radio">
                     <label for="have_stair"
-                           ng-click="cur_house_information.have_stair = 1;cur_house_information.stair = 1"
+                           ng-click="cur_house.have_stair = 1;cur_house.stair = 1"
                            class="col-md-3">
-                        <input id="have_stair" type="radio" ng-checked="cur_house_information.have_stair==1"
+                        <input id="have_stair" type="radio" ng-checked="cur_house.have_stair==1"
                                name="if_stair">
                         有
                     </label>
                     <label for="no_stair"
-                           ng-click="cur_house_information.have_stair = 0;cur_house_information.stair = 0"
+                           ng-click="cur_house.have_stair = 0;cur_house.stair = 0"
                            class="col-md-3">
-                        <input id="no_stair" type="radio" ng-checked="cur_house_information.have_stair==0"
+                        <input id="no_stair" type="radio" ng-checked="cur_house.have_stair==0"
                                name="if_stair">
                         无
                     </label>
-                    <div class="row col-md-12 structure" ng-if="cur_house_information.have_stair == 1">
-                        <label for="structure{{item.id}}" ng-click="cur_house_information.stair=+item.id"
-                               class="col-md-4" ng-repeat="item in cur_all_stair">
-                            <input type="radio" ng-checked="cur_house_information.stair == item.id"
+                    <div class="row col-md-12 structure" ng-if="cur_house.have_stair == 1">
+                        <label for="structure{{item.id}}" ng-click="cur_house.stair=+item.id"
+                               class="col-md-4" ng-repeat="item in all_stair">
+                            <input type="radio" ng-checked="cur_house.stair == item.id"
                                    id="structure{{item.id}}" name="stair_structure">
                             {{item.attribute}}
                         </label>
@@ -117,20 +117,20 @@
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>层高</label>
                 <div class="col-md-4 special_radio">
-                    <label for="first_high" ng-click="cur_house_information.high = 2.8" class="col-md-3">
-                        <input id="first_high" ng-checked="cur_house_information.high == 2.8" type="radio" name="high">
+                    <label for="first_high" ng-click="cur_house.high = 2.8" class="col-md-3">
+                        <input id="first_high" ng-checked="cur_house.high == 2.8" type="radio" name="high">
                         2.8m
                     </label>
-                    <label for="second_high" ng-click="cur_house_information.high = 3" class="col-md-3">
-                        <input id="second_high" ng-checked="cur_house_information.high == 3" type="radio" name="high">
+                    <label for="second_high" ng-click="cur_house.high = 3" class="col-md-3">
+                        <input id="second_high" ng-checked="cur_house.high == 3" type="radio" name="high">
                         3m
                     </label>
-                    <label for="three_high" ng-click="cur_house_information.high = 3.3" class="col-md-3">
-                        <input id="three_high" ng-checked="cur_house_information.high == 3.3" type="radio" name="high">
+                    <label for="three_high" ng-click="cur_house.high = 3.3" class="col-md-3">
+                        <input id="three_high" ng-checked="cur_house.high == 3.3" type="radio" name="high">
                         3.3m
                     </label>
-                    <label for="four_high" ng-click="cur_house_information.high = 4.5" class="col-md-3">
-                        <input id="four_high" ng-checked="cur_house_information.high == 4.5" type="radio" name="high">
+                    <label for="four_high" ng-click="cur_house.high = 4.5" class="col-md-3">
+                        <input id="four_high" ng-checked="cur_house.high == 4.5" type="radio" name="high">
                         >4.5m(跃层商铺等)
                     </label>
                 </div>
@@ -141,7 +141,7 @@
                     <input id="window" autocomplete="off" type="text" required
                            ng-pattern="/^\d$|^1\d$|^20$|^\d\.\d{1,2}$|^1\d\.\d{1,2}$/"
                            ng-blur="change2=!!curForm.window.$error"
-                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house_information.window"
+                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house.window"
                            name="window"
                            ng-class="{'error':(curForm.window.$invalid&&submitted) ||(
                            (curForm.window.$error.required || curForm.window.$error.pattern)&&change2)}">
@@ -155,27 +155,27 @@
             <div class="form-group">
                 <label class="col-md-2 text-left">系列选择</label>
                 <div class="col-md-3">
-                    <select class="form-control" ng-model="ctrlScope.cur_series"
-                            ng-options="item.series for item in cur_all_series"></select>
+                    <select class="form-control" ng-model="cur_house.series"
+                            ng-options="item.id as item.series for item in all_series"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left">风格选择</label>
                 <div class="col-md-3">
-                    <select class="form-control" ng-model="ctrlScope.cur_style"
-                            ng-options="item.style for item in cur_all_style"></select>
+                    <select class="form-control" ng-model="cur_house.style"
+                            ng-options="item.id as item.style for item in all_style"></select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>图纸</label>
                 <div class="col-md-10">
-                    <div class="cur_drawing" ng-repeat="item in all_drawing">
+                    <div class="cur_drawing" ng-repeat="item in cur_house.drawing_list">
                         <img ng-src="{{item}}" width="100px" height="100px">
                         <div class="text-center" ng-if="all_upload_status" ng-click="upload_delete(item)">&times;</div>
                     </div>
                     <div style="width: 100px;height: 100px;display: inline-block" ngf-pattern="image/*"
                          ng-change="arr_upload(data.file)" ngf-select="" ng-model="data.file" ngf-multiple="false"
-                         ng-if="all_drawing.length<6">
+                         ng-if="cur_house.drawing_list.length<6">
                         <img src="pages/intelligent/images/add.png" alt="" width="100px" height="100px">
                     </div>
                     <p class="upload_msg">图片大小347x190，5M内，可传1-6张图片，支持JPG、PNG、JPGE</p>

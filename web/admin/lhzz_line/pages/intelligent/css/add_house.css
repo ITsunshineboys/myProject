@@ -6,6 +6,17 @@
 .house_msg_header,.add_house{
     position: relative;
 }
+.add_house .basic_info{
+    position: relative;
+}
+.add_house .basic_info span{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+}
+.add_house .info{
+    padding-top: 20px;
+}
 .add_house h1{
     font-size:18px !important;
     margin-bottom: 20px!important;
