@@ -1231,10 +1231,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function resetSignature($signature)
     {
-        if (!$signature) {
-            $code = 1000;
-            return $code;
-        }
+//        if (!$signature) {
+//            $code = 1000;
+//            return $code;
+//        }
 
         if ($this->signature == $signature) {
             $code = 200;
