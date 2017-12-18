@@ -2678,14 +2678,16 @@ class OrderController extends Controller
             ]);
         }
 
-         if (6 <$comment['score'] && $comment['score']<= 10 )
+
+
+        if (6 <$comment['score'] && $comment['score']<= 10 )
         {
-            $comment['score']='好评';
+            $comment['score']=GoodsComment::DESC_SCORE_GOOD;
         }else if (2< $comment['score'] && $comment['score']<= 6 )
         {
-            $comment['score']='中评';
+            $comment['score']=GoodsComment::DESC_SCORE_MEDIUM;
         }else{
-            $comment['score']='差评';
+            $comment['score']=GoodsComment::DESC_SCORE_POOR;
         }
         $comment['create_time']=date('Y-m-d H:i',0);
 
@@ -2715,6 +2717,7 @@ class OrderController extends Controller
         ]);
     }
     /**
+     * 评论回复操作
      * @return string
      */
     public function  actionCommentReply()
@@ -4383,14 +4386,15 @@ class OrderController extends Controller
                 'data'=>[]
             ]);
         }
+
         if (6 <$comment['score'] && $comment['score']<= 10 )
         {
-            $comment['score']='好评';
+            $comment['score']=GoodsComment::DESC_SCORE_GOOD;
         }else if (2< $comment['score'] && $comment['score']<= 6 )
         {
-            $comment['score']='中评';
+            $comment['score']=GoodsComment::DESC_SCORE_MEDIUM;
         }else{
-            $comment['score']='差评';
+            $comment['score']=GoodsComment::DESC_SCORE_POOR;
         }
         $comment['create_time']=date('Y-m-d H:i',0);
 
