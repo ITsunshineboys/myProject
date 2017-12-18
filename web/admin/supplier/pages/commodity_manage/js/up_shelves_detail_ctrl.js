@@ -21,7 +21,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.goods_all_attrs = [];//所有属性数据
     $scope.logistics = [];//物流模块列表
     $scope.series_null_flag = false;
-    $scope.style_null_arr = false;
+    $scope.style_null_flag = false;
     $scope.series_null_arr = [];
     $scope.style_null_arr = [];
     let reg = /^\d+(\.\d{1,2})?$/;
@@ -201,25 +201,24 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     //添加属性
     $scope.i = 1;
     $scope.add_own_attrs = function () {
-        $scope.own_attrs_arr.push({
-            name: '',
-            value: '',
-            name_model: 'attrs' + $scope.i,
-            value_model: 'value' + $scope.i
-        });
-        $scope.i++;
+      $scope.own_attrs_arr.push({name: '', value: '', name_model: 'attrs' + $scope.i, value_model: 'value' + $scope.i});
+      $scope.i++;
     };
     //删除属性
     $scope.del_own_attrs = function (index) {
-        console.log(index);
         $scope.own_attrs_arr.splice(index, 1);
     };
-	$scope.own_input_change = function (input_value) {
-		for (let [key, value1] of $scope.goods_all_attrs.entries()) {
-			if (input_value == value1.name) {
+	$scope.own_input_change = function () {
+		let arr=[];
+		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
+		for(let [key,value] of arr.entries()){
+			let num=angular.copy(arr).filter(function (item) {
+				return item.name==value.name
+			});
+			if(num.length!=1){
 				$scope.own_submitted = true;
 				break;
-			} else {
+			}else{
 				$scope.own_submitted = false;
 			}
 		}

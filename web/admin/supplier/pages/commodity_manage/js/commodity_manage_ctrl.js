@@ -110,12 +110,11 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.wait_flag = true;
             $scope.logistics_flag = false;
             /*初始化已下架的搜索*/
-            $scope.ConfigWait.currentPage = 1; //页数跳转到第一页
+	          $scope.wjConfig.currentPage = 1; //页数跳转到第一页
             $scope.down_search_value = '';//清空输入框值
             $scope.params.keyword = '';
             $scope.params['sort[]'] = 'publish_time:3';
             $scope.params.status = 1;
-            tablePagesWait();
         }
         //物流模板
         if ($stateParams.logistics_flag == true) {
@@ -164,7 +163,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.down_flag = false;
             $scope.logistics_flag = false;
 	          /*初始化已下架的状态*/
-	        $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+	          $scope.wjConfig.currentPage = 1; //页数跳转到第一页
             $scope.wait_search_content='';
 	          $scope.params.keyword = '';
             $scope.params.status = 1;

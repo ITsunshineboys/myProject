@@ -48,8 +48,7 @@
                     <span>选择品牌</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.brand_model"
-                            ng-options="item.id as item.name for item in brands_arr"></select>
+                    <select class="form-control" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
                 </div>
             </div>
             <!--选择系列-->
@@ -58,8 +57,7 @@
                     <span>选择系列</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.series_model"
-                            ng-options="item.id as item.series for item in series_arr"></select>
+                    <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
                 </div>
             </div>
             <div class="row" ng-if="series_null_flag">
@@ -71,14 +69,12 @@
                     <span>选择风格</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.style_model"
-                            ng-options="item.id as item.style for item in styles_arr"></select>
+                    <select class="form-control" ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr"></select>
                 </div>
             </div>
             <div class="row" ng-if="style_null_flag">
                 <div class="col-sm-offset-2 remove_txt">风格已被移除，请重新选择风格</div>
             </div>
-
             <!--属性设置-->
             <div class="row">
                 <div class="col-sm-2 control-label">
@@ -138,17 +134,13 @@
                     <div class="col-sm-offset-2 col-sm-3">
                         <img src="pages/commodity_manage/image/red.png" alt=""/>
                         <span class="glyphicon glyphicon-minus pointer" ng-click="del_own_attrs($index)"></span>
-                        <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请输入属性名称"
-                               ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required
-                               ng-class="{'error':form[item.name_model].$invalid &&submitted||(form[item.name_model].$error.required)}"/>
+                        <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请勿输入重复属性名称" ng-change="own_input_change()" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'error':form[item.name_model].$invalid &&submitted||(form[item.name_model].$error.required) || own_submitted}"/>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容"
-                               ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required
-                               ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
+                        <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
                     </div>
                     <div class="col-sm-1">
-                        <span class="unit">&nbsp;</span>
+                        <span>&nbsp;</span>
                     </div>
                     <div class="col-sm-3 control-label">
                         <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>

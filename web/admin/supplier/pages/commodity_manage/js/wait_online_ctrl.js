@@ -5,14 +5,17 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		$scope.goods_all_attrs=[];//所有属性数据
 		$scope.logistics=[];//物流模块列表
     $scope.series_null_flag=false;
-    $scope.style_null_arr=false;
+    $scope.style_null_flag=false;
     $scope.series_null_arr=[];
     $scope.style_null_arr=[];
-	let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
+		let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
+		$scope.back_wait=function () {
+			$state.go('commodity_manage',{wait_flag:true})
+		};
     $rootScope.crumbs = [{
         name: '商品管理',
         icon: 'icon-shangpinguanli',
-        link: 'commodity_manage'
+        link: $scope.back_wait
     },{
         name: '商品详情',
     }];
@@ -21,7 +24,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.myng=$scope;
 	let goods_item=$stateParams.item;//点击对应的那条数据
 	console.log(goods_item);
-	console.log($stateParams.flag);
 	if($stateParams.flag==0){
 		$scope.show_flag=false;
 	}else if($stateParams.flag==1){
@@ -144,7 +146,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	/*==================品牌、系列、风格 下拉框结束===========================*/
 
 	/*---------------------------------属性获取开始---------------------------------*/
-
 	$scope.goods_input_attrs=[];//普通文本框
 	$scope.goods_select_attrs=[];//下拉框
 	$scope.goods_select_value=[];//下拉框的值
@@ -171,7 +172,9 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	  for(let [key,value] of $scope.goods_select_attrs.entries()){
 		  $scope.goods_select_attrs_value.push(value.value);//下拉框的值
 	  }
-  })
+	  console.log($scope.goods_all_attrs);
+  });
+
 	/*----------------自己添加的属性--------------------*/
 	$scope.own_attrs_arr=[];//自定义数组
 	//添加属性
@@ -182,7 +185,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	};
 	//删除属性
 	$scope.del_own_attrs=function (index) {
-		console.log(index);
 		$scope.own_attrs_arr.splice(index,1);
 	};
 	//判断属性是否为数字
@@ -191,6 +193,22 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			item.value = item.value.replace(/[^\d]/g,'');
 		}
 	};
+	//自己添加的属性
+	$scope.own_input_change = function () {
+		let arr=[];
+		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
+		for(let [key,value] of arr.entries()){
+			let num=angular.copy(arr).filter(function (item) {
+				return item.name==value.name
+			});
+			if(num.length!=1){
+				$scope.own_submitted = true;
+				break;
+			}else{
+				$scope.own_submitted = false;
+			}
+		}
+	}
 	//库存
 	$scope.leftNumber=function (value) {
 		if(value!==undefined){
@@ -332,7 +350,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
     let description = UE.getEditor('editor').getContent();//富文本编辑器
-		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag &&!!$scope.series_model && !!$scope.style_model){
+		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.own_submitted && !$scope.price_flag && !$scope.g_flag && !$scope.d_flag &&!!$scope.series_model && !!$scope.style_model){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票
@@ -385,8 +403,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				}
 			}
 			/*判断风格和系列是否存在，如果不存在，值传0*/
-			$scope.series_model==undefined?$scope.series_model=0:$scope.series_model=parseInt($scope.series_model);
-			$scope.style_model==undefined?$scope.style_model=0:$scope.style_model=parseInt($scope.style_model);
+			$scope.series_model == true?$scope.series_model=0:$scope.series_model=parseInt($scope.series_model);
+			$scope.style_model == true?$scope.style_model=0:$scope.style_model=parseInt($scope.style_model);
 			/*循环自己添加的属性*/
 			for(let[key,value] of $scope.own_attrs_arr.entries()){
 				$scope.pass_attrs_name.push(value.name);//属性名
@@ -452,10 +470,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			}
 		}
 	};
-	/*------------返回按钮----------------*/
-	$scope.back_wait=function () {
-		$state.go('commodity_manage',{wait_flag:true})
-	};
+
 	/*-----------------------保存成功跳转--------------------------------*/
 	$scope.change_go=function () {
 		setTimeout(function () {

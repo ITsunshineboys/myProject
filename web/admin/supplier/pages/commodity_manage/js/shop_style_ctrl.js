@@ -14,6 +14,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.logistics = [];//物流模块列表
 	$scope.goods_all_attrs = [];//所有属性数据
 	$scope.shop_logistics = [];//物流模板默认第一项
+	$scope.own_attrs_arr = [];//自己添加的属性数组
 	$scope.category_id = $stateParams.category_id;//三级分类的id
 	$scope.first_category_title = $stateParams.first_category_title;//一级分类名称
 	$scope.second_category_title = $stateParams.second_category_title;//二级分类名称
@@ -75,7 +76,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				$scope.goods_input_attrs.push(value);
 			}
 		}
-
 		//循环下拉框的值
 		for (let [key, value] of $scope.goods_select_attrs.entries()) {
 			$scope.goods_select_attrs_value.push(value.value);//下拉框的值
@@ -96,7 +96,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		}
 	};
 	/*----------------自己添加的属性--------------------*/
-	$scope.own_attrs_arr = [];//自定义数组
+
+	$scope.own_all_attrs=[];//大后台属性和自己添加的属性 数组
 	//添加属性
 	$scope.i = 1;
 	$scope.add_own_attrs = function () {
@@ -105,15 +106,20 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	};
 	//删除属性
 	$scope.del_own_attrs = function (index) {
-		console.log(index);
 		$scope.own_attrs_arr.splice(index, 1);
 	};
-	$scope.own_input_change = function (input_value) {
-		for (let [key, value1] of $scope.goods_all_attrs.entries()) {
-			if (input_value == value1.name) {
+	//自己增加的属性的change事件
+	$scope.own_input_change = function () {
+		let arr=[];
+		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
+		for(let [key,value] of arr.entries()){
+			let num=angular.copy(arr).filter(function (item) {
+				return item.name==value.name
+			});
+			if(num.length!=1){
 				$scope.own_submitted = true;
 				break;
-			} else {
+			}else{
 				$scope.own_submitted = false;
 			}
 		}
