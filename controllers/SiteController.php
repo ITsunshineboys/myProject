@@ -6,6 +6,7 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
 use app\models\Role;
+use app\models\UserAddress;
 use app\models\UserRole;
 use app\models\LogisticsDistrict;
 use app\models\Addressadd;
@@ -1478,7 +1479,7 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code = Addressadd::UserAddressAdd($district_code, $region, $consignee, $mobile, $user->id,$default);
+        $code = UserAddress::UserAddressAdd($district_code, $region, $consignee, $mobile, $user->id,$default);
         if ($code == 200) {
             return Json::encode([
                 'code' => $code,
@@ -1542,7 +1543,7 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code = Addressadd::SetDefaultAddress($address_id, $user);
+        $code = UserAddress::SetDefaultAddress($address_id, $user);
         if ($code == 200) {
             return Json::encode([
                 'code' => $code,
@@ -1583,7 +1584,7 @@ class SiteController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code = Addressadd::updateAddress($consignee, $address_id, $district_code, $mobile, $region,$default);
+        $code = UserAddress::updateAddress($consignee, $address_id, $district_code, $mobile, $region,$default);
         if ($code == 200) {
             return Json::encode([
                 'code' => $code,
@@ -1622,7 +1623,7 @@ class SiteController extends Controller
             ]);
         }
 
-        $code = Addressadd::DelAddress($address_id);
+        $code = UserAddress::DelAddress($address_id);
         if ($code == 200) {
             return Json::encode([
                 'code' => $code,
