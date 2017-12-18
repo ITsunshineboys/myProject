@@ -32,6 +32,7 @@ use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use app\services\LogisticsService;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -109,6 +110,19 @@ class OwnerController extends Controller
         'oil_paint'         => 5,// 油漆 -> 油漆id
         'tiler'             => 6,//泥工 -> 泥工id
     ];
+    /**
+     * 工艺名称
+     */
+    const PROJECT_NAME=[
+        'weak_current'      => '弱电工艺',
+        'strong_current'    => '强电工艺',
+        'waterway'          => '水路工艺',
+        'waterproof'        => '防水工艺',
+        'carpentry'         => '木作工艺',
+        'emulsion_varnish'  => '乳胶漆工艺',
+        'oil_paint'         => '油漆工艺',
+        'tiler'             => '泥作工艺',
+    ];
 
     /**
      * 其它信息
@@ -125,6 +139,21 @@ class OwnerController extends Controller
         'wall_brick_area'               => '贴墙砖面积',
     ];
 
+
+//    /**
+//     * 其它信息
+//     */
+//    const WORKMANSHIP_IDS = [
+//        'flat_area'                     => 1,
+//        'modelling_length'              => 2,
+//        'emulsion_varnish_primer_area'  => 7,
+//        'emulsion_varnish_cover_area'   => 8,
+//        'concave_line_length'           => 10,
+//        'putty_area'                    => 9,
+//        'protective_layer_length'       => 11,
+//        'geostrophy_area'               => 12,
+//        'wall_brick_area'               => 13,
+//    ];
     /**
      * room  detail
      */
@@ -141,12 +170,14 @@ class OwnerController extends Controller
      * room area
      */
     const ROOM_AREA = [
-        'kitchen_area' => '厨房面积',
-        'toilet_area'  => '卫生间面积',
-        'hall_area'    => '客餐厅及过道面积',
-        'bedroom_area' => '卧室面积',
-        'bedroom_area_' => '客厅面积',
+        'kitchen_area' => '厨房面积百分比',
+        'toilet_area'  => '卫生间面积百分比',
+        'hall_area'    => '客餐厅及过道面积百分比',
+        'bedroom_area' => '卧室面积百分比',
+        'bedroom_area_' => '客厅面积百分比',
     ];
+
+
 
     const MATERIALS_CLASSIFY = [
         'auxiliary_material' => '辅材',
@@ -353,7 +384,7 @@ class OwnerController extends Controller
         $weak_current = BasisDecorationService::judge($goods,$post);
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['weak_current'],$post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['weak_current'],$post['city']);
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -442,7 +473,7 @@ class OwnerController extends Controller
         $strong_current = BasisDecorationService::judge($goods, $post);
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['strong_current'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['strong_current'], $post['city']);
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -599,7 +630,8 @@ class OwnerController extends Controller
 
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterway'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterway'], $post['city']);
+
 
 
         //材料总费用
@@ -626,7 +658,7 @@ class OwnerController extends Controller
         //人工价格
         $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area']);
-        $worker_price = !isset($waterproof_labor['univalence']) ? $waterproof_labor['univalence'] : LaborCost::WATERPROOF_PRICE;
+        $worker_price = !isset($waterproof_labor['univalence']) ? $waterproof_labor['univalence'] : 100;
         $worker_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERPROOF_DAY_AREA;
 
 
@@ -672,7 +704,7 @@ class OwnerController extends Controller
 
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['waterproof'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterproof'], $post['city']);
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -690,7 +722,7 @@ class OwnerController extends Controller
         $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
         $material_total = [];
         foreach ($waterproof as $one_waterproof) {
-            if ($one_waterproof['title'] == BasisDecorationService::GOODS_NAME['waterproof_coating']) {
+            if ($one_waterproof['title'] == BasisDecorationService::id2Title()['waterproof_coating']) {
                 $one_waterproof['quantity'] = $material_price['quantity'];
                 $one_waterproof['cost'] = $material_price['cost'];
                 $one_waterproof['procurement'] = $material_price['procurement'];
@@ -731,7 +763,7 @@ class OwnerController extends Controller
                 }
             }
         }
-        $worker_price = !isset($labor_cost['univalence']) ? $labor_cost['univalence'] : LaborCost::CARPENTRY_PRICE;
+        $worker_price = !isset($labor_cost['univalence']) ? $labor_cost['univalence'] : 100;
         $_flat = !isset($flat) ? $flat :WorkerCraftNorm::CARPENTRY_DAY_FLAT;
         $_modelling = !isset($modelling) ? $modelling :WorkerCraftNorm::CARPENTRY_DAY_MODELLING;
 
@@ -773,7 +805,7 @@ class OwnerController extends Controller
 
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['carpentry'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['carpentry'], $post['city']);
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -816,6 +848,7 @@ class OwnerController extends Controller
         //工人一天单价
         $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+
         foreach ($worker_kind_details as $_labor_cost) {
             switch ($_labor_cost) {
                 case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_primer_area']:
@@ -939,7 +972,8 @@ class OwnerController extends Controller
         }
 //        $goods_price = BasisDecorationService::priceConversion($goods);
         //当地工艺
-        $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['emulsion_varnish'], $post['city']);
+        $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['emulsion_varnish'], $post['city']);
+
         if ($crafts == null){
             $code = 1059;
             return Json::encode([
@@ -948,23 +982,22 @@ class OwnerController extends Controller
             ]);
         }
         $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods, $post);
-
         foreach ($crafts as $craft) {
 
             switch ($craft) {
-                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['putty']:
+                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['putty']:
                     $putty_craft = $craft;
                     break;
-                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_primer']:
+                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['emulsion_varnish_primer']:
                     $primer_craft = $craft;
                     break;
-                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_surface']:
+                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['emulsion_varnish_surface']:
                     $finishing_coat_craft = $craft;
                     break;
-                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['concave_line']:
+                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['concave_line']:
                     $concave_line_craft = $craft;
                     break;
-                case $craft['project_details'] == BasisDecorationService::GOODS_NAME['land_plaster']:
+                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['land_plaster']:
                     $gypsum_powder_craft = $craft;
                     break;
             }
@@ -991,31 +1024,31 @@ class OwnerController extends Controller
         $material_total = [];
         foreach ($series_and_style as $one_goods_price) {
             switch ($one_goods_price) {
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['putty']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['putty']:
                     $one_goods_price['quantity'] = $putty_cost['quantity'];
                     $one_goods_price['cost'] = $putty_cost['cost'];
                     $one_goods_price['procurement'] = $putty_cost['procurement'];
                     $material_total['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_primer']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['emulsion_varnish_primer']:
                     $one_goods_price['quantity'] = $primer_cost['quantity'];
                     $one_goods_price['cost'] = $primer_cost['cost'];
                     $one_goods_price['procurement'] = $primer_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['emulsion_varnish_surface']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['emulsion_varnish_surface']:
                     $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
                     $one_goods_price['cost']     = $finishing_coat_cost['cost'];
                     $one_goods_price['procurement']     = $finishing_coat_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['concave_line']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['concave_line']:
                     $one_goods_price['quantity'] = $concave_line_cost['quantity'];
                     $one_goods_price['cost']     = $concave_line_cost['cost'];
                     $one_goods_price['procurement']     = $concave_line_cost['procurement'];
                     $material_total ['material'][] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['land_plaster']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['land_plaster']:
                     $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
                     $one_goods_price['cost']     = $gypsum_powder_cost['cost'];
                     $one_goods_price['procurement']     = $gypsum_powder_cost['procurement'];

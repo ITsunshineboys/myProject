@@ -70,6 +70,14 @@ class EngineeringStandardCraft  extends ActiveRecord
         return $row;
     }
 
+    public static function CraftsAllbyId($id){
+        return self::find()
+            ->asArray()
+            ->select('id,project_details,project')
+            ->where(['id'=>$id])
+            ->one();
+    }
+
     public static function findByList($city){
 
         return self::find()

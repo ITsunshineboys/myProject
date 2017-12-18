@@ -201,7 +201,7 @@ class QuoteController extends Controller
             }
         }
         if (!$worker){
-            $code = 1000;
+            $code = 500;
             return Json::encode([
                'code'=>$code,
                'msg'=>\Yii::$app->params['errorCodes'][$code],
@@ -211,7 +211,7 @@ class QuoteController extends Controller
         $labor_cost = LaborCost::findOne($post['id']);
         $labor_cost->univalence = $post['univalence'] * 100;
         if (!$labor_cost->save()){
-            $code = 1000;
+            $code = 500;
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
@@ -406,7 +406,7 @@ class QuoteController extends Controller
              $del = CoefficientManagement::deleteAll();
             if (!$del){
                 $tr->rollBack();
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => \Yii::$app->params['errorCodes'][$code]
@@ -418,7 +418,7 @@ class QuoteController extends Controller
 
             if (!$row){
                 $tr->rollBack();
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg'  => \Yii::$app->params['errorCodes'][$code]
@@ -426,7 +426,12 @@ class QuoteController extends Controller
             }
             $tr->commit();
         }catch (\Exception $e) {
-            $tr->rollback();
+            $tr->rollBack();
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
 
         return Json::encode([
@@ -1191,7 +1196,11 @@ class QuoteController extends Controller
             $del = (new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
             if (!$del){
                 $tr->rollBack();
-                return 500;
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'mag' => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
 
             foreach($post['assort'] as $management) {
@@ -1200,12 +1209,21 @@ class QuoteController extends Controller
 
             if (!$add){
                 $tr->rollBack();
-                return 500;
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'mag' => \Yii::$app->params['errorCodes'][$code],
+                ]);
             }
             $tr->commit();
         } catch (\Exception $e) {
             //回滚
             $tr->rollBack();
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'mag' => \Yii::$app->params['errorCodes'][$code],
+            ]);
         }
 
 
@@ -1370,7 +1388,7 @@ class QuoteController extends Controller
         $add_item->effect_id       = $effect['id'];
         $add_item->add_time        = time();
 
-        $code = 1000;
+        $code = 500;
         if (!$add_item->save()){
             return Json::encode([
                'code' => $code,
@@ -1398,7 +1416,7 @@ class QuoteController extends Controller
         if (!$find_one->validate()){
             return Json::encode([
                 'code' =>  $code,
-                'msg'  => '请求的参数不正确'
+                'mag' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
 
@@ -1442,7 +1460,7 @@ class QuoteController extends Controller
         $item->effect_id       = $effect['id'];
 
 
-        $code = 1000;
+        $code = 500;
         if (!$item->save()){
             return Json::encode([
                 'code' => $code,
@@ -1553,6 +1571,7 @@ class QuoteController extends Controller
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
         } else {
+            //TODO 新增错误码 详情 params
             $code=1080;
             return Json::encode([
                 'code' => $code,
@@ -1819,7 +1838,7 @@ class QuoteController extends Controller
 
         }
             if (!$dm) {
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -1887,7 +1906,7 @@ class QuoteController extends Controller
             $points->level = 2;
             $points->differentiate = 1;
             if (!$points->save()){
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -1904,7 +1923,7 @@ class QuoteController extends Controller
             $edit_points = $points->findOne(['id'=>$post['one_title']['edit_id']]);
             $edit_points->title = $post['one_title']['title'];
             if (!$edit_points->save()){
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -1922,7 +1941,7 @@ class QuoteController extends Controller
             $points->deleteAll(['and',['differentiate'=>1],['pid'=>$post['del_id']]]);
             if ($points_delete == 0){
                 return Json::encode([
-                    'code'=> 1055,
+                    'code'=> 1081,//TODO 1055 ->1081
                     'msg' => '删除失败,请确认'
                 ]);
             }
@@ -2187,8 +2206,8 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = Points::find()->asArray()->all();
-        var_dump($a);exit;
+      $a= BasisDecorationService::id2Title()['reticle'];
+       var_dump($a);
 
 
     }

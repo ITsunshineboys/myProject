@@ -7,11 +7,14 @@
  */
 namespace app\services;
 
+use app\controllers\OwnerController;
 use app\models\Effect;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
 use app\models\GoodsAttr;
+use app\models\GoodsCategory;
 use app\models\ProjectView;
+use app\models\WorkerCraftNorm;
 use yii\helpers\Json;
 
 class BasisDecorationService
@@ -23,6 +26,59 @@ class BasisDecorationService
     const DEFAULT_VALUE = [
       'value1' => 0,
       'value2' => 1,
+    ];
+
+    const GOODS_IDS = [
+        'reticle'=>32,
+        'wire'=>43,
+        'spool'=>30,
+        'bottom_case'=>40,
+        'pvc'=>37,
+        'ppr'=>33,
+        'waterproof_coating'=>56,
+        'plasterboard'=>22,
+        'keel'=>9,
+        'lead_screw'=>12,
+        'concave_line'=>28,
+        'lamp'=>130,
+        'curtains'=>128,
+        'river_sand'=>6,
+        'cement'=>172,
+        'self_leveling'=>36,
+        'putty'=>38,
+        'emulsion_varnish_primer'=>24,
+        'emulsion_varnish_surface'=>25,
+        'land_plaster'=>5,
+        'closet'=>83,
+        'wood_floor'=>17,
+        'aluminium_alloy'=>79,
+        'bath_heater'=>61,
+        'ventilator'=>62,
+        'ceiling_light'=>63,
+        'tap'=>75,
+        'marble'=>52,
+        'sofa'=>110,
+        'bed'=>121,
+        'night_table'=>123,
+        'kitchen_ventilator'=>106,
+        'stove'=>108,
+        'upright_air_conditioner'=>117,
+        'hang_air_conditioner'=>119,
+        'central_air_conditioner'=>120,
+        'mattress'=>170,
+        'shower_partition'=>152,
+        'sprinkler'=>146,
+        'bath_cabinet'=>140,
+        'closestool'=>144,
+        'squatting_pan'=>150,
+        'elbow'=>35,
+        'tiling'=>'贴砖',
+        'wall_brick'=>45,
+        'floor_tile'=>44,
+        'air_brick'=>3,
+        'stairs'=>82,
+        'timber_door' => 80,
+        'slab' => 13,
     ];
 
     /**
@@ -152,6 +208,80 @@ class BasisDecorationService
     ];
 
     /**
+     * engineering_standard_craft 表 id
+     */
+    const CARPENTRY_DETAILS_IDS=[
+        'reticle'=>1,//网线
+        'strong_spool'=>2,//强电线管
+        'wire'=>3,//电线
+        'weak_spool'=>4,//弱电线管
+        'ppr'=>5,
+        'pvc'=>6,
+        'putty'=>12,
+        'waterproof'=>7,
+        'keel_sculpt'=>9,
+        'screw_rod_sculpt'=>10,
+        'plasterboard_sculpt'=>11,
+        'emulsion_varnish_primer'=>13,
+        'emulsion_varnish_surface'=>14,
+        'concave_line'=>15,
+        'land_plaster'=>16,
+        'plasterboard_area'=>32,
+        'tv_day'=>33,
+        'tv_plasterboard'=>34,
+        'keel_area'=>35,
+        'screw_rod_area'=>36,
+        'tv_slab'=>37,
+
+    ];
+
+    public static function OtherId2Title(){
+        $titles = [];
+        foreach (OwnerController::WORKMANSHIP_IDS as $k=> &$v){
+            $title = WorkerCraftNorm::find()->asArray()->where(['id'=>$v])->one();
+            if ($title) {
+                $titles[$k] = $title['worker_kind_details'];
+            } else {
+                $titles[$k] = '';
+            }
+        }
+        return $titles;
+    }
+
+
+    public static function DetailsId2Title(){
+       $titles = [];
+        foreach (self::CARPENTRY_DETAILS_IDS as $k=> &$v){
+           $title = EngineeringStandardCraft::CraftsAllbyId($v);
+            if ($title) {
+                $titles[$k] = $title['project_details'];
+            } else {
+                $titles[$k] = '';
+            }
+        }
+        return $titles;
+    }
+    /**
+     * 根据分类id查出分类名称
+     * @return array
+     */
+    public static function id2Title()
+    {
+        $titles = [];
+        foreach (self::GOODS_IDS as $k => &$v) {
+            $cate = GoodsCategory::find()->where(['id' => $v, 'deleted' => 0])->one();
+            if ($cate) {
+                $titles[$k] = $cate->title;
+            } else {
+                $titles[$k] = '';
+            }
+        }
+        return $titles;
+    }
+
+
+
+    /**
      *   防水  水路  强电  弱电 人工费
      * @param string $points
      * @param array $labor
@@ -186,30 +316,35 @@ class BasisDecorationService
      */
     public static function quantity($points,$goods,$crafts)
     {
+        //TODO 修改
+        $project= EngineeringStandardCraft::CraftsAllbyId($points)['project'];
+        $project=='强电工艺'?$title=self::DetailsId2Title()['strong_spool']:$title=self::DetailsId2Title()['weak_spool'];
+
         foreach ($crafts as $craft) {
             switch ($craft) {
-                case $craft['project_details'] == self::GOODS_NAME['reticle'] || $craft['project_details'] == self::GOODS_NAME['wire']:
+                case $craft['project_details'] == self::DetailsId2Title()['reticle'] || $craft['project_details'] == self::DetailsId2Title()['wire']:
                     $material = $craft['material'];
                     break;
-                case $craft['project_details'] == self::GOODS_NAME['spool']:
+                case $craft['project_details'] == $title:
                     $spool = $craft['material'];
                     break;
             }
         }
+
         $goods_id = [];
         foreach ($goods as $one) {
             switch ($one) {
-                case $one['title'] == self::GOODS_NAME['reticle'] || $one['title'] == self::GOODS_NAME['wire']:
+                case $one['title'] == self::id2Title()['reticle'] || $one['title'] == self::id2Title()['wire']:
                     $goods_price = $one['platform_price'];
                     $goods_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
-                case $one['title'] == self::GOODS_NAME['spool']:
+                case $one['title'] == self::id2Title()['spool']:
                     $spool_price = $one['platform_price'];
                     $spool_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
-                case $one['title'] == self::GOODS_NAME['bottom_case']:
+                case $one['title'] == self::id2Title()['bottom_case']:
                     $bottom_case = $one['platform_price'];
                     $bottom_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
@@ -226,10 +361,10 @@ class BasisDecorationService
         }
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
-                case $one_unit['title'] == self::GOODS_NAME['reticle'] || $one_unit['title'] == self::GOODS_NAME['wire']:
+                case $one_unit['title'] == self::id2Title()['reticle'] || $one_unit['title'] == self::id2Title()['wire']:
                     $goods_value = $one_unit['value'];
                     break;
-                case $one_unit['title'] == self::GOODS_NAME['spool']:
+                case $one_unit['title'] == self::id2Title()['spool']:
                     $spool_value = $one_unit['value'];
                     break;
             }
@@ -279,6 +414,7 @@ class BasisDecorationService
         return  $electricity;
     }
 
+
     /**
      * 水路商品
      * @param string $points
@@ -290,12 +426,12 @@ class BasisDecorationService
     {
         foreach ($goods as $one) {
             switch ($one) {
-                case $one['title'] == self::GOODS_NAME['pvc']:
+                case $one['title'] == self::id2Title()['ppr']:
                     $pvc_price = $one['platform_price'];
                     $pvc_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
-                case $one['title'] == self::GOODS_NAME['ppr']:
+                case $one['title'] == self::id2Title()['pvc']:
                     $ppr_price = $one['platform_price'];
                     $ppr_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
@@ -304,6 +440,7 @@ class BasisDecorationService
         }
 
         $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
+
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -311,24 +448,23 @@ class BasisDecorationService
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
+        //TODO 修改 用分类名称 查询
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
-                case $one_unit['title'] == self::GOODS_NAME['ppr']:
+                case $one_unit['title'] == self::id2Title()['ppr']:
                     $ppr_value = $one_unit['value'];
                     break;
-                case $one_unit['title'] == self::GOODS_NAME['pvc']:
+                case $one_unit['title'] == self::id2Title()['pvc']:
                     $pvc_value = $one_unit['value'];
                     break;
             }
-        }
-
+        }//todo 工艺详情 修改了 不能用 分类名称
         foreach ($crafts as $craft) {
             switch ($craft) {
-                case $craft['project_details'] == self::GOODS_NAME['ppr']:
+                case $craft['project_details'] == self::DetailsId2Title()['ppr']:
                     $ppr = $craft['material'];
                     break;
-                case $craft['project_details'] == self::GOODS_NAME['pvc']:
+                case $craft['project_details'] == self::DetailsId2Title()['pvc']:
                     $pvc =  $craft['material'];
                     break;
             }
@@ -609,16 +745,16 @@ class BasisDecorationService
 
         foreach ($crafts as $craft) {
 
-           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_sculpt']){
+           if ($craft['project_details'] == self::DetailsId2Title()['plasterboard_sculpt']){
 
                $plasterboard_sculpt = $craft['material'];
            }
 
-           if ($craft['project_details'] == self::CARPENTRY_DETAILS['plasterboard_area']){
+           if ($craft['project_details'] == self::DetailsId2Title()['plasterboard_area']){
                $plasterboard_area = $craft['material'];
            }
 
-           if ($craft['project_details'] == self::CARPENTRY_DETAILS['tv_plasterboard']){
+           if ($craft['project_details'] == self::DetailsId2Title()['tv_plasterboard']){
                $tv_plasterboard  = $craft['material'];
            }
         }
@@ -652,10 +788,10 @@ class BasisDecorationService
 
 
             foreach ($crafts as $craft) {
-                if($craft['project_details'] == self::CARPENTRY_DETAILS['keel_sculpt']) {
+                if($craft['project_details'] == self::DetailsId2Title()['keel_sculpt']) {
                     $keel_sculpt = $craft['material'];
                 }
-                if($craft['project_details'] == self::CARPENTRY_DETAILS['keel_area']) {
+                if($craft['project_details'] == self::DetailsId2Title()['keel_area']) {
                     $keel_area = $craft['material'];
                 }
             }
@@ -689,10 +825,10 @@ class BasisDecorationService
                 }
             }
             foreach ($crafts as $craft) {
-                if($craft['project_details'] == self::CARPENTRY_DETAILS['screw_rod_sculpt']) {
+                if($craft['project_details'] == self::DetailsId2Title()['screw_rod_sculpt']) {
                     $screw_rod_sculpt = $craft['material'];
                 }
-                if($craft['project_details'] == self::CARPENTRY_DETAILS['screw_rod_area']) {
+                if($craft['project_details'] == self::DetailsId2Title()['screw_rod_area']) {
                     $screw_rod_area = $craft['material'];
                 }
             }
@@ -712,17 +848,18 @@ class BasisDecorationService
     public static function carpentryBlockboard($goods,$post)
     {
 
+
         foreach ($goods as $one_goods){
-            if ($one_goods['title'] == '细木工板'){
+            if ($one_goods['title'] == self::id2Title()['slab']){
                 $blockboard = $one_goods;
             }
         }
 
         $a = EngineeringStandardCraft::find()
             ->asArray()
-            ->where(['project'=>'木作'])
-            ->andWhere(['project_details'=>'电视墙用细木工板'])
-            ->andWhere(['district_code'=>$post['city']])
+            ->where(['project'=>OwnerController::PROJECT_NAME['carpentry']])
+            ->andWhere(['project_details'=>self::DetailsId2Title()['tv_slab']])
+            ->andWhere(['city_code'=>$post['city']])
             ->one();
         if ($a){
             $tv = $a['material'];
