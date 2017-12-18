@@ -2759,7 +2759,12 @@ class OrderController extends Controller
         $postData = Yii::$app->request->post();
         if (!$postData)
         {
-            $postData = Yii::$app->request->get();
+            if(
+                !array_key_exists('order_no', $postData)
+                || !array_key_exists('sku', $postData)
+            ){
+                $postData = Yii::$app->request->get();
+            }
         }
         $data=OrderAfterSale::FindAfterSaleData($postData,$user);
         if (is_numeric($data)){
@@ -2789,8 +2794,9 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $postData = Yii::$app->request->get();
-        if (!$postData)
+
+        $postData = \Yii::$app->request->get();
+        if (!isset($postData['order_no']) || !isset($postData['sku']))
         {
             $postData=Yii::$app->request->post();
         }
