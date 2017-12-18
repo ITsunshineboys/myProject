@@ -2,27 +2,27 @@
     <h6 class="location">总点位:{{total_count.count}}</h6>
     <div class="row">
         <p class="col-md-1">一级标题</p>
-        <div class="col-md-6">
-            <div class="row">
+        <div class="col-md-8 row">
+            <!--<div class="row">-->
                 <p class="col-md-1 text-right" style="margin: 0!important;">
                     <button type="button" ng-click="addOneTitle()" class="text-center"><i
                             class="glyphicon glyphicon-plus"></i></button>
                 </p>
                 <p class="col-md-4" style="margin: 0!important;padding-top: 5px;padding-bottom: 5px;">一级内容</p>
-            </div>
+            <!--</div>-->
         </div>
     </div>
     <div class="row" ng-repeat="item in one_title">
         <p class="col-md-1 text-right" style="margin: 5px 0!important;padding-right: 0;"
-           ng-if="!!+item.differentiate||item.differentiate==undefined"><i
+           ng-if="item.differentiate==1"><i
                 class="glyphicon glyphicon-asterisk red_mark"></i></p>
-        <div class="col-md-6" ng-class="{'col-md-offset-1':item.differentiate!=undefined&&!(+item.differentiate)}">
-            <div class="row">
-                <p class="col-md-3 col-md-offset-1" ng-if="item.differentiate!=undefined&&!(+item.differentiate)">
+        <div class="col-md-8 row" ng-class="{'col-md-offset-1':item.differentiate!=1}">
+            <!--<div class="row">-->
+                <p class="col-md-3 col-md-offset-1" ng-if="item.differentiate!=1">
                     {{item.title}}</p>
                 <p class="col-md-1 text-right" style="margin: 0!important;"
                    ng-if="item.differentiate==1">
-                    <button type="button" class="text-center" ng-click="remove_first_title($index,item)"><i
+                    <button type="button" class="text-center" ng-click="removeOneTitle(item,$index)"><i
                             class="glyphicon glyphicon-minus"></i></button>
                 </p>
                 <p class="col-md-3" ng-if="item.differentiate==1">
@@ -35,7 +35,7 @@
                    style="margin: 0!important;">
                     <button class="get_second_title" ng-click="getTwoTitle(item)">生成二级标题</button>
                 </p>
-            </div>
+            <!--</div>-->
         </div>
     </div>
     <form novalidate name="general_detail">
@@ -45,33 +45,33 @@
                 <div ng-repeat="item in one_title">
                     <div class="row" ng-if="item.two_title!=undefined">
                         <div class="col-md-1" style="margin-top: 5px;">{{item.title}}</div>
-                        <div class="col-md-6">
-                            <div class="row">
+                        <div class="col-md-8 row">
+                            <!--<div class="row">-->
                                 <p class="col-md-1 text-right" style="margin: 0!important;">
-                                    <button ng-click="add_second_title(item)" type="button" class="text-center"><i
+                                    <button ng-click="addTwoTitle($index)" type="button" class="text-center"><i
                                             class="glyphicon glyphicon-plus"></i></button>
                                 </p>
                                 <p class="col-md-3" style="margin: 0!important;padding-top: 5px;padding-bottom: 5px;">
                                     点位名称</p>
                                 <p class="col-md-3" style="margin: 0!important;padding-top: 5px;padding-bottom: 5px;">
                                     个数</p>
-                            </div>
+                            <!--</div>-->
                         </div>
                     </div>
                     <div class="row" ng-repeat="item1 in item.two_title">
                         <p class="col-md-1 text-right" style="margin: 5px 0!important;padding-right: 0;"><i
                                 class="glyphicon glyphicon-asterisk red_mark"></i></p>
-                        <div class="col-md-6">
-                            <div class="row">
+                        <div class="col-md-8 row">
+                            <!--<div class="row">-->
                                 <p class="col-md-3 col-md-offset-1" style="margin-bottom: 0!important;padding-top: 5px;padding-bottom: 5px;"
-                                   ng-if="!+item1.differentiate&&item1.differentiate!=undefined">{{item1.title}}</p>
+                                   ng-if="item1.differentiate == 0">{{item1.title}}</p>
                                 <div class="col-md-1 text-right" style="margin: 0!important;"
-                                     ng-if="(!!+item1.differentiate||item1.id==undefined)&&!$first">
-                                    <button type="button" class="text-center" ng-click="remove_second_title($index,item)"><i
+                                     ng-if="item1.differentiate == 1&&!$first">
+                                    <button type="button" class="text-center" ng-click="removeTwoTitle($parent.$index,$index)"><i
                                             class="glyphicon glyphicon-minus"></i></button>
                                 </div>
                                 <p class="col-md-3" ng-class="{'col-md-offset-1':$first}"
-                                   ng-if="!!+item1.differentiate||item1.differentiate==undefined">
+                                   ng-if="item1.differentiate==1">
                                     <input type="text" name="two_title{{item.id}}{{$index}}" required
                                            ng-blur="item1.flag = !!general_detail['two_title'+item.id+$index].$error"
                                            ng-class="{'error':(general_detail['two_title'+item.id+$index].$invalid&&submitted)||(general_detail['two_title'+item.id+$index].$error.required&&!!item1.flag)}"
@@ -79,20 +79,20 @@
                                 </p>
                                 <p class="col-md-3">
                                     <input type="text" name="two_count{{item.id}}{{$index}}" required
-                                           ng-change="get_all_count($parent.$index,$index,item1.count)"
-                                           ng-blur="item1.flag1 = !!general_detail['two_count'+item.id+$index].$error"
-                                           ng-class="{'error':(general_detail['two_count'+item.id+$index].$invalid&&submitted)||(general_detail['two_count'+item.id+$index].$error.required&&!!item1.flag1)}"
+                                           ng-change="changeCount($parent.$index)" ng-pattern="/^[1-9]\d{0,}$/"
+                                           ng-blur="item1.flag1 = general_detail['two_count'+item.id+$index].$error.required||general_detail['two_count'+item.id+$index].$error.pattern"
+                                           ng-class="{'error':(general_detail['two_count'+item.id+$index].$invalid&&submitted)||((general_detail['two_count'+item.id+$index].$error.required||general_detail['two_count'+item.id+$index].$error.pattern)&&!!item1.flag1)}"
                                            ng-model="item1.count" placeholder="请输入数值" class="form-control">
                                 </p>
-                                <p class="col-md-6" ng-if="!!+item1.differentiate||item1.differentiate==undefined">* 名称填写只限中英文，个数数值填写必须为≥1的整数数字</p>
-                            </div>
+                                <p class="col-md-5" ng-if="item1.differentiate==1">* 名称填写只限中英文，个数数值填写必须为≥1的整数数字</p>
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
             </div>
             <div class="from-group submit">
-                <button class="btn btn-primary" type="submit" ng-click="save_general_manage(general_detail.$valid,2)">保存</button>
-                <button type="button" class="btn btn-default" ng-click="return_general_manage()">返回</button>
+                <button class="btn btn-primary" type="submit" ng-click="saveTwoTitle(general_detail.$valid,2)">保存</button>
+                <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
             </div>
         </div>
     </form>

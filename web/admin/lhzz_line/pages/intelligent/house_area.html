@@ -2,33 +2,31 @@
     <form novalidate name="cur_house_area">
         <div class="row" style="margin-bottom: 20px;margin-top: 90px;">
             <div class="col-md-1 text-right">
-                <button type="submit" class="text-center" ng-click="add_area_range(cur_house_area.$valid)"><i
+                <button type="submit" class="text-center" ng-click="addArea()"><i
                         class="glyphicon glyphicon-plus"></i></button>
             </div>
         </div>
-        <div class="row" style="margin-bottom: 20px;" ng-repeat="item in all_area_range">
+        <div class="row" style="margin-bottom: 20px;" ng-repeat="item in area_list">
             <div class="col-md-1 text-right">
-                <button type="button" class="text-center" ng-click="remove_area_range(item)"><i
+                <button type="button" class="text-center" ng-click="removeArea(item,$index)"><i
                         class="glyphicon glyphicon-minus"></i></button>
             </div>
             <div class="col-md-4">
                 <div class="col-md-6">
-                    <input ng-disabled="all_area_range.length>1&&!$last"
-                           ng-pattern="/^[1-9]\d{0,1}$|^1[0-7]\d{1}$|^180$/" maxlength="3" ng-model="item.min_area"
+                    <input ng-disabled="area_list.length>1&&!$last" ng-change="checkItem(item)" maxlength="3" ng-model="item.min_area"
                            placeholder="请输入最小面积" type="text" class="form-control">
                 </div>
                 <div class="col-md-6">
-                    <input ng-disabled="all_area_range.length>1&&!$last"
-                           ng-pattern="/^[1-9]\d{0,1}$|^1[0-7]\d{1}$|^180$/" maxlength="3" ng-model="item.max_area"
+                    <input ng-disabled="area_list.length>1&&!$last" maxlength="3" ng-model="item.max_area" ng-change="checkItem(item)"
                            placeholder="请输入最大面积" type="text" class="form-control">
                 </div>
-                <p class="col-md-12" style="color: red;margin-top: 5px;" ng-if="$last&&!!area_tips">{{area_tips}}</p>
+                <p class="col-md-12" style="color: red;margin-top: 5px;" ng-if="$last&&error.tips!=''">{{error_tips}}</p>
             </div>
             <p class="col-md-7">*0＜X≤180的整数字</p>
         </div>
-        <div class="from-group submit" ng-class="{'else_submit':(all_area_range.length<12?true:false)}">
-            <button class="btn btn-primary" type="submit" ng-click="save_area(cur_house_area.$valid)">确认</button>
-            <button type="button" class="btn btn-default" ng-click="return_general_manage()">返回</button>
+        <div class="from-group submit">
+            <button class="btn btn-primary" type="submit" ng-click="saveData()">确认</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>

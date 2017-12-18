@@ -580,10 +580,11 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/material_detail.css',
             controller: 'material_detail_ctrl'
         })
-        .state('intelligent.house_area', {//房屋面积编辑
-            url: 'house_area',
+        .state('house_area', {//房屋面积编辑
+            url: '/house_area?id',
             templateUrl: 'pages/intelligent/house_area.html',
-            css: 'pages/intelligent/css/house_area.css'
+            css: 'pages/intelligent/css/house_area.css',
+            controller:'house_area_ctrl'
         })
         .state('general_manage', {//通用管理列表
             url: '/general_manage',
@@ -598,7 +599,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'general_detail_ctrl'
         })
         .state('else_general_manage', {//其他通用管理
-            url: '/else_general_manage?id',
+            url: '/else_general_manage?id&title',
             templateUrl: 'pages/intelligent/else_general_manage.html',
             css: 'pages/intelligent/css/else_general_manage.css',
             controller:'else_general_ctrl'
