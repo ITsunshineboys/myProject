@@ -756,17 +756,15 @@ class GoodsOrder extends ActiveRecord
 
 
             //详情描述
-            $orderGoodsdescription=new OrderGoodsDescription();
-            $orderGoodsdescription->order_no=$order_no;
-            $orderGoodsdescription->sku=$goods['sku'];
-            $orderGoodsdescription->description=$goods['description'];
-            if (!$orderGoodsdescription)
+            $orderGoodsDescription=new OrderGoodsDescription();
+            $orderGoodsDescription->order_no=$order_no;
+            $orderGoodsDescription->sku=$goods['sku'];
+            $orderGoodsDescription->description=$goods['description'];
+            if (!$orderGoodsDescription)
             {
                 $tran->rollBack();
                 return false;
             }
-
-
             $tran->commit();
         }catch (\Exception $e) {
             $tran->rollBack();
