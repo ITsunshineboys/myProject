@@ -482,7 +482,7 @@ class GoodsOrder extends ActiveRecord
      * @param $msg
      * @return bool
      */
-    public static function  Wxpaylinenotifydatabase($arr,$msg)
+    public static function  WxPayLineNotifyDataBase($arr,$msg)
     {
         $goods_id=$arr[0];
         $goods_num=$arr[1];
@@ -494,13 +494,11 @@ class GoodsOrder extends ActiveRecord
         $return_insurance=$arr[7];
         $order_no=$arr[8];
         $buyer_message=$arr[9];
-//        $client_ip=StringService::getClientIP();
         $goods=(new Query())
             ->from(Goods::tableName().' as a')
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-//        +$return_insurance*100
          if (($freight*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
              return false;
          }

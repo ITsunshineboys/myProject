@@ -1106,7 +1106,7 @@ class OrderController extends Controller
             if ($order){
                 return true;
             }
-            $result=GoodsOrder::Wxpaylinenotifydatabase($arr,$msg);
+            $result=GoodsOrder::WxPayLineNotifyDataBase($arr,$msg);
             if ($result==true){
                 return true;
             }else{
