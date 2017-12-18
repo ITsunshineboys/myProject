@@ -2743,6 +2743,7 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
      * @return string
      */
@@ -2794,6 +2795,7 @@ class OrderController extends Controller
         {
             $postData=Yii::$app->request->post();
         }
+        $file=Yii::$app->request->post('file');
         $uploadsData=FileService::uploadMore();
         if (!$uploadsData ==1000){
             if (is_numeric($uploadsData)){
@@ -2805,7 +2807,13 @@ class OrderController extends Controller
             }
         }
 
-        $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$uploadsData);
+        if ($file)
+        {
+            $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$file);
+        }else
+        {
+            $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$uploadsData);
+        }
         if($code==200){
             return Json::encode([
                 'code'=>$code,
