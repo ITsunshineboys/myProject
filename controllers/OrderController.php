@@ -300,6 +300,85 @@ class OrderController extends Controller
     }
 
     /**
+     * 无登录app-添加发票信息(新)
+     * @return string
+     */
+    public function actionAddLineOrderInvoice(){
+        $request = \Yii::$app->request;
+        $invoice_type        = trim($request->post('invoice_type'));
+        $invoice_header_type = trim($request->post('invoice_header_type'));
+        $invoice_header      = trim($request->post('invoice_header'));
+        $invoice_content     = trim($request->post('invoice_content'));
+        if (!$invoice_type||!$invoice_header||!$invoice_content )
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $invoicer_card =trim($request->post('invoicer_card'));
+        if ($invoicer_card){
+            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+            if ($isMatched==false){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
+        $res=Invoice::AddInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card);
+        if ($res)
+        {
+            $code=200;
+            return Json::encode([
+                'code' => $code,
+                'msg'  =>'ok',
+                'data' =>[
+                    'invoice_id'=>$res
+                ]
+            ]);
+        }else{
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+    }
+    /**
+     * 无登录app-获取发票信息(新)
+     * @return string
+     */
+    public function  actionGetLineOrderInvoiceData()
+    {
+        $request = \Yii::$app->request;
+        $invoice_id= trim($request->get('invoice_id'));
+        if (!$invoice_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $model = new Invoice();
+        $data=$model->GetLineInvoice($invoice_id);
+        if (!$data){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' => $data
+        ]);
+    }
+    /**
      * 无登录app-添加发票信息
      * @return string
      */
@@ -347,6 +426,40 @@ class OrderController extends Controller
             ]);
         }
     }
+
+    /**
+     * 无登录app-获取发票信息
+     * @return string
+     */
+    public function  actionGetinvoicelinedata()
+    {
+        $request = \Yii::$app->request;
+        $invoice_id= trim($request->get('invoice_id'));
+        if (!$invoice_id)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code],
+                'data' => null
+            ]);
+        }
+        $model = new Invoice();
+        $data=$model->GetLineInvoice($invoice_id);
+        if ($data){
+            return Json::encode([
+                'code' => 200,
+                'msg'  => 'ok',
+                'data' => $data
+            ]);
+        }else{
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
     /**
      * 线下店app-获取商品信息
      * @return string
@@ -382,40 +495,8 @@ class OrderController extends Controller
                'data'=>$data
            ]);
        }
-}
-    /**
-     * 无登录app-获取发票信息
-     * @return string
-     */
-    public function  actionGetinvoicelinedata()
-    {
-        $request = \Yii::$app->request;
-        $invoice_id= trim($request->get('invoice_id'));
-        if (!$invoice_id)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code],
-                'data' => null
-            ]);
-        }
-        $model = new Invoice();
-        $data=$model->GetLineInvoice($invoice_id);
-        if ($data){
-            return Json::encode([
-                'code' => 200,
-                'msg'  => 'ok',
-                'data' => $data
-            ]);
-        }else{
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
     }
+
     /**
      * 判断是否是微信登录
      */

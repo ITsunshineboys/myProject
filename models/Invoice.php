@@ -132,18 +132,22 @@ class Invoice extends ActiveRecord
         }
     }
 
-   /**
+    /**
      * 获取线下店商城-发票信息
+     * @param $invoiceId
+     * @return array|null|ActiveRecord
      */
-    public function  GetLineInvoice($invoice_id){
+    public function  GetLineInvoice($invoiceId){
         $array  = self::find()
-            ->select('invoice_content,invoice_header')->where(['id' => $invoice_id])
+            ->select('invoice_content,invoice_header')
+            ->where(['id' => $invoiceId])
+            ->asArray()
             ->one();
         if ($array){
             return $array;
         }else
         {
-            return null;
+            return [];
         }
     }
 
