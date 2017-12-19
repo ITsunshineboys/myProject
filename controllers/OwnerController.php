@@ -1679,7 +1679,7 @@ class OwnerController extends Controller
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        $material[]   = BasisDecorationService::formula($goods_price,$post);var_dump($material);die;
+        $material[]   = BasisDecorationService::formula($goods_price,$post);
 
 
 
