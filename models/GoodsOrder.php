@@ -2812,7 +2812,8 @@ class GoodsOrder extends ActiveRecord
            a.invoicer_card,
            a.invoice_content,
            z.cover_image,
-           z.is_unusual');
+           z.is_unusual,
+           z.after_sale_services');
         if($postData==''){
             $array=[];
         }else{
@@ -2950,12 +2951,47 @@ class GoodsOrder extends ActiveRecord
             $output['aftersale_type']=$after['aftersale_type'];
             $output['apply_aftersale_time']=$after['apply_aftersale_time'];
             $output['apply_aftersale_reason']=$after['apply_aftersale_reason'];
+            $output['is_support_after_sale'] = self::checkIsSupportAfterSale($arr[0]['after_sale_services'],$arr[0]['status_code']);
             $output['list'] = $list;
             return $output;
         }else{
             $arr=[];
             return $arr;
         }
+    }
+
+
+    /**
+     * 判断是否支持售后
+     * @param $after_sale_services
+     * @return int
+     */
+    public static   function  checkIsSupportAfterSale($after_sale_services,$status_code)
+    {
+            $ar=explode(',',$after_sale_services);
+            if($after_sale_services=='0')
+            {
+                $is_support_after_sale=0;
+            }else{
+                if (in_array(2,$ar)
+                    || in_array(3,$ar)
+                    || in_array(4,$ar)
+                    || in_array(5,$ar)
+                    || in_array(6,$ar)
+                )
+                {
+                    $is_support_after_sale=1;
+                }else{
+                    $is_support_after_sale=0;
+                }
+            }
+            if (
+                $status_code!=self::ORDER_TYPE_COMPLETED
+                && $status_code!=self::ORDER_TYPE_UNCOMMENT)
+            {
+                $is_support_after_sale=0;
+            }
+            return $is_support_after_sale;
     }
 
     /**
