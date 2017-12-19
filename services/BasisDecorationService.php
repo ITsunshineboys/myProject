@@ -215,40 +215,33 @@ class BasisDecorationService
         'strong_spool'=>2,//强电线管
         'wire'=>3,//电线
         'weak_spool'=>4,//弱电线管
-        'ppr'=>5,
-        'pvc'=>6,
-        'putty'=>12,
-        'waterproof'=>7,
-        'keel_sculpt'=>9,
-        'screw_rod_sculpt'=>10,
-        'plasterboard_sculpt'=>11,
-        'emulsion_varnish_primer'=>13,
-        'emulsion_varnish_surface'=>14,
-        'concave_line'=>15,
-        'land_plaster'=>16,
-        'plasterboard_area'=>32,
-        'tv_day'=>33,
-        'tv_plasterboard'=>34,
-        'keel_area'=>35,
-        'screw_rod_area'=>36,
-        'tv_slab'=>37,
+        'ppr'=>5,//PPR水管用料
+        'pvc'=>6,//PVC管用料
+        'putty'=>12,//1平方腻子用量
+        'waterproof'=>7,//防水涂剂用料
+        'keel_sculpt'=>9,//1根龙骨做造型长度
+        'screw_rod_sculpt'=>10,//1根丝杆做造型长度
+        'plasterboard_sculpt'=>11,//1张石膏板造型长度
+        'emulsion_varnish_primer'=>13,//1平方乳胶漆底漆
+        'emulsion_varnish_surface'=>14,//1平方乳胶漆面漆
+        'concave_line'=>15,//1米阴角线用量
+        'land_plaster'=>16,//1平方石膏粉费用
+        'plasterboard_area'=>32,//1张石膏板平顶面积
+        'tv_day'=>33,//电视墙需要天数
+        'tv_plasterboard'=>34,//电视墙所需石膏板
+        'keel_area'=>35,//1根龙骨做平顶面积
+        'screw_rod_area'=>36,//1根丝杆做平顶面积
+        'tv_slab'=>37,//电视墙用细木工板
+        'cement'=>18,//水泥用量
+        'self_leveling'=>19,//自流平用量
+        'river_sand'=>20,//河沙用量
 
     ];
 
-    public static function OtherId2Title(){
-        $titles = [];
-        foreach (OwnerController::WORKMANSHIP_IDS as $k=> &$v){
-            $title = WorkerCraftNorm::find()->asArray()->where(['id'=>$v])->one();
-            if ($title) {
-                $titles[$k] = $title['worker_kind_details'];
-            } else {
-                $titles[$k] = '';
-            }
-        }
-        return $titles;
-    }
-
-
+    /**
+     * EngineeringStandardCraft id 优化
+     * @return array
+     */
     public static function DetailsId2Title(){
        $titles = [];
         foreach (self::CARPENTRY_DETAILS_IDS as $k=> &$v){

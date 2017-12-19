@@ -121,7 +121,7 @@ class OwnerController extends Controller
         'carpentry'         => '木作工艺',
         'emulsion_varnish'  => '乳胶漆工艺',
         'oil_paint'         => '油漆工艺',
-        'tiler'             => '泥作工艺',
+        'tiler'             => '泥工工艺',
     ];
 
     /**
@@ -1095,6 +1095,7 @@ class OwnerController extends Controller
 
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
 
+
         if ($worker_kind_details == null){
             $code = 1057;
             return Json::encode([
@@ -1139,7 +1140,7 @@ class OwnerController extends Controller
         $drawing_room_area = (int)$post['area'] * $drawing_room_particulars;
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_DETAILS['tiler'], $post['city']);
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['tiler'], $post['city']);
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -1149,17 +1150,18 @@ class OwnerController extends Controller
         }
         foreach ($craft as $local_craft) {
             switch ($local_craft) {
-                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['cement']:
+                case $local_craft['project_details'] == BasisDecorationService::DetailsId2Title()['cement']:
                     $cement_craft = $local_craft['material'];
                     break;
-                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['self_leveling']:
+                case $local_craft['project_details'] == BasisDecorationService::DetailsId2Title()['self_leveling']:
                     $self_leveling_craft = $local_craft['material'];
                     break;
-                case $local_craft['project_details'] == BasisDecorationService::GOODS_NAME['river_sand']:
+                case $local_craft['project_details'] == BasisDecorationService::DetailsId2Title()['river_sand']:
                     $river_sand_craft = $local_craft['material'];
                     break;
             }
         }
+
 //        保护层面积
         $covering_layer_area = $post['waterproof_total_area'];
 //        保护层天数：保护层面积÷【每天做保护层面积】
@@ -1225,7 +1227,7 @@ class OwnerController extends Controller
 //        $goods_price = BasisDecorationService::priceConversion($goods);
         $goods_attr = BasisDecorationService::mudMakeMaterial($goods);
 
-        $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['wall_brick'], $post);
+        $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::id2Title()['wall_brick'], $post);
         if ($wall_brick == null){
             $code = 1061;
             return Json::encode([
@@ -1238,7 +1240,7 @@ class OwnerController extends Controller
         $wall_brick_max = BasisDecorationService::profitMargin($wall_brick_price);
         $wall_brick_area = BasisDecorationService::wallBrickAttr($wall_brick_max['id']);
 
-        $floor_tile = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::GOODS_NAME['floor_tile'], $post);
+        $floor_tile = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::id2Title()['floor_tile'], $post);
         if ($floor_tile == null){
             $code = 1061;
             return Json::encode([
@@ -1253,15 +1255,15 @@ class OwnerController extends Controller
 
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods, $cement_craft, $goods_attr,BasisDecorationService::GOODS_NAME['cement']);
+        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods, $cement_craft, $goods_attr,BasisDecorationService::id2Title()['cement']);
 
 //        自流平费用
         $self_leveling_area = $drawing_room_area;
-        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods, $self_leveling_craft, $goods_attr,BasisDecorationService::GOODS_NAME['self_leveling']);
+        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods, $self_leveling_craft, $goods_attr,BasisDecorationService::id2Title()['self_leveling']);
 
         //        河沙费用
         $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods, $river_sand_craft, $goods_attr,BasisDecorationService::GOODS_NAME['river_sand']);
+        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods, $river_sand_craft, $goods_attr,BasisDecorationService::id2Title()['river_sand']);
 
 
 
@@ -1340,19 +1342,19 @@ class OwnerController extends Controller
         // 水泥，河沙，自流平信息
         foreach ($goods as &$one_goods_price) {
             switch ($one_goods_price) {
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['river_sand']:
                     $one_goods_price['quantity'] = $river_sand_cost['quantity'];
                     $one_goods_price['cost'] = $river_sand_cost['cost'];
                     $one_goods_price['procurement'] = $river_sand_cost['procurement'];
                     $river_sand[] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['cement']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['cement']:
                     $one_goods_price['quantity'] = $cement_cost['quantity'];
                     $one_goods_price['cost'] = $cement_cost['cost'];
                     $one_goods_price['procurement'] = $cement_cost['procurement'];
                     $cement[] = $one_goods_price;
                     break;
-                case $one_goods_price['title'] == BasisDecorationService::GOODS_NAME['self_leveling']:
+                case $one_goods_price['title'] == BasisDecorationService::id2Title()['self_leveling']:
                     $one_goods_price['quantity'] = $self_leveling_cost['quantity'];
                     $one_goods_price['cost'] = $self_leveling_cost['cost'];
                     $one_goods_price['procurement'] = $self_leveling_cost['procurement'];
@@ -1456,7 +1458,7 @@ class OwnerController extends Controller
 
         foreach ($goods as $max) {
             switch ($max) {
-                case $max['title'] == BasisDecorationService::GOODS_NAME['cement']:
+                case $max['title'] == BasisDecorationService::id2Title()['cement']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
                     if ($goods_attr == null){
                         $code = 1067;
@@ -1472,7 +1474,7 @@ class OwnerController extends Controller
                     $max['procurement'] = $cement_cost['procurement'];
                     $cement[] = $max;
                     break;
-                case $max['title'] == BasisDecorationService::GOODS_NAME['air_brick']:
+                case $max['title'] == BasisDecorationService::id2Title()['air_brick']:
                     //空心砖费用
                     $brick_standard = GoodsAttr::findByGoodsId($max['id']);
                     if ($brick_standard == null){
@@ -1488,7 +1490,7 @@ class OwnerController extends Controller
                     $max['procurement'] = $brick_cost['procurement'];
                     $air_brick[] = $max;
                     break;
-                case $max['title'] == BasisDecorationService::GOODS_NAME['river_sand']:
+                case $max['title'] == BasisDecorationService::id2Title()['river_sand']:
                     $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
                     if ($goods_attr == null){
                         $code = 1067;
@@ -1571,7 +1573,6 @@ class OwnerController extends Controller
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
-
         $goods = Goods::findBySkuAll($codes);
         if ($goods == null){
             $code = 1061;
@@ -1685,7 +1686,7 @@ class OwnerController extends Controller
 
         //  楼梯信息
         if ($post['stairway_id'] == 1) {
-            $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
+            $stairs = Goods::findByCategory(BasisDecorationService::id2Title()['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
