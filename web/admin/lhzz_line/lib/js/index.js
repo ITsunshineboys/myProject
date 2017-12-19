@@ -49,11 +49,13 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
     }
 
     //侧边栏导航
-    $scope.mall_flag = false;
-    $scope.finance_flag = false;
+    $scope.mall_flag = false;//商城管理
+    $scope.finance_flag = false;//财务中心
+    $scope.account_flag = false;//账户管理
     $scope.other_flag = 'home';
     $scope.mall_active = 0;
     $scope.finance_active = 0;
+    $scope.account_active = 0;
 
     //商城管理
     $scope.mall_obj = [
@@ -71,7 +73,6 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
     ];
     //财务中心
     $scope.finance_obj = [
-        // {id:0,name:'财务数据',link:'mall_finance.index'},
         {id: 0, name: '商城财务', link: 'mall_finance.index'},
         {id: 1, name: '业主财务', link: 'owner_finance'},
     ];
@@ -160,7 +161,6 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         ;
     }
 
-
     //账户管理------一级
     $scope.account_click = function () {
         $scope.account_flag = true;
@@ -184,7 +184,6 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         $scope.mall_flag = false;
         $scope.finance_flag = false;
         $scope.other_flag = '';
-        $scope.account_active = 0;
     }
 
     //账户管理------二级
