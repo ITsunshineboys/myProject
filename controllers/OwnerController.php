@@ -1585,7 +1585,7 @@ class OwnerController extends Controller
         foreach ($add_materials as $material){
             foreach ($goods as &$one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
-                    $one_goods['quantity'] = $material['quantity'];
+                    $one_goods['quantity'] = (int)$material['quantity'];
                     $one_goods['cost'] = $material['quantity'] * $one_goods['platform_price'];
                     $one_goods['procurement'] = $material['quantity'] * $one_goods['purchase_price_decoration_company'];
                 }
@@ -1691,7 +1691,7 @@ class OwnerController extends Controller
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as &$one_stairs_price) {
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
-                    $one_stairs_price['quantity'] = 1;
+                    $one_stairs_price['quantity'] = (int)1;
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                     $one_stairs_price['procurement'] = $one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
