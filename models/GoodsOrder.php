@@ -2958,7 +2958,7 @@ class GoodsOrder extends ActiveRecord
             $output['aftersale_type']=$after['aftersale_type'];
             $output['apply_aftersale_time']=$after['apply_aftersale_time'];
             $output['apply_aftersale_reason']=$after['apply_aftersale_reason'];
-            if ($user->last_role_id_app=='supplier')
+            if ($user->last_role_id_app==6)
             {
                 $output['is_support_after_sale'] =0;
             }else
