@@ -13,7 +13,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   $scope.upload_dis=false;
   //选择城市开始
   //初始化省市区县;
-  $http.get('districts2.json').then(function (response) {
+  $http.get('city.json').then(function (response) {
     // console.log((response.data[0]['86']))
     let arr = [];
     let arr1 = [];
@@ -34,7 +34,7 @@ index_recommend.controller("index_recommend_ctrl",function ($rootScope,$scope,$h
   $scope.getCity = function (item) {
     console.log(item);
     $scope.cur_province = item;
-    $http.get('districts2.json').then(function (response) {
+    $http.get('city.json').then(function (response) {
       let arr1 = [];
       for(let [key,value] of Object.entries(response.data[0][item.id])){
         arr1.push({'id':key,'name':value})
