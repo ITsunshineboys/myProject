@@ -1456,8 +1456,43 @@ class OrderController extends Controller
             ]);
         }
     }
+
     /**
-     * 判断收货地址是否在指定区域内
+     * 判断收货地址是否在指定区域内(新)
+     * @return string
+     */
+    public function actionJudgeAddress(){
+        $request=Yii::$app->request;
+        $district_code=trim($request->get('district_code',''));
+        $goods_id=trim($request->get('goods_id',''));
+        if (!$district_code || !$goods_id) {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $template_id=Goods::find()
+            ->select('logistics_template_id')
+            ->where(['id'=>$goods_id])
+            ->asArray()
+            ->one()
+        ['logistics_template_id'];
+        $data=LogisticsDistrict::isApply($district_code,$template_id);
+        if ($data==200){
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'收货地址正常',
+            ]);
+        }else{
+            return Json::encode([
+                'code' => $data,
+                'msg' => '收货地址异常'
+            ]);
+        }
+    }
+    /**
+     * 判断收货地址是否在指定区域内(旧)
      * @return string
      */
     public function actionJudegaddress(){
@@ -1482,7 +1517,7 @@ class OrderController extends Controller
             ->asArray()
             ->one()
         ['logistics_template_id'];
-        $data=LogisticsDistrict::is_apply($districtcode,$template_id);
+        $data=LogisticsDistrict::isApply($districtcode,$template_id);
         if ($data==200){
             return Json::encode([
                 'code' => 200,
