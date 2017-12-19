@@ -3159,8 +3159,6 @@ class GoodsOrder extends ActiveRecord
         );
         return $transaction_no;
     }
-
-
     /**
      * 获取角色购买商品价格
      * @param $role
@@ -3197,7 +3195,6 @@ class GoodsOrder extends ActiveRecord
         }
         return $data;
     }
-
     /**
      * @param $user
      * @param $address_id
@@ -3291,7 +3288,6 @@ class GoodsOrder extends ActiveRecord
                             return $code;
                         }
                     }
-
                     $Goods=Goods::find()
                         ->where(['id'=>$goods['goods_id']])
                         ->asArray()
@@ -3341,7 +3337,6 @@ class GoodsOrder extends ActiveRecord
                             return false;
                         }
                     }
-
                     $serires=Series::findOne($Goods['series_id']);
                     if ($serires)
                     {
@@ -3356,7 +3351,6 @@ class GoodsOrder extends ActiveRecord
                             return false;
                         }
                     }
-
                     $goods_image=GoodsImage::find()
                         ->where(['goods_id'=>$goods['goods_id']])
                         ->all();
@@ -3376,7 +3370,6 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
-
                     $GoodsBrand=GoodsBrand::findOne($Goods['brand_id']);
                     if ($GoodsBrand)
                     {
@@ -3392,7 +3385,6 @@ class GoodsOrder extends ActiveRecord
                             return false;
                         }
                     }
-
                     $goodsAttr=GoodsAttr::find()
                         ->where(['goods_id'=>$goods['goods_id']])
                         ->all();
@@ -3415,7 +3407,6 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
-
                     $LogisticTemp=LogisticsTemplate::findOne($Goods['logistics_template_id']);
                     if ($LogisticTemp)
                     {
@@ -3433,7 +3424,6 @@ class GoodsOrder extends ActiveRecord
                             $tran->rollBack();
                             return false;
                         }
-
                         $LogisticDis=LogisticsDistrict::find()
                             ->where(['template_id'=>$Goods['logistics_template_id']])
                             ->all();
@@ -3519,25 +3509,6 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-        /**
-         * 余额购买
-         * @param $total_amount
-         * @param array $suppliers
-         * @param $pay_pwd
-         * @return int
-         */
-      public static function  BalanceBuy($total_amount,$pay_pwd,$orders=[])
-      {
-          $user = Yii::$app->user->identity;
-          if (Yii::$app->getSecurity()->validatePassword($pay_pwd,$user->pay_password)==false)
-          {
-              $code=1055;
-              return $code;
-          }
-
-
-      }
-
 
         /**
          * @param $goods
@@ -3610,21 +3581,6 @@ class GoodsOrder extends ActiveRecord
                   $freight+=$money;
               }
           }
-
-//            foreach ($costs as &$cost)
-//            {
-//                foreach ($Good as &$list)
-//                {
-//                    if ($list['id']==$cost['id'])
-//                    {
-//                        $cost['goods'][]=[
-//                            'goods_id'=>$list['goods_id'],
-//                            'num'=>$list['num']
-//                        ];
-//                    }
-//                }
-//            }
-
           return  StringService::formatPrice($freight*0.01);
       }
 

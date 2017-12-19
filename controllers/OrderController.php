@@ -4458,7 +4458,6 @@ class OrderController extends Controller
             ->where(['order_no'=>$order_no,'sku'=>$sku])
             ->asArray()
             ->one();
-
         if (!$OrderGoods)
         {
             $code=1000;
@@ -4492,8 +4491,6 @@ class OrderController extends Controller
             $comment['score']=GoodsComment::DESC_SCORE_POOR;
         }
         $comment['create_time']=date('Y-m-d H:i',0);
-
-
             $comment['image']=CommentImage::find()
                 ->select('image')
                 ->where(['comment_id'=>$comment['comment_id']])
