@@ -1621,24 +1621,22 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        var_dump($coefficient);
-        var_dump($post);die;
-//        $goods = [];
-//        if (is_array($post)){
-//            foreach ($coefficient as $one_coefficient){
-//                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
-//                foreach ($post['list'] as &$materials){
-//                    if ($materials['price'] != 0 ){
-//                        if ($classify['title'] == $materials['one_title']){
-//                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
-//                            $goods [] =$materials;
-//                         }
-//
-//                    }
-//
-//                }
-//
-//            }
+        $goods = [];
+        if (is_array($post)){
+            foreach ($coefficient as $one_coefficient){
+                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
+                foreach ($post['list'] as &$materials){
+                    if ($materials['price'] != 0 ){
+                        if ($classify['title'] == $materials['one_title']){
+                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
+                            $goods [] =$materials;
+                         }
+
+                    }
+
+                }
+
+            }
 
 
 //            foreach ($goods as &$default){
@@ -1665,7 +1663,7 @@ class OwnerController extends Controller
                     'total_prices'=>$total,
                 ],
             ]);
-//        }
+        }
 
 
     }
