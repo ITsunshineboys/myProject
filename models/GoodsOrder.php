@@ -2384,7 +2384,17 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
-                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status,shipping_type,after_sale_services')
+                    ->select('goods_name
+                    ,goods_price
+                    ,goods_number
+                    ,market_price
+                    ,supplier_price
+                    ,sku
+                    ,freight
+                    ,cover_image
+                    ,order_status
+                    ,shipping_type
+                    ,after_sale_services')
                     ->asArray()
                     ->all();
                 if($GoodsOrder[$k]['list']==[])
@@ -2401,6 +2411,8 @@ class GoodsOrder extends ActiveRecord
                         $GoodsOrder[$k]['list'][$key]['market_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+                        $GoodsOrder[$k]['after_sale_services']= $GoodsOrder[$k]['list'][$key]['after_sale_services'];
+                        unset($GoodsOrder[$k]['list'][$key]['after_sale_services']);
                         unset($GoodsOrder[$k]['list'][$key]['order_status']);
                         $GoodsOrder[$k]['all_goods_num']+=$GoodsOrder[$k]['list'][$key]['goods_number'];
                     }
@@ -2431,7 +2443,6 @@ class GoodsOrder extends ActiveRecord
 
             //2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
             $ar=explode(',',$arr[$key]['after_sale_services']);
-
             if($arr[$key]['after_sale_services']=='0')
             {
                 $arr[$key]['is_support_after_sale']=0;
@@ -2454,6 +2465,7 @@ class GoodsOrder extends ActiveRecord
              {
                  $arr[$key]['is_support_after_sale']=0;
              }
+             unset( $arr[$key]['after_sale_services']);
              $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr,$role);
