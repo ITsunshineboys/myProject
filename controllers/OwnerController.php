@@ -1612,7 +1612,7 @@ class OwnerController extends Controller
     public function actionCoefficient()
     {
         $post = Yii::$app->request->post();
-        $coefficient = CoefficientManagement::find()->all();
+        $coefficient = CoefficientManagement::find()->asArray()->all();
         if ($coefficient == null) {
             $code = 1064;
             return Json::encode([
@@ -1623,9 +1623,10 @@ class OwnerController extends Controller
 
         if (is_array($post)){
             foreach ($coefficient as $one_coefficient){
+                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
                 foreach ($post['list'] as &$materials){
                     if ($materials['price'] != 0 || $materials['price'] != null){
-                         if ($one_coefficient['classify'] == $materials['one_title']){
+                         if ($classify['title'] == $materials['one_title']){
                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
                             $goods[] = $materials;
                          }
