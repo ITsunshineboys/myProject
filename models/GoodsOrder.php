@@ -2384,7 +2384,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
-                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status,shipping_type')
+                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status,shipping_type,after_sale_services')
                     ->asArray()
                     ->all();
                 if($GoodsOrder[$k]['list']==[])
