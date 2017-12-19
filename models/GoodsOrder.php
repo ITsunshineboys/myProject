@@ -116,7 +116,8 @@ class GoodsOrder extends ActiveRecord
         'a.return_insurance',
         'z.cover_image',
         'z.shipping_type',
-        'a.role_id'
+        'a.role_id',
+        'z.after_sale_services'
     ];
     const REMIND_SEND_GOODS='remind_send_goods_';
     const PLAT_MONEY='platform_price';
@@ -2331,7 +2332,7 @@ class GoodsOrder extends ActiveRecord
      * @param $role
      * @return array
      */
-    public  static  function paginationByUserOrderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
+    public  static  function paginationByUserOrderList($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -2383,7 +2384,7 @@ class GoodsOrder extends ActiveRecord
                 $GoodsOrder[$k]['list']=OrderGoods::find()
                     ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
                     ->andWhere(['order_status' =>0])
-                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status,shipping_type')
+                    ->select('goods_name,goods_price,goods_number,market_price,supplier_price,sku,freight,cover_image,order_status,shipping_type,after_sale_services')
                     ->asArray()
                     ->all();
                 if($GoodsOrder[$k]['list']==[])
@@ -2427,14 +2428,29 @@ class GoodsOrder extends ActiveRecord
                     $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
                 }
             }
-            $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
-            if($goods->after_sale_services=='0')
+
+            //2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
+            $ar=explode(',',$arr[$key]['after_sale_services']);
+
+            if($arr[$key]['after_sale_services']=='0')
             {
                 $arr[$key]['is_support_after_sale']=0;
             }else{
-                $arr[$key]['is_support_after_sale']=1;
+                if (in_array(2,$ar)
+                    || in_array(3,$ar)
+                    || in_array(4,$ar)
+                    || in_array(5,$ar)
+                    || in_array(6,$ar)
+                )
+                {
+                    $arr[$key]['is_support_after_sale']=1;
+                }else{
+                    $arr[$key]['is_support_after_sale']=0;
+                }
             }
-             if ($arr[$key]['status']!=self::ORDER_TYPE_COMPLETED && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
+             if (
+                 $arr[$key]['status']!=self::ORDER_TYPE_COMPLETED
+                 && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
              {
                  $arr[$key]['is_support_after_sale']=0;
              }
