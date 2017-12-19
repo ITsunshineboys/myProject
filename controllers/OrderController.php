@@ -2589,6 +2589,14 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        if ($user->pay_password=='')
+        {
+            $code=1081;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
         {
             $code=1055;
