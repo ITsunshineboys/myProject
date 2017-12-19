@@ -29,6 +29,7 @@ class BasisDecorationService
     ];
 
     public static $goodsNames;
+    public static $carpentryNames;
 
     const GOODS_IDS = [
         'reticle'=>32,
@@ -305,6 +306,8 @@ class BasisDecorationService
         return self::$goodsNames;
     }
 
+
+
     /**
      *   防水  水路  强电  弱电 人工费
      * @param string $points
@@ -358,17 +361,17 @@ class BasisDecorationService
         $goods_id = [];
         foreach ($goods as $one) {
             switch ($one) {
-                case $one['title'] == self::id2Title()['reticle'] || $one['title'] == self::id2Title()['wire']:
+                case $one['title'] == self::goodsNames()['reticle'] || $one['title'] == self::goodsNames()['wire']:
                     $goods_price = $one['platform_price'];
                     $goods_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
-                case $one['title'] == self::id2Title()['spool']:
+                case $one['title'] ==self::goodsNames()['spool']:
                     $spool_price = $one['platform_price'];
                     $spool_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
-                case $one['title'] == self::id2Title()['bottom_case']:
+                case $one['title'] ==self::goodsNames()['bottom_case']:
                     $bottom_case = $one['platform_price'];
                     $bottom_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
@@ -385,10 +388,10 @@ class BasisDecorationService
         }
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
-                case $one_unit['title'] == self::id2Title()['reticle'] || $one_unit['title'] == self::id2Title()['wire']:
+                case $one_unit['title'] == self::goodsNames()['reticle'] || $one_unit['title'] == self::goodsNames()['wire']:
                     $goods_value = $one_unit['value'];
                     break;
-                case $one_unit['title'] == self::id2Title()['spool']:
+                case $one_unit['title'] == self::goodsNames()['spool']:
                     $spool_value = $one_unit['value'];
                     break;
             }
@@ -450,12 +453,12 @@ class BasisDecorationService
     {
         foreach ($goods as $one) {
             switch ($one) {
-                case $one['title'] == self::id2Title()['ppr']:
+                case $one['title'] == self::goodsNames()['pvc']:
                     $pvc_price = $one['platform_price'];
                     $pvc_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
                     break;
-                case $one['title'] == self::id2Title()['pvc']:
+                case $one['title'] == self::goodsNames()['ppr']:
                     $ppr_price = $one['platform_price'];
                     $ppr_procurement = $one['purchase_price_decoration_company'];
                     $goods_id [] = $one['id'];
@@ -475,10 +478,10 @@ class BasisDecorationService
         //TODO 修改 用分类名称 查询
         foreach ($ids as $one_unit) {
             switch ($one_unit) {
-                case $one_unit['title'] == self::id2Title()['ppr']:
+                case $one_unit['title'] == self::goodsNames()['ppr']:
                     $ppr_value = $one_unit['value'];
                     break;
-                case $one_unit['title'] == self::id2Title()['pvc']:
+                case $one_unit['title'] == self::goodsNames()['pvc']:
                     $pvc_value = $one_unit['value'];
                     break;
             }
