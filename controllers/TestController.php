@@ -195,7 +195,6 @@ class TestController extends Controller
         }
         $lists=ShippingCart::find()
             ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
-            ->asArray()
             ->all();
         foreach ($lists as &$list)
         {
