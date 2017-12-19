@@ -2442,29 +2442,36 @@ class GoodsOrder extends ActiveRecord
             }
             $arr=self::switchStatus($arr,$role);
             //2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
-            $ar=explode(',',$arr[$key]['after_sale_services']);
-            if($arr[$key]['after_sale_services']=='0')
+            if ($role =='supplier')
             {
                 $arr[$key]['is_support_after_sale']=0;
-            }else{
-                if (in_array(2,$ar)
-                    || in_array(3,$ar)
-                    || in_array(4,$ar)
-                    || in_array(5,$ar)
-                    || in_array(6,$ar)
-                )
+            }else
+            {
+                $ar=explode(',',$arr[$key]['after_sale_services']);
+                if($arr[$key]['after_sale_services']=='0')
                 {
-                    $arr[$key]['is_support_after_sale']=1;
+                    $arr[$key]['is_support_after_sale']=0;
                 }else{
+                    if (in_array(2,$ar)
+                        || in_array(3,$ar)
+                        || in_array(4,$ar)
+                        || in_array(5,$ar)
+                        || in_array(6,$ar)
+                    )
+                    {
+                        $arr[$key]['is_support_after_sale']=1;
+                    }else{
+                        $arr[$key]['is_support_after_sale']=0;
+                    }
+                }
+                if (
+                    $arr[$key]['status']!=self::ORDER_TYPE_COMPLETED
+                    && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
+                {
                     $arr[$key]['is_support_after_sale']=0;
                 }
             }
-             if (
-                 $arr[$key]['status']!=self::ORDER_TYPE_COMPLETED
-                 && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
-             {
-                 $arr[$key]['is_support_after_sale']=0;
-             }
+
              unset( $arr[$key]['after_sale_services']);
              $create_time[$key]  = $arr[$key]['create_time'];
         }
@@ -2951,7 +2958,13 @@ class GoodsOrder extends ActiveRecord
             $output['aftersale_type']=$after['aftersale_type'];
             $output['apply_aftersale_time']=$after['apply_aftersale_time'];
             $output['apply_aftersale_reason']=$after['apply_aftersale_reason'];
-            $output['is_support_after_sale'] = self::checkIsSupportAfterSale($arr[0]['after_sale_services'],$arr[0]['status_code']);
+            if ($user->last_role_id_app=='supplier')
+            {
+                $output['is_support_after_sale'] =0;
+            }else
+            {
+                $output['is_support_after_sale'] = self::checkIsSupportAfterSale($arr[0]['after_sale_services'],$arr[0]['status_code']);
+            }
             $output['list'] = $list;
             return $output;
         }else{
