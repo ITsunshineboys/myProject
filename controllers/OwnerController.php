@@ -1623,14 +1623,14 @@ class OwnerController extends Controller
         }
         $goods = [];
         if (is_array($post)){
-            foreach ($coefficient as $one_coefficient){
-                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
-                foreach ($post['list'] as &$materials){
-                    if ($materials['price'] != 0 ){
-                        if ($classify['title'] == $materials['one_title']){
-                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
-                            $goods [] =$materials;
-                         }
+            foreach ($coefficient as $one_coefficient) {
+                $classify = GoodsCategory::find()->select('title')->where(['id' => $one_coefficient['category_id']])->asArray()->one();
+                foreach ($post['list'] as &$materials) {
+                    if ($materials['price'] != 0) {
+                        if ($classify['title'] == $materials['one_title']) {
+                            $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
+                            $goods []                 = $materials;
+                        }
 
                     }
 
@@ -1679,12 +1679,13 @@ class OwnerController extends Controller
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
-        $material[]   = BasisDecorationService::formula($goods_price,$post);
+        $material[]   = BasisDecorationService::formula($goods_price,$post);var_dump($material);die;
 
 
 
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
+
 
         foreach ($assort_material as $one_without_assort){
 
