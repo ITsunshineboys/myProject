@@ -684,7 +684,7 @@ class SupplierCashController extends Controller
 //       $user->availableamount=99889865;
 //       $user->save(false);
 //       var_dump($user);die;
-      var_dump(UserAccessdetail::find()->where(['uid'=>48])->asArray()->all());
+      var_dump(UserAccessdetail::find()->asArray()->all());
 
     }
 
