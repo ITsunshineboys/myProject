@@ -1678,8 +1678,7 @@ class BasisDecorationService
 
     public static function formula($goods,$post)
     {
-        var_dump($goods);
-        var_dump($post);die;
+
         foreach ($goods as $one_goods){
             switch ($one_goods){
                 case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板

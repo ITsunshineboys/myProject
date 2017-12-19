@@ -1702,6 +1702,7 @@ class OwnerController extends Controller
         }
         $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
+        var_dump($material);die;
 
 
         $condition_stairs = [];
