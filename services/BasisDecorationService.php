@@ -28,6 +28,8 @@ class BasisDecorationService
       'value2' => 1,
     ];
 
+    public static $goodsNames;
+
     const GOODS_IDS = [
         'reticle'=>32,
         'wire'=>43,
@@ -272,7 +274,36 @@ class BasisDecorationService
         return $titles;
     }
 
+    /**
+     * Map(GOODS_IDS => GOODS_NAME)
+     *
+     * @return array
+     */
+    public static function goodsNames()
+    {
+        if (!self::$goodsNames) {
+            $idTitles = GoodsCategory::find()
+                ->select(['id', 'title'])
+                ->where(['deleted' => 0, 'level' => GoodsCategory::LEVEL3])
+                ->andWhere(['in', 'id', self::GOODS_IDS])
+                ->asArray()
+                ->all();
 
+            $idTitles2 = [];
+            foreach ($idTitles as $v) {
+                $idTitles2[$v['id']] = $v['title'];
+            }
+
+            $idTitles3 = [];
+            foreach (self::GOODS_IDS as $k => $v) {
+                $idTitles3[$k] = isset($idTitles2[$v]) ? $idTitles2[$v] : '';
+            }
+
+            self::$goodsNames = $idTitles3;
+        }
+
+        return self::$goodsNames;
+    }
 
     /**
      *   防水  水路  强电  弱电 人工费
