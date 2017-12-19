@@ -5505,15 +5505,14 @@ class OrderController extends Controller
     {
         $goods=Yii::$app->request->post('goods');
         foreach ($goods as $one){
-//            if(!array_key_exists('num',$one)
-//                || !array_key_exists('goods_id',$one))
-//            {
-//                $code=1000;
-//                return Json::encode([
-//                    'code' => $code,
-//                    'msg'  => Yii::$app->params['errorCodes'][$code]
-//                ]);
-//            }
+            if( !array_key_exists('goods_id',$one))
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             if (empty($one['num']))
             {
                 $code=1000;
