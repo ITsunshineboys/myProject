@@ -2102,37 +2102,37 @@ class OrderController extends Controller
             ]);
         }
         $express=Express::find()
-            ->select('waybillnumber,waybillname,create_time')
-            ->where(['waybillnumber'=>$waybillnumber])
-            ->asArray()
-            ->one();
-                if (!$express)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-                $list=Express::FindExpressList($waybillnumber,'-1');
-                if (is_numeric($list))
-                {
-                    $code=$list;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-            $waybillname= $express['waybillname'];
+        ->select('waybillnumber,waybillname,create_time')
+        ->where(['waybillnumber'=>$waybillnumber])
+        ->asArray()
+        ->one();
+        if (!$express)
+        {
+            $code=1000;
             return Json::encode([
-                'code' => 200,
-                'msg' =>'ok',
-                'data' => [
-                    'list'=>$list,
-                    'waybillname'=>$waybillname,
-                    'waybillnumber'=>$express['waybillnumber']
-                ],
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
+        }
+        $list=Express::FindExpressList($waybillnumber,'-1');
+        if (is_numeric($list))
+        {
+            $code=$list;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $waybillname= $express['waybillname'];
+        return Json::encode([
+            'code' => 200,
+            'msg' =>'ok',
+            'data' => [
+                'list'=>$list,
+                'waybillname'=>$waybillname,
+                'waybillnumber'=>$express['waybillnumber']
+            ],
+        ]);
     }
     /**
      * @return string
@@ -5419,6 +5419,28 @@ class OrderController extends Controller
         $goods_id=$request->post('goods_id');
         $goods_num=$request->post('goods_num');
         if (!$goods_id  || !$goods_num)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        $Goods=Goods::findOne($goods_id);
+        if (!$Goods)
+        {
+            $code=1000;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
+        $supplier=Supplier::findOne($Goods->supplier_id);
+        if (!$supplier)
         {
             $code=1000;
             return Json::encode(
