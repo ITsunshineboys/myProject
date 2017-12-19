@@ -660,11 +660,10 @@ class BasisDecorationService
             ->where(['and',['series_or_style'=>0],['coefficient'=>2]])
             ->asArray()
             ->all();
-
         if ($engineering){
             foreach ($engineering as $engineering_one) {
                 if( $engineering_one['project'] == $series) {
-                    $series_one = $engineering_one['value'];
+                    $series_one = $engineering_one['value']*0.01;
                 }
             }
         }
@@ -692,7 +691,7 @@ class BasisDecorationService
             ->all();
         foreach ($series_ as $one_series){
             if ($one_series['project'] == $series){
-                $series_one = $one_series['value'];
+                $series_one = $one_series['value']*0.01;
             }
         }
 
@@ -703,7 +702,7 @@ class BasisDecorationService
             ->all();
         foreach ($style_ as $one_style){
             if ($one_style['project'] == $style){
-                $style_one = $one_style['value'];
+                $style_one = $one_style['value']*0.01;
             }
         }
 
@@ -733,7 +732,7 @@ class BasisDecorationService
             ->all();
         foreach ($series_ as $one_series){
             if ($one_series['project'] == $series){
-                $series_one = $one_series['value'];
+                $series_one = $one_series['value']*0.01;
             }
         }
 
@@ -744,7 +743,7 @@ class BasisDecorationService
             ->all();
         foreach ($style_ as $one_style){
             if ($one_style['project'] == $style){
-                $style_one = $one_style['value'];
+                $style_one = $one_style['value']*0.01;
             }
         }
 
@@ -861,6 +860,7 @@ class BasisDecorationService
                     $screw_rod_area = $craft['material'];
                 }
             }
+
 //            个数=个数1+个数2
 //            个数1：（造型长度÷【2m】）
 //            个数2：（平顶面积÷【2m²】

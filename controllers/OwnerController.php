@@ -785,6 +785,7 @@ class OwnerController extends Controller
         $flat_day = BasisDecorationService::flatDay($carpentry_add, $_flat,$post['series'],$post['style']);
 
 
+
         //人工费
         $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
         $labour_charges['worker_kind'] = $labor_cost['worker_kind'];
@@ -816,6 +817,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
 
