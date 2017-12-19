@@ -1101,6 +1101,7 @@ class OwnerController extends Controller
         $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
 
 
+
         if ($worker_kind_details == null){
             $code = 1057;
             return Json::encode([
@@ -1111,16 +1112,17 @@ class OwnerController extends Controller
         foreach ($worker_kind_details as $labor_cost) {
             switch ($labor_cost) {
                 case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['protective_layer_length']:
-                    $covering_layer_day_area = $labor_cost['quantity'];
+                    $covering_layer_day_area = $labor_cost['quantity']/100;
                     break;
                 case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['geostrophy_area']:
-                    $geostrophy_day_area = $labor_cost['quantity'];
+                    $geostrophy_day_area = $labor_cost['quantity']/100;
                     break;
                 case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['wall_brick_area']:
-                    $wall_tile_day_area = $labor_cost['quantity'];
+                    $wall_tile_day_area = $labor_cost['quantity']/100;
                     break;
             }
         }
+
         //泥作面积    mudMakeArea
         //厨房面积
         $project_view = ProjectView::find()->asArray()->where(['parent_project'=> '面积比例'])->all();
@@ -1137,15 +1139,16 @@ class OwnerController extends Controller
                 $drawing_room_particulars = $value['project_value'] / 100;
             }
         }
-
-        $kitchen_area = $post['area'] * $kitchen_particulars;
+        //TODO 少了%  所以还需要除以100
+        $kitchen_area = $post['area'] * $kitchen_particulars*0.01;
         //卫生间面积
-        $toilet_area = (int)$post['area'] * $toilet_particulars;
+        $toilet_area = (int)$post['area'] * $toilet_particulars*0.01;
         //客餐厅面积
-        $drawing_room_area = (int)$post['area'] * $drawing_room_particulars;
+        $drawing_room_area = (int)$post['area'] * $drawing_room_particulars*0.01;
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['tiler'], $post['city']);
+
         if ($craft == null){
             $code = 1059;
             return Json::encode([
@@ -1171,6 +1174,7 @@ class OwnerController extends Controller
         $covering_layer_area = $post['waterproof_total_area'];
 //        保护层天数：保护层面积÷【每天做保护层面积】
         $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
+
 
 
         $points = Points::findByOne('id,title',"title='泥作'");
