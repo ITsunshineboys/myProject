@@ -1955,7 +1955,6 @@ class OrderController extends Controller
                 ]);
             }
         }
-
         if($sku =='-1')
         {
             $shipping_type=0;
@@ -1984,7 +1983,6 @@ class OrderController extends Controller
                     ]
                 ]);
             }
-
             $list=Express::FindExpressList($order_no,$sku);
             if (is_numeric($list))
             {
@@ -2007,8 +2005,6 @@ class OrderController extends Controller
                     'mobile'=>''
                 ],
             ]);
-
-
         }else
         {
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
@@ -5693,27 +5689,26 @@ class OrderController extends Controller
                 }
             }
 
-                $sup_freight=GoodsOrder::CalculationFreight($sup_goods);
-                $supplier=Supplier::findOne($supplier_id);
-                if (!$supplier)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg'  => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $data[]=
-                [
-                    'supplier_id'=>$supplier_id,
-                    'shop_name'=>$supplier->shop_name,
-                    'freight'=> StringService::formatPrice($sup_freight*0.01),
-                    'market_price'=> StringService::formatPrice($market_price*0.01),
-                    'discount_price'=> StringService::formatPrice($discount_price*0.01),
-                    'require_payment'=> StringService::formatPrice(($discount_price+$sup_freight)*0.01),
-                    'goods'=>$sup_goods
-                ];
-
+            $sup_freight=GoodsOrder::CalculationFreight($sup_goods);
+            $supplier=Supplier::findOne($supplier_id);
+            if (!$supplier)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $data[]=
+            [
+                'supplier_id'=>$supplier_id,
+                'shop_name'=>$supplier->shop_name,
+                'freight'=> StringService::formatPrice($sup_freight*0.01),
+                'market_price'=> StringService::formatPrice($market_price*0.01),
+                'discount_price'=> StringService::formatPrice($discount_price*0.01),
+                'require_payment'=> StringService::formatPrice(($discount_price+$sup_freight)*0.01),
+                'goods'=>$sup_goods
+            ];
             $all_money+=$discount_price;
         }
 
