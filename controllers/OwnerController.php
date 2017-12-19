@@ -1612,7 +1612,8 @@ class OwnerController extends Controller
     public function actionCoefficient()
     {
         $post = Yii::$app->request->post();
-        $coefficient = CoefficientManagement::find()->asArray()->all();
+        $coefficient = CoefficientManagement::find()->all();
+
         if ($coefficient == null) {
             $code = 1064;
             return Json::encode([
@@ -1620,19 +1621,23 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
+        $goods = [];
         if (is_array($post)){
             foreach ($coefficient as $one_coefficient){
                 $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
                 foreach ($post['list'] as &$materials){
-                    if ($materials['price'] != 0 || $materials['price'] != null){
-                         if ($classify['title'] == $materials['one_title']){
-                            $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
-                            $goods[] = $materials;
+                    if ($materials['price'] != 0 ){
+                        if ($classify['title'] == $materials['one_title']){
+                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
+                            $goods [] =$materials;
                          }
+
                     }
+
                 }
+
             }
+        var_dump($goods);die;
 //            foreach ($goods as &$default){
 //                    $default['goods_price'] = $default['goods_price'] * 1;
 ////                if (empty($default['goods_price'])){
@@ -1641,11 +1646,12 @@ class OwnerController extends Controller
 //            }
             $special_offer = 0;
             $total_prices = 0;
+
             foreach ($goods as $price){
                 $total_prices += $price['price'];
                 $special_offer += $price['goods_price'];
-
             }
+
             $total = sprintf('%.2f', (float)$total_prices);
             $special = sprintf('%.2f', (float)$special_offer);
             return Json::encode([
