@@ -1612,7 +1612,7 @@ class OwnerController extends Controller
     public function actionCoefficient()
     {
         $post = Yii::$app->request->post();
-        $coefficient = CoefficientManagement::find()->all();
+        $coefficient = CoefficientManagement::find()->asArray()->all();
 
         if ($coefficient == null) {
             $code = 1064;
@@ -1621,23 +1621,26 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $goods = [];
-        if (is_array($post)){
-            foreach ($coefficient as $one_coefficient){
-                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
-                foreach ($post['list'] as &$materials){
-                    if ($materials['price'] != 0 ){
-                        if ($classify['title'] == $materials['one_title']){
-                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
-                            $goods [] =$materials;
-                         }
+        var_dump($coefficient);
+        var_dump($post);die;
+//        $goods = [];
+//        if (is_array($post)){
+//            foreach ($coefficient as $one_coefficient){
+//                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
+//                foreach ($post['list'] as &$materials){
+//                    if ($materials['price'] != 0 ){
+//                        if ($classify['title'] == $materials['one_title']){
+//                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
+//                            $goods [] =$materials;
+//                         }
+//
+//                    }
+//
+//                }
+//
+//            }
 
-                    }
 
-                }
-
-            }
-        var_dump($goods);die;
 //            foreach ($goods as &$default){
 //                    $default['goods_price'] = $default['goods_price'] * 1;
 ////                if (empty($default['goods_price'])){
@@ -1662,7 +1665,7 @@ class OwnerController extends Controller
                     'total_prices'=>$total,
                 ],
             ]);
-        }
+//        }
 
 
     }
