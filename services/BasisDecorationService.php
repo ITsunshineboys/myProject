@@ -846,12 +846,14 @@ class BasisDecorationService
      */
     public static function carpentryPoleCost($modelling_length,$flat_area,$goods,$crafts)
     {
+
         if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)) {
             foreach ($goods as $price) {
                 if($price['title'] == self::goodsNames()['lead_screw']) {
                     $goods_price = $price;
                 }
             }
+
             foreach ($crafts as $craft) {
                 if($craft['project_details'] == self::DetailsId2Title()['screw_rod_sculpt']) {
                     $screw_rod_sculpt = $craft['material'];
@@ -891,10 +893,11 @@ class BasisDecorationService
             ->andWhere(['city_code'=>$post['city']])
             ->one();
         if ($a){
-            $tv = $a['material'];
+            $tv = $a['material']/100;
         }else{
             $tv = 1;
         }
+
 //      个数
         $pole_cost['quantity'] = (int)$tv;
 //      费用
