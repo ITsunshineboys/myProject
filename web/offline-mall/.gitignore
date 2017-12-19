@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+dist/
+npm-debug.log
+vuejs-templates-master
+
+# Editor directories and files
+.vscode
