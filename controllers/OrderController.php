@@ -1137,7 +1137,7 @@ class OrderController extends Controller
     public function actionFindOrderList(){
             $user = Yii::$app->user->identity;
             if (!$user){
-                $code=1052;
+                $code=403;
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
@@ -4526,7 +4526,7 @@ class OrderController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -4724,7 +4724,7 @@ class OrderController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -4905,7 +4905,7 @@ class OrderController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -6001,7 +6001,7 @@ class OrderController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
