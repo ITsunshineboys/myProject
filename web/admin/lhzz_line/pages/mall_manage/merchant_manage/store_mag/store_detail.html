@@ -68,6 +68,14 @@
         <div class="form-group">
             <span class="col-md-2 control-label">    </span>
             <div class="col-md-10 form-control-static">
+                <div class="col-md-2 score">店家服务</div>
+                <div class="col-md-1" ng-bind="result.store_service_score"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <span class="col-md-2 control-label">    </span>
+            <div class="col-md-10 form-control-static">
                 <div class="col-md-2 score">物流速度</div>
                 <div class="col-md-1" ng-bind="result.logistics_speed_score"></div>
             </div>
@@ -209,7 +217,7 @@
                 <td ng-bind="item.brand_name"></td>
                 <td ng-bind="item.create_time"></td>
                 <td>{{item.authorization_start}} 至 {{item.authorization_end}}</td>
-                <td ng-bind="item.review_status_desc"></td>
+                <td ng-bind="item.review_status_desc" ng-class="{'red':item.review_status_desc=='不通过','green':item.review_status_desc=='通过','blue':item.review_status_desc=='等待审核'}"></td>
                 <td ng-if="!item.review_note">
                     <span ng-bind="item.review_note" class="review_note"></span>
                 </td>
