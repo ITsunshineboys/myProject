@@ -1472,13 +1472,20 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $template_id=Goods::find()
+        $template=Goods::find()
             ->select('logistics_template_id')
             ->where(['id'=>$goods_id])
             ->asArray()
-            ->one()
-        ['logistics_template_id'];
-        $data=LogisticsDistrict::isApply($district_code,$template_id);
+            ->one();
+        if (!$template)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=LogisticsDistrict::isApply($district_code,$template['logistics_template_id']);
         if ($data==200){
             return Json::encode([
                 'code' => 200,
@@ -1801,7 +1808,7 @@ class OrderController extends Controller
         $waybillnumber = trim($request->post('waybillnumber', ''), '');
         $shipping_type = trim($request->post('shipping_type', '0'), '');
         $code=1000;
-        if (!$shipping_type==1){
+        if ($shipping_type!=1){
             if (!$sku|| !$waybillnumber || !$order_no) {
                 return Json::encode([
                     'code' => $code,
@@ -1846,10 +1853,10 @@ class OrderController extends Controller
     public function actionExpressadd()
     {
         $request = Yii::$app->request;
-        $sku = trim(htmlspecialchars($request->post('sku', '')), '');
-        $order_no = trim(htmlspecialchars($request->post('order_no', '')), '');
-        $waybillname = trim(htmlspecialchars($request->post('waybillname', '')), '');
-        $waybillnumber = trim(htmlspecialchars($request->post('waybillnumber', '')), '');
+        $sku = trim($request->post('sku', ''));
+        $order_no = trim($request->post('order_no', ''));
+        $waybillname = trim($request->post('waybillname', ''));
+        $waybillnumber = trim($request->post('waybillnumber', ''));
         if (!$sku || !$waybillname || !$waybillnumber || !$order_no) {
             $code = 1000;
             return Json::encode([
@@ -1877,7 +1884,7 @@ class OrderController extends Controller
             ]);
         }else {
             return Json::encode([
-                'code' => 500,
+                'code' => 1000,
                 'msg' => '快递单号已存在',
             ]);
         }
@@ -1948,15 +1955,7 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-        if (!$GoodsOrder)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
         if($sku =='-1')
         {
             $shipping_type=0;
@@ -1965,76 +1964,127 @@ class OrderController extends Controller
                 ->where(['waybillnumber'=>$order_no])
                 ->asArray()
                 ->one();
+            if (!$express)
+            {
+                $code=200;
+                $arr[]=[
+                    'time'=>date('Y-m-d H:i',time()),
+                    'context'=>'无物流信息'
+                ];
+                return Json::encode([
+                    'code' => $code,
+                    'msg' =>'ok',
+                    'data'=> [
+                        'list'=>$arr,
+                        'shipping_type'=>$shipping_type,
+                        'waybillname'=>'暂无物流信息',
+                        'waybillnumber'=>'0',
+                        'order_no'=>'',
+                        'mobile'=>''
+                    ]
+                ]);
+            }
+
+            $list=Express::FindExpressList($order_no,$sku);
+            if (is_numeric($list))
+            {
+                $code=$list;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $waybillname= $express['waybillname'];
+            return Json::encode([
+                'code' => 200,
+                'msg' =>'ok',
+                'data' => [
+                    'list'=>$list,
+                    'shipping_type'=>$shipping_type,
+                    'waybillname'=>$waybillname,
+                    'waybillnumber'=>$express['waybillnumber'],
+                    'order_no'=>$order_no,
+                    'mobile'=>''
+                ],
+            ]);
+
+
         }else
         {
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            if (!$GoodsOrder)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
             $shipping_type=GoodsOrder::findShippingType($order_no,$sku);
             $express=Express::find()
                 ->select('waybillnumber,waybillname,create_time')
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->asArray()
                 ->one();
-        }
-        if (!$express)
-        {
-            $code=200;
-            $arr=array(
-                'time'=>date('Y-m-d H:i',time()),
-                'context'=>'无物流信息'
-            );
+            if (!$express)
+            {
+                $code=200;
+                $arr[]=[
+                    'time'=>date('Y-m-d H:i',time()),
+                    'context'=>'无物流信息'
+                ];
+                return Json::encode([
+                    'code' => $code,
+                    'msg' =>'ok',
+                    'data'=> [
+                        'list'=>$arr,
+                        'shipping_type'=>$shipping_type,
+                        'waybillname'=>'暂无物流信息',
+                        'waybillnumber'=>'0',
+                        'order_no'=>$order_no,
+                        'mobile'=>$GoodsOrder->consignee_mobile
+                    ]
+                ]);
+            }
+            switch ($shipping_type){
+                case 0:
+                    $list=Express::FindExpressList($order_no,$sku);
+                    if (is_numeric($list))
+                    {
+                        $code=$list;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+                    break;
+                case 1:
+                    $list=Express::FindExpressListSendToHome($order_no,$sku);
+                    break;
+            }
+            if ($shipping_type==1)
+            {
+                $supplier=Supplier::find()
+                    ->select('nickname')
+                    ->where(['id'=>$GoodsOrder->supplier_id])
+                    ->one();
+                $waybillname=$supplier->nickname;
+            }else{
+                $waybillname= $express['waybillname'];
+            }
             return Json::encode([
-                'code' => $code,
+                'code' => 200,
                 'msg' =>'ok',
-                'data'=> [
-                    'list'=>[
-                        $arr
-                    ],
+                'data' => [
+                    'list'=>$list,
                     'shipping_type'=>$shipping_type,
-                    'waybillname'=>'暂无物流信息',
-                    'waybillnumber'=>'0',
+                    'waybillname'=>$waybillname,
+                    'waybillnumber'=>$express['waybillnumber'],
                     'order_no'=>$order_no,
                     'mobile'=>$GoodsOrder->consignee_mobile
-                ]
+                ],
             ]);
         }
-        switch ($shipping_type){
-            case 0:
-                $list=Express::FindExpressList($order_no,$sku);
-                if (is_numeric($list))
-                {
-                    $code=$list;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
-                break;
-            case 1:
-                $list=Express::FindExpressListSendToHome($order_no,$sku);
-                break;
-        }
-        if ($shipping_type==1)
-        {
-
-            $supplier=Supplier::find()
-                ->select('nickname')
-                ->where(['id'=>$GoodsOrder->supplier_id])
-                ->one();
-            $waybillname=$supplier->nickname;
-        }else{
-            $waybillname= $express['waybillname'];
-        }
-        return Json::encode([
-            'code' => 200,
-            'msg' =>'ok',
-            'data' => [
-                'list'=>$list,
-                'shipping_type'=>$shipping_type,
-                'waybillname'=>$waybillname,
-                'waybillnumber'=>$express['waybillnumber'],
-                'order_no'=>$order_no,
-                'mobile'=>$GoodsOrder->consignee_mobile
-            ],
-        ]);
     }
     /**
      * @return string
