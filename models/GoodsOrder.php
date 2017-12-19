@@ -2331,7 +2331,7 @@ class GoodsOrder extends ActiveRecord
      * @param $role
      * @return array
      */
-    public  static  function paginationByUserorderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
+    public  static  function paginationByUserOrderlist($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
@@ -2428,17 +2428,17 @@ class GoodsOrder extends ActiveRecord
                 }
             }
             $goods=Goods::find()->where(['sku'=>$arr[$key]['list'][0]['sku']])->one();
-            if($goods->after_sale_services=='0' )
+            if($goods->after_sale_services=='0')
             {
                 $arr[$key]['is_support_after_sale']=0;
             }else{
                 $arr[$key]['is_support_after_sale']=1;
             }
-            // if ($arr[$key]['status']!='completed' && $arr[$key]['status']!='uncomment')
-            // {
-            //     $arr[$key]['is_support_after_sale']=0;
-            // }
-            $create_time[$key]  = $arr[$key]['create_time'];
+             if ($arr[$key]['status']!=self::ORDER_TYPE_COMPLETED && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
+             {
+                 $arr[$key]['is_support_after_sale']=0;
+             }
+             $create_time[$key]  = $arr[$key]['create_time'];
         }
         $arr=self::switchStatus($arr,$role);
         if ($arr){

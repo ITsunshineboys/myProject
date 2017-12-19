@@ -2534,7 +2534,7 @@ class OrderController extends Controller
             $where.=' and z.customer_service=0';
         }
         $sort=' a.create_time  desc';
-        $paginationData = GoodsOrder::paginationByUserorderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
+        $paginationData = GoodsOrder::paginationByUserOrderlist($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
         if (is_numeric($paginationData))
         {
             $code=$paginationData;
@@ -2797,6 +2797,7 @@ class OrderController extends Controller
             'data'=>$comment
         ]);
     }
+
     /**
      * 评论回复操作
      * @return string

@@ -560,6 +560,14 @@ class WithdrawalsController extends Controller
         }
         $availableamount =$supplier->availableamount;
         $pwd=$supplier->pay_password;
+        if ($pwd=='')
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '您尚未设置支付密码，请先设置支付密码'
+            ]);
+        }
         if ($money*100>$availableamount){
             $code=1054;
             return Json::encode([
