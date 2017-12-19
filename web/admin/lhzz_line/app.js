@@ -631,81 +631,91 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/distribution/',
             templateUrl: 'pages/distribution/index.html'
         })
-        .state('distribution.index', {//分销主页
-            url: 'index',
+        .state('home_list', {//分销主页
+            url: '/home_list',
             templateUrl: 'pages/distribution/distribution_index.html',
-            css: 'pages/distribution/css/distribution_index.css'
+            css: 'pages/distribution/css/distribution_index.css',
+            controller:'home_list_ctrl'
         })
-        .state('distribution.detail', {//分销详情
-            url: 'detail',
+        .state('distribution_detail', {//分销详情
+            url: '/distribution_detail?mobile',
             templateUrl: 'pages/distribution/distribution_detail.html',
-            css: 'pages/distribution/css/distribution_detail.css'
+            css: 'pages/distribution/css/distribution_detail.css',
+            controller:'distribution_detail_ctrl'
         })
-        .state('distribution.associate_list', {//相关联订单
-            url: 'associate_list',
+        .state('associate_list', {//相关联订单
+            url: '/associate_list?mobile',
             templateUrl: 'pages/distribution/associate_list.html',
-            css: 'pages/distribution/css/associate_list.css'
+            css: 'pages/distribution/css/associate_list.css',
+            controller:'associate_list_ctrl'
         })
         //财务中心
         //商城财务
-        .state('mall_finance', {
-            url: '/mall_finance/',
-            templateUrl: 'pages/financial_center/mall/index.html'
-        })
-        .state('mall_finance.index', {//商城财务主页
-            url: 'index',
+        .state('mall_finance', {//商城财务主页
+            url: '/mall_finance',
             templateUrl: 'pages/financial_center/mall/mall_finance.html',
-            css: 'pages/financial_center/mall/css/mall_finance.css'
+            css: 'pages/financial_center/mall/css/mall_finance.css',
+            controller:'mall_finance_ctrl'
         })
-        .state('mall_finance.withdraw', {//商家提现管理
-            url: 'withdraw',
+        .state('mall_withdraw_manage', {//商家提现管理
+            url: '/mall_withdraw_manage?time_type&status',
             templateUrl: 'pages/financial_center/mall/withdraw_manage.html',
-            css: 'pages/financial_center/mall/css/withdraw_manage.css'
+            css: 'pages/financial_center/mall/css/withdraw_manage.css',
+            controller:'mall_withdraw_manage_ctrl'
         })
-        .state('mall_finance.withdraw_manage_detail', {//商家提现管理详情
-            url: 'withdraw_manage_detail?index',
+        .state('mall_withdraw_manage_detail', {//商家提现管理详情
+            url: '/mall_withdraw_manage_detail?transaction_no',
             templateUrl: 'pages/financial_center/mall/withdraw_manage_detail.html',
-            css: 'pages/financial_center/mall/css/account_detail.css'
+            css: 'pages/financial_center/mall/css/account_detail.css',
+            controller:'mall_manage_detail_ctrl'
         })
-        .state('mall_finance.account', {//财务账户管理
-            url: 'account',
+        .state('mall_account', {//财务账户管理
+            url: '/mall_account',
             templateUrl: 'pages/financial_center/mall/account.html',
-            css: 'pages/financial_center/mall/css/account.css'
+            css: 'pages/financial_center/mall/css/account.css',
+            controller:'mall_account_ctrl'
         })
-        .state('mall_finance.account_detail', {//财务账户详情
-            url: 'account_detail',
+        .state('mall_account_detail', {//财务账户详情
+            url: '/mall_account_detail?id',
             templateUrl: 'pages/financial_center/mall/account_detail.html',
-            css: 'pages/financial_center/mall/css/account_detail.css'
+            css: 'pages/financial_center/mall/css/account_detail.css',
+            controller:'mall_account_detail_ctrl'
         })
-        .state('mall_finance.freeze_money', {//冻结金额
-            url: 'freeze_money',
+        .state('mall_freeze_money', {//冻结金额
+            url: '/mall_freeze_money?id&cash',
             templateUrl: 'pages/financial_center/mall/freeze_money.html',
-            css: 'pages/financial_center/mall/css/freeze_money.css'
+            css: 'pages/financial_center/mall/css/freeze_money.css',
+            controller:'mall_freeze_ctrl'
         })
-        .state('mall_finance.withdraw_list', {//提现列表
-            url: 'withdraw_list',
+        .state('mall_withdraw_list', {//提现列表
+            url: '/mall_withdraw_list?id',
             templateUrl: 'pages/financial_center/mall/withdraw_list.html',
-            css: 'pages/financial_center/mall/css/withdraw_list.css'
+            css: 'pages/financial_center/mall/css/withdraw_list.css',
+            controller:'mall_withdraw_list_ctrl'
         })
-        .state('mall_finance.freeze_list', {//冻结金额列表
-            url: 'freeze_list',
+        .state('mall_freeze_list', {//冻结金额列表
+            url: '/mall_freeze_list?id',
             templateUrl: 'pages/financial_center/mall/freeze_list.html',
-            css: 'pages/financial_center/mall/css/withdraw_list.css'
+            css: 'pages/financial_center/mall/css/withdraw_list.css',
+            controller:'mall_freeze_list_ctrl'
         })
-        .state('mall_finance.withdraw_detail', {//提现详情
-            url: 'withdraw_detail',
+        .state('mall_withdraw_detail', {//提现详情
+            url: '/mall_withdraw_detail?id',
             templateUrl: 'pages/financial_center/mall/withdraw_detail.html',
-            css: 'pages/financial_center/mall/css/account_detail.css'
+            css: 'pages/financial_center/mall/css/account_detail.css',
+            controller:'mall_withdraw_detail_ctrl'
         })
-        .state('mall_finance.recorded_detail', {
-            url: 'recorded_detail',
+        .state('mall_recorded_detail', {
+            url: '/mall_recorded_detail',
             templateUrl: 'pages/financial_center/mall/recorded_detail.html',
-            css: 'pages/financial_center/mall/css/withdraw_manage.css'
+            css: 'pages/financial_center/mall/css/withdraw_manage.css',
+            controller:'recorded_list_ctrl'
         })
-        .state('mall_finance.money_list', {//收支列表
-            url: 'money_list',
+        .state('mall_money_list', {//收支列表
+            url: '/mall_money_list?id',
             templateUrl: 'pages/financial_center/mall/money_list.html',
-            css: 'pages/financial_center/mall/css/account.css'
+            css: 'pages/financial_center/mall/css/account.css',
+            controller:'mall_money_list_ctrl'
         })
         /*业主财务中心*/
         .state('owner_finance', {//业主财务中心主页

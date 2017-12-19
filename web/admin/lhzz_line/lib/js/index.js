@@ -135,7 +135,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         sessionStorage.removeItem('account_dd_menu');
         sessionStorage.removeItem('other_menu');
         sessionStorage.setItem('finance_menu', $scope.finance_flag);
-        $state.go('mall_finance.index');
+        $state.go('mall_finance');
     }
     $rootScope.finance_click = $scope.finance_click;
     if (sessionStorage.getItem('finance_menu') != null) {
@@ -184,6 +184,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         $scope.mall_flag = false;
         $scope.finance_flag = false;
         $scope.other_flag = '';
+        $scope.account_active = 0;
     }
 
     //账户管理------二级

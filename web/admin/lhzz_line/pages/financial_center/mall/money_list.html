@@ -1,13 +1,13 @@
 <div class="account">
     <div class="search form-inline clearfix">
-        <select ng-model="params5.time_type" ng-change="changeMoneyList(1)" class="form-control" ng-options="item.str as item.name for item in all_time_type"></select>
-        <input ng-if="params5.time_type == 'custom'" ngc-lay-date placeholder="开始时间" ng-change="changeMoneyList(1)" max-date="{{params5.time_end}}" id="start_time" type="text" ng-model="params5.time_start" class="form-control">
-        <input ng-if="params5.time_type == 'custom'" ngc-lay-date placeholder="结束时间" ng-change="changeMoneyList(1)" min-date="{{params5.time_start}}" id="end_time" type="text" ng-model="params5.time_end" class="form-control">
+        <select ng-model="params.time_type" ng-change="changeMoneyList(1)" class="form-control" ng-options="item.value as item.name for item in time_types"></select>
+        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="开始时间" ng-change="changeMoneyList(1)" max-date="{{params.time_end}}" id="start_time" type="text" ng-model="params.time_start" class="form-control">
+        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="结束时间" ng-change="changeMoneyList(1)" min-date="{{params.time_start}}" id="end_time" type="text" ng-model="params.time_end" class="form-control">
         <span>类型选择</span>
-        <select ng-model="params5.type" ng-change="changeMoneyList()" class="form-control" ng-options="item.num as item.str for item in all_type"></select>
+        <select ng-model="params.type" ng-change="changeMoneyList()" class="form-control" ng-options="item.num as item.str for item in all_type"></select>
         <div class="form-group pull-right">
             <div class="input-group">
-                <input class="form-control" ng-model="ctrlScope.keyword5" placeholder="搜索订单号或交易单号" type="text">
+                <input class="form-control" ng-model="vm.keyword" placeholder="搜索订单号或交易单号" type="text">
                 <span class="glyphicon glyphicon-search"></span>
             </div>
             <button class="btn btn-default" ng-click="inquire()">查询</button>
@@ -18,8 +18,8 @@
             <th ng-click="changeMoneyList(2)">
                 时间
                 <span class="sort">
-                    <i class="iconfont icon-up" ng-class="{'active':params5.sort_time==1}"></i>
-                    <i class="iconfont icon-down" ng-class="{'active':params5.sort_time==2}"></i>
+                    <i class="iconfont icon-up" ng-class="{'active':params.sort_time==1}"></i>
+                    <i class="iconfont icon-down" ng-class="{'active':params.sort_time==2}"></i>
                 </span>
             </th>
             <th>金额</th>
@@ -37,5 +37,5 @@
             <td><a ng-click="getMoneyDetail(item)">查看</a></td>
         </tr>
     </table>
-    <tm-pagination conf="Config5"></tm-pagination>
+    <tm-pagination conf="Config"></tm-pagination>
 </div>

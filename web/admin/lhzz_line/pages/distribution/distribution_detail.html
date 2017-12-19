@@ -25,26 +25,26 @@
         <div class="row" ng-if="subset.length>10">
                 <p class="col-md-2">&nbsp;</p>
                 <p class="col-md-10">
-                    <button class="remove" style="margin-left: 0;border:0;" ng-click="associate()">查看列表</button>
+                    <button class="remove" style="margin-left: 0;border:0;">查看列表</button>
                 </p>
         </div>
         <div class="row">
             <p class="col-md-2">相关联交易订单</p>
             <p class="col-md-10">
-                <button class="remove" style="margin-left: 0;" ng-click="associate()">查看列表</button>
+                <button class="remove" style="margin-left: 0;" ui-sref="associate_list({mobile:mobile})">查看列表</button>
             </p>
         </div>
         <div class="row">
             <p class="col-md-2">收益</p>
             <div class="col-md-2">
-                <input type="text" maxlength="8"  ng-pattern="/^0(\.\d{1,2})?$|^[1-9]\d{5}(\.\d{1})?$|^[1-9]\d{0,4}(\.\d{1,2})?$|^[1-9]\d{6,7}$/" required ng-blur="flag = !!count_profit.profit.$error" name="profit" maxlength="8" placeholder="请输入金额" ng-model="ctrlScope.profit"
+                <input type="text" maxlength="8"  ng-pattern="/^0(\.\d{1,2})?$|^[1-9]\d{5}(\.\d{1})?$|^[1-9]\d{0,4}(\.\d{1,2})?$|^[1-9]\d{6,7}$/" required ng-blur="flag = !!count_profit.profit.$error" name="profit" maxlength="8" placeholder="请输入金额" ng-model="vm.profit"
                        class="form-control">
                 <p style="margin-top: 10px;font-size: 12px;" ng-if="count_profit.profit.$invalid&&submitted" ng-class="{'error':(count_profit.profit.$invalid&&submitted)||(count_profit.profit.$error.pattern&&count_profit.profit.$error.required)&&flag}">金额小数点最多两位</p>
             </div>
         </div>
         <div class="from-group submit">
-            <button type="button" class="btn btn-primary" ng-click="save_profit(count_profit.$valid)">保存</button>
-            <button type="button" class="btn btn-default" ng-click="go_index()">返回</button>
+            <button type="button" class="btn btn-primary" ng-click="saveProfit(count_profit.$valid)">保存</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>

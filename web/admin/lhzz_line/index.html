@@ -41,7 +41,7 @@
         <dd ng-repeat="item in account_obj" ng-click="account_repeat(item)" ng-class="{true:'show',false:'hide'}[account_flag]"><a ng-class="{dd_on: account_active == item.id}" ng-bind="item.name"></a></dd>
     </dl>
     <dl>
-        <dt ui-sref="distribution.index" ng-class="{on:other_flag=='distribution.index'}" ng-click="other_display('distribution.index')"><i class="iconfont icon-fenxiao i_width"></i>分销</dt>
+        <dt ui-sref="home_list" ng-class="{on:other_flag=='home_list'}" ng-click="other_display('home_list')"><i class="iconfont icon-fenxiao i_width"></i>分销</dt>
     </dl>
     <dl>
         <dt ui-sref="apply_case_index" ng-class="{on:other_flag=='apply_case_index'}" ng-click="other_display('apply_case_index')"><i class="iconfont icon-yangbanjian i_width"></i>装修申请</dt>
@@ -137,9 +137,25 @@
 <script src="pages/intelligent/js/add_case.js"></script>
 
 <script src="pages/distribution/js/distribution.js"></script>
+<script src="pages/distribution/js/home_list.js"></script>
+<script src="pages/distribution/js/distribution_detail.js"></script>
+<script src="pages/distribution/js/associate_list.js"></script>
+
 <script src="pages/apply_case/js/apply_case_index.js"></script>
 <script src="pages/apply_case/js/case_detail.js"></script>
+
 <script src="pages/financial_center/mall/js/controller.js"></script>
+<script src="pages/financial_center/mall/js/mall_finance.js"></script>
+<script src="pages/financial_center/mall/js/withdraw_manage.js"></script>
+<script src="pages/financial_center/mall/js/mall_withdraw_manage_detail.js"></script>
+<script src="pages/financial_center/mall/js/mall_account.js"></script>
+<script src="pages/financial_center/mall/js/mall_account_detail.js"></script>
+<script src="pages/financial_center/mall/js/freeze_money.js"></script>
+<script src="pages/financial_center/mall/js/mall_withdraw_list.js"></script>
+<script src="pages/financial_center/mall/js/mall_freeze_list.js"></script>
+<script src="pages/financial_center/mall/js/mall_money_list.js"></script>
+<script src="pages/financial_center/mall/js/recorded_list.js"></script>
+<script src="pages/financial_center/mall/js/mall_withdraw_detail.js"></script>
 <script src="pages/financial_center/owner/js/owner_finance.js"></script>
 <script src="pages/financial_center/owner/js/withdraw_manage.js"></script>
 <script src="pages/financial_center/owner/js/withdraw_manage_detail.js"></script>

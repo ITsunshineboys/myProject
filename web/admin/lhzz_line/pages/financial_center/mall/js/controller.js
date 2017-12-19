@@ -933,7 +933,7 @@ angular.module('mall_finance', ['ui.bootstrap'])
                 }, {
                     name: '提现列表',
                     link: function () {
-                        $state.go('mmall_finance.withdraw_list')
+                        $state.go('mall_finance.withdraw_list')
                         $rootScope.crumbs.splice(5, 1)
                     }
                 }, {

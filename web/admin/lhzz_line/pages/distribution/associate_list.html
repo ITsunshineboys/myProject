@@ -1,5 +1,5 @@
 <div class="associate_list">
-    <p><span>关联订单：{{total_orders}}</span><span>关联金额：{{total_amount}}</span></p>
+    <p><span>关联订单：{{total_orders}}</span><span>关联金额：{{total_amount | currency:'￥'}}</span></p>
     <table class="table table-responsive table-hover">
         <tr>
             <th>手机号</th>
@@ -15,12 +15,12 @@
             <td>{{item.create_time}}</td>
             <td>
                 <div class="col-sm-5" style="padding-left: 0!important;">
-                    <input data-toggle="modal" ng-click="replace_remarks(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remarks">
+                    <input data-toggle="modal" ng-click="getRemark(item)" data-target="#remarks" type="text" class="form-control" ng-model="item.remarks">
                 </div>
             </td>
         </tr>
     </table>
-    <tm-pagination conf="Config1"></tm-pagination>
+    <tm-pagination conf="Config"></tm-pagination>
     <div class="modal fade" id="remarks" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -30,10 +30,10 @@
                 </div>
                 <div class="modal-body row">
                     <p class="col-md-3">备注(选填)</p>
-                    <textarea  ng-model="cur_associate_item.remarks" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
+                    <textarea  ng-model="cur_item.remarks" class="col-md-9" placeholder="请填写备注项" cols="30" rows="10"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="other_btn" ng-click="edit_remarks()" data-dismiss="modal">确认</button>
+                    <button type="button" class="other_btn" ng-click="editRemark()" data-dismiss="modal">确认</button>
                     <button type="button" data-dismiss="modal">取消</button>
                 </div>
             </div><!-- /.modal-content -->

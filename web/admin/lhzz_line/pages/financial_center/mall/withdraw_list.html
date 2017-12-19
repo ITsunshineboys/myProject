@@ -1,14 +1,8 @@
 <div class="withdraw_list">
-    <div class="row">
-        <div class="col-md-2">
-            <select ng-model="params4.time_type" ng-options="item.str as item.name for item in time_type" ng-change="getWithdrawList()" class="form-control"></select>
-        </div>
-        <div class="col-md-2">
-            <input ng-if="params4.time_type == 'custom'" ng-model="params4.start_time" max-date="{{params4.end_time}}" id="start_time" ng-change="getWithdrawList()" class="form-control" max-date="{{params.end_time}}" placeholder="开始时间" type="text" ngc-lay-date>
-        </div>
-        <div class="col-md-2">
-            <input ng-if="params4.time_type == 'custom'" ng-model="params4.end_time" min-date="{{params4.start_time}}" id="end_time" ng-change="getWithdrawList()" min-date="{{params.start_time}}" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
-        </div>
+    <div class="search form-inline clearfix">
+            <select ng-model="params.time_type" ng-options="item.value as item.name for item in time_types" ng-change="getWithdrawList()" class="form-control"></select>
+            <input ng-if="params.time_type == 'custom'" ng-model="params.start_time" max-date="{{params.end_time}}" id="start_time" ng-change="getWithdrawList()" class="form-control" max-date="{{params.end_time}}" placeholder="开始时间" type="text" ngc-lay-date>
+            <input ng-if="params.time_type == 'custom'" ng-model="params.end_time" min-date="{{params.start_time}}" id="end_time" ng-change="getWithdrawList()" min-date="{{params.start_time}}" class="form-control" placeholder="结束时间" type="text" ngc-lay-date>
     </div>
     <table class="table table-responsive table-hover">
         <tr>
@@ -25,8 +19,8 @@
             <td>{{item.real_money}}</td>
             <td>{{item.cost_money}}</td>
             <td>{{item.transaction_no}}</td>
-            <td style="color: #5677FC;" ng-click="go_withdraw_detail(item)">查看</td>
+            <td><a ui-sref="mall_withdraw_detail({id:item.id})">查看</a></td>
         </tr>
     </table>
-    <tm-pagination conf="Config4"></tm-pagination>
+    <tm-pagination conf="Config"></tm-pagination>
 </div>
