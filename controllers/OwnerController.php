@@ -1664,6 +1664,7 @@ class OwnerController extends Controller
         $goods = Goods::assortList(self::MATERIALS,$post['city']);
         $goods_price  = BasisDecorationService::priceConversion($goods);
         $material[]   = BasisDecorationService::formula($goods_price,$post);
+        var_dump($material);die;
 
 
         //无计算公式
@@ -1701,7 +1702,7 @@ class OwnerController extends Controller
         }
 
 
-        var_dump($material);die;
+
         $goods_material = [];
         foreach ($material as $one){
             if($one != null){
