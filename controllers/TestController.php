@@ -6,6 +6,7 @@ use app\models\Carousel;
 use app\models\Goods;
 use app\models\GoodsOrder;
 use app\models\OrderGoods;
+use app\models\ShippingCart;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserRole;
@@ -184,14 +185,22 @@ class TestController extends Controller
 
     public  function  actionUpData()
     {
-        $supplier=Supplier::findOne(Yii::$app->request->post('supplier_id'));
-        $role_id=Yii::$app->request->post('role_id');
-        $UserRole=UserRole::find()
-            ->where(['user_id'=>$supplier->uid])
-            ->andWhere(['role_id'=>$role_id])
-            ->one();
-        $UserRole->review_status=0;
-        $UserRole->save(false);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $lists=ShippingCart::find()
+            ->where(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+            ->asArray()
+            ->all();
+        foreach ($lists as &$list)
+        {
+            $list->delete();
+        }
     }
 
     public  function  actionDelInvalidData()

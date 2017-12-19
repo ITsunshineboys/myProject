@@ -5752,10 +5752,10 @@ class OrderController extends Controller
            $Good=Goods::findOne($list['goods_id']);
            if ($Good)
            {
-//               if(!$Good->status==2)
-//               {
+               if(!$Good->status==2)
+               {
                    $Goods[]=$Good->id;
-//               }
+               }
            }
         }
         $tran = Yii::$app->db->beginTransaction();
