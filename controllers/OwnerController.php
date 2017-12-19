@@ -1612,7 +1612,7 @@ class OwnerController extends Controller
     public function actionCoefficient()
     {
         $post = Yii::$app->request->post();
-        $coefficient = CoefficientManagement::find()->all();
+        $coefficient = CoefficientManagement::find()->asArray()->all();
         if ($coefficient == null) {
             $code = 1064;
             return Json::encode([
@@ -1623,9 +1623,10 @@ class OwnerController extends Controller
 
         if (is_array($post)){
             foreach ($coefficient as $one_coefficient){
+                $classify = GoodsCategory::find()->select('title')->where(['id'=>$one_coefficient['category_id']])->asArray()->one();
                 foreach ($post['list'] as &$materials){
                     if ($materials['price'] != 0 || $materials['price'] != null){
-                         if ($one_coefficient['classify'] == $materials['one_title']){
+                         if ($classify['title'] == $materials['one_title']){
                             $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
                             $goods[] = $materials;
                          }
@@ -1695,18 +1696,20 @@ class OwnerController extends Controller
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
 
-
+        $condition_stairs = [];
         //  楼梯信息
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as &$one_stairs_price) {
+
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = 1;
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                     $one_stairs_price['procurement'] = $one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
                 }
+
             }
             $material[][] = BasisDecorationService::profitMargin($condition_stairs);
         }
