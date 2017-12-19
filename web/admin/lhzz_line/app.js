@@ -3,7 +3,7 @@ var app = angular.module("app", ["ng.ueditor", "ui.router","ngFileUpload",
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
     "choose_styleModule", "styledetailModule", "storedetailModule", "merchant_details", "intelligent_index",
-    'angularCSS', 'distribution', 'mall_finance', 'idcard_right',
+    'angularCSS', 'idcard_right',
     //  王杰 开始
     "banner_recommend_module",
     "index_recommend_module",
