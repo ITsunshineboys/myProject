@@ -1695,18 +1695,20 @@ class OwnerController extends Controller
         $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
 
 
-
+        $condition_stairs = [];
         //  楼梯信息
         if ($post['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
             $stairs_price = BasisDecorationService::priceConversion($stairs);
             foreach ($stairs_price as &$one_stairs_price) {
+
                 if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
                     $one_stairs_price['quantity'] = 1;
                     $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
                     $one_stairs_price['procurement'] = $one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'];
                     $condition_stairs [] = $one_stairs_price;
                 }
+
             }
             $material[][] = BasisDecorationService::profitMargin($condition_stairs);
         }

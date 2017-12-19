@@ -624,6 +624,13 @@ class SupplieraccountController extends  Controller{
         $keyword = trim($request->get('keyword', ''));
         $timeType = trim($request->get('time_type', ''));
         $type=trim($request->get('type',''));
+        if(!$uid){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         if (array_key_exists($type,UserCashregister::ACCESS_TYPE_LIST))
         {
             $where="access_type={$type} and role_id=6 and uid={$uid}";
