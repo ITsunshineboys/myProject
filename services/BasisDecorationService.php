@@ -1954,7 +1954,7 @@ class BasisDecorationService
         foreach ($goods as &$one){
             foreach ($assort_material as $value){
                 if ($one['title'] == $value['title']){
-                    $one['quantity'] =$value['quantity'];
+                    $one['quantity'] =(int)$value['quantity'];
                     $one['cost'] = round($one['quantity'] * $one['platform_price'],2);
                     $one['procurement'] = round($one['quantity'] * $one['purchase_price_decoration_company'],2);
                 }
