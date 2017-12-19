@@ -55,6 +55,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
 use app\services\AuthService;
+use yii\web\UploadedFile;
+
 class OrderController extends Controller
 {
     const WXPAY_LINE_GOODS='线下店商城';
@@ -2892,7 +2894,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
         $postData = \Yii::$app->request->get();
         if (!isset($postData['order_no']) || !isset($postData['sku']))
         {
@@ -2910,7 +2911,7 @@ class OrderController extends Controller
             }
         }
 
-        if ($file)
+        if ($file!='')
         {
             $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$file);
         }else
