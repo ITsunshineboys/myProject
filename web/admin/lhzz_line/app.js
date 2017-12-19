@@ -627,10 +627,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'case_detail_ctrl'
         })
         //分销
-        .state('distribution', {
-            url: '/distribution/',
-            templateUrl: 'pages/distribution/index.html'
-        })
         .state('home_list', {//分销主页
             url: '/home_list',
             templateUrl: 'pages/distribution/distribution_index.html',
