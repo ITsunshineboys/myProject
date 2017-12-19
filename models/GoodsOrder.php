@@ -2440,7 +2440,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
                 }
             }
-
+            $arr=self::switchStatus($arr,$role);
             //2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
             $ar=explode(',',$arr[$key]['after_sale_services']);
             if($arr[$key]['after_sale_services']=='0')
@@ -2468,7 +2468,7 @@ class GoodsOrder extends ActiveRecord
              unset( $arr[$key]['after_sale_services']);
              $create_time[$key]  = $arr[$key]['create_time'];
         }
-        $arr=self::switchStatus($arr,$role);
+
         if ($arr){
             array_multisort($create_time, SORT_DESC, $arr);
             $count=count($arr);
