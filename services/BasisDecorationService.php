@@ -28,8 +28,8 @@ class BasisDecorationService
       'value2' => 1,
     ];
 
-    public static $goodsNames;
-    public static $carpentryNames;
+    private static $goodsNames;
+    private static $carpentryNames;
 
     const GOODS_IDS = [
         'reticle'=>32,
