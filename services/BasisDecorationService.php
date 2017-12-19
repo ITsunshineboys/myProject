@@ -525,6 +525,7 @@ class BasisDecorationService
     public static  function waterproofArea($area,$height,$house_area,$quantity = 1)
     {
 
+
 //            厨房地面面积：【x】%×（房屋面积)
         $ground = $area * $house_area;
 //            厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
@@ -547,6 +548,7 @@ class BasisDecorationService
      */
     public static function waterproofGoods($points,$goods,$crafts)
     {
+
         foreach ($crafts as $craft) {
             $material = $craft['material'];
         }

@@ -174,7 +174,7 @@ class OwnerController extends Controller
         'toilet_area'  => '卫生间面积百分比',
         'hall_area'    => '客餐厅及过道面积百分比',
         'bedroom_area' => '卧室面积百分比',
-        'bedroom_area_' => '客厅面积百分比',
+//        'bedroom_area_' => '客厅面积百分比',
     ];
 
 
@@ -683,14 +683,15 @@ class OwnerController extends Controller
 
         $points = Points::findByOne('id,title',"id = 69");
         //厨房
-        $kitchen_ = ProjectView::findByOne('厨房面积',68);
+        $kitchen_ = ProjectView::findByOne('厨房面积百分比',68);
         $_kitchen_height = ProjectView::findByOne('厨房防水高度',$points['id']);
-        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_['project_value'],$_kitchen_height['project_value'], $post['area'], $post['kitchen']);
+
+        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_['project_value']/100,$_kitchen_height['project_value']/100, $post['area'], $post['kitchen']);
 
         //卫生间
-        $toilet_ = ProjectView::findByOne('卫生间面积',68);
+        $toilet_ = ProjectView::findByOne('卫生间面积百分比',68);
         $_toilet_height = ProjectView::findByOne('卫生间防水高度',$points['id']);
-        $toilet_area = BasisDecorationService::waterproofArea($toilet_['project_value'],$_toilet_height['project_value'], $post['area'], $post['toilet']);
+        $toilet_area = BasisDecorationService::waterproofArea($toilet_['project_value']/100,$_toilet_height['project_value']/100, $post['area'], $post['toilet']);
 
 
         //总面积
@@ -698,14 +699,15 @@ class OwnerController extends Controller
             ->asArray()
             ->where(['<=','min_area',$post['area']])
             ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>'其他防水面积'])
+            ->andwhere(['project_name'=>'其他防水面积'])
             ->andWhere(['points_id'=>$points['id']])
             ->one();
-        $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
 
+        $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterproof'], $post['city']);
+
         if ($craft == null){
             $code = 1059;
             return Json::encode([
