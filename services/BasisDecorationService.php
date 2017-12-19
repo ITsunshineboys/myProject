@@ -28,8 +28,8 @@ class BasisDecorationService
       'value2' => 1,
     ];
 
-    private static $goodsNames;
-    private static $carpentryNames;
+    private static $_goodsNames;
+    private static $_carpentryNames;
 
     const GOODS_IDS = [
         'reticle'=>32,
@@ -282,7 +282,7 @@ class BasisDecorationService
      */
     public static function goodsNames()
     {
-        if (!self::$goodsNames) {
+        if (!self::$_goodsNames) {
             $idTitles = GoodsCategory::find()
                 ->select(['id', 'title'])
                 ->where(['deleted' => 0, 'level' => GoodsCategory::LEVEL3])
@@ -300,10 +300,10 @@ class BasisDecorationService
                 $idTitles3[$k] = isset($idTitles2[$v]) ? $idTitles2[$v] : '';
             }
 
-            self::$goodsNames = $idTitles3;
+            self::$_goodsNames = $idTitles3;
         }
 
-        return self::$goodsNames;
+        return self::$_goodsNames;
     }
 
 
