@@ -2460,11 +2460,16 @@ class OrderController extends Controller
         $sku=trim($request->post('sku',''));
         if (!$order_no || ! $sku)
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $order_no=trim($request->get('order_no',''));
+            $sku=trim($request->get('sku',''));
+            if (!$order_no || ! $sku)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $data= OrderRefund::FindRefundDetail($order_no,$sku);
         if (is_numeric($data))
