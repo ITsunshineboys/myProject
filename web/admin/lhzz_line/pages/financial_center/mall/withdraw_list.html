@@ -19,7 +19,7 @@
             <td>{{item.real_money}}</td>
             <td>{{item.cost_money}}</td>
             <td>{{item.transaction_no}}</td>
-            <td><a ui-sref="mall_withdraw_detail({id:item.id})">查看</a></td>
+            <td><a ui-sref="mall_withdraw_detail({id:item.id,supplier_id:supplier_id})">查看</a></td>
         </tr>
     </table>
     <tm-pagination conf="Config"></tm-pagination>
