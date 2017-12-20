@@ -3584,6 +3584,82 @@ class GoodsOrder extends ActiveRecord
       }
 
 
+    /**
+     * @param $goods
+     * @return string
+     */
+    public  static  function  CalculationFreightTest($goods)
+    {
+        foreach ($goods as $one){
+            if (!is_array($one))
+            {
+                $one=(array)$one;
+            }
+            if ($one['goods_num'] != 0 || $one['goods_num'] !=null){
+                $goods_ [] = $one;
+            }
+        }
+        foreach ($goods_ as  $k =>$v)
+        {
+            $Good[$k]=LogisticsTemplate::find()
+                ->where(['id'=>Goods::find()
+                    ->select('logistics_template_id')
+                    ->where(['id'=>$goods_[$k]['goods_id']])
+                    ->one()->logistics_template_id])
+                ->asArray()
+                ->one();
+            $Good[$k]['goods_id']=$goods_[$k]['goods_id'];
+            $Good[$k]['goods_num']=$goods_[$k]['goods_num'];
+        }
+        $templates=[];
+        foreach ($Good as &$wuliu){
+            if (!in_array($wuliu['id'],$templates))
+            {
+
+                $templates[]=$wuliu['id'];
+            };
+        }
+        foreach ($templates as &$list)
+        {
+            $costs[]['id']=$list;
+        }
+        foreach ($costs as &$cost)
+        {
+            $cost['goods_num']=0;
+            foreach ($Good as &$list)
+            {
+                if ($list['id']==$cost['id'])
+                {
+
+                    $cost['goods_num']+=$list['goods_num'];
+                }
+            }
+        }
+        $freight=0;
+        foreach ($costs as &$cost)
+        {
+            $logistics_template=LogisticsTemplate::find()
+                ->where(['id'=>$cost['id']])
+                ->asArray()
+                ->one();
+            if ($logistics_template['delivery_number_default']>=$cost['goods_num'])
+            {
+                $freight+=$logistics_template['delivery_cost_default'];
+            }else{
+                if ($logistics_template['delivery_number_delta']==0)
+                {
+                    $logistics_template['delivery_number_delta']=1;
+                }
+                $addnum=ceil(($cost['goods_num']-$logistics_template['delivery_number_default'])/$logistics_template['delivery_number_delta']);
+                $money=$logistics_template['delivery_cost_default']+$addnum*$logistics_template['delivery_cost_delta'];
+                $freight+=$money;
+            }
+        }
+        return  $freight;
+    }
+
+
+
 
 
 }

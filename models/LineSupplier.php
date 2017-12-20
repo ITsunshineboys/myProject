@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\services\ModelService;
-use Symfony\Component\DomCrawler\Field\InputFormField;
 use Yii;
 use yii\db\Exception;
 use yii\db\Query;
