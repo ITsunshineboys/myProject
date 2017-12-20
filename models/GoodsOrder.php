@@ -7,6 +7,7 @@
  */
 
 namespace app\models;
+use app\services\PayService;
 use yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
@@ -1142,7 +1143,7 @@ class GoodsOrder extends ActiveRecord
                 if ($arr[$k]['order_refer']==1)
                 {
                     $output['username']=LineSupplier::LINE_USER;
-                    $output['role']='平台';
+                    $output['role']=OrderPlatForm::PLATFORM;
                 }else{
                     $output['username']=(new Query())
                         ->from('user_address')
@@ -1158,7 +1159,7 @@ class GoodsOrder extends ActiveRecord
                     ->where(['a.user_id'=>$arr[$k]['user_id']])
                     ->one()['name'];
                 if (!$output['role']){
-                    $output['role']='平台';
+                    $output['role']=OrderPlatForm::PLATFORM;
                 }
             }
             $goods_num+=$arr[$k]['goods_number'];
@@ -3070,7 +3071,7 @@ class GoodsOrder extends ActiveRecord
                 ->from('user_address')
                 ->where(['id'=>$arr['address_id']])
                 ->one()['consignee'];
-            $output['role']='平台';
+            $output['role']=OrderPlatForm::PLATFORM;
         }else{
             $output['role']=(new Query())
                 ->from(UserRole::tableName().' as a')
@@ -3079,7 +3080,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['a.user_id'=>$arr['user_id']])
                 ->one()['name'];
             if (!$output['role']){
-                $output['role']='平台';
+                $output['role']=OrderPlatForm::PLATFORM;
             }
         }
         return $output;
@@ -3188,13 +3189,13 @@ class GoodsOrder extends ActiveRecord
         switch ($pay_way)
         {
             case 1:
-                $pay_name='余额支付';
+                $pay_name=PayService::BALANCE_PAY;
                 break;
             case 2:
-                $pay_name='支付宝app支付';
+                $pay_name=PayService::ALI_APP_PAY;
                 break;
             case 3:
-                $pay_name='微信APP支付';
+                $pay_name=PayService::WE_CHAT_APP_PAY;
                 break;
         }
         $address=UserAddress::findOne($address_id);
