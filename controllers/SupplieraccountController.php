@@ -1353,7 +1353,8 @@ class SupplieraccountController extends  Controller{
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('cate_id', 0);
-        $category = GoodsCategory::findOne($id);
+        $category = GoodsCategory::find()->where(['id'=>$id])->one();
+
         if (!$category) {
             return Json::encode([
                 'code' => $code,
