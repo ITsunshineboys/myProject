@@ -228,4 +228,24 @@ class TestController extends Controller
         }
         echo 1;
     }
+
+
+    /**
+     * @return string
+     */
+    public  function  actionBalanceAdd()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user=User::findOne($user->id);
+        $user->balance=100000000;
+        $user->availableamount=100000000;
+        $user->save(false);
+    }
 }
