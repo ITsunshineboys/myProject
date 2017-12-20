@@ -351,6 +351,8 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
+        var_dump($u_id);
+        var_dump($role_id);die;
         $res['news']=UserNewsRecord::find()
             ->where(['uid'=>$u_id,'role_id'=>$role_id])
             ->asArray()
