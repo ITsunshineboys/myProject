@@ -1386,6 +1386,8 @@ class SupplieraccountController extends  Controller{
         $category->pid = $pid;
         $category->create_time=time();
         $category->review_status=0;
+        $category->approve_time=0;
+        $category->reject_time=0;
         $checkSameLevelResult = $category->checkSameLevelByPid($pid);
         if ($checkSameLevelResult != 200) {
             return Json::encode([
