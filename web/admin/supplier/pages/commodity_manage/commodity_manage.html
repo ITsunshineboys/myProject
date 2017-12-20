@@ -436,7 +436,7 @@
             <tbody>
             <tr class="table_content" ng-repeat="item in wait_list_arr">
                 <td ng-if="wait_1">{{item.sku}}</td>
-                <td ng-if="wait_2">{{item.title}}</td>
+                <td ng-if="wait_2" class="reason_width">{{item.title}}</td>
                 <td ng-if="wait_3">¥{{item.supplier_price}}</td>
                 <td ng-if="wait_4">¥{{item.platform_price}}</td>
                 <td ng-if="wait_5">¥{{item.market_price}}</td>

@@ -24,7 +24,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.style_null_flag = false;
     $scope.series_null_arr = [];
     $scope.style_null_arr = [];
-    let reg = /^\d+(\.\d{1,2})?$/;
+    let reg = /^\d+(\.\d{1,2})?$/;//小数点后两位
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
     $scope.myng = $scope;
     let goods_item = $stateParams.item;//点击对应的那条数据
@@ -204,10 +204,13 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
       $scope.own_attrs_arr.push({name: '', value: '', name_model: 'attrs' + $scope.i, value_model: 'value' + $scope.i});
       $scope.i++;
     };
-    //删除属性
+    //删除自己添加的属性
     $scope.del_own_attrs = function (index) {
         $scope.own_attrs_arr.splice(index, 1);
     };
+		$scope.del_admin_attrs = function (index) {
+			$scope.goods_input_attrs.splice(index, 1);
+		};
 	$scope.own_input_change = function () {
 		let arr=[];
 		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);

@@ -187,6 +187,9 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.del_own_attrs=function (index) {
 		$scope.own_attrs_arr.splice(index,1);
 	};
+	$scope.del_admin_attrs = function (index) {
+		$scope.goods_input_attrs.splice(index, 1);
+	};
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
 		if(item.value!==undefined){

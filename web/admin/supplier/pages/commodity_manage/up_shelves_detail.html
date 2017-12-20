@@ -96,10 +96,11 @@
             <div class="row" ng-repeat="item in goods_input_attrs">
                 <div class="col-sm-offset-2 col-sm-3 control-label">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
-                    <span style="display: inline-block;width: 15px">&nbsp;</span>
+                    <span ng-if="item.from_type==0" style="display: inline-block;width: 15px">&nbsp;</span>
+                    <span ng-if="item.from_type==1" class="glyphicon glyphicon-minus pointer" ng-click="del_admin_attrs($index)"></span>
                     <span ng-model="myng.attr_name">{{item.name}}</span>
                 </div>
-                <div class="col-sm-3 control-label">
+                <div class="col-sm-3">
                     <input class="form-control" ng-model="item.value" type="text" maxlength="6" placeholder="请输入属性内容"
                            id="attr_name{{$index}}" name="attr_name{{$index}}" ng-keyup="testNumber(item)" required
                            ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}"
@@ -119,7 +120,7 @@
                     <span style="display: inline-block;width: 15px">&nbsp;</span>
                     <span style="display: inline-block;width: 140px">{{item.name}}</span>
                 </div>
-                <div class="col-sm-3 control-label">
+                <div class="col-sm-3">
                     <select class="form-control" ng-model="item.selected"
                             ng-options="items for items in goods_select_attrs_value[$index]"></select>
                 </div>
