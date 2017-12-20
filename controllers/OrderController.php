@@ -2887,7 +2887,8 @@ class OrderController extends Controller
             ]);
         }
         $postData = \Yii::$app->request->get();
-        if (!isset($postData['order_no']) || !isset($postData['sku']))
+        if (!isset($postData['order_no'])
+            ||!isset($postData['sku']))
         {
             $postData=Yii::$app->request->post();
         }
