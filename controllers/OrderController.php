@@ -70,7 +70,7 @@ class OrderController extends Controller
         'getplatformdetail',
         'getorderdetailsall',
         'platformhandlesubmit',
-        'find-order-list',
+//        'find-order-list',
         'find-supplier-order-list',
         'find-unusual-list',
         'find-unusual-list-lhzz',
