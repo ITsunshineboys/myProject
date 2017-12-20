@@ -1353,7 +1353,7 @@ class SupplieraccountController extends  Controller{
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('cate_id', 0);
-        $category = GoodsCategory::find()->where(['id'=>$id])->one();
+        $category = GoodsCategory::findOne($id);
 
         if (!$category) {
             return Json::encode([
@@ -1366,6 +1366,7 @@ class SupplieraccountController extends  Controller{
         $category->icon = trim(Yii::$app->request->post('icon', ''));
         $category->description= Yii::$app->request->post('description');
         $pid = (int)Yii::$app->request->post('pid', '');
+
         $category->setLevelPath($pid);
         $category->pid = $pid;
 
@@ -1389,13 +1390,13 @@ class SupplieraccountController extends  Controller{
         $category->review_status=0;
         $category->approve_time=0;
         $category->reject_time=0;
-//        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
-//        if ($checkSameLevelResult != 200) {
-//            return Json::encode([
-//                'code' => $checkSameLevelResult,
-//                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
-//            ]);
-//        }
+        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
+        if ($checkSameLevelResult != 200) {
+            return Json::encode([
+                'code' => $checkSameLevelResult,
+                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
+            ]);
+        }
         if (!$category->save(false)) {
             $code = 500;
             return Json::encode([

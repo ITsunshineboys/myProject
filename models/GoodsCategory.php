@@ -937,7 +937,7 @@ class GoodsCategory extends ActiveRecord
      */
     public function checkSameLevelByPid($newPid)
     {
-        if ($this->review_status == self::REVIEW_STATUS_REJECT) {
+        if ($this->supplier_id !=0 && $this->review_status == self::REVIEW_STATUS_REJECT) {
             return 200;
         }
 
