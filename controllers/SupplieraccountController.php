@@ -1393,7 +1393,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
             ]);
         }
-        if (!$category->save()) {
+        if (!$category->save(false)) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
