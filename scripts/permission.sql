@@ -32,7 +32,7 @@ CREATE TABLE `role_permission` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `role_permission`
+-- Dumping data for table `role_permission` 
 --
 
 LOCK TABLES `role_permission` WRITE;
