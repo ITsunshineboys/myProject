@@ -1388,13 +1388,13 @@ class SupplieraccountController extends  Controller{
         $category->review_status=0;
         $category->approve_time=0;
         $category->reject_time=0;
-        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
-        if ($checkSameLevelResult != 200) {
-            return Json::encode([
-                'code' => $checkSameLevelResult,
-                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
-            ]);
-        }
+//        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
+//        if ($checkSameLevelResult != 200) {
+//            return Json::encode([
+//                'code' => $checkSameLevelResult,
+//                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
+//            ]);
+//        }
         if (!$category->save(false)) {
             $code = 500;
             return Json::encode([
