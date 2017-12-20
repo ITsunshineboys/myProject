@@ -43,7 +43,6 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
 	/*分类所属 第一个下拉框的值*/
 	$scope.findParentClass =  (function () {
 		_ajax.get('/mall/categories-manage-admin',{},function (res) {
-			console.log(res);
             $scope.firstclass = res.data.categories.splice(1);
         })
 	})()
