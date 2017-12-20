@@ -3,12 +3,12 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
-import axios from 'axios'
+import api from './api'
 import App from './App'
 import Home from './components/HelloFromVux'
 
 Vue.use(VueRouter)
-Vue.prototype.$http = axios
+Vue.prototype.axios = api
 
 const routes = [{
   path: '/',

@@ -6,8 +6,6 @@
 </template>
 
 <script>
-  import http from './api'
-
   export default {
     name: 'app',
     data () {
@@ -16,12 +14,14 @@
       }
     },
     methods: {
-      async show () {
+      show () {
         let params = {
           id: 60
         }
-        const res = await http.post('/effect/effect-view', params)
-        console.log(res.data)
+        console.log(this)
+        this.axios.post('/effect/effect-view', function (res) {
+          console.log(res)
+        })
       }
     }
   }
