@@ -114,7 +114,7 @@ done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $
             order_no: $stateParams.order_no,
             sku: $stateParams.sku
         };
-        _ajax.post("/order/get-comment", data, function (res) {
+        _ajax.get("/order/get-comment", data, function (res) {
             console.log(res);
             /*判断有无评论*/
             if (res.data.length === 0) {

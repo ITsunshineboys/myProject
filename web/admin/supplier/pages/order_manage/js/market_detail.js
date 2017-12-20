@@ -87,7 +87,7 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 
 	});
 	//评论信息
-	_ajax.post('/order/get-comment',{
+	_ajax.get('/order/get-comment',{
 		order_no:$stateParams.order_no,
 		sku:$stateParams.sku
 	},function (res) {
