@@ -16,6 +16,7 @@ use app\services\ModelService;
  * @property integer $create_time
  * @property string $order_no
  * @property string $transaction_no
+ * @property string $sku
  */
 class UserAccessdetail extends \yii\db\ActiveRecord
 {
@@ -61,7 +62,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     {
         return [
             [['uid', 'role_id', 'access_type', 'access_money', 'create_time'], 'integer'],
-            [['order_no', 'transaction_no'], 'string', 'max' => 50],
+            [['order_no', 'transaction_no','sku'], 'string', 'max' => 50],
         ];
     }
 
@@ -79,6 +80,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             'create_time' => '创建时间',
             'order_no' => '订单号',
             'transaction_no' => '交易单号',
+            'sku' => '商品编号',
         ];
     }
 

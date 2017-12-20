@@ -1764,37 +1764,15 @@ class GoodsOrder extends ActiveRecord
      */
     public static function GetOrderList()
     {
-        $getorderlist  =(new Query())
+        $list  =(new Query())
             ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no');
-        return $getorderlist;
+        return $list;
     }
 
 
 
 
-    /**
-     * @param $sort_money
-     * @param $sort_time
-     * @return string
-     */
-    public static  function sort_lhzz_order($sort_money,$sort_time){
-        if ($sort_time==1 && $sort_money==1){
-            $sort='a.create_time asc,z.goods_price asc';
-        }else if ($sort_time==1 && $sort_money==2){
-            $sort='a.create_time asc';
-        }
-        else if ($sort_time==2 && $sort_money==1){
-            $sort='z.goods_price asc';
-        }
-        else if ($sort_time==2 && $sort_money==2){
-            $sort='a.create_time desc,z.goods_price desc';
-        }else
-        {
-            $sort='a.create_time desc,z.goods_price desc';
-        }
-        return $sort;
-    }
 
     /**
      * Get supplier sales volumn
