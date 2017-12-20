@@ -22,7 +22,7 @@ class LineSupplier extends \yii\db\ActiveRecord
 {
 
     const PAGE_SIZE_DEFAULT=12;
-
+    const  LINE_USER='线下店购买用户';
     /**
      * @inheritdoc
      */

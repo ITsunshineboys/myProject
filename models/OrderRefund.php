@@ -12,6 +12,8 @@ use yii\db\ActiveRecord;
 
 class OrderRefund extends ActiveRecord
 {
+    const  UNUSUAL_DESC='无异常';
+    const REFUND_FAIL='退款失败';
     /**
      * @return string 返回该AR类关联的数据表名
      */
