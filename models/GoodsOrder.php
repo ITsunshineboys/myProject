@@ -127,7 +127,7 @@ class GoodsOrder extends ActiveRecord
     const COMPANEY_MONEY='purchase_price_decoration_company';
     const SUPPLIER_MONEY='supplier_price';
     const STATUS_DESC_DETAILS=1;
-
+    const SHIP_HANDLE='发货';
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -851,7 +851,7 @@ class GoodsOrder extends ActiveRecord
                 case 'supplier':
                     if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED)
                     {
-                        $arr[$k]['handle']='发货';
+                        $arr[$k]['handle']=self::SHIP_HANDLE;
                         $arr[$k]['have_handle']=1;
                     }
                     break;
