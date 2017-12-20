@@ -3342,13 +3342,10 @@ class OrderController extends Controller
         {
             $freight=GoodsOrder::CalculationFreight($Goods);
         }
-
         else
         {
             $freight=0;
         }
-
-
 
         $address=UserAddress::find()
             ->where(['id'=>$address_id])
