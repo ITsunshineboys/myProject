@@ -3346,7 +3346,6 @@ class OrderController extends Controller
         {
             $freight=0;
         }
-
         $address=UserAddress::find()
             ->where(['id'=>$address_id])
             ->one();

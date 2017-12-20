@@ -43,7 +43,7 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
     // 分类所属 默认一二级下拉框
     function selectDefault() {
         _ajax.get('/mall/categories-manage-admin', {}, function (res) {
-            $scope.firstclass = res.data.categories.splice(1);
+            $scope.firstclass = res.data.categories;
             for (let i = 0; i < $scope.firstclass.length; i++) {
                 if ($scope.firstclass[i].id == $scope.finalpatharr[0]) {
                     $scope.firstselect = $scope.firstclass[i].id;
@@ -53,7 +53,7 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
         })
 
         _ajax.get('/mall/categories-manage-admin', {pid: $scope.finalpatharr[0]}, function (res) {
-            $scope.secondclass = res.data.categories.splice(1);
+            $scope.secondclass = res.data.categories;
             for (let i = 0; i < $scope.secondclass.length; i++) {
                 if ($scope.secondclass[i].id == $scope.finalpatharr[1]) {
                     $scope.secselect = $scope.secondclass[i].id;
@@ -81,7 +81,7 @@ app.controller('edit_class', ['$state', '$rootScope', '$scope', '$stateParams', 
     /*一级选择后的二级*/
     $scope.subClass = function (obj) {
         _ajax.get('/mall/categories-manage-admin', {pid: obj}, function (res) {
-            $scope.secondclass = res.data.categories.splice(1);
+            $scope.secondclass = res.data.categories;
             $scope.secselect = '0';
         })
     }

@@ -7,6 +7,7 @@
  */
 
 namespace app\models;
+use app\services\PayService;
 use yii;
 use yii\db\ActiveRecord;
 use yii\db\Query;
@@ -127,7 +128,7 @@ class GoodsOrder extends ActiveRecord
     const COMPANEY_MONEY='purchase_price_decoration_company';
     const SUPPLIER_MONEY='supplier_price';
     const STATUS_DESC_DETAILS=1;
-
+    const SHIP_HANDLE='发货';
 
     /**
      * @return string 返回该AR类关联的数据表名
@@ -841,9 +842,9 @@ class GoodsOrder extends ActiveRecord
             if ($arr[$k]['is_unusual']==1){
                 $arr[$k]['unusual']=self::ORDER_TYPE_DESC_APPLYREFUND;
             }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
+                $arr[$k]['unusual']=OrderRefund::UNUSUAL_DESC;
             }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
+                $arr[$k]['unusual']=OrderRefund::REFUND_FAIL;
             }
             $arr[$k]['handle']='';
             switch ($type)
@@ -851,14 +852,15 @@ class GoodsOrder extends ActiveRecord
                 case 'supplier':
                     if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED)
                     {
-                        $arr[$k]['handle']='发货';
+                        $arr[$k]['handle']=self::SHIP_HANDLE;
                         $arr[$k]['have_handle']=1;
                     }
                     break;
                 case 'lhzz':
-                    if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
+                    if(
+                        $arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
                     {
-                        $arr[$k]['handle']='平台介入';
+                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                         $arr[$k]['have_handle']=1;
                     }
                     break;
@@ -914,7 +916,7 @@ class GoodsOrder extends ActiveRecord
                         $arr[$k]['handle']='';
                         $arr[$k]['have_handle']=2;
                     }else{
-                        $arr[$k]['handle']='平台介入';
+                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                         $arr[$k]['have_handle']=1;
                     }
                 }else{
@@ -922,7 +924,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['have_handle']=2;
                 }
             }else{
-                $arr[$k]['handle']='平台介入';
+                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                 $arr[$k]['have_handle']=1;
             }
             unset($arr[$k]['consignee_mobile']);
@@ -1140,8 +1142,8 @@ class GoodsOrder extends ActiveRecord
             if (empty($output['username'])){
                 if ($arr[$k]['order_refer']==1)
                 {
-                    $output['username']='线下店购买用户';
-                    $output['role']='平台';
+                    $output['username']=LineSupplier::LINE_USER;
+                    $output['role']=OrderPlatForm::PLATFORM;
                 }else{
                     $output['username']=(new Query())
                         ->from('user_address')
@@ -1157,7 +1159,7 @@ class GoodsOrder extends ActiveRecord
                     ->where(['a.user_id'=>$arr[$k]['user_id']])
                     ->one()['name'];
                 if (!$output['role']){
-                    $output['role']='平台';
+                    $output['role']=OrderPlatForm::PLATFORM;
                 }
             }
             $goods_num+=$arr[$k]['goods_number'];
@@ -1559,7 +1561,7 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
             switch ($data[$k]['order_refer']){
                 case 1:
-                    $data[$k]['user_name']='线下店购买用户';
+                    $data[$k]['user_name']=LineSupplier::LINE_USER;
                     break;
                 case 2:
                     $data[$k]['user_name']=User::find()
@@ -1763,37 +1765,15 @@ class GoodsOrder extends ActiveRecord
      */
     public static function GetOrderList()
     {
-        $getorderlist  =(new Query())
+        $list  =(new Query())
             ->from(self::tableName().' AS a')
             ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no');
-        return $getorderlist;
+        return $list;
     }
 
 
 
 
-    /**
-     * @param $sort_money
-     * @param $sort_time
-     * @return string
-     */
-    public static  function sort_lhzz_order($sort_money,$sort_time){
-        if ($sort_time==1 && $sort_money==1){
-            $sort='a.create_time asc,z.goods_price asc';
-        }else if ($sort_time==1 && $sort_money==2){
-            $sort='a.create_time asc';
-        }
-        else if ($sort_time==2 && $sort_money==1){
-            $sort='z.goods_price asc';
-        }
-        else if ($sort_time==2 && $sort_money==2){
-            $sort='a.create_time desc,z.goods_price desc';
-        }else
-        {
-            $sort='a.create_time desc,z.goods_price desc';
-        }
-        return $sort;
-    }
 
     /**
      * Get supplier sales volumn
@@ -2410,7 +2390,7 @@ class GoodsOrder extends ActiveRecord
                         $GoodsOrder[$k]['list'][$key]['goods_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['market_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
                         $GoodsOrder[$k]['list'][$key]['supplier_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['unusual']='无异常';
+                        $GoodsOrder[$k]['list'][$key]['unusual']=OrderRefund::UNUSUAL_DESC;
                         $GoodsOrder[$k]['after_sale_services']= $GoodsOrder[$k]['list'][$key]['after_sale_services'];
                         unset($GoodsOrder[$k]['list'][$key]['after_sale_services']);
                         unset($GoodsOrder[$k]['list'][$key]['order_status']);
@@ -2512,12 +2492,12 @@ class GoodsOrder extends ActiveRecord
             if ($arr[$k]['is_unusual']==1){
                 $arr[$k]['unusual']=self::ORDER_TYPE_DESC_APPLYREFUND;
             }else if ($arr[$k]['is_unusual']==0){
-                $arr[$k]['unusual']='无异常';
+                $arr[$k]['unusual']=OrderRefund::UNUSUAL_DESC;
             }else if($arr[$k]['is_unusual']==2){
-                $arr[$k]['unusual']='退款失败';
+                $arr[$k]['unusual']=OrderRefund::REFUND_FAIL;
             }
-            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']=='售后中'|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
-                $arr[$k]['handle']='平台介入';
+            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
+                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
             }
             if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
                 if (!$arr[$k]['comment_id'] || $arr[$k]['comment_id']==0){
@@ -2652,10 +2632,10 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['status_code']=self::ORDER_TYPE_CANCEL;
                     $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CANCEL;
                     break;
-                case  '售后中':
+                case  self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN:
                     $arr[$k]['status_type']=9; //售后中
-                    $arr[$k]['status_code']='after_saled';
-                    $arr[$k]['status_desc']='售后中';
+                    $arr[$k]['status_code']=self::ORDER_TYPE_CUSTOMER_SERVICE_IN;
+                    $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN;
                     break;
                 case  self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER:
                     $arr[$k]['status_type']=10; //售后结束
@@ -3091,7 +3071,7 @@ class GoodsOrder extends ActiveRecord
                 ->from('user_address')
                 ->where(['id'=>$arr['address_id']])
                 ->one()['consignee'];
-            $output['role']='平台';
+            $output['role']=OrderPlatForm::PLATFORM;
         }else{
             $output['role']=(new Query())
                 ->from(UserRole::tableName().' as a')
@@ -3100,7 +3080,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['a.user_id'=>$arr['user_id']])
                 ->one()['name'];
             if (!$output['role']){
-                $output['role']='平台';
+                $output['role']=OrderPlatForm::PLATFORM;
             }
         }
         return $output;
@@ -3209,13 +3189,13 @@ class GoodsOrder extends ActiveRecord
         switch ($pay_way)
         {
             case 1:
-                $pay_name='余额支付';
+                $pay_name=PayService::BALANCE_PAY;
                 break;
             case 2:
-                $pay_name='支付宝app支付';
+                $pay_name=PayService::ALI_APP_PAY;
                 break;
             case 3:
-                $pay_name='微信APP支付';
+                $pay_name=PayService::WE_CHAT_APP_PAY;
                 break;
         }
         $address=UserAddress::findOne($address_id);

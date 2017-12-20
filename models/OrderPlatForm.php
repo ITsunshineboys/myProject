@@ -28,6 +28,9 @@ class OrderPlatForm extends ActiveRecord
     const PLATFORM_RETURN_DOOR=6;
     const PLATFORM_EXCHANGE_DOOR=7;
     const PLATFORM_CLOSE_ORDER=8;
+
+    const PLATFORM_HANDLE='平台介入';
+    const PLATFORM='平台';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -35,6 +38,7 @@ class OrderPlatForm extends ActiveRecord
     {
         return 'order_platform_handle';
     }
+
 
     /**
      * 关闭订单，线下退款

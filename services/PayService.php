@@ -19,8 +19,11 @@ use app\models\Wxpay;
 class PayService
 {
 
-
-
+    const  ALI_PAY='支付宝支付';
+    const  ALI_APP_PAY='支付宝APP支付';
+    const  BALANCE_PAY='余额支付';
+    const  WE_CHAT_PAY='微信支付';
+    const  WE_CHAT_APP_PAY='微信APP支付';
     /**
      *
      * 网页授权接口微信服务器返回的数据，返回样例如下
