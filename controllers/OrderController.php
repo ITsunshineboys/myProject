@@ -74,7 +74,7 @@ class OrderController extends Controller
         'find-supplier-order-list',
         'find-unusual-list',
         'find-unusual-list-lhzz',
-//        'get-comment',
+        'get-comment',
         'comment-reply',
         'supplier-after-sale-handle',
         'refund-handle',
@@ -88,7 +88,7 @@ class OrderController extends Controller
         'after-sale-delivery',
         'find-shipping-cart-list',
         'after-sale-detail-admin',
-        'get-order-num',
+//        'get-order-num',
         'close-order'
     ];
     /**
