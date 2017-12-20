@@ -3340,7 +3340,7 @@ class OrderController extends Controller
         ];
         if ($LogisticsTemplate->delivery_method==0)
         {
-            $freight=GoodsOrder::CalculationFreight($Goods);
+            $freight=GoodsOrder::CalculationFreightTest($Goods);
         }
         else
         {
