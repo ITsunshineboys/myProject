@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
-import api from './api'
+import api from './utils/api'
 import App from './App'
 import Home from './components/HelloFromVux'
 
