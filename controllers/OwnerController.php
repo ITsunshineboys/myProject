@@ -1628,7 +1628,7 @@ class OwnerController extends Controller
                 foreach ($post['list'] as &$materials) {
                     if ($materials['price'] != 0) {
                         if ($classify['title'] == $materials['one_title']) {
-                            $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient']*0.01;
+                            $materials['goods_price'] = $materials['procurement'] / $one_coefficient['coefficient'];
                             $goods []                 = $materials;
                         }
 

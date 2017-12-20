@@ -2208,7 +2208,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-        $a = GoodsCategory::find()->asArray()->where("supplier_id !=0 ")->all();
+        $a = CoefficientManagement::find()->asArray()->all();
         return Json::encode($a);
 
 
