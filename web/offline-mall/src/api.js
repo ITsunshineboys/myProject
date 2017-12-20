@@ -36,7 +36,7 @@ function checkCode (res) {
     alert(res.msg)
   }
   if (res.data && (!res.data.success)) {
-    alert(res.data.error_msg)
+    // alert(res.data.error_msg)
   }
   return res
 }

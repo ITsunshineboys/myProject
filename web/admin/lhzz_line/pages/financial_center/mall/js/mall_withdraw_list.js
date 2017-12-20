@@ -7,10 +7,14 @@ app.controller('mall_withdraw_list_ctrl',function ($state,$stateParams,_ajax,$sc
             link: $rootScope.finance_click
         }, {
             name: '商城财务',
-            link: -1
+            link: function () {
+                $state.go('mall_finance')
+            }
         }, {
             name: '账户管理',
-            link: -1
+            link: function () {
+                $state.go('mall_account')
+            }
         }, {
             name: '详情',
             link: -1
@@ -18,6 +22,7 @@ app.controller('mall_withdraw_list_ctrl',function ($state,$stateParams,_ajax,$sc
             name: '提现列表'
         }
     ]
+    $scope.supplier_id = $stateParams.id
     $scope.params = {
         time_type: '',
         start_time: '',

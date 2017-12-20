@@ -18,7 +18,7 @@
     methods: {
       async show () {
         let params = {
-          id: 48
+          id: 60
         }
         const res = await http.post('/effect/effect-view', params)
         console.log(res.data)
