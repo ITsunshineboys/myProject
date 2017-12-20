@@ -5,6 +5,7 @@ runtime
 cache
 uploads
 web/.htaccess
+web/assets
 config/db.php
 config/web.php
 config/params_online.php
