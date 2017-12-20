@@ -86,7 +86,7 @@ class OrderController extends Controller
         'after-sale-supplier-send-man',
         'after-sale-supplier-confirm',
         'after-sale-delivery',
-        'find-shipping-cart-list',
+        'find-shipping-cart-list'
     ];
     /**
      * @inheritdoc
@@ -114,6 +114,10 @@ class OrderController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post',],
+                    'after-sale-delivery' =>['post',],
+                    'after-sale-supplier-send-man' =>['post',],
+                    'after-sale-supplier-confirm' =>['post'],
+                    'supplier-after-sale-handle' =>['post',]
                 ],
             ],
         ];
