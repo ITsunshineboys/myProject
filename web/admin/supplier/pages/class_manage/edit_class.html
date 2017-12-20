@@ -37,7 +37,7 @@
         <span class="glyphicon glyphicon-asterisk red_mark"></span>
         <span class="each_title">分类图片</span>
         <div class="upload_pic">
-            <img ng-src="{{iconpath}}" alt="" id="cla_pic_uploadpic">
+            <img ng-src="{{defaultDetail.icon}}" alt="" id="cla_pic_uploadpic">
             <h6>图片大小120x120，5M内，支持JPG、PNG、JPGE</h6>
             <div id="upload">
                 <button type="button" ngf-pattern="image/*" ng-change="upload(data.file)" ngf-select=""
@@ -57,7 +57,7 @@
     <div class="cla_des">
         <span class="each_title">分类描述</span>
         <div id="edit_tool">
-            <div class="ueditor" ng-model="addclassdes" config="config" id="editor"></div>
+            <div class="ueditor" ng-model="defaultDetail.description" config="config" id="editor"></div>
         </div>
     </div>
     <div class="divider"></div>

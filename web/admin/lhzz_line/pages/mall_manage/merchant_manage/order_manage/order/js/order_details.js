@@ -129,7 +129,7 @@ app.controller('order_details', ['$rootScope', '$scope', '$interval', '$state', 
      * 评论回复信息函数
      */
     function commentsFun() {
-        _ajax.post('/order/get-comment', params, function (res) {
+        _ajax.get('/order/get-comment', params, function (res) {
             console.log(res, '评论回复');
             $scope.comments = res.data;
         })

@@ -20,6 +20,8 @@ withdraw_deposit.controller("withdraw_deposit_ctrl", function (_ajax, $rootScope
     $scope.alljudgefalse = false;
     $scope.moneyflag = false;
     $scope.pwdflag = false;
+    $scope.money_num = '';
+    $scope.password = '';
 
 
     totalMoney();
