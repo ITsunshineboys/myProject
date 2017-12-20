@@ -1201,7 +1201,6 @@ class SupplieraccountController extends  Controller{
             }
             $transaction->commit();
         }catch (Exception $e){
-            var_dump($e);die;
             $transaction->rollBack();
 
             $code = 500;
@@ -1395,7 +1394,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
             ]);
         }
-
+        var_dump($category->errors);die;
         if (!$category->save()) {
             $code = 500;
             return Json::encode([
