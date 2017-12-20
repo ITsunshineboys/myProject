@@ -18,8 +18,7 @@
         let params = {
           id: 60
         }
-        console.log(this)
-        this.axios.post('/effect/effect-view', function (res) {
+        this.axios.post('/effect/effect-view', params, function (res) {
           console.log(res)
         })
       }
