@@ -34,7 +34,7 @@ class GoodsCategory extends ActiveRecord
     const REVIEW_STATUS_NOT_REVIEWED = 0;
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
-    const SCENARIO_NEW_CATE_EDIT='new_cate_edit';
+    const SCENARIO_CATE_EDIT_SUPPLIER='cate_edit_supplier';
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_TOGGLE_STATUS = 'toggle';
     const SCENARIO_RESET_OFFLINE_REASON = 'reset_offline_reason';
@@ -783,7 +783,7 @@ class GoodsCategory extends ActiveRecord
             [['title', 'icon', 'pid'], 'required'],
             ['title', 'string', 'length' => [1, 10]],
             [['title'], 'unique', 'on' => self::SCENARIO_ADD, 'message' => self::ERROR_CODE_SAME_NAME . ModelService::SEPARATOR_ERRCODE_ERRMSG . Yii::$app->params['errorCodes'][self::ERROR_CODE_SAME_NAME]],
-            [['title'], 'validateTitle', 'on' => self::SCENARIO_EDIT],
+            [['title'], 'validateTitle', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_CATE_EDIT_SUPPLIER]],
             [['pid', 'approve_time', 'review_status', 'supplier_id'], 'number', 'integerOnly' => true, 'min' => 0],
             ['pid', 'validatePid'],
             [['reason', 'description', 'icon'], 'string'],
@@ -794,8 +794,8 @@ class GoodsCategory extends ActiveRecord
             ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
             ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON, self::SCENARIO_TOGGLE_STATUS]],
-            ['review_status', 'validateStatusEdit', 'on' => [self::SCENARIO_NEW_CATE_EDIT,]],
-            [['title'], 'validateTitle', 'on' => self::SCENARIO_NEW_CATE_EDIT],
+            ['review_status', 'validateStatusEditSupplier', 'on' => [self::SCENARIO_CATE_EDIT_SUPPLIER,]],
+//            [['title'], 'validateTitle', 'on' => self::SCENARIO_NEW_CATE_EDIT],
         ];
     }
 
@@ -820,7 +820,7 @@ class GoodsCategory extends ActiveRecord
      * @param $attribute
      * @return bool
      */
-    public function validateStatusEdit($attribute)
+    public function validateStatusEditSupplier($attribute)
     {
 
         if ($this->$attribute == self::REVIEW_STATUS_REJECT) {
@@ -1022,7 +1022,7 @@ class GoodsCategory extends ActiveRecord
                         $this->deleted = self::STATUS_OFFLINE;
                         $this->online_time = $now;
                     }
-                } elseif ($this->scenario == self::SCENARIO_EDIT) {
+                } elseif (in_array($this->scenario, [self::SCENARIO_EDIT, self::SCENARIO_CATE_EDIT_SUPPLIER])) {
                     if ($this->isAttributeChanged('pid')) {
                         $pid = $this->pid + 1;
                         $this->setLevelPath($pid);

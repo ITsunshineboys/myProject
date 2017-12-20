@@ -1375,13 +1375,10 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $category->level = $parentCategory->level + 1;
-        $category->path = $parentCategory->path . $category->id . ',';
-        $category->parent_title = $parentCategory->title;
         $category->pid = $pid;
 
 
-        $category->scenario = GoodsCategory::SCENARIO_NEW_CATE_EDIT;
+        $category->scenario = GoodsCategory::SCENARIO_CATE_EDIT_SUPPLIER;
         if (!$category->validate()) {
             if (isset($category->errors['title'])) {
                 $customErrCode = ModelService::customErrCode($category->errors['title'][0]);
@@ -1397,16 +1394,7 @@ class SupplieraccountController extends  Controller{
         }
 
         $category->create_time=time();
-        $category->review_status=0;
-        $category->approve_time=0;
-        $category->reject_time=0;
-        $checkSameLevelResult = $category->checkSameLevelByPid($pid);
-        if ($checkSameLevelResult != 200) {
-            return Json::encode([
-                'code' => $checkSameLevelResult,
-                'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
-            ]);
-        }
+        $category->review_status=GoodsCategory::REVIEW_STATUS_NOT_REVIEWED;
         if (!$category->save(false)) {
             $code = 500;
             return Json::encode([
