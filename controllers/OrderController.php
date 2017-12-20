@@ -2739,6 +2739,7 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
+
         }
         $order=OrderGoods::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
