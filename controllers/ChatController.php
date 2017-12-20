@@ -367,8 +367,7 @@ class ChatController extends Controller
                 'status'=>'1'
             ];
         }
-        var_dump($u_id);
-        var_dump($role_id);die;
+
         $data=ChatRecord::userlog($u_id,$role_id);
 
 
