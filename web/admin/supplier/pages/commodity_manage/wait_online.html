@@ -94,7 +94,8 @@
                 <div class="row" ng-repeat="item in goods_input_attrs">
                     <div class="col-sm-offset-2 col-sm-3 control-label">
                         <img src="pages/commodity_manage/image/red.png" alt=""/>
-                        <span style="display: inline-block;width: 15px">&nbsp;</span>
+                        <span ng-if="item.from_type==0" style="display: inline-block;width: 15px">&nbsp;</span>
+                        <span ng-if="item.from_type==1" class="glyphicon glyphicon-minus pointer" ng-click="del_admin_attrs($index)"></span>
                         <span ng-model="myng.attr_name">{{item.name}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
