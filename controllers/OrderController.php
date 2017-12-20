@@ -3334,14 +3334,15 @@ class OrderController extends Controller
             ]);
         }
         $LogisticsTemplate=LogisticsTemplate::findOne($goods->logistics_template_id);
-        $goods[]=[
+        $Goods[]=[
             'goods_id'=>$goods_id,
             'goods_num'=>$goods_num
         ];
         if ($LogisticsTemplate->delivery_method==0)
         {
-            $freight=GoodsOrder::CalculationFreight($goods);
+            $freight=GoodsOrder::CalculationFreight($Goods);
         }
+
         else
         {
             $freight=0;
