@@ -549,9 +549,12 @@ class QuoteController extends Controller
     {
         $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
-        $province_chinese = District::findByCode((int)$request['province_code']);
-        $city_chinese = District::findByCode((int)$request['city_code']);
-        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+//        $province_chinese = District::findByCode((int)$request['province_code']);
+//        $city_chinese = District::findByCode((int)$request['city_code']);
+//        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+        $province_chinese['name']='四川';
+        $city_chinese['name']='成都市';
+        $district_chinese['name']='金牛区';
 
         $transaction = \Yii::$app->db->beginTransaction();
         try {
@@ -582,7 +585,11 @@ class QuoteController extends Controller
 
                     if (!$effect_) {
                         $transaction->rollBack();
-                        return 500;
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code]
+                        ]);
                     }
 
                     $hall_area         = $house['hall_area'];
@@ -601,7 +608,11 @@ class QuoteController extends Controller
 
                     if (!$decoration) {
                         $transaction->rollBack();
-                        return 500;
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code]
+                        ]);
                     }
 
                     if (!empty($house['drawing_list'])) {
@@ -614,7 +625,11 @@ class QuoteController extends Controller
                         }
                         if (!$effect_picture) {
                             $transaction->rollBack();
-                            return 500;
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg'  => \Yii::$app->params['errorCodes'][$code]
+                            ]);
                         }
                     }
 
@@ -650,7 +665,11 @@ class QuoteController extends Controller
                     $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
                     if (!$effect) {
                         $transaction->rollBack();
-                        return 500;
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code]
+                        ]);
                     }
 
                     $effect_id      = \Yii::$app->db->getLastInsertID();
@@ -661,7 +680,11 @@ class QuoteController extends Controller
                     $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
                     if (!$effect_picture) {
                         $transaction->rollBack();
-                        return 500;
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg'  => \Yii::$app->params['errorCodes'][$code]
+                        ]);
                     }
 
                     if (!empty($house['all_goods'])) {
@@ -677,7 +700,11 @@ class QuoteController extends Controller
                         }
                         if (!$works_data) {
                             $transaction->rollBack();
-                            return 500;
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg'  => \Yii::$app->params['errorCodes'][$code]
+                            ]);
                         }
                     }
 
@@ -691,7 +718,11 @@ class QuoteController extends Controller
 
                         if (!$works_worker_data) {
                             $transaction->rollBack();
-                            return 500;
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg'  => \Yii::$app->params['errorCodes'][$code]
+                            ]);
                         }
                     }
 
