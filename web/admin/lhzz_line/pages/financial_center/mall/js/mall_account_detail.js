@@ -7,10 +7,14 @@ app.controller('mall_account_detail_ctrl',function ($scope,$stateParams,$rootSco
             link: $rootScope.finance_click
         }, {
             name: '商城财务',
-            link: -1
+            link: function () {
+                $state.go('mall_finance')
+            }
         }, {
             name: '账户管理',
-            link:-1
+            link:function () {
+                $state.go('mall_account')
+            }
         },{
         name:'详情'
         }
@@ -22,4 +26,7 @@ app.controller('mall_account_detail_ctrl',function ($scope,$stateParams,$rootSco
         console.log(res);
         $scope.account_detail = res.data
     })
+    $scope.goPrev = function () {
+        $state.go('mall_account')
+    }
 })

@@ -672,7 +672,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'mall_account_ctrl'
         })
         .state('mall_account_detail', {//财务账户详情
-            url: '/mall_account_detail?id',
+            url: '/mall_account_detail?id&supplier_id',
             templateUrl: 'pages/financial_center/mall/account_detail.html',
             css: 'pages/financial_center/mall/css/account_detail.css',
             controller:'mall_account_detail_ctrl'
@@ -696,7 +696,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'mall_freeze_list_ctrl'
         })
         .state('mall_withdraw_detail', {//提现详情
-            url: '/mall_withdraw_detail?id',
+            url: '/mall_withdraw_detail?id&supplier_id',
             templateUrl: 'pages/financial_center/mall/withdraw_detail.html',
             css: 'pages/financial_center/mall/css/account_detail.css',
             controller:'mall_withdraw_detail_ctrl'

@@ -7,13 +7,19 @@ app.controller('mall_withdraw_detail_ctrl',function ($scope,$rootScope,$state,$s
             link: $rootScope.finance_click
         }, {
             name: '商城财务',
-            link: -1
+            link: function () {
+                $state.go('mall_finance')
+            }
         }, {
             name: '账户管理',
-            link: -1
+            link: function () {
+                $state.go('mall_account')
+            }
         }, {
             name: '详情',
-            link: -1
+            link: function(){
+                $state.go('mall_account_detail',{id:$stateParams.supplier_id})
+            }
         }, {
             name: '提现列表',
             link:-1

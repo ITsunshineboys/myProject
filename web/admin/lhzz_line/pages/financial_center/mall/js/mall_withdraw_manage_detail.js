@@ -7,7 +7,9 @@ app.controller('mall_manage_detail_ctrl', function ($scope, _ajax, $rootScope, $
             link: $rootScope.finance_click
         }, {
             name: '商城财务',
-            link: -1,
+            link: function () {
+                $state.go('mall_finance')
+            },
         }, {
             name: '商家提现管理',
             link: -1
