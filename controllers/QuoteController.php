@@ -2208,7 +2208,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-      $a= ChatRecord::find()->asArray()->all();
+      $a= GoodsCategory::find()->asArray()->all();
        return Json::encode($a);
 
 
