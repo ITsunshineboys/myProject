@@ -12,9 +12,9 @@ use yii\helpers\Json;
 class Alipay extends  ActiveRecord
 {
 
-    const ALIPAY_LINPAY_NOTIFY='order/alipaylinenotify';
+    const ALIPAY_LINPAY_NOTIFY='order/ali-pay-line-notify';
     const LINE_PAY_SUCCESS='line/#!/pay_success';
-    const EFFECT_NOTIFY='order/alipayeffect_earnstnotify';
+    const EFFECT_NOTIFY='order/ali-pay-effect-earnest-notify';
     const EFFECT_SUCCESS='owner/mall/index.html#!/pay_success';
 
 
@@ -35,7 +35,7 @@ class Alipay extends  ActiveRecord
      * @param $buyer_message
      * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
      */
-    public static function  Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
+    public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
 //        $notify_url=Yii::$app->request->hostInfo.'/'.self::ALIPAY_LINPAY_NOTIFY;
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::ALIPAY_LINPAY_NOTIFY;
         $return_url=Yii::$app->request->hostInfo.'/'.self::LINE_PAY_SUCCESS;

@@ -587,7 +587,7 @@ class OrderController extends Controller
     /**
      * 样板间支付订单异步返回
      */
-    public function actionAlipayeffect_earnstnotify()
+    public function actionAliPayEffectEarnestNotify()
     {
         $post=Yii::$app->request->post();
         $model=new Alipay();
@@ -751,7 +751,7 @@ class OrderController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$c]
             ]);
         }
-        $res=Alipay::Alipaylinesubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
+        $res=Alipay::AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
         if ($res)
             {
                 $c=200;
@@ -764,7 +764,7 @@ class OrderController extends Controller
     /**
      * 支付宝线下店商城异步返回操作-购买回调
      */
-    public function actionAlipaylinenotify(){
+    public function actionAliPayLineNotify(){
         $post=Yii::$app->request->post();
         $model=new Alipay();
         $alipaySevice=$model->Alipaylinenotify();
