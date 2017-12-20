@@ -2208,7 +2208,7 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-      $a= ChatRecord::find()->asArray()->where(['send_id'=>8])->all();
+      $a= ChatRecord::find()->asArray()->where(['send_uid'=>8])->all();
        return Json::encode($a);
 
 
