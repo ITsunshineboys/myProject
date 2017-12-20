@@ -4060,8 +4060,6 @@ class OrderController extends Controller
                             return $code;
                         }
                     }
-
-
                     $tran->commit();
                 }catch (Exception $e){
                     $tran->rollBack();
