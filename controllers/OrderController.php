@@ -2726,12 +2726,20 @@ class OrderController extends Controller
             ]);
         }
         $postData=yii::$app->request->post();
-        if (!array_key_exists('order_no',$postData) || ! array_key_exists('sku',$postData)){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+        if (
+            !array_key_exists('order_no',$postData)
+            || ! array_key_exists('sku',$postData)){
+            $postData=yii::$app->request->get();
+            if (!in_array('order_no',$postData)||
+            !in_array('sku',$postData))
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
         }
         $order=OrderGoods::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
