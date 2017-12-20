@@ -351,8 +351,7 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        var_dump($u_id);
-        var_dump($role_id);die;
+
         $res['news']=UserNewsRecord::find()
             ->where(['uid'=>$u_id,'role_id'=>$role_id])
             ->asArray()
@@ -370,7 +369,7 @@ class ChatController extends Controller
         }
 
         $data=ChatRecord::userlog($u_id,$role_id);
-
+        var_dump($data);die;
         if(!$data){
             $data=[];
             $res['chat_news']=[];
