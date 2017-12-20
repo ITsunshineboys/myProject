@@ -128,11 +128,13 @@
                     <span ng-if="alldistricts.length > 3" data-toggle="modal"
                           data-target="#cityModal">查看</span>
                 </div>
-                <div class="margin_top">
-                    <span>是否包邮</span>
-                    <span class="margin_left">不包邮</span>
+                <div ng-if="delivery_method!='送货上门'" class="margin_top">
+                    <span>
+                        <span>是否包邮</span>
+                    </span>
+                    <span class="margin_left" ng-bind="delivery_cost_default?'不包邮':'包邮'"></span>
                 </div>
-                <div class="margin_top">
+                <div class="margin_top" ng-if="delivery_method!='送货上门'">
                     <span>收费金额</span>
                     <div class="margin_left inline_block">
                         <p>默认1件商品：¥{{delivery_cost_default}}</p>
