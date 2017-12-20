@@ -76,7 +76,7 @@
                 <span class="glyphicon glyphicon-asterisk red_mark"></span>
                 <span>社会信用代码/注册号</span>
                 <input type="text" placeholder="请输入信用代码/注册号" id="registercode" name="registercode"
-                       ng-model="params.licence" required maxlength=15
+                       ng-model="params.licence" required maxlength=18
                        ng-blur="register=!!storeform.registercode.$error"
                        ng-class={'tored':storeform.registercode.$invalid&&alljudgefalse||storeform.registercode.$error.required&&register}>
                 <p ng-if="registercode_repeat">
