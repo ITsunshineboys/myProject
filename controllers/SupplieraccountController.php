@@ -1394,6 +1394,9 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
             ]);
         }
+        var_dump($category->title);
+        var_dump($category->icon);
+        var_dump($category->pid);
         var_dump($category->save());die;
         if (!$category->save()) {
             $code = 500;
