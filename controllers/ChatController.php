@@ -370,6 +370,7 @@ class ChatController extends Controller
 
         $data=ChatRecord::userlog($u_id,$role_id);
         var_dump($data);die;
+
         if(!$data){
             $data=[];
             $res['chat_news']=[];
