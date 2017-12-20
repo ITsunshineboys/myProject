@@ -1367,7 +1367,17 @@ class SupplieraccountController extends  Controller{
         $category->description= Yii::$app->request->post('description');
         $pid = (int)Yii::$app->request->post('pid', '');
 
-        $category->setLevelPath($pid);
+
+        $parentCategory = GoodsCategory::findOne($pid);
+        if(!$parentCategory){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        $category->level = $parentCategory->level + 1;
+        $category->path = $parentCategory->path . $category->id . ',';
+        $category->parent_title = $parentCategory->title;
         $category->pid = $pid;
 
 
