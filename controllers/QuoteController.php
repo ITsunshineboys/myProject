@@ -11,6 +11,7 @@ use app\models\Apartment;
 use app\models\ApartmentArea;
 use app\models\AssortGoods;
 use app\models\BrainpowerInitalSupervise;
+use app\models\ChatRecord;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
 use app\models\DecorationMessage;
@@ -2207,8 +2208,8 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-      $a= BasisDecorationService::id2Title()['reticle'];
-       var_dump($a);
+      $a= ChatRecord::find()->asArray()->where(['send_id'=>8])->all();
+       return Json::encode($a);
 
 
     }
