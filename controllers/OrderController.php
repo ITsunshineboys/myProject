@@ -753,13 +753,13 @@ class OrderController extends Controller
         }
         $res=Alipay::AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
         if ($res)
-            {
-                $c=200;
-                return Json::encode([
-                    'code' =>  $c,
-                    'msg'  =>'ok'
-                ]);
-            }
+        {
+            $c=200;
+            return Json::encode([
+                'code' =>  $c,
+                'msg'  =>'ok'
+            ]);
+        }
     }
     /**
      * 支付宝线下店商城异步返回操作-购买回调
@@ -798,7 +798,7 @@ class OrderController extends Controller
      * 获取支付测试数据
      * @return string
      */
-    public function actionAlipaygetnotify(){
+    public function actionAliPayGetNotify(){
         $data=(new Query())->from('alipayreturntest')->all();
         return Json::encode([
             'code' => 200,
@@ -2557,24 +2557,7 @@ class OrderController extends Controller
             'data'=>$paginationData
         ]);
     }
-    /**
-     * @return string
-     */
-    public  function  actionBalanceAdd()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $user=User::findOne($user->id);
-        $user->balance=100000000;
-        $user->availableamount=100000000;
-        $user->save(false);
-    }
+
     /**
     * 余额支付
     * @return string

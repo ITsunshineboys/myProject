@@ -2475,7 +2475,6 @@ class GoodsOrder extends ActiveRecord
              unset( $arr[$key]['after_sale_services']);
              $create_time[$key]  = $arr[$key]['create_time'];
         }
-
         if ($arr){
             array_multisort($create_time, SORT_DESC, $arr);
             $count=count($arr);
