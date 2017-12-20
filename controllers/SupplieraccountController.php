@@ -1366,7 +1366,7 @@ class SupplieraccountController extends  Controller{
         $category->description= Yii::$app->request->post('description');
         $pid = (int)Yii::$app->request->post('pid', '');
         $category->setLevelPath($pid);
-
+        $category->pid = $pid;
 
 
         $category->scenario = GoodsCategory::SCENARIO_NEW_CATE_EDIT;
@@ -1383,7 +1383,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $category->pid = $pid;
+
         $category->create_time=time();
         $category->review_status=0;
         $category->approve_time=0;
@@ -1395,6 +1395,8 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$checkSameLevelResult],
             ]);
         }
+        var_dump($category->pid);
+        var_dump($category->save());die;
         if (!$category->save()) {
             $code = 500;
             return Json::encode([
