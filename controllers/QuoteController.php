@@ -2208,7 +2208,8 @@ class QuoteController extends Controller
     public function actionTest()
     {
         //engineering_standard_carpentry_craft
-      $a= GoodsCategory::find()->where(['id'=>190])->one()->delete();
+      $a= GoodsCategory::find()->where(['id'=>190])->one()->delete()
+      ;
        return Json::encode($a);
 
 
