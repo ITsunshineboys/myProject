@@ -33,6 +33,23 @@ class SupplierController extends Controller
         'reset-district',
         'reset-icon',
         'shop-types',
+        'get-supplier-info-by-shop-no',
+        'line-supplier-list',
+        'add-line-supplier-list',
+        'switch-line-supplier-status',
+        'get-edit-supplier-info-by-shop-no',
+        'up-line-supplier',
+        'line-supplier-goods-list',
+        'find-supplier-line-goods',
+        'find-supplier-line-by-district-code',
+        'add-line-supplier-goods',
+        'up-line-supplier-goods',
+        'switch-line-supplier-goods-status',
+        'del-line-supplier',
+        'del-line-supplier-goods',
+        'supplier-be-audited-list',
+        'supplier-be-audited-detail',
+        'get-up-supplier-line-goods'
     ];
 
     /**

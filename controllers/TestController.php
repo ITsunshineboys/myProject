@@ -6,12 +6,14 @@ use app\models\Carousel;
 use app\models\Goods;
 use app\models\GoodsOrder;
 use app\models\OrderGoods;
+use app\models\OrderPlatForm;
 use app\models\ShippingCart;
 use app\models\Supplier;
 use app\models\User;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use Yii;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -268,5 +270,41 @@ class TestController extends Controller
         $supplier->balance=0;
         $supplier->availableamount=0;
         $supplier->save(false);
+    }
+
+    /**
+     * 获取支付测试数据
+     * @return string
+     */
+    public function actionAliPayGetNotify(){
+        $data=(new Query())->from('alipayreturntest')->all();
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' => $data
+        ]);
+    }
+
+    /**
+     * 测试接口
+     * @return int
+     */
+    public  function  actionPlatformUp()
+    {
+        $request    = Yii::$app->request;
+        $order_no   = trim($request->post('order_no',''));
+        $sku        = trim($request->post('sku',''));
+        $handle_type= trim($request->post('handle_type',''));
+
+        $OrderPlatForm=OrderPlatForm::find()
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->one();
+        $OrderPlatForm->handle=$handle_type;
+        $res=$OrderPlatForm->save(false);
+        if (!$res){
+            $code=500;
+            return $code;
+        }
     }
 }
