@@ -14,6 +14,7 @@ use app\services\ExceptionHandleService;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\web\Controller;
 
 class TestController extends Controller
@@ -247,5 +248,25 @@ class TestController extends Controller
         $user->balance=100000000;
         $user->availableamount=100000000;
         $user->save(false);
+    }
+
+    /**
+     * @return string
+     */
+    public  function  actionBalanceDelete()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user=User::findOne($user->id);
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        $supplier->balance=0;
+        $supplier->availableamount=0;
+        $supplier->save(false);
     }
 }
