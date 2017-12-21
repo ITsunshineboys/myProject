@@ -3391,6 +3391,7 @@ class OrderController extends Controller
             $OrderGoods->freight=$freight;
             $OrderGoods->cover_image=$goods->cover_image;
             $OrderGoods->after_sale_services=$goods->after_sale_services;
+            $OrderGoods->subtitle=$goods->subtitle;
             $res2= $OrderGoods->save(false);
             if (!$res1  || !$res2)
             {
