@@ -38,12 +38,14 @@ app.controller('add_class', ['$state', '$rootScope', '$scope', '$stateParams', '
     /*分类所属 下拉框默认*/
     $scope.defaultClass = (function () {
         _ajax.get('/mall/categories-manage-admin', {}, function (res) {
-            $scope.firstclass = res.data.categories.splice(1);
+            // $scope.firstclass = res.data.categories.splice(1);
+            $scope.firstclass = res.data.categories;
             $scope.firstselect =  $scope.firstclass[0].id;
         })
 
         _ajax.get('/mall/categories-manage-admin', {pid: 1}, function (res) {
-            $scope.secondclass = res.data.categories.splice(1);
+            $scope.secondclass = res.data.categories;
+            // $scope.secondclass = res.data.categories.splice(1);
             $scope.secselect = '0';
         })
     })()
@@ -51,7 +53,8 @@ app.controller('add_class', ['$state', '$rootScope', '$scope', '$stateParams', '
     /*一级选择后的二级*/
     $scope.subClass = function (obj) {
         _ajax.get('/mall/categories-manage-admin', {pid: obj}, function (res) {
-            $scope.secondclass = res.data.categories.splice(1);
+            // $scope.secondclass = res.data.categories.splice(1);
+            $scope.secondclass = res.data.categories;
             $scope.secselect = '0';
         })
     }
