@@ -500,6 +500,52 @@ class QuoteController extends Controller
             'model' => $effect
         ]);
     }
+
+
+    /**
+     * plot list all
+     * @return string
+     */
+    public function actionLaborList()
+    {
+        $labor_list = LaborCost::find()
+        ->distinct()
+        ->select('worker_kind')
+        ->orderBy('worker_kind')
+        ->all();
+        $labor = [];
+        foreach ($labor_list as $list){
+            if ($list['worker_kind'] != '杂工' ){
+                $labor[] =   $list;
+            }
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg'=> 'ok',
+            'labor_list' => $labor,
+
+        ]);
+    }
+
+    /**
+     * series and style show
+     * @return string
+     */
+    public function actionSeriesAndStyle()
+    {
+        $stairs_details = StairsDetails::findByAll();
+        $series         = Series::findBySeries();
+        $style          = Style::findByStyle();
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'series' => $series,
+            'style' => $style,
+            'stairs_details'=>$stairs_details,
+        ]);
+    }
+
     /**
      * TODO 小区列表 优化
      * @return string
@@ -560,50 +606,6 @@ class QuoteController extends Controller
             'data'=>$paginationData
         ]);
 
-    }
-
-    /**
-     * plot list all
-     * @return string
-     */
-    public function actionLaborList()
-    {
-        $labor_list = LaborCost::find()
-        ->distinct()
-        ->select('worker_kind')
-        ->orderBy('worker_kind')
-        ->all();
-        $labor = [];
-        foreach ($labor_list as $list){
-            if ($list['worker_kind'] != '杂工' ){
-                $labor[] =   $list;
-            }
-        }
-        return Json::encode([
-            'code' => 200,
-            'msg'=> 'ok',
-            'labor_list' => $labor,
-
-        ]);
-    }
-
-    /**
-     * series and style show
-     * @return string
-     */
-    public function actionSeriesAndStyle()
-    {
-        $stairs_details = StairsDetails::findByAll();
-        $series         = Series::findBySeries();
-        $style          = Style::findByStyle();
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => 'ok',
-            'series' => $series,
-            'style' => $style,
-            'stairs_details'=>$stairs_details,
-        ]);
     }
     /**
      * TODO 新增接口 优化小区
