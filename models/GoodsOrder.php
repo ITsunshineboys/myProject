@@ -1373,7 +1373,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public  static function GetOrderGoodsInformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku){
+    public  static function GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku){
         $goods=[];
         $goods['goods_name']=$goods_name;
         $goods['goods_id']=$goods_id;
@@ -1859,10 +1859,10 @@ class GoodsOrder extends ActiveRecord
             switch ($order->shipping_status)
             {
                 case 0:
-                    $shipping_status='unshipped';
+                    $shipping_status=self::ORDER_TYPE_UNSHIPPED;
                     break;
                 case 1:
-                    $shipping_status='unreceived';
+                    $shipping_status=self::ORDER_TYPE_UNRECEIVED;
                     break;
             }
             $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
@@ -1997,7 +1997,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->one();
             $order_goodslist->order_status=self::ORDER_STATUS_CANCEL;
-            $res1=$order_goodslist->save();
+            $res1=$order_goodslist->save(false);
             if (!$res1){
                 $code=500;
                 $tran->rollBack();

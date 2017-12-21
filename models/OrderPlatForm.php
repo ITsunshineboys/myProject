@@ -296,7 +296,9 @@ class OrderPlatForm extends ActiveRecord
                     return $code;
                 }
             }
-            $Goods=Goods::find()->where(['sku'=>$sku])->one();
+            $Goods=Goods::find()
+                ->where(['sku'=>$sku])
+                ->one();
             $Goods->left_number+=$OrderGoods->goods_number;
             $Goods->sold_number-=$OrderGoods->goods_number;
             if (!$Goods->save(false))

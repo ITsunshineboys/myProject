@@ -1295,10 +1295,9 @@ class OrderController extends Controller
         //获取商品信息
         $goods_name=$order_information['goods_name'];
         $goods_id=$order_information['goods_id'];
-        $goods_attr_id=$order_information['goods_attr_id'];
         $order_no=$order_information['order_no'];
         $sku=explode('+',$order_information['sku']);
-        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
+        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
         if (!$ordergoodsinformation){
             $code = 500;
             return Json::encode([
@@ -1646,10 +1645,10 @@ class OrderController extends Controller
         //获取商品信息
         $goods_name=$order_information['goods_name'];
         $goods_id=$order_information['goods_id'];
-        $goods_attr_id=$order_information['goods_attr_id'];
         $order_no=$order_information['order_no'];
         $sku=explode('+',$order_information['sku']);
-        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$goods_attr_id,$order_no,$sku);
+        //获取商品属性
+        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
         if (!$ordergoodsinformation){
             $code = 1000;
             return Json::encode([
