@@ -253,7 +253,7 @@ class OrderPlatForm extends ActiveRecord
             }
             $transaction_no=GoodsOrder::SetTransactionNo($supplier->id);
             $supplier_accessdetail=new UserAccessdetail();
-            $supplier_accessdetail->uid=$GoodsOrder->user_id;
+            $supplier_accessdetail->uid=$supplier->uid;
             $supplier_accessdetail->role_id=6;
             $supplier_accessdetail->access_type=2;
             $supplier_accessdetail->access_money=$reduce_money;
