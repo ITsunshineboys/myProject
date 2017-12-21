@@ -1427,7 +1427,7 @@ class OrderController extends Controller
         {
             $reason='';
         }
-        $code=GoodsOrder::Platformadd($order_no,$handle_type,$reason,$sku);
+        $code=GoodsOrder::PlatformAdd($order_no,$handle_type,$reason,$sku);
         if ($code==200){
             return Json::encode([
                 'code' => 200,

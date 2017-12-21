@@ -47,7 +47,7 @@ class OrderPlatForm extends ActiveRecord
      * @param $reason
      * @return Exception|\Exception|int
      */
-    public static  function  platformhandle2($order_no,$handle_type,$reason,$sku)
+    public static  function  platformHandleCloseOrderLine($order_no,$handle_type,$reason,$sku)
     {
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             if (!$GoodsOrder || $GoodsOrder->order_refer!=1)

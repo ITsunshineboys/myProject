@@ -1391,7 +1391,7 @@ class GoodsOrder extends ActiveRecord
      * @param $reason
      * @return Exception|\Exception|int
      */
-    public static  function Platformadd($order_no,$handle_type,$reason,$sku){
+    public static  function PlatformAdd($order_no,$handle_type,$reason,$sku){
         $OrderPlatForm=OrderPlatForm::find()
             ->where(['order_no'=>$order_no])
             ->andWhere(['sku'=>$sku])
@@ -1402,10 +1402,12 @@ class GoodsOrder extends ActiveRecord
         }
         switch ($handle_type){
             case  1:
+                //关闭订单，退款
                 $code=OrderPlatForm::platformHandleCloseOrderRefundToUser($order_no,$handle_type,$reason,$sku);
                 break;
             case  2:
-                $code=OrderPlatForm::platformhandle2($order_no,$handle_type,$reason,$sku);
+                //关闭订单，线下退款
+                $code=OrderPlatForm::platformHandleCloseOrderLine($order_no,$handle_type,$reason,$sku);
                 break;
             case  3:
                 $code=OrderPlatForm::platformHandReturnGoods($order_no,$handle_type,$reason,$sku);
