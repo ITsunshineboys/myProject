@@ -126,7 +126,6 @@ class OrderController extends Controller
                     'expressupdate'=>['post',],
                     'refund-handle'=>['post',],
                     'comment-reply'=>['post',],
-                    'after-sale-detail-admin'=>['post',],
                     'supplier-delete-comment'=>['post',],
                     'close-order'=>['post',],
                 ],
