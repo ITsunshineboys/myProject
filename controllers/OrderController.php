@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\models\GoodsAttr;
 use app\models\OrderAfterSaleImage;
 use app\models\OrderGoodsAttr;
 use app\models\OrderGoodsBrand;
@@ -3399,6 +3400,29 @@ class OrderController extends Controller
                     'code' => $code,
                     'msg'  => Yii::$app->params['errorCodes'][$code]
                 ]);
+            }
+            $goodsAttr=GoodsAttr::find()
+                ->where(['goods_id'=>$goods->id])
+                ->all();
+            foreach ($goodsAttr as &$attrs)
+            {
+                $OrderAttr=new OrderGoodsAttr();
+                $OrderAttr->order_no=$order_no;
+                $OrderAttr->sku=$goods->sku;
+                $OrderAttr->name=$attrs->name;
+                $OrderAttr->value=$attrs->value;
+                $OrderAttr->unit=$attrs->unit;
+                $OrderAttr->addition_type=$attrs->addition_type;
+                $OrderAttr->goods_id=$attrs->goods_id;
+                if (!$OrderAttr->save(false))
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
             }
             $tran->commit();
             return Json::encode([
