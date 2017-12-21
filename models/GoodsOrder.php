@@ -1080,7 +1080,8 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.order_no'=>$order_no,'z.sku'=>$sku])
             ->all();
         $arr=self::GetOrderStatus($array);
-        if(!$arr){
+        if(!$arr)
+        {
             return null;
         }
         $output=array();
@@ -1598,8 +1599,7 @@ class GoodsOrder extends ActiveRecord
                             case 1:
                                 $data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN;
                                 break;
-                            case 2:
-                                $data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
+                            case 2:$data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
                                 break;
                         }
                         break;
@@ -1611,6 +1611,7 @@ class GoodsOrder extends ActiveRecord
             $data[$k]['send_time']=0;
             $data[$k]['complete_time']=0;
             $data[$k]['RemainingTime']=0;
+            //待收货订单状态判断操作
             if ($data[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
@@ -1636,16 +1637,13 @@ class GoodsOrder extends ActiveRecord
                     }
                 }
             };
+            //已完成订单状态判断操作
             if ($data[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
             {
                 $express=Express::find()
                     ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
                     ->one();
-                if (!$express){
-                    $data[$k]['send_time']=0;
-                    $data[$k]['RemainingTime']=0;
-                    $data[$k]['complete_time']=0;
-                }else{
+                if ($express){
                     $data[$k]['send_time']=$express->create_time;
                     $data[$k]['RemainingTime']=Express::findRemainingTime($express);
                     if ($data[$k]['RemainingTime']<0)
@@ -1658,6 +1656,7 @@ class GoodsOrder extends ActiveRecord
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
+            //代付款订单状态判断操作
             if ($data[$k]['status']==self::PAY_STATUS_DESC_UNPAID){
                 $time=time();
                 $pay_term=(strtotime($data[$k]['create_time'])+24*60*60);
@@ -1671,7 +1670,9 @@ class GoodsOrder extends ActiveRecord
                     $data[$k]['pay_term']=$pay_term-$time;
                 }
             }
-            if ($data[$k]['status']==self::ORDER_TYPE_DESC_CANCEL
+            //是否收货状态判断操作
+            if (
+                $data[$k]['status']==self::ORDER_TYPE_DESC_CANCEL
                 ||$data[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN
                 ||$data[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER)
             {
