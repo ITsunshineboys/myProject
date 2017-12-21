@@ -40,8 +40,8 @@ class ChatRecord extends \yii\db\ActiveRecord
 
     public static function userlog($u_id,$role_id){
 
-        $sql="SELECT * FROM( SELECT a.to_uid as lxr,a.*  FROM chat_record as a  WHERE  (a.send_uid = $u_id)  AND  (a.to_uid <> $u_id)  UNION
-    SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> $u_id)  AND (a.to_uid = $u_id) ORDER BY send_time DESC 
+        $sql="SELECT * FROM( SELECT a.to_uid as lxr,a.*  FROM chat_record as a  WHERE  (a.send_uid = $u_id)  or  (a.to_uid <> $u_id)  UNION
+    SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> $u_id)  or (a.to_uid = $u_id) ORDER BY send_time DESC 
   ) as b  WHERE send_role_id =$role_id or to_role_id =$role_id GROUP BY lxr";
         $user_log=Yii::$app->db->createCommand($sql)->queryAll();
         if(!$user_log){
