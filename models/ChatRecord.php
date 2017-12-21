@@ -46,13 +46,12 @@ class ChatRecord extends \yii\db\ActiveRecord
 //    SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> $u_id)  and (a.to_uid = $u_id) ORDER BY send_time DESC
 //  ) as b  WHERE send_role_id =$role_id OR to_role_id =$role_id GROUP BY lxr";
 
-        $sql_log="select substring_index(ur,'-', 1) uid, substring_index(ur,'-', -1) role_id,id,content,send_time,`type`,status from (
+        $sql_log="select * from (
 select * from (
-select * from (
-SELECT concat(to_uid,'-',to_role_id) ur,id,content,send_time,`type`,status FROM (select * from chat_record  where send_role_id=$role_id and send_uid=$u_id order by id desc) tmp group by to_uid,to_role_id
+SELECT to_uid uid, to_role_id role_id,id,content,`type`,send_time FROM (select * from chat_record  where send_role_id=$role_id and send_uid=$u_id order by id desc) tmp group by to_uid,to_role_id
 union
-SELECT concat(send_uid,'-',send_role_id) ur,id,content,send_time,`type`,status FROM (select * from chat_record  where to_role_id=$role_id and to_uid=$u_id order by id desc) tmp group by send_uid,send_role_id
-) t order by t.id desc) t2 group by t2.ur) t3;;";
+SELECT send_uid uid, send_role_id role_id,id,content,`type`,send_time FROM (select * from chat_record  where to_role_id=$role_id and to_uid=$u_id order by id desc) tmp group by send_uid,send_role_id
+) t order by t.id desc) t2 group by t2.uid,t2.role_id;";
         $user_log=Yii::$app->db->createCommand($sql_log)->queryAll();
 
         if(!$user_log){
