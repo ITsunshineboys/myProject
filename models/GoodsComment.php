@@ -130,7 +130,16 @@ class GoodsComment extends ActiveRecord
      */
     public  static  function  addComment($postData,$user,$uploadsData)
     {
-        if(!array_key_exists('store_service_score', $postData)|| !array_key_exists('shipping_score', $postData)|| !array_key_exists('score', $postData)|| !array_key_exists('logistics_speed_score', $postData) || !array_key_exists('sku',$postData) || !array_key_exists('order_no',$postData) || ! array_key_exists('content',$postData) || !array_key_exists('anonymous',$postData))
+        if(
+            !array_key_exists('store_service_score', $postData)
+            || !array_key_exists('shipping_score', $postData)
+            || !array_key_exists('score', $postData)
+            || !array_key_exists('logistics_speed_score', $postData)
+            || !array_key_exists('sku',$postData)
+            || !array_key_exists('order_no',$postData)
+            || ! array_key_exists('content',$postData)
+            || !array_key_exists('anonymous',$postData)
+        )
         {
             $code=1000;
             return $code;
@@ -146,14 +155,13 @@ class GoodsComment extends ActiveRecord
             $code=1000;
             return $code;
         }
-        $code=self::checkIsSetComment($orderGoods,$user);
+        $code=self::checkIsSetComment($orderGoods);
         if ($code !=200){
             return $code;
         }
         $goods=Goods::find()
             ->where(['sku'=>$postData['sku']])
             ->one();
-
         $list=self::GetAverageScore($postData,$goods->supplier_id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
@@ -318,11 +326,11 @@ class GoodsComment extends ActiveRecord
 
 
     /**
+     * 判断是否设置果评论
      * @param $postData
-     * @param $user
      * @return int
      */
-    public  static  function  checkIsSetComment($postData,$user)
+    public  static  function  checkIsSetComment($postData)
     {
         $orderGoods=OrderGoods::find()
             ->select('comment_id')
@@ -353,11 +361,12 @@ class GoodsComment extends ActiveRecord
         $order=[];
         foreach ($orders as $k =>$v){
             if ($orders[$k]['comment_id']){
-                $order[$k]=self::find()->where(['id'=>$orders[$k]['comment_id']])->one();
+                $order[$k]=self::find()
+                    ->where(['id'=>$orders[$k]['comment_id']])
+                    ->one();
             }else{
                 unset($order[$k]['comment_id']);
             }
-
         }
         $count=count($order);
         if ($count !=0)
@@ -406,18 +415,38 @@ class GoodsComment extends ActiveRecord
         }else{
             $score=$comment->score;
             if ($score==8 || $score==10){
-                $grade='好评';
+                $grade=self::DESC_SCORE_GOOD;
             }else if ($score ==4 && $score ==6)
             {
-                $grade='中评';
+                $grade=self::DESC_SCORE_MEDIUM;
             }else if ($score ==2){
-                $grade='差评';
+                $grade=self::DESC_SCORE_POOR;
             }else{
                 $grade='';
             }
         }
         return $grade;
     }
+
+
+    /**
+     * 判断能否自动评论
+     * @param $comp_time
+     * @return int
+     */
+    public  static  function  CheckIsAuToComment($comp_time)
+    {
+        if ((15*60*60*24+$comp_time)>time())
+        {
+            $code=1000;
+        }else
+        {
+            $code=200;
+        }
+        return $code;
+    }
+
+
 
 
 }

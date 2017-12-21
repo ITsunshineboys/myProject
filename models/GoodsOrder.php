@@ -1652,6 +1652,29 @@ class GoodsOrder extends ActiveRecord
                     }
                     $data[$k]['complete_time']=$express->receive_time;
                 }
+                if ($data[$k]['complete_time']!=0)
+                {
+
+                        $code=GoodsComment::checkIsSetComment(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']]);
+                        if ($code==200)
+                        {
+                            $code=GoodsComment::CheckIsAuToComment($data[$k]['complete_time']);
+                            if ($code==200)
+                            {
+                                GoodsComment::addComment(
+                                    ['order_no'=>$data[$k]['order_no'],
+                                    'sku'=>$data[$k]['sku'],
+                                    'store_service_score'=>10,
+                                    'shipping_score'=>10,
+                                    'score'=>10,
+                                    'logistics_speed_score'=>10,
+                                    'content'=>'',
+                                    'anonymous'=>2,
+                                    ],User::findOne($data[$k]['user_id'])
+                                    ,[]);
+                            }
+                        }
+                }
                 $data[$k]['is_unusual']=0;
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
