@@ -83,6 +83,10 @@ INSERT INTO `role_permission` VALUES (1,1,'time-types','site'),(2,2,'time-types'
 ,(318,1,'supplier-be-audited-list','supplier')
 ,(319,1,'supplier-be-audited-detail','supplier')
 ,(320,1,'get-up-supplier-line-goods','supplier')
+,(321,1,'owner-access-status','supplieraccount')
+,(322,1,'owner-audit-list','supplieraccount')
+,(323,1,'audit-view','supplieraccount')
+,(324,1,'owner-do-audit','supplieraccount')
 ;
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -122,10 +126,8 @@ INSERT INTO `lhzz_permission` VALUES (1,'time-types','site',''),(2,'recommend-ad
 ,(182,'owner-do-cash-deal','supplier-cash','')
 ,(183,'supplier-brand-view','supplieraccount','')
 ,(184,'supplier-brand-list','supplieraccount','')
-,(185,'supplier-brand-edit','supplieraccount','')
 ,(186,'supplier-cate-list','supplieraccount','')
 ,(187,'supplier-cate-view','supplieraccount','')
-,(188,'supplier-cate-edit','supplieraccount','')
 ,(189,'supplier-access-detail-list','supplieraccount','')
 ,(190,'after-find-express','order','')
 ,(191,'after-sale-detail-admin','order','')
@@ -148,6 +150,10 @@ INSERT INTO `lhzz_permission` VALUES (1,'time-types','site',''),(2,'recommend-ad
 ,(208,'supplier-be-audited-list','supplier','')
 ,(209,'supplier-be-audited-detail','supplier','')
 ,(210,'get-up-supplier-line-goods','supplier','')
+,(211,'owner-access-status','supplieraccount','')
+,(212,'owner-audit-list','supplieraccount','')
+,(213,'audit-view','supplieraccount','')
+,(214,'owner-do-audit','supplieraccount','')
 ;
 /*!40000 ALTER TABLE `lhzz_permission` ENABLE KEYS */;
 UNLOCK TABLES;
