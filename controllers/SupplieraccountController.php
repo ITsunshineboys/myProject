@@ -52,11 +52,15 @@ class SupplieraccountController extends  Controller{
         'Owner-access-detail-list',
         'supplier-brand-list',
         'supplier-brand-view',
-//        'supplier-brand-edit',
+        'supplier-brand-edit',
         'supplier-cate-list',
         'supplier-cate-view',
-//        'supplier-cate-edit',
-        'supplier-access-detail-list'
+        'supplier-cate-edit',
+        'owner-access-status',
+        'owner-audit-list',
+        'audit-view',
+        'owner-do-audit',
+
     ];
     const STATUS_OFFLINE = 0;
     const STATUS_ONLINE = 1;
