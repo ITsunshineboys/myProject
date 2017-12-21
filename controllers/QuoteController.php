@@ -2622,16 +2622,9 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-
-
-        $sql="
-		SELECT
-			*
-		FROM
-			chat_record
-		GROUP BY
-			send_uid = 1
-		OR to_uid = 1";
+        $sql="SELECT to_uid uid,to_role_id role_id,id FROM (select * from chat_record  where send_role_id=7 and send_uid=8 order by id desc) tmp group by to_uid,to_role_id
+union
+SELECT send_uid uid,send_role_id role_id,id FROM (select * from chat_record  where to_role_id=7 and to_uid=8 order by id desc) tmp group by send_uid,send_role_id;";
         $user_log=\Yii::$app->db->createCommand($sql)->queryAll();
         return Json::encode($user_log);
 
