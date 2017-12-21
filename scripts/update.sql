@@ -212,3 +212,15 @@ ALTER TABLE `chat_record` ADD  `length` int(11) NOT NULL DEFAULT '0' COMMENT '�
 update points set title='强电路点位' where title='强电';
 update points set title='弱电路点位' where title='弱电';
 update points set title='水路点位' where title='水路';
+
+--test 2017.12.20 yr
+CREATE TABLE `effect_toponymy` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `effect_id` varchar(20) NOT NULL,
+  `add_time` int(11) NOT NULL,
+  `province_code` int(11) DEFAULT NULL COMMENT '省编码',
+  `city_code` int(11) DEFAULT NULL COMMENT '市编码',
+  `district_code` int(11) DEFAULT NULL COMMENT '区编码',
+  `toponymy` varchar(50) DEFAULT NULL COMMENT '小区名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
