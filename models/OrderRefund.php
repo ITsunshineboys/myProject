@@ -275,10 +275,17 @@ class OrderRefund extends ActiveRecord
                 'stage'=>'',
                 'status'=>'over'
             ];
-            $platform=(array)$arrp;
+            $platform=self::object2array(['list'=>$arrp]);
+//            $platform=(array)$arrp;
         }
 
         return ['data'=>$data,'platform'=>$platform];
+    }
+
+    public  static  function object2array($object)
+    {
+        $object =  json_decode( json_encode( $object),true);
+        return  $object;
     }
 
 

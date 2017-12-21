@@ -1679,7 +1679,7 @@ class GoodsOrder extends ActiveRecord
             };
             $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
             $data[$k]['pay_term']=0;
-            //代付款订单状态判断操作
+            //待付款订单状态判断操作
             if ($data[$k]['status']==self::PAY_STATUS_DESC_UNPAID){
                 $time=time();
                 $pay_term=(strtotime($data[$k]['create_time'])+24*60*60);

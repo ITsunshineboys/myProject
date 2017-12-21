@@ -189,7 +189,7 @@ class GoodsComment extends ActiveRecord
                     $comment_image=new CommentImage();
                     $comment_image->comment_id=$comment->id;
                     $comment_image->image=$uploads;
-                    if (!$comment_image->save()){
+                    if (!$comment_image->save(false)){
                         $code=500;
                         return $code;
                     };
