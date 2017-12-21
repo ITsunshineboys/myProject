@@ -88,7 +88,6 @@ class SupplierController extends Controller
                     'switch-line-supplier-goods-status'=> ['post',],
                     'del-line-supplier'=> ['post',],
                     'del-line-supplier-goods'=> ['post',],
-                    'get-up-supplier-line-goods'=> ['post',],
                 ],
             ],
         ];
