@@ -32,7 +32,7 @@ CREATE TABLE `role_permission` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `role_permission`
+-- Dumping data for table `role_permission` 
 --
 
 LOCK TABLES `role_permission` WRITE;
@@ -59,6 +59,30 @@ INSERT INTO `role_permission` VALUES (1,1,'time-types','site'),(2,2,'time-types'
 ,(294,6,'supplier-brand-list','supplieraccount')
 ,(296,6,'supplier-cate-list','supplieraccount')
 ,(295,6,'supplier-cate-view','supplieraccount')
+,(297,1,'after-find-express','order')
+,(298,6,'after-find-express','order')
+,(299,1,'after-sale-detail-admin','order')
+,(300,6,'after-sale-detail-admin','order')
+,(301,1,'get-order-num','order')
+,(302,6,'get-order-num','order')
+,(303,1,'close-order','order')
+,(304,1,'get-supplier-info-by-shop-no','supplier')
+,(305,1,'line-supplier-list','supplier')
+,(306,1,'add-line-supplier','supplier')
+,(307,1,'switch-line-supplier-status','supplier')
+,(308,1,'get-edit-supplier-info-by-shop-no','supplier')
+,(309,1,'up-line-supplier','supplier')
+,(310,1,'line-supplier-goods-list','supplier')
+,(311,1,'find-supplier-line-goods','supplier')
+,(312,1,'find-supplier-line-by-district-code','supplier')
+,(313,1,'add-line-supplier-goods','supplier')
+,(314,1,'up-line-supplier-goods','supplier')
+,(315,1,'switch-line-supplier-goods-status','supplier')
+,(316,1,'del-line-supplier','supplier')
+,(317,1,'del-line-supplier-goods','supplier')
+,(318,1,'supplier-be-audited-list','supplier')
+,(319,1,'supplier-be-audited-detail','supplier')
+,(320,1,'get-up-supplier-line-goods','supplier')
 ;
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -103,6 +127,27 @@ INSERT INTO `lhzz_permission` VALUES (1,'time-types','site',''),(2,'recommend-ad
 ,(187,'supplier-cate-view','supplieraccount','')
 ,(188,'supplier-cate-edit','supplieraccount','')
 ,(189,'supplier-access-detail-list','supplieraccount','')
+,(190,'after-find-express','order','')
+,(191,'after-sale-detail-admin','order','')
+,(192,'get-order-num','order','')
+,(193,'close-order','order','')
+,(194,'get-supplier-info-by-shop-no','supplier','')
+,(195,'line-supplier-list','supplier','')
+,(196,'add-line-supplier','supplier','')
+,(197,'switch-line-supplier-status','supplier','')
+,(198,'get-edit-supplier-info-by-shop-no','supplier','')
+,(199,'up-line-supplier','supplier','')
+,(200,'line-supplier-goods-list','supplier','')
+,(201,'find-supplier-line-goods','supplier','')
+,(202,'find-supplier-line-by-district-code','supplier','')
+,(203,'add-line-supplier-goods','supplier','')
+,(204,'up-line-supplier-goods','supplier','')
+,(205,'switch-line-supplier-goods-status','supplier','')
+,(206,'del-line-supplier','supplier','')
+,(207,'del-line-supplier-goods','supplier','')
+,(208,'supplier-be-audited-list','supplier','')
+,(209,'supplier-be-audited-detail','supplier','')
+,(210,'get-up-supplier-line-goods','supplier','')
 ;
 /*!40000 ALTER TABLE `lhzz_permission` ENABLE KEYS */;
 UNLOCK TABLES;

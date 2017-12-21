@@ -88,7 +88,7 @@ class OrderController extends Controller
         'after-sale-delivery',
         'find-shipping-cart-list',
         'after-sale-detail-admin',
-        'get-order-num',
+//        'get-order-num',
         'close-order'
     ];
     /**
