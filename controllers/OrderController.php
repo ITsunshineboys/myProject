@@ -2722,8 +2722,8 @@ class OrderController extends Controller
             || ! array_key_exists('sku',$postData))
         {
             $postData=yii::$app->request->get();
-            if (!in_array('order_no',$postData)||
-            !in_array('sku',$postData))
+            if (!array_key_exists('order_no',$postData)||
+            !array_key_exists('sku',$postData))
             {
                 $code=1000;
                 return Json::encode([

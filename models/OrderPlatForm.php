@@ -51,7 +51,9 @@ class OrderPlatForm extends ActiveRecord
     public static  function  platformHandleCloseOrderLine($order_no,$handle_type,$reason,$sku)
     {
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-            if (!$GoodsOrder || $GoodsOrder->order_refer!=1)
+            if (
+                !$GoodsOrder
+                || $GoodsOrder->order_refer!=1)
             {
                 $code=1034;
                 return $code;
@@ -133,7 +135,6 @@ class OrderPlatForm extends ActiveRecord
                         return $code;
                     }
                 }else{
-
                     $GoodsStat->sold_number-=$OrderGoods->goods_number;
                     $GoodsStat->amount_sold-=(($OrderGoods->goods_price*$OrderGoods->goods_number)+$OrderGoods->freight);
                     if (!$GoodsStat->save(false))
@@ -308,6 +309,7 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+            //消息推送
             $data=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id), '平台介入，关闭订单退款', $GoodsOrder->role_id,"订单号{$order_no},商品编号{$sku}.您的订单已由平台介入关闭，退款金额".StringService::formatPrice($refund_money*0.01)."元已打入您的余额，请注意查看。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
             if ($data!=200)
             {
