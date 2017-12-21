@@ -78,7 +78,7 @@ class EffectToponymy extends \yii\db\ActiveRecord
             ->all();
         foreach ($toponymylist as &$toponymy) {
             $toponymy['add_time']=date('Y-m-d H:i:s',$toponymy['add_time']);
-            $toponymy['district']=District::findByCode($toponymy['district_code']);
+            $toponymy['district']=District::findByCode($toponymy['district_code'])->name;
             unset($toponymy['district_code']);
         }
         $total=self::find()->where($where)->count();;
