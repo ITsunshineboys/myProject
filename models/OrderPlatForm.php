@@ -230,7 +230,7 @@ class OrderPlatForm extends ActiveRecord
                 $role=User::findOne($GoodsOrder->user_id);
             }else
             {
-                $role=Role::CheckUserRole($GoodsOrder->role_id)->where(['uid'=>$GoodsOrder->user_id]);
+                $role=Role::CheckUserRole($GoodsOrder->role_id)->where(['uid'=>$GoodsOrder->user_id])->one();
             }
             $role->balance=$role->balance+$refund_money;
             $role->availableamount=$role->balance+$refund_money;
