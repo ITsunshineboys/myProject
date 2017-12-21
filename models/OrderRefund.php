@@ -280,7 +280,7 @@ class OrderRefund extends ActiveRecord
             ];
         }
 
-        return ['data'=>$data,'platform'=>$platform];
+        return ['data'=>$data,'platform'=>(object)$platform];
     }
 
 
