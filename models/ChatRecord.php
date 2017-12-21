@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use function GuzzleHttp\Psr7\_caseless_remove;
 use Yii;
 
 /**
@@ -40,10 +41,20 @@ class ChatRecord extends \yii\db\ActiveRecord
 
     public static function userlog($u_id,$role_id){
 
-        $sql="SELECT * FROM( SELECT a.to_uid as lxr,a.*  FROM chat_record as a  WHERE  (a.send_uid = $u_id)  and  (a.to_uid <> $u_id)  UNION
-    SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> $u_id)  and (a.to_uid = $u_id) ORDER BY send_time DESC 
-  ) as b  WHERE send_role_id =$role_id OR to_role_id =$role_id GROUP BY lxr";
-        $user_log=Yii::$app->db->createCommand($sql)->queryAll();
+
+//        $sql="SELECT * FROM( SELECT a.to_uid as lxr,a.*  FROM chat_record as a  WHERE  (a.send_uid = $u_id)  and  (a.to_uid <> $u_id)  UNION
+//    SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> $u_id)  and (a.to_uid = $u_id) ORDER BY send_time DESC
+//  ) as b  WHERE send_role_id =$role_id OR to_role_id =$role_id GROUP BY lxr";
+
+        $sql_log="select substring_index(ur,'-', 1) uid, substring_index(ur,'-', -1) role_id,id,content,send_time from (
+select * from (
+select * from (
+SELECT concat(to_uid,'-',to_role_id) ur,id,content,send_time FROM (select * from chat_record  where send_role_id=$role_id and send_uid=$u_id order by id desc) tmp group by to_uid,to_role_id
+union
+SELECT concat(send_uid,'-',send_role_id) ur,id,content,send_time FROM (select * from chat_record  where to_role_id=$role_id and to_uid=$u_id order by id desc) tmp group by send_uid,send_role_id
+) t order by t.id desc) t2 group by t2.ur) t3;;";
+        $user_log=Yii::$app->db->createCommand($sql_log)->queryAll();
+
         if(!$user_log){
             return null;
         }

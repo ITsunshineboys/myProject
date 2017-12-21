@@ -378,47 +378,48 @@ class ChatController extends Controller
 
        foreach ($data as $k=>&$v){
            $v['content']=ChatRecord::userTextDecode($v['content']);
-            $all=ChatRecord::find()->asArray()->where(['send_uid'=>$v['lxr'],'to_uid'=>$u_id])->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
+            $all=ChatRecord::find()->asArray()->where(['send_uid'=>$v['uid'],'to_uid'=>$u_id])->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
 
-          $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['lxr']])->one();
-
+          $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['uid']])->one();
           switch ($user_info['last_role_id_app']){
               case self::SUPPLIER_ROLE:
-                  $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['lxr']])->one()['shop_name'];
-                  $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
-                  $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['lxr']])->one()['icon'];
+                  $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['uid']])->one()['shop_name'];
+                  $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
+                  $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['uid']])->one()['icon'];
                   $v['count']=count($all);
                   if($v['count']==0){
                       $v['status']=1;
                   }
                   break;
               case self::OWNER_ROLE:
-                  $v['nickname']=User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
-                  $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
-                  $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
+                  $v['nickname']=User::find()->select('nickname')->asArray()->where(['id'=>$v['uid']])->one()['nickname'];
+                  $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
+                  $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['uid']])->one()['icon'];
                   $v['count']=count($all);
                   if($v['count']==0){
                       $v['status']=1;
                   }
                   break;
               case self::WORKER_ROLE:
-                  $v['nickname']='工人-'.User::find()->select('nickname')->asArray()->where(['id'=>$v['lxr']])->one()['nickname'];
-                  $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['lxr']])->one()['username'];
-                  $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['lxr']])->one()['icon'];
+                  $v['nickname']='工人-'.User::find()->select('nickname')->asArray()->where(['id'=>$v['uid']])->one()['nickname'];
+                  $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
+                  $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['uid']])->one()['icon'];
                   $v['count']=count($all);
                   if($v['count']==0){
                       $v['status']=1;
                   }
+                  break;
 
 
           }
+
           $v['send_time']=date('Y-m-d',$v['send_time']);
           unset($v['send_role_id']);
           unset($v['to_role_id']);
           unset($v['send_uid']);
           unset($v['to_uid']);
 
-         $res['chat_news'][]= array_merge($user_info,$v);
+         $res['chat_news']= $data;
 
        }
        $res['service']=[
