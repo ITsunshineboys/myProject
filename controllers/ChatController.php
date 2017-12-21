@@ -377,8 +377,7 @@ class ChatController extends Controller
         }
 
        foreach ($data as $k=>&$v){
-            $v['lxr']=$v['uid'];
-            $v['role_id']=$v['last_role_id_app'];
+
            $v['content']=ChatRecord::userTextDecode($v['content']);
             $all=ChatRecord::find()->asArray()->where(['send_uid'=>$v['uid'],'to_uid'=>$u_id])->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
 
@@ -414,7 +413,8 @@ class ChatController extends Controller
 
 
           }
-
+          $v['lxr']=$v['uid'];
+          $v['last_role_id_app']=$v['role_id'];
           $v['send_time']=date('Y-m-d',$v['send_time']);
           unset($v['role_id']);
           unset($v['uid']);
