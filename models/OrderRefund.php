@@ -282,6 +282,11 @@ class OrderRefund extends ActiveRecord
         return ['data'=>$data,'platform'=>$platform];
     }
 
+
+    /**
+     * @param $object
+     * @return mixed
+     */
     public  static  function object2array($object)
     {
         $object =  json_decode( json_encode( $object),true);
