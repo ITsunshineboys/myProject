@@ -615,12 +615,10 @@ class QuoteController extends Controller
         {
             $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
-//        $province_chinese = District::findByCode((int)$request['province_code']);
-//        $city_chinese = District::findByCode((int)$request['city_code']);
-//        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
-            $province_chinese['name'] = '四川';
-            $city_chinese['name']     = '成都市';
-            $district_chinese['name'] = '金牛区';
+        $province_chinese = District::findByCode((int)$request['province_code']);
+        $city_chinese = District::findByCode((int)$request['city_code']);
+        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
