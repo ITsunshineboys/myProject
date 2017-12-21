@@ -41,6 +41,7 @@ use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
+use yii\db\Exception;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -873,6 +874,58 @@ class QuoteController extends Controller
             'effect'=>$public_message,
         ]);
     }
+
+    /**
+     * TODO 新增删除小区
+     * @return string
+     */
+    public function actionEffectDelPlot(){
+        $del_id=(int)\Yii::$app->request->get('del_id');
+        $effect_plot=EffectToponymy::find()->where(['id'=>$del_id])->select('effect_id')->one();
+        $effect_ids= explode(',',$effect_plot['effect_id']);
+
+        $transaction = \Yii::$app->db->beginTransaction();
+        $code = 500;
+        try{
+            $ep_del=EffectToponymy::find()->where(['id'=>$del_id])->one()->delete();
+            if(!$ep_del){
+                $transaction->rollBack();
+                return Json::encode([
+                    'code'=>$code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+
+            foreach ( $effect_ids as $effect_id ){
+                $res = Effect::find()->where(['id'=>$effect_id])->one()->delete();
+                $res1 = EffectPicture::find()->where(['effect_id'=>$effect_id])->one()->delete();
+            }
+            $res2 =  WorksWorkerData::deleteAll(['effect_id'=>$effect_ids[1]]);
+            $res3 =  WorksData::deleteAll(['effect_id'=>$effect_ids[1]]);
+            if(!$res || !$res1 || !$res2 || !$res3){
+                $transaction->rollBack();
+                return Json::encode([
+                    'code'=>$code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            $transaction->commit();
+        }catch (Exception $e){
+            $transaction->rollBack();
+            return Json::encode([
+                'code'=>$code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+       return Json::encode([
+           'code'=>200,
+           'msg'=>'ok'
+       ]);
+
+    }
+
     /**
      * plot add function
      * @return string
