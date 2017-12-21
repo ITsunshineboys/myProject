@@ -86,7 +86,7 @@ class Wxpay  extends ActiveRecord
          * @param $openId
          * @return mixed
          */
-        public static  function effect_earnstsubmit($id,$openId)
+        public static  function EffectEarnestSubmit($id,$openId)
         {
             ini_set('date.timezone','Asia/Shanghai');
             //打印输出数组信息

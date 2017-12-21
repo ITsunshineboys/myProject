@@ -845,7 +845,7 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $res=Wxpay::effect_earnstsubmit($id,$openId);
+        $res=Wxpay::EffectEarnestSubmit($id,$openId);
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
