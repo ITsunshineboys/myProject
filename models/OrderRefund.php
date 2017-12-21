@@ -275,7 +275,7 @@ class OrderRefund extends ActiveRecord
                 'stage'=>'',
                 'status'=>'over'
             ];
-            $platform=(object);
+            $platform=(object)[];
             $platform->list=$arrp;
 //            $platform=(object)[
 //                'list'=>$arrp
