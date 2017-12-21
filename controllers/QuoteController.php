@@ -20,6 +20,7 @@ use app\models\District;
 use app\models\Effect;
 
 use app\models\EffectPicture;
+use app\models\EffectToponymy;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCarpentryCraft;
 use app\models\EngineeringStandardCraft;
@@ -39,10 +40,12 @@ use app\models\WorksWorkerData;
 use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
+use app\services\StringService;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\Request;
 
 class QuoteController extends Controller
 {
@@ -496,6 +499,67 @@ class QuoteController extends Controller
             'model' => $effect
         ]);
     }
+    /**
+     * TODO 小区列表 优化
+     * @return string
+     */
+
+    public function actionEffectPlotList(){
+        $request= new Request();
+        $city_code = (int)$request->get('city_code','');
+        $code = 1000;
+        if(!$city_code){
+
+            return Json::encode([
+                'code' => $code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $start_time=trim($request->get('start_time',''));
+        $end_time= trim($request->get('end_time',''));
+        $district_code = (int)$request->get('district_code','');
+        $keyword = trim($request->get('keyword',''));
+        $where = "city_code = $city_code";
+        if(!$keyword) {
+            if (($start_time && !StringService::checkDate($start_time))
+                || ($end_time && !StringService::checkDate($end_time))
+            ) {
+                $code = 1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            if ($start_time == $end_time) {
+                list($start_time, $end_time) = ModelService::timeDeal($start_time);
+            } else {
+                $start_time && $end_time .= ' 23:59:59';
+            }
+            if ($start_time) {
+                $startTime = (int)strtotime($start_time);
+                $startTime && $where .= " and add_time >= {$startTime}";
+            }
+            if ($end_time) {
+                $end_time = (int)strtotime($end_time);
+                $end_time && $where .= " and add_time <= {$end_time}";
+            }
+            if($district_code ){
+                $where .= " and  district_code = {$district_code}";
+            }
+        }else{
+            $where .=" and  toponymy like '%{$keyword}%'";
+        }
+        $page = (int)\Yii::$app->request->get('page', 1);
+        $size = (int)\Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
+
+        $paginationData = EffectToponymy::pagination($where, EffectToponymy::FIELDS_EXTRA, $page, $size);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+
+    }
 
     /**
      * plot list all
@@ -540,7 +604,275 @@ class QuoteController extends Controller
             'stairs_details'=>$stairs_details,
         ]);
     }
+    /**
+     * TODO 新增接口 优化小区
+     * @return string
+     */
+    public function actionEffectPlotAdd()
 
+        {
+            $request = \Yii::$app->request->post();
+//        $user = \Yii::$app->user->identity();
+//        $province_chinese = District::findByCode((int)$request['province_code']);
+//        $city_chinese = District::findByCode((int)$request['city_code']);
+//        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+            $province_chinese['name'] = '四川';
+            $city_chinese['name']     = '成都市';
+            $district_chinese['name'] = '金牛区';
+
+            $transaction = \Yii::$app->db->beginTransaction();
+            try {
+                foreach ($request['house_informations'] as $house) {
+                    if ($house['is_ordinary'] == 0) {
+                        //普通户型添加
+                        $bedroom                = $house['cur_room'];
+                        $sittingRoom_diningRoom = $house['cur_hall'];
+                        $toilet                 = $house['cur_toilet'];
+                        $kitchen                = $house['cur_kitchen'];
+                        $window                 = $house['window'];
+                        $area                   = $house['area'];
+                        $high                   = $house['high'];
+                        $province               = $province_chinese['name'];
+                        $province_code          = $request['province_code'];
+                        $city                   = $city_chinese['name'];
+                        $city_code              = $request['city_code'];
+                        $district               = $district_chinese['name'];
+                        $district_code          = $request['cur_county_id']['id'];
+                        $toponymy               = $request['house_name'];
+                        $street                 = $request['address'];
+                        $particulars            = $house['house_type_name'];
+                        $stairway               = $house['have_stair'];
+                        $house_image            = $house['cur_imgSrc'];
+                        $type                   = $house['is_ordinary'];
+                        $sort_id                = $house['sort_id'];
+                        $effect_                = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, 0);
+
+                        if (!$effect_) {
+                            $transaction->rollBack();
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => \Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+
+                        $hall_area         = $house['hall_area'];
+                        $hall_perimeter    = $house['hall_girth'];
+                        $bedroom_area      = $house['room_area'];
+                        $bedroom_perimeter = $house['room_girth'];
+                        $toilet_area       = $house['toilet_area'];
+                        $toilet_perimeter  = $house['toilet_girth'];
+                        $kitchen_area      = $house['kitchen_area'];
+                        $kitchen_perimeter = $house['kitchen_girth'];
+                        $modelling_length  = $house['other_length'];
+                        $flat_area         = $house['flattop_area'];
+                        $balcony_area      = $house['balcony_area'];
+                        $effect_id         = \Yii::$app->db->getLastInsertID();
+                        $ids[]=$effect_id;
+                        $decoration = (new DecorationParticulars())->plotAdd($effect_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
+
+                        if (!$decoration) {
+                            $transaction->rollBack();
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => \Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+
+                        if (!empty($house['drawing_list'])) {
+                            foreach ($house['drawing_list'] as $images) {
+                                $effect_images  = $images['all_drawing'];
+                                $series_id      = $images['series'];
+                                $style_id       = $images['style'];
+                                $images_user    = $images['drawing_name'];
+                                $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                            }
+                            if (!$effect_picture) {
+                                $transaction->rollBack();
+                                $code = 500;
+                                return Json::encode([
+                                    'code' => $code,
+                                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                                ]);
+                            }
+                        }
+
+
+                    }
+                    // 案列添加
+                    if ($house['is_ordinary'] == 1) {
+                        $bedroom                = $house['cur_room'];
+                        $sittingRoom_diningRoom = $house['cur_hall'];
+                        $toilet                 = $house['cur_toilet'];
+                        $kitchen                = $house['cur_kitchen'];
+                        $window                 = $house['window'];
+                        $area                   = $house['area'];
+                        $high                   = $house['high'];
+                        $province               = $province_chinese['name'];
+                        $province_code          = $request['province_code'];
+                        $city                   = $city_chinese['name'];
+                        $city_code              = $request['city_code'];
+                        $district               = $district_chinese['name'];
+                        $district_code          = $request['cur_county_id']['id'];
+                        $toponymy               = $request['house_name'];
+                        $street                 = $request['address'];
+                        $particulars            = $house['house_type_name'];
+                        $stairway               = $house['have_stair'];
+                        $house_image            = $house['cur_imgSrc'];
+                        $type                   = $house['is_ordinary'];
+                        $sort_id                = $house['sort_id'];
+                        if ($stairway != 1) {
+                            $stair_id = 0;
+                        } else {
+                            $stair_id = $house['stair'];
+                        }
+                        $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
+                        if (!$effect) {
+                            $transaction->rollBack();
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => \Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+
+                        $effect_id = \Yii::$app->db->getLastInsertID();
+                        $ids[]=$effect_id;
+                        $effect_images  = $house['drawing_list'];
+                        $series_id      = $house['series'];
+                        $style_id       = $house['style'];
+                        $images_user    = '案例添加';
+                        $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                        if (!$effect_picture) {
+                            $transaction->rollBack();
+                            $code = 500;
+                            return Json::encode([
+                                'code' => $code,
+                                'msg' => \Yii::$app->params['errorCodes'][$code]
+                            ]);
+                        }
+
+                        if (!empty($house['all_goods'])) {
+                            foreach ($house['all_goods'] as $goods) {
+                                $goods_id          = $effect_id;
+                                $goods_first       = $goods['first_name'];
+                                $goods_second      = $goods['second_name'];
+                                $goods_three       = $goods['three_name'];
+                                $goods_code        = $goods['good_code'];
+                                $goods_quantity    = $goods['good_quantity'];
+                                $three_category_id = $goods['three_id'];
+                                $works_data        = (new WorksData())->plotAdd($goods_id, $goods_first, $goods_second, $goods_three, $goods_code, $goods_quantity, $three_category_id);
+                            }
+                            if (!$works_data) {
+                                $transaction->rollBack();
+                                $code = 500;
+                                return Json::encode([
+                                    'code' => $code,
+                                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                                ]);
+                            }
+                        }
+
+                        if (!empty($house['worker_list'])) {
+                            foreach ($house['worker_list'] as $worker) {
+                                $worker_id         = $effect_id;
+                                $worker_kind       = $worker['worker_kind'];
+                                $worker_price      = $worker['price'];
+                                $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
+                            }
+
+                            if (!$works_worker_data) {
+                                $transaction->rollBack();
+                                $code = 500;
+                                return Json::encode([
+                                    'code' => $code,
+                                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                                ]);
+                            }
+                        }
+
+//                    if (!empty($house['backman_option'])) {
+//                        foreach ($house['backman_option'] as $backman) {
+//                            $backman_id         = $effect_id;
+//                            $backman_option     = $backman['name'];
+//                            $backman_value      = $backman['num'];
+//                            $works_backman_data = (new WorksBackmanData())->plotAdd($backman_id, $backman_option, $backman_value);
+//                        }
+//                        if (!$works_backman_data) {
+//                            $transaction->rollBack();
+//                            return 500;
+//                        }
+//                    }
+                    }
+                }
+
+                $ids = implode(',',$ids);
+                $effect_plot = new EffectToponymy();
+                $effect_plot->effect_id=$ids;
+                $effect_plot->toponymy=$request['house_name'];
+                $effect_plot->province_code=$request['province_code'];
+                $effect_plot->city_code=$request['city_code'];
+                $effect_plot->district_code=$request['cur_county_id']['id'];
+                $effect_plot->add_time=time();
+                if(!$effect_plot->save(false)){
+                    $transaction->rollBack();
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+            ]);
+
+    }
+    /**
+     * TODO 新增接口
+     * @return string
+     */
+    public function actionEffectPlotEditView()
+    {
+        $plot_id= (int)\Yii::$app->request->get('plot_id','');
+//        $user = \Yii::$app->user->identity();
+        $public_message = [];
+
+        $data= EffectToponymy::PlotView($plot_id);
+
+        $public_message['street'] =  $data[0]['street'];
+        $public_message['toponymy'] =  $data[0]['toponymy'];
+        $public_message['district_code'] =  $data[0]['district_code'];
+        $public_message['district'] = $data[0]['district'];
+        foreach ($data as $one_effect){
+
+            $id[] = $one_effect['id'];
+        }
+
+
+        $public_message['images'] = EffectPicture::findById($id);
+        $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
+        $public_message['works_data'] = WorksData::findById($id);
+        $public_message['works_worker_data'] = WorksWorkerData::findById($id);
+//        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'effect'=>$public_message,
+        ]);
+    }
     /**
      * plot add function
      * @return string
@@ -549,12 +881,10 @@ class QuoteController extends Controller
     {
         $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
-//        $province_chinese = District::findByCode((int)$request['province_code']);
-//        $city_chinese = District::findByCode((int)$request['city_code']);
-//        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
-        $province_chinese['name']='四川';
-        $city_chinese['name']='成都市';
-        $district_chinese['name']='金牛区';
+        $province_chinese = District::findByCode((int)$request['province_code']);
+        $city_chinese = District::findByCode((int)$request['city_code']);
+        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+
 
         $transaction = \Yii::$app->db->beginTransaction();
         try {
