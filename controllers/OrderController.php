@@ -1141,128 +1141,128 @@ class OrderController extends Controller
      * @return string
      */
     public function actionFindOrderList(){
-            $user = Yii::$app->user->identity;
-            if (!$user){
-                $code=403;
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=403;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $page=trim($request->get('page',1));
+        $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
+        $keyword = trim($request->get('keyword', ''));
+        $timeType = trim($request->get('time_type', ''));
+        $type=trim($request->get('type','all'));
+        $supplier_id=trim($request->get('supplier_id'));
+        $where=GoodsOrder::GetTypeWhere($type);
+        if ($timeType == 'custom') {
+            $startTime = trim(Yii::$app->request->get('start_time', ''));
+            $endTime = trim(Yii::$app->request->get('end_time', ''));
+            if (($startTime && !StringService::checkDate($startTime))
+                || ($endTime && !StringService::checkDate($endTime))
+            ){
+                $code=1000;
                 return Json::encode([
                     'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
+                    'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-                $request = Yii::$app->request;
-                $page=trim($request->get('page',1));
-                $size=trim($request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT));
-                $keyword = trim($request->get('keyword', ''));
-                $timeType = trim($request->get('time_type', ''));
-                $type=trim($request->get('type','all'));
-                $supplier_id=trim($request->get('supplier_id'));
-                $where=GoodsOrder::GetTypeWhere($type);
-                if ($timeType == 'custom') {
-                    $startTime = trim(Yii::$app->request->get('start_time', ''));
-                    $endTime = trim(Yii::$app->request->get('end_time', ''));
-                    if (($startTime && !StringService::checkDate($startTime))
-                        || ($endTime && !StringService::checkDate($endTime))
-                    ){
-                        $code=1000;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
-                    if($startTime==$endTime){
-                        list($startTime, $endTime) =ModelService::timeDeal($startTime);
-                    }else{
-                        $endTime && $endTime .= ' 23:59:59';
-                    }
-                }else{
-                    list($startTime, $endTime) = StringService::startEndDate($timeType);
-                }
-                if($type=='all')
+            if($startTime==$endTime){
+                list($startTime, $endTime) =ModelService::timeDeal($startTime);
+            }else{
+                $endTime && $endTime .= ' 23:59:59';
+            }
+        }else{
+            list($startTime, $endTime) = StringService::startEndDate($timeType);
+        }
+        if($type=='all')
+        {
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
                 {
-                    if($supplier_id)
-                    {
-                        if(!is_numeric($supplier_id))
-                        {
-                            $code=1000;
-                            return Json::encode([
-                                'code' => $code,
-                                'msg' => Yii::$app->params['errorCodes'][$code]
-                            ]);
-                        }
-                        $where .=" a.supplier_id={$supplier_id}";
-                    }
-                }else{
-                    if($supplier_id)
-                    {
-                        if(!is_numeric($supplier_id))
-                        {
-                            $code=1000;
-                            return Json::encode([
-                                'code' => $code,
-                                'msg' => Yii::$app->params['errorCodes'][$code]
-                            ]);
-                        }
-                        $where .=" and a.supplier_id={$supplier_id}";
-                    }
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
                 }
-                if ($type=='all' && !$supplier_id)
+                $where .=" a.supplier_id={$supplier_id}";
+            }
+        }else{
+            if($supplier_id)
+            {
+                if(!is_numeric($supplier_id))
                 {
-                    if($keyword){
-                        $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $where .=" and a.supplier_id={$supplier_id}";
+            }
+        }
+        if ($type=='all' && !$supplier_id)
+        {
+            if($keyword){
+                $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
 //                        a.consignee_mobile,u.mobile
-                    }
-                }else{
-                    if($keyword){
-                        $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
-                    }
-                }
+            }
+        }else{
+            if($keyword){
+                $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
+            }
+        }
 
 //            if ($timeType=='today')
 //            {
 //                $startTime=date('Y-m-d',time());
 //                $endTime=date('Y-m-d',time()+24*60*60);
 //            }
-            if ($type=='all' && !$supplier_id )
+        if ($type=='all' && !$supplier_id )
+        {
+            if ($keyword)
             {
-                if ($keyword)
-                {
-                        if ($startTime) {
-                            $startTime = (int)strtotime($startTime);
-                            $startTime && $where .= " and   a.create_time >= {$startTime}";
-                        }
-                        if ($endTime) {
-                            $endTime = (int)strtotime($endTime);
-                            $endTime && $where .= " and a.create_time <= {$endTime}";
-                        }
-                }else{
-                        if ($startTime) {
-                            $startTime = (int)strtotime($startTime);
-                            $startTime && $where .= "a.create_time >= {$startTime}";
-                        }
-                        if ($endTime) {
-                            $endTime = (int)strtotime($endTime);
-                            $endTime && $where .= " and a.create_time <= {$endTime}";
-                        }
-                }
+                    if ($startTime) {
+                        $startTime = (int)strtotime($startTime);
+                        $startTime && $where .= " and   a.create_time >= {$startTime}";
+                    }
+                    if ($endTime) {
+                        $endTime = (int)strtotime($endTime);
+                        $endTime && $where .= " and a.create_time <= {$endTime}";
+                    }
             }else{
-                if ($startTime) {
-                    $startTime = (int)strtotime($startTime);
-                    $startTime && $where .= " and   a.create_time >= {$startTime}";
-                }
-                if ($endTime) {
-                    $endTime = (int)strtotime($endTime);
-                    $endTime && $where .= " and a.create_time <= {$endTime}";
-                }
-           }
-            $sort_money=trim($request->get('sort_money'));
-            $sort_time=trim($request->get('sort_time'));
-            $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'lhzz');
-            $code=200;
-            return Json::encode([
-                 'code'=>$code,
-                'msg'=>'ok',
-                'data'=>$paginationData
-            ]);
+                    if ($startTime) {
+                        $startTime = (int)strtotime($startTime);
+                        $startTime && $where .= "a.create_time >= {$startTime}";
+                    }
+                    if ($endTime) {
+                        $endTime = (int)strtotime($endTime);
+                        $endTime && $where .= " and a.create_time <= {$endTime}";
+                    }
+            }
+        }else{
+            if ($startTime) {
+                $startTime = (int)strtotime($startTime);
+                $startTime && $where .= " and   a.create_time >= {$startTime}";
+            }
+            if ($endTime) {
+                $endTime = (int)strtotime($endTime);
+                $endTime && $where .= " and a.create_time <= {$endTime}";
+            }
+       }
+        $sort_money=trim($request->get('sort_money'));
+        $sort_time=trim($request->get('sort_time'));
+        $paginationData = GoodsOrder::pagination($where, GoodsOrder::FIELDS_ORDERLIST_ADMIN, $page, $size,$sort_time,$sort_money,'lhzz');
+        $code=200;
+        return Json::encode([
+             'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
     }
     /**
      *大后台之查看订单详情
