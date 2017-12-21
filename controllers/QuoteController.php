@@ -2625,7 +2625,7 @@ class QuoteController extends Controller
         $sql="SELECT * FROM( SELECT a.to_uid as lxr,a.*  FROM chat_record as a  WHERE  (a.send_uid = 8)  AND  (a.to_uid <> 8)  UNION
     SELECT a.send_uid as lxr ,a.* FROM chat_record as a  WHERE (a.send_uid <> 8)  AND (a.to_uid = 8) ORDER BY send_time DESC 
   ) as b  WHERE send_role_id =7 or to_role_id =7 GROUP BY lxr";
-        $user_log=Yii::$app->db->createCommand($sql)->queryAll();
+        $user_log=\Yii::$app->db->createCommand($sql)->queryAll();
         return Json::encode($user_log);
 
     }
