@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models;
+use app\services\StringService;
 use Yii;
 use yii\db\ActiveRecord;
 use Yii\db\Exception;
@@ -307,6 +308,20 @@ class OrderPlatForm extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+            $data=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id), '平台介入，关闭订单退款', $GoodsOrder->role_id,"订单号{$order_no},商品编号{$sku}.您的订单已由平台介入关闭，退款金额".StringService::formatPrice($refund_money*0.01)."元已打入您的余额，请注意查看。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
+            if ($data!=200)
+            {
+                $code= $data;
+                $tran->rollBack();
+                return $code;
+            };
+            $data1=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid), '平台介入，关闭订单退款', \Yii::$app->params['supplierRoleId'],"订单号{$order_no},商品编号{$sku}已进行平台介入关闭并退款，已从您的余额扣除".StringService::formatPrice($reduce_money*0.01)."元,若有疑问请联系客服。", $order_no, $sku,GoodsOrder::STATUS_DESC_DETAILS);
+            if ($data1!=200)
+            {
+                $code= $data;
+                $tran->rollBack();
+                return $code;
+            };
             $tran->commit();
             $code=200;
             return $code;
@@ -328,9 +343,8 @@ class OrderPlatForm extends ActiveRecord
      */
     public  static  function  platformHandCloseOrder($order_no,$handle_type,$reason,$sku)
     {
-            //关闭订单操作
+        //关闭订单操作
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-
         $tran = Yii::$app->db->beginTransaction();
         try{
 
