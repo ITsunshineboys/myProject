@@ -12,8 +12,8 @@ use yii\helpers\Json;
 
 class Wxpay  extends ActiveRecord
 {
-        const  EFFECT_NOTIFY_URL='/order/wxpayeffect_earnstnotify';
-        const  LINEPAY_NOTIFY_URL='/order/orderlinewxpaynotify';
+        const  EFFECT_NOTIFY_URL='/order/wx-pay-effect-earnest-notify';
+        const  LINEPAY_NOTIFY_URL='/order/order-line-wx-pay-notify';
         const  PAY_CANCEL_URL='/line/#!/order_commodity';
         const  PAY_SUCESS_URL='/line/#!/pay_success';
         const  PAY_FAIL_URL='/line/#!/order_commodity';
@@ -23,8 +23,6 @@ class Wxpay  extends ActiveRecord
         const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
         const  ACCESS_TOKEN='access_token';
         const  TICKET='ticket';
-
-
         /**
          * @return string 返回该AR类关联的数据表名
          */

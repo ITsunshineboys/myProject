@@ -994,7 +994,7 @@ class OrderController extends Controller
      * wxpay nityfy apply Deposit database
      * @return bool
      */
-    public function actionWxpayeffect_earnstnotify(){
+    public function actionWxPayEffectEarnestNotify(){
         //获取通知的数据
         $xml = file_get_contents("php://input");;
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
@@ -1089,7 +1089,7 @@ class OrderController extends Controller
     /**
      *微信线下支付异步操作
      */
-    public function actionOrderlinewxpaynotify(){
+    public function actionOrderLineWxPayNotify(){
         //获取通知的数据
         $xml = file_get_contents("php://input");
         $data=json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA));
