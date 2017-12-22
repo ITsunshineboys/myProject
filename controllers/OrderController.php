@@ -1634,14 +1634,14 @@ class OrderController extends Controller
         }
         //获取订单信息
         $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
-        if (!$order_information) {
+        if (!$order_information)
+        {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
         //获取商品信息
         $goods_name=$order_information['goods_name'];
         $goods_id=$order_information['goods_id'];
@@ -1686,63 +1686,62 @@ class OrderController extends Controller
                 $receive_details['invoice_type']='普通增值税发票';
                 break;
         }
-
-         $goods_data=array();
-          if ($order_information['goods_name']=='+'){
-              $goods_data['goods_name']='';
-          }else{
-              $goods_data['goods_name']=$order_information['goods_name'];
-          }
-          $goods_data['status']=$order_information['status'];
-          $goods_data['order_no']=$order_information['order_no'];
-          $goods_data['sku']=$order_information['sku'];
-          $goods_data['username']=$order_information['username'];
-          $goods_data['amount_order']=$order_information['amount_order'];
-            switch ($order_information['role_id'])
-            {
-                case 7:
-                    $goods_data['role']='平台价';
-                    break;
-                case 6:
-                    $goods_data['role']='供应商采购价';
-                    break;
-                case 5:
-                    $goods_data['role']='装修公司采购价';
-                    break;
-                case 4:
-                    $goods_data['role']='项目经理采购价';
-                    break;
-                case 3:
-                    $goods_data['role']='设计师采购价';
-                    break;
-                case 2:
-                    $goods_data['role']='工人采购价';
-                    break;
-            }
-          $goods_data['goods_price']=$order_information['goods_price'];
-          $goods_data['goods_number']=$order_information['goods_number'];
-          $goods_data['freight']=$order_information['freight'];
-          $goods_data['return_insurance']=$order_information['return_insurance'];
-          $goods_data['supplier_price']=$order_information['supplier_price'];
-          $goods_data['market_price']=$order_information['market_price'];
-          $goods_data['shipping_type']=$order_information['shipping_type'];
-          $goods_data['shipping_way']=$order_information['shipping_way'];
-          $express=Express::find()->where(['order_no'=>$order_no])->andWhere(['sku'=>$sku])->one();
-          $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
-          $goods_data['complete_time']=$order_information['complete_time'];
-          if ($order_information['shipping_type']==1){
-              $goods_data['shipping_way']='送货上门';
-              $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
-          }
-          $goods_data['pay_name']=$order_information['pay_name'];
-          if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
-              $goods_data['pay_term']=$order_information['pay_term'];
-          }else{
-              $goods_data['pay_term']=0;
-          }
-          if (!$order_information['paytime']==0){
-              $goods_data['paytime']=$order_information['paytime'];
-          }
+        $goods_data=array();
+        if ($order_information['goods_name']=='+'){
+          $goods_data['goods_name']='';
+        }else{
+          $goods_data['goods_name']=$order_information['goods_name'];
+        }
+        $goods_data['status']=$order_information['status'];
+        $goods_data['order_no']=$order_information['order_no'];
+        $goods_data['sku']=$order_information['sku'];
+        $goods_data['username']=$order_information['username'];
+        $goods_data['amount_order']=$order_information['amount_order'];
+        switch ($order_information['role_id'])
+        {
+            case 7:
+                $goods_data['role']='平台价';
+                break;
+            case 6:
+                $goods_data['role']='供应商采购价';
+                break;
+            case 5:
+                $goods_data['role']='装修公司采购价';
+                break;
+            case 4:
+                $goods_data['role']='项目经理采购价';
+                break;
+            case 3:
+                $goods_data['role']='设计师采购价';
+                break;
+            case 2:
+                $goods_data['role']='工人采购价';
+                break;
+        }
+        $goods_data['goods_price']=$order_information['goods_price'];
+        $goods_data['goods_number']=$order_information['goods_number'];
+        $goods_data['freight']=$order_information['freight'];
+        $goods_data['return_insurance']=$order_information['return_insurance'];
+        $goods_data['supplier_price']=$order_information['supplier_price'];
+        $goods_data['market_price']=$order_information['market_price'];
+        $goods_data['shipping_type']=$order_information['shipping_type'];
+        $goods_data['shipping_way']=$order_information['shipping_way'];
+        $express=Express::find()->where(['order_no'=>$order_no])->andWhere(['sku'=>$sku])->one();
+        $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
+        $goods_data['complete_time']=$order_information['complete_time'];
+        if ($order_information['shipping_type']==1){
+            $goods_data['shipping_way']='送货上门';
+            $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
+        }
+        $goods_data['pay_name']=$order_information['pay_name'];
+        if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
+            $goods_data['pay_term']=$order_information['pay_term'];
+        }else{
+            $goods_data['pay_term']=0;
+        }
+        if (!$order_information['paytime']==0){
+            $goods_data['paytime']=$order_information['paytime'];
+        }
           //1:无平台介入  2：有平台进入
           if (!OrderPlatForm::find()
               ->where(['order_no'=>$order_no,'sku'=>$sku])
@@ -1779,7 +1778,7 @@ class OrderController extends Controller
                 'msg' => 'ok',
                 'data' =>$data
           ]);
-}
+    }
     /**
      * 去发货--商家后台
      * @return string
