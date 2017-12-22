@@ -381,8 +381,8 @@ class ChatController extends Controller
            $v['content']=ChatRecord::userTextDecode($v['content']);
             $all=ChatRecord::find()->asArray()->where(['send_uid'=>$v['uid'],'to_uid'=>$u_id])->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
 
-          $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['uid']])->one();
-          switch ($user_info['last_role_id_app']){
+//          $user_info=User::find()->select('id,last_role_id_app')->asArray()->where(['id'=>$v['uid']])->one();
+          switch ($v['role_id']){
               case self::SUPPLIER_ROLE:
                   $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['uid']])->one()['shop_name'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
@@ -413,6 +413,9 @@ class ChatController extends Controller
 
 
           }
+           $v['nickname']==null?[]:$v['nickname'];
+           $v['Hx_name']==null?[]:$v['Hx_name'];
+           $v['icon']==null?[]:$v['icon'];
           $v['lxr']=$v['uid'];
           $v['last_role_id_app']=$v['role_id'];
           $v['send_time']=date('Y-m-d',$v['send_time']);
