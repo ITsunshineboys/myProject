@@ -5914,7 +5914,7 @@ class OrderController extends Controller
                         switch($OrderGoods->customer_service){
                             case 0:
                                 $code=200;
-                                $after=explode(',',$OrderGoods->afafter_sale_services);
+                                $after=explode(',',$OrderGoods->after_sale_services);
                                 $data=[];
                                 foreach ($after as &$afterList)
                                 {
@@ -5985,7 +5985,7 @@ class OrderController extends Controller
 //                                        break;
 //                                }
                                 $code=200;
-                                $after=explode(',',$OrderGoods->afafter_sale_services);
+                                $after=explode(',',$OrderGoods->after_sale_services);
                                 $data=[];
                                 foreach ($after as &$afterList)
                                 {
