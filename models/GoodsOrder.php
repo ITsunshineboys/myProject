@@ -919,6 +919,8 @@ class GoodsOrder extends ActiveRecord
                         $arr[$k]['handle']='';
                         $arr[$k]['have_handle']=2;
                     }else{
+                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+                        $arr[$k]['have_handle']=1;
                         if ($after->supplier_handle==2)
                         {
                             $platForm=OrderPlatForm::find()
@@ -931,8 +933,7 @@ class GoodsOrder extends ActiveRecord
                                 $arr[$k]['have_handle']=2;
                             }
                         }
-                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
-                        $arr[$k]['have_handle']=1;
+
                     }
                 }else{
                     $arr[$k]['handle']='';
