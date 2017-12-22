@@ -5914,26 +5914,15 @@ class OrderController extends Controller
                         switch($OrderGoods->customer_service){
                             case 0:
                                 $code=200;
-                                $data[]=[
-                                    'name'=>'退货',
-                                    'value'=>3,
-                                ];
-                                $data[]=[
-                                    'name'=>'换货',
-                                    'value'=>4,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门维修',
-                                    'value'=>5,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门换货',
-                                    'value'=>7,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门退货',
-                                    'value'=>6,
-                                ];
+                                $after=explode(',',$OrderGoods->afafter_sale_services);
+                                $data=[];
+                                foreach ($after as &$afterList)
+                                {
+                                    if ($afterList!=0 && $afterList !=1)
+                                    {$data[]=['name'=>OrderAfterSale::AFTER_SALE_SERVICES[$afterList],
+                                            'value'=>array_search(OrderAfterSale::AFTER_SALE_SERVICES[$afterList],OrderPlatForm::PLATFORM_HANDLE_TYPE)];
+                                    }
+                                }
                                 return Json::encode(
                                     [
                                         'code'=>$code,
@@ -5996,26 +5985,15 @@ class OrderController extends Controller
 //                                        break;
 //                                }
                                 $code=200;
-                                $data[]=[
-                                    'name'=>'退货',
-                                    'value'=>3,
-                                ];
-                                $data[]=[
-                                    'name'=>'换货',
-                                    'value'=>4,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门维修',
-                                    'value'=>5,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门换货',
-                                    'value'=>7,
-                                ];
-                                $data[]=[
-                                    'name'=>'上门退货',
-                                    'value'=>6,
-                                ];
+                                $after=explode(',',$OrderGoods->afafter_sale_services);
+                                $data=[];
+                                foreach ($after as &$afterList)
+                                {
+                                    if ($afterList!=0 && $afterList !=1)
+                                    {$data[]=['name'=>OrderAfterSale::AFTER_SALE_SERVICES[$afterList],
+                                        'value'=>array_search(OrderAfterSale::AFTER_SALE_SERVICES[$afterList],OrderPlatForm::PLATFORM_HANDLE_TYPE)];
+                                    }
+                                }
                                 return Json::encode(
                                     [
                                         'code'=>$code,
