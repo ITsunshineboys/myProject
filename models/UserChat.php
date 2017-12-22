@@ -338,15 +338,28 @@ class UserChat extends \yii\db\ActiveRecord
            $chat->status=1;
            $chat->save(false);
             $send_time=date('Y-m-d',$v['send_time']);
-            if($send_time==date('Y-m-d',time())){
-                $v['send_time']=date('H:i',$v['send_time']);
 
-            }else{
-                $v['send_time']=$send_time;
+            list($startTime, $endTime) = StringService::startEndDate('today');
+            if ($startTime) {
+                $startTime = (int)strtotime($startTime);
             }
+            if ($endTime) {
+                $endTime = (int)(strtotime($endTime));
+
+            }
+            $chat_limt=\Yii::$app->db->createCommand("select * from chat_record where send_uid=to_uid and send_uid = $uid and send_time >= $startTime and send_time <=$endTime ")->queryAll();
+            if(count($chat_limt)>=10){
+                return 1082;
+            }
+             if($send_time==date('Y-m-d',time())){
+                 $v['send_time']=date('H:i',$v['send_time']);
+
+             }else{
+                 $v['send_time']=$send_time;
+             }
         }
         if(!$data){
-          return null;
+          return 1000;
         }
         return $data;
     }

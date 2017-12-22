@@ -492,20 +492,26 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $code=1000;
+
         $recipient_id=(int)\Yii::$app->request->get('recipient_id');
         $recipient_role_id=(int)\Yii::$app->request->get('recipient_role_id');
         if(!$recipient_id || !$recipient_role_id){
+            $code=1000;
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $user_data=UserChat::userinfos($u_id,$role_id,$recipient_id,$recipient_role_id);
+        if(is_numeric($user_data)){
+           $code=$user_data;
+        }else{
+            $code=200;
+        }
         return Json::encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>$user_data
+            'code'=>$code,
+            'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code],
+            'data'=>$code==200?$user_data:[]
         ]);
     }
     public function actionTest(){
