@@ -349,7 +349,10 @@ class UserChat extends \yii\db\ActiveRecord
             $v['content']=ChatRecord::userTextDecode($v['content']);
            $chat= ChatRecord::find()->where(['id'=>$v['id']])->one();
            $chat->status=1;
-           $chat->save(false);
+          $res= $chat->save(false);
+          if(!$res){
+              return 500;
+          }
             $send_time=date('Y-m-d',$v['send_time']);
 
 
