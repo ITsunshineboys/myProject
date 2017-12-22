@@ -128,11 +128,12 @@
             <td ng-if="orderFilter.exception">{{obj.unusual}}</td>
             <td ng-if="orderFilter.comments">{{obj.comment_grade}}</td>
             <td ng-if="orderFilter.details">
-                <a ui-sref="order_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 0})">查看</a>
+                <a ng-if="obj.is_after == 0" ui-sref="order_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 0})">查看</a>
+                <a ng-if="obj.is_after == 1" ui-sref="sales_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 0})">查看</a>
             </td>
             <td ng-if="orderFilter.operation">
-                <a ng-if="obj.have_handle == 1"
-                   ui-sref="order_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 1})">平台介入</a>
+                <a ng-if="obj.is_after == 0" ng-if="obj.have_handle == 1" ui-sref="order_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 1})">平台介入</a>
+                <a ng-if="obj.is_after == 1" ng-if="obj.have_handle == 1" ui-sref="sales_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 1})">平台介入</a>
             </td>
         </tr>
         </tbody>
