@@ -302,6 +302,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 					$scope.logistics.unshift(value);
 					$scope.logistics_status=true;
 					$scope.logistics_red=false;
+					break;
 				}else if(value.id!=$scope.logistics_template_id){  //判断该商品的物流模板是否删除，如果删除，显示提示文字
 					$scope.logistics_red=true;
 					$scope.logistics_status=true;
