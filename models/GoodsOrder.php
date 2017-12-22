@@ -908,14 +908,18 @@ class GoodsOrder extends ActiveRecord
                 $isAfter=1;
                 if ($arr[$k]['order_refer']==2)
                 {
-                    if ($after->supplier_handle==0  || $after->supplier_handle==1)
-                    {
-                        $arr[$k]['handle']='';
-                        $arr[$k]['have_handle']=2;
-                    }else{
-                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
-                        $arr[$k]['have_handle']=1;
-                    }
+                    $arr[$k]['have_handle']=2;
+//                    if (
+//                        $after->supplier_handle==0
+//                        || $after->supplier_handle==1
+//                    )
+//                    {
+//                        $arr[$k]['handle']='';
+//                        $arr[$k]['have_handle']=2;
+//                    }else{
+//                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+//                        $arr[$k]['have_handle']=1;
+//                    }
                 }else{
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
