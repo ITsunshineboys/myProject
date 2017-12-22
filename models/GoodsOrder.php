@@ -78,7 +78,6 @@ class GoodsOrder extends ActiveRecord
         'z.market_price',
         'z.supplier_price',
         'z.sku',
-        'z.order_id',
         'z.comment_id',
         'a.order_refer',
         'z.freight',
@@ -111,7 +110,6 @@ class GoodsOrder extends ActiveRecord
         'z.market_price',
         'z.supplier_price',
         'z.sku',
-        'z.order_id',
         'z.comment_id',
         'z.freight',
         'a.return_insurance',
@@ -1058,7 +1056,6 @@ class GoodsOrder extends ActiveRecord
                b.waybillnumber,
                b.waybillname,
                z.shipping_type,
-               z.order_id,
                z.goods_price,
                a.order_refer,
                a.buyer_message,
@@ -2780,58 +2777,11 @@ class GoodsOrder extends ActiveRecord
      * @param $user
      * @return array|mixed|null
      */
-    public  static  function  FindUserOrderDetails($postData,$user)
+    public  static  function  FindUserOrderDetails($postData)
     {
+        $select='a.pay_name,a.supplier_id,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.role_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image,z.is_unusual,z.after_sale_services';
         $array=self::GetOrderList()
-            ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
-            ->select('
-           a.pay_name,
-           a.supplier_id,
-           z.order_status,
-           z.customer_service,
-           z.shipping_status,
-           a.pay_status,
-           a.create_time,
-           a.user_id,
-           a.address_id,
-           z.goods_name,
-           a.amount_order,
-           z.goods_number,
-           z.freight,
-           a.order_no,
-           a.create_time,
-           a.paytime,
-           a.user_id,
-           a.role_id,
-           a.address_id,
-           a.return_insurance,
-           z.goods_id,
-           z.goods_attr_id,
-           z.sku,
-           a.address_id,
-           a.invoice_id,
-           supplier_price,
-           z.market_price,
-           b.waybillnumber,
-           b.waybillname,
-           z.shipping_type,
-           z.order_id,
-           z.goods_price,
-           a.order_refer,
-           a.buyer_message,
-           z.comment_id,
-           a.consignee,
-           a.district_code,
-           a.region,
-           a.consignee_mobile,
-           a.invoice_type,
-           a.invoice_header_type,
-           a.invoice_header,
-           a.invoicer_card,
-           a.invoice_content,
-           z.cover_image,
-           z.is_unusual,
-           z.after_sale_services');
+            ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')->select($select);
         if($postData==''){
             $array=[];
         }else{

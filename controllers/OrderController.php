@@ -2648,7 +2648,7 @@ class OrderController extends Controller
                 }
             }
         }
-         $arr=GoodsOrder::FindUserOrderDetails($postData,$user);
+         $arr=GoodsOrder::FindUserOrderDetails($postData);
          if($arr)
          {
              $data=GoodsOrder::GetOrderDetailsData($arr,$user);
@@ -3391,6 +3391,7 @@ class OrderController extends Controller
             $OrderGoods->cover_image=$goods->cover_image;
             $OrderGoods->after_sale_services=$goods->after_sale_services;
             $OrderGoods->subtitle=$goods->subtitle;
+            $OrderGoods->category_id=$goods->category_id;
             $res2= $OrderGoods->save(false);
             if (!$res1  || !$res2)
             {
