@@ -865,11 +865,10 @@ class GoodsOrder extends ActiveRecord
                     }
                     break;
             }
-//            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['amount_order']*0.01);
-            $arr[$k]['amount_order']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']+$arr[$k]['freight']*0.01);
-            $arr[$k]['goods_price']=sprintf('%.2f', (float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['market_price']=sprintf('%.2f', (float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
-            $arr[$k]['supplier_price']=sprintf('%.2f', (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['amount_order']=StringService::formatPrice((float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']+$arr[$k]['freight']*0.01);
+            $arr[$k]['goods_price']=StringService::formatPrice((float)$arr[$k]['goods_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['market_price']=StringService::formatPrice((float)$arr[$k]['market_price']*0.01*$arr[$k]['goods_number']);
+            $arr[$k]['supplier_price']=StringService::formatPrice( (float)$arr[$k]['supplier_price']*0.01*$arr[$k]['goods_number']);
             switch ($arr[$k]['order_refer'])
             {
                 case 1:
@@ -909,6 +908,7 @@ class GoodsOrder extends ActiveRecord
                 ->one();
             if ($after)
             {
+                $isAfter=2;
                 if ($arr[$k]['order_refer']==2)
                 {
                     if ($after->supplier_handle==0  || $after->supplier_handle==1)
@@ -924,9 +924,11 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['have_handle']=2;
                 }
             }else{
+                $isAfter=1;
                 $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                 $arr[$k]['have_handle']=1;
             }
+            $arr[$k]['is_after']=$isAfter;
             unset($arr[$k]['consignee_mobile']);
             unset($arr[$k]['id']);
             unset($arr[$k]['address_id']);
