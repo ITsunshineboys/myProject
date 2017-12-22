@@ -909,6 +909,7 @@ class GoodsOrder extends ActiveRecord
                 if ($arr[$k]['order_refer']==2)
                 {
                     $arr[$k]['have_handle']=2;
+                    $arr[$k]['supplier_handle']=$after->supplier_handle;
 //                    if (
 //                        $after->supplier_handle==0
 //                        || $after->supplier_handle==1
