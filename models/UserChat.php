@@ -22,6 +22,15 @@ use yii\web\UploadedFile;
  */
 class UserChat extends \yii\db\ActiveRecord
 {
+    const TYPE_TEXT=1;
+    const TYPE_IMG=2;
+    const TYPE_AUDIO=3;
+
+    const TYPE=[
+        self::TYPE_TEXT => 'text',
+        self::TYPE_IMG => 'img',
+        self::TYPE_AUDIO => 'audio',
+    ];
     /**
      * @inheritdoc
      */
@@ -174,7 +183,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->content = $content;
                 $chat_record->status=0;
                 $chat_record->send_time = time();
-                $chat_record->type = 'text';
+                $chat_record->type = self::TYPE_TEXT;
                 if (!$chat_record->save(false)) {
                     $trans->rollBack();
                     return $code = 500;
@@ -218,7 +227,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->content = $filepath;
                 $chat_record->status=0;
                 $chat_record->send_time = time();
-                $chat_record->type = 'img';
+                $chat_record->type =  self::TYPE_IMG;
                 if (!$chat_record->save(false)) {
                     $trans->rollBack();
                     return $code = 500;
@@ -257,7 +266,7 @@ class UserChat extends \yii\db\ActiveRecord
                 $chat_record->length=$length;
                 $chat_record->status=0;
                 $chat_record->send_time = time();
-                $chat_record->type = 'audio';
+                $chat_record->type = self::TYPE_AUDIO;
                 if (!$chat_record->save(false)) {
                     $trans->rollBack();
                     return $code = 500;
@@ -321,7 +330,9 @@ class UserChat extends \yii\db\ActiveRecord
             $data['user']['hx_name']=$hx['username'];
         }
         $data['chat_record']=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$recipient_id) or (send_uid=$recipient_id and to_uid=$uid)) and ((send_role_id=$recipient_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$recipient_role_id))")->queryAll();
+
         foreach ($data['chat_record'] as &$v){
+            $v['type']= UserChat::TYPE[$v['type']];
             $v['content']=ChatRecord::userTextDecode($v['content']);
            $chat= ChatRecord::find()->where(['id'=>$v['id']])->one();
            $chat->status=1;

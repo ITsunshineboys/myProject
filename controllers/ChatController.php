@@ -416,6 +416,7 @@ class ChatController extends Controller
 
 
           }
+          $v['type']=UserChat::TYPE[$v['type']];
            $v['nickname']==null?[]:$v['nickname'];
            $v['Hx_name']==null?[]:$v['Hx_name'];
            $v['icon']==null?[]:$v['icon'];

@@ -224,3 +224,6 @@ CREATE TABLE `effect_toponymy` (
   `toponymy` varchar(50) DEFAULT NULL COMMENT '小区名称',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--test 2017.12.22 yr
+ALTER TABLE chat_record  MODIFY COLUMN `type` TINYINT(1);
