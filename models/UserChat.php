@@ -170,6 +170,7 @@ class UserChat extends \yii\db\ActiveRecord
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
         try {
+
             $chat_hx = new ChatService();
             $from = $username;
             $target = [$to_user['username']];
@@ -284,6 +285,18 @@ class UserChat extends \yii\db\ActiveRecord
 
         }
     }
+    public static function chatlimt($uid){
+        list($startTime, $endTime) = StringService::startEndDate('today');
+        if ($startTime) {
+            $startTime = (int)strtotime($startTime);
+        }
+        if ($endTime) {
+            $endTime = (int)(strtotime($endTime));
+
+        }
+        $chat_limt=\Yii::$app->db->createCommand("select * from chat_record where send_uid=to_uid and send_uid = $uid and send_time >= $startTime and send_time <=$endTime ")->queryAll();
+       return count($chat_limt);
+    }
     /**
      * @param $uid
      * @param $role_id
@@ -339,18 +352,7 @@ class UserChat extends \yii\db\ActiveRecord
            $chat->save(false);
             $send_time=date('Y-m-d',$v['send_time']);
 
-            list($startTime, $endTime) = StringService::startEndDate('today');
-            if ($startTime) {
-                $startTime = (int)strtotime($startTime);
-            }
-            if ($endTime) {
-                $endTime = (int)(strtotime($endTime));
 
-            }
-            $chat_limt=\Yii::$app->db->createCommand("select * from chat_record where send_uid=to_uid and send_uid = $uid and send_time >= $startTime and send_time <=$endTime ")->queryAll();
-            if(count($chat_limt)>=10){
-                return 1082;
-            }
              if($send_time==date('Y-m-d',time())){
                  $v['send_time']=date('H:i',$v['send_time']);
 

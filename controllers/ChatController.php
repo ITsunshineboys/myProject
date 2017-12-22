@@ -250,6 +250,14 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $chat_limt = UserChat::chatlimt($u_id);
+        if($chat_limt>=10){
+            $code =1082;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $code=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_uid,$to_role_id);
         return Json::encode([
             'code'=>$code,
@@ -288,6 +296,14 @@ class ChatController extends Controller
         $filepath=UserChat::upload();
         if(is_numeric($filepath)){
             $code=$filepath;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $chat_limt = UserChat::chatlimt($u_id);
+        if($chat_limt>=10){
+            $code =1082;
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
@@ -332,6 +348,14 @@ class ChatController extends Controller
         $filepath=UserChat::upload();
         if(is_numeric($filepath)){
             $code=$filepath;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $chat_limt = UserChat::chatlimt($u_id);
+        if($chat_limt>=10){
+            $code =1082;
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
