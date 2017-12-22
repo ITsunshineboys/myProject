@@ -718,7 +718,7 @@ class OrderController extends Controller
         $freight=$request->post('freight');
         $buyer_message=$request->post('buyer_message','');
         //商品描述，可空
-        $body = $request->post('body');
+        $body = $request->post('body','无');
         $code=1000;
         if (
             !$total_amount
