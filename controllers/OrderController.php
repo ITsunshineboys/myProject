@@ -6019,11 +6019,18 @@ class OrderController extends Controller
                                 break;
                             case 1:
                                 $code=200;
+//                                return Json::encode(
+//                                    [
+//                                        'code'=>$code,
+//                                        'msg'=>'ok',
+//                                        'data'=>$operation
+//                                    ]
+//                                );
                                 return Json::encode(
                                     [
                                         'code'=>$code,
                                         'msg'=>'ok',
-                                        'data'=>$operation
+                                        'data'=>[]
                                     ]
                                 );
                                 break;
