@@ -616,7 +616,7 @@ class OrderController extends Controller
                 $effect=Effect::findOne($id);
                 if (!$effect)
                 {
-                    echo 'sucess';
+                    echo 'success';
                     exit;
                 }
                 $tran = Yii::$app->db->beginTransaction();
@@ -692,7 +692,7 @@ class OrderController extends Controller
                     exit;
                 }
                 $tran->commit();
-                echo 'sucess';
+                echo 'success';
             }
         }else{
             //验证失败
