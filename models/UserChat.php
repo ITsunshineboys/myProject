@@ -156,7 +156,7 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $to_user
      * @return int|mixed
      */
-    public static function sendTextMessage($content, $username,$send_uid,$send_role_id,$to_uid)
+    public static function sendTextMessage($content, $username,$send_uid,$send_role_id,$to_uid,$to_role_id)
     {
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
@@ -168,7 +168,7 @@ class UserChat extends \yii\db\ActiveRecord
             if($re) {
                 $chat_record = new ChatRecord();
                 $chat_record->to_uid = $to_uid;
-                $chat_record->to_role_id = $to_user['last_role_id_app'];
+                $chat_record->to_role_id = $to_role_id;
                 $chat_record->send_uid = $send_uid;
                 $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $content;
@@ -200,7 +200,7 @@ class UserChat extends \yii\db\ActiveRecord
      * @param $filepath
      * @return int|mixed
      */
-    public static function SendImg($username,$send_uid,$send_role_id,$to_uid,$filepath){
+    public static function SendImg($username,$send_uid,$send_role_id,$to_uid,$filepath,$to_role_id){
 
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
@@ -212,7 +212,7 @@ class UserChat extends \yii\db\ActiveRecord
             if($re) {
                 $chat_record = new ChatRecord();
                 $chat_record->to_uid = $to_uid;
-                $chat_record->to_role_id = $to_user['last_role_id_app'];
+                $chat_record->to_role_id = $to_role_id;
                 $chat_record->send_uid = $send_uid;
                 $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $filepath;
@@ -238,7 +238,7 @@ class UserChat extends \yii\db\ActiveRecord
         }
     }
 
-    public static function SendAudio($username,$send_uid,$send_role_id,$to_uid,$filepath,$length){
+    public static function SendAudio($username,$send_uid,$send_role_id,$to_uid,$filepath,$length,$to_role_id){
 
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $trans = \Yii::$app->db->beginTransaction();
@@ -250,7 +250,7 @@ class UserChat extends \yii\db\ActiveRecord
             if($re) {
                 $chat_record = new ChatRecord();
                 $chat_record->to_uid = $to_uid;
-                $chat_record->to_role_id = $to_user['last_role_id_app'];
+                $chat_record->to_role_id = $to_role_id;
                 $chat_record->send_uid = $send_uid;
                 $chat_record->send_role_id = $send_role_id;
                 $chat_record->content = $filepath;

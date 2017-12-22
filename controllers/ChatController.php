@@ -232,6 +232,7 @@ class ChatController extends Controller
         $code=1000;
         $message=trim(\Yii::$app->request->post('message'));
         $to_uid=trim(\Yii::$app->request->post('to_uid'));
+        $to_role_id=trim(\Yii::$app->request->post('role_id'));
         $message=ChatRecord::userTextEncode($message);
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
@@ -249,7 +250,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id']);
+        $code=UserChat::sendTextMessage($message,$send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_uid,$to_role_id);
         return Json::encode([
             'code'=>$code,
             'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
@@ -267,6 +268,7 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $code=1000;
         $to_uid=trim(\Yii::$app->request->get('to_uid'));
+        $to_role_id=trim(\Yii::$app->request->get('role_id'));
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
         $res=$user_hx->getUser($to_user['username']);
@@ -291,7 +293,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath);
+        $code=UserChat::SendImg($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_uid,$filepath,$to_role_id);
         return Json::encode([
             'code'=>$code,
             'msg'=>$code==200?'ok':\Yii::$app->params['errorCodes'][$code]
@@ -309,6 +311,7 @@ class ChatController extends Controller
         list($u_id, $role_id) = $user;
         $code=1000;
         $to_uid=trim(\Yii::$app->request->get('to_uid'));
+        $to_role_id=trim(\Yii::$app->request->get('role_id'));
         $length=trim(\Yii::$app->request->get('length'));//语音长度
         $to_user=User::find()->where(['id'=>$to_uid])->asArray()->one();
         $user_hx=new ChatService();
@@ -334,7 +337,7 @@ class ChatController extends Controller
                 'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $code=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_user['id'],$filepath,$length);
+        $code=UserChat::SendAudio($send_user['username'],$send_user['id'],$send_user['last_role_id_app'],$to_uid,$filepath,$length,$to_role_id);
 
             return Json::encode([
                 'code'=>$code,
