@@ -191,7 +191,7 @@ class GoodsOrder extends ActiveRecord
      * @param $post
      * @return bool
      */
-    public static function Alipaylinenotifydatabase($arr,$post)
+    public static function AliPayLineNotifyDataBase($arr,$post)
     {
         $goods_id=$arr[0];
         $goods_num=$arr[1];
@@ -340,7 +340,6 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
-
             $serires=Series::findOne($Goods->series_id);
             if ($serires)
             {

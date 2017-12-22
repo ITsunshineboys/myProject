@@ -94,8 +94,8 @@ class Alipay extends  ActiveRecord
      * @return AlipayTradeService
      */
     public function Alipaylinenotify(){
-        $notify_url=Yii::$app->request->hostInfo."/order/alipaylinenotify";
-        $return_url=Yii::$app->request->hostInfo."/line/success_pay";
+        $notify_url="https://".$_SERVER["SERVER_NAME"].'/'."/order/alipaylinenotify";
+        $return_url="https://".$_SERVER["SERVER_NAME"].'/'."/line/success_pay";
         $config=(new AlipayConfig())->alipayconfig($notify_url,$return_url);
         $alipaySevice = new AlipayTradeService($config);
         return $alipaySevice;

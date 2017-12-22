@@ -796,7 +796,7 @@ class OrderController extends Controller
                     echo "success";
                     exit;
                 }
-                $res=GoodsOrder::Alipaylinenotifydatabase($arr,$post);
+                $res=GoodsOrder::AliPayLineNotifyDataBase($arr,$post);
                 if ($res==true){
                     echo "success";     //请不要修改或删除
                 }else{
