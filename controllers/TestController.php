@@ -309,4 +309,74 @@ class TestController extends Controller
             return $code;
         }
     }
+
+    public  function  actionTestData()
+    {
+        $arr[]=[
+               "uid"=> "2",
+               'role_id'=>'7',
+               'id'=>'56',
+               'content'=>'uploads/2017/12/16/1513412632.jpg'
+           ] ;
+        $arr[]=[
+            "uid"=> "8",
+            'role_id'=>'6',
+            'id'=>'79',
+            'content'=>'uploads/2017/12/16/1513412632.jpg'
+        ] ;
+        $arr[]=[
+            "uid"=> "8",
+            'role_id'=>'7',
+            'id'=>'111',
+            'content'=>'uploads/2017/12/16/1513412632.jpg'
+        ] ;
+        $arr[]=[
+            "uid"=> "11",
+            'role_id'=>'7',
+            'id'=>'60',
+            'content'=>'uploads/2017/12/16/1513412632.jpg'
+        ] ;
+        $arr[]=[
+            "uid"=> "40",
+            'role_id'=>'7',
+            'id'=>'27',
+            'content'=>'uploads/2017/12/16/1513412632.jpg'
+        ] ;
+        $arr[]=[
+            "uid"=> "8",
+            'role_id'=>'6',
+            'id'=>'77',
+            'content'=>'uploads/2017/12/16/1513412632.jpg'
+        ] ;
+        $arr[]=[
+            "uid"=> "8",
+            'role_id'=>'7',
+            'id'=>'76',
+            'content'=>'uploads/2017/12/16/1513412632.jpg'
+        ];
+//        foreach ($arr as $k =>$v)
+//        {
+//            $a[$k]=0;
+//              foreach ( $arr as $key =>$val)
+//              {
+//                if ($arr[$k]['uid']==$arr[$key]['uid']
+//                    && $arr[$k]['role_id']==$arr[$key]['role_id']
+//                    && $arr[$k]['id']<$arr[$key]['id']
+//                )
+//                {
+//                    $a[$k]=1;
+//                }
+//              }
+//              if ($a[$k]==1)
+//              {
+//                  unset($arr[$k]);
+//              }
+//        }
+//        var_dump($arr);die;
+        $filtered = array_filter($arr, function($item){
+
+            return $item['id'] !== '76';
+        });
+        print_r($filtered);
+    }
 }

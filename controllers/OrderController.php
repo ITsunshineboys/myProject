@@ -2621,7 +2621,8 @@ class OrderController extends Controller
         }
          if(
              array_key_exists('sku', $postData)
-             || !$postData['sku']==0)
+             || !$postData['sku']==0
+         )
          {
             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
@@ -4048,7 +4049,7 @@ class OrderController extends Controller
 //                            $role_id=$GoodsOrder->role_id;
 //                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
                             $GoodsOrder->pay_status=1;
-                            $GoodsOrder->pay_name='支付宝APP支付';
+                            $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
                             $res=$GoodsOrder->save(false);
                             if (!$res)
                             {
@@ -5353,7 +5354,7 @@ class OrderController extends Controller
                         return false;
                     }
                     $GoodsOrder->pay_status=1;
-                    $GoodsOrder->pay_name='微信APP支付';
+                    $GoodsOrder->pay_name=PayService::WE_CHAT_APP_PAY;
                     $res=$GoodsOrder->save(false);
                     if (!$res)
                     {
