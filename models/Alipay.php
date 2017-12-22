@@ -36,7 +36,6 @@ class Alipay extends  ActiveRecord
      * @return bool|mixed|\SimpleXMLElement|string|\vendor\alipay\提交表单HTML文本
      */
     public static function  AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message){
-//        $notify_url=Yii::$app->request->hostInfo.'/'.self::ALIPAY_LINPAY_NOTIFY;
         $notify_url="https://".$_SERVER["SERVER_NAME"].'/'.self::ALIPAY_LINPAY_NOTIFY;
         $return_url=Yii::$app->request->hostInfo.'/'.self::LINE_PAY_SUCCESS;
         $config=(new Alipayconfig())->alipayconfig($notify_url,$return_url);

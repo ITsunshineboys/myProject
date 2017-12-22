@@ -699,6 +699,93 @@ class OrderController extends Controller
             echo "fail";    //请不要修改或删除
         }
     }
+
+
+    /**
+     * 线下店商城支付宝支付提交订单
+     */
+    public function actionOrderLineAliPay(){
+        $request=Yii::$app->request;
+        //商户订单号，商户网站订单系统中唯一订单号，必填
+        $out_trade_no =GoodsOrder::SetOrderNo();
+        //付款金额，必填
+        $total_amount =$request->post('order_price');
+        $goods_id=$request->post('goods_id');
+        $goods_num=$request->post('goods_num');
+        $address_id=$request->post('address_id');
+        $pay_name=PayService::ALI_PAY;
+        $invoice_id=$request->post('invoice_id');
+        $freight=$request->post('freight');
+        $buyer_message=$request->post('buyer_message','');
+        //商品描述，可空
+        $body = $request->post('body');
+        $code=1000;
+        if (
+            !$total_amount
+            ||!$goods_id
+            ||!$goods_num
+            ||!$address_id
+        ){
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $Goods=Goods::findOne($goods_id);
+        if (!$Goods)
+        {
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        //若发票未填-添加发票操作
+        $invoice=Invoice::findOne($invoice_id);
+        if (!$invoice)
+        {
+            $address=UserAddress::findOne($address_id);
+            $in=new Invoice();
+            $in->invoice_type=1;
+            $in->invoice_header_type=1;
+            $in->invoice_header=$address->consignee;
+            $in->invoice_content='明细';
+            $res=$in->save(false);
+            if (!$res)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $invoice_id=$in->id;
+        }
+        if (!$freight)
+        {
+            $freight=0;
+        }
+        $return_insurance=0;
+        //判断金额是否正确
+        $money=$Goods->platform_price*$goods_num+$return_insurance*100+($freight*100);
+        if ($money*0.01 != $total_amount)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $res=Alipay::AliPayLineSubmit($out_trade_no,$Goods->title,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$Goods->supplier_id,$freight,$return_insurance,$buyer_message);
+        if ($res)
+        {
+            $code=200;
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  =>'ok'
+            ]);
+        }
+    }
+
     /**
      * 线下店商城支付宝支付提交订单
      */
@@ -724,8 +811,7 @@ class OrderController extends Controller
             $c=1000;
             return Json::encode([
                 'code' =>  $c,
-                'msg'  => Yii::$app->params['errorCodes'][$c],
-                'data' => null
+                'msg'  => Yii::$app->params['errorCodes'][$c]
             ]);
         }
 
@@ -756,13 +842,12 @@ class OrderController extends Controller
         }
         $return_insurance=0;
         //判断金额是否正确
-        $iscorrect_money=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
-        if (!$iscorrect_money)
+        $code=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
+        if ($code==1000)
         {
-            $c=1000;
             return Json::encode([
-                'code' =>  $c,
-                'msg'  => Yii::$app->params['errorCodes'][$c]
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $res=Alipay::AliPayLineSubmit($out_trade_no,$subject,$total_amount,$body,$goods_id, $goods_num,$address_id,$pay_name,$invoice_id,$supplier_id,$freight,$return_insurance,$buyer_message);
