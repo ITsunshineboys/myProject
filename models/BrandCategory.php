@@ -114,16 +114,30 @@ class BrandCategory extends ActiveRecord
             return [];
         }
 
+        $isSupplier = false;
+        $user = Yii::$app->user->identity;
+        if ($user) {
+            $userRole = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
+            if ($userRole) {
+                $isSupplier = true;
+            }
+        }
+
         $sql = "select b.id, b.name";
         $from = " from {{%" . self::tableName() . "}} bc
             ,{{%" . GoodsBrand::tableName() . "}} b
             ,{{%" . GoodsCategory::tableName() . "}} c";
+        $isSupplier && $from .= ",{{%" . BrandApplication::tableName() . "}} ba";
         $sql .= $from;
+
         $where = " where bc.brand_id = b.id 
             and bc.category_id = c.id 
             and b.status = " . GoodsBrand::STATUS_ONLINE . " 
             and c.deleted = 0
             and bc.category_id = {$categoryId}";
+        $isSupplier && $where .= " and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
+            . " and ba.supplier_id = " . $userRole->id;
+
         $sql .= $where;
         $orderBy = " order by convert(b.name using gbk) asc";
         $sql .= $orderBy;
