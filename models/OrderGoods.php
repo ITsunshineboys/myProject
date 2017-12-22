@@ -12,6 +12,14 @@ use Yii;
 
 class OrderGoods extends ActiveRecord
 {
+
+    const  PLATFORM_PRICE_DESC='平台价';
+    const  SUPPLIER_PRICE_DESC='供应商采购价格';
+    const  COMPANY_PRICE_DESC='装修公司采购价';
+    const  MANAGER_PRICE_DESC='项目经理采购价';
+    const  DESIGNER_PRICE_DESC='设计师采购价';
+    const  WORKER_PRICE_DESC='工人采购价';
+
     /**
      * @return string 返回该AR类关联的数据表名
      */

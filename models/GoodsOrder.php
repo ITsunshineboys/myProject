@@ -885,22 +885,22 @@ class GoodsOrder extends ActiveRecord
             switch ($arr[$k]['role_id'])
             {
                 case 7:
-                    $arr[$k]['role_id']='平台价';
+                    $arr[$k]['role_id']=OrderGoods::PLATFORM_PRICE_DESC;
                     break;
                 case 6:
-                    $arr[$k]['role_id']='供应商采购价格';
+                    $arr[$k]['role_id']=OrderGoods::SUPPLIER_PRICE_DESC;
                     break;
                 case 5:
-                    $arr[$k]['role_id']='装修公司采购价';
+                    $arr[$k]['role_id']=OrderGoods::COMPANY_PRICE_DESC;
                     break;
                 case 4:
-                    $arr[$k]['role_id']='项目经理采购价';
+                    $arr[$k]['role_id']=OrderGoods::MANAGER_PRICE_DESC;
                     break;
                 case 3:
-                    $arr[$k]['role_id']='设计师采购价';
+                    $arr[$k]['role_id']=OrderGoods::DESIGNER_PRICE_DESC;
                     break;
                 case 2:
-                    $arr[$k]['role_id']='工人采购价';
+                    $arr[$k]['role_id']=OrderGoods::WORKER_PRICE_DESC;
                     break;
             }
             $after=OrderAfterSale::find()
