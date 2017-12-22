@@ -1445,6 +1445,7 @@ class GoodsOrder extends ActiveRecord
         if (!$res){
             return null;
         }
+        var_dump($res);die;
         $res['handle_time']=date('Y-m-d H:i',$res['creat_time']);
         unset($res['creat_time']);
         $res['refund_result']=self::Getplatformresult($res['refund_result']);
