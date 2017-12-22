@@ -17,7 +17,7 @@
                         <span>商品名称</span>
                     </div>
                     <div class="col-sm-4">
-                        <input class="form-control" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required ng-class="{'error':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur) || g_flag}" ng-blur="title_blur=!!form.goods_name.$error"/>
+                        <input class="form-control" type="text" placeholder="请输入商品名称" maxlength="32" ng-model="goods_name" ng-change="g_name_change(goods_name)" id="goods_name" name="goods_name" required ng-class="{'error':(form.goods_name.$invalid && submitted)||(form.goods_name.$error.required && title_blur)}" ng-blur="title_blur=!!form.goods_name.$error"/>
                     </div>
                     <div class="col-sm-6 control-label">
                         <span class="prompt_txt">*限1~32个字符，不含特殊字符</span>
