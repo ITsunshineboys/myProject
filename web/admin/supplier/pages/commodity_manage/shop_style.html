@@ -38,12 +38,13 @@
                 </div>
             </div>
             <!--选择品牌-->
-            <div class="row" ng-if="brands_arr.length>0">
+            <div class="row">
                 <div class="col-sm-2 control-label">
                     <span>选择品牌</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                    <select class="form-control" ng-if="brands_arr.length > 0" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                    <p class="form-control-static" ng-if="brands_arr.length == 0">请先添加品牌授权</p>
                 </div>
             </div>
             <!--选择系列-->
