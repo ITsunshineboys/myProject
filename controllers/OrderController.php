@@ -621,11 +621,11 @@ class OrderController extends Controller
                 }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
-                    $earnst=EffectEarnest::find()
+                    $earnest=EffectEarnest::find()
                         ->where(['effect_id'=>$id])
                         ->one();
-                    $earnst->status=1;
-                    if (!$earnst->save(false))
+                    $earnest->status=1;
+                    if (!$earnest->save(false))
                     {
                         echo 'fail';
                         exit;
@@ -646,7 +646,9 @@ class OrderController extends Controller
                                 $tran->rollBack();
                                 return false;
                             };
-                            $effect=Effect::find()->where(['id'=>$effect_id])->one();
+                            $effect=Effect::find()
+                                ->where(['id'=>$effect_id])
+                                ->one();
                             if ($effect)
                             {
                                 $res1=$effect->delete();
