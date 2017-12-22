@@ -908,7 +908,7 @@ class GoodsOrder extends ActiveRecord
                 ->one();
             if ($after)
             {
-                $isAfter=2;
+                $isAfter=1;
                 if ($arr[$k]['order_refer']==2)
                 {
                     if ($after->supplier_handle==0  || $after->supplier_handle==1)
@@ -924,7 +924,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['have_handle']=2;
                 }
             }else{
-                $isAfter=1;
+                $isAfter=0;
                 $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                 $arr[$k]['have_handle']=1;
             }
