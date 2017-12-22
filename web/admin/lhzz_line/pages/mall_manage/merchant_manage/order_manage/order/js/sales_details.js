@@ -16,6 +16,8 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
         order_no: $stateParams.orderNo, // 订单编号
         sku: $stateParams.sku           // 商品编号
     };
+
+    $scope.isException = false; // 默认不显示异常记录
     $scope.platformInter = $stateParams.type;
     $scope.params = params;
 
@@ -27,6 +29,7 @@ app.controller('sales_details', ['$rootScope', '$scope', '$interval', '$state', 
         $scope.goodsDetails = data.goods_value;         // 商品详情信息
         $scope.receiveDetails = data.receive_details;   // 收货详情信息
         if (data.is_refund != 1) {
+            $scope.isException = true;
             _ajax.post('/order/find-unusual-list-lhzz', params, function (res) {
                 console.log(res, '异常信息');
                 $scope.receiving = res.data[0]; // 待发货异常记录
