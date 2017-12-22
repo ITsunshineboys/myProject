@@ -126,6 +126,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             }
 
         }
+        var_dump($effectList);die;
 
         $total = (int)self::find()->where($where)->asArray()->count();
         return ModelService::pageDeal($effectList, $total, $page, $size);
