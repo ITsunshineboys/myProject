@@ -5,6 +5,7 @@ import FastClick from 'fastclick'
 import api from './utils/api'
 import App from './App'
 import router from './router/index'
+import './assets/style/common.css'
 
 Vue.prototype.axios = api
 FastClick.attach(document.body)
