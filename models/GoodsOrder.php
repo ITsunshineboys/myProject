@@ -902,25 +902,38 @@ class GoodsOrder extends ActiveRecord
             }
             $after=OrderAfterSale::find()
                 ->where(['order_no'=>$arr[$k]['order_no']])
+                ->andWhere(['sku'=>$arr[$k]['order_no']])
                 ->one();
             if ($after)
             {
                 $isAfter=1;
                 if ($arr[$k]['order_refer']==2)
                 {
-                    $arr[$k]['have_handle']=2;
-                    $arr[$k]['supplier_handle']=$after->supplier_handle;
-//                    if (
-//                        $after->supplier_handle==0
-//                        || $after->supplier_handle==1
-//                    )
-//                    {
-//                        $arr[$k]['handle']='';
-//                        $arr[$k]['have_handle']=2;
-//                    }else{
-//                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
-//                        $arr[$k]['have_handle']=1;
-//                    }
+//                    $arr[$k]['have_handle']=2;
+//                    $arr[$k]['supplier_handle']=$after->supplier_handle;
+                    if (
+                        $after->supplier_handle==0
+                        || $after->supplier_handle==1
+                    )
+                    {
+                        $arr[$k]['handle']='';
+                        $arr[$k]['have_handle']=2;
+                    }else{
+                        if ($after->supplier_handle==2)
+                        {
+                            $platForm=OrderPlatForm::find()
+                                ->where(['order_no'=>$arr[$k]['order_no']])
+                                ->andWhere(['sku'=>$arr[$k]['order_no']])
+                                ->one();
+                            if ($platForm)
+                            {
+                                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+                                $arr[$k]['have_handle']=2;
+                            }
+                        }
+                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+                        $arr[$k]['have_handle']=1;
+                    }
                 }else{
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
