@@ -1448,7 +1448,13 @@ class GoodsOrder extends ActiveRecord
         $res['handle_time']=date('Y-m-d H:i',$res['creat_time']);
         unset($res['creat_time']);
         $res['refund_result']=self::Getplatformresult($res['refund_result']);
-        $res['refund_type']=self::Getplatformtype($res['refund_type']);
+        if (empty($res['refund_type']))
+        {
+            $res['refund_type']=self::Getplatformtype($res['refund_type']);
+        }else
+        {
+            $res['refund_type']='';
+        }
         $res['refund_time']=date('Y-m-d H:i',$res['refund_time']);
         return $res;
     }
