@@ -135,7 +135,7 @@ class BrandCategory extends ActiveRecord
             and b.status = " . GoodsBrand::STATUS_ONLINE . " 
             and c.deleted = 0
             and bc.category_id = {$categoryId}";
-        $isSupplier && $where .= " and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
+        $isSupplier && $where .= " and ba.brand_id = b.id and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
             . " and ba.supplier_id = " . $userRole->id;
 
         $sql .= $where;
