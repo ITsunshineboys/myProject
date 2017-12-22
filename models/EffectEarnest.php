@@ -121,12 +121,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
             if(isset($effect['create_time'])){
                 $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
             }
-            if($effect['status']==0 && $effect['item']==0){
-                    unset($effect);
-            }
+//            if($effect['status']==0 && $effect['item']==0){
+//                    unset($effect);
+//            }
 
         }
-        var_dump($effectList);die;
+
 
         $total = (int)self::find()->where($where)->asArray()->count();
         return ModelService::pageDeal($effectList, $total, $page, $size);
