@@ -5919,8 +5919,8 @@ class OrderController extends Controller
                                 foreach ($after as &$afterList)
                                 {
                                     if ($afterList!=0 && $afterList !=1)
-                                    {$data[]=['name'=>OrderAfterSale::AFTER_SALE_SERVICES[$afterList],
-                                            'value'=>array_search(OrderAfterSale::AFTER_SALE_SERVICES[$afterList],OrderPlatForm::PLATFORM_HANDLE_TYPE)];
+                                    {$data[]=['name'=>OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$afterList],
+                                            'value'=>array_search(OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$afterList],OrderPlatForm::PLATFORM_HANDLE_TYPE)];
                                     }
                                 }
                                 return Json::encode(
@@ -5990,8 +5990,8 @@ class OrderController extends Controller
                                 foreach ($after as &$afterList)
                                 {
                                     if ($afterList!=0 && $afterList !=1)
-                                    {$data[]=['name'=>OrderAfterSale::AFTER_SALE_SERVICES[$afterList],
-                                        'value'=>array_search(OrderAfterSale::AFTER_SALE_SERVICES[$afterList],OrderPlatForm::PLATFORM_HANDLE_TYPE)];
+                                    {$data[]=['name'=>OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$afterList],
+                                        'value'=>array_search(OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$afterList],OrderPlatForm::PLATFORM_HANDLE_TYPE)];
                                     }
                                 }
                                 return Json::encode(
