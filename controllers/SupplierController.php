@@ -1095,7 +1095,7 @@ class SupplierController extends Controller
             {
                 $tran->rollBack();
             }
-            $supplier->status=4;
+            $supplier->status=Supplier::STATUS_ONLINE;
             if (!$supplier->save(false))
             {
                 $tran->rollBack();
