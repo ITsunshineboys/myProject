@@ -919,20 +919,23 @@ class GoodsOrder extends ActiveRecord
                         $arr[$k]['handle']='';
                         $arr[$k]['have_handle']=2;
                     }else{
+
                         $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
-                        $arr[$k]['have_handle']=1;
-                        if ($after->supplier_handle==2)
-                        {
-                            $platForm=OrderPlatForm::find()
-                                ->where(['order_no'=>$arr[$k]['order_no']])
-                                ->andWhere(['sku'=>$arr[$k]['order_no']])
-                                ->one();
-                            if ($platForm)
-                            {
-                                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
-                                $arr[$k]['have_handle']=2;
-                            }
-                        }
+                        $arr[$k]['have_handle']=2;
+//                        $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+//                        $arr[$k]['have_handle']=1;
+//                        if ($after->supplier_handle==2)
+//                        {
+//                            $platForm=OrderPlatForm::find()
+//                                ->where(['order_no'=>$arr[$k]['order_no']])
+//                                ->andWhere(['sku'=>$arr[$k]['order_no']])
+//                                ->one();
+//                            if ($platForm)
+//                            {
+//                                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+//                                $arr[$k]['have_handle']=2;
+//                            }
+//                        }
 
                     }
                 }else{
