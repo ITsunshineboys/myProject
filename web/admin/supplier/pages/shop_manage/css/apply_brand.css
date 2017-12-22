@@ -3,16 +3,6 @@ li{
     list-style: none;
 }
 
-section{
-    margin-top: 100px;
-}
-
-/*所属分类*/
-.sel_group{
-    margin-top: 20px;
-
-}
-
 /*授权期限*/
 .red_mark{
     color: red;
