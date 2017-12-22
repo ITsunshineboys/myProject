@@ -1,130 +1,128 @@
 <link rel="stylesheet" href="pages/shop_manage/css/apply_brand.css">
 <div ng-controller="applybrand_ctrl">
-    <section>
-        <form name="apply_brand_form" novalidate class="form-horizontal sel_group">
-            <!--所属分类-->
-            <div class="form-group">
-                <span class="col-sm-2 control-label">所属分类</span>
-                <div class="col-sm-10 form-inline">
-                    <!--商家所属分类一级下拉框-->
-                    <select  class="form-control" ng-options="item.id as item.title for item in firstclass"
-                             ng-model="firstselect" ng-change="subClass(firstselect)"></select>
-                    <!--商家所属分类二级下拉-->
-                    <select class="form-control"  ng-options="item.id as item.title for item in secondclass"
-                            ng-model="secselect" ng-change="thirdClass(secselect)"></select>
-                    <!--商家所属分类三级下拉-->
-                    <select class="form-control"  ng-options="item.id as item.title for item in thirdclass"
-                            ng-model="params.category_id"></select>
-                </div>
+    <form name="apply_brand_form" novalidate class="form-horizontal sel_group">
+        <!--所属分类-->
+        <div class="form-group">
+            <span class="col-sm-2 control-label">所属分类</span>
+            <div class="col-sm-10 form-inline">
+                <!--商家所属分类一级下拉框-->
+                <select  class="form-control" ng-options="item.id as item.title for item in firstclass"
+                         ng-model="firstselect" ng-change="subClass(firstselect)"></select>
+                <!--商家所属分类二级下拉-->
+                <select class="form-control"  ng-options="item.id as item.title for item in secondclass"
+                        ng-model="secselect" ng-change="thirdClass(secselect)"></select>
+                <!--商家所属分类三级下拉-->
+                <select class="form-control"  ng-options="item.id as item.title for item in thirdclass"
+                        ng-model="params.category_id"></select>
             </div>
+        </div>
 
-            <!--品牌-->
-            <div class="form-group">
-                <span class="col-sm-2 control-label">
-                    <i class="glyphicon glyphicon-asterisk red_mark"></i>
-                    品牌
-                </span>
-                <div class="col-sm-2">
-                    <select class="form-control" ng-options="item.id as item.name for item in brandslist"
-                            ng-model="params.brand_id"></select>
-                </div>
+        <!--品牌-->
+        <div class="form-group">
+            <span class="col-sm-2 control-label">
+                <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                品牌
+            </span>
+            <div class="col-sm-2">
+                <select class="form-control" ng-options="item.id as item.name for item in brandslist"
+                        ng-model="params.brand_id"></select>
             </div>
+        </div>
 
-            <!--授权期限-->
-            <div class="form-group">
-                <span class="col-sm-2 control-label">
-                    <i class="glyphicon glyphicon-asterisk red_mark"></i>
-                    授权期限
-                </span>
-                <div class="col-sm-10 form-inline">
-                    <input class="form-control" ng-class="{'reg-error': startTimeIsNull}" ng-focus="startTimeIsNull = false"
-                           type="text" placeholder="请输入初始日期" id="starttime" ngc-lay-date
-                           max-date="{{params.authorization_end}}" ng-model="params.authorization_start">
-                    至
-                    <input class="form-control" ng-class="{'reg-error': endTimeIsNull}" ng-focus="endTimeIsNull = false"
-                           type="text" placeholder="请输入结束日期" id="endtime" ngc-lay-date
-                           min-date="{{params.authorization_start}}" ng-model="params.authorization_end">
-                    <span>*请与授权书上的时间保持一致</span>
-                </div>
+        <!--授权期限-->
+        <div class="form-group">
+            <span class="col-sm-2 control-label">
+                <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                授权期限
+            </span>
+            <div class="col-sm-10 form-inline">
+                <input class="form-control" ng-class="{'reg-error': startTimeIsNull}" ng-focus="startTimeIsNull = false"
+                       type="text" placeholder="请输入初始日期" id="starttime" ngc-lay-date
+                       max-date="{{params.authorization_end}}" ng-model="params.authorization_start">
+                至
+                <input class="form-control" ng-class="{'reg-error': endTimeIsNull}" ng-focus="endTimeIsNull = false"
+                       type="text" placeholder="请输入结束日期" id="endtime" ngc-lay-date
+                       min-date="{{params.authorization_start}}" ng-model="params.authorization_end">
+                <span>*请与授权书上的时间保持一致</span>
             </div>
-            <hr/>
+        </div>
+        <hr/>
 
-            <!--授权书上传-->
-            <div class="form-group">
-                <span class="col-sm-2 control-label">
-                    <i class="glyphicon glyphicon-asterisk red_mark"></i>
-                    授权书上传
-                </span>
-                <div class="col-sm-10 form-inline">
-                    <p>
-                        <input class="form-control" type="text" placeholder="请输入名称"
-                               ng-class="{'reg-error': licensed.isName}" ng-focus="licensed.isName = false" ng-model="licensed.name">
-                    </p>
-                    <p><img ngf-thumbnail="licensed.file || 'lib/images/default.png'" class="picstyle"></p>
-                    <p class="tip-msg">图片大小5M内，支持JPG、PNG、JPGE</p>
-                    <p>
-                        <button class="btn btn-default btn-upload" type="button" ng-disabled="uploadDisabled"
-                                ngf-select="upload(licensed.file, $invalidFiles, 'licensed')"
-                                ngf-pattern="'.jpg, .png, .jpge'"
-                                ngf-accept="'.jpg, .png, .jpge'"
-                                ng-model="licensed.file">{{licensed.text}}</button>
-                    </p>
-                    <p class="red_mark" ng-if="licensed.isNull">
-                        <i class="glyphicon glyphicon-asterisk"></i>
-                        <span>请上传图片</span>
-                    </p>
-                    <p class="red_mark" ng-if="licensed.isPattern">
-                        <i class="glyphicon glyphicon-asterisk"></i>
-                        <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                    </p>
-                </div>
+        <!--授权书上传-->
+        <div class="form-group">
+            <span class="col-sm-2 control-label">
+                <i class="glyphicon glyphicon-asterisk red_mark"></i>
+                授权书上传
+            </span>
+            <div class="col-sm-10 form-inline">
+                <p>
+                    <input class="form-control" type="text" placeholder="请输入名称"
+                           ng-class="{'reg-error': licensed.isName}" ng-focus="licensed.isName = false" ng-model="licensed.name">
+                </p>
+                <p><img ngf-thumbnail="licensed.file || 'lib/images/default.png'" class="picstyle"></p>
+                <p class="tip-msg">图片大小5M内，支持JPG、PNG、JPGE</p>
+                <p>
+                    <button class="btn btn-default btn-upload" type="button" ng-disabled="uploadDisabled"
+                            ngf-select="upload(licensed.file, $invalidFiles, 'licensed')"
+                            ngf-pattern="'.jpg, .png, .jpge'"
+                            ngf-accept="'.jpg, .png, .jpge'"
+                            ng-model="licensed.file">{{licensed.text}}</button>
+                </p>
+                <p class="red_mark" ng-if="licensed.isNull">
+                    <i class="glyphicon glyphicon-asterisk"></i>
+                    <span>请上传图片</span>
+                </p>
+                <p class="red_mark" ng-if="licensed.isPattern">
+                    <i class="glyphicon glyphicon-asterisk"></i>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </p>
             </div>
-            <!--添加授权书-->
-            <div class="form-group" ng-repeat="obj in licensedArray track by $index">
-                <div class="col-sm-10 col-sm-offset-2 form-inline">
-                    <p>
-                        <span class="addpic" style="top:8px;" ng-click="delLicensed($index)">
-                            <i class="glyphicon glyphicon-minus"></i>
-                        </span>
-                        <input class="form-control" type="text" placeholder="请输入名称"
-                               ng-class="{'reg-error': obj.isName}" ng-focus="obj.isName = false" ng-model="obj.name">
-                    </p>
-                    <p><img ngf-thumbnail="obj.file || 'lib/images/default.png'" class="picstyle"></p>
-                    <p class="tip-msg">图片大小5M内，支持JPG、PNG、JPGE</p>
-                    <p>
-                        <button class="btn btn-default" type="button" ng-disabled="uploadDisabled"
-                                ngf-select="upload(obj.file, $invalidFiles, 'licensedArray', 'array', $index)"
-                                ngf-pattern="'.jpg, .png, .jpge'"
-                                ngf-accept="'.jpg, .png, .jpge'"
-                                ng-model="obj.file">{{obj.text}}</button>
-                    </p>
-                    <p class="red_mark" ng-if="obj.isNull">
-                        <i class="glyphicon glyphicon-asterisk"></i>
-                        <span>请上传图片</span>
-                    </p>
-                    <p class="red_mark" ng-if="obj.isPattern">
-                        <i class="glyphicon glyphicon-asterisk"></i>
-                        <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
-                    </p>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-2">
-                    <span class="addpic" ng-click="addLicensed()">
-                        <i class="glyphicon glyphicon-plus"></i>
+        </div>
+        <!--添加授权书-->
+        <div class="form-group" ng-repeat="obj in licensedArray track by $index">
+            <div class="col-sm-10 col-sm-offset-2 form-inline">
+                <p>
+                    <span class="addpic" style="top:8px;" ng-click="delLicensed($index)">
+                        <i class="glyphicon glyphicon-minus"></i>
                     </span>
-                    <span class="tip-msg">如果逐级授权请添加图片，输入相应名称描述</span>
-                </div>
+                    <input class="form-control" type="text" placeholder="请输入名称"
+                           ng-class="{'reg-error': obj.isName}" ng-focus="obj.isName = false" ng-model="obj.name">
+                </p>
+                <p><img ngf-thumbnail="obj.file || 'lib/images/default.png'" class="picstyle"></p>
+                <p class="tip-msg">图片大小5M内，支持JPG、PNG、JPGE</p>
+                <p>
+                    <button class="btn btn-default" type="button" ng-disabled="uploadDisabled"
+                            ngf-select="upload(obj.file, $invalidFiles, 'licensedArray', 'array', $index)"
+                            ngf-pattern="'.jpg, .png, .jpge'"
+                            ngf-accept="'.jpg, .png, .jpge'"
+                            ng-model="obj.file">{{obj.text}}</button>
+                </p>
+                <p class="red_mark" ng-if="obj.isNull">
+                    <i class="glyphicon glyphicon-asterisk"></i>
+                    <span>请上传图片</span>
+                </p>
+                <p class="red_mark" ng-if="obj.isPattern">
+                    <i class="glyphicon glyphicon-asterisk"></i>
+                    <span>上传图片格式不正确或尺寸不匹配，请重新上传</span>
+                </p>
             </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <span class="addpic" ng-click="addLicensed()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </span>
+                <span class="tip-msg">如果逐级授权请添加图片，输入相应名称描述</span>
+            </div>
+        </div>
 
-            <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-2">
-                    <button class="btn btn-primary" type="button" ng-disabled="uploadDisabled" ng-click="licenseSubmit()">确认</button>
-                    <button class="btn btn-default" ui-sref="shop_manage({authorize_flag:true})">返回</button>
-                </div>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+                <button class="btn btn-primary" type="button" ng-disabled="uploadDisabled" ng-click="licenseSubmit()">确认</button>
+                <button class="btn btn-default" ui-sref="shop_manage({authorize_flag:true})">返回</button>
             </div>
-        </form>
-    </section>
+        </div>
+    </form>
 
     <div class="modal customer_modal detail_modal fade" id="sure_addbrand" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog" role="document">
@@ -141,5 +139,4 @@
             </div>
         </div>
     </div>
-
 </div>
