@@ -13,14 +13,14 @@ use yii\helpers\Json;
 class Wxpay  extends ActiveRecord
 {
         const  EFFECT_NOTIFY_URL='/order/wx-pay-effect-earnest-notify';
-        const  LINEPAY_NOTIFY_URL='/order/order-line-wx-pay-notify';
+        const  LINE_PAY_NOTIFY_URL='/order/order-line-wx-pay-notify';
         const  PAY_CANCEL_URL='/line/#!/order_commodity';
-        const  PAY_SUCESS_URL='/line/#!/pay_success';
+        const  PAY_SUCCESS_URL='/line/#!/pay_success';
         const  PAY_FAIL_URL='/line/#!/order_commodity';
         const  ORDER_APP_PAY_URL='/order/wx-notify-database';
         const  WX_RECHARGE_URL='/withdrawals/wx-recharge-database';
         const  EFFECT_BODY='样板间申请费';
-        const  NO_LOGIN_CACHE_FREFIX='no_login_cachce_prefix_';
+        const  NO_LOGIN_CACHE_FREFIX='no_login_cache_prefix_';
         const  ACCESS_TOKEN='access_token';
         const  TICKET='ticket';
         /**
@@ -64,14 +64,14 @@ class Wxpay  extends ActiveRecord
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("goods");
-            $input->SetNotify_url(Yii::$app->request->hostInfo.self::LINEPAY_NOTIFY_URL);
+            $input->SetNotify_url(Yii::$app->request->hostInfo.self::LINE_PAY_NOTIFY_URL);
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid($openId);
             $order = WxPayApi::unifiedOrder($input);
             $jsApiParameters = $tools->GetJsApiParameters($order);
             $failurl=Yii::$app->request->hostInfo.self::PAY_FAIL_URL;
             $cancelurl=Yii::$app->request->hostInfo.self::PAY_CANCEL_URL;
-            $successurl=Yii::$app->request->hostInfo.self::PAY_SUCESS_URL;
+            $successurl=Yii::$app->request->hostInfo.self::PAY_SUCCESS_URL;
             echo "<script type='text/javascript'>if (typeof WeixinJSBridge == 'undefined'){if( document.addEventListener ){document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);}else if (document.attachEvent){document.attachEvent('WeixinJSBridgeReady', jsApiCall);document.attachEvent('onWeixinJSBridgeReady', jsApiCall);}}else{jsApiCall();}//调用微信JS api 支付
      function jsApiCall(){ WeixinJSBridge.invoke('getBrandWCPayRequest',".$jsApiParameters.",function(res){if(res.err_msg == 'get_brand_wcpay_request:cancel'){window.location.href='".$cancelurl."';};if(res.err_msg == 'get_brand_wcpay_request:ok'){window.location.href='".$successurl."';};if(res.err_msg == 'get_brand_wcpay_request:fail'){window.location.href='".$failurl."';};});}
     </script>";
