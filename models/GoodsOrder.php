@@ -1211,7 +1211,7 @@ class GoodsOrder extends ActiveRecord
      * @param $shipping_type
      * @return int
      */
-    public static function Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type){
+    public static function SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type){
         $create_time=time();
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
         $trans = \Yii::$app->db->beginTransaction();

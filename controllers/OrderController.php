@@ -1814,7 +1814,7 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $res=GoodsOrder::Supplierdelivery($sku,$order_no,$waybillnumber,$shipping_type);
+        $res=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type);
         if ($res==200){
             return Json::encode([
                 'code' => 200,
@@ -5913,7 +5913,6 @@ class OrderController extends Controller
                     {
                         switch($OrderGoods->customer_service){
                             case 0:
-
                                 $code=200;
                                 return Json::encode(
                                     [
@@ -5929,7 +5928,7 @@ class OrderController extends Controller
                                     [
                                         'code'=>$code,
                                         'msg'=>'ok',
-                                        'data'=>[]
+                                        'data'=>$operation
                                     ]
                                 );
                                 break;
