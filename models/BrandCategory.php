@@ -105,9 +105,10 @@ class BrandCategory extends ActiveRecord
      * Get brands by category id
      *
      * @param  int $categoryId category id
+     * @param  int $fromAddGoodsPage if from "add goods" page default 0
      * @return array
      */
-    public static function brandsByCategoryId($categoryId)
+    public static function brandsByCategoryId($categoryId, $fromAddGoodsPage = 0)
     {
         $categoryId = (int)$categoryId;
         if ($categoryId <= 0) {
@@ -116,7 +117,7 @@ class BrandCategory extends ActiveRecord
 
         $isSupplier = false;
         $user = Yii::$app->user->identity;
-        if ($user) {
+        if ($fromAddGoodsPage && $user) {
             $userRole = UserRole::roleUser($user, Yii::$app->params['supplierRoleId']);
             if ($userRole) {
                 $isSupplier = true;
