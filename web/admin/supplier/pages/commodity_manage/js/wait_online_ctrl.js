@@ -84,7 +84,10 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.brands_arr=[];
 	$scope.series_arr=[];
 	$scope.styles_arr=[];
-	_ajax.get('/mall/category-brands-styles-series',{category_id:+goods_item.category_id},function (res) {
+	_ajax.get('/mall/category-brands-styles-series',{
+		category_id:+goods_item.category_id,
+		from_add_goods_page:1
+	},function (res) {
 		/*品牌、系列、风格 下拉框开始*/
 		$scope.brands_arr=res.data.category_brands_styles_series.brands;
 		$scope.series_arr=res.data.category_brands_styles_series.series;

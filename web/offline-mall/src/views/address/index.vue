@@ -2,7 +2,7 @@
     <div>
       <x-header :left-options="{backText: ''}">编辑收货地址</x-header>
       <div class="bg-white address-box">
-        <x-input class="consignee-box" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" v-model="consignee"></x-input>
+        <x-input class="consignee-box" on-change="consignee" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" v-model="consignee"></x-input>
         <x-input class="phone-box" title="联系电话" :placeholder="'请输入联系电话'" mask="999 9999 9999" v-model="contactNumber" :max="13" is-type="china-mobile"></x-input>
         <group class="choose-address-box" label-width="5rem" label-align="left">
           <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
@@ -33,7 +33,7 @@
         consignee: '',
         contactNumber: '',
         addressData: ChinaAddressData,
-        addressValue: ['广东省', '深圳市', '南山区']
+        addressValue: ['四川省', '成都市', '锦江区']
       }
     }
   }

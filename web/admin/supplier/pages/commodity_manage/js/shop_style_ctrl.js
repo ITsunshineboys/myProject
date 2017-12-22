@@ -37,7 +37,10 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.series_arr = [];
 	$scope.styles_arr = [];
 	/*品牌、系列、风格 下拉框*/
-	_ajax.get('/mall/category-brands-styles-series', {category_id: +$scope.category_id}, function (res) {
+	_ajax.get('/mall/category-brands-styles-series', {
+		category_id: +$scope.category_id,
+		from_add_goods_page:1
+	}, function (res) {
 		console.log(res);
 		//初始化下拉框的第一项
 		$scope.brands_arr = res.data.category_brands_styles_series.brands;
