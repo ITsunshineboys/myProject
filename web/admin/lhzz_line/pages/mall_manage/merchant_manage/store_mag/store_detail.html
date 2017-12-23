@@ -53,7 +53,7 @@
         <div class="form-group">
             <span class="col-md-2 control-label">店铺LOGO</span>
             <div class="col-md-10 form-control-static">
-                <img ng-src="{{result.icon}}" alt="店铺logo">
+                <img ng-src="{{result.icon}}" alt="店铺logo" class="pic-style">
             </div>
         </div>
 
@@ -68,7 +68,7 @@
         </div>
 
         <div class="form-group">
-            <span class="col-md-2 control-label">    </span>
+            <span class="col-md-2 control-label"></span>
             <div class="col-md-10 form-control-static">
                 <div class="col-md-2 score">店家服务</div>
                 <div class="col-md-1" ng-bind="result.store_service_score"></div>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="form-group">
-            <span class="col-md-2 control-label">    </span>
+            <span class="col-md-2 control-label"></span>
             <div class="col-md-10 form-control-static">
                 <div class="col-md-2 score">物流速度</div>
                 <div class="col-md-1" ng-bind="result.logistics_speed_score"></div>
@@ -151,7 +151,7 @@
         <div class="shop_money">
             <span>质保金</span>
             <span>{{result.quality_guarantee_deposit | currency:'¥'}}</span>
-            <span>已免除</span>
+            <span class="red">已免除</span>
         </div>
 
         <!--&lt;!&ndash;是否支持线下体验店&ndash;&gt;-->
