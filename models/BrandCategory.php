@@ -124,7 +124,7 @@ class BrandCategory extends ActiveRecord
             }
         }
 
-        $sql = "select b.id, b.name";
+        $sql = "select distinct(b.id), b.name";
         $from = " from {{%" . self::tableName() . "}} bc
             ,{{%" . GoodsBrand::tableName() . "}} b
             ,{{%" . GoodsCategory::tableName() . "}} c";
