@@ -95,6 +95,7 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 		res.data.length===0?$scope.comment_flag=false:$scope.comment_flag=true;
 
 		$scope.comment_content=res.data.content;//评论内容
+		$scope.comment_img=res.data.image;// 评论图片
 		$scope.comment_score=res.data.score;//商品评分
 		$scope.comment_store_service_score=res.data.store_service_score;////店家服务评分
 		$scope.comment_logistics_speed_score=res.data.logistics_speed_score;//物流速度评分

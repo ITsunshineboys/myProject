@@ -11,19 +11,16 @@
           <x-textarea  :title="'详细地址'" @on-change="addressChange" :placeholder="'请输入详细地址'" v-model="detailAddress" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
       </div>
-      <x-button class="save-btn" :class="{'save-btn-true':requiredStatus && phoneStatus && addressStatus}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!requiredStatus || !phoneStatus || !addressStatus"></x-button>
+      <x-button v-model="showHideOnBlur" class="save-btn" :class="{'save-btn-true':requiredStatus && phoneStatus && addressStatus}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!requiredStatus || !phoneStatus || !addressStatus"></x-button>
 
-      <group>
-        <x-switch v-model="showHideOnBlur" :title="'hide on clicking mask'"></x-switch>
-      </group>
-      <div v-transfer-dom >
+      <!--确认模态框-->
+      <div v-transfer-dom>
         <x-dialog @on-hide="hide"  v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
           <div class="modal-save-success">
             <span>保存成功</span>
           </div>
           <div @click="showHideOnBlur=false">
             <span class="modal-save-btn">确定</span>
-            <!--<span class="vux-close"></span>-->
           </div>
         </x-dialog>
       </div>
@@ -62,6 +59,7 @@
     },
     methods: {
       btnClick () {
+        this.showHideOnBlur = true
         this.axios.post('/order/add-line-receive-address', {
           consignee: this.consignee,
           mobile: this.phoneNumber,
@@ -70,24 +68,23 @@
         }, function (res) {
           console.log(res)
         })
-//        console.log(this.addressValue[2])
       },
       consigneeChange (value) {   // 收货人
         let that = this
         value === '' ? that.requiredStatus = false : that.requiredStatus = true
       },
-      phoneChange () {
+      phoneChange () {           // 电话号码
         let that = this
         that.phoneStatus = this.$refs.phone_ref.valid
         if (that.phoneStatus === true) {
           that.phoneNumber === '' ? that.phoneStatus = false : that.phoneStatus = true
         }
       },
-      addressChange () {
+      addressChange () {         // 详细地址
         let that = this
         that.detailAddress === '' ? that.addressStatus = false : that.addressStatus = true
       },
-      hide () {
+      hide () {                 // 关闭模态框时，跳转回订单页
         this.$router.go(-1)
       }
     }
@@ -150,20 +147,16 @@
     color: #666;
   }
   .modal-save-success{
-    height: 160px;
-    /*margin-bottom: 20px;*/
-    line-height: 160px;
+    height: 110px;
+    line-height: 110px;
     text-align: center;
     border-bottom: 1px solid #CDD3D7;
   }
-    .modal-save-btn{
-
-    }
-  .vux-close {
-
-    margin-top: 8px;
-    margin-bottom: 8px;
+  .modal-save-btn{
     color:#222;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
   }
   }
 </style>
