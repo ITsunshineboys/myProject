@@ -811,6 +811,11 @@ class Goods extends ActiveRecord
                 $code = 1022;
                 return $code;
             }
+
+            if (!$this->validateSupplierPrice()) {
+                $code = 1000;
+                return $code;
+            }
         } else {
             $this->offline_uid > 0 && $code = 403;
         }
