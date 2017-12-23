@@ -2,7 +2,7 @@
     <div>
       <x-header :left-options="{backText: ''}">编辑收货地址</x-header>
       <div class="bg-white address-box">
-        <x-input class="consignee-box" v-model="consignee" @on-change="consigneeChange" title="收货人" label-width="5rem" :placeholder="'请输入姓名'"></x-input>
+        <x-input class="consignee-box" v-model="consignee" @on-change="consigneeChange" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" :max=10></x-input>
         <x-input class="phone-box"  ref="phone_ref" @on-change="phoneChange" title="联系电话" name="mobile"  v-model="phoneNumber"  placeholder="请输入联系电话" keyboard="number" is-type="china-mobile" :max="11"></x-input>
         <group class="choose-address-box" label-width="5rem" label-align="left">
           <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
