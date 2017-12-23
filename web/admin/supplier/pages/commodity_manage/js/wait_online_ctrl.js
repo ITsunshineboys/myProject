@@ -357,7 +357,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
     let description = UE.getEditor('editor').getContent();//富文本编辑器
-		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.own_submitted && !$scope.price_flag && !$scope.d_flag &&!!$scope.series_model && !!$scope.style_model){
+		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.own_submitted && !$scope.price_flag &&!!$scope.series_model && !!$scope.style_model && $scope.brands_arr.length > 0){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票

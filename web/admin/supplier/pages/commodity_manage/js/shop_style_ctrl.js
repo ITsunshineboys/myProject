@@ -309,7 +309,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		}
 
 		/*判断必填项，全部ok，调用添加接口*/
-		if (valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1 && !$scope.d_flag) {
+		if (valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0) {
+			console.log($scope.brands_arr.length)
 			console.log($scope.own_submitted);
 			let description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.success_variable = '#on_shelves_add_success';

@@ -373,7 +373,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.edit_confirm = function (valid, error) {
         console.log($scope.series_model);
         console.log($scope.style_model);
-        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.own_submitted&& !$scope.d_flag && !!$scope.series_model && !!$scope.style_model) {
+        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.own_submitted && !!$scope.series_model && !!$scope.style_model && $scope.brands_arr.length > 0) {
             let description = UE.getEditor('editor').getContent();//富文本编辑器
             $scope.change_ok = '#change_ok';//编辑成功
             $scope.after_sale_services = [];

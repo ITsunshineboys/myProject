@@ -23,7 +23,7 @@
                        ng-blur="title_blur=!!form.goods_name.$error"/>
             </div>
             <div class="col-sm-6 control-label">
-                <span class="small_txt">*限1~32个字符，不含特殊字符</span>
+                <span class="small_txt">*限1~32个字符</span>
             </div>
         </div>
         <!--商品特色 -->
@@ -35,11 +35,11 @@
             <div class="col-sm-4">
                 <input class="form-control" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name"
                        ng-change="d_name_change(des_name)" id="des_name" name="des_name" required
-                       ng-class="{'error':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}"
+                       ng-class="{'error':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)}"
                        ng-blur="des_blur=!!form.des_name.$error"/>
             </div>
             <div class="col-sm-6 control-label">
-                <span class="small_txt">*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
+                <span class="small_txt">*1～16个字符；例：家用环保 强化 复合 防水耐磨</span>
             </div>
         </div>
         <div class="row">
@@ -47,8 +47,8 @@
                 <span>选择品牌</span>
             </div>
             <div class="col-sm-4">
-                <select class="form-control" ng-model="myng.brand_model"
-                        ng-options="item.id as item.name for item in brands_arr"></select>
+                <select class="form-control" ng-if="brands_arr.length > 0" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                <p class="form-control-static" ng-if="brands_arr.length == 0" style="color: red;">请先添加品牌授权</p>
             </div>
         </div>
         <!--选择系列-->
@@ -154,7 +154,7 @@
         <div class="row">
             <div class="col-sm-2 control-label">
                 <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
-                <span>上传图片</span>
+                <span>上传图片(封面)</span>
             </div>
             <div class="col-sm-10 control-label">
                 <div class="img_box">
@@ -175,7 +175,7 @@
         <!--上传图片-->
         <div class="row">
             <div class="col-sm-2 control-label">
-                <span>上传图片</span>
+                <span>上传图片(轮播)</span>
             </div>
             <div class="col-sm-10 control-label">
                 <div class="img_box" ng-repeat="item in upload_img_arr">

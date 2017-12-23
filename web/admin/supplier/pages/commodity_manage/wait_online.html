@@ -36,19 +36,20 @@
                 <div class="col-sm-4">
                     <input class="form-control" type="text" placeholder="请输入商品特色" maxlength="16" ng-model="des_name"
                            ng-change="d_name_change(des_name)" id="des_name" name="des_name" required
-                           ng-class="{'error':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)||d_flag}"
+                           ng-class="{'error':(form.des_name.$invalid && submitted)||(form.des_name.$error.required && des_blur)}"
                            ng-blur="des_blur=!!form.des_name.$error"/>
                 </div>
                 <div class="col-sm-6 control-label">
                     <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
                 </div>
             </div>
-            <div class="row" ng-if="brands_arr.length>0">
+            <div class="row">
                 <div class="col-sm-2 control-label">
                     <span>选择品牌</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                    <select class="form-control" ng-if="brands_arr.length>0" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                    <p class="form-control-static" ng-if="brands_arr.length == 0" style="color: red;">请先添加品牌授权</p>
                 </div>
             </div>
             <!--选择系列-->
