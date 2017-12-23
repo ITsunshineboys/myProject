@@ -1459,7 +1459,7 @@ class MallController extends Controller
 
             $deleted = 1 - $status;
             $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
-            $where .= " and supplier_id = 0 and deleted = {$deleted}";
+            $where .= " and deleted = {$deleted}";
 
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
