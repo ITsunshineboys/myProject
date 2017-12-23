@@ -1716,6 +1716,7 @@ class MallController extends Controller
 
         $brandApplication->review_status = (int)Yii::$app->request->post('review_status', ModelService::REVIEW_STATUS_APPROVE);
         $brandApplication->review_note = trim(Yii::$app->request->post('review_note', ''));
+        $brandApplication->review_time = time();
 
         $brandApplication->scenario = ModelService::SCENARIO_REVIEW;
         if (!$brandApplication->validate()) {
