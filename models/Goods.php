@@ -1080,10 +1080,10 @@ class Goods extends ActiveRecord
     /**
      * Validates prices
      *
-     * @param string $attribute supplier_price, platform_price, market_price and purchase prices to validate
+     * @param string $attribute supplier_price, platform_price, market_price and purchase prices to validate, default supplier_price to pass
      * @return bool
      */
-    public function validateSupplierPrice($attribute)
+    public function validateSupplierPrice($attribute = 'supplier_price')
     {
         if ($this->$attribute <= $this->purchase_price_decoration_company
             && $this->purchase_price_decoration_company <= $this->purchase_price_manager
