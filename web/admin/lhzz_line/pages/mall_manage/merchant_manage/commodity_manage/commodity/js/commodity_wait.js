@@ -139,8 +139,6 @@ app.controller('commodity_wait', ['_ajax','$scope', '$stateParams','$http', func
 
     /*等待上架 单个确认上架*/
     $scope.sureWaitToOnline = function () {
-        // let url = baseUrl+"/mall/goods-status-toggle";
-        // let data = {id: tempwaitgoodid};
         _ajax.post('/mall/goods-status-toggle',{id: tempwaitgoodid},function (res) {
             /*由于某些原因不能上架*/
             if (res.code != 200) {
