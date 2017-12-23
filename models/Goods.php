@@ -813,7 +813,7 @@ class Goods extends ActiveRecord
             }
 
             if (!$this->validateSupplierPrice()) {
-                $code = 1000;
+                $code = 1042;
                 return $code;
             }
         } else {
