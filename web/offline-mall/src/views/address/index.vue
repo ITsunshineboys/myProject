@@ -12,11 +12,26 @@
         </group>
       </div>
       <x-button class="save-btn" :class="{'save-btn-true':requiredStatus && phoneStatus && addressStatus}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!requiredStatus || !phoneStatus || !addressStatus"></x-button>
+
+      <group>
+        <x-switch v-model="showHideOnBlur" :title="'hide on clicking mask'"></x-switch>
+      </group>
+      <div v-transfer-dom >
+        <x-dialog @on-hide="hide"  v-model="showHideOnBlur" class="dialog-demo" hide-on-blur>
+          <div class="modal-save-success">
+            <span>保存成功</span>
+          </div>
+          <div @click="showHideOnBlur=false">
+            <span class="modal-save-btn">确定</span>
+            <!--<span class="vux-close"></span>-->
+          </div>
+        </x-dialog>
+      </div>
     </div>
 </template>
 
 <script>
-  import {XHeader, Group, XInput, XAddress, XTextarea, ChinaAddressV4Data, XButton} from 'vux'
+  import {XHeader, Group, XInput, XAddress, XTextarea, ChinaAddressV4Data, XButton, XDialog, XSwitch, TransferDomDirective as TransferDom} from 'vux'
   export default {
     name: 'Address',
     components: {
@@ -25,7 +40,12 @@
       XInput,
       XAddress,
       XTextarea,
-      XButton
+      XButton,
+      XDialog,
+      XSwitch
+    },
+    directives: {
+      TransferDom
     },
     data () {
       return {
@@ -36,7 +56,8 @@
         phoneNumber: '',
         addressValue: ['四川省', '成都市', '锦江区'],
         detailAddress: '',
-        addressData: ChinaAddressV4Data
+        addressData: ChinaAddressV4Data,
+        showHideOnBlur: false
       }
     },
     methods: {
@@ -65,12 +86,16 @@
       addressChange () {
         let that = this
         that.detailAddress === '' ? that.addressStatus = false : that.addressStatus = true
+      },
+      hide () {
+        this.$router.go(-1)
       }
     }
   }
 </script>
 
-<style>
+<style lang="less">
+  @import '~vux/src/styles/close';
   .bg-white,
   .choose-address-box .vux-cell-value{
     color: #666;
@@ -114,5 +139,31 @@
   .save-btn-true{
     color:rgba(255,255,255,1)!important;
     background:rgba(34,34,34,1)!important;
+  }
+  .dialog-demo{
+  .weui-dialog{
+    border-radius: 8px;
+    padding-bottom: 8px;
+  }
+  .dialog-title {
+    line-height: 30px;
+    color: #666;
+  }
+  .modal-save-success{
+    height: 160px;
+    /*margin-bottom: 20px;*/
+    line-height: 160px;
+    text-align: center;
+    border-bottom: 1px solid #CDD3D7;
+  }
+    .modal-save-btn{
+
+    }
+  .vux-close {
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+    color:#222;
+  }
   }
 </style>
