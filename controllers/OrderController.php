@@ -2287,6 +2287,14 @@ class OrderController extends Controller
             ->select('uid')
             ->where(['id'=>$GoodsOrder->supplier_id])
             ->one();
+        if (!$supplier)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $supplier_user=User::find()
             ->where(['id'=>$supplier->uid])
             ->one();

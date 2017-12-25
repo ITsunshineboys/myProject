@@ -2876,7 +2876,8 @@ class GoodsOrder extends ActiveRecord
                 } else {
                     $automatic_receive_time= $arr[$k]['RemainingTime'];
                 }
-                $refund=self::GetRefundData($arr[$k]['order_no'],$arr[$k]['sku']);
+
+                $refund=self::GetRefundData($arr[$k]['order_no'],$arr[$k]['sku'],$arr[$k]['status_type']);
                 $after=self::GetAfterSaleData($arr[$k]['order_no'],$arr[$k]['sku']);
                 $list[]=[
                     'goods_price'=>$arr[$k]['goods_price'],
@@ -2936,7 +2937,10 @@ class GoodsOrder extends ActiveRecord
             }
             $output['send_time']=$send_time;
             $output['complete_time']=$complete_time;
-            $output['refund_status']=$refund['refund_status'];
+
+                $output['refund_status']=$refund['refund_status'];
+
+
             $output['apply_refund_time']=$refund['apply_refund_time'];
             $output['apply_refund_reason']=$refund['apply_refund_reason'];
             $output['aftersale_status']=$after['aftersale_status'];
@@ -3034,11 +3038,11 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public  static function  GetRefundData($order_no,$sku)
+    public  static function  GetRefundData($order_no,$sku,$type)
     {
+
         $refund=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku])
-            ->asArray()
             ->one();
         if (!$refund)
         {
@@ -3049,18 +3053,58 @@ class GoodsOrder extends ActiveRecord
                 'apply_refund_reason'=>'',
             ];
         }else{
-            $data=[
-                'refund_status'=>2,
-                'apply_refund_time'=>'',
-                'apply_refund_reason'=>'',
-            ];
-            if ($refund['handle']==0)
+
+            if (
+                $type==3
+                || $type==7
+                || $type==5
+            )
             {
                 $data=[
-                    'refund_status'=>1,
-                    'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
-                    'apply_refund_reason'=>$refund['apply_reason'],
+                    'refund_status'=>2,
+                    'apply_refund_time'=>'',
+                    'apply_refund_reason'=>'',
                 ];
+                if ($refund->handle==0)
+                {
+                    $data=[
+                        'refund_status'=>1,
+                        'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
+                        'apply_refund_reason'=>$refund->apply_reason,
+                    ];
+                }
+            }else
+            {
+                if ($type==8
+                    || $type==11
+                    || $type==12)
+                {
+                    if ($refund->handle==0)
+                    {
+                        $refund->handle=2;
+                        $refund->save(false);
+                        $data=[
+                            'refund_status'=>2,
+                            'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
+                            'apply_refund_reason'=>$refund->apply_reason,
+                        ];
+                    }
+                }
+                if ($type==9
+                    || $type==10)
+                {
+                    return [
+                        'refund_status'=>0,
+                        'apply_refund_time'=>'',
+                        'apply_refund_reason'=>'',
+                    ];
+                }
+                return [
+                    'refund_status'=>0,
+                    'apply_refund_time'=>'',
+                    'apply_refund_reason'=>'',
+                ];
+
             }
             return $data;
         }
