@@ -12,6 +12,12 @@ use yii\helpers\Json;
 
 class Invoice extends ActiveRecord
 {
+
+    const  INVOICE_HEADER_TYPE_PERSON='个人';
+    const  INVOICE_HEADER_TYPE_COMPANY='公司';
+    const  INVOICE_TYPE_ORDINARY='普通发票';
+    const  INVOICE_TYPE_ELECT='电子发票';
+    const  INVOICE_TYPE_ADD_TAX='普通增值税发票';
     /**
      * @return string 返回该AR类关联的数据表名
      */

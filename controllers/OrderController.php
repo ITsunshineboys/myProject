@@ -1756,21 +1756,21 @@ class OrderController extends Controller
         $receive_details['buyer_message'] = $order_information['buyer_message'];
         switch ($receive_details['invoice_header_type']){
             case 1:
-                $receive_details['invoice_header_type']='个人';
+                $receive_details['invoice_header_type']=Invoice::INVOICE_HEADER_TYPE_PERSON;
                 break;
             case 2:
-                $receive_details['invoice_header_type']='公司';
+                $receive_details['invoice_header_type']=Invoice::INVOICE_HEADER_TYPE_COMPANY;
                 break;
         }
         switch ($receive_details['invoice_type']){
             case 1:
-                $receive_details['invoice_type']='普通发票';
+                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ORDINARY;
                 break;
             case 2:
-                $receive_details['invoice_type']='电子发票';
+                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ELECT;
                 break;
             case 3:
-                $receive_details['invoice_type']='普通增值税发票';
+                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ADD_TAX;
                 break;
         }
         $goods_data=array();
@@ -1817,7 +1817,7 @@ class OrderController extends Controller
         $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
         $goods_data['complete_time']=$order_information['complete_time'];
         if ($order_information['shipping_type']==1){
-            $goods_data['shipping_way']='送货上门';
+            $goods_data['shipping_way']=Express::SEND_TO_HOME;
             $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
         }
         $goods_data['pay_name']=$order_information['pay_name'];

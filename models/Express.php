@@ -12,7 +12,8 @@ use yii\db\Exception;
 class Express extends ActiveRecord
 {
 
-
+    const SEND_TO_HOME='送货上门';
+    const  LOGISTICS='快递物流';
     /**
      * @return string 返回该AR类关联的数据表名
      */

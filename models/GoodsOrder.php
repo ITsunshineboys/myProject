@@ -1705,7 +1705,6 @@ class GoodsOrder extends ActiveRecord
                                     {
                                 $data[$k]['comment_id']=$comment['comment_id'];
                                     }
-
                                 }
                         }
                 }
