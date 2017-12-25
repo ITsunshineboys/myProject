@@ -336,8 +336,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-offset-2 col-sm-10" ng-repeat="item in comment_img">
-                <img width=138px; height=138 ng-src="{{item.image}}">
+            <div class="col-sm-offset-2 col-sm-10">
+                <img width=138 height=138 ng-repeat="item in comment_img" ng-src="{{item.image}}">
             </div>
         </div>
         <div class="row">
@@ -400,14 +400,11 @@
         <div class="row">
             <div class="col-sm-2 control-label"></div>
             <div class="col-sm-10 control-label">
-                <div class="img_box">
-                    <img ng-src="{{item.image}}" ng-repeat="item in after_sale_images">
-                </div>
+                <img class="problem_img_size" ng-src="{{item.image}}" ng-repeat="item in after_sale_images">
             </div>
         </div>
         <hr>
         <!--售后进度-->
-        <div>
             <div class="row">
                 <div class="col-sm-2 control-label">
                     <h3>售后进度</h3>
@@ -434,7 +431,6 @@
                     {{items.content}}({{items.number}})
                 </a>
             </div>
-        </div>
         <!--平台介入-->
         <div ng-if="after_sale_progress_platform.length!=0">
             <div class="row">
