@@ -941,7 +941,9 @@ class GoodsOrder extends ActiveRecord
                 $isAfter=0;
                 $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                 $arr[$k]['have_handle']=1;
-                if ($arr[$k]['status']==self::ORDER_TYPE_DESC_CANCEL)
+                if ($arr[$k]['status']==self::ORDER_TYPE_DESC_CANCEL
+                ||$arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED
+                )
                 {
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
