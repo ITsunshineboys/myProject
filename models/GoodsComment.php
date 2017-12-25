@@ -262,6 +262,11 @@ class GoodsComment extends ActiveRecord
             return $code;
         }
         $user=User::findOne($goodsOrder->user_id);
+        if (!$user)
+        {
+            $code=1000;
+            return $code;
+        }
         $code=self::checkIsSetComment($orderGoods);
         if ($code !=200){
             return $code;
