@@ -553,7 +553,7 @@ class QuoteController extends Controller
 
     public function actionEffectPlotList(){
         $request= new Request();
-        $city_code = (int)$request->get('city_code','');
+        $city_code = (int)$request->get('district_code','');
         $code = 1000;
         if(!$city_code){
 
@@ -564,9 +564,9 @@ class QuoteController extends Controller
         }
         $start_time=trim($request->get('start_time',''));
         $end_time= trim($request->get('end_time',''));
-        $district_code = (int)$request->get('district_code','');
+//        $district_code = (int)$request->get('$district_code','');
         $keyword = trim($request->get('keyword',''));
-        $where = 'city_code = '.$city_code;
+        $where = 1;
         if(!$keyword) {
             if (($start_time && !StringService::checkDate($start_time))
                 || ($end_time && !StringService::checkDate($end_time))
@@ -590,8 +590,8 @@ class QuoteController extends Controller
                 $end_time = (int)strtotime($end_time);
                 $end_time && $where .= " and add_time <= {$end_time}";
             }
-            if($district_code ){
-                $where .= " and  district_code = {$district_code}";
+            if($city_code ){
+                $where .= " and  (district_code = {$city_code} or city_code = {$city_code})";
             }
         }else{
             $where .=" and  toponymy like '%{$keyword}%'";
