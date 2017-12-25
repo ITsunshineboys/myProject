@@ -133,7 +133,7 @@ class BrandApplication extends ActiveRecord
 
             if (isset($brandApplication['review_time'])) {
                 $brandApplication['review_time'] = $brandApplication['review_time']
-                    ? date('Y-m-d H:i', $brandApplication['create_time'])
+                    ? date('Y-m-d H:i', $brandApplication['review_time'])
                     : '';
             }
 
