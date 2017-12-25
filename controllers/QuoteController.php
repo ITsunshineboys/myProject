@@ -553,20 +553,20 @@ class QuoteController extends Controller
 
     public function actionEffectPlotList(){
         $request= new Request();
-        $city_code = (int)$request->get('city_code','');
-        $code = 1000;
-        if(!$city_code){
-
-            return Json::encode([
-                'code' => $code,
-                'msg'=>\Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+//        $city_code = (int)$request->get('city_code','');
+//        $code = 1000;
+//        if(!$city_code){
+//
+//            return Json::encode([
+//                'code' => $code,
+//                'msg'=>\Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
         $start_time=trim($request->get('start_time',''));
         $end_time= trim($request->get('end_time',''));
         $district_code = (int)$request->get('district_code','');
         $keyword = trim($request->get('keyword',''));
-        $where = "city_code = $city_code";
+        $where = 1;
         if(!$keyword) {
             if (($start_time && !StringService::checkDate($start_time))
                 || ($end_time && !StringService::checkDate($end_time))
@@ -841,6 +841,7 @@ class QuoteController extends Controller
             ]);
 
     }
+
     /**
      * TODO 新增接口
      * @return string
