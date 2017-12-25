@@ -3073,6 +3073,7 @@ class GoodsOrder extends ActiveRecord
                         'apply_refund_reason'=>$refund->apply_reason,
                     ];
                 }
+                return $data;
             }else
             {
                 if ($type==8
@@ -3083,12 +3084,14 @@ class GoodsOrder extends ActiveRecord
                     {
                         $refund->handle=2;
                         $refund->save(false);
-                        $data=[
-                            'refund_status'=>2,
-                            'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
-                            'apply_refund_reason'=>$refund->apply_reason,
-                        ];
+
                     }
+                    $data=[
+                        'refund_status'=>2,
+                        'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
+                        'apply_refund_reason'=>$refund->apply_reason,
+                    ];
+                    return $data;
                 }
                 if ($type==9
                     || $type==10)
@@ -3099,6 +3102,7 @@ class GoodsOrder extends ActiveRecord
                         'apply_refund_reason'=>'',
                     ];
                 }
+
                 return [
                     'refund_status'=>0,
                     'apply_refund_time'=>'',
@@ -3106,7 +3110,6 @@ class GoodsOrder extends ActiveRecord
                 ];
 
             }
-            return $data;
         }
     }
     /**
