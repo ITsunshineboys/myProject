@@ -904,6 +904,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$arr[$k]['order_no']])
                 ->andWhere(['sku'=>$arr[$k]['sku']])
                 ->one();
+
             if ($after)
             {
                 $isAfter=1;
@@ -917,7 +918,6 @@ class GoodsOrder extends ActiveRecord
                         $arr[$k]['handle']='';
                         $arr[$k]['have_handle']=2;
                     }else{
-
                         $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                         $arr[$k]['have_handle']=1;
                         if ($after->supplier_handle==2)
@@ -939,6 +939,11 @@ class GoodsOrder extends ActiveRecord
                 }
             }else{
                 $isAfter=0;
+                if ($arr[$k]['status']==self::ORDER_TYPE_DESC_CANCEL)
+                {
+                    $arr[$k]['handle']='';
+                    $arr[$k]['have_handle']=2;
+                }
                 $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
                 $arr[$k]['have_handle']=1;
             }
@@ -966,13 +971,13 @@ class GoodsOrder extends ActiveRecord
 //            ->asArray()
 //            ->one();
         if ($arr){
-
             $count=(new Query())
                 ->from(self::tableName().' AS a')
                 ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
                 ->leftJoin(User::tableName(). ' AS u','u.id=a.user_id')
                 ->select($select)
-                ->where($where)->count();
+                ->where($where)
+                ->count();
             $total_page=ceil($count/$size);
             //            $data=array_slice($arr, ($page-1)*$size,$size);
             return [
