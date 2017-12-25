@@ -2883,7 +2883,6 @@ class GoodsOrder extends ActiveRecord
                 } else {
                     $automatic_receive_time= $arr[$k]['RemainingTime'];
                 }
-
                 $refund=self::GetRefundData($arr[$k]['order_no'],$arr[$k]['sku'],$arr[$k]['status_type']);
                 $after=self::GetAfterSaleData($arr[$k]['order_no'],$arr[$k]['sku']);
                 $list[]=[
@@ -2944,10 +2943,7 @@ class GoodsOrder extends ActiveRecord
             }
             $output['send_time']=$send_time;
             $output['complete_time']=$complete_time;
-
-                $output['refund_status']=$refund['refund_status'];
-
-
+            $output['refund_status']=$refund['refund_status'];
             $output['apply_refund_time']=$refund['apply_refund_time'];
             $output['apply_refund_reason']=$refund['apply_refund_reason'];
             $output['aftersale_status']=$after['aftersale_status'];
@@ -3085,6 +3081,8 @@ class GoodsOrder extends ActiveRecord
             }else
             {
                 if ($type==8
+                    || $type==9
+                    || $type==10
                     || $type==11
                     || $type==12)
                 {
@@ -3101,15 +3099,15 @@ class GoodsOrder extends ActiveRecord
                     ];
                     return $data;
                 }
-                if ($type==9
-                    || $type==10)
-                {
-                    return [
-                        'refund_status'=>0,
-                        'apply_refund_time'=>'',
-                        'apply_refund_reason'=>'',
-                    ];
-                }
+//                if ($type==9
+//                    || $type==10)
+//                {
+//                    return [
+//                        'refund_status'=>0,
+//                        'apply_refund_time'=>'',
+//                        'apply_refund_reason'=>'',
+//                    ];
+//                }
 
                 return [
                     'refund_status'=>0,
