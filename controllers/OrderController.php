@@ -299,7 +299,7 @@ class OrderController extends Controller
     {
         $request = Yii::$app->request;
         $address_id=$request ->get('address_id');
-        $user_address=UserAddress::GetAddress($address_id);
+        $user_address=UserAddress::GetDistrict($address_id);
         if (!$user_address){
             $code=1000;
             return Json::encode([

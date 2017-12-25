@@ -111,6 +111,40 @@ class UserAddress extends  ActiveRecord
         }
     }
 
+
+    /**
+     * 无登录app-获取收货地址
+     * @param $addressId
+     * @return array|null|ActiveRecord
+     */
+    public static function GetDistrict($addressId){
+        $array  = self::find()
+            ->select('id,mobile,consignee,region,district')
+            ->where(['id' => $addressId])
+            ->asArray()
+            ->one();
+        if ($array){
+            $array['adCode']=$array['district'];
+            $districtcode=$array['district'];
+            $pro=substr($districtcode,0,2);
+            $ci=substr($districtcode,2,2);
+            $dis=substr($districtcode,4,2);
+            $code=Yii::$app->params['districts'][0];
+            if ($ci==0){
+                $position=$code[86][$pro.'0000'];
+            }else if($dis==0){
+                $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'];
+            }else{
+                $position=$code[86][$pro.'0000'].','.$code[$pro.'0000'][$pro.$ci.'00'].','.$code[$pro.$ci.'00'][$pro.$ci.$dis];
+            }
+            $array['district']=$position;
+            return $array;
+        }else
+        {
+            return [];
+        }
+    }
+
     /**
      * @param $district_code
      * @param $region
