@@ -3379,6 +3379,7 @@ class MallController extends Controller
             $model->offline_time = $now;
             $model->offline_uid = $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0;
             $model->offline_person = $operator->nickname;
+            $model->offline_reason = '';
             if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
                 $offlineReason = Yii::$app->request->post('offline_reason', '');
                 !$offlineReason && $offlineReason = Yii::$app->params['lhzz']['offline_reason'];
@@ -3444,7 +3445,8 @@ class MallController extends Controller
             'status' => Goods::STATUS_OFFLINE,
             'offline_time' => time(),
             'offline_uid' => $user->login_role_id == Yii::$app->params['lhzzRoleId'] ? $operator->id : 0,
-            'offline_person' => $operator->nickname
+            'offline_person' => $operator->nickname,
+            'offline_reason' => '',
         ];
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']) {
             $offlineReason = Yii::$app->request->post('offline_reason', '');
