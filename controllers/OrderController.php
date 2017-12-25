@@ -2762,7 +2762,8 @@ class OrderController extends Controller
      * 用户去评论
      * @return string
      */
-    public function actionCommentSub(){
+    public function actionCommentSub()
+    {
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -2773,7 +2774,10 @@ class OrderController extends Controller
         }
         $postData=yii::$app->request->get();
         $model = new UploadForm;
-        return  Json::encode(UploadedFile::getInstances($model, 'file'));
+        return  Json::encode([
+            'data'=>UploadedFile::getInstances($model, 'file'),
+            'num'=>count($model->file)
+        ]);
         $uploadsData=FileService::uploadMore();
         if (!$uploadsData ==1000){
             if (is_numeric($uploadsData)){
