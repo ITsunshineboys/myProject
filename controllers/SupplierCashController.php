@@ -669,9 +669,9 @@ class SupplierCashController extends Controller
     {
         $user = \Yii::$app->user->identity;
         if (!$user) {
-            $code = 1052;
+            $code = 403;
             return Json::encode([
-                'code' => 1052,
+                'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
