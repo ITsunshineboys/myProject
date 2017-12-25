@@ -1792,11 +1792,11 @@ class WithdrawalsController extends Controller
                         ->where(['order_no'=>$access['order_no']])
                         ->one();
                     $pay_name=$goodsOrder->pay_name;
-                    foreach ($accessList as &$list)
+                    foreach ($accessList as &$List)
                     {
                         $orderGoods=OrderGoods::find()
                             ->select('goods_name')
-                            ->where(['order_no'=>$list['order_no']])
+                            ->where(['order_no'=>$List['order_no']])
                             ->asArray()
                             ->all();
                         foreach ($orderGoods as $orderGood)
