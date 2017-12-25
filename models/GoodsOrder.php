@@ -939,13 +939,14 @@ class GoodsOrder extends ActiveRecord
                 }
             }else{
                 $isAfter=0;
+                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+                $arr[$k]['have_handle']=1;
                 if ($arr[$k]['status']==self::ORDER_TYPE_DESC_CANCEL)
                 {
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
                 }
-                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
-                $arr[$k]['have_handle']=1;
+
             }
             $arr[$k]['is_after']=$isAfter;
             unset($arr[$k]['consignee_mobile']);
