@@ -109,24 +109,22 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->all();
 
         foreach ($effectList as &$effect) {
-            if($effect['status']==0 && $effect['item']==0){
-                unset($effect);
-            }else {
-                $effect['item'] = self::EFFECT_LOGIN[$effect['item']];
 
-                if ($effect['earnest'] == 0) {
-                    unset($effect['earnest']);
-                } else {
-                    $effect['earnest'] = sprintf('%.2f', (float)$effect['earnest'] * 0.01);
-                }
-                if ($effect['transaction_no'] == '') {
-                    unset($effect['transaction_no']);
-                }
-                if (isset($effect['create_time'])) {
-                    $effect['create_time'] = date('Y-m-d H:i', $effect['create_time']);
-                }
+            $effect['item'] = self::EFFECT_LOGIN[$effect['item']];
 
+            if($effect['earnest']==0){
+                unset($effect['earnest']);
+            }else{
+                $effect['earnest']=sprintf('%.2f',(float)$effect['earnest']*0.01);
             }
+            if($effect['transaction_no']==''){
+                unset($effect['transaction_no']);
+            }
+            if(isset($effect['create_time'])){
+                $effect['create_time']=date('Y-m-d H:i', $effect['create_time']);
+            }
+
+
         }
 
 
