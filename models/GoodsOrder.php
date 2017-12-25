@@ -3019,14 +3019,14 @@ class GoodsOrder extends ActiveRecord
                 $data=[
                     'aftersale_status'=>2,
                     'aftersale_type'=>OrderAfterSale::AFTER_SALE_SERVICES[$after_sale['type']],
-                    'apply_aftersale_time'=>$after_sale['create_time'],
+                    'apply_aftersale_time'=>date('Y-m-d H:i',$after_sale['create_time']),
                     'apply_aftersale_reason'=>$after_sale['description'],
                 ];
                 if ($after_sale['supplier_handle'] == 0) {
                     $data=[
                         'aftersale_status'=>1,
                         'aftersale_type'=>OrderAfterSale::AFTER_SALE_SERVICES[$after_sale['type']],
-                        'apply_aftersale_time'=>$after_sale['create_time'],
+                        'apply_aftersale_time'=>date('Y-m-d H:i',$after_sale['create_time']),
                         'apply_aftersale_reason'=>$after_sale['description'],
                     ];
                 }
