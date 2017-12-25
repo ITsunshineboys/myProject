@@ -2856,7 +2856,6 @@ class GoodsOrder extends ActiveRecord
                 {
                     $username =$arr[$k]['username'];
                 }
-
                 $arr[$k]['return_insurance'] =  StringService::formatPrice($arr[$k]['return_insurance'] * 0.01);
                 $arr[$k]['goods_price'] =  StringService::formatPrice($arr[$k]['goods_price'] * 0.01);
                 // switch ($arr[$k]['shipping_type']){
@@ -2867,7 +2866,6 @@ class GoodsOrder extends ActiveRecord
                 //         $arr[$k]['shipping_type']='送货上门';
                 //         break;
                 // }
-
                 if ($arr[$k]['send_time'] == 0) {
                     $send_time = $arr[$k]['send_time'];
                 } else {
