@@ -2772,6 +2772,8 @@ class OrderController extends Controller
             ]);
         }
         $postData=yii::$app->request->get();
+        $model = new UploadForm;
+        return  Json::encode(UploadedFile::getInstances($model, 'file'));
         $uploadsData=FileService::uploadMore();
         if (!$uploadsData ==1000){
             if (is_numeric($uploadsData)){
