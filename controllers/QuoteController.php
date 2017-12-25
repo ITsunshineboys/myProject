@@ -932,10 +932,12 @@ class QuoteController extends Controller
         $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
 
-        $province_chinese = District::findByCode((int)$request['province_code']);
-        $city_chinese = District::findByCode((int)$request['city_code']);
-        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
-
+//        $province_chinese = District::findByCode((int)$request['province_code']);
+//        $city_chinese = District::findByCode((int)$request['city_code']);
+//        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+        $province_chinese['name']='四传';
+        $city_chinese['name']='传';
+        $district_chinese['name']='2323';
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             foreach ($request['house_informations'] as $house) {
@@ -1112,55 +1114,29 @@ class QuoteController extends Controller
 //                            }
 //                        }
                     }
-
                     $ids = implode(',',$ids);
                     $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                     $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
-                    if(!$effect_plot->save(false)){
-                        $transaction->rollBack();
-                        $code = 500;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-                }
 
+
+                }
+                $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+                $effect_plot->toponymy=$request['house_name'];
+                $effect_plot->province_code=$request['province_code'];
+                $effect_plot->city_code=$request['city_code'];
+                $effect_plot->district_code=$request['cur_county_id']['id'];
+                if(!$effect_plot->save(false)){
+                    $transaction->rollBack();
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
                 //  案例修改
                 $toponymy_ids=[];
                 if (isset($house['id'])) {
-                    $toponymy_ids[]= implode(',',$house['id']);
-                    $effect_toponymy=EffectToponymy::find()->where(['effect_id'=>$toponymy_ids])->one();
-                    /**
-                     * province_code:510000
-                    city_code:510100
-                    house_name:香语城
-                    cur_county_id[id]:510105
-                    cur_county_id[name]:
-                    address:光荣西巷
-                     */
 
-                    if(!$effect_toponymy){
-                        $transaction->rollBack();
-                        $code = 1000;
-                        return Json::encode([
-                            'code'=> $code,
-                            'msg'=> \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-                    $effect_toponymy->effect_id=$toponymy_ids;
-                    $effect_toponymy->toponymy=$request['house_name'];
-                    $effect_toponymy->province_code=$request['province_code'];
-                    $effect_toponymy->city_code=$request['city_code'];
-                    $effect_toponymy->district_code=$request['cur_county_id']['id'];
-                    if(!$effect_toponymy->save(false)){
-                        $code = 500 ;
-                        $transaction->rollBack();
-                        return Json::encode([
-                            'code'=>$code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
                     if ($house['is_ordinary'] == 0) {
                         //普通户型修改
                         $house_id               = $house['id'];
@@ -1319,12 +1295,38 @@ class QuoteController extends Controller
 //                            WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
 //                        }
                     }
+                    $toponymy_ids[]=$house['id'];
+                    if(is_array($toponymy_ids)){
+                        $ids= implode(',',$toponymy_ids);
+                    }else{
+                        $ids=['id'];
+                    }
+                    $effect_toponymy=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+                    if(!$effect_toponymy){
+                        $transaction->rollBack();
+                        $code = 1000;
+                        return Json::encode([
+                            'code'=> $code,
+                            'msg'=> \Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
+                    $effect_toponymy->effect_id=$ids;
+
+                    if(!$effect_toponymy->save(false)){
+                        $code = 500 ;
+                        $transaction->rollBack();
+                        return Json::encode([
+                            'code'=>$code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
                 }
             }
             $transaction->commit();
         }catch (\Exception $e) {
+            var_dump($e);die;
             $transaction->rollBack();
-            $code = 1000;
+            $code = 500;
             return json_encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
