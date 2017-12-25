@@ -3014,13 +3014,14 @@ class GoodsOrder extends ActiveRecord
                 'apply_aftersale_time'=>'',
                 'apply_aftersale_reason'=>'',
             ];
-        } else {
-            $data=[
-                'aftersale_status'=>2,
-                'aftersale_type'=>'',
-                'apply_aftersale_time'=>'',
-                'apply_aftersale_reason'=>'',
-            ];
+        } else
+        {
+                $data=[
+                    'aftersale_status'=>2,
+                    'aftersale_type'=>OrderAfterSale::AFTER_SALE_SERVICES[$after_sale['type']],
+                    'apply_aftersale_time'=>$after_sale['create_time'],
+                    'apply_aftersale_reason'=>$after_sale['description'],
+                ];
                 if ($after_sale['supplier_handle'] == 0) {
                     $data=[
                         'aftersale_status'=>1,
@@ -3062,8 +3063,8 @@ class GoodsOrder extends ActiveRecord
             {
                 $data=[
                     'refund_status'=>2,
-                    'apply_refund_time'=>'',
-                    'apply_refund_reason'=>'',
+                    'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
+                    'apply_refund_reason'=>$refund->apply_reason,
                 ];
                 if ($refund->handle==0)
                 {

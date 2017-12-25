@@ -1787,22 +1787,22 @@ class OrderController extends Controller
         switch ($order_information['role_id'])
         {
             case 7:
-                $goods_data['role']='平台价';
+                $goods_data['role']=OrderGoods::PLATFORM_PRICE_DESC;
                 break;
             case 6:
-                $goods_data['role']='供应商采购价';
+                $goods_data['role']=OrderGoods::SUPPLIER_PRICE_DESC;
                 break;
             case 5:
-                $goods_data['role']='装修公司采购价';
+                $goods_data['role']=OrderGoods::COMPANY_PRICE_DESC;
                 break;
             case 4:
-                $goods_data['role']='项目经理采购价';
+                $goods_data['role']=OrderGoods::MANAGER_PRICE_DESC;
                 break;
             case 3:
-                $goods_data['role']='设计师采购价';
+                $goods_data['role']=OrderGoods::DESIGNER_PRICE_DESC;
                 break;
             case 2:
-                $goods_data['role']='工人采购价';
+                $goods_data['role']=OrderGoods::WORKER_PRICE_DESC;
                 break;
         }
         $goods_data['goods_price']=$order_information['goods_price'];
