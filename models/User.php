@@ -59,6 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
         'signature',
         'aite_cube_no',
         'balance',
+        'availableamount'
     ];
     const FIELDS_USER_CENTER_EXTRA = [
 //        'address',
@@ -1758,7 +1759,8 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (isset($data['balance'])) {
-            $data['balance'] /= 100;
+            $data['balance'] = $data['availableamount']/100;
+            unset( $data['availableamount']);
         }
 
         if (isset($data['create_time'])) {
