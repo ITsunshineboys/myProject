@@ -899,8 +899,7 @@ class QuoteController extends Controller
         $transaction = \Yii::$app->db->beginTransaction();
         $code = 500;
         try{
-            $ep_del=EffectToponymy::find()->where(['id'=>$del_id])->one();
-            var_dump($ep_del);die;
+            $ep_del=EffectToponymy::deleteAll($del_id);
             if(!$ep_del){
                 $transaction->rollBack();
                 return Json::encode([
