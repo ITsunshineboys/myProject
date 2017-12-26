@@ -1886,7 +1886,6 @@ class OrderAfterSale extends ActiveRecord
                 return $code;
             }
 
-            echo 'two';die;
             $time=time();
             $OrderPlatForm=new self;
             $OrderPlatForm->order_no=$order_no;
@@ -1902,6 +1901,8 @@ class OrderAfterSale extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
+            echo 'three';die;
             $tran->commit();
             $code=200;
             return $code;
