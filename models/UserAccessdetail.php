@@ -37,6 +37,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         'transaction_no',
         'order_no'
     ];
+
     const ACCESS_TYPE_DESC_RECHARGE='充值';
     const ACCESS_TYPE_DESC_DEBIT='扣款';
     const ACCESS_TYPE_DESC_CASH='已提现';
@@ -44,6 +45,10 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     const ACCESS_TYPE_DESC_DISAGREE='驳回';
     const ACCESS_TYPE_DESC_PAYMENT_GOODS='货款';
     const ACCESS_TYPE_DESC_PAYMENT_BUY='使用';
+    //8.奖励金  9.工程款  10.工程退款
+    const ACCESS_TYPE_DESC_REWARD_MONEY='奖励金';
+    const ACCESS_TYPE_DESC_PROJECTS_MONEY='工程款';
+    const ACCESS_TYPE_DESC_PROJECTS_REFUND='工程退款';
 
     const ACCESS_CODE_DEBIT='Debit';
     const ACCESS_CODE_PAYMENT_BUY='Payment_buy';
@@ -84,7 +89,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         ];
     }
 
-       /**
+     /**
      * @param array $where
      * @param array $select
      * @param int $page
@@ -158,7 +163,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
      */
    public static  function  findAccessType($access_type)
     {
-        //1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款  7.使用
+        //1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款  7.使用  8.奖励金  9.工程款  10.工程退款
         switch ($access_type)
         {
             case 1:
@@ -181,6 +186,15 @@ class UserAccessdetail extends \yii\db\ActiveRecord
                 break;
             case 7:
                 $type=self::ACCESS_TYPE_DESC_PAYMENT_BUY;
+                break;
+            case 8:
+                $type=self::ACCESS_TYPE_DESC_REWARD_MONEY;
+                break;
+            case 9:
+                $type=self::ACCESS_TYPE_DESC_PROJECTS_MONEY;
+                break;
+            case 10:
+                $type=self::ACCESS_TYPE_DESC_PROJECTS_REFUND;
                 break;
         }
         return $type;
