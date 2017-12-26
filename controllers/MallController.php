@@ -3045,7 +3045,7 @@ class MallController extends Controller
         $postData = Yii::$app->request->post();
         $goods->attributes = $postData;
 
-        if (isset($postData['style_id'])) {
+        if (isset($postData['style_id']) && $postData['style_id']) {
             $goods->style_id = (int)$postData['style_id'];
             $styleIds = explode(ModelService::SEPARATOR_GENERAL, trim($postData['style_id'], ModelService::SEPARATOR_GENERAL));
         }
