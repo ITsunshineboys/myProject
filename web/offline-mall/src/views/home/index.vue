@@ -86,28 +86,27 @@
         let str = JsonData[0][this.cur_city[0]][this.cur_city[1]]
         this.city = str.substring(0, str.length - 1)
       }
-      let that = this
       this.axios.get('/mall/carousel', {
         district_code: this.cur_city[1]
-      }, function (res) {
+      }, (res) => {
         console.log(res)
         const imgList = res.data.carousel
-        that.banner_list = imgList.map((item, index) => ({
+        this.banner_list = imgList.map((item, index) => ({
           url: item.url,
           img: item.image,
           title: '',
           id: item.id
         }))
       })
-      this.axios.get('/mall/categories', {}, function (res) {
+      this.axios.get('/mall/categories', {}, (res) => {
         console.log(res)
-        that.category_list = res.data.categories
+        this.category_list = res.data.categories
       })
       this.axios.get('/mall/recommend-second', {
         district_code: this.cur_city[1]
-      }, function (res) {
+      }, (res) => {
         console.log(res)
-        that.recommended_list = res.data.recommend_second
+        this.recommended_list = res.data.recommend_second
       })
     }
   }

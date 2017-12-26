@@ -198,14 +198,14 @@
                                     <input type="text" ng-blur="determineGoodsCode(item2)"
                                            ng-class="{'error': (curForm['good{{item2.id}}'].$error.pattern)||!!item2.flag}"
                                            name="good{{item2.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码"
-                                           class="form-control" ng-model="item2.goods_code">
-                                    <p class="error_word" ng-if="item2.msg!=''">{{item3.msg}}</p>
+                                           class="form-control" ng-model="item2.good_code">
+                                    <p class="error_word" ng-if="item2.msg!=''">{{item2.msg}}</p>
                                 </div>
                                 <div class="col-md-2">
                                     <input type="text"
                                            ng-class="{'error': (curForm['quantity{{item2.id}}'].$error.pattern)}"
                                            name="quantity{{item2.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量"
-                                           class="form-control" ng-model="item2.quantity">
+                                           class="form-control" ng-model="item2.good_quantity">
                                 </div>
                                 <p class="col-md-5">*整数</p>
                             </div>
