@@ -879,8 +879,8 @@ class QuoteController extends Controller
             $public_message['effect']=Effect::findbyId($one_effect['id']);
             $public_message['images'] = EffectPicture::findById($one_effect['id']);
             $public_message['decoration_particulars'] = DecorationParticulars::findById($one_effect['id']);
-            $public_message['works_data'] = WorksData::findById($one_effect['id']);
-            $public_message['works_worker_data'] = WorksWorkerData::findById($one_effect['id']);
+            $public_message['goods_data'] = WorksData::findById($one_effect['id']);
+            $public_message['worker_data'] = WorksWorkerData::findById($one_effect['id']);
 
         }
 
