@@ -338,35 +338,10 @@ class OwnerController extends Controller
         $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['weak_current']]);
         $weak_where = 'pid = '.$points['id'];
         $weak_points = Points::findByPid('title,count',$weak_where);
-
-        $other = 0;
-        foreach ($weak_points as $one_points){
-
-            if ($one_points['title'] == self::ROOM_DETAIL['hall']){
-                $all = $one_points['count'] * $post['hall'];
-            }
-
-            if ($one_points['title'] == self::ROOM_DETAIL['secondary_bedroom']){
-                switch ($post['bedroom']) {
-                    case $post['bedroom'] == 1:
-                        $secondary_bedroom = 0;
-                        break;
-                    case $post['bedroom'] == 2:
-                        $secondary_bedroom = (int)$one_points['count'] * 1;
-                        break;
-                    case $post['bedroom'] > 2:
-                        $secondary_bedroom = (int)$one_points['count'] * ($post['bedroom'] - 1);
-                        break;
-                }
-            }
-
-            if ($one_points['title'] != self::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != self::ROOM_DETAIL['hall']){
-                $other +=  $one_points['count'];
-            }
-        }
         //  弱电总点位
-        $weak_current_points = $all + $secondary_bedroom + $other;
+        $current_points = BasisDecorationService::weakPoints($weak_points,$post);
 
+        
         //查询弱电所需要材料
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
         if ($goods == null){
@@ -395,7 +370,7 @@ class OwnerController extends Controller
 
 
         //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_current_points,$weak_current,$craft);
+        $material_price = BasisDecorationService::quantity($current_points,$weak_current,$craft);
         $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
 
         return Json::encode([
