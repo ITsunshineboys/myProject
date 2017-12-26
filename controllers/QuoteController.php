@@ -627,12 +627,12 @@ class QuoteController extends Controller
         {
             $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
-        $province_chinese = District::findByCode((int)$request['province_code']);
-        $city_chinese = District::findByCode((int)$request['city_code']);
-        $district_chinese = District::findByCode((int)$request['district_code']);
-//        $province_chinese['name']='四川';
-//        $city_chinese['name']='成都';
-//        $district_chinese['name']='锦江区';
+//        $province_chinese = District::findByCode((int)$request['province_code']);
+//        $city_chinese = District::findByCode((int)$request['city_code']);
+//        $district_chinese = District::findByCode((int)$request['district_code']);
+        $province_chinese['name']='四川';
+        $city_chinese['name']='成都';
+        $district_chinese['name']='锦江区';
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
@@ -904,45 +904,22 @@ class QuoteController extends Controller
      */
     public function actionEffectDelPlot(){
         $del_id=(int)\Yii::$app->request->post('del_id');
-        $effect_plot=EffectToponymy::find()->where(['id'=>$del_id])->select('effect_id')->one();
-        $effect_ids= explode(',',$effect_plot['effect_id']);
-
-        $transaction = \Yii::$app->db->beginTransaction();
-        $code = 500;
-        try{
-            $ep_del=EffectToponymy::deleteAll(['id'=>$del_id]);
-            if(!$ep_del){
-                $transaction->rollBack();
-                return Json::encode([
-                    'code'=>$code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-
-            foreach ( $effect_ids as $effect_id ){
-                $res = Effect::deleteAll(['id'=>$effect_id]);
-                $res1 = EffectPicture::deleteAll(['effect_id'=>$effect_id]);
-            }
-            $res2 =  WorksWorkerData::deleteAll(['effect_id'=>$effect_ids[1]]);
-            $res3 =  WorksData::deleteAll(['effect_id'=>$effect_ids[1]]);
-            if(!$res || !$res1 || !$res2 || !$res3){
-                $transaction->rollBack();
-                return Json::encode([
-                    'code'=>$code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-
-            $transaction->commit();
-        }catch (Exception $e){
-            var_dump($e);die;
-            $transaction->rollBack();
+        $effect_plot=EffectToponymy::find()->where(['id'=>$del_id])->asArray()->select('effect_id')->one();
+        if(!$effect_plot){
+            $code =1000;
             return Json::encode([
                 'code'=>$code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $effect_ids= explode(',',$effect_plot['effect_id']);
+
+        EffectToponymy::deleteAll(['id'=>$del_id]);
+        Effect::deleteAll(['id'=>$effect_ids]);
+        EffectPicture::deleteAll(['effect_id'=>$effect_ids]);
+        WorksWorkerData::deleteAll(['effect_id'=>$effect_ids]);
+        WorksData::deleteAll(['effect_id'=>$effect_ids]);
+
        return Json::encode([
            'code'=>200,
            'msg'=>'ok'
@@ -957,12 +934,12 @@ class QuoteController extends Controller
         $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
 
-//        $province_chinese = District::findByCode((int)$request['province_code']);
-//        $city_chinese = District::findByCode((int)$request['city_code']);
-//        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
-        $province_chinese['name']='四传';
-        $city_chinese['name']='传';
-        $district_chinese['name']='2323';
+        $province_chinese = District::findByCode((int)$request['province_code']);
+        $city_chinese = District::findByCode((int)$request['city_code']);
+        $district_chinese = District::findByCode((int)$request['district_code']);
+//        $province_chinese['name']='四传';
+//        $city_chinese['name']='传';
+//        $district_chinese['name']='2323';
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             foreach ($request['house_informations'] as $house) {
@@ -983,7 +960,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -1047,7 +1024,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -1149,7 +1126,7 @@ class QuoteController extends Controller
                 $effect_plot->toponymy=$request['house_name'];
                 $effect_plot->province_code=$request['province_code'];
                 $effect_plot->city_code=$request['city_code'];
-                $effect_plot->district_code=$request['cur_county_id']['id'];
+                $effect_plot->district_code=$request['district_code'];
                 if(!$effect_plot->save(false)){
                     $transaction->rollBack();
                     $code = 500;
@@ -1177,7 +1154,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
