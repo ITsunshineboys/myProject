@@ -1471,20 +1471,20 @@ class BasisDecorationService
             return $goods;
         } elseif ($goods == null){
             return new \stdClass;
-        }else {
-            $min =[];
+        } else {
+            $max =[];
             $len = count($goods);
             for ($i=0; $i<$len; $i++){
                 if ($i==0){
-                    $min = $goods[$i];
+                    $max = $goods[$i];
                     continue;
                 }
-                if ($goods[$i]['profit_rate']>$min['profit_rate']){
-                    $min = $goods[$i];
+                if ($goods[$i]['profit_rate']>$max['profit_rate']){
+                    $max = $goods[$i];
                 }
 
             }
-            return $min;
+            return $max;
         }
     }
 
@@ -1925,9 +1925,9 @@ class BasisDecorationService
 
 
         $material ['total_cost'] = round($material_price['total_cost'],2);
-        $material ['material'] [] = BasisDecorationService::profitMargin($wire);
-        $material ['material'] []= BasisDecorationService::profitMargin($spool);
-        $material ['material'] []= BasisDecorationService::profitMargin($bottom);
+        $material ['material'] [] = self::profitMargin($wire);
+        $material ['material'] [] = self::profitMargin($spool);
+        $material ['material'] [] = self::profitMargin($bottom);
         return $material;
     }
 
