@@ -783,7 +783,7 @@ class OrderController extends Controller
         $goods_id=trim($request->post('goods_id'),' ');
         $goods_num=trim($request->post('goods_num'),' ');
         $address_id=trim($request->post('address_id'),' ');
-        $pay_name='线上支付-支付宝支付';
+        $pay_name=PayService::ALI_PAY;
         $invoice_id=trim($request->post('invoice_id'),' ');
         $supplier_id=trim($request->post('supplier_id'),' ');
         $freight=trim($request->post('freight'));
@@ -826,7 +826,7 @@ class OrderController extends Controller
         }
         $return_insurance=0;
         //判断金额是否正确
-        $code=GoodsOrder::judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
+        $code=GoodsOrder::judgeOrderMoney($goods_id,$total_amount,$goods_num,$return_insurance,$freight);
         if ($code==1000)
         {
             return Json::encode([
@@ -2181,6 +2181,7 @@ class OrderController extends Controller
             ],
         ]);
     }
+
     /**
      * @return string
      */
@@ -2208,6 +2209,7 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
     //判断用户是否登陆
     public  static function userIdentity()
     {

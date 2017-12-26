@@ -3045,7 +3045,7 @@ class MallController extends Controller
         $postData = Yii::$app->request->post();
         $goods->attributes = $postData;
 
-        if (isset($postData['style_id']) && $postData['style_id']) {
+        if (!empty($postData['style_id'])) {
             $goods->style_id = (int)$postData['style_id'];
             $styleIds = explode(ModelService::SEPARATOR_GENERAL, trim($postData['style_id'], ModelService::SEPARATOR_GENERAL));
         }
@@ -3191,6 +3191,12 @@ class MallController extends Controller
         $goods->sanitize($user, $postData);
         $goods->attributes = $postData;
 
+        $styleIds = [];
+        if (!empty($postData['style_id'])) {
+            $goods->style_id = (int)$postData['style_id'];
+            $styleIds = explode(ModelService::SEPARATOR_GENERAL, trim($postData['style_id'], ModelService::SEPARATOR_GENERAL));
+        }
+
         if ($goods->needSetStatusToWait()) {
             $goods->status = Goods::STATUS_WAIT_ONLINE;
         }
@@ -3267,6 +3273,21 @@ class MallController extends Controller
             ]);
 
             $code = GoodsImage::addByAttrs($goods, $images);
+            if (200 != $code) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        GoodsStyle::deleteAll([
+            'goods_id' => $goods->id
+        ]);
+        if (!empty($styleIds)) {
+            $code = GoodsStyle::addByAttrs($goods->id, $styleIds);
             if (200 != $code) {
                 $transaction->rollBack();
 

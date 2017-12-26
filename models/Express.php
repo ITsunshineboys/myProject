@@ -119,7 +119,7 @@ class Express extends ActiveRecord
     /*
      * 获取对应名称和对应传值的方法
     */
-    private function expressname($order)
+    private function expressName($order)
     {
         $name   = json_decode($this->getcontent("http://www.kuaidi100.com/autonumber/auto?num=".$order), true);
         if (empty($name)){
@@ -140,9 +140,9 @@ class Express extends ActiveRecord
      * $data['ischeck'] ==1 已经签收
      * $data['data']        快递实时查询的状态 array
     */
-    public function getorder($order)
+    public function getOrder($order)
     {
-        $keywords = $this->expressname($order);
+        $keywords = $this->expressName($order);
         if (!$keywords) {
             return false;
         }else {
@@ -167,6 +167,16 @@ class Express extends ActiveRecord
                 ->where(['waybillnumber'=>$order_no])
                 ->asArray()
                 ->one();
+            $waybillnumber = $waybill['waybillnumber'];
+            $model = new Express();
+            $data = $model->getOrder($waybillnumber);
+            foreach ($data['data'] as &$datum)
+            {
+                $datum['time']=date('Y-m-d H:i:s',strtotime($datum['time']));
+                unset($datum['ftime']);
+                unset($datum['location']);
+            }
+            return $data['data'];
         }else{
             $waybill=Express::find()
                 ->select('waybillnumber,waybillname,create_time')
@@ -184,7 +194,7 @@ class Express extends ActiveRecord
             );
             $waybillnumber = $waybill['waybillnumber'];
             $model = new Express();
-            $result = $model->getorder($waybillnumber);
+            $result = $model->getOrder($waybillnumber);
             $data = self::Expresslist($result, $arr);
         }
         foreach ($data['data'] as &$datum)
@@ -373,7 +383,7 @@ class Express extends ActiveRecord
      * @param  array $datas 提交的数据
      * @return url响应返回的html
      */
-     public function sendPost($url, $datas) {
+     public  static function sendPost($url, $datas) {
         $temps = array();
         foreach ($datas as $key => $value) {
             $temps[] = sprintf('%s=%s', $key, $value);
@@ -413,7 +423,7 @@ class Express extends ActiveRecord
      * @param appkey Appkey
      * @return DataSign签名
      */
-    public function encrypt($data, $appkey) {
+    public static function encrypt($data, $appkey) {
         return urlencode(base64_encode(md5($data.$appkey)));
     }
 }

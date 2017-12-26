@@ -90,6 +90,8 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                         stair: value.stair_id,
                         high: value.high,
                         window: value.window,
+                        worker_list:[],
+                        all_goods:[],
                         is_ordinary:1
                     })
                 }
@@ -97,10 +99,11 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             //普通户型面积
             for(let [key,value] of res.effect.decoration_particulars.entries()){
                 let index = $scope.house_informations.findIndex(function (item) {
-                    return item.effect_id = value.id
+                    return item.id == value.effect_id
                 })
+                console.log($scope.house_informations[index]);
                 if(index!=-1){
-                    Object.entries($scope.house_informations[index],{
+                    Object.assign($scope.house_informations[index],{
                         other_id:value.id,
                         hall_area: value.hall_area,
                         hall_girth: value.hall_perimeter,
@@ -117,6 +120,33 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                     })
                 }
             }
+            //整合案例图片
+            for(let [key,value] of res.effect.images.entries()){
+                let index = $scope.house_informations.findIndex(function (item) {
+                    return item.id == value.effect_id
+                })
+                if(index != -1){
+                    if(value.images_user == '案例添加'){
+                        Object.assign($scope.house_informations[index],{
+                            drawing_id:value.id,
+                            drawing_list:value.effect_images.split(','),
+                            series:value.series_id,
+                            style:value.style_id
+                        })
+                    }else{
+                        $scope.drawing_informations.push({
+                            id:value.id,
+                            all_drawing:value.effect_images.split(','),
+                            series:value.series_id,
+                            style:value.style_id,
+                            drawing_name:value.images_user,
+                            index:index
+                        })
+                    }
+                }
+            }
+            console.log($scope.drawing_informations);
+            console.log($scope.house_informations);
         })
     }else{//添加
         // let arr = []
@@ -140,14 +170,14 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             drawing_name:'',
             // options:arr
         })
-        //修改后的数据
-        if(sessionStorage.getItem('houseInformation')!=null){
-            $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
-        }
-        if(sessionStorage.getItem('drawingInformation')!=null){
-            $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
-        }
         console.log($scope.drawing_informations);
+    }
+    //修改后的数据
+    if(sessionStorage.getItem('houseInformation')!=null){
+        $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
+    }
+    if(sessionStorage.getItem('drawingInformation')!=null){
+        $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
     }
     //添加房屋或者图纸
     $scope.addData = function (index) {
@@ -254,12 +284,22 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         let arr = angular.copy($scope.house_informations)
         for(let [key,value] of $scope.drawing_informations.entries()){
             console.log(arr[value.index]);
-            arr[value.index].drawing_list.push({
-                all_drawing:value.all_drawing.join(','),
-                series:value.series,
-                style:value.style,
-                drawing_name:value.drawing_name
-            })
+            if(value.id){
+                arr[value.index].drawing_list.push({
+                    id:value.id,
+                    all_drawing:value.all_drawing.join(','),
+                    series:value.series,
+                    style:value.style,
+                    drawing_name:value.drawing_name
+                })
+            }else{
+                arr[value.index].drawing_list.push({
+                    all_drawing:value.all_drawing.join(','),
+                    series:value.series,
+                    style:value.style,
+                    drawing_name:value.drawing_name
+                })
+            }
         }
         for(let [key,value] of arr.entries()){
             value['sort_id'] = key
@@ -293,20 +333,38 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             }
         }
         if(valid){
-            _ajax.post('/quote/effect-plot-add',{
-                province_code:$stateParams.province,
-                city_code:$stateParams.city,
-                address:$scope.params.address,
-                house_name:$scope.params.name,
-                district_code:$scope.params.region_code,
-                house_informations:arr
-            },function (res) {
-                $scope.submitted = false
-                $uibModal.open({
-                    templateUrl: 'pages/intelligent/cur_model.html',
-                    controller: all_modal
+            if($stateParams.index == 1){
+                _ajax.post('/quote/effect-edit-plot',{
+                    effect_id:$stateParams.id,
+                    province_code:$stateParams.province,
+                    city_code:$stateParams.city,
+                    address:$scope.params.address,
+                    house_name:$scope.params.name,
+                    district_code:$scope.params.region_code,
+                    house_informations:arr
+                },function () {
+                    $scope.submitted = false
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
                 })
-            })
+            }else{
+                _ajax.post('/quote/effect-plot-add',{
+                    province_code:$stateParams.province,
+                    city_code:$stateParams.city,
+                    address:$scope.params.address,
+                    house_name:$scope.params.name,
+                    district_code:$scope.params.region_code,
+                    house_informations:arr
+                },function (res) {
+                    $scope.submitted = false
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                })
+            }
         }else{
             $scope.submitted = true
         }

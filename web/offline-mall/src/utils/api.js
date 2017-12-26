@@ -41,10 +41,8 @@ function checkCode (res, callback) {
   if (res.code === 403) {
 
   } else {
-    if (res.code === 200) {
-      if (typeof callback === 'function') {
-        callback(res)
-      }
+    if (typeof callback === 'function') {
+      callback(res)
     }
   }
 }

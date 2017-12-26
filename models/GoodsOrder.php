@@ -1413,7 +1413,8 @@ class GoodsOrder extends ActiveRecord
      * @param $order_no
      * @param $handle_type
      * @param $reason
-     * @return Exception|\Exception|int
+     * @param $sku
+     * @return \Exception|int|\Yii\db\Exception
      */
     public static  function PlatformAdd($order_no,$handle_type,$reason,$sku){
         $OrderPlatForm=OrderPlatForm::find()
@@ -1495,7 +1496,7 @@ class GoodsOrder extends ActiveRecord
      * @param $freight
      * @return bool
      */
-    public static  function judge_order_money($goods_id,$total_amount,$goods_num,$return_insurance,$freight)
+    public static  function judgeOrderMoney($goods_id,$total_amount,$goods_num,$return_insurance,$freight)
     {
         $Goods=Goods::findOne($goods_id);
         $money=$Goods->platform_price*$goods_num+$return_insurance*100+($freight*100);

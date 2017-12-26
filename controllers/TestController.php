@@ -315,7 +315,6 @@ class TestController extends Controller
     {
         $request    = Yii::$app->request;
         $order_no   = trim($request->post('order_no',''));
-
         $sku        = trim($request->post('sku',''));
         $time=trim($request->post('time',''));
         $express=Express::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
@@ -330,16 +329,18 @@ class TestController extends Controller
     }
 
     public  function actionSendData(){
-        $requestData= "{'OrderCode':'','ShipperCode':'YTO','LogisticCode':'12345678'}";
+        $requestData= "{'OrderCode':'','ShipperCode':'STO','LogisticCode':'3345244122453'}";
 
+        //商户ID：1297184
+       // API key：0cdb787d-0542-4bef-bd2e-02826d7e52d4
         $datas = array(
-            'EBusinessID' => '',
+            'EBusinessID' => '1297184',
             'RequestType' => '1002',
             'RequestData' => urlencode($requestData) ,
             'DataType' => '2',
         );
-        $datas['DataSign'] = encrypt($requestData, AppKey);
-        $result=Express::sendPost(ReqURL, $datas);
+        $datas['DataSign'] = Express::encrypt($requestData, '0cdb787d-0542-4bef-bd2e-02826d7e52d4');
+        $result=Express::sendPost('http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx', $datas);
         var_dump($result);die;
         //根据公司业务处理返回的信息......
 
