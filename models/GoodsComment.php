@@ -141,8 +141,21 @@ class GoodsComment extends ActiveRecord
             || !array_key_exists('anonymous',$postData)
         )
         {
-            $code=1000;
-            return $code;
+            $postData=yii::$app->request->post();
+            if(
+                !array_key_exists('store_service_score', $postData)
+                || !array_key_exists('shipping_score', $postData)
+                || !array_key_exists('score', $postData)
+                || !array_key_exists('logistics_speed_score', $postData)
+                || !array_key_exists('sku',$postData)
+                || !array_key_exists('order_no',$postData)
+                || ! array_key_exists('content',$postData)
+                || !array_key_exists('anonymous',$postData)
+            )
+            {
+                $code=1000;
+                return $code;
+            }
         }
         $goodsOrder=GoodsOrder::find()
             ->where(['order_no'=>$postData['order_no']])
