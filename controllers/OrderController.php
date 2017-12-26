@@ -147,101 +147,7 @@ class OrderController extends Controller
             ],
         ];
     }
-    /**
-     * 获取省份
-     * @return string
-     */
-    public function actionGetprovince(){
-        $data=Yii::$app->params['districts'];
-        return Json::encode($data[0][86]);
-    }
-    /**
-     * 获取城市
-     * @return string
-     */
-    public  function  actionGetcity(){
-        $request=Yii::$app->request;
-        $code=trim($request->get('code',''));
-        if (!$code){
-            $c=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$c]
-            ]);
-        }
-        $data=Yii::$app->params['districts'];
-        return Json::encode($data[0][$code]);
-    }
-    /**
-     * 无登录app-添加收货地址（旧）
-     * @return string
-     */
-    public function actionAdduseraddress()
-    {
-        $request = Yii::$app->request;
-        if ($request->isPost) {
-            $consignee = trim($request->post('consignee',''),'');
-            $mobile= trim($request->post('mobile',''),'');
-            $districtCode=trim($request->post('districtcode',''),'');
-            $region=trim($request->post('region',''));
-            if (!$districtCode || !$region  || !$mobile || !$consignee ) {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }else{
-                $data=UserAddress::InsertAddress($mobile,$consignee,$region,$districtCode);
-                if (!$data){
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }else
-                {
-                    return Json::encode([
-                        'code' => 200,
-                        'msg' => 'ok',
-                        'data'=>[
-                            'address_id'=>$data
-                        ]
-                    ]);
-                }
-            }
-        }else
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => 0
-            ]);
-        }
-    }
 
-    /**
-     * 无登录app-确认订单页面-获取收货地址(旧)
-     * @return string
-     */
-    public function actionGetaddress(){
-        $request = Yii::$app->request;
-        $address_id=$request ->get('address_id');
-        $user_address=UserAddress::GetAddress($address_id);
-        if ($user_address){
-            return Json::encode([
-                'code' => 200,
-                'msg'  => 'ok',
-                'data' => $user_address
-            ]);
-        }else{
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-    }
 
     /**
      * 无登录app-添加收货地址(新)
@@ -313,6 +219,8 @@ class OrderController extends Controller
             'data' => $user_address
         ]);
     }
+
+
 
     /**
      * 无登录app-添加发票信息(新)
@@ -393,8 +301,82 @@ class OrderController extends Controller
             'data' => $data
         ]);
     }
+
     /**
-     * 无登录app-添加发票信息
+     * 无登录app-添加收货地址（旧）
+     * @return string
+     */
+    public function actionAdduseraddress()
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $consignee = trim($request->post('consignee',''),'');
+            $mobile= trim($request->post('mobile',''),'');
+            $districtCode=trim($request->post('districtcode',''),'');
+            $region=trim($request->post('region',''));
+            if (!$districtCode || !$region  || !$mobile || !$consignee ) {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }else{
+                $data=UserAddress::InsertAddress($mobile,$consignee,$region,$districtCode);
+                if (!$data){
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }else
+                {
+                    return Json::encode([
+                        'code' => 200,
+                        'msg' => 'ok',
+                        'data'=>[
+                            'address_id'=>$data
+                        ]
+                    ]);
+                }
+            }
+        }else
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => 0
+            ]);
+        }
+    }
+
+    /**
+     * 无登录app-确认订单页面-获取收货地址(旧)
+     * @return string
+     */
+    public function actionGetaddress(){
+        $request = Yii::$app->request;
+        $address_id=$request ->get('address_id');
+        $user_address=UserAddress::GetAddress($address_id);
+        if ($user_address){
+            return Json::encode([
+                'code' => 200,
+                'msg'  => 'ok',
+                'data' => $user_address
+            ]);
+        }else{
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+    }
+
+
+
+    /**
+     * 无登录app-添加发票信息(旧)
      * @return string
      */
     public function actionOrderinvoicelineadd(){
