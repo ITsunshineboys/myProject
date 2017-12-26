@@ -145,6 +145,7 @@ class Invoice extends ActiveRecord
      */
     public function  GetLineInvoice($invoiceId){
         $array  = self::find()
+            ->select('invoice_content,invoice_header,invoicer_card,invoice_header_type,invoice_type')
             ->where(['id' => $invoiceId])
             ->asArray()
             ->one();
