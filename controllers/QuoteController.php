@@ -875,7 +875,7 @@ class QuoteController extends Controller
         $public_message['district_code'] =  $data[0]['district_code'];
         $public_message['district'] = $data[0]['district'];
         $public_message['effect']=$data;
-//        $id=[];
+        $id=[];
         foreach ($data as $one_effect){
 
             $id[]=$one_effect['id'];
@@ -884,11 +884,11 @@ class QuoteController extends Controller
 
 //        $ids=implode(',',$id);
 //        var_dump($ids);
-        $a = EffectPicture::findByIds($id);
-        var_dump( $a);die;
-        $public_message['decoration_particulars'] = DecorationParticulars::findByIds($ids);
-        $public_message['goods_data'] = WorksData::findByIds($ids);
-        $public_message['worker_data'] = WorksWorkerData::findByIds($ids);
+        $public_message['images']= EffectPicture::findByIds($id);
+
+        $public_message['decoration_particulars'] = DecorationParticulars::findByIds($id);
+        $public_message['goods_data'] = WorksData::findByIds($id);
+        $public_message['worker_data'] = WorksWorkerData::findByIds($id);
 //        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
