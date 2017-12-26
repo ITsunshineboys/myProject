@@ -938,7 +938,15 @@ class OrderController extends Controller
         $freight=trim($request->get('freight'));
         $return_insurance=trim($request->get('return_insurance'));
         $buyer_message=trim($request->get('buyer_message',''));
-        if (!$total_amount || !$goods_id || !$goods_num || !$address_id || !$pay_name ||! $invoice_id || !$supplier_id )
+        if (
+            !$total_amount
+            || !$goods_id
+            || !$goods_num
+            || !$address_id
+            || !$pay_name
+            ||! $invoice_id
+            || !$supplier_id
+        )
         {
             $code=1000;
             return Json::encode([
