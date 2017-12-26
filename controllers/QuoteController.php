@@ -905,7 +905,7 @@ class QuoteController extends Controller
         $transaction = \Yii::$app->db->beginTransaction();
         $code = 500;
         try{
-            $ep_del=EffectToponymy::deleteAll($del_id);
+            $ep_del=EffectToponymy::deleteAll(['id'=>$del_id]);
             if(!$ep_del){
                 $transaction->rollBack();
                 return Json::encode([
@@ -916,8 +916,8 @@ class QuoteController extends Controller
 
 
             foreach ( $effect_ids as $effect_id ){
-                $res = Effect::deleteAll($effect_id);
-                $res1 = EffectPicture::deleteAll($effect_id);
+                $res = Effect::deleteAll(['id'=>$effect_id]);
+                $res1 = EffectPicture::deleteAll(['effect_id'=>$effect_id]);
             }
             $res2 =  WorksWorkerData::deleteAll(['effect_id'=>$effect_ids[1]]);
             $res3 =  WorksData::deleteAll(['effect_id'=>$effect_ids[1]]);
@@ -931,6 +931,7 @@ class QuoteController extends Controller
 
             $transaction->commit();
         }catch (Exception $e){
+            var_dump($e);die;
             $transaction->rollBack();
             return Json::encode([
                 'code'=>$code,
