@@ -3067,7 +3067,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $data=\Yii::$app->params['districts'];
-        return Json::encode($data);
+       $a= EffectToponymy::deleteAll();
+        return Json::encode($a);
     }
 }
