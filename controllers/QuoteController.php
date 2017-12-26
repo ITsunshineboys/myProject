@@ -185,7 +185,7 @@ class QuoteController extends Controller
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
 
-        $select = 'id,city_code,province_code,univalence,worker_kind_id';
+        $select = 'id,city_code,province_code,univalence,worker_kind_id,unit';
         $labor_cost = LaborCost::workerKind($select,$id);
 
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
@@ -625,7 +625,7 @@ class QuoteController extends Controller
 //        $user = \Yii::$app->user->identity();
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
-        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+        $district_chinese = District::findByCode((int)$request['district_code']);
 
 
             $transaction = \Yii::$app->db->beginTransaction();
@@ -645,7 +645,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -722,7 +722,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -821,7 +821,7 @@ class QuoteController extends Controller
                 $effect_plot->toponymy=$request['house_name'];
                 $effect_plot->province_code=$request['province_code'];
                 $effect_plot->city_code=$request['city_code'];
-                $effect_plot->district_code=$request['cur_county_id']['id'];
+                $effect_plot->district_code=$request['district_code'];
                 $effect_plot->add_time=time();
                 if(!$effect_plot->save(false)){
                     $transaction->rollBack();
