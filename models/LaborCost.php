@@ -117,7 +117,13 @@ class LaborCost extends ActiveRecord
             ->one();
 
         $row['univalence'] = $row['univalence'] / 100;
-        $row['unit'] = self::UNIT[$row['unit']];
+        $row['worker_kind']=WorkerType::gettype($row['worker_kind_id']);
+        $row['city'] = District::findByCode($row['city_code'])->name;
+        $row['province'] = District::findByCode($row['province_code'])->name;
+        unset($row['worker_kind_id']);
+        unset($row['city_code']);
+        unset($row['province_code']);
+//        $row['unit'] = self::UNIT[$row['unit']];
 
         return $row;
     }

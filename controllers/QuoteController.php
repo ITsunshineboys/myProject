@@ -185,9 +185,9 @@ class QuoteController extends Controller
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
 
-        $select = 'id,city_code,univalence,worker_kind_id';
+        $select = 'id,city_code,province_code,univalence,worker_kind_id';
         $labor_cost = LaborCost::workerKind($select,$id);
-        var_dump($labor_cost);die;
+
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
         return Json::encode([
             'code' => 200,
