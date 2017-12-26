@@ -70,19 +70,21 @@ class LaborCost extends ActiveRecord
 
     /**
      * 根据工种id查询
-     * @param $arr
-     * @param $craft
+     * @param $city
+     * @param $id
      * @param string $rank
      * @return array|null|ActiveRecord
      */
-    public static function profession($arr,$craft,$rank = self::LABOR_LEVEL)
+    public static function profession($city,$id,$rank = self::LABOR_LEVEL)
     {
         $select = self::SELECT_FIND;
 
         $labors = self::find()
             ->asArray()
             ->select($select)
-            ->where(['and',['city_code' => $arr],['id'=>$craft],['rank'=>$rank]])
+            ->where(['city_code' => $city])
+            ->andWhere(['id'=>$id])
+            ->andWhere(['rank'=>$rank])
             ->one();
 
         $labors['univalence'] = $labors['univalence'] / 100;
