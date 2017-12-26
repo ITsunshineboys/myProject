@@ -1896,7 +1896,7 @@ class OrderAfterSale extends ActiveRecord
             $OrderPlatForm->refund_time=$time;
             $res=$OrderPlatForm->save(false);
             if (!$res){
-                $code=500;
+                $code=1000;
                 $tran->rollBack();
                 return $code;
             }
