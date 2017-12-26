@@ -163,13 +163,17 @@ class QuoteController extends Controller
      */
     public function actionLaborCostList()
     {
-        $city = trim(\Yii::$app->request->get('city',''));
-        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
-        foreach ($data as &$v) {
-            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
-            unset($v['worker_kind_id']);
-        }
-
+//        $city = trim(\Yii::$app->request->get('city',''));
+//        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
+//        foreach ($data as &$v) {
+//            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
+//            unset($v['worker_kind_id']);
+//        }
+        $data=WorkerType::find()
+            ->where(['status'=>1,'pid'=>0])
+            ->select('id,worker_name')
+            ->asArray()
+            ->all();
         return Json::encode([
             'code'=> 200,
             'msg'=> 'ok',
@@ -626,10 +630,13 @@ class QuoteController extends Controller
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
         $district_chinese = District::findByCode((int)$request['district_code']);
-
+//        $province_chinese['name']='四川';
+//        $city_chinese['name']='成都';
+//        $district_chinese['name']='锦江区';
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
+                $ids=[];
                 foreach ($request['house_informations'] as $house) {
                     if ($house['is_ordinary'] == 0) {
                         //普通户型添加
@@ -814,8 +821,10 @@ class QuoteController extends Controller
 //                    }
                     }
                 }
+                if(is_array($ids)){
+                    $ids = implode(',',$ids);
+                }
 
-                $ids = implode(',',$ids);
                 $effect_plot = new EffectToponymy();
                 $effect_plot->effect_id=$ids;
                 $effect_plot->toponymy=$request['house_name'];
@@ -833,6 +842,7 @@ class QuoteController extends Controller
                 }
                 $transaction->commit();
             } catch (\Exception $e) {
+                var_dump($e);die;
                 $transaction->rollBack();
                 $code = 500;
                 return Json::encode([
@@ -864,16 +874,18 @@ class QuoteController extends Controller
         $public_message['toponymy'] =  $data[0]['toponymy'];
         $public_message['district_code'] =  $data[0]['district_code'];
         $public_message['district'] = $data[0]['district'];
+        var_dump($data);die;
         foreach ($data as $one_effect){
+            $public_message['effect']=Effect::findbyId($one_effect['id']);
+            $id[]=$one_effect['id'];
 
-            $id[] = $one_effect['id'];
         }
 
 
         $public_message['images'] = EffectPicture::findById($id);
-        $public_message['decoration_particulars'] = DecorationParticulars::findById($id);
-        $public_message['works_data'] = WorksData::findById($id);
-        $public_message['works_worker_data'] = WorksWorkerData::findById($id);
+        $public_message['decoration_particulars'] = DecorationParticulars::findById($one_effect['id']);
+        $public_message['goods_data'] = WorksData::findById($one_effect['id']);
+        $public_message['worker_data'] = WorksWorkerData::findById($one_effect['id']);
 //        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
@@ -895,7 +907,7 @@ class QuoteController extends Controller
         $transaction = \Yii::$app->db->beginTransaction();
         $code = 500;
         try{
-            $ep_del=EffectToponymy::find()->where(['id'=>$del_id])->one()->delete();
+            $ep_del=EffectToponymy::deleteAll(['id'=>$del_id]);
             if(!$ep_del){
                 $transaction->rollBack();
                 return Json::encode([
@@ -906,8 +918,8 @@ class QuoteController extends Controller
 
 
             foreach ( $effect_ids as $effect_id ){
-                $res = Effect::find()->where(['id'=>$effect_id])->one()->delete();
-                $res1 = EffectPicture::find()->where(['effect_id'=>$effect_id])->one()->delete();
+                $res = Effect::deleteAll(['id'=>$effect_id]);
+                $res1 = EffectPicture::deleteAll(['effect_id'=>$effect_id]);
             }
             $res2 =  WorksWorkerData::deleteAll(['effect_id'=>$effect_ids[1]]);
             $res3 =  WorksData::deleteAll(['effect_id'=>$effect_ids[1]]);
@@ -921,6 +933,7 @@ class QuoteController extends Controller
 
             $transaction->commit();
         }catch (Exception $e){
+            var_dump($e);die;
             $transaction->rollBack();
             return Json::encode([
                 'code'=>$code,
@@ -3056,7 +3069,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $data=\Yii::$app->params['districts'];
-        return Json::encode($data);
+       $a= EffectToponymy::deleteAll();
+        return Json::encode($a);
     }
 }

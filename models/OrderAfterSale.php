@@ -284,7 +284,10 @@ class OrderAfterSale extends ActiveRecord
      */
     public static function SupplierAfterSaleHandle($postData)
     {
-        if(!array_key_exists('order_no', $postData) || !array_key_exists('sku', $postData) || !array_key_exists('handle',$postData)){
+        if(
+            !array_key_exists('order_no', $postData)
+            || !array_key_exists('sku', $postData)
+            || !array_key_exists('handle',$postData)){
             $code=1000;
             return $code;
         }
@@ -293,6 +296,11 @@ class OrderAfterSale extends ActiveRecord
             ->one();
         if (!$after_sale){
             $code=1000;
+            return $code;
+        }
+        if ($after_sale->supplier_handle!=0)
+        {
+            $code=1032;
             return $code;
         }
         switch ($postData['handle']){

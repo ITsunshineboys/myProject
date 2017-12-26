@@ -309,7 +309,7 @@ class BasisDecorationService
 
 
     /**
-     *   防水  水路  强电  弱电 人工费
+     *   防水  水路  强电  弱电人工费
      * @param string $points
      * @param array $labor
      * @return float
@@ -335,7 +335,7 @@ class BasisDecorationService
     }
 
     /**
-     * 电线计算公式
+     * 水电所需材料处理
      * @param string $points
      * @param array $goods
      * @param string $crafts
@@ -404,7 +404,7 @@ class BasisDecorationService
     }
 
     /**
-     * 水电工 计算公式
+     * 水电工 值
      * @param $points
      * @param $material
      * @param $goods_value
@@ -422,12 +422,12 @@ class BasisDecorationService
     public static function plumberFormula($points,$material,$goods_value,$goods_price,$goods_procurement,$spool,$spool_value,$spool_price,$spool_procurement,$bottom_case,$bottom_procurement)
     {
         //线路个数计算 ,线路费用计算
-        $electricity['wire_quantity'] = ceil($points * $material / $goods_value);
+        $electricity['wire_quantity'] = self::goodsNumber($points,$material,$goods_value);
         $electricity['wire_cost'] = round($electricity['wire_quantity'] * $goods_price,2);
         $electricity['wire_procurement'] = round($electricity['wire_quantity'] * $goods_procurement,2);
 
         //线管个数计算,线管费用计算
-        $electricity['spool_quantity'] = ceil($points * $spool / $spool_value);
+        $electricity['spool_quantity'] = self::goodsNumber($points,$spool,$spool_value);
         $electricity['spool_cost'] =  round($electricity['spool_quantity'] * $spool_price,2);
         $electricity['spool_procurement'] =  round($electricity['spool_quantity'] * $spool_procurement,2);
 
@@ -439,6 +439,22 @@ class BasisDecorationService
         //总费用
         $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
         return  $electricity;
+    }
+
+    /**
+     * 商品数量 计算公式
+     * @param $points
+     * @param $craft
+     * @param $goods_value
+     * @return float
+     */
+    public function goodsNumber($points,$craft,$goods_value)
+    {
+//       个数2：（弱电点位×【10m】÷抓取的商品的长度）
+        $number = ceil($points * $craft / $goods_value);
+
+        return $number;
+
     }
 
 
@@ -1455,20 +1471,20 @@ class BasisDecorationService
             return $goods;
         } elseif ($goods == null){
             return new \stdClass;
-        }else {
-            $min =[];
+        } else {
+            $max =[];
             $len = count($goods);
             for ($i=0; $i<$len; $i++){
                 if ($i==0){
-                    $min = $goods[$i];
+                    $max = $goods[$i];
                     continue;
                 }
-                if ($goods[$i]['profit_rate']>$min['profit_rate']){
-                    $min = $goods[$i];
+                if ($goods[$i]['profit_rate']>$max['profit_rate']){
+                    $max = $goods[$i];
                 }
 
             }
-            return $min;
+            return $max;
         }
     }
 
@@ -1881,7 +1897,8 @@ class BasisDecorationService
     {
         foreach ($goods as $one_weak_current) {
             switch ($one_weak_current) {
-                case $one_weak_current['title'] == self::goodsNames()['reticle'] || $one_weak_current['title'] == self::goodsNames()['wire']:
+                case $one_weak_current['title'] == self::goodsNames()['reticle']
+                    || $one_weak_current['title'] == self::goodsNames()['wire']:
                     $one_weak_current['quantity'] = $material_price['wire_quantity'];
                     $one_weak_current['cost'] = $material_price['wire_cost'];
                     $one_weak_current['procurement'] = $material_price['wire_procurement'];
@@ -1908,9 +1925,9 @@ class BasisDecorationService
 
 
         $material ['total_cost'] = round($material_price['total_cost'],2);
-        $material ['material'] [] = BasisDecorationService::profitMargin($wire);
-        $material ['material'] []= BasisDecorationService::profitMargin($spool);
-        $material ['material'] []= BasisDecorationService::profitMargin($bottom);
+        $material ['material'] [] = self::profitMargin($wire);
+        $material ['material'] [] = self::profitMargin($spool);
+        $material ['material'] [] = self::profitMargin($bottom);
         return $material;
     }
 
