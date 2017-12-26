@@ -1887,7 +1887,7 @@ class OrderAfterSale extends ActiveRecord
             }
 
             $time=time();
-            $OrderPlatForm=new self;
+            $OrderPlatForm=new OrderPlatForm;
             $OrderPlatForm->order_no=$order_no;
             $OrderPlatForm->sku=$sku;
             $OrderPlatForm->handle=OrderPlatForm::PLATFORM_CLOSE_ORDER;
@@ -1895,7 +1895,6 @@ class OrderAfterSale extends ActiveRecord
             $OrderPlatForm->creat_time=$time;
             $OrderPlatForm->refund_result=2;
             $OrderPlatForm->refund_time=$time;
-            var_dump($OrderPlatForm);die;
             $res=$OrderPlatForm->save(false);
             if (!$res){
                 $code=1000;
