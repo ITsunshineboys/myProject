@@ -588,6 +588,22 @@ class Effect extends ActiveRecord
     }
 
     /**
+     * according to condition find
+     * @param $street
+     * @param $toponymy
+     * @param $district
+     * @return array|ActiveRecord[]
+     */
+    public static function findbyId($id)
+    {
+        return self::find()
+            ->asArray()
+            ->where(['id'=>$id])
+            ->andWhere('type != 2')
+//            ->orderBy(['sort_id'=>SORT_ASC])
+            ->one();
+    }
+    /**
      *
      * @param $district_code
      * @param $street
