@@ -601,7 +601,7 @@ class Effect extends ActiveRecord
             ->where(['id'=>$id])
             ->andWhere('type != 2')
 //            ->orderBy(['sort_id'=>SORT_ASC])
-            ->one();
+            ->all();
     }
     /**
      *
