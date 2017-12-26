@@ -163,13 +163,17 @@ class QuoteController extends Controller
      */
     public function actionLaborCostList()
     {
-        $city = trim(\Yii::$app->request->get('city',''));
-        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
-        foreach ($data as &$v) {
-            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
-            unset($v['worker_kind_id']);
-        }
-
+//        $city = trim(\Yii::$app->request->get('city',''));
+//        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
+//        foreach ($data as &$v) {
+//            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
+//            unset($v['worker_kind_id']);
+//        }
+        $data=WorkerType::find()
+            ->where(['status'=>1,'pid'=>0])
+            ->select('id,worker_name')
+            ->asArray()
+            ->all();
         return Json::encode([
             'code'=> 200,
             'msg'=> 'ok',
@@ -821,7 +825,7 @@ class QuoteController extends Controller
                 $effect_plot->toponymy=$request['house_name'];
                 $effect_plot->province_code=$request['province_code'];
                 $effect_plot->city_code=$request['city_code'];
-                $effect_plot->district_code=$request['district_code'];
+                $effect_plot->district_code=$request['cur_county_id']['id'];
                 $effect_plot->add_time=time();
                 if(!$effect_plot->save(false)){
                     $transaction->rollBack();
@@ -896,6 +900,7 @@ class QuoteController extends Controller
         $code = 500;
         try{
             $ep_del=EffectToponymy::find()->where(['id'=>$del_id])->one()->delete();
+            var_dump($ep_del);die;
             if(!$ep_del){
                 $transaction->rollBack();
                 return Json::encode([
