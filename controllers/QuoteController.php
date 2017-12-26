@@ -884,11 +884,11 @@ class QuoteController extends Controller
 
         $ids=implode(',',$id);
         var_dump($ids);
-        $public_message['images'] = EffectPicture::findByIds($ids);
-        var_dump( $public_message['images']);die;
+        $a = EffectPicture::findByIds($ids);
+        var_dump( $a);die;
         $public_message['decoration_particulars'] = DecorationParticulars::findByIds($ids);
         $public_message['goods_data'] = WorksData::findByIds($ids);
-        $public_message['worker_data'] = WorksWorkerData::findById($ids);
+        $public_message['worker_data'] = WorksWorkerData::findByIds($ids);
 //        $public_message['works_backman_data'] = WorksBackmanData::findById($id);
 
         return Json::encode([
