@@ -169,15 +169,15 @@ class QuoteController extends Controller
 //            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
 //            unset($v['worker_kind_id']);
 //        }
-        $data=WorkerType::find()
-            ->where(['status'=>1,'pid'=>0])
-            ->select('id,worker_name')
-            ->asArray()
-            ->all();
+
         return Json::encode([
             'code'=> 200,
             'msg'=> 'ok',
-            'list' =>$data,
+            'list' =>WorkerType::find()
+                ->where(['status'=>1,'pid'=>0])
+                ->select('id,worker_name')
+                ->asArray()
+                ->all()
         ]);
     }
 
@@ -3009,10 +3009,10 @@ class QuoteController extends Controller
      */
     public function actionSkuFefer()
     {
-        $category = trim(\Yii::$app->request->get('category',''));
+        $category = trim(\Yii::$app->request->get('cate_id',''));
         $sku = (int)trim(\Yii::$app->request->get('sku',''));
 
-        $goods_category = GoodsCategory::find()->where(['title'=>$category])->andwhere(['level'=>3])->one();
+        $goods_category = GoodsCategory::find()->where(['id'=>$category])->andwhere(['level'=>3])->one();
         if (!$goods_category){
             $code = 1043;
             return Json::encode([
