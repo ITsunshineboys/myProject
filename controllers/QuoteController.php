@@ -163,13 +163,17 @@ class QuoteController extends Controller
      */
     public function actionLaborCostList()
     {
-        $city = trim(\Yii::$app->request->get('city',''));
-        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
-        foreach ($data as &$v) {
-            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
-            unset($v['worker_kind_id']);
-        }
-
+//        $city = trim(\Yii::$app->request->get('city',''));
+//        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
+//        foreach ($data as &$v) {
+//            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
+//            unset($v['worker_kind_id']);
+//        }
+        $data=WorkerType::find()
+            ->where(['status'=>1,'pid'=>0])
+            ->select('id,worker_name')
+            ->asArray()
+            ->all();
         return Json::encode([
             'code'=> 200,
             'msg'=> 'ok',
@@ -185,7 +189,7 @@ class QuoteController extends Controller
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
 
-        $select = 'id,city_code,province_code,univalence,worker_kind_id';
+        $select = 'id,city_code,province_code,univalence,worker_kind_id,unit';
         $labor_cost = LaborCost::workerKind($select,$id);
 
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
@@ -625,7 +629,7 @@ class QuoteController extends Controller
 //        $user = \Yii::$app->user->identity();
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
-        $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
+        $district_chinese = District::findByCode((int)$request['district_code']);
 
 
             $transaction = \Yii::$app->db->beginTransaction();
@@ -645,7 +649,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -722,7 +726,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
@@ -895,7 +899,7 @@ class QuoteController extends Controller
         $transaction = \Yii::$app->db->beginTransaction();
         $code = 500;
         try{
-            $ep_del=EffectToponymy::find()->where(['id'=>$del_id])->one()->delete();
+            $ep_del=EffectToponymy::deleteAll($del_id);
             if(!$ep_del){
                 $transaction->rollBack();
                 return Json::encode([
