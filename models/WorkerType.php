@@ -36,6 +36,21 @@ class WorkerType extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function findPidbyid($id){
+        $data=self::find()
+            ->select('id,worker_name')
+            ->where(['pid'=>$id])
+            ->asArray()
+            ->all();
+        foreach ($data as &$v){
+            $v['labor_cost_id']=$id;
+            $v['quantity']='';
+        }
+
+
+
+        return $data;
+    }
     /**
      * 根据父级工种找子级
      *@return string

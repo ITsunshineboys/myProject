@@ -43,13 +43,20 @@ class WorkerCraftNorm extends ActiveRecord
     {
         $row =  self::find()
             ->asArray()
-            ->select('id,quantity,labor_cost_id,worker_kind_details,unit')
+            ->select('id,quantity,labor_cost_id,worker_kind_id,unit')
             ->where(['labor_cost_id'=>$id])
             ->All();
 
+
         foreach ($row as &$one){
+            $one['worker_kind_details']=WorkerType::find()
+                ->where(['id'=>$one['worker_kind_id']])
+                ->select('worker_name')
+                ->asArray()
+                ->one()['worker_name'];
             $one['quantity'] = $one['quantity'] / 100;
             $one['unit'] = self::UNIT[$one['unit']];
+            unset($one['worker_kind_id']);
         }
 
         return $row;

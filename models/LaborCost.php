@@ -99,7 +99,7 @@ class LaborCost extends ActiveRecord
     public static function LaborCostList($select,$where)
     {
         return  self::find()
-            ->distinct()
+//            ->distinct()
             ->select($select)
             ->where($where)
 //            ->groupBy('worker_kind')
@@ -108,24 +108,39 @@ class LaborCost extends ActiveRecord
     }
 
 
-    public static function workerKind($select = [],$id)
+    public static function workerKind($select = [],$id,$city_code,$province_code)
     {
         $row =  self::find()
             ->asArray()
             ->select($select)
-            ->where(['id'=>$id])
+            ->where(['id'=>$id,'city_code'=>$city_code])
             ->one();
+        if($row==null){
+//            $row['city'] = District::findByCode($row['city_code'])->name;
+//        $row['province'] = District::findByCode($row['province_code'])->name;
+            $row['city']='巴中';
+            $row['province']='四川省';
+            $row['univalence']='';
+            $row['unit']=self::UNIT[1];
 
-        $row['univalence'] = $row['univalence'] / 100;
-        $row['worker_kind']=WorkerType::gettype($row['worker_kind_id']);
-        $row['city'] = District::findByCode($row['city_code'])->name;
-        $row['province'] = District::findByCode($row['province_code'])->name;
+        }else{
+            $row['city']='成都';
+            $row['province']='四川省';
+            $row['univalence'] = $row['univalence'] / 100;
+            $row['worker_kind']=WorkerType::gettype($row['worker_kind_id']);
+
+            $row['unit'] = self::UNIT[$row['unit']];
+//        $row['city'] = District::findByCode($row['city_code'])->name;
+//        $row['province'] = District::findByCode($row['province_code'])->name;
+        }
+
+
         unset($row['worker_kind_id']);
         unset($row['city_code']);
         unset($row['province_code']);
-//        $row['unit'] = self::UNIT[$row['unit']];
-
         return $row;
+
+
     }
 }
 

@@ -188,11 +188,17 @@ class QuoteController extends Controller
     public function actionLaborCostEditList()
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
-
+        $city_code = (int)trim(\Yii::$app->request->get('city_code',''));
+        $province_code = (int)trim(\Yii::$app->request->get('province_code',''));
+//        $where = "id = $id and city_code = $city_code";
         $select = 'id,city_code,province_code,univalence,worker_kind_id,unit';
-        $labor_cost = LaborCost::workerKind($select,$id);
+        $labor_cost = LaborCost::workerKind($select,$id,$city_code,$province_code);
+        if($labor_cost['univalence']==''){
+            $worker_craft_norm = WorkerType::findPidbyid($id);
+        }else{
+            $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
+        }
 
-        $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
