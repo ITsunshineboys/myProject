@@ -73,7 +73,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
     ];
     //财务中心
     $scope.finance_obj = [
-        {id: 0, name: '商城财务', link: 'mall_finance.index'},
+        {id: 0, name: '商城财务', link: 'mall_finance'},
         {id: 1, name: '业主财务', link: 'owner_finance'},
     ];
     //账户管理

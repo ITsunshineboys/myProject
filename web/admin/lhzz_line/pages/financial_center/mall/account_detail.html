@@ -27,7 +27,7 @@
         <div class="col-sm-2">账户余额</div>
         <div class="col-sm-2">{{account_detail.balance | currency:'￥'}}</div>
         <div class="col-sm-8">
-            <button class="btn btn-default" ui-sref="mall_freeze_money({id:account_detail.id,cash:account_detail.cashwithdrawal_money})">冻结金额</button>
+            <button ng-disabled="+account_detail.balance <= 0" class="btn btn-default" ui-sref="mall_freeze_money({id:account_detail.id,cash:account_detail.cashwithdrawal_money})">冻结金额</button>
         </div>
     </div>
     <div class="row">

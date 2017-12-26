@@ -8,7 +8,7 @@
                     <input ng-class="{'error':(curForm.houseName.$invalid&&submitted) || ((curForm.houseName.$error.required || curForm.houseName.$error.pattern)&&change)}"
                            ng-pattern="/^[\d\D]{1,12}$/" ng-blur="change=!!curForm.houseName.$error" autocomplete="off"
                            type="text" id="houseName" name="houseName" required placeholder="请输入户型名称"
-                           ng-model="cur_house_information.house_type_name" class="form-control">
+                           ng-model="cur_house.house_type_name" class="form-control">
                 </div>
                 <p class="col-md-6 col-md-offset-1">*限1~12个字符</p>
             </div>
@@ -16,7 +16,7 @@
                 <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋面积</label>
                 <div class="col-md-3 col-sm-3 col-xs-3">
                     <input id=" houseArea" autocomplete="off" type="text" name="houseArea" ng-pattern="/^[1-9]$|^[1-9]\d$|^1[0-7]\d$|^[1-9]\.\d{1,2}$|^[1-9]\d\.\d{1,2}$|^1[0-7]\d.\d{1,2}$|^180$/"
-                           required class="form-control" ng-model="cur_house_information.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
+                           required class="form-control" ng-model="cur_house.area" placeholder="请输入面积数值" ng-blur="change1=!!curForm.houseArea.$error"
                     ng-class="{'error':(curForm.houseArea.$invalid&&submitted) ||((curForm.houseArea.$error.required || curForm.houseArea.$error.pattern)&&change1)}">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
@@ -26,75 +26,82 @@
                 <label class="col-md-2 col-sm-2 col-xs-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>房屋户型</label>
                 <div class="col-md-4">
                     <label for="room" class="col-md-6 left_house_type">
-                        <input id="room" type="text" disabled class="form-control" ng-model="cur_house_information.cur_room">
+                        <input id="room" type="text" disabled class="form-control" ng-model="cur_house.cur_room">
                         <span>室</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',6,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_room',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="changeQuantity('cur_house.cur_room',6,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="changeQuantity('cur_house.cur_room',1,0)"></button>
                     </label>
                     <label for="hall" class="col-md-6 right_house_type">
-                        <input id="hall" type="text" disabled class="form-control" ng-model="cur_house_information.cur_hall">
+                        <input id="hall" type="text" disabled class="form-control" ng-model="cur_house.cur_hall">
                         <span>厅</span>
-                        <button class="glyphicon glyphicon-plus" type="button"  ng-click="change_cur_quantity('cur_house_information.cur_hall',3,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_hall',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus" type="button"  ng-click="changeQuantity('cur_house.cur_hall',3,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="changeQuantity('cur_house.cur_hall',1,0)"></button>
                     </label>
                     <label for="toilet" class="col-md-6 left_house_type">
-                        <input id="toilet" type="text" disabled class="form-control" ng-model="cur_house_information.cur_toilet">
+                        <input id="toilet" type="text" disabled class="form-control" ng-model="cur_house.cur_toilet">
                         <span>卫</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_toilet',4,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_toilet',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="changeQuantity('cur_house.cur_toilet',4,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="changeQuantity('cur_house.cur_toilet',1,0)"></button>
                     </label>
                     <label for="kitchen" class="col-md-6 right_house_type">
-                        <input id="kitchen" type="text" disabled class="form-control" ng-model="cur_house_information.cur_kitchen">
+                        <input id="kitchen" type="text" disabled class="form-control" ng-model="cur_house.cur_kitchen">
                         <span>厨</span>
-                        <button class="glyphicon glyphicon-plus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_kitchen',2,1)"></button>
-                        <button class="glyphicon glyphicon-minus" type="button" ng-click="change_cur_quantity('cur_house_information.cur_kitchen',1,0)"></button>
+                        <button class="glyphicon glyphicon-plus" type="button" ng-click="changeQuantity('cur_house.cur_kitchen',2,1)"></button>
+                        <button class="glyphicon glyphicon-minus" type="button" ng-click="changeQuantity('cur_house.cur_kitchen',1,0)"></button>
                     </label>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="imgSrc">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型图</label>
                 <div class="col-md-3">
                     <div style="width: 100px;height: 100px;">
-                    <!--<img src="pages\intelligent\images\default.png" ng-if="!data.file" alt=""  width="100px" height="100px">-->
-                    <img ng-src="{{ cur_house_information.cur_imgSrc}}" ng-if="cur_house_information.cur_imgSrc!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
-                    <img ng-if="cur_house_information.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                    <img ng-src="{{ cur_house.cur_imgSrc}}" ng-if="cur_house.cur_imgSrc!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                    <img ng-if="cur_house.cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
                     </div>
                     <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
                     <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*" ng-disabled="upload_status"  ngf-select="" ngf-multiple="false" ng-model="data.file">
                         {{upload_txt}}</button>
-                    <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}</p>
+                    <p class="pic_error" ng-if="img_error != ''"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{img_error}}</p>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>是否有楼梯</label>
                 <div class="col-md-4 special_radio">
-                    <label for="have_stair" ng-click="cur_house_information.have_stair = 1" class="col-md-3">
-                        <input id="have_stair" type="radio" ng-checked="cur_house_information.have_stair==1" name="if_stair">
+                    <label for="have_stair" ng-click="cur_house.have_stair = 1;cur_house.stair = 1" class="col-md-3">
+                        <input id="have_stair" type="radio" ng-checked="cur_house.have_stair==1" name="if_stair">
                         有
                     </label>
-                    <label for="no_stair" ng-click="cur_house_information.have_stair = 0" class="col-md-3">
-                        <input id="no_stair" type="radio" ng-checked="cur_house_information.have_stair==0" name="if_stair">
+                    <label for="no_stair" ng-click="cur_house.have_stair = 0;cur_house.stair = 0" class="col-md-3">
+                        <input id="no_stair" type="radio" ng-checked="cur_house.have_stair==0" name="if_stair">
                         无
                     </label>
+                    <!--<div class="row col-md-12 structure" ng-if="cur_house.have_stair == 1">-->
+                        <!--<label for="structure{{item.id}}" ng-click="cur_house.stair=+item.id"-->
+                               <!--class="col-md-4" ng-repeat="item in all_stair">-->
+                            <!--<input type="radio" ng-checked="cur_house.stair == item.id"-->
+                                   <!--id="structure{{item.id}}" name="stair_structure">-->
+                            <!--{{item.attribute}}-->
+                        <!--</label>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>层高</label>
                 <div class="col-md-4 special_radio">
-                    <label for="first_high" ng-click="cur_house_information.high = 2.8" class="col-md-3">
-                        <input id="first_high" ng-checked="cur_house_information.high == 2.8" type="radio" name="high">
+                    <label for="first_high" ng-click="cur_house.high = 2.8" class="col-md-3">
+                        <input id="first_high" ng-checked="cur_house.high == 2.8" type="radio" name="high">
                         2.8m
                     </label>
-                    <label for="second_high" ng-click="cur_house_information.high = 3" class="col-md-3">
-                        <input id="second_high" ng-checked="cur_house_information.high == 3" type="radio" name="high">
+                    <label for="second_high" ng-click="cur_house.high = 3" class="col-md-3">
+                        <input id="second_high" ng-checked="cur_house.high == 3" type="radio" name="high">
                         3m
                     </label>
-                    <label for="three_high" ng-click="cur_house_information.high = 3.3" class="col-md-3">
-                        <input id="three_high" ng-checked="cur_house_information.high == 3.3" type="radio" name="high">
+                    <label for="three_high" ng-click="cur_house.high = 3.3" class="col-md-3">
+                        <input id="three_high" ng-checked="cur_house.high == 3.3" type="radio" name="high">
                         3.3m
                     </label>
-                    <label for="four_high" ng-click="cur_house_information.high = 4.5" class="col-md-3">
-                        <input id="four_high" ng-checked="cur_house_information.high == 4.5" type="radio" name="high">
+                    <label for="four_high" ng-click="cur_house.high = 4.5" class="col-md-3">
+                        <input id="four_high" ng-checked="cur_house.high == 4.5" type="radio" name="high">
                         >4.5m(跃层商铺等)
                     </label>
                 </div>
@@ -103,7 +110,7 @@
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>飘窗</label>
                 <div class="col-md-3">
                     <input id="window" autocomplete="off" type="text" required ng-pattern="/^\d$|^1\d$|^20$|^\d\.\d{1,2}$|^1\d\.\d{1,2}$/" ng-blur="change2=!!curForm.window.$error"
-                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house_information.window" name="window"
+                           placeholder="请输入长度数值" class="form-control" ng-model="cur_house.window" name="window"
                            ng-class="{'error':(curForm.window.$invalid&&submitted) ||(
                            (curForm.window.$error.required || curForm.window.$error.pattern)&&change2)}">
                 </div>
@@ -120,7 +127,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.hallArea.$invalid&&submitted) ||(
                            (curForm.hallArea.$error.required || curForm.hallArea.$error.pattern)&&change3)}"
-                           ng-model="cur_house_information.hall_area" class="form-control">
+                           ng-model="cur_house.hall_area" class="form-control">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
                 <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -132,7 +139,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.hallGirth.$invalid&&submitted) ||(
                            (curForm.hallGirth.$error.required || curForm.hallGirth.$error.pattern)&&change4)}"
-                           placeholder="请输入长度数值" ng-model="cur_house_information.hall_girth" class="form-control">
+                           placeholder="请输入长度数值" ng-model="cur_house.hall_girth" class="form-control">
                 </div>
                 <span class="unit col-md-1">m</span>
                 <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -144,7 +151,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.roomArea.$invalid&&submitted) ||(
                            (curForm.roomArea.$error.required || curForm.roomArea.$error.pattern)&&change5)}"
-                           placeholder="请输入面积数值" ng-model="cur_house_information.room_area" class="form-control">
+                           placeholder="请输入面积数值" ng-model="cur_house.room_area" class="form-control">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
                 <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -156,7 +163,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.roomGirth.$invalid&&submitted) ||(
                            (curForm.roomGirth.$error.required || curForm.roomGirth.$error.pattern)&&change6)}"
-                           placeholder="请输入长度数值" ng-model="cur_house_information.room_girth" class="form-control">
+                           placeholder="请输入长度数值" ng-model="cur_house.room_girth" class="form-control">
                 </div>
                 <span class="unit col-md-1">m</span>
                 <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -168,7 +175,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.toiletArea.$invalid&&submitted) ||(
                            (curForm.toiletArea.$error.required || curForm.toiletArea.$error.pattern)&&change7)}"
-                           placeholder="请输入面积数值" ng-model="cur_house_information.toilet_area" class="form-control">
+                           placeholder="请输入面积数值" ng-model="cur_house.toilet_area" class="form-control">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
                 <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -180,7 +187,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.toiletGirth.$invalid&&submitted) ||(
                            (curForm.toiletGirth.$error.required || curForm.toiletGirth.$error.pattern)&&change8)}"
-                           placeholder="请输入长度数值" ng-model="cur_house_information.toilet_girth" class="form-control">
+                           placeholder="请输入长度数值" ng-model="cur_house.toilet_girth" class="form-control">
                 </div>
                 <span class="unit col-md-1">m</span>
                 <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -192,7 +199,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.kitchenArea.$invalid&&submitted) ||(
                            (curForm.kitchenArea.$error.required || curForm.kitchenArea.$error.pattern)&&change9)}"
-                           placeholder="请输入面积数值" ng-model="cur_house_information.kitchen_area" class="form-control">
+                           placeholder="请输入面积数值" ng-model="cur_house.kitchen_area" class="form-control">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
                 <p class="col-md-6 ">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -204,7 +211,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.kitchenGirth.$invalid&&submitted) ||(
                            (curForm.kitchenGirth.$error.required || curForm.kitchenGirth.$error.pattern)&&change10)}"
-                           placeholder="请输入长度数值" ng-model="cur_house_information.kitchen_girth" class="form-control">
+                           placeholder="请输入长度数值" ng-model="cur_house.kitchen_girth" class="form-control">
                 </div>
                 <span class="unit col-md-1">m</span>
                 <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -216,7 +223,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.otherLength.$invalid&&submitted) ||(
                            (curForm.otherLength.$error.required || curForm.otherLength.$error.pattern)&&change11)}"
-                           placeholder="请输入长度数值" ng-model="cur_house_information.other_length" class="form-control">
+                           placeholder="请输入长度数值" ng-model="cur_house.other_length" class="form-control">
                 </div>
                 <span class="unit col-md-1">m</span>
                 <p class="col-md-6">*长度数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -228,7 +235,7 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.flattopArea.$invalid&&submitted) ||(
                            (curForm.flattopArea.$error.required || curForm.flattopArea.$error.pattern)&&change12)}"
-                           placeholder="请输入面积数值" ng-model="cur_house_information.flattop_area" class="form-control">
+                           placeholder="请输入面积数值" ng-model="cur_house.flattop_area" class="form-control">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
                 <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
@@ -240,15 +247,15 @@
                            ng-pattern="/^0\.0[1-9]$|^0\.[1-9]\d{0,1}$|^[1-9]\d{0,}$|^[1-9]\d{0,}\.\d{1,2}$/"
                            ng-class="{'error':(curForm.balconyArea.$invalid&&submitted) ||(
                            (curForm.balconyArea.$error.required || curForm.balconyArea.$error.pattern)&&change13)}"
-                           placeholder="请输入面积数值" ng-model="cur_house_information.balcony_area" class="form-control">
+                           placeholder="请输入面积数值" ng-model="cur_house.balcony_area" class="form-control">
                 </div>
                 <span class="unit col-md-1">m<sup>2</sup></span>
                 <p class="col-md-6">*面积数值填写必须为>0的数字，精确到小数点后两位</p>
             </div>
         </div>
         <div class="from-group submit">
-            <button class="btn btn-primary" type="submit">确认</button>
-            <button type="button" class="btn btn-default" ng-click="houseReturn()">返回</button>
+            <button class="btn btn-primary" type="submit" ng-click="saveHouse(curForm.$valid,curForm.$error.required)">确认</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>

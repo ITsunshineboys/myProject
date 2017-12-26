@@ -27,7 +27,7 @@
         <div class="col-md-2">账户余额</div>
         <div class="col-md-2">{{owner_detail.balance | currency:'￥'}}</div>
         <div class="col-md-8">
-            <button class="btn btn-default" ui-sref="freeze_money({user_id:owner_detail.id})">冻结金额</button>
+            <button ng-disabled="+owner_detail.balance <= 0" class="btn btn-default" ui-sref="freeze_money({user_id:owner_detail.id})">冻结金额</button>
         </div>
     </div>
     <div class="row">

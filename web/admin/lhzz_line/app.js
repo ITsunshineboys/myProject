@@ -504,7 +504,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'house_list_ctrl'
         })
         .state('add_house', {//智能报价添加/编辑小区
-            url: '/add_house?id&city&index',
+            url: '/add_house?id&city&index&province',
             templateUrl: 'pages/intelligent/add_house.html',
             css: 'pages/intelligent/css/add_house.css',
             controller:'house_detail_ctrl'
@@ -515,15 +515,17 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/add_case.css',
             controller:'add_case_ctrl'
         })
-        .state('intelligent.edit_house', {//智能报价添加/编辑普通小区
-            url: 'edit_house',
+        .state('edit_house', {//智能报价添加/编辑普通小区
+            url: '/edit_house?index&cur_index&city',
             templateUrl: 'pages/intelligent/edit_house.html',
-            css: 'pages/intelligent/css/edit_house.css'
+            css: 'pages/intelligent/css/edit_house.css',
+            controller:'edit_house_ctrl'
         })
-        .state('intelligent.add_drawing', {//智能报价添加/编辑普通小区图纸
-            url: 'add_drawing',
+        .state('add_drawing', {//智能报价添加/编辑普通小区图纸
+            url: '/add_drawing?index&cur_index&city',
             templateUrl: 'pages/intelligent/add_drawing.html',
-            css: 'pages/intelligent/css/add_drawing.css'
+            css: 'pages/intelligent/css/add_drawing.css',
+            controller:'add_drawing_ctrl'
         })
         .state('add_support_goods', {//智能报价案列/社区店配套商品管理
             url: '/add_support_goods?city&province&name',
