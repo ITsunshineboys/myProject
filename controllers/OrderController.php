@@ -2993,6 +2993,7 @@ class OrderController extends Controller
                 ]);
             }
         }
+        
         $code=OrderAfterSale::UserApplyAfterSale($postData,$user,$uploadsData);
         if($code==200){
             return Json::encode([
