@@ -1874,7 +1874,6 @@ class OrderAfterSale extends ActiveRecord
                     return 1000;
                     break;
             }
-            echo 'one';die;
             $orderPlatForm=OrderPlatForm::find()
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
@@ -1886,6 +1885,7 @@ class OrderAfterSale extends ActiveRecord
                 $code=1000;
                 return $code;
             }
+
             $time=time();
             $OrderPlatForm=new self;
             $OrderPlatForm->order_no=$order_no;
@@ -1901,6 +1901,8 @@ class OrderAfterSale extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
+            echo 'three';die;
             $tran->commit();
             $code=200;
             return $code;
