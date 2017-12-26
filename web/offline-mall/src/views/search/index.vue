@@ -41,10 +41,9 @@
     },
     methods: {
       getGoods () {
-        let that = this
         if (this.search === '') {
-          that.good_list = ''
-          console.log(that.good_list)
+          this.good_list = ''
+          console.log(this.good_list)
         } else {
           if (this.history_list.indexOf(this.search) === -1) {
             if (this.history_list.length < 6) {
@@ -57,14 +56,14 @@
           localStorage.setItem('history_list', JSON.stringify(this.history_list))
           this.axios.get('/mall/search', {
             keyword: this.search
-          }, function (res) {
+          }, (res) => {
             console.log(res)
             if (res.data.search.categories.length !== 0) {
-              that.good_list = res.data.search.categories
+              this.good_list = res.data.search.categories
             } else {
-              that.good_list = res.data.search.goods
+              this.good_list = res.data.search.goods
             }
-            console.log(that.good_list)
+            console.log(this.good_list)
           })
         }
       },
@@ -83,15 +82,14 @@
       }
     },
     created () {
-      let that = this
       if (localStorage.getItem('history_list') !== null) {
         this.history_list = JSON.parse(localStorage.getItem('history_list'))
       }
       this.$nextTick(() => {
         console.log(this.$refs.search.$refs.input.nextElementSibling.classList)
-        this.$refs.search.$refs.input.nextElementSibling.addEventListener('click', function () {
-          that.search = ''
-          that.good_list = ''
+        this.$refs.search.$refs.input.nextElementSibling.addEventListener('click', () => {
+          this.search = ''
+          this.good_list = ''
         })
       })
     }

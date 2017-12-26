@@ -88,7 +88,8 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
                             quantity:''
                         }]})
                 }else{
-                    let index4 = arr[index2].two_level[index3].findIndex(function(item){
+                    console.log(arr[index2].two_level[index3]);
+                    let index4 = arr[index2].two_level[index3].three_level.findIndex(function(item){
                         return item.id == value.id
                     })
                     if(index4 == -1){
@@ -135,7 +136,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
         if(item.good_code!=''){
             _ajax.get('/quote/sku-fefer',{
                 category:item.title,
-                sku:item.good_id
+                sku:item.good_code
             },function (res) {
                 console.log(res)
                 if(res.code == 1043){
@@ -221,7 +222,10 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
-        if(valid&&$scope.cur_house.cur_imgSrc != ''&&$scope.cur_house.drawing_list.length > 0){
+        let index = $scope.cur_house.all_goods.findIndex(function (item) {
+            return item.msg != ''
+        })
+        if(valid&&$scope.cur_house.cur_imgSrc != ''&&$scope.cur_house.drawing_list.length > 0&&index==-1){
             $scope.submitted = false
             $scope.house_informations[$stateParams.cur_index] = $scope.cur_house
             sessionStorage.setItem('houseInformation',JSON.stringify($scope.house_informations))
