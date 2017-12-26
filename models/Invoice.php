@@ -10,6 +10,19 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Json;
 
+/**
+ * This is the model class for table "invoice".
+ *
+ * @property integer $invoice_header_type
+ * @property string  invoice_header
+ * @property string  invoice_content
+ * @property integer $invoice_type
+ * @property string  $invoicer_card
+ * @property string  $invoicetoken
+ * @property integer $uid
+ * @property integer $default
+ *
+ */
 class Invoice extends ActiveRecord
 {
 
@@ -106,7 +119,7 @@ class Invoice extends ActiveRecord
             foreach ($invoice as $k =>$v)
             {
                 $invoice[$k]->default=0;
-                $res[$k]=$invoice[$k]->save();
+                $res[$k]=$invoice[$k]->save(false);
                 if (!$res[$k]){
                     $code=500;
                     $tran->rollBack();
@@ -121,7 +134,7 @@ class Invoice extends ActiveRecord
             $invoice_add->invoice_content=$invoice_content;
             $invoice_add->uid=$user->id;
             $invoice_add->default=1;
-            $res =$invoice_add->save();
+            $res =$invoice_add->save(false);
             if (!$res){
                 $code=500;
                 $tran->rollBack();
@@ -169,7 +182,7 @@ class Invoice extends ActiveRecord
             $invoice=self::find()->where("id !=  {$invoice_id}")->andWhere(['uid'=>$user->id])->all();
             foreach ( $invoice as $k =>$v){
                 $invoice[$k]->default=0;
-                $res[$k]=$invoice[$k]->save();
+                $res[$k]=$invoice[$k]->save(false);
                 if (!$res[$k]){
                     $code=500;
                     $tran->rollBack();
@@ -178,7 +191,7 @@ class Invoice extends ActiveRecord
             }
             $invoice_set=self::find()->where(['id'=>$invoice_id])->andWhere(['uid'=>$user->id])->one();
             $invoice_set->default=1;
-            $res1=$invoice_set->save();
+            $res1=$invoice_set->save(false);
             if (!$res1){
                 $code=500;
                 $tran->rollBack();
@@ -218,7 +231,7 @@ class Invoice extends ActiveRecord
             $invoice_up->invoice_content=$invoice_content;
             $invoice_up->uid=$user->id;
             $invoice_up->create_time=$time;
-            $res=$invoice_up->save();
+            $res=$invoice_up->save(false);
             if (!$res){
                 $code=500;
                 $tran->rollBack();
