@@ -1,5 +1,5 @@
 <template>
-  <div class=comment-container>
+  <div class="comment-container">
     <div class="top-container">
       <img :class="headshotStyle" class="user-pic" src="" alt="">
       <span :class="nameStyle" class="user-name">包子</span>
@@ -31,6 +31,7 @@
 <style scoped>
   .comment-container {
     padding: 14px 20px 16px;
+    border-top: 2px solid #E9EDEE;
     border-bottom: 2px solid #E9EDEE;
   }
 
