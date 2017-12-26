@@ -2,3 +2,10 @@
   background-color: #fff;
 }
 
+#app .vux-header .vux-header-title {
+  margin: 0 44px;
+}
+
+/*#app .vux-header .vux-header-right .iconfont {
+  padding: 5px;
+}*/
