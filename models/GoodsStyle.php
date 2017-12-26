@@ -48,4 +48,22 @@ class GoodsStyle extends ActiveRecord
     {
         return 'goods_style';
     }
+
+    /**
+     * Get style id list by goods id
+     *
+     * @param $goodsId goods id
+     * @return array
+     */
+    public static function styleIdsByGoodsId($goodsId)
+    {
+        $styleIds = self::find()
+            ->asArray()
+            ->select(['style_id'])
+            ->where(['goods_id' => $goodsId])
+            ->all();
+        return array_map(function ($v) {
+            return $v['style_id'];
+        }, $styleIds);
+    }
 }
