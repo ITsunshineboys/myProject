@@ -55,7 +55,6 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
 
     _ajax.get('/mall/goods-view-admin', {id: $stateParams.id}, function (res) {
         $scope.good_detail = res.data.goods_view_admin;
-        console.log($scope.good_detail);
         let price_a = Number($scope.good_detail.purchase_price_decoration_company); //装修公司采购价
         let price_b = Number($scope.good_detail.purchase_price_manager);            //项目经理采购价
         let price_c = Number($scope.good_detail.purchase_price_designer);           //设计师采购价
