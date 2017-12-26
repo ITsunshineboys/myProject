@@ -66,7 +66,7 @@ class EffectPicture extends ActiveRecord
     {
         return self::find()
             ->asArray()
-            ->where(['in','effect_id','231,232'])
+            ->where(['in','effect_id',$ids])
             ->all();
     }
 }
