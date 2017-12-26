@@ -875,13 +875,14 @@ class QuoteController extends Controller
         $public_message['district_code'] =  $data[0]['district_code'];
         $public_message['district'] = $data[0]['district'];
         $public_message['effect']=$data;
+
         foreach ($data as $one_effect){
 
             $id[]=$one_effect['id'];
 
         }
 
-
+        var_dump($id);die;
         $public_message['images'] = EffectPicture::findByIds($id);
         $public_message['decoration_particulars'] = DecorationParticulars::findByIds($id);
         $public_message['goods_data'] = WorksData::findByIds($id);
