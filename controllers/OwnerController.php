@@ -385,7 +385,6 @@ class OwnerController extends Controller
 
         //当地工艺
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['weak_current'],$post['city']);
-
         if ($craft == null){
             $code = 1059;
             return Json::encode([
