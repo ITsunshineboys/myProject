@@ -93,7 +93,7 @@ class FileService
             return $code;
         }
 
-        $file = $filename . '.' . $model->file->extension;
+        $file = $filename . $model->file->baseName . '.' . $model->file->extension;
         if (!$model->file->saveAs($directory . '/' . $file)) {
             $code = 500;
             return $code;

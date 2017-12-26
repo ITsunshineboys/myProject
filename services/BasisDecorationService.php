@@ -2045,6 +2045,12 @@ class BasisDecorationService
         return $material_total;
     }
 
+    /**
+     * 弱电总点位
+     * @param $points
+     * @param $get
+     * @return mixed
+     */
     public static function weakPoints($points,$get)
     {
         $other = 0;
@@ -2075,5 +2081,53 @@ class BasisDecorationService
         $weak_points = $all + $secondary_bedroom + $other;
 
         return $weak_points;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function strongPoints($points,$get)
+    {
+        $other = 0;
+        foreach ($points as $one_points){
+            //客厅
+            if ($one_points['title'] == OwnerController::ROOM_DETAIL['hall']){
+                $all = $one_points['count'] * $get['hall'];
+            }
+
+            // 次卧
+            if ($one_points['title'] == OwnerController::ROOM_DETAIL['secondary_bedroom']){
+                switch ($one_points) {
+                    case $get['bedroom'] == 1:
+                        $secondary_bedroom =  0;
+                        break;
+                    case $get['bedroom'] == 2:
+                        $secondary_bedroom = $one_points['count'] * 1 ;
+                        break;
+                    case $get['bedroom'] > 2:
+                        $secondary_bedroom = $one_points['count'] * ($get['bedroom'] - 1) ;
+                        break;
+                }
+            }
+
+            // 厨房
+            if ($one_points['title'] == OwnerController::ROOM_DETAIL['kitchen']){
+                $kitchen = $one_points['count'] * $get['kitchen'] ;
+            }
+
+            // 卫生间
+            if ($one_points['title'] == OwnerController::ROOM_DETAIL['toilet']){
+                $toilet = $one_points['count'] * $get['toilet'] ;
+            }
+
+
+            if ($one_points['title'] != OwnerController::ROOM_DETAIL['hall'] && $one_points['title'] == OwnerController::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != OwnerController::ROOM_DETAIL['kitchen'] && $one_points['title'] != OwnerController::ROOM_DETAIL['toilet']){
+                $other +=  $one_points['count'];
+            }
+        }
+        //  弱电总点位
+        $current_points = $all + $secondary_bedroom + $kitchen + $toilet + $other;
+
+        return $current_points;
     }
 }

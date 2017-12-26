@@ -11,6 +11,7 @@ use app\models\GoodsCategory;
 use app\models\Goods;
 use app\models\GoodsRecommendViewLog;
 use app\models\GoodsRecommendViewLogSupplier;
+use app\models\GoodsStyle;
 use app\models\LineSupplierGoods;
 use app\models\Series;
 use app\models\Style;
@@ -101,7 +102,7 @@ class MallController extends Controller
         'logistics-template-status-toggle',
         'goods-attr-add',
         'goods-attr-list-admin',
-        'goods-add',
+//        'goods-add',
         'goods-edit',
         'goods-edit-lhzz',
         'goods-attrs-admin',
@@ -3041,7 +3042,14 @@ class MallController extends Controller
         $code = 1000;
 
         $goods = new Goods;
-        $goods->attributes = Yii::$app->request->post();
+        $postData = Yii::$app->request->post();
+        $goods->attributes = $postData;
+
+        if (isset($postData['style_id']) && $postData['style_id']) {
+            $goods->style_id = (int)$postData['style_id'];
+            $styleIds = explode(ModelService::SEPARATOR_GENERAL, trim($postData['style_id'], ModelService::SEPARATOR_GENERAL));
+        }
+
         $images = Yii::$app->request->post('images', []);
 
         $goods->scenario = Goods::SCENARIO_ADD;
@@ -3116,6 +3124,18 @@ class MallController extends Controller
 
         if (!StringService::checkEmptyElement($images)) {
             $code = GoodsImage::addByAttrs($goods, $images);
+            if (200 != $code) {
+                $transaction->rollBack();
+
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }
+
+        if (isset($styleIds) && $styleIds) {
+            $code = GoodsStyle::addByAttrs($goods->id, $styleIds);
             if (200 != $code) {
                 $transaction->rollBack();
 

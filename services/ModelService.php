@@ -16,6 +16,7 @@ use Yii;
 class ModelService
 {
     const SEPARATOR_SORT = ':';
+    const SEPARATOR_GENERAL = ',';
     const SORT_DIRECTIONS = [
         SORT_DESC => 'DESC',
         SORT_ASC => 'ASC',
@@ -42,6 +43,8 @@ class ModelService
         self::REVIEW_STATUS_APPROVE,
     ];
     const SCENARIO_REVIEW = 'review';
+    const SCENARIO_ADD = 'add';
+    const SCENARIO_EDIT = 'edit';
 
     /**
      * Generate sorting statements for query

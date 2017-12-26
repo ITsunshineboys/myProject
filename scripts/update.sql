@@ -227,3 +227,11 @@ CREATE TABLE `effect_toponymy` (
 
 --test 2017.12.22 yr
 ALTER TABLE chat_record  MODIFY COLUMN `type` TINYINT(1);
+
+--all 2017.12.26 hj
+create table goods_style (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) unsigned not null default 0,
+  `style_id` int(11) unsigned not null default 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
