@@ -3,8 +3,9 @@ import Router from 'vue-router'
 import Home from '@/views/home/index'
 import Search from '@/views/search/index'
 import City from '@/views/city/index'
-import Order from '@/views/order/index'
-import Address from '@/views/address/index'
+import Order from '@/views/order/index'           // 订单主页
+import Address from '@/views/address/index'       // 收货地址
+import Invoice from '@/views/invoice/index'       // 发票
 import GoodDetail from '@/views/good_detail/index'
 import ClassList from '@/views/class/index'
 
@@ -39,6 +40,11 @@ export default new Router({
       path: '/address',
       name: 'Address',
       component: Address
+    },
+    {
+      path: '/invoice',
+      name: 'Invoice',
+      component: Invoice
     },
     {
       path: '/class',
