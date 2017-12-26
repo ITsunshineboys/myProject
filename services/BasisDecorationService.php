@@ -2045,8 +2045,35 @@ class BasisDecorationService
         return $material_total;
     }
 
-    public static function handymanGoods()
+    public static function weakPoints($points,$get)
     {
+        $other = 0;
+        foreach ($points as $one_points){
 
+            if ($one_points['title'] == OwnerController::ROOM_DETAIL['hall']){
+                $all = $one_points['count'] * $get['hall'];
+            }
+
+            if ($one_points['title'] == OwnerController::ROOM_DETAIL['secondary_bedroom']){
+                switch ($get['bedroom']) {
+                    case $get['bedroom'] == 1:
+                        $secondary_bedroom = 0;
+                        break;
+                    case $get['bedroom'] == 2:
+                        $secondary_bedroom = (int)$one_points['count'] * 1;
+                        break;
+                    case $get['bedroom'] > 2:
+                        $secondary_bedroom = (int)$one_points['count'] * ($get['bedroom'] - 1);
+                        break;
+                }
+            }
+
+            if ($one_points['title'] != OwnerController::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != OwnerController::ROOM_DETAIL['hall']){
+                $other +=  $one_points['count'];
+            }
+        }
+        $weak_points = $all + $secondary_bedroom + $other;
+
+        return $weak_points;
     }
 }
