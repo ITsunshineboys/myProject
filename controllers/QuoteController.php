@@ -630,10 +630,13 @@ class QuoteController extends Controller
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
         $district_chinese = District::findByCode((int)$request['district_code']);
-
+//        $province_chinese['name']='四川';
+//        $city_chinese['name']='成都';
+//        $district_chinese['name']='锦江区';
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
+                $ids=[];
                 foreach ($request['house_informations'] as $house) {
                     if ($house['is_ordinary'] == 0) {
                         //普通户型添加
@@ -818,14 +821,16 @@ class QuoteController extends Controller
 //                    }
                     }
                 }
+                if(is_array($ids)){
+                    $ids = implode(',',$ids);
+                }
 
-                $ids = implode(',',$ids);
                 $effect_plot = new EffectToponymy();
                 $effect_plot->effect_id=$ids;
                 $effect_plot->toponymy=$request['house_name'];
                 $effect_plot->province_code=$request['province_code'];
                 $effect_plot->city_code=$request['city_code'];
-                $effect_plot->district_code=$request['cur_county_id']['id'];
+                $effect_plot->district_code=$request['district_code'];
                 $effect_plot->add_time=time();
                 if(!$effect_plot->save(false)){
                     $transaction->rollBack();
@@ -837,6 +842,7 @@ class QuoteController extends Controller
                 }
                 $transaction->commit();
             } catch (\Exception $e) {
+                var_dump($e);die;
                 $transaction->rollBack();
                 $code = 500;
                 return Json::encode([
@@ -908,7 +914,7 @@ class QuoteController extends Controller
                 ]);
             }
 
-
+            var_dump($effect_ids);die;
             foreach ( $effect_ids as $effect_id ){
                 $res = Effect::find()->where(['id'=>$effect_id])->one()->delete();
                 $res1 = EffectPicture::find()->where(['effect_id'=>$effect_id])->one()->delete();
