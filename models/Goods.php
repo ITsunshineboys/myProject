@@ -1308,7 +1308,7 @@ class Goods extends ActiveRecord
             'after_sale_services' => $this->afterSaleServicesReadable(),
             'qr_code' => '/' . UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
-            'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'style_name' => join(',', Style::findNames(['in', 'id', GoodsStyle::styleIdsByGoodsId($this->id)])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
