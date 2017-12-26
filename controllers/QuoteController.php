@@ -3070,7 +3070,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       $a= EffectPicture::findAll([]);
+       $a= EffectPicture::find()->asArray()->all();
         return Json::encode($a);
     }
 }
