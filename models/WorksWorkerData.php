@@ -50,4 +50,12 @@ class WorksWorkerData extends ActiveRecord
             ->where(['effect_id'=>$id])
             ->all();
     }
+
+    public static function findByIds($ids)
+    {
+        return self::find()
+            ->asArray()
+            ->where(['in','effect_id',$ids])
+            ->all();
+    }
 }

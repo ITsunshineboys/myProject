@@ -113,4 +113,13 @@ class DecorationParticulars extends ActiveRecord
             ->all();
     }
 
+    public static function findByIds($ids)
+    {
+        return self::find()
+            ->asArray()
+            ->select('id,effect_id,hall_area,bedroom_area,toilet_area,kitchen_area,hall_perimeter,bedroom_perimeter,toilet_perimeter,kitchen_perimeter,modelling_length,flat_area,balcony_area')
+            ->where(['in','effect_id',$ids])
+            ->all();
+    }
+
 }

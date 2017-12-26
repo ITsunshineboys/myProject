@@ -60,4 +60,11 @@ class EffectPicture extends ActiveRecord
             ->where(['effect_id'=>$id])
             ->all();
     }
+    public static function findByIds($ids)
+    {
+        return self::find()
+            ->asArray()
+            ->where("effect_id in $ids")
+            ->all();
+    }
 }
