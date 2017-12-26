@@ -328,4 +328,20 @@ class TestController extends Controller
             echo 2;
         };
     }
+
+    public  function actionSendData(){
+        $requestData= "{'OrderCode':'','ShipperCode':'YTO','LogisticCode':'12345678'}";
+
+        $datas = array(
+            'EBusinessID' => '',
+            'RequestType' => '1002',
+            'RequestData' => urlencode($requestData) ,
+            'DataType' => '2',
+        );
+        $datas['DataSign'] = encrypt($requestData, AppKey);
+        $result=Express::sendPost(ReqURL, $datas);
+        var_dump($result);die;
+        //根据公司业务处理返回的信息......
+
+    }
 }
