@@ -34,6 +34,8 @@ use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
 use app\models\WorkerCraftNorm;
+use app\models\WorkerRank;
+use app\models\WorkerType;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
@@ -155,16 +157,23 @@ class QuoteController extends Controller
     }
 
     /**
+     *
      * labor list show
      * @return string
      */
     public function actionLaborCostList()
     {
         $city = trim(\Yii::$app->request->get('city',''));
+        $data =LaborCost::LaborCostList('id,worker_kind_id',"city_code={$city}");
+        foreach ($data as &$v) {
+            $v['worker_kind'] = WorkerType::gettype($v['worker_kind_id']);
+            unset($v['worker_kind_id']);
+        }
+
         return Json::encode([
             'code'=> 200,
             'msg'=> 'ok',
-            'list' => LaborCost::LaborCostList('id,worker_kind',"city_code={$city}"),
+            'list' =>$data,
         ]);
     }
 
@@ -176,12 +185,9 @@ class QuoteController extends Controller
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
 
-        $select = 'id,province,city,univalence,worker_kind,unit';
+        $select = 'id,city_code,univalence,worker_kind_id';
         $labor_cost = LaborCost::workerKind($select,$id);
-        $labor_cost['location'] = $labor_cost['province']. '-' .$labor_cost['city'];
-        unset($labor_cost['province']);
-        unset($labor_cost['city']);
-
+        var_dump($labor_cost);die;
         $worker_craft_norm = WorkerCraftNorm::findById($labor_cost['id']);
         return Json::encode([
             'code' => 200,
@@ -882,7 +888,7 @@ class QuoteController extends Controller
      * @return string
      */
     public function actionEffectDelPlot(){
-        $del_id=(int)\Yii::$app->request->get('del_id');
+        $del_id=(int)\Yii::$app->request->post('del_id');
         $effect_plot=EffectToponymy::find()->where(['id'=>$del_id])->select('effect_id')->one();
         $effect_ids= explode(',',$effect_plot['effect_id']);
 
@@ -927,7 +933,10 @@ class QuoteController extends Controller
        ]);
 
     }
-
+    /**
+     * 小区编辑
+     * @return string
+     */
     public function actionEffectEditPlot(){
         $request = \Yii::$app->request->post();
 //        $user = \Yii::$app->user->identity();
