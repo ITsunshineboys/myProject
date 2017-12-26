@@ -914,10 +914,10 @@ class QuoteController extends Controller
                 ]);
             }
 
-            var_dump($effect_ids);die;
+
             foreach ( $effect_ids as $effect_id ){
-                $res = Effect::find()->where(['id'=>$effect_id])->one()->delete();
-                $res1 = EffectPicture::find()->where(['effect_id'=>$effect_id])->one()->delete();
+                $res = Effect::deleteAll($effect_id);
+                $res1 = EffectPicture::deleteAll($effect_id);
             }
             $res2 =  WorksWorkerData::deleteAll(['effect_id'=>$effect_ids[1]]);
             $res3 =  WorksData::deleteAll(['effect_id'=>$effect_ids[1]]);
