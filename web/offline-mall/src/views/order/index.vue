@@ -3,10 +3,21 @@
     <x-header :left-options="{backText: ''}">确认订单</x-header>
     <!--收货地址-->
     <div class="bg-white">
-      <cell-box :link="{path:'/address'}">
-        <i class="iconfont icon-blue1"></i>
+      <!--  没有填写收货地址-- 显示   -->
+      <cell-box :link="{path:'/address'}" v-if= consigneeFlag>
+        <i class="iconfont icon-location"></i>
         <span class="add_address">填写收货地址</span>
       </cell-box>
+      <!--  已经填写过收货地址---显示 -->
+      <div class="consignee-box" v-else = !consigneeFlag>
+        <div class="consignee-top">
+          <span>收货人：{{consignee}}</span><span style="margin-left: 20px">{{head_number}}****{{foot_number}}</span>
+        </div>
+        <cell-box :link="{path:'/address'}">
+          <i class="iconfont icon-location"></i>
+          <span class="add_address">地址：{{addressValue}}{{detailAddress}}</span>
+        </cell-box>
+      </div>
     </div>
     <!--商品图文详情-->
     <ShopDetails :shopObj="shopObj"></ShopDetails>
@@ -14,7 +25,7 @@
     <div class="bg-white">
       <div class="cell-invoice">
         <group>
-          <cell title ="发票信息" value="明细" is-link></cell>
+          <cell title ="发票信息" value="明细" :link="{path:'/invoice'}"></cell>
         </group>
       </div>
       <!--付款方式-->
@@ -72,34 +83,9 @@
       XTextarea,
       ShopDetails
     },
-    methods: {
-    },
-    created () {
-      let that = this
-      this.axios.get('/order/get-line-goods-info', {
-        goods_id: 43,
-        goods_num: 10
-      }, function (res) {
-        console.log(res)
-        that.shop_name = res.data.shop_name // 店铺名称
-        that.title = res.data.title // 商品名称
-        that.cover_image = res.data.cover_image // 商品图片
-        that.platform_price = res.data.platform_price // 商品价格
-        that.goods_num = res.data.goods_num // 数量
-        that.market_price = res.data.market_price // 优惠价
-        that.freight = res.data.freight // 运费
-        that.allCost = res.data.allCost // 总价
-        that.shopObj = {
-          shop_name: that.shop_name,
-          title: that.title,
-          cover_image: that.cover_image,
-          platform_price: that.platform_price,
-          goods_num: that.goods_num
-        }
-      })
-    },
     data () {
       return {
+        consigneeFlag: true,
         shopObj: {},
         shop_name: '',
         goods_name: '',
@@ -108,13 +94,79 @@
         goods_num: '',
         market_price: '',
         freight: '',
-        allCost: ''
+        allCost: '',
+        consignee: '',
+        head_number: '',
+        foot_number: '',
+        addressValue: '',
+        detailAddress: '',
+        str: ''
+      }
+    },
+    methods: {
+    },
+    activated () {
+      this.axios.get('/order/get-line-goods-info', {
+        goods_id: 43,
+        goods_num: 10
+      }, (res) => {
+        console.log(res)
+        this.shop_name = res.data.shop_name // 店铺名称
+        this.title = res.data.title // 商品名称
+        this.cover_image = res.data.cover_image // 商品图片
+        this.platform_price = res.data.platform_price // 商品价格
+        this.goods_num = res.data.goods_num // 数量
+        this.market_price = res.data.market_price // 优惠价
+        this.freight = res.data.freight // 运费
+        this.allCost = res.data.allCost // 总价
+        this.shopObj = {
+          shop_name: this.shop_name,
+          title: this.title,
+          cover_image: this.cover_image,
+          platform_price: this.platform_price,
+          goods_num: this.goods_num
+        }
+      })
+      // 判断有无收货地址
+      if (sessionStorage.getItem('address_id')) {
+        this.consigneeFlag = false
+        this.axios.get('/order/get-line-receive-address', {
+          address_id: sessionStorage.getItem('address_id')
+        }, (res) => {
+          console.log(res)
+          this.consignee = res.data.consignee
+          this.phoneNumber = res.data.mobile
+          this.head_number = this.phoneNumber.substring(0, 3)
+          this.foot_number = this.phoneNumber.substring(7)
+          this.addressValue = res.data.district.replace(/,/g, '')
+          this.detailAddress = res.data.region
+        })
+      } else {
+        this.consigneeFlag = true
+      }
+      // 判断有无发票信息
+      if (sessionStorage.getItem('address_id')) {
+
       }
     }
   }
 </script>
 
 <style>
+  .consignee-box{
+    font-size: 14px;
+    color: #666;
+  }
+  .consignee-box .vux-cell-box{
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+  }
+  .consignee-top{
+    padding-left: 41px;
+  }
+  .consignee-box .add_address{
+    color: #999!important;
+  }
   .add_address{
     margin-left: 10px;
   }
@@ -198,6 +250,10 @@
     text-align: center;
     background-color: #D9AD65;
   }
+  .vux-cell-box:before{
+    border: 0!important;
+  }
+
 
 
 </style>

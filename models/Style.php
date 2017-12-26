@@ -136,4 +136,22 @@ class Style extends ActiveRecord
             ];
         }
     }
+
+    /**
+     * Find style names
+     *
+     * @param array $where query condition default empty
+     * @return array
+     */
+    public static function findNames(array $where = [])
+    {
+        $names = self::find()
+            ->asArray()
+            ->select(['style'])
+            ->where($where)
+            ->all();
+        return array_map(function ($v) {
+            return $v['style'];
+        }, $names);
+    }
 }

@@ -1290,6 +1290,7 @@ class Goods extends ActiveRecord
      */
     public function adminView()
     {
+        $styleIds = GoodsStyle::styleIdsByGoodsId($this->id);
         return [
             'id' => $this->id,
             'logistics_template_id' => $this->logistics_template_id,
@@ -1308,7 +1309,8 @@ class Goods extends ActiveRecord
             'after_sale_services' => $this->afterSaleServicesReadable(),
             'qr_code' => '/' . UploadForm::DIR_PUBLIC . '/goods_' . $this->id . '.png',
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
-            'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'style_ids' => $styleIds,
+            'style_name' => join(',', Style::findNames(['in', 'id', $styleIds])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
@@ -1352,6 +1354,8 @@ class Goods extends ActiveRecord
             $line_goods['line_mobile']='';
             $line_goods['line_supplier_name']='';
         }
+
+        $styleIds = GoodsStyle::styleIdsByGoodsId($this->id);
         return [
             'status' => $this->status,
             'title' => $this->title,
@@ -1362,7 +1366,8 @@ class Goods extends ActiveRecord
             'sku' => $this->sku,
             'left_number' => $this->left_number,
             'brand_name' => GoodsBrand::findOne($this->brand_id)->name,
-            'style_name' => $this->style_id ? Style::findOne($this->style_id)->style : '',
+            'style_ids' => $styleIds,
+            'style_name' => join(',', Style::findNames(['in', 'id', $styleIds])), // $this->style_id ? Style::findOne($this->style_id)->style : '',
             'series_name' => $this->series_id ? Series::findOne($this->series_id)->series : '',
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),

@@ -145,6 +145,13 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                     }
                 }
             }
+            //修改后的数据
+            if(sessionStorage.getItem('houseInformation')!=null){
+                $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
+            }
+            if(sessionStorage.getItem('drawingInformation')!=null){
+                $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+            }
             console.log($scope.drawing_informations);
             console.log($scope.house_informations);
         })
@@ -170,14 +177,14 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             drawing_name:'',
             // options:arr
         })
+        //修改后的数据
+        if(sessionStorage.getItem('houseInformation')!=null){
+            $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
+        }
+        if(sessionStorage.getItem('drawingInformation')!=null){
+            $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+        }
         console.log($scope.drawing_informations);
-    }
-    //修改后的数据
-    if(sessionStorage.getItem('houseInformation')!=null){
-        $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
-    }
-    if(sessionStorage.getItem('drawingInformation')!=null){
-        $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
     }
     //添加房屋或者图纸
     $scope.addData = function (index) {

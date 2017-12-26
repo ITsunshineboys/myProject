@@ -13,6 +13,8 @@
       <group>
         <cell-box is-link>
           选择数量
+
+
         </cell-box>
         <cell-box is-link>
           <div class="service">
@@ -24,34 +26,52 @@
             <span>上门退货</span>
           </div>
           <div class="service">
-          <i class="iconfont icon-blue"></i>
-          <span>上门退货</span>
+            <i class="iconfont icon-blue"></i>
+            <span>上门退货</span>
           </div>
         </cell-box>
       </group>
-
       <divider></divider>
-      <group>
-        <cell-box>
-          <span class="sum-comment">
-            评价
-          </span>
-          <span>
-            (493)
-            </span>
-        </cell-box>
-      </group>
+      <flexbox justify="flex-start" class="comment-count">
+        <span class="sum-comment">评价</span>
+        <span>(493)</span>
+      </flexbox>
       <comment headshotStyle="headshot-style" nameStyle="name-style" dateStyle="date-style"></comment>
-      <group>
-        <cell-box>
-          <p class="view-all">
-            查看全部评价
-          </p>
-         <i class="iconfont icon-arrow_line_right"></i>
-        </cell-box>
-      </group>
+      <flexbox justify="center" class="view-all">
+        <span>
+          查看全部评价
+          </span>
+        <i class="iconfont icon-arrow_line_right"></i>
+      </flexbox>
+      <divider></divider>
+      <card class="shop-card">
+        <flexbox slot="header" justify="flex-start" align="center">
+          <img src="./logo.png" alt="">
+          <span>马可波罗其打算的撒</span>
+        </flexbox>
+        <flexbox slot="content" justify="space-between">
+          <div>
+            <span>1130</span>
+            <br/>
+            商品数
+        </div>
+          <div>
+            <span>15</span>
+            <br/>
+           粉丝数
+        </div>
+          <div>
+            <span>0</span>
+            <br/>
+            综合评分
+        </div>
 
+        </flexbox>
+        <div slot="footer">
+          进店逛逛
 
+        </div>
+      </card>
 
 
     </div>
@@ -61,7 +81,7 @@
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox} from 'vux'
+  import {Swiper, Group, Cell, CellBox, Flexbox, Card} from 'vux'
   import goodsTitle from '../good_detail/title'
   import divider from '../good_detail/divider'
   import comment from '../good_detail/comment.vue'
@@ -85,6 +105,8 @@
       Group,
       Cell,
       CellBox,
+      Flexbox,
+      Card,
       goodsTitle,
       divider,
       comment
@@ -174,38 +196,60 @@
     color: rgba(153, 153, 153, 1);
   }
 
-  .good-container .sum-comment {
-    font-size:16px;
+  .good-container .comment-count {
+    padding: 16px 14px;
+    line-height: 16px;
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+  }
+
+  .good-container .comment-count span:first-child {
     margin-right: 10px;
-    color:rgba(102,102,102,1);
-    line-height:16px;
   }
 
   /*评价组件样式*/
-  .headshot-style {
+  .good-container .headshot-style {
     width: 50px;
     height: 50px;
     border-radius: 50%;
   }
 
-  .name-style {
+  .good-container .name-style {
     margin-left: 15px;
-    font-size:16px;
-    color:rgba(153,153,153,1);
+    font-size: 16px;
+    color: rgba(153, 153, 153, 1);
   }
 
-  .date-style {
-    font-size:14px;
-    color:rgba(153,153,153,1);
-    line-height:16px;
+  .good-container .date-style {
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 16px;
   }
 
-  .view-all {
+  .good-container .view-all {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .shop-card img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .shop-card > div:first-child {
+    padding-top: 10px;
+    padding-left: 14px;
+  }
+
+  .shop-card > div:first-child span {
+    font-size: 16px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 16px;
+    margin-left: 10px;
+  }
+
+  .shop-card > div:nth-child(2) > div {
     text-align: center;
-    font-size:16px;
-    color:rgba(34,34,34,1);
-    line-height:16px;
   }
-
 
 </style>

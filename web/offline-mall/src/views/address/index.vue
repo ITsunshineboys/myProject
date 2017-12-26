@@ -2,16 +2,16 @@
     <div>
       <x-header :left-options="{backText: ''}">编辑收货地址</x-header>
       <div class="bg-white address-box">
-        <x-input class="consignee-box" v-model="consignee" @on-change="consigneeChange" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" :max=10></x-input>
-        <x-input class="phone-box"  ref="phone_ref" @on-change="phoneChange" title="联系电话" name="mobile"  v-model="phoneNumber"  placeholder="请输入联系电话" keyboard="number" is-type="china-mobile" :max="11"></x-input>
+        <x-input class="consignee-box" v-model="consignee" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" :max=10></x-input>
+        <x-input class="phone-box"  ref="phone_ref" v-model="phoneNumber" title="联系电话" name="mobile"  placeholder="请输入联系电话" keyboard="number" is-type="china-mobile" :max="11"></x-input>
         <group class="choose-address-box" label-width="5rem" label-align="left">
-          <x-address title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
+          <x-address :confirm-text="'确认'" title="地址选择" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
         </group>
         <group class="address-detail-box" label-width="5rem">
-          <x-textarea  :title="'详细地址'" @on-change="addressChange" :placeholder="'请输入详细地址'" v-model="detailAddress" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
+          <x-textarea  :title="'详细地址'" :placeholder="'请输入详细地址'" v-model="detailAddress" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
       </div>
-      <x-button v-model="showHideOnBlur" class="save-btn" :class="{'save-btn-true':requiredStatus && phoneStatus && addressStatus}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!requiredStatus || !phoneStatus || !addressStatus"></x-button>
+      <x-button v-model="showHideOnBlur" class="save-btn" :class="{'save-btn-true':consignee && phoneNumber && detailAddress}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!consignee || !phoneNumber || !detailAddress"></x-button>
 
       <!--确认模态框-->
       <div v-transfer-dom>
@@ -44,6 +44,24 @@
     directives: {
       TransferDom
     },
+    activated () {
+      if (sessionStorage.getItem('address_id')) {
+        this.axios.get('/order/get-line-receive-address', {
+          address_id: sessionStorage.getItem('address_id')
+        }, (res) => {
+          console.log(res)
+          this.consignee = res.data.consignee
+          this.phoneNumber = res.data.mobile
+          this.addressValue = res.data.district.split(',')
+          this.detailAddress = res.data.region
+        })
+      } else {
+        this.consignee = ''
+        this.phoneNumber = ''
+        this.addressValue = ['四川省', '成都市', '锦江区']
+        this.detailAddress = ''
+      }
+    },
     data () {
       return {
         requiredStatus: false,
@@ -67,22 +85,8 @@
           region: this.detailAddress
         }, function (res) {
           console.log(res)
+          sessionStorage.setItem('address_id', res.data.address_id)
         })
-      },
-      consigneeChange (value) {   // 收货人
-        let that = this
-        value === '' ? that.requiredStatus = false : that.requiredStatus = true
-      },
-      phoneChange () {           // 电话号码
-        let that = this
-        that.phoneStatus = this.$refs.phone_ref.valid
-        if (that.phoneStatus === true) {
-          that.phoneNumber === '' ? that.phoneStatus = false : that.phoneStatus = true
-        }
-      },
-      addressChange () {         // 详细地址
-        let that = this
-        that.detailAddress === '' ? that.addressStatus = false : that.addressStatus = true
       },
       hide () {                 // 关闭模态框时，跳转回订单页
         this.$router.go(-1)
@@ -91,7 +95,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import '~vux/src/styles/close';
   .bg-white,
   .choose-address-box .vux-cell-value{
@@ -158,5 +162,9 @@
     height: 50px;
     line-height: 50px;
   }
+  }
+  .vux-popup-header-left,
+  .vux-popup-header-right{
+    color:#222!important;
   }
 </style>
