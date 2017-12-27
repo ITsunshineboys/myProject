@@ -2957,7 +2957,7 @@ class GoodsOrder extends ActiveRecord
             if ($user->last_role_id_app == 6) {
                 $output['uid'] = $arr[0]['user_id'];
                 $output['to_role_id'] = $arr[0]['role_id'];
-            } else {
+            }else {
                 $output['uid'] = Supplier::find()
                     ->select('uid')
                     ->where(['id' => $arr[0]['supplier_id']])
