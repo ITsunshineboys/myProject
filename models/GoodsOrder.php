@@ -3062,6 +3062,7 @@ class GoodsOrder extends ActiveRecord
     }
 
     /**
+     * 获取退款数据
      * @param $order_no
      * @param $sku
      * @return array
@@ -3123,7 +3124,6 @@ class GoodsOrder extends ActiveRecord
                     ];
                 }
             }
-
             if ($type==8
                 || $type==9
                 || $type==10
