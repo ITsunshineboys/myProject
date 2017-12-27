@@ -8,6 +8,7 @@ use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
+use app\models\EditCategory;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\models\EffectPicture;
@@ -1963,6 +1964,46 @@ class OwnerController extends Controller
                 'worker_data' => $worker_data,
             ]
         ]);
+    }
+
+
+    public function actionChangeGoods()
+    {
+        $id = (int)\Yii::$app->request->get('id','');
+
+        $goods = Goods::find()
+            ->select('goods.id,goods.category_id,gc.title as category_title,goods.market_price,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,gc.path')
+            ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
+            ->where(['goods.id'=>$id])
+            ->asArray()
+            ->one();
+        $goods['market_price'] = $goods['market_price'] / 100;
+        $goods['platform_price'] = $goods['platform_price'] / 100;
+        $goods['supplier_price'] = $goods['supplier_price'] / 100;
+        $goods['purchase_price_decoration_company'] = $goods['purchase_price_decoration_company'] / 100;
+
+
+        $change_goods = 0;
+        // 无计算公式的商品
+        $assort_goods = AssortGoods::find()->where(['state'=>1])->all();
+        foreach ($assort_goods as $assort){
+            if ($assort['category_id'] == $goods['category_id']){
+                $change_goods = $assort['quantity'];
+            }
+        }
+
+
+        // 有计算公式的商品
+//        $goods_attr = GoodsAttr::find()->asArray()->where(['goods_id'=>$goods['id']])->all();
+
+
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'quantity' => $change_goods,
+        ]);
+
     }
 
     /**
