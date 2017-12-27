@@ -296,7 +296,7 @@ class MallController extends Controller
     {
         $districtCode = (int)Yii::$app->request->get('district_code', Yii::$app->params['district_default']);
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', GoodsRecommend::PAGE_SIZE_DEFAULT_ADMIN_INDEX);
 
         return Json::encode([
             'code' => 200,
