@@ -21,6 +21,7 @@ use app\models\Effect;
 
 use app\models\EffectPicture;
 use app\models\EffectToponymy;
+use app\models\EngineeringCraftName;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCarpentryCraft;
 use app\models\EngineeringStandardCraft;
@@ -182,7 +183,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 做工标准修改列表
+     * 做工标准修改列表 (已优化)
      * @return string
      */
     public function actionLaborCostEditList()
@@ -208,7 +209,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 做工标准修改
+     * 做工标准修改（已优化)
      * @return string
      */
     public function actionLaborCostEdit()
@@ -2064,42 +2065,18 @@ class QuoteController extends Controller
     public function actionAssortGoodsAdd()
     {
         $post = \Yii::$app->request->post();
-        $tr = \Yii::$app->db->beginTransaction();
-        try {
-            $del = (new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
-            if (!$del){
-                $tr->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'mag' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
+        (new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
+        foreach($post['assort'] as $management) {
+            $add = AssortGoods::add($management,$post['city']);
+        }
 
-            foreach($post['assort'] as $management) {
-                $add = AssortGoods::add($management,$post['city']);
-            }
-
-            if (!$add){
-                $tr->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'mag' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            $tr->commit();
-        } catch (\Exception $e) {
-
-            //回滚
-            $tr->rollBack();
+        if (!$add){
             $code=500;
             return Json::encode([
                 'code' => $code,
                 'mag' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
 
         return Json::encode([
            'code' => 200,
@@ -3079,7 +3056,12 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       $a= EffectPicture::find()->asArray()->all();
-        return Json::encode($a);
+//      $data=EngineeringStandardCraft::find()->asArray()->all();
+//      foreach ($data as $a){
+//          $res =new EngineeringCraftName();
+//          $res->project_details=$a['project_details'];
+//          $res->project=$a['project'];
+//          $res->save();
+//      }
     }
 }
