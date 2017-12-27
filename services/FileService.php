@@ -169,7 +169,7 @@ class FileService
         }
 
         while (true) {
-            $filename = uniqid(rand(1, 10000) . rand(1, 10000));
+            $filename = uniqid(rand(1, 10000) . rand(10, 99) . rand(1, 10000) . rand(10, 99) . rand(1, 10000));
             if (!file_exists($directory . '/' . $filename)) {
                 return $filename;
             }
