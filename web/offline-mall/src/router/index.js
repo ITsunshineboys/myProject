@@ -3,11 +3,11 @@ import Router from 'vue-router'
 import Home from '@/views/home/index'
 import Search from '@/views/search/index'
 import City from '@/views/city/index'
-import Order from '@/views/order/index'           // 订单主页
-import Address from '@/views/address/index'       // 收货地址
-import Invoice from '@/views/invoice/index'       // 发票
+import Order from '@/views/order/index'             // 订单主页
+import Address from '@/views/address/index'         // 收货地址
+import Invoice from '@/views/invoice/index'         // 发票
 import GoodDetail from '@/views/good_detail/index'
-import ClassList from '@/views/class/index'
+import ClassList from '@/views/class/index'         // 分类列表
 
 Vue.use(Router)
 

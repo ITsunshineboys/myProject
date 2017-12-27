@@ -1,21 +1,69 @@
-.bg-white{
+body, html {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bg-white {
   background-color: #fff;
 }
 
-#app .vux-header .vux-header-title {
-  margin: 0 44px;
-}
+/* Header */
 #app .vux-header{
   width: 100%;
   position: fixed;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   z-index: 100;
 }
 
 #app .vux-header + * {
   margin-top: 46px;
 }
-/*#app .vux-header .vux-header-right .iconfont {
+
+#app .vux-header .vux-header-title {
+  margin: 0 45px;
+}
+
+#app .vux-header .vux-header-right {
+  right: 10px;
+  color: #222;
+}
+
+#app .vux-header .vux-header-right .iconfont {
   padding: 5px;
-}*/
+}
+
+/* Header search */
+#app .vux-header .search {
+  margin-top: 4px;
+  line-height: 1.6;
+}
+
+#app .vux-header .search .weui-search-bar {
+  align-items: center;
+  background-color: transparent;
+}
+
+#app .vux-header .search .weui-search-bar:before,
+#app .vux-header .search .weui-search-bar:after,
+#app .vux-header .search .weui-search-bar__form:after {
+  content: none
+}
+
+#app .vux-header .search .weui-search-bar__form {
+  border: 1px solid #e5e5e5;
+  background-color: transparent;
+  border-radius: 20px;
+}
+
+#app .vux-header .search .weui-search-bar__box .weui-icon-search {
+  top: 2px;
+}
+
+#app .vux-header .search .weui-search-bar__label {
+  display: none;
+}
