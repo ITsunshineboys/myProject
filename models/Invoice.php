@@ -54,7 +54,6 @@ class Invoice extends ActiveRecord
      */
     public static function AddInvoice($invoice_type,$invoice_header_type,$invoice_header,$invoice_content,$invoicer_card)
     {
-            $array=array();
             $creat_time=date('Y-m-d H:i:s',time());
             $invoicetoken=md5($invoice_type.$invoice_header.$creat_time);
             $data=self::find()
