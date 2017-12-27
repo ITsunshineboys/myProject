@@ -93,7 +93,7 @@ class FileService
             return $code;
         }
 
-        $file = $filename . $model->file->baseName . '.' . $model->file->extension;
+        $file = $filename . '.' . $model->file->extension;
         if (!$model->file->saveAs($directory . '/' . $file)) {
             $code = 500;
             return $code;
@@ -169,7 +169,7 @@ class FileService
         }
 
         while (true) {
-            $filename = time() + rand(1000, 9999);
+            $filename = uniqid(rand(1, 10000) . rand(1, 10000));
             if (!file_exists($directory . '/' . $filename)) {
                 return $filename;
             }
