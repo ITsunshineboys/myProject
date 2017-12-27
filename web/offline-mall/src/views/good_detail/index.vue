@@ -5,28 +5,27 @@
       <i class="iconfont icon-share"></i>
       <i class="iconfont icon-more"></i>
     </div>
-    <!--<swiper :list="demo03_list" loop auto height="375px" dots-class="custom-bottom" dots-position="center"></swiper>-->
-    <swiper loop auto :list="demo03_list" height="375px" dots-class="custom-bottom" dots-position="center"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"></swiper>
     <div class="good-detail">
-      <goodsTitle></goodsTitle>
+      <!--<goodsTitle :title="good_detail.title" :subtitle="good_detail.subtitle"-->
+                  <!--:platform_price="good_detail.platform_price" :show_offline="good_detail.line_goods.is_offline_goods === '否' ? false:true"></goodsTitle>-->
       <divider></divider>
       <group>
-        <cell-box is-link>
+        <cell-box is-link class="choose-count">
           选择数量
-
 
         </cell-box>
         <cell-box is-link>
           <div class="service">
-            <i class="iconfont icon-blue"></i>
+            <i class="iconfont icon-checkbox-circle-line"></i>
             <span>上门退货</span>
           </div>
           <div class="service">
-            <i class="iconfont icon-blue"></i>
+            <i class="iconfont icon-checkbox-circle-line"></i>
             <span>上门退货</span>
           </div>
           <div class="service">
-            <i class="iconfont icon-blue"></i>
+            <i class="iconfont icon-checkbox-circle-line"></i>
             <span>上门退货</span>
           </div>
         </cell-box>
@@ -49,31 +48,122 @@
           <img src="./logo.png" alt="">
           <span>马可波罗其打算的撒</span>
         </flexbox>
-        <flexbox slot="content" justify="space-between">
+        <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
             <span>1130</span>
             <br/>
             商品数
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+          <span></span>
           <div>
             <span>15</span>
             <br/>
-           粉丝数
-        </div>
+            粉丝数
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+          <span></span>
           <div>
             <span>0</span>
             <br/>
             综合评分
-        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
 
         </flexbox>
-        <div slot="footer">
-          进店逛逛
-
-        </div>
+        <flexbox slot="footer" justify="center" class="view-shop-btn">
+          <button type="button"> 进店逛逛</button>
+        </flexbox>
       </card>
-
-
+      <divider></divider>
+      <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
+        <tab-item selected>图文详情</tab-item>
+        <tab-item>产品参数</tab-item>
+      </tab>
+      <div></div>
+      <div>
+        <flexbox orient="vertical" class="pro-params" align="flex-start">
+          <flexbox-item>
+            <flexbox justify="space-between">
+              <span>产品编码</span>
+              <span>DSADSA5S5</span>
+            </flexbox>
+          </flexbox-item>
+          <flexbox-item>
+            <flexbox justify="space-between">
+              <span>产品编码</span>
+              <span>DSADSA5S5</span>
+            </flexbox>
+          </flexbox-item>
+          <flexbox-item>
+          </flexbox-item>
+        </flexbox>
+        <divider></divider>
+      </div>
+      <div class="bottom-tabbar">
+        <div><i class="iconfont icon-service"></i><br/>联系商家</div>
+        <div>加入购物车</div>
+        <div>立即购买</div>
+      </div>
     </div>
 
 
@@ -81,22 +171,19 @@
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox, Flexbox, Card} from 'vux'
+  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup} from 'vux'
   import goodsTitle from '../good_detail/title'
   import divider from '../good_detail/divider'
   import comment from '../good_detail/comment.vue'
 
-  const baseList = [{
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/1.jpg'
-  }, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/2.jpg'
-  }, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/5.jpg',
-    fallbackImg: 'https://static.vux.li/demo/3.jpg'
-  }]
+  //  const pic = [{
+  //    img: 'https://static.vux.li/demo/1.jpg'
+  //  }, {
+  //    img: 'https://static.vux.li/demo/2.jpg'
+  //  }, {
+  //    img: 'https://static.vux.li/demo/5.jpg',
+  //    fallbackImg: 'https://static.vux.li/demo/3.jpg'
+  //  }]
 
   export default {
     name: 'GoodDetail',
@@ -106,19 +193,30 @@
       Cell,
       CellBox,
       Flexbox,
+      FlexboxItem,
       Card,
+      Tab,
+      TabItem,
+      Popup,
       goodsTitle,
       divider,
       comment
     },
     data () {
       return {
-        // note: changing this line won't causes changes
-        // with hot-reload because the reloaded component
-        // preserves its current state and we are modifying
-        // its initial state.
-        demo03_list: baseList
+        good_detail: '',
+        banner_list: []
       }
+    },
+    created () {
+      this.axios.get('/mall/goods-view', {id: 65}, (res) => {
+        this.good_detail = res.data.goods_view
+        const imgList = this.good_detail.images
+        console.log(imgList)
+//        this.banner_list = imgList.map((item, index) => ({
+//          img: item.image
+//        }))
+      })
     }
   }
 </script>
@@ -128,7 +226,7 @@
     background: rgba(255, 255, 255, 1);
   }
 
-  .custom-bottom {
+  .good-container .custom-bottom {
     bottom: 26px;
   }
 
@@ -167,6 +265,10 @@
 
   .good-container .guide-icon .icon-more {
     right: 14px;
+  }
+
+  .good-container .choose-count {
+    border-bottom: 1px solid #E9EDEE;
   }
 
   .good-container .weui-cells {
@@ -231,25 +333,145 @@
     padding-bottom: 16px;
   }
 
-  .shop-card img {
+  .good-container .shop-card {
+    margin-top: 0;
+  }
+
+  .good-container .shop-card img {
     width: 50px;
     height: 50px;
   }
 
-  .shop-card > div:first-child {
+  .good-container .shop-card > div:first-child {
     padding-top: 10px;
     padding-left: 14px;
   }
 
-  .shop-card > div:first-child span {
+  .good-container .shop-card > div:first-child span {
     font-size: 16px;
     color: rgba(153, 153, 153, 1);
     line-height: 16px;
     margin-left: 10px;
   }
 
-  .shop-card > div:nth-child(2) > div {
+  .good-container .shop-card > div:nth-child(2) > div {
     text-align: center;
   }
+
+  .good-container .shop-intro {
+    padding-top: 15px;
+    padding-bottom: 20px;
+  }
+
+  .good-container .shop-intro > div {
+    width: 128px;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(149, 146, 146, 1);
+    line-height: 14px;
+  }
+
+  .good-container .shop-intro > div > span {
+    display: inline-block;
+    margin-bottom: 9px;
+    font-size: 18px;
+    color: rgba(217, 173, 101, 1);
+    line-height: 18px;
+  }
+
+  .good-container .shop-intro > span {
+    display: inline-block;
+    width: 2px;
+    height: 20px;
+    background: #CDD3D7;
+  }
+
+  .good-container .view-shop-btn {
+    padding-bottom: 20px;
+  }
+
+  .good-container .view-shop-btn > button {
+    width: 100px;
+    height: 34px;
+    padding: 10px 22px;
+    line-height: 17px;
+    text-align: center;
+    border: 1px solid rgba(34, 34, 34, 1);
+    border-radius: 41px;
+    color: rgba(34, 34, 34, 1);
+    background: rgba(255, 255, 255, 1);;
+  }
+
+  .good-container .tab > div {
+    font-size: 16px;
+  }
+
+  .good-container .pro-params {
+    margin-top: 39px;
+  }
+
+  .good-container .pro-params .vux-flexbox-item {
+    margin-top: 0 !important;
+  }
+
+  .good-container .pro-params .vux-flexbox-item .vux-flexbox {
+    box-sizing: border-box;
+    padding: 14px 17px;
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 14px;
+    border-bottom: 1px solid #CDD3D7;
+  }
+
+  .good-container .pro-params > div:last-child {
+    height: 50px;
+  }
+
+  .good-container .bottom-tabbar {
+    text-align: center;
+    height: 48px;
+  }
+
+  .good-container .bottom-tabbar > div {
+    float: left;
+    height: 48px;
+  }
+
+  .good-container .bottom-tabbar i {
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+  .good-container .bottom-tabbar > span {
+    display: inline-block;
+    float: left;
+    width: 2px;
+    height: 20px;
+    margin-top: 15px;
+    background: #CDD3D7;
+  }
+
+  .good-container .bottom-tabbar > div:first-child {
+    width: 79px;
+    font-size: 12px;
+    color: rgba(153, 153, 153, 1);
+  }
+
+  .good-container .bottom-tabbar > div:nth-child(2) {
+    width: 148px;
+    font-size: 16px;
+    background: rgba(34, 34, 34, 1);
+    color: rgba(255, 255, 255, 1);
+    line-height: 48px;
+  }
+
+  .good-container .bottom-tabbar > div:last-child {
+    width: 148px;
+    line-height: 48px;
+    background: rgba(217, 173, 101, 1);
+    font-size: 16px;
+    color: rgba(255, 255, 255, 1);
+  }
+
 
 </style>
