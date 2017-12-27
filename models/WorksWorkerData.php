@@ -69,6 +69,6 @@ class WorksWorkerData extends ActiveRecord
         }
 
 
-        var_dump($data);die;
+       return $data;
     }
 }
