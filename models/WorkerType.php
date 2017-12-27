@@ -134,4 +134,23 @@ class WorkerType extends \yii\db\ActiveRecord
                 'worker_name'=> $worker['worker_name'],
             ],['id' => $worker['id']])->execute();
     }
+
+
+    public static function laborlist(){
+        $labor_list = WorkerType::find()
+            ->select('worker_name,id')
+            ->asArray()
+            ->where(['pid'=>0,'status'=>1])
+//        ->orderBy('worker_kind')
+            ->all();
+        $labor = [];
+        foreach ($labor_list as &$list){
+
+            if ($list['worker_name'] != '杂工' ){
+                $labor[] =   $list;
+            }
+
+        }
+        return $labor_list;
+    }
 }

@@ -51,11 +51,21 @@ class WorksWorkerData extends ActiveRecord
             ->all();
     }
 
+
+
     public static function findByIds($ids)
     {
-        return self::find()
+        $data= self::find()
             ->asArray()
             ->where(['in','effect_id',$ids])
             ->all();
+        $worker_list=WorkerType::laborlist();
+        var_dump($worker_list);die;
+        foreach ($data as &$v){
+           if($v['']){
+
+           }
+        }
+        var_dump($data);die;
     }
 }

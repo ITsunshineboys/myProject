@@ -38,7 +38,7 @@ class AssortGoods extends ActiveRecord
                 'pid'=>$add['pid'],
                 'path'=>$add['path'],
                 'state'=>0,
-                'quantity'=>0,
+                'quantity'=>$add['quantity'],
                 'city_code'=>$city,
             ])
             ->execute();

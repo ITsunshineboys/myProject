@@ -553,24 +553,12 @@ class QuoteController extends Controller
      */
     public function actionLaborList()
     {
-        $labor_list = WorkerType::find()
-        ->select('worker_name,id')
-            ->asArray()
-            ->where(['pid'=>0,'status'=>1])
-//        ->orderBy('worker_kind')
-        ->all();
-        $labor = [];
-        foreach ($labor_list as &$list){
+        $data= WorkerType::Laborlist();
 
-            if ($list['worker_name'] != '杂工' ){
-                $labor[] =   $list;
-            }
-
-        }
         return Json::encode([
             'code' => 200,
             'msg'=> 'ok',
-            'labor_list' => $labor,
+            'labor_list' => $data,
 
         ]);
     }
@@ -2047,8 +2035,9 @@ class QuoteController extends Controller
 
         $city = (int)trim(\Yii::$app->request->get('city',''));
         $where = 'city_code='.$city;
+
         $goods_list = AssortGoods::find()
-            ->select(['title','category_id as id','pid','path'])
+            ->select(['title','category_id as id','pid','path','quantity'])
             ->where(['state'=>0])
             ->andWhere($where)
             ->asArray()
@@ -2099,6 +2088,7 @@ class QuoteController extends Controller
             }
             $tr->commit();
         } catch (\Exception $e) {
+
             //回滚
             $tr->rollBack();
             $code=500;
