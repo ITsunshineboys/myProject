@@ -151,6 +151,6 @@ class WorkerType extends \yii\db\ActiveRecord
             }
 
         }
-        return $labor_list;
+        return $labor;
     }
 }
