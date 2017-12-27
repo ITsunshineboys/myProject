@@ -2066,22 +2066,25 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         (new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
-        foreach($post['assort'] as $management) {
-            $add = AssortGoods::add($management,$post['city']);
-        }
+        if(isset($post)){
+            foreach($post['assort'] as $management) {
+                $add = AssortGoods::add($management,$post['city']);
+            }
 
-        if (!$add){
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'mag' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+            if (!$add){
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'mag' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
 
+        }
         return Json::encode([
-           'code' => 200,
-           'msg' => 'ok',
+            'code' => 200,
+            'msg' => 'ok',
         ]);
+
     }
 
     /**
