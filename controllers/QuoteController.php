@@ -2066,7 +2066,7 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         (new AssortGoods())->deleteAll(['and',['state'=>0],['city_code'=>$post['city']]]);
-        if(isset($post)){
+        if(isset($post['assort'])){
             foreach($post['assort'] as $management) {
                 $add = AssortGoods::add($management,$post['city']);
             }
