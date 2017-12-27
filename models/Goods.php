@@ -1291,10 +1291,16 @@ class Goods extends ActiveRecord
     public function adminView()
     {
         $styleIds = GoodsStyle::styleIdsByGoodsId($this->id);
+        $cate = GoodsCategory::findOne($this->category_id);
+        $categoryTitle = '';
+        if ($cate) {
+            $cate->refresh();
+            $categoryTitle = $cate->fullTitle();
+        }
         return [
             'id' => $this->id,
             'logistics_template_id' => $this->logistics_template_id,
-            'category_title' => GoodsCategory::findOne($this->category_id)->fullTitle(),
+            'category_title' => $categoryTitle,
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'cover_image' => $this->cover_image,
