@@ -1973,34 +1973,35 @@ class OwnerController extends Controller
      */
     public function actionChangeGoods()
     {
-        $id = (int)\Yii::$app->request->get('id','');
+        $get = Yii::$app->request->get();
+//        $id = (int)\Yii::$app->request->get('id','');
 
         $goods = Goods::find()
-            ->select('goods.id,goods.category_id,gc.title as category_title,goods.market_price,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,gc.path')
+            ->select('goods.id,goods.category_id,gc.title,goods.market_price,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company')
             ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
-            ->where(['goods.id'=>$id])
+            ->where(['goods.id'=>$get['id']])
             ->asArray()
             ->one();
-        $goods['market_price'] = $goods['market_price'] / 100;
-        $goods['platform_price'] = $goods['platform_price'] / 100;
-        $goods['supplier_price'] = $goods['supplier_price'] / 100;
-        $goods['purchase_price_decoration_company'] = $goods['purchase_price_decoration_company'] / 100;
 
 
+        // 判断是否有计算公式
         $change_goods = 0;
-        // 无计算公式的商品
-        $assort_goods = AssortGoods::find()->where(['state'=>1])->all();
-        foreach ($assort_goods as $assort){
-            if ($assort['category_id'] == $goods['category_id']){
-                $change_goods = $assort['quantity'];
-            }
+        $value = BasisDecorationService::judgeGoods($goods['category_id'],self::MATERIALS);
+
+        //  无计算公式
+        if ($value == false) {
+            $assort_goods = AssortGoods::find()
+                ->where(['state'=>1])
+                ->andWhere(['category_id'=>$goods['category_id']])
+                ->one();
+            $change_goods = $assort_goods['quantity'];
         }
 
-
-        // 有计算公式的商品
-//        $goods_attr = GoodsAttr::find()->asArray()->where(['goods_id'=>$goods['id']])->all();
-
-
+        // 有计算公式
+        if ($value == true){
+            $material = BasisDecorationService::oneFormula($goods,$get);
+            $change_goods = $material['quantity'];
+        }
 
         return Json::encode([
             'code' => 200,
