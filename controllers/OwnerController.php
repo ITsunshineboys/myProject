@@ -2000,7 +2000,7 @@ class OwnerController extends Controller
         // 有计算公式
         if ($value == true){
             $material = BasisDecorationService::oneFormula($goods,$get);
-            $change_goods = $material['quantity'];
+            $change_goods = $material;
         }
 
         return Json::encode([

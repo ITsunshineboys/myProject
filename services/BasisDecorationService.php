@@ -1896,83 +1896,120 @@ class BasisDecorationService
      */
     public static function oneFormula($goods,$post)
     {
-            switch ($goods){
-                case $goods['title'] == self::goodsNames()['wood_floor']: // 木地板
-                    //木地板面积=卧室地面积    卧室地面积=【z】%×（房屋面积） 木地板费用：个数×抓取的商品价格 个数：（木地板面积÷抓取木地板面积）
-                    $goods_area = GoodsAttr::findByGoodsIdUnit($goods['id']);
-                    foreach ($goods_area as $one_goods_area) {
-                        if ($one_goods_area['name'] == self::UNITS['length']) {
-                            $length = $one_goods_area['value'] / self::BRICK_UNITS;
-                        }
-                        if ($one_goods_area['name'] == self::UNITS['breadth']) {
-                            $breadth = $one_goods_area['value'] / self::BRICK_UNITS;
-                        }
-                    }
-                    $area = $length * $breadth;
-                    $quantity = ceil($post['bedroom_area'] / $area);
-                    break;
-                case $goods['title'] == self::goodsNames()['marble']: // 大理石
-                    if ($post['window'] > 1) {
-                        $quantity = $post['window'];
-                    }else {
-                        $quantity = null;
-                    }
-                    break;
-                case $goods['title'] == self::goodsNames()['elbow']: // 弯头
-                    $quantity['quantity'] = $post['toilet'] * 4;
-                    break;
-                case $goods['title'] == self::goodsNames()['timber_door']: //木门
-                    $quantity = $post['bedroom'];
-                    break;
-                case $goods['title'] == self::goodsNames()['bath_heater']: //浴霸
-                    $quantity= $post['toilet'];
-                    break;
-                case $goods['title'] == self::goodsNames()['ventilator'] : //换气扇
-                    $quantity = $post['toilet'];
-                    break;
-                case $goods['title'] == self::goodsNames()['ceiling_light']: //吸顶灯
-                    $quantity= $post['toilet'];
-                    break;
-                case $goods['title'] == self::goodsNames()['tap']: //水龙头
-                    $quantity = $post['toilet'] + $post['kitchen'];
-                    break;
-                case $goods['title'] == self::goodsNames()['bed']: //床
-                    $quantity = $post['bedroom'] ;
-                    break;
-                case $goods['title'] == self::goodsNames()['night_table']: //床头柜
-                    $quantity = $post['bedroom'] * 2;
-                    break;
-                case $goods['title'] == self::goodsNames()['kitchen_ventilator']: //抽油烟机
-                    $quantity = $post['kitchen'];
-                    break;
-                case $goods['title'] == self::goodsNames()['stove']: //灶具
-                    $quantity = $post['kitchen'];
-                    break;
-                case $goods['title'] == self::goodsNames()['upright_air_conditioner'] : //立柜空调
-                    $quantity = $post['hall'];
-                    break;
-                case $goods['title'] == self::goodsNames()['hang_air_conditioner']: //壁挂空调
-                    $quantity = $post['bedroom'];
-                    break;
-                case $goods['title'] == self::goodsNames()['lamp']: //灯具
-                    $quantity = $post['bedroom'];
-                    break;
-                case $goods['title'] == self::goodsNames()['mattress']: //床垫
-                    $quantity = $post['bedroom'];
-                    break;
-                case $goods['title'] == self::goodsNames()['closestool']: //马桶
-                    $quantity = $post['toilet'];
-                    break;
-                case $goods['title'] == self::goodsNames()['bath_cabinet']: //浴柜
-                    $quantity = $post['toilet'];
-                    break;
-                case $goods['title'] == self::goodsNames()['sprinkler']: //花洒套装
-                    $quantity = $post['toilet'];
-                    break;
-                case $goods['title'] == self::goodsNames()['shower_partition']: //淋浴隔断
-                    $quantity = $post['toilet'];
-                    break;
+        // 木地板
+        if ($goods['title'] == self::goodsNames()['wood_floor']){
+            $goods_area = GoodsAttr::findByGoodsIdUnit($goods['id']);
+            foreach ($goods_area as $one_goods_area) {
+                if ($one_goods_area['name'] == self::UNITS['length']) {
+                    $length = $one_goods_area['value'] / self::BRICK_UNITS;
+                }
+                if ($one_goods_area['name'] == self::UNITS['breadth']) {
+                    $breadth = $one_goods_area['value'] / self::BRICK_UNITS;
+                }
             }
+            $area = $length * $breadth;
+            $quantity = ceil($post['bedroom_area'] / $area);
+
+        }
+
+        // 大理石
+        if ($goods['title'] == self::goodsNames()['marble']) {
+            if ($post['window'] > 1) {
+                $quantity = ceil($post['window']);
+            }else {
+                $quantity = null;
+            }
+        }
+
+        // 弯头
+        if ($goods['title'] == self::goodsNames()['elbow']) {
+            $quantity['quantity'] = ceil($post['toilet'] * 4);
+        }
+
+        //木门
+        if ($goods['title'] == self::goodsNames()['timber_door']) {
+            $quantity = ceil($post['bedroom']);
+        }
+
+        //浴霸
+        if ($goods['title'] == self::goodsNames()['bath_heater']) {
+            $quantity= ceil($post['toilet']);
+        }
+
+        //换气扇
+        if ($goods['title'] == self::goodsNames()['ventilator']) {
+            $quantity = ceil($post['toilet']);
+        }
+
+        //吸顶灯
+        if ($goods['title'] == self::goodsNames()['ceiling_light']) {
+            $quantity= ceil($post['toilet']);
+        }
+
+        //水龙头
+        if ($goods['title'] == self::goodsNames()['tap']) {
+            $quantity = ceil($post['toilet'] + $post['kitchen']);
+        }
+
+        //床
+        if ($goods['title'] == self::goodsNames()['bed']) {
+            $quantity = ceil($post['bedroom']) ;
+        }
+
+        //床头柜
+        if ($goods['title'] == self::goodsNames()['night_table']) {
+            $quantity = ceil($post['bedroom'] * 2);
+        }
+
+        //抽油烟机
+        if ($goods['title'] == self::goodsNames()['kitchen_ventilator']) {
+            $quantity = ceil($post['kitchen']);
+        }
+
+        //灶具
+        if ($goods['title'] == self::goodsNames()['stove']) {
+            $quantity = ceil($post['kitchen']);
+        }
+
+        //立柜空调
+        if ($goods['title'] == self::goodsNames()['upright_air_conditioner']) {
+            $quantity = ceil($post['hall']);
+        }
+
+        //壁挂空调
+        if ($goods['title'] == self::goodsNames()['hang_air_conditioner']) {
+            $quantity = ceil($post['bedroom']);
+        }
+
+        //灯具
+        if ($goods['title'] == self::goodsNames()['lamp']) {
+            $quantity = ceil($post['bedroom']);
+        }
+
+        //床垫
+        if ($goods['title'] == self::goodsNames()['mattress']) {
+            $quantity = ceil($post['bedroom']);
+        }
+
+        //马桶
+        if ($goods['title'] == self::goodsNames()['closestool']) {
+            $quantity = ceil($post['toilet']);
+        }
+
+        //浴柜
+        if ($goods['title'] == self::goodsNames()['bath_cabinet']) {
+            $quantity = ceil($post['toilet']);
+        }
+
+        //花洒套装
+        if ($goods['title'] == self::goodsNames()['sprinkler']) {
+            $quantity = ceil($post['toilet']);
+        }
+
+        //淋浴隔断
+        if ($goods['title'] == self::goodsNames()['shower_partition']) {
+            $quantity = ceil($post['toilet']);
+        }
 
         return $quantity;
     }
