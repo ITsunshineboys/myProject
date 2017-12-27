@@ -168,6 +168,13 @@ class OrderController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }else{
+                $code=1000;
+                if (!StringService::isMobile($mobile)) {
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
                 $data=UserAddress::InsertAddress($mobile,$consignee,$region,$districtCode);
                 if (!$data){
                     $code=1000;
