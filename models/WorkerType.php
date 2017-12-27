@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\controllers\FindworkerController;
+use app\controllers\QuoteController;
 use Yii;
 use yii\db\Query;
 
@@ -38,13 +39,14 @@ class WorkerType extends \yii\db\ActiveRecord
 
     public static function findPidbyid($id){
         $data=self::find()
-            ->select('id,worker_name')
+            ->select('id,worker_name,unit')
             ->where(['pid'=>$id])
             ->asArray()
             ->all();
         foreach ($data as &$v){
             $v['labor_cost_id']=$id;
             $v['quantity']='';
+            $v['unit']=WorkerCraftNorm::UNIT[$v['unit']];
         }
 
 

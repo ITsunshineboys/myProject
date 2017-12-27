@@ -191,8 +191,8 @@ class QuoteController extends Controller
         $city_code = (int)trim(\Yii::$app->request->get('city_code',''));
         $province_code = (int)trim(\Yii::$app->request->get('province_code',''));
 //        $where = "id = $id and city_code = $city_code";
-        $select = 'id,city_code,province_code,univalence,worker_kind_id,unit';
-        $labor_cost = LaborCost::workerKind($select,$id,$city_code,$province_code);
+//        $select = 'id,city_code,province_code,univalence,worker_kind_id,unit';
+        $labor_cost = LaborCost::workerKind($id,$city_code,$province_code);
         if($labor_cost['univalence']==''){
             $worker_craft_norm = WorkerType::findPidbyid($id);
         }else{
@@ -215,33 +215,58 @@ class QuoteController extends Controller
     {
         $post = \Yii::$app->request->post();
         //修改
-        if($post['id']){
-
-        }
-        foreach ($post['else'] as $one_post){
-            if ($one_post['quantity']){
-                $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
-                $worker_craft_norm->quantity = $one_post['quantity'] * 100;
-                $worker = $worker_craft_norm->save();
+        if(isset($post['id'])){
+            foreach ($post['else'] as $one_post){
+                if ($one_post['quantity']){
+                    $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
+//                    var_dump($worker_craft_norm);
+                    $worker_craft_norm->quantity = $one_post['quantity'] * 100;
+                    $worker = $worker_craft_norm->save();
+                }
             }
-        }
-        if (!$worker){
-            $code = 500;
-            return Json::encode([
-               'code'=>$code,
-               'msg'=>\Yii::$app->params['errorCodes'][$code],
-            ]);
+            $labor_cost = LaborCost::findOne($post['id']);
+            $labor_cost->univalence = $post['univalence'] * 100;
+            $labor_cost=$labor_cost->save();
+        }elseif(isset($post['worker_id'])){
+            $labor_cost =new LaborCost();
+            $labor_cost->univalence = $post['univalence'] * 100;
+            $labor_cost->worker_kind_id = $post['worker_id'];
+            $labor_cost->province_code = $post['province_code'];
+            $labor_cost->city_code = $post['city_code'];
+            $labor_cost=$labor_cost->save();
+
+            $id=\Yii::$app->db->getLastInsertID();
+
+            foreach ($post['else'] as $one_post){
+                if ($one_post['quantity']){
+
+                    $worker_craft_norm =new WorkerCraftNorm();
+                    $worker_craft_norm->worker_type_id = $one_post['id'];
+                    $worker_craft_norm->quantity = $one_post['quantity'] * 100;
+                    $worker_craft_norm->labor_cost_id = $id;
+                    $worker = $worker_craft_norm->save();
+                }
+            }
+
         }
 
-        $labor_cost = LaborCost::findOne($post['id']);
-        $labor_cost->univalence = $post['univalence'] * 100;
-        if (!$labor_cost->save()){
+        if (!$worker){
             $code = 500;
             return Json::encode([
                 'code'=>$code,
                 'msg'=>\Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        if (!$labor_cost){
+            $code = 500;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+
+
         return Json::encode([
             'code' =>200,
             'msg'=>'OK'
