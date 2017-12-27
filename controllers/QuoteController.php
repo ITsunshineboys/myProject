@@ -553,16 +553,19 @@ class QuoteController extends Controller
      */
     public function actionLaborList()
     {
-        $labor_list = LaborCost::find()
-        ->distinct()
-        ->select('worker_kind')
-        ->orderBy('worker_kind')
+        $labor_list = WorkerType::find()
+        ->select('worker_name,id')
+            ->asArray()
+            ->where(['pid'=>0,'status'=>1])
+//        ->orderBy('worker_kind')
         ->all();
         $labor = [];
-        foreach ($labor_list as $list){
-            if ($list['worker_kind'] != '杂工' ){
+        foreach ($labor_list as &$list){
+
+            if ($list['worker_name'] != '杂工' ){
                 $labor[] =   $list;
             }
+
         }
         return Json::encode([
             'code' => 200,
