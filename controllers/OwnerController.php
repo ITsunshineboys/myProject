@@ -1967,6 +1967,10 @@ class OwnerController extends Controller
     }
 
 
+    /**
+     * 默认数量
+     * @return string
+     */
     public function actionChangeGoods()
     {
         $id = (int)\Yii::$app->request->get('id','');
