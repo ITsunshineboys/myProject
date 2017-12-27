@@ -3068,79 +3068,93 @@ class GoodsOrder extends ActiveRecord
      */
     public  static function  GetRefundData($order_no,$sku,$type)
     {
-
-        $refund=OrderRefund::find()
-            ->where(['order_no'=>$order_no,'sku'=>$sku])
-            ->one();
-        if (!$refund)
-        {
-            //无退款记录
-            return [
-                'refund_status'=>0,
-                'apply_refund_time'=>'',
-                'apply_refund_reason'=>'',
-            ];
-        }else{
-
-            if (
-                $type==3
-                || $type==7
-                || $type==5
-            )
+            if ($type==3)
             {
-                $data=[
-                    'refund_status'=>2,
-                    'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
-                    'apply_refund_reason'=>$refund->apply_reason,
-                ];
-                if ($refund->handle==0)
+                $refund_unshipped=OrderRefund::find()
+                    ->where(['order_no'=>$order_no,'sku'=>$sku])
+                    ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
+                    ->one();
+                if (!$refund_unshipped)
                 {
-                    $data=[
-                        'refund_status'=>1,
-                        'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
-                        'apply_refund_reason'=>$refund->apply_reason,
+                    //无 代发货退款记录
+                    return [
+                        'refund_status'=>0,
+                        'apply_refund_time'=>'',
+                        'apply_refund_reason'=>'',
                     ];
-                }
-                return $data;
-            }else
-            {
-                if ($type==8
-                    || $type==9
-                    || $type==10
-                    || $type==11
-                    || $type==12)
-                {
-                    if ($refund->handle==0)
-                    {
-                        $refund->handle=2;
-                        $refund->save(false);
-
-                    }
+                }else{
                     $data=[
                         'refund_status'=>2,
-                        'apply_refund_time'=>date('Y-m-d H:i',$refund['create_time']),
-                        'apply_refund_reason'=>$refund->apply_reason,
+                        'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
+                        'apply_refund_reason'=>$refund_unshipped->apply_reason,
                     ];
+                    if ($refund_unshipped->handle==0)
+                    {
+                        $data=[
+                            'refund_status'=>1,
+                            'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
+                            'apply_refund_reason'=>$refund_unshipped->apply_reason,
+                        ];
+                    }
                     return $data;
                 }
-//                if ($type==9
-//                    || $type==10)
-//                {
-//                    return [
-//                        'refund_status'=>0,
-//                        'apply_refund_time'=>'',
-//                        'apply_refund_reason'=>'',
-//                    ];
-//                }
-
-                return [
-                    'refund_status'=>0,
-                    'apply_refund_time'=>'',
-                    'apply_refund_reason'=>'',
-                ];
-
             }
-        }
+            if ($type==5  || $type==7)
+            {
+                $refund_unreceived=OrderRefund::find()
+                    ->where(['order_no'=>$order_no,'sku'=>$sku])
+                    ->andWhere(['order_type'=>self::ORDER_TYPE_UNRECEIVED])
+                    ->one();
+                if (!$refund_unreceived)
+                {
+                  return [
+                        'refund_status'=>2,
+                        'apply_refund_time'=>date('Y-m-d H:i',$refund_unreceived->create_time),
+                        'apply_refund_reason'=>$refund_unreceived->apply_reason,
+                  ];
+                }
+
+                if ($refund_unreceived->handle==1)
+                {
+                    return  [
+                        'refund_status'=>1,
+                        'apply_refund_time'=>date('Y-m-d H:i',$refund_unreceived->create_time),
+                        'apply_refund_reason'=>$refund_unreceived->apply_reason,
+                    ];
+                }
+            }
+
+            if ($type==8
+                || $type==9
+                || $type==10
+                || $type==11
+                || $type==12)
+            {
+
+                $refund=OrderRefund::find()
+                    ->where(['order_no'=>$order_no,'sku'=>$sku])
+                    ->one();
+                if (!$refund)
+                {
+                    return [
+                        'refund_status'=>0,
+                        'apply_refund_time'=>'',
+                        'apply_refund_reason'=>'',
+                    ];
+                }
+                if ($refund->handle==0)
+                {
+                    $refund->handle=2;
+                    $refund->save(false);
+
+                }
+                $data=[
+                    'refund_status'=>2,
+                    'apply_refund_time'=>date('Y-m-d H:i',$refund->create_time),
+                    'apply_refund_reason'=>$refund->apply_reason,
+                ];
+                return $data;
+            }
     }
     /**
      * 设置平台角色
