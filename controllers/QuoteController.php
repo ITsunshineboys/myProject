@@ -1090,7 +1090,7 @@ class QuoteController extends Controller
                         }
 
                         if (!empty($house['all_goods'])) {
-                            WorksData::deleteAll($ids);
+                            WorksData::deleteAll(['effect_id'=>$effect_id]);
                             foreach ($house['all_goods'] as $goods) {
                                 $goods_id          = $effect_id;
                                 $goods_first       = $goods['first_name'];
@@ -1112,7 +1112,7 @@ class QuoteController extends Controller
                         }
 
                         if (!empty($house['worker_list'])) {
-                            WorksWorkerData::deleteAll($ids);
+                            WorksWorkerData::deleteAll(['effect_id'=>$effect_id]);
                             foreach ($house['worker_list'] as $worker) {
                                 $worker_id         = $effect_id;
                                 $worker_kind       = $worker['worker_kind'];
