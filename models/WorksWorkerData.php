@@ -60,12 +60,15 @@ class WorksWorkerData extends ActiveRecord
             ->where(['in','effect_id',$ids])
             ->all();
         $worker_list=WorkerType::laborlist();
-        var_dump($worker_list);die;
         foreach ($data as &$v){
-           if($v['']){
-
-           }
+            foreach ($worker_list as $item){
+                if($v['worker_kind']==$item['worker_name']){
+                    $v['worker_id']=$item['id'];
+                }
+            }
         }
+
+
         var_dump($data);die;
     }
 }
