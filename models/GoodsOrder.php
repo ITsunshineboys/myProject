@@ -2053,18 +2053,26 @@ class GoodsOrder extends ActiveRecord
         $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $order_goodslist=OrderGoods::find()
+            $OrderGoods=OrderGoods::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->one();
-            $order_goodslist->order_status=self::ORDER_STATUS_CANCEL;
-            $res1=$order_goodslist->save(false);
+            $OrderGoods->order_status=self::ORDER_STATUS_CANCEL;
+            $res1=$OrderGoods->save(false);
             if (!$res1){
                 $code=500;
                 $tran->rollBack();
                 return $code;
             }
-            $supplier->balance=$supplier->balance-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
-            $supplier->availableamount=$supplier->availableamount-$order_goodslist->freight-$order_goodslist->supplier_price*$order_goodslist->goods_number;
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            if ($OrderGoods->shipping_status==0){
+                $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
+                $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number+$OrderGoods->freight;
+            }else{
+                $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
+                $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+            }
+            $supplier->balance=$supplier->balance-$reduce_money;
+            $supplier->availableamount=$supplier->availableamount-$reduce_money;
             $res2=$supplier->save(false);
             if (!$res2){
                 $code=500;
@@ -2075,7 +2083,7 @@ class GoodsOrder extends ActiveRecord
             $supplier_accessdetail->uid=$user->id;
             $supplier_accessdetail->role_id=6;
             $supplier_accessdetail->access_type=2;
-            $supplier_accessdetail->access_money=$order_goodslist->freight+$order_goodslist->supplier_price*$order_goodslist->goods_number;
+            $supplier_accessdetail->access_money=$reduce_money;
             $supplier_accessdetail->order_no=$order_no;
             $supplier_accessdetail->sku=$sku;
             $supplier_accessdetail->create_time=$time;
@@ -2094,6 +2102,23 @@ class GoodsOrder extends ActiveRecord
             $order_refund->handle_time=$time;
             $res4=$order_refund->save(false);
             if (!$res4){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+
+            //这一步我看不懂
+            if ($GoodsOrder->role_id==7)
+            {
+                $role=User::findOne($GoodsOrder->user_id);
+            }else
+            {
+                $role=Role::CheckUserRole($GoodsOrder->role_id)->where(['uid'=>$GoodsOrder->user_id])->one();
+            }
+            $role->balance=$role->balance+$refund_money;
+            $role->availableamount=$role->balance+$refund_money;
+            $res3=$role->save(false);
+            if (!$res3){
                 $code=500;
                 $tran->rollBack();
                 return $code;
@@ -2932,7 +2957,7 @@ class GoodsOrder extends ActiveRecord
             if ($user->last_role_id_app == 6) {
                 $output['uid'] = $arr[0]['user_id'];
                 $output['to_role_id'] = $arr[0]['role_id'];
-            } else {
+            }else {
                 $output['uid'] = Supplier::find()
                     ->select('uid')
                     ->where(['id' => $arr[0]['supplier_id']])

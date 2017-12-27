@@ -708,7 +708,7 @@ class SupplierController extends Controller
         $where="L.district_code  like '%{$district_code}%' ";
         if ($keyword)
         {
-            $where .=" and  CONCAT(S.shop_name,S.shop_no,G.sku) like '%{$keyword}%'";
+            $where .=" and  CONCAT(S.shop_name,S.shop_no,G.sku,G.title) like '%{$keyword}%'";
         }
         if ($status==1 || $status==2)
         {
