@@ -118,6 +118,7 @@ class LaborCost extends ActiveRecord
         if($row==null){
 //            $row['city'] = District::findByCode($row['city_code'])->name;
 //        $row['province'] = District::findByCode($row['province_code'])->name;
+            $row['worker_kind']=WorkerType::gettype($id);
             $row['city']='巴中';
             $row['province']='四川省';
             $row['univalence']='';

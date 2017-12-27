@@ -214,6 +214,10 @@ class QuoteController extends Controller
     public function actionLaborCostEdit()
     {
         $post = \Yii::$app->request->post();
+        //修改
+        if($post['id']){
+
+        }
         foreach ($post['else'] as $one_post){
             if ($one_post['quantity']){
                 $worker_craft_norm = WorkerCraftNorm::findOne($one_post['id']);
@@ -1212,7 +1216,7 @@ class QuoteController extends Controller
                         $city                   = $city_chinese['name'];
                         $city_code              = $request['city_code'];
                         $district               = $district_chinese['name'];
-                        $district_code          = $request['cur_county_id']['id'];
+                        $district_code          = $request['district_code'];
                         $toponymy               = $request['house_name'];
                         $street                 = $request['address'];
                         $particulars            = $house['house_type_name'];
