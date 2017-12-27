@@ -58,6 +58,39 @@ banner_history.controller("banner_history_ctrl", function ($rootScope,$scope, $h
         $scope.Config.currentPage = 1; //页数跳转到第一页
         tablePages();
     }
+
+  $scope.shop_details=function (item) {
+    $scope.shop_datails=item;
+    console.log($scope.shop_datails);
+    if($scope.shop_datails.from_type=='商家'){
+      $scope.shop_details_title=$scope.shop_datails.title; //标题
+      $scope.shop_details_subtitle=$scope.shop_datails.description;//副标题
+      $scope.shop_details_types=$scope.shop_datails.from_type; //类型
+      $scope.shop_details_sku=$scope.shop_datails.sku;  //编号
+      $scope.shop_details_time=$scope.shop_datails.create_time; //创建时间
+      $scope.shop_details_status=$scope.shop_datails.status;  //是否启用
+      $scope.shop_details_platform_price=$scope.shop_datails.platform_price;//平台价格
+      $scope.shop_details_supplier_name=$scope.shop_datails.supplier_name;//来源商家
+      $scope.shop_details_supplier_price=$scope.shop_datails.supplier_price; //供货价格
+      $scope.shop_details_market_price=$scope.shop_datails.market_price;  //市场价格
+      $scope.shop_details_img=$scope.shop_datails.image;//图片
+      $scope.shop_details_viewed_number=$scope.shop_datails.viewed_number;//上架浏览
+      $scope.shop_details_viewed_left=$scope.shop_datails.left_number;//库存
+      $scope.shop_details_sold_number=$scope.shop_datails.sold_number;//上架销量
+    }
+    //链接
+    if($scope.shop_datails.from_type=='链接'){
+      $scope.link_details_title=$scope.shop_datails.title;  //标题
+      $scope.link_details_subtitle=$scope.shop_datails.description;//副标题
+      $scope.link_details_from_type=$scope.shop_datails.from_type; //类型
+      $scope.link_details_show_price=$scope.shop_datails.show_price;//显示价格
+      $scope.link_details_supplier_name=$scope.shop_datails.supplier_name;//来源商家
+      $scope.link_details_create_time=$scope.shop_datails.create_time;//创建时间
+      $scope.link_details_status=$scope.shop_datails.status;//是否启用
+      $scope.link_details_viewed_number=$scope.shop_datails.viewed_number;//浏览
+      $scope.link_details_img=$scope.shop_datails.image;//图片
+    }
+  };
 });
 
 

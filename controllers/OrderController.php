@@ -5622,6 +5622,7 @@ class OrderController extends Controller
     public function actionCalculationFreight()
     {
         $goods=Yii::$app->request->post('goods');
+        //步骤1 ：去掉无效商品
         foreach ($goods as $one){
             if( !array_key_exists('goods_id',$one)
             ||!array_key_exists('num',$one))
@@ -5646,6 +5647,7 @@ class OrderController extends Controller
                 unset($one);
             }
         }
+        //步骤2：获取每个商品物流数据
         foreach ($goods_ as  $k =>$v)
         {
             $goodsData=Goods::findOne($goods_[$k]['goods_id']);
@@ -5665,6 +5667,7 @@ class OrderController extends Controller
             $Good[$k]['num']=$goods_[$k]['num'];
         }
         $templates=[];
+        //步骤3：去掉重复物流
         foreach ($Good as &$wuliu){
             if (!in_array($wuliu['id'],$templates))
             {
@@ -5672,10 +5675,12 @@ class OrderController extends Controller
                 $templates[]=$wuliu['id'];
             };
         }
+        //步骤4：组合物流id
         foreach ($templates as &$list)
         {
             $costs[]['id']=$list;
         }
+        //步骤5：分别计算商品数量
         foreach ($costs as &$cost)
         {
             $cost['num']=0;
@@ -5689,6 +5694,7 @@ class OrderController extends Controller
             }
         }
         $freight=0;
+        //步骤6：分别计算运费 并累加计算总运费
         foreach ($costs as &$cost)
         {
             $logistics_template=LogisticsTemplate::find()
@@ -5708,20 +5714,6 @@ class OrderController extends Controller
                 $freight+=$money;
             }
         }
-//            foreach ($costs as &$cost)
-//            {
-//                foreach ($Good as &$list)
-//                {
-//                    if ($list['id']==$cost['id'])
-//                    {
-//                        $cost['goods'][]=[
-//                            'goods_id'=>$list['goods_id'],
-//                            'num'=>$list['num']
-//                        ];
-//                    }
-//                }
-//            }
-
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',

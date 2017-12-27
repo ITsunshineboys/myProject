@@ -22,3 +22,17 @@
 .blue{
   color: #3F94F6;
 }
+.img_box{
+  width: 254px;
+  height: 137px;
+  overflow: hidden;
+}
+.img_width{
+  width: 100%;
+}
+.yesGreen{
+  color: #92C661!important;
+}
+.noRed{
+  color:#E6594D!important;
+}
