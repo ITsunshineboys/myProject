@@ -1256,10 +1256,8 @@ class QuoteController extends Controller
                         $style_id      = $house['style'];
                         $images_user   = '案例图片';
                         (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-
+                        WorksData::deleteAll(['effect_id'=>$house_id]);
                         if (!empty($house['all_goods'])) {
-                            WorksData::deleteAll(['effect_id'=>$house_id]);
-
                             foreach ($house['all_goods'] as $goods) {
                                 if (!empty($goods['id'])) {
                                     $goods_id       = $goods['id'];
@@ -1282,9 +1280,8 @@ class QuoteController extends Controller
                                 }
                             }
                         }
-
+                        WorksWorkerData::deleteAll(['effect_id'=>$house_id]);
                         if (!empty($house['worker_list'])) {
-                            WorksWorkerData::deleteAll(['effect_id'=>$house_id]);
                             foreach ($house['worker_list'] as $worker) {
                                 if (!empty($worker['id'])) {
                                     $worker_id    = $worker['id'];
