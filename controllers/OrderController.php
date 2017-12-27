@@ -242,7 +242,7 @@ class OrderController extends Controller
         }
         $invoicer_card =trim($request->post('invoicer_card'));
         if ($invoicer_card){
-            $isMatched = preg_match('/^[0-9A-Z?]{18}$/', $invoicer_card, $matches);
+            $isMatched = preg_match('/^[1-9][0-9A-Z?]{17}$/', $invoicer_card, $matches);
             if ($isMatched==false){
                 $code=1000;
                 return Json::encode([
