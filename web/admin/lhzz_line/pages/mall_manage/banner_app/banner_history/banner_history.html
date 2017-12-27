@@ -20,6 +20,7 @@
                 <th>平台价格</th>
                 <th>创建时间</th>
                 <th>图片</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
@@ -34,9 +35,98 @@
                 <td ng-if="item.sku=='0'">—</td>
                 <td>{{item.create_time}}</td>
                 <td><img id="show_img_size" ng-src="{{item.image}}" alt=""></td>
+                <td><a data-target="#shop_modal_details" data-toggle="modal" ng-click="shop_details(item)">详情</a></td>
             </tr>
         </tbody>
     </table>
     <!--分页-->
     <tm-pagination conf="Config"></tm-pagination>
+    <!--商铺|链接  详情模态框开始-->
+    <div class="modal fade" id="shop_modal_details">
+        <div class="modal-dialog" role="document">
+            <!--商铺详情模态框-->
+            <div class="modal-content" ng-if="shop_datails.from_type=='商家'">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">推荐——商家详情</h4>
+                </div>
+                <!--商铺详情模态框-->
+                <div class="modal-body" >
+                    <div class="row">
+                        <p class="col-sm-12">商品名称 : {{shop_details_title}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">类型 : {{shop_details_types}}</p>
+                        <p class="col-sm-6">商品编号 : {{shop_details_sku}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">来源商家 : {{shop_details_supplier_name}}</p>
+                        <p class="col-sm-6">创建时间 : {{shop_details_time}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">是否启用 : <span class="yesGreen" ng-class="{'noRed':(shop_details_status=='停用')}">{{shop_details_status}}</span></p>
+                        <p class="col-sm-6">上架浏览 : <span class="blue">{{shop_details_viewed_number}}</span></p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">库存 : {{shop_details_viewed_left}}</p>
+                        <p class="col-sm-6">供货价格 : {{shop_details_supplier_price}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">平台价格 : {{shop_details_platform_price}}</p>
+                        <p class="col-sm-6">市场价格 : {{shop_details_market_price}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-12">图片 : </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 img_box">
+                            <img class="img_width" ng-src="{{shop_details_img}}" >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+
+            <!--链接详情模态框-->
+            <div class="modal-content" ng-if="shop_datails.from_type=='链接'">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">推荐——链接详情</h4>
+                </div>
+                <!--商铺详情模态框-->
+                <div class="modal-body">
+                    <div class="row">
+                        <p class="col-sm-6">名称 : {{link_details_title}}</p>
+                        <p class="col-sm-6">类型 : {{link_details_from_type}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">来源商家 : <span class="blue">{{link_details_supplier_name==''?'链接':link_details_supplier_name}}</span></p>
+                        <p class="col-sm-6">创建时间 : {{link_details_create_time}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-6">是否启用 : <span class="yesGreen" ng-class="{'noRed':(link_details_status=='停用')}">{{link_details_status}}</span></p>
+                        <p class="col-sm-6">浏览 : {{link_details_viewed_number}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-sm-12">图片 : </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 img_box">
+                            <img class="img_width" ng-src="{{link_details_img}}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--商铺|链接 详情模态框结束-->
 </div>
