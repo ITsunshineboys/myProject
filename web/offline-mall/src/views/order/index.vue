@@ -2,7 +2,7 @@
   <div>
     <x-header :left-options="{backText: ''}">确认订单</x-header>
     <!--收货地址-->
-    <div class="bg-white">
+    <div style="margin-top: 40px"  class="bg-white">
       <!--  没有填写收货地址-- 显示   -->
       <cell-box :link="{path:'/address'}" v-if= consigneeFlag>
         <i class="iconfont icon-location"></i>
@@ -25,7 +25,10 @@
     <div class="bg-white">
       <div class="cell-invoice">
         <group>
-          <cell title ="发票信息" value="明细" :link="{path:'/invoice'}"></cell>
+          <cell class="invoice-content" title ="发票信息"  :link="{path:'/invoice'}">
+            <span v-if="!!invoice_header" slot="default">明细-{{invoice_header}}</span>
+            <span v-else="!invoice_header" slot="default">明细</span>
+          </cell>
         </group>
       </div>
       <!--付款方式-->
@@ -55,6 +58,13 @@
           <span class="gold-color">￥{{allCost}}</span>
         </cell>
     </div>
+    <!--商城购买协议-->
+    <div style="margin-bottom: 48px">
+        <input type="checkbox">
+        <span>已同意</span>
+        <a>《商城购买协议》</a>
+    </div>
+
     <!--去付款按钮-->
     <div class="bg-white">
       <div class="footer-box">
@@ -62,17 +72,20 @@
           <span class="total-txt">合计：</span>
           <span class="total-p">￥{{allCost}}</span>
         </div>
-        <div class="to-pay-box">
+        <div class="to-pay-box" @click="toPay">
           <span>去支付</span>
         </div>
       </div>
     </div>
+    <!--模态框-->
+    <Modal :modalStatus="modalStatus"></Modal>
   </div>
 </template>
 
 <script>
   import { XHeader, Group, Cell, CellBox, XTextarea } from 'vux'
   import ShopDetails from './shop_details'
+  import Modal from '../order/modal'
   export default {
     name: 'Order',
     components: {
@@ -81,29 +94,62 @@
       Cell,
       CellBox,
       XTextarea,
-      ShopDetails
+      ShopDetails,
+      Modal
     },
     data () {
       return {
-        consigneeFlag: true,
-        shopObj: {},
-        shop_name: '',
-        goods_name: '',
-        cover_image: '',
-        platform_price: '',
-        goods_num: '',
-        market_price: '',
-        freight: '',
-        allCost: '',
-        consignee: '',
-        head_number: '',
-        foot_number: '',
-        addressValue: '',
-        detailAddress: '',
-        str: ''
+        shopObj: {}, // 店铺商品信息
+        modalStatus: {}, // 模态框
+        consigneeFlag: true, // 有无收货地址状态
+        shop_name: '', // 店铺名称
+        goods_name: '', // 商品名称
+        cover_image: '', // 封面图
+        platform_price: '', // 平台价 优惠价
+        goods_num: '',  // 数量
+        market_price: '', // 市场价
+        freight: '', // 运费
+        allCost: '', // 需付款金额
+        consignee: '', // 收货人
+        head_number: '', // 手机号前3位
+        foot_number: '', // 手机号后4位
+        addressValue: '', // 所属区域
+        adCode: '', // 所属区域的区号
+        detailAddress: '', // 详细地址
+        invoice_header: '' // 抬头
       }
     },
     methods: {
+      toPay () {
+        if (!this.consigneeFlag) {      // 已填写收货地址
+          this.axios.get('/order/judge-address', {
+            goods_id: 43,
+            district_code: this.adCode
+          }, (res) => {
+            console.log(res)
+            if (res.code === 200) {
+              if (this.invoice_header) {
+                console.log(222222)
+              } else {
+                this.modalStatus = {
+                  error_status: true,
+                  dialogTitle: '请填写发票'
+                }
+              }
+            } else {
+              this.modalStatus = {            // 所填区域不在配送范围内
+                error_status: true,
+                dialogContent: '你好，你购买的［' + this.goods_name + '］属于区域销售商品，你所选择的收货地址不在配送范围内，请更换商品或收货地址！'
+              }
+            }
+          })
+        } else {                        // 未填写收货地址
+          this.modalStatus = {
+            error_status: true,
+            dialogTitle: '请填写收货地址'
+          }
+        }
+      }
     },
     activated () {
       this.axios.get('/order/get-line-goods-info', {
@@ -112,7 +158,7 @@
       }, (res) => {
         console.log(res)
         this.shop_name = res.data.shop_name // 店铺名称
-        this.title = res.data.title // 商品名称
+        this.goods_name = res.data.title // 商品名称
         this.cover_image = res.data.cover_image // 商品图片
         this.platform_price = res.data.platform_price // 商品价格
         this.goods_num = res.data.goods_num // 数量
@@ -121,7 +167,7 @@
         this.allCost = res.data.allCost // 总价
         this.shopObj = {
           shop_name: this.shop_name,
-          title: this.title,
+          title: this.goods_name,
           cover_image: this.cover_image,
           platform_price: this.platform_price,
           goods_num: this.goods_num
@@ -140,13 +186,19 @@
           this.foot_number = this.phoneNumber.substring(7)
           this.addressValue = res.data.district.replace(/,/g, '')
           this.detailAddress = res.data.region
+          this.adCode = res.data.adCode
         })
       } else {
         this.consigneeFlag = true
       }
       // 判断有无发票信息
-      if (sessionStorage.getItem('address_id')) {
-
+      if (sessionStorage.getItem('invoice_id')) {
+        this.axios.get('/order/get-line-order-invoice-data', {
+          invoice_id: sessionStorage.getItem('invoice_id')
+        }, (res) => {
+          console.log(res)
+          this.invoice_header = res.data.invoice_header
+        })
       }
     }
   }
@@ -162,10 +214,14 @@
     padding-bottom: 0!important;
   }
   .consignee-top{
-    padding-left: 41px;
+    padding-left: 40px;
   }
   .consignee-box .add_address{
     color: #999!important;
+  }
+  .consignee-box .vux-cell-box:before{
+    left: 0!important;
+    border: 0!important;
   }
   .add_address{
     margin-left: 10px;
@@ -250,10 +306,7 @@
     text-align: center;
     background-color: #D9AD65;
   }
-  .vux-cell-box:before{
-    border: 0!important;
-  }
-
-
-
+  /*.invoice-content .weui-cell__ft{*/
+    /*width: 70%;*/
+  /*}*/
 </style>

@@ -5,7 +5,17 @@
 #app .vux-header .vux-header-title {
   margin: 0 44px;
 }
+#app .vux-header{
+  width: 100%;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+}
 
+#app .vux-header + * {
+  margin-top: 46px;
+}
 /*#app .vux-header .vux-header-right .iconfont {
   padding: 5px;
 }*/

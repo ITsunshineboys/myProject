@@ -6,7 +6,7 @@
         <div class="invoice-type">
           <span class="invoice-txt">发票类型</span>
           <div class="invoice-top">
-            <x-button mini class="btn-black">submit</x-button>
+            <x-button mini class="btn-black">普通发票</x-button>
           </div>
         </div>
       </div>
@@ -68,7 +68,6 @@
         modalStatus: {},
         invoiceHeaderValue: '',
         taxpayerValue: '',
-        showHideOnBlur: false,
         chooseSelect: true,
         chooseDefault: false,
         cardFlag: true
@@ -76,26 +75,52 @@
     },
     methods: {
       btnClick () {
+        let invoicerReg = /^(?!(?:\d+)$)[\dA-Z]{18}$/
         this.cardFlag === true ? this.taxpayerValue = '' : this.taxpayerValue = this.taxpayerValue
-        this.axios.post('/order/add-line-order-invoice', {
-          invoice_type: '1',
-          invoice_header_type: '2',
-          invoice_header: this.invoiceHeaderValue,
-          invoice_content: '明细',
-          invoicer_card: this.taxpayerValue
-        }, function (res) {
-          console.log(res)
-          if (res.code === 200) {
-            this.modalStatus = {
-              success_status: true
+        if (this.cardFlag) {
+          this.modalStatus = {
+            success_status: true,
+            dialogTitle: '保存成功'
+          }
+          this.axios.post('/order/add-line-order-invoice', {
+            invoice_type: '1',
+            invoice_header_type: '2',
+            invoice_header: this.invoiceHeaderValue,
+            invoice_content: '明细',
+            invoicer_card: this.taxpayerValue
+          }, (res) => {
+            console.log(res)
+            if (res.code === 200) {
+              sessionStorage.setItem('invoice_id', res.data.invoice_id)
             }
-            sessionStorage.setItem('invoice_id', res.data.invoice_id)
-          } else {
+          })
+        } else {
+          if (invoicerReg.test(this.taxpayerValue)) {
             this.modalStatus = {
-              error_status: true
+              success_status: true,
+              dialogTitle: '保存成功'
+            }
+            this.axios.post('/order/add-line-order-invoice', {
+              invoice_type: '1',
+              invoice_header_type: '2',
+              invoice_header: this.invoiceHeaderValue,
+              invoice_content: '明细',
+              invoicer_card: this.taxpayerValue
+            }, (res) => {
+              console.log(res)
+              if (res.code === 200) {
+                sessionStorage.setItem('invoice_id', res.data.invoice_id)
+              }
+            })
+          } else {
+            console.log(this.taxpayerValue)
+            this.modalStatus = {
+              error_status: true,
+              dialogTitle: '纳税人识别号输入不正确',
+              dialogContent: '请重新输入'
             }
           }
-        })
+        }
       },
       personalClick () {         // 个人 点击
         this.chooseSelect = true
@@ -138,7 +163,7 @@
 
   }
   .invoice-txt{
-    border-left:4px solid #222;
+    border-left:3px solid #222;
     padding-left: 5px;
   }
   .invoice-top{

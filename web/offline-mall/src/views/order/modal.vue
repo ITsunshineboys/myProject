@@ -4,7 +4,7 @@
       <div v-transfer-dom>
         <x-dialog @on-hide="hide"  v-model="modalStatus.success_status" class="dialog-demo" hide-on-blur>
           <div class="modal-save-success">
-            <span>保存成功</span>
+            <span>{{modalStatus.dialogTitle}}</span>
           </div>
           <div @click="modalStatus.success_status=false">
             <span class="modal-save-btn">确定</span>
@@ -15,8 +15,8 @@
       <div v-transfer-dom>
         <x-dialog v-model="modalStatus.error_status" class="dialog-demo" hide-on-blur>
           <div class="modal-save-error">
-            <p>纳税人识别号输入不正确</p>
-            <p>请重新输入</p>
+            <p>{{modalStatus.dialogTitle}}</p>
+            <p class="small-txt">{{modalStatus.dialogContent}}</p>
           </div>
           <div @click="modalStatus.error_status=false">
             <span class="modal-save-btn">确定</span>
@@ -77,5 +77,10 @@
     height: 50px;
     line-height: 50px;
   }
+  }
+  .small-txt{
+    font-size: 14px;
+    color: #999;
+    padding: 0 15px;
   }
 </style>
