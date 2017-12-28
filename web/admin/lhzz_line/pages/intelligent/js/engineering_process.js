@@ -5,7 +5,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -16,7 +16,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         }
     ]
     let arr = [],arr1 = [],arr2 = [],arr3 = []
-    console.log($stateParams)
+    let obj = JSON.parse(sessionStorage.getItem('area'))
     $scope.project_name = $stateParams.project
     $scope.cur_process_list = []
     //风格、系列以及楼梯结构
@@ -27,7 +27,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
     })
     //请求基本数据
     _ajax.get('/quote/project-norm-edit-list',{
-        city:$stateParams.city,
+        city:obj.city,
         project:$stateParams.project
     },function (res) {
         console.log(res)
@@ -77,7 +77,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                 }
             }
             _ajax.get('/quote/project-norm-woodwork-list',{
-                city:$stateParams.city
+                city:obj.city
             },function (res) {
                 console.log(res)
                 let arr4 = angular.copy($scope.all_series),
@@ -232,7 +232,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         if(valid){
             if($stateParams.project == '木作工艺'){
                 _ajax.post('/quote/project-norm-woodwork-edit',{
-                    city_code:$stateParams.city,
+                    city_code:obj.city,
                     value:arr,
                     specification:arr1,
                     coefficient:arr2

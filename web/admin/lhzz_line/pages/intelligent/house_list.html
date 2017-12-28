@@ -32,7 +32,7 @@
                 <td class="text-left">{{item.toponymy}}</td>
                 <td class="text-left">{{item.add_time}}</td>
                 <td class="text-left">{{item.district}}</td>
-                <td class="text-left"><a ui-sref="add_house({id:item.id,region_options:region_options,index:1,city:city_code,province:province_code})">编辑</a></td>
+                <td class="text-left"><a ui-sref="add_house({id:item.id,index:1})">编辑</a></td>
                 <td class="text-left"><a ng-click="deleteItem(item)">删除</a></td>
             </tr>
         </table>

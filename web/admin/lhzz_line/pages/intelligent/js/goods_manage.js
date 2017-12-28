@@ -5,18 +5,19 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
             name: '智能报价商品管理'
         }
     ]
+    let obj = JSON.parse(sessionStorage.getItem('area'))
     //获取省市
     $http.get('city.json').then(function (res) {
         console.log(res)
-        $scope.province_name = res.data[0]['86'][$stateParams.province]
-        $scope.city_name = res.data[0][$stateParams.province][$stateParams.city]
+        $scope.province_name = res.data[0]['86'][obj.province]
+        $scope.city_name = res.data[0][obj.province][obj.city]
     })
     //获取分类
     _ajax.get('/quote/assort-goods', {}, function (res) {
@@ -36,7 +37,7 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
                 $scope.level_three = res.data.categories
                 //获取列表
                 _ajax.get('/quote/goods-management-list',{
-                    city:$stateParams.city
+                    city:obj.city
                 },function (res) {
                     console.log(res)
                     $scope.goods_management_list = res.list
@@ -153,7 +154,7 @@ app.controller('goods_manage_ctrl',function ($uibModal,$state,$stateParams, _aja
         }
         if(valid){
             _ajax.post('/quote/goods-management-add',{
-                city:$stateParams.city,
+                city:obj.city,
                 add_item:arr
             },function (res) {
                 console.log(res)

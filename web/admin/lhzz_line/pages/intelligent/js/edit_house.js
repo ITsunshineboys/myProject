@@ -5,7 +5,7 @@ app.controller('edit_house_ctrl', function ($window,$uibModal,$anchorScroll,$loc
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
