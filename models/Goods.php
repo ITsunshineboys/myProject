@@ -1242,6 +1242,49 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Validates style_id(multiple style ids)
+     *
+     * @param array $styleIds style ids to validate
+     * @return mixed
+     */
+    public static function validateStyleIds(array $styleIds)
+    {
+        $offlineStyleIds = [];
+        $offlineStyleNames = [];
+        foreach ($styleIds as $styleId) {
+            if ($styleId <= 0) {
+                $offlineStyleIds[] = $styleId;
+                continue;
+            }
+
+            $style = Style::findOne($styleId);
+            if (!$style || $style->status != Style::STATUS_ONLINE) {
+                $offlineStyleIds[] = $styleId;
+                $style && $offlineStyleNames[] = $style->style;
+                continue;
+            }
+        }
+
+        if (!$offlineStyleIds && !$offlineStyleNames) {
+            return 200;
+        }
+
+        if (count($offlineStyleIds) != count($offlineStyleNames)) {
+            return 1000;
+        }
+
+        if (count($offlineStyleIds) == count($styleIds)) {
+            return 1045;
+        }
+
+        $code = 1046;
+        return [
+            'code' => $code,
+            'msg' => str_replace('{{style_names}}', join(ModelService::SEPARATOR_GENERAL, $offlineStyleNames), Yii::$app->params['errorCodes'][$code]),
+        ];
+    }
+
+    /**
      * Validates series_id
      *
      * @param string $attribute series_id to validate
