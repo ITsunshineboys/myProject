@@ -1462,14 +1462,19 @@ class MallController extends Controller
             $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
             $where .= " and deleted = {$deleted}";
 
-            $pid = (int)Yii::$app->request->get('pid', 0);
-            if ($pid > 0) {
-                $ids = GoodsCategory::level23Ids($pid, false, (bool)$status);
-                if (!$ids) {
-                    $where .= ' and 0';
-                } else {
-                    $where .= ' and id in (' . implode(',', $ids) . ')';
+            $keyword = trim(Yii::$app->request->get('keyword'));
+            if (!$keyword) {
+                $pid = (int)Yii::$app->request->get('pid', 0);
+                if ($pid > 0) {
+                    $ids = GoodsCategory::level23Ids($pid, false, (bool)$status);
+                    if (!$ids) {
+                        $where .= ' and 0';
+                    } else {
+                        $where .= ' and id in (' . implode(',', $ids) . ')';
+                    }
                 }
+            } else {
+                $where .= " and title like '%{$keyword}%'";
             }
         }
 
