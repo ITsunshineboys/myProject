@@ -1422,7 +1422,7 @@ class SupplieraccountController extends  Controller{
         $data=[
             ['status'=>0,'value'=>'全部'],
             ['status'=>1,'value'=>'充值'],
-            ['status'=>2,'value'=>'扣款'],
+            ['status'=>11,'value'=>UserAccessdetail::ACCESS_TYPE_DESC_REFUND],
             ['status'=>3,'value'=>'已提现'],
             ['status'=>4,'value'=>'提现中'],
             ['status'=>5,'value'=>'驳回'],
