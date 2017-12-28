@@ -1,11 +1,21 @@
 <div class="search form-inline clearfix">
-        <button class="btn btn-default" ng-click=checkAll()>全选</button>
-        <button class="btn btn-default" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
-        <span class="class-choose">分类选择</span>
-        <!--/*分类选择一级下拉框*/-->
-        <select name=""  class="form-control" ng-model="dropdown.firstselect" ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
-        <!--/*分类选择二级菜单*/-->
-        <select name="" class="form-control" ng-show="dropdown.firstselect=='0'?false:true" ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
+    <button class="btn btn-default" ng-click=checkAll()>全选</button>
+    <button class="btn btn-default" data-toggle="modal" data-target="#batchoffline_modal">下架</button>
+    <span class="class-choose">分类选择</span>
+    <!--/*分类选择一级下拉框*/-->
+    <select name="" class="form-control" ng-model="dropdown.firstselect"
+            ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
+    <!--/*分类选择二级菜单*/-->
+    <select name="" class="form-control" ng-show="dropdown.firstselect=='0'?false:true"
+            ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
+
+    <div class="form-group pull-right">
+        <div class="input-group">
+            <input class="form-control" type="text" ng-model="table.keyword" placeholder="搜索分类名称">
+            <span class="glyphicon glyphicon-search"></span>
+        </div>
+        <button class="btn btn-default" ng-click="search()">查询</button>
+    </div>
 </div>
 
 <div class="content">
@@ -17,7 +27,7 @@
             <th>分类图片</th>
             <th>分类名称</th>
             <th>分类级别</th>
-            <th ng-click=sortTime()>
+            <th ng-click="sortTime()">
                 <span>下架时间</span>
                 <span class="sort">
                             <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
@@ -55,7 +65,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body">
@@ -69,7 +80,8 @@
                         下架原因（选填）
                     </div>
                     <div class="col-md-8">
-                          <textarea name="" rows="10"  class="form-control" placeholder="请填写下架原因，如选择多个则为批量备注" ng-model="offlinereason.single"></textarea>
+                        <textarea name="" rows="10" class="form-control" placeholder="请填写下架原因，如选择多个则为批量备注"
+                                  ng-model="offlinereason.single"></textarea>
                     </div>
 
                 </div>
@@ -88,7 +100,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">下架操作</h4>
             </div>
             <div class="modal-body" ng-if="table.roles.length">
@@ -102,7 +115,8 @@
                         下架原因（选填）
                     </div>
                     <div class="col-md-8">
-                         <textarea class="form-control" name="" rows="14" placeholder="请填写下架原因，如选择多个则为批量备注" ng-model="offlinereason.batch"></textarea>
+                        <textarea class="form-control" name="" rows="14" placeholder="请填写下架原因，如选择多个则为批量备注"
+                                  ng-model="offlinereason.batch"></textarea>
                     </div>
                     {{batchoffline_reason}}
                 </div>
@@ -115,8 +129,10 @@
                 </div>
             </div>
             <div class="modal-footer" ng-if="table.roles.length">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureBatchOffline()">确认</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelBatchOffline()">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureBatchOffline()">确认
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelBatchOffline()">取消
+                </button>
             </div>
             <div class="modal-footer" ng-if="!table.roles.length">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>

@@ -5,14 +5,14 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
         status: 0, //已上架
         pid: 0,   //父分类id
         page: 1,  //当前页数
-        'sort[]': "online_time:3" //排序规则 默认按下架时间降序排列
+        keyword: '', //关键字
+        'sort[]': "offline_time:3" //排序规则 默认按下架时间降序排列
     }
     /*全选ID数组*/
     $scope.table = {
         roles: [],
+        keyword: ''
     };
-    /*已上架单个下架初始化下架原因*/
-    $scope.offlinereason = '';
 
     /*分类选择下拉框初始化*/
     $scope.dropdown = {
@@ -57,11 +57,7 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
 
     // 时间排序
     $scope.sortTime = function () {
-        if($scope.onsale_flag){
-            $scope.params['sort[]'] = $scope.params['sort[]'] == 'online_time:3' ? 'online_time:4' : 'online_time:3';
-        }else {
-            $scope.params['sort[]'] = $scope.params['sort[]'] == 'offline_time:3' ? 'offline_time:4' : 'offline_time:3';
-        }
+        $scope.params['sort[]'] = $scope.params['sort[]'] == 'offline_time:3' ? 'offline_time:4' : 'offline_time:3';
         $scope.table.roles.length = 0;
         $scope.pageConfig.currentPage = 1;
         tableList();
@@ -73,9 +69,10 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
         if (value == oldValue) {
             return
         }
-        $scope.params['sort[]'] = $scope.onsale_flag? 'online_time:3':'offline_time:3'
+        $scope.params['sort[]'] = 'offline_time:3'
         subClass(value);
         $scope.params.pid = value;
+        $scope.table.keyword = '';
         tableList()
     });
 
@@ -90,17 +87,30 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
         }
         if (value) {
             $scope.params.pid = value;
+            $scope.table.keyword = '';
             tableList()
         } else {
             //二级分类id为0
             $scope.params.pid = $scope.dropdown.firstselect;
+            $scope.table.keyword = '';
             tableList()
         }
     });
 
+    /*搜索*/
+    $scope.search = function () {
+        $scope.table.roles.length = 0;
+        $scope.params.keyword = $scope.table.keyword,
+        $scope.dropdown.firstselect = 0;
+        $scope.params['sort[]'] = 'offline_time:3';
+        $scope.pageConfig.currentPage = 1;
+        tableList();
+    }
+
 
     /*列表数据获取*/
     function tableList() {
+        $scope.params.keyword = $scope.table.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
             $scope.pageConfig.totalItems = res.data.category_list_admin.total;
@@ -117,7 +127,7 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
     };
 
 
-    /*-----------------------已下架操作--------------------*/
+
 
     /*已下架单个分类上架种类统计*/
     $scope.singleOnline = function (id) {

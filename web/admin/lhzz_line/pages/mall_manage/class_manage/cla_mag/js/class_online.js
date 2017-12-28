@@ -1,5 +1,4 @@
 app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($scope, $stateParams, _ajax) {
-
     let singleoffid;   //单个下架分类id
 
     /*默认参数*/
@@ -7,12 +6,15 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         status: 1, //已上架
         pid: 0,   //父分类id
         page: 1,  //当前页数
+        keyword: '', //关键字
         'sort[]': "online_time:3" //排序规则 默认按上架时间降序排列
     }
     /*全选ID数组*/
     $scope.table = {
         roles: [],
+        keyword: ''
     };
+
 
     /*下架原因初始化*/
     $scope.offlinereason = {
@@ -78,6 +80,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         $scope.params['sort[]'] = 'online_time:3';
         subClass(value);
         $scope.params.pid = value;
+        $scope.table.keyword = '';
         tableList()
     });
 
@@ -92,17 +95,30 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         }
         if (value) {
             $scope.params.pid = value;
+            $scope.table.keyword = '';
             tableList()
         } else {
             //二级分类id为0
             $scope.params.pid = $scope.dropdown.firstselect;
+            $scope.table.keyword = '';
             tableList()
         }
     });
 
+    /*搜索*/
+    $scope.search = function () {
+        $scope.table.roles.length = 0;
+        $scope.params.keyword = $scope.table.keyword,
+        $scope.dropdown.firstselect = 0;
+        $scope.params['sort[]'] = 'online_time:3';
+        $scope.pageConfig.currentPage = 1;
+        tableList();
+    }
+
 
     /*列表数据获取*/
     function tableList() {
+        $scope.params.keyword = $scope.table.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
             $scope.pageConfig.totalItems = res.data.category_list_admin.total;
@@ -119,7 +135,6 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     };
 
 
-    /*-----------------------已上架操作--------------------*/
 
     /*已上架单个分类下架种类统计*/
     $scope.singleOffline = function (id) {
@@ -155,7 +170,6 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     /*取消批量下架*/
     $scope.cancelBatchOffline = function () {
         $scope.offlinereason.batch = '';
-
     }
 }]);
 

@@ -3,10 +3,6 @@
     margin-right: 15px;
 }
 
-button{
-    margin-right: 15px;
-}
-
 table img{
     width: 30px;
     height: 30px;
@@ -36,86 +32,6 @@ table .handle{
     cursor: pointer;
 }
 
-/*模态框*/
-#xiajia_content,#shuru_content,#piliangxiajia_content{
-    width: 635px!important;
-    padding-left: 40px!important;
-    padding-right: 40px!important;
-    overflow: hidden;
-    padding-top: 40px;
-}
-
-#xiajia_modal，#piliangxiajia_modal{
-    padding: 40px 0 20px 0;
-    font-family: Helvetica-Bold;
-    font-size: 18px;
-    color: #2F3033;
-    line-height: 18px;
-    font-weight: bold;
-}
-
-#shuru_xiajiareason{
-    padding: 40px 0 20px 0;
-    font-family: Helvetica-Bold;
-    font-size: 18px;
-    color: #2F3033;
-    line-height: 18px;
-    font-weight: bold;
-}
-
-#xiajia_header,#shuru_header,#piliangxiajia_header{
-    padding: 0!important;
-}
-
-#xiajia_body,#shuru_body,#piliangxiajia_body{
-    padding: 0px!important;
-}
-
-#xiajia_body h6{
-    font-size: 16px;
-    color: #3c3c3c;
-}
-
-#piliangxiajia_body h6{
-    font-size: 16px;
-    color: #3c3c3c;
-}
-
-
-#xiajia_reason,#shuru_reason,#piliangxiajia_reason{
-    margin-top: 20px;
-}
-
-#xiajia_textarea,#shuru_textarea,#piliangxiajia_textarea{
-    float: right;
-    margin-top: -24px;
-}
-
-.btn_modal{
-    height: 60px;
-    margin-top: 290px;
-    overflow: hidden;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-#sure,#cancel,#shuru_cancel,#shuru_sure,#piliang_cancel,#piliang_sure{
-    float: right;
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #5677FC;
-    line-height: 12px;
-    padding: 6px 18px;
-    background-color: white;
-    border: 1px solid #5677FC;
-    border-radius: 3px;
-}
-
-#cancel,#shuru_cancel,#piliang_cancel{
-    margin-left: 15px;
-    cursor: pointer;
-}
-
 #dianji_shuru span{
     display: inline-block;
     width: 50px;
@@ -128,81 +44,13 @@ table .handle{
     text-overflow: ellipsis;
 }
 
-#xiajiacaozuo,#piliangxiajiacaozuo{
-    padding-bottom: 10px;
-    font-weight: bold;
-}
-
 textarea{
     font-size: 15px;
     font-weight: 400;
 }
+
 .off-state{
     color:red!important;
-}
-
-.shangjia{
-    cursor: pointer;
-}
-
-#shuru_reason{
-    font-size: 16px;
-}
-
-#shuru_textarea{
-    margin-top: -27px;
-}
-
-#shurucaozuo{
-    padding-bottom: 10px;
-}
-
-/*已下架_操作_模态框样式*/
-#caozuo_content,#sjcaozuo_content{
-    width: 636px!important;
-    height: 256px!important;
-}
-
-#caozuo_shangjia,#sjcaozuo_shangjia{
-    font-size: 16px;
-    font-weight: bold;
-    padding-top: 20px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-}
-
-#caozuo_body,#sjcaozuo_body{
-    padding-left: 20px;
-    font-size: 16px;
-}
-
-#caozuo_body h6{
-    font-size: 16px;
-    float: left;
-    margin-left: 20px;
-}
-
-#sjcaozuo_body h6{
-    font-size: 16px;
-    float: left;
-    margin-left: 20px;
-}
-
-.btn_modal_two{
-    margin-top: 74px;
-}
-
-#caozuo_cancel,#caozuo_sure,#sjcaozuo_cancel,#sjcaozuo_sure{
-    float: right;
-    font-family: Helvetica;
-    font-size: 12px;
-    color: #5677FC;
-    line-height: 12px;
-    padding: 6px 18px;
-    background-color: white;
-    border: 1px solid #5677FC;
-    border-radius: 3px;
-    margin-right: 20px;
 }
 
 .active{
