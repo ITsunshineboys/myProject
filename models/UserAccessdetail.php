@@ -38,6 +38,18 @@ class UserAccessdetail extends \yii\db\ActiveRecord
         'order_no'
     ];
 
+    const ACCESS_TYPE_RECHARGE=1;
+    const ACCESS_TYPE_DEBIT=2;
+    const ACCESS_TYPE_CASH=3;
+    const ACCESS_TYPE_UNCASH_IN=4;
+    const ACCESS_TYPE_DISAGREE=5;
+    const ACCESS_TYPE_PAYMENT_GOODS=6;
+    const ACCESS_TYPE_PAYMENT_BUY=7;
+    const ACCESS_TYPE_REWARD_MONEY=8;
+    const ACCESS_TYPE_PROJECTS_MONEY=9;
+    const ACCESS_TYPE_PROJECTS_REFUND=10;
+    const ACCESS_TYPE_REFUND=11;
+
     const ACCESS_TYPE_DESC_RECHARGE='充值';
     const ACCESS_TYPE_DESC_DEBIT='扣款';
     const ACCESS_TYPE_DESC_CASH='已提现';
@@ -116,10 +128,10 @@ class UserAccessdetail extends \yii\db\ActiveRecord
              $list['access_type']=self::findAccessType($list['access_type']);
              if ($list['access_type']==self::ACCESS_TYPE_DESC_PAYMENT_BUY)
              {
-                 $accessList=self::find()
-                     ->where(['transaction_no'=>$list['transaction_no']])
-                     ->asArray()
-                     ->all();
+                    $accessList=self::find()
+                         ->where(['transaction_no'=>$list['transaction_no']])
+                         ->asArray()
+                         ->all();
                      $list['access_money']=0;
                      foreach ($accessList as &$aList)
                      {
