@@ -3074,11 +3074,8 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-      $data=EngineeringCraftName::find()->asArray()->all();
-      foreach ($data as $a){
-          $res =new EngineeringStandardCraft();
-          $res->project_id=$a['id'];
-          $res->save();
-      }
+      $res = WorkerType::find()->where(['id'=>29])->one();
+      $res ->worker_name='强电工艺';
+      var_dump($res->save());
     }
 }
