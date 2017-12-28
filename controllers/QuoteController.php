@@ -365,15 +365,16 @@ class QuoteController extends Controller
         $where = 'city_code='.$city;
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll($where);
         $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll($where);
-        foreach ($goods['specification'] as $k=>$v1){
-            var_dump($v1['value']);
-        }die;
-        foreach ($goods['find_specification'] as $k=>&$v2){
-//                if($goods){
-//
-//                }
-        }die;
-        var_dump($goods['find_specification']);
+        $a =[];
+        foreach ($goods['specification'] as $k1=>$v1){
+            $a[$k1]=$v1['value'];
+        }
+        foreach ($goods['find_specification'] as $k2=>&$v2){
+                if($v2['value']==''){
+                    $v2['value']=$a[$k2];
+                }
+        }
+        var_dump($goods['find_specification']);die;
 
 
         return Json::encode([
