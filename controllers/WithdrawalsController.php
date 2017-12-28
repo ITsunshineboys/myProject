@@ -1784,27 +1784,46 @@ class WithdrawalsController extends Controller
                     ];
                 }
                 break;
-//            case UserAccessdetail::ACCESS_TYPE_REFUND:
-//                    $Orderoods;
-//                    $list[]=[
-//                        'name'=>'支付类型',
-//                        'value'=>$pay_name
-//                    ];
-//                    $list[]=[
-//                        'name'=>'商品名称',
-//                        'value'=>$title
-//                    ];
-//                    $list[]=[
-//                        'name'=>'时间',
-//                        'value'=>$access['create_time']
-//                    ];
-//                    $list[]=[
-//                        'name'=>'交易单号',
-//                        'value'=>$transaction_no
-//                    ];
-//                }
-//                break;
-        }
+            case UserAccessdetail::ACCESS_TYPE_REFUND:
+                    $OrderGoods=OrderGoods::FindByOrderNoAndSku($access['order_no'],$access['sku']);
+                    $list[]=[
+                        'name'=>'商品名称',
+                        'value'=>$OrderGoods->goods_name
+                    ];
+                    $list[]=[
+                        'name'=>'退款金额',
+                        'value'=>StringService::formatPrice($access['access_money']*0.01)
+                    ];
+                    $list[]=[
+                        'name'=>'到账银行卡',
+                        'value'=>StringService::formatPrice($access['access_money']*0.01)
+                    ];
+                    $list[]=[
+                        'name'=>'商品订单号',
+                        'value'=>$access['order_no']
+                    ];
+                    $list[]=[
+                        'name'=>'交易单号',
+                        'value'=>$transaction_no
+                    ];
+                    $list[]=[
+                        'name'=>'下单时间',
+                        'value'=>$transaction_no
+                    ];
+                    $list[]=[
+                        'name'=>'付款方式',
+                        'value'=>$transaction_no
+                    ];
+                    $list[]=[
+                        'name'=>'付款时间',
+                        'value'=>$transaction_no
+                    ];
+                    $list[]=[
+                        'name'=>'退款时间',
+                        'value'=>$transaction_no
+                    ];
+                break;
+         }
          $code=200;
          return Json::encode([
             'code'=>$code,

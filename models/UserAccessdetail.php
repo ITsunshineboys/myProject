@@ -209,7 +209,6 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             case 10:
                 $type=self::ACCESS_TYPE_DESC_PROJECTS_REFUND;
                 break;
-
             case self::ACCESS_TYPE_REFUND:
                 $type=self::ACCESS_TYPE_DESC_REFUND;
                 break;
