@@ -374,7 +374,7 @@ class QuoteController extends Controller
                     $v2['value']=$a[$k2];
                 }
         }
-        var_dump($goods['find_specification']);die;
+
 
 
         return Json::encode([
