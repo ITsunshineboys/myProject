@@ -47,6 +47,7 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
         if($scope.params.time_type!=''){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
@@ -59,6 +60,7 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal==''&&oldVal!=''&&$scope.params.time_type!=''){
+            $scope.Config.currentPage = 1
             $scope.params.search = ''
             tablePages()
         }
@@ -71,6 +73,7 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
                 time_end: '',
                 search: $scope.keyword
             };
+            $scope.Config.currentPage = 1
             tablePages()
         }
     }

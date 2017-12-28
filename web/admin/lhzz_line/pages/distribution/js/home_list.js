@@ -54,6 +54,7 @@ app.controller('home_list_ctrl',function ($scope,$rootScope,$uibModal,$state,$st
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal==''&&oldVal!=''){
+            $scope.Config.currentPage = 1
             $scope.params.keyword = ''
             tablePages()
         }
@@ -66,6 +67,7 @@ app.controller('home_list_ctrl',function ($scope,$rootScope,$uibModal,$state,$st
                 end_time:'',
                 keyword:$scope.keyword
             };
+            $scope.Config.currentPage = 1
             tablePages()
         }
     }

@@ -117,7 +117,7 @@ app.controller('money_list_ctrl',function ($uibModal,$rootScope,$stateParams,_aj
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
-        if(item.access_type == '使用'||item.access_type == '充值' ||item.access_type == '扣款'){
+        if(item.access_type == '使用'||item.access_type == '充值' ||item.access_type == '退款'){
             $uibModal.open({
                 templateUrl: 'pages/financial_center/owner/money_detail_modal.html',
                 controller: all_modal

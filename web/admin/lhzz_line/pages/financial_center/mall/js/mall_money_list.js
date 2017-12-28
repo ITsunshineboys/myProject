@@ -73,9 +73,11 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
                 if($scope.params.time_type != 'custom'){
                     $scope.params.time_start = ''
                     $scope.params.time_end = ''
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }else{
                     if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                        $scope.Config.currentPage = 1
                         tablePages()
                     }
                 }
@@ -83,8 +85,10 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
                 $scope.params.keyword = ''
             }else if(index == 2){
                 $scope.params.sort_time = $scope.params.sort_time==1?2:1
+                $scope.Config.currentPage = 1
                 tablePages()
             }else{
+                $scope.Config.currentPage = 1
                 tablePages()
                 $scope.keyword = ''
                 $scope.params.keyword = ''
@@ -93,6 +97,7 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal == ''&&oldVal!=''&&$scope.params.uid!=''){
+            $scope.Config.currentPage = 1
             $scope.params.keyword = newVal
             tablePages()
         }
@@ -100,6 +105,7 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
     //关键词查询
     $scope.inquire = function () {
         if($scope.keyword!=''){
+            $scope.Config.currentPage = 1
             $scope.params.keyword = $scope.keyword
             $scope.params.time_type = 'all'
             $scope.params.type = '0'

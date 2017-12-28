@@ -28,6 +28,6 @@ app.controller('engineering_standards_ctrl',function ($uibModal,$state,$statePar
     })
     //跳转详情
     $scope.goEngineeringDetail = function (item) {
-        $state.go('engineering_process',{project:item.project})
+        $state.go('engineering_process',{id:item.id,project:item.project})
     }
 })

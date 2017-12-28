@@ -56,9 +56,11 @@ app.controller('mall_freeze_list_ctrl',function ($scope,$rootScope,$state,$state
         if($scope.parmas.time_type!=''){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.start_time!=''||$scope.params.end_time!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
+                $scope.Config.currentPage = 1
                 tablePages()
             }
         }

@@ -55,9 +55,11 @@ app.controller('freeze_list_ctrl',function ($uibModal,$state,$stateParams,$scope
         if($scope.params.use_id!=''&&$scope.params.time_type!=''){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
+                $scope.Config.currentPage = 1
                 tablePages()
             }
         }

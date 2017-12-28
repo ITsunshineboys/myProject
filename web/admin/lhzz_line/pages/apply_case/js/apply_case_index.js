@@ -47,10 +47,12 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
         if($scope.params.time_type!=''){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }else{
                     $scope.params.time_start = ''
                     $scope.params.time_end = ''
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }
@@ -60,12 +62,14 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal==''&&oldVal!=''){
+            $scope.Config.currentPage = 1
             $scope.params.keyword = ''
             tablePages()
         }
     })
     $scope.inquire = function () {
         if($scope.keyword!=''){
+            $scope.Config.currentPage = 1
             $scope.params.keyword = $scope.keyword
             $scope.params.time_end = ''
             $scope.params.time_start = ''

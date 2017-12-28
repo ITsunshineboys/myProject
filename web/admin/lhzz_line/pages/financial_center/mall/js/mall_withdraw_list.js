@@ -57,9 +57,11 @@ app.controller('mall_withdraw_list_ctrl',function ($state,$stateParams,_ajax,$sc
         if($scope.parmas.time_type!=''){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.start_time!=''||$scope.params.end_time!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
+                $scope.Config.currentPage = 1
                 tablePages()
             }
         }

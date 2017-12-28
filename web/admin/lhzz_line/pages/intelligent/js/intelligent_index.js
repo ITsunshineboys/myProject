@@ -51,4 +51,12 @@ app.controller('intelligent_index_ctrl',function (_ajax,$http,$scope,$rootScope)
             }))
         }
     },true)
+    $scope.$watch('city',function (newVal,oldVal) {
+        if(oldVal!=undefined&&newVal!=undefined){
+            sessionStorage.setItem('area',JSON.stringify({
+                province:$scope.province,
+                city:newVal
+            }))
+        }
+    },true)
 })

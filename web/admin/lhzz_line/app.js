@@ -563,7 +563,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'engineering_standards_ctrl'
         })
         .state('engineering_process', {//工程标准编辑
-            url: '/engineering_process?project',
+            url: '/engineering_process?id&project',
             templateUrl: 'pages/intelligent/engineering_process.html',
             css: 'pages/intelligent/css/engineering_process.css',
             controller: 'engineering_process_ctrl'

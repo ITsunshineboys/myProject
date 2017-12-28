@@ -27,26 +27,26 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
     })
     //请求基本数据
     _ajax.get('/quote/project-norm-edit-list',{
-        city:obj.city,
-        project:$stateParams.project
+        city_code:obj.city,
+        id:$stateParams.id
     },function (res) {
         console.log(res)
         if($stateParams.project == '杂工工艺'){
             //水泥整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('水泥')!=-1){
+                if(value.project.indexOf('水泥')!=-1){
                     arr.push(value)
                 }
             }
             //河沙整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('河沙')!=-1){
+                if(value.project.indexOf('河沙')!=-1){
                     arr1.push(value)
                 }
             }
             //其它整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('水泥')==-1&&value.project_details.indexOf('河沙')==-1){
+                if(value.project.indexOf('水泥')==-1&&value.project.indexOf('河沙')==-1){
                     arr2.push(value)
                 }
             }
@@ -54,25 +54,25 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         }else if($stateParams.project == '木作工艺'){
             //细木工板整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('细木工板')!=-1){
+                if(value.project.indexOf('细木工板')!=-1){
                     arr.push(value)
                 }
             }
             //石膏整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('石膏')!=-1){
+                if(value.project.indexOf('石膏')!=-1){
                     arr1.push(value)
                 }
             }
             //龙骨整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('龙骨')!=-1){
+                if(value.project.indexOf('龙骨')!=-1){
                     arr2.push(value)
                 }
             }
             //丝杆整合
             for(let [key,value] of res.list.entries()){
-                if(value.project_details.indexOf('丝杆')!=-1){
+                if(value.project.indexOf('丝杆')!=-1){
                     arr3.push(value)
                 }
             }
@@ -145,7 +145,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                             (value.title.indexOf('细木工板')!=-1&&value1.title.indexOf('细木工板')!=-1&&value.title.indexOf(value1.name)!=-1)
                         ){
                             value['options'] = value1.value
-                            value['project_details'] = value.title
+                            value['project'] = value.title
                             value['material'] = value.value + ''
                         }
                     }
@@ -199,7 +199,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
             for(let [key1,value1] of value.entries()){
                 if(value1.options == undefined){
                     arr.push({
-                        id:value1.id,
+                        id:value1.project_id,
                         value:value1.material
                     })
                 }else{
@@ -245,6 +245,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                 })
             }else{
                 _ajax.post('/quote/project-norm-edit',{
+                    city_code:obj.city,
                     material:arr
                 },function (res) {
                     console.log(res);
