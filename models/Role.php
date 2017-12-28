@@ -155,4 +155,37 @@ class Role extends ActiveRecord
         }
         return $model;
     }
+
+
+    /**
+     * 获取生成交易单号  角色number
+     * @param $userRole
+     * @param $role_id
+     * @return mixed
+     */
+    public  static  function  GetUserRoleNumber($userRole,$role_id)
+    {
+        switch ($role_id)
+        {
+            case 2:
+                $user_role_number=$userRole->worker_type_id;
+                break;
+            case 3:
+                $user_role_number=$userRole->decoration_company_id;
+                break;
+            case 4:
+                $user_role_number=$userRole->decoration_company_id;
+                break;
+            case 5:
+                $user_role_number=$userRole->id;
+                break;
+            case 6:
+                $user_role_number=$userRole->shop_no;
+                break;
+            case 7:
+                $user_role_number=$userRole->aite_cube_no;
+                break;
+        }
+        return $user_role_number;
+    }
 }

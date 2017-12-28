@@ -512,4 +512,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+
+
 }
