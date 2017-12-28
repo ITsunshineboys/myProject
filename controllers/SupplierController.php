@@ -1029,7 +1029,7 @@ class SupplierController extends Controller
                 'name'=>$Supplier->name,
                 'licence'=>$Supplier->licence,
                 'type_org'=>$type_org,
-                'licence_image'=>$Supplier->licence,
+                'licence_image'=>$Supplier->licence_image,
                 'legal_person'=>$user->legal_person,
                 'identity_no'=>$user->identity_no,
                 'identity_card_front_image'=>$user->identity_card_front_image,
