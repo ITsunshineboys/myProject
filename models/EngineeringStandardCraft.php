@@ -6,7 +6,9 @@
  * Time: 下午 17:40
  */
 namespace app\models;
+use dosamigos\qrcode\formats\vCard;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class EngineeringStandardCraft  extends ActiveRecord
 {
@@ -45,6 +47,32 @@ class EngineeringStandardCraft  extends ActiveRecord
         return 'engineering_standard_craft';
     }
 
+    public static function findALLByid($id,$city_code){
+
+        $chlidren= WorkerType::find()->asArray()->select('id,worker_name,unit')->where(['pid'=>$id])->all();
+
+        $data=[];
+        foreach ($chlidren as &$chlid){
+            $row =  self::find()
+                ->asArray()
+                ->where(['city_code'=>$city_code])
+                ->andWhere(['project_id'=>$chlid['id']])
+                ->one();
+            if($row==null){
+                $row['city_code']=$city_code;
+                $row['material']='';
+                $row['project_id']=$chlid['id'];
+                $row['project']=$chlid['worker_name'];
+            }
+         if($row['project_id']==$chlid['id']){
+             $row['project']=$chlid['worker_name'];
+         }
+            $data[]=$row;
+        }
+
+        return $data;
+
+    }
     /**
      * condition find
      * @param string $project
@@ -54,15 +82,17 @@ class EngineeringStandardCraft  extends ActiveRecord
     public static function findByAll($project='',$code =510100)
     {
 
-        $select = 'id,material,project_details,unit';
+        $select = 'id,material,project_id';
         $row =  self::find()
             ->asArray()
             ->select($select)
             ->where(['city_code'=>$code])
-            ->andWhere(['project'=>$project])
+            ->andWhere(['id'=>$project])
             ->all();
 
         foreach ($row as &$one){
+
+            $one['project_details']=$one['project_details'];
             $one['material'] = $one['material'] / self::PRICE_CONVERSION;
             $one['unit'] = self::UNIT[$one['unit']];
         }
@@ -78,13 +108,13 @@ class EngineeringStandardCraft  extends ActiveRecord
             ->one();
     }
 
-    public static function findByList($city){
+    public static function findByList(){
 
         return self::find()
             ->asArray()
-            ->where(['city_code'=>$city])
+//            ->where(['city_code'=>$city])
             ->distinct()
-            ->select('project')
+            ->select('project,id')
             ->all();
     }
 }

@@ -37,6 +37,8 @@ class WorkerType extends \yii\db\ActiveRecord
         ];
     }
 
+
+
     public static function findPidbyid($id){
         $data=self::find()
             ->select('id,worker_name,unit')
@@ -45,6 +47,7 @@ class WorkerType extends \yii\db\ActiveRecord
             ->all();
         foreach ($data as &$v){
             $v['labor_cost_id']=$id;
+            $v['worker_kind_details']=$v['worker_name'];
             $v['quantity']='';
             $v['unit']=WorkerCraftNorm::UNIT[$v['unit']];
         }
@@ -53,6 +56,15 @@ class WorkerType extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    public static function WorkerCraft3(){
+        return self::find()
+            ->asArray()
+            ->select('id,worker_name')
+            ->where(['status'=>3,'pid'=>0])
+            ->all();
+    }
+
     /**
      * 根据父级工种找子级
      *@return string
