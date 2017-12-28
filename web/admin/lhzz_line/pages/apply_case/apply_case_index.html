@@ -2,8 +2,8 @@
     <p><span>今日新申请：{{total_data.today_apply}}</span><span>今日定金：{{total_data.today_earnest|currency:'￥'}}</span><span>总申请：{{total_data.all_apply}}</span><span>总定金：{{total_data.today_earnest}}</span></p>
     <div class=" search form-inline clearfix">
         <select ng-model="params.time_type" ng-options="item.value as item.name for item in time_types" ng-change="getCase()" class="form-control"></select>
-        <input ng-if="params.time_type == 'custom'" ng-model="params.time_start" id="start_time" class="form-control" ng-change="getCase()" max-date="{{params.time_end}}" placeholder="开始时间" type="text" ngc-lay-date>
-        <input ng-if="params.time_type == 'custom'" ng-model="params.time_end" id="end_time" class="form-control" ng-change="getCase()" min-date="{{params.time_start}}" placeholder="结束时间" type="text" ngc-lay-date>
+        <input ng-if="params.time_type == 'custom'" ng-model="params.start_time" id="start_time" class="form-control" ng-change="getCase()" max-date="{{params.end_time}}" placeholder="开始时间" type="text" ngc-lay-date>
+        <input ng-if="params.time_type == 'custom'" ng-model="params.end_time" id="end_time" class="form-control" ng-change="getCase()" min-date="{{params.start_time}}" placeholder="结束时间" type="text" ngc-lay-date>
         <div class="form-group pull-right">
             <div class="input-group">
                 <input class="form-control" style="width: 228px;" ng-model="vm.keyword" placeholder="搜索手机号、姓名或交易单号" type="text">

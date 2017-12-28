@@ -40,19 +40,19 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
     $scope.params = {
         keyword: '',
         time_type: '',
-        time_start: '',
-        time_end: ''
+        start_time: '',
+        end_time: ''
     }
     $scope.getCase = function () {
         if($scope.params.time_type!=''){
             if($scope.params.time_type == 'custom'){
-                if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                if($scope.params.start_time!=''||$scope.params.end_time!=''){
                     $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
-                $scope.params.time_start = ''
-                $scope.params.time_end = ''
+                $scope.params.start_time = ''
+                $scope.params.end_time = ''
                 $scope.Config.currentPage = 1
                 tablePages()
             }
@@ -71,8 +71,8 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
         if($scope.keyword!=''){
             $scope.Config.currentPage = 1
             $scope.params.keyword = $scope.keyword
-            $scope.params.time_end = ''
-            $scope.params.time_start = ''
+            $scope.params.end_time = ''
+            $scope.params.start_time = ''
             $scope.params.time_type = $scope.time_types[0].value
             tablePages()
         }
