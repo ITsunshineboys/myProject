@@ -2,7 +2,7 @@
   <div>
     <x-header :left-options="{backText: ''}">确认订单</x-header>
     <!--收货地址-->
-    <div style="margin-top: 40px"  class="bg-white">
+    <div class="bg-white">
       <!--  没有填写收货地址-- 显示   -->
       <cell-box :link="{path:'/address'}" v-if= consigneeFlag>
         <i class="iconfont icon-location"></i>
@@ -38,7 +38,7 @@
       <!--买家留言-->
       <div class="cell-buy">
         <group>
-          <x-textarea :title="'买家留言'" :placeholder="'选填：对本次交易的说明'" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
+          <x-textarea v-model="buyer_message" :title="'买家留言'" :placeholder="'选填：对本次交易的说明'" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
       </div>
     </div>
@@ -59,12 +59,11 @@
         </cell>
     </div>
     <!--商城购买协议-->
-    <div style="margin-bottom: 48px">
+    <div class="agreement-box">
         <input type="checkbox">
         <span>已同意</span>
         <a>《商城购买协议》</a>
     </div>
-
     <!--去付款按钮-->
     <div class="bg-white">
       <div class="footer-box">
@@ -116,7 +115,8 @@
         addressValue: '', // 所属区域
         adCode: '', // 所属区域的区号
         detailAddress: '', // 详细地址
-        invoice_header: '' // 抬头
+        invoice_header: '', // 抬头
+        buyer_message: ''
       }
     },
     methods: {
@@ -128,8 +128,21 @@
           }, (res) => {
             console.log(res)
             if (res.code === 200) {
-              if (this.invoice_header) {
-                console.log(222222)
+              if (this.invoice_header) {                  //
+                this.axios.post('/order/order-line-ali-pay', {
+                  order_price: this.allCost,
+                  goods_id: 43,
+                  goods_num: 10,
+                  address_id: sessionStorage.getItem('address_id'),
+                  invoice_id: sessionStorage.getItem('invoice_id  '),
+                  freight: this.freight,
+                  buyer_message: this.buyer_message
+                }, (res) => {
+                  const div = document.createElement('div') // 创建div
+                  div.innerHTML = res // 将返回的form 放入div
+                  document.body.appendChild(div)
+                  document.forms[0].submit()
+                })
               } else {
                 this.modalStatus = {
                   error_status: true,
@@ -306,7 +319,21 @@
     text-align: center;
     background-color: #D9AD65;
   }
-  /*.invoice-content .weui-cell__ft{*/
-    /*width: 70%;*/
-  /*}*/
+  .agreement-box{
+    margin-bottom: 48px;
+    padding: 14px
+  }
+  .agreement-box > input {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+  .agreement-box > span {
+    font-size: 12px;
+    color: #7c7c7c;
+  }
+  .agreement-box > a {
+    font-size: 12px;
+    color: #222;
+  }
 </style>

@@ -100,11 +100,7 @@
                         <span ng-model="myng.attr_name">{{item.name}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <input class="form-control" ng-model="item.value" type="text" maxlength="6"
-                               placeholder="请输入属性内容" id="attr_name{{$index}}" name="attr_name{{$index}}"
-                               ng-keyup="testNumber(item)" required
-                               ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}"
-                               ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
+                        <input class="form-control" ng-model="item.value" type="text" maxlength="6" placeholder="请输入属性内容" id="attr_name{{$index}}" name="attr_name{{$index}}" ng-keyup="testNumber(item)" required ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}" ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
                     </div>
                     <div class="col-sm-1 control-label">
                         <span class="unit">{{item.unit}}</span>
@@ -121,8 +117,7 @@
                         <span style="display: inline-block;width: 140px">{{item.name}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <select class="form-control" ng-model="item.selected"
-                                ng-options="items for items in goods_select_attrs_value[$index]"></select>
+                        <select class="form-control" ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
                     </div>
                     <div class="col-sm-1 control-label">
                         <span class="unit">{{item.unit}}</span>
@@ -139,13 +134,13 @@
                         <input type="text" class="form-control own_attr_name" maxlength="6" placeholder="请勿输入重复属性名称" ng-change="own_input_change()" ng-model="item.name" id="{{item.name_model}}" name="{{item.name_model}}" required ng-class="{'error':form[item.name_model].$invalid &&submitted||(form[item.name_model].$error.required) || own_submitted}"/>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" maxlength="10" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
+                        <input type="text" class="form-control" maxlength="30" placeholder="请输入属性内容" ng-model="item.value" id="{{item.value_model}}" name="{{item.value_model}}" required ng-class="{'error':form[item.value_model].$invalid &&submitted||(form[item.value_model].$error.required)}"/>
                     </div>
                     <div class="col-sm-1">
                         <span>&nbsp;</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                        <span>*属性名称限1～6个字符,属性内容限1～30个字符</span>
                     </div>
                 </div>
             </div>
