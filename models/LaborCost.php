@@ -120,7 +120,7 @@ class LaborCost extends ActiveRecord
         if($row==null){
             $row['city'] = District::findByCode($row['city_code'])->name;
         $row['province'] = District::findByCode($row['province_code'])->name;
-        $row['location']=$row['province']-$row['city'];
+            $row['location']=$row['province'].'-'.$row['city'];
             $row['worker_kind']=WorkerType::gettype($id);
             $row['worker_id']= $id;
             $row['city_code']=$city_code;
@@ -138,7 +138,7 @@ class LaborCost extends ActiveRecord
             $row['unit'] = self::UNIT[$row['unit']];
             $row['city'] = District::findByCode($row['city_code'])->name;
             $row['province'] = District::findByCode($row['province_code'])->name;
-            $row['location']=$row['province']-$row['city'];
+            $row['location']=$row['province'].'-'.$row['city'];
         }
 
 
