@@ -235,3 +235,7 @@ create table goods_style (
   `style_id` int(11) unsigned not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--all 2017.12.28 hyz
+ALTER TABLE `user_accessdetail` modify column access_type tinyint(2) NOT NULL DEFAULT '0' COMMENT '1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用  8.奖励金  9.工程款  10.工程退款   11.退款';
