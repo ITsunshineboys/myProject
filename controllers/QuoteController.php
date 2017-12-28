@@ -308,10 +308,21 @@ class QuoteController extends Controller
      */
     public function actionProjectNormEdit(){
         $post = \Yii::$app->request->post();
+
         foreach ($post['material'] as $one_material){
-            $material = EngineeringStandardCraft::findOne($one_material['id']);
-            $material->material = $one_material['value'] * 100;
-            $edit_material = $material->save();
+//            var_dump($one_material);
+            $material = EngineeringStandardCraft::findallbycity($post['city_code'],$one_material['id']);
+            if($material){
+                $material->material = $one_material['value'] * 100;
+                $edit_material = $material->save();
+            }else{
+                $model =new EngineeringStandardCraft;
+                $model->city_code=$post['city_code'];
+                $model->material=$one_material['value']*100;
+                $model->project_id=$one_material['id'];
+                $edit_material = $model->save();
+            }
+
         }
         if (!$edit_material){
             $code = 1000;

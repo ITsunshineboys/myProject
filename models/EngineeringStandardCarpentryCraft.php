@@ -31,21 +31,21 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
             ->select('id,title,value,unit')
             ->where($where)
             ->all();
-//        if($row==null){
-//            $row=self::find()
-//                ->select('title,value,unit')
-//                ->asArray()
-//                ->distinct('title')
-//                ->all();
-//           foreach ($row as &$a){
-//               if($a['value']!=null){
-//                   unset($a['value']);
-//               }
-//               $a['unit'] = self::UNIT[$a['unit']];
-//                $a['value']='';
-//           }
-//
-//        }else{
+        if($row==null){
+            $row=self::find()
+                ->select('title,value,unit')
+                ->asArray()
+                ->distinct('title')
+                ->all();
+           foreach ($row as &$a){
+               if($a['value']!=null){
+                   unset($a['value']);
+               }
+               $a['unit'] = self::UNIT[$a['unit']];
+                $a['value']='';
+           }
+
+        }else{
             foreach ($row as &$one){
 
                 $one['unit'] = self::UNIT[$one['unit']];
@@ -53,7 +53,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
                 if($one['value']==0){
                     $one['value']='其它';//TODO 修改
                 }
-//            }
+            }
 
         }
 
