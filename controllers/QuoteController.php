@@ -316,7 +316,7 @@ class QuoteController extends Controller
                 $material->material = $one_material['value'] * 100;
                 $edit_material = $material->save();
             }else{
-                $model =new EngineeringStandardCraft;
+                $model =new EngineeringStandardCraft();
                 $model->city_code=$post['city_code'];
                 $model->material=$one_material['value']*100;
                 $model->project_id=$one_material['id'];
@@ -362,7 +362,6 @@ class QuoteController extends Controller
 
 
 
-
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
         $where = 'city_code='.$city;
@@ -390,22 +389,18 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
         foreach ($post['value'] as $one_post){
             if (isset($one_post['id'])){
-                $value = EngineeringStandardCraft::findOne($one_post['id']);
+                $value = EngineeringStandardCraft::findallbycity($post['city_code'],$one_post['id']);
                 $value->material = $one_post['value'] * 100;
                 $value->save();
+            }else{
+                $model =new EngineeringStandardCraft();
+                $model->city_code=$post['city_code'];
+                $model->material=$one_post['value']*100;
+                $model->project_id=$one_post['id'];
+                $model->save();
             }
         }
 
-        foreach ($post['value'] as $one_post){
-            if (!isset($one_post['id'])){
-                $value = new EngineeringStandardCraft();
-                $value->city_code   = $post['city_code'];
-                $value->project         = $post['project'];
-                $value->project_details = $one_post['name'];
-                $value->material        = $one_post['value'] * 100;
-                $value->save();
-            }
-        }
 
         foreach ($post['specification'] as $one_specification){
             $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
