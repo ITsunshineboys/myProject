@@ -118,32 +118,31 @@ class LaborCost extends ActiveRecord
             ->one();
 
         if($row==null){
-//            $row['city'] = District::findByCode($row['city_code'])->name;
-//        $row['province'] = District::findByCode($row['province_code'])->name;
+            $row['city'] = District::findByCode($row['city_code'])->name;
+        $row['province'] = District::findByCode($row['province_code'])->name;
+        $row['location']=$row['province']-$row['city'];
             $row['worker_kind']=WorkerType::gettype($id);
             $row['worker_id']= $id;
             $row['city_code']=$city_code;
             $row['province_code']=$province_code;
-            $row['city']='巴中';
-            $row['province']='四川省';
+//            $row['city']='巴中';
+//            $row['province']='四川省';
             $row['univalence']='';
             $row['unit']=self::UNIT[1];
 
         }else{
-            $row['city']='成都';
-            $row['province']='四川省';
+//            $row['city']='成都';
+//            $row['province']='四川省';
             $row['univalence'] = $row['univalence'] / 100;
             $row['worker_kind']=WorkerType::gettype($row['worker_kind_id']);
-
             $row['unit'] = self::UNIT[$row['unit']];
-//        $row['city'] = District::findByCode($row['city_code'])->name;
-//        $row['province'] = District::findByCode($row['province_code'])->name;
+            $row['city'] = District::findByCode($row['city_code'])->name;
+            $row['province'] = District::findByCode($row['province_code'])->name;
+            $row['location']=$row['province']-$row['city'];
         }
 
 
         unset($row['worker_kind_id']);
-//        unset($row['city_code']);
-//        unset($row['province_code']);
         return $row;
 
 
