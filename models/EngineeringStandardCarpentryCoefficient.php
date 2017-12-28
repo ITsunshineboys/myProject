@@ -35,6 +35,7 @@ class EngineeringStandardCarpentryCoefficient extends ActiveRecord
             ->where($where)
             ->All();
 
+       ;
         foreach ($row as &$one){
             $one['value'] = $one['value'] / 100;
         }

@@ -275,15 +275,15 @@ class QuoteController extends Controller
     }
 
     /**
-     * 工程标准列表
+     * 工程标准列表 ok
      * @return string
      */
     public function actionProjectNormList(){
-        $city = trim(\Yii::$app->request->get('city',''));
+//        $city = trim(\Yii::$app->request->get('city',''));
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-            'list'=>EngineeringStandardCraft::findByList($city),
+            'list'=>WorkerType::WorkerCraft3(),
         ]);
     }
 
@@ -292,12 +292,13 @@ class QuoteController extends Controller
      * @return string
      */
     public function actionProjectNormEditList(){
-        $city = (int)trim(\Yii::$app->request->get('city',''));
-        $project = trim(\Yii::$app->request->get('project',''));
+        $city = (int)trim(\Yii::$app->request->get('city_code',''));
+        $project_id = trim(\Yii::$app->request->get('id',''));
+        $data=EngineeringStandardCraft::findALLByid($project_id,$city);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-           'list'=>EngineeringStandardCraft::findByAll($project,$city),
+           'list'=>$data
         ]);
     }
 
@@ -335,7 +336,9 @@ class QuoteController extends Controller
 
         $material = [22,9,12,13]; // 龙骨 丝杆 细木工板 石膏板分类 id   13
         $goods_ = Goods::priceDetail(3,$material);
+
         $category = array_values(Effect::array_group_by($goods_,'title'));
+
         foreach ($category as $v){
             $goods_c [] = BasisDecorationService::profitMargin($v);
         }
@@ -345,6 +348,7 @@ class QuoteController extends Controller
             $id [] = $one['id'];
         }
         $goods['specification'] = GoodsCategory::attrValue($id);
+
 
 
 
@@ -358,7 +362,7 @@ class QuoteController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
-           'specification'=>$goods,
+            'specification'=>$goods,
             'series'=>$series,
             'style'=>$style,
             'coefficient'=>$coefficient
@@ -3059,12 +3063,11 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-//      $data=EngineeringStandardCraft::find()->asArray()->all();
-//      foreach ($data as $a){
-//          $res =new EngineeringCraftName();
-//          $res->project_details=$a['project_details'];
-//          $res->project=$a['project'];
-//          $res->save();
-//      }
+      $data=EngineeringCraftName::find()->asArray()->all();
+      foreach ($data as $a){
+          $res =new EngineeringStandardCraft();
+          $res->project_id=$a['id'];
+          $res->save();
+      }
     }
 }

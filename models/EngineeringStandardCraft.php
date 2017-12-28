@@ -6,6 +6,7 @@
  * Time: 下午 17:40
  */
 namespace app\models;
+use app\services\BasisDecorationService;
 use dosamigos\qrcode\formats\vCard;
 use yii\db\ActiveRecord;
 use yii\db\Query;
@@ -52,21 +53,27 @@ class EngineeringStandardCraft  extends ActiveRecord
         $chlidren= WorkerType::find()->asArray()->select('id,worker_name,unit')->where(['pid'=>$id])->all();
 
         $data=[];
-        foreach ($chlidren as &$chlid){
+
+        foreach ($chlidren as $chlid){
+
             $row =  self::find()
                 ->asArray()
-                ->where(['city_code'=>$city_code])
-                ->andWhere(['project_id'=>$chlid['id']])
+                ->select([])
+                ->where(['city_code'=>$city_code,'project_id'=>$chlid['id']])
                 ->one();
+
             if($row==null){
                 $row['city_code']=$city_code;
                 $row['material']='';
                 $row['project_id']=$chlid['id'];
                 $row['project']=$chlid['worker_name'];
+            }else{
+                if($row['project_id']==$chlid['id']){
+                    $row['project']=$chlid['worker_name'];
+                    $row['material']=$row['material']/100;
+                }
             }
-         if($row['project_id']==$chlid['id']){
-             $row['project']=$chlid['worker_name'];
-         }
+
             $data[]=$row;
         }
 

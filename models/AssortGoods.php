@@ -30,6 +30,7 @@ class AssortGoods extends ActiveRecord
     public static function add($add,$city)
     {
         $db= \Yii::$app->db;
+
         $res = $db
             ->createCommand()
             ->insert(self::tableName(),[
