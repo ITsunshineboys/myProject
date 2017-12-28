@@ -58,11 +58,16 @@ class WorkerType extends \yii\db\ActiveRecord
     }
 
     public static function WorkerCraft3(){
-        return self::find()
+       $data=self::find()
             ->asArray()
             ->select('id,worker_name')
             ->where(['status'=>3,'pid'=>0])
             ->all();
+       foreach ($data as &$v){
+           $v['project']=$v['worker_name'];
+           unset($v['worker_name']);
+       }
+       return $data;
     }
 
     /**
