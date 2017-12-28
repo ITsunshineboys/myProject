@@ -359,20 +359,14 @@ class QuoteController extends Controller
             $id [] = $one['id'];
         }
         $goods['specification'] = GoodsCategory::attrValue($id);
-
+        var_dump($goods['specification']);die;
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
         $where = 'city_code='.$city;
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll($where);
         $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll($where);
 
-        foreach ($goods['specification'] as $k1=>$good){
-            foreach ($goods['find_specification'] as $k2=>&$v){
-                if($v['value']==''){
-                    $v['value'][$k1]=$good['value'][$k2];
-                }
-            }
-        }
+
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
