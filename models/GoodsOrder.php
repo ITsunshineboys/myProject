@@ -1980,7 +1980,7 @@ class GoodsOrder extends ActiveRecord
     {
         if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
         {
-            $code=self::AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+            $code=self::AgreeRefundHandle($order_no,$sku,$user,$supplier);
             return $code;
         }
         if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE){
@@ -2046,7 +2046,7 @@ class GoodsOrder extends ActiveRecord
      * @param $supplier
      * @return int
      */
-    public static function AgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    public static function AgreeRefundHandle($order_no,$sku,$user,$supplier)
     {
         $time=time();
         $role_number=$supplier->shop_no;
@@ -2119,6 +2119,22 @@ class GoodsOrder extends ActiveRecord
             $role->availableamount=$role->balance+$refund_money;
             $res3=$role->save(false);
             if (!$res3){
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $user_transaction_no=self::SetTransactionNo(Role::GetUserRoleNumber($role,$GoodsOrder->role_id));
+            $user_access_detail=new UserAccessdetail();
+            $user_access_detail->uid=$user->id;
+            $user_access_detail->role_id=$GoodsOrder->role_id;
+            $user_access_detail->access_type=UserAccessdetail::ACCESS_TYPE_REFUND;
+            $user_access_detail->access_money=$refund_money;
+            $user_access_detail->order_no=$order_no;
+            $user_access_detail->sku=$sku;
+            $user_access_detail->create_time=$time;
+            $user_access_detail->transaction_no=$user_transaction_no;
+            if(!$user_access_detail->save(false))
+            {
                 $code=500;
                 $tran->rollBack();
                 return $code;
