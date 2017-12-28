@@ -1784,16 +1784,36 @@ class WithdrawalsController extends Controller
                     ];
                 }
                 break;
+//            case UserAccessdetail::ACCESS_TYPE_REFUND:
+//                    $Orderoods;
+//                    $list[]=[
+//                        'name'=>'支付类型',
+//                        'value'=>$pay_name
+//                    ];
+//                    $list[]=[
+//                        'name'=>'商品名称',
+//                        'value'=>$title
+//                    ];
+//                    $list[]=[
+//                        'name'=>'时间',
+//                        'value'=>$access['create_time']
+//                    ];
+//                    $list[]=[
+//                        'name'=>'交易单号',
+//                        'value'=>$transaction_no
+//                    ];
+//                }
+//                break;
         }
-        $code=200;
+         $code=200;
          return Json::encode([
             'code'=>$code,
-           'msg'=>'ok',
+            'msg'=>'ok',
             'data'=>[
                 'type'=>'交易详情-'.$type,
                 'list'=>$list
             ]
-        ]);
+         ]);
     }
     /**
     * 获取身份证

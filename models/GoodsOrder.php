@@ -3657,7 +3657,7 @@ class GoodsOrder extends ActiveRecord
                   $freight+=$money;
               }
           }
-          return  StringService::formatPrice($freight*0.01);
+          return  $freight;
       }
 
 
