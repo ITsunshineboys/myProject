@@ -541,13 +541,13 @@ class OrderController extends Controller
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($user_agent, 'MicroMessenger') === false) {
             // 非微信浏览器禁止浏览
-            echo Json::encode([
+            return Json::encode([
                 'code' => 201,
                 'msg' =>'非微信打开',
             ]);
         } else {
             // 微信浏览器，允许访问
-            echo Json::encode([
+            return Json::encode([
                 'code' => 200,
                 'msg' =>'微信内打开',
                 'data'=>Wxpay::GetWxJsSign()
@@ -3130,8 +3130,9 @@ class OrderController extends Controller
             ]
         ]);
     }
-     /**售后详情
-     * @return array|string
+     /**
+      * 售后详情
+      *  @return array|string
      */
     public  function   actionUserAfterSaleDetail(){
         $user = Yii::$app->user->identity;

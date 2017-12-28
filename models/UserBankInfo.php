@@ -265,7 +265,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
         $UserCash=UserCashregister::find()
             ->where(['role_id'=>$role_id])
             ->andWhere(['uid'=>$user->id])
-            ->andWhere(['status'=>3])
+            ->andWhere(['status'=>UserCashregister::CASH_STATUS_IN])
             ->all();
         $cash_money=0;
         foreach ($UserCash as &$list)
