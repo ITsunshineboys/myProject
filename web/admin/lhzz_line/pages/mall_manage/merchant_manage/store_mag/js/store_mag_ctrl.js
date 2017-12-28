@@ -82,25 +82,29 @@ angular.module("storemagModule", []).controller("store_mag", function ($scope, $
 
     $scope.$watch('secselect', function (newVal, oldVal) {
         if(newVal == oldVal) return;
+        if(newVal == 0) {
+            $scope.params.category_id = $scope.firstselect
+        }else {
+            $scope.params.category_id = +newVal;
+        }
         sortReset();
         $scope.keyword = '';
         $scope.params.keyword = '';
         $scope.pageConfig.currentPage = 1;
-        if (!!newVal) {
-            $scope.params.category_id = +newVal;
-        }
         tableList();
     });
 
     $scope.$watch('thirdselect', function (newVal, oldVal) {
         if(newVal == oldVal) return;
+        if(newVal == 0) {
+            $scope.params.category_id = $scope.secselect;
+        }else {
+            $scope.params.category_id = +newVal;
+        }
         sortReset();
         $scope.keyword = '';
         $scope.params.keyword = '';
         $scope.pageConfig.currentPage = 1;
-        if (!!newVal) {
-            $scope.params.category_id = +newVal;
-        }
         tableList();
     });
 
