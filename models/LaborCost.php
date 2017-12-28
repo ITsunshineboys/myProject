@@ -118,8 +118,8 @@ class LaborCost extends ActiveRecord
             ->one();
 
         if($row==null){
-            $row['city'] = District::findByCode($row['city_code'])['name'];
-            $row['province'] = District::findByCode($row['province_code'])['name'];
+            $row['city'] = District::findByCode($city_code)['name'];
+            $row['province'] = District::findByCode($province_code)['name'];
             $row['location']=$row['province'].'-'.$row['city'];
             $row['worker_kind']=WorkerType::gettype($id);
             $row['worker_id']= $id;
