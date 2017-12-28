@@ -1402,11 +1402,11 @@ class BasisDecorationService
      * @param $post
      * @return array|bool
      */
-    public static function judge($goods,$post)
+    public static function judge($goods,$get)
     {
         foreach ($goods as $one_goods) {
             switch ($one_goods) {
-                case $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style']:
+                case $one_goods['series_id'] == $get['series'] && $one_goods['style_id'] == $get['style']:
                      $goods_judge[] = $one_goods;
                     break;
                 default:
