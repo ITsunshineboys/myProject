@@ -12,6 +12,7 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
             name: '入账详情'
         }
     ]
+    $scope.vm = $scope
     $scope.params = {
         time_type: 'today',
         time_start: '',
