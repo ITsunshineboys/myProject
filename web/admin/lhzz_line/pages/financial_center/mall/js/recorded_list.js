@@ -56,6 +56,8 @@ app.controller('recorded_list_ctrl',function ($scope,$rootScope,$state,$statePar
                 $scope.params.time_end = ''
                 $scope.keyword = ''
                 $scope.params.search = ''
+                $scope.Config.currentPage = 1
+                tablePages()
             }
         }
     }

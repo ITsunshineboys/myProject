@@ -49,12 +49,12 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
                     $scope.Config.currentPage = 1
                     tablePages()
-                }else{
-                    $scope.params.time_start = ''
-                    $scope.params.time_end = ''
-                    $scope.Config.currentPage = 1
-                    tablePages()
                 }
+            }else{
+                $scope.params.time_start = ''
+                $scope.params.time_end = ''
+                $scope.Config.currentPage = 1
+                tablePages()
             }
         }
         $scope.keyword = ''
