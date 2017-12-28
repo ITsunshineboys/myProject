@@ -49,6 +49,7 @@ class UserAccessdetail extends \yii\db\ActiveRecord
     const ACCESS_TYPE_DESC_REWARD_MONEY='奖励金';
     const ACCESS_TYPE_DESC_PROJECTS_MONEY='工程款';
     const ACCESS_TYPE_DESC_PROJECTS_REFUND='工程退款';
+    const ACCESS_TYPE_DESC_REFUND='退款';
 
     const ACCESS_CODE_DEBIT='Debit';
     const ACCESS_CODE_PAYMENT_BUY='Payment_buy';
