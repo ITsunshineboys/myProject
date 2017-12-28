@@ -288,7 +288,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 工程标准修改列表
+     * 工程标准修改列表 ok
      * @return string
      */
     public function actionProjectNormEditList(){
@@ -303,7 +303,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 工程标准修改
+     * 工程标准修改 ok
      * @return string
      */
     public function actionProjectNormEdit(){
@@ -338,7 +338,7 @@ class QuoteController extends Controller
     }
 
     /**
-     * 工程标准修改 木作列表
+     * 工程标准修改 木作列表 ok
      * @return string
      */
     public function actionProjectNormWoodworkList()
@@ -360,15 +360,19 @@ class QuoteController extends Controller
         }
         $goods['specification'] = GoodsCategory::attrValue($id);
 
-
-
         $series = Series::findBySeries();
         $style  = Style::findByStyle();
         $where = 'city_code='.$city;
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll($where);
         $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll($where);
 
-
+        foreach ($goods['specification'] as $k1=>$good){
+            foreach ($goods['find_specification'] as $k2=>&$v){
+                if($v['value']==''){
+                    $v['value'][$k1]=$good['value'][$k2];
+                }
+            }
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
