@@ -68,7 +68,7 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="imgSrc">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>户型图</label>
                 <div class="col-md-3">
                     <div style="width: 100px;height: 100px;">
@@ -82,7 +82,7 @@
                             ngf-select="" ng-disabled="upload_txt!=='上传'" ngf-multiple="false" ng-model="data.file">
                         {{upload_txt}}
                     </button>
-                    <p class="pic_error" ng-if="img_error != ''"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}
+                    <p class="pic_error" ng-if="img_error != ''"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{img_error}}
                     </p>
                 </div>
             </div>
@@ -165,7 +165,7 @@
                             ng-options="item.id as item.style for item in all_style"></select>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="drawing">
                 <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>图纸</label>
                 <div class="col-md-10">
                     <div class="cur_drawing" ng-repeat="item in cur_house.drawing_list">
@@ -178,7 +178,7 @@
                         <img src="pages/intelligent/images/add.png" alt="" width="100px" height="100px">
                     </div>
                     <p class="upload_msg">图片大小347x190，5M内，可传1-6张图片，支持JPG、PNG、JPGE</p>
-                    <p class="pic_error" ng-if="drawing_error != ''"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{pic_error}}
+                    <p class="pic_error" ng-if="drawing_error != ''"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{drawing_error}}
                     </p>
                 </div>
             </div>
@@ -186,25 +186,25 @@
         </div>
         <div class="all">
             <h1>户型商品</h1>
-            <div ng-repeat="item in cur_house.all_goods">
+            <div ng-repeat="item in cur_house.all_goods| orderBy:'id'">
                 <h2>{{all_num[$index]}}、{{item.title}}</h2>
-                <div ng-repeat="item1 in item.two_level | orderBy :'id'">
+                <div ng-repeat="item1 in item.two_level track by $index">
                     <h3 class="second_level">{{$index+1}}、{{item1.title}}</h3>
                     <ul class="three_level">
-                        <li ng-repeat="item2 in item1.three_level | orderBy :'id'">
+                        <li ng-repeat="item2 in item1.three_level">
                             <div class="form-group">
                                 <label class="col-md-2 text-left goods">{{item2.title}}</label>
                                 <div class="col-md-3">
                                     <input type="text" ng-blur="determineGoodsCode(item2)"
-                                           ng-class="{'error': (curForm['good{{item2.id}}'].$error.pattern)||!!item2.flag}"
-                                           name="good{{item2.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码"
+                                           ng-class="{'error': (curForm['good{{item2.id}}{{$index}}'].$error.pattern)||!!item2.flag}"
+                                           name="good{{item2.id}}{{$index}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品编码"
                                            class="form-control" ng-model="item2.good_code">
                                     <p class="error_word" ng-if="item2.msg!=''">{{item2.msg}}</p>
                                 </div>
                                 <div class="col-md-2">
                                     <input type="text"
-                                           ng-class="{'error': (curForm['quantity{{item2.id}}'].$error.pattern)}"
-                                           name="quantity{{item2.id}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量"
+                                           ng-class="{'error': (curForm['quantity{{item2.id}}{{$index}}'].$error.pattern)}"
+                                           name="quantity{{item2.id}}{{$index}}" ng-pattern="/^\d{0,}$/" placeholder="请输入商品数量"
                                            class="form-control" ng-model="item2.good_quantity">
                                 </div>
                                 <p class="col-md-5">*整数</p>
@@ -253,7 +253,7 @@
             </div>
         </div>
         <div class="from-group submit">
-            <button class=" btn btn-primary" type="button" ng-click="saveCase(curForm.$valid)">确认
+            <button class=" btn btn-primary" type="button" ng-click="saveCase(curForm.$valid,curForm.$error.required)">确认
             </button>
             <button type="button" class=" btn btn-default" ng-click="goPrev()">返回</button>
         </div>

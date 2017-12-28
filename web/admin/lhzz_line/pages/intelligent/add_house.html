@@ -52,7 +52,7 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="all_btn">
                         <p class="col-md-4" ng-show="$index!=0">
-                            <button ng-click="deleteItem($index)" class="btn btn-default"><i
+                            <button ng-click="deleteItem(item,$index)" class="btn btn-default"><i
                                     class="glyphicon glyphicon-minus"></i></button>
                         </p>
                         <p class="col-md-4" ng-show="$index==0"></p>
@@ -97,7 +97,7 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="all_btn">
                         <p class="col-md-4">
-                        <button ng-click="deleteItem($index,1)" class="btn btn-default"><i
+                        <button ng-click="deleteItem(item,$index,1)" class="btn btn-default"><i
                                 class="glyphicon glyphicon-minus"></i></button>
                         </p>
                     </div>

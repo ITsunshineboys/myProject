@@ -15,12 +15,15 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             name: $stateParams.index == 1 ? '编辑小区信息' : '添加小区信息'
         }
     ]
+
     //初始化数据
     $scope.params = {
         name:'',
         region_code:'',
         address:''
     }
+    $scope.delete_house = []//删除户型
+    $scope.delete_drawing = []//删除图纸
     $scope.house_informations = []//房屋信息
     $scope.drawing_informations = []//图纸信息
     $http.get('city.json').then(function (res) {
@@ -36,8 +39,6 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         $scope.params.region_code = $scope.region_options[0].region_code
     })
     if($stateParams.index == 1){//编辑
-        $scope.house_informations = []
-        $scope.drawing_informations = []
         _ajax.get('/quote/effect-plot-edit-view',{
             plot_id:$stateParams.id
         },function (res) {
@@ -126,7 +127,7 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                     return item.id == value.effect_id
                 })
                 if(index != -1){
-                    if(value.images_user == '案例添加'){
+                    if($scope.house_informations[index].is_ordinary == 1){
                         Object.assign($scope.house_informations[index],{
                             drawing_id:value.id,
                             drawing_list:value.effect_images.split(','),
@@ -145,11 +146,52 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                     }
                 }
             }
+            //整合商品数据
+            for(let [key,value] of res.effect.goods_data.entries()){
+                let index = $scope.house_informations.findIndex(function (item) {
+                    return item.id == value.effect_id
+                })
+                if(index != -1){
+                    let num = 0
+                    let index1 = $scope.house_informations[index].all_goods.findIndex(function (item) {
+                        return item.three_id == value.three_category_id
+                    })
+                    if(index1!=-1){
+                        num = $scope.house_informations[index].all_goods[index1].index + 1
+                    }
+                    $scope.house_informations[index].all_goods.push({
+                        id:value.id,
+                        three_id:value.three_category_id,
+                        good_code:value.goods_code,
+                        good_quantity:value.goods_quantity,
+                        index:num
+                    })
+                }
+            }
+            //整合工人数据
+            for(let [key,value] of res.effect.worker_data.entries()){
+                let index = $scope.house_informations.findIndex(function (item) {
+                    return item.id == value.effect_id
+                })
+                if(index != -1){
+                    $scope.house_informations[index].worker_list.push({
+                        id:value.id,
+                        worker_kind:value.worker_kind,
+                        price:value.worker_price
+                    })
+                }
+            }
             //修改后的数据
             if(sessionStorage.getItem('houseInformation')!=null){
                 $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
             }
             if(sessionStorage.getItem('drawingInformation')!=null){
+                $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+            }
+            if(sessionStorage.getItem('deleteHouse')!=null){
+                $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+            }
+            if(sessionStorage.getItem('deleteDrawing')!=null){
                 $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
             }
             console.log($scope.drawing_informations);
@@ -244,10 +286,16 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         }
     }
     //删除项
-    $scope.deleteItem = function (index,num) {
+    $scope.deleteItem = function (item,index,num) {
         if(num == 1){
+            if(item.id){
+                $scope.delete_drawing.push(item.id)
+            }
             $scope.drawing_informations.splice(index,1)
         }else{
+            if(item.id){
+                $scope.delete_house.push(item.id)
+            }
             for(let [key,value] of $scope.drawing_informations.entries()){
                 if(value.index == index){
                     value.index = ''
@@ -289,25 +337,29 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
         let arr = angular.copy($scope.house_informations)
+        //整合普通户型图纸
         for(let [key,value] of $scope.drawing_informations.entries()){
             console.log(arr[value.index]);
-            if(value.id){
-                arr[value.index].drawing_list.push({
-                    id:value.id,
-                    all_drawing:value.all_drawing.join(','),
-                    series:value.series,
-                    style:value.style,
-                    drawing_name:value.drawing_name
-                })
-            }else{
-                arr[value.index].drawing_list.push({
-                    all_drawing:value.all_drawing.join(','),
-                    series:value.series,
-                    style:value.style,
-                    drawing_name:value.drawing_name
-                })
+            if(value.index!==undefined){
+                if(value.id){
+                    arr[value.index].drawing_list.push({
+                        id:value.id,
+                        all_drawing:value.all_drawing.join(','),
+                        series:value.series,
+                        style:value.style,
+                        drawing_name:value.drawing_name
+                    })
+                }else{
+                    arr[value.index].drawing_list.push({
+                        all_drawing:value.all_drawing.join(','),
+                        series:value.series,
+                        style:value.style,
+                        drawing_name:value.drawing_name
+                    })
+                }
             }
         }
+        //整合案例商品
         for(let [key,value] of arr.entries()){
             value['sort_id'] = key
             if(value.is_ordinary == 1){
@@ -339,6 +391,7 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 value.drawing_list = value.drawing_list.join(',')
             }
         }
+        //整合案例工人费用
         if(valid){
             if($stateParams.index == 1){
                 _ajax.post('/quote/effect-edit-plot',{
@@ -348,7 +401,9 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                     address:$scope.params.address,
                     house_name:$scope.params.name,
                     district_code:$scope.params.region_code,
-                    house_informations:arr
+                    house_informations:arr,
+                    delete_house:$scope.delete_house,
+                    delete_drawing:$scope.delete_drawing
                 },function () {
                     $scope.submitted = false
                     $uibModal.open({

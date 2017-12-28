@@ -530,7 +530,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state('add_support_goods', {//智能报价案列/社区店配套商品管理
             url: '/add_support_goods?city&province&name',
             templateUrl: 'pages/intelligent/add_support_goods.html',
-            css: 'pages/intelligent/css/add_support_goods.css',
+            css: 'pages/intelligent/css/goods_manage.css',
             controller: 'support_goods_ctrl'
         })
         .state('worker_price_list', {//智能报价工人资费列表

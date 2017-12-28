@@ -115,6 +115,7 @@ app.controller('support_goods_ctrl', function ($uibModal, $state, $stateParams, 
             index!=-1?$scope.support_goods_list.splice(index,1):''
         }else{
             console.log(2);
+            item.quantity = ''
             $scope.support_goods_list.push(item)
         }
     }
@@ -130,7 +131,7 @@ app.controller('support_goods_ctrl', function ($uibModal, $state, $stateParams, 
         $scope.level_three[index1].flag = false
     }
     //保存数据
-    $scope.saveCategory = function () {
+    $scope.saveCategory = function (valid) {
         console.log($scope.support_goods_list);
         let arr = []
         let all_modal = function ($scope, $uibModalInstance) {
@@ -146,21 +147,28 @@ app.controller('support_goods_ctrl', function ($uibModal, $state, $stateParams, 
                 id:value.id,
                 path:value.path,
                 pid:value.pid,
-                title:value.title
+                title:value.title,
+                quantity:value.quantity
             })
         }
-        _ajax.post('/quote/assort-goods-add',{
-            city:$stateParams.city,
-            assort:arr
-        },function (res) {
-            $uibModal.open({
-                templateUrl: 'pages/intelligent/cur_model.html',
-                controller: all_modal
+        if(valid){
+            _ajax.post('/quote/assort-goods-add',{
+                city:$stateParams.city,
+                assort:arr
+            },function (res) {
+                $scope.submitted = false
+                $uibModal.open({
+                    templateUrl: 'pages/intelligent/cur_model.html',
+                    controller: all_modal
+                })
             })
-        })
+        }else{
+            $scope.submitted = true
+        }
     }
     //返回上一页
     $scope.goPrev = function () {
+        $scope.submitted = false
         history.go(-1)
     }
 })

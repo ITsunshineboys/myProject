@@ -1,25 +1,41 @@
 <div class="ulright">
-    <h6 class="location text-left"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
-    <ul>
-        <li ng-repeat="item in level_one" ng-class="{'cur_select':cur_level_one==item}" ng-click="getCategory(item,1)">{{item.title}}</li>
-    </ul>
+    <form novalidate name="support_goods">
+    <h6 class="location text-left"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker"
+                                      aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
+        <ul>
+            <li ng-repeat="item in level_one" ng-class="{'cur_select':cur_level_one==item}"
+                ng-click="getCategory(item,1)">{{item.title}}
+            </li>
+        </ul>
 
-    <ul>
-        <li ng-repeat="item in level_two" ng-class="{'cur_select':cur_level_two==item}" ng-click="getCategory(item,2)">{{item.title}}</li>
-    </ul>
+        <ul>
+            <li ng-repeat="item in level_two" ng-class="{'cur_select':cur_level_two==item}"
+                ng-click="getCategory(item,2)">{{item.title}}
+            </li>
+        </ul>
 
-    <ul class="thirdul" style="overflow: auto">
-        <li ng-repeat="item in level_three"><input ng-click="chooseCategory(item)" type="checkbox" ng-model="item.flag">{{item.title}}</li>
-    </ul>
+        <ul class="thirdul" style="overflow: auto">
+            <li ng-repeat="item in level_three"><input ng-click="chooseCategory(item)" type="checkbox"
+                                                       ng-model="item.flag">{{item.title}}
+            </li>
+        </ul>
 
-    <ul class="lastul" style="overflow: auto">
-        <li ng-repeat="item in support_goods_list track by $index">
-            {{item.title}}
-            <img src="pages/intelligent/images/close.png" alt="" ng-click="removeCategory(item)">
-        </li>
-    </ul>
-    <div class="from-group submit">
-        <button class="btn btn-primary" ng-click="saveCategory()">保存</button>
-        <button ng-click="goPrev()" class="btn btn-default">返回</button>
-    </div>
+        <ul class="lastul" style="overflow: auto">
+            <li ng-repeat="item in support_goods_list track by $index">
+                <div>
+                    {{item.title}}
+                    <img src="pages/intelligent/images/close.png" alt="" ng-click="removeCategory(item)">
+                </div>
+                <input type="text" class="form-control" style="display: inline-block" ng-model="item.quantity"
+                       placeholder="请输入数量" name="goods{{$index}}"
+                       ng-blur="item.complete = !!support_goods['goods'+$index].$error"
+                       required
+                       ng-class="{'error':(support_goods['goods'+$index].$invalid&&submitted)||(support_goods['goods'+$index].$error.required&&item.complete)}">
+            </li>
+        </ul>
+        <div class="from-group submit">
+            <button class="btn btn-primary" ng-click="saveCategory(support_goods.$valid)">保存</button>
+            <button ng-click="goPrev()" class="btn btn-default">返回</button>
+        </div>
+    </form>
 </div>

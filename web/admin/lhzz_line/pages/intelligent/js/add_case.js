@@ -23,12 +23,22 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
     _ajax.get('/quote/labor-list',{},function (res) {
         console.log(res);
         $scope.labor_list = res.labor_list
+        let arr = []
         for(let [key,value] of $scope.labor_list.entries()){
-            $scope.cur_house.worker_list.push({
-                worker_kind:value.worker_kind,
+            arr.push({
+                worker_kind:value.worker_name,
                 price:''
             })
         }
+        for(let [key,value] of arr.entries()){
+            let index = $scope.cur_house.worker_list.findIndex(function (item) {
+                return item.worker_kind == value.worker_kind
+            })
+            if(index!=-1){
+                value.price = $scope.cur_house.worker_list[index].price
+            }
+        }
+        $scope.cur_house.worker_list = arr
     })
     //风格、系列以及楼梯结构
     _ajax.get('/quote/series-and-style', {}, function (res) {
@@ -47,7 +57,9 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
         city:$stateParams.city
     },function (res) {
         console.log(res);
-        let arr = []
+        let arr = [],arr2 = []
+        let arr1 = $scope.cur_house.all_goods
+        console.log(arr1);
         for(let [key,value] of angular.copy(res.list).entries()){
             let index = res.classify.findIndex(function (item) {
                 return item.id == value.path.split(',')[0]
@@ -59,55 +71,89 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
                 return item.id == value.path.split(',')[0]
             })
             if(index2 == -1){
+                let cur_arr = []
+                for(let i = 0;i<+value.quantity;i++){
+                    let obj = {
+                        id:value.id,
+                        title:value.title,
+                        good_code:'',
+                        good_quantity:'',
+                        index:i
+                    }
+                    cur_arr.push(obj)
+                }
                 arr.push({
                     id:res.classify[index].id,
                     title:res.classify[index].title,
                     two_level:[{
                         id:res.classify[index1].id,
                         title:res.classify[index1].title,
-                        three_level:[{
-                            id:value.id,
-                            title:value.title,
-                            good_code:'',
-                            good_quantity:''
-                        }]
+                        three_level:cur_arr
                     }]
                 })
             }else{
                 let index3 = arr[index2].two_level.findIndex(function (item) {
                     return item.id == value.pid
                 })
+                let cur_arr = []
+                for(let i = 0;i<+value.quantity;i++){
+                    let obj = {
+                        id:value.id,
+                        title:value.title,
+                        good_code:'',
+                        good_quantity:'',
+                        index:i
+                    }
+                    cur_arr.push(obj)
+                }
                 if(index3 == -1){
                     arr[index2].two_level.push({
                         id:res.classify[index1].id,
                         title:res.classify[index1].title,
-                        three_level:[{
-                            id:value.id,
-                            title:value.title,
-                            sku:'',
-                            quantity:''
-                        }]})
-                }else{
-                    console.log(arr[index2].two_level[index3]);
-                    let index4 = arr[index2].two_level[index3].three_level.findIndex(function(item){
-                        return item.id == value.id
+                        three_level:cur_arr
                     })
-                    if(index4 == -1){
-                        arr[index2].two_level[index3].three_level.push({
+                }else{
+                      let index4 = arr[index2].two_level[index3].three_level.findIndex(function(item){
+                            return item.id == value.id
+                        })
+                    let cur_arr = []
+                    for(let i = 0;i<+value.quantity;i++){
+                        let obj = {
                             id:value.id,
                             title:value.title,
-                            sku:'',
-                            quantity:''
-                        })
+                            good_code:'',
+                            good_quantity:'',
+                            index:i
+                        }
+                        cur_arr.push(obj)
+                    }
+                    if(index4 == -1){
+                        arr[index2].two_level[index3].three_level = arr[index2].two_level[index3].three_level.concat(cur_arr)
+                    }
+                }
+            }
+        }
+        for(let [key,value] of arr.entries()){
+            for(let [key1,value1] of value.two_level.entries()){
+                for(let [key2,value2] of value1.three_level.entries()){
+                    let index = arr1.findIndex(function (item) {
+                        return item.three_id == value2.id && item.index == value2.index
+                    })
+                    if(index != -1){
+                        value2.good_code = arr1[index].good_code
+                        value2.good_quantity = arr1[index].good_quantity
+                        value2.cur_id = arr1[index].id
                     }
                 }
             }
         }
         console.log(arr);
         $scope.cur_house.all_goods = arr
+        console.log($scope.cur_house.all_goods);
     })
     $scope.house_informations = JSON.parse(sessionStorage.getItem('houseInformation'))
     $scope.cur_house = $scope.house_informations[$stateParams.cur_index]
+    console.log($scope.cur_house);
     if($scope.cur_house.house_type_name == ''){
         Object.assign($scope.cur_house,{
             area:'',
@@ -135,7 +181,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
         console.log(item)
         if(item.good_code!=''){
             _ajax.get('/quote/sku-fefer',{
-                category:item.title,
+                cate_id:item.id,
                 sku:item.good_code
             },function (res) {
                 console.log(res)
@@ -213,7 +259,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
         $scope.cur_house.drawing_list.splice(index,1)
     }
     //保存案例
-    $scope.saveCase = function (valid) {
+    $scope.saveCase = function (valid,error) {
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.cur_title = '保存成功'
             $scope.common_house = function () {
@@ -222,9 +268,9 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
-        let index = $scope.cur_house.all_goods.findIndex(function (item) {
-            return item.msg != ''
-        })
+        let index =JSON.stringify($scope.cur_house.all_goods).indexOf('"msg":"请输入正确的商品编码"')
+        console.log(index);
+        console.log($scope.cur_house.all_goods[index]);
         if(valid&&$scope.cur_house.cur_imgSrc != ''&&$scope.cur_house.drawing_list.length > 0&&index==-1){
             $scope.submitted = false
             $scope.house_informations[$stateParams.cur_index] = $scope.cur_house
@@ -235,10 +281,27 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
             })
         }else if($scope.cur_house.cur_imgSrc == ''){
             $scope.img_error = '请上传图片'
-        }else if(scope.cur_house.drawing_list.length == 0){
+            $anchorScroll.yOffset = 150
+            $location.hash('imgSrc')
+            $anchorScroll()
+        }else if($scope.cur_house.drawing_list.length == 0){
             $scope.drawing_error = '请上传图片'
+            $anchorScroll.yOffset = 150
+            $location.hash('drawing')
+            $anchorScroll()
         }else{
             $scope.submitted = true
+            if (!valid) {
+                for (let [key, value] of error.entries()) {
+                    if (value.$invalid) {
+                        $anchorScroll.yOffset = 150
+                        $location.hash(value.$name)
+                        $anchorScroll()
+                        $window.document.getElementById(value.$name).focus()
+                        break
+                    }
+                }
+            }
         }
     }
     //返回上一页

@@ -24,8 +24,8 @@ app.controller('edit_house_ctrl', function ($window,$uibModal,$anchorScroll,$loc
         $scope.all_series = res.series
         $scope.all_style = res.style
         $scope.all_stair = res.stairs_details
-        $scope.cur_house.series = $scope.all_series[0].id
-        $scope.cur_house.style = $scope.all_style[0].id
+        // $scope.cur_house.series = $scope.all_series[0].id
+        // $scope.cur_house.style = $scope.all_style[0].id
         $scope.cur_house.stair = $scope.all_stair[0].id
     })
     //获取数据
