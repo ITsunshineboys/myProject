@@ -194,13 +194,13 @@ class Supplier extends ActiveRecord
     /**
      * Supplier applies for certification
      *
-     * @param Supplier $sup supplier who applies for certification
      * @param ActiveRecord $user user
      * @param array $attrs attributes to add
+     * @param Supplier $sup supplier who applies for certification default null
      * @param ActiveRecord $operator operator default null
      * @return int
      */
-    public static function certificationApplication(Supplier $sup, ActiveRecord $user, array $attrs, ActiveRecord $operator = null)
+    public static function certificationApplication(ActiveRecord $user, array $attrs, Supplier $sup = null, ActiveRecord $operator = null)
     {
         $supplier = $sup ? $sup : new self;
         $supplier->type_org = isset($attrs['type_org']) ? (int)$attrs['type_org'] : 0;

@@ -136,7 +136,7 @@ class SupplierController extends Controller
             }
         }
 
-        $code = Supplier::certificationApplication($supplier, $user, Yii::$app->request->post());
+        $code = Supplier::certificationApplication($user, Yii::$app->request->post(), $supplier);
         if (200 != $code) {
             return Json::encode([
                 'code' => $code,
