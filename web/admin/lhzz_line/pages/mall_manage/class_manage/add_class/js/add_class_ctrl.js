@@ -119,7 +119,7 @@ add_class.controller("addClass",function ($scope, $http,Upload,$state,$rootScope
                     $scope.save_msg="保存成功"
                     $scope.success_flag = true;
                 }else if(res.code==1006){
-                    $scope.save_msg = res.data.msg;
+                    $scope.save_msg = res.msg;
                     $scope.success_flag = false;
                 }
             })

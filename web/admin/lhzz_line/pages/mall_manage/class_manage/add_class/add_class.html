@@ -64,25 +64,21 @@
             <button class="btn btn-primary" ng-click="sureaddclass()">确认</button>
             <button class="btn btn-default" ui-sref="class.offline">返回</button>
         </div>
-
     </div>
 
-    <!--保存提示模态框-->
-    <div class="modal fade" id="save_tishi">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
+    <div class="modal fade" tabindex="-1" role="dialog" id="save_tishi">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
                 </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">{{save_msg}}</h6>
+                <div class="modal-body">
+                    <p>{{save_msg}}</p>
                 </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
-                    <button id="caozuo_sure" data-dismiss="modal" ng-if="!success_flag">确认</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="suresave()" ng-if="success_flag">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"  ng-if="!success_flag">确认</button>
                 </div>
             </div>
         </div>
