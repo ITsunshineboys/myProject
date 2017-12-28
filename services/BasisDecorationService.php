@@ -324,7 +324,6 @@ class BasisDecorationService
         return ($p / $d);
     }
 
-
     public static function P($points,$day_points,$labor)
     {
         $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
@@ -334,32 +333,22 @@ class BasisDecorationService
         return ceil(($p / $d)) * $l;
     }
 
+
     /**
-     * 水电所需材料处理
+     * 强弱电所需材料处理
      * @param string $points
-     * @param array $goods
      * @param string $crafts
+     * @param array $goods
      * @return mixed
      */
-    public static function quantity($points,$goods,$crafts)
+    public static function quantity($points,$crafts,$goods)
     {
-        //TODO 修改
-        $project= EngineeringStandardCraft::CraftsAllbyId($points)['project'];
-        $project=='强电工艺'?$title=self::DetailsId2Title()['strong_spool']:$title=self::DetailsId2Title()['weak_spool'];
 
-        foreach ($crafts as $craft) {
-            switch ($craft) {
-                case $craft['project_details'] == self::DetailsId2Title()['reticle'] || $craft['project_details'] == self::DetailsId2Title()['wire']:
-                    $material = $craft['material'];
-                    break;
-                case $craft['project_details'] == $title:
-                    $spool = $craft['material'];
-                    break;
+        foreach ($goods as &$one) {
+            if ($one['title'] == self::goodsNames()['reticle'] || $one['title'] == self::goodsNames()['wire']){
+                $ids = GoodsAttr::findByGoodsIdUnit($one['id']);
+                var_dump($ids);die;
             }
-        }
-
-        $goods_id = [];
-        foreach ($goods as $one) {
             switch ($one) {
                 case $one['title'] == self::goodsNames()['reticle'] || $one['title'] == self::goodsNames()['wire']:
                     $goods_price = $one['platform_price'];
@@ -1399,7 +1388,7 @@ class BasisDecorationService
     /**
      * 条件判断
      * @param $goods
-     * @param $post
+     * @param $get
      * @return array|bool
      */
     public static function judge($goods,$get)
@@ -2156,10 +2145,10 @@ class BasisDecorationService
                         $secondary_bedroom = 0;
                         break;
                     case $get['bedroom'] == 2:
-                        $secondary_bedroom = (int)$one_points['count'] * 1;
+                        $secondary_bedroom = self::algorithm(1,$one_points['count'],1);
                         break;
                     case $get['bedroom'] > 2:
-                        $secondary_bedroom = (int)$one_points['count'] * ($get['bedroom'] - 1);
+                        $secondary_bedroom = self::algorithm(2,$one_points['count'],$get['bedroom']);
                         break;
                 }
             }
@@ -2185,7 +2174,7 @@ class BasisDecorationService
         foreach ($points as $one_points){
             //客厅
             if ($one_points['title'] == OwnerController::ROOM_DETAIL['hall']){
-                $all = $one_points['count'] * $get['hall'];
+                $all = self::algorithm(1,$one_points['count'],$get['hall']);
             }
 
             // 次卧
@@ -2195,22 +2184,22 @@ class BasisDecorationService
                         $secondary_bedroom =  0;
                         break;
                     case $get['bedroom'] == 2:
-                        $secondary_bedroom = $one_points['count'] * 1 ;
+                        $secondary_bedroom = self::algorithm(1,$one_points['count'],1);
                         break;
                     case $get['bedroom'] > 2:
-                        $secondary_bedroom = $one_points['count'] * ($get['bedroom'] - 1) ;
+                        $secondary_bedroom = self::algorithm(2,$one_points['count'],$get['bedroom']) ;
                         break;
                 }
             }
 
             // 厨房
             if ($one_points['title'] == OwnerController::ROOM_DETAIL['kitchen']){
-                $kitchen = $one_points['count'] * $get['kitchen'] ;
+                $kitchen = self::algorithm(1,$one_points['count'],$get['kitchen']);
             }
 
             // 卫生间
             if ($one_points['title'] == OwnerController::ROOM_DETAIL['toilet']){
-                $toilet = $one_points['count'] * $get['toilet'] ;
+                $toilet = self::algorithm(1,$one_points['count'],$get['toilet']);;
             }
 
 
@@ -2240,5 +2229,31 @@ class BasisDecorationService
            }
         }
         return false;
+    }
+
+
+    /**
+     * 计算公式
+     * @param $int
+     *   int 传值不一样 所用计算公式也不一样
+     * @param $value
+     * @param $value1
+     * @return int
+     */
+    public static function algorithm($int,$value,$value1)
+    {
+        switch ($int){
+            case $int == 1:
+                $result = $value * $value1;
+                break;
+            case $int == 2:
+                $result = $value * ($value1 - 1);
+                break;
+            case $int == 3:
+                $result = $value + $value1;
+                break;
+        }
+
+        return (int)$result;
     }
 }

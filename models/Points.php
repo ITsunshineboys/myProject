@@ -32,7 +32,7 @@ class Points extends ActiveRecord
         ];
     }
 
-    public static function findByPid($select =[],$where = [])
+    public static function findByIds($select =[],$where = [])
     {
         return self::find()
             ->asArray()
@@ -41,13 +41,13 @@ class Points extends ActiveRecord
             ->all();
     }
 
-    public static function findByOne($select =[],$where = [])
+    public static function findByPid($select =[],$where = [])
     {
         return self::find()
             ->asArray()
             ->select($select)
             ->where($where)
-            ->one();
+            ->all();
     }
 
     public static function findByInsert($rows)
