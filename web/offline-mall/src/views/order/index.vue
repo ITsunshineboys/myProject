@@ -60,7 +60,7 @@
     </div>
     <!--商城购买协议-->
     <div class="agreement-box">
-        <input type="checkbox">
+        <input type="checkbox" v-model="checked_flag" >
         <span>已同意</span>
         <a>《商城购买协议》</a>
     </div>
@@ -116,7 +116,9 @@
         adCode: '', // 所属区域的区号
         detailAddress: '', // 详细地址
         invoice_header: '', // 抬头
-        buyer_message: ''
+        buyer_message: '', // 留言
+        checked_flag: false, // 是否勾选“商城购买协议”
+        paymentMethod: '' // 支付方式
       }
     },
     methods: {
@@ -128,25 +130,31 @@
           }, (res) => {
             console.log(res)
             if (res.code === 200) {
-              if (this.invoice_header) {                  //
-                this.axios.post('/order/order-line-ali-pay', {
-                  order_price: this.allCost,
-                  goods_id: 43,
-                  goods_num: 10,
-                  address_id: sessionStorage.getItem('address_id'),
-                  invoice_id: sessionStorage.getItem('invoice_id  '),
-                  freight: this.freight,
-                  buyer_message: this.buyer_message
-                }, (res) => {
-                  const div = document.createElement('div') // 创建div
-                  div.innerHTML = res // 将返回的form 放入div
-                  document.body.appendChild(div)
-                  document.forms[0].submit()
-                })
+              if (this.checked_flag) {                  // 已勾选协议
+                if (this.paymentMethod) {               // 微信支付
+                  console.log('微信支付')
+                } else {        // 支付宝支付
+                  console.log('支付宝支付 ')
+                  this.axios.post('/order/order-line-ali-pay', {
+                    order_price: this.allCost,
+                    goods_id: 43,
+                    goods_num: 10,
+                    address_id: sessionStorage.getItem('address_id'),
+                    invoice_id: sessionStorage.getItem('invoice_id  '),
+                    freight: this.freight,
+                    buyer_message: this.buyer_message
+                  }, (res) => {
+                    console.log(res)
+                    const div = document.createElement('div') // 创建div
+                    div.innerHTML = res // 将返回的form 放入div
+                    document.body.appendChild(div)
+                    document.forms[0].submit()
+                  })
+                }
               } else {
                 this.modalStatus = {
                   error_status: true,
-                  dialogTitle: '请填写发票'
+                  dialogTitle: '请先勾选购买协议'
                 }
               }
             } else {
@@ -213,6 +221,10 @@
           this.invoice_header = res.data.invoice_header
         })
       }
+      // 判断是微信还是浏览器
+      this.axios.get('/order/iswxlogin', {}, (res) => {
+        res.code === 200 ? this.paymentMethod = true : this.paymentMethod = false
+      })
     }
   }
 </script>
@@ -259,12 +271,19 @@
   .ship-cost-box{
     font-size: 14px;
   }
+
   .cell-invoice .vux-label,
   .cell-pay .vux-label,
   .cell-buy .weui-label,
-  .need-pay
-  {
+  .need-pay {
     color: #666;
+  }
+  .cell-invoice .vux-label,
+  .cell-pay .vux-label,
+  .cell-buy .weui-label,
+  .goods-price-box .vux-label,
+  .discount-price-box .vux-label {
+    font-size: 16px;
   }
   .gold-color,
   .discount-price-box .weui-cell__ft{
@@ -284,6 +303,15 @@
   {
     color: #999;
   }
+  .invoice-content .weui-cell__ft{
+    display: inline-block;
+    width: 75%;
+  }
+  .cell-buy .weui-textarea{
+    height: 24px;
+    line-height: 24px;
+  }
+  /*底部*/
   .footer-box{
     height: 48px;
     line-height: 48px;
@@ -319,6 +347,7 @@
     text-align: center;
     background-color: #D9AD65;
   }
+  /*购买协议*/
   .agreement-box{
     margin-bottom: 48px;
     padding: 14px

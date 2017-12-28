@@ -5,7 +5,7 @@ app.controller('house_list_ctrl',function ($scope,$state,$stateParams,$uibModal,
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -42,11 +42,10 @@ app.controller('house_list_ctrl',function ($scope,$state,$stateParams,$uibModal,
     //获取区列表
     $http.get('city.json').then(function (res) {
         console.log(res)
-        $scope.province_name = res.data[0]['86'][$stateParams.province]
-        $scope.city_name = res.data[0][$stateParams.province][$stateParams.city]
-        $scope.city_code = $stateParams.city
-        $scope.province_code = $stateParams.province
-        let arr = res.data[0][$stateParams.city]
+        let obj = JSON.parse(sessionStorage.getItem('area'))
+        $scope.province_name = res.data[0]['86'][obj.province]
+        $scope.city_name = res.data[0][obj.province][obj.city]
+        let arr = res.data[0][obj.city]
         $scope.region_options = []
         for(let [key,value] of Object.entries(arr)){
             $scope.region_options.push({
@@ -55,7 +54,7 @@ app.controller('house_list_ctrl',function ($scope,$state,$stateParams,$uibModal,
             })
         }
         $scope.region_options.unshift({
-            region_code:$stateParams.city,
+            region_code:obj.city,
             region_name:'全市'
         })
         $scope.params.district_code = $scope.region_options[0].region_code

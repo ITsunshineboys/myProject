@@ -5,7 +5,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -19,6 +19,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
         }
     ]
     $scope.all_num = ['一','二','三','四','五','六','七','八']
+    let obj = JSON.parse(sessionStorage.getItem('area'))
     //工人信息
     _ajax.get('/quote/labor-list',{},function (res) {
         console.log(res);
@@ -54,7 +55,7 @@ app.controller('add_case_ctrl', function ($window,$uibModal,$anchorScroll,$locat
     })
     //案例材料项
     _ajax.get('/quote/assort-goods-list',{
-        city:$stateParams.city
+        city:obj.city
     },function (res) {
         console.log(res);
         let arr = [],arr2 = []

@@ -5,7 +5,7 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -15,6 +15,7 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
             name: '材料项详情'
         }
     ]
+    let obj = JSON.parse(sessionStorage.getItem('area'))
     $scope.cur_status = $stateParams.status
     $scope.vm = $scope
     $scope.basic_attr = ''//基本属性
@@ -281,7 +282,7 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
             if (valid) {
                 if($scope.cur_status == 0){
                     _ajax.post('/quote/decoration-add', {
-                        city: $stateParams.city,
+                        city: obj.city,
                         sku: $scope.basic_attr.sku,
                         category_id: $scope.cur_level_three.id,
                         message: $scope.tab_status == 0 ? '系列相关' : ($scope.tab_status == 1 ? '风格相关' : '户型相关'),

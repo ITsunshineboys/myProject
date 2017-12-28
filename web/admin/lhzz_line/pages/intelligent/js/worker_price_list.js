@@ -5,7 +5,7 @@ app.controller('worker_price_ctrl',function ($http,$stateParams,_ajax,$scope,$st
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -14,12 +14,11 @@ app.controller('worker_price_ctrl',function ($http,$stateParams,_ajax,$scope,$st
     ]
     $http.get('city.json').then(function (res) {
         console.log(res)
-        $scope.province_name = res.data[0]['86'][$stateParams.province]
-        $scope.city_name = res.data[0][$stateParams.province][$stateParams.city]
+        let obj = JSON.parse(sessionStorage.getItem('area'))
+        $scope.province_name = res.data[0]['86'][obj.province]
+        $scope.city_name = res.data[0][obj.province][obj.city]
     })
-    _ajax.get('/quote/labor-cost-list',{
-        city:$stateParams.city
-    },function (res) {
+    _ajax.get('/quote/labor-cost-list',{},function (res) {
         console.log(res)
         $scope.worker_list = res.list
     })

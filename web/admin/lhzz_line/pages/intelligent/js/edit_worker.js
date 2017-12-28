@@ -5,7 +5,7 @@ app.controller('edit_worker_ctrl', function ($uibModal,$state,$stateParams, _aja
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -15,8 +15,11 @@ app.controller('edit_worker_ctrl', function ($uibModal,$state,$stateParams, _aja
             name: '资费/做工标准详情'
         }
     ]
+    let obj = JSON.parse(sessionStorage.getItem('area'))
     _ajax.get('/quote/labor-cost-edit-list',{
-        id:$stateParams.id
+        id:$stateParams.id,
+        city_code:obj.city,
+        province_code:obj.province
     },function (res) {
         console.log(res)
         $scope.basic_data = res.labor_cost
@@ -40,12 +43,23 @@ app.controller('edit_worker_ctrl', function ($uibModal,$state,$stateParams, _aja
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
         if(valid){
+            let obj = {
+                univalence:$scope.basic_data.univalence,
+                city_code:obj.city,
+                province_code:obj.province,
+                else:arr
+            }
+            if($scope.basic_data.id!=undefined){
+                Object.assign(obj,{
+                    id:$scope.basic_data.id
+                })
+            }else{
+                Object.assign(obj,{
+                    worker_id:$scope.basic_data.worker_id
+                })
+            }
             if (valid) {
-                _ajax.post('/quote/labor-cost-edit', {
-                    id: $stateParams.id,
-                    univalence: $scope.basic_data.univalence,
-                    else: arr
-                }, function (res) {
+                _ajax.post('/quote/labor-cost-edit', obj, function (res) {
                     console.log(res)
                     $uibModal.open({
                         templateUrl: 'pages/intelligent/cur_model.html',

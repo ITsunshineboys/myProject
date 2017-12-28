@@ -7,7 +7,7 @@
             <th>详情</th>
         </tr>
         <tr ng-repeat="item in worker_list">
-            <td class="text-left">{{item.worker_kind}}</td>
+            <td class="text-left">{{item.worker_name}}</td>
             <td class="text-left"><a ui-sref="edit_worker({id:item.id})">编辑</a></td>
         </tr>
         </tbody>

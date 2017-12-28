@@ -13,8 +13,12 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     $scope.table = {
         roles: [],
     };
-    /*已上架单个下架初始化下架原因*/
-    $scope.offlinereason = '';
+
+    /*下架原因初始化*/
+    $scope.offlinereason = {
+        single:'',
+        batch:''
+    }
 
     /*分类选择下拉框初始化*/
     $scope.dropdown = {
@@ -124,9 +128,9 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*单个确认下架*/
     $scope.sureOffline = function () {
-        let data = {id: singleoffid, offline_reason: $scope.offlinereason};
+        let data = {id: singleoffid, offline_reason: $scope.offlinereason.single};
         _ajax.post('/mall/category-status-toggle',data,function (res) {
-            $scope.offlinereason = '';
+            $scope.offlinereason.single = '';
             $scope.pageConfig.currentPage = 1;
             tableList();
         })
@@ -134,15 +138,15 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*单个取消下架*/
     $scope.cancelOffline = function () {
-        $scope.offlinereason = '';
+        $scope.offlinereason.single = '';
     }
 
     /*确认批量下架*/
     $scope.sureBatchOffline = function () {
         let batchoffids = $scope.table.roles.join(',');
-        let data = {ids: batchoffids, offline_reason: $scope.batchoffline_reason};
+        let data = {ids: batchoffids, offline_reason: $scope.offlinereason.batch};
         _ajax.post('/mall/category-disable-batch',data,function (res) {
-            $scope.batchoffline_reason = '';
+            $scope.offlinereason.batch = '';
             $scope.pageConfig.currentPage = 1;
             tableList()
         })
@@ -150,7 +154,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*取消批量下架*/
     $scope.cancelBatchOffline = function () {
-        $scope.batchoffline_reason = '';
+        $scope.offlinereason.batch = '';
 
     }
 }]);

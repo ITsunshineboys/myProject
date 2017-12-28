@@ -44,14 +44,14 @@
     padding: 5px 0;
     border-bottom: 2px solid #E9EDEE;
   }
-  .shop_name>span{
+  .shop_name > span{
     color: #666666;
     font-size: 14px;
     margin-left: 5px;
   }
   .goods_box{
+    height: 120px;
     padding: 15px;
-    height: 90px;
   }
   .goods_left{
     width: 26%;

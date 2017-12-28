@@ -1281,6 +1281,9 @@ class Goods extends ActiveRecord
         return [
             'code' => $code,
             'msg' => str_replace('{{style_names}}', join(ModelService::SEPARATOR_GENERAL, $offlineStyleNames), Yii::$app->params['errorCodes'][$code]),
+            'data' => [
+                'offline_style_ids' => $offlineStyleIds,
+            ]
         ];
     }
 

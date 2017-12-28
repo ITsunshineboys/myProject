@@ -492,49 +492,50 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/intelligent/index.html',
             // css: 'pages/intelligent/css/apply_case_header.css'
         })
-        .state('intelligent.intelligent_index', {//智能报价首页
-            url: 'index',
+        .state('intelligent_index', {//智能报价首页
+            url: '/intelligent_index',
             templateUrl: 'pages/intelligent/intelligent_index.html',
-            css: 'pages/intelligent/css/intelligent_index.css'
+            css: 'pages/intelligent/css/intelligent_index.css',
+            controller:'intelligent_index_ctrl'
         })
         .state('house_list', {//智能报价小区列表
-            url: '/house_list?city&province',
+            url: '/house_list',
             templateUrl: 'pages/intelligent/house_list.html',
             css: 'pages/intelligent/css/house_list.css',
             controller:'house_list_ctrl'
         })
         .state('add_house', {//智能报价添加/编辑小区
-            url: '/add_house?id&city&index&province',
+            url: '/add_house?id&index',
             templateUrl: 'pages/intelligent/add_house.html',
             css: 'pages/intelligent/css/add_house.css',
             controller:'house_detail_ctrl'
         })
         .state('add_case', {//智能报价添加/编辑案例
-            url: '/add_case?index&cur_index&city',
+            url: '/add_case?index&cur_index',
             templateUrl: 'pages/intelligent/add_case.html',
             css: 'pages/intelligent/css/add_case.css',
             controller:'add_case_ctrl'
         })
         .state('edit_house', {//智能报价添加/编辑普通小区
-            url: '/edit_house?index&cur_index&city',
+            url: '/edit_house?index&cur_index',
             templateUrl: 'pages/intelligent/edit_house.html',
             css: 'pages/intelligent/css/edit_house.css',
             controller:'edit_house_ctrl'
         })
         .state('add_drawing', {//智能报价添加/编辑普通小区图纸
-            url: '/add_drawing?index&cur_index&city',
+            url: '/add_drawing?index&cur_index',
             templateUrl: 'pages/intelligent/add_drawing.html',
             css: 'pages/intelligent/css/add_drawing.css',
             controller:'add_drawing_ctrl'
         })
         .state('add_support_goods', {//智能报价案列/社区店配套商品管理
-            url: '/add_support_goods?city&province&name',
+            url: '/add_support_goods?name',
             templateUrl: 'pages/intelligent/add_support_goods.html',
             css: 'pages/intelligent/css/goods_manage.css',
             controller: 'support_goods_ctrl'
         })
         .state('worker_price_list', {//智能报价工人资费列表
-            url: '/worker_price_list?city&province',
+            url: '/worker_price_list',
             templateUrl: 'pages/intelligent/worker_price_list.html',
             css: 'pages/intelligent/css/worker_price_list.css',
             controller: 'worker_price_ctrl'
@@ -556,31 +557,31 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/add_manage.css'
         })
         .state('engineering_standards', {//工程标准
-            url: '/engineering_standards?city&province',
+            url: '/engineering_standards',
             templateUrl: 'pages/intelligent/engineering_standards.html',
             css: 'pages/intelligent/css/engineering_standards.css',
             controller: 'engineering_standards_ctrl'
         })
         .state('engineering_process', {//工程标准编辑
-            url: '/engineering_process?city&project',
+            url: '/engineering_process?project',
             templateUrl: 'pages/intelligent/engineering_process.html',
             css: 'pages/intelligent/css/engineering_process.css',
             controller: 'engineering_process_ctrl'
         })
         .state('coefficient_manage', {//系数管理
-            url: '/coefficient_manage?city&province',
+            url: '/coefficient_manage',
             templateUrl: 'pages/intelligent/coefficient_manage.html',
             css: 'pages/intelligent/css/coefficient_manage.css',
             controller: 'coefficient_manage_ctrl'
         })
         .state('add_material', {//添加材料项
-            url: '/add_material?city&province',
+            url: '/add_material',
             templateUrl: 'pages/intelligent/add_material.html',
             css: 'pages/intelligent/css/add_material.css',
             controller: 'add_material_ctrl'
         })
         .state('material_detail', {//添加材料详情
-            url: '/material_detail?status&id&city',
+            url: '/material_detail?status&id',
             templateUrl: 'pages/intelligent/material_detail.html',
             css: 'pages/intelligent/css/material_detail.css',
             controller: 'material_detail_ctrl'
@@ -610,7 +611,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'else_general_ctrl'
         })
         .state('goods_manage', {//智能报价商品管理
-            url: '/goods_manage?city&province',
+            url: '/goods_manage',
             templateUrl: 'pages/intelligent/goods_manage.html',
             css: 'pages/intelligent/css/goods_manage.css',
             controller: 'goods_manage_ctrl'

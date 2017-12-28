@@ -1072,6 +1072,111 @@ class OrderController extends Controller
             'data'=>$data
         ]);
     }
+
+    /**
+     * @return string
+     */
+    public  function  actionOrderLineWxPay()
+    {
+        $request=Yii::$app->request;
+        //商户订单号，商户网站订单系统中唯一订单号，必填
+        //付款金额，必填
+        $total_amount =$request->post('order_price');
+        $goods_id=$request->post('goods_id');
+        $goods_num=$request->post('goods_num');
+        $address_id=$request->post('address_id');
+        $pay_name=PayService::WE_CHAT_PAY;
+        $invoice_id=$request->post('invoice_id');
+        $freight=$request->post('freight');
+        $buyer_message=$request->post('buyer_message','');
+        //商品描述，可空
+        $body = $request->post('body','无');
+        $open_id=$request->post('open_id');
+        $code=1000;
+        if (
+            !$total_amount
+            ||!$goods_id
+            ||!$goods_num
+            ||!$address_id
+            ||!$open_id
+        ){
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $Goods=Goods::findOne($goods_id);
+        if (!$Goods)
+        {
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        //若发票未填-添加发票操作
+        $invoice=Invoice::findOne($invoice_id);
+        if (!$invoice)
+        {
+            $address=UserAddress::findOne($address_id);
+            $in=new Invoice();
+            $in->invoice_type=1;
+            $in->invoice_header_type=1;
+            $in->invoice_header=$address->consignee;
+            $in->invoice_content='明细';
+            $res=$in->save(false);
+            if (!$res)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $invoice_id=$in->id;
+        }
+        if (!$freight)
+        {
+            $freight=0;
+        }
+        $return_insurance=0;
+        //判断金额是否正确
+        $money=$Goods->platform_price*$goods_num+$return_insurance*100+($freight*100);
+        if ($money*0.01 != $total_amount)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' =>  $code,
+                'msg'  => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $orders=[
+            'address_id'=> $address_id,
+            'invoice_id'=>$invoice_id,
+            'goods_id'=> $goods_id,
+            'goods_num'=> $goods_num,
+            'order_price'=>$total_amount,
+            'goods_name'=> $Goods->title,
+            'pay_name'=> $pay_name,
+            'supplier_id'=> $Goods->supplier_id,
+            'freight'=> $freight,
+            'return_insurance'=> 0,
+            'body'=> $body,
+            'order_no'=>GoodsOrder::SetOrderNo(),
+            'buyer_message'=> $buyer_message,
+            'total_amount'=> $total_amount
+        ];
+        $model=new Wxpay();
+        $data=$model->WxLinePay($orders,$open_id);
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$data
+        ]);
+    }
+
+
+
     /**
      * 微信公众号样板间申请定金异步返回
      * wxpay notify action

@@ -5,8 +5,7 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
-                $rootScope.crumbs.splice(1, 4)
+                $state.go('intelligent_index')
             }
         }, {
             name: '小区列表页',
@@ -26,9 +25,10 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
     $scope.delete_drawing = []//删除图纸
     $scope.house_informations = []//房屋信息
     $scope.drawing_informations = []//图纸信息
+    let obj = JSON.parse(sessionStorage.getItem('area'))
     $http.get('city.json').then(function (res) {
         console.log(res)
-        let arr = res.data[0][$stateParams.city]
+        let arr = res.data[0][obj.city]
         $scope.region_options = []
         for(let [key,value] of Object.entries(arr)){
             $scope.region_options.push({
@@ -317,11 +317,11 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         sessionStorage.setItem('houseInformation',JSON.stringify($scope.house_informations))
         sessionStorage.setItem('drawingInformation',JSON.stringify($scope.drawing_informations))
         if(item.is_ordinary == 0){
-            $state.go('edit_house',({index:$stateParams.index,cur_index:index,city:$stateParams.city}))
+            $state.go('edit_house',({index:$stateParams.index,cur_index:index}))
         }else if(item.is_ordinary == 1){
-            $state.go('add_case',({index:$stateParams.index,cur_index:index,city:$stateParams.city}))
+            $state.go('add_case',({index:$stateParams.index,cur_index:index}))
         }else{
-            $state.go('add_drawing',({index:$stateParams.index,cur_index:index,city:$stateParams.city}))
+            $state.go('add_drawing',({index:$stateParams.index,cur_index:index}))
         }
     }
     //保存数据
@@ -396,8 +396,8 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             if($stateParams.index == 1){
                 _ajax.post('/quote/effect-edit-plot',{
                     effect_id:$stateParams.id,
-                    province_code:$stateParams.province,
-                    city_code:$stateParams.city,
+                    province_code:obj.province,
+                    city_code:obj.city,
                     address:$scope.params.address,
                     house_name:$scope.params.name,
                     district_code:$scope.params.region_code,
@@ -413,8 +413,8 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 })
             }else{
                 _ajax.post('/quote/effect-plot-add',{
-                    province_code:$stateParams.province,
-                    city_code:$stateParams.city,
+                    province_code:obj.province,
+                    city_code:obj.city,
                     address:$scope.params.address,
                     house_name:$scope.params.name,
                     district_code:$scope.params.region_code,

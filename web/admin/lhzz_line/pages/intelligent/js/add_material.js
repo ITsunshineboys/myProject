@@ -5,7 +5,7 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
@@ -13,12 +13,12 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         }
     ]
     $scope.status_words = '刷新材料抓取'
-    $scope.city = $stateParams.city
+   let obj = JSON.parse(sessionStorage.getItem('area'))
     //请求省市数据
     $http.get('city.json').then(function (res) {
         console.log(res)
-        $scope.province_name = res.data[0]['86'][$stateParams.province]
-        $scope.city_name = res.data[0][$stateParams.province][$stateParams.city]
+        $scope.province_name = res.data[0]['86'][obj.province]
+        $scope.city_name = res.data[0][obj.province][obj.city]
     })
     //分页配置
     $scope.Config = {
@@ -38,7 +38,7 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         })
     };
     $scope.params = {
-        city:$stateParams.city
+        city:obj.city
     };
     //删除项
     $scope.deleteMaterial = function (item) {

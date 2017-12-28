@@ -5,7 +5,7 @@ app.controller('general_detail_ctrl',function (_ajax,$scope,$rootScope,$statePar
             name: '智能报价',
             icon: 'icon-baojia',
             link: function () {
-                $state.go('intelligent.intelligent_index')
+                $state.go('intelligent_index')
                 $rootScope.crumbs.splice(1, 4)
             }
         }, {
