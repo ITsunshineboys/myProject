@@ -814,6 +814,7 @@ class WithdrawalsController extends Controller
             'data' => $data
         ]);
     }
+
     /**
      * 大后台收支明细
      * @return string
@@ -874,6 +875,9 @@ class WithdrawalsController extends Controller
             case 7:
     //                $type=UserAccessdetail::ACCESS_CODE_PAYMENT_BUY;
                 $data=UserAccessdetail::GetPaymentBuyDetail($transaction_no);
+                break;
+            case UserAccessdetail::ACCESS_TYPE_REFUND:
+                $data=UserAccessdetail::findRefundDetail($transaction_no);
                 break;
         }
         if (is_numeric($data))
@@ -1786,6 +1790,7 @@ class WithdrawalsController extends Controller
                 break;
             case UserAccessdetail::ACCESS_TYPE_REFUND:
                     $OrderGoods=OrderGoods::FindByOrderNoAndSku($access['order_no'],$access['sku']);
+                    $GoodsOrder=GoodsOrder::FindByOrderNo($access['order_no']);
                     $list[]=[
                         'name'=>'商品名称',
                         'value'=>$OrderGoods->goods_name
@@ -1794,9 +1799,10 @@ class WithdrawalsController extends Controller
                         'name'=>'退款金额',
                         'value'=>StringService::formatPrice($access['access_money']*0.01)
                     ];
+                    $refund_bank=BankinfoLog::findOne($access['refund_bank_log_id']);
                     $list[]=[
                         'name'=>'到账银行卡',
-                        'value'=>StringService::formatPrice($access['access_money']*0.01)
+                        'value'=>$refund_bank->bankname
                     ];
                     $list[]=[
                         'name'=>'商品订单号',
@@ -1808,19 +1814,19 @@ class WithdrawalsController extends Controller
                     ];
                     $list[]=[
                         'name'=>'下单时间',
-                        'value'=>$transaction_no
+                        'value'=>$GoodsOrder->create_time
                     ];
                     $list[]=[
                         'name'=>'付款方式',
-                        'value'=>$transaction_no
+                        'value'=>$GoodsOrder->pay_name
                     ];
                     $list[]=[
                         'name'=>'付款时间',
-                        'value'=>$transaction_no
+                        'value'=>date('Y-m-d H:i',$GoodsOrder->paytime)
                     ];
                     $list[]=[
                         'name'=>'退款时间',
-                        'value'=>$transaction_no
+                        'value'=>date('Y-m-d H:i',$access['create_time'])
                     ];
                 break;
          }

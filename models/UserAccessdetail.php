@@ -370,6 +370,58 @@ class UserAccessdetail extends \yii\db\ActiveRecord
 
 
     /**
+     * 退款收支详情
+     * @param $transaction_no
+     * @return array
+     */
+    public  static  function  findRefundDetail($transaction_no)
+    {
+        $access=self::find()
+            ->where(['transaction_no'=>$transaction_no])
+            ->asArray()
+            ->one();
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($access['order_no'],$access['sku']);
+        $GoodsOrder=GoodsOrder::FindByOrderNo($access['order_no']);
+        $list[]=[
+            'name'=>'商品名称',
+            'value'=>$OrderGoods->goods_name
+        ];
+        $list[]=[
+            'name'=>'退款金额',
+            'value'=>StringService::formatPrice($access['access_money']*0.01)
+        ];
+        $refund_bank=BankinfoLog::findOne($access['refund_bank_log_id']);
+        $list[]=[
+            'name'=>'到账银行卡',
+            'value'=>$refund_bank->bankname
+        ];
+        $list[]=[
+            'name'=>'商品订单号',
+            'value'=>$access['order_no']
+        ];
+        $list[]=[
+            'name'=>'交易单号',
+            'value'=>$transaction_no
+        ];
+        $list[]=[
+            'name'=>'下单时间',
+            'value'=>$GoodsOrder->create_time
+        ];
+        $list[]=[
+            'name'=>'付款方式',
+            'value'=>$GoodsOrder->pay_name
+        ];
+        $list[]=[
+            'name'=>'付款时间',
+            'value'=>date('Y-m-d H:i',$GoodsOrder->paytime)
+        ];
+        $list[]=[
+            'name'=>'退款时间',
+            'value'=>date('Y-m-d H:i',$access['create_time'])
+        ];
+        return $list;
+    }
+    /**
      * @param $transaction_no
      * @return array
      */
