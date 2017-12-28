@@ -3232,6 +3232,28 @@ class MallController extends Controller
             ]);
         }
 
+        if ($goods->series_id && !$goods->validateSeriesId('series_id')) {
+            $code = 1047;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        if (!empty($styleIds)) {
+            $validateStyleIdsRes = Goods::validateStyleIds($styleIds);
+            if (is_int($validateStyleIdsRes)) {
+                if (200 != $validateStyleIdsRes) {
+                    return Json::encode([
+                        'code' => $validateStyleIdsRes,
+                        'msg' => Yii::$app->params['errorCodes'][$validateStyleIdsRes],
+                    ]);
+                }
+            } else {
+                return Json::encode($validateStyleIdsRes);
+            }
+        }
+
         $transaction = Yii::$app->db->beginTransaction();
 
         if (!$goods->save()) {
