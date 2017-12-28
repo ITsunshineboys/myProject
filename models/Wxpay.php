@@ -50,7 +50,16 @@ class Wxpay  extends ActiveRecord
             //②、统一下单
             $input = new WxPayUnifiedOrder();
             $orders['return_insurance']=0;
-            $attach=$orders['goods_id'].'&'.$orders['goods_num'].'&'.$orders['address_id'].'&'.$orders['pay_name'].'&'.$orders['invoice_id'].'&'.$orders['supplier_id'].'&'.$orders['freight'].'&'.$orders['return_insurance'].'&'.$orders['order_no'].'&'.$orders['buyer_message'];
+            $attach=$orders['goods_id'];
+            $attach.='&'.$orders['goods_num'];
+            $attach.='&'.$orders['address_id'];
+            $attach.='&'.$orders['pay_name'];
+            $attach.='&'.$orders['invoice_id'];
+            $attach.='&'.$orders['supplier_id'];
+            $attach.='&'.$orders['freight'];
+            $attach.='&'.$orders['return_insurance'];
+            $attach.='&'.$orders['order_no'];
+            $attach.='&'.$orders['buyer_message'];
             if (!$orders['goods_name'])
             {
                 $goods_name=Goods::findOne($orders['goods_id'])->title;
@@ -77,6 +86,55 @@ class Wxpay  extends ActiveRecord
     </script>";
             exit;
         }
+
+    /**
+     *无登录-微信公众号支付接口
+     */
+    public function WxLinePay($orders,$openid){
+        ini_set('date.timezone','Asia/Shanghai');
+        //打印输出数组信息
+        function printf_info($data)
+        {
+            foreach($data as $key=>$value){
+                echo "<font color='#00ff55;'>$key</font> : $value <br/>";
+            }
+        }
+        //、获取用户openid
+        $tools = new PayService();
+        $openId = $openid;
+        //②、统一下单
+        $input = new WxPayUnifiedOrder();
+        $orders['return_insurance']=0;
+        $attach=$orders['goods_id'];
+        $attach.='&'.$orders['goods_num'];
+        $attach.='&'.$orders['address_id'];
+        $attach.='&'.$orders['pay_name'];
+        $attach.='&'.$orders['invoice_id'];
+        $attach.='&'.$orders['supplier_id'];
+        $attach.='&'.$orders['freight'];
+        $attach.='&'.$orders['return_insurance'];
+        $attach.='&'.$orders['order_no'];
+        $attach.='&'.$orders['buyer_message'];
+        if (!$orders['goods_name'])
+        {
+            $goods_name=Goods::findOne($orders['goods_id'])->title;
+        }else{
+            $goods_name=$orders['goods_name'];
+        }
+        $input->SetBody($goods_name);
+        $input->SetAttach($attach);
+        $input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+        $input->SetTotal_fee($orders['total_amount']*100);
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("goods");
+        $input->SetNotify_url(Yii::$app->request->hostInfo.self::LINE_PAY_NOTIFY_URL);
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $order = WxPayApi::unifiedOrder($input);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+        return  Json::decode($jsApiParameters);
+    }
 
         /**
          * 样板间申请支付定金
