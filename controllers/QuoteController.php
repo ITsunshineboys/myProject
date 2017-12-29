@@ -34,6 +34,7 @@ use app\models\ProjectView;
 use app\models\Series;
 use app\models\StairsDetails;
 use app\models\Style;
+use app\models\User;
 use app\models\WorkerCraftNorm;
 use app\models\WorkerRank;
 use app\models\WorkerType;
@@ -2127,10 +2128,10 @@ class QuoteController extends Controller
      */
     public function actionHomepageList(){
         $request = \Yii::$app->request;
-        $province_code = trim($request->get('province',''));
-        $city_code = trim($request->get('city',''));
+//        $province_code = trim($request->get('province',''));
+        $district_code = trim($request->get('district_code',''));
 
-        $brainpower = (new BrainpowerInitalSupervise())->codeStatus($province_code,$city_code);
+        $brainpower = (new BrainpowerInitalSupervise())->codeStatus($district_code);
         foreach ($brainpower as $value){
             $effect = Effect::find()
                 ->asArray()
@@ -2177,14 +2178,14 @@ class QuoteController extends Controller
     public function actionHomepageDistrict()
     {
         $request = \Yii::$app->request;
-        $province_code = trim($request->get('province',''));
+//        $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
         $code = 200;
 
         return Json::encode([
             'code' => $code,
             'msg'  => 'ok',
-            'list' => (new Effect)->findCode($province_code,$city_code),
+            'list' => (new Effect)->findCode($city_code),
         ]);
 
     }
@@ -2196,14 +2197,14 @@ class QuoteController extends Controller
     public function actionHomepageToponymy()
     {
         $request    = \Yii::$app->request;
-        $province   = trim($request->post('province',''));
+//        $province   = trim($request->post('province',''));
         $city       = trim($request->post('city',''));
         $district   = trim($request->post('district',''));
         $code = 200;
         return Json::encode([
             'code' => $code,
             'msg'  => 'ok',
-            'list' => (new Effect)->findToponymy($province,$city,$district),
+            'list' => (new Effect)->findToponymy($city,$district),
         ]);
     }
 
@@ -2265,15 +2266,8 @@ class QuoteController extends Controller
         $add_item = new BrainpowerInitalSupervise();
         $add_item->recommend_name  = trim($request->post('recommend_name',''));
         $add_item->image           = trim($request->post('image',''));
-        $add_item->district_code   = $effect['district_code'];
-        $add_item->toponymy        = $effect['toponymy'];
-        $add_item->street          = $effect['street'];
         $add_item->house_type_name = $effect['particulars'];
-        $add_item->province_code   = $effect['province_code'];
         $add_item->city_code       = $effect['city_code'];
-        $add_item->province        = $effect['province'];
-        $add_item->city            = $effect['city'];
-        $add_item->district        = $effect['district'];
         $add_item->effect_id       = $effect['id'];
         $add_item->add_time        = time();
 
@@ -3094,12 +3088,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-//$sql="update  engineering_standard_carpentry_craft set type_id=69 where id=1;
-//update  engineering_standard_carpentry_craft set type_id=70 where id=2;
-//update  engineering_standard_carpentry_craft set type_id=71 where id=3;
-//update  engineering_standard_carpentry_craft set type_id=72 where id=4;
-//update  engineering_standard_carpentry_craft set type_id=73 where id=5;";
-//      $res =\Yii::$app->db->createCommand($sql)->execute();
-//      var_dump($res);
+   var_dump(User::find()->where(['id'=>39])->asArray()->one());
+
     }
 }
