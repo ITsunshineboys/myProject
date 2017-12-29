@@ -3091,13 +3091,12 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-//      $sql="INSERT INTO `worker_type` VALUES ('69', '0', '龙骨抓取规格', null, '0', '4', '0');
-//INSERT INTO `worker_type` VALUES ('70', '0', '丝杆抓取规格', null, '0', '4', '0');
-//INSERT INTO `worker_type` VALUES ('71', '0', '石膏板抓取规格', null, '0', '4', '0');
-//INSERT INTO `worker_type` VALUES ('72', '0', '细木工板抓取长度', null, '0', '4', '0');
-//INSERT INTO `worker_type` VALUES ('73', '0', '细木工板抓取宽度', null, '0', '4', '0')";
-//
-//      $res =\Yii::$app->db->createCommand($sql)->execute();
-//      var_dump($res);
+$sql="update  engineering_standard_carpentry_craft set type_id=69 where id=1;
+update  engineering_standard_carpentry_craft set type_id=70 where id=2;
+update  engineering_standard_carpentry_craft set type_id=71 where id=3;
+update  engineering_standard_carpentry_craft set type_id=72 where id=4;
+update  engineering_standard_carpentry_craft set type_id=73 where id=5;";
+      $res =\Yii::$app->db->createCommand($sql)->execute();
+      var_dump($res);
     }
 }
