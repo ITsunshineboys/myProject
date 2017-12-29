@@ -329,100 +329,9 @@ class OwnerController extends Controller
     }
 
     /**
-     * 弱电价格
+     * 强弱电价格
      * @return string
      */
-    public function actionWeakCurrent()
-    {
-        $post = \Yii::$app->request->get();
-        //      点位 和 材料查询
-        $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['weak_current']]);
-        $weak_where = 'pid = '.$points['id'];
-        $weak_points = Points::findByIds('title,count',$weak_where);
-        //  弱电总点位
-        $current_points = BasisDecorationService::weakPoints($weak_points,$post);
-
-        //查询弱电所需要材料
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $weak_current = BasisDecorationService::judge($goods,$post);
-
-        //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['weak_current'],$post['city']);
-        if ($craft == null){
-            $code = 1059;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        //材料总费用
-        $material_price = BasisDecorationService::quantity($current_points,$weak_current,$craft);
-        $material = BasisDecorationService::electricianMaterial($weak_current, $material_price);
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'weak_current_material' => $material,
-            ]
-        ]);
-    }
-
-    /**
-     * 强电价格
-     * @return string
-     */
-    public function actionStrongCurrent()
-    {
-        $post = \Yii::$app->request->get();
-        //强电点位
-        $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['strong_current']]);
-        $weak_where = 'pid = '.$points['id'];
-        $weak_points = Points::findByIds('title,count',$weak_where);
-        //  总点位
-        $strong_points = BasisDecorationService::strongPoints($weak_points,$post);
-
-        //查询弱电所需要材料
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::STRING_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'strong_current_labor_price' => [],
-                    'strong_current_material' => [],
-                ]
-            ]);
-        }
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $strong_current = BasisDecorationService::judge($goods, $post);
-
-        //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['strong_current'], $post['city']);
-        if ($craft == null){
-            $code = 1059;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        //材料总费用
-        $material_price = BasisDecorationService::quantity($strong_points, $strong_current, $craft);
-        $material = BasisDecorationService::electricianMaterial($strong_current, $material_price);
-
-        return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'strong_current_material' => $material,
-            ]
-        ]);
-    }
-
     public function actionElectricity()
     {
         $get = Yii::$app->request->get();
@@ -445,27 +354,61 @@ class OwnerController extends Controller
                 $strong_overall_points = BasisDecorationService::strongPoints($strong_points,$get);
             }
         }
+
         // 强弱电总点位
         $total_points = BasisDecorationService::algorithm(3,$weak_overall_points,$strong_overall_points);
+
 
         // 所需要材料查询
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CIRCUIT_MATERIAL);
         $judge = BasisDecorationService::judge($goods,$get);
 
+
         // 当地工艺
         $weak_craft = WorkerType::craft(self::CRAFT_NAME['weak'],$get['city']);  // 弱电工艺
+        foreach ($weak_craft as $weak_value){
+            if ($weak_value['worker_name'] == '网线用量' ){
+                $reticle = $weak_value['material'];
+            }
+
+            if ($weak_value['worker_name'] == '线管用料' ){
+                $spool = $weak_value['material'];
+            }
+        }
         $strong_craft = WorkerType::craft(self::CRAFT_NAME['strong'],$get['city']);  // 强电工艺
+        foreach ($strong_craft as $strong_value){
+            if ($strong_value['worker_name'] == '电线用料' ){
+                $wire = $strong_value['material'];
+            }
 
-        //材料总费用
-        $material_price = BasisDecorationService::quantity($weak_overall_points,$weak_craft,$judge);
-        $material = BasisDecorationService::electricianMaterial($strong_current, $material_price);
+            if ($strong_value['worker_name'] == '线管用料' ){
+                $spool1 = $strong_value['material'];
+            }
+        }
 
 
+        //商品属性抓取
+        $reticle_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['reticle']);
+        $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wire']);
+        $spool_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['spool']);
+
+        $bottom_case_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['bottom_case']);
 
 
+        // 商品价格
+        $goods_price[] = BasisDecorationService::plumberFormula(1,$weak_overall_points,$reticle_attr,$reticle);
+        $goods_price[] = BasisDecorationService::plumberFormula(1,$strong_overall_points,$wire_attr,$wire);
+        $goods_price[] = BasisDecorationService::plumberFormula(3,$strong_overall_points,$spool_attr,$spool,$spool1,$weak_overall_points);
+        $goods_price[] = BasisDecorationService::plumberFormula(2,$total_points,$bottom_case_attr);
 
-
+        return Json::encode([
+           'code' => 200,
+           'msg'  => 'ok',
+            'data'=> $goods_price
+        ]);
     }
+
+
     /**
      * 水路
      * @return string

@@ -335,117 +335,64 @@ class BasisDecorationService
 
 
     /**
-     * 强弱电所需材料处理
-     * @param string $points
-     * @param string $crafts
-     * @param array $goods
-     * @return mixed
+     * 商品属性抓取
+     * @param $goods
+     * @param $value
+     * @return array
      */
-    public static function quantity($points,$crafts,$goods)
+    public static function goodsAttr($goods,$value)
     {
-
-        foreach ($goods as &$one) {
-            if ($one['title'] == self::goodsNames()['reticle'] || $one['title'] == self::goodsNames()['wire']){
-                $ids = GoodsAttr::findByGoodsIdUnit($one['id']);
-                var_dump($ids);die;
-            }
-            switch ($one) {
-                case $one['title'] == self::goodsNames()['reticle'] || $one['title'] == self::goodsNames()['wire']:
-                    $goods_price = $one['platform_price'];
-                    $goods_procurement = $one['purchase_price_decoration_company'];
-                    $goods_id [] = $one['id'];
-                    break;
-                case $one['title'] ==self::goodsNames()['spool']:
-                    $spool_price = $one['platform_price'];
-                    $spool_procurement = $one['purchase_price_decoration_company'];
-                    $goods_id [] = $one['id'];
-                    break;
-                case $one['title'] ==self::goodsNames()['bottom_case']:
-                    $bottom_case = $one['platform_price'];
-                    $bottom_procurement = $one['purchase_price_decoration_company'];
-                    $goods_id [] = $one['id'];
-                    break;
+        foreach ($goods as $one){
+            if ($one['title'] == $value){
+                $one_goods = $one;
             }
         }
-        $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-        if ($ids == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($ids as $one_unit) {
-            switch ($one_unit) {
-                case $one_unit['title'] == self::goodsNames()['reticle'] || $one_unit['title'] == self::goodsNames()['wire']:
-                    $goods_value = $one_unit['value'];
-                    break;
-                case $one_unit['title'] == self::goodsNames()['spool']:
-                    $spool_value = $one_unit['value'];
-                    break;
-            }
-        }
-        $electricity = self::plumberFormula($points,$material,$goods_value,$goods_price,$goods_procurement,$spool,$spool_value,$spool_price,$spool_procurement,$bottom_case,$bottom_procurement);
 
+        //  抓取利润最大的商品
+        $max_goods = self::profitMargin($one_goods);
+        $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],'长');
 
-        return $electricity;
+        return [$max_goods,$goods_attr];
 
     }
 
-    /**
-     * 水电工 值
-     * @param $points
-     * @param $material
-     * @param $goods_value
-     * @param $goods_price
-     * @param $goods_procurement
-     * @param $spool
-     * @param $spool_value
-     * @param $spool_price
-     * @param $spool_procurement
-     * @param $bottom_case
-     * @param $bottom_procurement
-     * @return mixed
-     */
-
-    public static function plumberFormula($points,$material,$goods_value,$goods_price,$goods_procurement,$spool,$spool_value,$spool_price,$spool_procurement,$bottom_case,$bottom_procurement)
-    {
-        //线路个数计算 ,线路费用计算
-        $electricity['wire_quantity'] = self::goodsNumber($points,$material,$goods_value);
-        $electricity['wire_cost'] = round($electricity['wire_quantity'] * $goods_price,2);
-        $electricity['wire_procurement'] = round($electricity['wire_quantity'] * $goods_procurement,2);
-
-        //线管个数计算,线管费用计算
-        $electricity['spool_quantity'] = self::goodsNumber($points,$spool,$spool_value);
-        $electricity['spool_cost'] =  round($electricity['spool_quantity'] * $spool_price,2);
-        $electricity['spool_procurement'] =  round($electricity['spool_quantity'] * $spool_procurement,2);
-
-        // 底盒个数计算.底盒费用计算
-        $electricity['bottom_quantity'] = $points;
-        $electricity['bottom_cost'] = round($points * $bottom_case,2);
-        $electricity['bottom_procurement'] = round($points * $bottom_procurement,2);
-
-        //总费用
-        $electricity['total_cost'] = $electricity['wire_cost'] + $electricity['spool_cost'] + $electricity['bottom_cost'];
-        return  $electricity;
-    }
 
     /**
-     * 商品数量 计算公式
+     * 强弱电价格计算
+     * @param $int
      * @param $points
      * @param $craft
-     * @param $goods_value
-     * @return float
+     * @param $goods
+     * @return mixed
      */
-    public function goodsNumber($points,$craft,$goods_value)
+    public static function plumberFormula($int,$points,$goods,$craft = 1,$craft1=1,$points1=1)
     {
-//       个数2：（弱电点位×【10m】÷抓取的商品的长度）
-        $number = ceil($points * $craft / $goods_value);
+        switch ($int){
+            case $int == 1:
+                $electricity['quantity'] = self::algorithm(4,$points,$craft,$goods[1]['value']);
+                $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
+                $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+            case $int == 2:
+                $electricity['quantity'] = $points;
+                $electricity['cost'] = round(self::algorithm(1,$points,$goods[0]['platform_price']),2);
+                $electricity['procurement'] = round(self::algorithm(1,$points,$goods[0]['purchase_price_decoration_company']),2);
+                break;
+            case $int == 3:
+                $quantity = self::algorithm(4,$points1,$craft,$goods[1]['value']);
+                $quantity1 = self::algorithm(4,$points,$craft1,$goods[1]['value']);
+                $electricity['quantity'] = self::algorithm(3,$quantity,$quantity1);
+                $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
+                $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+        }
 
-        return $number;
+        $goods[0]['quantity'] = $electricity['quantity'];
+        $goods[0]['cost'] = $electricity['cost'];
+        $goods[0]['procurement'] = $electricity['procurement'];
 
+        return  $goods[0];
     }
-
 
     /**
      * 水路商品
@@ -1369,21 +1316,6 @@ class BasisDecorationService
         return $marble;
     }
 
-    /**
-     * 价格转化
-     * @param $goods
-     * @return array
-     */
-    public static function priceConversion($goods)
-    {
-        foreach ($goods as &$one_goods) {
-            $one_goods['platform_price'] =  $one_goods['platform_price'] / self::GOODS_PRICE_UNITS;
-            $one_goods['supplier_price'] =  $one_goods['supplier_price'] / self::GOODS_PRICE_UNITS;
-            $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / self::GOODS_PRICE_UNITS;
-        }
-
-        return $goods;
-    }
 
     /**
      * 条件判断
@@ -1452,29 +1384,39 @@ class BasisDecorationService
     /**
      * 利润率最大
      * @param $goods
+     * @param $value
+     *  $value 传值不一样 抓取规则不同 默认值为1
      * @return mixed
      */
-    public static function profitMargin($goods)
+    public static function profitMargin($goods,$value=1)
     {
-        if (count($goods) == count($goods, 1)) {
-            return $goods;
-        } elseif ($goods == null){
-            return new \stdClass;
-        } else {
-            $max =[];
-            $len = count($goods);
-            for ($i=0; $i<$len; $i++){
-                if ($i==0){
-                    $max = $goods[$i];
-                    continue;
-                }
-                if ($goods[$i]['profit_rate']>$max['profit_rate']){
-                    $max = $goods[$i];
-                }
+        switch ($value){
+            case $value == 1:
+                if (count($goods) == count($goods, 1)) {
+                    return $goods;
+                } elseif ($goods == null){
+                    return new \stdClass;
+                } else {
+                    $max =[];
+                    $len = count($goods);
+                    for ($i=0; $i<$len; $i++){
+                        if ($i==0){
+                            $max = $goods[$i];
+                            continue;
+                        }
+                        if ($goods[$i]['profit_rate']>$max['profit_rate']){
+                            $max = $goods[$i];
+                        }
 
-            }
-            return $max;
+                    }
+                    return $max;
+                }
+                break;
+            case $value == 2:
+                return false;
+                break;
         }
+
     }
 
     /**
@@ -1516,51 +1458,6 @@ class BasisDecorationService
             }
         }
         return $goods_all;
-    }
-
-
-    /**
-     * 强电点位
-     * @param $points
-     * @param $post
-     * @return mixed
-     */
-    public static function strongCurrentPoints($points,$post)
-    {
-        foreach ($points as $one_points) {
-            switch ($one_points) {
-                case $one_points['place'] == self::HOUSE_MESSAGE['bedroom']:
-                    $bedroom = $one_points['points_total'] * $post['bedroom'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['kitchen']:
-                    $kitchen = $one_points['points_total'] * $post['kitchen'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['toilet']:
-                    $toilet = $one_points['points_total'] * $post['toilet'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['household']:
-                    $register = $one_points['points_total'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['drawing_room_balcony']:
-                    $balcony = $one_points['points_total'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['passage']:
-                    $passage = $one_points['points_total'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['live_balcony']:
-                    $live_balcony= $one_points['points_total'];
-                    break;
-            }
-            if ($one_points['place'] == self::HOUSE_MESSAGE['guest_restaurant']) {
-                if ($post['hall'] != 2) {
-                    $hall = $one_points['points_total'] * $post['hall'];
-                } else {
-                    $hall = $one_points['points_total'] + 2;
-                }
-            }
-        }
-        $strong_current_points = $hall+$bedroom+$kitchen+$toilet+$register+$balcony+$passage+$live_balcony;
-        return $strong_current_points;
     }
 
     /**
@@ -1966,49 +1863,6 @@ class BasisDecorationService
         return $quantity;
     }
 
-    /**
-     * 电工材料利润最大
-     * @param $goods
-     * @param $material_price
-     * @return array
-     */
-    public static function electricianMaterial($goods,$material_price)
-    {
-        foreach ($goods as $one_weak_current) {
-            switch ($one_weak_current) {
-                case $one_weak_current['title'] == self::goodsNames()['reticle']
-                    || $one_weak_current['title'] == self::goodsNames()['wire']:
-                    $one_weak_current['quantity'] = $material_price['wire_quantity'];
-                    $one_weak_current['cost'] = $material_price['wire_cost'];
-                    $one_weak_current['procurement'] = $material_price['wire_procurement'];
-                    $wire [] =  $one_weak_current;
-                    break;
-                case $one_weak_current['title'] == self::goodsNames()['spool']:
-                    $one_weak_current['quantity'] = $material_price['spool_quantity'];
-                    $one_weak_current['cost'] = $material_price['spool_cost'];
-                    $one_weak_current['procurement'] = $material_price['spool_procurement'];
-                    $spool [] =  $one_weak_current;
-                    break;
-                case $one_weak_current['title'] == self::goodsNames()['bottom_case']:
-                    $one_weak_current['quantity'] = $material_price['bottom_quantity'];
-                    $one_weak_current['cost'] = $material_price['bottom_cost'];
-                    $one_weak_current['procurement'] = $material_price['bottom_procurement'];
-                    $bottom [] =  $one_weak_current;
-                    break;
-            }
-        }
-
-        if (!$wire && !$spool && !$bottom){
-            return false;
-        }
-
-
-        $material ['total_cost'] = round($material_price['total_cost'],2);
-        $material ['material'] [] = self::profitMargin($wire);
-        $material ['material'] [] = self::profitMargin($spool);
-        $material ['material'] [] = self::profitMargin($bottom);
-        return $material;
-    }
 
     /**
      * 水路材料
@@ -2203,7 +2057,7 @@ class BasisDecorationService
             }
 
 
-            if ($one_points['title'] != OwnerController::ROOM_DETAIL['hall'] && $one_points['title'] == OwnerController::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != OwnerController::ROOM_DETAIL['kitchen'] && $one_points['title'] != OwnerController::ROOM_DETAIL['toilet']){
+            if ($one_points['title'] != OwnerController::ROOM_DETAIL['hall'] && $one_points['title'] != OwnerController::ROOM_DETAIL['secondary_bedroom'] && $one_points['title'] != OwnerController::ROOM_DETAIL['kitchen'] && $one_points['title'] != OwnerController::ROOM_DETAIL['toilet']){
                 $other +=  $one_points['count'];
             }
         }
@@ -2238,9 +2092,10 @@ class BasisDecorationService
      *   int 传值不一样 所用计算公式也不一样
      * @param $value
      * @param $value1
+     * @param $value2
      * @return int
      */
-    public static function algorithm($int,$value,$value1)
+    public static function algorithm($int,$value,$value1,$value2 = 1)
     {
         switch ($int){
             case $int == 1:
@@ -2252,8 +2107,15 @@ class BasisDecorationService
             case $int == 3:
                 $result = $value + $value1;
                 break;
+            case $int == 4:
+                // （点位×【10m】÷抓取的商品的长度）
+                $result = $value * $value1 / $value2;
+                break;
+            case $int == 5:
+                $result = $value + $value1 + $value2;
+                break;
         }
 
-        return (int)$result;
+        return $result;
     }
 }

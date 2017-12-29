@@ -717,6 +717,7 @@ class OrderAfterSale extends ActiveRecord
     }
 
     /**
+     * 上门退货
      * @param $data
      * @param $OrderAfterSale
      * @return array|int
@@ -826,59 +827,6 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>''
         ];
-//        $OrderGoods=OrderGoods::find()
-//            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-//            ->one();
-//        if ($OrderGoods->customer_service!=2){
-//            $tran = Yii::$app->db->beginTransaction();
-//            try{
-//                $GoodsOrder=GoodsOrder::find()
-//                    ->where(['order_no'=>$OrderAfterSale->order_no])
-//                    ->one();
-//                $user=User::find()
-//                    ->where(['id'=>$GoodsOrder->user_id])
-//                    ->one();
-//                $user->balance=($user->balance+$OrderGoods->goods_price*$OrderGoods->goods_number);
-//                $res=$user->save(false);
-//                if (!$res){
-//                    $tran->rollBack();
-//                }
-//                $supplier=Supplier::find()
-//                    ->where(['id'=>$GoodsOrder->supplier_id])
-//                    ->one();
-//                $supplier->balance=($supplier->balance-$OrderGoods->supplier_price*$OrderGoods->goods_number);
-//                $supplier->availableamount=$supplier->availableamount-$OrderGoods->supplier_price*$OrderGoods->goods_number;
-//                $res2=$supplier->save(false);
-//                if (!$res2){
-//                    $tran->rollBack();
-//                }
-//                $role_number=$supplier->shop_no;
-//                $transaction_no=GoodsOrder::SetTransactionNo($role_number);
-//                $supplier_accessdetail=new UserAccessdetail();
-//                $supplier_accessdetail->uid=$user->id;
-//                $supplier_accessdetail->role_id=6;
-//                $supplier_accessdetail->access_type=2;
-//                $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
-//                $supplier_accessdetail->order_no=$OrderGoods->order_no;
-//                $supplier_accessdetail->sku=$OrderGoods->sku;
-//                $supplier_accessdetail->create_time=time();
-//                $supplier_accessdetail->transaction_no=$transaction_no;
-//                $res3=$supplier_accessdetail->save(false);
-//                if (!$res3){
-//                    $tran->rollBack();
-//                }
-//                $OrderGoods->customer_service=2;
-//                $res4=$OrderGoods->save();
-//                if (!$res4){
-//                    $tran->rollBack();
-//                }
-//                $tran->commit();
-//            }catch (Exception $e){
-//                $tran->rollBack();
-//                $code=500;
-//                return $code;
-//            }
-//        }
         $data[]=[
             'type'=>'退款结果',
             'value'=>'成功',
@@ -1850,6 +1798,128 @@ class OrderAfterSale extends ActiveRecord
     }
 
     /**
+     * 上门退货操作
+     * @param $OrderAfterSale
+     * @return int
+     */
+    public  static  function  AfterReturnToDoorGoodsAction($OrderAfterSale)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $OrderAfterSale->supplier_express_confirm=1;
+            $OrderGoods=OrderGoods::find()
+                ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+                ->one();
+            $GoodsOrder=GoodsOrder::find()
+                ->where(['order_no'=>$OrderAfterSale->order_no])
+                ->one();
+            if (!$GoodsOrder || !$OrderGoods)
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+            if ($GoodsOrder->role_id==7) {
+                $userRole = User::findOne($GoodsOrder->user_id);
+            } else {
+                $userRole = Role::CheckUserRole($GoodsOrder->role_id)
+                    ->where(['uid' =>$GoodsOrder->user_id])
+                    ->one();
+            }
+            $refund_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+            $return_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
+            $userRole->balance+=$return_money;
+            $userRole->availableamount+=$return_money;
+            $res=$userRole->save(false);
+            if (!$res){
+                $tran->rollBack();
+            }
+            switch ($GoodsOrder->role_id)
+            {
+                case 2:
+                    $user_role_number=$userRole->worker_type_id;
+                    break;
+                case 3:
+                    $user_role_number=$userRole->decoration_company_id;
+                    break;
+                case 4:
+                    $user_role_number=$userRole->decoration_company_id;
+                    break;
+                case 5:
+                    $user_role_number=$userRole->id;
+                    break;
+                case 6:
+                    $user_role_number=$userRole->shop_no;
+                    break;
+                case 7:
+                    $user_role_number=$userRole->aite_cube_no;
+                    break;
+            }
+            $user_transaction_no=GoodsOrder::SetTransactionNo($user_role_number);
+            $user_access_detail=new UserAccessdetail();
+            if ($GoodsOrder->role_id=7)
+            {
+                $user_access_detail->uid=$userRole->id;
+            }else
+            {
+                $user_access_detail->uid=$userRole->role_id;
+            }
+            $user_access_detail->role_id=$GoodsOrder->role_id;
+            $user_access_detail->access_type=11;
+            $user_access_detail->access_money=$return_money;
+            $user_access_detail->order_no=$OrderGoods->order_no;
+            $user_access_detail->sku=$OrderGoods->sku;
+            $user_access_detail->create_time=time();
+            $user_access_detail->transaction_no=$user_transaction_no;
+            if (!$user_access_detail->save(false))
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+            $supplier=Supplier::find()
+                ->where(['id'=>$GoodsOrder->supplier_id])
+                ->one();
+            $supplier->balance=($supplier->balance-$refund_money);
+            $supplier->availableamount=$supplier->availableamount-$refund_money;
+            if (!$supplier->save(false)){
+                $tran->rollBack();
+            }
+            $role_number=$supplier->shop_no;
+            $transaction_no=GoodsOrder::SetTransactionNo($role_number);
+            $supplier_accessdetail=new UserAccessdetail();
+            $supplier_accessdetail->uid=$supplier->uid;
+            $supplier_accessdetail->role_id=6;
+            $supplier_accessdetail->access_type=2;
+            $supplier_accessdetail->access_money=$refund_money;
+            $supplier_accessdetail->order_no=$OrderGoods->order_no;
+            $supplier_accessdetail->sku=$OrderGoods->sku;
+            $supplier_accessdetail->create_time=time();
+            $supplier_accessdetail->transaction_no=$transaction_no;
+            $res3=$supplier_accessdetail->save(false);
+            if (!$res3){
+                $tran->rollBack();
+            }
+            $OrderGoods->customer_service=2;
+            $res4=$OrderGoods->save(false);
+            if (!$res4){
+                $tran->rollBack();
+            }
+            $res=$OrderAfterSale->save(false);
+            if (!$res){
+                $tran->rollBack();
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=1000;
+            return $code;
+        }
+    }
+
+    /**
      * @param $OrderAfterSale
      * @return int
      */
@@ -1884,7 +1954,7 @@ class OrderAfterSale extends ActiveRecord
                 $OrderAfterSale->supplier_confirm_time=time();
                 if ($OrderAfterSale->type==5)
                 {
-                    $code=self::AfterReturnGoodsAction($OrderAfterSale);
+                    $code=self::AfterReturnToDoorGoodsAction($OrderAfterSale);
                     if ($code!=200)
                     {
                         $tran->rollBack();

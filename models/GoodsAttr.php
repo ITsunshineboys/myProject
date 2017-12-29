@@ -319,19 +319,26 @@ class GoodsAttr extends ActiveRecord
     /**
      * find goods_id
      * @param $goods_id
+     * @param $name
+     *  $name  商品属性名称
      * @return array
      */
-    public static function findByGoodsIdUnit($goods_id)
+    public static function findByGoodsIdUnit($goods_id,$name)
     {
-        if (is_array($goods_id)) {
-            $str_id = implode(',', $goods_id);
-        } else {
-            $str_id = $goods_id;
-        }
-        $db = Yii::$app->db;
-        $sql = "SELECT goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value FROM goods_attr LEFT JOIN goods ON goods_attr.goods_id = goods. id LEFT JOIN goods_category ON goods.category_id = goods_category.id WHERE goods_id IN (" . $str_id . ")";
-        $standard = $db->createCommand($sql)->queryOne();
-        return $standard;
+        $row = self::find()
+            ->select('goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value,goods_attr.unit')
+            ->leftJoin('goods','goods_attr.goods_id = goods.id')
+            ->leftJoin('goods_category','goods.category_id = goods_category.id')
+            ->where(['goods_attr.goods_id'=>$goods_id])
+            ->andwhere(['like','goods_attr.name',$name])
+            ->asArray()
+            ->one();
+
+            if ($row['unit'] == 5){
+                $row['value'] = $row['value'] * 100;
+            }
+
+        return $row;
     }
 
     /**
