@@ -1980,12 +1980,12 @@ class GoodsOrder extends ActiveRecord
     {
         if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
         {
-            $code=self::AgreeRefundHandle($order_no,$sku,$user,$supplier);
+            $code=self::AgreeRefundHandle($order_no,$sku);
             return $code;
         }
         if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE)
         {
-            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
+            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$supplier);
             return $code;
         }
     }
@@ -2002,7 +2002,7 @@ class GoodsOrder extends ActiveRecord
      * @param $supplier
      * @return int
      */
-    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$supplier)
     {
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
@@ -2027,7 +2027,9 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-            $code=UserNewsRecord::AddOrderNewRecord($user,'取消订单反馈','7',"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$sku,self::STATUS_DESC_DETAILS);
+            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+            $role=User::findOne($GoodsOrder->user_id);
+            $code=UserNewsRecord::AddOrderNewRecord($role,'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if ($code!=200)
             {
                 $code=500;
@@ -2054,7 +2056,7 @@ class GoodsOrder extends ActiveRecord
      * @param $supplier
      * @return int
      */
-    public static function AgreeRefundHandle($order_no,$sku,$user,$supplier)
+    public static function AgreeRefundHandle($order_no,$sku)
     {
         $time=time();
 //        $role_number=$supplier->shop_no;
@@ -2133,7 +2135,7 @@ class GoodsOrder extends ActiveRecord
             }
             $user_transaction_no=self::SetTransactionNo(Role::GetUserRoleNumber($role,$GoodsOrder->role_id));
             $user_access_detail=new UserAccessdetail();
-            $user_access_detail->uid=$user->id;
+            $user_access_detail->uid=$GoodsOrder->user_id;
             $user_access_detail->role_id=$GoodsOrder->role_id;
             $user_access_detail->access_type=UserAccessdetail::ACCESS_TYPE_REFUND;
             $user_access_detail->access_money=$refund_money;
@@ -2142,6 +2144,13 @@ class GoodsOrder extends ActiveRecord
             $user_access_detail->create_time=$time;
             $user_access_detail->transaction_no=$user_transaction_no;
             if(!$user_access_detail->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已退至账户余额,点击查看详情",$order_no,$sku,self::STATUS_DESC_DETAILS);
+            if ($code!=200)
             {
                 $code=500;
                 $tran->rollBack();
