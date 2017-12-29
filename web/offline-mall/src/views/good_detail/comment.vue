@@ -22,7 +22,7 @@
     name: 'comment',
     props: ['headshotStyle', 'nameStyle', 'dateStyle']
 //    data () {
-//      return {}
+//      return {                                                                                                                                             }
 //    },
 //    methods: {}
   }

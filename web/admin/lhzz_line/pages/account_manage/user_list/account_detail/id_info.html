@@ -1,0 +1,52 @@
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <span class="col-md-2 control-label">姓名</span>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="account_detail.legal_person"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">身份证号</span>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="account_detail.identity_no"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">身份证正面</span>
+        <div class="col-md-10 form-control-static">
+            <img ng-src="{{account_detail.identity_card_front_image}}" alt="">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">身份证反面</span>
+        <div class="col-md-10 form-control-static">
+            <img ng-src="{{account_detail.identity_card_back_image}}" alt="">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">认证状态</span>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="account_detail.review_status_desc"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">认证状态</span>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="account_detail.review_status_desc"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-md-2 control-label">认证时间</span>
+        <div class="col-md-10 form-control-static">
+            <span ng-bind="account_detail.review_time"></span>
+        </div>
+    </div>
+</form>
+
+<button class="btn btn-default" ng-click="backPage()">返回</button>
