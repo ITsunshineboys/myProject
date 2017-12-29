@@ -402,7 +402,6 @@ class QuoteController extends Controller
         foreach ($post['value'] as $one_post){
             if (isset($one_post['id'])){
                 $value = EngineeringStandardCraft::findallbycity($post['city_code'],$one_post['id']);
-                var_dump($value);die;
                 $value->material = $one_post['value'] * 100;
                 $value->save();
             }elseif (isset($one_post['project_id'])){
