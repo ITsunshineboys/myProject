@@ -1855,6 +1855,7 @@ class OrderAfterSale extends ActiveRecord
      */
     public static  function  SupplierConfirm($OrderAfterSale,$type)
     {
+        var_dump($OrderAfterSale->type);die;
         $tran = Yii::$app->db->beginTransaction();
         try{
             if ($type=='received')
