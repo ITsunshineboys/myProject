@@ -556,7 +556,7 @@ class SupplieraccountController extends  Controller{
         $keyword=trim(Yii::$app->request->get('keyword',''));
         $where=1;
         if($keyword){
-            $where.=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
+            $where.=" and CONCAT(nickname,aite_cube_no,mobile) like '%{$keyword}%'";
         }
         if($status!=-1){
             $where.= $status == self::STATUS_ONLINE ? ' and  deadtime = 0':' and deadtime >0' ;
