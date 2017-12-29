@@ -400,23 +400,33 @@ class QuoteController extends Controller
                 $value = EngineeringStandardCraft::findallbycity($post['city_code'],$one_post['id']);
                 $value->material = $one_post['value'] * 100;
                 $value->save();
-            }else{
+            }elseif (isset($one_post['project_id'])){
                 $model =new EngineeringStandardCraft();
                 $model->city_code=$post['city_code'];
                 $model->material=$one_post['value']*100;
-                $model->project_id=$one_post['id'];
+                $model->project_id=$one_post['project_id'];
                 $model->save();
             }
         }
 
 
         foreach ($post['specification'] as $one_specification){
-            $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
-            if(is_numeric($specification['value'])){
-                $specification->value = $one_specification['value'] * 100;
-            }else{
-                $specification->value =$one_specification['value'];
+            if(isset($one_specification['id'])){
+                $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
+
+                if(is_numeric($specification['value'])){
+                    $specification->value = $one_specification['value'] * 100;
+                }else{
+                    $specification->value =$one_specification['value'];
+                }
+            }elseif (isset($one_specification['title'])){
+                $specification = new EngineeringStandardCarpentryCraft();
+                $specification->title=$one_specification['title'];
+                $specification->value=$one_specification['value']*100;
+                $specification->city_code=$post['city_code'];
+                $specification->unit=1;
             }
+
 
             $specification->save();
         }
