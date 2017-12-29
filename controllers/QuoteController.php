@@ -3091,13 +3091,13 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-      $sql="INSERT INTO `worker_type` VALUES ('69', '0', '龙骨抓取规格', null, '0', '4', '0');
-INSERT INTO `worker_type` VALUES ('70', '0', '丝杆抓取规格', null, '0', '4', '0');
-INSERT INTO `worker_type` VALUES ('71', '0', '石膏板抓取规格', null, '0', '4', '0');
-INSERT INTO `worker_type` VALUES ('72', '0', '细木工板抓取长度', null, '0', '4', '0');
-INSERT INTO `worker_type` VALUES ('73', '0', '细木工板抓取宽度', null, '0', '4', '0')";
-
-      $res =\Yii::$app->db->createCommand($sql)->execute();
-      var_dump($res);
+//      $sql="INSERT INTO `worker_type` VALUES ('69', '0', '龙骨抓取规格', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('70', '0', '丝杆抓取规格', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('71', '0', '石膏板抓取规格', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('72', '0', '细木工板抓取长度', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('73', '0', '细木工板抓取宽度', null, '0', '4', '0')";
+//
+//      $res =\Yii::$app->db->createCommand($sql)->execute();
+//      var_dump($res);
     }
 }

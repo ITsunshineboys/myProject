@@ -28,7 +28,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
     {
         $row =  self::find()
             ->asArray()
-            ->select('id,title,value,unit')
+            ->select('id,type_id,value,unit')
             ->where($where)
             ->all();
         if($row==null){
@@ -47,7 +47,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
 
         }else{
             foreach ($row as &$one){
-
+                $one['title']=WorkerType::find()->where(['id'=>$one['type_id']])->one()['worker_name'];
                 $one['unit'] = self::UNIT[$one['unit']];
                 $one['value'] = $one['value'] / 100;
                 if($one['value']==0){
