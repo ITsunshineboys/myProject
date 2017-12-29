@@ -2149,7 +2149,9 @@ class GoodsOrder extends ActiveRecord
         }
     }
 
-    /** check user Jurisdiction
+    /**
+     * 身份验证
+     * check user Jurisdiction
      * @param $order_no
      * @param $user
      * @return int

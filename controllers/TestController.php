@@ -313,19 +313,23 @@ class TestController extends Controller
 
     public  function  actionTestData()
     {
-        $request    = Yii::$app->request;
-        $order_no   = trim($request->post('order_no',''));
-        $sku        = trim($request->post('sku',''));
-        $time=trim($request->post('time',''));
-        $express=Express::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-        if ($express)
-        {
-            $express->receive_time=strtotime($time);
-            $express->save(false);
-        }else
-        {
-            echo 2;
-        };
+//        $request    = Yii::$app->request;
+//        $order_no   = trim($request->post('order_no',''));
+//        $sku        = trim($request->post('sku',''));
+//        $time=trim($request->post('time',''));
+//        $express=Express::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
+//        if ($express)
+//        {
+//            $express->receive_time=strtotime($time);
+//            $express->save(false);
+//        }else
+//        {
+//            echo 2;
+//        };
+
+        $user=User::find()->all();
+        return Json::encode($user);
+
     }
 
     public  function actionSendData(){
