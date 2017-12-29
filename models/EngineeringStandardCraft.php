@@ -131,4 +131,10 @@ class EngineeringStandardCraft  extends ActiveRecord
             ->where(['id'=>$id,'city_code'=>$city])
             ->one();
     }
+
+    public static function _findallbycity($city,$id){
+        return self::find()
+            ->where(['project_id'=>$id,'city_code'=>$city])
+            ->one();
+    }
 }

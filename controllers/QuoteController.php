@@ -311,7 +311,7 @@ class QuoteController extends Controller
 
         foreach ($post['material'] as $one_material){
 //            var_dump($one_material);
-            $material = EngineeringStandardCraft::findallbycity($post['city_code'],$one_material['id']);
+            $material = EngineeringStandardCraft::_findallbycity($post['city_code'],$one_material['id']);
             if($material){
                 $material->material = $one_material['value'] * 100;
                 $edit_material = $material->save();
