@@ -717,6 +717,7 @@ class OrderAfterSale extends ActiveRecord
     }
 
     /**
+     * 上门退货
      * @param $data
      * @param $OrderAfterSale
      * @return array|int
