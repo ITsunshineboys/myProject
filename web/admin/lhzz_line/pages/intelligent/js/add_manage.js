@@ -15,4 +15,22 @@ app.controller('add_manage_ctrl', function ($scope, $rootScope, _ajax, $http, $s
             name: $stateParams.index == 1 ? '编辑推荐' : '添加推荐'
         }
     ]
+    $scope.recommend_name = ''
+    $scope.vm = $scope
+    let obj = JSON.parse(sessionStorage.getItem('area'))
+    _ajax.get('/quote/homepage-district',{
+        province:obj.province,
+        city:obj.city
+    },function (res) {
+        console.log(res);
+        $scope.district = res.list
+        $scope.choose_district = $scope.district[0].district_code
+        _ajax.post('/quote/homepage-toponymy',{
+            province:obj.province,
+            city:obj.city,
+            district:$scope.choose_district
+        },function (res) {
+            console.log(res);
+        })
+    })
 })

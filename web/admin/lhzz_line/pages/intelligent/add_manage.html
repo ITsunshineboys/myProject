@@ -5,7 +5,7 @@
         <div class="form-group">
             <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>推荐名称</label>
             <div class="col-md-3">
-                <input ng-model="ctrlScope.recommend_name" name="recommend_name" maxlength="14" required ng-blur="change=!!add_manage.recommend_name.$error"
+                <input ng-model="vm.recommend_name" name="recommend_name" maxlength="14" required ng-blur="change=!!add_manage.recommend_name.$error"
                        ng-class="{'error':(add_manage.recommend_name.$invalid&&submitted)||(add_manage.recommend_name.$error.required&&change)}" class="form-control">
             </div>
             <p class="col-md-7">*限1~14个字符</p>
@@ -14,13 +14,13 @@
             <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>配对户型</label>
             <div class="col-md-3">
                 <label>选择区、县</label>
-                <select ng-change="change_county(cur_house_city)" ng-model="ctrlScope.cur_house_city" ng-options="item.district for item in all_house_city" class="form-control"></select>
+                <select ng-model="vm.choose_district" ng-options="item.district_code as item.district for item in district" class="form-control"></select>
                 <label>选择小区</label>
-                <select ng-change="change_toponymy(cur_toponymy_house)" ng-model="ctrlScope.cur_toponymy_house" ng-options="item.toponymy for item in all_toponymy" class="form-control"></select>
+                <select ng-model="ctrlScope.cur_toponymy_house" ng-options="item.toponymy for item in all_toponymy" class="form-control"></select>
                 <label>选择地址</label>
-                <select ng-change="change_street(cur_street)" ng-model="ctrlScope.cur_street" ng-options="item.street for item in all_street" class="form-control"></select>
+                <select ng-model="ctrlScope.cur_street" ng-options="item.street for item in all_street" class="form-control"></select>
                 <label>选择案例</label>
-                <select ng-model="ctrlScope.cur_case" ng-options="item.particulars for item in all_case" class="form-control"></select>
+                <select ng-options="item.particulars for item in all_case" class="form-control"></select>
             </div>
         </div>
         <div class="form-group">

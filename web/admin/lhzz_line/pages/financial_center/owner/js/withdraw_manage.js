@@ -34,7 +34,7 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
         itemsPerPage: 12,
         currentPage: 1,
         onChange: function () {
-            tablePages();
+            $scope.params.time_type!=''&&$scope.params.status!=''?tablePages():'';
         }
     }
     let tablePages = function () {
@@ -56,14 +56,17 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
         if(index == 1){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
                 $scope.params.time_start = ''
                 $scope.params.time_end = ''
+                $scope.Config.currentPage = 1
                 tablePages()
             }
         }else{
+            $scope.Config.currentPage = 1
             tablePages()
         }
         $scope.keyword = ''
@@ -72,6 +75,7 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal == ''&&oldVal!=''){
             $scope.params.keyword = ''
+            $scope.Config.currentPage = 1
             tablePages()
         }
     })
@@ -82,6 +86,7 @@ app.controller('withdraw_manage_ctrl',function ($rootScope,$state,_ajax,$scope,$
             $scope.params.time_start = ''
             $scope.params.time_end = ''
             $scope.params.status = '0'
+            $scope.Config.currentPage = 1
             tablePages()
         }
     }

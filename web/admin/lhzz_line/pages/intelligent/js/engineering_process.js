@@ -220,14 +220,14 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         })
                     }
                 }else{
-                    if(value1.id == undefined){
+                    if(value1.type_id == undefined){
                         arr1.push({
-                            title:value1.title,
+                            id:value1.id,
                             value:value1.material=='其它'?0:value1.material
                         })
                     }else{
                         arr1.push({
-                            id:value1.id,
+                            type_id:value1.type_id,
                             value:value1.material=='其它'?0:value1.material
                         })
                     }
@@ -244,7 +244,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         })
                     }else{
                         arr2.push({
-                            project:value1.id,
+                            add_id:value1.id,
                             value:value1.value,
                             coefficient:value1.coefficient,
                             series_or_style:value1.series_or_style
@@ -255,6 +255,9 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         }
         if(valid){
             if($stateParams.project == '木作工艺'){
+                console.log(arr);
+                console.log(arr1);
+                console.log(arr2);
                 _ajax.post('/quote/project-norm-woodwork-edit',{
                     city_code:obj.city,
                     value:arr,

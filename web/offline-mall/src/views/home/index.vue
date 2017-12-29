@@ -24,7 +24,7 @@
       </flexbox-item>
     </flexbox>
     <card :header="{title:'推荐'}" class="command">
-      <flexbox justify="center" align="flex-start" :gutter="0" slot="content" wrap="wrap">
+      <flexbox justify="space-around" align="flex-start" :gutter="0" slot="content" wrap="wrap">
         <flexbox-item :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                       v-for="(item,index) in recommended_list" :key="index">
           <img width="168px" height="160px" :src="item.image" alt="">
@@ -109,6 +109,28 @@
         console.log(res)
         this.recommended_list = res.data.recommend_second
       })
+    },
+    mounted () {
+      // 微信获取地址code
+      this.axios.post('/order/find-open-id', {
+        url: location.href
+      }, (res) => {
+        console.log(res)
+        console.log(res.data)
+        location.href = res.data
+        sessionStorage.setItem('wxCodeFlag', true)
+      })
+      // 获取openID
+      if (sessionStorage.getItem('wxCodeFlag')) {
+        this.openID = location.href.split('code=')[1].split('&state')[0]
+        this.axios.post('/order/get-open-id', {
+          code: this.openID
+        }, (res) => {
+          console.log(this.openID)
+          sessionStorage.setItem('openID', res.data)
+          console.log(res)
+        })
+      }
     }
   }
 </script>
@@ -169,14 +191,12 @@
   }
 
   /*推荐*/
-  .odd_col { /*推荐奇数项*/
-    padding-right: 7.5px;
-  }
-
-  .even_col { /*推荐偶数项*/
-    padding-left: 7.5px;
-  }
-
+  /*.odd_col{!*推荐奇数项*!*/
+  /*padding-right: 7.5px;*/
+  /*}*/
+  /*.even_col{!*推荐偶数项*!*/
+  /*padding-left: 7.5px;*/
+  /*}*/
   .command {
     margin-bottom: 10px;
   }

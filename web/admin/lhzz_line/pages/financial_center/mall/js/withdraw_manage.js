@@ -56,14 +56,17 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
         if(index == 1){
             if($scope.params.time_type == 'custom'){
                 if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
                 $scope.params.time_start = ''
                 $scope.params.time_end = ''
+                $scope.Config.currentPage = 1
                 tablePages()
             }
         }else{
+            $scope.Config.currentPage = 1
             tablePages()
         }
         $scope.keyword = ''
@@ -72,6 +75,7 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal == ''&&oldVal!=''){
             $scope.params.search = ''
+            $scope.Config.currentPage = 1
             tablePages()
         }
     })
@@ -82,6 +86,7 @@ app.controller('mall_withdraw_manage_ctrl',function ($scope,$stateParams,_ajax,$
             $scope.params.time_start = ''
             $scope.params.time_end = ''
             $scope.params.status = '0'
+            $scope.Config.currentPage = 1
             tablePages()
         }
     }
