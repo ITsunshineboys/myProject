@@ -342,24 +342,6 @@ class BasisDecorationService
      */
     public static function goodsAttr($goods,$value)
     {
-
-//        foreach ($goods as $one) {
-//            switch ($one) {
-//                case $one['title'] == self::goodsNames()['reticle']:
-//                    $reticle [] = $one;
-//                    break;
-//                case $one['title'] == self::goodsNames()['wire']:
-//                    $wire [] = $one;
-//                    break;
-//                case $one['title'] ==self::goodsNames()['spool']:
-//                    $spool = $one;
-//                    break;
-//                case $one['title'] ==self::goodsNames()['bottom_case']:
-//                    $bottom_case [] = $one;
-//                    break;
-//            }
-//        }
-
         foreach ($goods as $one){
             if ($one['title'] == $value){
                 $one_goods = $one;
@@ -1334,21 +1316,6 @@ class BasisDecorationService
         return $marble;
     }
 
-    /**
-     * 价格转化
-     * @param $goods
-     * @return array
-     */
-    public static function priceConversion($goods)
-    {
-        foreach ($goods as &$one_goods) {
-            $one_goods['platform_price'] =  $one_goods['platform_price'] / self::GOODS_PRICE_UNITS;
-            $one_goods['supplier_price'] =  $one_goods['supplier_price'] / self::GOODS_PRICE_UNITS;
-            $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / self::GOODS_PRICE_UNITS;
-        }
-
-        return $goods;
-    }
 
     /**
      * 条件判断
@@ -1491,51 +1458,6 @@ class BasisDecorationService
             }
         }
         return $goods_all;
-    }
-
-
-    /**
-     * 强电点位
-     * @param $points
-     * @param $post
-     * @return mixed
-     */
-    public static function strongCurrentPoints($points,$post)
-    {
-        foreach ($points as $one_points) {
-            switch ($one_points) {
-                case $one_points['place'] == self::HOUSE_MESSAGE['bedroom']:
-                    $bedroom = $one_points['points_total'] * $post['bedroom'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['kitchen']:
-                    $kitchen = $one_points['points_total'] * $post['kitchen'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['toilet']:
-                    $toilet = $one_points['points_total'] * $post['toilet'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['household']:
-                    $register = $one_points['points_total'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['drawing_room_balcony']:
-                    $balcony = $one_points['points_total'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['passage']:
-                    $passage = $one_points['points_total'];
-                    break;
-                case $one_points['place'] == self::HOUSE_MESSAGE['live_balcony']:
-                    $live_balcony= $one_points['points_total'];
-                    break;
-            }
-            if ($one_points['place'] == self::HOUSE_MESSAGE['guest_restaurant']) {
-                if ($post['hall'] != 2) {
-                    $hall = $one_points['points_total'] * $post['hall'];
-                } else {
-                    $hall = $one_points['points_total'] + 2;
-                }
-            }
-        }
-        $strong_current_points = $hall+$bedroom+$kitchen+$toilet+$register+$balcony+$passage+$live_balcony;
-        return $strong_current_points;
     }
 
     /**
@@ -1941,15 +1863,6 @@ class BasisDecorationService
         return $quantity;
     }
 
-
-    public static function electricianMaterial($goods,$price,$price1,$price2)
-    {
-        $goods['quantity'] = $price;
-        $goods['cost'] = $price1;
-        $goods['procurement'] = $price2;
-
-        return $goods;
-    }
 
     /**
      * 水路材料
