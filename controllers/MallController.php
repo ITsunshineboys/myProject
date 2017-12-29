@@ -1184,6 +1184,7 @@ class MallController extends Controller
             ]);
         }
 
+        $oldPid = $category->pid;
         $category->title = trim(Yii::$app->request->post('title', ''));
         $category->icon = trim(Yii::$app->request->post('icon', ''));
         null !== Yii::$app->request->post('offline_reason') && $category->offline_reason = trim(Yii::$app->request->post('offline_reason', ''));
@@ -1215,7 +1216,26 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$category->save()) {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            if (!$category->save(false)) {
+                $tran->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if ($oldPid != $category->pid) {
+                $category->updateSubCategoryPath($category->id);
+            }
+
+            $tran->commit();
+        } catch (\Exception $e) {
+            $tran->rollBack();
+
             $code = 500;
             return Json::encode([
                 'code' => $code,

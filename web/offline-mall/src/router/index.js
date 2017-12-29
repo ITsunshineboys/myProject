@@ -6,6 +6,7 @@ import City from '@/views/city/index'
 import Order from '@/views/order/index'             // 订单主页
 import Address from '@/views/address/index'         // 收货地址
 import Invoice from '@/views/invoice/index'         // 发票
+import PaySuccess from '@/views/pay_success/index'         // 支付成功
 import GoodDetail from '@/views/good_detail/index'
 import ClassList from '@/views/class/index'         // 分类列表
 
@@ -50,6 +51,11 @@ export default new Router({
       path: '/class',
       name: 'ClassList',
       component: ClassList
+    },
+    {
+      path: '/success',
+      name: 'PaySuccess',
+      component: PaySuccess
     }
   ]
 })

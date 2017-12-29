@@ -1736,7 +1736,9 @@ class OrderAfterSale extends ActiveRecord
             if ($GoodsOrder->role_id==7) {
                 $userRole = User::findOne($GoodsOrder->user_id);
             } else {
-                $userRole = Role::CheckUserRole($GoodsOrder->role_id)->where(['uid' =>$GoodsOrder->user_id])->one();
+                $userRole = Role::CheckUserRole($GoodsOrder->role_id)
+                    ->where(['uid' =>$GoodsOrder->user_id])
+                    ->one();
             }
             $refund_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
             $return_money=$OrderGoods->goods_price*$OrderGoods->goods_number;

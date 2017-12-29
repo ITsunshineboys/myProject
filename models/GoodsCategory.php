@@ -1042,7 +1042,7 @@ class GoodsCategory extends ActiveRecord
     /**
      * Set level and path by pid
      *
-     * @param $pid
+     * @param int $pid parent category id
      */
     public function setLevelPath($pid)
     {
@@ -1057,6 +1057,29 @@ class GoodsCategory extends ActiveRecord
                 $this->path = $this->id . ',';
                 $this->parent_title = '';
             }
+        }
+    }
+
+    /**
+     * Update sub-categories' paths
+     *
+     * @param $pid parent category id
+     */
+    public function updateSubCategoryPath($pid)
+    {
+        $children = self::find()->where(['pid' => $pid])->all();
+
+        if (!$children) {
+            return;
+        }
+
+        foreach ($children as $child) {
+            $child->path = $this->path . $child->id . ModelService::SEPARATOR_GENERAL;
+            if (!$child->save(false)) {
+                throw new \RuntimeException('category not saved');
+            }
+
+            $child->updateSubCategoryPath($child->id);
         }
     }
 
