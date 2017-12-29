@@ -149,7 +149,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
      */
     public static function getallapply(){
 
-        return $sum=(new Query())->from('effect_earnest')->where(['type'=>self::STATUS_NO])->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where('type=0 and (status = 1 or item = 1)')->count('*');
     }
 
 
@@ -161,7 +161,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
     public static function gettodayapply(){
         $today=self::getToday();
 
-        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->andWhere(['status'=>self::STATUS_PAYED])->count('*');
+        return $sum=(new Query())->from('effect_earnest')->where('create_time<='.$today[1])->andWhere('create_time>='.$today[0])->andWhere('type=0 and (status = 1 or item = 1)')->count('*');
     }
 
     /**

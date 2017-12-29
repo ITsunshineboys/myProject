@@ -415,17 +415,17 @@ class QuoteController extends Controller
 
 
         foreach ($post['specification'] as $one_specification){
-            if(isset($one_specification['id'])){
-                $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['id']);
+            if(isset($one_specification['type_id'])){
+                $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['type_id']);
 
                 if(is_numeric($specification['value'])){
                     $specification->value = $one_specification['value'] * 100;
                 }else{
                     $specification->value =$one_specification['value'];
                 }
-            }elseif (isset($one_specification['type_id'])){
+            }elseif (isset($one_specification['id'])){
                 $specification = new EngineeringStandardCarpentryCraft();
-                $specification->type_id=$one_specification['type_id'];
+                $specification->type_id=$one_specification['id'];
                 $specification->value=$one_specification['value']*100;
                 $specification->city_code=$post['city_code'];
                 $specification->unit=1;
@@ -3091,12 +3091,12 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-$sql="update  engineering_standard_carpentry_craft set type_id=69 where id=1;
-update  engineering_standard_carpentry_craft set type_id=70 where id=2;
-update  engineering_standard_carpentry_craft set type_id=71 where id=3;
-update  engineering_standard_carpentry_craft set type_id=72 where id=4;
-update  engineering_standard_carpentry_craft set type_id=73 where id=5;";
-      $res =\Yii::$app->db->createCommand($sql)->execute();
-      var_dump($res);
+//$sql="update  engineering_standard_carpentry_craft set type_id=69 where id=1;
+//update  engineering_standard_carpentry_craft set type_id=70 where id=2;
+//update  engineering_standard_carpentry_craft set type_id=71 where id=3;
+//update  engineering_standard_carpentry_craft set type_id=72 where id=4;
+//update  engineering_standard_carpentry_craft set type_id=73 where id=5;";
+//      $res =\Yii::$app->db->createCommand($sql)->execute();
+//      var_dump($res);
     }
 }
