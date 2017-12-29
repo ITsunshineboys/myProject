@@ -2185,7 +2185,7 @@ class QuoteController extends Controller
         return Json::encode([
             'code' => $code,
             'msg'  => 'ok',
-            'list' => (new Effect)->findCode($city_code),
+            'list' => Effect::findCode($city_code),
         ]);
 
     }
