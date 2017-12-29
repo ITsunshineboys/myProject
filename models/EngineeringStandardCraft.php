@@ -129,7 +129,7 @@ class EngineeringStandardCraft  extends ActiveRecord
     public static function findallbycity($city,$id){
         return self::find()
             ->asArray()
-            ->where(['project_id'=>$id,'city_code'=>$city])
+            ->where(['id'=>$id,'city_code'=>$city])
             ->one();
     }
 }
