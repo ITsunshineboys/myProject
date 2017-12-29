@@ -554,7 +554,7 @@ class SupplieraccountController extends  Controller{
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', Supplier::PAGE_SIZE_DEFAULT);
         $keyword=trim(Yii::$app->request->get('keyword',''));
-        $where="last_role_id_app=7";
+        $where=1;
         if($keyword){
             $where.=" and CONCAT(nickname,aite_cube_no) like '%{$keyword}%'";
         }

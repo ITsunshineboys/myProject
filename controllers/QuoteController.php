@@ -3088,7 +3088,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-   var_dump(User::find()->where(['id'=>39])->asArray()->one());
+   var_dump(User::find()->asArray()->all());
 
     }
 }
