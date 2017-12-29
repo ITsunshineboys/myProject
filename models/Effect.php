@@ -627,11 +627,11 @@ class Effect extends ActiveRecord
      */
     public static function findCode($province,$city)
     {
-        return self::find()
+        return EffectToponymy::find()
             ->asArray()
             ->select('district,district_code')
-            ->where(['and',['province_code'=>$province],['city_code'=>$city],['type'=>self::TYPE_STATUS_YES]])
-            ->groupBy('district')
+            ->where(['and',['city_code'=>$city]])
+            ->groupBy('district_code')
             ->all();
     }
 
@@ -643,13 +643,12 @@ class Effect extends ActiveRecord
      * @param $district
      * @return array|ActiveRecord[]
      */
-    public static function findToponymy($province,$city,$district)
+    public static function findToponymy($city,$district)
     {
         return self::find()
             ->asArray()
             ->select('toponymy')
             ->where(['and',
-                ['province_code'=>$province],
                 ['city_code'=>$city],
                 ['district_code'=>$district],
                 ['type'=>self::TYPE_STATUS_YES]
