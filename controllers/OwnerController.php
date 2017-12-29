@@ -78,7 +78,7 @@ class OwnerController extends Controller
      * 工种类型 id
      */
     const WORK_CATEGORY = [
-        'plumber'           => 2,  // 水电工id
+        'plumber'           => 9,  // 水电工id
         'waterproof_worker' => 3,  // 防水工id
         'woodworker'        => 1,  // 木工id
         'painters'          => 4,  // 油漆工id
@@ -415,9 +415,58 @@ class OwnerController extends Controller
      */
     public function actionWaterway()
     {
-        $post = \Yii::$app->request->get();
+        $get = \Yii::$app->request->get();
         //人工价格
-        $waterway_labor = LaborCost::profession($post,self::WORK_CATEGORY['plumber']);
+
+        //查询弱电所需要材料
+        $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL);
+        if ($goods == null){
+            $code = 1061;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data' => [
+                    'waterway_labor_price' => [],
+                    'waterway_material_price' => [],
+                ]
+            ]);
+        }
+//        $judge = BasisDecorationService::priceConversion($goods);
+        $waterway_current = BasisDecorationService::judge($goods, $get);
+
+
+        //当地工艺
+        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterway'], $get['city']);
+
+
+
+        //材料总费用
+        $material_price = BasisDecorationService::waterwayGoods($waterway_count, $waterway_current,$craft);
+        $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => '成功',
+            'data' => [
+//                'waterway_labor_price' => $labor_all_cost,
+                'waterway_material_price' => $material,
+            ]
+        ]);
+    }
+
+
+    /**
+     * 水电工 工人费用
+     * @return string
+     */
+    public function actionPlumberPrice()
+    {
+        $get = \Yii::$app->request->get();
+        //人工价格
+
+
+        $waterway_labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
+        var_dump($waterway_labor);die;
         $worker_kind_details = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
         foreach ($worker_kind_details as $one_){
             if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['strong_current']){
@@ -524,41 +573,13 @@ class OwnerController extends Controller
         $weak_     = BasisDecorationService::laborFormula($weak_count,$weak);
         $strong_   = BasisDecorationService::laborFormula($strong_count,$strong);
         $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_) * $waterway_labor['univalence'];
-        $labor_all_cost['worker_kind'] = $waterway_labor['worker_kind'];
+        $labor_all_cost['worker_kind'] = '水电工';
 
-        //查询弱电所需要材料
-        $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'waterway_labor_price' => [],
-                    'waterway_material_price' => [],
-                ]
-            ]);
-        }
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $waterway_current = BasisDecorationService::judge($goods, $post);
-
-
-        //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterway'], $post['city']);
-
-
-
-        //材料总费用
-        $material_price = BasisDecorationService::waterwayGoods($waterway_count, $waterway_current,$craft);
-        $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
 
         return Json::encode([
-            'code' => 200,
-            'msg' => '成功',
-            'data' => [
-                'waterway_labor_price' => $labor_all_cost,
-                'waterway_material_price' => $material,
-            ]
+           'code' => 200,
+           'msg' => 'ok',
+           'data' => $labor_all_cost,
         ]);
     }
 
