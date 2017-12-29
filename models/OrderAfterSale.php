@@ -1855,15 +1855,12 @@ class OrderAfterSale extends ActiveRecord
      */
     public static  function  SupplierConfirm($OrderAfterSale,$type)
     {
-        var_dump($OrderAfterSale->type);die;
         $tran = Yii::$app->db->beginTransaction();
         try{
             if ($type=='received')
             {
-                if ($OrderAfterSale->type==OrderAfterSale::AFTER_SALE_SERVICES[1])
+                if ($OrderAfterSale->type==1)
                 {
-
-                    echo 1;exit;
                     $code=self::AfterReturnGoodsAction($OrderAfterSale);
                     if ($code!=200)
                     {
@@ -1872,7 +1869,7 @@ class OrderAfterSale extends ActiveRecord
                         return $code;
                     }
                 }
-                if ($OrderAfterSale->type==OrderAfterSale::AFTER_SALE_SERVICES[2])
+                if ($OrderAfterSale->type==2)
                 {
                     $OrderAfterSale->supplier_express_confirm=1;
                     $express=Express::findOne($OrderAfterSale->buyer_express_id);
@@ -1885,7 +1882,7 @@ class OrderAfterSale extends ActiveRecord
             }else{
                 $OrderAfterSale->supplier_confirm=1;
                 $OrderAfterSale->supplier_confirm_time=time();
-                if ($OrderAfterSale->type==OrderAfterSale::AFTER_SALE_SERVICES[5])
+                if ($OrderAfterSale->type==5)
                 {
                     $code=self::AfterReturnGoodsAction($OrderAfterSale);
                     if ($code!=200)
