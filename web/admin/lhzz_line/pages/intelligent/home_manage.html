@@ -1,7 +1,7 @@
 <div class="home_manage">
     <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
     <div class="search form-inline clearfix">
-        <button class="btn btn-default" ng-click="add_manage()"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加</button>
+        <button class="btn btn-default" ui-sref="add_manage"><i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>添加</button>
         <button class="btn btn-default" ng-click="cur_sort()">保存</button>
     </div>
     <table class="table table-responsive table-hover">
@@ -21,7 +21,7 @@
             <td class="text-left">{{item.district}}</td>
             <td ng-class="{'cur_status':!+item.status}" class="text-left">{{!+item.status?'关闭':'开启'}}</td>
             <td class="text-left" style="color: #5677FC;">
-                <span ng-click="go_edit_manage(item)">编辑</span>
+                <span><a ui-sref="add_manage({index:1})">编辑</a></span>
                 <span style="margin-right: 10px;margin-left: 10px;" ng-click="delete_manage(item)">删除</span>
                 <span style="cursor: pointer" ng-click="change_status(item)">{{!+item.status?'开启':'关闭'}}</span>
             </td>
