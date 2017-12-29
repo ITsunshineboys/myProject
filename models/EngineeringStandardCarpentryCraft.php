@@ -35,6 +35,7 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
             $row=self::find()
                 ->select('title,value,unit')
                 ->asArray()
+                ->where($where)
                 ->distinct('title')
                 ->all();
            foreach ($row as &$a){
