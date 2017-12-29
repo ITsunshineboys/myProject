@@ -50,6 +50,8 @@ class UserCashregister extends \yii\db\ActiveRecord
             4=>self::CASH_IN,
             5=>self::REJECT,
             6=>self::GOODSPAYMENT,
+            7=>7,
+            11=>11,
         ];
     const STATUS_CSED='已提现';
     const CASH_STATUS_ALL=4;
