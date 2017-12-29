@@ -1729,7 +1729,7 @@ class OrderAfterSale extends ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-            echo 1;die;
+
             $OrderAfterSale->supplier_express_confirm=1;
             $express=Express::findOne($OrderAfterSale->buyer_express_id);
             $express->receive_time=time();
@@ -1861,6 +1861,8 @@ class OrderAfterSale extends ActiveRecord
             {
                 if ($OrderAfterSale->type==OrderAfterSale::AFTER_SALE_SERVICES[1])
                 {
+
+                    echo 1;exit;
                     $code=self::AfterReturnGoodsAction($OrderAfterSale);
                     if ($code!=200)
                     {
