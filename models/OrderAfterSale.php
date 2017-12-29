@@ -40,6 +40,21 @@ class OrderAfterSale extends ActiveRecord
         1=>self::AFTER_SALE_HANDLE_AGREE_DESC,
         2=>self::AFTER_SALE_HANDLE_DISAGREE_DESC
     ];
+
+    const AFTER_SALE_UN_HANDLE='unhandle';
+    const AFTER_SALE_USER_UN_SHIPPED='user_unshipped';
+    const AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED='supplier_unconfirm_received';
+    const AFTER_SALE_SUPPLIER_UN_SHIPPED='supplier_unshipped';
+    const AFTER_SALE_USER_UN_CONFIRM_RECEIVED='user_unconfirm_received';
+    const AFTER_SALE_SUPPLIER_UN_SEND='supplier_unsend';
+    const AFTER_SALE_USER_UN_CONFIRM_EXCHANGE='user_unconfirm_exchange';
+    const AFTER_SALE_SUPPLIER_UN_CONFIRM_RETURN_TO_DOOR='supplier_unconfirm_retunrn_to_door';
+    const AFTER_SALE_SHIPPED='shipped';
+    const AFTER_SALE_COUNT_DOWN='countdown';
+    const AFTER_SALE_USER_UN_CONFIRM_REPAIR='user_unconfirm_repair';
+    const AFTER_SALE_USER_UN_CONFIRM='unconfirm';
+    const AFTER_STATUS_IN='in';
+    const AFTER_STATUS_OVER='over';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -143,7 +158,7 @@ class OrderAfterSale extends ActiveRecord
                     $OrderAfterSaleImage=new OrderAfterSaleImage();
                     $OrderAfterSaleImage->after_sale_id=$OrderAfterSale->id;
                     $OrderAfterSaleImage->image=$uploads;
-                    if (!$OrderAfterSaleImage->save()){
+                    if (!$OrderAfterSaleImage->save(false)){
                         $tran->rollBack();
                         $code=500;
                         return $code;
@@ -403,7 +418,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>'',
             'number'=>'',
-            'code'=>'unhandle',
+            'code'=>self::AFTER_SALE_UN_HANDLE,
             'status'=>'in'
         ];
          return [
@@ -568,37 +583,37 @@ class OrderAfterSale extends ActiveRecord
         $code=1000;
         switch ($stage)
         {
-            case 'user_unshipped':
+            case self::AFTER_SALE_USER_UN_SHIPPED:
                 if (!$OrderAfterSale->buyer_express_id)
                 {
                     $code=200;
                 }
                 break;
-            case 'supplier_unconfirm_received':
+            case self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED:
                 if (!$OrderAfterSale->supplier_express_confirm==1)
                 {
                     $code=200;
                 }
                 break;
-            case 'supplier_unshipped':
+            case self::AFTER_SALE_SUPPLIER_UN_SHIPPED:
                 if (!$OrderAfterSale->supplier_express_id)
                 {
                     $code=200;
                 }
                 break;
-            case 'user_unconfirm_received':
+            case self::AFTER_SALE_USER_UN_CONFIRM_RECEIVED:
                 if (!$OrderAfterSale->buyer_express_confirm)
                 {
                     $code=200;
                 }
                 break;
-            case 'supplier_unsend':
+            case self::AFTER_SALE_SUPPLIER_UN_SEND:
                 if (!$OrderAfterSale->supplier_send_man)
                 {
                     $code=200;
                 }
                 break;
-            case 'user_unconfirm_exchange':
+            case self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE:
                 if ($OrderAfterSale->buyer_confirm!=1)
                 {
                     $code=200;
@@ -606,7 +621,7 @@ class OrderAfterSale extends ActiveRecord
 
                 break;
                 //此处代码单词写错，不易更改
-            case 'supplier_unconfirm_retunrn_to_door':
+            case self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RETURN_TO_DOOR:
                 if (!$OrderAfterSale->supplier_confirm)
                 {
                     $code=200;
@@ -630,7 +645,7 @@ class OrderAfterSale extends ActiveRecord
                     'content'=>'',
                     'number'=>'',
                     'code'=>'',
-                    'status'=>'in'
+                    'status'=>self::AFTER_STATUS_IN
                 ];
                 $data[]=[
                     'type'=>'售后完成',
@@ -722,7 +737,7 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>'',
                         'number'=>'',
                         'code'=>'',
-                        'status'=>'in'
+                        'status'=>self::AFTER_STATUS_IN
                     ];
                     break;
                 case 'supplier':
@@ -733,8 +748,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unsend',
-                        'status'=>'in'
+                        'code'=>self::AFTER_SALE_SUPPLIER_UN_SEND,
+                        'status'=>self::AFTER_STATUS_IN
                     ];
                     break;
             }
@@ -743,7 +758,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unsend');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -772,7 +787,7 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>'',
                         'number'=>'',
                         'code'=>'',
-                        'status'=>'in'
+                        'status'=>self::AFTER_STATUS_IN
                     ];
                     break;
                 case 'supplier':
@@ -783,7 +798,7 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unconfirm_retunrn_to_door',
+                        'code'=>self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RETURN_TO_DOOR,
                         'status'=>'in'
                     ];
                     break;
@@ -794,7 +809,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unconfirm_retunrn_to_door');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RETURN_TO_DOOR);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -811,59 +826,59 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>''
         ];
-        $OrderGoods=OrderGoods::find()
-            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-            ->one();
-        if ($OrderGoods->customer_service!=2){
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $GoodsOrder=GoodsOrder::find()
-                    ->where(['order_no'=>$OrderAfterSale->order_no])
-                    ->one();
-                $user=User::find()
-                    ->where(['id'=>$GoodsOrder->user_id])
-                    ->one();
-                $user->balance=($user->balance+$OrderGoods->goods_price*$OrderGoods->goods_number);
-                $res=$user->save(false);
-                if (!$res){
-                    $tran->rollBack();
-                }
-                $supplier=Supplier::find()
-                    ->where(['id'=>$GoodsOrder->supplier_id])
-                    ->one();
-                $supplier->balance=($supplier->balance-$OrderGoods->supplier_price*$OrderGoods->goods_number);
-                $supplier->availableamount=$supplier->availableamount-$OrderGoods->supplier_price*$OrderGoods->goods_number;
-                $res2=$supplier->save(false);
-                if (!$res2){
-                    $tran->rollBack();
-                }
-                $role_number=$supplier->shop_no;
-                $transaction_no=GoodsOrder::SetTransactionNo($role_number);
-                $supplier_accessdetail=new UserAccessdetail();
-                $supplier_accessdetail->uid=$user->id;
-                $supplier_accessdetail->role_id=6;
-                $supplier_accessdetail->access_type=2;
-                $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
-                $supplier_accessdetail->order_no=$OrderGoods->order_no;
-                $supplier_accessdetail->sku=$OrderGoods->sku;
-                $supplier_accessdetail->create_time=time();
-                $supplier_accessdetail->transaction_no=$transaction_no;
-                $res3=$supplier_accessdetail->save(false);
-                if (!$res3){
-                    $tran->rollBack();
-                }
-                $OrderGoods->customer_service=2;
-                $res4=$OrderGoods->save();
-                if (!$res4){
-                    $tran->rollBack();
-                }
-                $tran->commit();
-            }catch (Exception $e){
-                $tran->rollBack();
-                $code=500;
-                return $code;
-            }
-        }
+//        $OrderGoods=OrderGoods::find()
+//            ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
+//            ->one();
+//        if ($OrderGoods->customer_service!=2){
+//            $tran = Yii::$app->db->beginTransaction();
+//            try{
+//                $GoodsOrder=GoodsOrder::find()
+//                    ->where(['order_no'=>$OrderAfterSale->order_no])
+//                    ->one();
+//                $user=User::find()
+//                    ->where(['id'=>$GoodsOrder->user_id])
+//                    ->one();
+//                $user->balance=($user->balance+$OrderGoods->goods_price*$OrderGoods->goods_number);
+//                $res=$user->save(false);
+//                if (!$res){
+//                    $tran->rollBack();
+//                }
+//                $supplier=Supplier::find()
+//                    ->where(['id'=>$GoodsOrder->supplier_id])
+//                    ->one();
+//                $supplier->balance=($supplier->balance-$OrderGoods->supplier_price*$OrderGoods->goods_number);
+//                $supplier->availableamount=$supplier->availableamount-$OrderGoods->supplier_price*$OrderGoods->goods_number;
+//                $res2=$supplier->save(false);
+//                if (!$res2){
+//                    $tran->rollBack();
+//                }
+//                $role_number=$supplier->shop_no;
+//                $transaction_no=GoodsOrder::SetTransactionNo($role_number);
+//                $supplier_accessdetail=new UserAccessdetail();
+//                $supplier_accessdetail->uid=$user->id;
+//                $supplier_accessdetail->role_id=6;
+//                $supplier_accessdetail->access_type=2;
+//                $supplier_accessdetail->access_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+//                $supplier_accessdetail->order_no=$OrderGoods->order_no;
+//                $supplier_accessdetail->sku=$OrderGoods->sku;
+//                $supplier_accessdetail->create_time=time();
+//                $supplier_accessdetail->transaction_no=$transaction_no;
+//                $res3=$supplier_accessdetail->save(false);
+//                if (!$res3){
+//                    $tran->rollBack();
+//                }
+//                $OrderGoods->customer_service=2;
+//                $res4=$OrderGoods->save();
+//                if (!$res4){
+//                    $tran->rollBack();
+//                }
+//                $tran->commit();
+//            }catch (Exception $e){
+//                $tran->rollBack();
+//                $code=500;
+//                return $code;
+//            }
+//        }
         $data[]=[
             'type'=>'退款结果',
             'value'=>'成功',
@@ -917,7 +932,7 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unsend',
+                        'code'=>self::AFTER_SALE_SUPPLIER_UN_SEND,
                         'status'=>'in'
                     ];
                     break;
@@ -927,7 +942,7 @@ class OrderAfterSale extends ActiveRecord
         }
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unsend');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -937,7 +952,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unsend');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -968,7 +983,7 @@ class OrderAfterSale extends ActiveRecord
                                 'phone'=>'',
                                 'content'=>'0',
                                 'number'=>'',
-                                'code'=>'user_unconfirm_repair',
+                                'code'=>self::AFTER_SALE_USER_UN_CONFIRM_REPAIR,
                                 'status'=>'in'
                             ];
                             break;
@@ -980,7 +995,7 @@ class OrderAfterSale extends ActiveRecord
                                 'phone'=>'',
                                 'content'=>'',
                                 'number'=>'',
-                                'code'=>'user_unconfirm_exchange',
+                                'code'=>self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE,
                                 'status'=>'in'
                             ];
                             break;
@@ -995,7 +1010,7 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'0',
                         'number'=>'',
-                        'code'=>'unconfirm',
+                        'code'=>self::AFTER_SALE_USER_UN_CONFIRM,
                         'status'=>'in'
                     ];
                     break;
@@ -1004,7 +1019,7 @@ class OrderAfterSale extends ActiveRecord
         }
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unconfirm_exchange');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1013,7 +1028,7 @@ class OrderAfterSale extends ActiveRecord
         }
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unconfirm_exchange');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1074,7 +1089,7 @@ class OrderAfterSale extends ActiveRecord
 //                        'phone'=>'',
 //                        'content'=>'',
 //                        'number'=>'',
-//                        'code'=>'user_unshipped',
+//                        'code'=>self::AFTER_SALE_USER_UN_SHIPPED,
 //                        'status'=>'in'
 //                    ];
 //                    break;
@@ -1103,7 +1118,7 @@ class OrderAfterSale extends ActiveRecord
 //            'phone'=>'',
 //            'content'=>$buyer_express->waybillname,
 //            'number'=>$buyer_express->waybillnumber,
-//            'code'=>'shipped',
+//            'code'=>self::AFTER_SALE_SHIPPED,
 //            'status'=>''
 //        ];
 //        $time=15*24*60*60+$buyer_express->create_time-time();
@@ -1150,7 +1165,7 @@ class OrderAfterSale extends ActiveRecord
 //                        'content'=>$time,
 //                        'phone'=>'',
 //                        'number'=>'',
-//                        'code'=>'supplier_unconfirm_received',
+//                        'code'=>self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED,
 //                        'status'=>'in'
 //                    ];
 //                    break;
@@ -1262,8 +1277,8 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'user_unshipped',
-                        'status'=>'in'
+                        'code'=>self::AFTER_SALE_USER_UN_SHIPPED,
+                        'status'=>self::AFTER_STATUS_IN
                     ];
                     break;
                 case 'supplier':
@@ -1275,7 +1290,7 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>'',
                         'number'=>'',
                         'code'=>'',
-                        'status'=>'in'
+                        'status'=>self::AFTER_STATUS_IN
                     ];
                     break;
             }
@@ -1283,7 +1298,7 @@ class OrderAfterSale extends ActiveRecord
         }
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unshipped');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_SHIPPED);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1301,7 +1316,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$buyer_express->waybillname,
             'number'=>$buyer_express->waybillnumber,
-            'code'=>'shipped',
+            'code'=>self::AFTER_SALE_SHIPPED,
             'status'=>''
         ];
         $time=15*24*60*60+$buyer_express->create_time-time();
@@ -1326,7 +1341,7 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>$time,
                         'phone'=>'',
                         'number'=>'',
-                        'code'=>'countdown',
+                        'code'=>self::AFTER_SALE_COUNT_DOWN,
                         'status'=>'in'
                     ];
                     break;
@@ -1338,7 +1353,7 @@ class OrderAfterSale extends ActiveRecord
                         'content'=>$time,
                         'phone'=>'',
                         'number'=>'',
-                        'code'=>'supplier_unconfirm_received',
+                        'code'=>self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED,
                         'status'=>'in'
                     ];
                     break;
@@ -1348,7 +1363,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unconfirm_received');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1405,7 +1420,7 @@ class OrderAfterSale extends ActiveRecord
                         'phone'=>'',
                         'content'=>'',
                         'number'=>'',
-                        'code'=>'user_unshipped',
+                        'code'=>self::AFTER_SALE_USER_UN_SHIPPED,
                         'status'=>'in'
                     ];
                     break;
@@ -1426,7 +1441,7 @@ class OrderAfterSale extends ActiveRecord
         }
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unshipped');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_SHIPPED);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1443,7 +1458,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content' =>$buyer_express->waybillname,
             'number'=>$buyer_express->waybillnumber,
-            'code'=>'shipped',
+            'code'=>self::AFTER_SALE_SHIPPED,
             'status'=>''
         ];
 //            $time=15*24*60*60+$buyer_express->create_time-time();
@@ -1469,7 +1484,7 @@ class OrderAfterSale extends ActiveRecord
 
             if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
             {
-                $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unconfirm_received');
+                $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED);
                 if (!is_numeric($code))
                 {
                     $data[]=$code;
@@ -1492,7 +1507,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'countdown',
+                            'code'=>self::AFTER_SALE_COUNT_DOWN,
                             'status'=>'in'
                         ];
                         break;
@@ -1504,7 +1519,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'supplier_unconfirm_received',
+                            'code'=>self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED,
                             'status'=>'in'
                         ];
                         break;
@@ -1545,7 +1560,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>'',
                             'number'=>'',
-                            'code'=>'supplier_unshipped',
+                            'code'=>self::AFTER_SALE_SUPPLIER_UN_SHIPPED,
                             'status'=>'in'
                         ];
                         break;
@@ -1555,7 +1570,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'supplier_unshipped');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SHIPPED);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1572,7 +1587,7 @@ class OrderAfterSale extends ActiveRecord
             'phone'=>'',
             'content'=>$supplier_express->waybillname,
             'number'=>$supplier_express->waybillnumber,
-            'code'=>'shipped',
+            'code'=>self::AFTER_SALE_SHIPPED,
             'status'=>''
         ];
 
@@ -1600,7 +1615,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,'user_unconfirm_received');
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_RECEIVED);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1618,7 +1633,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'user_unconfirm_received',
+                            'code'=>self::AFTER_SALE_USER_UN_CONFIRM_RECEIVED,
                             'status'=>'in'
                         ];
                         break;
@@ -1630,7 +1645,7 @@ class OrderAfterSale extends ActiveRecord
                             'phone'=>'',
                             'content'=>$time,
                             'number'=>'',
-                            'code'=>'countdown',
+                            'code'=>self::AFTER_SALE_COUNT_DOWN,
                             'status'=>'in'
                         ];
                         break;
@@ -1714,6 +1729,7 @@ class OrderAfterSale extends ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
+            echo 1;die;
             $OrderAfterSale->supplier_express_confirm=1;
             $express=Express::findOne($OrderAfterSale->buyer_express_id);
             $express->receive_time=time();
@@ -1866,6 +1882,16 @@ class OrderAfterSale extends ActiveRecord
             }else{
                 $OrderAfterSale->supplier_confirm=1;
                 $OrderAfterSale->supplier_confirm_time=time();
+                if ($OrderAfterSale->type==OrderAfterSale::AFTER_SALE_SERVICES[5])
+                {
+                    $code=self::AfterReturnGoodsAction($OrderAfterSale);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=1000;
+                        return $code;
+                    }
+                }
             }
             $res=$OrderAfterSale->save(false);
             if (!$res){
