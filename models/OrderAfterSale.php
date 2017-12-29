@@ -1794,7 +1794,7 @@ class OrderAfterSale extends ActiveRecord
             {
                 $user_access_detail->uid=$userRole->role_id;
             }
-            $user_access_detail->role_id=$userRole->role_id;
+            $user_access_detail->role_id=$GoodsOrder->role_id;
             $user_access_detail->access_type=11;
             $user_access_detail->access_money=$return_money;
             $user_access_detail->order_no=$OrderGoods->order_no;
