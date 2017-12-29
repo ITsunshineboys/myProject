@@ -647,18 +647,15 @@ class Effect extends ActiveRecord
      * @param $district
      * @return array|ActiveRecord[]
      */
-    public static function findToponymy($city,$district)
+    public static function findToponymy($district)
     {
-        return self::find()
+        $data= EffectToponymy::find()
             ->asArray()
-            ->select('toponymy')
-            ->where(['and',
-                ['city_code'=>$city],
-                ['district_code'=>$district],
-                ['type'=>self::TYPE_STATUS_YES]
-            ])
+            ->select('toponymy,street')
+            ->where(['district_code'=>$district])
             ->groupBy('toponymy')
             ->all();
+        return $data;
     }
 
     /**

@@ -2198,15 +2198,16 @@ class QuoteController extends Controller
     {
         $request    = \Yii::$app->request;
 //        $province   = trim($request->post('province',''));
-        $city       = trim($request->post('city',''));
-        $district   = trim($request->post('district',''));
+//        $city       = trim($request->post('city',''));
+        $district   = trim($request->get('district',''));
         $code = 200;
         return Json::encode([
             'code' => $code,
             'msg'  => 'ok',
-            'list' => (new Effect)->findToponymy($city,$district),
+            'list' => Effect::findToponymy($district),
         ]);
     }
+
 
     /**
      * homepage street find
