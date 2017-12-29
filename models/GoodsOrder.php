@@ -2027,6 +2027,14 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
+            $code=UserNewsRecord::AddOrderNewRecord('','取消订单反馈',',','取消订单反馈，您的订单已被驳回，原因xxx',$order_no,$sku,'');
+            if ($code!=200)
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
             $tran->commit();
             $code=200;
             return $code;
@@ -2035,6 +2043,7 @@ class GoodsOrder extends ActiveRecord
             $code=500;
             return $code;
         }
+
     }
 
     /**
