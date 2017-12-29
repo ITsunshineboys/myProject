@@ -417,7 +417,7 @@ class QuoteController extends Controller
         foreach ($post['specification'] as $one_specification){
             if(isset($one_specification['type_id'])){
                 $specification = EngineeringStandardCarpentryCraft::find()
-                    ->where(['type_id'=>$one_specification['type_id'],['city_code'=>$post['city_code']]])
+                    ->where(['type_id'=>$one_specification['type_id'],'city_code'=>$post['city_code']])
                     ->one();
                     var_dump($specification);die;
                 if(is_numeric($specification['value'])){
