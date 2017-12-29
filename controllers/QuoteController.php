@@ -423,9 +423,9 @@ class QuoteController extends Controller
                 }else{
                     $specification->value =$one_specification['value'];
                 }
-            }elseif (isset($one_specification['title'])){
+            }elseif (isset($one_specification['type_id'])){
                 $specification = new EngineeringStandardCarpentryCraft();
-                $specification->title=$one_specification['title'];
+                $specification->type_id=$one_specification['type_id'];
                 $specification->value=$one_specification['value']*100;
                 $specification->city_code=$post['city_code'];
                 $specification->unit=1;
@@ -3091,8 +3091,27 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-      $res = WorkerType::find()->where(['id'=>29])->one();
-      $res ->worker_name='强电工艺';
-      var_dump($res->save());
+//      $sql="INSERT INTO `worker_type` VALUES ('74', '0', '龙骨抓取规格', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('75', '0', '丝杆抓取规格', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('76', '0', '石膏板抓取规格', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('77', '0', '细木工板抓取长度', null, '0', '4', '0');
+//INSERT INTO `worker_type` VALUES ('78', '0', '细木工板抓取宽度', null, '0', '4', '0')";
+        $sql="DROP TABLE IF EXISTS `engineering_standard_carpentry_craft`;
+CREATE TABLE `engineering_standard_carpentry_craft` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` int(11) DEFAULT NULL COMMENT '值',
+  `unit` tinyint(1) DEFAULT NULL,
+  `city_code` int(5) DEFAULT '510100',
+  `type_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+INSERT INTO `engineering_standard_carpentry_craft` VALUES ('1', '250', '1', '510100', '0');
+INSERT INTO `engineering_standard_carpentry_craft` VALUES ('2', '250', '1', '510100', '0');
+INSERT INTO `engineering_standard_carpentry_craft` VALUES ('3', '295', '1', '510100', '0');
+INSERT INTO `engineering_standard_carpentry_craft` VALUES ('4', '244', '1', '510100', '0');
+INSERT INTO `engineering_standard_carpentry_craft` VALUES ('5', '122', '1', '510100', '0'); ";
+      $res =\Yii::$app->db->createCommand($sql)->execute();
+      var_dump($res);
     }
 }

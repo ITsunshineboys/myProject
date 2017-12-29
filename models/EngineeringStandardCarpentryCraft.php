@@ -32,18 +32,17 @@ class EngineeringStandardCarpentryCraft extends ActiveRecord
             ->where($where)
             ->all();
         if($row==null){
-            $row=self::find()
-                ->select('title,value,unit')
+            $row=WorkerType::find()
+                ->select('worker_name,id')
                 ->asArray()
-                ->where($where)
-                ->distinct('title')
+                ->where(['status'=>4])
                 ->all();
            foreach ($row as &$a){
-               if($a['value']!=null){
-                   unset($a['value']);
-               }
-               $a['unit'] = self::UNIT[$a['unit']];
-                $a['value']='';
+
+              $a['title']=$a['worker_name'];
+              $a['unit'] = self::UNIT[1];
+              $a['value']='';
+               unset($a['worker_name']);
            }
 
         }else{
