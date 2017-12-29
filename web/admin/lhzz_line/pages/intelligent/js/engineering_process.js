@@ -185,12 +185,12 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                     }
                 }
                 $scope.cur_process_list = [arr,arr1,arr2,arr3]
+                console.log($scope.cur_process_list)
             })
         }else {
             arr.push(res.list)
             $scope.cur_process_list = arr
         }
-        console.log($scope.cur_process_list)
     })
     //保存数据
     $scope.saveData = function (valid) {
@@ -208,15 +208,29 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
         for(let [key,value] of $scope.cur_process_list.entries()){
             for(let [key1,value1] of value.entries()){
                 if(value1.options == undefined){
-                    arr.push({
-                        id:value1.project_id,
-                        value:value1.material
-                    })
+                    if(value1.id == undefined){
+                        arr.push({
+                            project_id:value1.project_id,
+                            value:value1.material
+                        })
+                    }else{
+                        arr.push({
+                            id:value1.id,
+                            value:value1.material
+                        })
+                    }
                 }else{
-                    arr1.push({
-                        id:value1.id,
-                        value:value1.material=='其它'?0:value1.material
-                    })
+                    if(value1.id == undefined){
+                        arr1.push({
+                            title:value1.title,
+                            value:value1.material=='其它'?0:value1.material
+                        })
+                    }else{
+                        arr1.push({
+                            id:value1.id,
+                            value:value1.material=='其它'?0:value1.material
+                        })
+                    }
                 }
             }
         }
@@ -230,7 +244,7 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         })
                     }else{
                         arr2.push({
-                            add_id:value1.id,
+                            project:value1.id,
                             value:value1.value,
                             coefficient:value1.coefficient,
                             series_or_style:value1.series_or_style

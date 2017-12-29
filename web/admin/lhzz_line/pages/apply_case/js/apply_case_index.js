@@ -28,10 +28,10 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
         _ajax.get('/effect/effect-list', $scope.params, function (res) {
             console.log(res);
             $scope.total_data = {
-                all_apply:res.data['0'].all_apply,
-                all_earnest:res.data['0'].all_earnest,
-                today_apply:res.data['0'].today_apply,
-                today_earnest:res.data['0'].today_earnest
+                all_apply:res.data.all_apply,
+                all_earnest:res.data.all_earnest,
+                today_apply:res.data.today_apply,
+                today_earnest:res.data.today_earnest
             }
             $scope.case_list = res.data['0'].list
             $scope.Config.totalItems = res.data['0'].count
@@ -79,7 +79,7 @@ app.controller('apply_case_ctrl', function ($rootScope,$scope, _ajax, $state) {
     }
     //获取备注
     $scope.getRemark = function (item) {
-        $scope.cur_remark = item
+        $scope.cur_remark = angular.copy(item)
     }
     //编辑备注
     $scope.editRemark = function () {

@@ -546,15 +546,17 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/intelligent/css/edit_worker.css',
             controller: 'edit_worker_ctrl'
         })
-        .state('intelligent.home_manage', {//智能报价首页管理
-            url: 'home_manage',
+        .state('home_manage', {//智能报价首页管理
+            url: '/home_manage',
             templateUrl: 'pages/intelligent/home_manage.html',
-            css: 'pages/intelligent/css/home_manage.css'
+            css: 'pages/intelligent/css/home_manage.css',
+            controller:'home_manage_ctrl'
         })
-        .state('intelligent.add_manage', {//添加推荐
-            url: 'add_manage',
+        .state('add_manage', {//添加推荐
+            url: '/add_manage?index',
             templateUrl: 'pages/intelligent/add_manage.html',
-            css: 'pages/intelligent/css/add_manage.css'
+            css: 'pages/intelligent/css/add_manage.css',
+            controller:'add_manage_ctrl'
         })
         .state('engineering_standards', {//工程标准
             url: '/engineering_standards',
