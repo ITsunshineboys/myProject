@@ -419,7 +419,7 @@ class QuoteController extends Controller
                 $specification = EngineeringStandardCarpentryCraft::find()
                     ->where(['type_id'=>$one_specification['type_id'],['city_code'=>$post['city_code']]])
                     ->one();
-
+                    var_dump($specification);die;
                 if(is_numeric($specification['value'])){
                     $specification->value = $one_specification['value'] * 100;
                 }else{
