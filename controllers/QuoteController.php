@@ -310,16 +310,16 @@ class QuoteController extends Controller
         $post = \Yii::$app->request->post();
 
         foreach ($post['material'] as $one_material){
-//            var_dump($one_material);
-            $material = EngineeringStandardCraft::_findallbycity($post['city_code'],$one_material['id']);
-            if($material){
+
+            if(isset($one_material['id'])){
+                $material = EngineeringStandardCraft::findallbycity($post['city_code'],$one_material['id']);
                 $material->material = $one_material['value'] * 100;
                 $edit_material = $material->save();
-            }else{
+            }elseif(isset($one_material['project_id'])){
                 $model =new EngineeringStandardCraft();
                 $model->city_code=$post['city_code'];
                 $model->material=$one_material['value']*100;
-                $model->project_id=$one_material['id'];
+                $model->project_id=$one_material['project_id'];
                 $edit_material = $model->save();
             }
 
