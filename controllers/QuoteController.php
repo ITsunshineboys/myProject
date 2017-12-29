@@ -416,7 +416,9 @@ class QuoteController extends Controller
 
         foreach ($post['specification'] as $one_specification){
             if(isset($one_specification['type_id'])){
-                $specification = EngineeringStandardCarpentryCraft::findOne($one_specification['type_id']);
+                $specification = EngineeringStandardCarpentryCraft::find()
+                    ->where(['type_id'=>$one_specification['type_id'],['city_code'=>$post['city_code']]])
+                    ->one();
 
                 if(is_numeric($specification['value'])){
                     $specification->value = $one_specification['value'] * 100;
@@ -2178,6 +2180,7 @@ class QuoteController extends Controller
         $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
         $code = 200;
+
         return Json::encode([
             'code' => $code,
             'msg'  => 'ok',
