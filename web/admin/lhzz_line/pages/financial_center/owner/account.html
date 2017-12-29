@@ -4,8 +4,8 @@
         <select ng-model="params.status" ng-change="getAccount()" ng-options="item.num as item.status for item in all_status" ng-change="getCategory(1)"  class="form-control"></select>
         <div class="form-group pull-right">
             <div class="input-group">
-                <input class="form-control" ng-model="vm.keyword" placeholder="搜索业主名称、手机号g或魔方号" type="text">
-                <span class="glyphicon glyphicon-search"></span>
+                <input class="form-control" ng-model="vm.keyword" placeholder="搜索业主名称、手机号或魔方号" type="text">
+                <span class="iconfont icon-search"></span>
             </div>
             <button class="btn btn-default" ng-click="getAccountList()">搜索</button>
         </div>
