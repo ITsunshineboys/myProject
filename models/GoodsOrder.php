@@ -1983,7 +1983,8 @@ class GoodsOrder extends ActiveRecord
             $code=self::AgreeRefundHandle($order_no,$sku,$user,$supplier);
             return $code;
         }
-        if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE){
+        if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE)
+        {
             $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
             return $code;
         }
@@ -2006,7 +2007,6 @@ class GoodsOrder extends ActiveRecord
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
         try{
-
             $order_goodslist=OrderGoods::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
             $order_goodslist->is_unusual=0;
             $res1=$order_goodslist->save(false);
@@ -2027,14 +2027,13 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
-//            $code=UserNewsRecord::AddOrderNewRecord('','取消订单反馈',',','取消订单反馈，您的订单已被驳回，原因xxx',$order_no,$sku,'');
-//            if ($code!=200)
-//            {
-//                $code=500;
-//                $tran->rollBack();
-//                return $code;
-//            }
+            $code=UserNewsRecord::AddOrderNewRecord($user,'取消订单反馈','7',"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$sku,self::STATUS_DESC_DETAILS);
+            if ($code!=200)
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
             $tran->commit();
             $code=200;
             return $code;
@@ -2058,8 +2057,8 @@ class GoodsOrder extends ActiveRecord
     public static function AgreeRefundHandle($order_no,$sku,$user,$supplier)
     {
         $time=time();
-        $role_number=$supplier->shop_no;
-        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
+//        $role_number=$supplier->shop_no;
+//        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $tran = Yii::$app->db->beginTransaction();
         try{
             $OrderGoods=OrderGoods::find()
@@ -2075,34 +2074,34 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             if ($OrderGoods->shipping_status==0){
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
-                $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number+$OrderGoods->freight;
+                //$reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number+$OrderGoods->freight;
             }else{
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
-                $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+                //$reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
             }
-            $supplier->balance-=$reduce_money;
-            $supplier->availableamount-=$reduce_money;
-            $res2=$supplier->save(false);
-            if (!$res2){
-                $code=500;
-                $tran->rollBack();
-                return $code;
-            }
-            $supplier_accessdetail=new UserAccessdetail();
-            $supplier_accessdetail->uid=$user->id;
-            $supplier_accessdetail->role_id=6;
-            $supplier_accessdetail->access_type=2;
-            $supplier_accessdetail->access_money=$reduce_money;
-            $supplier_accessdetail->order_no=$order_no;
-            $supplier_accessdetail->sku=$sku;
-            $supplier_accessdetail->create_time=$time;
-            $supplier_accessdetail->transaction_no=$transaction_no;
-            $res3=$supplier_accessdetail->save(false);
-            if (!$res3){
-                $code=500;
-                $tran->rollBack();
-                return $code;
-            }
+//            $supplier->balance-=$reduce_money;
+//            $supplier->availableamount-=$reduce_money;
+//            $res2=$supplier->save(false);
+//            if (!$res2){
+//                $code=500;
+//                $tran->rollBack();
+//                return $code;
+//            }
+//            $supplier_accessdetail=new UserAccessdetail();
+//            $supplier_accessdetail->uid=$user->id;
+//            $supplier_accessdetail->role_id=6;
+//            $supplier_accessdetail->access_type=2;
+//            $supplier_accessdetail->access_money=$reduce_money;
+//            $supplier_accessdetail->order_no=$order_no;
+//            $supplier_accessdetail->sku=$sku;
+//            $supplier_accessdetail->create_time=$time;
+//            $supplier_accessdetail->transaction_no=$transaction_no;
+//            $res3=$supplier_accessdetail->save(false);
+//            if (!$res3){
+//                $code=500;
+//                $tran->rollBack();
+//                return $code;
+//            }
             $order_refund=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
                 ->one();
