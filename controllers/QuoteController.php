@@ -366,14 +366,18 @@ class QuoteController extends Controller
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll($where);
         $goods['find_specification'] = EngineeringStandardCarpentryCraft::findByAll($where);
         $a =[];
-        foreach ($goods['specification'] as $k1=>$v1){
-            $a[$k1]=$v1['value'];
-        }
-        foreach ($goods['find_specification'] as $k2=>&$v2){
+        var_dump($goods);die;
+        if($goods['specification'] &&  $goods['find_specification']){
+            foreach ($goods['specification'] as $k1=>$v1){
+                $a[$k1]=$v1['value'];
+            }
+            foreach ($goods['find_specification'] as $k2=>&$v2){
                 if($v2['value']==''){
                     $v2['value']=$a[$k2];
                 }
+            }
         }
+
 
 
 
