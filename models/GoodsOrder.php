@@ -3150,7 +3150,7 @@ class GoodsOrder extends ActiveRecord
                   ];
                 }
 
-                if ($refund_unreceived->handle==1)
+                if ($refund_unreceived->handle==0)
                 {
                     return  [
                         'refund_status'=>1,
@@ -3158,6 +3158,11 @@ class GoodsOrder extends ActiveRecord
                         'apply_refund_reason'=>$refund_unreceived->apply_reason,
                     ];
                 }
+                return [
+                    'refund_status'=>2,
+                    'apply_refund_time'=>date('Y-m-d H:i',$refund_unreceived->create_time),
+                    'apply_refund_reason'=>$refund_unreceived->apply_reason,
+                ];
             }
             if ($type==8
                 || $type==9
