@@ -1,5 +1,5 @@
 <div class="apply_case_index">
-    <p><span>今日新申请：{{total_data.today_apply}}</span><span style="margin-right: 10px">今日定金：{{total_data.today_earnest|currency:'￥'}}</span><span style="margin-right: 10px">总申请：{{total_data.all_apply}}</span><span style="margin-right: 10px">总定金：{{total_data.today_earnest | currency:'￥'}}</span></p>
+    <p><span>今日新申请：{{total_data.today_apply}}</span><span style="margin-right: 10px">今日定金：{{total_data.today_earnest|currency:'￥'}}</span><span style="margin-right: 10px">总申请：{{total_data.all_apply}}</span><span style="margin-right: 10px">总定金：{{total_data.all_earnest | currency:'￥'}}</span></p>
     <div class=" search form-inline clearfix">
         <select ng-model="params.time_type" ng-options="item.value as item.name for item in time_types" ng-change="getCase()" class="form-control"></select>
         <input ng-if="params.time_type == 'custom'" ng-model="params.start_time" id="start_time" class="form-control" ng-change="getCase()" max-date="{{params.end_time}}" placeholder="开始时间" type="text" ngc-lay-date>
