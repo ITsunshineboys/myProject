@@ -1799,11 +1799,11 @@ class WithdrawalsController extends Controller
                         'name'=>'退款金额',
                         'value'=>StringService::formatPrice($access['access_money']*0.01)
                     ];
-                    $refund_bank=BankinfoLog::findOne($access['refund_bank_log_id']);
-                    $list[]=[
-                        'name'=>'到账银行卡',
-                        'value'=>$refund_bank->bankname
-                    ];
+//                    $refund_bank=BankinfoLog::findOne($access['refund_bank_log_id']);
+//                    $list[]=[
+//                        'name'=>'到账银行卡',
+//                        'value'=>$refund_bank->bankname
+//                    ];
                     $list[]=[
                         'name'=>'商品订单号',
                         'value'=>$access['order_no']

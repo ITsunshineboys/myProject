@@ -242,3 +242,6 @@ ALTER TABLE `user_accessdetail` modify column access_type tinyint(2) NOT NULL DE
 
 --all 2017.12.28  17:46 hyz
 ALTER TABLE `user_accessdetail` ADD  `refund_bank_log_id` int(11) NOT NULL COMMENT '退款银行卡logID';
+
+--all 2017.12.28  18:32 hyz
+alter table `user_accessdetail` drop column refund_bank_log_id  ;

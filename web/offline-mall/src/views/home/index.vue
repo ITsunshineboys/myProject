@@ -23,7 +23,7 @@
       </flexbox-item>
     </flexbox>
     <card :header="{title:'推荐'}" class="command">
-      <flexbox justify="center" align="flex-start" :gutter="0" slot="content" wrap="wrap">
+      <flexbox justify="space-around" align="flex-start" :gutter="0" slot="content" wrap="wrap">
         <flexbox-item :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}" v-for="(item,index) in recommended_list" :key="index">
           <img width="168px" height="160px" :src="item.image" alt="">
           <p class="command_title">{{item.title}}</p>
@@ -157,12 +157,12 @@
     color: #222!important;
   }
   /*推荐*/
-  .odd_col{/*推荐奇数项*/
-    padding-right: 7.5px;
-  }
-  .even_col{/*推荐偶数项*/
-    padding-left: 7.5px;
-  }
+  /*.odd_col{!*推荐奇数项*!*/
+  /*padding-right: 7.5px;*/
+  /*}*/
+  /*.even_col{!*推荐偶数项*!*/
+  /*padding-left: 7.5px;*/
+  /*}*/
   .command{
     margin-bottom: 10px;
   }

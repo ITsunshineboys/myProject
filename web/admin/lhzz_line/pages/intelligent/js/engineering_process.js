@@ -92,7 +92,9 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == '0'&&item.coefficient=='1'
                     })
                     value['series_or_style'] = 0
-                    value['cur_id'] = res.coefficient[index].id
+                    if(index != -1){
+                        value['cur_id'] = res.coefficient[index].id
+                    }
                     value['coefficient'] = 1
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -102,7 +104,9 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 0&&item.coefficient==2
                     })
                     value['series_or_style'] = 0
-                    value['cur_id'] = res.coefficient[index].id
+                    if(index != -1){
+                        value['cur_id'] = res.coefficient[index].id
+                    }
                     value['coefficient'] = 2
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -112,7 +116,9 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 0&&item.coefficient==3
                     })
                     value['series_or_style'] = 0
-                    value['cur_id'] = res.coefficient[index].id
+                    if(index != -1){
+                        value['cur_id'] = res.coefficient[index].id
+                    }
                     value['coefficient'] = 3
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }//风格1
@@ -121,7 +127,9 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 1&&item.coefficient==1
                     })
                     value['series_or_style'] = 1
-                    value['cur_id'] = res.coefficient[index].id
+                    if(index != -1){
+                        value['cur_id'] = res.coefficient[index].id
+                    }
                     value['coefficient'] = 1
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }
@@ -131,7 +139,9 @@ app.controller('engineering_process_ctrl',function ($uibModal,$state,$stateParam
                         return item.project == value.id&&item.series_or_style == 1&&item.coefficient==2
                     })
                     value['series_or_style'] = 1
-                    value['cur_id'] = res.coefficient[index].id
+                    if(index != -1){
+                        value['cur_id'] = res.coefficient[index].id
+                    }
                     value['coefficient'] = 2
                     value['value'] = (index==-1?'':res.coefficient[index].value)
                 }

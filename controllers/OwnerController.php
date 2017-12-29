@@ -27,6 +27,7 @@ use app\models\StairsDetails;
 use app\models\Style;
 use app\models\Worker;
 use app\models\WorkerCraftNorm;
+use app\models\WorkerType;
 use app\models\WorksBackmanData;
 use app\models\WorksData;
 use app\models\WorksWorkerData;
@@ -56,8 +57,7 @@ class OwnerController extends Controller
     /**
      * 基础装修有计算公式的必要材料id
      */
-    const WEAK_MATERIAL      = [32,30,40];       // 弱电材料id
-    const STRING_MATERIAL    = [43,30,40];       // 强电材料id
+    const CIRCUIT_MATERIAL    = [43,30,40,32];       // 强弱电材料id
     const WATERWAY_MATERIAL  = [33,37];          // 水路材料id
     const WATERPROOF_MATERIAL= [56];             // 防水材料id
     const CARPENTRY_MATERIAL = [22,9,12,13];     // 木作材料id
@@ -114,9 +114,9 @@ class OwnerController extends Controller
     /**
      * 工艺名称
      */
-    const PROJECT_NAME=[
-        'weak_current'      => '弱电工艺',
-        'strong_current'    => '强电工艺',
+    const CRAFT_NAME =[
+        'weak'      => 25,  // 弱电工艺
+        'strong'    => 29,  // 强电工艺
         'waterway'          => '水路工艺',
         'waterproof'        => '防水工艺',
         'carpentry'         => '木作工艺',
@@ -338,24 +338,12 @@ class OwnerController extends Controller
         //      点位 和 材料查询
         $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['weak_current']]);
         $weak_where = 'pid = '.$points['id'];
-        $weak_points = Points::findByPid('title,count',$weak_where);
+        $weak_points = Points::findByIds('title,count',$weak_where);
         //  弱电总点位
         $current_points = BasisDecorationService::weakPoints($weak_points,$post);
 
-
         //查询弱电所需要材料
         $goods = Goods::priceDetail(self::WALL_SPACE, self::WEAK_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'weak_current_labor_price' => [],
-                    'weak_current_material' => [],
-                ]
-            ]);
-        }
 //        $judge = BasisDecorationService::priceConversion($goods);
         $weak_current = BasisDecorationService::judge($goods,$post);
 
@@ -368,7 +356,6 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
 
         //材料总费用
         $material_price = BasisDecorationService::quantity($current_points,$weak_current,$craft);
@@ -393,7 +380,7 @@ class OwnerController extends Controller
         //强电点位
         $points = Points::findByOne('id,title',['id'=>self::PROJECT_DETAILS['strong_current']]);
         $weak_where = 'pid = '.$points['id'];
-        $weak_points = Points::findByPid('title,count',$weak_where);
+        $weak_points = Points::findByIds('title,count',$weak_where);
         //  总点位
         $strong_points = BasisDecorationService::strongPoints($weak_points,$post);
 
@@ -436,6 +423,49 @@ class OwnerController extends Controller
         ]);
     }
 
+    public function actionElectricity()
+    {
+        $get = Yii::$app->request->get();
+
+        // 点位
+        $where = 'id in ('.self::PROJECT_DETAILS['strong_current'].','.self::PROJECT_DETAILS['weak_current'].')';
+        $points = Points::findByIds('id,title',$where);
+        foreach ($points as $one_points){
+            // 弱电
+            if ($one_points['id'] ==  self::PROJECT_DETAILS['weak_current']){
+                $weak_where = 'pid = '.$one_points['id'];
+                $weak_points = Points::findByPid('title,count',$weak_where);
+                $weak_overall_points = BasisDecorationService::weakPoints($weak_points,$get);
+            }
+
+            // 强电
+            if ($one_points['id'] ==  self::PROJECT_DETAILS['strong_current']){
+                $weak_where = 'pid = '.$one_points['id'];
+                $strong_points = Points::findByPid('title,count',$weak_where);
+                $strong_overall_points = BasisDecorationService::strongPoints($strong_points,$get);
+            }
+        }
+        // 强弱电总点位
+        $total_points = BasisDecorationService::algorithm(3,$weak_overall_points,$strong_overall_points);
+
+        // 所需要材料查询
+        $goods = Goods::priceDetail(self::WALL_SPACE, self::CIRCUIT_MATERIAL);
+        $judge = BasisDecorationService::judge($goods,$get);
+
+        // 当地工艺
+        $weak_craft = WorkerType::craft(self::CRAFT_NAME['weak'],$get['city']);  // 弱电工艺
+        $strong_craft = WorkerType::craft(self::CRAFT_NAME['strong'],$get['city']);  // 强电工艺
+
+        //材料总费用
+        $material_price = BasisDecorationService::quantity($weak_overall_points,$weak_craft,$judge);
+        $material = BasisDecorationService::electricianMaterial($strong_current, $material_price);
+
+
+
+
+
+
+    }
     /**
      * 水路
      * @return string
