@@ -2080,8 +2080,8 @@ class GoodsOrder extends ActiveRecord
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
                 $reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
             }
-            $supplier->balance=$supplier->balance-$reduce_money;
-            $supplier->availableamount=$supplier->availableamount-$reduce_money;
+            $supplier->balance-=$reduce_money;
+            $supplier->availableamount-=$reduce_money;
             $res2=$supplier->save(false);
             if (!$res2){
                 $code=500;
@@ -2124,8 +2124,8 @@ class GoodsOrder extends ActiveRecord
             {
                 $role=Role::CheckUserRole($GoodsOrder->role_id)->where(['uid'=>$GoodsOrder->user_id])->one();
             }
-            $role->balance=$role->balance+$refund_money;
-            $role->availableamount=$role->availableamount+$refund_money;
+            $role->balance+=$refund_money;
+            $role->availableamount+=$refund_money;
             $res3=$role->save(false);
             if (!$res3){
                 $code=500;
