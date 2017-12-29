@@ -2125,7 +2125,7 @@ class GoodsOrder extends ActiveRecord
                 $role=Role::CheckUserRole($GoodsOrder->role_id)->where(['uid'=>$GoodsOrder->user_id])->one();
             }
             $role->balance=$role->balance+$refund_money;
-            $role->availableamount=$role->balance+$refund_money;
+            $role->availableamount=$role->availableamount+$refund_money;
             $res3=$role->save(false);
             if (!$res3){
                 $code=500;

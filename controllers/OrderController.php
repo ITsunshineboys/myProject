@@ -798,7 +798,15 @@ class OrderController extends Controller
         $buyer_message=trim($request->post('buyer_message',''));
         //商品描述，可空
         $body = trim($request->post('body'),' ');
-        if (!$subject||!$total_amount||!$goods_id ||!$goods_num||!$address_id||! $invoice_id||!$supplier_id ){
+        if (
+            !$subject
+            ||!$total_amount
+            ||!$goods_id
+            ||!$goods_num
+            ||!$address_id
+            ||! $invoice_id
+            ||!$supplier_id
+        ){
             $c=1000;
             return Json::encode([
                 'code' =>  $c,
