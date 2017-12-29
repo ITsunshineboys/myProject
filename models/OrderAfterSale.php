@@ -1879,6 +1879,7 @@ class OrderAfterSale extends ActiveRecord
         }
     }
     /**
+     * 用户确认售后
      * @param $OrderAfterSale
      * @return int
      */
