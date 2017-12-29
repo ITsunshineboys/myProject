@@ -1,9 +1,9 @@
-var app = angular.module("app", ["ng.ueditor", "ui.router","ngFileUpload",
-    "addclassModule", 'brand_details_module', 'account_comment', 'change_num', 'bind_record', 'operation_record',
+var app = angular.module("app", ["ng.ueditor", "ui.router", "ngFileUpload",
+    "addclassModule", 'brand_details_module',
     "mallmagModule", "storemagModule", "addstoreModule", "onlineeditModule", "offlineeditModule", "addbrandModule",
     "styleindexModule", "chooseseriesModule", "addseriesModule", "seriesdetailModule", "addstyleModule",
-    "choose_styleModule", "styledetailModule", "storedetailModule", "merchant_details", "intelligent_index",
-    'angularCSS', 'idcard_right',
+    "choose_styleModule", "styledetailModule", "merchant_details", "intelligent_index",
+    'angularCSS',
     //  王杰 开始
     "banner_recommend_module",
     "index_recommend_module",
@@ -144,131 +144,6 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: "pages/account_manage/user_list/add_user/css/add_user.css"
         })
 
-        .state("account_comment", {
-            url: "/account_comment?id",
-            templateUrl: "pages/account_manage/user_list/account_comment/account_comment.html",
-            css: "pages/account_manage/user_list/account_comment/css/account_comment.css"
-        })
-
-        .state("change_num", {  //更换手机号码
-            url: "/change_num",
-            templateUrl: "pages/account_manage/user_list/account_comment/change_num.html",
-            css: "pages/account_manage/user_list/account_comment/css/change_num.css",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname',
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            }
-        })
-        .state("bind_record", {
-            url: "/bind_record?id",
-            templateUrl: "pages/account_manage/user_list/account_comment/bind_record.html",
-            css: "pages/account_manage/user_list/account_comment/css/bind_record.css",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            }
-        })
-        .state("operation_record", {
-            url: "/operation_record",
-            templateUrl: "pages/account_manage/user_list/account_comment/operation_record.html",
-            css: "pages/account_manage/user_list/account_comment/css/operation_record.css",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            }
-        })
-        .state("idcard_right", {
-            url: "/idcard_right?id",
-            templateUrl: "pages/account_manage/user_list/account_comment/idcard_right.html",
-            css: "pages/account_manage/user_list/account_comment/css/idcard_right.css",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            }
-        })
         .state("choose_series", {
             /*系列/风格/属性管理-选择拥有系列的分类*/
             url: "/choose_series",
@@ -344,7 +219,9 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         .state("store_detail", {    //商家详情
             params: {"store": null, "authorize_flag": null},
             url: "/store_detail",
-            templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_detail.html"
+            controller: "storedetail_ctrl",
+            templateUrl: "pages/mall_manage/merchant_manage/store_mag/store_detail.html",
+            css: "pages/mall_manage/merchant_manage/store_mag/css/store_detail.css"
         })
         .state("merchant_details", { //品牌授权详情
             params: {"itemdetail": null, "store": null},
@@ -415,6 +292,91 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             templateUrl: 'pages/account_manage/user_list/account_mag/user_list_closed.html',
             css: 'pages/account_manage/user_list/account_mag/css/user_list.css',
             controller: 'account_user_list_closed'
+        })
+
+        .state("account_mag_detail", { //账户详情
+            url: "/account_mag_detail?id",
+            templateUrl: "pages/account_manage/user_list/account_detail/account_detail.html",
+            css: "pages/account_manage/user_list/account_detail/css/account_detail.css",
+            controller: "account_mag_detail"
+        })
+
+        .state("id_info", {  //身份认证
+            url: "/id_info?id",
+            templateUrl: "pages/account_manage/user_list/account_detail/id_info.html",
+            css: "pages/account_manage/user_list/account_detail/css/id_info.css",
+            params: {id: null},
+            controller:"id_info"
+        })
+
+        .state("change_num", {  //更换手机号码
+            url: "/change_num",
+            templateUrl: "pages/account_manage/user_list/account_detail/change_num.html",
+            css: "pages/account_manage/user_list/account_detail/css/change_num.css",
+            params: {user_id:null},
+            controller:"change_num_ctrl"
+        })
+        .state("bind_record", {
+            url: "/bind_record?id",
+            templateUrl: "pages/account_manage/user_list/account_detail/bind_record.html",
+            css: "pages/account_manage/user_list/account_detail/css/bind_record.css",
+            params: {
+                icon: 'icon',
+                nickname: 'nickname'
+                ,
+                old_nickna: 'old_nickname',
+                district_name: 'district_name',
+                birthday: 'birthday',
+                signature: 'signature',
+                mobile: 'mobile',
+                aite_cube_no: 'aite_cube_no',
+                create_time: 'create_time',
+                names: 'names',
+                review_status_desc: 'review_status_desc',
+                status: 'status',
+                id: 'id',
+                legal_person: 'legal_person',
+                identity_no: 'identity_no'
+                ,
+                identity_card_front_imagen: 'identity_card_front_image',
+                identity_card_back_image: 'identity_card_back_image',
+                review_time: 'review_time',
+                status_remark: 'status_remark',
+                status_operator: 'status_operator',
+                a: ''
+            },
+            controller:"bind_record_ctrl"
+        })
+        .state("operation_record", {
+            url: "/operation_record",
+            templateUrl: "pages/account_manage/user_list/account_detail/operation_record.html",
+            css: "pages/account_manage/user_list/account_detail/css/operation_record.css",
+            params: {
+                icon: 'icon',
+                nickname: 'nickname'
+                ,
+                old_nickna: 'old_nickname',
+                district_name: 'district_name',
+                birthday: 'birthday',
+                signature: 'signature',
+                mobile: 'mobile',
+                aite_cube_no: 'aite_cube_no',
+                create_time: 'create_time',
+                names: 'names',
+                review_status_desc: 'review_status_desc',
+                status: 'status',
+                id: 'id',
+                legal_person: 'legal_person',
+                identity_no: 'identity_no'
+                ,
+                identity_card_front_imagen: 'identity_card_front_image',
+                identity_card_back_image: 'identity_card_back_image',
+                review_time: 'review_time',
+                status_remark: 'status_remark',
+                status_operator: 'status_operator',
+                a: ''
+            },
+            controller:"aaa"
         })
 
         .state('account_user_verify', { //账户管理 - 用户审核
@@ -496,37 +458,37 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/intelligent_index',
             templateUrl: 'pages/intelligent/intelligent_index.html',
             css: 'pages/intelligent/css/intelligent_index.css',
-            controller:'intelligent_index_ctrl'
+            controller: 'intelligent_index_ctrl'
         })
         .state('house_list', {//智能报价小区列表
             url: '/house_list',
             templateUrl: 'pages/intelligent/house_list.html',
             css: 'pages/intelligent/css/house_list.css',
-            controller:'house_list_ctrl'
+            controller: 'house_list_ctrl'
         })
         .state('add_house', {//智能报价添加/编辑小区
             url: '/add_house?id&index',
             templateUrl: 'pages/intelligent/add_house.html',
             css: 'pages/intelligent/css/add_house.css',
-            controller:'house_detail_ctrl'
+            controller: 'house_detail_ctrl'
         })
         .state('add_case', {//智能报价添加/编辑案例
             url: '/add_case?index&cur_index',
             templateUrl: 'pages/intelligent/add_case.html',
             css: 'pages/intelligent/css/add_case.css',
-            controller:'add_case_ctrl'
+            controller: 'add_case_ctrl'
         })
         .state('edit_house', {//智能报价添加/编辑普通小区
             url: '/edit_house?index&cur_index',
             templateUrl: 'pages/intelligent/edit_house.html',
             css: 'pages/intelligent/css/edit_house.css',
-            controller:'edit_house_ctrl'
+            controller: 'edit_house_ctrl'
         })
         .state('add_drawing', {//智能报价添加/编辑普通小区图纸
             url: '/add_drawing?index&cur_index',
             templateUrl: 'pages/intelligent/add_drawing.html',
             css: 'pages/intelligent/css/add_drawing.css',
-            controller:'add_drawing_ctrl'
+            controller: 'add_drawing_ctrl'
         })
         .state('add_support_goods', {//智能报价案列/社区店配套商品管理
             url: '/add_support_goods?name',
@@ -592,25 +554,25 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/house_area?id',
             templateUrl: 'pages/intelligent/house_area.html',
             css: 'pages/intelligent/css/house_area.css',
-            controller:'house_area_ctrl'
+            controller: 'house_area_ctrl'
         })
         .state('general_manage', {//通用管理列表
             url: '/general_manage',
             templateUrl: 'pages/intelligent/general_manage.html',
             css: 'pages/intelligent/css/engineering_standards.css',
-            controller:'general_manage_ctrl'
+            controller: 'general_manage_ctrl'
         })
         .state('general_detail', {//通用管理详情
             url: '/general_detail?id',
             templateUrl: 'pages/intelligent/general_detail.html',
             css: 'pages/intelligent/css/general_detail.css',
-            controller:'general_detail_ctrl'
+            controller: 'general_detail_ctrl'
         })
         .state('else_general_manage', {//其他通用管理
             url: '/else_general_manage?id&title',
             templateUrl: 'pages/intelligent/else_general_manage.html',
             css: 'pages/intelligent/css/else_general_manage.css',
-            controller:'else_general_ctrl'
+            controller: 'else_general_ctrl'
         })
         .state('goods_manage', {//智能报价商品管理
             url: '/goods_manage',
@@ -636,19 +598,19 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/home_list',
             templateUrl: 'pages/distribution/distribution_index.html',
             css: 'pages/distribution/css/distribution_index.css',
-            controller:'home_list_ctrl'
+            controller: 'home_list_ctrl'
         })
         .state('distribution_detail', {//分销详情
             url: '/distribution_detail?mobile',
             templateUrl: 'pages/distribution/distribution_detail.html',
             css: 'pages/distribution/css/distribution_detail.css',
-            controller:'distribution_detail_ctrl'
+            controller: 'distribution_detail_ctrl'
         })
         .state('associate_list', {//相关联订单
             url: '/associate_list?mobile',
             templateUrl: 'pages/distribution/associate_list.html',
             css: 'pages/distribution/css/associate_list.css',
-            controller:'associate_list_ctrl'
+            controller: 'associate_list_ctrl'
         })
         //财务中心
         //商城财务
@@ -656,67 +618,67 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             url: '/mall_finance',
             templateUrl: 'pages/financial_center/mall/mall_finance.html',
             css: 'pages/financial_center/mall/css/mall_finance.css',
-            controller:'mall_finance_ctrl'
+            controller: 'mall_finance_ctrl'
         })
         .state('mall_withdraw_manage', {//商家提现管理
             url: '/mall_withdraw_manage?time_type&status',
             templateUrl: 'pages/financial_center/mall/withdraw_manage.html',
             css: 'pages/financial_center/mall/css/withdraw_manage.css',
-            controller:'mall_withdraw_manage_ctrl'
+            controller: 'mall_withdraw_manage_ctrl'
         })
         .state('mall_withdraw_manage_detail', {//商家提现管理详情
             url: '/mall_withdraw_manage_detail?transaction_no',
             templateUrl: 'pages/financial_center/mall/withdraw_manage_detail.html',
             css: 'pages/financial_center/mall/css/account_detail.css',
-            controller:'mall_manage_detail_ctrl'
+            controller: 'mall_manage_detail_ctrl'
         })
         .state('mall_account', {//财务账户管理
             url: '/mall_account',
             templateUrl: 'pages/financial_center/mall/account.html',
             css: 'pages/financial_center/mall/css/account.css',
-            controller:'mall_account_ctrl'
+            controller: 'mall_account_ctrl'
         })
         .state('mall_account_detail', {//财务账户详情
             url: '/mall_account_detail?id&supplier_id',
             templateUrl: 'pages/financial_center/mall/account_detail.html',
             css: 'pages/financial_center/mall/css/account_detail.css',
-            controller:'mall_account_detail_ctrl'
+            controller: 'mall_account_detail_ctrl'
         })
         .state('mall_freeze_money', {//冻结金额
             url: '/mall_freeze_money?id&cash',
             templateUrl: 'pages/financial_center/mall/freeze_money.html',
             css: 'pages/financial_center/mall/css/freeze_money.css',
-            controller:'mall_freeze_ctrl'
+            controller: 'mall_freeze_ctrl'
         })
         .state('mall_withdraw_list', {//提现列表
             url: '/mall_withdraw_list?id',
             templateUrl: 'pages/financial_center/mall/withdraw_list.html',
             css: 'pages/financial_center/mall/css/withdraw_list.css',
-            controller:'mall_withdraw_list_ctrl'
+            controller: 'mall_withdraw_list_ctrl'
         })
         .state('mall_freeze_list', {//冻结金额列表
             url: '/mall_freeze_list?id',
             templateUrl: 'pages/financial_center/mall/freeze_list.html',
             css: 'pages/financial_center/mall/css/withdraw_list.css',
-            controller:'mall_freeze_list_ctrl'
+            controller: 'mall_freeze_list_ctrl'
         })
         .state('mall_withdraw_detail', {//提现详情
             url: '/mall_withdraw_detail?id&supplier_id',
             templateUrl: 'pages/financial_center/mall/withdraw_detail.html',
             css: 'pages/financial_center/mall/css/account_detail.css',
-            controller:'mall_withdraw_detail_ctrl'
+            controller: 'mall_withdraw_detail_ctrl'
         })
         .state('mall_recorded_detail', {
             url: '/mall_recorded_detail',
             templateUrl: 'pages/financial_center/mall/recorded_detail.html',
             css: 'pages/financial_center/mall/css/withdraw_manage.css',
-            controller:'recorded_list_ctrl'
+            controller: 'recorded_list_ctrl'
         })
         .state('mall_money_list', {//收支列表
             url: '/mall_money_list?id',
             templateUrl: 'pages/financial_center/mall/money_list.html',
             css: 'pages/financial_center/mall/css/account.css',
-            controller:'mall_money_list_ctrl'
+            controller: 'mall_money_list_ctrl'
         })
         /*业主财务中心*/
         .state('owner_finance', {//业主财务中心主页

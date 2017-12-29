@@ -160,9 +160,8 @@ app.controller('account_user_list_normal', ['$scope', '$stateParams', '_ajax', '
 
     //查看跳转
     $scope.checkAccount = (item) => {
-        console.log(123456);
-        sessionStorage.setItem('comment_account',JSON.stringify(item));
-        $state.go('account_comment');
+        sessionStorage.setItem('account_detail',JSON.stringify(item));
+        $state.go('account_mag_detail');
     }
 
 

@@ -1,0 +1,54 @@
+<div ng-controller="change_num_ctrl">
+    <section>
+        <form name="formNum" class="form-horizontal" role="form" novalidate>
+                <div class="form-group">
+                    <span class="col-sm-2 control-label"><i class="glyphicon glyphicon-asterisk red"></i>新手机号</span>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="text" name="input_num" placeholder="请输入新的手机号码"
+                               ng-model="new_num" maxlength="11" ng-blur="checkNull()" ng-class="{'tored':warning.isNull}"/>
+                        <h6 class="error-tips" ng-if="warning.isPhone"><i class="glyphicon glyphicon-asterisk"></i>请输入11位数字</h6>
+                        <h6 class="error-tips" ng-if="warning.isRegistered"><i class="glyphicon glyphicon-asterisk"></i>该手机号已被注册，请重新输入</h6>
+                    </div>
+                </div>
+
+
+            <button class="btn btn-primary" ng-click="sureChange()">确认</button>
+            <button class="btn btn-default" ui-sref="account_mag_detail">返回</button>
+
+
+                <!--<div class="new_num">-->
+                <!--<img src="pages/mall_manage/merchant_manage/merchant_comment/images/red.png" alt=""/>-->
+                <!--<span>新的手机号</span>-->
+                <!--<span>*限11位整数数字</span> <br/>-->
+                <!--&lt;!&ndash;<span class="span_left"  ng-show="formNum.input_num.$error.pattern && change">*限11位整数数字</span> <br/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<span class="span_left" ng-show="formNum.input_num.$error.required && change">*不能为空</span> <br/>&ndash;&gt;-->
+                <!--&lt;!&ndash;<span class="span_left" ng-show="!!tel_error">{{tel_error}}</span>&ndash;&gt;-->
+
+                <!--</div>-->
+
+                <!--按钮-->
+                <!--<div class="btn_back">-->
+                    <!--&lt;!&ndash;<button  type="submit" data-toggle="{{change_success}}" data-target="#close_reason_modal" ng-click="getRight (formNum.$valid)">确认</button>&ndash;&gt;-->
+                    <!--<button ng-click="aa()">返回</button>-->
+                <!--</div>-->
+
+                <!--<div class="modal fade" id="close_reason_modal" data-backdrop="static" data-keyboard="false">-->
+                <!--<div class="modal-dialog" role="document">-->
+                <!--<div class="modal-content">-->
+                <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--<h4 class="modal-title">提示</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body" style="height: 240px">-->
+                <!--<span style="margin-right: 30px">更换成功</span>-->
+
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="changeNum ()">确认</button>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+        </form>
+    </section>
+</div>
