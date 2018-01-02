@@ -1181,7 +1181,7 @@ class QuoteController extends Controller
 //                            }
 //                        }
                     }
-                    var_dump($ids);die;
+
                     $ids = implode(',',$ids);
                     $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                     $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
