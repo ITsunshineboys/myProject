@@ -1382,7 +1382,7 @@ class QuoteController extends Controller
                             'msg'=> \Yii::$app->params['errorCodes'][$code]
                         ]);
                     }
-                    var_dump($ids);die;
+
                     $effect_toponymy->effect_id=$ids;
 
                     if(!$effect_toponymy->save(false)){
