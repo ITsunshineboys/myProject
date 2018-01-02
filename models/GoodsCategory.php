@@ -754,16 +754,18 @@ class GoodsCategory extends ActiveRecord
      * @param int $pid parent id
      * @return array goods categories
      */
-    public function categories($pid = 0)
+    public static function categories($pid = 0)
     {
-        $cache = Yii::$app->cache;
-        $key = self::CACHE_SUB_CATE_PREFIX . $pid;
-        $categories = $cache->get($key);
-        if (!$categories) {
-            $categories = $this->_categories($pid);
-            $categories && $cache->set($key, $categories);
-        }
-        return $categories;
+        return self::_categories($pid);
+
+//        $cache = Yii::$app->cache;
+//        $key = self::CACHE_SUB_CATE_PREFIX . $pid;
+//        $categories = $cache->get($key);
+//        if (!$categories) {
+//            $categories = self::_categories($pid);
+//            $categories && $cache->set($key, $categories);
+//        }
+//        return $categories;
     }
 
     /**
@@ -773,14 +775,14 @@ class GoodsCategory extends ActiveRecord
      * @param int $pid parent id
      * @return array goods categories
      */
-    private function _categories($pid = 0)
+    private static function _categories($pid = 0)
     {
         $db = Yii::$app->db;
-        $sql = "select id, title from {{%goods_category}} where pid= :pid";
+        $sql = 'select id, title from ' . self::tableName() . ' where pid = :pid';
         $categories = $db->createCommand($sql)->bindParam(':pid', $pid)->queryAll();
         $arr = [];
         foreach ($categories as $category) {
-            $category['children'] = $this->_categories($category['id']); // 调用函数，传入参数，继续查询下级
+            $category['children'] = self::_categories($category['id']); // 调用函数，传入参数，继续查询下级
             $arr[] = $category; // 组合数组
         }
         return $arr;
@@ -1113,8 +1115,8 @@ class GoodsCategory extends ActiveRecord
             }
         }
 
-        $key = self::CACHE_PREFIX . $this->pid;
-        Yii::$app->cache->delete($key);
+//        $key = self::CACHE_PREFIX . $this->pid;
+//        Yii::$app->cache->delete($key);
     }
 
     public function getChildren()
