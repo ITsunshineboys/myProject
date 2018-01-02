@@ -651,7 +651,7 @@ class Effect extends ActiveRecord
     {
         $data= EffectToponymy::find()
             ->asArray()
-            ->select('toponymy,street')
+            ->select('toponymy,street,id')
             ->where(['district_code'=>$district])
             ->groupBy('toponymy')
             ->all();

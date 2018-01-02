@@ -893,6 +893,7 @@ class QuoteController extends Controller
                 $effect_plot->province_code=$request['province_code'];
                 $effect_plot->city_code=$request['city_code'];
                 $effect_plot->district_code=$request['district_code'];
+                $effect_plot->street=$request['address'];
                 $effect_plot->add_time=time();
                 if(!$effect_plot->save(false)){
                     $transaction->rollBack();
@@ -904,7 +905,6 @@ class QuoteController extends Controller
                 }
                 $transaction->commit();
             } catch (\Exception $e) {
-                var_dump($e);die;
                 $transaction->rollBack();
                 $code = 500;
                 return Json::encode([
@@ -2209,24 +2209,24 @@ class QuoteController extends Controller
     }
 
 
-    /**
-     * homepage street find
-     * @return string
-     */
-    public function actionHomepageStreet()
-    {
-        $request    = \Yii::$app->request;
-        $province   = trim($request->post('province',''));
-        $city       = trim($request->post('city',''));
-        $district   = trim($request->post('district',''));
-        $toponymy   = trim($request->post('toponymy',''));
-        $code = 200;
-        return Json::encode([
-            'code' => $code,
-            'msg'  => 'ok',
-            'list' => (new Effect)->findStreet($province,$city,$district,$toponymy),
-        ]);
-    }
+//    /**
+//     * homepage street find
+//     * @return string
+//     */
+//    public function actionHomepageStreet()
+//    {
+//        $request    = \Yii::$app->request;
+//        $province   = trim($request->post('province',''));
+//        $city       = trim($request->post('city',''));
+//        $district   = trim($request->post('district',''));
+//        $toponymy   = trim($request->post('toponymy',''));
+//        $code = 200;
+//        return Json::encode([
+//            'code' => $code,
+//            'msg'  => 'ok',
+//            'list' => (new Effect)->findStreet($province,$city,$district,$toponymy),
+//        ]);
+//    }
 
     /**
      * homepage case find
@@ -2235,16 +2235,26 @@ class QuoteController extends Controller
     public function actionHomepageCase()
     {
         $request  = \Yii::$app->request;
-        $province = trim($request->post('province',''));
-        $city     = trim($request->post('city',''));
-        $district = trim($request->post('district',''));
-        $toponymy = trim($request->post('toponymy',''));
-        $street   = trim($request->post('street',''));
-        $code = 200;
+//        $province = trim($request->post('province',''));
+//        $city     = trim($request->post('city',''));
+//        $district = trim($request->post('district',''));
+//        $toponymy = trim($request->post('toponymy',''));
+//        $street   = trim($request->post('street',''));
+        $toponymy_id= trim($request->get('toponymy_id'));
+        $effect_ids = EffectToponymy::find()->select('effect_id')->asArray()->one()['effect_id'];
+        $effect_id=explode(',',$effect_ids);
+        $data=[];
+        foreach ($effect_id as $item){
+           $data[]=Effect::find()
+               ->select('particulars')
+               ->asArray()
+               ->where(['id'=>$item])
+               ->one();
+       }
         return Json::encode([
-            'code' => $code,
+            'code' => 200,
             'msg'  => 'ok',
-            'list' => (new Effect)->findCase($province,$city,$district,$toponymy,$street),
+            'list' => $data,
         ]);
     }
 
@@ -3089,7 +3099,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-   var_dump(User::find()->asArray()->all());
-
+        $sql="ALTER TABLE `effect_toponymy` ADD  `street` VARCHAR (100) NOT NULL COMMENT '街道';";
+        var_dump(\Yii::$app->db->createCommand($sql)->execute());
     }
 }
