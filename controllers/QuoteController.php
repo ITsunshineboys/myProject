@@ -3129,6 +3129,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(Effect::find()->where(['status'=>1])->asArray()->all());
+        var_dump(Effect::find()->where(['type'=>1])->asArray()->all());
     }
 }
