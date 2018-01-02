@@ -2940,10 +2940,16 @@ class MallController extends Controller
 
         $where = 'review_status = ' . GoodsCategory::REVIEW_STATUS_APPROVE;
 
-        $pid = (int)Yii::$app->request->get('pid', 0);
-        $ids = $pid > 0
-            ? GoodsCategory::level23Ids($pid, true, false)
-            : GoodsCategory::allLevel3CategoryIds(false);
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if ($keyword) {
+            $ids = GoodsCategory::findIdsByTitle($keyword);
+        } else {
+            $pid = (int)Yii::$app->request->get('pid', 0);
+            $ids = $pid > 0
+                ? GoodsCategory::level23Ids($pid, true, false)
+                : GoodsCategory::allLevel3CategoryIds(false);
+        }
+
         $where .= !$ids ? ' and 0' : ' and id in (' . implode(',', $ids) . ')';
 
         $page = (int)Yii::$app->request->get('page', 1);

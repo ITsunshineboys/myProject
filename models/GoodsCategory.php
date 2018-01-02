@@ -600,6 +600,17 @@ class GoodsCategory extends ActiveRecord
     }
 
     /**
+     * Get category id list by title
+     *
+     * @param string $title title
+     * @return array
+     */
+    public static function findIdsByTitle($title)
+    {
+        return array_map(function ($v) {return $v['id'];}, self::findByTitle($title, ['id']));
+    }
+
+    /**
      * Get online categories by title
      *
      * @param string $title title
