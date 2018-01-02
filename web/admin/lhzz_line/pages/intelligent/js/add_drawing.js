@@ -10,7 +10,9 @@ app.controller('add_drawing_ctrl',function ($window,$uibModal,$anchorScroll,$loc
             }
         }, {
             name: '小区列表页',
-            link: -1
+            link: function () {
+                $state.go('house_list')
+            }
         }, {
             name: $stateParams.index == 1 ? '编辑小区信息' : '添加小区信息',
             link: -1
@@ -87,12 +89,12 @@ app.controller('add_drawing_ctrl',function ($window,$uibModal,$anchorScroll,$loc
     }
     //保存图纸
     $scope.saveDrawing = function (valid) {
-        let index = $scope.drawing_informations.findIndex(function (item) {
-            return item.index == $scope.cur_drawing.index&&item.series == $scope.cur_drawing.series&&item.style == $scope.cur_drawing.style
-        })
-        let index1 = angular.copy($scope.drawing_informations).findIndex(function (item) {
-            return item.index == $scope.cur_drawing.index&&item.series == $scope.cur_drawing.series&&item.style == $scope.cur_drawing.style
-        })
+        let arr = []
+        for(let [key,value] of $scope.drawing_informations.entries()){
+            if(value.index == $scope.cur_drawing.index&&value.series == $scope.cur_drawing.series&&value.style == $scope.cur_drawing.style){
+                arr.push(value)
+            }
+        }
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.cur_title = '保存成功'
             $scope.common_house = function () {
@@ -108,7 +110,7 @@ app.controller('add_drawing_ctrl',function ($window,$uibModal,$anchorScroll,$loc
             }
         }
         all_modal1.$inject = ['$scope', '$uibModalInstance']
-        if(index == index1){
+        if(arr.length <= 1){
             if($scope.cur_drawing.all_drawing.length > 0&&valid){
                 $scope.drawing_informations[$stateParams.cur_index] = $scope.cur_drawing
                 sessionStorage.setItem('drawingInformation',JSON.stringify($scope.drawing_informations))
