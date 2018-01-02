@@ -5,15 +5,14 @@
       <i class="iconfont icon-share"></i>
       <i class="iconfont icon-more"></i>
     </div>
-    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center" :show-desc-mask="false"></swiper>
     <div class="good-detail">
-      <!--<goodsTitle :title="good_detail.title" :subtitle="good_detail.subtitle"-->
-                  <!--:platform_price="good_detail.platform_price" :show_offline="good_detail.line_goods.is_offline_goods === '否' ? false:true"></goodsTitle>-->
+      <goodsTitle :title="good_detail.title" :subtitle="good_detail.subtitle"
+                  :platform_price="good_detail.platform_price" :show_offline="is_offline_goods === '否' ? false:true"></goodsTitle>
       <divider></divider>
       <group>
-        <cell-box is-link class="choose-count">
+        <cell-box is-link class="choose-count" @click.native="show_count = true">
           选择数量
-
         </cell-box>
         <cell-box is-link>
           <div class="service">
@@ -166,7 +165,13 @@
       </div>
     </div>
 
-
+    <popup v-model="show_count">
+      <div>
+        <group>
+         dsadsadsad
+        </group>
+      </div>
+    </popup>
   </div>
 </template>
 
@@ -175,15 +180,6 @@
   import goodsTitle from '../good_detail/title'
   import divider from '../good_detail/divider'
   import comment from '../good_detail/comment.vue'
-
-  //  const pic = [{
-  //    img: 'https://static.vux.li/demo/1.jpg'
-  //  }, {
-  //    img: 'https://static.vux.li/demo/2.jpg'
-  //  }, {
-  //    img: 'https://static.vux.li/demo/5.jpg',
-  //    fallbackImg: 'https://static.vux.li/demo/3.jpg'
-  //  }]
 
   export default {
     name: 'GoodDetail',
@@ -204,18 +200,21 @@
     },
     data () {
       return {
-        good_detail: '',
-        banner_list: []
+        good_detail: {},
+        is_offline_goods: '',
+        banner_list: [],
+        show_count: false
       }
     },
     created () {
       this.axios.get('/mall/goods-view', {id: 65}, (res) => {
         this.good_detail = res.data.goods_view
+        this.is_offline_goods = res.data.goods_view.line_goods.is_offline_goods
         const imgList = this.good_detail.images
         console.log(imgList)
-//        this.banner_list = imgList.map((item, index) => ({
-//          img: item.image
-//        }))
+        this.banner_list = imgList.map((item) => ({
+          img: item
+        }))
       })
     }
   }
