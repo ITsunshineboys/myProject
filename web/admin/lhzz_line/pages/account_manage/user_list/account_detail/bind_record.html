@@ -1,29 +1,30 @@
-<div ng-controller="bind_record_ctrl">
-    <section>
-        <div class="table_div">
-            <table class="table table-condensed">
-                <tr>
-                    <th>绑定手机号</th>
-                    <th>时间
-                        <img ng-show=flag ng-click="changePic ()"  src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
-                        <img ng-show=strat ng-click="changePicse ()"  src="pages/account_manage/account_comment/images/mall_filter_sor.png" alt=""/>
-                    </th>
-                    <th>操作人员</th>
-                </tr>
-                <tr ng-repeat=" n in past_record">
-                    <td>{{n.mobile}}</td>
-                    <td>{{n.create_time}}</td>
-                    <td>{{n.op_username}}</td>
-                </tr>
-            </table>
-        </div>
-        <!--按钮-->
+<div>
+    <div class="content">
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>绑定手机号</th>
+                <th ng-click="sortTime()">
+                    <span>时间</span>
+                    <span class="sort">
+                            <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
+                            <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
+                    </span>
+                </th>
+                <th>操作人员</th>
+            </tr>
+            </thead>
 
-        <!--分页开始-->
-        <tm-pagination conf="Config"></tm-pagination>
-        <!--分页结束-->
-        <div class="btn_back">
-            <button ng-click="getReturn ()">返回</button>
-        </div>
-    </section>
+            <tbody>
+            <tr ng-repeat="item in record">
+                <td>{{item.mobile}}</td>
+                <td>{{item.create_time}}</td>
+                <td>{{item.op_username}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <tm-pagination conf="pageConfig"></tm-pagination>
+    </div>
+
+    <button class="btn btn-default back-btn" ui-sref="account_mag_detail">返回</button>
 </div>

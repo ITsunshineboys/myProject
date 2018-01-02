@@ -1,64 +1,15 @@
 .tored {
     border: 1px solid red;
 }
-/*!*ͷ����ʼ*!*/
-/*header{*/
-    /*height: 60px;*/
-    /*line-height: 60px;*/
-    /*padding-left: 40px;*/
-    /*border-bottom: 1px solid #E6E9F0 ;*/
-/*}*/
-/*.shop_manage{*/
-    /*font-size: 14px;*/
-    /*color: #2F3033;*/
-    /*line-height: 14px;*/
-    /*font-weight: 700;*/
-/*}*/
-/*.manage_child{*/
-    /*font-size: 14px;*/
-    /*color: #8D9199;*/
-    /*line-height: 14px;*/
-/*}*/
-/*header img{*/
-    /*margin-left:75%;*/
-/*}*/
-/*!*ͷ������*!*/
 
-/*!*��������*!*/
-/*section{*/
-    /*padding-left: 40px;*/
-/*}*/
-/*.new_num{*/
-    /*margin-top: 45px;*/
-/*}*/
-/*.new_num img{*/
-    /*margin-left: -25px;*/
-/*}*/
-/*.new_num input{*/
-    /*width: 215px;*/
-    /*height: 36px;*/
-    /*border: 1px solid #ABABAB;*/
-    /*border-radius: 6px;*/
-    /*padding-left: 10px;*/
-    /*margin-left: 85px;*/
-/*}*/
-/*.new_num span:nth-child(4){*/
-    /*margin-left: 20px;*/
-    /*color:#ABABAB;*/
-/*}*/
-/*.span_left{*/
-    /*margin-left: 160px;*/
-    /*color:red;*/
-/*}*/
-/*.btn_back{*/
-    /*margin-top: 550px;*/
-    /*margin-bottom: 40px;*/
-/*}*/
-/*.btn_back button{*/
-    /*width: 80px;*/
-    /*height: 34px;*/
-    /*background-color: white;*/
-    /*margin-left: 15px;*/
-    /*color: #5E6166;*/
-    /*border: 1px solid #5E6166;*/
-/*}*/
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.form-horizontal .form-control-static {
+    text-align: left;
+}
+
+.btns {
+    margin-top: 100px;
+}

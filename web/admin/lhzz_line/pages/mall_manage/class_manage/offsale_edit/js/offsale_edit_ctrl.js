@@ -97,7 +97,7 @@ app.controller('offsale_edit', ['$state', '$scope', '$stateParams', '$http', '$r
         })
     }
 
-    /*保存编辑*/
+    // 保存编辑
     $scope.saveclass = function () {
         if (!pattern.test($scope.item.title) || $scope.item.title == '') {
             $scope.class_warning = "您的输入不满足条件,请重新输入"

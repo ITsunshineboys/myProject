@@ -1,50 +1,56 @@
-<div ng-controller="operation_record_ctrl">
-    <section>
-        <div class="table_div">
-            <table class="table table-condensed">
+<div>
+    <div class="content">
+            <table class="table table-responsive table-hover">
+                <thead>
                 <tr>
                     <th>绑定手机号</th>
-                    <th>时间
-                        <img ng-show=flag ng-click="changePic ()"  src="pages/account_manage/account_comment/images/mall_arrow_up.png" alt=""/>
-                        <img ng-show=strat ng-click="changePicse ()"  src="pages/account_manage/account_comment/images/mall_filter_sor.png" alt=""/>
+                    <th ng-click="sortTime()">
+                        <span>时间</span>
+                        <span class="sort">
+                            <i class="iconfont icon-up" ng-class="{'active':sortStyleFunc() == 4}"></i>
+                            <i class="iconfont icon-down" ng-class="{'active':sortStyleFunc() == 3}"></i>
+                    </span>
                     </th>
                     <th>操作人员</th>
                     <th>操作后状态</th>
                     <th>关闭原因</th>
                 </tr>
-                <tr ng-repeat=" n in past_record">
-                    <td>{{n.mobile}}</td>
-                    <td>{{n.create_time}}</td>
-                    <td>{{n.op_username}}</td>
-                    <td>{{n.status}}</td>
-                    <td><input type="text" data-toggle="modal" ng-click="getRemark (n.remark)"
-                               data-target=".bs-example-modal-lg" placeholder="{{n.remark}}"/></td>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="item in record">
+                    <td>{{item.mobile}}</td>
+                    <td>{{item.create_time}}</td>
+                    <td>{{item.op_username}}</td>
+                    <td>{{item.status}}</td>
+                    <td ng-if="item.remark" data-toggle="modal" data-target="#close-reason" ng-click="showReason(item.remark)"><span class="reason-span">{{item.remark}}</span></td>
+                    <td ng-if="!item.remark"></td>
                 </tr>
-
+                </tbody>
             </table>
-            <!--分页开始-->
-            <tm-pagination conf="Config"></tm-pagination>
-            <!--分页结束-->
+        <tm-pagination conf="pageConfig"></tm-pagination>
         </div>
 
-        <div class="btn_back">
-            <button ng-click="getBack ()">返回</button>
-        </div>
-        <!--模态框-->
 
-        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                  <h4>关闭原因</h4>
-                    <hr/>
-                    <span style="margin-left: 20px">关闭原因(选填)</span>
-                    <div class="model_div">
 
-                        <span>{{remark}}</span>
-                    </div>
-                    <button class="btn_right" data-dismiss="modal">确认</button>
+        <button class="btn btn-default back-btn" ui-sref="account_mag_detail">返回</button>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="close-reason">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p ng-bind="reason"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
 </div>

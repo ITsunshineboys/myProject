@@ -62,7 +62,7 @@
             <div class="col-md-10 form-control-static">
                 <span ng-bind="account_detail.mobile"></span>
                 <button class="btn btn-primary" ui-sref="change_num({user_id:account_detail.id})">更换</button>
-                <span class="blue">过往绑定记录</span>
+                <span class="blue" ui-sref="bind_record({user_id:account_detail.id})">过往绑定记录</span>
             </div>
         </div>
 
@@ -117,7 +117,7 @@
         <div class="form-group">
             <span class="col-md-2 control-label" ng-bind="account_detail.status"></span>
             <div class="col-md-10 form-control-static">
-                <span class="blue">过往操作记录</span>
+                <span class="blue" ui-sref="operation_record({user_id:account_detail.id})">过往操作记录</span>
             </div>
         </div>
 
@@ -135,72 +135,7 @@
             </div>
         </div>
 
-
-
         <button class="btn btn-default" ui-sref="account_user_list.normal" ng-if="account_detail.status == '正常'">返回</button>
         <button class="btn btn-default" ui-sref="account_user_list.closed" ng-if="account_detail.status == '关闭'">返回</button>
     </form>
-
-    <!--<div class="shop_name">-->
-    <!--<hr/>-->
-
-    <!--&lt;!&ndash;注册信息&ndash;&gt;-->
-    <!--<div>-->
-        <!--<span>注册信息</span>-->
-    <!--</div>-->
-    <!--绑定手机号-->
-        <!--<div class="shop_num">-->
-            <!--<span>绑定手机号</span>-->
-            <!--<span>{{mobile}}</span>-->
-            <!--&lt;!&ndash;<span>{{id}}</span>&ndash;&gt;-->
-            <!--<button><a ui-sref="change_num({icon,nickname-->
-              <!--,old_nickna,district_name,birthday,-->
-              <!--signature,mobile,aite_cube_no,-->
-              <!--create_time,names,review_status_desc,-->
-              <!--status,id,status_remark,status_operator,a})">更换</a></button>-->
-            <!--<span><a ui-sref="bind_record({icon,nickname-->
-              <!--,old_nickna,district_name,birthday,-->
-              <!--&lt;!&ndash;signature,mobile,aite_cube_no,&ndash;&gt;-->
-              <!--&lt;!&ndash;create_time,names,review_status_desc,&ndash;&gt;-->
-              <!--&lt;!&ndash;&lt;!&ndash;status,id,status_remark,status_operator,a})">过往绑定记录</a></span>&ndash;&gt;&ndash;&gt;-->
-    <!--</div>-->
-    <!--&lt;!&ndash;魔方号&ndash;&gt;-->
-    <!--<div class="shop_m">-->
-        <!--<span>魔方号</span>-->
-        <!--<span>{{aite_cube_no}}</span>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;注册时间&ndash;&gt;-->
-    <!--<div class="shop_more">-->
-        <!--<span>注册时间</span>-->
-        <!--<span>{{create_time}}</span>-->
-    <!--</div>-->
-    <!--<hr/>-->
-    <!--&lt;!&ndash;角色信息&ndash;&gt;-->
-    <!--<div>-->
-        <!--<span>角色信息</span>-->
-    <!--</div>-->
-    <!--业主-->
-    <!--<div class="shop_name">-->
-        <!--<span>{{names}}</span>-->
-        <!--&lt;!&ndash;<span>商城商家</span>&ndash;&gt;-->
-    <!--</div>-->
-    <!--<hr/>-->
-
-    <!--</div>-->
-    <!--<div class="flag">-->
-        <!--<span>正常</span>-->
-        <!--<span> <a ui-sref="operation_record({icon,nickname-->
-          <!--,old_nickna,district_name,birthday,-->
-          <!--signature,mobile,aite_cube_no,-->
-          <!--create_time,names,review_status_desc,-->
-          <!--status,id,status_remark,status_operator,a})">过往操作记录</a></span>-->
-    <!--</div>-->
-    <!--<div ng-if="a" class="last_div">-->
-        <!--<span>操作人员</span>-->
-        <!--<span>{{status_operator}}</span> <br/> <br/>-->
-        <!--<span>关闭原因</span>-->
-        <!--<span>{{status_remark}}</span>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;按钮&ndash;&gt;-->
-    <!--<button class="btn btn-default" ng-click="back_page()">返回</button>-->
 </div>
