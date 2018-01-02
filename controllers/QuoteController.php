@@ -2242,7 +2242,11 @@ class QuoteController extends Controller
 //        $toponymy = trim($request->post('toponymy',''));
 //        $street   = trim($request->post('street',''));
         $toponymy_id= trim($request->get('toponymy_id'));
-        $effect_ids = EffectToponymy::find()->select('effect_id')->asArray()->one()['effect_id'];
+        $effect_ids = EffectToponymy::find()
+            ->select('effect_id')
+            ->where(['id'=>$toponymy_id])
+            ->asArray()
+            ->one()['effect_id'];
         $effect_id=explode(',',$effect_ids);
         $data=[];
         foreach ($effect_id as $item){
