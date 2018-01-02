@@ -1136,80 +1136,20 @@ class OrderController extends Controller
             {
                 return false;
             }
-           // if ($arr['total_fee']!=8900)
-           // {
-           //     return false;
-           // }
-            $id=$arr['attach'];
-            $tran = Yii::$app->db->beginTransaction();
-            try{
-                $earnst=EffectEarnest::find()
-                    ->where(['effect_id'=>$id])
-                    ->one();
-                $earnst->status=1;
-                if (!$earnst->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
-                $time=(time()-60*60*6);
-                $list=EffectEarnest::find()
-                    ->where("  create_time < {$time} ")
-                    ->andWhere(['status'=>0,'type'=>0,'item'=>0])
-                    ->all();
-                if ($list)
-                {
-                    foreach ($list as &$delList)
-                    {
-                        $effect_id=$delList->effect_id;
-                        $res=$delList->delete();
-                        if (!$res)
-                        {
-                            $tran->rollBack();
-                            return false;
-                        };
-                        $effect=Effect::find()->where(['id'=>$effect_id])->one();
-                        if ($effect)
-                        {
-                            $res1=$effect->delete();
-                            if (!$res1)
-                            {
-                                $tran->rollBack();
-                                return false;
-                            };
-                        }
-                        $effect_material=EffectMaterial::find()
-                            ->where(['effect_id'=>$effect_id])
-                            ->one();
-                        if ($effect_material)
-                        {
-                            $res2=$effect_material->delete();
-                            if (!$res2)
-                            {
-                                $tran->rollBack();
-                                return false;
-                            };
-                        }
-                        $EffectPicture=EffectPicture::find()
-                            ->where(['effect_id'=>$effect_id])
-                            ->one();
-                        if ($EffectPicture)
-                        {
-                            $res3=$EffectPicture->delete();
-                            if (!$res3)
-                            {
-                                $tran->rollBack();
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }catch (Exception $e){
-                $tran->rollBack();
+            if ($arr['total_fee']!=8900)
+            {
                 return false;
             }
-            $tran->commit();
-            return true;
+            $id=$arr['attach'];
+            $code=OrderGoods::AddEffect($id);
+            if ($code=200)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+
         }else{
             return false;
         }
@@ -1405,119 +1345,15 @@ class OrderController extends Controller
                 ]);
             }
         }
-        //获取订单信息
-        $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
-        if (!$order_information) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        //获取商品信息
-        $goods_name=$order_information['goods_name'];
-        $goods_id=$order_information['goods_id'];
-        $order_no=$order_information['order_no'];
-        $sku=explode('+',$order_information['sku']);
-        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
-        if (!$ordergoodsinformation)
+        $data=OrderGoods::GetOrderDetails($order_no,$sku);
+        if (is_numeric($data))
         {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        //获取收货详情
-        $address_id=$order_information['address_id'];
-        $invoice_id=$order_information['invoice_id'];
-        $address=UserAddress::find()
-            ->where(['id'=>$address_id])
-            ->asArray()
-            ->one();
-        if (!$address){
-            $code = 1000;
+            $code=$data;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $address['district']=LogisticsDistrict::getdistrict($address['district']);
-        $invoice=Invoice::find()
-            ->where(['id'=>$invoice_id])
-            ->asArray()
-            ->one();
-        if (!$invoice)
-        {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $receive_details['consignee']=$address['consignee'];
-        $receive_details['mobile']=$address['mobile'];
-        $receive_details['district']=$address['district'];
-        $receive_details['region']=$address['region'];
-        $receive_details['invoice_header']=$invoice['invoice_header'];
-        $order_information['invoice_type']=$invoice['invoice_type'];
-        $receive_details['invoice_header_type']=$invoice['invoice_header_type'];
-        $receive_details['invoice_content']=$invoice['invoice_content'];
-        $receive_details['invoicer_card'] = $invoice['invoicer_card'];
-        $receive_details['buyer_message']=$order_information['buyer_message'];
-        switch ($invoice['invoice_header_type']){
-            case 1:
-                $receive_details['invoice_header_type']='个人';
-                break;
-            case 2:
-                $receive_details['invoice_header_type']='公司';
-                break;
-        }
-        switch ($receive_details['invoice_type']){
-            case 1:
-                $receive_details['invoice_type']='普通发票';
-                break;
-            case 2:
-                $receive_details['invoice_type']='电子发票';
-                break;
-            case 3:
-                $receive_details['invoice_type']='普通增值税发票';
-                break;
-        }
-        $goods_data=array();
-        if ($order_information['goods_name']=='+'){
-            $goods_data['goods_name']='';
-        }else{
-            $goods_data['goods_name']=$order_information['goods_name'];
-        }
-        $goods_data['status']=$order_information['status'];
-        $goods_data['order_no']=$order_information['order_no'];
-        $goods_data['username']=$order_information['username'];
-        $goods_data['amount_order']=$order_information['amount_order'];
-        $goods_data['goods_price_type']=$order_information['role'].'价';
-        $goods_data['goods_price']=$order_information['goods_price'];
-        $goods_data['freight']=$order_information['freight'];
-        $goods_data['return_insurance']=$order_information['return_insurance'];
-        $goods_data['supplier_price']=$order_information['supplier_price'];
-        $goods_data['market_price']=$order_information['market_price'];
-        $goods_data['shipping_way']=$order_information['waybillname'].'('.$order_information['waybillnumber'].')';
-        if ($order_information['shipping_type']==1){
-            $goods_data['shipping_way']='送货上门';
-        }
-        if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
-            $goods_data['pay_term']=$order_information['pay_term'];
-        }else{
-            $goods_data['pay_term']=0;
-        }
-        if (!$order_information['paytime']==0){
-            $goods_data['paytime']=$order_information['paytime'];
-        }
-        $goods_data['create_time']=$order_information['create_time'];
-        $data=array(
-            'goods_data'=>$goods_data,
-            'goods_value'=>$ordergoodsinformation,
-            'receive_details'=>$receive_details
-        );
         $code = 200;
         return Json::encode([
             'code' => $code,
@@ -1525,8 +1361,6 @@ class OrderController extends Controller
             'data' =>$data
         ]);
     }
-
-
     /**
      * 订单平台介入-操作
      * @return int|string
@@ -1770,152 +1604,21 @@ class OrderController extends Controller
                 ]);
             }
         }
-        //获取订单信息
-        $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
-        if (!$order_information)
+        $data=OrderGoods::GetOrderDetails($order_no,$sku);
+        if (is_numeric($data))
         {
-            $code = 1000;
+            $code=$data;
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
+                'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        //获取商品信息
-        $goods_name=$order_information['goods_name'];
-        $goods_id=$order_information['goods_id'];
-        $order_no=$order_information['order_no'];
-        $sku=explode('+',$order_information['sku']);
-        //获取商品属性
-        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
-        if (!$ordergoodsinformation){
-            $code = 1000;
-            return Json::encode([
-               'code' => $code,
-               'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        //获取收货详情
-        $receive_details['consignee']=$order_information['consignee'];
-        $receive_details['consignee_mobile']=$order_information['consignee_mobile'];
-        $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']).$order_information['region'];
-        $receive_details['region']=$order_information['region'];
-        $receive_details['invoice_header']=$order_information['invoice_header'];
-        $receive_details['invoice_type']=$order_information['invoice_type'];
-        $receive_details['invoice_header_type']=$order_information['invoice_header_type'];
-        $receive_details['invoice_content']=$order_information['invoice_content'];
-        $receive_details['invoicer_card'] = $order_information['invoicer_card'];
-        $receive_details['buyer_message'] = $order_information['buyer_message'];
-        switch ($receive_details['invoice_header_type']){
-            case 1:
-                $receive_details['invoice_header_type']=Invoice::INVOICE_HEADER_TYPE_PERSON;
-                break;
-            case 2:
-                $receive_details['invoice_header_type']=Invoice::INVOICE_HEADER_TYPE_COMPANY;
-                break;
-        }
-        switch ($receive_details['invoice_type']){
-            case 1:
-                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ORDINARY;
-                break;
-            case 2:
-                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ELECT;
-                break;
-            case 3:
-                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ADD_TAX;
-                break;
-        }
-        $goods_data=array();
-        if ($order_information['goods_name']=='+'){
-          $goods_data['goods_name']='';
-        }else{
-          $goods_data['goods_name']=$order_information['goods_name'];
-        }
-        $goods_data['status']=$order_information['status'];
-        $goods_data['order_no']=$order_information['order_no'];
-        $goods_data['sku']=$order_information['sku'];
-        $goods_data['username']=$order_information['username'];
-        $goods_data['amount_order']=$order_information['amount_order'];
-        switch ($order_information['role_id'])
-        {
-            case 7:
-                $goods_data['role']=OrderGoods::PLATFORM_PRICE_DESC;
-                break;
-            case 6:
-                $goods_data['role']=OrderGoods::SUPPLIER_PRICE_DESC;
-                break;
-            case 5:
-                $goods_data['role']=OrderGoods::COMPANY_PRICE_DESC;
-                break;
-            case 4:
-                $goods_data['role']=OrderGoods::MANAGER_PRICE_DESC;
-                break;
-            case 3:
-                $goods_data['role']=OrderGoods::DESIGNER_PRICE_DESC;
-                break;
-            case 2:
-                $goods_data['role']=OrderGoods::WORKER_PRICE_DESC;
-                break;
-        }
-        $goods_data['goods_price']=$order_information['goods_price'];
-        $goods_data['goods_number']=$order_information['goods_number'];
-        $goods_data['freight']=$order_information['freight'];
-        $goods_data['return_insurance']=$order_information['return_insurance'];
-        $goods_data['supplier_price']=$order_information['supplier_price'];
-        $goods_data['market_price']=$order_information['market_price'];
-        $goods_data['shipping_type']=$order_information['shipping_type'];
-        $goods_data['shipping_way']=$order_information['shipping_way'];
-        $express=Express::find()->where(['order_no'=>$order_no])->andWhere(['sku'=>$sku])->one();
-        $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
-        $goods_data['complete_time']=$order_information['complete_time'];
-        if ($order_information['shipping_type']==1){
-            $goods_data['shipping_way']=Express::SEND_TO_HOME;
-            $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
-        }
-        $goods_data['pay_name']=$order_information['pay_name'];
-        if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
-            $goods_data['pay_term']=$order_information['pay_term'];
-        }else{
-            $goods_data['pay_term']=0;
-        }
-        if (!$order_information['paytime']==0){
-            $goods_data['paytime']=$order_information['paytime'];
-        }
-          //1:无平台介入  2：有平台进入
-          if (!OrderPlatForm::find()
-              ->where(['order_no'=>$order_no,'sku'=>$sku])
-              ->one())
-          {
-              $is_platform=1;
-          }else{
-              $is_platform=2;
-          }
-
-          //1: 无退款  2：有退款
-          if (!OrderRefund::find()
-              ->where(['order_no'=>$order_no,'sku'=>$sku])
-              ->one())
-          {
-//                $is_unusual=0;
-                $is_refund=1;
-          }else{
-//                $is_unusual=1;
-                $is_refund=2;
-          }
-          $goods_data['create_time']=$order_information['create_time'];
-            $data=array(
-                'goods_data'=>$goods_data,
-                'goods_value'=>$ordergoodsinformation,
-                'receive_details'=>$receive_details,
-                'is_unusual'=>$order_information['is_unusual'],
-                'is_platform'=>$is_platform,
-                'is_refund'=>$is_refund
-            );
-          $code = 200;
-          return Json::encode([
-                'code' => $code,
-                'msg' => 'ok',
-                'data' =>$data
-          ]);
+        $code = 200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data' =>$data
+        ]);
     }
     /**
      * 去发货--商家后台

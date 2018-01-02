@@ -226,6 +226,150 @@ class OrderGoods extends ActiveRecord
     }
 
 
+    /**
+     * @param $order_no
+     * @param $sku
+     * @return array|int
+     */
+    public  static  function  GetOrderDetails($order_no,$sku)
+    {
+        //获取订单信息
+        $order_information=GoodsOrder::GetOrderInformation($order_no,$sku);
+        if (!$order_information)
+        {
+            $code = 1000;
+            return $code;
+        }
+        //获取商品信息
+        $goods_name=$order_information['goods_name'];
+        $goods_id=$order_information['goods_id'];
+        $order_no=$order_information['order_no'];
+        $sku=explode('+',$order_information['sku']);
+        //获取商品属性
+        $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
+        if (!$ordergoodsinformation){
+            $code = 1000;
+            return $code;
+        }
+
+        //获取收货详情
+        $receive_details['consignee']=$order_information['consignee'];
+        $receive_details['consignee_mobile']=$order_information['consignee_mobile'];
+        $receive_details['district']=LogisticsDistrict::getdistrict($order_information['district_code']).$order_information['region'];
+        $receive_details['region']=$order_information['region'];
+        $receive_details['invoice_header']=$order_information['invoice_header'];
+        $receive_details['invoice_type']=$order_information['invoice_type'];
+        $receive_details['invoice_header_type']=$order_information['invoice_header_type'];
+        $receive_details['invoice_content']=$order_information['invoice_content'];
+        $receive_details['invoicer_card'] = $order_information['invoicer_card'];
+        $receive_details['buyer_message'] = $order_information['buyer_message'];
+        switch ($receive_details['invoice_header_type']){
+            case 1:
+                $receive_details['invoice_header_type']=Invoice::INVOICE_HEADER_TYPE_PERSON;
+                break;
+            case 2:
+                $receive_details['invoice_header_type']=Invoice::INVOICE_HEADER_TYPE_COMPANY;
+                break;
+        }
+        switch ($receive_details['invoice_type']){
+            case 1:
+                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ORDINARY;
+                break;
+            case 2:
+                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ELECT;
+                break;
+            case 3:
+                $receive_details['invoice_type']=Invoice::INVOICE_TYPE_ADD_TAX;
+                break;
+        }
+        $goods_data=[];
+        if ($order_information['goods_name']=='+'){
+            $goods_data['goods_name']='';
+        }else{
+            $goods_data['goods_name']=$order_information['goods_name'];
+        }
+        $goods_data['status']=$order_information['status'];
+        $goods_data['order_no']=$order_information['order_no'];
+        $goods_data['sku']=$order_information['sku'];
+        $goods_data['username']=$order_information['username'];
+        $goods_data['amount_order']=$order_information['amount_order'];
+        switch ($order_information['role_id'])
+        {
+            case 7:
+                $goods_data['role']=OrderGoods::PLATFORM_PRICE_DESC;
+                break;
+            case 6:
+                $goods_data['role']=OrderGoods::SUPPLIER_PRICE_DESC;
+                break;
+            case 5:
+                $goods_data['role']=OrderGoods::COMPANY_PRICE_DESC;
+                break;
+            case 4:
+                $goods_data['role']=OrderGoods::MANAGER_PRICE_DESC;
+                break;
+            case 3:
+                $goods_data['role']=OrderGoods::DESIGNER_PRICE_DESC;
+                break;
+            case 2:
+                $goods_data['role']=OrderGoods::WORKER_PRICE_DESC;
+                break;
+        }
+
+        $goods_data['goods_price']=$order_information['goods_price'];
+        $goods_data['goods_number']=$order_information['goods_number'];
+        $goods_data['freight']=$order_information['freight'];
+        $goods_data['return_insurance']=$order_information['return_insurance'];
+        $goods_data['supplier_price']=$order_information['supplier_price'];
+        $goods_data['market_price']=$order_information['market_price'];
+        $goods_data['shipping_type']=$order_information['shipping_type'];
+        $goods_data['shipping_way']=$order_information['shipping_way'];
+        $express=Express::find()->where(['order_no'=>$order_no])->andWhere(['sku'=>$sku])->one();
+        $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
+        $goods_data['complete_time']=$order_information['complete_time'];
+        if ($order_information['shipping_type']==1){
+            $goods_data['shipping_way']=Express::SEND_TO_HOME;
+            $goods_data['send_time']=$express?date('Y-m-d H:i',$express->create_time):0;
+        }
+        $goods_data['pay_name']=$order_information['pay_name'];
+        if ($order_information['status']==GoodsOrder::ORDER_TYPE_DESC_UNPAID){
+            $goods_data['pay_term']=$order_information['pay_term'];
+        }else{
+            $goods_data['pay_term']=0;
+        }
+        if (!$order_information['paytime']==0){
+            $goods_data['paytime']=$order_information['paytime'];
+        }
+        //1:无平台介入  2：有平台进入
+        if (!OrderPlatForm::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one())
+        {
+            $is_platform=1;
+        }else{
+            $is_platform=2;
+        }
+        //1: 无退款  2：有退款
+        if (!OrderRefund::find()
+            ->where(['order_no'=>$order_no,'sku'=>$sku])
+            ->one())
+        {
+            $is_refund=1;
+        }else{
+            $is_refund=2;
+        }
+        $goods_data['create_time']=$order_information['create_time'];
+        $data=[
+            'goods_data'=>$goods_data,
+            'goods_value'=>$ordergoodsinformation,
+            'receive_details'=>$receive_details,
+            'is_unusual'=>$order_information['is_unusual'],
+            'is_platform'=>$is_platform,
+            'is_refund'=>$is_refund
+        ];
+        return $data;
+    }
+
+
 
 
     
