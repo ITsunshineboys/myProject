@@ -22,7 +22,7 @@ class LaborCost extends ActiveRecord
         'worker_kind_details'
     ];
     const LABOR_COST ='labor_cost';
-    const SELECT_FIND = 'id,univalence,worker_kind';
+//    const SELECT_FIND = 'id,univalence,worker_kind_id';
     const WORKER_KIND_DETAILS = [
             'weak'=> '弱电',
             'strong' => '强电',
@@ -76,13 +76,13 @@ class LaborCost extends ActiveRecord
      */
     public static function profession($city,$id,$rank = 1)
     {
-        $select = self::SELECT_FIND;
         $labors = self::find()
             ->asArray()
-            ->select($select)
-            ->where(['city_code' => $city])
-            ->andWhere(['worker_kind_id'=>$id])
-            ->andWhere(['rank'=>$rank])
+            ->select('labor_cost.id,labor_cost.univalence,wt.worker_name')
+            ->leftJoin('worker_type as wt','wt.id = labor_cost.worker_kind_id')
+            ->where(['labor_cost.city_code' => $city])
+            ->andWhere(['wt.id'=>$id])
+            ->andWhere(['labor_cost.rank'=>$rank])
             ->one();
 
         $labors['univalence'] = $labors['univalence'] / 100;
