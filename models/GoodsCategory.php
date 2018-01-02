@@ -752,11 +752,12 @@ class GoodsCategory extends ActiveRecord
      * Get goods categories(including subcategories) by pid
      *
      * @param int $pid parent id
+     * @param array $select select fields default 'id', 'title', 'icon', 'pid'
      * @return array goods categories
      */
-    public static function categories($pid = 0)
+    public static function categories($pid = 0, array $select = self::APP_FIELDS)
     {
-        return self::_categories($pid);
+        return self::_categories($pid, $select);
 
 //        $cache = Yii::$app->cache;
 //        $key = self::CACHE_SUB_CATE_PREFIX . $pid;
@@ -773,16 +774,18 @@ class GoodsCategory extends ActiveRecord
      *
      * @access private
      * @param int $pid parent id
+     * @param array $select select fields
      * @return array goods categories
      */
-    private static function _categories($pid = 0)
+    private static function _categories($pid = 0, array $select)
     {
         $db = Yii::$app->db;
-        $sql = 'select id, title from ' . self::tableName() . ' where pid = :pid';
+        $selectStr = $select ? join(',', $select) : '*';
+        $sql = 'select ' . $selectStr. ' from ' . self::tableName() . ' where pid = :pid';
         $categories = $db->createCommand($sql)->bindParam(':pid', $pid)->queryAll();
         $arr = [];
         foreach ($categories as $category) {
-            $category['children'] = self::_categories($category['id']); // 调用函数，传入参数，继续查询下级
+            $category['children'] = self::_categories($category['id'], $select); // 调用函数，传入参数，继续查询下级
             $arr[] = $category; // 组合数组
         }
         return $arr;
