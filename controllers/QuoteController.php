@@ -883,6 +883,7 @@ class QuoteController extends Controller
 //                    }
                     }
                 }
+                var_dump($ids);die;
                 if(is_array($ids)){
                     $ids = implode(',',$ids);
                 }
