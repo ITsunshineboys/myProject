@@ -26,9 +26,6 @@ app.controller('change_num_ctrl', ['$state', '$scope', '$stateParams', '$http', 
         !$scope.new_num ? $scope.warning.isNull = true : $scope.warning.isNull = false;
     }
 
-
-
-
  // 提交
     $scope.sureChange = function() {
         $scope.warning.isNull = false;
@@ -73,7 +70,7 @@ app.controller('change_num_ctrl', ['$state', '$scope', '$stateParams', '$http', 
     function submit () {
         _ajax.post('/mall/reset-mobile', {mobile:$scope.new_num,user_id:$stateParams.user_id}, function (res) {
             _alert('提示','更换成功',function () {
-                    history.go(-1);
+                   $state.go('account_mag_detail',{new_num:$scope.new_num})
             })
         })
     }

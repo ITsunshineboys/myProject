@@ -296,6 +296,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state("account_mag_detail", { //账户详情
             url: "/account_mag_detail?id",
+            params: {new_num:null},
             templateUrl: "pages/account_manage/user_list/account_detail/account_detail.html",
             css: "pages/account_manage/user_list/account_detail/css/account_detail.css",
             controller: "account_mag_detail"

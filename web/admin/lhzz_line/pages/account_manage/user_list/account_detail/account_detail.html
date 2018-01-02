@@ -60,7 +60,7 @@
         <div class="form-group bind-mobile">
             <span class="col-md-2 control-label">绑定手机号</span>
             <div class="col-md-10 form-control-static">
-                <span ng-bind="account_detail.mobile"></span>
+                <span ng-bind="new_num || account_detail.mobile"></span>
                 <button class="btn btn-primary" ui-sref="change_num({user_id:account_detail.id})">更换</button>
                 <span class="blue" ui-sref="bind_record({user_id:account_detail.id})">过往绑定记录</span>
             </div>
