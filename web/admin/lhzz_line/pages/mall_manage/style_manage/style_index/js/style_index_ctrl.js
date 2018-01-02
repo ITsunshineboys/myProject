@@ -256,12 +256,13 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         if (value == oldValue) {
             return
         }
+
         $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
         $scope.dropdown.keyword = '';
         $scope.pageConfig.currentPage = 1;
-        subClass(value);
         $scope.attr_params.pid = value;
-        tableList()
+        !value ? value : subClass(value);
+        tableList();
     });
 
 
