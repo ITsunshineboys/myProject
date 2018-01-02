@@ -71,7 +71,7 @@ class LaborCost extends ActiveRecord
      * 根据工种id查询
      * @param $city
      * @param $id
-     * @param string $rank
+     * @param $rank
      * @return array|null|ActiveRecord
      */
     public static function profession($city,$id,$rank = 1)
