@@ -15,26 +15,66 @@ app.controller('add_manage_ctrl', function (Upload,$scope, $rootScope, _ajax, $h
             name: $stateParams.index == 1 ? '编辑推荐' : '添加推荐'
         }
     ]
-    $scope.recommend_name = ''
+    $scope.recommend_name = ''//推荐名
     $scope.vm = $scope
+    $scope.district_list = []//区列表
+    $scope.toponymy_list = []//小区列表
     let obj = JSON.parse(sessionStorage.getItem('area'))
+    //获取推荐信息
     _ajax.get('/quote/homepage-district',{
-        province:obj.province,
         city:obj.city
     },function (res) {
         console.log(res);
-        $scope.district = res.list
-        if($scope.district.length != 0){
-            $scope.choose_district = $scope.district[0].district_code
-            _ajax.post('/quote/homepage-toponymy',{
-                province:obj.province,
-                city:obj.city,
+        $scope.district_list = res.list
+        if($scope.district_list.length != 0){
+            $scope.choose_district = $scope.district_list[0].district_code
+            _ajax.get('/quote/homepage-toponymy',{
                 district:$scope.choose_district
             },function (res) {
                 console.log(res);
+                $scope.toponymy_list = res.list
+                $scope.choose_toponymy = $scope.toponymy_list[0]
+                _ajax.get('/quote/homepage-case',{
+                    toponymy_id:$scope.choose_toponymy.id
+                },function (res) {
+                    console.log(res);
+                    $scope.case_list = res.list
+                    $scope.choose_case = $scope.case_list[0].id//我认为传文字肯定有问题
+                })
             })
         }
     })
+    //修改获取户型数据
+    $scope.getCase = function (str) {
+        if(str == 'district'){
+            if($scope.district_list.length != 0){
+                _ajax.get('/quote/homepage-toponymy',{
+                    district:$scope.choose_district
+                },function (res) {
+                    console.log(res);
+                    $scope.toponymy_list = res.list
+                    $scope.choose_toponymy = $scope.toponymy_list[0]
+                    _ajax.get('/quote/homepage-case',{
+                        toponymy_id:$scope.choose_toponymy.id
+                    },function (res) {
+                        console.log(res);
+                        $scope.case_list = res.list
+                        $scope.choose_case = $scope.case_list[0].id
+                    })
+                })
+            }
+        }else if(str == 'toponymy'){
+            if($scope.toponymy_list.length != 0){
+                _ajax.get('/quote/homepage-case',{
+                    toponymy_id:$scope.choose_toponymy.id
+                },function (res) {
+                    console.log(res);
+                    $scope.case_list = res.list
+                    $scope.choose_case = $scope.case_list[0].id
+                })
+            }
+        }
+    }
     $scope.img_error = ''
     $scope.data = {
         file: null
@@ -68,10 +108,32 @@ app.controller('add_manage_ctrl', function (Upload,$scope, $rootScope, _ajax, $h
     }
     //保存推荐
     $scope.saveManage = function (valid) {
-        if(valid){
-
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.cur_title = '保存成功'
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+                history.go(-1)
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        if($scope.cur_imgSrc != ''){
+            if(valid){
+                _ajax.post('/quote/homepage-add',{
+                    recommend_name:$scope.recommend_name,
+                    effect_id:$scope.choose_case,
+                    image:$scope.cur_imgSrc
+                },function (res) {
+                    console.log(res);
+                    $uibModal.open({
+                        templateUrl: 'pages/intelligent/cur_model.html',
+                        controller: all_modal
+                    })
+                })
+            }else{
+                $scope.submitted = true
+            }
         }else{
-            $scope.submitted = true
+            $scope.img_error = '请上传图片'
         }
     }
     //返回上一页

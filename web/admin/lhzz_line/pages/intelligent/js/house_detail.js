@@ -256,31 +256,35 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
     //上移、下移
     $scope.move = function (item,index,num) {
         let drawing_information = ''
-        if(sessionStorage.getItem('drawingInformation')){
+        if(sessionStorage.getItem('drawingInformation')!=null){
             drawing_information = JSON.parse(sessionStorage.getItem('drawingInformation'))
         }
         if(num == 1){
-            for(let [key,value] of drawing_information.entries()){
-                if(value.index == index){
-                    value.index = index+1
+            if(drawing_information!=''){
+                for(let [key,value] of drawing_information.entries()){
+                    if(value.index == index){
+                        value.index = index+1
+                    }
+                    if(value.index == index+1){
+                        value.index = index
+                    }
                 }
-                if(value.index == index+1){
-                    value.index = index
-                }
+                sessionStorage.setItem('drawingInformation',JSON.stringify(drawing_information))
             }
-            sessionStorage.setItem('drawingInformation',JSON.stringify(drawing_information))
             $scope.house_informations.splice(index,1)
             $scope.house_informations.splice(index+1,0,item)
         }else{
-            for(let [key,value] of drawing_information.entries()){
-                if(value.index == index){
-                    value.index = index-1
+            if(drawing_information!=''){
+                for(let [key,value] of drawing_information.entries()){
+                    if(value.index == index){
+                        value.index = index-1
+                    }
+                    if(value.index == index-1){
+                        value.index = index
+                    }
                 }
-                if(value.index == index-1){
-                    value.index = index
-                }
+                sessionStorage.setItem('drawingInformation',JSON.stringify(drawing_information))
             }
-            sessionStorage.setItem('drawingInformation',JSON.stringify(drawing_information))
             $scope.house_informations.splice(index,1)
             $scope.house_informations.splice(index-1,0,item)
         }
