@@ -1181,29 +1181,29 @@ class QuoteController extends Controller
 //                            }
 //                        }
                     }
+                    var_dump($ids);die;
+                    $ids = implode(',',$ids);
+                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+                    $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
 
-
+                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+                    $effect_plot->toponymy=$request['house_name'];
+                    $effect_plot->province_code=$request['province_code'];
+                    $effect_plot->city_code=$request['city_code'];
+                    $effect_plot->district_code=$request['district_code'];
+                    $effect_plot->street=$request['address'];
+                    if(!$effect_plot->save(false)){
+                        $transaction->rollBack();
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => \Yii::$app->params['errorCodes'][$code]
+                        ]);
+                    }
                 }
 
-                var_dump($ids);die;
-                $ids = implode(',',$ids);
-                $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-                $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
 
-                $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-                $effect_plot->toponymy=$request['house_name'];
-                $effect_plot->province_code=$request['province_code'];
-                $effect_plot->city_code=$request['city_code'];
-                $effect_plot->district_code=$request['district_code'];
-                $effect_plot->street=$request['address'];
-                if(!$effect_plot->save(false)){
-                    $transaction->rollBack();
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
+
                 //  案例修改
                 $toponymy_ids=[];
                 if (isset($house['id'])) {
