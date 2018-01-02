@@ -327,6 +327,24 @@ class MallController extends Controller
     }
 
     /**
+     * Get goods categories with children action.
+     *
+     * @return string
+     */
+    public function actionCategoriesWithChildren()
+    {
+        $pid = (int)Yii::$app->request->get('pid', 0);
+        $categories = GoodsCategory::categories($pid);
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'categories' => $categories
+            ],
+        ]);
+    }
+
+    /**
      * Get goods categories action(admin).
      *
      * @return string
