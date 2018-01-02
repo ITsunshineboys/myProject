@@ -1781,15 +1781,16 @@ class GoodsOrder extends ActiveRecord
             }
             $supplier_accessdetail=new UserAccessdetail();
             $supplier_accessdetail->uid=$supplier->uid;
-            $supplier_accessdetail->role_id=6;
-            $supplier_accessdetail->access_type=6;
+            $supplier_accessdetail->role_id=Yii::$app->params['supplierRoleId'];
+            $supplier_accessdetail->access_type=UserAccessdetail::ACCESS_TYPE_PAYMENT_GOODS;
             $supplier_accessdetail->access_money=($orderGoods->freight+$orderGoods->supplier_price*$orderGoods->goods_number);
             $supplier_accessdetail->order_no=$order_no;
             $supplier_accessdetail->sku=$sku;
             $supplier_accessdetail->create_time=time();
             $supplier_accessdetail->transaction_no=$transaction_no;
             $res2=$supplier_accessdetail->save(false);
-            if (!$res2){
+            if (!$res2)
+            {
                 $trans->rollBack();
                 return false;
             }
@@ -1992,13 +1993,11 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
-     *
-     * ordfer_refund 表字段status不启用
+     * order_refund 表字段status不启用
      * @param $order_no
      * @param $sku
      * @param $handle
      * @param $handle_reason
-     * @param $user
      * @param $supplier
      * @return int
      */
@@ -2050,10 +2049,6 @@ class GoodsOrder extends ActiveRecord
     /**
      * @param $order_no
      * @param $sku
-     * @param $handle
-     * @param $handle_reason
-     * @param $user
-     * @param $supplier
      * @return int
      */
     public static function AgreeRefundHandle($order_no,$sku)

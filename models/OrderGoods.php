@@ -48,7 +48,10 @@ class OrderGoods extends ActiveRecord
      */
     public static  function  UserConfirmReceipt($postData=[],$user)
     {
-            if (!array_key_exists('order_no',$postData) || !array_key_exists('sku',$postData)){
+            if (
+                !array_key_exists('order_no',$postData)
+                || !array_key_exists('sku',$postData)
+            ){
                 $code=1000;
                 return $code;
             }
@@ -77,8 +80,8 @@ class OrderGoods extends ActiveRecord
                 }
                 $supplier_accessdetail=new UserAccessdetail();
                 $supplier_accessdetail->uid=$supplier->uid;
-                $supplier_accessdetail->role_id=6;
-                $supplier_accessdetail->access_type=6;
+                $supplier_accessdetail->role_id=Yii::$app->params['supplierRoleId'];
+                $supplier_accessdetail->access_type=UserAccessdetail::ACCESS_TYPE_PAYMENT_GOODS;
                 $supplier_accessdetail->access_money=($OrderGoods->freight+$OrderGoods->supplier_price*$OrderGoods->goods_number);
                 $supplier_accessdetail->order_no=$postData['order_no'];
                 $supplier_accessdetail->sku=$postData['sku'];
@@ -117,6 +120,13 @@ class OrderGoods extends ActiveRecord
                         $code=500;
                         return $code;
                     }
+                }
+                $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'订单已收货',Yii::$app->params['supplierRoleId'],"订单号{$postData['order_no']},商品名称{$OrderGoods->goods_name},货款已打至您的账户余额.",$postData['order_no'],$postData['sku'],GoodsOrder::STATUS_DESC_DETAILS);
+                if ($code!=200)
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
                 }
                 $code=200;
                 $tran->commit();
