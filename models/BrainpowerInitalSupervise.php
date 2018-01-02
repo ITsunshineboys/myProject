@@ -44,13 +44,13 @@ class BrainpowerInitalSupervise extends ActiveRecord
 //        ];
 //    }
 
-    public static function findByCode($province,$city)
+    public static function findByCode($city)
     {
         $res = self::find()
             ->asArray()
             ->select([])
             ->orderBy(['sort'=>SORT_ASC])
-            ->where(['and',['province_code'=>$province],['city_code'=>$city]])
+            ->where(['city_code'=>$city])
             ->all();
         foreach ($res as &$list) {
             if(isset($list['add_time'])){
@@ -65,7 +65,7 @@ class BrainpowerInitalSupervise extends ActiveRecord
     {  // ['status'=>1]
         $ros = self::find()
             ->asArray()
-            ->where([['city_code'=>$city]])
+            ->where(['city_code'=>$city])
             ->all();
         return $ros;
     }

@@ -2130,9 +2130,9 @@ class QuoteController extends Controller
     public function actionHomepageList(){
         $request = \Yii::$app->request;
 //        $province_code = trim($request->get('province',''));
-        $district_code = trim($request->get('district_code',''));
+        $district_code = trim($request->get('city_code',''));
 
-        $brainpower = (new BrainpowerInitalSupervise())->codeStatus($district_code);
+        $brainpower =BrainpowerInitalSupervise::codeStatus($district_code);
         foreach ($brainpower as $value){
             $effect = Effect::find()
                 ->asArray()
@@ -2151,7 +2151,7 @@ class QuoteController extends Controller
         return Json::encode([
             'code' => $code,
             'msg'  => 'ok',
-            'list' =>  (new BrainpowerInitalSupervise())->findByCode($province_code,$city_code)
+            'list' =>  BrainpowerInitalSupervise::findByCode($district_code)
         ]);
     }
 
@@ -2280,6 +2280,9 @@ class QuoteController extends Controller
         $add_item->image           = trim($request->post('image',''));
         $add_item->house_type_name = $effect['particulars'];
         $add_item->city_code       = $effect['city_code'];
+        $add_item->district_code   = $effect['district_code'];
+        $add_item->toponymy         = $effect['toponymy'];
+        $add_item->street          = $effect['street'];
         $add_item->effect_id       = $effect['id'];
         $add_item->add_time        = time();
 
@@ -2347,12 +2350,7 @@ class QuoteController extends Controller
         $item->toponymy        = $effect['toponymy'];
         $item->street          = $effect['street'];
         $item->house_type_name = $effect['particulars'];
-        $item->province_code   = $effect['province_code'];
         $item->city_code       = $effect['city_code'];
-        $item->province        = $effect['province'];
-        $item->city            = $effect['city'];
-        $item->district        = $effect['district'];
-        $item->effect_id       = $effect['id'];
 
 
         $code = 500;
