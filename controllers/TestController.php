@@ -6,6 +6,7 @@ use app\models\Carousel;
 use app\models\Express;
 use app\models\Goods;
 use app\models\GoodsOrder;
+use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderPlatForm;
 use app\models\ShippingCart;
@@ -167,10 +168,22 @@ class TestController extends Controller
      */
     public function actionTest()
     {
-        $users = \Yii::$app->user->identity;
-        $user=User::findOne($users->id);
-      $users->icon=13;
-      $users->save(false);
+
+        $arr=array(0,1,2,3,4,5,6);
+//        $arr=explode(',',$arr);
+        //0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
+        foreach ($arr as &$type)
+        {
+            if ($type != 0  && $type !=1)
+            {
+                $status[]=array_search(OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$type],OrderAfterSale::AFTER_SALE_SERVICES);
+            }
+        }
+
+        if (!in_array(5,$arr)){
+          echo 1;
+        }
+
     }
 
     /**

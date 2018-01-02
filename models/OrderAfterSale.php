@@ -108,21 +108,26 @@ class OrderAfterSale extends ActiveRecord
             $code=1036;
             return $code;
         }
-        $goods=Goods::find()
-            ->select('after_sale_services')
-            ->where(['sku'=>$postData['sku']])
-            ->one();
-//        if ($goods){
-//            $array=explode(',',$goods->after_sale_services);
-//            $arr=[];
-//            foreach ($array as $k =>$v){
-//                $arr[]=self::GOODS_AFTER_SALE_SERVICES[$array[$k]];
-//            }
-//            if (!in_array(self::AFTER_SALE_SERVICES[$postData['type']],$arr)){
-//                $code=1035;
-//                return $code;
-//            }
-//        }
+        if ($OrderGoods->after_sale_services!=0)
+        {
+            $arr=explode(',',$OrderGoods->after_sale_services);
+            //0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
+            foreach ($arr as &$type)
+            {
+                if ($type != 0  && $type !=1)
+                {
+                    $status[]=array_search(self::GOODS_AFTER_SALE_SERVICES[$type],self::AFTER_SALE_SERVICES);
+                }
+            }
+            if (!in_array($postData['type'],$status)){
+                $code=1035;
+                return $code;
+            }
+        }else
+        {
+            $code=1035;
+            return $code;
+        }
         $CheckIsAfter=self::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
