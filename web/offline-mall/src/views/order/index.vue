@@ -147,6 +147,7 @@
                     console.log('openID返回值')
                     console.log(res)
                     function onBridgeReady () {
+                      /* global WeixinJSBridge:true */
                       WeixinJSBridge.invoke(
                         'getBrandWCPayRequest', {
                           'appId': res.data.appId,                 // 公众号名称，由商户传入

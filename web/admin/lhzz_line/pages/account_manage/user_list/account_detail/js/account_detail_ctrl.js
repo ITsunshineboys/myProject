@@ -1,7 +1,8 @@
 /**
  * Created by hulingfangzi on 2017/7/27.
  */
-app.controller('account_mag_detail', ['$rootScope', '$scope', '$http', '$state', function ($rootScope, $scope, $http, $state) {
+app.controller('account_mag_detail', ['$stateParams', '$rootScope', '$scope', '$http', '$state', function ($stateParams, $rootScope, $scope, $http, $state) {
+    $scope.new_num = $stateParams.new_num;
     $scope.account_detail = JSON.parse(sessionStorage.getItem('account_detail'));
     $rootScope.crumbs = [{
         name: '账户管理',

@@ -296,6 +296,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
 
         .state("account_mag_detail", { //账户详情
             url: "/account_mag_detail?id",
+            params: {new_num:null},
             templateUrl: "pages/account_manage/user_list/account_detail/account_detail.html",
             css: "pages/account_manage/user_list/account_detail/css/account_detail.css",
             controller: "account_mag_detail"
@@ -316,67 +317,19 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             params: {user_id:null},
             controller:"change_num_ctrl"
         })
-        .state("bind_record", {
+        .state("bind_record", { // 账户绑定记录
             url: "/bind_record?id",
             templateUrl: "pages/account_manage/user_list/account_detail/bind_record.html",
             css: "pages/account_manage/user_list/account_detail/css/bind_record.css",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            },
+            params: {user_id:null},
             controller:"bind_record_ctrl"
         })
-        .state("operation_record", {
+        .state("operation_record", { //账户操作记录
             url: "/operation_record",
             templateUrl: "pages/account_manage/user_list/account_detail/operation_record.html",
             css: "pages/account_manage/user_list/account_detail/css/operation_record.css",
-            params: {
-                icon: 'icon',
-                nickname: 'nickname'
-                ,
-                old_nickna: 'old_nickname',
-                district_name: 'district_name',
-                birthday: 'birthday',
-                signature: 'signature',
-                mobile: 'mobile',
-                aite_cube_no: 'aite_cube_no',
-                create_time: 'create_time',
-                names: 'names',
-                review_status_desc: 'review_status_desc',
-                status: 'status',
-                id: 'id',
-                legal_person: 'legal_person',
-                identity_no: 'identity_no'
-                ,
-                identity_card_front_imagen: 'identity_card_front_image',
-                identity_card_back_image: 'identity_card_back_image',
-                review_time: 'review_time',
-                status_remark: 'status_remark',
-                status_operator: 'status_operator',
-                a: ''
-            },
-            controller:"aaa"
+            params: {user_id:null},
+            controller:"operation_record"
         })
 
         .state('account_user_verify', { //账户管理 - 用户审核
