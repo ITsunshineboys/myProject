@@ -104,7 +104,10 @@ class OrderAfterSale extends ActiveRecord
             $code=1000;
             return $code;
         }
-        if ($OrderGoods->order_status !=1 || $GoodsOrder->pay_status !=1 ){
+        if (
+            $OrderGoods->order_status !=1
+            || $GoodsOrder->pay_status !=1
+        ){
             $code=1036;
             return $code;
         }
@@ -119,9 +122,12 @@ class OrderAfterSale extends ActiveRecord
                     $status[]=array_search(self::GOODS_AFTER_SALE_SERVICES[$type],self::AFTER_SALE_SERVICES);
                 }
             }
-            if (!in_array($postData['type'],$status)){
-                $code=1035;
-                return $code;
+            if (!empty($status))
+            {
+                if (!in_array($postData['type'],$status)){
+                    $code=1035;
+                    return $code;
+                }
             }
         }else
         {
@@ -143,7 +149,7 @@ class OrderAfterSale extends ActiveRecord
             $OrderAfterSale->description=$postData['description'];
             $OrderAfterSale->type=$postData['type'];
             $OrderAfterSale->create_time=time();
-            $res=$OrderAfterSale->save();
+            $res=$OrderAfterSale->save(false);
             if (!$res)
             {
                 $tran->rollBack();
@@ -169,6 +175,14 @@ class OrderAfterSale extends ActiveRecord
                         return $code;
                     };
                 }
+            }
+            $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+            $code=UserNewsRecord::AddOrderNewRecord(User::findOne($supplier->uid),'申请售后订单',Yii::$app->params['supplierRoleId'],"订单号{$postData['order_no']}申请售后，商品名称{$OrderGoods->goods_name}，点击查看详情。",$postData['order_no'],$postData['sku'],GoodsOrder::STATUS_DESC_DETAILS);
+            if ($code!=200)
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
             }
             $tran->commit();
             $code=200;
