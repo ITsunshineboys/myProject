@@ -781,7 +781,8 @@ class GoodsCategory extends ActiveRecord
     {
         $db = Yii::$app->db;
         $selectStr = $select ? join(',', $select) : '*';
-        $sql = 'select ' . $selectStr. ' from ' . self::tableName() . ' where pid = :pid';
+        $sql = 'select ' . $selectStr. ' from ' . self::tableName();
+        $sql .= ' where deleted = 0 and review_status = ' . self::REVIEW_STATUS_APPROVE . ' and pid = :pid';
         $categories = $db->createCommand($sql)->bindParam(':pid', $pid)->queryAll();
         $arr = [];
         foreach ($categories as $category) {
