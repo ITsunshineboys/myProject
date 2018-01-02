@@ -468,7 +468,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller:'home_manage_ctrl'
         })
         .state('add_manage', {//添加推荐
-            url: '/add_manage?index',
+            url: '/add_manage?index&id',
             templateUrl: 'pages/intelligent/add_manage.html',
             css: 'pages/intelligent/css/add_manage.css',
             controller:'add_manage_ctrl'
