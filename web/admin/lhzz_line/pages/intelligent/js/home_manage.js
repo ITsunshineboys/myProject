@@ -28,8 +28,14 @@ app.controller('home_manage_ctrl',function ($http,$scope,_ajax,$rootScope,$state
     })
     //拖拽排序
     $scope.dropComplete = function (index, obj) {
-        let idx = $scope.all_manage.indexOf(obj)
-        $scope.all_manage[idx] = $scope.all_manage[index]
-        $scope.all_manage[index] = obj
+        let idx = $scope.home_manage_list.indexOf(obj)
+        $scope.home_manage_list[idx] = $scope.home_manage_list[index]
+        $scope.home_manage_list[index] = obj
     }
+    //首页推荐开启关闭
+    $scope.saveStatus = function (item) {
+        
+    }
+    //首页推荐删除
+    //保存首页排序
 })
