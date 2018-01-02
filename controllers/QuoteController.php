@@ -2236,11 +2236,6 @@ class QuoteController extends Controller
     public function actionHomepageCase()
     {
         $request  = \Yii::$app->request;
-//        $province = trim($request->post('province',''));
-//        $city     = trim($request->post('city',''));
-//        $district = trim($request->post('district',''));
-//        $toponymy = trim($request->post('toponymy',''));
-//        $street   = trim($request->post('street',''));
         $toponymy_id= trim($request->get('toponymy_id'));
         $effect_ids = EffectToponymy::find()
             ->select('effect_id')
