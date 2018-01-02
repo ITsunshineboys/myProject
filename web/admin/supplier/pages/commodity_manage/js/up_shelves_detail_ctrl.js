@@ -127,6 +127,8 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
             }
             //循环风格列表
             for (let [key, value] of $scope.styles_arr.entries()) {
+                console.log(value)
+                console.log(3332)
                 $scope.style_null_arr.push(value.style);
                 if (value.style == $scope.detail_style) {
                     $scope.styles_arr.splice(key, 1);
@@ -158,8 +160,25 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     });
     /*品牌、系列、风格 下拉框结束*/
 
-    /*---------------------------------属性获取开始---------------------------------*/
 
+	//风格复选框
+	$scope.style_change = function (status,item) {
+		console.log(item);
+		if(status === true){
+			$scope.style_check_arr.push(item.id)
+		} else {
+			style_check_del(item.id)
+		}
+	}
+	function style_check_del(num) {
+		let del_index = $scope.style_check_arr.findIndex(function (value, index, arr) {
+			return value == num;
+		});
+		if (del_index != -1) {
+			$scope.style_check_arr.splice(del_index, 1);
+		}
+	}
+    /*---------------------------------属性获取开始---------------------------------*/
     $scope.goods_input_attrs = [];//普通文本框
     $scope.goods_select_attrs = [];//下拉框
     $scope.goods_select_value = [];//下拉框的值

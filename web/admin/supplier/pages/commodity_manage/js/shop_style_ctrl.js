@@ -11,6 +11,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.upload_dis=false;
 	$scope.price_flag = false;//价格flag
 	$scope.myng = $scope;
+	$scope.style_check_arr = [] // 风格id 数组
+	$scope.style_check_model = ''
 	$scope.logistics = [];//物流模块列表
 	$scope.goods_all_attrs = [];//所有属性数据
 	$scope.shop_logistics = [];//物流模板默认第一项
@@ -52,14 +54,32 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			$scope.series_model = res.data.category_brands_styles_series.series[0].id;
 		}
 		$scope.styles_arr = res.data.category_brands_styles_series.styles;
-		if ($scope.styles_arr.length > 0) {
-			$scope.style_model = res.data.category_brands_styles_series.styles[0].id;
-		}
+		// if ($scope.styles_arr.length > 0) {
+		// 	$scope.style_model = res.data.category_brands_styles_series.styles[0].id;
+		// }
 	})
 	/*品牌、系列、风格 下拉框结束*/
 
-	/*---------------属性获取-----------------*/
+	//风格复选框
+	$scope.style_change = function (status,item) {
+		console.log(status);
+		console.log(item);
+		if(status === true){
+			$scope.style_check_arr.push(item.id)
+		} else {
+			style_check_del(item.id)
+		}
+	}
+	function style_check_del(num) {
+		let del_index = $scope.style_check_arr.findIndex(function (value, index, arr) {
+			return value == num;
+		});
+		if (del_index != -1) {
+			$scope.style_check_arr.splice(del_index, 1);
+		}
+	}
 
+	/*---------------属性获取-----------------*/
 	$scope.goods_input_attrs = [];//普通文本框
 	$scope.goods_select_attrs = [];//下拉框
 	$scope.goods_select_value = [];//下拉框的值
@@ -335,7 +355,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			}
 			/*判断风格和系列是否存在，如果不存在，值传0*/
 			$scope.series_model == undefined ? $scope.series_model = 0 : $scope.series_model = parseInt($scope.series_model);
-			$scope.style_model == undefined ? $scope.style_model = 0 : $scope.style_model = parseInt($scope.style_model);
+			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = [] : $scope.style_check_arr = $scope.style_check_arr.join(',')
 			/*如果没有属性，则传空数组*/
 			if ($scope.pass_attrs_name[0] == undefined) {
 				$scope.pass_attrs_name = [];
@@ -350,7 +370,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				title: $scope.goods_name,              //名称
 				subtitle: $scope.des_name,             //特色
 				brand_id: +$scope.brand_model,      //品牌
-				style_id: $scope.style_model,      //风格
+				style_id: $scope.style_check_arr,      //风格
 				series_id: $scope.series_model,    //系列
 				'names[]': $scope.pass_attrs_name,   // 属性名称
 				'values[]': $scope.pass_attrs_value, //属性值

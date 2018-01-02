@@ -156,7 +156,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.pass_attrs_value=[];//值
   $scope.goods_select_attrs_value=[];
   _ajax.get('/mall/goods-attrs-admin',{goods_id:+$scope.goods_id},function (res) {
-	  console.log(res);
 	  $scope.goods_all_attrs=res.data.goods_attrs_admin;
 	  //循环所有获取到的属性值，判断是普通文本框还是下拉框
 	  for( let [key,value] of $scope.goods_all_attrs.entries()){
@@ -175,7 +174,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	  for(let [key,value] of $scope.goods_select_attrs.entries()){
 		  $scope.goods_select_attrs_value.push(value.value);//下拉框的值
 	  }
-	  console.log($scope.goods_all_attrs);
   });
 
 	/*----------------自己添加的属性--------------------*/
@@ -292,8 +290,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 
 	//物流模块
 	_ajax.post('/mall/logistics-templates-supplier',{},function (res) {
-		console.log('物流模块');
-		console.log(res);
 		if(res.data.logistics_templates_supplier.length>0) {
 			$scope.logistics = res.data.logistics_templates_supplier;
 			for (let [key, value] of $scope.logistics.entries()) {
@@ -311,8 +307,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			$scope.shop_logistics=res.data.logistics_templates_supplier[0].id;
 			$scope.$watch('shop_logistics',function (newVal,oldVal) {
 				_ajax.get('/mall/logistics-template-view',{id:+newVal},function (res) {
-					console.log('物流详情');
-					console.log(res);
 					$scope.logistics_method=res.data.logistics_template.delivery_method;//快递方式
 					$scope.district_names=res.data.logistics_template.district_names;//地区名
 					$scope.delivery_cost_default=res.data.logistics_template.delivery_cost_default;//默认运费

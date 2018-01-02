@@ -86,8 +86,6 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.params.keyword = '';
             $scope.params['sort[]'] = 'online_time:3';
             $scope.params.status = 2;
-            $scope.up_sort_sale_img = 'lib/images/arrow_default.png';//销量默认图片
-            $scope.up_sort_time_img = 'lib/images/arrow_down.png';   //时间默认图片
             $scope.table.roles = [];//清空全选状态
         }
         //已下架
@@ -102,6 +100,7 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.params.keyword = '';
             $scope.params['sort[]'] = 'offline_time:3';
             $scope.params.status = 0;
+            console.log($scope.params['sort[]'])
         }
         //等待上架
         if ($stateParams.wait_flag == true) {
@@ -137,8 +136,6 @@ let commodity_manage = angular.module("commodity_manage", [])
             $scope.params.keyword = '';
             $scope.params['sort[]'] = 'online_time:3';
             $scope.params.status = 2;
-            $scope.up_sort_sale_img = 'lib/images/arrow_default.png';//销量默认图片
-            $scope.up_sort_time_img = 'lib/images/arrow_down.png';   //时间默认图片
             $scope.table.roles = [];//清空全选状态
             tablePages();
         };
