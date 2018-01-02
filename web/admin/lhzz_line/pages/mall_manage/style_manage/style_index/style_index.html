@@ -98,14 +98,22 @@
   <!--属性管理-->
   <div ng-if="showattr==true">
     <!--属性管理按钮组-->
-    <div class="attr_btns">
+    <div class="search form-inline clearfix">
       <span>分类选择</span>
       <!--/*分类选择一级下拉框*/-->
-      <select name="" class="fenleichoose" ng-model="dropdown.firstselect"
+      <select name="" class="form-control" ng-model="dropdown.firstselect"
               ng-options="item.id as item.title for item in firstclass" ng-change="subClass(firstselect)"></select>
       <!--/*分类选择二级菜单*/-->
-      <select name="" class="cailiaochoose" ng-show="dropdown.firstselect=='0'?false:true"
+      <select name="" class="form-control" ng-show="dropdown.firstselect=='0'?false:true"
               ng-options="item.id as item.title for item in secondclass" ng-model="dropdown.secselect"></select>
+
+      <div class="form-group pull-right">
+        <div class="input-group">
+          <input class="form-control" type="text" ng-model="dropdown.keyword" placeholder="搜索分类名称">
+          <span class="iconfont icon-search"></span>
+        </div>
+        <button class="btn btn-default" ng-click="search()">查询</button>
+      </div>
     </div>
 
     <!--属性管理表格-->

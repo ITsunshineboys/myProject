@@ -108,10 +108,9 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
     /*搜索*/
     $scope.search = function () {
         $scope.table.roles.length = 0;
-        $scope.params.keyword = $scope.table.keyword,
         $scope.dropdown.firstselect = 0;
         $scope.params['sort[]'] = 'online_time:3';
-        $scope.pageConfig.currentPage = 1;
+        $scope.params.page = 1;
         tableList();
     }
 

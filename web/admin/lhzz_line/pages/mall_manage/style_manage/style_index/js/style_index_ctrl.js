@@ -34,16 +34,6 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     };
 
 
-
-
-    //POST请求的响应头
-    let config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        transformRequest: function (data) {
-            return $.param(data)
-        }
-    };
-
     let sortparam;
     //系列——展示数据数组
     $scope.series_arr = [];  //系列所有数据列表
@@ -65,7 +55,8 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /*分类选择下拉框初始化*/
     $scope.dropdown = {
         firstselect: 0,
-        secselect: 0
+        secselect: 0,
+        keyword: ''
     }
 
     /*分类选择一级下拉框*/
@@ -75,8 +66,6 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
             $scope.dropdown.firstselect = res.data.categories[0].id;
         })
     }
-
-
 
 
     $scope.changeTabbar = (function () {
@@ -240,23 +229,18 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /*********************************风格结束*******************************/
 
     /*********************************属性开始*******************************/
-
-
-
-
     /*默认参数*/
     $scope.attr_params = {
         pid: 0,   //父分类id
         page: 1,  //当前页数
-        'sort[]': "attr_op_time:3" //排序规则 默认按最后操作时间降序排列
+        'sort[]': "attr_op_time:3", //排序规则 默认按最后操作时间降序排列
+        keyword:''
     }
 
     /*排序按钮样式控制*/
     $scope.sortStyleFunc = () => {
         return $scope.attr_params['sort[]'].split(':')[1]
     }
-
-
 
 
     /*分类选择二级下拉框*/
@@ -269,7 +253,11 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
     /*分类筛选方法*/
     $scope.$watch('dropdown.firstselect', function (value, oldValue) {
-        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 下单时间排序
+        if (value == oldValue) {
+            return
+        }
+        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
+        $scope.dropdown.keyword = '';
         $scope.pageConfig.currentPage = 1;
         subClass(value);
         $scope.attr_params.pid = value;
@@ -278,7 +266,8 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
 
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
-        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 下单时间排序
+        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
+        $scope.dropdown.keyword = '';
         $scope.pageConfig.currentPage = 1;
         if (value == oldValue) {
             return
@@ -300,11 +289,22 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         tableList();
     }
 
+    // 搜索
+    $scope.search = function () {
+        $scope.attr_params.page = 1;
+        $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
+        // $scope.dropdown.firstselect = 0;
+        $scope.attr_params.page = 1;
+        tableList();
+    }
+
 
     /*列表数据获取*/
     function tableList() {
+        $scope.attr_params.keyword = $scope.dropdown.keyword;
         $scope.attr_params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/goods-attr-list-admin',$scope.attr_params,function (res) {
+            console.log(res);
             $scope.pageConfig.totalItems = res.data.goods_attr_list_admin.total;
             $scope.listdata = res.data.goods_attr_list_admin.details;
         })
