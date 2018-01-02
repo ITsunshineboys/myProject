@@ -462,23 +462,23 @@ class OwnerController extends Controller
     public function actionPlumberPrice()
     {
         $get = \Yii::$app->request->get();
+
+
         //人工价格
+        $labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
+        $day_workload = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$labor['id']])->all();
 
-
-        $waterway_labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
-        var_dump($waterway_labor);die;
-        $worker_kind_details = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$waterway_labor['id']])->all();
-        foreach ($worker_kind_details as $one_){
-            if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['strong_current']){
-                $strong = $one_['quantity'];
+        foreach ($day_workload as $one_day){
+            if ($one_day['worker_kind_details'] == self::POINTS_CATEGORY['strong_current']){
+                $strong = $one_day['quantity'];
             }
 
-            if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['weak_current']){
-                $weak = $one_['quantity'];
+            if ($one_day['worker_kind_details'] == self::POINTS_CATEGORY['weak_current']){
+                $weak = $one_day['quantity'];
             }
 
-            if ($one_['worker_kind_details'] == self::POINTS_CATEGORY['waterway']){
-                $waterway = $one_['quantity'];
+            if ($one_day['worker_kind_details'] == self::POINTS_CATEGORY['waterway']){
+                $waterway = $one_day['quantity'];
             }
         }
 
