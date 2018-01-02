@@ -202,12 +202,13 @@ class OrderAfterSale extends ActiveRecord
      */
     public  static function FindAfterSaleData($postData,$user)
     {
-        if(!array_key_exists('order_no', $postData) || !array_key_exists('sku', $postData)){
+        if(
+            !array_key_exists('order_no', $postData)
+            || !array_key_exists('sku', $postData)
+        ){
             $code=1000;
             return $code;
         }
-
-
         $goodsOrder=GoodsOrder::find()
             ->select(['supplier_id'])
             ->where(['order_no'=>$postData['order_no']])
@@ -247,17 +248,6 @@ class OrderAfterSale extends ActiveRecord
         if ($data['supplier_handle_time']!=0){
             $data['supplier_handle_time']=date('Y-m-d H:i',$data['supplier_handle_time']);
         }
-//        switch ($data['supplier_handle']){
-//            case 0:
-//                $data['supplier_handle']='未处理';
-//                break;
-//            case 1:
-//                $data['supplier_handle']='同意';
-//                break;
-//            case 2:
-//                $data['supplier_handle']='驳回';
-//                break;
-//        }
         return $data;
     }
 
@@ -298,17 +288,6 @@ class OrderAfterSale extends ActiveRecord
         if ($data['create_time'] !=0){
             $data['create_time']=date('Y-m-d H:i',$data['create_time']);
         }
-//        switch ($data['supplier_handle']){
-//            case 0:
-//                $data['supplier_handle']='未处理';
-//                break;
-//            case 1:
-//                $data['supplier_handle']='同意';
-//                break;
-//            case 2:
-//                $data['supplier_handle']='驳回';
-//                break;
-//        }
         return $data;
     }
 
@@ -328,7 +307,8 @@ class OrderAfterSale extends ActiveRecord
         $after_sale=self::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
-        if (!$after_sale){
+        if (!$after_sale)
+        {
             $code=1000;
             return $code;
         }
@@ -380,10 +360,18 @@ class OrderAfterSale extends ActiveRecord
                 return $code;
             }
             $OrderGoods->customer_service=2;
-            $res2=$OrderGoods->save();
+            $res2=$OrderGoods->save(false);
             if (!$res2){
                 $tran->rollBack();
                 $code=500;
+                return $code;
+            }
+            $GoodsOrder=GoodsOrder::FindByOrderNo($postData['order_no']);
+            $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'申请售后反馈',$GoodsOrder->role_id,"订单号{$postData['order_no']},商品名称{$OrderGoods->goods_name}申请售后，已被驳回,点击查看详情",$postData['order_no'],$postData['sku'],GoodsOrder::STATUS_DESC_DETAILS);
+            if ($code!=200)
+            {
+                $code=500;
+                $tran->rollBack();
                 return $code;
             }
             $tran->commit();
