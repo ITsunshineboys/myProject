@@ -229,7 +229,8 @@ class EffectController extends Controller
             ]);
         }
         $res= htmlspecialchars(trim($request->post('remark',''),''));
-        if($res || $res==''){
+//        var_dump($res);die;
+        if($res){
             $remark->remark=$res;
             if(!$remark->save()){
                 $code=500;
@@ -243,7 +244,6 @@ class EffectController extends Controller
                     'msg' => 'ok',
                 ]);
         }else{
-
             $model = new Effect();
             $effect_id=EffectEarnest::find()->asArray()->where(['id'=>$effect_enst_id])->select('effect_id')->one()['effect_id'];
             $data = $model->geteffectdata($effect_id);
