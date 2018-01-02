@@ -2,7 +2,7 @@
     <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}</h6>
     <div class="search form-inline clearfix">
         <button class="btn btn-default" ui-sref="add_manage"><i class="iconfont icon-add" style="margin-right: 5px;" aria-hidden="true"></i>添加</button>
-        <button class="btn btn-default" ng-click="cur_sort()">保存</button>
+        <button class="btn btn-default" ng-click="saveSort()">保存</button>
     </div>
     <table class="table table-responsive table-hover">
         <tr>
@@ -19,11 +19,11 @@
             <td class="text-left">{{item.add_time}}</td>
             <td class="text-left">{{item.toponymy}}</td>
             <td class="text-left">{{item.district}}</td>
-            <td ng-class="{'error':item.status==0}" class="text-left">{{item.status==0?'关闭':'开启'}}</td>
+            <td style="color:#23527c;" ng-class="{'error':item.status==0}" class="text-left">{{item.status==0?'关闭':'开启'}}</td>
             <td class="text-left">
-                <span><a ui-sref="add_manage({index:1})">编辑</a></span>
-                <span><a>删除</a></span>
-                <span><a>{{item.status==0?'开启':'关闭'}}</a></span>
+                <span><a ui-sref="add_manage({index:1,id:item.id})">编辑</a></span>
+                <span><a ng-click="deleteManage(item)">删除</a></span>
+                <span><a ng-click="saveStatus(item)">{{item.status==0?'开启':'关闭'}}</a></span>
             </td>
         </tr>
     </table>

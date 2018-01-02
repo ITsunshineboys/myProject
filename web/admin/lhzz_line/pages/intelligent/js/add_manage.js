@@ -21,29 +21,78 @@ app.controller('add_manage_ctrl', function (Upload,$scope, $rootScope, _ajax, $h
     $scope.toponymy_list = []//小区列表
     let obj = JSON.parse(sessionStorage.getItem('area'))
     //获取推荐信息
-    _ajax.get('/quote/homepage-district',{
-        city:obj.city
-    },function (res) {
-        console.log(res);
-        $scope.district_list = res.list
-        if($scope.district_list.length != 0){
-            $scope.choose_district = $scope.district_list[0].district_code
-            _ajax.get('/quote/homepage-toponymy',{
-                district:$scope.choose_district
+    if($stateParams.index == 1){
+        _ajax.get('/quote/homepage-edit-view',{
+            id:$stateParams.id
+        },function (res) {
+            console.log(res);
+            $scope.basic_data = res.list
+            $scope.recommend_name = res.list.recommend_name//推荐名
+            $scope.cur_imgSrc = res.list.image
+            _ajax.get('/quote/homepage-district',{
+                city:obj.city
             },function (res) {
                 console.log(res);
-                $scope.toponymy_list = res.list
-                $scope.choose_toponymy = $scope.toponymy_list[0]
-                _ajax.get('/quote/homepage-case',{
-                    toponymy_id:$scope.choose_toponymy.id
+                $scope.district_list = res.list
+                if($scope.district_list.length != 0){
+                    let index = $scope.district_list.findIndex(function (item) {
+                        return item.district_code == $scope.basic_data.district_code
+                    })
+                    index!=-1?($scope.choose_district = $scope.district_list[index].district_code):''
+                    _ajax.get('/quote/homepage-toponymy',{
+                        district:$scope.choose_district
+                    },function (res) {
+                        console.log(res);
+                        $scope.toponymy_list = res.list
+                        if($scope.toponymy_list.length!=0){
+                            let index = $scope.toponymy_list.findIndex(function (item) {
+                                return item.id == $scope.basic_data.toponymy_id
+                            })
+                            index!=-1?($scope.choose_toponymy = $scope.toponymy_list[index]):''
+                            _ajax.get('/quote/homepage-case',{
+                                toponymy_id:$scope.choose_toponymy.id
+                            },function (res) {
+                                console.log(res);
+                                $scope.case_list = res.list
+                                if($scope.case_list.length!=0){
+                                    let index = $scope.case_list.findIndex(function (item) {
+                                        return item.id == $scope.basic_data.effect_id
+                                    })
+                                    index!=-1?($scope.choose_case = $scope.case_list[index].id):''
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        })
+    }else{
+        _ajax.get('/quote/homepage-district',{
+            city:obj.city
+        },function (res) {
+            console.log(res);
+            $scope.district_list = res.list
+            if($scope.district_list.length != 0){
+                $scope.choose_district = $scope.district_list[0].district_code
+                _ajax.get('/quote/homepage-toponymy',{
+                    district:$scope.choose_district
                 },function (res) {
                     console.log(res);
-                    $scope.case_list = res.list
-                    $scope.choose_case = $scope.case_list[0].id//我认为传文字肯定有问题
+                    $scope.toponymy_list = res.list
+                    if($scope.toponymy_list.length!=0){
+                        $scope.choose_toponymy = $scope.toponymy_list[0]
+                        _ajax.get('/quote/homepage-case',{
+                            toponymy_id:$scope.choose_toponymy.id
+                        },function (res) {
+                            console.log(res);
+                            $scope.case_list = res.list
+                            $scope.choose_case = $scope.case_list[0].id
+                        })
+                    }
                 })
-            })
-        }
-    })
+            }
+        })
+    }
     //修改获取户型数据
     $scope.getCase = function (str) {
         if(str == 'district'){
@@ -53,14 +102,16 @@ app.controller('add_manage_ctrl', function (Upload,$scope, $rootScope, _ajax, $h
                 },function (res) {
                     console.log(res);
                     $scope.toponymy_list = res.list
-                    $scope.choose_toponymy = $scope.toponymy_list[0]
-                    _ajax.get('/quote/homepage-case',{
-                        toponymy_id:$scope.choose_toponymy.id
-                    },function (res) {
-                        console.log(res);
-                        $scope.case_list = res.list
-                        $scope.choose_case = $scope.case_list[0].id
-                    })
+                    if($scope.toponymy_list.length!=0){
+                        $scope.choose_toponymy = $scope.toponymy_list[0]
+                        _ajax.get('/quote/homepage-case',{
+                            toponymy_id:$scope.choose_toponymy.id
+                        },function (res) {
+                            console.log(res);
+                            $scope.case_list = res.list
+                            $scope.choose_case = $scope.case_list[0].id
+                        })
+                    }
                 })
             }
         }else if(str == 'toponymy'){
@@ -118,17 +169,32 @@ app.controller('add_manage_ctrl', function (Upload,$scope, $rootScope, _ajax, $h
         all_modal.$inject = ['$scope', '$uibModalInstance']
         if($scope.cur_imgSrc != ''){
             if(valid){
-                _ajax.post('/quote/homepage-add',{
-                    recommend_name:$scope.recommend_name,
-                    effect_id:$scope.choose_case,
-                    image:$scope.cur_imgSrc
-                },function (res) {
-                    console.log(res);
-                    $uibModal.open({
-                        templateUrl: 'pages/intelligent/cur_model.html',
-                        controller: all_modal
+                if($stateParams.index == 1){
+                    _ajax.post('/quote/homepage-edit',{
+                        recommend_name:$scope.recommend_name,
+                        effect_id:$scope.choose_case,
+                        image:$scope.cur_imgSrc,
+                        id:$stateParams.id
+                    },function (res) {
+                        console.log(res);
+                        $uibModal.open({
+                            templateUrl: 'pages/intelligent/cur_model.html',
+                            controller: all_modal
+                        })
                     })
-                })
+                }else{
+                    _ajax.post('/quote/homepage-add',{
+                        recommend_name:$scope.recommend_name,
+                        effect_id:$scope.choose_case,
+                        image:$scope.cur_imgSrc
+                    },function (res) {
+                        console.log(res);
+                        $uibModal.open({
+                            templateUrl: 'pages/intelligent/cur_model.html',
+                            controller: all_modal
+                        })
+                    })
+                }
             }else{
                 $scope.submitted = true
             }
