@@ -431,6 +431,7 @@ class OwnerController extends Controller
                 ]
             ]);
         }
+        var_dump($goods);die;
 //        $judge = BasisDecorationService::priceConversion($goods);
         $waterway_current = BasisDecorationService::judge($goods, $get);
 
@@ -509,7 +510,7 @@ class OwnerController extends Controller
         $strong_   = BasisDecorationService::laborFormula($strong_overall_points,$strong);
         $total = ceil(BasisDecorationService::algorithm(5,$waterway_,$weak_,$strong_));
 
-        
+
         $labor_all_cost['price'] = BasisDecorationService::algorithm(1,$total,$labor['univalence']);
         $labor_all_cost['worker_kind'] = $labor['worker_name'];
 
@@ -527,9 +528,9 @@ class OwnerController extends Controller
      */
     public function actionWaterproof()
     {
-        $post = \Yii::$app->request->get();
+        $get = \Yii::$app->request->get();
         //人工价格
-        $waterproof_labor = LaborCost::profession($post, self::WORK_CATEGORY['waterproof_worker']);
+        $waterproof_labor = LaborCost::profession($get, self::WORK_CATEGORY['waterproof_worker']);
         $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area']);
         $worker_price = !isset($waterproof_labor['univalence']) ? $waterproof_labor['univalence'] : 100;
         $worker_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERPROOF_DAY_AREA;
