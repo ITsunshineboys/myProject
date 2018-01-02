@@ -931,7 +931,7 @@ class QuoteController extends Controller
         $public_message = [];
 
         $data= EffectToponymy::PlotView($plot_id);
-        var_dump($data);die;
+//        var_dump($data);die;
         $public_message['street'] =  $data[0]['street'];
         $public_message['toponymy'] =  $data[0]['toponymy'];
         $public_message['district_code'] =  $data[0]['district_code'];
@@ -3129,6 +3129,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-
+        var_dump(Effect::find()->where(['status'=>1])->asArray()->all());
     }
 }
