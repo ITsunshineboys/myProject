@@ -1367,32 +1367,32 @@ class QuoteController extends Controller
 //                            WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
 //                        }
                     }
-                    $toponymy_ids[]=$house['id'];
-                    if(is_array($toponymy_ids)){
-                        $ids= implode(',',$toponymy_ids);
-                    }else{
-                        $ids=['id'];
-                    }
-                    $effect_toponymy=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-                    if(!$effect_toponymy){
-                        $transaction->rollBack();
-                        $code = 1000;
-                        return Json::encode([
-                            'code'=> $code,
-                            'msg'=> \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-
-                    $effect_toponymy->effect_id=$ids;
-
-                    if(!$effect_toponymy->save(false)){
-                        $code = 500 ;
-                        $transaction->rollBack();
-                        return Json::encode([
-                            'code'=>$code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
+//                    $toponymy_ids[]=$house['id'];
+//                    if(is_array($toponymy_ids)){
+//                        $ids= implode(',',$toponymy_ids);
+//                    }else{
+//                        $ids=['id'];
+//                    }
+//                    $effect_toponymy=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+//                    if(!$effect_toponymy){
+//                        $transaction->rollBack();
+//                        $code = 1000;
+//                        return Json::encode([
+//                            'code'=> $code,
+//                            'msg'=> \Yii::$app->params['errorCodes'][$code]
+//                        ]);
+//                    }
+//
+//                    $effect_toponymy->effect_id=$ids;
+//
+//                    if(!$effect_toponymy->save(false)){
+//                        $code = 500 ;
+//                        $transaction->rollBack();
+//                        return Json::encode([
+//                            'code'=>$code,
+//                            'msg' => \Yii::$app->params['errorCodes'][$code]
+//                        ]);
+//                    }
                 }
             }
             $transaction->commit();
