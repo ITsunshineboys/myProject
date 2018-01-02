@@ -102,7 +102,7 @@ class PayService
         $url = $this->__CreateOauthUrlForCode($baseUrl);
         header("Location:".$url);
     }
- 
+
     /**
      *
      * 获取jsapi支付的参数

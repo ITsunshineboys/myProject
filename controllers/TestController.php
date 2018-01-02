@@ -20,6 +20,7 @@ use app\models\UserAddress;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
 use Yii;
+use yii\db\Exception;
 use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -173,14 +174,7 @@ class TestController extends Controller
      */
     public function actionTest()
     {
-
-        $order=OrderGoods::FindByOrderNoAndSku('1125190153','81','goods_name');
-//        var_dump($order->toArray());die;
-        $order->goods_name='韩亚空心砖123';
-        if ($order->save(false))
-        {
-            echo 1;
-        }
+        throw new Exception("服务器发生错误");
     }
 
     /**

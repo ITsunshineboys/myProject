@@ -3201,7 +3201,6 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
-
         if (!$order_no || !$sku)
         {
             $order_no=trim($request->get('order_no',''));
@@ -3431,7 +3430,6 @@ class OrderController extends Controller
                 ]);
             }
         }
-
         $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
 
         if (!$GoodsOrder)
