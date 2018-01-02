@@ -2251,7 +2251,7 @@ class QuoteController extends Controller
         $data=[];
         foreach ($effect_id as $item){
            $data[]=Effect::find()
-               ->select('particulars')
+               ->select('id,particulars')
                ->asArray()
                ->where(['id'=>$item])
                ->one();
@@ -2272,10 +2272,10 @@ class QuoteController extends Controller
         $request = \Yii::$app->request;
         $effect = Effect::find()
             ->asArray()
-            ->where(['district_code'=>(int)trim($request->post('district',''))])
-            ->andWhere(['toponymy'=>trim($request->post('toponymy',''))])
-            ->andWhere(['street'=>trim($request->post('street',''))])
-            ->andWhere(['!=','type',2])
+            ->where(['id'=>(int)trim($request->post('effect_id',''))])
+//            ->andWhere(['toponymy'=>trim($request->post('toponymy',''))])
+//            ->andWhere(['street'=>trim($request->post('street',''))])
+//            ->andWhere(['!=','type',2])
             ->one();
 
 
