@@ -1191,6 +1191,7 @@ class QuoteController extends Controller
                 $effect_plot->province_code=$request['province_code'];
                 $effect_plot->city_code=$request['city_code'];
                 $effect_plot->district_code=$request['district_code'];
+                $effect_plot->street=$request['address'];
                 if(!$effect_plot->save(false)){
                     $transaction->rollBack();
                     $code = 500;
