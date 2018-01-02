@@ -931,7 +931,7 @@ class QuoteController extends Controller
         $public_message = [];
 
         $data= EffectToponymy::PlotView($plot_id);
-
+        var_dump($data);die;
         $public_message['street'] =  $data[0]['street'];
         $public_message['toponymy'] =  $data[0]['toponymy'];
         $public_message['district_code'] =  $data[0]['district_code'];
@@ -1100,7 +1100,7 @@ class QuoteController extends Controller
                             $stair_id = $house['stair'];
                         }
                         $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
-                        var_dump($effect);die;
+//                        var_dump($effect);die;
                         if (!$effect) {
                             $code = 500 ;
                             $transaction->rollBack();
