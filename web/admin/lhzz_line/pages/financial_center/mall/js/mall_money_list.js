@@ -28,8 +28,8 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
         keyword:'',
         sort_time:'2',
         type:'0',
-        time_start:'',
-        time_end:''
+        start_time:'',
+        end_time:''
     };
     $scope.keyword = ''
     $scope.vm = $scope
@@ -71,12 +71,12 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
             $scope.Config.currentPage = 1
             if(index == 1){
                 if($scope.params.time_type != 'custom'){
-                    $scope.params.time_start = ''
-                    $scope.params.time_end = ''
+                    $scope.params.start_time = ''
+                    $scope.params.end_time = ''
                     $scope.Config.currentPage = 1
                     tablePages()
                 }else{
-                    if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                    if($scope.params.start_time!=''||$scope.params.end_time!=''){
                         $scope.Config.currentPage = 1
                         tablePages()
                     }
@@ -109,8 +109,8 @@ app.controller('mall_money_list_ctrl',function ($scope,$rootScope,$state,$stateP
             $scope.params.keyword = $scope.keyword
             $scope.params.time_type = 'all'
             $scope.params.type = '0'
-            $scope.params.time_start = ''
-            $scope.params.time_end = ''
+            $scope.params.start_time = ''
+            $scope.params.end_time = ''
             tablePages()
         }
     }

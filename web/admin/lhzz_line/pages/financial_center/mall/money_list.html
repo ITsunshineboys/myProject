@@ -1,8 +1,8 @@
 <div class="account">
     <div class="search form-inline clearfix">
         <select ng-model="params.time_type" ng-change="changeMoneyList(1)" class="form-control" ng-options="item.value as item.name for item in time_types"></select>
-        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="开始时间" ng-change="changeMoneyList(1)" max-date="{{params.time_end}}" id="start_time" type="text" ng-model="params.time_start" class="form-control">
-        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="结束时间" ng-change="changeMoneyList(1)" min-date="{{params.time_start}}" id="end_time" type="text" ng-model="params.time_end" class="form-control">
+        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="开始时间" ng-change="changeMoneyList(1)" max-date="{{params.end_time}}" id="start_time" type="text" ng-model="params.start_time" class="form-control">
+        <input ng-if="params.time_type == 'custom'" ngc-lay-date placeholder="结束时间" ng-change="changeMoneyList(1)" min-date="{{params.start_time}}" id="end_time" type="text" ng-model="params.end_time" class="form-control">
         <span>类型选择</span>
         <select ng-model="params.type" ng-change="changeMoneyList()" class="form-control" ng-options="item.num as item.str for item in all_type"></select>
         <div class="form-group pull-right">

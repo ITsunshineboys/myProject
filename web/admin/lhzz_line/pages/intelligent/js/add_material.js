@@ -34,7 +34,7 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         _ajax.get('/quote/decoration-list', $scope.params, function (res) {
             console.log(res);
             $scope.material_list = res.list.details
-            $scope.Config.totalItems = res.list.size
+            $scope.Config.totalItems = res.list.total
         })
     };
     $scope.params = {

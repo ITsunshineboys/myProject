@@ -164,6 +164,9 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                         three_id:value.three_category_id,
                         good_code:value.goods_code,
                         good_quantity:value.goods_quantity,
+                        goods_first:value.goods_first,
+                        goods_second:value.goods_second,
+                        goods_three:value.goods_three,
                         index:num
                     })
                 }
@@ -193,6 +196,9 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
             }
             if(sessionStorage.getItem('deleteDrawing')!=null){
                 $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+            }
+            if(sessionStorage.getItem('params')!=null){
+                $scope.params = JSON.parse(sessionStorage.getItem('params'))
             }
             console.log($scope.drawing_informations);
             console.log($scope.house_informations);
@@ -225,6 +231,9 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         }
         if(sessionStorage.getItem('drawingInformation')!=null){
             $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+        }
+        if(sessionStorage.getItem('params')!=null){
+            $scope.params = JSON.parse(sessionStorage.getItem('params'))
         }
         console.log($scope.drawing_informations);
     }
@@ -320,6 +329,7 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
     $scope.goDetail = function (item,index) {
         sessionStorage.setItem('houseInformation',JSON.stringify($scope.house_informations))
         sessionStorage.setItem('drawingInformation',JSON.stringify($scope.drawing_informations))
+        sessionStorage.setItem('params',JSON.stringify($scope.params))
         if(item.is_ordinary == 0){
             $state.go('edit_house',({index:$stateParams.index,cur_index:index}))
         }else if(item.is_ordinary == 1){
@@ -363,6 +373,7 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 }
             }
         }
+        console.log(arr);
         //整合案例商品
         for(let [key,value] of arr.entries()){
             value['sort_id'] = key
@@ -370,21 +381,33 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 let goods_arr = []
                 let worker_list = []
                 for(let [key1,value1] of value.all_goods.entries()){
-                    for(let [key2,value2] of value1.two_level.entries()){
-                        for(let [key3,value3] of value2.three_level.entries()){
-                            if(value3.good_code!=''&&value3.good_quantity!=''){
-                                goods_arr.push({
-                                    first_name:value1.title,
-                                    second_name:value2.title,
-                                    three_name:value3.title,
-                                    good_code:value3.good_code,
-                                    good_quantity:value3.good_quantity,
-                                    three_id:value3.id
-                                })
+                    if(value1.two_level!= undefined){
+                        for(let [key2,value2] of value1.two_level.entries()){
+                            for(let [key3,value3] of value2.three_level.entries()){
+                                if(value3.good_code!=''&&value3.good_quantity!=''){
+                                    goods_arr.push({
+                                        first_name:value1.title,
+                                        second_name:value2.title,
+                                        three_name:value3.title,
+                                        good_code:value3.good_code,
+                                        good_quantity:value3.good_quantity,
+                                        three_id:value3.id
+                                    })
+                                }
                             }
                         }
+                    }else{
+                        goods_arr.push({
+                            first_name:value1.goods_first,
+                            second_name:value1.goods_second,
+                            three_name:value1.goods_three,
+                            good_code:value1.good_code,
+                            good_quantity:value1.good_quantity,
+                            three_id:value1.id
+                        })
                     }
                 }
+                console.log(goods_arr);
                 value.all_goods = goods_arr
                 for(let [key1,value1] of value.worker_list.entries()){
                     if(value1.price!=''){

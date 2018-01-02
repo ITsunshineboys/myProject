@@ -55,8 +55,8 @@ app.controller('money_list_ctrl',function ($uibModal,$rootScope,$stateParams,_aj
     };
     $scope.params = {
         time_type:'' ,
-        time_start: '',
-        time_end: '',
+        start_time: '',
+        end_time: '',
         user_id:$stateParams.user_id,
         keyword:'',
         type:'',
@@ -67,7 +67,7 @@ app.controller('money_list_ctrl',function ($uibModal,$rootScope,$stateParams,_aj
         if($scope.params.time_type!=''&&$scope.params.user_id!=''){
             if(index == 1){
                 if($scope.params.time_type == 'custom'){
-                    if($scope.params.time_end!=''||$scope.params.time_start!=''){
+                    if($scope.params.end_time!=''||$scope.params.start_time!=''){
                         tablePages()
                     }
                 } else {
@@ -87,8 +87,8 @@ app.controller('money_list_ctrl',function ($uibModal,$rootScope,$stateParams,_aj
         if($scope.keyword!=''){
             $scope.Config.currentPage = 1
             $scope.params.time_type = $scope.time_types[0].value
-            $scope.params.time_start = ''
-            $scope.params.time_end = ''
+            $scope.params.start_time = ''
+            $scope.params.end_time = ''
             $scope.params.status = $scope.all_status[0].status
             $scope.params.keyword = $scope.keyword
             tablePages()
