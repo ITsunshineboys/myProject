@@ -883,7 +883,7 @@ class QuoteController extends Controller
 //                    }
                     }
                 }
-                var_dump($ids);die;
+
                 if(is_array($ids)){
                     $ids = implode(',',$ids);
                 }
@@ -1182,12 +1182,15 @@ class QuoteController extends Controller
 //                            }
 //                        }
                     }
-                    $ids = implode(',',$ids);
-                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-                    $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
 
 
                 }
+
+                var_dump($ids);die;
+                $ids = implode(',',$ids);
+                $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
+                $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
+
                 $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                 $effect_plot->toponymy=$request['house_name'];
                 $effect_plot->province_code=$request['province_code'];
