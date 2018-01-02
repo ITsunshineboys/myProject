@@ -19,6 +19,13 @@ app.controller('home_manage_ctrl',function ($http,$scope,_ajax,$rootScope,$state
         $scope.province_name = res.data[0]['86'][obj.province]
         $scope.city_name = res.data[0][obj.province][obj.city]
     })
+    //获取首页管理数据
+    _ajax.get('/quote/homepage-list',{
+        city_code:obj.city
+    },function (res) {
+        console.log(res);
+        $scope.home_manage_list = res.list
+    })
     //拖拽排序
     $scope.dropComplete = function (index, obj) {
         let idx = $scope.all_manage.indexOf(obj)

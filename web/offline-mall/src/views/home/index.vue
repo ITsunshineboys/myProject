@@ -34,17 +34,17 @@
         </flexbox-item>
       </flexbox>
     </card>
-    <div class="shopcart">
-      <p><i class="iconfont icon-home-shoppingcart"></i></p>
-      <p style="font-size: 12px;color: #999;">购物车</p>
-    </div>
-    <div style="height: 64px;"></div>
-    <flexbox class="nav" wrap="wrap">
-      <flexbox-item style="text-align: center;margin: 0;" :span="1/4" v-for="(item,index) in nav_list" :key="index">
-        <img width="23px" height="23px" :src="item.image">
-        <p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>
-      </flexbox-item>
-    </flexbox>
+    <!--<div class="shopcart">-->
+      <!--<p><i class="iconfont icon-home-shoppingcart"></i></p>-->
+      <!--<p style="font-size: 12px;color: #999;">购物车</p>-->
+    <!--</div>-->
+    <!--<div style="height: 64px;"></div>-->
+    <!--<flexbox class="nav" wrap="wrap">-->
+      <!--<flexbox-item style="text-align: center;margin: 0;" :span="1/4" v-for="(item,index) in nav_list" :key="index">-->
+        <!--<img width="23px" height="23px" :src="item.image">-->
+        <!--<p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>-->
+      <!--</flexbox-item>-->
+    <!--</flexbox>-->
   </div>
 </template>
 
@@ -235,28 +235,28 @@
   }
 
   /*底部导航*/
-  .nav {
-    background-color: #fff;
-    padding: 8px 0;
-    position: fixed;
-    bottom: 0;
-  }
+  /*.nav {*/
+    /*background-color: #fff;*/
+    /*padding: 8px 0;*/
+    /*position: fixed;*/
+    /*bottom: 0;*/
+  /*}*/
 
   /*购物车*/
-  .shopcart {
-    background-color: #fff;
-    text-align: center;
-    height: 60px;
-    width: 60px;
-    border-radius: 60px;
-    border: 1px solid #222;
-    position: fixed;
-    top: calc(50% - 30px);
-    right: 30px;
-  }
+  /*.shopcart {*/
+    /*background-color: #fff;*/
+    /*text-align: center;*/
+    /*height: 60px;*/
+    /*width: 60px;*/
+    /*border-radius: 60px;*/
+    /*border: 1px solid #222;*/
+    /*position: fixed;*/
+    /*top: calc(50% - 30px);*/
+    /*right: 30px;*/
+  /*}*/
 
-  .shopcart i {
-    font-size: 24px;
-    color: #222;
-  }
+  /*.shopcart i {*/
+    /*font-size: 24px;*/
+    /*color: #222;*/
+  /*}*/
 </style>

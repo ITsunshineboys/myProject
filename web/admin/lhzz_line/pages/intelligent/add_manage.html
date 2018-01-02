@@ -14,13 +14,14 @@
             <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>配对户型</label>
             <div class="col-md-3">
                 <label>选择区、县</label>
-                <select ng-model="vm.choose_district" ng-options="item.district_code as item.district for item in district" class="form-control"></select>
+                <select ng-change="getCase('district')" ng-model="vm.choose_district" ng-options="item.district_code as item.district for item in district_list" class="form-control"></select>
                 <label>选择小区</label>
-                <select ng-model="vm.choose_toponymy" ng-options="item.toponymy for item in all_toponymy" class="form-control"></select>
-                <label>选择地址</label>
-                <select ng-model="vm.choose_street" ng-options="item.street for item in all_street" class="form-control"></select>
+                <select ng-change="getCase('toponymy')" ng-model="vm.choose_toponymy" ng-options="item.toponymy for item in toponymy_list" class="form-control"></select>
+                <label>小区地址</label>
+                <p>{{vm.choose_toponymy.street}}</p>
+                <!--<select ng-model="vm.choose_toponymy" ng-options="item.id as item.street for item in choose_toponymy" class="form-control"></select>-->
                 <label>选择案例</label>
-                <select ng-model="vm.choose_case" ng-options="item.particulars for item in all_case" class="form-control"></select>
+                <select ng-model="vm.choose_case" ng-options="item.id as item.particulars for item in case_list" class="form-control"></select>
             </div>
         </div>
         <div class="form-group">
