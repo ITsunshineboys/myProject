@@ -234,7 +234,7 @@ class EffectController extends Controller
             }
             $res= trim($request->post('remark',''));
             if(isset($res)){
-                    $remark->remar=$res;
+                    $remark->remark=$res;
                     if(!$remark->save()){
                         $code=500;
                         return json_encode([
