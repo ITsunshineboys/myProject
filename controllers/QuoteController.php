@@ -1100,6 +1100,7 @@ class QuoteController extends Controller
                             $stair_id = $house['stair'];
                         }
                         $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
+                        var_dump($effect);die;
                         if (!$effect) {
                             $code = 500 ;
                             $transaction->rollBack();
