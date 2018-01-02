@@ -2934,12 +2934,14 @@ class GoodsOrder extends ActiveRecord
                 }
                 if ($arr[$k]['RemainingTime'] <= 0) {
                     $automatic_receive_time = 0;
-                } else {
+                } else
+                {
                     $automatic_receive_time= $arr[$k]['RemainingTime'];
                 }
-                $refund=self::GetRefundData($arr[$k]['order_no'],$arr[$k]['sku'],$arr[$k]['status_type']);
-                $after=self::GetAfterSaleData($arr[$k]['order_no'],$arr[$k]['sku']);
-                $list[]=[
+                $refund=self::GetRefundData($arr[$k]['order_no'],$arr[$k]['sku'],$arr[$k]['status_type'],$user->last_role_id_app);
+                $after=self::GetAfterSaleData($arr[$k]['order_no'],$arr[$k]['sku'],$user->last_role_id_app);
+                $list[]=
+                [
                     'goods_price'=>$arr[$k]['goods_price'],
                     'send_time'=>$send_time,
                     'complete_time'=>$complete_time,
@@ -3058,7 +3060,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public  static  function  GetAfterSaleData($order_no,$sku)
+    public  static  function  GetAfterSaleData($order_no,$sku,$role_id)
     {
         $after_sale = OrderAfterSale::find()
             ->where(['order_no' => $order_no, 'sku' => $sku])
@@ -3079,14 +3081,17 @@ class GoodsOrder extends ActiveRecord
                     'apply_aftersale_time'=>date('Y-m-d H:i',$after_sale['create_time']),
                     'apply_aftersale_reason'=>$after_sale['description'],
                 ];
+            if ($role_id==Yii::$app->params['supplierRoleId'])
+            {
                 if ($after_sale['supplier_handle'] == 0) {
-                    $data=[
-                        'aftersale_status'=>1,
-                        'aftersale_type'=>OrderAfterSale::AFTER_SALE_SERVICES[$after_sale['type']],
-                        'apply_aftersale_time'=>date('Y-m-d H:i',$after_sale['create_time']),
-                        'apply_aftersale_reason'=>$after_sale['description'],
+                    $data = [
+                        'aftersale_status' => 1,
+                        'aftersale_type' => OrderAfterSale::AFTER_SALE_SERVICES[$after_sale['type']],
+                        'apply_aftersale_time' => date('Y-m-d H:i', $after_sale['create_time']),
+                        'apply_aftersale_reason' => $after_sale['description'],
                     ];
                 }
+            }
         }
         return $data;
     }
@@ -3097,7 +3102,7 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @return array
      */
-    public  static function  GetRefundData($order_no,$sku,$type)
+    public  static function  GetRefundData($order_no,$sku,$type,$role_id)
     {
             if ($type==3)
             {
@@ -3119,14 +3124,18 @@ class GoodsOrder extends ActiveRecord
                         'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
                         'apply_refund_reason'=>$refund_unshipped->apply_reason,
                     ];
-                    if ($refund_unshipped->handle==0)
+                    if ($role_id==Yii::$app->params['supplierRoleId'])
                     {
-                        $data=[
-                            'refund_status'=>1,
-                            'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
-                            'apply_refund_reason'=>$refund_unshipped->apply_reason,
-                        ];
+                        if ($refund_unshipped->handle==0)
+                        {
+                            $data=[
+                                'refund_status'=>1,
+                                'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
+                                'apply_refund_reason'=>$refund_unshipped->apply_reason,
+                            ];
+                        }
                     }
+
                     return $data;
                 }
             }
