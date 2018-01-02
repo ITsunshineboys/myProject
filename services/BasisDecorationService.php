@@ -310,18 +310,18 @@ class BasisDecorationService
 
     /**
      *   防水  水路  强电  弱电人工费
-     * @param string $points
-     * @param array $labor
+     * @param int $points
+     * @param int $day_points
      * @return float
      *
      */
     public static function laborFormula($points,$day_points)
     {
         $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
-//        $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value2'];
         $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
+
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        return ($p / $d);
+        return self::algorithm(6,$p,$d);
     }
 
     public static function P($points,$day_points,$labor)
@@ -2068,6 +2068,36 @@ class BasisDecorationService
     }
 
     /**
+     * 水路总点位
+     * @param $points
+     * @param $get
+     * @return mixed
+     */
+    public static function waterwayPoints($points,$get)
+    {
+        $other = 0;
+        foreach ($points as $one){
+            switch ($one){
+                case $one['title'] == OwnerController::ROOM_DETAIL['toilet']:
+//                    $toilet_waterway_points = $one['count'] * $get['toilet'];
+                    $toilet_waterway_points = self::algorithm(1,$one['count'],$get['toilet']);
+                    break;
+                case $one['title'] == OwnerController::ROOM_DETAIL['kitchen']:
+                    $kitchen_waterway_points = $get['kitchen'] * $one['count'];
+                    break;
+                case $one['title'] != OwnerController::ROOM_DETAIL['toilet'] && $one['title'] != OwnerController::ROOM_DETAIL['kitchen']:
+                    $other += $one['count'];
+                    break;
+            }
+
+        }
+
+        $waterway_count = $toilet_waterway_points + $kitchen_waterway_points + $other;
+
+        return $waterway_count;
+    }
+
+    /**
      * 判断是否有计算公式
      * @param $category
      * @param $judge
@@ -2113,6 +2143,9 @@ class BasisDecorationService
                 break;
             case $int == 5:
                 $result = $value + $value1 + $value2;
+                break;
+            case $int == 6:
+                $result = $value / $value1;
                 break;
         }
 
