@@ -172,12 +172,14 @@ class GoodsOrder extends ActiveRecord
 
     /**
      * @param $order_no
+     * @param array $select
      * @return array|null|ActiveRecord
      */
-    public  static  function  FindByOrderNo($order_no)
+    public  static  function  FindByOrderNo($order_no, $select = [])
     {
         $data=self::find()
             ->where(['order_no'=>$order_no])
+            ->select($select)
             ->one();
         return $data;
     }

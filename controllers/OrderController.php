@@ -2841,7 +2841,8 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if (!array_key_exists($OrderAfterSale->type,OrderAfterSale::AFTER_SALE_SERVICES))
+        if (!array_key_exists($OrderAfterSale->type,OrderAfterSale::AFTER_SALE_SERVICES)
+        )
         {
             $code=1000;
             return Json::encode([
@@ -2879,13 +2880,13 @@ class OrderController extends Controller
             ]);
         }
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
-                if ($OrderGoods->customer_service==2)
-                {
-                    $state='over';
-                }else
-                {
-                    $state='in';
-                }
+        if ($OrderGoods->customer_service==2)
+        {
+            $state='over';
+        }else
+        {
+            $state='in';
+        }
         return Json::encode([
             'code'=>$code,
             'msg'=>'ok',

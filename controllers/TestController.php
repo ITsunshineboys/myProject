@@ -174,21 +174,13 @@ class TestController extends Controller
     public function actionTest()
     {
 
-        $arr=array(0,1,2,3,4,5,6);
-//        $arr=explode(',',$arr);
-        //0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
-        foreach ($arr as &$type)
+        $order=OrderGoods::FindByOrderNoAndSku('1125190153','81','goods_name');
+//        var_dump($order->toArray());die;
+        $order->goods_name='韩亚空心砖123';
+        if ($order->save(false))
         {
-            if ($type != 0  && $type !=1)
-            {
-                $status[]=array_search(OrderAfterSale::GOODS_AFTER_SALE_SERVICES[$type],OrderAfterSale::AFTER_SALE_SERVICES);
-            }
+            echo 1;
         }
-
-        if (!in_array(5,$arr)){
-          echo 1;
-        }
-
     }
 
     /**

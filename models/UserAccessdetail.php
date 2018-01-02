@@ -380,8 +380,8 @@ class UserAccessdetail extends \yii\db\ActiveRecord
             ->where(['transaction_no'=>$transaction_no])
             ->asArray()
             ->one();
-        $OrderGoods=OrderGoods::FindByOrderNoAndSku($access['order_no'],$access['sku']);
-        $GoodsOrder=GoodsOrder::FindByOrderNo($access['order_no']);
+        $OrderGoods=OrderGoods::FindByOrderNoAndSku($access['order_no'],$access['sku'],'goods_name');
+        $GoodsOrder=GoodsOrder::FindByOrderNo($access['order_no'],'create_time,pay_name,paytime');
         $list[]=[
             'name'=>'商品名称',
             'value'=>$OrderGoods->goods_name
