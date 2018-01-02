@@ -56,6 +56,10 @@ class BrainpowerInitalSupervise extends ActiveRecord
             if(isset($list['add_time'])){
                 $list['add_time']=date('Y-m-d H:i', $list['add_time']);
             }
+            if(isset($list['district_code'])){
+                $list['district']=District::findByCode($list['district_code'])['name'];
+                    unset($list['district_code']);
+            }
 
         }
         return $res;
