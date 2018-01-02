@@ -9,6 +9,7 @@ use app\services\ExceptionHandleService;
 use app\services\ModelService;
 use app\services\StringService;
 use app\services\AuthService;
+use yii\base\Model;
 use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
@@ -329,7 +330,7 @@ class EffectController extends Controller
 
         }
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', EffectEarnest::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $paginationData = EffectEarnest::pagination($where, EffectEarnest::FIELDS_ADMIN, $page, $size);
         $earnest=new EffectEarnest();
         return Json::encode([
