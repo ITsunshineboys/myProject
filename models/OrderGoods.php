@@ -139,6 +139,92 @@ class OrderGoods extends ActiveRecord
             }
     }
 
+    /**
+     * 添加样板间操作
+     * @param $id
+     * @return int
+     */
+    public  static  function  AddEffect($id)
+    {
+        $effect=Effect::findOne($id);
+        if (!$effect)
+        {
+           return 200;
+        }
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $earnest=EffectEarnest::find()
+                ->where(['effect_id'=>$id])
+                ->one();
+            $earnest->status=1;
+            if (!$earnest->save(false))
+            {
+                $tran->rollBack();
+                return 500;
+            }
+            $time=(time()-60*60*6);
+            $list=EffectEarnest::find()
+                ->where("create_time<={$time}")
+                ->andWhere(['status'=>0,'type'=>0,'item'=>0])
+                ->all();
+            if ($list)
+            {
+                foreach ($list as &$delList)
+                {
+                    $effect_id=$delList->effect_id;
+                    $res=$delList->delete();
+                    if (!$res)
+                    {
+                        $tran->rollBack();
+                        return 500;
+                    };
+                    $effect=Effect::find()
+                        ->where(['id'=>$effect_id])
+                        ->one();
+                    if ($effect)
+                    {
+                        $res1=$effect->delete();
+                        if (!$res1)
+                        {
+                            $tran->rollBack();
+                            return 500;
+                        };
+                    }
+                    $effect_material=EffectMaterial::find()
+                        ->where(['effect_id'=>$effect_id])
+                        ->one();
+                    if ($effect_material)
+                    {
+                        $res2=$effect_material->delete();
+                        if (!$res2)
+                        {
+                            $tran->rollBack();
+                            return 500;
+                        };
+                    }
+                    $EffectPicture=EffectPicture::find()
+                        ->where(['effect_id'=>$effect_id])
+                        ->one();
+                    if ($EffectPicture)
+                    {
+                        $res3=$EffectPicture->delete();
+                        if (!$res3)
+                        {
+                            $tran->rollBack();
+                            return 500;
+                        };
+                    }
+                }
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            return 500;
+        }
+
+    }
+
 
 
 

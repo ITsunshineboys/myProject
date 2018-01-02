@@ -1,8 +1,6 @@
 <?php
 
 namespace app\controllers;
-use app\models\GoodsAttr;
-use app\models\OrderAfterSaleImage;
 use app\models\OrderGoodsAttr;
 use app\models\OrderGoodsBrand;
 use app\models\OrderGoodsDescription;
@@ -56,7 +54,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
 use app\services\AuthService;
-use yii\web\UploadedFile;
 
 class OrderController extends Controller
 {
@@ -89,7 +86,6 @@ class OrderController extends Controller
         'after-sale-delivery',
         'find-shipping-cart-list',
         'after-sale-detail-admin',
-//        'get-order-num',
         'close-order'
     ];
     /**
@@ -608,82 +604,16 @@ class OrderController extends Controller
                     echo 'success';
                     exit;
                 }
-                $tran = Yii::$app->db->beginTransaction();
-                try{
-                    $earnest=EffectEarnest::find()
-                        ->where(['effect_id'=>$id])
-                        ->one();
-                    $earnest->status=1;
-                    if (!$earnest->save(false))
-                    {
-                        echo 'fail';
-                        exit;
-                    }
-                    $time=(time()-60*60*6);
-                    $list=EffectEarnest::find()
-                        ->where("create_time<={$time}")
-                        ->andWhere(['status'=>0,'type'=>0,'item'=>0])
-                        ->all();
-                    if ($list)
-                    {
-                        foreach ($list as &$delList)
-                        {
-                            $effect_id=$delList->effect_id;
-                            $res=$delList->delete();
-                            if (!$res)
-                            {
-                                $tran->rollBack();
-                                return false;
-                            };
-                            $effect=Effect::find()
-                                ->where(['id'=>$effect_id])
-                                ->one();
-                            if ($effect)
-                            {
-                                $res1=$effect->delete();
-                                if (!$res1)
-                                {
-                                    $tran->rollBack();
-                                    echo 'fail';
-                                    exit;
-                                };
-                            }
-
-                            $effect_material=EffectMaterial::find()
-                                ->where(['effect_id'=>$effect_id])
-                                ->one();
-                            if ($effect_material)
-                            {
-                                $res2=$effect_material->delete();
-                                if (!$res2)
-                                {
-                                    $tran->rollBack();
-                                    echo 'fail';
-                                    exit;
-                                };
-                            }
-                            $EffectPicture=EffectPicture::find()
-                                ->where(['effect_id'=>$effect_id])
-                                ->one();
-                            if ($EffectPicture)
-                            {
-                                $res3=$EffectPicture->delete();
-                                if (!$res3)
-                                {
-                                    $tran->rollBack();
-                                    echo 'fail';
-                                    exit;
-                                };
-                            }
-                        }
-                    }
-                }catch (Exception $e){
-                    $tran->rollBack();
+                $code=OrderGoods::AddEffect($id);
+                if ($code==200)
+                {
+                    echo 'success';
+                    exit;
+                }else
+                {
                     echo 'fail';
                     exit;
                 }
-                $tran->commit();
-                echo 'success';
             }
         }else{
             //验证失败
@@ -716,7 +646,8 @@ class OrderController extends Controller
             ||!$goods_id
             ||!$goods_num
             ||!$address_id
-        ){
+        )
+        {
             return Json::encode([
                 'code' =>  $code,
                 'msg'  => Yii::$app->params['errorCodes'][$code]
@@ -1404,20 +1335,14 @@ class OrderController extends Controller
         if ($type=='all' && !$supplier_id)
         {
             if($keyword){
-                $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
+                $where .="  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,z.sku) like '%{$keyword}%'";
 //                        a.consignee_mobile,u.mobile
             }
         }else{
             if($keyword){
-                $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile) like '%{$keyword}%'";
+                $where .=" and  CONCAT(z.order_no,z.goods_name,a.consignee_mobile,z.sku) like '%{$keyword}%'";
             }
         }
-
-//            if ($timeType=='today')
-//            {
-//                $startTime=date('Y-m-d',time());
-//                $endTime=date('Y-m-d',time()+24*60*60);
-//            }
         if ($type=='all' && !$supplier_id )
         {
             if ($keyword)
@@ -1495,7 +1420,8 @@ class OrderController extends Controller
         $order_no=$order_information['order_no'];
         $sku=explode('+',$order_information['sku']);
         $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
-        if (!$ordergoodsinformation){
+        if (!$ordergoodsinformation)
+        {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -1505,21 +1431,28 @@ class OrderController extends Controller
         //获取收货详情
         $address_id=$order_information['address_id'];
         $invoice_id=$order_information['invoice_id'];
-        $address=UserAddress::find()->where(['id'=>$address_id])->asArray()->one();
+        $address=UserAddress::find()
+            ->where(['id'=>$address_id])
+            ->asArray()
+            ->one();
         if (!$address){
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => '收货地址不存在'
+                'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $address['district']=LogisticsDistrict::getdistrict($address['district']);
-        $invoice=Invoice::find()->where(['id'=>$invoice_id])->asArray()->one();
-        if (!$invoice){
+        $invoice=Invoice::find()
+            ->where(['id'=>$invoice_id])
+            ->asArray()
+            ->one();
+        if (!$invoice)
+        {
             $code = 1000;
             return Json::encode([
                 'code' => $code,
-                'msg' => '发票信息为空'
+                'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $receive_details['consignee']=$address['consignee'];
@@ -1604,7 +1537,8 @@ class OrderController extends Controller
             return $user;
         }
         $lhzz=self::LhzzIdentity($user);
-        if (!is_numeric($lhzz)){
+        if (!is_numeric($lhzz))
+        {
             return $lhzz;
         }
         $request    = Yii::$app->request;
@@ -1624,12 +1558,16 @@ class OrderController extends Controller
             $reason='';
         }
         $code=GoodsOrder::PlatformAdd($order_no,$handle_type,$reason,$sku);
-        if ($code==200){
-            return Json::encode([
-                'code' => 200,
-                'msg' => 'ok'
-            ]);
-        }else{
+        if ($code==200)
+        {
+            return Json::encode(
+                [
+                    'code' => 200,
+                    'msg'  => 'ok'
+                ]
+            );
+        }else
+        {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1645,7 +1583,10 @@ class OrderController extends Controller
         $request=Yii::$app->request;
         $district_code=trim($request->get('district_code',''));
         $goods_id=trim($request->get('goods_id',''));
-        if (!$district_code || !$goods_id) {
+        if (
+            !$district_code
+            || !$goods_id
+        ) {
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -2343,9 +2284,9 @@ class OrderController extends Controller
     {
         $user = \Yii::$app->user->identity;
         if (!$user) {
-            $code = 1052;
+            $code = 403;
             return Json::encode([
-                'code' => 1052,
+                'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
@@ -2362,7 +2303,7 @@ class OrderController extends Controller
             ->where(['uid'=>$user])
             ->one();
         if (!$lhzz){
-            $code = 1010;
+            $code = 1052;
             return Json::encode([
                 'code' => 1052,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -5090,27 +5031,7 @@ class OrderController extends Controller
                 ]);
          }
      }
-    public  function  actionReturnUrl()
-    {
-     $tools = new PayService();
-     $code=Yii::$app->request->get('code');
-     $openid = $tools->getOpenidFromMp($code);
-     Yii::$app->session['openId']=$openid;
-     echo $openid;
-    }
-    public  function  actionRetOpenId()
-    {
-        echo Yii::$app->session['openId'];exit;
-    }
-    public  function  actionTestOpenId2()
-    {
-        $tools = new PayService();
-        $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-        $url=$http_type."ac.cdlhzz.cn/order/return-url";
-        $baseUrl = urlencode($url);
-        $urls = $tools->__CreateOauthUrlForCode1($baseUrl);
-        file_get_contents($urls);
-    }
+
     public  function  actionTestOpenId()
     {
         $tools = new PayService();
@@ -6302,36 +6223,6 @@ class OrderController extends Controller
             ]
         );
 
-    }
-    /**
-     * 测试接口-获取商品
-     * @return string
-     */
-    public  function  actionFindSupplierGoods()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier=Supplier::find()
-            ->where(['uid'=>$user->id])
-            ->one();
-        $Goods=Goods::find()
-            ->select('id,sku,title')
-            ->where(['supplier_id'=>$supplier->id])
-            ->all();
-        $code=200;
-        return Json::encode(
-            [
-                'code'=>$code,
-                'msg'=>'ok',
-                'data'=>$Goods
-            ]
-        );
     }
     /**
      * 获取默认地址

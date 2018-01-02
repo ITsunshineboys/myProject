@@ -1436,8 +1436,7 @@ class GoodsOrder extends ActiveRecord
             $res['refund_type']='';
         }else
         {
-            $res['refund_type']=self::Getplatformtype($res['refund_type']);
-
+            $res['refund_type']=self::GetPlatformType($res['refund_type']);
         }
         $res['refund_time']=date('Y-m-d H:i',$res['refund_time']);
         return $res;
@@ -1471,7 +1470,7 @@ class GoodsOrder extends ActiveRecord
      * @param $refund_type
      * @return string
      */
-    public  static  function Getplatformtype($refund_type)
+    public  static  function GetPlatformType($refund_type)
     {
         switch ($refund_type)
         {
