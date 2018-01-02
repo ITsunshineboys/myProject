@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
 
 class WorkerCraftNorm extends ActiveRecord
 {
-    const SELECT_FIND = 'quantity,worker_kind_details';
+    const SELECT_FIND = 'quantity,worker_kind_id';
     const WEAK_CURRENT_DAY_POINTS = 5;
     const STRONG_CURRENT_DAY_POINTS = 5;
     const WATERWAY_DAY_POINTS = 6;
@@ -85,10 +85,16 @@ class WorkerCraftNorm extends ActiveRecord
      */
     public static function findByLaborCostAll($id)
     {
-        return self::find()
+        $rows = self::find()
             ->asArray()
-            ->select('id,quantity,worker_kind_details')
+            ->select('id,quantity,worker_type_id')
             ->where(['labor_cost_id'=>$id])
             ->all();
+
+        foreach ($rows as &$row){
+            $row['quantity'] = $row['quantity'] / 100;
+        }
+
+        return $rows;
     }
 }

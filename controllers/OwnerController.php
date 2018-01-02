@@ -91,9 +91,9 @@ class OwnerController extends Controller
      * points category details
      */
     const POINTS_CATEGORY = [
-        'weak_current'  => '弱电点位',
-        'strong_current'=> '强电点位',
-        'waterway'      => '水路点位',
+        'weak_current'  => 11, //'弱电点位',
+        'strong_current'=> 10, //'强电点位',
+        'waterway'      => 12, //'水路点位',
         'work_area'     => '做工面积',
 
     ];
@@ -439,7 +439,6 @@ class OwnerController extends Controller
         $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterway'], $get['city']);
 
 
-
         //材料总费用
         $material_price = BasisDecorationService::waterwayGoods($waterway_count, $waterway_current,$craft);
         $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
@@ -463,117 +462,56 @@ class OwnerController extends Controller
     {
         $get = \Yii::$app->request->get();
 
-
         //人工价格
         $labor = LaborCost::profession($get['city'],self::WORK_CATEGORY['plumber']);
-        $day_workload = WorkerCraftNorm::find()->asArray()->where(['labor_cost_id'=>$labor['id']])->all();
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor['id']);
 
         foreach ($day_workload as $one_day){
-            if ($one_day['worker_kind_details'] == self::POINTS_CATEGORY['strong_current']){
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['strong_current']){
                 $strong = $one_day['quantity'];
             }
 
-            if ($one_day['worker_kind_details'] == self::POINTS_CATEGORY['weak_current']){
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['weak_current']){
                 $weak = $one_day['quantity'];
             }
 
-            if ($one_day['worker_kind_details'] == self::POINTS_CATEGORY['waterway']){
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['waterway']){
                 $waterway = $one_day['quantity'];
             }
         }
 
-        $points = Points::find()->asArray()->select('id,title,count')->where(['in','id',[1,2,3]])->andWhere(['level'=>1])->all();
-        $w_orh = 0;
-
+        $points = Points::find()->asArray()->select('id,title,count')->where(['in','id',[1,2,3]])->all();
         foreach ($points  as $p){
             if ($p['id'] == self::PROJECT_DETAILS['waterway']){
-                $id = $p['id'];
-                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
-                foreach ($_waterway as $one){
-                    switch ($one){
-                        case $one['title'] == self::ROOM_DETAIL['toilet']:
-                            $toilet_waterway_points = $one['count'] * $post['toilet'];
-                            break;
-                        case $one['title'] == self::ROOM_DETAIL['kitchen']:
-                            $kitchen_waterway_points = $post['kitchen'] * $one['count'];
-                            break;
-                        case $one['title'] != self::ROOM_DETAIL['toilet'] && $one['title'] != self::ROOM_DETAIL['kitchen']:
-                            $w_orh += $one['count'];
-                            break;
-                    }
-
-                }
-
-                $waterway_count = $toilet_waterway_points + $kitchen_waterway_points + $w_orh;
+                $waterway_where = 'pid = '.$p['id'];
+                $waterway_points = Points::findByPid('title,count',$waterway_where);
+                $waterway_overall_points = BasisDecorationService::waterwayPoints($waterway_points,$get);
             }
 
             if ($p['id'] == self::PROJECT_DETAILS['weak_current']){
-                $id = $p['id'];
-                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
-                foreach ($_waterway as $one){
-                    switch ($one){
-                        case $one['title'] == self::ROOM_DETAIL['master_bedroom']:
-                            $room_weak_points = $one['count'];
-                            break;
-                        case $one['title'] == self::ROOM_DETAIL['secondary_bedroom']:
-                            $croom_weak_points = $one['count'] * ($post['bedroom'] - 1);
-                            break;
-                        case $one['title'] == self::ROOM_DETAIL['hall']:
-                            $hall_weak__points = $one['count'] * $post['hall'];
-                            break;
-                    }
-                }
-                $weak_count = $room_weak_points + $croom_weak_points + $hall_weak__points;
+                $weak_where = 'pid = '.$p['id'];
+                $weak_points = Points::findByPid('title,count',$weak_where);
+                $weak_overall_points = BasisDecorationService::weakPoints($weak_points,$get);
             }
 
             if ($p['id'] == self::PROJECT_DETAILS['strong_current']){
-                $id = $p['id'];
-                $_waterway = Points::find()->select('title,count')->where(['and',['level'=>2],['pid'=>$id]])->asArray()->all();
-                foreach ($_waterway as $one){
+                $strong_where = 'pid = '.$p['id'];
+                $strong_points = Points::findByPid('title,count',$strong_where);
+                $strong_overall_points = BasisDecorationService::strongPoints($strong_points,$get);
+                }
 
-                    switch ($one){
-                        case $one['title'] == self::ROOM_DETAIL['secondary_bedroom']:
-                            switch ($post['bedroom']){
-                                case $post['bedroom'] <= 1:
-                                    $ciwoshi = 0;
-                                    break;
-                                case $post['bedroom'] == 2:
-                                    $ciwoshi = 1;
-                                    break;
-                                case $post['bedroom'] > 2:
-                                    $ciwoshi = $post['bedroom'] - 2;
-                                    break;
-                            }
-                            $croom_strong_points = $one['count'] * $ciwoshi;
-                            break;
-                        case $one['title'] == self::ROOM_DETAIL['hall']:
-                            $hall_strong_points = $one['count'] * ($post['hall']-1);
-                            break;
-                        case $one['title'] == self::ROOM_DETAIL['toilet']:
-                            $toilet_strong_points = $one['count'] * ($post['toilet']-1);
-                            break;
-                        case $one['title'] == self::ROOM_DETAIL['kitchen']:
-                            $kitchen_strong_points = $one['count'] * ($post['kitchen']-1);
-                            break;
-                    }
-                }
-//
-                $qita = 0;
-                foreach ($_waterway as $one_){
-                    $qita += $one_['count'];
-                }
-                $strong_count =$croom_strong_points + $hall_strong_points + $toilet_strong_points + $kitchen_strong_points + $qita;
-            }
         }
 
 
-
         //人工总费用    $points['count'],$workers['univalence'],$worker_kind_details['quantity']
-        $waterway_ = BasisDecorationService::laborFormula($waterway_count,$waterway);
-        $weak_     = BasisDecorationService::laborFormula($weak_count,$weak);
-        $strong_   = BasisDecorationService::laborFormula($strong_count,$strong);
-        $labor_all_cost['price'] = ceil($waterway_ + $weak_ + $strong_) * $waterway_labor['univalence'];
-        $labor_all_cost['worker_kind'] = '水电工';
+        $waterway_ = BasisDecorationService::laborFormula($waterway_overall_points,$waterway);
+        $weak_     = BasisDecorationService::laborFormula($weak_overall_points,$weak);
+        $strong_   = BasisDecorationService::laborFormula($strong_overall_points,$strong);
+        $total = ceil(BasisDecorationService::algorithm(5,$waterway_,$weak_,$strong_));
+
+        
+        $labor_all_cost['price'] = BasisDecorationService::algorithm(1,$total,$labor['univalence']);
+        $labor_all_cost['worker_kind'] = $labor['worker_name'];
 
 
         return Json::encode([
