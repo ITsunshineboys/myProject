@@ -111,26 +111,28 @@
       })
     },
     mounted () {
-      // 微信获取地址code
-      this.axios.post('/order/find-open-id', {
-        url: location.href
-      }, (res) => {
-        console.log(res)
-        console.log(res.data)
-        location.href = res.data
-        sessionStorage.setItem('wxCodeFlag', true)
+      this.axios.get('/order/iswxlogin', {}, (res) => {
+        res.code === 200 ? sessionStorage.setItem('wxCodeFlag', true) : sessionStorage.getItem('wxCodeFlag', false)
+        if (sessionStorage.getItem('wxCodeFlag') && !sessionStorage.getItem('wxStatus')) {
+          this.axios.post('/order/find-open-id', {
+            url: location.href
+          }, (res) => {
+            console.log(res)
+            console.log(res.data)
+            location.href = res.data
+            sessionStorage.setItem('wxStatus', true)
+          })
+        } else if (sessionStorage.getItem('wxCodeFlag') && sessionStorage.getItem('wxStatus')) {
+          this.openID = location.href.split('code=')[1].split('&state')[0]
+          this.axios.post('/order/get-open-id', {
+            code: this.openID
+          }, (res) => {
+            console.log(this.openID)
+            sessionStorage.setItem('openID', res.data)
+            console.log(res)
+          })
+        }
       })
-      // 获取openID
-      if (sessionStorage.getItem('wxCodeFlag')) {
-        this.openID = location.href.split('code=')[1].split('&state')[0]
-        this.axios.post('/order/get-open-id', {
-          code: this.openID
-        }, (res) => {
-          console.log(this.openID)
-          sessionStorage.setItem('openID', res.data)
-          console.log(res)
-        })
-      }
     }
   }
 </script>

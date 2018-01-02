@@ -118,7 +118,8 @@
         invoice_header: '', // 抬头
         buyer_message: '', // 留言
         checked_flag: false, // 是否勾选“商城购买协议”
-        paymentMethod: '' // 支付方式
+        paymentMethod: '', // 支付方式
+        openID: '' // 微信支付 openID
       }
     },
     methods: {
@@ -131,8 +132,50 @@
             console.log(res)
             if (res.code === 200) {
               if (this.checked_flag) {                  // 已勾选协议
-                if (this.paymentMethod) {               // 微信支付
+                if (sessionStorage.getItem('wxCodeFlag')) {               // 微信支付
                   console.log('微信支付')
+                  this.axios.post('/order/order-line-wx-pay', {
+                    order_price: this.allCost,
+                    goods_id: 43,
+                    goods_num: 10,
+                    address_id: sessionStorage.getItem('address_id'),
+                    invoice_id: sessionStorage.getItem('invoice_id'),
+                    freight: this.freight,
+                    buyer_message: this.buyer_message,
+                    open_id: sessionStorage.getItem('openID')
+                  }, (res) => {
+                    console.log('openID返回值')
+                    console.log(res)
+                    function onBridgeReady () {
+                      WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest', {
+                          'appId': res.data.appId,                 // 公众号名称，由商户传入
+                          'timeStamp': res.data.timeStamp,         // 时间戳，自1970年以来的秒数
+                          'nonceStr': res.data.nonceStr,          // 随机串
+                          'package': res.data.package,
+                          'signType': res.data.signType,          // 微信签名方式：
+                          'paySign': res.data.paySign             // 微信签名
+                        },
+                        function (res) {
+                          console.log(res)
+                          if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                            alert('支付成功！！！')
+                            this.$router.push({path: '/'})
+                          }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                        }
+                      )
+                    }
+                    if (typeof WeixinJSBridge === 'undefined') {
+                      if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
+                      } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
+                        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
+                      }
+                    } else {
+                      onBridgeReady()
+                    }
+                  })
                 } else {        // 支付宝支付
                   console.log('支付宝支付 ')
                   this.axios.post('/order/order-line-ali-pay', {
