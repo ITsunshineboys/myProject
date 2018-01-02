@@ -2210,6 +2210,35 @@ class QuoteController extends Controller
     }
 
 
+    public function actionHomepageEditView()
+    {
+        $id = (int)\Yii::$app->request->get('id');
+
+        $effect= BrainpowerInitalSupervise::find()
+            ->asArray()
+            ->where(['id'=>$id])
+            ->one();
+        if(!$effect){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $topnymy_id=EffectToponymy::find()
+            ->select('id')
+            ->asArray()
+            ->where(['district_code'=>$effect['district_code'],'toponymy'=>$effect['toponymy'],'street'=>$effect['street']])
+            ->one();
+       $effect['toponymy_id']=$topnymy_id['id'];
+
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'list'=>$effect
+        ]);
+
+    }
 //    /**
 //     * homepage street find
 //     * @return string
@@ -3097,7 +3126,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $sql="ALTER TABLE `effect_toponymy` ADD  `street` VARCHAR (100) NOT NULL COMMENT '街道';";
-        var_dump(\Yii::$app->db->createCommand($sql)->execute());
+
     }
 }
