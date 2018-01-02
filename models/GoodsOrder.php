@@ -1053,50 +1053,7 @@ class GoodsOrder extends ActiveRecord
      * @return array|null
      */
     public static function GetOrderInformation($order_no,$sku){
-        $select='a.pay_name,
-               z.order_status,
-               z.customer_service,
-               z.shipping_status,
-               a.pay_status,
-               a.create_time,
-               a.user_id,
-               a.address_id,
-               z.goods_name,
-               a.amount_order,
-               z.goods_number,
-               z.freight,
-               a.order_no,
-               a.create_time,
-               a.paytime,
-               a.user_id,
-               a.address_id,
-               a.return_insurance,
-               z.goods_id,
-               z.goods_attr_id,
-               z.sku,
-               a.address_id,
-               a.invoice_id,
-               supplier_price,
-               z.market_price,
-               b.waybillnumber,
-               b.waybillname,
-               z.shipping_type,
-               z.goods_price,
-               a.order_refer,
-               a.buyer_message,
-               z.comment_id,
-               a.consignee,
-               a.district_code,
-               a.region,
-               a.consignee_mobile,
-               a.invoice_type,
-               a.invoice_header_type,
-               a.invoice_header,
-               a.invoicer_card,
-               a.invoice_content,
-               z.cover_image,
-               a.role_id,
-               z.is_unusual';
+        $select='a.pay_name,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image,a.role_id,z.is_unusual';
         $array=self::GetOrderList()
             ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
             ->select($select)
@@ -2868,7 +2825,8 @@ class GoodsOrder extends ActiveRecord
     {
         $select='a.pay_name,a.supplier_id,z.order_status,z.customer_service,z.shipping_status,a.pay_status,a.create_time,a.user_id,a.address_id,z.goods_name,a.amount_order,z.goods_number,z.freight,a.order_no,a.create_time,a.paytime,a.user_id,a.role_id,a.address_id,a.return_insurance,z.goods_id,z.goods_attr_id,z.sku,a.address_id,a.invoice_id,supplier_price,z.market_price,b.waybillnumber,b.waybillname,z.shipping_type,z.goods_price,a.order_refer,a.buyer_message,z.comment_id,a.consignee,a.district_code,a.region,a.consignee_mobile,a.invoice_type,a.invoice_header_type,a.invoice_header,a.invoicer_card,a.invoice_content,z.cover_image,z.is_unusual,z.after_sale_services';
         $array=self::GetOrderList()
-            ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')->select($select);
+            ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
+            ->select($select);
         if($postData==''){
             $array=[];
         }else{
@@ -2897,7 +2855,6 @@ class GoodsOrder extends ActiveRecord
         $supplier_price = 0;
         $market_price = 0;
         $amount_order = 0;
-        $goods_num = 0;
         $freight = 0;
         if ($arr) {
             $arr = self::SwitchStatus_desc($arr, $user);
@@ -2914,14 +2871,6 @@ class GoodsOrder extends ActiveRecord
                 }
                 $arr[$k]['return_insurance'] =  StringService::formatPrice($arr[$k]['return_insurance'] * 0.01);
                 $arr[$k]['goods_price'] =  StringService::formatPrice($arr[$k]['goods_price'] * 0.01);
-                // switch ($arr[$k]['shipping_type']){
-                //     case 0:
-                //         $arr[$k]['shipping_type']='快递物流';
-                //         break;
-                //     case 1:
-                //         $arr[$k]['shipping_type']='送货上门';
-                //         break;
-                // }
                 if ($arr[$k]['send_time'] == 0) {
                     $send_time = $arr[$k]['send_time'];
                 } else {
