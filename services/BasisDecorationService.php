@@ -396,75 +396,40 @@ class BasisDecorationService
 
     /**
      * 水路商品
+     * @param int $int
      * @param string $points
      * @param array $goods
-     * @param string $crafts
+     * @param string $craft
      * @return float
      */
-    public static function waterwayGoods($points,$goods,$crafts)
+    public static function waterwayGoods($int,$points,$craft,$goods)
     {
-        foreach ($goods as $one) {
-            switch ($one) {
-                case $one['title'] == self::goodsNames()['pvc']:
-                    $pvc_price = $one['platform_price'];
-                    $pvc_procurement = $one['purchase_price_decoration_company'];
-                    $goods_id [] = $one['id'];
-                    break;
-                case $one['title'] == self::goodsNames()['ppr']:
-                    $ppr_price = $one['platform_price'];
-                    $ppr_procurement = $one['purchase_price_decoration_company'];
-                    $goods_id [] = $one['id'];
-                    break;
-            }
+        switch ($int){
+            case $int == 1:
+                $value['quantity'] = self::algorithm(4,$points,$craft,$goods[1]['value']);
+                $value['cost'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
+                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
         }
+        $goods[0]['quantity'] = $value['quantity'];
+        $goods[0]['cost'] = $value['cost'];
+        $goods[0]['procurement'] = $value['procurement'];
 
-        $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        //TODO 修改 用分类名称 查询
-        foreach ($ids as $one_unit) {
-            switch ($one_unit) {
-                case $one_unit['title'] == self::goodsNames()['ppr']:
-                    $ppr_value = $one_unit['value'];
-                    break;
-                case $one_unit['title'] == self::goodsNames()['pvc']:
-                    $pvc_value = $one_unit['value'];
-                    break;
-            }
-        }//todo 工艺详情 修改了 不能用 分类名称
-        foreach ($crafts as $craft) {
-            switch ($craft) {
-                case $craft['project_details'] == self::DetailsId2Title()['ppr']:
-                    $ppr = $craft['material'];
-                    break;
-                case $craft['project_details'] == self::DetailsId2Title()['pvc']:
-                    $pvc =  $craft['material'];
-                    break;
-            }
-        }
-
-
+        return $goods[0];
 //           PPR费用：个数×抓取的商品价格
 //           个数：（水路总点位×【2m】÷抓取的商品的长度）
 //           PVC费用：个数×抓取的商品价格
 //           个数：（水路总点位×【2m】÷抓取的商品的长度）
-        $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
-        $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
-
-        $waterway['ppr_cost'] = round($waterway['ppr_quantity'] * $ppr_price,2);
-        $waterway['pvc_cost'] = round($waterway['pvc_quantity'] * $pvc_price,2);
-
-        $waterway['ppr_procurement'] = round($waterway['pvc_quantity'] * $ppr_procurement,2);
-        $waterway['pvc_procurement'] = round($waterway['pvc_quantity'] * $pvc_procurement,2);
-
-        $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
-        return $waterway;
+//        $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
+//        $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
+//
+//        $waterway['ppr_cost'] = round($waterway['ppr_quantity'] * $ppr_price,2);
+//        $waterway['pvc_cost'] = round($waterway['pvc_quantity'] * $pvc_price,2);
+//
+//        $waterway['ppr_procurement'] = round($waterway['pvc_quantity'] * $ppr_procurement,2);
+//        $waterway['pvc_procurement'] = round($waterway['pvc_quantity'] * $pvc_procurement,2);
+//
+//        $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
     }
 
     /**
@@ -1862,41 +1827,6 @@ class BasisDecorationService
 
         return $quantity;
     }
-
-
-    /**
-     * 水路材料
-     * @param $goods
-     * @param $material_price
-     * @return array
-     */
-    public static function waterwayMaterial($goods,$material_price)
-    {
-        foreach ($goods as $one_waterway_current) {
-            switch ($one_waterway_current) {
-                case $one_waterway_current['title'] == self::goodsNames()['ppr'];
-                    $one_waterway_current['quantity'] = $material_price['ppr_quantity'];
-                    $one_waterway_current['cost'] = $material_price['ppr_cost'];
-                    $one_waterway_current['procurement'] = $material_price['ppr_procurement'];
-                    $ppr[] = $one_waterway_current;
-                    break;
-                case $one_waterway_current['title'] == self::goodsNames()['pvc'];
-                    $one_waterway_current['quantity'] = $material_price['pvc_quantity'];
-                    $one_waterway_current['cost'] = $material_price['pvc_cost'];
-                    $one_waterway_current['procurement'] = $material_price['pvc_procurement'];
-                    $pvc[] = $one_waterway_current;
-                    break;
-            }
-        }
-        if (!$ppr && !$pvc){
-            return false;
-        }
-        $material ['total_cost'] = round($material_price['total_cost'],2);
-        $material ['material'][] = BasisDecorationService::profitMargin($ppr);
-        $material ['material'][] = BasisDecorationService::profitMargin($pvc);
-        return $material;
-    }
-
 
     /**
      * 无分类的商品

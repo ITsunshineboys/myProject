@@ -117,7 +117,7 @@ class OwnerController extends Controller
     const CRAFT_NAME =[
         'weak'      => 25,  // 弱电工艺
         'strong'    => 29,  // 强电工艺
-        'waterway'          => '水路工艺',
+        'waterway'  => 32,  //'水路工艺',
         'waterproof'        => '防水工艺',
         'carpentry'         => '木作工艺',
         'emulsion_varnish'  => '乳胶漆工艺',
@@ -391,7 +391,6 @@ class OwnerController extends Controller
         $reticle_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['reticle']);
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wire']);
         $spool_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['spool']);
-
         $bottom_case_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['bottom_case']);
 
 
@@ -400,11 +399,13 @@ class OwnerController extends Controller
         $goods_price[] = BasisDecorationService::plumberFormula(1,$strong_overall_points,$wire_attr,$wire);
         $goods_price[] = BasisDecorationService::plumberFormula(3,$strong_overall_points,$spool_attr,$spool,$spool1,$weak_overall_points);
         $goods_price[] = BasisDecorationService::plumberFormula(2,$total_points,$bottom_case_attr);
+        $total_cost = $goods_price[0]['cost']+$goods_price[1]['cost']+$goods_price[2]['cost']+$goods_price[3]['cost'];
 
         return Json::encode([
            'code' => 200,
            'msg'  => 'ok',
-            'data'=> $goods_price
+            'data'=> $goods_price,
+            'total_cost'=> $total_cost,
         ]);
     }
 
@@ -416,7 +417,17 @@ class OwnerController extends Controller
     public function actionWaterway()
     {
         $get = \Yii::$app->request->get();
-        //人工价格
+        // 点位查询
+        $where = 'id = '.self::PROJECT_DETAILS['waterway'];
+        $points = Points::findByIds('id,title',$where);
+        foreach ($points  as $p) {
+            if ($p['id'] == self::PROJECT_DETAILS['waterway']) {
+                $waterway_where          = 'pid = ' . $p['id'];
+                $waterway_points         = Points::findByPid('title,count', $waterway_where);
+                $waterway_overall_points = BasisDecorationService::waterwayPoints($waterway_points, $get);
+            }
+        }
+
 
         //查询弱电所需要材料
         $goods = Goods::priceDetail(self::WALL_SPACE,self::WATERWAY_MATERIAL);
@@ -431,26 +442,36 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-        var_dump($goods);die;
-//        $judge = BasisDecorationService::priceConversion($goods);
         $waterway_current = BasisDecorationService::judge($goods, $get);
+
+        // 商品属性抓取
+        $ppr = BasisDecorationService::goodsAttr($waterway_current,BasisDecorationService::goodsNames()['ppr']);
+        $pvc = BasisDecorationService::goodsAttr($waterway_current,BasisDecorationService::goodsNames()['pvc']);
 
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterway'], $get['city']);
+        $craft = WorkerType::craft(self::CRAFT_NAME['waterway'], $get['city']);
+        foreach ($craft as $value){
+            if ($value['worker_name'] == 'PPR水管用料' ){
+                $ppr_ = $value['material'];
+            }
+
+            if ($value['worker_name'] == 'PVC管用料' ){
+                $pvc_ = $value['material'];
+            }
+        }
 
 
-        //材料总费用
-        $material_price = BasisDecorationService::waterwayGoods($waterway_count, $waterway_current,$craft);
-        $material = BasisDecorationService::waterwayMaterial($waterway_current, $material_price);
+        //材料费用
+        $material[] = BasisDecorationService::waterwayGoods(1,$waterway_overall_points,$ppr_,$ppr);
+        $material[] = BasisDecorationService::waterwayGoods(1,$waterway_overall_points,$pvc_,$pvc);
+        $total_cost = BasisDecorationService::algorithm(3,$material[0]['cost'],$material[1]['cost']);
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'data' => [
-//                'waterway_labor_price' => $labor_all_cost,
-                'waterway_material_price' => $material,
-            ]
+            'data' => $material,
+            'total_cost' => $total_cost,
         ]);
     }
 
