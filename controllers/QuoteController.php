@@ -887,7 +887,6 @@ class QuoteController extends Controller
                 if(is_array($ids)){
                     $ids = implode(',',$ids);
                 }
-
                 $effect_plot = new EffectToponymy();
                 $effect_plot->effect_id=$ids;
                 $effect_plot->toponymy=$request['house_name'];
