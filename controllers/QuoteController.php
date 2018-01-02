@@ -2209,7 +2209,9 @@ class QuoteController extends Controller
         ]);
     }
 
-
+    /**
+     * @return string
+     */
     public function actionHomepageEditView()
     {
         $id = (int)\Yii::$app->request->get('id');
