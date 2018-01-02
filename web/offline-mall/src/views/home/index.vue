@@ -28,8 +28,8 @@
         <flexbox-item :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
                       v-for="(item,index) in recommended_list" :key="index">
           <img width="168px" height="160px" :src="item.image" alt="">
-          <p class="command_title">{{item.title}}</p>
-          <p class="command_description">{{item.description}}</p>
+          <p class="command_title nowrap">{{item.title}}</p>
+          <p class="command_description nowrap">{{item.description}}</p>
           <p class="command_price">￥{{item.platform_price}}</p>
         </flexbox-item>
       </flexbox>
@@ -199,6 +199,11 @@
   /*.even_col{!*推荐偶数项*!*/
   /*padding-left: 7.5px;*/
   /*}*/
+  .nowrap{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+  }
   .command {
     margin-bottom: 10px;
   }

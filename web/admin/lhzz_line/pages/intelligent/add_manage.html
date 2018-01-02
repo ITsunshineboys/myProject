@@ -16,30 +16,30 @@
                 <label>选择区、县</label>
                 <select ng-model="vm.choose_district" ng-options="item.district_code as item.district for item in district" class="form-control"></select>
                 <label>选择小区</label>
-                <select ng-model="ctrlScope.cur_toponymy_house" ng-options="item.toponymy for item in all_toponymy" class="form-control"></select>
+                <select ng-model="vm.choose_toponymy" ng-options="item.toponymy for item in all_toponymy" class="form-control"></select>
                 <label>选择地址</label>
-                <select ng-model="ctrlScope.cur_street" ng-options="item.street for item in all_street" class="form-control"></select>
+                <select ng-model="vm.choose_street" ng-options="item.street for item in all_street" class="form-control"></select>
                 <label>选择案例</label>
-                <select ng-options="item.particulars for item in all_case" class="form-control"></select>
+                <select ng-model="vm.choose_case" ng-options="item.particulars for item in all_case" class="form-control"></select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-2 text-left"><i class="glyphicon glyphicon-asterisk red_mark"></i>效果图</label>
             <div class="col-md-3">
                 <div style="width: 100px;height: 100px;">
-                    <img ng-src="{{cur_image}}" ng-if="cur_image!=''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
-                    <img ng-if="cur_image==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
+                    <img ng-src="{{cur_imgSrc}}" ng-if="cur_imgSrc!=''"  width="100px" height="100px">
+                    <img ng-if="cur_imgSrc==''" src="pages\intelligent\images\default.png"  width="100px" height="100px">
                 </div>
                 <span class="upload_msg">图片大小176x176，5M内，可传1张图片，支持JPG、PNG、JPGE</span>
                 <button type="button" class="button" ng-change="upload(data.file)" ngf-pattern="image/*"  ngf-select="" ngf-multiple="false" ng-model="data.file">
                     上传</button>
-                <p class="pic_error" ng-if="!!a_pic_error"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{a_pic_error}}</p>
+                <p class="pic_error" ng-if="img_error!=''"><i class="glyphicon glyphicon-asterisk red_mark"></i>{{img_error}}</p>
             </div>
         </div>
     </div>
         <div class="from-group submit">
-            <button class="btn btn-primary" type="button" ng-click="save_manage(add_manage.$valid)">确认</button>
-            <button type="button" class="btn btn-default" ng-click="returnHomeManage()">返回</button>
+            <button class="btn btn-primary" type="button" ng-click="saveManage(add_manage.$valid)">确认</button>
+            <button type="button" class="btn btn-default" ng-click="goPrev()">返回</button>
         </div>
     </form>
 </div>
