@@ -3997,6 +3997,7 @@ class MallController extends Controller
         }
 
         $data = $goods->view(Yii::$app->request->userIP);
+        $data = LineSupplierGoods::_extraData($data);
 //        $cache->set($cacheKey, $data, Yii::$app->params['goods']['viewCacheTime']);
         return Json::encode([
             'code' => 200,
@@ -4035,7 +4036,7 @@ class MallController extends Controller
         }
 
         $data = $goods->adminView();
-        $data =LineSupplierGoods::_extraData($data);
+        $data = LineSupplierGoods::_extraData($data);
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
