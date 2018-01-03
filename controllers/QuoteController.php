@@ -1638,7 +1638,7 @@ class QuoteController extends Controller
     public function actionPlotEdit()
     {
         $request = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity();
+
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
         $district_chinese = District::findByCode($request['cur_county_id']['id']);
@@ -2097,7 +2097,6 @@ class QuoteController extends Controller
      */
     public function actionHomepageList(){
         $request = \Yii::$app->request;
-//        $province_code = trim($request->get('province',''));
         $district_code = trim($request->get('city_code',''));
 
         $brainpower =BrainpowerInitalSupervise::codeStatus($district_code);
@@ -2147,7 +2146,6 @@ class QuoteController extends Controller
     public function actionHomepageDistrict()
     {
         $request = \Yii::$app->request;
-//        $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
         $code = 200;
 
