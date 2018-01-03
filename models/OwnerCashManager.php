@@ -125,7 +125,7 @@ class OwnerCashManager extends ActiveRecord {
             ->select('u.nickname,u.id,u.balance,u.availableamount,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch')
             ->leftJoin('user_bankinfo as ub', 'ub.uid=u.id')
             ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
-            ->where(['u.id'=>$user_id])
+            ->where(['u.id'=>$user_id,'ub.role_id'=>self::OWNER_ROLE])
             ->one();
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 0])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 2])->sum('cash_money');
