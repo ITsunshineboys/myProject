@@ -974,7 +974,7 @@ class WithdrawalsController extends Controller
             ]);
     }
     /**
-     *查询提现金额
+     * 查询提现金额
      * @return string
      */
     public  function  actionCheckCashMoney()
@@ -1168,11 +1168,7 @@ class WithdrawalsController extends Controller
                 if (!$res1)
                 {
                     $tran->rollBack();
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    return false;
                 }
                 $accessDetail=new UserAccessdetail();
                 $accessDetail->uid=$uid;
@@ -1186,22 +1182,14 @@ class WithdrawalsController extends Controller
                 if (!$res2)
                 {
                     $tran->rollBack();
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
+                    return false;
                 }
                 $tran->commit();
                 echo 'success';
             }catch (Exception $e)
             {
                 $tran->rollBack();
-                $code=500;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
+                return false;
             }
         }
     }

@@ -1144,7 +1144,7 @@ class OrderController extends Controller
             }
             $id=$arr['attach'];
             $code=OrderGoods::AddEffect($id);
-            if ($code=200)
+            if ($code==200)
             {
                 return true;
             }else
