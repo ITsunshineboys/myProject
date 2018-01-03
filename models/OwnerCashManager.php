@@ -139,7 +139,7 @@ class OwnerCashManager extends ActiveRecord {
             ->where(['ub.uid'=>$user_id,'ub.role_id'=>self::OWNER_ROLE])
             ->one();
         if(!$array){
-            $array='';
+            $array=[];
         }
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 0])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 2])->sum('cash_money');
