@@ -1,59 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <link rel="stylesheet" href="css/rem.css">
-    <link rel="stylesheet" href="css/all.css"/>
-    <link rel="stylesheet" href="css/search.css"/>
-</head>
-<body>
-<header>
-    <div class="search_box" >
-        <img src="" alt=""/>
-        <input href="search.html" class="search" placeholder="请输入想购买的商品"/>
-        <span class="massage">取消</span>
-    </div>
-</header>
-<section>
-    <div  class="tab_none" >
-        <h2>热门搜索</h2>
-        <div class="tab_div">
-            <ul class="tab_li">
-                <li>深大地板</li>
-                <li>深大地板</li>
-                <li>深大地板</li>
-                <li>深大地板</li>
+<div>
+    <header>
+        <div class="header_cell clearfix">
+            <div class="pull-left">
+                <img src="images/mall_searchbar.png" alt=""/>
+                <input type="text" placeholder="请输入小区名字" maxlength="14" ng-model="toponymy.name"/>
+            </div>
+            <a class="pull-right" ng-click="goPrev()">取消</a>
+        </div>
+    </header>
+
+    <section>
+        <!--有结果显示数据-->
+        <div class="have_data" ng-if="search_data.length">
+            <ul class="cell_ul">
+                <li ng-repeat="item in search_data">
+                    <a ui-sref="modelRoom({roomCode: item.district_code, toponymy: item.toponymy, street: item.street})">
+                        <div class="first_fru">{{item.toponymy}}</div>
+                        <div class="second_fru">{{item.site_particulars}}</div>
+                    </a>
+                </li>
             </ul>
         </div>
-        <h2>搜索历史</h2>
-        <div class="history_search">
-            <ul>
-                <li>特质衣架</li>
-                <li>特质衣架</li>
-                <li>特质衣架</li>
-                <li>特质衣架</li>
-                <li>特质衣架</li>
-                <li>特质衣架</li>
-            </ul>
+
+        <!--无数据显示-->
+        <div class="no_data" ng-if="search_data.length==0&&toponymy!=''">
+            <div>无数据</div>
+            <a ng-click="go_nodata()">没有我的小区?</a>
         </div>
-        <div class="clear_history_btn">
-            <button>清除历史记录</button>
-        </div>
-    </div>
-    <!--搜索后显示的内容-->
-    <div class="tab_hidden" style="display: none">
-        <ul>
-            <li>海尔洗衣机</li>
-            <li>海尔电冰箱</li>
-            <li>海尔吹风机</li>
-        </ul>
-    </div>
-</section>
-<script src="../js/jquery-3.1.1.js"></script>
-<script src="../js/angular.min.js"></script>
-<script src="js/global.js"></script>
-<script src="js/rem.js"></script>
-<script src=js/search.js></script>
-</body>
-</html>
+    </section>
+</div>
