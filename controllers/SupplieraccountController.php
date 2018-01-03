@@ -9,7 +9,6 @@ use app\models\GoodsCategory;
 use app\models\OwnerCashManager;
 use app\models\Supplier;
 use app\models\SupplierCashManager;
-use app\models\SupplierCashregister;
 use app\models\User;
 use app\models\UserAccessdetail;
 use app\models\UserCashregister;
@@ -490,7 +489,7 @@ class SupplieraccountController extends  Controller{
             $endTime && $where .= " and apply_time <= {$endTime}";
         }
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', UserCashregister::PAGE_SIZE_DEFAULT);
         $paginationData = UserCashregister::pagination($uid,$where, UserCashregister::FIELDS_ADMIN, $page, $size);
         return Json::encode([
             'code'=>200,

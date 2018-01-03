@@ -9,7 +9,6 @@ use app\models\GoodsOrder;
 use app\models\OrderGoods;
 use app\models\Role;
 use app\models\Supplier;
-use app\models\SupplierCashregister;
 use app\models\User;
 use app\models\UserAccessdetail;
 use app\models\UserCashregister;
@@ -944,7 +943,7 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $role_id=6;
+            $role_id=Yii::$app->params['supplierRoleId'];
             switch ($accessDetail['access_type'])
             {
                 case 1:
@@ -2002,7 +2001,7 @@ class WithdrawalsController extends Controller
             $where .=" and CONCAT(u.nickname,u.aite_cube_no) like '%{$keyword}%'";
         }
         $page = (int)Yii::$app->request->get('page', 1);
-        $size = (int)Yii::$app->request->get('size', SupplierCashregister::PAGE_SIZE_DEFAULT);
+        $size = (int)Yii::$app->request->get('size', UserCashregister::PAGE_SIZE_DEFAULT);
         if ($type)
         {
             switch ($type)

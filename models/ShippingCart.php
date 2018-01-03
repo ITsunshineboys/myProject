@@ -207,6 +207,7 @@ class ShippingCart extends \yii\db\ActiveRecord
     }
 
     /**
+     * 删除失效商品
      * @param $Goods_ids
      * @param $user
      * @return int
@@ -246,6 +247,7 @@ class ShippingCart extends \yii\db\ActiveRecord
     }
 
     /**
+     * 添加购物车操作
      * @param $goods_id
      * @param $user
      * @param $goods_num
