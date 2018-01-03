@@ -25,12 +25,12 @@ let webpackConfig = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src')
     }
   },
   module: {
     rules: [
-      ...(config.dev.useEslint? [{
+      ...(config.dev.useEslint ? [{
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
