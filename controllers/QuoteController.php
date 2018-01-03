@@ -2333,9 +2333,6 @@ class QuoteController extends Controller
         $effect = Effect::find()
             ->asArray()
             ->where(['id'=>(int)trim($request->post('effect_id',''))])
-//            ->andWhere(['toponymy'=>trim($request->post('toponymy',''))])
-//            ->andWhere(['street'=>trim($request->post('street',''))])
-//            ->andWhere(['!=','type',2])
             ->one();
 
         $add_item = new BrainpowerInitalSupervise();
