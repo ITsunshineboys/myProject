@@ -223,7 +223,8 @@ class ChatController extends Controller
      * 发送文本消息给指定用户
      * @return array|string
      */
-    public function actionSendTextMessage(){
+    public function actionSendTextMessage()
+    {
         $user = self::getUser();
         if (!is_array($user)) {
             return $user;
