@@ -4781,7 +4781,8 @@ class OrderController extends Controller
         if (!$user)
         {
             $code=1052;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -4791,7 +4792,12 @@ class OrderController extends Controller
         $total_amount=$request->post('total_amount');
         $address_id=$request->post('address_id');
         $pay_way=$request->post('pay_way');
-        if(!$suppliers  ||  !$total_amount || !$address_id || !$pay_way)
+        if(
+            !$suppliers
+            ||  !$total_amount
+            || !$address_id
+            || !$pay_way
+        )
         {
             $code=1000;
             return Json::encode([

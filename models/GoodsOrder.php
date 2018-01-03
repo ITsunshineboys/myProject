@@ -2722,6 +2722,7 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_COMPLETED;
                     if (!$arr[$k]['comment_id'])
                     {
+                        $arr[$k]['status_type']=12; //待评论
                         $arr[$k]['status_code']=self::ORDER_TYPE_UNCOMMENT;
                         $arr[$k]['status_desc']=self::ORDER_TYPE_DESC_UNCOMMENT;
                     }

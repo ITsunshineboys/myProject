@@ -104,15 +104,13 @@ class OrderAfterSale extends ActiveRecord
             $code=1000;
             return $code;
         }
-        if (
-            $OrderGoods->order_status !=1
-            || $GoodsOrder->pay_status !=1
-        ){
-            $code=1036;
-            return $code;
-        }
-        if ($OrderGoods->after_sale_services!=0)
-        {
+            if (
+                $OrderGoods->order_status !=1
+                || $GoodsOrder->pay_status !=1
+            ){
+                $code=1036;
+                return $code;
+            }
             $arr=explode(',',$OrderGoods->after_sale_services);
             //0：提供发票, 1：上门安装, 2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
             foreach ($arr as &$type)
@@ -129,11 +127,6 @@ class OrderAfterSale extends ActiveRecord
                     return $code;
                 }
             }
-        }else
-        {
-            $code=1035;
-            return $code;
-        }
         $CheckIsAfter=self::find()
             ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
             ->one();
