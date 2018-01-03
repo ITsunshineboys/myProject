@@ -174,7 +174,7 @@ class WorkerType extends \yii\db\ActiveRecord
     public static function craft($pid,$city)
     {
         $rows = self::find()
-            ->select('worker_type.worker_name,e.material')
+            ->select('worker_type.id,worker_type.worker_name,e.material')
             ->leftJoin('engineering_standard_craft AS e','e.project_id = worker_type.id')
             ->where(['e.city_code'=>$city])
             ->andWhere(['worker_type.pid'=>$pid])
