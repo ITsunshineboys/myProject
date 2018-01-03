@@ -317,8 +317,8 @@ class BasisDecorationService
      */
     public static function laborFormula($points,$day_points)
     {
-        $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
-        $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
+        $p = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+        $d = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
 
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
         return self::algorithm(6,$p,$d);
@@ -326,11 +326,14 @@ class BasisDecorationService
 
     public static function P($points,$day_points,$labor)
     {
-        $p  = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
-        $l  = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value2'];
-        $d  = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
+        $p = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+        $l = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value2'];
+        $d = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
+
         //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        return ceil(($p / $d)) * $l;
+        $algorithm = ceil(self::algorithm(6,$p,$d));
+
+        return self::algorithm(1,$algorithm,$l);
     }
 
 
@@ -340,7 +343,7 @@ class BasisDecorationService
      * @param $value
      * @return array
      */
-    public static function goodsAttr($goods,$value)
+    public static function goodsAttr($goods,$value,$name)
     {
         foreach ($goods as $one){
             if ($one['title'] == $value){
@@ -350,7 +353,7 @@ class BasisDecorationService
 
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
-        $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],'长');
+        $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
 
         return [$max_goods,$goods_attr];
 
@@ -416,20 +419,6 @@ class BasisDecorationService
         $goods[0]['procurement'] = $value['procurement'];
 
         return $goods[0];
-//           PPR费用：个数×抓取的商品价格
-//           个数：（水路总点位×【2m】÷抓取的商品的长度）
-//           PVC费用：个数×抓取的商品价格
-//           个数：（水路总点位×【2m】÷抓取的商品的长度）
-//        $waterway['ppr_quantity'] = ceil($points * $ppr / $ppr_value);
-//        $waterway['pvc_quantity'] = ceil($points * $pvc / $pvc_value);
-//
-//        $waterway['ppr_cost'] = round($waterway['ppr_quantity'] * $ppr_price,2);
-//        $waterway['pvc_cost'] = round($waterway['pvc_quantity'] * $pvc_price,2);
-//
-//        $waterway['ppr_procurement'] = round($waterway['pvc_quantity'] * $ppr_procurement,2);
-//        $waterway['pvc_procurement'] = round($waterway['pvc_quantity'] * $pvc_procurement,2);
-//
-//        $waterway['total_cost'] =  $waterway['ppr_cost'] + $waterway['pvc_cost'];
     }
 
     /**
@@ -465,43 +454,25 @@ class BasisDecorationService
 
     /**
      * 防水商品
-     * @param string $points
+     * @param string $area
      * @param array $goods
      * @param string $crafts
      * @return float
      */
-    public static function waterproofGoods($points,$goods,$crafts)
+    public static function waterproofGoods($area,$crafts,$goods)
     {
 
-        foreach ($crafts as $craft) {
-            $material = $craft['material'];
-        }
-
-        if (count($goods) == count($goods, 1)) {
-            $goods_platform_price = $goods['platform_price'];
-            $goods_price = $goods['purchase_price_decoration_company'];
-            $goods_id [] = $goods['id'];
-        } else {
-            foreach ($goods as $one) {
-                $goods_platform_price = $one['platform_price'];
-                $goods_price = $one['purchase_price_decoration_company'];
-                $goods_id [] = $one['id'];
-            }
-        }
-
-        $ids = GoodsAttr::findByGoodsIdUnit($goods_id);
-        foreach ($ids as $one_unit) {
-            if ($one_unit['title'] == self::goodsNames()['waterproof_coating']) {
-                $goods_value = $one_unit['value'];
-            }
-        }
-
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
-        $waterproof['quantity'] = ceil($points * $material /$goods_value);
+        $value['quantity'] = ceil(self::algorithm(4,$area,$crafts,$goods[1]['value']));
 //            防水涂剂费用：个数×抓取的商品价格
-        $waterproof['cost'] =  round($waterproof['quantity'] * $goods_platform_price,2);
-        $waterproof['procurement'] =  round($waterproof['quantity'] * $goods_price,2);
-        return $waterproof;
+        $value['cost'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
+        $value['procurement'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+
+        $goods[0]['quantity'] = $value['quantity'];
+        $goods[0]['cost'] = $value['cost'];
+        $goods[0]['procurement'] = $value['procurement'];
+
+        return $goods[0];
     }
 
     /**

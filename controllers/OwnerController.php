@@ -118,7 +118,7 @@ class OwnerController extends Controller
         'weak'      => 25,  // 弱电工艺
         'strong'    => 29,  // 强电工艺
         'waterway'  => 32,  //'水路工艺',
-        'waterproof'        => '防水工艺',
+        'waterproof'=> 35,//'防水工艺',
         'carpentry'         => '木作工艺',
         'emulsion_varnish'  => '乳胶漆工艺',
         'oil_paint'         => '油漆工艺',
@@ -375,10 +375,10 @@ class OwnerController extends Controller
 
 
         //商品属性抓取
-        $reticle_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['reticle']);
-        $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wire']);
-        $spool_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['spool']);
-        $bottom_case_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['bottom_case']);
+        $reticle_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['reticle'],'长');
+        $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wire'],'长');
+        $spool_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['spool'],'长');
+        $bottom_case_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['bottom_case'],'长');
 
 
         // 商品价格
@@ -432,8 +432,8 @@ class OwnerController extends Controller
         $waterway_current = BasisDecorationService::judge($goods, $get);
 
         // 商品属性抓取
-        $ppr = BasisDecorationService::goodsAttr($waterway_current,BasisDecorationService::goodsNames()['ppr']);
-        $pvc = BasisDecorationService::goodsAttr($waterway_current,BasisDecorationService::goodsNames()['pvc']);
+        $ppr = BasisDecorationService::goodsAttr($waterway_current,BasisDecorationService::goodsNames()['ppr'],'长');
+        $pvc = BasisDecorationService::goodsAttr($waterway_current,BasisDecorationService::goodsNames()['pvc'],'长');
 
 
         //当地工艺
@@ -526,7 +526,7 @@ class OwnerController extends Controller
         return Json::encode([
            'code' => 200,
            'msg' => 'ok',
-           'data' => $labor_all_cost,
+           'labor_all_cost' => $labor_all_cost,
         ]);
     }
 
@@ -581,14 +581,6 @@ class OwnerController extends Controller
             if ($one_area['id'] == self::ROOM['toilet_area']){
                 $toilet_ratio = $one_area['project_value'];
             }
-            // 客厅
-            if ($one_area['id'] == self::ROOM['hall_area']){
-                $hall_ratio = $one_area['project_value'];
-            }
-            // 卧室
-            if ($one_area['id'] == self::ROOM['bedroom_area']){
-                $bedroom_ratio = $one_area['project_value'];
-            }
         }
 
         // 防水高度查询
@@ -605,64 +597,34 @@ class OwnerController extends Controller
         }
 
 
-        // 厨房  ①厨房防水面积：厨房地面积+厨房墙面积   厨房地面积：【x】%×（房屋面积) 厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
+        // 厨房   //卫生间  //其它面积查询
         $kitchen_area = BasisDecorationService::waterproofArea($kitchen_ratio,$kitchen_height,$get,$get['kitchen'],4);
-var_dump($kitchen_area);die;
-        //卫生间
-        $toilet_ = ProjectView::findByOne('卫生间面积百分比',68);
-        $_toilet_height = ProjectView::findByOne('卫生间防水高度',$points['id']);
-        $toilet_area = BasisDecorationService::waterproofArea($toilet_['project_value']/100,$_toilet_height['project_value']/100, $post['area'], $post['toilet']);
-
+        $toilet_area = BasisDecorationService::waterproofArea($toilet_ratio,$toilet_height,$get,$get['toilet'],4);
+        $apartment = Apartment::find()->asArray()->where(['<=','min_area',$get['area']])->andWhere(['>=','max_area',$get['area']])->andWhere(['points_id'=>$points['id']])->one();
 
         //总面积
-        $apartment = Apartment::find()
-            ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andwhere(['project_name'=>'其他防水面积'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-
-        $total_area = $kitchen_area + $toilet_area + $apartment['project_value'];
+        $total_area = round(BasisDecorationService::algorithm(5,$kitchen_area,$toilet_area,$apartment['project_value']),2);
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['waterproof'], $post['city']);
-
-        if ($craft == null){
-            $code = 1059;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
+        $craft = WorkerType::craft(self::CRAFT_NAME['waterproof'],$get['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-        $labor_all_cost['price'] = BasisDecorationService::p($total_area,$worker_day_points,$worker_price);
-        $labor_all_cost['worker_kind'] = $waterproof_labor['worker_kind'];
-        
+        $labor_all_cost['price'] = BasisDecorationService::p($total_area,$area,$labor_cost['univalence']);
+        $labor_all_cost['worker_kind'] = $labor_cost['worker_name'];
+
+        // 商品属性
+        $goods_attr = BasisDecorationService::goodsAttr($waterproof,BasisDecorationService::goodsNames()['waterproof_coating'],'重');
+
         //材料总费用
-        $material_price = BasisDecorationService::waterproofGoods($total_area, $waterproof, $craft);
-        $material_total = [];
-        foreach ($waterproof as $one_waterproof) {
-            if ($one_waterproof['title'] == BasisDecorationService::goodsNames()['waterproof_coating']) {
-                $one_waterproof['quantity'] = $material_price['quantity'];
-                $one_waterproof['cost'] = $material_price['cost'];
-                $one_waterproof['procurement'] = $material_price['procurement'];
-                $goods_max [] = $one_waterproof;
-            }
-        }
-        $material_total ['material'][] = BasisDecorationService::profitMargin($goods_max);
-        $material_total ['total_cost'][] =  round($material_price['cost'],2);
+        $material_price = BasisDecorationService::waterproofGoods($total_area,$craft[0]['material'],$goods_attr);
+        $total_cost =  round($material_price['cost'],2);
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'data' => [
-                'waterproof_labor_price' => $labor_all_cost,
-                'waterproof_material' => $material_total,
-                'total_area' => ceil($total_area),
-            ]
+            'labor_all_cost' => $labor_all_cost,
+            'data' => $material_price,
+            'total_area' => $total_cost,
         ]);
     }
 

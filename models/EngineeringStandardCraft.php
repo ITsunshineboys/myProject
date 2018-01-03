@@ -80,13 +80,14 @@ class EngineeringStandardCraft  extends ActiveRecord
         return $data;
 
     }
+
+
     /**
-     * condition find
-     * @param string $project
-     * @param int $district
-     * @return array|bool|ActiveRecord[]
+     * @param $project
+     * @param int $code
+     * @return array|ActiveRecord[]
      */
-    public static function findByAll($project='',$code =510100)
+    public static function findByAll($project,$code =510100)
     {
 
         $select = 'id,material,project_id';
@@ -98,10 +99,7 @@ class EngineeringStandardCraft  extends ActiveRecord
             ->all();
 
         foreach ($row as &$one){
-
-            $one['project_details']=$one['project_details'];
             $one['material'] = $one['material'] / self::PRICE_CONVERSION;
-            $one['unit'] = self::UNIT[$one['unit']];
         }
 
         return $row;
