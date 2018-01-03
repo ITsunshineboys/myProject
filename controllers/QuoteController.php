@@ -929,7 +929,7 @@ class QuoteController extends Controller
         $public_message['street'] =  $topnymy_datas['street'];
         $public_message['toponymy'] =  $topnymy_datas['toponymy'];
         $public_message['district_code'] =  $topnymy_datas['district_code'];
-        $public_message['district'] = $topnymy_datas['district'];
+        $public_message['district'] = District::findByCode($topnymy_datas['district_code'])['name'];
         $public_message['effect']=$data;
         $id=[];
         foreach ($data as $one_effect){
