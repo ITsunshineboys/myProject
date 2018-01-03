@@ -1581,7 +1581,12 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        if ($access['access_type']==1 || $access['access_type']==5 || $access['access_type']==6 )
+        if (
+            $access['access_type']==1
+            || $access['access_type']==5
+            || $access['access_type']==6
+            || $access['access_type']==UserAccessdetail::ACCESS_TYPE_REFUND
+        )
         {
             //"1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用"
             $access['access_money']=sprintf('%.2f',(float)$access['access_money']*0.01);
@@ -1739,6 +1744,7 @@ class WithdrawalsController extends Controller
                         ->where(['order_no'=>$access['order_no']])
                         ->one();
                     $pay_name=$goodsOrder->pay_name;
+                    $access['access_money']=0;
                     foreach ($accessList as &$List)
                     {
                         $orderGoods=OrderGoods::find()
@@ -1750,6 +1756,7 @@ class WithdrawalsController extends Controller
                         {
                             $goods_name[]=   $orderGood['goods_name'];
                         }
+                        $access['access_money']+=$List['access_money'];
                     }
                     if (count($goods_name)>1)
                     {
@@ -1757,22 +1764,39 @@ class WithdrawalsController extends Controller
                     }else{
                         $title=$goods_name[0];
                     }
-                    $list[]=[
+                    $list_payment[]=[
+                        'name'=>$name,
+                        'value'=>sprintf('%.2f',-$access['access_money']*0.01)
+                    ];
+                    $list_payment[]=[
+                        'name'=>'类型',
+                        'value'=>$type
+                    ];
+                    $list_payment[]=[
                         'name'=>'支付类型',
                         'value'=>$pay_name
                     ];
-                    $list[]=[
+                    $list_payment[]=[
                         'name'=>'商品名称',
                         'value'=>$title
                     ];
-                    $list[]=[
+                    $list_payment[]=[
                         'name'=>'时间',
                         'value'=>$access['create_time']
                     ];
-                    $list[]=[
+                    $list_payment[]=[
                         'name'=>'交易单号',
                         'value'=>$transaction_no
                     ];
+                    $code=200;
+                    return Json::encode([
+                        'code'=>$code,
+                        'msg'=>'ok',
+                        'data'=>[
+                            'type'=>'交易详情-'.$type,
+                            'list'=>$list_payment
+                        ]
+                    ]);
                 }
                 break;
             case UserAccessdetail::ACCESS_TYPE_REFUND:
