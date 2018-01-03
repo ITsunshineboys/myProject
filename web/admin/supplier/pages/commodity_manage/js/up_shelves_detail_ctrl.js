@@ -1,6 +1,5 @@
 let up_shelves_detail = angular.module("up_shelves_detail_module", ['ngFileUpload']);
 up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $scope, $http, $stateParams, $state, Upload, $location, $anchorScroll, $window, _ajax) {
-    console.log($scope.back_cm);
     /*------------返回按钮----------------*/
     $scope.back_cm = function () {
         if ($stateParams.flag == 0) {
@@ -20,7 +19,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.upload_dis = false;
     $scope.goods_all_attrs = [];//所有属性数据
     $scope.logistics = [];//物流模块列表
+    $scope.brand_null_flag = false;
     $scope.series_null_flag = false;
+		$scope.series_add_flag = false;
     $scope.style_null_flag = false;
     $scope.series_null_arr = [];
     $scope.style_null_arr = [];
@@ -90,96 +91,74 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.brands_arr = [];
     $scope.series_arr = [];
     $scope.styles_arr = [];
-    _ajax.get('/mall/category-brands-styles-series', {
-        category_id: +goods_item.category_id,
-	      from_add_goods_page:1
-    }, function (res) {
-        console.log(res);
-        /*品牌、系列、风格 下拉框开始*/
-        $scope.brands_arr = res.data.category_brands_styles_series.brands;
-        $scope.series_arr = res.data.category_brands_styles_series.series;
-        $scope.styles_arr = res.data.category_brands_styles_series.styles;
-        //商品详情接口，获取品牌、系列、风格名称、重置 第一项下拉框
-        _ajax.get('/mall/goods-view', {id: $scope.goods_id}, function (res) {
-            console.log(res);
-            $scope.detail_brand = res.data.goods_view.brand_name;//品牌名称
-            $scope.detail_ser = res.data.goods_view.series_name;//系列名称
-            $scope.detail_style = res.data.goods_view.style_name;//风格名称
-            $scope.line_goods = res.data.goods_view.line_goods;//线下店信息
-            //循环品牌列表
-            for (let [key, value] of $scope.brands_arr.entries()) {
-                if (value.name == $scope.detail_brand) {
-                    $scope.brands_arr.splice(key, 1);
-                    $scope.brands_arr.unshift(value);
-                    //把对应的品牌前置到下拉框第一项
-                    $scope.brand_model = value.id;
-                }
-            }
-            //循环系列列表
-            for (let [key, value] of $scope.series_arr.entries()) {
-                $scope.series_null_arr.push(value.series);
-                if (value.series == $scope.detail_ser) {
-                    $scope.series_arr.splice(key, 1);
-                    $scope.series_arr.unshift(value);
-                    //把对应的系列前置到下拉框第一项
-                    $scope.series_model = value.id;
-                }
-            }
-            //循环风格列表
-            for (let [key, value] of $scope.styles_arr.entries()) {
-                console.log(value)
-                console.log(3332)
-                $scope.style_null_arr.push(value.style);
-                if (value.style == $scope.detail_style) {
-                    $scope.styles_arr.splice(key, 1);
-                    $scope.styles_arr.unshift(value);
-                    //把对应的风格前置到下拉框第一项
-                    $scope.style_model = value.id;
-                }
-            }
+		$scope.style_ids = [];
+		$scope.style_check_arr=[];
+	_ajax.get('/mall/goods-view-admin', {id: $scope.goods_id}, function (res) {
+		console.log(res);
+		$scope.detail_brand = res.data.goods_view_admin.brand_name;//品牌名称
+		$scope.detail_ser = res.data.goods_view_admin.series_name;//系列名称
+		$scope.detail_style = res.data.goods_view_admin.style_name;//风格名称
+		$scope.line_goods = res.data.goods_view_admin.line_goods;//线下店信息
+		$scope.style_ids = res.data.goods_view_admin.style_ids // 风格ids
+		_ajax.get('/mall/category-brands-styles-series', {
+			category_id: +goods_item.category_id,
+			from_add_goods_page:1
+		}, function (res) {
+			console.log(res);
+			/*品牌、系列、风格 下拉框开始*/
+			$scope.brands_arr = res.data.category_brands_styles_series.brands;
+			$scope.series_arr = res.data.category_brands_styles_series.series;
+			$scope.styles_arr = res.data.category_brands_styles_series.styles;
+			//循环品牌列表
+			for (let [key, value] of $scope.brands_arr.entries()) {
+				if (value.name == $scope.detail_brand) {
+					$scope.brands_arr.splice(key, 1);
+					$scope.brands_arr.unshift(value);
+					//把对应的品牌前置到下拉框第一项
+					$scope.brand_model = value.id;
+				}
+			}
+			//循环系列列表
+			for (let [key, value] of $scope.series_arr.entries()) {
+				$scope.series_null_arr.push(value.series);
+				if (value.series == $scope.detail_ser) {
+					$scope.series_arr.splice(key, 1);
+					$scope.series_arr.unshift(value);
+					//把对应的系列前置到下拉框第一项
+					$scope.series_model = value.id;
+				}
+			}
 
-            if (!!res.data.goods_view.series_name) {
-                let series_null_flag = $scope.series_null_arr.findIndex(function (value) {
-                    return $scope.detail_ser == value
-                });
-                series_null_flag === -1 ? $scope.series_null_flag = true : $scope.series_null_flag = false;
-            } else {
-                $scope.series_model = true;
-            }
-            if (!!res.data.goods_view.style_name) {
-                let style_null_flag = $scope.style_null_arr.findIndex(function (value) {
-                    return $scope.detail_style == value
-                });
-                style_null_flag === -1 ? $scope.style_null_flag = true : $scope.style_null_flag = false;
-            } else {
-                $scope.style_model = true;
-            }
-
-
-        })
-    });
+			if($scope.detail_ser === ''){
+				$scope.series_null_flag = true
+				$scope.series_hint_words = '添加系列，便于智能报价抓取该商品'
+			}
+			if (!!$scope.detail_ser) {
+				let series_null_flag = $scope.series_null_arr.findIndex(function (value) {
+					return $scope.detail_ser == value
+				});
+				if (series_null_flag === -1) {
+					$scope.series_down_flag = true;
+					$scope.series_hint_words = '该商品原系列已下架'
+				} else {
+					$scope.series_down_flag = false;
+				}
+			}
+			// 风格默认勾选
+			for (let [key,value] of $scope.styles_arr.entries()) {
+				console.log(value);
+				let style_index = $scope.style_ids.findIndex(function (value1) {
+					return value.id == value1
+				})
+				style_index ===-1 ? value.status = false : value.status = true
+			}
+		});
+	})
     /*品牌、系列、风格 下拉框结束*/
 
-
-	//风格复选框
-	$scope.style_change = function (status,item) {
-		console.log(item);
-		if(status === true){
-			$scope.style_check_arr.push(item.id)
-		} else {
-			style_check_del(item.id)
-		}
-	}
-	function style_check_del(num) {
-		let del_index = $scope.style_check_arr.findIndex(function (value, index, arr) {
-			return value == num;
-		});
-		if (del_index != -1) {
-			$scope.style_check_arr.splice(del_index, 1);
-		}
-	}
     /*---------------------------------属性获取开始---------------------------------*/
     $scope.goods_input_attrs = [];//普通文本框
+		$scope.merchant_add_attrs = [] ; // 商家自己添加的属性
     $scope.goods_select_attrs = [];//下拉框
     $scope.goods_select_value = [];//下拉框的值
     $scope.pass_attrs_name = [];//名称
@@ -191,11 +170,13 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
         $scope.goods_all_attrs = res.data.goods_attrs_admin;
         //循环所有获取到的属性值，判断是普通文本框还是下拉框
         for (let [key, value] of $scope.goods_all_attrs.entries()) {
-            if (value.addition_type == 1) {
+	        if (value.addition_type === 1) {
                 $scope.goods_select_attrs.push(value);
-            } else {
+            } else if (value.addition_type === 0 && value.from_type === 0) {
                 $scope.goods_input_attrs.push(value);
-            }
+            }else if(value.from_type === 1) {
+	        	  $scope.merchant_add_attrs.push(value)
+	        }
         }
         //循环添加名称和值
         for (let [key, value] of $scope.goods_input_attrs.entries()) {
@@ -209,9 +190,10 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     });
     //判断属性是否为数字
     $scope.testNumber = function (item) {
-        if (item.value !== undefined) {
-            item.value = item.value.replace(/[^\d]/g, '')
-        }
+	    if(item.value!==undefined){
+		    let reg_value = reg.test(item.value);
+		    !reg_value ? item.status = true : item.status = false
+	    }
     }
     $scope.leftNumber = function (value) {
         if (value !== undefined) {
@@ -231,7 +213,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
         $scope.own_attrs_arr.splice(index, 1);
     };
 		$scope.del_admin_attrs = function (index) {
-			$scope.goods_input_attrs.splice(index, 1);
+			$scope.merchant_add_attrs.splice(index, 1);
 		};
 	$scope.own_input_change = function () {
 		let arr=[];
@@ -251,7 +233,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     /*---------------------------------属性获取结束---------------------------------*/
 
     /*----------------上传封面图-----------------------*/
-    //$scope.upload_cover_src='';
     $scope.data = {
         file: null
     };
@@ -352,8 +333,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     //物流模块
     $scope.logistics_red = false;
     _ajax.post('/mall/logistics-templates-supplier', {}, function (res) {
-        console.log('物流模板')
-        console.log(res);
         //判断有无物流模板数据
         if (res.data.logistics_templates_supplier.length > 0) {
             $scope.logistics = res.data.logistics_templates_supplier;
@@ -373,8 +352,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
             $scope.shop_logistics = res.data.logistics_templates_supplier[0].id;
             $scope.$watch('shop_logistics', function (newVal, oldVal) {
                 _ajax.get('/mall/logistics-template-view', {id: +newVal}, function (res) {
-                    console.log('物流详情');
-                    console.log(res);
                     $scope.logistics_method = res.data.logistics_template.delivery_method;//快递方式
                     $scope.district_names = res.data.logistics_template.district_names;//地区名
                     $scope.delivery_cost_default = res.data.logistics_template.delivery_cost_default;//默认运费
@@ -390,9 +367,17 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     })
     // /*--------------编辑保存按钮----------------------*/
     $scope.edit_confirm = function (valid, error) {
-        console.log($scope.series_model);
-        console.log($scope.style_model);
-        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.own_submitted && !!$scope.series_model && !!$scope.style_model && $scope.brands_arr.length > 0) {
+	    // 判断默认属性输入规则是否符合标准
+	    for (let [key,value] of $scope.goods_input_attrs.entries()) {
+		    if (value.status === true) {
+			    $scope.attr_blur_flag = false
+			    break
+		    }else{
+			    $scope.attr_blur_flag = true
+		    }
+	    }
+
+        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
             let description = UE.getEditor('editor').getContent();//富文本编辑器
             $scope.change_ok = '#change_ok';//编辑成功
             $scope.after_sale_services = [];
@@ -445,10 +430,16 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
                     $scope.after_sale_services.splice(del_index, 1);
                 }
             }
-
-            /*判断风格和系列是否存在，如果不存在，值传0*/
-            $scope.series_model == true ? $scope.series_model = 0 : $scope.series_model = parseInt($scope.series_model);
-            $scope.style_model == true ? $scope.style_model = 0 : $scope.style_model = parseInt($scope.style_model);
+	        // 系列传值
+	        $scope.series_model == undefined ? $scope.series_model = 0 : $scope.series_model = $scope.series_model;
+	        /*判断风格和系列是否存在，如果不存在，值传0*/
+	        for (let [key,value] of $scope.styles_arr.entries()) {
+		        if (value.status === true) {
+			        $scope.style_check_arr.push(value.id)
+		        }
+	        }
+	        // 风格传值
+	        $scope.style_check_arr[0] == undefined ? $scope.style_check_arr = 0 : $scope.style_check_arr = $scope.style_check_arr.join(',')
             /*循环自己添加的属性*/
             for (let [key, value] of $scope.own_attrs_arr.entries()) {
                 $scope.pass_attrs_name.push(value.name);//属性名
@@ -474,15 +465,13 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
                     $scope.pass_attrs_value.push(value.selected);
                 }
             }
-            console.log($scope.pass_attrs_name);
-            console.log($scope.pass_attrs_value);
             _ajax.post('/mall/goods-edit', {
                 id: +$scope.goods_id, //id
                 title: $scope.goods_name,//名称
                 subtitle: $scope.des_name,//特色
                 brand_id: +$scope.brand_model,//品牌
-                style_id: +$scope.style_model,//风格
-                series_id: +$scope.series_model,//系列
+                style_id: $scope.style_check_arr,//风格
+                series_id: $scope.series_model,//系列
                 'names[]': $scope.pass_attrs_name,//属性名称
                 'values[]': $scope.pass_attrs_value,//属性值
                 cover_image: $scope.upload_cover_src,//封面图
@@ -496,7 +485,6 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
                 description: description//描述
             }, function (res) {
                 console.log(res);
-                console.log($scope.series_model)
             })
         } else {
             $scope.submitted = true;

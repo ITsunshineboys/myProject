@@ -44,12 +44,15 @@
         </div>
         <div class="row">
             <div class="col-sm-2 control-label">
+                <img class="red_img" src="pages/commodity_manage/image/red.png" alt=""/>
                 <span>选择品牌</span>
             </div>
             <div class="col-sm-4">
                 <select class="form-control" ng-if="brands_arr.length > 0" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
-                <p class="form-control-static" ng-if="brands_arr.length == 0" style="color: red;">请先添加品牌授权</p>
             </div>
+        </div>
+        <div class="row" ng-if="brand_null_flag">
+            <div class="col-sm-offset-2 remove_txt">该商品品牌已下架</div>
         </div>
         <!--选择系列-->
         <div class="row" ng-if="series_arr.length>0">
@@ -59,21 +62,18 @@
             <div class="col-sm-4">
                 <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
             </div>
-        </div>
-        <div class="row" ng-if="series_null_flag">
-            <div class="col-sm-offset-2 remove_txt">系列已被移除，请重新选择系列</div>
+            <div class="col-sm-6 control-label small_txt" ng-class="{'remove_txt':series_down_flag}" ng-if="series_null_flag || series_down_flag">
+                <span>{{series_hint_words}}</span>
+            </div>
         </div>
         <!--选择风格-->
         <div class="row" ng-if="styles_arr.length>0">
             <div class="col-sm-2 control-label">
                 <span>选择风格</span>
             </div>
-            <!--<div class="col-sm-4">-->
-                <!--<select class="form-control" ng-model="myng.style_model" ng-options="item.id as item.style for item in styles_arr"></select>-->
-            <!--</div>-->
             <div class="col-sm-10">
                 <label ng-repeat="item in styles_arr" style="margin-right: 20px">
-                    <input type="checkbox" ng-model="style_check_model" ng-change="style_change(style_check_model, item)">
+                    <input type="checkbox" ng-model="item.status">
                     <span class="cursor" style="font-weight: normal">{{item.style}}</span>
                 </label>
             </div>
@@ -97,25 +97,38 @@
             <div class="col-sm-1 control-label">
                 <span>单位</span>
             </div>
-            <!--普通文本框-->
+        </div>
+            <!--默认普通文本框-->
             <div class="row" ng-repeat="item in goods_input_attrs">
                 <div class="col-sm-offset-2 col-sm-3 control-label">
-                    <img src="pages/commodity_manage/image/red.png" alt=""/>
-                    <span ng-if="item.from_type==0" style="display: inline-block;width: 15px">&nbsp;</span>
-                    <span ng-if="item.from_type==1" class="glyphicon glyphicon-minus pointer" ng-click="del_admin_attrs($index)"></span>
+                    <img src="pages/commodity_manage/image/red.png"/>
                     <span ng-model="myng.attr_name">{{item.name}}</span>
                 </div>
                 <div class="col-sm-3">
-                    <input class="form-control" ng-model="item.value" type="text" maxlength="6" placeholder="请输入属性内容"
-                           id="attr_name{{$index}}" name="attr_name{{$index}}" ng-keyup="testNumber(item)" required
-                           ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index])}"
-                           ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
+                    <input class="form-control" ng-model="item.value" type="text" maxlength="10" placeholder="请输入属性内容" id="attr_name{{$index}}" name="attr_name{{$index}}" ng-blur="testNumber(item)" onkeyup="this.value=this.value.replace(/[^\d\.]/g,'')" required ng-class="{'error':(form['attr_name' + $index].$invalid && submitted)||(form['attr_name' + $index].$error.required && attrs_blur[$index]) || item.status}" ng-blur="attrs_blur[$index]=!!form['attr_name' + $index].$error"/>
                 </div>
                 <div class="col-sm-1 control-label">
                     <span class="unit">{{item.unit}}</span>
                 </div>
                 <div class="col-sm-3 control-label">
                     <span class="small_txt">*属性内容限1～10个字符</span>
+                </div>
+            </div>
+            <!--商家自己添加的属性-->
+            <div class="row" ng-repeat="item in merchant_add_attrs">
+                <div class="col-sm-offset-2 col-sm-3 control-label">
+                    <img src="pages/commodity_manage/image/red.png"/>
+                    <span class="glyphicon glyphicon-minus pointer" ng-click="del_admin_attrs($index)"></span>
+                    <span ng-model="myng.attr_name">{{item.name}}</span>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" ng-model="item.value" type="text" maxlength="30" placeholder="请输入属性内容" id="m_attr_name{{$index}}" name="attr_name{{$index}}" ng-blur="testNumber(item)" onkeyup="this.value=this.value.replace(/[^\d\.]/g,'')" required ng-class="{'error':(form['m_attr_name' + $index].$invalid && submitted)||(form['m_attr_name' + $index].$error.required && m_attrs_blur[$index])}" ng-blur="m_attrs_blur[$index]=!!form['m_attr_name' + $index].$error"/>
+                </div>
+                <div class="col-sm-1 control-label">
+                    <span class="unit">{{item.unit}}</span>
+                </div>
+                <div class="col-sm-3 control-label">
+                    <span class="small_txt">*属性内容限1～30个字符</span>
                 </div>
             </div>
             <!--下拉框-->
@@ -126,8 +139,7 @@
                     <span style="display: inline-block;width: 140px">{{item.name}}</span>
                 </div>
                 <div class="col-sm-3">
-                    <select class="form-control" ng-model="item.selected"
-                            ng-options="items for items in goods_select_attrs_value[$index]"></select>
+                    <select class="form-control" ng-model="item.selected" ng-options="items for items in goods_select_attrs_value[$index]"></select>
                 </div>
                 <div class="col-sm-1 control-label">
                     <span class="unit">{{item.unit}}</span>
@@ -136,6 +148,7 @@
                     <span class="small_txt">*属性内容限1～10个字符</span>
                 </div>
             </div>
+            <!--商家自己添加的属性-->
             <div class="row" ng-repeat="item in own_attrs_arr track by $index">
                 <div class="col-sm-offset-2 col-sm-3">
                     <img src="pages/commodity_manage/image/red.png" alt=""/>
@@ -152,7 +165,6 @@
                     <span class="small_txt">*属性名称限1～6个字符,属性内容限1～30个字符</span>
                 </div>
             </div>
-        </div>
         <hr/>
 
         <!--封面上传图片-->

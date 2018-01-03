@@ -39,7 +39,23 @@ let commodity_manage = angular.module("commodity_manage", [])
             itemsPerPage: 12,
             currentPage: 1,
             onChange: function () {
-                $scope.table.roles = [];//清空全选状态
+	            if ($stateParams.on_flag == true) {
+		            $scope.params['sort[]'] = 'online_time:3';
+		            $scope.params.status = 2;
+	            }
+	            //已下架
+	            else if ($stateParams.down_flag == true) {
+		            $scope.params['sort[]'] = 'offline_time:3';
+		            $scope.params.status = 0;
+	            }
+	            //等待上架
+	            else if ($stateParams.wait_flag == true) {
+		            $scope.params['sort[]'] = 'publish_time:3';
+		            $scope.params.status = 1;
+	            }
+	            $stateParams.on_flag = false
+	            $stateParams.down_flag = false
+	            $stateParams.wait_flag = false
                 tablePages();
             }
         }
@@ -54,14 +70,47 @@ let commodity_manage = angular.module("commodity_manage", [])
               console.log(res)
               if ($scope.on_flag == true) {
                  $scope.up_list_arr = res.data.goods_list_admin.details;
-                 } else if ($scope.down_flag == true) {
-                  $scope.down_list_arr = res.data.goods_list_admin.details;
-                }else{
+              } else if ($scope.down_flag == true) {
+	                $scope.down_list_arr = res.data.goods_list_admin.details;
+              } else {
 	                $scope.wait_list_arr = res.data.goods_list_admin.details;
               }
                   $scope.wjConfig.totalItems = res.data.goods_list_admin.total;
             })
         };
+	    if ($stateParams.on_flag == true) {
+		    $scope.on_flag = true;
+		    $scope.down_flag = false;
+		    $scope.wait_flag = false;
+		    $scope.logistics_flag = false;
+		    // 初始化已上架搜索
+		    $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+		    $scope.params.keyword = ''; // 清除搜素值
+		    $scope.up_search_value = '';//搜索输入框的值
+		    $scope.table.roles = [];//清空全选状态
+	    }
+	    //已下架
+	    else if ($stateParams.down_flag == true) {
+		    $scope.on_flag = false;
+		    $scope.down_flag = true;
+		    $scope.wait_flag = false;
+		    $scope.logistics_flag = false;
+		    /*初始化已下架的搜索*/
+		    $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+		    $scope.params.keyword = ''; // 清除搜素值
+		    $scope.down_search_value = '';//清空输入框值
+	    }
+	    //等待上架
+	    else if ($stateParams.wait_flag == true) {
+		    $scope.on_flag = false;
+		    $scope.down_flag = false;
+		    $scope.wait_flag = true;
+		    $scope.logistics_flag = false;
+		    /*初始化已下架的搜索*/
+		    $scope.wjConfig.currentPage = 1; //页数跳转到第一页
+		    $scope.params.keyword = ''; // 清除搜素值
+		    $scope.down_search_value = '';//清空输入框值
+	    }
 
         /*--------------全选---------------------*/
         //全选ID数组
@@ -75,46 +124,7 @@ let commodity_manage = angular.module("commodity_manage", [])
         };
         /*--------------页面返回，TAB判断--------------------*/
         //已上架
-        if ($stateParams.on_flag == true) {
-            $scope.on_flag = true;
-            $scope.down_flag = false;
-            $scope.wait_flag = false;
-            $scope.logistics_flag = false;
-            // 初始化已上架搜索
-            $scope.wjConfig.currentPage = 1; //页数跳转到第一页
-            $scope.up_search_value = '';//搜索输入框的值
-            $scope.params.keyword = '';
-            $scope.params['sort[]'] = 'online_time:3';
-            $scope.params.status = 2;
-            $scope.table.roles = [];//清空全选状态
-        }
-        //已下架
-        if ($stateParams.down_flag == true) {
-            $scope.on_flag = false;
-            $scope.down_flag = true;
-            $scope.wait_flag = false;
-            $scope.logistics_flag = false;
-            /*初始化已下架的搜索*/
-            $scope.wjConfig.currentPage = 1; //页数跳转到第一页
-            $scope.down_search_value = '';//清空输入框值
-            $scope.params.keyword = '';
-            $scope.params['sort[]'] = 'offline_time:3';
-            $scope.params.status = 0;
-            console.log($scope.params['sort[]'])
-        }
-        //等待上架
-        if ($stateParams.wait_flag == true) {
-            $scope.on_flag = false;
-            $scope.down_flag = false;
-            $scope.wait_flag = true;
-            $scope.logistics_flag = false;
-            /*初始化已下架的搜索*/
-	          $scope.wjConfig.currentPage = 1; //页数跳转到第一页
-            $scope.down_search_value = '';//清空输入框值
-            $scope.params.keyword = '';
-            $scope.params['sort[]'] = 'publish_time:3';
-            $scope.params.status = 1;
-        }
+
         //物流模板
         if ($stateParams.logistics_flag == true) {
             $scope.on_flag = false;

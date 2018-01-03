@@ -264,8 +264,8 @@
                 <th ng-if="show_12">
                     <span>下架时间</span>
                     <span class="sort" ng-click="down_sort_time_click()">
-                        <i class="iconfont icon-up" ng-class="{'active':params['sort[]'] == 'offline_time:4'}"></i>
-                        <i class="iconfont icon-down" ng-class="{'active':params['sort[]'] == 'offline_time:3'}"></i>
+                        <i class="iconfont icon-up" ng-class="{'active': params['sort[]'] == 'offline_time:4'}"></i>
+                        <i class="iconfont icon-down" ng-class="{'active': params['sort[]'] == 'offline_time:3'}"></i>
                     </span>
                 </th>
                 <th ng-if="down_13">操作人员</th>
@@ -445,8 +445,8 @@
                 <td ng-if="wait_8">¥{{item.purchase_price_designer}}</td>
                 <td ng-if="wait_9"><input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'')"  class="form-control" ng-change="change_right_number(item.id,item.left_number)" ng-model="item.left_number"></td>
                 <td ng-if="wait_10">{{item.sold_number}}</td>
-                <td ng-if="wait_11">{{item.status}}</td>
-                <td ng-if="wait_12" class="sky_blue">{{item.publish_time}}</td>
+                <td ng-if="wait_11" class="blue">{{item.status}}</td>
+                <td ng-if="wait_12" class="blue">{{item.publish_time}}</td>
                 <td ng-if="wait_13"><img class="img_cover_size" ng-src="{{item.cover_image}}" alt=""></td>
                 <td ng-if="wait_14" class="blue td_size" data-toggle="modal" ng-click="getRest (item.reason)" data-target={{waiteModel}}>{{item.reason}}</td>
                 <td ng-if="wait_15"><a ui-sref="wait_online({item:item,flag:1})">编辑</a></td>
