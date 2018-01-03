@@ -3100,7 +3100,7 @@ class GoodsOrder extends ActiveRecord
                     return $data;
                 }
             }
-            if ($type==5  || $type==7)
+            if ($type==5 || $type==6  || $type==7)
             {
                 $refund_unreceived=OrderRefund::find()
                     ->where(['order_no'=>$order_no,'sku'=>$sku])
