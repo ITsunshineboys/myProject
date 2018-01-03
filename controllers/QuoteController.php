@@ -684,17 +684,11 @@ class QuoteController extends Controller
      * @return string
      */
 
-    public function actionEffectPlotAdd()
-
-        {
-            $request = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity();
+    public function actionEffectPlotAdd(){
+        $request = \Yii::$app->request->post();
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
         $district_chinese = District::findByCode((int)$request['district_code']);
-//        $province_chinese['name']='四川';
-//        $city_chinese['name']='成都';
-//        $district_chinese['name']='锦江区';
 
             $transaction = \Yii::$app->db->beginTransaction();
             try {
@@ -927,11 +921,9 @@ class QuoteController extends Controller
     public function actionEffectPlotEditView()
     {
         $plot_id= (int)\Yii::$app->request->get('plot_id','');
-//        $user = \Yii::$app->user->identity();
         $public_message = [];
-
         $data= EffectToponymy::PlotView($plot_id);
-//        var_dump($data);die;
+
         $public_message['street'] =  $data[0]['street'];
         $public_message['toponymy'] =  $data[0]['toponymy'];
         $public_message['district_code'] =  $data[0]['district_code'];
@@ -943,9 +935,6 @@ class QuoteController extends Controller
             $id[]=$one_effect['id'];
 
         }
-
-//        $ids=implode(',',$id);
-//        var_dump($ids);
         $public_message['images']= EffectPicture::findByIds($id);
 
         $public_message['decoration_particulars'] = DecorationParticulars::findByIds($id);
@@ -994,14 +983,12 @@ class QuoteController extends Controller
      */
     public function actionEffectEditPlot(){
         $request = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity();
+
 
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
         $district_chinese = District::findByCode((int)$request['district_code']);
-//        $province_chinese['name']='四传';
-//        $city_chinese['name']='传';
-//        $district_chinese['name']='2323';
+
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             foreach ($request['house_informations'] as $house) {
@@ -1367,37 +1354,10 @@ class QuoteController extends Controller
 //                            WorksBackmanData::deleteAll(['id' => $house['delete_backman']]);
 //                        }
                     }
-//                    $toponymy_ids[]=$house['id'];
-//                    if(is_array($toponymy_ids)){
-//                        $ids= implode(',',$toponymy_ids);
-//                    }else{
-//                        $ids=['id'];
-//                    }
-//                    $effect_toponymy=EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
-//                    if(!$effect_toponymy){
-//                        $transaction->rollBack();
-//                        $code = 1000;
-//                        return Json::encode([
-//                            'code'=> $code,
-//                            'msg'=> \Yii::$app->params['errorCodes'][$code]
-//                        ]);
-//                    }
-//
-//                    $effect_toponymy->effect_id=$ids;
-//
-//                    if(!$effect_toponymy->save(false)){
-//                        $code = 500 ;
-//                        $transaction->rollBack();
-//                        return Json::encode([
-//                            'code'=>$code,
-//                            'msg' => \Yii::$app->params['errorCodes'][$code]
-//                        ]);
-//                    }
                 }
             }
             $transaction->commit();
         }catch (\Exception $e) {
-            var_dump($e);die;
             $transaction->rollBack();
             $code = 500;
             return json_encode([
@@ -1432,7 +1392,7 @@ class QuoteController extends Controller
     public function actionPlotAdd()
     {
         $request = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity();
+
         $province_chinese = District::findByCode((int)$request['province_code']);
         $city_chinese = District::findByCode((int)$request['city_code']);
         $district_chinese = District::findByCode((int)$request['cur_county_id']['id']);
