@@ -107,7 +107,8 @@ class OrderAfterSale extends ActiveRecord
             if (
                 $OrderGoods->order_status !=1
                 || $GoodsOrder->pay_status !=1
-            ){
+            )
+            {
                 $code=1036;
                 return $code;
             }

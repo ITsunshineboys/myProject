@@ -2930,9 +2930,15 @@ class GoodsOrder extends ActiveRecord
             $output['status_code'] = $arr[0]['status_code'];
             $output['status_desc'] = $arr[0]['status_desc'];
             $output['buyer_message'] = $arr[0]['buyer_message'];
-            $output['pay_name'] = $arr[0]['pay_name'];
+            if ( $arr[0]['status_type'] ==1)
+            {
+                $output['pay_name'] = '在线支付';
+            }else{
+                $output['pay_name'] = $arr[0]['pay_name'];
+            }
             $output['create_time'] = $arr[0]['create_time'];
             $output['paytime'] = date('Y-m-d H:i', $arr[0]['paytime']);
+
             $output['pay_term'] = $arr[0]['pay_term'];
             $output['freight'] = StringService::formatPrice($freight);
             $output['original_price'] = StringService::formatPrice($market_price * $arr[0]['goods_number']);
