@@ -206,10 +206,10 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }else{
             $sort_id=0;
         }
-        $province=District::findByCode($post['province_code'])->name;
-        $city=District::findByCode($post['city_code'])->name;
+        $province=District::findByCode($post['province_code'])['name'];
+        $city=District::findByCode($post['city_code'])['name'];
         if(isset($post['district_code'])){
-            $district=District::findByCode($post['district_code'])->name;
+            $district=District::findByCode($post['district_code'])['name'];
 
         }else{
             $district=null;

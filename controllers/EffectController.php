@@ -230,7 +230,6 @@ class EffectController extends Controller
             ]);
         }
         $res= htmlspecialchars(trim($request->post('remark',''),''));
-//        var_dump($res);die;
         if($res){
             $remark->remark=$res;
             if(!$remark->save()){
