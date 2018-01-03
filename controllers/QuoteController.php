@@ -3092,6 +3092,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(BrainpowerInitalSupervise::find()->where(['id'=>1])->one()->delete());
+        var_dump(BrainpowerInitalSupervise::find()->where(['id'=>6])->one()->delete());
     }
 }
