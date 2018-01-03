@@ -4806,7 +4806,11 @@ class OrderController extends Controller
             ]);
         }
         $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
-        if ($orders==500 || $orders==1000)
+        if (
+            $orders==500
+            || $orders==1000
+            || $orders==1083
+        )
         {
             $code=$orders;
             return Json::encode([

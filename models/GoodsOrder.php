@@ -3404,8 +3404,9 @@ class GoodsOrder extends ActiveRecord
                         $orderStyle->images=$style->images;
                         if (!$orderStyle->save(false))
                         {
+                            $code=1000;
                             $tran->rollBack();
-                            return false;
+                            return $code;
                         }
                     }
                     $serires=Series::findOne($Goods['series_id']);
@@ -3418,8 +3419,9 @@ class GoodsOrder extends ActiveRecord
                         $orderSeries->intro=$serires->intro;
                         if (!$orderSeries->save(false))
                         {
+                            $code=1000;
                             $tran->rollBack();
-                            return false;
+                            return $code;
                         }
                     }
                     $goods_image=GoodsImage::find()
@@ -3436,8 +3438,9 @@ class GoodsOrder extends ActiveRecord
                             $orderGoodsImage->image=$image->image;
                             if (!$orderGoodsImage->save(false))
                             {
+                                $code=1000;
                                 $tran->rollBack();
-                                return false;
+                                return $code;
                             }
                         }
                     }
@@ -3452,8 +3455,9 @@ class GoodsOrder extends ActiveRecord
                         $orderGoodsBrand->certificate=$GoodsBrand->certificate;
                         if (!$orderGoodsBrand->save(false))
                         {
+                            $code=1000;
                             $tran->rollBack();
-                            return false;
+                            return $code;
                         }
                     }
                     $goodsAttr=GoodsAttr::find()
@@ -3461,7 +3465,7 @@ class GoodsOrder extends ActiveRecord
                         ->all();
                     if ($goodsAttr)
                     {
-                        foreach ( $goodsAttr as &$attr)
+                        foreach ($goodsAttr as &$attr)
                         {
                             $orderGoodsAttr=new OrderGoodsAttr();
                             $orderGoodsAttr->order_no=$order_no;
@@ -3473,8 +3477,9 @@ class GoodsOrder extends ActiveRecord
                             $orderGoodsAttr->goods_id=$attr->goods_id;
                             if (!$orderGoodsAttr->save(false))
                             {
+                                $code=1000;
                                 $tran->rollBack();
-                                return false;
+                                return $code;
                             }
                         }
                     }
@@ -3492,8 +3497,16 @@ class GoodsOrder extends ActiveRecord
                         $orderLogisticTemp->delivery_number_delta=$LogisticTemp->delivery_number_delta;
                         if (!$orderLogisticTemp->save(false))
                         {
+                            $code=1000;
                             $tran->rollBack();
-                            return false;
+                            return $code;
+                        }
+                        $code=LogisticsDistrict::isApply($address->district,$Goods['logistics_template_id']);
+                        if ($code!=200)
+                        {
+                            $code=1083;
+                            $tran->rollBack();
+                            return $code;
                         }
                         $LogisticDis=LogisticsDistrict::find()
                             ->where(['template_id'=>$Goods['logistics_template_id']])
@@ -3508,8 +3521,9 @@ class GoodsOrder extends ActiveRecord
                                 $OrderLogisticDis->district_name=$dis->district_name;
                                 if (!$OrderLogisticDis->save(false))
                                 {
+                                    $code=1000;
                                     $tran->rollBack();
-                                    return false;
+                                    return $code;
                                 }
                             }
                         }
@@ -3593,7 +3607,11 @@ class GoodsOrder extends ActiveRecord
               {
                   $one=(array)$one;
               }
-              if ($one['goods_num'] != 0 || $one['goods_num'] !=null){
+              if (
+                  $one['goods_num'] != 0
+                  || $one['goods_num'] !=null
+              )
+              {
                   $goods_ [] = $one;
               }
           }
