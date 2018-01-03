@@ -2347,6 +2347,7 @@ class QuoteController extends Controller
         $item->street          = $effect['street'];
         $item->house_type_name = $effect['particulars'];
         $item->city_code       = $effect['city_code'];
+        $item->effect_id       = $effect['id'];
 
 
         $code = 500;
