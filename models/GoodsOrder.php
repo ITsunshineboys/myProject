@@ -1862,12 +1862,7 @@ class GoodsOrder extends ActiveRecord
         if ($code !=200){
             return $code;
         }
-        $refunds=OrderRefund::find()
-            ->select('id')
-            ->where(['order_no'=>$order_no])
-            ->andWhere(['sku'=>$sku])
-            ->andWhere('handle = 0')
-            ->one();
+
         $time=time();
         $trans = \Yii::$app->db->beginTransaction();
         try {
@@ -1879,11 +1874,25 @@ class GoodsOrder extends ActiveRecord
             {
                 case 0:
                     $shipping_status=self::ORDER_TYPE_UNSHIPPED;
+//                    $refunds=OrderRefund::find()
+//                        ->select('id')
+//                        ->where(['order_no'=>$order_no])
+//                        ->andWhere(['sku'=>$sku])
+//                        ->andWhere(['order_type'=>$shipping_status])
+//                        ->one();
                     break;
+
                 case 1:
                     $shipping_status=self::ORDER_TYPE_UNRECEIVED;
+
                     break;
             }
+            $refunds=OrderRefund::find()
+                ->select('id')
+                ->where(['order_no'=>$order_no])
+                ->andWhere(['sku'=>$sku])
+                ->andWhere(['order_type'=>$shipping_status])
+                ->one();
             $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
             $res2=$order->save(false);
             if (!$res2){
@@ -2529,7 +2538,8 @@ class GoodsOrder extends ActiveRecord
              unset( $arr[$key]['after_sale_services']);
              $create_time[$key]  = $arr[$key]['create_time'];
         }
-        if ($arr){
+        if ($arr)
+        {
             array_multisort($create_time, SORT_DESC, $arr);
             $count=count($arr);
             $total_page=ceil($count/$size);
