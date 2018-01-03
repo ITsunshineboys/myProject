@@ -78,12 +78,12 @@ class OwnerController extends Controller
      * 工种类型 id
      */
     const WORK_CATEGORY = [
-        'plumber'           => 9,  // 水电工id
-        'waterproof_worker' => 3,  // 防水工id
-        'woodworker'        => 1,  // 木工id
-        'painters'          => 4,  // 油漆工id
-        'mason'             => 5,  // 泥瓦工id
-        'backman'           => 6,  // 杂工id
+        'plumber'    => 9,  // 水电工id
+        'waterproof' => 18,  // 防水工id
+        'woodworker' => 1,  // 木工id
+        'painters'   => 4,  // 油漆工id
+        'mason'      => 5,  // 泥瓦工id
+        'backman'    => 6,  // 杂工id
 //        'backman_'          => '泥工',
     ];
 
@@ -94,8 +94,8 @@ class OwnerController extends Controller
         'weak_current'  => 11, //'弱电点位',
         'strong_current'=> 10, //'强电点位',
         'waterway'      => 12, //'水路点位',
-        'work_area'     => '做工面积',
-
+        'waterproof'    => 19, //'做工面积',
+        'area_ratio'    => 68, //'面积比例',
     ];
 
     /**
@@ -141,20 +141,6 @@ class OwnerController extends Controller
     ];
 
 
-//    /**
-//     * 其它信息
-//     */
-//    const WORKMANSHIP_IDS = [
-//        'flat_area'                     => 1,
-//        'modelling_length'              => 2,
-//        'emulsion_varnish_primer_area'  => 7,
-//        'emulsion_varnish_cover_area'   => 8,
-//        'concave_line_length'           => 10,
-//        'putty_area'                    => 9,
-//        'protective_layer_length'       => 11,
-//        'geostrophy_area'               => 12,
-//        'wall_brick_area'               => 13,
-//    ];
     /**
      * room  detail
      */
@@ -170,12 +156,13 @@ class OwnerController extends Controller
     /**
      * room area
      */
-    const ROOM_AREA = [
-        'kitchen_area' => '厨房面积百分比',
-        'toilet_area'  => '卫生间面积百分比',
-        'hall_area'    => '客餐厅及过道面积百分比',
-        'bedroom_area' => '卧室面积百分比',
-//        'bedroom_area_' => '客厅面积百分比',
+    const ROOM = [
+        'kitchen_area' => 5,//'厨房面积百分比',
+        'toilet_area'  => 6,//'卫生间面积百分比',
+        'hall_area'    => 8,//'客餐厅及过道面积百分比',
+        'bedroom_area' => 7,//'卧室面积百分比',
+        'kitchen_height' => 1,//'厨房防水高度',
+        'toilet_height' => 2,//'卫生间防水高度',
     ];
 
 
@@ -551,10 +538,13 @@ class OwnerController extends Controller
     {
         $get = \Yii::$app->request->get();
         //人工价格
-        $waterproof_labor = LaborCost::profession($get, self::WORK_CATEGORY['waterproof_worker']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostId($waterproof_labor['id'],self::POINTS_CATEGORY['work_area']);
-        $worker_price = !isset($waterproof_labor['univalence']) ? $waterproof_labor['univalence'] : 100;
-        $worker_day_points = !isset($worker_kind_details['quantity']) ? $worker_kind_details['quantity'] : WorkerCraftNorm::WATERPROOF_DAY_AREA;
+        $labor_cost = LaborCost::profession($get['city'],self::WORK_CATEGORY['waterproof']);
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
+        foreach ($day_workload as $one_day){
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['waterproof']){
+                $area = $one_day['quantity'];
+            }
+        }
 
 
         //防水所需材料
@@ -571,17 +561,53 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $waterproof = BasisDecorationService::judge($goods, $post);
+        $waterproof = BasisDecorationService::judge($goods,$get);
 
 
-        $points = Points::findByOne('id,title',"id = 69");
-        //厨房
-        $kitchen_ = ProjectView::findByOne('厨房面积百分比',68);
-        $_kitchen_height = ProjectView::findByOne('厨房防水高度',$points['id']);
+        $points = Points::find()
+            ->select('id,title')
+            ->where(['id'=>self::PROJECT_DETAILS['waterproof']])
+            ->asArray()
+            ->one();
 
-        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_['project_value']/100,$_kitchen_height['project_value']/100, $post['area'], $post['kitchen']);
+        //  面积比例查询
+        $area_ = ProjectView::findById(self::POINTS_CATEGORY['area_ratio'],$ratio = 10000);
+        foreach ($area_ as $one_area){
+            // 厨房
+            if ($one_area['id'] == self::ROOM['kitchen_area']){
+                $kitchen_ratio = $one_area['project_value'];
+            }
+            // 卫生间
+            if ($one_area['id'] == self::ROOM['toilet_area']){
+                $toilet_ratio = $one_area['project_value'];
+            }
+            // 客厅
+            if ($one_area['id'] == self::ROOM['hall_area']){
+                $hall_ratio = $one_area['project_value'];
+            }
+            // 卧室
+            if ($one_area['id'] == self::ROOM['bedroom_area']){
+                $bedroom_ratio = $one_area['project_value'];
+            }
+        }
 
+        // 防水高度查询
+        $height = ProjectView::findByAll([],['points_id'=>$points['id']]);
+        foreach ($height as $one_height){
+            // 厨房防水高度
+            if ($one_height['id'] == self::ROOM['kitchen_height']){
+                $kitchen_height = $one_height['project_value'];
+            }
+            // 卫生间防水高度
+            if ($one_height['id'] == self::ROOM['toilet_height']){
+                $toilet_height = $one_height['project_value'];
+            }
+        }
+
+
+        // 厨房  ①厨房防水面积：厨房地面积+厨房墙面积   厨房地面积：【x】%×（房屋面积) 厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
+        $kitchen_area = BasisDecorationService::waterproofArea($kitchen_ratio,$kitchen_height,$get,$get['kitchen'],4);
+var_dump($kitchen_area);die;
         //卫生间
         $toilet_ = ProjectView::findByOne('卫生间面积百分比',68);
         $_toilet_height = ProjectView::findByOne('卫生间防水高度',$points['id']);

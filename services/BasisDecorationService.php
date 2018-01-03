@@ -434,25 +434,32 @@ class BasisDecorationService
 
     /**
      * 防水面积计算
-     * @param array $arr
-     * @param string $house_area
-     * @param int $quantity
-     * @return float
+     * @param $ratio
+     * @param $height
+     * @param $get
+     * @param $room
+     * @param $wall
+     * @return int
      */
-    public static  function waterproofArea($area,$height,$house_area,$quantity = 1)
+    public static  function waterproofArea($ratio,$height,$get,$room,$wall)
     {
 
 
 //            厨房地面面积：【x】%×（房屋面积)
-        $ground = $area * $house_area;
+        $ground_area = self::algorithm(1,$ratio,$get['area']);
 //            厨房墙面积：（厨房地面积÷厨房个数）开平方×【0.3m】×4 ×厨房个数
-        $sqrt = sqrt($ground / $quantity);
-        $wall_space = $sqrt * $height * self::WALL_SPACE * $quantity;
-//            厨房防水面积：厨房地面积+厨房墙面积
-        $all_area = $ground + $wall_space;
-        $total_area = round($all_area,2);
+        $sqrt = sqrt(self::algorithm(6,$ground_area,$room));
+        // 开平方 * 层高
+        $value = self::algorithm(1,$sqrt,$height);
+        $value1 = self::algorithm(1,$wall,$room);
+        // 墙面积
+        $wall_area = self::algorithm(1,$value,$value1);
 
-        return $total_area;
+
+        // 总面积
+        $total = self::algorithm(3,$ground_area,$wall_area);
+
+        return $total;
 
     }
 
