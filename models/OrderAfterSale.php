@@ -689,7 +689,8 @@ class OrderAfterSale extends ActiveRecord
      */
     public  static  function  findHandleAfterSaleAgree($OrderAfterSale,$role)
     {
-        $data[]=[
+        $data[]=
+        [
             'type'=>'发起售后',
             'value'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->create_time),
@@ -699,7 +700,8 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>''
         ];
-        $data[]=[
+        $data[]=
+        [
             'type'=>'商家反馈',
             'value'=>self::AFTER_SALE_HANDLE[$OrderAfterSale->supplier_handle],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->supplier_handle_time),

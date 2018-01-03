@@ -3580,10 +3580,11 @@ class GoodsOrder extends ActiveRecord
 
 
 
-        /**
-         * @param $goods
-         * @return string
-         */
+    /**
+     * 计算运费
+     * @param $goods
+     * @return string
+     */
       public  static  function  CalculationFreight($goods)
       {
           foreach ($goods as $one){

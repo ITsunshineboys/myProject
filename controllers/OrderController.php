@@ -2825,7 +2825,8 @@ class OrderController extends Controller
         $request = Yii::$app->request;
         $order_no=trim($request->get('order_no',''));
         $sku=trim($request->get('sku',''));
-        if(!$order_no || !$sku){
+        if(!$order_no || !$sku)
+        {
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -5194,8 +5195,10 @@ class OrderController extends Controller
         $goods=Yii::$app->request->post('goods');
         //步骤1 ：去掉无效商品
         foreach ($goods as $one){
-            if( !array_key_exists('goods_id',$one)
-            ||!array_key_exists('num',$one))
+            if(
+                !array_key_exists('goods_id',$one)
+            ||!array_key_exists('num',$one)
+            )
             {
                 $code=1000;
                 return Json::encode([
@@ -5758,7 +5761,8 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
-                'data'=>[
+                'data'=>
+                [
                     'id'=>1,
                     'uid'=>1,
                     'consignee'=>'',
@@ -5773,7 +5777,6 @@ class OrderController extends Controller
         }
         $addressList['district_code'] = $addressList['district'];
         $addressList['district'] = LogisticsDistrict::getdistrict($addressList['district']);
-
         $code=200;
         return Json::encode([
             'code' => $code,
