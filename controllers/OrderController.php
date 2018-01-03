@@ -157,7 +157,8 @@ class OrderController extends Controller
             $mobile= trim($request->post('mobile',''),'');
             $districtCode=trim($request->post('district_code',''),'');
             $region=trim($request->post('region',''));
-            if (!$districtCode || !$region  || !$mobile || !$consignee ) {
+            if (!$districtCode || !$region  || !$mobile || !$consignee )
+            {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -180,7 +181,8 @@ class OrderController extends Controller
                     ]);
                 }else
                 {
-                    return Json::encode([
+                    return Json::encode(
+                    [
                         'code' => 200,
                         'msg' => 'ok',
                         'data'=>[
@@ -5448,7 +5450,8 @@ class OrderController extends Controller
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -5468,43 +5471,15 @@ class OrderController extends Controller
                }
            }
         }
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            foreach ($Goods as &$cart)
-            {
-                $ca=ShippingCart::find()
-                    ->where(['goods_id'=>$cart])
-                    ->andWhere(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
-                    ->one();
-                if (!$ca)
-                {
-                    $tran->rollBack();
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $res=$ca->delete();
-                if (!$res)
-                {
-                    $tran->rollBack();
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-            }
-            $tran->commit();
-            $code=200;
+        $code=ShippingCart::DelInvalidGoods($Goods,$user);
+        if ($code==200)
+        {
             return Json::encode([
                 'code' => $code,
                 'msg' => 'ok'
             ]);
-        }catch (\Exception $e){
-            $tran->rollBack();
-            $code=500;
+        }else
+        {
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -5559,14 +5534,14 @@ class OrderController extends Controller
             case 1:
                 //     待付款
                 $operation[]=[
-                    'name'=>'关闭订单，线下退款',
+                    'name'=>OrderPlatForm::PLATFORM_HANDLE_TYPE[2],
                     'value'=>2
                 ];
                 break;
             case 2:
                 //     待付款
                 $operation[]=[
-                    'name'=>'关闭订单，退款',
+                    'name'=>OrderPlatForm::PLATFORM_HANDLE_TYPE[1],
                     'value'=>1
                 ];
                 break;

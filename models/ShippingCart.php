@@ -206,5 +206,44 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @param $Goods_ids
+     * @param $user
+     * @return int
+     */
+    public  static  function  DelInvalidGoods($Goods_ids,$user)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            foreach ($Goods_ids as &$id)
+            {
+                $ca=ShippingCart::find()
+                    ->where(['goods_id'=>$id])
+                    ->andWhere(['uid'=>$user->id,'role_id'=>$user->last_role_id_app])
+                    ->one();
+                if (!$ca)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+                $res=$ca->delete();
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return $code;
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
 
 }
