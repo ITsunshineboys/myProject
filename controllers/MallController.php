@@ -3359,7 +3359,7 @@ class MallController extends Controller
         }
 
         if ($user->login_role_id == Yii::$app->params['supplierRoleId']
-            && in_array($goods->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE])
+            && in_array($goods->status, [Goods::STATUS_WAIT_ONLINE, Goods::STATUS_ONLINE, GOODS::STATUS_OFFLINE])
         ) {
             GoodsImage::deleteAll([
                 'goods_id' => $id
