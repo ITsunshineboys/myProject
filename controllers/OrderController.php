@@ -5168,46 +5168,21 @@ class OrderController extends Controller
                 ]
             );
         }
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            $shippingCart=ShippingCart::find()
-                ->where([
-                    'goods_id'=>$goods_id,
-                    'uid'=>$user->id,
-                    'role_id'=>$user->last_role_id_app])
-                ->one();
-            if (!$shippingCart)
-            {
-                $shippingCart=new ShippingCart();
-                $shippingCart->goods_id=$goods_id;
-                $shippingCart->uid=$user->id;
-                $shippingCart->role_id=$user->last_role_id_app;
-                $shippingCart->goods_num=$goods_num;
-                $shippingCart->create_time=time();
-                if (!$shippingCart->save(false))
-                {
-                    $tran->rollBack();
-                }
-            }else{
-                $shippingCart->goods_num+=$goods_num;
-                if (!$shippingCart->save(false))
-                {
-                    $tran->rollBack();
-                }
-            }
-            $tran->commit();
-            $code=200;
+        $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
+        if ($code==200)
+        {
             return Json::encode([
-                'code' => $code,
-                'msg'  => 'ok'
+                'code'=>$code,
+                'msg'=>'ok'
             ]);
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
+        }else
+        {
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
         }
     }
     /**
