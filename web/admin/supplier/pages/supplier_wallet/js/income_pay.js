@@ -37,7 +37,7 @@ angular.module('income_pay_module',[])
   $scope.income_pay_list=[];
   //状态
   $scope.status_arr=[
-    {id:7,value:'全部'},
+    {id:0,value:'全部'},
     {id:6,value:'货款'},
     {id:5,value:'驳回'},
     {id:4,value:'提现中'},
