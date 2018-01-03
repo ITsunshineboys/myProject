@@ -1,19 +1,13 @@
 <template>
   <div class="class-list">
-    <x-header :left-options="{backText: '', preventGoBack: true}" @on-click-back="goHome">
-      <router-link :to="'/search'">
-        <search class="search" placeholder="请输入想购买的商品" cancel-text=""></search>
-      </router-link>
-      <span class="iconfont icon-more" slot="right" @click="showMore"></span>
-    </x-header>
-
+    <v-header :go-link="'/'" @show="isShow"></v-header>
     <div class="content">
-      <div class="content-left">
-        <div class="active" v-for="obj in 10">
+      <div class="content-left" :class="{'pop-open': isPopOpen}">
+        <div class="active" v-for="obj in 20">
           <a href="javascript: void (0);">01</a>
         </div>
       </div>
-      <div class="content-right">
+      <div class="content-right" :class="{'pop-open': isPopOpen}">
         <div class="cateList" v-for="obj in 10">
           <div class="hd">
             <span class="text">地面材料</span>
@@ -35,47 +29,45 @@
 </template>
 
 <script>
-  import {XHeader, Search, Flexbox, FlexboxItem} from 'vux'
+  import vHeader from '../../components/HeaderSearch'
 
   export default {
     components: {
-      XHeader,
-      Search,
-      Flexbox,
-      FlexboxItem
+      vHeader
     },
     data () {
       return {
-        showText: false
+        isPopOpen: false
       }
     },
     methods: {
-      showMore () {
-        console.log(11)
-      },
-      goHome () {
-        this.$router.replace('/')
+      isShow: function (bool) {
+        this.isPopOpen = bool
       }
     }
   }
 </script>
 
 <style>
-  #app .class-list .weui-search-bar {
-    padding: 0;
-  }
-
-  #app .class-list .weui-search-bar__cancel-btn {
-    display: none !important;
-  }
-
   .content {
     position: absolute;
     top: 10px;
     bottom: 0;
     display: flex;
+    margin-top: 50px;
     width: 100%;
     background-color: #fff;
+  }
+
+  .content-left,
+  .content-right {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .content-left.pop-open,
+  .content-right.pop-open {
+    overflow-y: hidden;
   }
 
   .content-left {
@@ -84,9 +76,7 @@
   }
 
   .content-right {
-    /*flex: 1 0 auto;*/
     padding: 30px 18px;
-    overflow-y: auto;
   }
 
   .content-left div {

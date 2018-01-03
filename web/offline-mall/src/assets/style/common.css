@@ -21,7 +21,7 @@ body, html {
 }
 
 #app .vux-header + * {
-  margin-top: 46px;
+  margin-top: 40px;
 }
 
 #app .vux-header .vux-header-title {
@@ -35,35 +35,4 @@ body, html {
 
 #app .vux-header .vux-header-right .iconfont {
   padding: 5px;
-}
-
-/* Header search */
-#app .vux-header .search {
-  margin-top: 4px;
-  line-height: 1.6;
-}
-
-#app .vux-header .search .weui-search-bar {
-  align-items: center;
-  background-color: transparent;
-}
-
-#app .vux-header .search .weui-search-bar:before,
-#app .vux-header .search .weui-search-bar:after,
-#app .vux-header .search .weui-search-bar__form:after {
-  content: none
-}
-
-#app .vux-header .search .weui-search-bar__form {
-  border: 1px solid #e5e5e5;
-  background-color: transparent;
-  border-radius: 20px;
-}
-
-#app .vux-header .search .weui-search-bar__box .weui-icon-search {
-  top: 2px;
-}
-
-#app .vux-header .search .weui-search-bar__label {
-  display: none;
 }
