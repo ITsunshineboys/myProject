@@ -562,13 +562,32 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        session_start();
-//        Yii::$app->session->id ='n7ve8ei1833adksa4hmo7l17p5';
 //        Yii::$app->session['address_id']=1;
-       var_dump(Yii::$app->session->id);die;
+//        $cookies = Yii::$app->response->cookies;
+//        $cookies->add(new \yii\web\Cookie([
+//            'name' => 'PHPSESSID',
+//            'value' => 'n7ve8ei1833adksa4hmo7l17p5',
+//            'expire'=>time()+3600
+//        ]));
+////        session_start();
+//        Yii::$app->session->id ='n7ve8ei1833adksa4hmo7l17p5';
+//////        Yii::$app->session['address_id']=1;
+        $cookies = Yii::$app->request->cookies;//注意此处是request
+        $language = $cookies->get('PHPSESSID');//设置默认值
+        Yii::$app->session->id =$language;
+       var_dump(Yii::$app->session['address_id']);die;
 //        $sessionId=Yii::$app->session->id;
 //        echo  $sessionId;
     }
+    public  static  function  actionTest1()
+    {
+        $cookie=$_COOKIE["PHPSESSID"];
+        if ($cookie)
+        {
+            echo 1;die;
+        }
+    }
+
 
 
 

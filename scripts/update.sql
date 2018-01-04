@@ -245,3 +245,6 @@ ALTER TABLE `user_accessdetail` ADD  `refund_bank_log_id` int(11) NOT NULL COMME
 
 --all 2017.12.28  18:32 hyz
 alter table `user_accessdetail` drop column refund_bank_log_id  ;
+
+--all 2017.1.4   hyz
+ ALTER TABLE `shipping_cart` ADD `session_id` varchar(30) DEFAULT '' COMMENT 'cookie';
