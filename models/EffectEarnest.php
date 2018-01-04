@@ -330,7 +330,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->where(['uid'=>$uid,'type'=>$type,'item'=>1])
             ->asArray()
             ->all();
-
+        var_dump($effect_earnests);die;
 
         $data=[];
         if(!isset($effect_earnests)){
