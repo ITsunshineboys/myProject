@@ -341,9 +341,11 @@ class BasisDecorationService
      * 商品属性抓取
      * @param $goods
      * @param $value
+     * @param $name
+     * @param $int
      * @return array
      */
-    public static function goodsAttr($goods,$value,$name)
+    public static function goodsAttr($goods,$value,$name,$int = 1)
     {
         foreach ($goods as $one){
             if ($one['title'] == $value){
@@ -353,7 +355,14 @@ class BasisDecorationService
 
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
-        $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
+        switch ($int){
+            case $int == 1 ;
+                $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
+                break;
+            case $int == 2 ;
+                $goods_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
+        }
+
 
         return [$max_goods,$goods_attr];
 
@@ -584,46 +593,51 @@ class BasisDecorationService
     }
 
     /**
-     * 木作石膏板计算公式
-     * @param string $modelling_length
-     * @param string $flat_area
-     * @param float $meter
-     * @param array $goods
-     * @param int $video_wall
-     * @return float
+     * 木作计算公式
+     * @param $int
+     * @param $length
+     * @param $area
+     * @param $goods
+     * @param $value
+     * @param $value1
+     * @param $value2
+     * @return mixed
      */
-    public static function carpentryPlasterboardCost($modelling_length,$flat_area,$goods,$crafts)
+    public static function carpentryPlasterboardCost($int,$length,$area,$goods,$value=1,$value1=1,$value2=1)
     {
-        $plasterboard = [];
-        foreach ($goods as $goods_price ) {
-            if($goods_price['title'] == self::goodsNames()['plasterboard']) {
-                $plasterboard = $goods_price;
-            }
+
+        switch ($int){
+            case $int == 1 ;
+                // 石膏板费用：个数×商品价格     个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
+                $modelling_length = self::algorithm(6,$length,$value);
+                $flat_area = self::algorithm(6,$area,$value1);
+                $cost['quantity'] = self::algorithm(5,$modelling_length,$flat_area,$value2);
+                $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
+                $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+            case $int == 2;
+                // 龙骨费用：个数×商品价格   个数=个数1+个数2 个数1：（造型长度÷【1.5m】） 个数2：（平顶面积÷【1.5m²】）
+                $modelling_length = self::algorithm(6,$length,$value);
+                $flat_area = self::algorithm(6,$area,$value1);
+                $cost['quantity'] = self::algorithm(3,$modelling_length,$flat_area);
+                $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
+                $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+            case $int == 3;
+                // 木工板费用：个数×商品价格   个数：【1】
+                $cost['quantity'] = $length;
+                $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
+                $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+
+
         }
 
-        foreach ($crafts as $craft) {
+        $goods[0]['quantity'] = $cost['quantity'];
+        $goods[0]['cost'] = $cost['cost'];
+        $goods[0]['procurement'] = $cost['procurement'];
 
-           if ($craft['project_details'] == self::DetailsId2Title()['plasterboard_sculpt']){
-
-               $plasterboard_sculpt = $craft['material'];
-           }
-
-           if ($craft['project_details'] == self::DetailsId2Title()['plasterboard_area']){
-               $plasterboard_area = $craft['material'];
-           }
-
-           if ($craft['project_details'] == self::DetailsId2Title()['tv_plasterboard']){
-               $tv_plasterboard  = $craft['material'];
-           }
-        }
-
-//            个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
-        $plasterboard_cost['quantity'] = ceil($modelling_length / $plasterboard_sculpt + $flat_area / $plasterboard_area + $tv_plasterboard);
-
-//            石膏板费用：个数×商品价格
-        $plasterboard_cost['cost'] = round($plasterboard_cost['quantity'] * $plasterboard['platform_price'],2);
-        $plasterboard_cost['procurement'] = round($plasterboard_cost['quantity'] * $plasterboard['purchase_price_decoration_company'],2);
-        return $plasterboard_cost;
+        return $goods[0];
     }
 
     /**
@@ -1780,46 +1794,6 @@ class BasisDecorationService
         return $material;
     }
 
-    public static function carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost,$blockboard)
-    {
-
-        $material_total = [];
-        foreach ($goods_price as &$one_goods_price) {
-            switch ($one_goods_price) {
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['plasterboard']:
-                    $one_goods_price['quantity'] = $plasterboard_cost['quantity'];
-                    $one_goods_price['cost'] = $plasterboard_cost['cost'];
-                    $one_goods_price['procurement'] = $plasterboard_cost['procurement'];
-                    $plasterboard [] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['keel']:
-                    $one_goods_price['quantity'] = $keel_cost['quantity'];
-                    $one_goods_price['cost'] = $keel_cost['cost'];
-                    $one_goods_price['procurement'] = $keel_cost['procurement'];
-                    $keel [] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['lead_screw']:
-                    $one_goods_price['quantity'] = $pole_cost['quantity'];
-                    $one_goods_price['cost'] = $pole_cost['cost'];
-                    $one_goods_price['procurement'] = $pole_cost['procurement'];
-                    $pole [] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['slab']:
-                    $one_goods_price['quantity'] = $blockboard['quantity'];
-                    $one_goods_price['cost'] = $blockboard['cost'];
-                    $one_goods_price['procurement'] = $blockboard['procurement'];
-                    $slab [] = $one_goods_price;
-                    break;
-            }
-        }
-
-        $material_total['material'][] = BasisDecorationService::profitMargin($plasterboard);
-        $material_total['material'][] = BasisDecorationService::profitMargin($keel);
-        $material_total['material'][] = BasisDecorationService::profitMargin($pole);
-        $material_total['material'][] = BasisDecorationService::profitMargin($slab);
-        $material_total['total_cost'][] =  round($material_cost,2);
-        return $material_total;
-    }
 
     /**
      * 弱电总点位

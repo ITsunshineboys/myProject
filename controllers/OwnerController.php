@@ -577,14 +577,13 @@ class OwnerController extends Controller
 
         //材料总费用
         $material_price = BasisDecorationService::waterproofGoods($total_area,$craft[0]['material'],$goods_attr);
-        $total_cost =  round($material_price['cost'],2);
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'labor_all_cost' => $labor_all_cost,
-            'data' => $material_price,
-            'total_area' => $total_cost,
+            'data' => [$material_price],
+            'total_cost' => $material_price['cost'],
         ]);
     }
 
@@ -732,31 +731,28 @@ class OwnerController extends Controller
         $plaster_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['plasterboard'],'面积');
         $keel_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['keel'],'长度');
         $screw_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['lead_screw'],'长度');
-        $board_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['slab'],'长度');
+        $board_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['slab'],'',2);
 
 
-        //石膏板费用
-        $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
+        //石膏板费用  //龙骨费用   //丝杆费用 //木工板
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(1,$modelling_length,$flat_area_,$plaster_attr,$plaster_height,$plaster_area,$tv_plaster);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$modelling_length,$flat_area_,$keel_attr,$keel_height,$keel_area);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(2,$modelling_length,$flat_area_,$screw_attr,$screw_height,$screw_area);
+        $material_total[] = BasisDecorationService::carpentryPlasterboardCost(3,$tv_board,'',$board_attr);
 
-        //龙骨费用
-        $keel_cost = BasisDecorationService::carpentryKeelCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-
-        //丝杆费用
-        $pole_cost = BasisDecorationService::carpentryPoleCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);
-//        //木工板
-        $blockboard = BasisDecorationService::carpentryBlockboard($goods_price,$post);
-
-        //材料费用
-        $material_cost = ($keel_cost['cost'] + $plasterboard_cost['cost'] + $pole_cost['cost']) + $blockboard['cost'];
-        $material_total = BasisDecorationService::carpentryGoods($goods_price,$keel_cost,$pole_cost,$plasterboard_cost,$material_cost,$blockboard);
+        // 总费用
+        $total_area = 0;
+        foreach ($material_total as $total){
+            $total_area +=  $total['cost'];
+        }
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'carpentry_labor_price' => $labour_charges,
-                'carpentry_material' => $material_total,
-                'carpentry_add_price' => $carpentry_add,
+                'labor_all_cost' => $labour_charges,
+                'data' => $material_total,
+                'total_cost' => $total_area,
             ]
         ]);
     }
