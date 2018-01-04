@@ -246,6 +246,48 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
     }
 
+
+    public  static  function  addShippingCartNoLogin($goods_id,$goods_num)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $shippingCart=ShippingCart::find()
+                ->where(
+                    [
+                        'goods_id'=>$goods_id,
+                        'uid'=>$user->id,
+                        'role_id'=>$user->last_role_id_app
+                    ]
+                )
+                ->one();
+            if (!$shippingCart)
+            {
+                $shippingCart=new ShippingCart();
+                $shippingCart->goods_id=$goods_id;
+                $shippingCart->uid=$user->id;
+                $shippingCart->role_id=$user->last_role_id_app;
+                $shippingCart->goods_num=$goods_num;
+                $shippingCart->create_time=time();
+                if (!$shippingCart->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }else{
+                $shippingCart->goods_num+=$goods_num;
+                if (!$shippingCart->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=1000;
+            return $code;
+        }
+    }
     /**
      * 添加购物车操作
      * @param $goods_id

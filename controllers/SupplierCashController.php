@@ -395,19 +395,16 @@ class SupplierCashController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $user_uid=UserCashregister::find()
-            ->asArray()
-            ->where(['transaction_no'=>$transaction_no])
-            ->one()['uid'];
-        $user_id=User::find()->where(['id'=>$user_uid])->asArray()->one()['id'];
-        if(!$user_id){
-            $code=500;
+
+        $data = OwnerCashManager::GetCashView($transaction_no);
+        if(is_numeric($data))
+        {
+            $code = $data;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $data = OwnerCashManager::GetCashView($transaction_no,$user_id);
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
