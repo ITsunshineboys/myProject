@@ -44,7 +44,13 @@ class EffectToponymy extends \yii\db\ActiveRecord
             [['toponymy'], 'string', 'max' => 50],
         ];
     }
-
+    /**
+     * 二维数组按照指定字段名 排序
+     * @param $array
+     * @param $field
+     * @param string $sort
+     * @return mixed
+     */
     public static  function arraySequence($array, $field, $sort = 'SORT_ASC')
     {
         $arrSort = array();
@@ -57,6 +63,10 @@ class EffectToponymy extends \yii\db\ActiveRecord
         return $array;
     }
 
+    /**
+     * @param $id
+     * @return array|int
+     */
     public static function PlotView($id){
         $effect_ids =self::find()->asArray()->where(['id'=>$id])->select('effect_id')->one()['effect_id'];
         if(!$effect_ids){
