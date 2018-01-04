@@ -13,6 +13,7 @@ use app\models\Supplier;
 use app\models\SupplierCashManager;
 use app\models\User;
 use app\models\UserAccessdetail;
+use app\models\UserBankInfo;
 use app\models\UserCashregister;
 use app\services\ExceptionHandleService;
 use app\services\ModelService;
@@ -686,6 +687,7 @@ class SupplierCashController extends Controller
 //       $user->save(false);
 //       var_dump($user);die;
       var_dump(BankinfoLog::find()->asArray()->all());
+      var_dump(UserBankInfo::find()->asArray()->all());
 
     }
 
