@@ -243,7 +243,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
         $scope.upload_dis = true;
         $scope.upload_txt = '上传中...';
         Upload.upload({
-            url: baseUrl + '/site/upload',
+            url: '/site/upload',
             data: {'UploadForm[file]': file}
         }).then(function (response) {
             if (!response.data.data) {
@@ -251,9 +251,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
             } else {
                 $scope.cover_flag = '';
                 $scope.upload_cover_src = response.data.data.file_path;
-                $scope.upload_dis = false;
-                $scope.upload_txt = '上传';
             }
+	        $scope.upload_dis = false;
+	        $scope.upload_txt = '上传';
         }, function (error) {
             console.log(error)
             $scope.upload_cover_src = '';
@@ -273,17 +273,17 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
         $scope.completeUpload = false;
         $scope.upload_img_arr.push(loadingPicUri);
         Upload.upload({
-            url: baseUrl + '/site/upload',
+            url: '/site/upload',
             data: {'UploadForm[file]': file}
         }).then(function (response) {
             $scope.upload_img_arr.pop();
             if (!response.data.data) {
                 $scope.img_flag = "上传图片格式不正确，请重新上传"
             } else {
-                $scope.completeUpload = true;
                 $scope.img_flag = '';
                 $scope.upload_img_arr.push(response.data.data.file_path)
             }
+	        $scope.completeUpload = true;
         }, function (error) {
             console.log(error)
             $scope.upload_img_arr.pop();

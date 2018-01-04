@@ -14,6 +14,8 @@ angular.module("edit_brand_module",[])
 		$scope.categories=[];
 		$scope.item_check = [];
 		$scope.three=[];
+		$scope.ids_arr=[]; // 三级分类
+		$scope.edit_title_red = false
 		_ajax.get("/supplieraccount/supplier-brand-view",{
 			brand_id:$scope.brand_id
 		},function (res) {
@@ -27,6 +29,22 @@ angular.module("edit_brand_module",[])
 				$scope.item_check.push(value);
 				console.log($scope.item_check);
 			}
+			//获取三级
+			_ajax.get('/mall/categories',{pid:2},function (res) {
+				$scope.three = res.data.categories;
+				for(let [key,value] of $scope.three.entries()){
+					console.log(value)
+					if($scope.item_check.length == 0){
+						value.complete = false
+					}else{
+						for(let [key1,value1] of $scope.item_check.entries()){
+							if(value.id == value1.id){
+								value.complete = true
+							}
+						}
+					}
+				}
+			});
 		});
 		/*===========================上传图片开始===============================*/
 		//上传商标注册证
@@ -50,9 +68,9 @@ angular.module("edit_brand_module",[])
 				}else{
 					$scope.img_flag='';
 					$scope.upload_img_src=response.data.data.file_path;
-					$scope.trademark_txt='上传';
-					$scope.upload_dis=false;
 				}
+				$scope.trademark_txt='上传';
+				$scope.upload_dis=false;
 			},function (error) {
 				console.log(error)
 			})
@@ -78,9 +96,9 @@ angular.module("edit_brand_module",[])
 				}else{
 					$scope.img_logo_flag='';
 					$scope.upload_logo_src=response.data.data.file_path;
-					$scope.logo_txt='上传';
-					$scope.upload_dis=false;
 				}
+				$scope.logo_txt='上传';
+				$scope.upload_dis=false;
 			},function (error) {
 				console.log(error)
 			})
@@ -96,21 +114,7 @@ angular.module("edit_brand_module",[])
 			$scope.second = res.data.categories;
 			$scope.twoColor= $scope.second[0];
 		})
-		//获取三级
-		_ajax.get('/mall/categories',{pid:2},function (res) {
-			$scope.three = res.data.categories;
-			for(let [key,value] of $scope.three.entries()){
-				if($scope.item_check.length == 0){
-					value['complete'] = false
-				}else{
-					for(let [key1,value1] of $scope.item_check.entries()){
-						if(value.id == value1.id){
-							value.complete = true
-						}
-					}
-				}
-			}
-		});
+
 		//点击一级 获取相对应的二级
 		$scope.getMore = function (n) {
 			$scope.oneColor = n;
@@ -192,13 +196,10 @@ angular.module("edit_brand_module",[])
 			}
 		};
 		
-		//编辑确认
-		$scope.ids_arr=[];
+		// 编辑确认
 		$scope.editBtn=function () {
+			$scope.ids_arr=[];
 			for(let [key,value] of $scope.item_check.entries()){
-				if(value.complete){
-					delete value.complete
-				}
 				$scope.ids_arr.push($scope.item_check[key].id)
 			}
 			_ajax.post('/supplieraccount/supplier-brand-edit',{
@@ -208,6 +209,15 @@ angular.module("edit_brand_module",[])
 				logo:$scope.upload_logo_src,
 				category_ids:$scope.ids_arr.join(',')
 			},function (res) {
+				if(res.code==200){
+					$('#edit_modal').modal('show');
+				}else{
+					$scope.edit_title_red=true;
+					$anchorScroll.yOffset = 150;
+					$location.hash('brand_title');
+					$anchorScroll();
+					$window.document.getElementById('brand_title').focus();
+				}
 				console.log(res);
 			})
 		};
