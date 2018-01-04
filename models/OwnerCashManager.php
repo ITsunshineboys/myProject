@@ -231,8 +231,7 @@ class OwnerCashManager extends ActiveRecord {
 
         $bankcard = SupplierCashManager::GetBankcard($arr['bank_log_id'],self::OWNER_ROLE);
         $user = SupplierCashManager::GetUser($user_id);
-        var_dump($bankcard);
-        var_dump($user);die;
+
         if (!$bankcard || !$user) {
             return null;
         }
