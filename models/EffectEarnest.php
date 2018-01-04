@@ -345,10 +345,10 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 ->leftJoin('series as se','se.id=ep.series_id')
                 ->where(['e.id'=>$effect_earnest['effect_id']])
                 ->one();
+            var_dump($data);
 
+        }die;
 
-        }
-        var_dump($data);die;
         if(!$data){
             $data=[];
         }
