@@ -1,263 +1,63 @@
+<div class="back">
+    <section style="overflow: hidden">
+        <!--移动家具-->
+        <div class="sheet_material">
+            <ul class="wall_ul">
+                <li ng-repeat="item in cur_item.second_level">
+                    <div ng-class="{'cur_animate':is_delete_btn}" class="goods_detail" data-target="#myModal" data-toggle="{{cur_content}}" ng-repeat="item1 in item.goods_detail"
+                         ng-click="get_basic_details(item1)">
+                        <div class="wall_span_brand">
+                            <span class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br>
+                            <span class="wall_brand">{{item1.name}}</span>
+                        </div>
+                        <span class="wall_money">{{item1.cost | currency:'￥'}}
+                            <img ng-if="!is_delete_btn" src="images/left_more.png" alt=""></span>
+                        <button class="del" ng-click="delete_item(item1)" ng-if="is_delete_btn">删除</button>
+                    </div>
+                </li>
+            </ul>
+            <p ng-if="cur_item.count==0&&!!is_delete_btn" class="no_data">暂无材料显示</p>
+        </div>
 
-    <link rel="stylesheet" href="css/other_material.css"/>
-    <link rel="stylesheet" href="zui-1.7.0-dist/dist/css/zui.min.css"/>
-<div ng-controller="other_materials_ctrl" class="back">
-<header>
-    <div>
-        <a ng-click="goPrev({'name':name,'address':address,'pic_one':pic_one,'pic_two':pic_two})">
-            <!--<i class="in_span icon icon-chevron-left icon-3x"></i>-->
-            <img src="images/mall_nav_return.png" alt="" class="in_span"/>
-        </a>
-        <span class="pic_span">移动家具</span>
-        <span class="edit">编辑</span>
+        <!--添加材料按钮-->
+        <div class="add_material">
+            <a ng-if="!is_delete_btn" ng-click="go_three_item()">
+                <span>点击添加装修材料</span>
+            </a>
+        </div>
+        <div ng-show="cur_item.count>6"></div>
+        <!--按钮、-->
+        <div class="preservation">
+            <span>合计：</span>
+            <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
+            <button ng-if="!is_delete_btn" ng-click="save()">保存</button>
+        </div>
 
-    </div>
-</header>
-<section>
-    <!--移动家具-->
-    <div class="sheet_material first_top animated fadeInUp" style="animation-delay: 0.15s;" otherDirective>
-        <ul class="wall_ul">
-            <li data-toggle="modal" data-target="#myModal">
-                <span class="wall_span" >沙发x1</span><br/>
-                <span class="wall_brand" >帕沙曼</span>
-                <img src="images/left_more.png" alt="" class="left_com"/>
-                <span class="wall_money">￥1900.00</span>
-                <button class='del'>删除</button>
-            </li>
-            <li data-toggle="modal" data-target="#myModal_1">
-                <span class="wall_span" >茶几x1</span><br/>
-                <span class="wall_brand" >择木宜居</span>
-                <img src="images/left_more.png" alt="" class="left_com"/>
-                <span class="wall_money" >￥270.00</span>
-                <button class='del'>删除</button>
-            </li>
-            <li data-toggle="modal" data-target="#myModal_2">
-                <span class="wall_span" >电视柜x1</span><br/>
-                <span class="wall_brand" >木象</span>
-                <img src="images/left_more.png" alt="" class="left_com"/>
-                <span class="wall_money" >￥650.00</span>
-                <button class='del'>删除</button>
-            </li>
-            <li data-toggle="modal" data-target="#myModal_3">
-                <span class="wall_span" >餐桌x1</span><br/>
-                <span class="wall_brand" >浪度</span>
-                <img src="images/left_more.png" alt="" class="left_com"/>
-                <span class="wall_money" >￥1500.00</span>
-                <button class='del'>删除</button>
-            </li>
-            <li data-toggle="modal" data-target="#myModal_4">
-                <span class="wall_span" >床x1</span><br/>
-                <span class="wall_brand" >林氏</span>
-                <img src="images/left_more.png" alt="" class="left_com"/>
-                <span class="wall_money" >￥1300.00</span>
-                <button class='del'>删除</button>
-            </li>
-            <li data-toggle="modal" data-target="#myModal_5">
-                <span class="wall_span" >床头柜x2</span><br/>
-                <span class="wall_brand" >久沐森</span>
-                <img src="images/left_more.png" alt="" class="left_com"/>
-                <span class="wall_money" >￥1200.00</span>
-                <button class='del'>删除</button>
-            </li>
-
-        </ul>
-    </div>
-
-    <!--添加材料按钮-->
-    <div class="add_material">
-        <a >
-           <span class=" glyphicon glyphicon-plus add_col" aria-hidden="true" ></span>
-            <span class="color_a">点击添加装修材料</span>
-        </a>
-    </div>
-
-    <!--按钮、-->
-    <div class="preservation">
-        <span>合计：</span>
-        <span class="money_col">￥6820.00</span>
-        <button>保存</button>
-    </div>
-
-    <!--模态框  ===== 更换材料 -->
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" >
-                <div class="modal-body"  >
+        <!--模态框  ===== 更换材料 -->
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="whit">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <div class="comment_img">
-                        <img src="images/shafa.jpg" alt=""/>
+                        <img ng-src="{{cur_goods.cover_image}}" alt=""/>
                     </div>
                     <div class="comment">
-                        <span class="comment_span">品牌名称</span>
-                        <span class="comment_se">￥700.00</span>
-                        <br/>
-                        <span class="comment_square">产品类别：防水 规格：1000m <sup>2</sup></span>
-
-
-                        <p class="comment_p">商品特色</p>
-                        <p class="text_p ">5年好店，权威认证</p>
+                        <p class="goods_name">{{cur_goods.goods_name}}</p>
+                        <p class="price">{{cur_goods.platform_price | currency:'￥'}}</p>
+                        <p>品牌名称：{{cur_goods.name}}</p>
+                        <p>
+                            <span ng-if="cur_goods.series_name!=undefined">系列：{{cur_goods.series_name}}</span>
+                            <span class="style_position" ng-if="cur_goods.style_name!=undefined">风格：{{cur_goods.style_name}}</span>
+                        </p>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="replace">
-                        <button type="button" class="btn btn-primary"  data-dismiss="modal">更换</button>
-                    </a>
+                    <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
+                    <button type="button" class="go_replace" ng-click="replace_material()">更换</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="myModal_1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content"  >
-                <div class="modal-body"  >
-                    <div class="comment_img">
-                        <img src="images/chaji.jpg" alt=""/>
-                    </div>
-                    <div class="comment">
-                        <span class="comment_span">品牌名称</span>
-                        <span class="comment_se">￥700.00</span>
-                        <br/>
-                        <span class="comment_square">产品类别：防水 规格：1000m <sup>2</sup></span>
-                        <p class="comment_p">5年好店，权威认证</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="replace">
-                        <button type="button" class="btn btn-primary"  data-dismiss="modal">更换</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal_2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content"  >
-                <div class="modal-body"  >
-                    <div class="comment_img">
-                        <img src="images/dianshigui.jpg" alt=""/>
-                    </div>
-                    <div class="comment">
-                        <span class="comment_span">品牌名称</span>
-                        <span class="comment_se">￥700.00</span>
-                        <br/>
-                        <span class="comment_square">产品类别：防水 规格：1000m <sup>2</sup></span>
-
-
-                        <p class="comment_p">商品特色</p>
-                        <p class="text_p ">如需入户安装请联系客服补相应费用</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="replace">
-                        <button type="button" class="btn btn-primary"  data-dismiss="modal">更换</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal_3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content"  >
-                <div class="modal-body"  >
-                    <div class="comment_img">
-                        <img src="images/canzuo.jpg" alt=""/>
-                    </div>
-                    <div class="comment">
-                        <span class="comment_span">品牌名称</span>
-                        <span class="comment_se">￥700.00</span>
-                        <br/>
-                        <span class="comment_square">产品类别：防水 规格：1000m <sup>2</sup></span>
-
-
-                        <p class="comment_p">商品特色</p>
-                        <p class="text_p ">结实牢固、不易变形！</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="replace">
-                        <button type="button" class="btn btn-primary"  data-dismiss="modal">更换</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal_4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content"  >
-                <div class="modal-body"  >
-                    <div class="comment_img">
-                        <img src="images/bed_q.jpg" alt=""/>
-                    </div>
-                    <div class="comment">
-                        <span class="comment_span">品牌名称</span>
-                        <span class="comment_se">￥700.00</span>
-                        <br/>
-                        <span class="comment_square">产品类别：防水 规格：1000m <sup>2</sup></span>
-
-
-                        <p class="comment_p">商品特色</p>
-                        <p class="text_p ">高档全实木 5年退换货</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="replace">
-                        <button type="button" class="btn btn-primary"  data-dismiss="modal">更换</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="myModal_5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content"  >
-                <div class="modal-body"  >
-                    <div class="comment_img">
-                        <img src="images/chuangtougui.jpg" alt=""/>
-                    </div>
-                    <div class="comment">
-                        <span class="comment_span">品牌名称</span>
-                        <span class="comment_se">￥700.00</span>
-                        <br/>
-                        <span class="comment_square">产品类别：防水 规格：1000m <sup>2</sup></span>
-
-
-                        <p class="comment_p">商品特色</p>
-                        <p class="text_p ">卧室套装 环保板材 坚硬耐磨</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a  class="replace">
-                        <button type="button" class="btn btn-primary"  data-dismiss="modal">更换</button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!--弹窗删除-->
-    <!-- Modal -->
-    <!--<div class="modal fade bounceInUp" id="myModal_del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
-        <!--<div class="modal-dialog" role="document">-->
-            <!--<div class="modal-content">-->
-                <!--<div class="modal-header">-->
-                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                    <!--<h4 class="modal-title" id="myModalLabel">是否删除</h4>-->
-                <!--</div>-->
-                <!--<div class="modal-body">-->
-                  <!--<div class="del_y">-->
-                      <!--<p>是否删除</p>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!--<div class="modal-footer">-->
-                    <!--<button type="button" class="btn  def_btn" data-dismiss="modal" >取消</button>-->
-                    <!--<button type="button" class="btn  del_btn">确定</button>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-</section>
-
+    </section>
 
 
 </div>

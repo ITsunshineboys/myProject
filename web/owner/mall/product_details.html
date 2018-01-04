@@ -1,81 +1,59 @@
-<link rel="stylesheet" href="css/product_details.css"/>
-<div ng-controller="product_details_ctrl" class="main_body">
-    <a class="header" ng-click="goPrev({stair:stair,index:index,level:level,stair_copy:stair_copy
-                ,worker_category:worker_category,level:level,
-                handyman_price:handyman_price,area:area,series_index:series_index,style_index:style_index,
-                labor_price:labor_price,house_bedroom:house_bedroom,house_hall:house_hall,
-                house_kitchen:house_kitchen,house_toilet:house_toilet,highCrtl:highCrtl,
-                window:window,choose_stairs:choose_stairs,second_material:second_material,
-                three_material:three_material,three_material_details:three_material_details,excluded_item:excluded_item,
-                prev_index:prev_index,pid:pid,cur_stair :cur_stair})"><img src="images/mall_nav_return.png" alt=""></a>
+<div class="main_body">
+    <a class="header" ng-click="returnPrev()"><img src="images/nav_return_white.png" alt=""></a>
     <div class="main">
-        <div class="details_banner">
-            <img src="images/banner1.png" alt=""/>
-        </div>
+        <!--<div class="details_banner">-->
+            <div class="carousel" style="margin-top: 0;">
+                <div class="swiper-container" style="width: 100%;height: 100%;">
+                    <div class="swiper-wrapper" style="width: 100%;height: 100%;">
+                        <div class="swiper-slide" ng-repeat="item in cur_params.images" style="width: 100%;height: 100%;">
+                            <img ng-src="{{item}}" style="width: 100%;height: 100%;" alt="">
+                        </div>
+                    </div>
+                    <!-- 如果需要分页器 -->
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        <!--</div>-->
         <div class="intro_box">
             <div class="product_name">
-                {{current_good.title}}
+                {{cur_params.title}}
             </div>
-                <div class="introduce">{{current_good.subtitle}}</div>
-                <p class="cost">{{current_good.platform_price | currency:'￥'}}</p>
+            <div class="introduce">{{check_goods.subtitle}}</div>
+            <p class="cost">{{check_goods.platform_price | currency:'￥'}}</p>
         </div>
         <!--下拉选择数量-->
-        <div class="standard">
-            <div>选择数量</div>
-            <div data-toggle="modal" data-target="#myModal">
+        <div class="standard" ng-if="!!cur_status" data-toggle="modal" data-target="#myModal">
+            <div class="standard_txt">选择数量</div>
+            <div>
                 <img src="images/left_more.png" class="img_size" alt="">
             </div>
         </div>
         <!--服务项-->
-         <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
-             <ul>
-                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门维修</span></li>
-                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门换货</span></li>
-                 <li><img src="images/right.png" alt=""/> &nbsp;<span>上门退货</span></li>
-                 <li>
-                     <img src="images/left_more.png" class="img_size_1" alt="">
-                 </li>
-             </ul>
-         </div>
-
-        <!--评论列表-->
-        <div class="comment_list">
-            <p class="comment_total">评论(189)</p>
-            <div class="comment_man">
-            <img src="images/soft.png" alt=""/>
-            <span class="user_comment">提莫</span>
-            <span class="comment_time">2017-06-06</span>
-            </div>
-            <p class="comment_des">质量好，发货快，商家态度好</p>
-        </div>
-        <!--查看所有评论-->
-        <div class="all_comment">
-            <span > <a >查看全部评论</a>
-              <img src="images/left_more.png" alt="">
-            </span>
+        <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
+            <ul>
+                <li ng-repeat="item in sale_services"><img src="images/right.png" alt=""/> &nbsp;<span>{{item}}</span></li>
+                <li>
+                    <img src="images/left_more.png" class="img_size_1" alt="">
+                </li>
+            </ul>
         </div>
         <!--商铺头部-->
         <div class="shop_header">
-            <div class="shop_header_child">
-                <img src="images/bed.png" alt=""/>
-                <span>合金压缩旗舰店</span>
+            <div class="shop_header_child clearfix">
+                <div class="img_box pull-left">
+                    <img ng-src="{{supplier.icon}}" alt=""/>
+                </div>
+                <span class="pull-left">{{supplier.shop_name}}</span>
             </div>
             <div class="shop_number">
                 <ul>
                     <li>
-                        <span class="num_shop">66</span> <br/>
-                        <span>商品数量</span>
-                        <div class="line"></div>
+                        <span class="num_shop">{{supplier.goods_number}}</span> <br/>
+                        <span>商品数</span>
                     </li>
                     <li>
-                        <span class="num_shop">666</span> <br/>
-                        <span>关注人数</span>
-                        <div class="line"></div>
-                    </li>
-                    <li>
-                        <span class="num_shop">6.6</span> <br/>
-                        <span>好评率</span>
-                        <div class="line" style="visibility: hidden"></div>
+                        <span class="num_shop">{{supplier.comprehensive_score}}</span> <br/>
+                        <span>综合详情</span>
                     </li>
                 </ul>
             </div>
@@ -85,31 +63,31 @@
             <div>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs pic_tabs" role="tablist">
-                    <li role="presentation" ng-class="{'active':(tab_title==0)}"><a ng-click="(tab_title == 0)" aria-controls="home" role="tab" data-toggle="tab">图文详情</a></li>
-                    <li role="presentation" ng-class="{'active':(tab_title==1)}"><a ng-click="(tab_title == 1)" aria-controls="profile" role="tab" data-toggle="tab">产品参数</a></li>
+                    <li role="presentation" ng-class="{'active':(tab_title==0)}"><a ng-click="(tab_title = 0)" aria-controls="home" role="tab" data-toggle="tab">图文详情
+                        <hr></a></li>
+                    <li role="presentation" ng-class="{'active':(tab_title==1)}"><a ng-click="(tab_title = 1)" aria-controls="profile" role="tab" data-toggle="tab">产品参数<hr></a></li>
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content" ng-switch on="tab_title">
                     <!--图文详情-->
-                    <div role="tabpanel" class="tab-pane active" id="home" ng-switch-when="0">
-                        <div class="tab_one">
-                            <img src="images/banner1.png" alt=""/>
+                    <div role="tabpanel" id="home" ng-switch-when="0">
+                        <div class="tab_one" ng-bind-html="description | toHtml">
+                            <!--<img src="images/banner1.png" alt=""/>-->
                             <!--<p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>-->
                         </div>
                     </div>
                     <!--产品参数-->
-                    <div role="tabpanel" class="tab-pane" id="profile" ng-switch-when="1">
-                      <div class="shop_two">
-                          <ul>
-                              <li><span>产品参数</span><span class="comment_num">25446556</span></li>
-                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                              <li><span>产品品牌</span><span class="comment_num">盛大木地板</span></li>
-                          </ul>
-                      </div>
+                    <div role="tabpanel" id="profile" ng-switch-when="1">
+                        <div class="shop_two">
+                            <ul>
+                                <li><span>产品编码</span><span class="comment_num">{{cur_params.code}}</span></li>
+                                <li><span>产品品牌</span><span class="comment_num">{{check_goods.name}}</span></li>
+                                <li ng-if="cur_params.series_name != ''"><span>系列</span><span class="comment_num">{{check_goods.series_name}}</span></li>
+                                <li ng-if="cur_params.style_name != ''"><span>风格</span><span class="comment_num">{{check_goods.style_name}}</span></li>
+                                <li ng-repeat="item in cur_params.attrs"><span>{{item.name}}</span><span class="comment_num">{{item.value}}</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,94 +99,66 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <p type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">
-                        <img src="images/close.png" alt="">
-                    </span>
-                    </p>
+                    <p type="button" class="close" data-dismiss="modal" aria-label="Close">x</p>
                 </div>
                 <div class="modal-body">
-                  <div class="add_cart">
-                      <img src="images/bed.png" alt=""/>
-                  </div>
+                    <div class="add_cart">
+                        <img ng-src="{{check_goods.cover_image}}" alt=""/>
+                    </div>
                     <div class="div_pic">
                         <span class="pic_data">{{current_good.platform_price | currency:'￥'}}</span>
-                        <span class="shu_pic">库存1200件</span>
+                        <span class="shu_pic">库存{{cur_params.left_number}}件</span>
                     </div>
 
 
-                     <div class="sl">
-                        <span>购买数量</span>
-                        <div class="input_div">
-                            <input class="min am-btn" ng-click="subtract()" name="" type="button" value="-" />
-                            <input class="text_box" name="" type="text" ng-model="add_quantity" style="width:40px;border: none;" />
-                            <input class="add am-btn" ng-click="add()" name="" type="button" value="+" />
+                    <div class="sl clearfix">
+                        <span class="pull-left">购买数量</span>
+                        <div class="input_div pull-right">
+                            <input class="min am-btn" ng-click="operate('check_goods',0,1,'quantity')" name="" type="button" value="-" />
+                            <input class="text_box" name=""  type="tel" ng-model="check_goods.quantity" />
+                            <input class="add am-btn" ng-click="operate('check_goods',1,cur_params.left_number,'quantity')" name="" type="button" value="+" />
                         </div>
-                     </div>
+                    </div>
                 </div>
                 <div class="modal-footer_div">
                     <!--<button type="button" class=" resct_btn_one join_cart " data-dismiss="modal" data-toggle="modal" data-target="#myModalP">加入购物车</button>-->
-                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-if="prev_index == 0" ng-click="add_goods()">添加</button>
-                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-if="prev_index == 1 || prev_index == 2" ng-click="replace_goods()">更换</button>
+                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-click="first_replace()">{{cur_title}}</button>
                 </div>
             </div>
         </div>
     </div>
-      <!--售后服务条款模态框-->
+    <!--售后服务条款模态框-->
     <!-- Modal -->
     <div class="modal fade" id="myModal_sec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class=" t-header">
-                    <h1 class="modal-title" id="myModalLabel">售后</h1>
-                </div>
                 <div class="modal-body-comment">
-                   <div class="service_comment">
-                       <ul>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>上门维修</span>
-                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                           </li>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>上门换货</span>
-                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                           </li>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>上门退货</span>
-                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                           </li>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>换货</span>
-                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                           </li>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>退货</span>
-                               <p>可在售后服务后选择此服务。商家同意后回派人上门维修</p>
-                           </li>
-                       </ul>
-                   </div>
-                   <div class="t-header-two">
+                    <div ng-if="aftermarket.length!=0">
+                    <div class="t-header-two" >
+                        <h1>售后</h1>
+                    </div>
+                    <div class="service_comment">
+                        <ul>
+                            <li ng-repeat="item in aftermarket">
+                                <img src="images/right.png" alt=""/>
+                                <span>{{item}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
+                    <div ng-if="protection.length!=0">
+                    <div class="t-header-two" >
                         <h1>保障</h1>
-                   </div>
-                   <div class="service_comment">
-                       <ul>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>提供发票</span>
-                               <p>在购买后，会提供相应的发票</p>
-                           </li>
-                           <li>
-                               <img src="images/right.png" alt=""/>
-                               <span>上门安装</span>
-                               <p>在购买商品后，商家会上门安装</p>
-                           </li>
-                       </ul>
-                   </div>
-
+                    </div>
+                    <div class="service_comment">
+                        <ul>
+                            <li class="" ng-repeat="item in protection">
+                                <img src="images/right.png" alt=""/>
+                                <span>{{item}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    </div>
                 </div>
                 <div class="modal-footer-btn">
                     <button type="button" class="btn btn_color"  data-dismiss="modal">完成</button>
@@ -216,10 +166,8 @@
             </div>
         </div>
     </div>
-    <div class="foot_tab">
-        <div><img src="images/mall_collect.png" class="img_size_3" alt=""><p>联系商家</p></div>
-        <button class="add" ng-if="prev_index == 0" data-toggle="modal" data-target="#myModal">添加</button>
-        <button class="add" ng-if="prev_index == 1 || prev_index == 2" data-toggle="modal" data-target="#myModal">更换</button>
+    <div class="foot_tab" ng-if="!!cur_status">
+        <button class="add" data-toggle="modal" data-target="#myModal">{{cur_title}}</button>
     </div>
-    <div style="height: 4rem;"></div>
+    <div style="height: 4rem;" ng-if="!!cur_status"></div>
 </div>

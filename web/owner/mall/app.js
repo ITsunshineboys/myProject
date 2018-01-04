@@ -1,60 +1,61 @@
-var app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
+let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
     .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
         $stateProvider
-            .state("home", {
+            .state("home", {//首页
                 url: "/",
                 templateUrl: "home.html",
                 css:['css/intelligent_index.css','zui-1.7.0-dist/dist/css/zui.min.css'],
                 controller:'home_ctrl'
             })
-            .state('nodata',{
+            .state('nodata',{//无资料
                 url:'/nodata',
                 templateUrl:'nodata.html',
                 css:['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
                 controller:'nodata_ctrl'
             })
-            .state('search',{
+            .state('search',{//搜索页
                 url:'/search',
                 templateUrl:'search.html',
                 css:'css/cell_search.css',
                 controller:'search_ctrl'
             })
-            // .state('nodata.house_list',{
-            //     url:'/nodata_house_list',
-            //     templateUrl:'nodata.html',
-            //     css:['css/inteligent_nodata.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
-            // })
-            // .state('nodata.basics_decoration',{ // 基础装修
-            //     url:'/basics_decoration',
-            //     templateUrl:'all_basics.html',
-            //     css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
-            // })
-            // .state('nodata.main_material',{ // 主要材料
-            //     url:'/main_material',
-            //     templateUrl:'main_goods.html',
-            //     css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css']
-            // })
-            // .state('nodata.other_material',{    // 其他
-            //     url:'/other_material?index',
-            //     templateUrl:'other_goods.html',
-            //     css:['css/other.css','css/all.css']
-            // })
-            // .state('nodata.product_detail',{
-            //     url:'/product_detail?num',
-            //     templateUrl:'cur_product_detail.html',
-            //     css:['css/product_details.css','css/all.css'],
-            // })
-            // .state('nodata.all_goods',{
-            //     url:'/all_goods',
-            //     templateUrl:'get_all_goods.html',
-            //     css:['css/commodify.css','css/all.css']
-            // })
-            // .state('nodata.second_level',{
-            //     url:'/second_level',
-            //     templateUrl:'second_level.html',
-            //     css:['css/movefurniture.css','css/all.css']
-            // })
+            .state('basic_decoration',{ // 基础装修
+                url:'/basic_decoration',
+                templateUrl:'basic_decoration.html',
+                css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
+                controller:'basic_ctrl'
+            })
+            .state('main_materials',{ // 主要材料
+                url:'/main_materials',
+                templateUrl:'main_materials.html',
+                css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
+                controller:'main_ctrl'
+            })
+            .state('other_materials',{    // 其他
+                url:'/other_materials',
+                templateUrl:'other_materials.html',
+                css:['css/other.css','css/all.css'],
+                controller:'other_ctrl'
+            })
+            .state('product_details',{//商品详情
+                url:'/product_details',
+                templateUrl:'product_details.html',
+                css:['css/product_details.css','css/all.css'],
+                controller:'product_details_ctrl'
+            })
+            .state('product_list',{//商品列表
+                url:'/product_list',
+                templateUrl:'product_list.html',
+                css:['css/commodify.css','css/all.css'],
+                controller:'product_list_ctrl'
+            })
+            .state('level_three',{//三级列表
+                url:'/level_three',
+                templateUrl:'level_three.html',
+                css:['css/movefurniture.css','css/all.css'],
+                controller:'level_three_ctrl'
+            })
             .state('modelRoom',{ // 样板间
                 url:'/quotation?roomCode&toponymy&street',
                 templateUrl:'model_room.html',

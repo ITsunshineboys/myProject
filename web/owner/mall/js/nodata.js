@@ -45,8 +45,9 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     }
     /*存基本信息sessionStorage*/
     $scope.$watch('params', function (newVal, oldVal) {
-        let index = Object.entries(oldVal).findIndex(function (item) {
-            return item[1] == ''
+        console.log(newVal);
+        let index = Object.entries(newVal).findIndex(function (item) {
+            return item[1] === ''
         })
         if(index == -1) {
             sessionStorage.setItem('params', JSON.stringify(newVal))
