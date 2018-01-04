@@ -336,7 +336,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
         if(!isset($effect_earnests)){
             $data=[];
         }
-        foreach ($effect_earnests as &$effect_earnest){
+        foreach ($effect_earnests as $k=>&$effect_earnest){
             $data[]=(new Query())->from('effect as e')
                 ->select('ee.id,e.add_time,st.style,se.series')
                 ->leftJoin('effect_earnest as ee','e.id=ee.effect_id')
@@ -345,13 +345,13 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 ->leftJoin('series as se','se.id=ep.series_id')
                 ->where(['e.id'=>$effect_earnest['effect_id']])
                 ->one();
-            var_dump($data);
 
-        }die;
-
-        if(!$data){
-            $data=[];
+            if($data[$k]==false){
+                $data=[];
+            }
         }
+
+
 
         foreach ($data as &$v){
             $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
