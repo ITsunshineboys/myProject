@@ -126,10 +126,10 @@ class OwnerCashManager extends ActiveRecord {
             ->where(['id'=>$user_id])
             ->asArray()
             ->one();
-        var_dump($user_info);die;
+
         if($user_info){
-            $data['availableamount'] = sprintf('%.2f', (float)$user_info['availableamount'] * 0.01);
-            $data['balance'] = sprintf('%.2f', (float)$user_info['balance'] * 0.01);
+            $user_info['availableamount'] = sprintf('%.2f', (float)$user_info['availableamount'] * 0.01);
+            $user_info['balance'] = sprintf('%.2f', (float)$user_info['balance'] * 0.01);
         }
         $array=(new Query())
             ->select('sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch')
