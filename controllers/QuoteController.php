@@ -3092,6 +3092,6 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(BrainpowerInitalSupervise::find()->asArray()->all());
+        var_dump(Effect::find()->asArray()->where("type!=2")->all());
     }
 }
