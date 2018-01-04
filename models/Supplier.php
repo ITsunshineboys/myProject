@@ -690,7 +690,7 @@ class Supplier extends ActiveRecord
     {
 
         $Supplier_info=Supplier::find()
-            ->select('shop_name,uid,balance,availableamount')
+            ->select('id,shop_name,uid,balance,availableamount')
             ->where(['id'=>$supplier_id])
             ->asArray()
             ->one();
