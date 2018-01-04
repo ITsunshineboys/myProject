@@ -2081,7 +2081,7 @@ class GoodsOrder extends ActiveRecord
                             $order_refund_unshipped->handle=2;
                             $order_refund_unshipped->handle_reason='';
                             $order_refund_unshipped->handle_time=$time;
-                            if ($order_refund_unshipped->save(false))
+                            if (!$order_refund_unshipped->save(false))
                             {
                                 $code=500;
                                 $tran->rollBack();
