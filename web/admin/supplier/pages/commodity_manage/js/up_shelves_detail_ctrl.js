@@ -26,6 +26,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.series_null_arr = [];
     $scope.style_null_arr = [];
 		$scope.attr_blur_flag = true
+		$scope.own_submitted = true
     let reg = /^\d+(\.\d{1,2})?$/;//小数点后两位
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
     $scope.myng = $scope;

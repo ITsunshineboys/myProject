@@ -18,6 +18,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.shop_logistics = [];//物流模板默认第一项
 	$scope.own_attrs_arr = [];//自己添加的属性数组
 	$scope.attr_blur_flag = true
+	$scope.own_submitted = true
 	$scope.category_id = $stateParams.category_id;//三级分类的id
 	$scope.first_category_title = $stateParams.first_category_title;//一级分类名称
 	$scope.second_category_title = $stateParams.second_category_title;//二级分类名称
@@ -60,8 +61,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 	//风格复选框
 	$scope.style_change = function (status,item) {
-		console.log(status);
-		console.log(item);
 		if(status === true){
 			$scope.style_check_arr.push(item.id)
 		} else {

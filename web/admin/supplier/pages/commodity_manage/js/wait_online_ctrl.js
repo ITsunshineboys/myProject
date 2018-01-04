@@ -8,6 +8,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     $scope.series_down_flag=false;
     $scope.style_null_flag=false;
 		$scope.attr_blur_flag = true
+		$scope.own_submitted = true
     $scope.series_null_arr=[];
     $scope.style_null_arr=[];
 		let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
