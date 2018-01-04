@@ -330,7 +330,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->where(['uid'=>$uid,'type'=>$type,'item'=>1])
             ->asArray()
             ->all();
-        var_dump($effect_earnests);die;
+
 
         $data=[];
         if(!isset($effect_earnests)){
@@ -348,7 +348,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
 
         }
-
+        var_dump($data);die;
         foreach ($data as &$v){
             $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
             $v['style']=$v['series'].'-'.$v['style'];
