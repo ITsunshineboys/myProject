@@ -346,11 +346,11 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 ->where(['e.id'=>$effect_earnest['effect_id']])
                 ->one();
 
+            if($data==false){
+                return [];
+            }
+        }
 
-        }
-        if($data==false){
-            return [];
-        }
         foreach ($data as &$v){
             $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
             $v['style']=$v['series'].'-'.$v['style'];
