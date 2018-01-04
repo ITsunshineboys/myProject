@@ -4358,18 +4358,18 @@ class OrderController extends Controller
         $purchase_price_decoration_company=$OrderGoods->purchase_price_decoration_company;
         $purchase_price_manager=$OrderGoods->purchase_price_manager;
         $purchase_price_designer=$OrderGoods->purchase_price_designer;
-//        $logisticsTemplate=OrderLogisticsTemplate::find()
-//            ->where(['order_no'=>$order_no])
-//            ->andWhere(['sku'=>$sku])
-//            ->asArray()
-//            ->one();
-//        if (!$logisticsTemplate)
-//        {
+        $logisticsTemplate=OrderLogisticsTemplate::find()
+            ->where(['order_no'=>$order_no])
+            ->andWhere(['sku'=>$sku])
+            ->asArray()
+            ->one();
+        if (!$logisticsTemplate)
+        {
             $logisticsTemplate=LogisticsTemplate::find()
                 ->where(['id'=>$Goods->logistics_template_id])
                 ->asArray()
                 ->one();
-//        }
+        }
         $logisticsTemplate['delivery_cost_default']=StringService::formatPrice($logisticsTemplate['delivery_cost_default']*0.01);
         $logisticsTemplate['delivery_cost_delta']=StringService::formatPrice($logisticsTemplate['delivery_cost_delta']*0.01);
         $logisticsDistrict=OrderLogisticsDistrict::find()
