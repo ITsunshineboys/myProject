@@ -208,9 +208,6 @@ offline_edit.controller("offlineedit",function ($rootScope,$scope,$http,$statePa
         if(valid && $scope.item_check.length>=1){
           $scope.ids_arr=[];
           for(let [key,value] of $scope.item_check.entries()){
-            if(value.complete){
-              delete value.complete
-            }
             $scope.ids_arr.push($scope.item_check[key].id)
           }
           console.log($scope.ids_arr);

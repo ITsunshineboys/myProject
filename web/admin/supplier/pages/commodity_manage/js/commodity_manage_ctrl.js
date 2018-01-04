@@ -33,6 +33,16 @@ let commodity_manage = angular.module("commodity_manage", [])
         $scope.show_all = function (m) {
           m === true ? $scope[m] = false : $scope[m] = true;
         };
+	    /*--------------全选---------------------*/
+	    //全选ID数组
+	    $scope.table = {
+		    roles: [],
+	    };
+	    $scope.checkAll = function () {
+		    !$scope.table.roles.length ? $scope.table.roles = $scope.up_list_arr.map(function (item) {
+			    return item.id;
+		    }) : $scope.table.roles.length = 0;
+	    };
         /*分页配置*/
         $scope.wjConfig = {
             showJump: true,
@@ -111,17 +121,6 @@ let commodity_manage = angular.module("commodity_manage", [])
 		    $scope.params.keyword = ''; // 清除搜素值
 		    $scope.down_search_value = '';//清空输入框值
 	    }
-
-        /*--------------全选---------------------*/
-        //全选ID数组
-        $scope.table = {
-            roles: [],
-        };
-        $scope.checkAll = function () {
-            !$scope.table.roles.length ? $scope.table.roles = $scope.up_list_arr.map(function (item) {
-                return item.id;
-            }) : $scope.table.roles.length = 0;
-        };
         /*--------------页面返回，TAB判断--------------------*/
         //已上架
 
