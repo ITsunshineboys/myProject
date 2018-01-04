@@ -1890,6 +1890,7 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return $code;
             }
+
             $title='申请取消订单';
             $content="订单号{$order_no},{$order->goods_name}";
             $code=UserNewsRecord::AddOrderNewRecord($supplier_user,$title,6,$content,$order_no,$sku,self::STATUS_DESC_DETAILS);

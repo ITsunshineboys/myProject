@@ -2240,6 +2240,7 @@ class OrderController extends Controller
             }
         }
 
+
         $supplier=Supplier::find()
             ->where(['uid'=>$user->id])
             ->one();
@@ -2247,7 +2248,8 @@ class OrderController extends Controller
             ->select('id')
             ->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])
             ->one();
-        if (!$supplier ){
+        if (!$supplier )
+        {
             $code=1010;
             return Json::encode([
                 'code' => $code,
@@ -2255,6 +2257,7 @@ class OrderController extends Controller
             ]);
         }
         if(!$order){
+
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -2282,7 +2285,8 @@ class OrderController extends Controller
         }
         $code=GoodsOrder::RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
         if ($code ==200){
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg'  => 'ok',
             ]);

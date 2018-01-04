@@ -1,24 +1,28 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/10/20
- * Time: 9:45
- */
+
 namespace app\models;
+use Yii;
+use yii\db\ActiveRecord;
+class Jpush  extends ActiveRecord
+{
+    const APP_KEY= 'c00134223dd89221dec89314';            //待发送的应用程序(appKey)，只能填一个。
+    const MASTER_SECRET = 'ad4f1b86363e9a9f0fbb65d1';      //主密码
+    const URL = "https://api.jpush.cn/v3/push";            //推送的地址
 
-class Jpush{
-
-    private $app_key = 'c00134223dd89221dec89314';            //待发送的应用程序(appKey)，只能填一个。
-    private $master_secret = 'ad4f1b86363e9a9f0fbb65d1';      //主密码
-    private $url = "https://api.jpush.cn/v3/push";            //推送的地址
-
-    //若实例化的时候传入相应的值则按新的相应值进行
-    public function __construct($app_key=null, $master_secret=null,$url=null) {
-        if ($app_key) $this->app_key = $app_key;
-        if ($master_secret) $this->master_secret = $master_secret;
-        if ($url) $this->url = $url;
-    }
+//    public function __construct($app_key=null, $master_secret=null,$url=null) {
+//        echo 1;die;
+//        if ($app_key)
+//        {
+//            $this->app_key = $app_key;
+//        }
+//        if ($master_secret){
+//            $this->master_secret = $master_secret;
+//        }
+//        if ($url)
+//        {
+//            $this->url = $url;
+//        }
+//    }
 
     /*  $receiver 接收者的信息
         all 字符串 该产品下面的所有用户. 对app_key下的所有用户推送消息
@@ -32,7 +36,8 @@ class Jpush{
         $m_time 保存离线时间的秒数默认为一天(可不传)单位为秒
     */
     public function push($receiver='all', $title='', $content='', $extras, $m_time='86400'){
-        $base64=base64_encode("$this->app_key:$this->master_secret");
+
+        $base64=base64_encode(self::APP_KEY.":".self::MASTER_SECRET);
         $header=array("Authorization:Basic $base64","Content-Type:application/json");
         $data = array();
         $data['platform'] = 'all';          //目标用户终端手机的平台类型android,ios,winphone
@@ -81,8 +86,11 @@ class Jpush{
 
     //推送的Curl方法
     public function push_curl($param="",$header="") {
-        if (empty($param)) { return false; }
-        $postUrl = $this->url;
+        if (empty($param))
+        {
+            return false;
+        }
+        $postUrl = self::URL;
         $curlPost = $param;
         $ch = curl_init();                                      //初始化curl
         curl_setopt($ch, CURLOPT_URL,$postUrl);                 //抓取指定网页
