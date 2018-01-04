@@ -7,6 +7,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     $scope.series_null_flag=false;
     $scope.series_down_flag=false;
     $scope.style_null_flag=false;
+		$scope.attr_blur_flag = true
     $scope.series_null_arr=[];
     $scope.style_null_arr=[];
 		let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
@@ -199,7 +200,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		$scope.own_attrs_arr.splice(index,1);
 	};
 	$scope.del_admin_attrs = function (index) {
-		$scope.goods_input_attrs.splice(index, 1);
+		$scope.merchant_add_attrs.splice(index, 1);
+		console.log($scope.goods_input_attrs)
 	};
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
@@ -217,11 +219,11 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				return item.name==value.name
 			});
 			if(num.length!=1){
-				$scope.own_submitted = true;
-				break;
+				value.own_status = true
 			}else{
-				$scope.own_submitted = false;
+				value.own_status = false
 			}
+			console.log(value)
 		}
 	}
 	//库存
@@ -241,7 +243,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         $scope.upload_dis=true;
         $scope.upload_txt='上传中...';
         Upload.upload({
-            url:baseUrl+'/site/upload',
+            url: '/site/upload',
             data:{'UploadForm[file]':file}
         }).then(function (response) {
             if(!response.data.data){
@@ -272,17 +274,17 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
         $scope.completeUpload = false;
         $scope.upload_img_arr.push(loadingPicUri);
         Upload.upload({
-            url:baseUrl+'/site/upload',
+            url: '/site/upload',
             data:{'UploadForm[file]':file}
         }).then(function (response) {
             $scope.upload_img_arr.pop();
             if(!response.data.data){
                 $scope.img_flag="上传图片格式不正确，请重新上传"
             }else{
-                $scope.completeUpload = true;
                 $scope.img_flag='';
                 $scope.upload_img_arr.push(response.data.data.file_path)
             }
+	        $scope.completeUpload = true;
         },function (error) {
             console.log(error)
             $scope.upload_img_arr.pop();
@@ -363,6 +365,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.edit_confirm=function (valid,error) {
 		// 判断默认属性输入规则是否符合标准
 		for (let [key,value] of $scope.goods_input_attrs.entries()) {
+			console.log(value)
 			if (value.status === true) {
 				$scope.attr_blur_flag = false
 				break
@@ -371,7 +374,27 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			}
 		}
     let description = UE.getEditor('editor').getContent();//富文本编辑器
-		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.own_submitted && !$scope.price_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag){
+		// 判断有无重复属性名
+		let arr=[];
+		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
+		for(let [key,value] of arr.entries()){
+			let num=angular.copy(arr).filter(function (item) {
+				return item.name==value.name
+			});
+			if(num.length!=1){
+				value.own_status = true
+			}else{
+				value.own_status = false
+			}
+			if(value.own_status === true){
+				$scope.own_submitted = false
+				break
+			}else{
+				$scope.own_submitted = true
+			}
+		}
+
+		if(valid && $scope.upload_cover_src &&$scope.logistics_status && $scope.own_submitted && !$scope.price_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票
@@ -450,6 +473,14 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
               $scope.pass_attrs_value.push(value.value);
           }
       }
+			if($scope.merchant_add_attrs[0]!=undefined){
+				for(let[key,value] of $scope.merchant_add_attrs.entries()){
+					console.log(value);
+					$scope.pass_attrs_name.push(value.name);
+					$scope.pass_attrs_value.push(value.value);
+				}
+			}
+
       if($scope.goods_select_attrs[0]!=undefined){
           for(let[key,value] of $scope.goods_select_attrs.entries()){
               $scope.pass_attrs_name.push(value.name);
