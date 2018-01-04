@@ -1121,6 +1121,9 @@ class MallController extends Controller
         $goodsCategory->review_status = (int)Yii::$app->request->post('review_status');
         $goodsCategory->scenario = GoodsCategory::SCENARIO_REVIEW;
         if (!$goodsCategory->validate()) {
+            if (YII_DEBUG) {
+                StringService::writeLog('test', json_encode($goodsCategory->errors), 'category_review');
+            }
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
@@ -1134,8 +1137,6 @@ class MallController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-
 
         return Json::encode([
             'code' => 200,
