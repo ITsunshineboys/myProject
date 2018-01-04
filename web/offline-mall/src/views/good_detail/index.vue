@@ -5,27 +5,25 @@
       <i class="iconfont icon-share"></i>
       <i class="iconfont icon-more"></i>
     </div>
-    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center" :show-desc-mask="false"></swiper>
+    <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
+            :show-desc-mask="false"></swiper>
     <div class="good-detail">
       <goodsTitle :title="good_detail.title" :subtitle="good_detail.subtitle"
-                  :platform_price="good_detail.platform_price" :show_offline="is_offline_goods === '否' ? false:true"></goodsTitle>
+                  :platform_price="good_detail.platform_price"
+                  :show_offline="is_offline_goods === '否' ? false:true"></goodsTitle>
       <divider></divider>
       <group>
         <cell-box is-link class="choose-count" @click.native="show_count = true">
           选择数量
+
+
+
+
         </cell-box>
-        <cell-box is-link>
-          <div class="service">
+        <cell-box is-link @click.native="show_after_service = true">
+          <div class="service" v-for="item in after_sale_services">
             <i class="iconfont icon-checkbox-circle-line"></i>
-            <span>上门退货</span>
-          </div>
-          <div class="service">
-            <i class="iconfont icon-checkbox-circle-line"></i>
-            <span>上门退货</span>
-          </div>
-          <div class="service">
-            <i class="iconfont icon-checkbox-circle-line"></i>
-            <span>上门退货</span>
+            <span>{{item}}</span>
           </div>
         </cell-box>
       </group>
@@ -52,6 +50,17 @@
             <span>1130</span>
             <br/>
             商品数
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -100,6 +109,17 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
           </div>
           <span></span>
           <div>
@@ -126,11 +146,22 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
           </div>
 
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
-          <button type="button"> 进店逛逛</button>
+          <button type="button">进店逛逛</button>
         </flexbox>
       </card>
       <divider></divider>
@@ -165,18 +196,77 @@
       </div>
     </div>
 
+    <!-- 选择数量弹窗 -->
     <popup v-model="show_count">
       <div>
         <group>
-         dsadsadsad
+          <div class="count-top">
+            <div class="count-cover-img">
+              <img :src="good_detail.cover_image" alt="封面图">
+            </div>
+            <div class="count-price-sum">
+              <p>¥{{good_detail.platform_price}}</p>
+              <span>库存{{good_detail.left_number}}件</span>
+            </div>
+            <i class="iconfont icon-close" @click="show_count = false"></i>
+          </div>
+          <group>
+            <x-number title="购买数量" v-model="count" :fillable="true" :max="good_detail.left_number" :min="1"
+                      width="34px"></x-number>
+          </group>
+        </group>
+        <flexbox class="count-bottom-btn">
+          <flexbox-item>
+            加入购物车
+
+
+
+          </flexbox-item>
+          <flexbox-item>
+            立即购买
+
+
+
+          </flexbox-item>
+        </flexbox>
+      </div>
+    </popup>
+
+    <!--售后保障弹窗 -->
+    <popup v-model="show_after_service" height="100%">
+      <div>
+        <group>
+          <div class="after-service">
+            <p>售后</p>
+            <div>
+              <i class="iconfont icon-checkbox-circle-line"></i>
+              <span>上门维修</span>
+              <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+            </div>
+            <div>
+              <i class="iconfont icon-checkbox-circle-line"></i>
+              <span>上门维修</span>
+              <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+            </div>
+          </div>
+          <div class="after-service safe-guard">
+            <p>保障</p>
+            <div>
+              <i class="iconfont icon-checkbox-circle-line"></i>
+              <span>上门维修</span>
+              <p>清代性灵派诗人袁枚说过这么一句话：“读书不知味,不如束高阁;蠢鱼尔何如,终日食糟粕”，意思就是读书如果不能明白其中的道理，还不如束之高阁，那些只会死读书的书呆子们，相当于在吞食无用的糟粕。</p>
+            </div>
+          </div>
+          <div class="after-service-done-btn">完成</div>
         </group>
       </div>
     </popup>
+
   </div>
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup} from 'vux'
+  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
   import goodsTitle from '../good_detail/title'
   import divider from '../good_detail/divider'
   import comment from '../good_detail/comment.vue'
@@ -194,6 +284,7 @@
       Tab,
       TabItem,
       Popup,
+      XNumber,
       goodsTitle,
       divider,
       comment
@@ -203,15 +294,19 @@
         good_detail: {},
         is_offline_goods: '',
         banner_list: [],
-        show_count: false
+        after_sale_services: [],        // 页面售后显示
+        show_count: false,          // 选择数量弹窗
+        show_after_service: false,  // 售后弹窗
+        count: 1                    // 选择数量默认值
       }
     },
     created () {
-      this.axios.get('/mall/goods-view', {id: 65}, (res) => {
+      this.axios.get('/mall/goods-view', {id: 31}, (res) => {
         this.good_detail = res.data.goods_view
         this.is_offline_goods = res.data.goods_view.line_goods.is_offline_goods
+        this.after_sale_services = this.good_detail.after_sale_services.splice(0, 3)
         const imgList = this.good_detail.images
-        console.log(imgList)
+        imgList.splice(0, 0, this.good_detail.cover_image)
         this.banner_list = imgList.map((item) => ({
           img: item
         }))
@@ -237,7 +332,7 @@
   .good-container .guide-icon .iconfont {
     position: absolute;
     top: 32px;
-    z-index: 999;
+    z-index: 200;
     font-size: 15px;
     color: #FFFFFF;
   }
@@ -256,6 +351,10 @@
 
   .good-container .guide-icon .icon-return {
     left: 14px;
+  }
+
+  .good-container .vux-popup-dialog {
+    background: rgba(255, 255, 255, 1);
   }
 
   .good-container .guide-icon .icon-share {
@@ -292,9 +391,14 @@
     color: #222222;
   }
 
+  .good-container .icon-checkbox-circle-line {
+    font-size: 20px;
+  }
+
   .good-container .service span {
     font-size: 16px;
     color: rgba(153, 153, 153, 1);
+    vertical-align: text-top;
   }
 
   .good-container .comment-count {
@@ -472,5 +576,142 @@
     color: rgba(255, 255, 255, 1);
   }
 
+  /*选择数量*/
+  .good-container .count-top {
+    overflow: hidden;
+    padding: 15px 0 10px 14px;
+    border-bottom: 1px solid #E9EDEE;
+  }
+
+  .good-container .count-cover-img {
+    float: left;
+    width: 112px;
+    padding-right: 10px;
+  }
+
+  .good-container .count-cover-img img {
+    width: 88px;
+    height: 88px;
+  }
+
+  .good-container .count-price-sum {
+    float: left;
+  }
+
+  .good-container .count-price-sum p:first-child {
+    font-size: 18px;
+    color: rgba(217, 173, 101, 1);
+    line-height: 18px;
+  }
+
+  .good-container .count-price-sum span:last-child {
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 14px;
+  }
+
+  .good-container .vux-number-selector svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .good-container .vux-number-input {
+    height: 23px;
+    font-size: 14px;
+  }
+
+  .good-container .vux-number-selector {
+    float: left;
+    height: 23px;
+    font-size: 16px;
+    line-height: 0;
+    color: #222;
+    border: 1px solid #ececec;
+  }
+
+  .good-container .vux-number-selector svg {
+    fill: #222;
+  }
+
+  .good-container .count-bottom-btn {
+    height: 49px;
+  }
+
+  .good-container .count-bottom-btn > div {
+    height: 49px;
+    text-align: center;
+    line-height: 49px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .good-container .count-bottom-btn > div:first-child {
+    background: rgba(34, 34, 34, 1);
+  }
+
+  .good-container .count-bottom-btn > div:last-child {
+    background: rgba(217, 173, 101, 1);
+    margin-left: 0 !important;
+  }
+
+  .good-container .icon-close {
+    position: absolute;
+    right: 10px;
+    font-size: 18px;
+    color: #999;
+  }
+
+  /* 售后弹窗 */
+  .good-container .after-service > p {
+    height: 63px;
+    font-size: 18px;
+    color: rgba(102, 102, 102, 1);
+    text-align: center;
+    line-height: 63px;
+    border-bottom: 2px solid #CDD3D7;
+  }
+
+  .good-container .after-service > div {
+    padding: 11px 14px 4px;
+  }
+
+  .good-container .after-service > div .iconfont {
+    color: #222;
+  }
+
+  .good-container .after-service > div span {
+    font-size: 16px;
+    color: rgba(102, 102, 102, 1);
+    line-height: 16px;
+  }
+
+  .good-container .after-service > div p {
+    font-size: 12px;
+    color: rgba(149, 146, 146, 1);
+    line-height: 17px;
+    margin-top: 6px;
+    margin-left: 25px;
+  }
+
+  /* 保障 */
+  .good-container .safe-guard > p {
+    height: 46px;
+    line-height: 46px;
+  }
+
+  .good-container .weui-cells:after {
+    border-bottom: none;
+  }
+
+  .good-container .after-service-done-btn {
+    position: absolute;
+    bottom: 0;
+    height: 48px;
+    line-height:48px;
+    text-align: center;
+    background:rgba(34,34,34,1);
+    font-size:18px;
+    color:rgba(255,255,255,1);
+  }
 
 </style>

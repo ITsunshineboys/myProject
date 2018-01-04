@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import vHeader from '../../components/HeaderSearch'
+  import vHeader from '@/components/HeaderSearch'
 
   export default {
     components: {
@@ -51,10 +51,9 @@
 <style>
   .content {
     position: absolute;
-    top: 10px;
+    top: 56px;
     bottom: 0;
     display: flex;
-    margin-top: 50px;
     width: 100%;
     background-color: #fff;
   }

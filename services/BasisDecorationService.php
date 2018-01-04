@@ -540,71 +540,6 @@ class BasisDecorationService
        return $artificial_fee;
     }
 
-    /**
-     * 木作造型长度计算
-     * @param array $arr
-     * @param array $coefficient_all
-     * @param string $series
-     * @return mixed
-     */
-    public static function  carpentryModellingLength($arr,$series=1)
-    {
-
-        $length = $arr['modelling_length'];
-        $engineering = EngineeringStandardCarpentryCoefficient::find()
-            ->where(['and',['series_or_style'=>0],['coefficient'=>2]])
-            ->asArray()
-            ->all();
-        if ($engineering){
-            foreach ($engineering as $engineering_one) {
-                if( $engineering_one['project'] == $series) {
-                    $series_one = $engineering_one['value']*0.01;
-                }
-            }
-        }
-
-        //造型长度=基本造型长度×系列系数2
-        return $length* $series_one;
-    }
-
-    /**
-     * 造型天数计算公式
-     * @param string $modelling
-     * @param string $day_modelling
-     * @param string $series_all
-     * @param string $style_all
-     * @param int $series
-     * @param int $style
-     * @return float|int
-     */
-    public static function carpentryModellingDay($modelling,$day_modelling,$series =1,$style =1)
-    {
-
-        $series_ = EngineeringStandardCarpentryCoefficient::find()
-            ->where(['and',['series_or_style'=>0],['coefficient'=>1]])
-            ->asArray()
-            ->all();
-        foreach ($series_ as $one_series){
-            if ($one_series['project'] == $series){
-                $series_one = $one_series['value']*0.01;
-            }
-        }
-
-
-        $style_ = EngineeringStandardCarpentryCoefficient::find()
-            ->where(['and',['series_or_style'=>1],['coefficient'=>1]])
-            ->asArray()
-            ->all();
-        foreach ($style_ as $one_style){
-            if ($one_style['project'] == $style){
-                $style_one = $one_style['value']*0.01;
-            }
-        }
-
-//            造型天数=造型长度÷【每天做造型长度】×系列系数1×风格系数1
-        $modelling_day = $modelling / $day_modelling * $series_one * $style_one;
-        return $modelling_day;
-    }
 
     /**
      * 平顶天数计算公式
@@ -2031,9 +1966,10 @@ class BasisDecorationService
      * @param $value
      * @param $value1
      * @param $value2
+     * @param $value3
      * @return int
      */
-    public static function algorithm($int,$value,$value1,$value2 = 1)
+    public static function algorithm($int,$value,$value1,$value2 = 1,$value3 = 1)
     {
         switch ($int){
             case $int == 1:
@@ -2054,6 +1990,14 @@ class BasisDecorationService
                 break;
             case $int == 6:
                 $result = $value / $value1;
+                break;
+            case $int == 7:
+                // 造型长度÷【每天做造型长度】×系列系数1×风格系数1
+                $result = $value / $value1 * $value2 * $value3;
+                break;
+            case $int == 8:
+                // （造型天数+平顶天数）×【工人每天费用】
+                $result = ($value + $value1) * $value2;
                 break;
         }
 

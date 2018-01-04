@@ -12,6 +12,7 @@ use app\models\EditCategory;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\models\EffectPicture;
+use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
@@ -46,12 +47,10 @@ class OwnerController extends Controller
 
     const JUDGE_VALUE = 0;
     const TYPE_VALUE = 1;
-    const WALL_HIGH = 2.8;
     const WALL = 4;
     const WALL_SPACE = 3;
     const DIGITAL = 2;
     const PRICE_UNITS = 100;
-    const DEFAULT_CITY_CODE = 510100;
 
 
     /**
@@ -96,6 +95,8 @@ class OwnerController extends Controller
         'waterway'      => 12, //'水路点位',
         'waterproof'    => 19, //'做工面积',
         'area_ratio'    => 68, //'面积比例',
+        'flat_area'     => 3,  //'平顶面积',
+        'modelling'     => 2,  //'造型长度',
     ];
 
     /**
@@ -106,7 +107,7 @@ class OwnerController extends Controller
         'strong_current'    => 1,//强电id
         'waterway'          => 3,//水路id
         'waterproof'        => 69,// 防水-修改 防水id
-        'carpentry'         => 4,
+        'carpentry'         => 4, // 木作
         'emulsion_varnish'  => '乳胶漆',
         'oil_paint'         => 5,// 油漆 -> 油漆id
         'tiler'             => 6,//泥工 -> 泥工id
@@ -119,38 +120,10 @@ class OwnerController extends Controller
         'strong'    => 29,  // 强电工艺
         'waterway'  => 32,  //'水路工艺',
         'waterproof'=> 35,//'防水工艺',
-        'carpentry'         => '木作工艺',
+        'carpentry' => 37,//'木作工艺',
         'emulsion_varnish'  => '乳胶漆工艺',
         'oil_paint'         => '油漆工艺',
         'tiler'             => '泥工工艺',
-    ];
-
-    /**
-     * 其它信息
-     */
-    const WORKMANSHIP = [
-        'flat_area'                     => '平顶面积',
-        'modelling_length'              => '造型长度',
-        'emulsion_varnish_primer_area'  => '乳胶漆底漆面积',
-        'emulsion_varnish_cover_area'   => '乳胶漆面漆面积',
-        'concave_line_length'           => '阴角线长度',
-        'putty_area'                    => '腻子面积',
-        'protective_layer_length'       => '保护层长度',
-        'geostrophy_area'               => '贴地砖面积',
-        'wall_brick_area'               => '贴墙砖面积',
-    ];
-
-
-    /**
-     * room  detail
-     */
-    const ROOM_DETAIL = [
-        'kitchen' => '厨房',
-        'toilet'  => '卫生间',
-        'hall'    => '客厅',
-//        'bedroom' => '卧室',
-        'master_bedroom' => '主卧',
-        'secondary_bedroom' => '次卧',
     ];
 
     /**
@@ -163,32 +136,19 @@ class OwnerController extends Controller
         'bedroom_area' => 7,//'卧室面积百分比',
         'kitchen_height' => 1,//'厨房防水高度',
         'toilet_height' => 2,//'卫生间防水高度',
+        'modelling' => 9,//'造型长度',
+        'flat_area' => 10,//'平顶面积',
+        'keel_height' => 38,//'1根龙骨做造型长度',
+        'screw_height' => 39,//'1根丝杆做造型长度',
+        'plaster_height' => 40,//'1张石膏板造型长度',
+        'plaster_area' => 41,//'1张石膏板平顶面积',
+        'tv_day' => 42,//'电视墙需要天数',
+        'tv_plaster' => 43,//'电视墙所需石膏板',
+        'keel_area' => 44,//'1根龙骨做平顶面积',
+        'screw_area' => 45,//'1根丝杆做平顶面积',
+        'tv_board' => 46,//'电视墙用细木工板',
     ];
 
-
-
-    const MATERIALS_CLASSIFY = [
-        'auxiliary_material' => '辅材',
-        'principal_material' => '主要材料',
-        'immobilization' => '固定家具',
-        'move' => '移动家具',
-        'home_appliances' => '家电配套',
-        'mild' => '软装配套',
-        'capacity' => '智能配套',
-        'live' => '生活配套',
-    ];
-
-    const AREA_PROPORTION = 68;
-
-    const OTHER_AREA = [
-        'waterproof_area'=> '防水面积',
-        'putty_area'=> '腻子面积',
-        'concave_length'=> '阴角线长度',
-        'latex_paint_area'=> '乳胶漆面积',
-        'wall_area'=> '墙面积',
-        'land_area'=> '地面积',
-        'handyman_day'=> '杂工天数',
-    ];
     /**
      * Actions accessed by logged-in users
      */
@@ -633,44 +593,80 @@ class OwnerController extends Controller
      */
     public function actionCarpentry()
     {
-        $post = \Yii::$app->request->get();
-        $labor_cost = LaborCost::profession($post, self::WORK_CATEGORY['woodworker']);
-        if ($labor_cost){
-            $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
-            foreach ($worker_kind_details as $one_labor) {
-                switch ($one_labor) {
-                    case $one_labor['worker_kind_details'] == self::WORKMANSHIP['flat_area']:
-                        $flat = $one_labor['quantity'];
-                        break;
-                    case $one_labor['worker_kind_details'] == self::WORKMANSHIP['modelling_length']:
-                        $modelling = $one_labor['quantity'];
-                        break;
-                }
+        $get = \Yii::$app->request->get();
+
+        // 人工价格
+        $labor_cost = LaborCost::profession($get['city'],self::WORK_CATEGORY['woodworker']);
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_cost['id']);
+        foreach ($day_workload as $one_day){
+            // 造型长度
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['modelling']){
+                $modelling = $one_day['quantity'];
+            }
+
+            // 平顶面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['flat_area']){
+                $flat_area = $one_day['quantity'];
             }
         }
-        $worker_price = !isset($labor_cost['univalence']) ? $labor_cost['univalence'] : 100;
-        $_flat = !isset($flat) ? $flat :WorkerCraftNorm::CARPENTRY_DAY_FLAT;
-        $_modelling = !isset($modelling) ? $modelling :WorkerCraftNorm::CARPENTRY_DAY_MODELLING;
 
-        $carpentry_add = CarpentryAdd::findByStipulate($post['series'], $post['style']);
-        if ($carpentry_add == null){
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => '木工添加项不能为空',
-            ]);
+
+        $ProjectView = ProjectView::findByAll('id,project,project_value',['points_id'=>self::PROJECT_DETAILS['carpentry']]);
+        foreach ($ProjectView as $one_view){
+            // 造型长度
+            if ($one_view['id'] == self::ROOM['modelling']){
+                $defaults_modelling = $one_view['project_value'];
+            }
+
+            // 平顶面积
+            if ($one_view['id'] == self::ROOM['flat_area']){
+                $defaults_flat_area = $one_view['project_value'];
+            }
         }
 
-        // 造型长度 //造型天数 //平顶天数
-        $modelling_length = BasisDecorationService::carpentryModellingLength($carpentry_add,$post['series']);
-        $modelling_day = BasisDecorationService::carpentryModellingDay($modelling_length,$_modelling,$post['series'],$post['style']);
-        $flat_day = BasisDecorationService::flatDay($carpentry_add, $_flat,$post['series'],$post['style']);
+        // 系列系数 风格系数 查询
+        $coefficient = EngineeringStandardCarpentryCoefficient::findByAll(['and',['city_code'=>$get['city']],['project'=>$get['series']],['project'=>$get['style']]]);
+        foreach ($coefficient as $one_){
+            // 系列系数2
+            if ($one_['series_or_style'] == 0 && $one_['coefficient'] == 2 && $one_['project'] == $get['series']){
+                $coefficient2 = $one_['value'];
+            }
+            // 系列系数1
+            if ($one_['series_or_style'] == 0 && $one_['coefficient'] == 1 && $one_['project'] == $get['series']){
+                $coefficient1 = $one_['value'];
+            }
 
+            // 风格系数1
+            if ($one_['series_or_style'] == 1 && $one_['coefficient'] == 1 && $one_['project'] == $get['style']){
+                $coefficient3 = $one_['value'];
+            }
+
+            // 系列系数3
+            if ($one_['series_or_style'] == 0 && $one_['coefficient'] == 3 && $one_['project'] == $get['series']){
+                $coefficient4 = $one_['value'];
+            }
+
+            // 风格系数2
+            if ($one_['series_or_style'] == 1 && $one_['coefficient'] == 2 && $one_['project'] == $get['style']){
+                $coefficient5 = $one_['value'];
+            }
+        }
+
+
+
+        //造型长度  平顶面积
+        $modelling_length = BasisDecorationService::algorithm(1,$defaults_modelling,$coefficient2);
+        $flat_area_ = $defaults_flat_area;
+
+        //造型天数 造型长度÷【每天做造型长度】×系列系数1×风格系数1    //平顶天数  平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
+        $modelling_day = ceil(BasisDecorationService::algorithm(7,$modelling_length,$modelling,$coefficient1,$coefficient3));
+        $flat_area_day = ceil(BasisDecorationService::algorithm(7,$flat_area_,$flat_area,$coefficient4,$coefficient5));
 
 
         //人工费
-        $labour_charges['price'] = BasisDecorationService::carpentryLabor($modelling_day, $flat_day, 1,$worker_price);
-        $labour_charges['worker_kind'] = $labor_cost['worker_kind'];
+        $labour_charges['price'] = BasisDecorationService::algorithm(8,$modelling_day,$flat_area_day,$labor_cost['univalence']);
+        $labour_charges['worker_kind'] = $labor_cost['worker_name'];
+
 
         //材料
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CARPENTRY_MATERIAL);
@@ -686,19 +682,58 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-//        $judge = BasisDecorationService::priceConversion($goods);
-        $goods_price = BasisDecorationService::judge($goods, $post);
+        $goods_price = BasisDecorationService::judge($goods,$get);
 
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['carpentry'], $post['city']);
-        if ($craft == null){
-            $code = 1059;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        $craft = WorkerType::craft(self::CRAFT_NAME['carpentry'],$get['city']);
+        foreach ($craft as $one_craft){
+            switch ($one_craft){
+                case  $one_craft['id'] == self::ROOM['keel_height']:
+                    //1根龙骨做造型长度
+                    $keel_height = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['keel_area']:
+                    //1根龙骨做平顶面积
+                    $keel_area = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['screw_height']:
+                    //1根丝杆做造型长度
+                    $screw_height = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['screw_area']:
+                    //1根丝杆做平顶面积
+                    $screw_area = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['plaster_height']:
+                    //1张石膏板做造型长度
+                    $plaster_height = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['plaster_area']:
+                    //1张石膏板做平顶面积
+                    $plaster_area = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['tv_day']:
+                    //电视墙需要天数
+                    $tv_day = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['tv_plaster']:
+                    //电视墙需要石膏板
+                    $tv_plaster = $one_craft['material'];
+                    break;
+                case  $one_craft['id'] == self::ROOM['tv_board']:
+                    //电视墙需要细木工板
+                    $tv_board = $one_craft['material'];
+                    break;
+            }
         }
+
+        // 商品属性  石膏板   龙骨 丝杆 木工板
+        $plaster_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['plasterboard'],'面积');
+        $keel_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['keel'],'长度');
+        $screw_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['lead_screw'],'长度');
+        $board_attr = BasisDecorationService::goodsAttr($goods_price,BasisDecorationService::goodsNames()['slab'],'长度');
+
 
         //石膏板费用
         $plasterboard_cost = BasisDecorationService::carpentryPlasterboardCost($modelling_length, $carpentry_add['flat_area'], $goods_price, $craft);

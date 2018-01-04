@@ -393,8 +393,7 @@
   }
   /*购买协议*/
   .agreement-box{
-    margin-bottom: 48px;
-    padding: 14px
+    padding: 14px 14px 62px 14px;
   }
   .agreement-box > input {
     width: 12px;

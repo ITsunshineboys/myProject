@@ -3,6 +3,16 @@ body, html {
   height: 100%;
 }
 
+body:before,
+body:after {
+  content: " ";
+  display: table;
+}
+
+body:after {
+  clear: both;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -36,3 +46,23 @@ body, html {
 #app .vux-header .vux-header-right .iconfont {
   padding: 5px;
 }
+
+/* sort start */
+.sort {
+  display: inline-block;
+  margin-left: -5px;
+  margin-top: -2px;
+  line-height: 8px;
+  color: #999;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.sort > span {
+  display: block;
+}
+
+.sort .active {
+  color: #222;
+}
+/* sort end */

@@ -1759,7 +1759,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if (isset($data['balance'])) {
-            $data['balance'] = $data['availableamount']/100;
+            $data['balance'] = StringService::formatPrice($data['availableamount']/100);
             unset( $data['availableamount']);
         }
 

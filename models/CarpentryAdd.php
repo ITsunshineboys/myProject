@@ -18,18 +18,17 @@ class CarpentryAdd extends ActiveRecord
         return 'carpentry_add';
     }
 
-    public static function findByStipulate($series = '',$style = '',$province = '四川',$city = '成都')
+    public static function findById($id,$code)
     {
-        $inquire_result = [];
-        $carpentry_add_all = self::find()->where(['and',['province'=>$province],['city'=>$city],['series_id'=>$series],['style_id'=>$style]])->all();
-        foreach ($carpentry_add_all as $carpentry_add_one)
-        {
-            if($carpentry_add_one['project'] == '造型长度'){
-                $inquire_result ['modelling_length']  = $carpentry_add_one['standard'];
-            }elseif ($carpentry_add_one['project'] == '平顶面积') {
-                $inquire_result ['flat_area'] = $carpentry_add_one['standard'];
-            }
-        }
-        return $inquire_result;
+        $select = 'carpentry_add.standard,wt.worker_name';
+        $rows = self::find()
+            ->select($select)
+            ->leftJoin('worker_type as wt','wt.id = carpentry_add.worker_type_id')
+            ->where(['in','worker_type_id',$id])
+            ->andWhere(['city_code'=>$code])
+            ->asArray()
+            ->all();
+
+        return $rows;
     }
 }

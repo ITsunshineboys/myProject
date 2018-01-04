@@ -922,12 +922,14 @@ class QuoteController extends Controller
     {
         $plot_id= (int)\Yii::$app->request->get('plot_id','');
         $public_message = [];
+        $topnymy_datas=EffectToponymy::find()->where(['id'=>$plot_id])->asArray()->one();
+
         $data= EffectToponymy::PlotView($plot_id);
 
-        $public_message['street'] =  $data[0]['street'];
-        $public_message['toponymy'] =  $data[0]['toponymy'];
-        $public_message['district_code'] =  $data[0]['district_code'];
-        $public_message['district'] = $data[0]['district'];
+        $public_message['street'] =  $topnymy_datas['street'];
+        $public_message['toponymy'] =  $topnymy_datas['toponymy'];
+        $public_message['district_code'] =  $topnymy_datas['district_code'];
+        $public_message['district'] = District::findByCode($topnymy_datas['district_code'])['name'];
         $public_message['effect']=$data;
         $id=[];
         foreach ($data as $one_effect){
@@ -1636,7 +1638,7 @@ class QuoteController extends Controller
     public function actionPlotEdit()
     {
         $request = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity();
+
         $province_chinese = District::findByCode($request['province_code']);
         $city_chinese = District::findByCode($request['city_code']);
         $district_chinese = District::findByCode($request['cur_county_id']['id']);
@@ -2095,7 +2097,6 @@ class QuoteController extends Controller
      */
     public function actionHomepageList(){
         $request = \Yii::$app->request;
-//        $province_code = trim($request->get('province',''));
         $district_code = trim($request->get('city_code',''));
 
         $brainpower =BrainpowerInitalSupervise::codeStatus($district_code);
@@ -2145,7 +2146,6 @@ class QuoteController extends Controller
     public function actionHomepageDistrict()
     {
         $request = \Yii::$app->request;
-//        $province_code = trim($request->get('province',''));
         $city_code = trim($request->get('city',''));
         $code = 200;
 

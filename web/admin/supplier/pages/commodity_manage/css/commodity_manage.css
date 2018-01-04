@@ -46,9 +46,6 @@
   text-overflow: ellipsis;
 }
 
-.blue{
-  color: #5677FC;
-}
 .td_size{
   width:100px;/*要显示文字的宽度*/
   overflow:hidden; /*超出的部分隐藏起来。*/
@@ -61,15 +58,7 @@
   white-space:nowrap;/*不显示的地方用省略号...代替*/
   text-overflow:ellipsis;/* 支持 IE */
 }
-.sky_blue{
-  color: #03A9F4;
-}
-.green{
-  color: #8BC34A;
-}
-.red{
-  color:red;
-}
+
 .img_size{
   height:20px;
   width: 10px;

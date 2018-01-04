@@ -85,7 +85,7 @@ class OrderAfterSale extends ActiveRecord
             return $code;
         }
         $GoodsOrder=GoodsOrder::find()
-            ->select('user_id,pay_status')
+            ->select('user_id,pay_status,supplier_id')
             ->where(['order_no'=>$postData['order_no']])
             ->one();
         if (!$GoodsOrder)
@@ -107,7 +107,8 @@ class OrderAfterSale extends ActiveRecord
             if (
                 $OrderGoods->order_status !=1
                 || $GoodsOrder->pay_status !=1
-            ){
+            )
+            {
                 $code=1036;
                 return $code;
             }

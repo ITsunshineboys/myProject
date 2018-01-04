@@ -11,14 +11,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/': {
-        target: 'http://test.cdlhzz.cn/',//设置你调用的接口域名和端口号 别忘了加http
+        target: 'http://test.cdlhzz.cn/', // 设置你调用的接口域名和端口号 别忘了加http
         // changeOrigin: true,
         // pathRewrite: {
         //   '^/api': '/'
         // }
-        secure:false
-       }
-      },
+        secure: false
+      }
+    },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
@@ -53,7 +53,7 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false,
+    cssSourceMap: false
   },
 
   build: {

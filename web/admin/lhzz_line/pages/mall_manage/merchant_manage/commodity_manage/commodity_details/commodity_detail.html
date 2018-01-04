@@ -184,23 +184,23 @@
 
         <div class="margin_top">
             <span>是否是线下商品</span>
-            <span class="margin_left" ng-bind="good_detail.is_offline_goods"></span>
+            <span class="margin_left" ng-bind="good_detail.line_goods.is_offline_goods"></span>
         </div>
 
-        <div ng-if="good_detail.is_offline_goods=='是'">
+        <div ng-if="good_detail.line_goods.is_offline_goods=='是'">
             <div class="margin_top">
                 <span>线下店名称</span>
-                <span class="margin_left" ng-bind="good_detail.line_supplier_name"></span>
+                <span class="margin_left" ng-bind="good_detail.line_goods.line_supplier_name"></span>
             </div>
 
             <div class="margin_top">
                 <span>线下店地址</span>
-                <span class="margin_left" ng-bind="good_detail.line_district"></span>
+                <span class="margin_left" ng-bind="good_detail.line_goods.line_district"></span>
             </div>
 
             <div class="margin_top">
                 <span>电话</span>
-                <span class="margin_left" ng-bind="good_detail.line_mobile"></span>
+                <span class="margin_left" ng-bind="good_detail.line_goods.line_mobile"></span>
             </div>
         </div>
 

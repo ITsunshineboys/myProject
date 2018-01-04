@@ -456,7 +456,7 @@ class GoodsOrder extends ActiveRecord
             $orderGoodsdescription->order_no=$post['out_trade_no'];
             $orderGoodsdescription->sku=$goods['sku'];
             $orderGoodsdescription->description=$goods['description'];
-            if (!$orderGoodsdescription)
+            if (!$orderGoodsdescription->save(false))
             {
                 $tran->rollBack();
                 return false;
@@ -511,7 +511,6 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $goods_order=new self();
             $goods_order->order_no=$order_no;
             $goods_order->amount_order=$msg['total_fee'];
@@ -700,7 +699,6 @@ class GoodsOrder extends ActiveRecord
                 foreach ( $goodsAttr as &$attr)
                 {
                     $orderGoodsAttr=new OrderGoodsAttr();
-
                     $orderGoodsAttr->order_no=$order_no;
                     $orderGoodsAttr->sku=$goods['sku'];
                     $orderGoodsAttr->name=$attr->name;
@@ -761,13 +759,14 @@ class GoodsOrder extends ActiveRecord
             $orderGoodsDescription->order_no=$order_no;
             $orderGoodsDescription->sku=$goods['sku'];
             $orderGoodsDescription->description=$goods['description'];
-            if (!$orderGoodsDescription)
+            if (!$orderGoodsDescription->save(false))
             {
                 $tran->rollBack();
                 return false;
             }
             $tran->commit();
-        }catch (\Exception $e) {
+        }catch (\Exception $e)
+        {
             $tran->rollBack();
             return false;
         }
@@ -1881,7 +1880,6 @@ class GoodsOrder extends ActiveRecord
 //                        ->andWhere(['order_type'=>$shipping_status])
 //                        ->one();
                     break;
-
                 case 1:
                     $shipping_status=self::ORDER_TYPE_UNRECEIVED;
 
@@ -1892,6 +1890,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
                 ->andWhere(['order_type'=>$shipping_status])
+//                ->orFilterWhere(['handle'=>0])
                 ->one();
             $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
             $res2=$order->save(false);
@@ -2930,9 +2929,15 @@ class GoodsOrder extends ActiveRecord
             $output['status_code'] = $arr[0]['status_code'];
             $output['status_desc'] = $arr[0]['status_desc'];
             $output['buyer_message'] = $arr[0]['buyer_message'];
-            $output['pay_name'] = $arr[0]['pay_name'];
+            if ( $arr[0]['status_type'] ==1)
+            {
+                $output['pay_name'] = '在线支付';
+            }else{
+                $output['pay_name'] = $arr[0]['pay_name'];
+            }
             $output['create_time'] = $arr[0]['create_time'];
             $output['paytime'] = date('Y-m-d H:i', $arr[0]['paytime']);
+
             $output['pay_term'] = $arr[0]['pay_term'];
             $output['freight'] = StringService::formatPrice($freight);
             $output['original_price'] = StringService::formatPrice($market_price * $arr[0]['goods_number']);
