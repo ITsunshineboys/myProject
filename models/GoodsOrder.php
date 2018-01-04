@@ -3106,8 +3106,8 @@ class GoodsOrder extends ActiveRecord
                 {
                   return [
                         'refund_status'=>2,
-                        'apply_refund_time'=>date('Y-m-d H:i',$refund_unreceived->create_time),
-                        'apply_refund_reason'=>$refund_unreceived->apply_reason,
+                        'apply_refund_time'=>'',
+                        'apply_refund_reason'=>'',
                   ];
                 }
 

@@ -49,7 +49,7 @@ class OrderSeries extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param $style_id
+     * @param $series_id
      * @param $order_no
      * @param $sku
      * @return int
