@@ -58,6 +58,7 @@ class EffectToponymy extends \yii\db\ActiveRecord
            $effect_datas = Effect::find()
                ->where(['id'=>$effect_id])
                ->asArray()
+               ->orderBy('sort_id as ASC')
                ->one();
             $data[]=$effect_datas;
         }
