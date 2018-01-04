@@ -348,6 +348,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
 
         }
+        var_dump($data);die;
         if(!$data){
             $data=[];
         }
