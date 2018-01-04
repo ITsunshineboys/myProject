@@ -293,6 +293,7 @@ class Supplier extends ActiveRecord
 
             $user->refresh();
             if (!empty($attrs['identity_no'])) {
+                $identityNoOld = $user->identity_no;
                 $user->legal_person = isset($attrs['legal_person']) ? trim($attrs['legal_person']) : '';
                 $user->identity_no = isset($attrs['identity_no']) ? trim($attrs['identity_no']) : '';
                 $user->identity_card_front_image = isset($attrs['identity_card_front_image'])
@@ -309,7 +310,7 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
-                if (User::checkIdentityAuthorized($user->identity_no)) {
+                if ($identityNoOld != $user->identity_no && User::checkIdentityExisting($user->identity_no)) {
                     $transaction->rollBack();
 
                     $code = 1038;
