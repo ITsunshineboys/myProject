@@ -9,7 +9,7 @@
         </ul>
     </div>
 <!--已上架开始-->
-    <section ng-show="on_flag==true">
+    <section ng-if="on_flag==true">
         <div class="form-inline clearfix operating_div">
             <button class="btn btn-default"  ng-click="checkAll()">全选</button>
             <button class="btn btn-default btn_left" data-toggle="modal" data-target="#{{on_modal_v}}" ng-click="batch_down_shelves()">下架</button>
@@ -77,7 +77,7 @@
 
 
 <!--已下架 开始-->
-    <section ng-show="down_flag==true">
+    <section ng-if="down_flag==true">
         <div class="form-inline clearfix operating_div">
             <button class="btn btn-default" ui-sref="add_brand"><i class="iconfont icon-add"></i> 添加</button>
             <button class="btn btn-default btn_left" ng-click="checkAll()">全选</button>
@@ -200,7 +200,7 @@
 <!--已下架结束-->
 
 <!--品牌审核内容 开始-->
-    <section ng-show="check_flag==true">
+    <section ng-if="check_flag==true">
         <div class="search form-inline clearfix">
             <!--申请-->
             <div class="form-group pull-left">
@@ -255,7 +255,6 @@
                 <td ng-show="item.review_status!='0'">&nbsp;</td>
             </tr>
             </tbody>
-
         </table>
         <!--分页-->
         <tm-pagination conf="brand_Config"></tm-pagination>

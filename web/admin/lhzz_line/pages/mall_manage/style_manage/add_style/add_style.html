@@ -43,12 +43,12 @@
             <span class="glyphicon glyphicon-asterisk red_mark"></span>
             <span>风格效果图</span>
           </div>
-            <div class="col-sm-10 control-label pic_right">
+            <div class="col-sm-10 control-label">
                 <div class="img_list" ng-repeat="item in upload_img_arr">
                     <img ng-src="{{ item}}" class="logo">
                     <div class="img_times" ng-click="del_img(item)">&times;</div>
                 </div>
-                <img ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/mall_manage/style_manage/add_style/image/plus.png" alt="" id="logo">
+                <img class="logo" ng-if="upload_img_arr.length!=5" ngf-pattern="image/*" ng-change="upload(data.file)"  ngf-select="" ngf-multiple="false" ng-model="data.file" src="pages/mall_manage/style_manage/add_style/image/plus.png">
                 <p class="img_txt more_txt" >图片大小694×400，5M内，可上传5张图片，支持JPG、PNG、JPEG</p>
                 <p class="red_mark warning" ng-if="!!img_flag">
                     <span class="glyphicon glyphicon-asterisk red_mark"></span>

@@ -12,6 +12,9 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     /*品牌审核开始*/
     $scope.on_shelves_list=[];
     $scope.down_shelves_list=[];
+    $scope.on_flag = true
+    $scope.down_flag = false
+    $scope.check_flag = false
     $scope.firstclass=[]; //一级分类
     $scope.brand_review_list=[];//列表循环数组
     $scope.types=[];//品牌使用审核
@@ -34,7 +37,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
         'sort[]':'online_time:3'
     };
     let tablePages=function () {
-        $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
+      $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/brand-list-admin',$scope.params,function (res) {
             console.log(res);
             if($scope.on_flag==true){  //--------------已上架
@@ -314,14 +317,23 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
             brand_Pages();
         }
     };
+    $scope.brand_params = {
+      page: 1,                        // 当前页数
+      review_status:'-1',           //状态 -1：全部，0: 待审核，1: 审核不通过，2: 审核通过
+      start_time:'',
+      end_time:'',
+      'sort[]':'create_time:3',
+      keyword: '',
+    };
     let brand_Pages=function () {
-        $scope.brand_params.page=$scope.brand_Config.currentPage;//点击页数，传对应的参数
-        _ajax.get('/mall/brand-application-review-list',$scope.brand_params,function (res) {
+      console.log($scope.brand_Config.currentPage);
+       $scope.brand_params.page=$scope.brand_Config.currentPage;//点击页数，传对应的参数
+      _ajax.get('/mall/brand-application-review-list',$scope.brand_params,function (res) {
           console.log(res);
           $scope.brand_review_list=res.data.brand_application_review_list.details;
           $scope.brand_Config.totalItems = res.data.brand_application_review_list.total;
           if($scope.brand_params.review_status=='0'||$scope.brand_params.review_status=='-1'){
-            $scope.application_num=null;
+            $scope.application_num=0;
             for(let[key,value] of res.data.brand_application_review_list.details.entries()){
               if(value.review_status==0){
                 $scope.application_num++;
@@ -329,14 +341,6 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
             }
           }
         });
-    };
-    $scope.brand_params = {
-        page: 1,                        // 当前页数
-        review_status:'-1',           //状态 -1：全部，0: 待审核，1: 审核不通过，2: 审核通过
-        start_time:'',
-        end_time:'',
-        'sort[]':'create_time:3',
-        keyword: '',
     };
 
   //获取审核类型
