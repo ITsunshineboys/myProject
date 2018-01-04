@@ -753,80 +753,69 @@ class BasisDecorationService
 
     /**
      * 乳胶漆面积计算公式
-     * @param array $area
-     * @param string $house_area
-     * @param string $bedroom
-     * @param float $tall
+     * @param $ratio
+     * @param $area
+     * @param $tall
+     * @param $value
      * @param int $wall
-     * @return array|string
+     * @return array
      */
-    public static function paintedArea($area,$house_area ,$bedroom ,$tall= 2.8,$wall = 4)
+    public static function paintedArea($ratio,$area,$tall,$value,$wall = 4)
     {
 //        卧室地面积：【z】%×（房屋面积）
-            $ground_area = $area * ($house_area / 100);
+        $ground_area = self::algorithm(1,$ratio,$area);
 //        卧室墙面积：（卧室地面积÷卧室个数）开平方×【1.8m】×4 ×卧室个数
-            $wall_space_area =  sqrt($ground_area / $bedroom) * $tall * $wall * $bedroom;
+        $sqrt = sqrt(self::algorithm(6,$ground_area,$value));
+        $wall_area = self::algorithm(9,$sqrt,$tall,$wall,$value);
+
 //        卧室底漆面积=卧室地面积+卧室墙面积
-            $total_area = round($ground_area + $wall_space_area,2);
+        $total_area = round(self::algorithm(3,$ground_area,$wall_area),2);
         return [$total_area,$ground_area];
     }
 
     /**
      * 乳胶漆周长计算公式
-     * @param array $area
-     * @param string $house_area
-     * @param string $bedroom
+     * @param $area
+     * @param $value
      * @param int $wall
-     * @return float|string
+     * @return int
      */
-    public  static function paintedPerimeter($area,$house_area,$bedroom ,$wall = 4)
+    public  static function paintedPerimeter($area,$value,$wall = 4)
     {
+  //      （卧室地面积÷卧室个数）开平方×4×卧室个数
+        $sqrt = self::algorithm(6,$area,$value);
+        $v = self::algorithm(10,$sqrt,$wall,$value);
 
-//        卧室地面积：【z】%×（房屋面积）
-            $ground_area =  $area * ($house_area / 100);
-//        卧室周长：（卧室地面积÷卧室个数）开平方×4×卧室个数
-            $wall_space_perimeter = sqrt($ground_area / $bedroom) * $wall * $bedroom;
-
-        return $wall_space_perimeter;
+        return $v;
     }
 
     /**
-     * 乳胶漆 费用计算公式
-     * @param array $goods
-     * @param array $crafts
-     * @param array $area
-     * @return int
+     * 乳胶漆计算公式
+     * @param $int
+     * @param $area
+     * @param $craft
+     * @param $goods
+     * @return mixed
      */
-    public static function paintedCost($goods,$craft,$area)
+    public static function paintedCost($int,$area,$craft,$goods)
     {
-        $goods_value = GoodsAttr::findByGoodsIdUnit($goods['id']);
-        if ($goods_value == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $goods_value_one = '';
-        foreach ($goods_value as $value) {
-            if ($goods['title'] == self::goodsNames()['concave_line']) {
-                if ($value['name'] == self::UNITS['length'] && $value['title'] == self::goodsNames()['concave_line']) {
-                    $goods_value_one = $value['value'];
-                } elseif($value['name'] !== self::UNITS['texture']) {
-                    $goods_value_one = $value['value'];
-                }
-            } else {
-                $goods_value_one = $value['value'];
-            }
+        switch ($int){
+            case $int == 1:
+                $value ['quantity'] = ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
+                $value ['cost'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['platform_price']),2);
+                $value ['procurement'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+            case $int == 2:
+                $value ['quantity'] = ceil(self::algorithm(4,$craft,$area,$goods[1]['value']));
+                $value ['cost'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['platform_price']),2);
+                $value ['procurement'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['purchase_price_decoration_company']),2);
         }
 
-//        个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
-        $putty_cost ['quantity'] = ceil($area * $craft['material'] / $goods_value_one);
+        $goods[0]['quantity'] = $value ['quantity'];
+        $goods[0]['cost'] = $value ['cost'];
+        $goods[0]['procurement'] = $value ['procurement'];
 
-//        腻子费用：个数×商品价格
-        $putty_cost ['cost']  =  round($putty_cost['quantity'] * $goods['platform_price'],2);
-        $putty_cost ['procurement']  = round($putty_cost['quantity'] * $goods['purchase_price_decoration_company'],2);
-        return $putty_cost;
+        return $goods[0];
     }
 
     /**
@@ -1972,6 +1961,13 @@ class BasisDecorationService
             case $int == 8:
                 // （造型天数+平顶天数）×【工人每天费用】
                 $result = ($value + $value1) * $value2;
+                break;
+            case $int == 9:
+                // （造型天数+平顶天数）×【工人每天费用】
+                $result = $value * $value1 * $value2 * $value3;
+                break;
+            case $int == 10:
+                $result = $value * $value1 * $value2;
                 break;
         }
 

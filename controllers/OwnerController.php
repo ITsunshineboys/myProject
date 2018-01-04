@@ -80,7 +80,7 @@ class OwnerController extends Controller
         'plumber'    => 9,  // 水电工id
         'waterproof' => 18,  // 防水工id
         'woodworker' => 1,  // 木工id
-        'painters'   => 4,  // 油漆工id
+        'painters'   => 13,  // 油漆工id
         'mason'      => 5,  // 泥瓦工id
         'backman'    => 6,  // 杂工id
 //        'backman_'          => '泥工',
@@ -97,6 +97,10 @@ class OwnerController extends Controller
         'area_ratio'    => 68, //'面积比例',
         'flat_area'     => 3,  //'平顶面积',
         'modelling'     => 2,  //'造型长度',
+        'undercoat'     => 14,  //'乳胶漆底漆面积',
+        'finishing_coat'=> 15,  //'乳胶漆面漆面积',
+        'putty'         => 16,  //'腻子面积',
+        'thread'        => 17,  //'阴角线长度',
     ];
 
     /**
@@ -119,10 +123,10 @@ class OwnerController extends Controller
         'weak'      => 25,  // 弱电工艺
         'strong'    => 29,  // 强电工艺
         'waterway'  => 32,  //'水路工艺',
-        'waterproof'=> 35,//'防水工艺',
-        'carpentry' => 37,//'木作工艺',
-        'emulsion_varnish'  => '乳胶漆工艺',
-        'oil_paint'         => '油漆工艺',
+        'waterproof'=> 35,  //'防水工艺',
+        'carpentry' => 37,  //'木作工艺',
+//        'emulsion_varnish'  => '乳胶漆工艺',
+        'oil_paint' => 47,  //'油漆工艺',
         'tiler'             => '泥工工艺',
     ];
 
@@ -147,6 +151,12 @@ class OwnerController extends Controller
         'keel_area' => 44,//'1根龙骨做平顶面积',
         'screw_area' => 45,//'1根丝杆做平顶面积',
         'tv_board' => 46,//'电视墙用细木工板',
+        'putty' => 48,//'1平方腻子用量',
+        'undercoat' => 49,//'1平方乳胶漆底漆',
+        'finishing' => 50,//'1平方乳胶漆面漆',
+        'wire' => 51,//'1米阴角线用量',
+        'land' => 52,//'1平方石膏粉费用',
+
     ];
 
     /**
@@ -762,234 +772,159 @@ class OwnerController extends Controller
      */
     public function actionCoating()
     {
-        $post = \Yii::$app->request->get();
+        $get = \Yii::$app->request->get();
         //工人一天单价
-        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['painters']);
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
-
-        foreach ($worker_kind_details as $_labor_cost) {
-            switch ($_labor_cost) {
-                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_primer_area']:
-                    $primer = $_labor_cost['quantity'];
-                    break;
-                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['emulsion_varnish_cover_area']:
-                    $finishing_coat = $_labor_cost['quantity'];
-                    break;
-                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['concave_line_length']:
-                    $concave_line = $_labor_cost['quantity'];
-                    break;
-                case $_labor_cost['worker_kind_details'] == self::WORKMANSHIP['putty_area']:
-                    $putty = $_labor_cost['quantity'];
-                    break;
+        $labor_costs = LaborCost::profession($get['city'], self::WORK_CATEGORY['painters']);
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+        foreach ($day_workload as $one_day){
+            // 乳胶漆底漆面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['undercoat']){
+                $undercoat = $one_day['quantity'];
+            }
+            // 乳胶漆面漆面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['finishing_coat']){
+                $finishing_coat = $one_day['quantity'];
+            }
+            // 腻子面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['putty']){
+                $putty = $one_day['quantity'];
+            }
+            // 阴角线长度
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['thread']){
+                $thread = $one_day['quantity'];
             }
         }
+
 
         // 面积比例
-        $points_where = ['id'=>self::AREA_PROPORTION];
-        $points = Points::findByOne([],$points_where);
-        if ($points == null){
-            $code = 1058;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $proportion_where = ['points_id'=>$points['id']];
-        $proportion = ProjectView::findByAll([],$proportion_where);
-        if ($proportion == null){
-            $code = 1060;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($proportion as $one_proportion){
-            if ($one_proportion['project'] == self::ROOM_AREA['hall_area']){
-                $hall_area = $one_proportion;
+        $where = ['points_id'=>self::POINTS_CATEGORY['area_ratio']];
+        $ratio = ProjectView::findById($where,10000);
+        foreach ($ratio as $value){
+            // 客厅百分比
+            if ($value['id'] == self::ROOM['hall_area']){
+                $hall_area = $value['project_value'];
             }
-            if ($one_proportion['project'] == self::ROOM_AREA['bedroom_area']){
-                $bedroom_area = $one_proportion;
+            // 卧室百分比
+            if ($value['id'] == self::ROOM['bedroom_area']){
+                $bedroom_area = $value['project_value'];
             }
         }
 
-        //卧室底漆面积
-        $bedroom_primer_area = BasisDecorationService::paintedArea($post['area'],$bedroom_area['project_value'],$post['bedroom'],self::WALL_HIGH,self::WALL);
+
+        //卧室底漆面积   客餐厅底漆面积
+        $bedroom_primer_area = BasisDecorationService::paintedArea($bedroom_area,$get['area'],$get['high'],$get['bedroom'],4);
+        $hall_primer_area = BasisDecorationService::paintedArea($hall_area,$get['area'],$get['high'],$get['hall'],3);
 
 
-        //客餐厅底漆面积
-        $drawing_room_primer_area = BasisDecorationService::paintedArea($post['area'],$hall_area['project_value'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
-
-
-        $points = Points::findByOne('id,title',"id = 5");
-        $latex_paint_area = Apartment::find()
-            ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>'其他乳胶漆面积'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-//        乳胶漆底漆面积：卧室底漆面积+客厅底漆面积+餐厅底漆面积+其它面积1
-        $primer_area = $bedroom_primer_area[0] + $drawing_room_primer_area[0] + $latex_paint_area['project_value'];
-//        乳胶漆底漆天数：乳胶漆底漆面积÷【每天做乳胶漆底漆面积】
-        $primer_day = $primer_area / $primer;
-
-
-        //乳胶漆面漆面积
-        $finishing_coat_area = $primer_area * self::DIGITAL;
-//        乳胶漆面漆天数：乳胶漆面漆面积÷【每天做乳胶漆面漆面积】
-        $finishing_coat_day = $finishing_coat_area / $finishing_coat;
-
-//        卧室周长
-        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter( $post['area'],$bedroom_area['project_value'],$post['bedroom'], self::WALL);
-//        客厅周长
-        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($post['area'],$hall_area['project_value'],$post['hall'], self::WALL_SPACE);
-//        阴角线长度
-        $concave_length = Apartment::find()
-            ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=> '其他阴角线长度'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-        $concave_line_length = $bedroom_primer_perimeter + $drawing_room_perimeter + $concave_length['project_value'] ;
-//        阴角线天数：阴角线长度÷【每天做阴角线长度】
-        $concave_line_day = $concave_line_length / $concave_line;
+        // 其它面积查询
+        $other = Apartment::find()->asArray()->where(['points_id'=>5])->andWhere(['<=','min_area',$get['area']])->andWhere(['>=','max_area',$get['area']])->all();
+        foreach ($other as $one_other){
+            if ($one_other['project_name'] == '其他乳胶漆面积'){
+                $v = $one_other['project_value'];
+            }
+            if ($one_other['project_name'] == '其他腻子面积'){
+                $v1 = $one_other['project_value'];
+            }
+            if ($one_other['project_name'] == '其他阴角线长度'){
+                $v2 = $one_other['project_value'];
+            }
+        }
 
 
 
-//        腻子卧室墙面积
-        $putty_bedroom_area = BasisDecorationService::paintedArea($bedroom_area['project_value'], $post['area'], $post['bedroom'], self::WALL_HIGH, self::WALL);
-//        腻子客餐厅面积
-        $putty_drawing_room_area = BasisDecorationService::paintedArea($hall_area['project_value'], $post['area'], $post['hall'], self::WALL_HIGH, self::WALL_SPACE);
+//        乳胶漆底漆面积   乳胶漆底漆天数
+        $primer_area = BasisDecorationService::algorithm(5,$bedroom_primer_area[0],$hall_primer_area[0],$v);
+        $primer_day = BasisDecorationService::algorithm(6,$primer_area,$undercoat);
 
 
-//        腻子面积 卧室腻子面积+客厅腻子面积
-        $putty_area = Apartment::find()
-            ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=> '其他腻子面积'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-        $putty_area = $putty_bedroom_area[0] + $putty_drawing_room_area[0] + $putty_area['project_value'];
-//        腻子天数 腻子面积÷【每天做腻子面积】
-        $putty_day = $putty_area / $putty;
+        //乳胶漆面漆面积  乳胶漆面漆天数
+        $finishing_coat_area = BasisDecorationService::algorithm(1,$primer_area,2);
+        $finishing_coat_day = BasisDecorationService::algorithm(6,$finishing_coat_area,$finishing_coat);
+
+
+
+//        卧室周长 客餐厅及过道周长
+        $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($bedroom_primer_area[1],$get['bedroom'],4);
+        $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($hall_primer_area[1],$get['hall'],3);
+
+//        阴角线长度   阴角线天数
+        $concave_line_length = BasisDecorationService::algorithm(5,$bedroom_primer_perimeter,$drawing_room_perimeter,$v2);
+        $concave_line_day = BasisDecorationService::algorithm(6,$concave_line_length,$thread);
+
+//        腻子面积   腻子天数
+        $putty_area = BasisDecorationService::algorithm(3,$finishing_coat_area,$v1);
+        $putty_day = BasisDecorationService::algorithm(6,$putty_area,$putty);
 
 
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'coating_labor_price' => [],
-                    'coating_material' => [],
-                ]
-            ]);
-        }
-//        $goods_price = BasisDecorationService::priceConversion($goods);
+        $judge = BasisDecorationService::judge($goods,$get);
+
+
         //当地工艺
-        $crafts = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['emulsion_varnish'], $post['city']);
-
-        if ($crafts == null){
-            $code = 1059;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $series_and_style = BasisDecorationService::coatingSeriesAndStyle($goods, $post);
-        foreach ($crafts as $craft) {
-
-            switch ($craft) {
-                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['putty']:
-                    $putty_craft = $craft;
-                    break;
-                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['emulsion_varnish_primer']:
-                    $primer_craft = $craft;
-                    break;
-                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['emulsion_varnish_surface']:
-                    $finishing_coat_craft = $craft;
-                    break;
-                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['concave_line']:
-                    $concave_line_craft = $craft;
-                    break;
-                case $craft['project_details'] == BasisDecorationService::DetailsId2Title()['land_plaster']:
-                    $gypsum_powder_craft = $craft;
-                    break;
+        $craft = WorkerType::craft(self::CRAFT_NAME['oil_paint'],$get['city']);
+        foreach ($craft as $one_craft){
+            // 腻子用量
+            if ($one_craft['id'] == self::ROOM['putty']){
+                $putty = $one_craft['material'];
             }
-
+            // 底漆用量
+            if ($one_craft['id'] == self::ROOM['undercoat']){
+                $undercoat = $one_craft['material'];
+            }
+            // 面漆用量
+            if ($one_craft['id'] == self::ROOM['finishing']){
+                $finishing = $one_craft['material'];
+            }
+            // 阴角线用量
+            if ($one_craft['id'] == self::ROOM['wire']){
+                $wire = $one_craft['material'];
+            }
+            // 石膏粉用量
+            if ($one_craft['id'] == self::ROOM['land']){
+                $land = $one_craft['material'];
+            }
         }
 
-//        腻子费用
-        $putty_cost = BasisDecorationService::paintedCost($series_and_style['putty'], $putty_craft,$putty_area);
-//        底漆费用
-        $primer_cost = BasisDecorationService::paintedCost($series_and_style['primer'], $primer_craft,$primer_area);
-//        乳胶漆面漆费用
-        $finishing_coat_cost = BasisDecorationService::paintedCost($series_and_style['finishing_coat'],$finishing_coat_craft,$finishing_coat_area);
-//        阴角线费用
-        $concave_line_cost = BasisDecorationService::paintedCost($series_and_style['concave_line'],$concave_line_craft,$concave_line_length);
+        // 商品属性
+        $putty_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['putty'],'');
+        $undercoat_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_primer'],'');
+        $finishing_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['emulsion_varnish_surface'],'');
+        $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['concave_line'],'长');
+        $land_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['land_plaster'],'');
 
-//        石膏粉费用   石膏粉费用：个数×商品价格
-//        个数：（【3元】×乳胶漆面漆面积÷商品价格）
-        $gypsum_powder_cost['quantity'] = ceil($gypsum_powder_craft['material'] * $finishing_coat_area / $series_and_style['gypsum_powder']['platform_price']);
-        $gypsum_powder_cost['cost'] = round($gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['platform_price'],2);
-        $gypsum_powder_cost['procurement'] = round($gypsum_powder_cost['quantity'] * $series_and_style['gypsum_powder']['purchase_price_decoration_company'],2);
+
+
+
+//        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
+        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
+        $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
+
+
 
         //总费用
-        $total_cost = $putty_cost['cost'] + $primer_cost['cost'] + $finishing_coat_cost['cost'] + $concave_line_cost['cost'] + $gypsum_powder_cost['cost'];
-        $material_total = [];
-        foreach ($series_and_style as $one_goods_price) {
-            switch ($one_goods_price) {
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['putty']:
-                    $one_goods_price['quantity'] = $putty_cost['quantity'];
-                    $one_goods_price['cost'] = $putty_cost['cost'];
-                    $one_goods_price['procurement'] = $putty_cost['procurement'];
-                    $material_total['material'][] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['emulsion_varnish_primer']:
-                    $one_goods_price['quantity'] = $primer_cost['quantity'];
-                    $one_goods_price['cost'] = $primer_cost['cost'];
-                    $one_goods_price['procurement'] = $primer_cost['procurement'];
-                    $material_total ['material'][] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['emulsion_varnish_surface']:
-                    $one_goods_price['quantity'] = $finishing_coat_cost['quantity'];
-                    $one_goods_price['cost']     = $finishing_coat_cost['cost'];
-                    $one_goods_price['procurement']     = $finishing_coat_cost['procurement'];
-                    $material_total ['material'][] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['concave_line']:
-                    $one_goods_price['quantity'] = $concave_line_cost['quantity'];
-                    $one_goods_price['cost']     = $concave_line_cost['cost'];
-                    $one_goods_price['procurement']     = $concave_line_cost['procurement'];
-                    $material_total ['material'][] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['land_plaster']:
-                    $one_goods_price['quantity'] = $gypsum_powder_cost['quantity'];
-                    $one_goods_price['cost']     = $gypsum_powder_cost['cost'];
-                    $one_goods_price['procurement']     = $gypsum_powder_cost['procurement'];
-                    $material_total ['material'][] = $one_goods_price;
-                    break;
-            }
+        $total_cost = 0;
+        foreach ($material_total as $v){
+            $total_cost += $v['cost'];
         }
-        $material_total['total_cost'] [] = $total_cost;
-        //总天数   乳胶漆天数+阴角线天数+腻子天数
-        $total_day = ceil($primer_day + $finishing_coat_day + $putty_day + $concave_line_day);
 
-        //总人工费   人工费：（总天数）×【工人每天费用】
-        $coating_labor_price['price'] = $total_day * $labor_costs['univalence'];
-        $coating_labor_price['worker_kind'] = $labor_costs['worker_kind'];
+        //乳胶漆天数   总天数
+        $latex_paint_day = BasisDecorationService::algorithm(3,$primer_day,$finishing_coat_day);
+        $total_day = ceil(BasisDecorationService::algorithm(5,$latex_paint_day,$concave_line_day,$putty_day));
+
+        //总人工费
+        $coating_labor_price['price'] = BasisDecorationService::algorithm(1,$total_day,$labor_costs['univalence']);
+        $coating_labor_price['worker_kind'] = $labor_costs['worker_name'];
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'data' => [
-                'coating_labor_price' => $coating_labor_price,
-                'coating_material' => $material_total,
-                'bedroom_area' => round($bedroom_primer_area[1],2),
-            ]
+            'labor_all_cost' => $coating_labor_price,
+            'data' => $material_total,
+            'total_cost' => $total_cost,
+            'bedroom_area' => round($bedroom_primer_area[1],2),
         ]);
     }
 
