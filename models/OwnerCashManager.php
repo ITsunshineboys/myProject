@@ -208,19 +208,19 @@ class OwnerCashManager extends ActiveRecord {
     /**
      * 业主提现详情
      * @param $transaction_no
-     * @param $user_id
-     * @return array|null|ActiveRecord
+     * @return array|int|null|ActiveRecord
      */
-    public static function GetCashView($transaction_no,$user_id)
+    public static function GetCashView($transaction_no)
     {
 
-        $query =UserCashregister::find()
+        $arr =UserCashregister::find()
             ->asArray()
-            ->where(['transaction_no' => $transaction_no, 'role_id' => self::OWNER_ROLE]);
-
-        $arr = $query->one();
-        if (!$arr) {
-            return null;
+            ->where(['transaction_no' => $transaction_no, 'role_id' => self::OWNER_ROLE])
+            ->one();
+        if (!$arr)
+        {
+            $code=500;
+            return $code;
         }
         if ($arr['apply_time']) {
             $arr['apply_time'] = date('Y-m-d H:i', $arr['apply_time']);
@@ -228,20 +228,20 @@ class OwnerCashManager extends ActiveRecord {
         if ($arr['handle_time']) {
             $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
         }
+        $bank=BankinfoLog::findOne($arr['bank_log_id']);
+//        $bank = SupplierCashManager::GetBankcard($arr['bank_log_id']);
+        $user=User::findOne($arr['uid']);
+//        $user = SupplierCashManager::GetUser($user_id);
 
-        $bankcard = SupplierCashManager::GetBankcard($arr['bank_log_id']);
-        $user = SupplierCashManager::GetUser($user_id);
-
-        if (!$bankcard || !$user) {
-            return null;
+        if (!$bank || !$user) {
+            return 500;
         }
-
-        $arr['card_no'] = $bankcard['bankcard'];
-        $arr['nickname'] = $user['nickname'];
-        $arr['bank_name'] = $bankcard['bankname'];
-        $arr['position'] = $bankcard['position'];
-        $arr['bank_branch'] = $bankcard['bankbranch'];
-        $arr['username'] = $bankcard['username'];
+        $arr['card_no'] = $bank->bankcard;
+        $arr['nickname'] = $user->nickname;
+        $arr['bank_name'] = $bank->bankname;
+        $arr['position'] = $bank->position;
+        $arr['bank_branch'] = $bank->bankbranch;
+        $arr['username'] =  $user->username;
         $arr['cash_money'] = sprintf('%.2f', (float)$arr['cash_money'] / 100);
         if ($arr['real_money']) {
             $arr['real_money'] = sprintf('%.2f', (float)$arr['real_money'] / 100);
