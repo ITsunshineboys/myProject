@@ -325,6 +325,11 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
 
     }
+    /**
+     * @param $uid
+     * @param $type
+     * @return array
+     */
     public static function PlanList($uid,$type){
         $effect_earnests=EffectEarnest::find()
             ->where(['uid'=>$uid,'type'=>$type,'item'=>1])
@@ -334,9 +339,9 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
         $data=[];
         if(!isset($effect_earnests)){
-            $data=null;
+            $data=[];
         }
-        foreach ($effect_earnests as &$effect_earnest){
+        foreach ($effect_earnests as $k=>&$effect_earnest){
             $data[]=(new Query())->from('effect as e')
                 ->select('ee.id,e.add_time,st.style,se.series')
                 ->leftJoin('effect_earnest as ee','e.id=ee.effect_id')
@@ -349,7 +354,12 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
         }
 
+
+
         foreach ($data as &$v){
+            if($v==false){
+                return [];
+            }
             $v['add_time']=date('Y-m-d H:i:s',$v['add_time']);
             $v['style']=$v['series'].'-'.$v['style'];
             unset($v['series']);

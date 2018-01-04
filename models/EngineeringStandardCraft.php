@@ -67,13 +67,14 @@ class EngineeringStandardCraft  extends ActiveRecord
                 $row['material']='';
                 $row['project_id']=$chlid['id'];
                 $row['project']=$chlid['worker_name'];
+                $row['unit']=self::UNIT[$chlid['unit']];
             }else{
                 if($row['project_id']==$chlid['id']){
                     $row['project']=$chlid['worker_name'];
                     $row['material']=$row['material']/100;
                 }
             }
-
+            $row['unit']=self::UNIT[$chlid['unit']];
             $data[]=$row;
         }
 

@@ -560,6 +560,12 @@ class TestController extends Controller
         }
     }
 
+    public  static  function  actionTest()
+    {
+        $LogisticTemp=LogisticsTemplate::find()->where(['id'=>24])->asArray()->one();
+        var_dump($LogisticTemp);
+    }
+
 
 
 
