@@ -228,10 +228,11 @@ class OwnerCashManager extends ActiveRecord {
         if ($arr['handle_time']) {
             $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
         }
-        var_dump($arr);
-        var_dump($user_id);die;
+
         $bankcard = SupplierCashManager::GetBankcard($arr['bank_log_id'],self::OWNER_ROLE);
         $user = SupplierCashManager::GetUser($user_id);
+        var_dump($bankcard);
+        var_dump($user);die;
         if (!$bankcard || !$user) {
             return null;
         }
