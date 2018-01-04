@@ -3536,13 +3536,16 @@ class GoodsOrder extends ActiveRecord
                             }
                         }
                     }
-                    $LogisticTemp= LogisticsTemplate::find()->where(['id'=>$Goods['logistics_template_id']])->asArray()->one();
+                    $LogisticTemp= LogisticsTemplate::find()
+                        ->where(['id'=>$Goods['logistics_template_id']])
+                        ->asArray()
+                        ->one();
                     if ($LogisticTemp)
                     {
                         $orderLogisticTemp=new  OrderLogisticsTemplate();
                         $orderLogisticTemp->order_no=$order_no;
                         $orderLogisticTemp->sku=$Goods['sku'];
-                        $orderLogisticTemp->name=$LogisticTemp->name;
+                        $orderLogisticTemp->name=$LogisticTemp['name'];
                         $orderLogisticTemp->delivery_method=$LogisticTemp['delivery_method'];
                         $orderLogisticTemp->delivery_cost_default=$LogisticTemp['delivery_cost_default'];
                         $orderLogisticTemp->delivery_number_default=$LogisticTemp['delivery_number_default'];
