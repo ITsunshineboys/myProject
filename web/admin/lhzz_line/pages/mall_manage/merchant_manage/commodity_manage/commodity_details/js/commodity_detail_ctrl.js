@@ -120,7 +120,6 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
         }
     }
 
-    console.log(456456);
 
     // 采购价
     $scope.$watch('allprice.purchase_price_decoration_company', function (value, oldValue) {
