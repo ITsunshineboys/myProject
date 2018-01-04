@@ -346,26 +346,13 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-            $goods_image=GoodsImage::find()
-                ->where(['goods_id'=>$goods_id])
-                ->all();
-            if ($goods_image)
+            $code=OrderGoodsImage::AddNewData($goods_id,$post['out_trade_no'],$goods['sku']);
+            if ($code!=200)
             {
-                foreach ( $goods_image as &$image)
-                {
-                    $orderGoodsImage=new OrderGoodsImage();
-                    $orderGoodsImage->order_no=$post['out_trade_no'];
-                    $orderGoodsImage->sku=$goods['sku'];
-                    $orderGoodsImage->goods_id=$goods_id;
-                    $orderGoodsImage->image=$image->image;
-                    if (!$orderGoodsImage->save(false))
-                    {
-                        $tran->rollBack();
-                        return false;
-                    }
-                }
+                $tran->rollBack();
+                return false;
             }
+
 
             $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
             if ($GoodsBrand)

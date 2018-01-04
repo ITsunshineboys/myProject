@@ -56,22 +56,27 @@ class OrderGoodsImage extends \yii\db\ActiveRecord
      * @param $sku
      * @return int
      */
-    public  static  function  AddNewData($series_id,$order_no,$sku)
+    public  static  function  AddNewData($goods_id,$order_no,$sku)
     {
         $tran = Yii::$app->db->beginTransaction();
         try {
-            $serires=Series::findOne($series_id);
-            if ($serires)
+            $goods_image=GoodsImage::find()
+                ->where(['goods_id'=>$goods_id])
+                ->all();
+            if ($goods_image)
             {
-                $orderSeries=new OrderSeries();
-                $orderSeries->order_no=$order_no;
-                $orderSeries->sku=$sku;
-                $orderSeries->series=$serires->series;
-                $orderSeries->intro=$serires->intro;
-                if (!$orderSeries->save(false))
+                foreach ( $goods_image as &$image)
                 {
-                    $tran->rollBack();
-                    return 500;
+                    $orderGoodsImage=new OrderGoodsImage();
+                    $orderGoodsImage->order_no=$order_no;
+                    $orderGoodsImage->sku=$sku;
+                    $orderGoodsImage->goods_id=$goods_id;
+                    $orderGoodsImage->image=$image->image;
+                    if (!$orderGoodsImage->save(false))
+                    {
+                        $tran->rollBack();
+                        return 500;
+                    }
                 }
             }
             $tran->commit();
