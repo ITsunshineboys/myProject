@@ -101,7 +101,7 @@
         <!--按钮组-->
         <div class="row">
             <div class="col-sm-12">
-                <button class="btn btn-primary" ng-disabled="upload_dis" ng-click="editBtn()">确认</button>
+                <button class="btn btn-primary" ng-disabled="upload_dis" ng-click="editBtn(add_brand_form.$valid,add_brand_form.$error.required)">确认</button>
                 <button class="btn btn-default btn_left" ng-click="back_upper()">返回</button>
             </div>
         </div>

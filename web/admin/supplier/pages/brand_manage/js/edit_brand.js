@@ -197,29 +197,31 @@ angular.module("edit_brand_module",[])
 		};
 		
 		// 编辑确认
-		$scope.editBtn=function () {
+		$scope.editBtn=function (valid,error) {
 			$scope.ids_arr=[];
 			for(let [key,value] of $scope.item_check.entries()){
 				$scope.ids_arr.push($scope.item_check[key].id)
 			}
-			_ajax.post('/supplieraccount/supplier-brand-edit',{
-				brand_id:$scope.brand_id,
-				name:$scope.brand_on_name_model,
-				certificate:$scope.upload_img_src,
-				logo:$scope.upload_logo_src,
-				category_ids:$scope.ids_arr.join(',')
-			},function (res) {
-				if(res.code==200){
-					$('#edit_modal').modal('show');
-				}else{
-					$scope.edit_title_red=true;
-					$anchorScroll.yOffset = 150;
-					$location.hash('brand_title');
-					$anchorScroll();
-					$window.document.getElementById('brand_title').focus();
-				}
-				console.log(res);
-			})
+			if (valid && $scope.item_check.length >= 1) {
+				_ajax.post('/supplieraccount/supplier-brand-edit',{
+					brand_id:$scope.brand_id,
+					name:$scope.brand_on_name_model,
+					certificate:$scope.upload_img_src,
+					logo:$scope.upload_logo_src,
+					category_ids:$scope.ids_arr.join(',')
+				},function (res) {
+					if(res.code==200){
+						$('#edit_modal').modal('show');
+					}else{
+						$scope.edit_title_red=true;
+						$anchorScroll.yOffset = 150;
+						$location.hash('brand_title');
+						$anchorScroll();
+						$window.document.getElementById('brand_title').focus();
+					}
+					console.log(res);
+				})
+			}
 		};
 		//返回按钮
 		$scope.back_upper=function () {
