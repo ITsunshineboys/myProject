@@ -48,13 +48,13 @@
             <span>风格标签</span>
             </div>
             <div class="col-sm-10 control-label">
-            <img class="add_img" ng-click="label_add()" ng-class="{'vis':style_label_arr.length>=6}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
+            <img class="add_img" ng-click="label_add()" ng-class="{'vis':style_label_arr.length>=9}" src="pages/mall_manage/style_manage/add_series/image/add.png" alt="add_tag">
             <ul class="tags">
                 <li ng-repeat="item in style_label_arr track by $index">
                     <input class="form-control" ng-model="item.num" name="{{item.label_name}}" required ng-class="{'border_red':form.{{item.label_name}}.$invalid &&submitted||(form.{{item.label_name}}.$error.required)}" type="text" maxlength="4" placeholder="请输入标签">
                     <img ng-if="style_label_arr.length!=1" ng-click="close_label($index)" src="pages/mall_manage/style_manage/add_style/image/close.png" class="closetag">
                 </li>
-                <span class="limitword">*限1~3个字符,最多6个标签</span>
+                <span class="limitword">*限1~4个字符,最多9个标签</span>
             </ul>
             </div>
         </div>
