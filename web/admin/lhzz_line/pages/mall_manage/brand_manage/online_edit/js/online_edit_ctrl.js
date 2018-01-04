@@ -38,7 +38,7 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
     $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -47,9 +47,9 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
-        $scope.trademark_txt='上传';
-        $scope.upload_dis=false;
       }
+      $scope.trademark_txt='上传';
+      $scope.upload_dis=false;
     },function (error) {
       console.log(error)
     })
@@ -60,14 +60,13 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
     file:null
   };
   $scope.upload_logo = function (file) {
-    if(!$scope.data.file){
+    if(!$scope.logo_data.file){
       return
     }
     $scope.logo_txt='上传...';
     $scope.upload_dis=true;
-    console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -76,9 +75,9 @@ online_edit.controller("onlineedit",function ($rootScope,$scope,$http,$statePara
       }else{
         $scope.img_logo_flag='';
         $scope.upload_logo_src=response.data.data.file_path;
-        $scope.logo_txt='上传';
-        $scope.upload_dis=false;
       }
+      $scope.logo_txt='上传';
+      $scope.upload_dis=false;
     },function (error) {
       console.log(error)
     })

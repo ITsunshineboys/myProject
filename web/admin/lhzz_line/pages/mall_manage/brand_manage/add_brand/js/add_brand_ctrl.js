@@ -38,9 +38,9 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
       }else{
         $scope.img_flag='';
         $scope.upload_img_src=response.data.data.file_path;
-        $scope.trademark_txt='上传';
-        $scope.upload_dis=false;
       }
+      $scope.trademark_txt='上传';
+      $scope.upload_dis=false;
     },function (error) {
       console.log(error)
     })
@@ -68,9 +68,9 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
       }else{
         $scope.img_logo_flag='';
         $scope.upload_logo_src=response.data.data.file_path;
-        $scope.logo_txt='上传'
-        $scope.upload_dis=false;
       }
+      $scope.logo_txt='上传'
+      $scope.upload_dis=false;
     },function (error) {
       console.log(error)
     })
