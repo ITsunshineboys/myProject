@@ -810,7 +810,7 @@ class GoodsCategory extends ActiveRecord
             ['review_status', 'in', 'range' => array_keys(Yii::$app->params['reviewStatuses'])],
             ['review_status', 'validateReviewStatus', 'on' => self::SCENARIO_REVIEW],
             ['supplier_id', 'validateSupplierId', 'on' => self::SCENARIO_REVIEW],
-            ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
+//            ['approve_time', 'validateApproveTime', 'on' => self::SCENARIO_REVIEW],
             ['review_status', 'validateReviewStatusEdit', 'on' => [self::SCENARIO_EDIT, self::SCENARIO_RESET_OFFLINE_REASON, self::SCENARIO_TOGGLE_STATUS]],
             ['review_status', 'validateStatusEditSupplier', 'on' => [self::SCENARIO_CATE_EDIT_SUPPLIER,]],
 //            [['title'], 'validateTitle', 'on' => self::SCENARIO_NEW_CATE_EDIT],
