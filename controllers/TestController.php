@@ -562,8 +562,12 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $sessionId=Yii::$app->session->id;
-        echo  $sessionId;
+        session_start();
+//        Yii::$app->session->id ='n7ve8ei1833adksa4hmo7l17p5';
+//        Yii::$app->session['address_id']=1;
+       var_dump(Yii::$app->session->id);die;
+//        $sessionId=Yii::$app->session->id;
+//        echo  $sessionId;
     }
 
 
