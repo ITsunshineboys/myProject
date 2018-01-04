@@ -105,7 +105,7 @@ app.controller('mall_account_ctrl', function ($scope, $rootScope, _ajax, $state,
         }
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
-        if(newVal == ''&&oldVal!=''&&$scope.params.category_id!=''){
+        if(newVal === ''&&oldVal!=''&&$scope.params.category_id!=''){
             $scope.params.keyword = ''
             $scope.Config.currentPage = 1
             tablePages()
