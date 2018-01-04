@@ -2058,17 +2058,98 @@ class GoodsOrder extends ActiveRecord
 //            }
             $order_refund=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
-                ->one();
-            $order_refund->handle=1;
-            $order_refund->handle_reason='';
-            $order_refund->handle_time=$time;
-            $res4=$order_refund->save(false);
-            if (!$res4){
-                $code=500;
+                ->all();
+
+            if (!$order_refund)
+            {
+                $code=1000;
                 $tran->rollBack();
                 return $code;
             }
+            if (count($order_refund)>1)
+            {
+                foreach ($order_refund as &$refunds)
+                {
+                    if ($refunds->order_type=self::ORDER_TYPE_UNRECEIVED)
+                    {
+                        $order_refund_unshipped=OrderRefund::find()
+                            ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+                            ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
+                            ->one();
+                        if ($order_refund_unshipped)
+                        {
+                            $order_refund_unshipped->handle=2;
+                            $order_refund_unshipped->handle_reason='';
+                            $order_refund_unshipped->handle_time=$time;
+                            if ($order_refund_unshipped->save(false))
+                            {
+                                $code=500;
+                                $tran->rollBack();
+                                return $code;
+                            }
+                        }
+                        $refunds->handle=1;
+                        $refunds->handle_reason='';
+                        $refunds->handle_time=$time;
+                        if (!$refunds->save(false))
+                        {
+                            $code=500;
+                            $tran->rollBack();
+                            return $code;
+                        }
+                    }
+                }
+            }else
+            {
+                $order_refund[0]->handle=1;
+                $order_refund[0]->handle_reason='';
+                $order_refund[0]->handle_time=$time;
+                if (!$order_refund[0]->save(false)){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
 
+//            if ($order_refund->order_type=self::ORDER_TYPE_UNSHIPPED)
+//            {
+//                $order_refund->handle=1;
+//                $order_refund->handle_reason='';
+//                $order_refund->handle_time=$time;
+//                $res4=$order_refund->save(false);
+//                if (!$res4){
+//                    $code=500;
+//                    $tran->rollBack();
+//                    return $code;
+//                }
+//            }else
+//            {
+//                $order_refund_unshipped=OrderRefund::find()
+//                    ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+//                    ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
+//                    ->one();
+//                if ($order_refund_unshipped)
+//                {
+//                    $order_refund_unshipped->handle=2;
+//                    $order_refund_unshipped->handle_reason='';
+//                    $order_refund_unshipped->handle_time=$time;
+//                    if ($order_refund_unshipped->save(false))
+//                    {
+//                        $code=500;
+//                        $tran->rollBack();
+//                        return $code;
+//                    }
+//                }
+//                $order_refund->handle=1;
+//                $order_refund->handle_reason='';
+//                $order_refund->handle_time=$time;
+//                $res4=$order_refund->save(false);
+//                if (!$res4){
+//                    $code=500;
+//                    $tran->rollBack();
+//                    return $code;
+//                }
+//            };
             //这一步我看不懂
             if ($GoodsOrder->role_id==7)
             {
@@ -3119,11 +3200,24 @@ class GoodsOrder extends ActiveRecord
                         ];
                     }else
                     {
-                        return [
+                        $data=[
                             'refund_status'=>2,
                             'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
                             'apply_refund_reason'=>$refund_unshipped->apply_reason,
                         ];
+                        if ($role_id==Yii::$app->params['supplierRoleId'])
+                        {
+                            if ($refund_unshipped->handle==0)
+                            {
+                                $data=[
+                                    'refund_status'=>1,
+                                    'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
+                                    'apply_refund_reason'=>$refund_unshipped->apply_reason,
+                                ];
+                            }
+                        }
+
+                        return $data;
 
                     }
                 }
