@@ -332,7 +332,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public static function getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC',$time_s)
     {
 
         $query = (new Query())
@@ -340,7 +340,7 @@ class SupplierCashManager extends ActiveRecord
             ->leftJoin(self::SUPPLIER . ' s', 'g.uid = s.uid')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 's.shop_name', 's.shop_no', 'g.uid', 'g.status', 'g.real_money', 'g.transaction_no', 'g.handle_time'])
             ->where($where)
-            ->orderBy('g.handle_time Desc');
+            ->orderBy($time_s .'Desc');
 
 
         $count = $query->count();
