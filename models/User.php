@@ -1003,6 +1003,20 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Check if identity has been authorized
+     *
+     * @param string $identityNo identity card no
+     * @return bool
+     */
+    public static function checkIdentityAuthorized($identityNo)
+    {
+        $user = self::find()->where(['identity_no' => $identityNo])->one();
+        return $user && UserRole::find()
+                ->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED])
+                ->exists();
+    }
+
+    /**
      * @param $user
      * @param $postData
      * @return int

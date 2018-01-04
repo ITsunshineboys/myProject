@@ -5142,14 +5142,6 @@ class OrderController extends Controller
      */
     public  function  actionAddShippingCart()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
         $request=Yii::$app->request;
         $goods_id=$request->post('goods_id');
         $goods_num=$request->post('goods_num');
@@ -5185,7 +5177,18 @@ class OrderController extends Controller
                 ]
             );
         }
-        $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=ShippingCart::addShippingCartNoLogin($goods_id,$goods_num);
+        }else
+        {
+            $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
+        }
+
+
+
+
+
         if ($code==200)
         {
             return Json::encode([
