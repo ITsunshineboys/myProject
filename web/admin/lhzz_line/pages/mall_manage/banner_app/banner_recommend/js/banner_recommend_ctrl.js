@@ -527,6 +527,7 @@ banner_recommend.controller("banner_recommend_ctrl",function ($rootScope,$scope,
   };
   $scope.sort_order=[];
   $scope.save_btn_ok=function () {
+    $scope.sort_order=[];
     for(let[key,value] of $scope.shop_rep.entries()){
       $scope.sort_order.push(value.id);
     }

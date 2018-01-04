@@ -430,10 +430,14 @@
                     </div>
                     <div class="modal-body body_font">
                         <p class='track_p' ng-if='track_flag'>{{track_font}}</p>
-                        <div>
-                            <span class='track_span'>*</span>
-                            <span class='track_span'>快递单号</span>
-                            <input type="text" class="delivery_input" ng-model="delivery_input_model">
+                        <div class="row">
+                            <div class="col-sm-2 track_height">
+                                <span class='track_span'>*</span>
+                                <span class='track_span'>快递单号</span>
+                            </div>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="delivery_input_model">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
