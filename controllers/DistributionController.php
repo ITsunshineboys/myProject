@@ -309,6 +309,14 @@ class DistributionController extends Controller
             ]);
         }
         $binding_mobile=$request = Yii::$app->request->post('mobile','');
+        if ($binding_mobile==$mobile)
+        {
+            $code=1084;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $ismobile = preg_match('/^1[34578]\d{9}$/',$binding_mobile);
         if (!$binding_mobile || $ismobile!=1)
         {
