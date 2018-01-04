@@ -696,7 +696,7 @@ class Supplier extends ActiveRecord
             ->one();
         $data=[];
         if($Supplier_info){
-            $Supplier_info['availableamount'] = sprintf('%.2f', (float)$Supplier_info['availableamount'] * 0.01);
+            $Supplier_info['cashwithdrawal_money'] = sprintf('%.2f', (float)$Supplier_info['availableamount'] * 0.01);
             $Supplier_info['balance'] = sprintf('%.2f', (float)$Supplier_info['balance'] * 0.01);
         }
         $array=(new Query())
