@@ -17,6 +17,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.goods_all_attrs = [];//所有属性数据
 	$scope.shop_logistics = [];//物流模板默认第一项
 	$scope.own_attrs_arr = [];//自己添加的属性数组
+	$scope.attr_blur_flag = true
 	$scope.category_id = $stateParams.category_id;//三级分类的id
 	$scope.first_category_title = $stateParams.first_category_title;//一级分类名称
 	$scope.second_category_title = $stateParams.second_category_title;//二级分类名称
@@ -137,10 +138,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				return item.name==value.name
 			});
 			if(num.length!=1){
-				$scope.own_submitted = true;
-				break;
+				value.own_status = true
 			}else{
-				$scope.own_submitted = false;
+				value.own_status = false
 			}
 		}
 	}
@@ -330,9 +330,28 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				$scope.attr_blur_flag = true
 			}
 		}
+		// 判断有无重复属性名
+		let arr=[];
+		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
+		for(let [key,value] of arr.entries()){
+			let num=angular.copy(arr).filter(function (item) {
+				return item.name==value.name
+			});
+			if(num.length!=1){
+				value.own_status = true
+			}else{
+				value.own_status = false
+			}
+			if(value.own_status === true){
+				$scope.own_submitted = false
+				break
+			}else{
+				$scope.own_submitted = true
+			}
+		}
 
 		/*判断必填项，全部ok，调用添加接口*/
-		if (valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
+		if (valid && $scope.upload_cover_src && !$scope.price_flag && $scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
 			console.log($scope.brands_arr.length)
 			console.log($scope.own_submitted);
 			let description = UE.getEditor('editor').getContent();//富文本编辑器

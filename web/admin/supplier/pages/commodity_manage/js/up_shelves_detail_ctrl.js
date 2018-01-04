@@ -25,6 +25,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.style_null_flag = false;
     $scope.series_null_arr = [];
     $scope.style_null_arr = [];
+		$scope.attr_blur_flag = true
     let reg = /^\d+(\.\d{1,2})?$/;//小数点后两位
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
     $scope.myng = $scope;
@@ -223,10 +224,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 				return item.name==value.name
 			});
 			if(num.length!=1){
-				$scope.own_submitted = true;
-				break;
+				value.own_status = true
 			}else{
-				$scope.own_submitted = false;
+				value.own_status = false
 			}
 		}
 	}
@@ -376,8 +376,27 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 			    $scope.attr_blur_flag = true
 		    }
 	    }
+	    // 判断有无重复属性名
+	    let arr=[];
+	    arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
+	    for(let [key,value] of arr.entries()){
+		    let num=angular.copy(arr).filter(function (item) {
+			    return item.name==value.name
+		    });
+		    if(num.length!=1){
+			    value.own_status = true
+		    }else{
+			    value.own_status = false
+		    }
+		    if(value.own_status === true){
+			    $scope.own_submitted = false
+			    break
+		    }else{
+			    $scope.own_submitted = true
+		    }
+	    }
 
-        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
+        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && $scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
             let description = UE.getEditor('editor').getContent();//富文本编辑器
             $scope.change_ok = '#change_ok';//编辑成功
             $scope.after_sale_services = [];
@@ -459,6 +478,12 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
                     $scope.pass_attrs_value.push(value.value);
                 }
             }
+		        if ($scope.merchant_add_attrs[0] != undefined) {
+			        for (let [key, value] of $scope.merchant_add_attrs.entries()) {
+				        $scope.pass_attrs_name.push(value.name);
+				        $scope.pass_attrs_value.push(value.value);
+			        }
+		        }
             if ($scope.goods_select_attrs[0] != undefined) {
                 for (let [key, value] of $scope.goods_select_attrs.entries()) {
                     $scope.pass_attrs_name.push(value.name);
