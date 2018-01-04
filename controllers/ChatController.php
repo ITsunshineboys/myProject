@@ -476,7 +476,7 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $page=(int)\Yii::$app->request->get('page',1);
+        $page=\Yii::$app->request->get('page',1);
         $size=(int)\Yii::$app->request->get('size',self::DEAF_SIZE);
         $query=(new Query())
             ->from('user_news_record')
