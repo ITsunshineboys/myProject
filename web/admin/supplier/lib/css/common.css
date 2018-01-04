@@ -462,3 +462,9 @@ select.form-control:focus {
     color: #8BC34A;
 }
 /* color end */
+
+/* word-wrap start */
+.word-wrap{
+    word-wrap: break-word;
+}
+/* word-wrap end */
