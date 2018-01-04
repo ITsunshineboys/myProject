@@ -29,7 +29,7 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
     $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url:'/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
@@ -52,14 +52,14 @@ add_brand.controller("addbrand",function ($rootScope,$scope,$http,$state,Upload,
     file:null
   };
   $scope.upload_logo = function (file) {
-    if(!$scope.data.file){
+    if(!$scope.logo_data.file){
       return
     }
     $scope.logo_txt='上传...'
     $scope.upload_dis=true;
     console.log($scope.data);
     Upload.upload({
-      url:baseUrl+'/site/upload',
+      url: '/site/upload',
       data:{'UploadForm[file]':file}
     }).then(function (response) {
       console.log(response);
