@@ -334,7 +334,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
 
         $data=[];
         if(!isset($effect_earnests)){
-            $data=null;
+            $data=[];
         }
         foreach ($effect_earnests as &$effect_earnest){
             $data[]=(new Query())->from('effect as e')
@@ -346,9 +346,10 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 ->where(['e.id'=>$effect_earnest['effect_id']])
                 ->one();
 
-            if($data==false){
-                return [];
-            }
+
+        }
+        if(!$data){
+            $data=[];
         }
 
         foreach ($data as &$v){
