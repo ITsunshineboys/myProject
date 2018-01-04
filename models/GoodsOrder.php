@@ -1971,18 +1971,29 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
             $order_refund=OrderRefund::find()
-                ->where(['order_no'=>$order_no,'sku'=>$sku])
-                ->one();
-            $order_refund->handle=$handle;
-            $order_refund->handle_reason=$handle_reason;
-            $order_refund->handle_time=$time;
-            $res2=$order_refund->save(false);
-            if(!$res2){
-                $code=500;
+                ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
+                ->all();
+
+            if (!$order_refund)
+            {
+                $code=1000;
                 $tran->rollBack();
                 return $code;
             }
+            foreach ($order_refund as &$refunds)
+            {
+                $refunds->handle=$handle;
+                $refunds->handle_reason=$handle_reason;
+                $refunds->handle_time=$time;
+                if(!$refunds->save(false)){
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
+            }
+
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $role=User::findOne($GoodsOrder->user_id);
             $code=UserNewsRecord::AddOrderNewRecord($role,'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$sku,self::STATUS_DESC_DETAILS);
@@ -2028,34 +2039,10 @@ class GoodsOrder extends ActiveRecord
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             if ($OrderGoods->shipping_status==0){
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
-                //$reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number+$OrderGoods->freight;
             }else{
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
-                //$reduce_money=$OrderGoods->supplier_price*$OrderGoods->goods_number;
+
             }
-//            $supplier->balance-=$reduce_money;
-//            $supplier->availableamount-=$reduce_money;
-//            $res2=$supplier->save(false);
-//            if (!$res2){
-//                $code=500;
-//                $tran->rollBack();
-//                return $code;
-//            }
-//            $supplier_accessdetail=new UserAccessdetail();
-//            $supplier_accessdetail->uid=$user->id;
-//            $supplier_accessdetail->role_id=6;
-//            $supplier_accessdetail->access_type=2;
-//            $supplier_accessdetail->access_money=$reduce_money;
-//            $supplier_accessdetail->order_no=$order_no;
-//            $supplier_accessdetail->sku=$sku;
-//            $supplier_accessdetail->create_time=$time;
-//            $supplier_accessdetail->transaction_no=$transaction_no;
-//            $res3=$supplier_accessdetail->save(false);
-//            if (!$res3){
-//                $code=500;
-//                $tran->rollBack();
-//                return $code;
-//            }
             $order_refund=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
                 ->all();
@@ -2111,45 +2098,6 @@ class GoodsOrder extends ActiveRecord
                 }
             }
 
-//            if ($order_refund->order_type=self::ORDER_TYPE_UNSHIPPED)
-//            {
-//                $order_refund->handle=1;
-//                $order_refund->handle_reason='';
-//                $order_refund->handle_time=$time;
-//                $res4=$order_refund->save(false);
-//                if (!$res4){
-//                    $code=500;
-//                    $tran->rollBack();
-//                    return $code;
-//                }
-//            }else
-//            {
-//                $order_refund_unshipped=OrderRefund::find()
-//                    ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
-//                    ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
-//                    ->one();
-//                if ($order_refund_unshipped)
-//                {
-//                    $order_refund_unshipped->handle=2;
-//                    $order_refund_unshipped->handle_reason='';
-//                    $order_refund_unshipped->handle_time=$time;
-//                    if ($order_refund_unshipped->save(false))
-//                    {
-//                        $code=500;
-//                        $tran->rollBack();
-//                        return $code;
-//                    }
-//                }
-//                $order_refund->handle=1;
-//                $order_refund->handle_reason='';
-//                $order_refund->handle_time=$time;
-//                $res4=$order_refund->save(false);
-//                if (!$res4){
-//                    $code=500;
-//                    $tran->rollBack();
-//                    return $code;
-//                }
-//            };
             //这一步我看不懂
             if ($GoodsOrder->role_id==7)
             {
