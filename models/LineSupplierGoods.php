@@ -299,7 +299,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         }
     }
 
-    public  static  function  _extraData($goods)
+    public static function extraData($goods)
     {
         $lineGoods=self::find()->where(['goods_id'=>$goods['id']])->one();
         if ($lineGoods)
