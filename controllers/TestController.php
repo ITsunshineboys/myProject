@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Bank;
 use app\models\Carousel;
 use app\models\Express;
 use app\models\Goods;
@@ -19,6 +20,8 @@ use app\models\User;
 use app\models\UserAddress;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
+use app\services\StringService;
+use Symfony\Component\Yaml\Tests\B;
 use Yii;
 use yii\db\Exception;
 use yii\db\Query;
@@ -170,11 +173,58 @@ class TestController extends Controller
     }
 
     /**
-     * Test
+     * 验证银行卡测试时
      */
-    public function actionTest()
+    public function actionVerificationBank()
     {
-        throw new Exception("服务器发生错误");
+       $bank_card='13121564684864546123';
+       $id_card='511302199112131914';
+       $id_name='何友志';
+       $bank=Bank::find()->where(['bank_card'=>$bank_card])->one();
+       if ($bank)
+       {
+           $code=$id_card==$bank_card->id_card?200:1000;
+
+       }else
+       {
+           $tran=Yii::$app->db->transaction;
+           $url='';
+           try{
+                $result=StringService::httpGet($url);
+                if ($result)
+                {
+
+                    $code=200;
+                }else
+                {
+                    $code=1000;
+                }
+               $bank=new Bank();
+               $bank->bank_card=$result['bank_card'];
+               $bank->id_card=$result['id_card'];
+               $bank->id_name=$result['id_name'];
+               if (!$bank->save(false))
+               {
+                   $tran->rollBack();
+               }
+               $tran->commit();
+
+           }catch (\Exception $e){
+               $tran->rollBack();
+               $code=500;
+               return Json::encode([
+                   'code' => $code,
+                   'msg'  => Yii::$app->params['errorCodes'][$code]
+               ]);
+           }
+       }
+        return Json::encode([
+            'code' => $code,
+            'msg'  => 200?'ok':Yii::$app->params['errorCodes'][$code]
+        ]);
+
+
+
     }
 
     /**
@@ -509,5 +559,8 @@ class TestController extends Controller
             ]);
         }
     }
+
+
+
 
 }

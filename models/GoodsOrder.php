@@ -186,6 +186,59 @@ class GoodsOrder extends ActiveRecord
 
 
     /**
+     * 添加表数据
+     * @param $order_no
+     * @param $amount_order
+     * @param $supplier_id
+     * @param $pay_status
+     * @param $create_time
+     * @param $order_refer
+     * @param int $return_insurance
+     * @param $pay_name
+     * @param $buyer_message
+     * @param $address
+     * @param $invoice
+     * @return int
+     */
+    public  static  function  AddNewPayOrderData($order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $goods_order = new self();
+            $goods_order->order_no = $order_no;
+            $goods_order->amount_order = $amount_order;
+            $goods_order->supplier_id = $supplier_id;
+            $goods_order->invoice_id = $invoice->id;
+            $goods_order->pay_status = $pay_status;
+            $goods_order->create_time =$create_time;
+            $goods_order->paytime =$create_time;
+            $goods_order->order_refer = $order_refer;
+            $goods_order->return_insurance = $return_insurance * 100;
+            $goods_order->pay_name = $pay_name;
+            $goods_order->buyer_message = $buyer_message;
+            $goods_order->consignee = $address->consignee;
+            $goods_order->district_code = $address->district;
+            $goods_order->region = $address->region;
+            $goods_order->consignee_mobile = $address->mobile;
+            $goods_order->invoice_type = $invoice->invoice_type;
+            $goods_order->invoice_header_type = $invoice->invoice_header_type;
+            $goods_order->invoicer_card = $invoice->invoicer_card;
+            $goods_order->invoice_header = $invoice->invoice_header;
+            $goods_order->invoice_content = $invoice->invoice_content;
+            $res1 = $goods_order->save(false);
+            if (!$res1) {
+                $tran->rollBack();
+                return 500;
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+                $tran->rollBack();
+                return 500;
+        }
+    }
+
+    /**
      * 支付宝线下商城数据库操作
      * @param $arr
      * @param $post
@@ -207,7 +260,7 @@ class GoodsOrder extends ActiveRecord
             ->where(['a.id'=>$goods_id])
             ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
             ->one();
-        if (($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100)
+        if ( !$goods ||($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100)
         {
             return false;
         }
@@ -220,63 +273,18 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $goods_order=new self();
-            $goods_order->order_no=$post['out_trade_no'];
-            $goods_order->amount_order=$post['total_amount'];
-            $goods_order->supplier_id=$goods['supplier_id'];
-            $goods_order->invoice_id=$invoice_id;
-            $goods_order->pay_status=1;
-            $goods_order->create_time=strtotime($post['gmt_create']);
-            $goods_order->paytime=strtotime($post['gmt_payment']);
-            $goods_order->order_refer=1;
-            $goods_order->return_insurance=$return_insurance*100;
-            $goods_order->pay_name=$pay_name;
-            $goods_order->buyer_message=$buyer_message;
-            $goods_order->consignee=$address->consignee;
-            $goods_order->district_code=$address->district;
-            $goods_order->region=$address->region;
-            $goods_order->consignee_mobile=$address->mobile;
-            $goods_order->invoice_type=$invoice->invoice_type;
-            $goods_order->invoice_header_type=$invoice->invoice_header_type;
-            $goods_order->invoicer_card=$invoice->invoicer_card;
-            $goods_order->invoice_header=$invoice->invoice_header;
-            $goods_order->invoice_content=$invoice->invoice_content;
-            $res1=$goods_order->save(false);
-            if (!$res1)
+            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$goods['supplier_id'],1,$time,1,0,$pay_name,$buyer_message,$address,$invoice);
+            if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
-            $OrderGoods=new OrderGoods();
-            $OrderGoods->order_no=$post['out_trade_no'];
-            $OrderGoods->goods_id=$goods['id'];
-            $OrderGoods->goods_number=$goods_num;
-            $OrderGoods->create_time=strtotime($post['gmt_create']);
-            $OrderGoods->goods_name=$goods['title'];
-            $OrderGoods->goods_price=$goods['platform_price'];
-            $OrderGoods->sku=$goods['sku'];
-            $OrderGoods->market_price=$goods['market_price'];
-            $OrderGoods->supplier_price=$goods['supplier_price'];
-            $OrderGoods->shipping_type=$goods['delivery_method'];
-            $OrderGoods->cover_image=$goods['cover_image'];
-            $OrderGoods->order_status=0;
-            $OrderGoods->shipping_status=0;
-            $OrderGoods->customer_service=0;
-            $OrderGoods->is_unusual=0;
-            $OrderGoods->freight=$freight*100;
-            $OrderGoods->category_id=$goods['category_id'];
-            $OrderGoods->after_sale_services=$goods['after_sale_services'];
-            $OrderGoods->platform_price=$goods['platform_price'];
-            $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
-            $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
-            $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
-            $OrderGoods->subtitle=$goods['subtitle'];
-            $res2=$OrderGoods->save(false);
-            if (!$res2){
+            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$goods,0,0,0,0,$freight*100);
+            if ($code!=200)
+            {
                 $tran->rollBack();
                 return false;
             }
-            $time=time();
             $month=date('Ym',$time);
             $supplier=Supplier::find()
                 ->where(['id'=>$goods['supplier_id']])
@@ -324,35 +332,19 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-            $style=Style::findOne($Goods->style_id);
-            if ($style)
+
+            $code=OrderStyle::AddNewData($Goods->style_id,$post['out_trade_no'],$goods['sku']);
+            if ($code!=200)
             {
-                $orderStyle=new OrderStyle();
-                $orderStyle->order_no=$post['out_trade_no'];
-                $orderStyle->sku=$goods['sku'];
-                $orderStyle->style=$style->style;
-                $orderStyle->intro=$style->intro;
-                $orderStyle->theme=$style->theme;
-                $orderStyle->images=$style->images;
-                if (!$orderStyle->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
+                $tran->rollBack();
+                return false;
             }
-            $serires=Series::findOne($Goods->series_id);
-            if ($serires)
+
+            $code=OrderSeries::AddNewData($Goods->series_id,$post['out_trade_no'],$goods['sku']);
+            if ($code!=200)
             {
-                $orderSeries=new OrderSeries();
-                $orderSeries->order_no=$post['out_trade_no'];
-                $orderSeries->sku=$goods['sku'];
-                $orderSeries->series=$serires->series;
-                $orderSeries->intro=$serires->intro;
-                if (!$orderSeries->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
+                $tran->rollBack();
+                return false;
             }
 
             $goods_image=GoodsImage::find()
@@ -399,7 +391,6 @@ class GoodsOrder extends ActiveRecord
                 foreach ( $goodsAttr as &$attr)
                 {
                     $orderGoodsAttr=new OrderGoodsAttr();
-
                     $orderGoodsAttr->order_no=$post['out_trade_no'];
                     $orderGoodsAttr->sku=$goods['sku'];
                     $orderGoodsAttr->name=$attr->name;

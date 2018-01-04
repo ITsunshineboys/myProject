@@ -52,4 +52,39 @@ class OrderStyle extends \yii\db\ActiveRecord
             'images' => 'Images',
         ];
     }
+
+    /**
+     * @param $style_id
+     * @param $order_no
+     * @param $sku
+     * @return int
+     */
+    public  static  function  AddNewData($style_id,$order_no,$sku)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $style=Style::findOne($style_id);
+            if ($style)
+            {
+                $OrderStyle=new self();
+                $OrderStyle->order_no=$order_no;
+                $OrderStyle->sku=$sku;
+                $OrderStyle->style=$style->style;
+                $OrderStyle->intro=$style->intro;
+                $OrderStyle->theme=$style->theme;
+                $OrderStyle->images=$style->images;
+                $res1=$OrderStyle->save(false);
+                if (!$res1)
+                {
+                    $tran->rollBack();
+                    return 500;
+                }
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return 500;
+        }
+    }
 }

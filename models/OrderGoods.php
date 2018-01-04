@@ -372,6 +372,61 @@ class OrderGoods extends ActiveRecord
     }
 
 
+    /**
+     * @param $order_no
+     * @param $goods_id
+     * @param $goods_num
+     * @param $time
+     * @param $goods
+     * @param $order_status
+     * @param $shipping_status
+     * @param $customer_service
+     * @param $is_unusual
+     * @param $freight
+     * @return int
+     */
+    public  static  function  AddNewOrderData($order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $OrderGoods=new self();
+            $OrderGoods->order_no=$order_no;
+            $OrderGoods->goods_id=$goods['id'];
+            $OrderGoods->goods_number=$goods_num;
+            $OrderGoods->create_time=$time;
+            $OrderGoods->goods_name=$goods['title'];
+            $OrderGoods->goods_price=$goods['platform_price'];
+            $OrderGoods->sku=$goods['sku'];
+            $OrderGoods->market_price=$goods['market_price'];
+            $OrderGoods->supplier_price=$goods['supplier_price'];
+            $OrderGoods->shipping_type=$goods['delivery_method'];
+            $OrderGoods->cover_image=$goods['cover_image'];
+            $OrderGoods->order_status=$order_status;
+            $OrderGoods->shipping_status=$shipping_status;
+            $OrderGoods->customer_service=$customer_service;
+            $OrderGoods->is_unusual=$is_unusual;
+            $OrderGoods->freight=$freight;
+            $OrderGoods->category_id=$goods['category_id'];
+            $OrderGoods->after_sale_services=$goods['after_sale_services'];
+            $OrderGoods->platform_price=$goods['platform_price'];
+            $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
+            $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
+            $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
+            $OrderGoods->subtitle=$goods['subtitle'];
+            $res1=$OrderGoods->save(false);
+            if (!$res1) {
+                $tran->rollBack();
+                return 500;
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return 500;
+        }
+    }
+
+
 
 
     
