@@ -688,29 +688,61 @@ class Supplier extends ActiveRecord
      */
     public static function getsupplierdata($supplier_id, $uid)
     {
-        $query = new Query();
-        $select = 's.uid,s.id,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money,s.availableamount';
-        $array = $query->from('supplier as s')
-            ->select($select)
-            ->leftJoin('user_cashregister as sc', 'sc.uid=s.uid')
-            ->leftJoin('user_bankinfo as ub', 'ub.uid=s.uid')
-            ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
-            ->leftJoin('user_freezelist as sf', 'sf.uid=s.uid')
-            ->where(['s.id' => $supplier_id,'ub.role_id'=>self::ROLE_SUPPLIER])
+
+        $Supplier_info=Supplier::find()
+            ->select('shop_name,id,balance,availableamount')
+            ->where(['id'=>$supplier_id])
+            ->asArray()
             ->one();
-        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_OFFLINE])->sum('freeze_money');
-        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => 2])->sum('cash_money');
-        if ($array) {
-            $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
-            $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
-            $array['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
-            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['availableamount'] * 0.01);
-            unset($array['availableamount']);
-            return $array;
-
+        $data=[];
+        if($Supplier_info){
+            $Supplier_info['availableamount'] = sprintf('%.2f', (float)$Supplier_info['availableamount'] * 0.01);
+            $Supplier_info['balance'] = sprintf('%.2f', (float)$Supplier_info['balance'] * 0.01);
         }
+        $array=(new Query())
+            ->select('sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch')
+            ->from('user_bankinfo as ub')
+            ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
+            ->where(['ub.uid'=>$uid,'ub.role_id'=>6])
+            ->one();
+        if(!$array){
+            $array=[];
+        }
+        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 0])->sum('freeze_money');
+        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 2])->sum('cash_money');
+        $data['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
+//            $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
+        $data['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
+//        if($array){
+        $data= array_merge($array,$data,$Supplier_info);
 
-        return null;
+//            $array['availableamount'] = sprintf('%.2f', (float)$array['availableamount'] * 0.01);
+//        }else{
+//            return null;
+//        }
+//        $query = new Query();
+//        $select = 's.uid,s.id,s.balance,s.shop_name,sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch,sf.freeze_money,s.availableamount';
+//        $array = $query->from('supplier as s')
+//            ->select($select)
+//            ->leftJoin('user_cashregister as sc', 'sc.uid=s.uid')
+//            ->leftJoin('user_bankinfo as ub', 'ub.uid=s.uid')
+//            ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
+//            ->leftJoin('user_freezelist as sf', 'sf.uid=s.uid')
+//            ->where(['s.id' => $supplier_id,'ub.role_id'=>self::ROLE_SUPPLIER])
+//            ->one();
+//        $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => self::STATUS_OFFLINE])->sum('freeze_money');
+//        $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $uid])->andWhere(['role_id' => self::ROLE_SUPPLIER])->andWhere(['status' => 2])->sum('cash_money');
+//        if ($array) {
+//            $array['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
+//            $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
+//            $array['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
+//            $array['cashwithdrawal_money'] = sprintf('%.2f', (float)$array['availableamount'] * 0.01);
+//            unset($array['availableamount']);
+//            return $array;
+//
+//        }
+//
+        return $data;
 
     }
 
