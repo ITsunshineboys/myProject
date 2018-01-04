@@ -43,12 +43,12 @@ angular.module("add_brand_module",[])
 		};
 		//上传品牌LOGO
 		$scope.upload_logo = function (file) {
-			if(!$scope.data.file){
+			if(!$scope.logo_data.file){
 				return
 			}
 			$scope.logo_txt='上传...'
 			$scope.upload_dis=true;
-			console.log($scope.data);
+			console.log($scope.logo_data);
 			Upload.upload({
 				url:'/site/upload',
 				data:{'UploadForm[file]':file}
