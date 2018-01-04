@@ -332,7 +332,7 @@ class SupplierCashManager extends ActiveRecord
      * @param $search
      * @return array
      */
-    public static function getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC',$time_s)
+    public static function getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $time_s,$orderBy = 'id DESC')
     {
 
         $query = (new Query())
