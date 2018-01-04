@@ -100,17 +100,20 @@ app.controller('mall_account_ctrl', function ($scope, $rootScope, _ajax, $state,
             }else{
                 $scope.params.category_id = $scope.third
             }
+            $scope.Config.currentPage = 1
             tablePages()
         }
     }
     $scope.$watch('keyword',function (newVal,oldVal) {
         if(newVal == ''&&oldVal!=''&&$scope.params.category_id!=''){
             $scope.params.keyword = ''
+            $scope.Config.currentPage = 1
             tablePages()
         }
     })
     $scope.getAccountList = function () {
         if($scope.keyword!=''){
+            $scope.Config.currentPage = 1
             $scope.params.keyword = $scope.keyword
             $scope.params.category_id = $scope.level_one[0].id
             $scope.first = $scope.level_one[0].id
