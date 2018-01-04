@@ -5,6 +5,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		$scope.goods_all_attrs=[];//所有属性数据
 		$scope.logistics=[];//物流模块列表
     $scope.series_null_flag=false;
+    $scope.series_down_flag=false;
     $scope.style_null_flag=false;
     $scope.series_null_arr=[];
     $scope.style_null_arr=[];
@@ -84,20 +85,29 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.brands_arr=[];
 	$scope.series_arr=[];
 	$scope.styles_arr=[];
-	_ajax.get('/mall/category-brands-styles-series',{
-		category_id:+goods_item.category_id,
-		from_add_goods_page:1
-	},function (res) {
-		/*品牌、系列、风格 下拉框开始*/
-		$scope.brands_arr=res.data.category_brands_styles_series.brands;
-		$scope.series_arr=res.data.category_brands_styles_series.series;
-		$scope.styles_arr=res.data.category_brands_styles_series.styles;
-		_ajax.get('/mall/goods-view',{id:$scope.goods_id},function (res) {
-			$scope.detail_brand=res.data.goods_view.brand_name;//品牌名称
-			$scope.detail_ser=res.data.goods_view.series_name;//系列名称
-			$scope.detail_style=res.data.goods_view.style_name;//风格名称
-			$scope.line_goods = res.data.goods_view.line_goods;//线下店信息
-
+	$scope.style_ids = [];
+	$scope.style_check_arr=[];
+	$scope.detail_brand=[]
+	$scope.detail_ser=[]
+	$scope.detail_style=[]
+	$scope.line_goods=[]
+	_ajax.get('/mall/goods-view-admin',{id:$scope.goods_id},function (res) {
+		console.log(res);
+		$scope.detail_brand=res.data.goods_view_admin.brand_name;//品牌名称
+		$scope.detail_ser=res.data.goods_view_admin.series_name;//系列名称
+		$scope.detail_style=res.data.goods_view_admin.style_name;//风格名称
+		$scope.line_goods = res.data.goods_view_admin.line_goods;//线下店信息
+		$scope.style_ids = res.data.goods_view_admin.style_ids // 风格ids
+		console.log($scope.style_ids);
+		_ajax.get('/mall/category-brands-styles-series',{
+			category_id:+goods_item.category_id,
+			from_add_goods_page:1
+		},function (res) {
+			console.log(res);
+			/*品牌、系列、风格 下拉框开始*/
+			$scope.brands_arr=res.data.category_brands_styles_series.brands;
+			$scope.series_arr=res.data.category_brands_styles_series.series;
+			$scope.styles_arr=res.data.category_brands_styles_series.styles;
 			//循环品牌列表
 			for(let [key,value] of $scope.brands_arr.entries()){
 				if(value.name==$scope.detail_brand){
@@ -117,39 +127,37 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 					$scope.series_model=value.id;
 				}
 			}
-			//循环风格列表
-			for(let [key,value] of $scope.styles_arr.entries()){
-				$scope.style_null_arr.push(value.style);
-				if(value.style==$scope.detail_style){
-					$scope.styles_arr.splice(key,1);
-					$scope.styles_arr.unshift(value);
-					//把对应的风格前置到下拉框第一项
-					$scope.style_model=value.id;
-				}
+			if($scope.detail_ser === ''){
+				$scope.series_null_flag = true
+				$scope.series_hint_words = '添加系列，便于智能报价抓取该商品'
 			}
-			if(!!res.data.goods_view.series_name){
+			if(!!$scope.detail_ser){
 				let series_null_flag= $scope.series_null_arr.findIndex(function (value) {
 					return $scope.detail_ser==value
 				});
-				console.log(series_null_flag);
-				series_null_flag===-1?$scope.series_null_flag=true:$scope.series_null_flag=false;
-			}else{
-				$scope.series_model=true;
+				if (series_null_flag === -1) {
+					$scope.series_down_flag = true;
+					$scope.series_hint_words = '该商品原系列已下架'
+				} else {
+					$scope.series_down_flag = false;
+				}
 			}
-			if(!!res.data.goods_view.style_name){
-				let style_null_flag= $scope.style_null_arr.findIndex(function (value) {
-					return $scope.detail_style==value
-				});
-				style_null_flag===-1?$scope.style_null_flag=true:$scope.style_null_flag=false;
-			}else{
-				$scope.style_model=true;
-			}
-		})
-	});
+
+			// 风格默认勾选
+			for (let [key,value] of $scope.styles_arr.entries()) {
+					let style_index = $scope.style_ids.findIndex(function (value1) {
+						return value.id == value1
+					})
+					style_index ===-1 ? value.status = false : value.status = true
+				}
+			console.log($scope.styles_arr);
+		});
+	})
 	/*==================品牌、系列、风格 下拉框结束===========================*/
 
 	/*---------------------------------属性获取开始---------------------------------*/
 	$scope.goods_input_attrs=[];//普通文本框
+	$scope.merchant_add_attrs = [] ; // 商家自己添加的属性
 	$scope.goods_select_attrs=[];//下拉框
 	$scope.goods_select_value=[];//下拉框的值
 	$scope.pass_attrs_name=[];//名称
@@ -158,11 +166,13 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
   _ajax.get('/mall/goods-attrs-admin',{goods_id:+$scope.goods_id},function (res) {
 	  $scope.goods_all_attrs=res.data.goods_attrs_admin;
 	  //循环所有获取到的属性值，判断是普通文本框还是下拉框
-	  for( let [key,value] of $scope.goods_all_attrs.entries()){
-		  if(value.addition_type==1){
+	  for (let [key, value] of $scope.goods_all_attrs.entries()) {
+		  if (value.addition_type === 1) {
 			  $scope.goods_select_attrs.push(value);
-		  }else{
+		  } else if (value.addition_type === 0 && value.from_type === 0) {
 			  $scope.goods_input_attrs.push(value);
+		  }else if(value.from_type === 1) {
+			  $scope.merchant_add_attrs.push(value)
 		  }
 	  }
 	  //循环添加名称和值
@@ -194,7 +204,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
 		if(item.value!==undefined){
-			item.value = item.value.replace(/[^\d]/g,'');
+			let reg_value = reg.test(item.value);
+			!reg_value ? item.status = true : item.status = false
 		}
 	};
 	//自己添加的属性
@@ -350,8 +361,17 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
     };
 	/*--------------编辑保存按钮----------------------*/
 	$scope.edit_confirm=function (valid,error) {
+		// 判断默认属性输入规则是否符合标准
+		for (let [key,value] of $scope.goods_input_attrs.entries()) {
+			if (value.status === true) {
+				$scope.attr_blur_flag = false
+				break
+			}else{
+				$scope.attr_blur_flag = true
+			}
+		}
     let description = UE.getEditor('editor').getContent();//富文本编辑器
-		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.own_submitted && !$scope.price_flag &&!!$scope.series_model && !!$scope.style_model && $scope.brands_arr.length > 0){
+		if(valid && $scope.upload_cover_src &&$scope.logistics_status && !$scope.own_submitted && !$scope.price_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag){
 			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票
@@ -404,8 +424,13 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				}
 			}
 			/*判断风格和系列是否存在，如果不存在，值传0*/
-			$scope.series_model == true?$scope.series_model=0:$scope.series_model=parseInt($scope.series_model);
-			$scope.style_model == true?$scope.style_model=0:$scope.style_model=parseInt($scope.style_model);
+			for (let [key,value] of $scope.styles_arr.entries()) {
+				if (value.status === true) {
+					$scope.style_check_arr.push(value.id)
+				}
+			}
+			$scope.series_model == undefined ? $scope.series_model=0 : $scope.series_model = $scope.series_model;
+			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = 0 : $scope.style_check_arr = $scope.style_check_arr.join(',')
 			/*循环自己添加的属性*/
 			for(let[key,value] of $scope.own_attrs_arr.entries()){
 				$scope.pass_attrs_name.push(value.name);//属性名
@@ -419,27 +444,25 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				$scope.pass_attrs_value=[];
 			}
 			/*判断是默认属性是 下拉框还是普通文本框*/
-            if($scope.goods_input_attrs[0]!=undefined){
-                for(let[key,value] of $scope.goods_input_attrs.entries()){
-                    $scope.pass_attrs_name.push(value.name);
-                    $scope.pass_attrs_value.push(value.value);
-                }
-            }
-            if($scope.goods_select_attrs[0]!=undefined){
-                for(let[key,value] of $scope.goods_select_attrs.entries()){
-                    $scope.pass_attrs_name.push(value.name);
-                    $scope.pass_attrs_value.push(value.selected);
-                }
-            }
-			console.log($scope.pass_attrs_name);
-			console.log($scope.pass_attrs_value);
+      if($scope.goods_input_attrs[0]!=undefined){
+          for(let[key,value] of $scope.goods_input_attrs.entries()){
+              $scope.pass_attrs_name.push(value.name);
+              $scope.pass_attrs_value.push(value.value);
+          }
+      }
+      if($scope.goods_select_attrs[0]!=undefined){
+          for(let[key,value] of $scope.goods_select_attrs.entries()){
+              $scope.pass_attrs_name.push(value.name);
+              $scope.pass_attrs_value.push(value.selected);
+          }
+      }
 			_ajax.post('/mall/goods-edit',{
 				id:+$scope.goods_id, //id
 				title:$scope.goods_name,//名称
 				subtitle:$scope.des_name,//特色
 				brand_id:+$scope.brand_model,//品牌
-				style_id:+$scope.style_model,//风格
-				series_id:+$scope.series_model,//系列
+				style_id:$scope.style_check_arr,//风格
+				series_id:$scope.series_model,//系列
 				'names[]':$scope.pass_attrs_name,//属性名称
 				'values[]':$scope.pass_attrs_value,//属性值
 				cover_image:$scope.upload_cover_src,//封面图

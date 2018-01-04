@@ -11,6 +11,7 @@ angular.module("add_brand_module",[])
 		$scope.logo_txt='上传'
 		$scope.upload_dis=false;
 		$scope.brand_name_flag=false;
+		$scope.ids_arr = []; // 三级分类
 		//上传商标注册证
 		$scope.upload_img_src='';
 		$scope.data = {
@@ -33,9 +34,9 @@ angular.module("add_brand_module",[])
 				}else{
 					$scope.img_flag='';
 					$scope.upload_img_src=response.data.data.file_path;
-					$scope.trademark_txt='上传';
-					$scope.upload_dis=false;
 				}
+				$scope.trademark_txt='上传';
+				$scope.upload_dis=false;
 			},function (error) {
 				console.log(error)
 			})
@@ -57,10 +58,10 @@ angular.module("add_brand_module",[])
 					$scope.img_logo_flag="上传图片格式不正确，请重新上传"
 				}else{
 					$scope.img_logo_flag='';
-					$scope.upload_logo_src=response.data.data.file_path;
-					$scope.logo_txt='上传'
-					$scope.upload_dis=false;
+					$scope.upload_logo_src=response.data.data.file_path
 				}
+				$scope.logo_txt='上传'
+				$scope.upload_dis=false;
 			},function (error) {
 				console.log(error)
 			})
@@ -160,7 +161,6 @@ angular.module("add_brand_module",[])
 		//删除拥有系列的三级
 		$scope.delete_item = function (item) {
 			for(let[key,value] of $scope.three.entries()){
-				// console.log(value)
 				if(item.id==value.id){
 					value.complete=false;
 				}
@@ -176,12 +176,35 @@ angular.module("add_brand_module",[])
 
 		//添加确定按钮
 		$scope.add_brand_ok=function (valid,error) {
-			if (valid && $scope.upload_img_src && $scope.upload_logo_src && $scope.item_check.length >= 1) {
-				$scope.ids_arr = [];
-				for (let [key, value] of $scope.item_check.entries()) {
-					if (value.complete) {
-						delete value.complete
+			if(!$scope.upload_img_src){
+				$scope.img_flag='请上传图片';
+				$scope.add_modal_v='';
+			}
+			if(!$scope.upload_logo_src){
+				$scope.img_logo_flag='请上传图片';
+				$scope.add_modal_v='';
+			}
+			if($scope.item_check.length<1){
+				$scope.sort_check='请至少选择一个分类';
+			}else{
+				$scope.sort_check='';
+			}
+			if(!valid){
+				$scope.submitted = true;
+				//循环错误，定位到第一次错误，并聚焦
+				for (let [key, value] of error.entries()) {
+					if (value.$invalid) {
+						$anchorScroll.yOffset = 150;
+						$location.hash(value.$name);
+						$anchorScroll();
+						$window.document.getElementById(value.$name).focus();
+						break
 					}
+				}
+			}
+			if (valid && $scope.upload_img_src && $scope.upload_logo_src && $scope.item_check.length >= 1) {
+				$scope.ids_arr = []
+				for (let [key, value] of $scope.item_check.entries()) {
 					$scope.ids_arr.push($scope.item_check[key].id)
 				}
 				_ajax.post('/mall/brand-add', {
@@ -201,32 +224,6 @@ angular.module("add_brand_module",[])
 						$window.document.getElementById('brand_title').focus();
 					}
 				})
-			}
-			if(!valid){
-				$scope.submitted = true;
-				//循环错误，定位到第一次错误，并聚焦
-				for (let [key, value] of error.entries()) {
-					if (value.$invalid) {
-						$anchorScroll.yOffset = 150;
-						$location.hash(value.$name);
-						$anchorScroll();
-						$window.document.getElementById(value.$name).focus();
-						break
-					}
-				}
-			}
-			if(!$scope.upload_img_src){
-				$scope.img_flag='请上传图片';
-				$scope.add_modal_v='';
-			}
-			if(!$scope.upload_logo_src){
-				$scope.img_logo_flag='请上传图片';
-				$scope.add_modal_v='';
-			}
-			if($scope.item_check.length<1){
-				$scope.sort_check='请至少选择一个分类';
-			}else{
-				$scope.sort_check='';
 			}
 		};
 		//模态框确认按钮

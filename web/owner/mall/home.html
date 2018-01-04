@@ -1,0 +1,44 @@
+<div class="font_f">
+    <div class="header">
+        <img src="images/home_top.png" alt="" />
+    </div>
+
+    <section>
+       <div class="intelligent_div">
+            <div class="intelligent_div_box">
+                <div class="clearfix">
+                    <div class="intel pull-left">智能报价</div>
+                    <a ui-sref="city_choose" class="pull-right">
+                        <img class="adress_img" src="images/index_local.png"/>
+                        <span class="address">成都</span>
+                    </a>
+                </div>
+                <a class="two_box" ui-sref="nodata">
+                    <button>计算我的房屋报价</button>
+                </a>
+            </div>
+        </div>
+
+        <!--展示页面-->
+        <div class="exhibition">
+            <ul>
+                <li class="animated fadeInUp" ng-repeat="item in recommend_list | orderBy:'sort'"
+                ng-style="{animationDelay:($index==0)?'0s':(($index==1)?'0.15s':'0.3s')}" >
+                    <a ui-sref="modelRoom({roomCode: item.district_code, toponymy: item.toponymy, street: item.street})">
+                        <!--<span>10.1万</span>-->
+                        <!--<h1>今日花园</h1>-->
+                        <!--<p>60m<sup>2</sup> 一室一厅一卫 齐家风格 现代简约</p>-->
+                        <img ng-src="{{item.image}}" style="height: 14.13rem;"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <div class="tab_bottom">
+        <ul>
+            <li class="span_active"><a ><img src="images/public_jisuan_active.png" alt=""><br><span>报价</span></a></li>
+            <li><a href="/line/index.html"><img src="images/public_shop.png" alt=""><br><span>商城</span></a></li>
+            <li><a href="/distribution"><img src="images/public_fenxiao.png" alt=""><br><span>分销</span></a></li>
+        </ul>
+    </div>
+</div>

@@ -54,9 +54,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			$scope.series_model = res.data.category_brands_styles_series.series[0].id;
 		}
 		$scope.styles_arr = res.data.category_brands_styles_series.styles;
-		// if ($scope.styles_arr.length > 0) {
-		// 	$scope.style_model = res.data.category_brands_styles_series.styles[0].id;
-		// }
 	})
 	/*品牌、系列、风格 下拉框结束*/
 
@@ -89,7 +86,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.goods_select_value_pass = [];//传值的下拉框值
 	//大后台添加的属性
 	_ajax.get('/mall/category-attrs', {category_id: +$scope.category_id}, function (res) {
-		console.log(res);
 		$scope.goods_all_attrs = res.data.category_attrs;
 		//循环所有获取到的属性值，判断是普通文本框还是下拉框
 		for (let [key, value] of $scope.goods_all_attrs.entries()) {
@@ -109,7 +105,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
 		if(item.value!==undefined){
-			item.value = item.value.replace(/[^\d]/g,'');
+			let reg_value = reg.test(item.value);
+			!reg_value ? item.status = true : item.status = false
 		}
 	};
 	//库存
@@ -158,7 +155,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		$scope.upload_dis=true;
 		$scope.upload_txt='上传中...';
 		Upload.upload({
-			url: baseUrl + '/site/upload',
+			url: '/site/upload',
 			data: {'UploadForm[file]': file}
 		}).then(function (response) {
 			console.log(response);
@@ -167,9 +164,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			} else {
 				$scope.cover_flag = '';
 				$scope.upload_cover_src = response.data.data.file_path;
-				$scope.upload_dis=false;
-				$scope.upload_txt='上传';
 			}
+			$scope.upload_dis=false;
+			$scope.upload_txt='上传';
 		}, function (error) {
 			console.log(error);
 			$scope.upload_cover_src = '';
@@ -190,17 +187,17 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		$scope.completeUpload = false;
 		$scope.upload_img_arr.push(loadingPicUri);
 		Upload.upload({
-			url: baseUrl + '/site/upload',
+			url: '/site/upload',
 			data: {'UploadForm[file]': file}
 		}).then(function (response) {
 			$scope.upload_img_arr.pop();
 			if (!response.data.data) {
 				$scope.img_flag = "上传图片格式不正确，请重新上传"
 			} else {
-				$scope.completeUpload = true;
 				$scope.img_flag = '';
 				$scope.upload_img_arr.push(response.data.data.file_path);
 			}
+			$scope.completeUpload = true;
 		}, function (error) {
 			console.log(error)
 			$scope.upload_img_arr.pop();
@@ -252,8 +249,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	};
 	/*---------------物流模板--------------------*/
 	_ajax.post('/mall/logistics-templates-supplier', {}, function (res) {
-		console.log('物流模板');
-		console.log(res);
 		if (res.data.logistics_templates_supplier.length > 0) {
 			$scope.logistics_flag1 = true;
 			$scope.logistics = res.data.logistics_templates_supplier;
@@ -261,7 +256,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			//物流模块详情
 			$scope.$watch('shop_logistics', function (newVal, oldVal) {
 				_ajax.get('/mall/logistics-template-view', {id: +newVal}, function (res) {
-					console.log(res);
 					$scope.logistics_method = res.data.logistics_template.delivery_method;//快递方式
 					$scope.district_names = res.data.logistics_template.district_names;//地区
 					$scope.delivery_cost_default = res.data.logistics_template.delivery_cost_default;//默认运费
@@ -327,9 +321,18 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				$scope.after_sale_services.splice(del_index, 1);
 			}
 		}
+		// 判断默认属性输入规则是否符合标准
+		for (let [key,value] of $scope.goods_input_attrs.entries()) {
+			if (value.status === true) {
+				$scope.attr_blur_flag = false
+				break
+			}else{
+				$scope.attr_blur_flag = true
+			}
+		}
 
 		/*判断必填项，全部ok，调用添加接口*/
-		if (valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0) {
+		if (valid && $scope.upload_cover_src && !$scope.price_flag && !$scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
 			console.log($scope.brands_arr.length)
 			console.log($scope.own_submitted);
 			let description = UE.getEditor('editor').getContent();//富文本编辑器
@@ -355,7 +358,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			}
 			/*判断风格和系列是否存在，如果不存在，值传0*/
 			$scope.series_model == undefined ? $scope.series_model = 0 : $scope.series_model = parseInt($scope.series_model);
-			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = [] : $scope.style_check_arr = $scope.style_check_arr.join(',')
+			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = 0 : $scope.style_check_arr = $scope.style_check_arr.join(',')
 			/*如果没有属性，则传空数组*/
 			if ($scope.pass_attrs_name[0] == undefined) {
 				$scope.pass_attrs_name = [];

@@ -100,6 +100,7 @@ var app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
             return deferred.promise
         };
         this.post = function (url, params, callback) {
+            let deferred = $q.defer()
             $http({
                 method: 'post',
                 url: baseUrl + url,

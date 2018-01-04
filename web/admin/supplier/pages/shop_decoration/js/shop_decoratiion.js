@@ -191,9 +191,9 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
       }else{
         $scope.banner_add_img_flag='';
         $scope.banner_add_img_src=response.data.data.file_path;
-	      $scope.upload_dis=false;
-	      $scope.upload_txt='上传';
       }
+	    $scope.upload_dis=false;
+	    $scope.upload_txt='上传';
     },function (error) {
       console.log(error)
     })
@@ -287,9 +287,9 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
       }else{
         $scope.banner_edit_img_flag='';
         $scope.banner_edit_img_src=response.data.data.file_path;
-	      $scope.upload_dis=false;
-	      $scope.upload_txt='上传';
       }
+	    $scope.upload_dis=false;
+	    $scope.upload_txt='上传';
     },function (error) {
       console.log(error)
     })

@@ -573,7 +573,7 @@ class SupplierCashController extends Controller
 
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('page_size', ModelService::PAGE_SIZE_DEFAULT);
-        $paginationData = SupplierCashManager::getCashListAll($where,$page, $page_size);
+        $paginationData = SupplierCashManager::getCashListAll($where,$page, $page_size,$time_s);
         return json_encode([
             'code' => 200,
             'msg' => 'ok',
