@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 
+use app\models\BankinfoLog;
 use app\models\ChatRecord;
 use app\models\EffectEarnest;
 use app\models\OwnerCashManager;
@@ -684,7 +685,7 @@ class SupplierCashController extends Controller
 //       $user->availableamount=99889865;
 //       $user->save(false);
 //       var_dump($user);die;
-      var_dump(UserAccessdetail::find()->asArray()->all());
+      var_dump(BankinfoLog::find()->asArray()->all());
 
     }
 
