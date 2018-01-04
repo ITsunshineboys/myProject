@@ -4363,6 +4363,7 @@ class OrderController extends Controller
             ->andWhere(['sku'=>$sku])
             ->asArray()
             ->one();
+        var_dump($logisticsTemplate);die;
         if (!$logisticsTemplate)
         {
             $logisticsTemplate=LogisticsTemplate::find()
