@@ -325,6 +325,11 @@ class EffectEarnest extends \yii\db\ActiveRecord
         }
 
     }
+    /**
+     * @param $uid
+     * @param $type
+     * @return array
+     */
     public static function PlanList($uid,$type){
         $effect_earnests=EffectEarnest::find()
             ->where(['uid'=>$uid,'type'=>$type,'item'=>1])
