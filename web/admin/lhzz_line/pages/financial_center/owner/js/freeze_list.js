@@ -47,18 +47,20 @@ app.controller('freeze_list_ctrl',function ($uibModal,$state,$stateParams,$scope
     };
     $scope.params = {
         time_type:'' ,
-        time_start: '',
-        time_end: '',
+        start_time: '',
+        end_time: '',
         user_id:$stateParams.user_id
     };
     $scope.getFreezeList = function () {
         if($scope.params.use_id!=''&&$scope.params.time_type!=''){
             if($scope.params.time_type == 'custom'){
-                if($scope.params.time_start!=''||$scope.params.time_end!=''){
+                if($scope.params.start_time!=''||$scope.params.end_time!=''){
                     $scope.Config.currentPage = 1
                     tablePages()
                 }
             }else{
+                $scope.params.start_time = ''
+                $scope.params.end_time = ''
                 $scope.Config.currentPage = 1
                 tablePages()
             }
