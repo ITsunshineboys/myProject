@@ -44,31 +44,37 @@ class UserNewsRecord extends ActiveRecord
                 $code=1000;
                 return $code;
             }
+
+
+
+            $registration_id=$user->registration_id;
+            $push=new Jpush();
+            $extras =[
+                'role_id'=>$role_id,
+                'order_no'=>$order_no,
+                'sku'=>$sku,
+                'type'=>$type,
+            ];
+
+            //推送附加字段的类型
+            $m_time = '86400';//离线保留时间
+            $receive = ['registration_id'=>[$registration_id]];//设备的id标识
+
+            $result = $push->push($receive,$title,$content,$extras, $m_time);
+            if (!$result)
+            {
+                $code=1000;
+                $tran->rollBack();
+                return $code;
+            }
             $tran->commit();
+            return 200;
         }catch (\Exception $e){
             $code=1000;
             $tran->rollBack();
             return $code;
         }
-        $registration_id=$user->registration_id;
-        $push=new Jpush();
-        $extras =[
-            'role_id'=>$role_id,
-            'order_no'=>$order_no,
-            'sku'=>$sku,
-            'type'=>$type,
-        ];
-        //推送附加字段的类型
-        $m_time = '86400';//离线保留时间
-        $receive = ['registration_id'=>[$registration_id]];//设备的id标识
-        $result = $push->push($receive,$title,$content,$extras, $m_time);
-        if (!$result)
-        {
-            $code=1000;
-            return $code;
-        }
-        $code=200;
-        return $code;
+
     }
 
 
