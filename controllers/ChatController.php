@@ -303,7 +303,7 @@ class ChatController extends Controller
             ]);
         }
         $chat_limt = UserChat::chatlimt($u_id);
-        if($chat_limt>=10){
+        if($chat_limt>=100){
             $code =1082;
             return Json::encode([
                 'code'=>$code,
@@ -355,7 +355,7 @@ class ChatController extends Controller
             ]);
         }
         $chat_limt = UserChat::chatlimt($u_id);
-        if($chat_limt>=10){
+        if($chat_limt>=100){
             $code =1082;
             return Json::encode([
                 'code'=>$code,
