@@ -131,7 +131,7 @@ class SupplierCashManager extends ActiveRecord
         if ($arr['handle_time']) {
             $arr['handle_time'] = date('Y-m-d H:i', $arr['handle_time']);
         }
-        $bankcard = self::GetBankcard($arr['bank_log_id'],self::ROLE_ID);
+        $bankcard = self::GetBankcard($arr['bank_log_id']);
         $supplier = self::GetSupplier($supplier_id);
         if ($supplier) {
             $arr['supplier_name'] = $supplier['shop_name'];
@@ -169,13 +169,14 @@ class SupplierCashManager extends ActiveRecord
      * @param $bank_log_id
      * @return ActiveRecord
      */
-    public static function GetBankcard($bank_log_id,$role_id)
+    public static function GetBankcard($bank_log_id)
     {
-        return BankinfoLog::find()
-            ->select('bankinfo_log.*')
-            ->leftJoin('user_bankinfo','user_bankinfo.log_id=bankinfo_log.id')
-            ->where(['bankinfo_log.id' => $bank_log_id,'user_bankinfo.role_id'=>$role_id])
-            ->one();
+        return BankinfoLog::find()->where(['id'=>$bank_log_id])->asArray()->one();
+//        return BankinfoLog::find()
+//            ->select('bankinfo_log.*')
+//            ->leftJoin('user_bankinfo','user_bankinfo.log_id=bankinfo_log.id')
+//            ->where(['bankinfo_log.id' => $bank_log_id,'user_bankinfo.role_id'=>$role_id])
+//            ->one();
     }
 
     public static function GetSupplier($supplier_id)
