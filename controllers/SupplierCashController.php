@@ -397,6 +397,14 @@ class SupplierCashController extends Controller
         }
 
         $data = OwnerCashManager::GetCashView($transaction_no);
+        if(is_numeric($data))
+        {
+            $code = $data;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         return Json::encode([
             'code' => 200,
             'msg' => 'ok',
