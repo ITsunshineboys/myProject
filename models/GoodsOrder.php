@@ -939,12 +939,10 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['order_id']);
             unset($arr[$k]['return_insurance']);
             unset($arr[$k]['consignee']);
-            unset($arr[$k]['shipping_type']);;
             unset($arr[$k]['send_time']);;
             unset($arr[$k]['complete_time']);;
-            unset($arr[$k]['RemainingTime']);;
-            unset($arr[$k]['pay_term']);;
-            unset($arr[$k]['shipping_type']);
+            unset($arr[$k]['RemainingTime']);
+            unset($arr[$k]['pay_term']);
             $amount_order[$k]  = $arr[$k]['amount_order'];
             $create_time[$k]  = $arr[$k]['create_time'];
         }
