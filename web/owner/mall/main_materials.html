@@ -1,5 +1,20 @@
 <div class="main_body">
-    <div class="fill"></div>
+    <!--<div class="fill"></div>-->
+    <header>
+        <div>
+            <a class="return_btn" ng-click="goPrev()">
+                <img src="images/mall_nav_return.png" class="in_span">
+            </a>
+            <p class="pic_span" style="text-align: center;">主材料</p>
+            <!--<p class="cur_location">-->
+                <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+                <!--<span class="postion_span">成都</span>-->
+            <!--</p>-->
+            <!--<p class="cur_location" ng-if="is_edit">-->
+            <!--<span class="postion_span" ng-click="switch_delete()">{{cur_operate}}</span>-->
+            <!--</p>-->
+        </div>
+    </header>
     <section>
         <!--地面材料-->
         <div ng-repeat="item in cur_item.second_level" class="detail_block">
