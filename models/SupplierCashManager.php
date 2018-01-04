@@ -133,16 +133,24 @@ class SupplierCashManager extends ActiveRecord
         }
         $bankcard = self::GetBankcard($arr['bank_log_id'],self::ROLE_ID);
         $supplier = self::GetSupplier($supplier_id);
-        if (!$bankcard || !$supplier) {
-            return null;
+        if ($supplier) {
+            $arr['supplier_name'] = $supplier['shop_name'];
+
+        }else{
+            $supplier=null;
+        }
+        if ($bankcard) {
+            $arr['card_no'] = $bankcard['bankcard'];
+
+            $arr['bank_name'] = $bankcard['bankname'];
+            $arr['position'] = $bankcard['position'];
+            $arr['bank_branch'] = $bankcard['bankbranch'];
+            $arr['username'] = $bankcard['username'];
+
+        }else{
+            $bankcard=null;
         }
 
-        $arr['card_no'] = $bankcard['bankcard'];
-        $arr['supplier_name'] = $supplier['shop_name'];
-        $arr['bank_name'] = $bankcard['bankname'];
-        $arr['position'] = $bankcard['position'];
-        $arr['bank_branch'] = $bankcard['bankbranch'];
-        $arr['username'] = $bankcard['username'];
         $arr['cash_money'] = sprintf('%.2f', (float)$arr['cash_money'] / 100);
         if ($arr['real_money']) {
             $arr['real_money'] = sprintf('%.2f', (float)$arr['real_money'] / 100);
