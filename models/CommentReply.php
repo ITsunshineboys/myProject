@@ -56,7 +56,11 @@ class CommentReply extends ActiveRecord
                return $code;
            }
            $OrderGoods=OrderGoods::FindByOrderNoAndSku($postData['order_no'],$postData['sku']);
-           var_dump($OrderGoods);die;
+           if (!$OrderGoods)
+           {
+               $code=1000;
+               return $code;
+           }
            if ($OrderGoods->comment_id==0){
                $code=1000;
                return $code;
