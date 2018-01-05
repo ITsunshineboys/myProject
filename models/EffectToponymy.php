@@ -105,4 +105,23 @@ class EffectToponymy extends \yii\db\ActiveRecord
         $total=self::find()->where($where)->count();;
         return ModelService::pageDeal($toponymylist, $total, $page, $size);
     }
+
+    public static function effectdatas($id){
+        $effect_ids=self::find()
+            ->where(['id'=>$id])
+            ->select('effect_id')
+            ->asArray()
+            ->one()['effect_id'];
+        $effect_ids=explode(',',$effect_ids);
+        $data=[];
+        foreach ($effect_ids as &$effect_id){
+            $data[]=Effect::find()
+                ->where(['id'=>$effect_id])
+                ->asArray()
+                ->one();
+        }
+        $data=self::arraySequence($data,'sort_id');
+        return $data;
+
+    }
 }

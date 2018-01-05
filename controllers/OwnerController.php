@@ -13,6 +13,7 @@ use app\models\EditCategory;
 use app\models\Effect;
 use app\models\EffectEarnest;
 use app\models\EffectPicture;
+use app\models\EffectToponymy;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
 use app\models\EngineeringUniversalCriterion;
@@ -1551,7 +1552,32 @@ class OwnerController extends Controller
 
 
     }
+    public function actionEffectCaseList(){
+        $id=(int)trim(Yii::$app->request->get('id',''));
+        $effect= EffectToponymy::effectdatas($id);
+        if ($effect == null) {
+            $code = 1066;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        foreach ($effect as &$one_effect){
+            $one_effect['detailed_address'] = $one_effect['province'] . $one_effect['city'] . $one_effect['district'] .  $one_effect['street'];
+            if ($one_effect['type'] == 1){
+                $one_effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
+            }
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data'=>[
+                'list' => $effect,
+//                'id' => $id,
+            ],
+        ]);
 
+    }
     /**
      * 案例列表
      * @return string
