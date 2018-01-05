@@ -81,9 +81,8 @@ class OwnerController extends Controller
         'waterproof' => 18,  // 防水工id
         'woodworker' => 1,  // 木工id
         'painters'   => 13,  // 油漆工id
-        'mason'      => 5,  // 泥瓦工id
+        'mason'      => 20,  // 泥瓦工id
         'backman'    => 6,  // 杂工id
-//        'backman_'          => '泥工',
     ];
 
     /**
@@ -311,6 +310,10 @@ class OwnerController extends Controller
                 $strong_overall_points = BasisDecorationService::strongPoints($strong_points,$get);
             }
         }
+
+        var_dump($strong_overall_points);
+        var_dump($weak_overall_points);
+        die;
 
         // 强弱电总点位
         $total_points = BasisDecorationService::algorithm(3,$weak_overall_points,$strong_overall_points);
@@ -931,42 +934,14 @@ class OwnerController extends Controller
      */
     public function actionMudMake()
     {
-        $post = \Yii::$app->request->get();
-        //工人一天单价
-//        $_select = 'id,univalence,worker_kind';
-        $labor_costs = LaborCost::profession($post, self::WORK_CATEGORY['mason']);
+        $get = \Yii::$app->request->get();
 
-        if ($labor_costs == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['mason']);
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+        var_dump($day_workload);die;
 
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+        foreach ($day_workload as $one_day) {
 
-
-
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($worker_kind_details as $labor_cost) {
-            switch ($labor_cost) {
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['protective_layer_length']:
-                    $covering_layer_day_area = $labor_cost['quantity']/100;
-                    break;
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['geostrophy_area']:
-                    $geostrophy_day_area = $labor_cost['quantity']/100;
-                    break;
-                case $labor_cost['worker_kind_details'] == self::WORKMANSHIP['wall_brick_area']:
-                    $wall_tile_day_area = $labor_cost['quantity']/100;
-                    break;
-            }
         }
 
         //泥作面积    mudMakeArea
