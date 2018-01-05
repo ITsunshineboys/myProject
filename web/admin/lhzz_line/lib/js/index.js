@@ -90,12 +90,8 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         $scope.account_flag = false;
         $scope.other_flag = '';
         $scope.mall_active = 0;
-        sessionStorage.removeItem('finance_menu');
-        sessionStorage.removeItem('mall_dd_menu');
-        sessionStorage.removeItem('finance_dd_menu');
-        sessionStorage.removeItem('account_menu');
-        sessionStorage.removeItem('account_dd_menu');
-        sessionStorage.removeItem('other_menu');
+
+        sessionStorage.clear()
         sessionStorage.setItem('mall_menu', $scope.mall_flag);
         $state.go('merchant_index')
     }
@@ -129,12 +125,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         $scope.account_flag = false;
         $scope.other_flag = '';
         $scope.finance_active = 0;
-        sessionStorage.removeItem('mall_menu');
-        sessionStorage.removeItem('mall_dd_menu');
-        sessionStorage.removeItem('finance_dd_menu');
-        sessionStorage.removeItem('account_menu');
-        sessionStorage.removeItem('account_dd_menu');
-        sessionStorage.removeItem('other_menu');
+        sessionStorage.clear()
         sessionStorage.setItem('finance_menu', $scope.finance_flag);
         $state.go('mall_finance');
     }
@@ -170,11 +161,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
         $scope.other_flag = '';
         $scope.account_active = 0;
 
-        sessionStorage.removeItem('mall_menu');
-        sessionStorage.removeItem('finance_menu');
-        sessionStorage.removeItem('mall_dd_menu');
-        sessionStorage.removeItem('finance_dd_menu');
-        sessionStorage.removeItem('other_menu');
+        sessionStorage.clear()
         sessionStorage.setItem('account_menu', $scope.account_flag);
         $state.go('account_user_list.normal')
     }
@@ -205,12 +192,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
 
     //其他一级菜单
     $scope.other_display = function (value) {
-        sessionStorage.removeItem('mall_menu');
-        sessionStorage.removeItem('mall_dd_menu');
-        sessionStorage.removeItem('finance_menu');
-        sessionStorage.removeItem('finance_dd_menu');
-        sessionStorage.removeItem('account_menu');
-        sessionStorage.removeItem('account_dd_menu');
+        sessionStorage.clear()
         console.log(value);
         $scope.other_flag = '';
         $scope.other_flag = value;

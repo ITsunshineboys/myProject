@@ -11,4 +11,5 @@ app.controller('home', ['$rootScope', '$scope', '_ajax', function ($rootScope, $
     _ajax.get('/mall/index-admin-lhzz', {}, function (res) {
         $scope.data = res.data.index_admin_lhzz
     })
+    sessionStorage.clear()
 }]);
