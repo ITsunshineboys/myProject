@@ -40,12 +40,12 @@ app.controller('experience_shop', ['$scope', '$http', '$timeout', '_ajax', funct
         // 获取省的数据
         $scope.province = selectProvince(86);
         // 默认显示为四川省-成都市
-        $scope.search_params.province_code = '510000';
+        /*$scope.search_params.province_code = '510000';
         listenProvince('510000');
         $timeout(function () {
             $scope.search_params.city_code = '510100';
             listenCity('510100');
-        })
+        },300)*/
     });
 
     // 开启或者关闭线下店

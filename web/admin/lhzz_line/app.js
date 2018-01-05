@@ -774,8 +774,15 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'order_goods'
         })
         .state('search', {    // 搜索页面
+            abstract: true,
             url: '/merchant_index/search',
             templateUrl: 'pages/mall_manage/merchant_manage/search_page/search_page.html',
+            css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css'
+            // controller: 'searchCtrl'
+        })
+        .state('search.order', {
+            url: '/order',
+            templateUrl: 'pages/mall_manage/merchant_manage/search_page/search_order.html',
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'searchCtrl'
         })

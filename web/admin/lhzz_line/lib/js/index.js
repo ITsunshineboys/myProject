@@ -62,7 +62,7 @@ app.controller("index_ctrl", function ($rootScope, $scope, _ajax, $state) {
     $scope.mall_obj = [
         {id: 0, name: '商城数据', link: 'merchant_index'},
         {id: 1, name: 'APP搜索位-banner管理', link: 'banner_recommend'},
-        {id: 2, name: '搜索页面', link: 'search'},
+        {id: 2, name: '搜索页面', link: 'search.order'},
         {id: 3, name: '商家管理', link: 'store_mag'},
         {id: 4, name: '商城数据', link: 'mall_data'},
         {id: 5, name: '品牌管理', link: 'brand_index'},

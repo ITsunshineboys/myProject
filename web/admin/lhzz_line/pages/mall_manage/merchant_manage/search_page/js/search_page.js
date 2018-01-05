@@ -9,7 +9,7 @@ app.controller('searchCtrl', ['$rootScope', '$scope', '_ajax', function ($rootSc
     // 筛选器
     $scope.orderFilter = {
         orderNum: true,     // 订单编号
-        goodsNum: true,    // 商品编号
+        goodsNum: false,    // 商品编号
         goodsName: true,    // 商品名称
         orderMoney: true,   // 订单金额
         orderTime: true,    // 下单时间
