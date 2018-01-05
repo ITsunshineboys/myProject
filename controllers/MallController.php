@@ -3933,6 +3933,64 @@ class MallController extends Controller
     }
 
 
+    /**
+     * Admin goods list action
+     *
+     * @return string
+     */
+    public function actionGoodsListSearch()
+    {
+        $code = 1000;
+
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $sort = Yii::$app->request->get('sort', []);
+        $model = new Goods;
+        $orderBy = $sort ? ModelService::sortFields($model, $sort) : ModelService::sortFields($model);
+        if ($orderBy === false) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
+        $status = (int)Yii::$app->request->get('status', Goods::STATUS_ONLINE);
+        $keyword = trim(Yii::$app->request->get('keyword', ''));
+        if (in_array($status, array_keys(Goods::$statuses))) {
+            $where = "status = {$status}";
+
+            if ($keyword) {
+                $where .= " and (sku like '%{$keyword}%' or title like '%{$keyword}%')";
+            }
+        }else
+        {
+            if ($keyword) {
+                $where = " (sku like '%{$keyword}%' or title like '%{$keyword}%')";
+            }
+        }
+        $page = (int)Yii::$app->request->get('page', 1);
+        $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
+        $fromLhzz = $user->login_role_id == Yii::$app->params['lhzzRoleId'];
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'OK',
+            'data' => [
+                'goods_list_admin' => [
+                    'total' => (int)Goods::find()->where($where)->asArray()->count(),
+                    'details' => Goods::pagination($where, Goods::FIELDS_ADMIN, $page, $size, $orderBy, $fromLhzz)
+                ]
+            ],
+        ]);
+    }
+
+
 
     /**
      * Goods images action
