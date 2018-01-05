@@ -8,6 +8,7 @@ use app\models\BrainpowerInitalSupervise;
 use app\models\CarpentryAdd;
 use app\models\CoefficientManagement;
 use app\models\DecorationAdd;
+use app\models\District;
 use app\models\EditCategory;
 use app\models\Effect;
 use app\models\EffectEarnest;
@@ -252,13 +253,20 @@ class OwnerController extends Controller
      */
     public function actionSearch()
     {
-        $id  = trim(Yii::$app->request->get('id',''));
+//        $id  = trim(Yii::$app->request->get('id',''));
         $str = trim(Yii::$app->request->get('str',''));
+        $city_code = (int)trim(Yii::$app->request->get('city_code','510100'));
         if ($str != null){
-            $select = 'id,toponymy,province,city,district_code,district,street';
-            $effect = Effect::districtSearch($str,$select);
+            $select = 'id,toponymy,province_code,city_code,district_code,street';
+            $effect = Effect::districtSearch($str,$select,$city_code);
             foreach ($effect as &$value){
+                $value['province']=District::findByCode($value['province_code'])['name'];
+                $value['city']=District::findByCode($value['city_code'])['name'];
+                $value['district']=District::findByCode($value['district_code'])['name'];
                 $value['detailed_address'] = $value['province'].$value['city'].$value['district'].$value['street'];
+                unset($value['province_code']);
+                unset($value['city_code']);
+                unset($value['district_code']);
             }
             return Json::encode([
                 'code' => 200,
@@ -268,15 +276,14 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-
-        if ($id != null){
-            $id_effect = Effect::findOne(['id'=>$id]);
-            return Json::encode([
-                'code' => 200,
-                'msg'  => '成功',
-                'data' => Effect::findAll(['toponymy'=>$id_effect->toponymy]),
-            ]);
-        }
+//        if ($id != null){
+//            $id_effect = Effect::findOne(['id'=>$id]);
+//            return Json::encode([
+//                'code' => 200,
+//                'msg'  => '成功',
+//                'data' => Effect::findAll(['toponymy'=>$id_effect->toponymy]),
+//            ]);
+//        }
 
     }
 
