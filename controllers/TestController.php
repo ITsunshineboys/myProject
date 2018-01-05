@@ -562,12 +562,11 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-            echo 1;
+       echo  $_COOKIE['PHPSESSID'];
     }
     public  static  function  actionTest1()
     {
-       echo  StringService::getClientIP();
-//        echo  Yii::$app->session['PHPSESSID'];die;
+        var_dump(Yii::$app->session['cart_goods']);
     }
 
 

@@ -249,10 +249,47 @@ class ShippingCart extends \yii\db\ActiveRecord
 
     public  static  function  addShippingCartNoLogin($goods_id,$goods_num)
     {
+        if (!$_COOKIE['PHPSESSID'])
+        {
+            Yii::$app->session['shipping_card_goods'];
+        }
+        $sessionId=$_COOKIE['PHPSESSID'];
+        $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-           echo 1;
-        }catch (\Exception $e){
+            if ($sessionId==1000)
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+//            $invalid_time=$time-24*3600;
+//            ShippingCart::deleteAll("uid = 0 AND role_id = 0  AND  create_time<{$invalid_time}");
+            $shipping_cart=ShippingCart::find()
+                ->where(['session_id'=>$sessionId])
+                ->andWhere(['goods_id'=>$goods_id])
+                ->one();
+            if ($shipping_cart)
+            {
+                $shipping_cart->goods_num+=$goods_num;
+            }else
+            {
+                $cart=new ShippingCart();
+                $cart->goods_id=$goods_id;
+                $cart->goods_num=$goods_num;
+                $cart->create_time=$time;
+                $cart->session_id=$sessionId;
+                if (!$cart->save(false))
+                {
+                    $tran->rollBack();
+                    $code=1000;
+                    return $code;
+                }
+                $tran->commit();
+                return$sessionId;
+            }
+        }catch (\Exception $e)
+        {
             $tran->rollBack();
             $code=1000;
             return $code;

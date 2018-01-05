@@ -5180,30 +5180,43 @@ class OrderController extends Controller
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=ShippingCart::addShippingCartNoLogin($goods_id,$goods_num);
+            if ($code==1000)
+            {
+                return Json::encode(
+                    [
+                        'code'=>$code,
+                        'msg'=>Yii::$app->params['errorCodes'][$code]
+                    ]
+                );
+            }else
+            {
+                return Json::encode([
+                    'code'=>200,
+                    'msg'=>'ok',
+                    'data'=>$code
+                ]);
+            }
         }else
         {
             $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
-        }
-
-
-
-
-
-        if ($code==200)
-        {
-            return Json::encode([
-                'code'=>$code,
-                'msg'=>'ok'
-            ]);
-        }else
-        {
-            return Json::encode(
-                [
+            if ($code==200)
+            {
+                return Json::encode([
                     'code'=>$code,
-                    'msg'=>Yii::$app->params['errorCodes'][$code]
-                ]
-            );
+                    'msg'=>'ok',
+                    'data'=>''
+                ]);
+            }else
+            {
+                return Json::encode(
+                    [
+                        'code'=>$code,
+                        'msg'=>Yii::$app->params['errorCodes'][$code]
+                    ]
+                );
+            }
         }
+
     }
     /**
      * 计算运费
