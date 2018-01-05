@@ -1620,6 +1620,10 @@ class User extends ActiveRecord implements IdentityInterface
                 $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
             }
 
+            if (YII_DEBUG) {
+                StringService::writeLog('test', json_encode($userRole->errors), 'owner_cert');
+                StringService::writeLog('test', json_encode($userRole->attributes), 'owner_cert');
+            }
             if (!$userRole->save()) {
                 $tran->rollBack();
                 return $code;
