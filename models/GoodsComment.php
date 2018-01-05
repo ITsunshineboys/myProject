@@ -525,17 +525,13 @@ class GoodsComment extends ActiveRecord
         if (!$comment){
             $grade='';
         }else{
-            $score=$comment->score;
-            if ($score==8 || $score==10){
-                $grade=self::DESC_SCORE_GOOD;
-            }else if ($score ==4 && $score ==6)
-            {
-                $grade=self::DESC_SCORE_MEDIUM;
-            }else if ($score ==2){
-                $grade=self::DESC_SCORE_POOR;
-            }else{
-                $grade='';
-            }
+                if (in_array($comment->score, self::SCORE_GOOD)) {
+                    $grade = self::DESC_SCORE_GOOD;
+                } elseif (in_array($comment->score, self::SCORE_MEDIUM)) {
+                    $grade= self::DESC_SCORE_MEDIUM;
+                } else {
+                    $grade = self::DESC_SCORE_POOR;
+                }
         }
         return $grade;
     }

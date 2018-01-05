@@ -495,10 +495,9 @@ class OrderAfterSale extends ActiveRecord
             'status'=>'over'
         ];
         //通过售后的类型获取是否过该类型下的平台介入
-        $handle=OrderPlatForm::GetAfterHandleType($OrderAfterSale->type);
         $PlatForm=OrderPlatForm::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
-            ->andWhere(['handle'=>$handle])
+            ->andWhere('handle !=1 and handle!=2')
             ->one();
         if (!$PlatForm){
             return ['data'=>$data,'platform'=>[]];
@@ -543,6 +542,7 @@ class OrderAfterSale extends ActiveRecord
             ];
             return ['data'=>$data,'platform'=>$RefundData];
         }
+
         $OrderGoods=OrderGoods::find()
             ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
             ->one();
