@@ -21,7 +21,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'search_ctrl'
             })
             .state('basic_decoration',{ // 基础装修
-                url:'/basic_decoration',
+                url:'/basic_decoration?index',
                 templateUrl:'basic_decoration.html',
                 css:['css/basics.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
                 controller:'basic_ctrl'

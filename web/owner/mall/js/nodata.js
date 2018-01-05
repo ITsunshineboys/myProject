@@ -1,5 +1,11 @@
 app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScroll, $location, $q) {
     $scope.vm = $scope
+    $scope.materials = []
+    $scope.worker_list = []
+    //监听滚动
+    // window.addEventListener('scroll',function (event) {
+    //     console.log(document.body.scrollTop);
+    // })
     /*初始化*/
     //基本信息
     $scope.params = {
@@ -129,7 +135,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     value1.second_level.push({
                                         id: $scope.second_level[index1].id,
                                         title: $scope.second_level[index1].title,
-                                        count: 0,
+                                        cost: 0,
                                         procurement: 0,
                                         goods: []
                                     })
@@ -145,14 +151,13 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     let index = value2.goods.findIndex(function (item) {
                                         return item.id == value.id
                                     })
-                                    value1.quantity += value.quantity
                                     value1.cost += value.cost
                                     value1.procurement += value.procurement
-                                    value2.quantity += value.quantity
                                     value2.cost += value.cost
                                     value2.procurement += value.procurement
                                     if (index == -1) {
                                         value2.goods.push(value)
+                                        value1.count ++
                                     } else {
                                         value2.goods[index].quantity += value.quantity
                                         value2.goods[index].cost += value.cost
@@ -183,7 +188,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     value1.second_level.push({
                                         id: $scope.second_level[index1].id,
                                         title: $scope.second_level[index1].title,
-                                        count: 0,
+                                        cost: 0,
                                         procurement: 0,
                                         goods: []
                                     })
@@ -199,14 +204,13 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     let index = value2.goods.findIndex(function (item) {
                                         return item.id == value.id
                                     })
-                                    value1.quantity += value.quantity
                                     value1.cost += value.cost
                                     value1.procurement += value.procurement
-                                    value2.quantity += value.quantity
                                     value2.cost += value.cost
                                     value2.procurement += value.procurement
                                     if (index == -1) {
                                         value2.goods.push(value)
+                                        value1.count ++
                                     } else {
                                         value2.goods[index].quantity += value.quantity
                                         value2.goods[index].cost += value.cost
@@ -245,7 +249,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     value1.second_level.push({
                                         id: $scope.second_level[index1].id,
                                         title: $scope.second_level[index1].title,
-                                        count: 0,
+                                        cost: 0,
                                         procurement: 0,
                                         goods: []
                                     })
@@ -261,14 +265,13 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     let index = value2.goods.findIndex(function (item) {
                                         return item.id == value.id
                                     })
-                                    value1.quantity += value.quantity
                                     value1.cost += value.cost
                                     value1.procurement += value.procurement
-                                    value2.quantity += value.quantity
                                     value2.cost += value.cost
                                     value2.procurement += value.procurement
                                     if (index == -1) {
                                         value2.goods.push(value)
+                                        value1.count ++
                                     } else {
                                         value2.goods[index].quantity += value.quantity
                                         value2.goods[index].cost += value.cost
@@ -282,7 +285,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             })(),
             //木作
             (function () {
-               _ajax.get('/owner/carpentry',$scope.params,function (res) {
+              return _ajax.get('/owner/carpentry',$scope.params,function (res) {
                    console.log('木作');
                    console.log(res);
                    let index = $scope.worker_list.findIndex(function (item) {
@@ -307,7 +310,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                    value1.second_level.push({
                                        id: $scope.second_level[index1].id,
                                        title: $scope.second_level[index1].title,
-                                       count: 0,
+                                       cost: 0,
                                        procurement: 0,
                                        goods: []
                                    })
@@ -323,14 +326,13 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                    let index = value2.goods.findIndex(function (item) {
                                        return item.id == value.id
                                    })
-                                   value1.quantity += value.quantity
                                    value1.cost += value.cost
                                    value1.procurement += value.procurement
-                                   value2.quantity += value.quantity
                                    value2.cost += value.cost
                                    value2.procurement += value.procurement
                                    if (index == -1) {
                                        value2.goods.push(value)
+                                       value1.count ++
                                    } else {
                                        value2.goods[index].quantity += value.quantity
                                        value2.goods[index].cost += value.cost
@@ -344,7 +346,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             })(),
             //乳胶漆
             (function () {
-               _ajax.get('/owner/coating',$scope.params,function (res) {
+              return _ajax.get('/owner/coating',$scope.params,function (res) {
                    console.log('乳胶漆');
                    console.log(res);
                    let index = $scope.worker_list.findIndex(function (item) {
@@ -369,7 +371,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                    value1.second_level.push({
                                        id: $scope.second_level[index1].id,
                                        title: $scope.second_level[index1].title,
-                                       count: 0,
+                                       cost: 0,
                                        procurement: 0,
                                        goods: []
                                    })
@@ -385,14 +387,13 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                    let index = value2.goods.findIndex(function (item) {
                                        return item.id == value.id
                                    })
-                                   value1.quantity += value.quantity
                                    value1.cost += value.cost
                                    value1.procurement += value.procurement
-                                   value2.quantity += value.quantity
                                    value2.cost += value.cost
                                    value2.procurement += value.procurement
                                    if (index == -1) {
                                        value2.goods.push(value)
+                                       value1.count ++
                                    } else {
                                        value2.goods[index].quantity += value.quantity
                                        value2.goods[index].cost += value.cost
@@ -421,5 +422,20 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         //     }
         // }
         // }
+    }
+    //跳转页面
+    $scope.goInner = function (item,index) {
+        sessionStorage.setItem('materials',JSON.stringify('materials'))
+        if(item.id == 1){
+            $state.go('basic_decoration',{index:index})
+        }else if(item.id == 14){
+
+        }else{
+
+        }
+    }
+    //返回上一页
+    $scope.goPrev = function () {
+        $state.go('home')
     }
 })

@@ -235,21 +235,19 @@
                     </ul>
                 </div>
             </div>
-            <div class="btn_vr">
+            <div class="btn_vr" ng-if="materials.length == 0">
                 <button type="button" ng-click="getMaterials(area_news.$valid,area_news.$error.required)" ng-disabled="words == '生成中...'">{{words}}</button>
             </div>
 
 
             <!--材料选择-->
-            <div ng-if="show_material">
+            <div ng-if="materials.length != 0">
                 <div class="material_choose">
                     <div class="left_main">
                         <div class="shu"></div>
                         <p class="title">材料选择</p>
                         <div id="basis_decoration" class="basis_decoration">
-                            <div class="grid" water ng-repeat="item in ctrlScope.all_goods"
-                                 ng-click="go_inner(item,$index)">
-                                <!--<a ui-sref="basics_decoration({first_level:item,second_level:level})">-->
+                            <div class="grid" ng-click="goInner(item,$index)" water ng-repeat="item in vm.materials">
                                 <div class="basis_item" id="bottom{{item.id}}">
                                     <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
                                             class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>
@@ -265,7 +263,7 @@
                                     <ul ng-if="item.title == '辅材'||item.title == '主要材料'">
                                         <li ng-repeat="item1 in item.second_level">
                                             <span class="cur_title">{{item1.title}}</span>
-                                            <span class="pic_q">{{item1.cost | currency:'￥'}}</span>
+                                            <span class="pic_q">￥{{item1.cost.toFixed(2)}}</span>
                                         </li>
                                     </ul>
                                     <ul ng-if="item.title != '辅材'&&item.title != '主要材料'">

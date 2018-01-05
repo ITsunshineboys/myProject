@@ -1,27 +1,43 @@
 app.directive('water', function ($timeout) {
     // return {
-        // restrict: "A",
-        // link: function (scope, element, attrs) {
-        //     if (scope.$last) {
-        //         // scope.$emit('ngRepeatFinished');
-        //         $timeout(function () {
-        //             scope.$emit('ngRepeatFinished')
-        //         }, 300)
-        //     }
-        // }
-        return {
-            restrict: "EA",
-            // scope:false,
-            link: function (scope, element, attrs) {
-                console.log(element)
-                console.log(element.find('div'))
-                if (scope.$last === true) {
-                    $timeout(function () {
-                        scope.$emit('ngRepeatFinished')
-                    }, 300)
-                }
+    // restrict: "A",
+    // link: function (scope, element, attrs) {
+    //     if (scope.$last) {
+    //         // scope.$emit('ngRepeatFinished');
+    //         $timeout(function () {
+    //             scope.$emit('ngRepeatFinished')
+    //         }, 300)
+    //     }
+    // }
+    return {
+        restrict: "EA",
+        // scope:false,
+        link: function (scope, element, attrs) {
+            scope.$on('ngRepeatFinished', function () {
+                let $grid = $('.grid')
+                console.log($grid)
+                let cur_height = [0, 0]
+                $grid.each(function () {
+                    console.log(cur_height)
+                    let min = parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[1] : cur_height[0]
+                    let minIndex = cur_height[0] > cur_height[1] ? 1 : 0
+                    $(this).css({
+                        'top': min,
+                        'left': minIndex * ($(window).width() * 0.471),
+                    })
+                    cur_height[minIndex] += $(this).outerHeight() + 20
+                    $('.basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
+                })
+            })
+            console.log(element)
+            console.log(element.find('div'))
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit('ngRepeatFinished')
+                }, 300)
             }
         }
+    }
     // }
 })
     .directive('tmPagination', function () {
@@ -236,4 +252,4 @@ app.directive('water', function ($timeout) {
                 });
             }
         };
-    });
+    })
