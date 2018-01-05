@@ -1065,29 +1065,25 @@ class OwnerController extends Controller
         $river_sand_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['river_sand'],'重');
         $wall_brick_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wall_brick'],'',2);
 
+        //地砖 商品查询   44
+        $brick = Goods::priceDetail(self::WALL_SPACE,self::BRICK);
+        foreach ($brick as &$one_brick){
+            $one_brick['attr'] = GoodsAttr::findByGoodsIdUnits($one_brick['id'],'');
+        }
+        
 
-
-//        水泥费用    自流平费用  河沙费用
+//        水泥费用    自流平费用  河沙费用  墙砖费用
         $self_leveling_area = $drawing_room_area;
         $cement_area = BasisDecorationService::algorithm(5,$covering_layer_area,$floor_tile_area,$wall_area);
         $m[] = BasisDecorationService::mudMakeCost(1,$cement_area,$concrete,$cement_attr);
         $m[] = BasisDecorationService::mudMakeCost(1,$self_leveling_area,$self_leveling,$self_leveling_attr);
         $m[] = BasisDecorationService::mudMakeCost(1,$cement_area,$river_sand,$river_sand_attr);
-
-
-        // 墙砖  地砖 商品查询   44
-        $brick = Goods::priceDetail(self::WALL_SPACE,self::BRICK);
-
-
-//        墙砖费用
-        $wall_brick_cost['quantity'] = ceil($wall_area / $wall_brick_area);
-        $wall_brick_cost['cost'] = round($wall_brick_cost ['quantity'] * $wall_brick_max['platform_price'],2);
-        $wall_brick_cost['procurement'] = round($wall_brick_cost ['quantity'] * $wall_brick_max['purchase_price_decoration_company'],2);
+        $m[] = BasisDecorationService::mudMakeCost(2,$wall_area,'',$wall_brick_attr);
+        $m[] = BasisDecorationService::mudMakeCost(2,$toilet_area,'',$brick);
 
 
 
-
-//        卫生间地砖个数和价格：（墙砖面积÷抓取墙砖面积）  厨房/卫生间墙砖费用
+//       卫生间地砖费用：个数×抓取的商品价格    个数：（卫生间地砖面积÷抓取地砖面积）
         $toilet_wall_brick_cost['quantity'] = ceil($toilet_area / $floor_tile_attr['toilet']['area']);
         $toilet_wall_brick_cost['cost'] = round($toilet_wall_brick_cost['quantity'] * $floor_tile_attr['toilet']['price'],2);
         $toilet_wall_brick_cost['procurement'] = round($toilet_wall_brick_cost['quantity'] * $floor_tile_attr['toilet']['purchase_price_decoration_company'],2);
@@ -1106,79 +1102,6 @@ class OwnerController extends Controller
         $hall_wall_brick_cost['cost'] = round($hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'],2);
         $hall_wall_brick_cost['procurement'] = round($hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['purchase_price_decoration_company'],2);
 
-
-
-        foreach ($floor_tile_price as &$one_goods){
-            foreach ($floor_tile_attr as $goods_id){
-                if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '厨房')
-                {
-                    $one_goods['quantity'] = $kitchen_wall_brick_cost['quantity'];
-                    $one_goods['cost'] = $kitchen_wall_brick_cost['cost'];
-                    $one_goods['procurement'] = $kitchen_wall_brick_cost['procurement'];
-                    $kitchen_goods[] = $one_goods;
-                }
-
-                if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '客厅')
-                {
-                    $one_goods['quantity'] = $hall_wall_brick_cost['quantity'];
-                    $one_goods['cost'] = $hall_wall_brick_cost['cost'];
-                    $one_goods['procurement'] = $hall_wall_brick_cost['procurement'];
-                    $hall_goods[] = $one_goods;
-                }
-
-                if ($one_goods['id'] == $goods_id['id'] && $goods_id['name'] == '卫生间')
-                {
-                    $one_goods['quantity'] = $toilet_wall_brick_cost['quantity'];
-                    $one_goods['cost'] = $toilet_wall_brick_cost['cost'];
-                    $one_goods['procurement'] = $toilet_wall_brick_cost['procurement'];
-                    $toilet_goods[] = $one_goods;
-                }
-            }
-        }
-
-
-        //  墙砖价格
-        $wall_brick_max['quantity'] = $wall_brick_cost['quantity'];
-        $wall_brick_max['cost'] = $wall_brick_cost['cost'];
-        $wall_brick_max['procurement'] = $wall_brick_cost['procurement'];
-        $material_total['material'][] = $wall_brick_max;
-
-        // 地砖价格
-        $material_total['material'][] = BasisDecorationService::profitMargin($kitchen_goods);
-        $material_total['material'][] = BasisDecorationService::profitMargin($hall_goods);
-        $material_total['material'][] = BasisDecorationService::profitMargin($toilet_goods);
-
-        //材料总费用
-        $material_cost_total = $cement_cost['cost'] + $self_leveling_cost['cost'] + $river_sand_cost['cost'] + $wall_brick_cost['cost'] + $toilet_wall_brick_cost['cost'] + $kitchen_wall_brick_cost['cost'] + $hall_wall_brick_cost['cost'];
-
-        // 水泥，河沙，自流平信息
-        foreach ($goods as &$one_goods_price) {
-            switch ($one_goods_price) {
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['river_sand']:
-                    $one_goods_price['quantity'] = $river_sand_cost['quantity'];
-                    $one_goods_price['cost'] = $river_sand_cost['cost'];
-                    $one_goods_price['procurement'] = $river_sand_cost['procurement'];
-                    $river_sand[] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['cement']:
-                    $one_goods_price['quantity'] = $cement_cost['quantity'];
-                    $one_goods_price['cost'] = $cement_cost['cost'];
-                    $one_goods_price['procurement'] = $cement_cost['procurement'];
-                    $cement[] = $one_goods_price;
-                    break;
-                case $one_goods_price['title'] == BasisDecorationService::goodsNames()['self_leveling']:
-                    $one_goods_price['quantity'] = $self_leveling_cost['quantity'];
-                    $one_goods_price['cost'] = $self_leveling_cost['cost'];
-                    $one_goods_price['procurement'] = $self_leveling_cost['procurement'];
-                    $self_leveling[] = $one_goods_price;
-                    break;
-            }
-        }
-
-        $material_total['material'][] = BasisDecorationService::profitMargin($river_sand);
-        $material_total['material'][] = BasisDecorationService::profitMargin($cement);
-        $material_total['material'][] = BasisDecorationService::profitMargin($self_leveling);
-        $material_total['total_cost'] = round($material_cost_total,2);
 
         return Json::encode([
             'code' => 200,

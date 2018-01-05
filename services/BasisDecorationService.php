@@ -847,11 +847,18 @@ class BasisDecorationService
                 $value['cost'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['platform_price']),2);
                 $value['procurement'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['purchase_price_decoration_company']),2);
                 break;
+            case $int == 2:
+                $area_ = self::algorithm(1,$goods[1][0]['value'],$goods[1][1]['value']);
+                $value['quantity'] = ceil(self::algorithm(6,$area,$area_));
+                $value['cost'] = round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
+                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+
         }
 
-        $goods[0]['quantity'] = $value ['quantity'];
-        $goods[0]['cost'] = $value ['cost'];
-        $goods[0]['procurement'] = $value ['procurement'];
+        $goods[0]['quantity'] = $value['quantity'];
+        $goods[0]['cost'] = $value['cost'];
+        $goods[0]['procurement'] = $value['procurement'];
 
         return $goods[0];
     }

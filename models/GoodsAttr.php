@@ -343,6 +343,7 @@ class GoodsAttr extends ActiveRecord
 
     public static function findByGoodsIdUnits($goods_id,$name)
     {
+
         $row = self::find()
             ->select('goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value,goods_attr.unit')
             ->leftJoin('goods','goods_attr.goods_id = goods.id')
@@ -351,6 +352,12 @@ class GoodsAttr extends ActiveRecord
             ->andwhere(['like','goods_attr.name',$name])
             ->asArray()
             ->all();
+
+        foreach ($row as &$one){
+            if (is_numeric($one['value']) && $one['unit'] == 5){
+                $one['value'] = $one['value'] / 100;
+            }
+        }
 
         return $row;
     }
