@@ -46,9 +46,13 @@ class CommentReply extends ActiveRecord
          */
        public static function  CommentReplyAction($postData)
        {
-           if (!array_key_exists('reply_content',$postData) || !array_key_exists('order_no',$postData) || !array_key_exists('sku',$postData))
+           if (
+               !array_key_exists('reply_content',$postData)
+               || !array_key_exists('order_no',$postData)
+               || !array_key_exists('sku',$postData)
+           )
            {
-               $code=100;
+               $code=1000;
                return $code;
            }
            $OrderGoods=OrderGoods::find()
