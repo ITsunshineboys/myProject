@@ -567,7 +567,7 @@ class TestController extends Controller
     public  static  function  actionTest1()
     {
        echo  StringService::getClientIP();
-        echo  Yii::$app->session['PHPSESSID'];die;
+//        echo  Yii::$app->session['PHPSESSID'];die;
 
     }
 
