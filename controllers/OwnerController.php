@@ -158,6 +158,13 @@ class OwnerController extends Controller
 
     ];
 
+    const ROOM_DETAIL = [
+        'hall' => '客厅',
+        'secondary_bedroom' => '次卧',
+        'kitchen' => '厨房',
+        'toilet' => '卫生间',
+    ];
+
     /**
      * Actions accessed by logged-in users
      */
