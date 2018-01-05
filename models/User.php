@@ -1793,12 +1793,21 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function viewIdentity()
     {
+        $this->transformIdentityNo();
         $modelData = ModelService::selectModelFields($this, self::FIELDS_VIEW_IDENTITY);
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_VIEW_IDENTITY_EXTRA))
             : $modelData;
         self::_formatData($viewData);
         return $viewData;
+    }
+
+    /**
+     * Transform identity no
+     */
+    public function transformIdentityNo()
+    {
+        $this->identity_no && $this->identity_no = preg_replace('/(\d{6})(\d{8})(.*)/', '$1xxxxxxxx$3', $this->identity_no);
     }
 
     /**
