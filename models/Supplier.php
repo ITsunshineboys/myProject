@@ -310,6 +310,10 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
+                if (YII_DEBUG) {
+                    StringService::writeLog('test', json_encode([$identityNoOld, $user->identity_no]), 'supplier_cert');
+                    StringService::writeLog('test', json_encode($attrs), 'supplier_cert');
+                }
                 if ($identityNoOld != $user->identity_no && User::checkIdentityExisting($user->identity_no)) {
                     $transaction->rollBack();
 
