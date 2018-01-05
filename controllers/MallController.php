@@ -1715,6 +1715,7 @@ class MallController extends Controller
 
         $brand->review_status = (int)Yii::$app->request->post('review_status', 0);
         $brand->reason = trim(Yii::$app->request->post('reason', ''));
+        $brand->review_status == GoodsBrand::REVIEW_STATUS_APPROVE && $brand->status = GoodsBrand::STATUS_OFFLINE;
 
         $brand->scenario = GoodsBrand::SCENARIO_REVIEW;
         if (!$brand->validate()) {
@@ -1724,7 +1725,7 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$brand->save()) {
+        if (!$brand->save(false)) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
@@ -2511,7 +2512,7 @@ class MallController extends Controller
             }
 
             $where = 'review_status = ' . GoodsBrand::REVIEW_STATUS_APPROVE;
-            $where .= " and supplier_id = 0 and status = {$status}";
+            $where .= " and status = {$status}";
 
             $pid = (int)Yii::$app->request->get('pid', 0);
             if ($pid > 0) {
