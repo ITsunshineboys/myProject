@@ -317,10 +317,7 @@ class OwnerController extends Controller
                 $strong_overall_points = BasisDecorationService::strongPoints($strong_points,$get);
             }
         }
-
-        var_dump($strong_overall_points);
-        var_dump($weak_overall_points);
-        die;
+        
 
         // 强弱电总点位
         $total_points = BasisDecorationService::algorithm(3,$weak_overall_points,$strong_overall_points);
