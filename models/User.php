@@ -1612,19 +1612,15 @@ class User extends ActiveRecord implements IdentityInterface
 
             UserRole::deleteAll(['user_id' => $this->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
             $userRole = new UserRole;
+            $userRole->user_id = $this->id;
+            $userRole->role_id = Yii::$app->params['ownerRoleId'];
             $userRole->review_apply_time = time();
+            $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
             if ($operator) {
                 $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
                 $userRole->reviewer_uid = $operator->id;
-            } else {
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
             }
-
             if (!$userRole->save()) {
-                if (YII_DEBUG) {
-                    StringService::writeLog('test', json_encode($userRole->errors), 'owner_cert');
-                    StringService::writeLog('test', json_encode($userRole->attributes), 'owner_cert');
-                }
                 $tran->rollBack();
                 return $code;
             }
