@@ -325,4 +325,8 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 			saleDetail();
 		})
 	}
+	/*图片放大显示*/
+	$scope.showImgs = (src) => {
+		$scope.showImg = src;
+	}
 });

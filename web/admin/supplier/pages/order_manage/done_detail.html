@@ -336,7 +336,7 @@
                 <div class="col-sm-2 control-label">
                 </div>
                 <div class="col-sm-10 control-label">
-                    <img ng-src="{{item.image}}" alt="" ng-repeat="item in comment.image" data-toggle="modal" data-target="#myModal" ng-click="showImgs(item.image)">
+                    <img class="defulat-img-size" ng-src="{{item.image}}" ng-repeat="item in comment.image" data-toggle="modal" data-target="#enlargePicture" ng-click="showImgs(item.image)">
                 </div>
             </div>
             <div class="row">
@@ -401,14 +401,11 @@
         </div>
     </div>
 
-
     <!-- 图片浏览模态框 -->
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+    <div id="enlargePicture" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-img" role="document">
             <div class="modal-content">
-                <div class="modal-body text-center">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="modal-body">
                     <img ng-src="{{showImg}}">
                 </div>
             </div>

@@ -54,20 +54,6 @@ h3 {
 }
 
 
-/* 评论图片放大 */
-.modal-img {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
-
-.modal-img button {
-    position: absolute;
-    top: 15px;
-    right: 18px;
-    z-index: 10;
-}
-
 .dl_active4{
     background-color: #E6E9F0!important;
 }

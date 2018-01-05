@@ -468,3 +468,19 @@ select.form-control:focus {
     word-wrap: break-word;
 }
 /* word-wrap end */
+
+/*enlarge picture start*/
+.defulat-img-size{
+    width: 138px;
+    height: 138px;
+    margin-right: 10px;
+}
+.modal-img {
+    display: flex;
+    width: 700px;
+    justify-content: center;
+}
+.modal-img img {
+    width: 100%;
+}
+/*enlarge picture end*/
