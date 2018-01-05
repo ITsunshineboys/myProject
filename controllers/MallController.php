@@ -149,6 +149,7 @@ class MallController extends Controller
         'style-add',
         'style-edit',
         'style-status',
+        'goods-list-search',
     ];
 
     /**

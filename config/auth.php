@@ -179,6 +179,9 @@ return [
     'supplier/supplier-be-audited-detail' => [1],
     'supplier/get-up-supplier-line-goods' => [1],
 
+    // 2018.1.5
+    'mall/goods-list-search' => [1],
+
     // yr
     'effect/effect-list' => [1],
     'effect/effect-view' => [1],

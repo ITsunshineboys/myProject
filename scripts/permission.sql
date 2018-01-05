@@ -87,6 +87,7 @@ INSERT INTO `role_permission` VALUES (1,1,'time-types','site'),(2,2,'time-types'
 ,(322,1,'owner-audit-list','supplieraccount')
 ,(323,1,'audit-view','supplieraccount')
 ,(324,1,'owner-do-audit','supplieraccount')
+,(325,1,'goods-list-search','mall')
 ;
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -154,6 +155,7 @@ INSERT INTO `lhzz_permission` VALUES (1,'time-types','site',''),(2,'recommend-ad
 ,(212,'owner-audit-list','supplieraccount','')
 ,(213,'audit-view','supplieraccount','')
 ,(214,'owner-do-audit','supplieraccount','')
+,(215,'goods-list-admin','mall','')
 ;
 /*!40000 ALTER TABLE `lhzz_permission` ENABLE KEYS */;
 UNLOCK TABLES;
