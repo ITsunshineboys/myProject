@@ -236,7 +236,7 @@
                 </div>
             </div>
             <div class="btn_vr">
-                <button type="button" ng-click="getMaterials(area_news.$valid,area_news.$error.required)">生成材料</button>
+                <button type="button" ng-click="getMaterials(area_news.$valid,area_news.$error.required)" ng-disabled="words == '生成中...'">{{words}}</button>
             </div>
 
 
