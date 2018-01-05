@@ -3908,13 +3908,12 @@ class MallController extends Controller
             $where .= " and supplier_id = {$supplier->id}";
         } else {
             $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
-            if ($supplierId) {
+            if (!$supplierId) {
                 return Json::encode([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
             }
-
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
@@ -3932,6 +3931,8 @@ class MallController extends Controller
             ],
         ]);
     }
+
+
 
     /**
      * Goods images action
