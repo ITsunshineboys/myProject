@@ -1070,37 +1070,41 @@ class OwnerController extends Controller
         foreach ($brick as &$one_brick){
             $one_brick['attr'] = GoodsAttr::findByGoodsIdUnits($one_brick['id'],'');
         }
-        
+        foreach ($brick as $one_brick){
+            foreach ($one_brick['attr'] as $attr_){
+                if ($attr_['value'] == '卫生间'){
+                    $toilet_goods[] = $one_brick;
+                }
+                if ($attr_['value'] == '厨房'){
+                    $kitchen_goods[] = $one_brick;
+                }
+                if ($attr_['value'] == '客厅'){
+                    $hall_goods[] = $one_brick;
+                }
+            }
 
-//        水泥费用    自流平费用  河沙费用  墙砖费用
+        }
+        $max_toilet_goods[] = BasisDecorationService::profitMargin($toilet_goods);
+        $max_kitchen_goods[] = BasisDecorationService::profitMargin($kitchen_goods);
+        $max_hall_goods[] = BasisDecorationService::profitMargin($hall_goods);
+
+
+//        水泥费用    自流平费用  河沙费用  墙砖费用 卫生间
         $self_leveling_area = $drawing_room_area;
         $cement_area = BasisDecorationService::algorithm(5,$covering_layer_area,$floor_tile_area,$wall_area);
-        $m[] = BasisDecorationService::mudMakeCost(1,$cement_area,$concrete,$cement_attr);
-        $m[] = BasisDecorationService::mudMakeCost(1,$self_leveling_area,$self_leveling,$self_leveling_attr);
-        $m[] = BasisDecorationService::mudMakeCost(1,$cement_area,$river_sand,$river_sand_attr);
-        $m[] = BasisDecorationService::mudMakeCost(2,$wall_area,'',$wall_brick_attr);
-        $m[] = BasisDecorationService::mudMakeCost(2,$toilet_area,'',$brick);
+        $material_total[] = BasisDecorationService::mudMakeCost(1,$cement_area,$concrete,$cement_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(1,$self_leveling_area,$self_leveling,$self_leveling_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(1,$cement_area,$river_sand,$river_sand_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(2,$wall_area,'',$wall_brick_attr);
+        $material_total[] = BasisDecorationService::mudMakeCost(3,$toilet_area,'',$max_toilet_goods);
+        $material_total[] = BasisDecorationService::mudMakeCost(3,$kitchen_area,'',$max_kitchen_goods);
+        $material_total[] = BasisDecorationService::mudMakeCost(3,$drawing_room_area,'',$max_hall_goods);
 
-
-
-//       卫生间地砖费用：个数×抓取的商品价格    个数：（卫生间地砖面积÷抓取地砖面积）
-        $toilet_wall_brick_cost['quantity'] = ceil($toilet_area / $floor_tile_attr['toilet']['area']);
-        $toilet_wall_brick_cost['cost'] = round($toilet_wall_brick_cost['quantity'] * $floor_tile_attr['toilet']['price'],2);
-        $toilet_wall_brick_cost['procurement'] = round($toilet_wall_brick_cost['quantity'] * $floor_tile_attr['toilet']['purchase_price_decoration_company'],2);
-
-
-
-//        厨房地砖费用 厨房地砖费用：个数×抓取的商品价格 个数：（厨房地砖面积÷抓取厨房地砖面积）
-        $kitchen_wall_brick_cost['quantity'] = ceil($kitchen_area / $floor_tile_attr['kitchen']['area']);
-        $kitchen_wall_brick_cost['cost'] = round($kitchen_wall_brick_cost['quantity'] * $floor_tile_attr['kitchen']['purchase_price_decoration_company'],2);
-        $kitchen_wall_brick_cost['procurement'] = round($kitchen_wall_brick_cost['quantity'] * $floor_tile_attr['kitchen']['purchase_price_decoration_company'],2);
-
-
-
-//        客厅地砖费用
-        $hall_wall_brick_cost['quantity'] = ceil($drawing_room_area / $floor_tile_attr['hall']['area']);
-        $hall_wall_brick_cost['cost'] = round($hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['price'],2);
-        $hall_wall_brick_cost['procurement'] = round($hall_wall_brick_cost['quantity'] * $floor_tile_attr['hall']['purchase_price_decoration_company'],2);
+        //总费用
+        $total_cost = 0;
+        foreach ($material_total as $v){
+            $total_cost += $v['cost'];
+        }
 
 
         return Json::encode([
@@ -1108,7 +1112,8 @@ class OwnerController extends Controller
             'msg' => '成功',
             'data' => [
                 'mud_make_labor' => $total_labor_cost,
-                'mud_make_material' => $material_total,
+                'data' => $material_total,
+                'total_cost' => $total_cost,
             ]
         ]);
     }

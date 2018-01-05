@@ -853,6 +853,21 @@ class BasisDecorationService
                 $value['cost'] = round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
                 $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
+            case $int == 3:
+                foreach ($goods[0]['attr'] as $one_goods){
+                    if ($one_goods['name']  == '长度' ){
+                        $v = $one_goods['value'];
+                    }
+                    if ($one_goods['name']  == '宽度' ){
+                        $v1 = $one_goods['value'];
+                    }
+                }
+                $area_ = self::algorithm(1,$v,$v1);
+                $value['quantity'] = ceil(self::algorithm(6,$area,$area_));
+                $value['cost'] = round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
+                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                unset($goods[0]['attr']);
+                break;
 
         }
 
