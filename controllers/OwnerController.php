@@ -1552,6 +1552,10 @@ class OwnerController extends Controller
 
 
     }
+    /**
+     * 小区案例列表 ---yr
+     * @return string
+     */
     public function actionEffectCaseList(){
         $id=(int)trim(Yii::$app->request->get('id',''));
         $effect= EffectToponymy::effectdatas($id);
@@ -1615,6 +1619,8 @@ class OwnerController extends Controller
         ]);
 
     }
+
+
 
     /**
      * 案例数据
