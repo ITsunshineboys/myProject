@@ -901,7 +901,7 @@ class Goods extends ActiveRecord
      */
     public function validateCategoryStyleSeries($attribute = 'category_id')
     {
-        if ($this->style_id + $this->series_id == 0) {
+        if ((int)$this->style_id + (int)$this->series_id == 0) {
             return true;
         }
 
