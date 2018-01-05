@@ -10,7 +10,7 @@ import PaySuccess from '@/views/pay_success/index'  // 支付成功
 import GoodDetail from '@/views/good_detail/index'  // 商品详情
 import AllComment from '@/views/comment/index'      // 全部评价
 import ClassList from '@/views/class/index'         // 分类列表
-// import GoodsList from '@/views/goods_list/index'    // 商品列表
+import GoodsList from '@/views/goods_list/index'    // 商品列表
 
 Vue.use(Router)
 
@@ -63,11 +63,11 @@ export default new Router({
       path: '/success',
       name: 'PaySuccess',
       component: PaySuccess
+    },
+    {
+      path: '/goods-list',
+      name: 'GoodsList',
+      component: GoodsList
     }
-    // {
-    //   path: '/goods-list',
-    //   name: 'GoodsList',
-    //   component: GoodsList
-    // }
   ]
 })
