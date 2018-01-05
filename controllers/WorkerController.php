@@ -4,6 +4,7 @@ namespace app\controllers;
 
 
 use app\models\User;
+use app\models\UserNewsRecord;
 use app\models\Worker;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
@@ -1080,5 +1081,49 @@ class WorkerController extends Controller
             'data'=>$data
         ]);
 
+    }
+
+    /**
+     * 工程订单状态 消息
+     * @return int|string
+     */
+    public function actionWorkerNews(){
+        $uid = self::userIdentity();
+        if (!is_int($uid)) {
+            return $uid;
+        }
+        $type=(int)trim(\Yii::$app->request->get('type'));
+        $where=[];
+            switch ($type){
+               case $type==1:
+                   $where=[];
+                   break;
+               case $type==2:
+                   $where=['title'=>'到账通知'];
+                   break;
+               case $type==3:
+                   $where=['title'=>'订单状态'];
+                   break;
+            }
+
+        $data=UserNewsRecord::find()
+            ->where(['type'=>1,'role_id'=>2])
+            ->andWhere($where)
+            ->asArray()
+            ->all();
+        foreach ($data as &$v){
+            $v['sku']?$v['sku']:$v['sku']='';
+            if($v['send_time']==date('Y-m-d',time())){
+                $v['send_time']=date('H:i',$v['send_time']);
+
+            }else{
+                $v['send_time']=date('Y-m-d',$v['send_time']);
+            }
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'list'=>$data
+        ]);
     }
 }
