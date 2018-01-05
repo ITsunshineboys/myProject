@@ -1,4 +1,4 @@
-app.controller('searchCtrl', ['$rootScope', '$scope', '_ajax', function ($rootScope, $scope, _ajax) {
+app.controller('searchOrderCtrl', ['$rootScope', '$scope', '_ajax', function ($rootScope, $scope, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -9,15 +9,14 @@ app.controller('searchCtrl', ['$rootScope', '$scope', '_ajax', function ($rootSc
     // 筛选器
     $scope.orderFilter = {
         orderNum: true,     // 订单编号
-        goodsNum: false,    // 商品编号
         goodsName: true,    // 商品名称
         orderMoney: true,   // 订单金额
         orderTime: true,    // 下单时间
         user: true,         // 用户
-        phone: true,       // 绑定手机
+        phone: true,        // 绑定手机
+        merchantName: true, // 商家名称
         orderState: true,   // 订单状态
         exception: true,    // 异常
-        comments: true,     // 评论
         details: true,      // 详情
         operation: true     // 操作
     };
@@ -25,7 +24,7 @@ app.controller('searchCtrl', ['$rootScope', '$scope', '_ajax', function ($rootSc
     // 请求参数
     $scope.params = {
         page: 1,                        // 当前页数
-        keyword: '',                    // 关键字查询
+        keyword: ''                     // 关键字查询
     };
 
     // 分页配置

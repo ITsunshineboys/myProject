@@ -2,8 +2,8 @@
     <div class="search form-inline clearfix">
         <div class="form-group pull-right">
             <div class="input-group">
-                <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索订单号、商品名称或手机号">
-                <span class="glyphicon glyphicon-search"></span>
+                <input class="form-control" type="text" ng-model="params.keyword" placeholder="搜索订单号、商品名称或手机号" style="width: 245px;">
+                <span class="iconfont icon-search"></span>
             </div>
             <button class="btn btn-default" ng-click="search()">查询</button>
             <a class="btn btn-default" href="javascript: void(0);" ng-click="filter = !filter">
@@ -78,15 +78,14 @@
             <thead>
             <tr>
                 <th ng-if="orderFilter.orderNum">订单编号</th>
-                <th ng-if="orderFilter.goodsNum">商品编号</th>
                 <th ng-if="orderFilter.goodsName">商品名称</th>
                 <th ng-if="orderFilter.orderMoney">订单金额</th>
                 <th ng-if="orderFilter.orderTime">下单时间</th>
                 <th ng-if="orderFilter.user">用户</th>
                 <th ng-if="orderFilter.phone">绑定手机</th>
+                <th ng-if="orderFilter.merchantName">商家名称</th>
                 <th ng-if="orderFilter.orderState">订单状态</th>
                 <th ng-if="orderFilter.exception">异常</th>
-                <th ng-if="orderFilter.comments">评论</th>
                 <th ng-if="orderFilter.details">详情</th>
                 <th ng-if="orderFilter.operation">操作</th>
             </tr>
@@ -94,15 +93,14 @@
             <tbody>
             <tr ng-repeat="obj in list">
                 <td ng-if="orderFilter.orderNum">{{obj.order_no}}</td>
-                <td ng-if="orderFilter.goodsNum">{{obj.sku}}</td>
                 <td ng-if="orderFilter.goodsName">{{obj.goods_name}}</td>
                 <td ng-if="orderFilter.orderMoney">{{obj.amount_order}}</td>
                 <td ng-if="orderFilter.orderTime">{{obj.create_time}}</td>
                 <td ng-if="orderFilter.user">{{obj.user_name}}</td>
                 <td ng-if="orderFilter.phone">{{obj.mobile}}</td>
+                <th ng-if="orderFilter.merchantName">{{obj.merchant}}</th>
                 <td ng-if="orderFilter.orderState">{{obj.status}}</td>
                 <td ng-if="orderFilter.exception">{{obj.unusual}}</td>
-                <td ng-if="orderFilter.comments">{{obj.comment_grade}}</td>
                 <td ng-if="orderFilter.details">
                     <a ng-if="obj.is_after == 0" ui-sref="order_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 0})">查看</a>
                     <a ng-if="obj.is_after == 1" ui-sref="sales_details({orderNo: obj.order_no,sku: obj.sku,status: obj.status,type: 0})">查看</a>

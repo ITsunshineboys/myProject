@@ -780,11 +780,11 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css'
             // controller: 'searchCtrl'
         })
-        .state('search.order', {
+        .state('search.order', {    // 搜索订单
             url: '/order',
             templateUrl: 'pages/mall_manage/merchant_manage/search_page/search_order.html',
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
-            controller: 'searchCtrl'
+            controller: 'searchOrderCtrl'
         })
         .state('mall_data', { // 商城数据
             url: '/mall_data',
