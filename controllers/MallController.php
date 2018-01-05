@@ -3908,14 +3908,11 @@ class MallController extends Controller
             $where .= " and supplier_id = {$supplier->id}";
         } else {
             $supplierId = (int)Yii::$app->request->get('supplier_id', 0);
-            if (!$supplierId) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code],
-                ]);
+            if ($supplierId) {
+                $where .= " and supplier_id = {$supplierId}";
             }
 
-            $where .= " and supplier_id = {$supplierId}";
+
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
