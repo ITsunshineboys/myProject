@@ -62,4 +62,16 @@ class ProjectView extends ActiveRecord
 
         return $row;
     }
+
+    public static function pointsId($points_id,$like){
+        $row =  self::find()
+            ->asArray()
+            ->where(['points_id'=>$points_id])
+            ->andwhere(['like','project',$like])
+            ->one();
+
+        $row['project_value'] = $row['project_value'] / 100;
+
+        return $row;
+    }
 }

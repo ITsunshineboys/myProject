@@ -820,18 +820,17 @@ class BasisDecorationService
 
     /**
      * 泥作面积
-     * @param array $ground_area
-     * @param array $craft
+     * 公式  （卫生间地面积÷卫生间个数）开平方×【2.4m】×4 ×卫生间个数
+     * @param $area
+     * @param $high
      * @param int $quantity
      * @param int $wall
-     * @return float
+     * @return int
      */
-    public static function mudMakeArea($ground_area,$craft,$quantity = 1,$wall = 4)
+    public static function mudMakeArea($area,$high,$quantity = 1,$wall = 4)
     {
-
-        //        （卫生间地面积÷卫生间个数）开平方×【2.4m】×4 ×卫生间个数
-        $sqrt= sqrt($ground_area / $quantity);
-        $wall_area = $sqrt * $craft * $wall * $quantity;
+        $sqrt= sqrt(self::algorithm(6,$area,$quantity));
+        $wall_area = self::algorithm(9,$sqrt,$high,$wall,$quantity);
 
         return $wall_area;
     }
@@ -1968,6 +1967,9 @@ class BasisDecorationService
                 break;
             case $int == 10:
                 $result = $value * $value1 * $value2;
+                break;
+            case $int == 11:
+                $result = $value + $value1 + $value2 + $value3;
                 break;
         }
 

@@ -985,23 +985,6 @@ class Goods extends ActiveRecord
         }
     }
 
-    public static function seriesAndStyle($level, $title, $post)
-    {
-        if ($title) {
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.category_id,gc.path,goods.profit_rate,goods.subtitle,goods.series_id,goods.style_id,goods.cover_image,supplier.shop_name,goods.title as goods_name";
-            $goods = self::find()
-                ->asArray()
-                ->select($select)
-                ->leftJoin('goods_brand', 'goods.brand_id = goods_brand.id')
-                ->leftJoin('goods_category AS gc', 'goods.category_id = gc.id')
-                ->leftJoin('logistics_template', 'goods.supplier_id = logistics_template.supplier_id')
-                ->leftJoin('logistics_district', 'logistics_template.id = logistics_district.template_id')
-                ->leftJoin('supplier', 'goods.supplier_id = supplier.id')
-                ->where(['and', ['gc.title' => $title], ['gc.level' => $level], ['goods.series_id' => $post['series']], ['goods.style_id' => $post['style']]])
-                ->all();
-            return $goods;
-        }
-    }
 
     public static function assortList($all, $city = 510100)
     {

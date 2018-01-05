@@ -100,6 +100,9 @@ class OwnerController extends Controller
         'finishing_coat'=> 15,  //'乳胶漆面漆面积',
         'putty'         => 16,  //'腻子面积',
         'thread'        => 17,  //'阴角线长度',
+        'maskant'       => 21,  //'保护层长度',
+        'floor_tile'    => 22,  //'贴地砖面积',
+        'wall_brick'    => 23,  //'贴墙砖面积',
     ];
 
     /**
@@ -124,9 +127,8 @@ class OwnerController extends Controller
         'waterway'  => 32,  //'水路工艺',
         'waterproof'=> 35,  //'防水工艺',
         'carpentry' => 37,  //'木作工艺',
-//        'emulsion_varnish'  => '乳胶漆工艺',
         'oil_paint' => 47,  //'油漆工艺',
-        'tiler'             => '泥工工艺',
+        'tiler'     => 53,  //'泥工工艺',
     ];
 
     /**
@@ -155,6 +157,9 @@ class OwnerController extends Controller
         'finishing' => 50,//'1平方乳胶漆面漆',
         'wire' => 51,//'1米阴角线用量',
         'land' => 52,//'1平方石膏粉费用',
+        'concrete' => 54,//'水泥用量',
+        'self_leveling' => 55,//'自流平用量',
+        'river_sand' => 56,//'河沙用量',
 
     ];
 
@@ -942,151 +947,125 @@ class OwnerController extends Controller
 
         $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['mason']);
         $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
-        var_dump($day_workload);die;
-
         foreach ($day_workload as $one_day) {
-
-        }
-
-        //泥作面积    mudMakeArea
-        //厨房面积
-        $project_view = ProjectView::find()->asArray()->where(['parent_project'=> '面积比例'])->all();
-        foreach ($project_view as $value){
-            if ($value['project'] == self::ROOM_AREA['kitchen_area']){
-                $kitchen_particulars = $value['project_value'] / 100;
+            // 保护层
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['maskant']){
+                $maskant = $one_day['quantity'];
             }
-
-            if ($value['project'] == self::ROOM_AREA['toilet_area']){
-                $toilet_particulars = $value['project_value'] / 100;
+            // 贴地砖面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['floor_tile']){
+                $floor_tile = $one_day['quantity'];
             }
-
-            if ($value['project'] == self::ROOM_AREA['hall_area']){
-                $drawing_room_particulars = $value['project_value'] / 100;
+            // 贴墙砖面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['wall_brick']){
+                $wall_brick = $one_day['quantity'];
             }
         }
-        //TODO 少了%  所以还需要除以100
-        $kitchen_area = $post['area'] * $kitchen_particulars*0.01;
-        //卫生间面积
-        $toilet_area = (int)$post['area'] * $toilet_particulars*0.01;
-        //客餐厅面积
-        $drawing_room_area = (int)$post['area'] * $drawing_room_particulars*0.01;
+
+        // 面积比例
+        $ratio = ProjectView::findById(self::POINTS_CATEGORY['area_ratio'],10000);
+        foreach ($ratio as $one_ratio){
+            // 厨房
+            if ($one_ratio['id'] == self::ROOM['kitchen_area']){
+                $kitchen_ratio = $one_ratio['project_value'];
+            }
+            // 卫生间
+            if ($one_ratio['id'] == self::ROOM['toilet_area']){
+                $toilet_ratio = $one_ratio['project_value'];
+            }
+            // 客厅
+            if ($one_ratio['id'] == self::ROOM['hall_area']){
+                $hall_area = $one_ratio['project_value'];
+            }
+        }
+
+
+        //厨房面积   卫生间面积  客餐厅面积
+        $kitchen_area = BasisDecorationService::algorithm(1,$get['area'],$kitchen_ratio);
+        $toilet_area = BasisDecorationService::algorithm(1,$get['area'],$toilet_ratio);
+        $drawing_room_area = BasisDecorationService::algorithm(1,$get['area'],$hall_area);
+
+
 
         //当地工艺
-        $craft = EngineeringStandardCraft::findByAll(self::PROJECT_NAME['tiler'], $post['city']);
-
-        if ($craft == null){
-            $code = 1059;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        foreach ($craft as $local_craft) {
-            switch ($local_craft) {
-                case $local_craft['project_details'] == BasisDecorationService::DetailsId2Title()['cement']:
-                    $cement_craft = $local_craft['material'];
-                    break;
-                case $local_craft['project_details'] == BasisDecorationService::DetailsId2Title()['self_leveling']:
-                    $self_leveling_craft = $local_craft['material'];
-                    break;
-                case $local_craft['project_details'] == BasisDecorationService::DetailsId2Title()['river_sand']:
-                    $river_sand_craft = $local_craft['material'];
-                    break;
+        $craft = WorkerType::craft(self::CRAFT_NAME['tiler'],$get['city']);
+        foreach ($craft as $one_craft){
+            // 水泥用量
+            if ($one_craft['id'] == self::ROOM['concrete']){
+                $concrete = $one_craft['material'];
+            }
+            // 自流平用量
+            if ($one_craft['id'] == self::ROOM['self_leveling']){
+                $self_leveling = $one_craft['material'];
+            }
+            // 河沙用量
+            if ($one_craft['id'] == self::ROOM['river_sand']){
+                $river_sand = $one_craft['material'];
             }
         }
 
-//        保护层面积
-        $covering_layer_area = $post['waterproof_total_area'];
-//        保护层天数：保护层面积÷【每天做保护层面积】
-        $covering_layer_day = $covering_layer_area / $covering_layer_day_area;
+//        保护层面积  保护层天数  保护层面积÷【每天做保护层面积】
+        $covering_layer_area = $get['waterproof_total_area'];
+        $covering_layer_day = BasisDecorationService::algorithm(6,$covering_layer_area,$maskant);
+
+        // 贴砖高度查询
+        $project = ProjectView::pointsId(self::PROJECT_DETAILS['tiler'],$get['high']);
+        $high = isset($project['project_value'])?$project['project_value']:2.8;
 
 
+//        卫生间墙面积  厨房墙面积
+        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area,$high,$get['toilet'],4);
+        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area,$high,$get['kitchen'],3);
 
-        $points = Points::findByOne('id,title',"title='泥作'");
-        $perject = ProjectView::find()->where(['and',['points_id'=>$points['id']],['project'=>$post['high']]])->asArray()->one();
-        $high = isset($perject['project_value'])?$perject['project_value']:2.8;
-
-//        卫生间墙面积
-        $toilet_wall_area = BasisDecorationService::mudMakeArea($toilet_area, $high, $post['toilet']);
-//        厨房墙面积
-        $kitchen_wall_area = BasisDecorationService::mudMakeArea($kitchen_area, $high, $post['kitchen'], 3);
-//        墙砖面积
+//        其它面积查询
         $latex_paint_area = Apartment::find()
             ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>'其他墙面积'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-        $wall_area = $toilet_wall_area + $kitchen_wall_area + $latex_paint_area['project_value'];
-//        墙砖天数
-        $wall_day = $wall_area / $wall_tile_day_area;
+            ->where(['<=','min_area',$get['area']])
+            ->andWhere(['>=','max_area',$get['area']])
+            ->andWhere(['points_id'=>self::PROJECT_DETAILS['tiler']])
+            ->all();
+
+        foreach ($latex_paint_area as $value){
+            if ($value['project_name'] == '其他地面积'){
+                $other_land_area = $value['project_value'];
+            }
+            if ($value['project_name'] == '其他墙面积'){
+                $other_wall_area = $value['project_value'];
+            }
+        }
+
+        // 墙砖面积   墙砖天数
+        $wall_area = BasisDecorationService::algorithm(5,$toilet_wall_area,$kitchen_wall_area,$other_wall_area);
+        $wall_day = BasisDecorationService::algorithm(6,$wall_area,$wall_brick);
+
+        // 地砖面积   地砖天数
+        $floor_tile_area = BasisDecorationService::algorithm(11,$toilet_area,$kitchen_area,$drawing_room_area,$other_land_area);
+        $floor_tile_day = BasisDecorationService::algorithm(6,$floor_tile_area,$floor_tile);
 
 
-//        地砖面积
-        $land_area = Apartment::find()
-            ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>'其他地面积'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-        $floor_tile_area = $drawing_room_area + $toilet_area + $kitchen_area + $land_area['project_value'];
-//        地砖天数
-        $floor_tile_day = $floor_tile_area / $geostrophy_day_area;
+
+//        贴砖天数   总天数：保护层天数+贴砖天数
+        $tiling_day = BasisDecorationService::algorithm(3,$wall_day,$floor_tile_day);
+        $total_day = ceil(BasisDecorationService::algorithm(3,$tiling_day,$covering_layer_day));
 
 
-
-//        贴砖天数
-        $tiling_day = $floor_tile_day + $wall_day;
-//        总天数：保护层天数+贴砖天数
-        $total_day = ceil($tiling_day + $covering_layer_day);
         //总的人工费
-        $total_labor_cost['price'] = $total_day * $labor_costs['univalence'];
-        $total_labor_cost['worker_kind'] = $labor_costs['worker_kind'];
+        $total_labor_cost['price'] = BasisDecorationService::algorithm(1,$total_day,$labor_costs['univalence']);
+        $total_labor_cost['worker_kind'] = $labor_costs['worker_name'];
+
 
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'mud_make_labor_price' => [],
-                    'mud_make_material' => [],
-                ]
-            ]);
-        }
-//        $goods_price = BasisDecorationService::priceConversion($goods);
-        $goods_attr = BasisDecorationService::mudMakeMaterial($goods);
+        $judge = BasisDecorationService::judge($goods,$get);
 
-        $wall_brick = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::goodsNames()['wall_brick'], $post);
-        if ($wall_brick == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => $goods,
-            ]);
-        }
-        $wall_brick_price = BasisDecorationService::priceConversion($wall_brick);
-        $wall_brick_max = BasisDecorationService::profitMargin($wall_brick_price);
-        $wall_brick_area = BasisDecorationService::wallBrickAttr($wall_brick_max['id']);
-
-        $floor_tile = Goods::seriesAndStyle(self::WALL_SPACE,BasisDecorationService::goodsNames()['floor_tile'], $post);
-        if ($floor_tile == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => $goods,
-            ]);
-        }
-        $floor_tile_price = BasisDecorationService::priceConversion($floor_tile);
-        $floor_tile_attr = BasisDecorationService::floorTile($floor_tile_price);
+        //商品属性
+        $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
+        $self_leveling_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['self_leveling'],'重');
+        $river_sand_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['river_sand'],'重');
 
 
+
+        
 //        水泥费用
         $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
         $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods, $cement_craft, $goods_attr,BasisDecorationService::goodsNames()['cement']);
@@ -1206,7 +1185,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' => [
-                'mud_make_labor_price' => $total_labor_cost,
+                'mud_make_labor' => $total_labor_cost,
                 'mud_make_material' => $material_total,
             ]
         ]);
