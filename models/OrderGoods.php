@@ -9,6 +9,7 @@
 namespace app\models;
 use yii\db\ActiveRecord;
 use Yii;
+use yii\db\Query;
 
 class OrderGoods extends ActiveRecord
 {
@@ -440,6 +441,121 @@ class OrderGoods extends ActiveRecord
         }
     }
 
+
+    public  static  function  FindOrderNumBer($user)
+    {
+        if ($user->last_role_id_app==6)
+        {
+            $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+            $all=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where(" g.supplier_id={$supplier->id} ")
+                ->count();
+//        $role_id=$user->last_role_id_app;
+            //Get 待付款订单  and g.role_id={$role_id}
+            $unpaid=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
+                ->count();
+            $unshipped=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier->id} ")
+                ->count();
+            $unreceiveed=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier->id} ")
+                ->count();
+            $completed=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0 ")
+                ->count();
+            $canceled=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("o.order_status=2 and o.customer_service=0  and g.supplier_id={$supplier->id}")
+                ->count();
+            $customer_service=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier->id}")
+                ->count();
+        }else
+        {
+            $all=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where(" g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
+                ->count();
+//        $role_id=$user->last_role_id_app;
+            //Get 待付款订单  and g.role_id={$role_id}
+            $unpaid=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=0 and o.order_status=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
+                ->count();
+            $unshipped=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} ")
+                ->count();
+            $unreceiveed=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} ")
+                ->count();
+            $completed=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0 ")
+                ->count();
+            $canceled=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("o.order_status=2 and o.customer_service=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
+                ->count();
+            $customer_service=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("o.order_status=1  and  o.customer_service!=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
+                ->count();
+        }
+
+        $userNews=UserNewsRecord::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['role_id'=>$user->last_role_id_app])
+            ->andWhere(['status'=>0])
+            ->count();
+
+        return [
+                'all'=>$all,
+                'unpaid'=>$unpaid,
+                'unshipped'=>$unshipped,
+                'unreceiveed'=>$unreceiveed,
+                'completed'=>$completed,
+                'canceled'=>$canceled,
+                'customer_service'=>$customer_service,
+                'have_read_news'=>$userNews>0?1:2
+            ];
+    }
 
 
 

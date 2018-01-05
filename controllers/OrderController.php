@@ -5817,4 +5817,25 @@ class OrderController extends Controller
             'data'=>$addressList
         ]);
     }
+
+    /**
+     * APP-获取订单number
+     * @return string
+     */
+    public  function  actionUserFindOrderNum()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'data'=>OrderGoods::FindOrderNumBer($user)
+        ]);
+    }
 }
