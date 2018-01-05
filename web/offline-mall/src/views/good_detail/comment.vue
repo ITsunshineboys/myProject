@@ -6,24 +6,13 @@
       <span :class="dateStyle" class="comment-date">{{commentDate}}</span>
     </div>
     <p>{{content}}</p>
-    <!--<div>-->
-      <!--<img src="" alt="">-->
-      <!--<img src="" alt="">-->
-      <!--<img src="" alt="">-->
-      <!--<img src="" alt="">-->
-      <!--<img src="" alt="">-->
-    <!--</div>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
     name: 'comment',
-    props: ['headshotStyle', 'nameStyle', 'dateStyle', 'userIcon', 'userName', 'commentDate', 'content']
-//    data () {
-//      return {                                                                                                                                             }
-//    },
-//    methods: {}
+    props: ['headshotStyle', 'nameStyle', 'dateStyle', 'userIcon', 'userName', 'commentDate', 'content', 'userIcon']
   }
 </script>
 
@@ -43,11 +32,12 @@
 
   .top-container {
     padding-bottom: 14px;
+    line-height: 50px;
   }
 
   .comment-date {
     float: right;
-    margin-top: 14px;
+    margin-top: 4px;
   }
 
   p {
@@ -60,12 +50,4 @@
     /*white-space: nowrap;*/
     /*text-overflow: ellipsis;*/
   }
-
-  /*.user-pic {*/
-    /*vertical-align: middle;*/
-  /*}*/
-
-   /*{*/
-    /*vertical-align: middle;*/
-  /*}*/
 </style>

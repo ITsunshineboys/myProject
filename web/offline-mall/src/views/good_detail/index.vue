@@ -2,7 +2,7 @@
   <div class="good-container">
     <div class="guide-icon">
       <i class="iconfont icon-return"></i>
-      <i class="iconfont icon-share" @click="show_share=true"></i>
+      <i class="iconfont icon-share" @click="show_share = true"></i>
       <i class="iconfont icon-more"></i>
     </div>
     <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
@@ -15,6 +15,7 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -31,7 +32,8 @@
           <span>({{good_detail.comments.total}})</span>
         </flexbox>
         <comment headshotStyle="headshot-style" nameStyle="name-style" dateStyle="date-style"
-                 :src="good_detail.comments.latest.icon" :userName="good_detail.comments.latest.name"
+                 :userName="good_detail.comments.latest.name" :userIcon="good_detail.comments.latest.icon || user_icon"
+                 :commentDate="good_detail.comments.latest.create_time"
                  :content="good_detail.comments.latest.content"></comment>
         <flexbox justify="center" class="view-all">
           <router-link to="/all-comment">
@@ -56,10 +58,6 @@
             <br/>
             商品数
 
-
-
-
-
           </div>
           <span></span>
           <div>
@@ -67,20 +65,12 @@
             <br/>
             粉丝数
 
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
-
-
-
-
 
           </div>
         </flexbox>
@@ -92,10 +82,10 @@
 
       <!--底部选项卡-->
       <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
-        <tab-item selected @on-item-click="showDescription">图文详情</tab-item>
-        <tab-item @on-item-click="showParams">产品参数</tab-item>
+        <tab-item selected @on-item-click="tabHandler('des')">图文详情</tab-item>
+        <tab-item @on-item-click="tabHandler('params')">产品参数</tab-item>
       </tab>
-      <div v-show="show_description">
+      <div v-show="show_description" class="description-container">
         <flexbox>
           <flexbox-item class="description" v-html="good_detail.description"></flexbox-item>
         </flexbox>
@@ -167,9 +157,17 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count">
             加入购物车
+
+
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
+
+
+
+
           </flexbox-item>
         </flexbox>
       </div>
@@ -204,43 +202,27 @@
       </div>
     </popup>
 
-    <!-- 分享 -->
+    <!-- 分享弹窗 -->
     <popup v-model="show_share" class="show_share">
       <div>分享</div>
       <div class="share-icon">
-        <div>
-          <img src="../../assets/images/weixin.png" alt=""><br/>
-          <span>微信</span>
-        </div>
-        <div>
-          <img src="../../assets/images/pengyouquan.png" alt=""><br/>
-          <span>朋友圈</span>
-        </div>
-        <div>
-          <img src="../../assets/images/sina.png" alt=""><br/>
-          <span>新浪</span>
-        </div>
-        <div class="qq">
-          <img src="../../assets/images/qq.png" alt=""><br/>
-          <span>QQ</span>
-        </div>
-        <div>
-          <img src="../../assets/images/qzone.png" alt=""><br/>
-          <span>QQ空间</span>
+        <div v-for="item in share_content">
+          <img :src="item.image" alt=""><br/>
+          <span>{{item.title}}</span>
         </div>
       </div>
-      <div @click="show_share=false">取消</div>
+      <div @click="show_share = false">取消</div>
     </popup>
 
   </div>
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber, PopupRadio} from 'vux'
+  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
   import goodsTitle from '../good_detail/title'
   import divider from '../good_detail/divider'
   import comment from '../good_detail/comment.vue'
-  //  const safeguard_arr = ['提供发票', '上门安装']
+  const afterserviceArr = ['上门维修', '上门退货', '上门换货', '退货', '换货']
 
   export default {
     name: 'GoodDetail',
@@ -255,7 +237,6 @@
       Tab,
       TabItem,
       Popup,
-      PopupRadio,
       XNumber,
       goodsTitle,
       divider,
@@ -285,15 +266,24 @@
         },
         show_description: true,       // 显示图文详情
         all_after_sale_services: [],
-        afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
-        safeguard_arr: ['提供发票', '上门安装'],
         count_cart: false,            // 加入购物车按钮显示
         count_now: false,             // 立即购买按钮显示
-        default_count: false          // 两个按钮显示
+        default_count: false,         // 两个按钮显示
+        afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
+        safeguard_arr: ['提供发票', '上门安装'],
+        user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
+        share_content: [
+          {image: require('../../assets/images/weixin.png'), title: '微信'},
+          {image: require('../../assets/images/pengyouquan.png'), title: '朋友圈'},
+          {image: require('../../assets/images/sina.png'), title: '购物车'},
+          {image: require('../../assets/images/qq.png'), title: '我的'},
+          {image: require('../../assets/images/qzone.png'), title: 'QQ空间'}
+        ]
+
       }
     },
     created () {
-      this.axios.get('/mall/goods-view', {id: 31}, (res) => {
+      this.axios.get('/mall/goods-view', {id: 332}, (res) => {
         this.good_detail = res.data.goods_view
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
@@ -309,16 +299,13 @@
       // 判断是否显示售后
       afterServiceShow: function () {
         for (let [key, value] of this.all_after_sale_services.entries()) {    // eslint-disable-line
-          if (this.afterservice_arr.indexOf(value) !== -1) {
+          if (afterserviceArr.indexOf(value) !== -1) {
             this.pop.show_service = true
           }
         }
       },
-      showDescription: function () {
-        this.show_description = true
-      },
-      showParams: function () {
-        this.show_description = false
+      tabHandler: function (obj) {
+        obj === 'des' ? this.show_description = true : this.show_description = false
       },
       showCount: function (obj) {
         if (obj === 'all') {
@@ -438,10 +425,10 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    margin-right: 15px;
   }
 
   .good-container .name-style {
-    margin-left: 15px;
     font-size: 16px;
     color: rgba(153, 153, 153, 1);
   }
@@ -449,7 +436,6 @@
   .good-container .date-style {
     font-size: 14px;
     color: rgba(153, 153, 153, 1);
-    line-height: 16px;
   }
 
   .good-container .view-all {
@@ -762,6 +748,11 @@
     color: rgba(255, 255, 255, 1);
   }
 
+  /*图文详情*/
+  .good-container .description-container {
+    min-height: 10px;
+  }
+
   .good-container .description {
     margin: auto;
   }
@@ -810,8 +801,12 @@
     text-align: center;
   }
 
-  .good-container .share-icon > div:not(.qq) {
+  .good-container .share-icon > div {
     margin-right: 42px;
+  }
+
+  .good-container .share-icon > div:nth-child(4) {
+    margin-right: 0;
   }
 
   .good-container .share-icon > div:last-child {
