@@ -139,8 +139,8 @@ done_detail.controller("done_detail_ctrl", function ($rootScope,$scope, _ajax, $
         if (!$scope.emptywarning) {
             $scope.savemodal = "#send_modal";
             let data = {
-                order_no: +$stateParams.order_no,
-                sku: +$stateParams.sku,
+                order_no: $stateParams.order_no,
+                sku: $stateParams.sku,
                 reply_content: $scope.sp.textcount
             };
             _ajax.post("/order/comment-reply", data, function (res) {

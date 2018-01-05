@@ -24,7 +24,7 @@ waitpay_detail.controller("waitpaydetail_ctrl", function ($rootScope, $scope, _a
     function orderDetail() {
         let data = {
             order_no: $stateParams.order_no,
-            sku: +$stateParams.sku
+            sku: $stateParams.sku
         };
 
         _ajax.get("/order/getsupplierorderdetails", data, function (res) {

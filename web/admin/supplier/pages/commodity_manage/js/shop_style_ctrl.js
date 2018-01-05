@@ -19,6 +19,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.own_attrs_arr = [];//自己添加的属性数组
 	$scope.attr_blur_flag = true
 	$scope.own_submitted = true
+	$scope.success_modal_flag = false // 添加成功，跳转列表页
+	$scope.error_modal_flag = false   // 部分系列、风格关闭
+	$scope.default_modal_flag = false // 关闭模态框，停留在当前页
 	$scope.category_id = $stateParams.category_id;//三级分类的id
 	$scope.first_category_title = $stateParams.first_category_title;//一级分类名称
 	$scope.second_category_title = $stateParams.second_category_title;//二级分类名称
@@ -351,10 +354,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 		/*判断必填项，全部ok，调用添加接口*/
 		if (valid && $scope.upload_cover_src && !$scope.price_flag && $scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
-			console.log($scope.brands_arr.length)
-			console.log($scope.own_submitted);
 			let description = UE.getEditor('editor').getContent();//富文本编辑器
-			$scope.success_variable = '#on_shelves_add_success';
+			$scope.pass_attrs_name = []
+			$scope.pass_attrs_value = []
 			/*循环自己添加的属性*/
 			for (let [key, value] of $scope.own_attrs_arr.entries()) {
 				$scope.pass_attrs_name.push(value.name);//属性名
@@ -375,8 +377,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				}
 			}
 			/*判断风格和系列是否存在，如果不存在，值传0*/
-			$scope.series_model == undefined ? $scope.series_model = 0 : $scope.series_model = parseInt($scope.series_model);
-			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = 0 : $scope.style_check_arr = $scope.style_check_arr.join(',')
+			$scope.series_model == undefined ? $scope.series_model = 0 : $scope.series_model = $scope.series_model;
+			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = [] : $scope.style_check_arr = $scope.style_check_arr
 			/*如果没有属性，则传空数组*/
 			if ($scope.pass_attrs_name[0] == undefined) {
 				$scope.pass_attrs_name = [];
@@ -384,14 +386,12 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			if ($scope.pass_attrs_value[0] == undefined) {
 				$scope.pass_attrs_value = [];
 			}
-			console.log($scope.pass_attrs_name)
-			console.log($scope.pass_attrs_value)
 			_ajax.post('/mall/goods-add', {
 				category_id: +$scope.category_id,      //三级分类id
 				title: $scope.goods_name,              //名称
 				subtitle: $scope.des_name,             //特色
-				brand_id: +$scope.brand_model,      //品牌
-				style_id: $scope.style_check_arr,      //风格
+				brand_id: $scope.brand_model,      //品牌
+				style_id: $scope.style_check_arr.join(','),      //风格
 				series_id: $scope.series_model,    //系列
 				'names[]': $scope.pass_attrs_name,   // 属性名称
 				'values[]': $scope.pass_attrs_value, //属性值
@@ -405,8 +405,39 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				after_sale_services: $scope.after_sale_services.join(','),//售后、保障
 				description: description//描述
 			}, function (res) {
-				console.log('添加成功');
 				console.log(res);
+				if (res.code === 200) {
+					if ($scope.error_modal_flag) {              // 部分系列或风格关闭情况后、点击确认
+						$('#on_shelves_add_success').modal('hide')
+						setTimeout(function () {
+							$state.go('commodity_manage');
+						}, 300)
+					}else{                                        // 正常添加
+						$('#on_shelves_add_success').modal('show')
+						$scope.success_modal_flag = true
+						$scope.error_modal_flag = false
+						$scope.default_modal_flag = false
+						$scope.add_moal_txt = '添加成功'
+					}
+				} else if (res.code === 1045 || res.code === 1047) {  // 所选系列或风格，全部关闭
+					$('#on_shelves_add_success').modal('show')
+					$scope.default_modal_flag = true
+					$scope.success_modal_flag = false
+					$scope.error_modal_flag = false
+					$scope.add_moal_txt = res.msg
+				}else if(res.code === 1046){                        // 部分系列或风格关闭
+					$('#on_shelves_add_success').modal('show')
+					$scope.error_modal_flag = true
+					$scope.default_modal_flag = false
+					$scope.success_modal_flag = false
+					$scope.add_moal_txt = res.msg
+					for (let [key,value2] of res.data.offline_style_ids.entries()){
+						let index = $scope.style_check_arr.findIndex((value) => {
+							return value == value2;
+						})
+						$scope.style_check_arr.splice(index,1)
+					}
+				}
 			})
 		} else {
 			$scope.submitted = true;

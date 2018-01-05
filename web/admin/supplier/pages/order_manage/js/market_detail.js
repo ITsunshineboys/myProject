@@ -79,7 +79,7 @@ market_detail.controller("market_detail_ctrl", function ($rootScope,$scope,$inte
 		//异常
 		_ajax.post('/order/find-unusual-list',{
 			order_no:$scope.order_no,
-			sku:+$scope.sku
+			sku:$scope.sku
 		},function (res) {
 			$scope.is_unusual_list_msg=res.data;
 			// console.log(res);

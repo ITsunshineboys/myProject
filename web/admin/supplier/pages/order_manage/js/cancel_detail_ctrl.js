@@ -49,7 +49,7 @@ cancel_detail.controller("cancel_detail_ctrl", function ($rootScope,$scope, _aja
     function orderDetail() {
         let data = {
             order_no: $stateParams.order_no,
-            sku: +$stateParams.sku
+            sku: $stateParams.sku
         };
         _ajax.get("/order/getsupplierorderdetails", data, function (res) {
             $scope.order_detail = res.data.goods_data; //订单详情

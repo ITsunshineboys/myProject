@@ -14,7 +14,7 @@ express.controller("express_ctrl", function ($rootScope,$scope, _ajax, $statePar
     function expressDetail() {
         let data = {
             order_no: $scope.order_no,
-            sku: +$scope.sku
+            sku: $scope.sku
         };
         _ajax.post("/order/getexpress", data, function (res) {
             $scope.order_info = res.data;

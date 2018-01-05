@@ -78,7 +78,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
       //异常
       _ajax.post('/order/find-unusual-list',{
           order_no:$scope.order_no,
-          sku:+$scope.sku
+          sku:$scope.sku
       },function (res) {
           $scope.is_unusual_list_msg=res.data;
       })
@@ -112,7 +112,7 @@ waitsend_detail.controller("waitsend_detail_ctrl", function ($rootScope,$scope, 
           $scope.is_unusual_flag=true;
           _ajax.post('/order/find-unusual-list',{
               order_no:$scope.order_no,
-              sku:+$scope.sku
+              sku:$scope.sku
           },function (res) {
               $scope.is_unusual_list_msg=res.data;
           })

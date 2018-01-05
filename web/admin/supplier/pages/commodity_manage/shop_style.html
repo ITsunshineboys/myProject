@@ -70,7 +70,7 @@
                         <input type="checkbox" ng-model="style_check_model" ng-change="style_change(style_check_model, item)">
                         <span class="cursor" style="font-weight: normal">{{item.style}}</span>
                     </label>
-                    <span class="small_txt">*添加系列，便于智能报价抓取该商品</span>
+                    <span class="small_txt">*添加风格，便于智能报价抓取该商品</span>
                 </div>
             </div>
             <!--属性设置-->
@@ -286,12 +286,12 @@
             <!--按钮-->
             <div class="row">
                 <div class="col-sm-12 control-label">
-                    <button class="btn btn-primary" ng-click="add_goods_confirm(form.$valid,form.$error.required)" data-toggle="modal" data-target="{{success_variable}}" ng-disabled="upload_dis">确认</button>
+                    <button class="btn btn-primary" ng-click="add_goods_confirm(form.$valid,form.$error.required)" ng-disabled="upload_dis">确认</button>
                     <button class="btn btn-default btn_left" ui-sref="commodity_manage">返回</button>
                 </div>
             </div>
         </form>
-    <!--添加成功-->
+    <!--添加成功模态框-->
     <div class="modal fade" id="on_shelves_add_success" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -300,10 +300,22 @@
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    添加成功
+                    {{add_moal_txt}}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="on_shelves_add_success()">确定</button>
+                    <!--添加成功，跳转列表页-->
+                    <div ng-if="success_modal_flag">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="on_shelves_add_success()">确定</button>
+                    </div>
+                    <!--部分系列、风格关闭-->
+                    <div ng-if="error_modal_flag">
+                        <button type="button" class="btn btn-primary" ng-click="add_goods_confirm(form.$valid,form.$error.required)">确定</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+                    </div>
+                    <!--关闭模态框，停留在当前页-->
+                    <div ng-if="default_modal_flag">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                    </div>
                 </div>
             </div>
         </div>
