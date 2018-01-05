@@ -55,6 +55,7 @@ class CommentReply extends ActiveRecord
                $code=1000;
                return $code;
            }
+           var_dump($postData);die;
            $OrderGoods=OrderGoods::find()
                ->where(['order_no'=>$postData['order_no'],'sku'=>$postData['sku']])
                ->one();
@@ -67,7 +68,7 @@ class CommentReply extends ActiveRecord
                $commentReply=new self;
                $commentReply->comment_id=$OrderGoods->comment_id;
                $commentReply->content=$postData['reply_content'];
-               $res=$commentReply->save();
+               $res=$commentReply->save(false);
                if (!$res){
                    $tran->rollBack();
                    $code=500;
