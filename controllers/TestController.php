@@ -568,7 +568,6 @@ class TestController extends Controller
     {
        echo  StringService::getClientIP();
 //        echo  Yii::$app->session['PHPSESSID'];die;
-
     }
 
 
