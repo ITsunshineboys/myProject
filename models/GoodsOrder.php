@@ -87,7 +87,8 @@ class GoodsOrder extends ActiveRecord
         'a.order_refer',
         'a.role_id',
         'z.shipping_type',
-        'u.mobile'
+        'u.mobile',
+        'a.supplier_id'
     ];
     const FIELDS_USERORDER_ADMIN = [
         'a.supplier_id',
@@ -927,9 +928,10 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['handle']='';
                     $arr[$k]['have_handle']=2;
                 }
-
             }
             $arr[$k]['is_after']=$isAfter;
+            $arr[$k]['shop_name']=Supplier::find()->select(['shop_name'])->where(['id'=>$arr[$k]['supplier_id']])->one()->shop_name;
+            unset($arr[$k]['supplier_id']);
             unset($arr[$k]['consignee_mobile']);
             unset($arr[$k]['id']);
             unset($arr[$k]['address_id']);

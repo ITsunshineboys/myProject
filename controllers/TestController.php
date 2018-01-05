@@ -562,7 +562,8 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-       echo  $_COOKIE['PHPSESSID'];
+        $data=Supplier::find()->where(['id'=>1])->column('id');
+        var_dump($data);
     }
     public  static  function  actionTest1()
     {
