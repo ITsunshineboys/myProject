@@ -20,6 +20,20 @@ class OrderGoods extends ActiveRecord
     const  DESIGNER_PRICE_DESC='设计师采购价';
     const  WORKER_PRICE_DESC='工人采购价';
 
+
+    const STATUS_TYPE_UNPAID=1;
+    const STATUS_TYPE_UN_SHIPPED=2;
+    const STATUS_TYPE_UN_SHIPPED_REFUND=3;
+    const STATUS_TYPE_SHIPPED=4;
+    const STATUS_TYPE_SHIPPED_REFUND=5;
+    const STATUS_TYPE_UN_RECEIVED=6;
+    const STATUS_TYPE_UN_RECEIVED_REFUND=7;
+    const STATUS_TYPE_CANCEL=8;
+    const STATUS_TYPE_CUSTOMER_SERVICE_IN=9;
+    const STATUS_TYPE_CUSTOMER_SERVICE_OVER=10;
+    const STATUS_TYPE_COMPLETED=11;
+    const STATUS_TYPE_CUSTOMER_UNCOMMENT=12;
+
     /**
      * @return string 返回该AR类关联的数据表名
      */

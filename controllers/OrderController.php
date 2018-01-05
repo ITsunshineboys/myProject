@@ -2297,7 +2297,8 @@ class OrderController extends Controller
             ]);
         }
     }
-     /**获取退款详情
+     /**
+      * 获取退款详情
      * @return string
      */
     public function  actionFindRefundDetail()
@@ -5177,8 +5178,7 @@ class OrderController extends Controller
                 ]
             );
         }
-        $user = Yii::$app->user->identity;
-        if (!$user){
+        if ($request->post('type')==1){
             $code=ShippingCart::addShippingCartNoLogin($goods_id,$goods_num);
             if ($code==1000)
             {
@@ -5198,6 +5198,7 @@ class OrderController extends Controller
             }
         }else
         {
+            $user = Yii::$app->user->identity;
             $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
             if ($code==200)
             {

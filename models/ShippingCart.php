@@ -249,11 +249,15 @@ class ShippingCart extends \yii\db\ActiveRecord
 
     public  static  function  addShippingCartNoLogin($goods_id,$goods_num)
     {
-        if (!$_COOKIE['PHPSESSID'])
+
+        if (!isset($_COOKIE['PHPSESSID']))
         {
-            Yii::$app->session['shipping_card_goods'];
+            Yii::$app->session['shipping_card_goods']=1;
+            $sessionId=Yii::$app->session->id;
+        }else
+        {
+            $sessionId=$_COOKIE['PHPSESSID'];
         }
-        $sessionId=$_COOKIE['PHPSESSID'];
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
@@ -263,8 +267,8 @@ class ShippingCart extends \yii\db\ActiveRecord
                 $code=1000;
                 return $code;
             }
-//            $invalid_time=$time-24*3600;
-//            ShippingCart::deleteAll("uid = 0 AND role_id = 0  AND  create_time<{$invalid_time}");
+            $invalid_time=$time-24*3600;
+            ShippingCart::deleteAll("uid = 0 AND role_id = 0  AND  create_time<{$invalid_time}");
             $shipping_cart=ShippingCart::find()
                 ->where(['session_id'=>$sessionId])
                 ->andWhere(['goods_id'=>$goods_id])
@@ -274,20 +278,20 @@ class ShippingCart extends \yii\db\ActiveRecord
                 $shipping_cart->goods_num+=$goods_num;
             }else
             {
-                $cart=new ShippingCart();
-                $cart->goods_id=$goods_id;
-                $cart->goods_num=$goods_num;
-                $cart->create_time=$time;
-                $cart->session_id=$sessionId;
-                if (!$cart->save(false))
-                {
-                    $tran->rollBack();
-                    $code=1000;
-                    return $code;
-                }
-                $tran->commit();
-                return$sessionId;
+                $shipping_cart=new ShippingCart();
+                $shipping_cart->goods_id=$goods_id;
+                $shipping_cart->goods_num=$goods_num;
+                $shipping_cart->create_time=$time;
+                $shipping_cart->session_id=$sessionId;
             }
+            if (!$shipping_cart->save(false))
+            {
+                $tran->rollBack();
+                $code=1000;
+                return $code;
+            }
+            $tran->commit();
+            return  $sessionId;
         }catch (\Exception $e)
         {
             $tran->rollBack();
