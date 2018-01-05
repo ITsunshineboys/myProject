@@ -352,7 +352,6 @@ class BasisDecorationService
                 $one_goods = $one;
             }
         }
-
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
         switch ($int){
@@ -362,10 +361,7 @@ class BasisDecorationService
             case $int == 2 ;
                 $goods_attr = GoodsAttr::findByGoodsIdUnits($max_goods['id'],$name);
         }
-
-
         return [$max_goods,$goods_attr];
-
     }
 
 
@@ -843,31 +839,21 @@ class BasisDecorationService
      * @param string $project
      * @return mixed
      */
-    public static function mudMakeCost($area,$goods,$craft,$goods_attr,$project)
+    public static function mudMakeCost($int,$area,$craft,$goods)
     {
-
-        foreach ($goods as $one) {
-            if ($one['title'] == $project) {
-                $goods_price = $one['platform_price'];
-                $goods_procurement = $one['purchase_price_decoration_company'];
-            }
-        }
-        $goods_unit = 0;
-        foreach ($goods_attr as $one_goods_attr) {
-            if ($one_goods_attr['title'] == $project) {
-                $goods_unit = $one_goods_attr['value'];
-            }
-        }
-        if ($goods_unit == 0){
-            $goods_unit = 1;
+        switch ($int){
+            case $int ==1:
+                $value['quantity'] = ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
+                $value['cost'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['platform_price']),2);
+                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['purchase_price_decoration_company']),2);
+                break;
         }
 
-        //        个数：（水泥面积×【15kg】÷抓取的商品的KG）
-        $mud_make['quantity'] = ceil($area * $craft / $goods_unit);
-        //        水泥费用:个数×抓取的商品价格
-        $mud_make['cost'] = round($mud_make['quantity'] * $goods_price,2);
-        $mud_make['procurement'] = round($mud_make['quantity'] * $goods_procurement,2);
-        return $mud_make;
+        $goods[0]['quantity'] = $value ['quantity'];
+        $goods[0]['cost'] = $value ['cost'];
+        $goods[0]['procurement'] = $value ['procurement'];
+
+        return $goods[0];
     }
 
     /**

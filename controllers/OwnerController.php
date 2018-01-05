@@ -61,8 +61,9 @@ class OwnerController extends Controller
     const WATERPROOF_MATERIAL= [56];             // 防水材料id
     const CARPENTRY_MATERIAL = [22,9,12,13];     // 木作材料id
     const LATEX_MATERIAL     = [38,24,25,28,5];  // 乳胶漆材料id
-    const TILER_MATERIAL     = [172,36,6];       // 泥工材料id
+    const TILER_MATERIAL     = [172,36,6,45];       // 泥工材料id
     const BACKMAN_MATERIAL   = [172,6,3];      // 杂工材料id
+    const BRICK   = [44];      // 杂工材料id
 
 
     /**
@@ -1055,32 +1056,30 @@ class OwnerController extends Controller
 
 
         //材料费
-        $goods = Goods::priceDetail(self::WALL_SPACE, self::TILER_MATERIAL);
+        $goods = Goods::priceDetail(self::WALL_SPACE,self::TILER_MATERIAL);
         $judge = BasisDecorationService::judge($goods,$get);
 
         //商品属性
         $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
         $self_leveling_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['self_leveling'],'重');
         $river_sand_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['river_sand'],'重');
+        $wall_brick_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wall_brick'],'',2);
 
 
 
-        
-//        水泥费用
-        $cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $cement_cost = BasisDecorationService::mudMakeCost($cement_area, $goods, $cement_craft, $goods_attr,BasisDecorationService::goodsNames()['cement']);
-
-//        自流平费用
+//        水泥费用    自流平费用  河沙费用
         $self_leveling_area = $drawing_room_area;
-        $self_leveling_cost = BasisDecorationService::mudMakeCost($self_leveling_area, $goods, $self_leveling_craft, $goods_attr,BasisDecorationService::goodsNames()['self_leveling']);
-
-        //        河沙费用
-        $river_sand_cement_area = $covering_layer_area + $floor_tile_area + $wall_area;
-        $river_sand_cost = BasisDecorationService::mudMakeCost($river_sand_cement_area, $goods, $river_sand_craft, $goods_attr,BasisDecorationService::goodsNames()['river_sand']);
-
+        $cement_area = BasisDecorationService::algorithm(5,$covering_layer_area,$floor_tile_area,$wall_area);
+        $m[] = BasisDecorationService::mudMakeCost(1,$cement_area,$concrete,$cement_attr);
+        $m[] = BasisDecorationService::mudMakeCost(1,$self_leveling_area,$self_leveling,$self_leveling_attr);
+        $m[] = BasisDecorationService::mudMakeCost(1,$cement_area,$river_sand,$river_sand_attr);
 
 
-//        墙砖费用 墙砖费用：个数×抓取的商品价格 个数：（墙砖面积÷抓取墙砖面积）
+        // 墙砖  地砖 商品查询   44
+        $brick = Goods::priceDetail(self::WALL_SPACE,self::BRICK);
+
+
+//        墙砖费用
         $wall_brick_cost['quantity'] = ceil($wall_area / $wall_brick_area);
         $wall_brick_cost['cost'] = round($wall_brick_cost ['quantity'] * $wall_brick_max['platform_price'],2);
         $wall_brick_cost['procurement'] = round($wall_brick_cost ['quantity'] * $wall_brick_max['purchase_price_decoration_company'],2);

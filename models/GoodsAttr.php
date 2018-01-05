@@ -355,6 +355,26 @@ class GoodsAttr extends ActiveRecord
         return $row;
     }
 
+    public static function goodsIdUnits($goods_id,$name)
+    {
+        $row = self::find()
+            ->select('goods_attr.goods_id,goods_category.title,goods_attr.name,goods_attr.value,goods_attr.unit')
+            ->leftJoin('goods','goods_attr.goods_id = goods.id')
+            ->leftJoin('goods_category','goods.category_id = goods_category.id')
+            ->where(['in','goods_attr.goods_id',$goods_id])
+            ->andwhere(['like','goods_attr.name',$name])
+            ->asArray()
+            ->all();
+
+        foreach ($row as &$one){
+            if (is_numeric($one['value'])){
+                $one['value'] = $one['value'] / 100;
+            }
+        }
+
+        return $row;
+    }
+
     /**
      * @param $goods
      * @return array|ActiveRecord[]

@@ -1510,4 +1510,9 @@ class Goods extends ActiveRecord
     {
         return $this->hasOne(GoodsBrand::className(), ['id' => 'brand_id']);
     }
+
+    public static function moreCondition()
+    {
+
+    }
 }
