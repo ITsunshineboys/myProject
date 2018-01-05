@@ -20,13 +20,13 @@
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
-    <goods-list :class="{'modal-open': true}"></goods-list>
+    <goods-list></goods-list>
 
     <!-- 筛选 -->
-    <popup class="modal-filter" position="right" :hide-on-blur="false" v-model="isModalOpen">
-      <group>
+    <popup class="modal-filter" position="right" v-model="isModalOpen">
+      <group class="modal-filter-content">
         <cell :title="'风格'" :is-link="true" :border-intent="false" :arrow-direction="isStyleOpen ? 'up' : 'down'" @click.native="isStyleOpen = !isStyleOpen"></cell>
-        <div class="modal-filter-style">
+        <div class="modal-filter-style" v-if="isStyleOpen">
           <checker v-model="styleParams" default-item-class="btn" selected-item-class="btn-primary">
             <checker-item value="1">123123</checker-item>
             <checker-item value="2">1231232132</checker-item>
@@ -36,12 +36,13 @@
           </checker>
         </div>
         <cell :title="'系列'" :is-link="true" :border-intent="false" :arrow-direction="isSeriesOpen ? 'up' : 'down'" @click.native="isSeriesOpen = !isSeriesOpen"></cell>
-        <div class="modal-filter-style">
+        <div class="modal-filter-style" v-if="isSeriesOpen">
           <checker v-model="seriesParams" default-item-class="btn" selected-item-class="btn-primary">
             <checker-item value="1">123123</checker-item>
             <checker-item value="2">1231232132</checker-item>
             <checker-item value="3">3453535</checker-item>
             <checker-item value="4">57683423</checker-item>
+            <checker-item value="5">567324</checker-item>
             <checker-item value="5">567324</checker-item>
           </checker>
         </div>
@@ -50,18 +51,24 @@
           <input type="number" placeholder="最低价"> <span class="iconfont icon-reduce"></span> <input type="number" placeholder="最高价">
         </div>
         <cell :title="'品牌'" :is-link="true" :border-intent="false" :arrow-direction="isBrandOpen ? 'up' : 'down'" @click.native="isBrandOpen = !isBrandOpen"></cell>
-        <div class="modal-filter-style">
-          <checker v-model="brandParams" default-item-class="btn" selected-item-class="btn-primary">
+        <div class="modal-filter-style" v-if="isBrandOpen">
+          <checker v-model="brandParams" default-item-class="btn" selected-item-class="btn-primary" type="checkbox">
             <checker-item value="1">123123</checker-item>
             <checker-item value="2">1231232132</checker-item>
             <checker-item value="3">3453535</checker-item>
             <checker-item value="4">57683423</checker-item>
             <checker-item value="5">567324</checker-item>
+            <checker-item value="6">123123</checker-item>
+            <checker-item value="7">1231232132</checker-item>
+            <checker-item value="8">3453535</checker-item>
+            <checker-item value="9">57683423</checker-item>
+            <checker-item value="0">567324</checker-item>
+            <checker-item value="10">123123</checker-item>
+            <checker-item value="12">1231232132</checker-item>
+            <checker-item value="13">3453535</checker-item>
+            <checker-item value="14">57683423</checker-item>
+            <checker-item value="15">最后一个</checker-item>
           </checker>
-        </div>
-        <div class="brand-all" @click="isModalBrandOpen = true">
-          <span>全部品牌</span>
-          <span class="iconfont icon-arrow-line-right"></span>
         </div>
         <div class="btn-group">
           <button class="btn-reset" type="button">重置</button>
@@ -96,13 +103,12 @@
       return {
         styleParams: '',
         seriesParams: '',
-        brandParams: '',
+        brandParams: [],
         isMoreOpen: false,      // 头部更多选项是否显示
-        isModalOpen: false,      // 模态框是否显示
+        isModalOpen: false,     // 模态框是否显示
         isStyleOpen: false,     // 风格是否显示
         isSeriesOpen: false,    // 系列是否显示
-        isBrandOpen: false,     // 品牌是否显示
-        isModalBrandOpen: false // 全部品牌是否显示
+        isBrandOpen: false      // 品牌是否显示
       }
     },
     methods: {
@@ -234,10 +240,6 @@
   .btn-finish {
     color: #fff;
     background-color: #222222;
-  }
-
-  .modal-open {
-    overflow: hidden !important;
   }
 </style>
 
