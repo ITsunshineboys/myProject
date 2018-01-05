@@ -15,8 +15,6 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -36,10 +34,12 @@
                  :src="good_detail.comments.latest.icon" :userName="good_detail.comments.latest.name"
                  :content="good_detail.comments.latest.content"></comment>
         <flexbox justify="center" class="view-all">
-        <span>
-          查看全部评价
+          <router-link to="/all-comment">
+           <span>
+            查看全部评价
           </span>
-          <i class="iconfont icon-arrow-line-right"></i>
+            <i class="iconfont icon-arrow-line-right"></i>
+          </router-link>
         </flexbox>
         <divider></divider>
       </div>
@@ -57,6 +57,9 @@
             商品数
 
 
+
+
+
           </div>
           <span></span>
           <div>
@@ -65,12 +68,18 @@
             粉丝数
 
 
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
+
+
+
 
 
           </div>
@@ -158,13 +167,9 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count">
             加入购物车
-
-
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
-
-
           </flexbox-item>
         </flexbox>
       </div>
@@ -173,7 +178,7 @@
     <!--售后保障弹窗 -->
     <popup v-model="show_after_service" height="100%" class="show_after_service">
       <div>
-        <flexbox orient="vertical" justify="space-between">
+        <flexbox orient="vertical" justify="space-between" style="-webkit-overflow-scrolling: touch;">
           <flexbox-item>
             <div class="after-service" v-if="pop.show_service">
               <p>售后</p>
@@ -231,7 +236,7 @@
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
+  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber, PopupRadio} from 'vux'
   import goodsTitle from '../good_detail/title'
   import divider from '../good_detail/divider'
   import comment from '../good_detail/comment.vue'
@@ -250,6 +255,7 @@
       Tab,
       TabItem,
       Popup,
+      PopupRadio,
       XNumber,
       goodsTitle,
       divider,
@@ -449,6 +455,11 @@
   .good-container .view-all {
     padding-top: 16px;
     padding-bottom: 16px;
+  }
+
+  .good-container .view-all a {
+    font-size: 16px;
+    color: rgba(34, 34, 34, 1);
   }
 
   .good-container .view-all .iconfont {
