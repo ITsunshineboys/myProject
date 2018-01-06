@@ -85,7 +85,7 @@ class OwnerController extends Controller
         'woodworker' => 1,  // 木工id
         'painters'   => 13,  // 油漆工id
         'mason'      => 20,  // 泥瓦工id
-        'backman'    => 6,  // 杂工id
+        'backman'    => 4,  // 杂工id
     ];
 
     /**
@@ -106,6 +106,11 @@ class OwnerController extends Controller
         'maskant'       => 21,  //'保护层长度',
         'floor_tile'    => 22,  //'贴地砖面积',
         'wall_brick'    => 23,  //'贴墙砖面积',
+        'build_24'      => 23,  //'新建24墙面积',
+        'dismantle_24'  => 23,  //'拆除24墙面积',
+        'build_12'      => 23,  //'新建12墙面积',
+        'dismantle_12'  => 23,  //'拆除12墙面积',
+        'repair'        => 23,  //'补烂面积',
     ];
 
     /**
@@ -1132,25 +1137,25 @@ class OwnerController extends Controller
      */
     public function actionHandyman()
     {
-        $post = \Yii::$app->request->post();
-//        $_select = 'id,univalence,worker_kind';
-        $labor = LaborCost::profession($post, self::WORK_CATEGORY['backman']);
-        if ($labor == null){
-            $code = 1056;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
+        $get = \Yii::$app->request->get();
+        $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['backman']);
+        $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
+        foreach ($day_workload as $one_day) {
+            // 保护层
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['maskant']){
+                $maskant = $one_day['quantity'];
+            }
+            // 贴地砖面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['floor_tile']){
+                $floor_tile = $one_day['quantity'];
+            }
+            // 贴墙砖面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['wall_brick']){
+                $wall_brick = $one_day['quantity'];
+            }
         }
+        var_dump($day_workload);die;
 
-        $worker_kind_details = WorkerCraftNorm::findByLaborCostAll($labor['id']);
-        if ($worker_kind_details == null){
-            $code = 1057;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
 
         $points = Points::findByOne('id,title',"id=7");
         $Apartment = Apartment::find()
@@ -1553,6 +1558,7 @@ class OwnerController extends Controller
 
 
     }
+
     /**
      * 小区案例列表 ---yr
      * @return string
