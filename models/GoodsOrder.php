@@ -128,7 +128,6 @@ class GoodsOrder extends ActiveRecord
     const SUPPLIER_MONEY='supplier_price';
     const STATUS_DESC_DETAILS=1;
     const SHIP_HANDLE='发货';
-
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -170,7 +169,6 @@ class GoodsOrder extends ActiveRecord
 
         return (int)$query->count();
     }
-
     /**
      * @param $order_no
      * @param array $select
@@ -184,8 +182,6 @@ class GoodsOrder extends ActiveRecord
             ->one();
         return $data;
     }
-
-
     /**
      * 添加表数据
      * @param $order_no
@@ -238,7 +234,6 @@ class GoodsOrder extends ActiveRecord
                 return 500;
         }
     }
-
     /**
      * 支付宝线下商城数据库操作
      * @param $arr
@@ -276,7 +271,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$Goods,0,0,0,0,$freight*100);
+            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100);
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -389,8 +384,6 @@ class GoodsOrder extends ActiveRecord
         new SmValidationService($sms);
         return true;
     }
-
-
     /**
      * 微信线下商城数据库操作
      * @param $arr
@@ -404,17 +397,13 @@ class GoodsOrder extends ActiveRecord
         $address_id=$arr[2];
         $pay_name=$arr[3];
         $invoice_id=$arr[4];
-        $supplier_id=$arr[5];
+        //$supplier_id=$arr[5];
         $freight=$arr[6];
-        $return_insurance=$arr[7];
+        //$return_insurance=$arr[7];
         $order_no=$arr[8];
         $buyer_message=$arr[9];
-        $goods=(new Query())
-            ->from(Goods::tableName().' as a')
-            ->where(['a.id'=>$goods_id])
-            ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
-            ->one();
-         if (($freight*100+$goods['platform_price']*$goods_num)!=$msg['total_fee']){
+        $Goods=Goods::findOne($goods_id);
+         if (($freight*100+$Goods->platform_price*$goods_num)!=$msg['total_fee']){
              return false;
          }
         $address=UserAddress::findOne($address_id);
@@ -425,70 +414,25 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $goods_order=new self();
-            $goods_order->order_no=$order_no;
-            $goods_order->amount_order=$msg['total_fee'];
-            $goods_order->supplier_id=$goods['supplier_id'];
-            $goods_order->invoice_id=$invoice_id;
-            $goods_order->address_id=$address_id;
-            $goods_order->pay_status=1;
-            $goods_order->create_time=$time;
-            $goods_order->paytime=$time;
-            $goods_order->order_refer=1;
-            $goods_order->return_insurance=$return_insurance*100;
-            $goods_order->pay_name=$pay_name;
-            $goods_order->buyer_message=$buyer_message;
-            $goods_order->consignee=$address->consignee;
-            $goods_order->district_code=$address->district;
-            $goods_order->region=$address->region;
-            $goods_order->consignee_mobile=$address->mobile;
-            $goods_order->invoice_type=$invoice->invoice_type;
-            $goods_order->invoice_header_type=$invoice->invoice_header_type;
-            $goods_order->invoicer_card=$invoice->invoicer_card;
-            $goods_order->invoice_header=$invoice->invoice_header;
-            $goods_order->invoice_content=$invoice->invoice_content;
-            $res1=$goods_order->save(false);
-            if (!$res1){
+            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice);
+            if ($code!=200)
+            {
                 $tran->rollBack();
                 return false;
             }
-            //关闭
-            $OrderGoods=new OrderGoods();
-            $OrderGoods->order_no=$order_no;
-            $OrderGoods->goods_id=$goods['id'];
-            $OrderGoods->goods_number=$goods_num;
-            $OrderGoods->create_time=time();
-            $OrderGoods->goods_name=$goods['title'];
-            $OrderGoods->goods_price=$goods['platform_price'];
-            $OrderGoods->sku=$goods['sku'];
-            $OrderGoods->market_price=$goods['market_price'];
-            $OrderGoods->supplier_price=$goods['supplier_price'];
-            $OrderGoods->shipping_type=$goods['delivery_method'];
-            $OrderGoods->cover_image=$goods['cover_image'];
-            $OrderGoods->order_status=0;
-            $OrderGoods->shipping_status=0;
-            $OrderGoods->customer_service=0;
-            $OrderGoods->is_unusual=0;
-            $OrderGoods->freight=$freight*100;
-            $OrderGoods->category_id=$goods['category_id'];
-            $OrderGoods->after_sale_services=$goods['after_sale_services'];
-            $OrderGoods->platform_price=$goods['platform_price'];
-            $OrderGoods->purchase_price_decoration_company=$goods['purchase_price_decoration_company'];
-            $OrderGoods->purchase_price_manager=$goods['purchase_price_manager'];
-            $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
-            $OrderGoods->subtitle=$goods['subtitle'];
-            $res2=$OrderGoods->save(false);
-            if (!$res2){
+            $code=OrderGoods::AddNewOrderData($order_no,$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100);
+            if ($code!=200)
+            {
                 $tran->rollBack();
                 return false;
             }
             $time=time();
             $month=date('Ym',$time);
             $supplier=Supplier::find()
-                ->where(['id'=>$goods['supplier_id']])
+                ->where(['id'=>$Goods->supplier_id])
                 ->one();
             $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
-            $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
+            $supplier->sales_amount_month=$supplier->sales_amount_month+$Goods->platform_price*$goods_num;
             $supplier->month=$month;
             $res3=$supplier->save(false);
             if (!$res3){
@@ -497,13 +441,13 @@ class GoodsOrder extends ActiveRecord
             }
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
-                ->where(['supplier_id'=>$goods['supplier_id']])
+                ->where(['supplier_id'=>$Goods->supplier_id])
                 ->andWhere(['create_date'=>$date])
                 ->one();
             if (!$GoodsStat)
             {
                 $GoodsStat=new GoodsStat();
-                $GoodsStat->supplier_id=$goods['supplier_id'];
+                $GoodsStat->supplier_id=$Goods->supplier_id;
                 $GoodsStat->sold_number=$goods_num;
                 $GoodsStat->amount_sold=$msg['total_fee'];
                 $GoodsStat->create_date=$date;
@@ -521,7 +465,6 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
-            $Goods=Goods::findOne($goods_id);
             $Goods->left_number-=$goods_num;
             $Goods->sold_number+=$goods_num;
             if (!$Goods->save(false))
@@ -530,149 +473,53 @@ class GoodsOrder extends ActiveRecord
                 return false;
             }
             //风格
-            $style=Style::findOne($Goods->style_id);
-            if ($style)
+            $code=OrderStyle::AddNewData($Goods->style_id,$order_no,$Goods->sku);
+            if ($code!=200)
             {
-                $orderStyle=new OrderStyle();
-                $orderStyle->order_no=$order_no;
-                $orderStyle->sku=$goods['sku'];
-                $orderStyle->style=$style->style;
-                $orderStyle->intro=$style->intro;
-                $orderStyle->theme=$style->theme;
-                $orderStyle->images=$style->images;
-                if (!$orderStyle->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
+                $tran->rollBack();
+                return false;
             }
 
 
-            //系列
-            $serires=Series::findOne($Goods->series_id);
-            if ($serires)
+            $code=OrderSeries::AddNewData($Goods->series_id,$order_no,$Goods->sku);
+            if ($code!=200)
             {
-                $orderSeries=new OrderSeries();
-                $orderSeries->order_no=$order_no;
-                $orderSeries->sku=$goods['sku'];
-                $orderSeries->series=$serires->series;
-                $orderSeries->intro=$serires->intro;
-                if (!$orderSeries->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
+                $tran->rollBack();
+                return false;
             }
-
-
             //商品图片
-            $goods_image=GoodsImage::find()
-                ->where(['goods_id'=>$goods_id])
-                ->all();
-            if ($goods_image)
+            $code=OrderGoodsImage::AddNewData($goods_id,$order_no,$Goods->sku);
+            if ($code!=200)
             {
-                foreach ( $goods_image as &$image)
-                {
-                    $orderGoodsImage=new OrderGoodsImage();
-                    $orderGoodsImage->order_no=$order_no;
-                    $orderGoodsImage->sku=$goods['sku'];
-                    $orderGoodsImage->goods_id=$goods_id;
-                    $orderGoodsImage->image=$image->image;
-                    if (!$orderGoodsImage->save(false))
-                    {
-                        $tran->rollBack();
-                        return false;
-                    }
-                }
+                $tran->rollBack();
+                return false;
             }
-
-
             //品牌
-            $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
-            if ($GoodsBrand)
+            $code=OrderGoodsBrand::AddNewData($Goods->brand_id,$order_no,$Goods->sku);
+            if ($code!=200)
             {
-                $orderGoodsBrand=new OrderGoodsBrand();
-                $orderGoodsBrand->order_no=$order_no;
-                $orderGoodsBrand->sku=$goods['sku'];
-                $orderGoodsBrand->name=$GoodsBrand->name;
-                $orderGoodsBrand->logo=$GoodsBrand->logo;
-                $orderGoodsBrand->certificate=$GoodsBrand->certificate;
-                if (!$orderGoodsBrand->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
+                $tran->rollBack();
+                return false;
             }
-
             //商品属性
-            $goodsAttr=GoodsAttr::find()
-                ->where(['goods_id'=>$goods_id])
-                ->all();
-            if ($goodsAttr)
+            $code=OrderGoodsAttr::AddNewData($goods_id,$order_no,$Goods->sku);
+            if ($code!=200)
             {
-                foreach ( $goodsAttr as &$attr)
-                {
-                    $orderGoodsAttr=new OrderGoodsAttr();
-                    $orderGoodsAttr->order_no=$order_no;
-                    $orderGoodsAttr->sku=$goods['sku'];
-                    $orderGoodsAttr->name=$attr->name;
-                    $orderGoodsAttr->value=$attr->value;
-                    $orderGoodsAttr->unit=$attr->unit;
-                    $orderGoodsAttr->addition_type=$attr->addition_type;
-                    $orderGoodsAttr->goods_id=$attr->goods_id;
-                    if (!$orderGoodsAttr->save(false))
-                    {
-                        $tran->rollBack();
-                        return false;
-                    }
-                }
+                $tran->rollBack();
+                return false;
             }
-
             //物流末班
-            $LogisticTemp=LogisticsTemplate::findOne($Goods->logistics_template_id);
-            if ($LogisticTemp)
+            $code=OrderLogisticsTemplate::AddNewData($Goods->logistics_template_id,$order_no,$Goods->sku);
+            if ($code!=200)
             {
-                $orderLogisticTemp=new  OrderLogisticsTemplate();
-                $orderLogisticTemp->order_no=$order_no;
-                $orderLogisticTemp->sku=$goods['sku'];
-                $orderLogisticTemp->name=$LogisticTemp->name;
-                $orderLogisticTemp->delivery_method=$LogisticTemp->delivery_method;
-                $orderLogisticTemp->delivery_cost_default=$LogisticTemp->delivery_cost_default;
-                $orderLogisticTemp->delivery_number_default=$LogisticTemp->delivery_number_default;
-                $orderLogisticTemp->delivery_cost_delta=$LogisticTemp->delivery_cost_delta;
-                $orderLogisticTemp->delivery_number_delta=$LogisticTemp->delivery_number_delta;
-                if (!$orderLogisticTemp->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
-
-                $LogisticDis=LogisticsDistrict::find()
-                    ->where(['template_id'=>$Goods->logistics_template_id])
-                    ->all();
-                if ($LogisticDis)
-                {
-                    foreach ($LogisticDis as  &$dis)
-                    {
-                        $OrderLogisticDis=new OrderLogisticsDistrict();
-                        $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
-                        $OrderLogisticDis->district_code=$dis->district_code;
-                        $OrderLogisticDis->district_name=$dis->district_name;
-                        if (!$OrderLogisticDis->save(false))
-                        {
-                            $tran->rollBack();
-                            return false;
-                        }
-                    }
-                }
+                $tran->rollBack();
+                return false;
             }
-
-
             //详情描述
             $orderGoodsDescription=new OrderGoodsDescription();
             $orderGoodsDescription->order_no=$order_no;
-            $orderGoodsDescription->sku=$goods['sku'];
-            $orderGoodsDescription->description=$goods['description'];
+            $orderGoodsDescription->sku=$Goods->sku;
+            $orderGoodsDescription->description=$Goods->description;
             if (!$orderGoodsDescription->save(false))
             {
                 $tran->rollBack();
@@ -686,7 +533,7 @@ class GoodsOrder extends ActiveRecord
         }
         $sms['mobile']=$address->mobile;
         $sms['type']='gotOrder';
-        $sms['goods_title']=$goods['title'];
+        $sms['goods_title']=$Goods->title;
         $sms['order_no']=$order_no;
         $sms['recipient']=$address->consignee;
         $sms['phone_number']=$address->mobile;
@@ -911,8 +758,6 @@ class GoodsOrder extends ActiveRecord
         }
 
     }
-
-    
     /**
      * @param $goods_id
      * @param $goods_num

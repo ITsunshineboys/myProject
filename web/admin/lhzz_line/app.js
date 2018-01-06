@@ -261,7 +261,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
         })
 
         .state('commodity_detail', { // 商品详情
-            params: {id: null, storeid: null},
+            params: {id: null, storeid: null, good_state: null},
             url: '/commodity_detail',
             templateUrl: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/commodity_detail.html',
             css: 'pages/mall_manage/merchant_manage/commodity_manage/commodity_details/css/commodity_detail.css',

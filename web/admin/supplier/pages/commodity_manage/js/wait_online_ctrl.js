@@ -100,7 +100,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		$scope.detail_style=res.data.goods_view_admin.style_name;//风格名称
 		$scope.line_goods = res.data.goods_view_admin.line_goods;//线下店信息
 		$scope.style_ids = res.data.goods_view_admin.style_ids // 风格ids
-		console.log($scope.style_ids);
 		_ajax.get('/mall/category-brands-styles-series',{
 			category_id:+goods_item.category_id,
 			from_add_goods_page:1
@@ -151,8 +150,22 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 						return value.id == value1
 					})
 					style_index ===-1 ? value.status = false : value.status = true
+			}
+			// 风格关闭 提示
+			$scope.style_all_ids = []
+			for (let [key,value] of $scope.styles_arr.entries()) {
+				$scope.style_all_ids.push(value.id)
+			}
+			let style_value = [...new Set($scope.style_all_ids.concat($scope.style_ids))]
+				if (style_value.length === $scope.style_all_ids.length ) {
+					$scope.style_null_flag=false
+				}else if (style_value.length > $scope.style_all_ids.length && style_value.length < $scope.style_all_ids.length + $scope.style_ids.length ){
+					$scope.style_null_flag=true
+					$scope.style_hint_words= '*该商品部分风格已下架'
+				}else if (style_value.length === $scope.style_all_ids.length + $scope.style_ids.length){
+					$scope.style_null_flag=true
+					$scope.style_hint_words= '*该商品原风格已下架'
 				}
-			console.log($scope.styles_arr);
 		});
 	})
 	/*==================品牌、系列、风格 下拉框结束===========================*/

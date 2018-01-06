@@ -1370,9 +1370,13 @@ class OrderController extends Controller
      * @return int|string
      */
     public function actionPlatformhandlesubmit(){
-        $user = self::userIdentity();
-        if (!is_numeric($user)) {
-            return $user;
+        $user = \Yii::$app->user->identity;
+        if (!$user) {
+            $code = 1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
         }
         $lhzz=self::LhzzIdentity($user);
         if (!is_numeric($lhzz))

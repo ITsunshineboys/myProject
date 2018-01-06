@@ -24,7 +24,7 @@
                            ng-blur="title_blur=!!form.goods_name.$error"/>
                 </div>
                 <div class="col-sm-6 control-label">
-                    <span>*限1~32个字符，不含特殊字符</span>
+                    <span class="small_txt">*限1~32个字符，不含特殊字符</span>
                 </div>
             </div>
             <!--商品特色 -->
@@ -40,7 +40,7 @@
                            ng-blur="des_blur=!!form.des_name.$error"/>
                 </div>
                 <div class="col-sm-6 control-label">
-                    <span>*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
+                    <span class="small_txt">*1～16个字符，不含特殊字符；例：家用环保 强化 复合 防水耐磨</span>
                 </div>
             </div>
             <div class="row">
@@ -49,7 +49,7 @@
                     <span>选择品牌</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-if="brands_arr.length>0" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                    <select class="form-control" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
                 </div>
             </div>
             <!--选择系列-->
@@ -74,10 +74,8 @@
                         <input type="checkbox" ng-model="item.status">
                         <span class="cursor" style="font-weight: normal">{{item.style}}</span>
                     </label>
+                    <span class="small_txt remove_txt" ng-if="style_null_flag">{{style_hint_words}}</span>
                 </div>
-            </div>
-            <div class="row" ng-if="style_null_flag">
-                <div class="col-sm-offset-2 remove_txt">风格已被移除，请重新选择风格</div>
             </div>
             <!--属性设置-->
             <div class="row">
@@ -108,7 +106,7 @@
                         <span class="unit">{{item.unit}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <span>*属性内容限1～10个字符</span>
+                        <span class="small_txt">*属性内容限1～10个字符</span>
                     </div>
                 </div>
                 <!--商家自己添加的属性-->
@@ -142,7 +140,7 @@
                         <span class="unit">{{item.unit}}</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <span>*属性名称限1～6个字符,属性内容限1～10个字符</span>
+                        <span class="small_txt">*属性名称限1～6个字符,属性内容限1～10个字符</span>
                     </div>
                 </div>
                 <!--自己添加属性-->
@@ -159,7 +157,7 @@
                         <span>&nbsp;</span>
                     </div>
                     <div class="col-sm-3 control-label">
-                        <span>*属性名称限1～6个字符,属性内容限1～30个字符</span>
+                        <span class="small_txt">*属性名称限1～6个字符,属性内容限1～30个字符</span>
                     </div>
                 </div>
             <hr/>

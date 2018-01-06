@@ -48,11 +48,8 @@
                 <span>选择品牌</span>
             </div>
             <div class="col-sm-4">
-                <select class="form-control" ng-if="brands_arr.length > 0" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
+                <select class="form-control" ng-model="myng.brand_model" ng-options="item.id as item.name for item in brands_arr"></select>
             </div>
-        </div>
-        <div class="row" ng-if="brand_null_flag">
-            <div class="col-sm-offset-2 remove_txt">该商品品牌已下架</div>
         </div>
         <!--选择系列-->
         <div class="row" ng-if="series_arr.length>0">
@@ -76,10 +73,8 @@
                     <input type="checkbox" ng-model="item.status">
                     <span class="cursor" style="font-weight: normal">{{item.style}}</span>
                 </label>
+                <span class="remove_txt" ng-if="style_null_flag">{{style_hint_words}}</span>
             </div>
-        </div>
-        <div class="row" ng-if="style_null_flag">
-            <div class="col-sm-offset-2 remove_txt">风格已被移除，请重新选择风格</div>
         </div>
 
         <!--属性设置-->

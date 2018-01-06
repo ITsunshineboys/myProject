@@ -106,11 +106,11 @@ class OwnerController extends Controller
         'maskant'       => 21,  //'保护层长度',
         'floor_tile'    => 22,  //'贴地砖面积',
         'wall_brick'    => 23,  //'贴墙砖面积',
-        'build_24'      => 23,  //'新建24墙面积',
-        'dismantle_24'  => 23,  //'拆除24墙面积',
-        'build_12'      => 23,  //'新建12墙面积',
-        'dismantle_12'  => 23,  //'拆除12墙面积',
-        'repair'        => 23,  //'补烂面积',
+        'build_24'      => 5,  //'新建24墙面积',
+        'dismantle_24'  => 6,  //'拆除24墙面积',
+        'build_12'      => 7,  //'新建12墙面积',
+        'dismantle_12'  => 8,  //'拆除12墙面积',
+        'repair'        => 24,  //'补烂面积',
     ];
 
     /**
@@ -137,6 +137,8 @@ class OwnerController extends Controller
         'carpentry' => 37,  //'木作工艺',
         'oil_paint' => 47,  //'油漆工艺',
         'tiler'     => 53,  //'泥工工艺',
+        'backman'   => 7,  //'杂工',
+        'backman_'   => 57,  //'杂工',
     ];
 
     /**
@@ -168,6 +170,17 @@ class OwnerController extends Controller
         'concrete' => 54,//'水泥用量',
         'self_leveling' => 55,//'自流平用量',
         'river_sand' => 56,//'河沙用量',
+        'rubbish_12' => 58,//'12墙建渣运到楼下',
+        'rubbish_24' => 59,//'24墙建渣运到楼下',
+        'vehicle_12' => 60,//'运渣车-车拉12墙面积',
+        'vehicle_24' => 61,//'运渣车-车拉24墙面积',
+        'fare' => 62,//'运渣车-车费用',
+        'concrete_12' => 63,//'12墙新建水泥用量',
+        'concrete_24' => 64,//'24墙新建水泥用量',
+        'concrete_repair' => 65,//'补烂水泥用量',
+        'river_sand_12' => 66,//'12墙新建河沙用量',
+        'river_sand_24' => 67,//'24墙新建河沙用量',
+        'river_sand_repair' => 68,//'补烂河沙用量',
 
     ];
 
@@ -1124,7 +1137,7 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'mud_make_labor' => $total_labor_cost,
+            'labor_all_cost' => $total_labor_cost,
             'data' => $material_total,
             'total_cost' => round($total_cost,2),
         ]);
@@ -1139,167 +1152,145 @@ class OwnerController extends Controller
         $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['backman']);
         $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
         foreach ($day_workload as $one_day) {
-            // 保护层
-            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['maskant']){
-                $maskant = $one_day['quantity'];
+            // 新建24
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['build_24']){
+                $build_24 = $one_day['quantity'];
             }
-            // 贴地砖面积
-            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['floor_tile']){
-                $floor_tile = $one_day['quantity'];
+            // 新建12
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['build_12']){
+                $build_12 = $one_day['quantity'];
             }
-            // 贴墙砖面积
-            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['wall_brick']){
-                $wall_brick = $one_day['quantity'];
+            // 拆除24
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['dismantle_24']){
+                $dismantle_24 = $one_day['quantity'];
+            }
+            // 拆除12
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['dismantle_12']){
+                $dismantle_12 = $one_day['quantity'];
+            }
+            // 补烂面积
+            if ($one_day['worker_type_id'] == self::POINTS_CATEGORY['repair']){
+                $repair = $one_day['quantity'];
             }
         }
-        var_dump($day_workload);die;
 
-
-        $points = Points::findByOne('id,title',"id=7");
-        $Apartment = Apartment::find()
+        // 其它面积查询
+        $apartment = Apartment::find()
             ->asArray()
-            ->where(['<=','min_area',$post['area']])
-            ->andWhere(['>=','max_area',$post['area']])
-            ->andWhere(['project_name'=>'其他杂工天数'])
-            ->andWhere(['points_id'=>$points['id']])
-            ->one();
-        if ($Apartment){
-            $_area = $Apartment['project_value'];
-        }else{
-            $_area = 1;
+            ->where(['<=','min_area',$get['area']])
+            ->andWhere(['>=','max_area',$get['area']])
+            ->andWhere(['points_id'=>self::CRAFT_NAME['backman']])
+            ->all();
+
+        // 拆除天数  新建天数  补烂天数  总天数
+        $dismantle_day = BasisDecorationService::wallArea(1,$get,$dismantle_12,$dismantle_24);
+        $build_day = BasisDecorationService::wallArea(2,$get,$build_12,$build_24);
+        $repair_day = BasisDecorationService::wallArea(3,$get,$repair);
+        $total_day = ceil(BasisDecorationService::algorithm(11,$dismantle_day,$build_day,$repair_day,$apartment[0]['project_value']));
+
+
+        //当地工艺
+        $craft = WorkerType::craft(self::CRAFT_NAME['backman_'],$get['city']);
+        foreach ($craft as $one_craft){
+            // 12墙建渣运到楼下
+            if ($one_craft['id'] == self::ROOM['rubbish_12']){
+                $rubbish_12 = $one_craft['material'];
+            }
+            // 24墙建渣运到楼下
+            if ($one_craft['id'] == self::ROOM['rubbish_24']){
+                $rubbish_24 = $one_craft['material'];
+            }
+            // 车拉12墙面积
+            if ($one_craft['id'] == self::ROOM['vehicle_12']){
+                $vehicle_12 = $one_craft['material'];
+            }
+            // 车拉24墙面积
+            if ($one_craft['id'] == self::ROOM['vehicle_24']){
+                $vehicle_24 = $one_craft['material'];
+            }
+            // 车费用
+            if ($one_craft['id'] == self::ROOM['fare']){
+                $fare = $one_craft['material'];
+            }
+            // 12墙新建水泥用量
+            if ($one_craft['id'] == self::ROOM['concrete_12']){
+                $concrete_12 = $one_craft['material'];
+            }
+            // 24墙新建水泥用量
+            if ($one_craft['id'] == self::ROOM['concrete_24']){
+                $concrete_24 = $one_craft['material'];
+            }
+            // 补烂水泥
+            if ($one_craft['id'] == self::ROOM['concrete_repair']){
+                $concrete_repair = $one_craft['material'];
+            }
+            // 12墙新建河沙用量
+            if ($one_craft['id'] == self::ROOM['river_sand_12']){
+                $river_sand_12 = $one_craft['material'];
+            }
+            // 24墙新建河沙用量
+            if ($one_craft['id'] == self::ROOM['river_sand_24']){
+                $river_sand_24 = $one_craft['material'];
+            }
+            // 补烂河沙
+            if ($one_craft['id'] == self::ROOM['river_sand_repair']){
+                $river_sand_repair = $one_craft['material'];
+            }
         }
-//        总天数
-        $total_day = BasisDecorationService::wallArea($post,$worker_kind_details,$_area);
-
-//        清运建渣费用
-        $craft = EngineeringStandardCraft::findByAll($points['id'], $post['city']);
-        if ($craft == null){
-            $code = 1062;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
 
 
-        if ($post['building_scrap'] == 'true') {
-            $building_scrap = BasisDecorationService::haveBuildingScrap($post, $craft);
+        if ($get['building_scrap'] == 1) {
+            $cost_12 = BasisDecorationService::haveBuildingScrap(1,$get['12_dismantle'],$rubbish_12);
+            $cost_24 = BasisDecorationService::haveBuildingScrap(1,$get['24_dismantle'],$rubbish_24);
+            $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
         } else {
-            $building_scrap = BasisDecorationService::nothingBuildingScrap($post, $craft);
-        }
+            $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_12);
+            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_24);
+            $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
 
+        }
 
 //        总人工费
-        $labor_cost['price'] = $total_day['total_day'] * $labor['univalence'] + $building_scrap['cost'];
-        $labor_cost['worker_kind'] = $labor['worker_kind'];
+        $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
+        $labor_cost['worker_kind'] = $labor_costs['worker_name'];
+
 
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
-        if ($goods == null){
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-                'data' => [
-                    'labor_cost' => [],
-                    'total_material' => [],
-                ]
-            ]);
+        $judge = BasisDecorationService::judge($goods,$get);
+
+
+        // 商品属性
+        $air_brick_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['air_brick'],'',2);
+        $river_sand_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['river_sand'],'重');
+        $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
+
+        //水泥费用   河沙费用   空心砖费用
+        $material_total[] = BasisDecorationService::handyman(1,$get,$concrete_repair,$concrete_12,$concrete_24,$cement_attr);
+        $material_total[] = BasisDecorationService::handyman(1,$get,$river_sand_repair,$river_sand_12,$river_sand_24,$river_sand_attr);
+        $material_total[] = BasisDecorationService::handyman(2,$get,'','','',$air_brick_attr);
+
+
+        //总费用
+        $total_cost = 0;
+        foreach ($material_total as $v){
+            $total_cost += $v['cost'];
         }
-//        $goods_price = BasisDecorationService::priceConversion($goods);
 
-        foreach ($goods as $max) {
-            switch ($max) {
-                case $max['title'] == BasisDecorationService::goodsNames()['cement']:
-                    $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
-                    if ($goods_attr == null){
-                        $code = 1067;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
-                    //水泥费用
-                    $cement_cost = BasisDecorationService::cementCost($post,$craft,$max,$goods_attr);
-                    $max['quantity'] = $cement_cost['quantity'];
-                    $max['cost'] = $cement_cost['cost'];
-                    $max['procurement'] = $cement_cost['procurement'];
-                    $cement[] = $max;
-                    break;
-                case $max['title'] == BasisDecorationService::goodsNames()['air_brick']:
-                    //空心砖费用
-                    $brick_standard = GoodsAttr::findByGoodsId($max['id']);
-                    if ($brick_standard == null){
-                        $code = 1067;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
-                    $brick_cost = BasisDecorationService::brickCost($post, $max, $brick_standard);
-                    $max['quantity'] = $brick_cost['quantity'];
-                    $max['cost'] = $brick_cost['cost'];
-                    $max['procurement'] = $brick_cost['procurement'];
-                    $air_brick[] = $max;
-                    break;
-                case $max['title'] == BasisDecorationService::goodsNames()['river_sand']:
-                    $goods_attr = GoodsAttr::findByGoodsIdUnit($max['id']);
-                    if ($goods_attr == null){
-                        $code = 1067;
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => Yii::$app->params['errorCodes'][$code],
-                        ]);
-                    }
-                    //河沙费用
-
-                    $river_sand_cost = BasisDecorationService::riverSandCost($post, $max, $craft, $goods_attr);
-                    $max['quantity'] = $river_sand_cost['quantity'];
-                    $max['cost'] = $river_sand_cost['cost'];
-                    $max['procurement'] = $river_sand_cost['procurement'];
-                    $river_sand[] = $max;
-                    break;
+        $a = [];
+        foreach ($material_total as $marerial){
+            if ($marerial['quantity'] != 0){
+                $a [] = $marerial;
             }
         }
-        $material['material'][] = BasisDecorationService::profitMargin($cement);
-        $material['material'][] = BasisDecorationService::profitMargin($air_brick);
-        $material['material'][] = BasisDecorationService::profitMargin($river_sand);
 
-
-        $goods_value['material'] = [];
-        foreach ($material['material'] as $value){
-            if ($value['quantity'] != 0){
-                $goods_value['material'] [] = $value;
-            }
-        }
-        $goods_value['total_cost'] = 0;
-        foreach ($goods_value['material'] as $total_cost){
-            $goods_value['total_cost'] += $total_cost['cost'];
-        }
-
-        if (empty($goods_value['material'])){
-            return Json::encode([
-                'code' => 200,
-                'msg' => '成功',
-                'data' => [
-                    'labor_cost' => $labor_cost,
-                    'total_material' => $goods_value,
-                ]
-            ]);
-        }
-
-
-//        //总材料费
-//        $total_material_cost = $cement_cost['cost'] + $brick_cost['cost'] + $river_sand_cost['cost'];
-//        $material['total_cost'] = $total_material_cost;
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'data' => [
-                'labor_cost' => $labor_cost,
-                'total_material' => $material,
-            ]
+            'labor_all_cost' => $labor_cost,
+            'data' => $a,
+            'total_cost' => round($total_cost,2),
         ]);
     }
 
