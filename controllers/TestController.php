@@ -7,13 +7,23 @@ use app\models\Carousel;
 use app\models\Express;
 use app\models\Goods;
 use app\models\GoodsAttr;
+use app\models\GoodsBrand;
 use app\models\GoodsOrder;
+use app\models\GoodsStat;
 use app\models\Invoice;
+use app\models\LogisticsDistrict;
 use app\models\LogisticsTemplate;
 use app\models\OrderAfterSale;
 use app\models\OrderGoods;
 use app\models\OrderGoodsAttr;
+use app\models\OrderGoodsBrand;
+use app\models\OrderGoodsDescription;
+use app\models\OrderGoodsImage;
+use app\models\OrderLogisticsDistrict;
+use app\models\OrderLogisticsTemplate;
 use app\models\OrderPlatForm;
+use app\models\OrderSeries;
+use app\models\OrderStyle;
 use app\models\ShippingCart;
 use app\models\Supplier;
 use app\models\User;
@@ -512,6 +522,10 @@ class TestController extends Controller
             $OrderGoods->after_sale_services=$goods->after_sale_services;
             $OrderGoods->subtitle=$goods->subtitle;
             $OrderGoods->category_id=$goods->category_id;
+            $OrderGoods->purchase_price_decoration_company=$goods->purchase_price_decoration_company;
+            $OrderGoods->purchase_price_manager=$goods->purchase_price_manager;
+            $OrderGoods->purchase_price_designer=$goods->purchase_price_designer;
+            $OrderGoods->platform_price=$goods->platform_price;
             $res2= $OrderGoods->save(false);
             if (!$res1  || !$res2)
             {
@@ -544,6 +558,125 @@ class TestController extends Controller
                         'msg'  => Yii::$app->params['errorCodes'][$code]
                     ]);
                 }
+            }
+
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$goods->supplier_id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$goods['supplier_id'];
+                $GoodsStat->sold_number=$goods_num;
+                $GoodsStat->amount_sold=$post['total_amount'];
+                $GoodsStat->create_date=$date;
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }else
+            {
+                $GoodsStat->sold_number+=$goods_num;
+                $GoodsStat->amount_sold+=$amount_order;
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+            $Goods=Goods::findOne($goods->id);
+            $Goods->left_number-=$goods_num;
+            $Goods->sold_number+=$goods_num;
+            if (!$Goods->save(false))
+            {
+                $tran->rollBack();
+                return false;
+            }
+
+
+            $code=OrderStyle::AddNewData($goods->style_id,$order_no,$goods->sku);
+            if ($code!=200)
+            {
+                $tran->rollBack();
+                return false;
+            }
+
+            $code=OrderSeries::AddNewData($goods->series_id,$order_no,$goods->sku);
+            if ($code!=200)
+            {
+                $tran->rollBack();
+                return false;
+            }
+            $code=OrderGoodsImage::AddNewData($goods->id,$order_no,$goods->sku);
+            if ($code!=200)
+            {
+                $tran->rollBack();
+                return false;
+            }
+            $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
+            if ($GoodsBrand)
+            {
+                $orderGoodsBrand=new OrderGoodsBrand();
+                $orderGoodsBrand->order_no=$order_no;
+                $orderGoodsBrand->sku=$goods->sku;
+                $orderGoodsBrand->name=$GoodsBrand->name;
+                $orderGoodsBrand->logo=$GoodsBrand->logo;
+                $orderGoodsBrand->certificate=$GoodsBrand->certificate;
+                if (!$orderGoodsBrand->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+
+            $LogisticTemp=LogisticsTemplate::find()->where(['id'=>$Goods->logistics_template_id])->asArray()->one();
+            if ($LogisticTemp)
+            {
+                $orderLogisticTemp=new  OrderLogisticsTemplate();
+                $orderLogisticTemp->order_no=$order_no;
+                $orderLogisticTemp->sku=$goods->sku;
+                $orderLogisticTemp->name=$LogisticTemp['name'];
+                $orderLogisticTemp->delivery_method=$LogisticTemp['delivery_method'];
+                $orderLogisticTemp->delivery_cost_default=$LogisticTemp['delivery_cost_default'];
+                $orderLogisticTemp->delivery_number_default=$LogisticTemp['delivery_number_default'];
+                $orderLogisticTemp->delivery_cost_delta=$LogisticTemp['delivery_cost_delta'];
+                $orderLogisticTemp->delivery_number_delta=$LogisticTemp['delivery_number_delta'];
+                if (!$orderLogisticTemp->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+                $LogisticDis=LogisticsDistrict::find()
+                    ->where(['template_id'=>$Goods->logistics_template_id])
+                    ->all();
+                if ($LogisticDis)
+                {
+                    foreach ($LogisticDis as  &$dis)
+                    {
+                        $OrderLogisticDis=new OrderLogisticsDistrict();
+                        $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
+                        $OrderLogisticDis->district_code=$dis->district_code;
+                        $OrderLogisticDis->district_name=$dis->district_name;
+                        if (!$OrderLogisticDis->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            $orderGoodsdescription=new OrderGoodsDescription();
+            $orderGoodsdescription->order_no=$order_no;
+            $orderGoodsdescription->sku=$goods->sku;
+            $orderGoodsdescription->description=$goods->description;
+            if (!$orderGoodsdescription->save(false))
+            {
+                $tran->rollBack();
+                return false;
             }
             $tran->commit();
             return Json::encode([
