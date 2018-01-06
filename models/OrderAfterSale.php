@@ -776,7 +776,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -827,7 +827,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RETURN_TO_DOOR);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -907,7 +907,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -928,7 +928,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -985,7 +985,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -994,7 +994,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -1264,7 +1264,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_SHIPPED);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -1329,7 +1329,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -1407,7 +1407,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_SHIPPED);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -1449,7 +1449,7 @@ class OrderAfterSale extends ActiveRecord
                 $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_CONFIRM_RECEIVED);
                 if (!is_numeric($code))
                 {
-                    $data[]=$code;
+                    $data=$code;
                     return $data;
                 }
             }
@@ -1505,7 +1505,7 @@ class OrderAfterSale extends ActiveRecord
                 $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SHIPPED);
                 if (!is_numeric($code))
                 {
-                    $data[]=$code;
+                    $data=$code;
                     return $data;
                 }
             }
@@ -1545,7 +1545,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SHIPPED);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
@@ -1590,7 +1590,7 @@ class OrderAfterSale extends ActiveRecord
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_RECEIVED);
             if (!is_numeric($code))
             {
-                $data[]=$code;
+                $data=$code;
                 return $data;
             }
         }
