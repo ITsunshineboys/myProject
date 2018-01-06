@@ -579,7 +579,7 @@ class TestController extends Controller
                 $tran->rollBack();
                 return false;
             }
-            $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
+            $GoodsBrand=GoodsBrand::findOne($goods->brand_id);
             if ($GoodsBrand)
             {
                 $orderGoodsBrand=new OrderGoodsBrand();
@@ -595,7 +595,7 @@ class TestController extends Controller
                 }
             }
 
-            $LogisticTemp=LogisticsTemplate::find()->where(['id'=>$Goods->logistics_template_id])->asArray()->one();
+            $LogisticTemp=LogisticsTemplate::find()->where(['id'=>$goods->logistics_template_id])->asArray()->one();
             if ($LogisticTemp)
             {
                 $orderLogisticTemp=new  OrderLogisticsTemplate();
@@ -613,7 +613,7 @@ class TestController extends Controller
                     return false;
                 }
                 $LogisticDis=LogisticsDistrict::find()
-                    ->where(['template_id'=>$Goods->logistics_template_id])
+                    ->where(['template_id'=>$goods->logistics_template_id])
                     ->all();
                 if ($LogisticDis)
                 {
@@ -638,6 +638,7 @@ class TestController extends Controller
                 ->where(['supplier_id'=>$goods->supplier_id])
                 ->andWhere(['create_date'=>$date])
                 ->one();
+
             if (!$GoodsStat)
             {
                 $GoodsStat=new GoodsStat();
@@ -660,6 +661,7 @@ class TestController extends Controller
                     return false;
                 }
             }
+
             if ($goods->left_number<$goods_num)
             {
                 $tran->rollBack();
