@@ -15,8 +15,8 @@
           <span class="iconfont icon-sort-up"></span><span class="iconfont icon-sort-down"></span>
         </span>
       </div>
-      <div class="btn-filter">
-        <span @click="isModalOpen = true">筛选</span>
+      <div class="btn-filter" @click="isModalOpen = true">
+        <span>筛选</span>
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
@@ -75,11 +75,6 @@
           <button class="btn-finish" type="button">完成</button>
         </div>
       </group>
-    </popup>
-
-    <!-- 全部品牌 -->
-    <popup class="modal-brand" position="right" :hide-on-blur="false" v-model="isModalBrandOpen">
-
     </popup>
   </div>
 </template>
@@ -154,15 +149,13 @@
     background-color: #fff;
   }
 
-  .modal-filter,
-  .modal-brand {
+  .modal-filter {
     width: 90% !important;
     background-color: #fff;
-    overflow-y: auto;
-    z-index: 999;
   }
 
   .modal-filter-style {
+    margin-bottom: 49px;
     padding: 5px 15px;
     font-size: 14px;
   }
@@ -175,16 +168,6 @@
     text-align: center;
     border: 1px solid #999999;
     border-radius: 2px;
-  }
-
-  .brand-all {
-    margin-bottom: 58px;
-    height: 44px;
-    line-height: 44px;
-    text-align: center;
-    font-size: 14px;
-    color: #959292;
-    border-top: 1px solid #d9d9d9;
   }
 
   .weui-cell {
