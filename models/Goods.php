@@ -969,7 +969,7 @@ class Goods extends ActiveRecord
     public static function findByCategory($condition)
     {
         if ($condition) {
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,supplier.shop_name,goods.cover_image,goods.title as goods_name";
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.market_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,supplier.shop_name,goods.cover_image,goods.title as goods_name";
             $goods = self::find()
                 ->asArray()
                 ->select($select)
@@ -982,6 +982,13 @@ class Goods extends ActiveRecord
                 ->where(['gc.title' => $condition])
                 ->andWhere(['goods.status'=>self::STATUS_ONLINE])
                 ->all();
+
+            foreach ($goods as &$one_goods) {
+                $one_goods['platform_price'] =  $one_goods['platform_price'] / 100;
+                $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
+                $one_goods['market_price']   =  $one_goods['market_price'] / 100;
+                $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
+            }
 
             return $goods;
         }

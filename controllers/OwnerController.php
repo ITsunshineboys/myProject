@@ -1433,7 +1433,7 @@ class OwnerController extends Controller
 
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
-        $material[]   = BasisDecorationService::formula($goods,$get);
+        $material[]= BasisDecorationService::formula($goods,$get);
 
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
@@ -1442,7 +1442,8 @@ class OwnerController extends Controller
         }
 
         $_goods = Goods::assortList($without_assort_name,$get['city']);
-        $material[] = BasisDecorationService::withoutAssortGoods($_goods,$assort_material,$get);
+        $material[]= BasisDecorationService::withoutAssortGoods($_goods,$assort_material,$get);
+
 
 
 
@@ -1450,8 +1451,16 @@ class OwnerController extends Controller
         //  楼梯信息
         if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            foreach ($stairs as $one_stairs_price) {
-                if ($one_stairs_price['value'] == $get['stairs'] && $one_stairs_price['style_id'] == $get['style']) {
+            $stairs_details = StairsDetails::find()->asArray()->all();
+
+            foreach ($stairs_details as $detail){
+               if ($detail['id'] == $get['stairs']){
+                   $sm = $detail['attribute'];
+               }
+            }
+            foreach ($stairs as &$one_stairs_price) {
+                if ($one_stairs_price['value'] == $sm && $one_stairs_price['style_id'] == $get['style']) {
+                    echo 111;
                     $one_stairs_price['quantity'] = 1;
                     $one_stairs_price['cost'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['platform_price'],$one_stairs_price['quantity']),2);
                     $one_stairs_price['procurement'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['purchase_price_decoration_company'],$one_stairs_price['quantity']),2);
@@ -1459,15 +1468,14 @@ class OwnerController extends Controller
                 }
 
             }
-            $material[][] = BasisDecorationService::profitMargin($condition_stairs);
+            $material[][]= BasisDecorationService::profitMargin($condition_stairs);
         }
-
 
 
         $goods_material = [];
         foreach ($material as $one){
             if($one != null){
-                $goods_material [] = $one;
+                $goods_material[]= $one;
             }
         }
 
@@ -1476,7 +1484,7 @@ class OwnerController extends Controller
             'code' => 200,
             'msg' => '成功',
             'data' =>[
-               'goods' => Json::decode(Json::encode($goods_material),true),
+               'goods' => $goods_material,
             ],
         ]);
     }
