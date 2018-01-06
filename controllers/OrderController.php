@@ -4531,7 +4531,7 @@ class OrderController extends Controller
         {
             return Json::encode([
                 'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
+                'msg' => '快递单号错误',
             ]);
         }
         $orderAfterSale=OrderAfterSale::find()
