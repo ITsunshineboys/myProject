@@ -1543,15 +1543,24 @@ class OwnerController extends Controller
      */
     public function actionHomepage()
     {
+        $data=BrainpowerInitalSupervise::find()
+            ->select('id,image,district_code,street,toponymy,house_type_name,effect_id')//TODO 新增 effect_id
+            ->where(['status'=>BrainpowerInitalSupervise::STATUS_OPEN])
+            ->orderBy(['sort' => SORT_ASC])
+            ->all();
+        foreach ($data as &$v){
+            $toponymy_id=EffectToponymy::find()
+                    ->asArray()
+                    ->select('id')
+                    ->where(['district_code'=>$v['district_code'],'street'=>$v['street'],'toponymy'=>$v['toponymy']])
+                    ->one()['id'];
+            $v['id']=$toponymy_id;
+        }
 
         return Json::encode([
             'code' =>200,
             'msg'=>'ok',
-            'data'=> BrainpowerInitalSupervise::find()
-                ->select('id,image,district_code,street,toponymy,house_type_name,effect_id')//TODO 新增 effect_id
-                ->where(['status'=>BrainpowerInitalSupervise::STATUS_OPEN])
-                ->orderBy(['sort' => SORT_ASC])
-                ->all()
+            'data'=>$data
         ]);
 
 
