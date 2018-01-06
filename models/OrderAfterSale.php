@@ -1424,7 +1424,6 @@ class OrderAfterSale extends ActiveRecord
             'code'=>self::AFTER_SALE_SHIPPED,
             'status'=>''
         ];
-//            $time=15*24*60*60+$buyer_express->create_time-time();
             $time=15*24*60*60+$buyer_express->create_time-time();
             $tran = Yii::$app->db->beginTransaction();
             try{
@@ -1501,15 +1500,15 @@ class OrderAfterSale extends ActiveRecord
                 'status'=>''
             ];
 
-        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
-        {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SHIPPED);
-            if (!is_numeric($code))
+            if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
             {
-                $data[]=$code;
-                return $data;
+                $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SHIPPED);
+                if (!is_numeric($code))
+                {
+                    $data[]=$code;
+                    return $data;
+                }
             }
-        }
             if(!$OrderAfterSale->supplier_express_id){
                 switch ($role)
                 {
@@ -1543,7 +1542,7 @@ class OrderAfterSale extends ActiveRecord
 
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SHIPPED);
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SHIPPED);
             if (!is_numeric($code))
             {
                 $data[]=$code;
@@ -1956,23 +1955,59 @@ class OrderAfterSale extends ActiveRecord
             {
                 if ($OrderAfterSale->type==1)
                 {
-                    $code=self::AfterReturnGoodsAction($OrderAfterSale);
-                    if ($code!=200)
+                    $OrderPlatForm=OrderPlatForm::find()
+                        ->where(['order_no'=>$OrderAfterSale->order_no])
+                        ->andWhere(['sku'=>$OrderAfterSale->sku])
+                        ->andWhere('handle !=1 and handle!=2 and handle!=3')
+                        ->one();
+                    if ($OrderPlatForm)
                     {
-                        $tran->rollBack();
-                        $code=1000;
-                        return $code;
+                        $OrderAfterSale->supplier_express_confirm=1;
+                        $express=Express::findOne($OrderAfterSale->buyer_express_id);
+                        $express->receive_time=time();
+                        if (!$express->save(false))
+                        {
+                            $tran->rollBack();
+                        }
+                    }else
+                    {
+                        $code=self::AfterReturnGoodsAction($OrderAfterSale);
+                        if ($code!=200)
+                        {
+                            $tran->rollBack();
+                            $code=1000;
+                            return $code;
+                        }
                     }
+
                 }
                 if ($OrderAfterSale->type==2)
                 {
-                    $OrderAfterSale->supplier_express_confirm=1;
-                    $express=Express::findOne($OrderAfterSale->buyer_express_id);
-                    $express->receive_time=time();
-                    if (!$express->save(false))
+                    $OrderPlatForm=OrderPlatForm::find()
+                        ->where(['order_no'=>$OrderAfterSale->order_no])
+                        ->andWhere(['sku'=>$OrderAfterSale->sku])
+                        ->andWhere('handle =3')
+                        ->one();
+                    if ($OrderPlatForm)
                     {
-                        $tran->rollBack();
+                        $code=self::AfterReturnGoodsAction($OrderAfterSale);
+                        if ($code!=200)
+                        {
+                            $tran->rollBack();
+                            $code=1000;
+                            return $code;
+                        }
+                    }else
+                    {
+                        $OrderAfterSale->supplier_express_confirm=1;
+                        $express=Express::findOne($OrderAfterSale->buyer_express_id);
+                        $express->receive_time=time();
+                        if (!$express->save(false))
+                        {
+                            $tran->rollBack();
+                        }
                     }
+
                 }
             }else{
                 $OrderAfterSale->supplier_confirm=1;
