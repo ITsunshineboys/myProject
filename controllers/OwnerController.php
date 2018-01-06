@@ -1246,7 +1246,7 @@ class OwnerController extends Controller
             $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
         } else {
             $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_12);
-            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_24);
+            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$rubbish_24);
             $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
 
         }
@@ -1416,12 +1416,9 @@ class OwnerController extends Controller
 
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
-        var_dump($goods);die;
         $material[]   = BasisDecorationService::formula($goods,$get);
-        var_dump($goods);die;
 
-
-
+        
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
 

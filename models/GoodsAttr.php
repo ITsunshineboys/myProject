@@ -355,7 +355,7 @@ class GoodsAttr extends ActiveRecord
 
         foreach ($row as &$one){
             if (is_numeric($one['value']) && $one['unit'] == 5){
-                $one['value'] = $one['value'] / 100;
+                $one['value'] = $one['value'] / 1000;
             }
         }
 

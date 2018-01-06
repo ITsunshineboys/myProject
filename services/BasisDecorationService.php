@@ -1398,13 +1398,13 @@ class BasisDecorationService
             switch ($one_goods){
                 case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板
                 //木地板面积=卧室地面积    卧室地面积=【z】%×（房屋面积） 木地板费用：个数×抓取的商品价格 个数：（木地板面积÷抓取木地板面积）
-                    $goods_area = GoodsAttr::findByGoodsIdUnit($one_goods['id']);
+                    $goods_area = GoodsAttr::findByGoodsIdUnits($one_goods['id'],'');
                     foreach ($goods_area as $one_goods_area) {
                         if ($one_goods_area['name'] == self::UNITS['length']) {
-                            $length = $one_goods_area['value'] / self::BRICK_UNITS;
+                            $length = $one_goods_area['value'];
                         }
                         if ($one_goods_area['name'] == self::UNITS['breadth']) {
-                            $breadth = $one_goods_area['value'] / self::BRICK_UNITS;
+                            $breadth = $one_goods_area['value'];
                         }
                     }
                     $area = $length * $breadth;
@@ -1412,6 +1412,7 @@ class BasisDecorationService
                     $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
                     $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $wood_floor [] = $one_goods;
+                    var_dump($wood_floor);die;
                     break;
                 case $one_goods['title'] == self::goodsNames()['marble']: // 大理石
                     if ($post['window'] > 1) {
