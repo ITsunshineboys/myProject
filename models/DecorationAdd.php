@@ -93,14 +93,15 @@ class DecorationAdd extends ActiveRecord
             ->all();
     }
 
-    public static function findByAll($select = [] , $where = [])
+    public static function findByAll($code,$style,$series,$area)
     {
+        $select ='decoration_add.id,decoration_add.c_id,decoration_add.sku,d.quantity';
         return self::find()
             ->asArray()
             ->select($select)
-            ->where($where)
+            ->where(['decoration_add.city_code'=>$code])
+            ->andWhere(['or',['d.style_id'=>$style],['d.series_id'=>$series],['and',['<=','d.min_area',$area],['>=','d.max_area',$area]]])
             ->leftJoin('decoration_message as d','d.decoration_add_id = decoration_add.id')
-//            ->groupBy('decoration_add.three_materials')
             ->all();
     }
 

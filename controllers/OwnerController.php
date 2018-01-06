@@ -1149,6 +1149,7 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $get = \Yii::$app->request->get();
+
         $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['backman']);
         $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
         foreach ($day_workload as $one_day) {
@@ -1299,13 +1300,15 @@ class OwnerController extends Controller
      */
     public function actionAddMaterials()
     {
-        $code = trim(Yii::$app->request->post('code',''));
-        $series = trim(Yii::$app->request->post('series',''));
-        $style = trim(Yii::$app->request->post('style',''));
-        $area = trim(Yii::$app->request->post('area',''));
-        $add_select = 'decoration_add.id,decoration_add.c_id,decoration_add.sku,max(d.quantity) as quantity';
-        $add_where = ['and',['decoration_add.city_code'=>$code],['or',['d.style_id'=>$style],['d.series_id'=>$series],['and',['<=','d.min_area',$area],['>=','d.max_area',$area]]]];
-        $add_materials = DecorationAdd::findByAll($add_select,$add_where);
+        $code = trim(Yii::$app->request->get('code',''));
+        $series = trim(Yii::$app->request->get('series',''));
+        $style = trim(Yii::$app->request->get('style',''));
+        $area = trim(Yii::$app->request->get('area',''));
+
+
+
+        $add_materials = DecorationAdd::findByAll($code,$style,$series,$area);
+        var_dump($add_materials);die;
         if ($add_materials == null){
             $code = 1063;
             return Json::encode([
@@ -1313,6 +1316,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+
         foreach ($add_materials as $one_materials){
             $codes [] = $one_materials['sku'];
         }
@@ -1408,12 +1412,13 @@ class OwnerController extends Controller
      */
     public function actionAssortFacility()
     {
-        $post = Yii::$app->request->get();
+        $get = Yii::$app->request->get();
 
         // 有资料 计算公式
-        $goods = Goods::assortList(self::MATERIALS,$post['city']);
-        $goods_price  = BasisDecorationService::priceConversion($goods);
-        $material[]   = BasisDecorationService::formula($goods_price,$post);
+        $goods = Goods::assortList(self::MATERIALS,$get['city']);
+        var_dump($goods);die;
+        $material[]   = BasisDecorationService::formula($goods,$get);
+        var_dump($goods);die;
 
 
 
