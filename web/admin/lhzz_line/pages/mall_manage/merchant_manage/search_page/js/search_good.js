@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2018/1/5/005.
  */
-app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootScope, $scope, _ajax){
+app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootScope, $scope, _ajax) {
     let sortway = "online_time"; //默认按上架时间降序排列
     /*默认参数配置*/
     $scope.params = {
@@ -12,7 +12,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
     }
 
     $scope.basic = {
-        keyword : ''  //输入框搜索值初始化
+        keyword: ''  //输入框搜索值初始化
     }
 
     /*分页配置*/
@@ -43,7 +43,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
         {name: '库存', value: false},
         {name: '销量', value: false},
         {name: '状态', value: true},
-        {name:  '操作人员',value:true},
+        {name: '操作人员', value: true},
         {name: '图片', value: true},
         {name: '原因及备注', value: true},
         {name: '详情', value: true},
@@ -56,15 +56,14 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
         if (value == oldValue) {
             return
         }
-            $scope.params['sort[]'] = 'sold_number:3';       // 销量排序
-            $scope.pageConfig.currentPage = 1;
-            tableList();
+        $scope.params['sort[]'] = 'sold_number:3';       // 销量排序
+        $scope.pageConfig.currentPage = 1;
+        tableList();
     });
 
 
-
     /*本月销量排序*/
-    $scope.sortVolumn =  () => {
+    $scope.sortVolumn = () => {
         $scope.pageConfig.currentPage = 1;
         $scope.params['sort[]'] = $scope.params['sort[]'] == 'sold_number:3' ? 'sold_number:4' : 'sold_number:3';
         tableList();
@@ -89,8 +88,8 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
     /*单个商品确认下架*/
     $scope.sureGoodOffline = function () {
-        let data = {id: Number(tempongoodid), offline_reason:$scope.offline_reason||''};
-        _ajax.post('/mall/goods-status-toggle',data,function (res) {
+        let data = {id: Number(tempongoodid), offline_reason: $scope.offline_reason || ''};
+        _ajax.post('/mall/goods-status-toggle', data, function (res) {
             $scope.offline_reason = '';
             $scope.pageConfig.currentPage = 1;
             $scope.basic.keyword = '';
@@ -113,7 +112,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
     /*单个商品确认上架*/
     $scope.sureGoodOnline = function () {
-        _ajax.post('/mall/goods-status-toggle',{id: Number(tempoffgoodid)},function (res) {
+        _ajax.post('/mall/goods-status-toggle', {id: Number(tempoffgoodid)}, function (res) {
             /*由于某些原因不能上架*/
             if (res.code != 200) {
                 // console.log(res)
@@ -143,7 +142,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
 // =======================等待上架===========================================
     /*更新审核备注*/
-    $scope.checkReason = function (id,reason) {
+    $scope.checkReason = function (id, reason) {
         checkId = id;
         $scope.lastreason = reason;
     }
@@ -151,12 +150,11 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
     /*确认更新审核备注*/
     $scope.sureCheckReason = function () {
-        let data  = {id:Number(checkId),reason:$scope.lastreason||''};
-        _ajax.post('/mall/goods-reason-reset',data,function (res) {
+        let data = {id: Number(checkId), reason: $scope.lastreason || ''};
+        _ajax.post('/mall/goods-reason-reset', data, function (res) {
             tableList();
         })
     }
-
 
 
     let tempwaitgoodid;  //单个商品id
@@ -170,7 +168,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
 
     /*等待上架 单个确认上架*/
     $scope.sureWaitToOnline = function () {
-        _ajax.post('/mall/goods-status-toggle',{id: tempwaitgoodid},function (res) {
+        _ajax.post('/mall/goods-status-toggle', {id: tempwaitgoodid}, function (res) {
             /*由于某些原因不能上架*/
             if (res.code != 200) {
                 // console.log(res)
@@ -192,7 +190,7 @@ app.controller('searchGood', ['$rootScope', '$scope', '_ajax', function ($rootSc
     function tableList() {
         $scope.params.keyword = $scope.basic.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
-        _ajax.get('/mall/goods-list-search',$scope.params,function (res) {
+        _ajax.get('/mall/goods-list-search', $scope.params, function (res) {
             $scope.tabledetail = res.data.goods_list_admin.details;
             $scope.pageConfig.totalItems = res.data.goods_list_admin.total;
         })

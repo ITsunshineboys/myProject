@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/10/25/025.
  */
 app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$stateParams', '$state', '$location', '$anchorScroll', '$window', '$rootScope', function (_ajax, $rootScope, $scope, $http, $stateParams, $state, $location, $anchorScroll, $window, $rootScope) {
-    if ($stateParams.storeid == null) {
+    if ($stateParams.storeid == null && $stateParams.good_state == null) {
         $rootScope.crumbs = [{
             name: '装修申请',
             icon: 'icon-yangbanjian',
@@ -13,7 +13,7 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
         }, {
             name: '商品详情',
         }];
-    } else {
+    } else if($stateParams.storeid !== null && $stateParams.good_state == null) {
         $rootScope.crumbs = [{
             name: '商城管理',
             icon: 'icon-shangchengguanli',
@@ -27,7 +27,19 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
         }, {
             name: '商品详情',
         }];
+    }else {
+        $rootScope.crumbs = [{
+            name: '商城管理',
+            icon: 'icon-shangchengguanli',
+            link: 'merchant_index'
+        }, {
+            name: '搜索',
+            link: -1,
+        }, {
+            name: '商品详情',
+        }];
     }
+
 
     $scope.allprice = {
         purchase_price_decoration_company: $scope.purchase_price_decoration_company,
@@ -35,10 +47,10 @@ app.controller('commodity_detail', ['_ajax', '$rootScope', '$scope', '$http', '$
         purchase_price_designer: $scope.purchase_price_designer
     }
 
-    $rootScope.fromState_name == 'commodity.online' ? $scope.online_btn = true : $scope.online_btn = false;
-    $rootScope.fromState_name == 'commodity.offline' ? $scope.offline_btn = true : $scope.offline_btn = false;
-    $rootScope.fromState_name == 'commodity.wait' ? $scope.wait_btn = true : $scope.wait_btn = false;
-    $rootScope.fromState_name == 'commodity.deleted' || $rootScope.fromState_name == 'case_detail' ? $scope.deleted_btn = true : $scope.deleted_btn = false;
+    $rootScope.fromState_name == 'commodity.online' || $stateParams.good_state == 'online' ? $scope.online_btn = true : $scope.online_btn = false;
+    $rootScope.fromState_name == 'commodity.offline' || $stateParams.good_state == 'offline' ? $scope.offline_btn = true : $scope.offline_btn = false;
+    $rootScope.fromState_name == 'commodity.wait' || $stateParams.good_state == 'wait' ? $scope.wait_btn = true : $scope.wait_btn = false;
+    $rootScope.fromState_name == 'commodity.deleted' || $rootScope.fromState_name == 'case_detail' || $stateParams.good_state == 'deleted'? $scope.deleted_btn = true : $scope.deleted_btn = false;
 
 
     let logistics;

@@ -77,8 +77,10 @@
         <td ng-if="menu_list[13].value&&item.status==='等待上架'"  data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span class="wait_check" ng-bind="item.reason||'点击输入'" ng-click="checkReason(item.id,item.reason)"></span></td>
         <td ng-if="menu_list[13].value&&item.status==='已下架'" data-toggle="modal" data-target="#show_reason"  ng-click="showOffReason(item.offline_reason)"><span class="off_reason">{{item.offline_reason}}</span></td>
 
-        <td ng-if="menu_list[14].value&&item.status!=='已删除'" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
-        <td ng-if="menu_list[14].value&&item.status==='已删除'" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">查看</td>
+        <td ng-if="menu_list[14].value&&item.status==='已上架'" class="blue" ui-sref="commodity_detail({id:item.id,good_state:'online'})">编辑</td>
+        <td ng-if="menu_list[14].value&&item.status==='已下架'" class="blue" ui-sref="commodity_detail({id:item.id,good_state:'offline'})">编辑</td>
+        <td ng-if="menu_list[14].value&&item.status==='等待上架'" class="blue" ui-sref="commodity_detail({id:item.id,good_state:'wait'})">编辑</td>
+        <td ng-if="menu_list[14].value&&item.status==='已删除'" class="blue" ui-sref="commodity_detail({id:item.id,good_state:'deleted'})">查看</td>
 
         <td ng-if="menu_list[15].value&&item.status==='已上架'" class="blue" data-toggle="modal" data-target="#down_shelves_reason_modal"
             ng-click="singlegoodOffline(item.id)">下架
