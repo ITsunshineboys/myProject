@@ -3918,7 +3918,7 @@ class MallController extends Controller
         }
 
         if (YII_DEBUG) {
-            StringService::writeLog('test', $where, 'goods_list_admin');
+            StringService::writeLog('test', $user->login_role_id . '|' . $where, 'goods_list_admin');
         }
         $page = (int)Yii::$app->request->get('page', 1);
         $size = (int)Yii::$app->request->get('size', GoodsCategory::PAGE_SIZE_DEFAULT);
