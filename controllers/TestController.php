@@ -632,6 +632,43 @@ class TestController extends Controller
                 }
             }
 
+
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$goods->supplier_id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$goods->supplier_id;
+                $GoodsStat->sold_number=$goods_num;
+                $GoodsStat->amount_sold=$amount_order;
+                $GoodsStat->create_date=$date;
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }else
+            {
+                $GoodsStat->sold_number+=$goods_num;
+                $GoodsStat->amount_sold+=$amount_order;
+                if (!$GoodsStat->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+            }
+            $goods->left_number-=$goods_num;
+            $goods->sold_number+=$goods_num;
+            if (!$goods->save(false))
+            {
+                $tran->rollBack();
+                return false;
+            }
+
+
             $orderGoodsdescription=new OrderGoodsDescription();
             $orderGoodsdescription->order_no=$order_no;
             $orderGoodsdescription->sku=$goods->sku;
