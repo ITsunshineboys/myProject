@@ -3169,7 +3169,12 @@ class GoodsOrder extends ActiveRecord
                     }
                     $time=time();
                     $Goods=Goods::findOne($goods['goods_id']);
-
+                    if ($Goods->left_number<$goods['goods_num'])
+                    {
+                        $tran->rollBack();
+                        $code=1085;
+                        return $code;
+                    }
                     $Goods->left_number-=(int)$goods['goods_num'];
                     $Goods->sold_number+=(int)$goods['goods_num'];
                     if (!$Goods->save(false))
