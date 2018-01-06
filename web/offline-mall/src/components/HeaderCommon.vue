@@ -2,9 +2,7 @@
   <div class="header-container">
     <i class="iconfont icon-return"></i>
     <span>{{headTitle}}</span>
-    <slot name="more">
-      <i class="iconfont icon-more"></i>
-    </slot>
+    <slot name="more"></slot>
   </div>
 </template>
 
@@ -20,6 +18,7 @@
 
 <style scoped>
   .header-container {
+    position: relative;
     height: 64px;
     padding: 33px 14px 13px;
     text-align: center;
@@ -41,7 +40,9 @@
   }
 
   .header-container .icon-more {
-    float: right;
+    position: absolute;
+    right: 14px;
+
   }
 
 </style>

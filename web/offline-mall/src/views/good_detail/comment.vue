@@ -12,7 +12,7 @@
 <script type="text/ecmascript-6">
   export default {
     name: 'comment',
-    props: ['headshotStyle', 'nameStyle', 'dateStyle', 'userIcon', 'userName', 'commentDate', 'content', 'userIcon']
+    props: ['headshotStyle', 'nameStyle', 'dateStyle', 'userIcon', 'userName', 'commentDate', 'content']
   }
 </script>
 

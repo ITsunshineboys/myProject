@@ -24,7 +24,7 @@
           </div>
         </cell-box>
       </group>
-      <divider></divider>
+      <Divider></Divider>
       <!--评价-->
       <div v-if="good_detail.comments.total">
         <flexbox justify="flex-start" class="comment-count">
@@ -43,7 +43,7 @@
             <i class="iconfont icon-arrow-line-right"></i>
           </router-link>
         </flexbox>
-        <divider></divider>
+        <Divider></Divider>
       </div>
 
       <!--店铺简介-->
@@ -78,7 +78,7 @@
           <button type="button">进店逛逛</button>
         </flexbox>
       </card>
-      <divider></divider>
+      <Divider></Divider>
 
       <!--底部选项卡-->
       <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
@@ -123,7 +123,7 @@
             </flexbox>
           </flexbox-item>
         </flexbox>
-        <divider></divider>
+        <Divider></Divider>
       </div>
 
       <!--底部按钮-->
@@ -220,7 +220,7 @@
 <script>
   import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
   import goodsTitle from '../good_detail/title'
-  import divider from '../good_detail/divider'
+  import Divider from '@/components/Divider'
   import comment from '../good_detail/comment.vue'
   const afterserviceArr = ['上门维修', '上门退货', '上门换货', '退货', '换货']
 
@@ -239,7 +239,7 @@
       Popup,
       XNumber,
       goodsTitle,
-      divider,
+      Divider,
       comment
     },
     data () {
