@@ -660,6 +660,11 @@ class TestController extends Controller
                     return false;
                 }
             }
+            if ($goods->left_number<$goods_num)
+            {
+                $tran->rollBack();
+                return false;
+            }
             $goods->left_number-=$goods_num;
             $goods->sold_number+=$goods_num;
             if (!$goods->save(false))
@@ -667,6 +672,7 @@ class TestController extends Controller
                 $tran->rollBack();
                 return false;
             }
+
 
 
             $orderGoodsdescription=new OrderGoodsDescription();
