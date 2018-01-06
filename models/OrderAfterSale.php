@@ -915,6 +915,7 @@ class OrderAfterSale extends ActiveRecord
         if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
         {
             $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
+            var_dump($code);die;
             if (!is_numeric($code))
             {
                 $data[]=$code;
