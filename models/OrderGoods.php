@@ -546,13 +546,13 @@ class OrderGoods extends ActiveRecord
             ->count();
 
         return [
-                'all'=>$all,
-                'unpaid'=>$unpaid,
-                'unshipped'=>$unshipped,
-                'unreceiveed'=>$unreceiveed,
-                'completed'=>$completed,
-                'canceled'=>$canceled,
-                'customer_service'=>$customer_service,
+                'all'=>$all>99?99:$all,
+                'unpaid'=>$unpaid>99?99:$unpaid,
+                'unshipped'=>$unshipped>99?99:$unshipped,
+                'unreceiveed'=>$unreceiveed>99?99:$unreceiveed,
+                'completed'=>$completed>99?99:$completed,
+                'canceled'=>$canceled>99?99:$canceled,
+                'customer_service'=>$customer_service>99?99:$customer_service,
                 'have_read_news'=>$userNews>0?1:2
             ];
     }
