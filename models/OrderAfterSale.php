@@ -639,6 +639,13 @@ class OrderAfterSale extends ActiveRecord
                     $code=200;
                 }
                 break;
+            case  self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE:
+                if (!$OrderAfterSale->buyer_confirm)
+                {
+                    $code=200;
+                }
+                break;
+
         }
         if ($code==200)
         {
@@ -647,7 +654,6 @@ class OrderAfterSale extends ActiveRecord
                 ->where(['order_no'=>$OrderAfterSale->order_no,'sku'=>$OrderAfterSale->sku])
                 ->andWhere(['handle'=>OrderPlatForm::PLATFORM_CLOSE_ORDER])
                 ->one();
-            var_dump($PlatFormCloseOrder);die;
             if ($PlatFormCloseOrder)
             {
                 $data[]=[
@@ -913,15 +919,6 @@ class OrderAfterSale extends ActiveRecord
             }
         }
 
-        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
-        {
-            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SEND);
-            if (!is_numeric($code))
-            {
-                $data[]=$code;
-                return $data;
-            }
-        }
         $data[]=[
             'type'=>'商家已派出工作人员',
             'value' =>'',
@@ -932,6 +929,16 @@ class OrderAfterSale extends ActiveRecord
             'code'=>'',
             'status'=>''
         ];
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE);
+            if (!is_numeric($code))
+            {
+                $data[]=$code;
+                return $data;
+            }
+        }
         if ($OrderAfterSale->buyer_confirm!=1){
             switch ($role)
             {
