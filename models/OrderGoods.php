@@ -479,6 +479,12 @@ class OrderGoods extends ActiveRecord
                 ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
                 ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0 ")
                 ->count();
+            $uncomment=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0 and o.comment_id=0 ")
+                ->count();
             $canceled=(new Query())
                 ->from(GoodsOrder::tableName().' as g')
                 ->select('g.id')
@@ -525,6 +531,12 @@ class OrderGoods extends ActiveRecord
                 ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
                 ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0 ")
                 ->count();
+            $uncomment=(new Query())
+                ->from(GoodsOrder::tableName().' as g')
+                ->select('g.id')
+                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0 and o.comment_id=0 ")
+                ->count();
             $canceled=(new Query())
                 ->from(GoodsOrder::tableName().' as g')
                 ->select('g.id')
@@ -553,7 +565,8 @@ class OrderGoods extends ActiveRecord
                 'completed'=>$completed>99?99:$completed,
                 'canceled'=>$canceled>99?99:$canceled,
                 'customer_service'=>$customer_service>99?99:$customer_service,
-                'have_read_news'=>$userNews>0?1:2
+                'have_read_news'=>$userNews>0?1:2,
+                'uncomment'=>$uncomment>99?99:$uncomment
             ];
     }
 
