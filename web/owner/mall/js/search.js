@@ -17,8 +17,15 @@ app.controller('search_ctrl',function ($scope,_ajax,$state) {
             _ajax.get('/owner/search',{
                 str:newVal
             },function (res) {
+                console.log('小区列表');
                 console.log(res);
+                $scope.toponymy_list = res.data.list_effect
             })
         }
     })
+    //获取数据返回无资料
+    $scope.setName = function () {
+        sessionStorage.setItem('toponymy',JSON.stringify($scope.toponymy))
+        $state.go('nodata')
+    }
 })

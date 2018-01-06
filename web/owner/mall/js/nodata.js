@@ -91,6 +91,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         //分类商品初始化
         $scope.materials = angular.copy($scope.first_level)
         for (let [key, value] of $scope.materials.entries()) {
+            value.id = +value.id
             value['cost'] = 0
             value['count'] = 0
             value['second_level'] = []
@@ -133,7 +134,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                 })
                                 if (index == -1) {
                                     value1.second_level.push({
-                                        id: $scope.second_level[index1].id,
+                                        id: +$scope.second_level[index1].id,
                                         title: $scope.second_level[index1].title,
                                         cost: 0,
                                         procurement: 0,
@@ -186,7 +187,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                 })
                                 if (index == -1) {
                                     value1.second_level.push({
-                                        id: $scope.second_level[index1].id,
+                                        id: +$scope.second_level[index1].id,
                                         title: $scope.second_level[index1].title,
                                         cost: 0,
                                         procurement: 0,
@@ -247,7 +248,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                 })
                                 if (index == -1) {
                                     value1.second_level.push({
-                                        id: $scope.second_level[index1].id,
+                                        id: +$scope.second_level[index1].id,
                                         title: $scope.second_level[index1].title,
                                         cost: 0,
                                         procurement: 0,
@@ -281,6 +282,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                             }
                         }
                     }
+                    // _ajax.get('/owner/mud-make',Object.assign(angular.copy($scope.params),{waterproof_total_area:}))
                 })
             })(),
             //木作
@@ -308,7 +310,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                })
                                if (index == -1) {
                                    value1.second_level.push({
-                                       id: $scope.second_level[index1].id,
+                                       id: +$scope.second_level[index1].id,
                                        title: $scope.second_level[index1].title,
                                        cost: 0,
                                        procurement: 0,
@@ -369,7 +371,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                })
                                if (index == -1) {
                                    value1.second_level.push({
-                                       id: $scope.second_level[index1].id,
+                                       id: +$scope.second_level[index1].id,
                                        title: $scope.second_level[index1].title,
                                        cost: 0,
                                        procurement: 0,
@@ -425,7 +427,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     }
     //跳转页面
     $scope.goInner = function (item,index) {
-        sessionStorage.setItem('materials',JSON.stringify('materials'))
+        sessionStorage.setItem('materials',JSON.stringify($scope.materials))
         if(item.id == 1){
             $state.go('basic_decoration',{index:index})
         }else if(item.id == 14){

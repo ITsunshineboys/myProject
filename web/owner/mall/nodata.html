@@ -247,7 +247,7 @@
                         <div class="shu"></div>
                         <p class="title">材料选择</p>
                         <div id="basis_decoration" class="basis_decoration">
-                            <div class="grid" ng-click="goInner(item,$index)" water ng-repeat="item in vm.materials">
+                            <div class="grid" ng-click="goInner(item,$index)" water ng-repeat="item in vm.materials | orderBy:'id'">
                                 <div class="basis_item" id="bottom{{item.id}}">
                                     <p ng-if="item.title == '辅材'" class="basis_title">基础装修 <span
                                             class="basis_title_span" ng-if="item.cost != 0"> &nbsp;&nbsp;{{item.second_level.length}}项</span>

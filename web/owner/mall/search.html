@@ -11,21 +11,21 @@
 
     <section>
         <!--有结果显示数据-->
-        <div class="have_data" ng-if="search_data.length">
+        <div class="have_data" ng-if="toponymy_list.length!=0">
             <ul class="cell_ul">
-                <li ng-repeat="item in search_data">
+                <li ng-repeat="item in toponymy_list">
                     <a ui-sref="modelRoom({roomCode: item.district_code, toponymy: item.toponymy, street: item.street})">
                         <div class="first_fru">{{item.toponymy}}</div>
-                        <div class="second_fru">{{item.site_particulars}}</div>
+                        <div class="second_fru">{{item.detailed_address}}</div>
                     </a>
                 </li>
             </ul>
         </div>
 
         <!--无数据显示-->
-        <div class="no_data" ng-if="search_data.length==0&&toponymy!=''">
+        <div class="no_data" ng-if="toponymy_list.length==0&&toponymy.name!=''">
             <div>无数据</div>
-            <a ng-click="go_nodata()">没有我的小区?</a>
+            <a ng-click="setName()">没有我的小区?</a>
         </div>
     </section>
 </div>
