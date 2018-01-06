@@ -1149,6 +1149,12 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $get = \Yii::$app->request->get();
+        $get['12_dismantle'] = !isset($get['12_dismantle'])?:0;
+        $get['24_dismantle'] =!isset($get['24_dismantle'])?:0;
+        $get['repair'] =!isset($get['repair'])?:0;
+        $get['12_new_construction'] =!isset($get['12_new_construction'])?:0;
+        $get['24_new_construction'] =!isset($get['24_new_construction'])?:0;
+
 
         $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['backman']);
         $day_workload = WorkerCraftNorm::findByLaborCostAll($labor_costs['id']);
@@ -1245,8 +1251,8 @@ class OwnerController extends Controller
             $cost_24 = BasisDecorationService::haveBuildingScrap(1,$get['24_dismantle'],$rubbish_24);
             $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
         } else {
-            $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_12);
-            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$rubbish_24);
+            $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$vehicle_12,$fare);
+            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$vehicle_24,$fare);
             $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
 
         }
@@ -1418,7 +1424,7 @@ class OwnerController extends Controller
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
         $material[]   = BasisDecorationService::formula($goods,$get);
 
-        
+
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
 
