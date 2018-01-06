@@ -1277,12 +1277,19 @@ class OwnerController extends Controller
             $total_cost += $v['cost'];
         }
 
+        $a = [];
+        foreach ($material_total as $marerial){
+            if ($marerial['quantity'] != 0){
+                $a [] = $marerial;
+            }
+        }
+
 
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
             'labor_all_cost' => $labor_cost,
-            'data' => $material_total,
+            'data' => $a,
             'total_cost' => round($total_cost,2),
         ]);
     }
