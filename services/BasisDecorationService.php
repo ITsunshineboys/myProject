@@ -414,7 +414,7 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $value['quantity'] = self::algorithm(4,$points,$craft,$goods[1]['value']);
+                $value['quantity'] = ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
                 $value['cost'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
                 $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -607,7 +607,7 @@ class BasisDecorationService
                 // 石膏板费用：个数×商品价格     个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
                 $modelling_length = self::algorithm(6,$length,$value);
                 $flat_area = self::algorithm(6,$area,$value1);
-                $cost['quantity'] = self::algorithm(5,$modelling_length,$flat_area,$value2);
+                $cost['quantity'] = ceil(self::algorithm(5,$modelling_length,$flat_area,$value2));
                 $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
                 $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -615,13 +615,13 @@ class BasisDecorationService
                 // 龙骨费用：个数×商品价格   个数=个数1+个数2 个数1：（造型长度÷【1.5m】） 个数2：（平顶面积÷【1.5m²】）
                 $modelling_length = self::algorithm(6,$length,$value);
                 $flat_area = self::algorithm(6,$area,$value1);
-                $cost['quantity'] = self::algorithm(3,$modelling_length,$flat_area);
+                $cost['quantity'] = ceil(self::algorithm(3,$modelling_length,$flat_area));
                 $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
                 $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 3;
                 // 木工板费用：个数×商品价格   个数：【1】
-                $cost['quantity'] = $length;
+                $cost['quantity'] = ceil($length);
                 $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
                 $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;

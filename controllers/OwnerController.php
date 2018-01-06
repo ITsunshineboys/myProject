@@ -443,7 +443,7 @@ class OwnerController extends Controller
         //材料费用
         $material[] = BasisDecorationService::waterwayGoods(1,$waterway_overall_points,$ppr_,$ppr);
         $material[] = BasisDecorationService::waterwayGoods(1,$waterway_overall_points,$pvc_,$pvc);
-        $total_cost = BasisDecorationService::algorithm(3,$material[0]['cost'],$material[1]['cost']);
+        $total_cost = round(BasisDecorationService::algorithm(3,$material[0]['cost'],$material[1]['cost']),2);
 
         return Json::encode([
             'code' => 200,
@@ -510,7 +510,7 @@ class OwnerController extends Controller
         $total = ceil(BasisDecorationService::algorithm(5,$waterway_,$weak_,$strong_));
 
 
-        $labor_all_cost['price'] = BasisDecorationService::algorithm(1,$total,$labor['univalence']);
+        $labor_all_cost['price'] = round(BasisDecorationService::algorithm(1,$total,$labor['univalence']),2);
         $labor_all_cost['worker_kind'] = $labor['worker_name'];
 
 
@@ -782,7 +782,7 @@ class OwnerController extends Controller
             'msg' => '成功',
             'labor_all_cost' => $labour_charges,
             'data' => $material_total,
-            'total_cost' => $total_area,
+            'total_cost' => round($total_area,2),
         ]);
     }
 
@@ -942,7 +942,7 @@ class OwnerController extends Controller
             'msg' => '成功',
             'labor_all_cost' => $coating_labor_price,
             'data' => $material_total,
-            'total_cost' => $total_cost,
+            'total_cost' => round($total_cost,2),
             'bedroom_area' => round($bedroom_primer_area[1],2),
         ]);
     }
@@ -1121,7 +1121,7 @@ class OwnerController extends Controller
             'data' => [
                 'mud_make_labor' => $total_labor_cost,
                 'data' => $material_total,
-                'total_cost' => $total_cost,
+                'total_cost' => round($total_cost,2),
             ]
         ]);
     }
