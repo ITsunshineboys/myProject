@@ -25,6 +25,7 @@ app.controller('search_ctrl',function ($scope,_ajax,$state) {
     })
     //获取数据返回无资料
     $scope.setName = function () {
+        console.log(111);
         sessionStorage.setItem('toponymy',JSON.stringify($scope.toponymy))
         $state.go('nodata')
     }
