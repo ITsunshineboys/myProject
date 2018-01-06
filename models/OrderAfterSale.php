@@ -639,12 +639,6 @@ class OrderAfterSale extends ActiveRecord
                     $code=200;
                 }
                 break;
-            case self::AFTER_SALE_USER_UN_CONFIRM_EXCHANGE:
-                if (!$OrderAfterSale->buyer_confirm)
-                {
-                    $code=200;
-                }
-                break;
         }
         if ($code==200)
         {
