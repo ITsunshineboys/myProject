@@ -615,6 +615,7 @@ class OwnerController extends Controller
             'labor_all_cost' => $labor_all_cost,
             'data' => [$material_price],
             'total_cost' => $material_price['cost'],
+            'total_area' => $total_area,
         ]);
     }
 
