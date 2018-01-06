@@ -1315,77 +1315,77 @@ class GoodsOrder extends ActiveRecord
      */
     public static function  GetOrderStatus($data)
     {
-        foreach ($data as $k =>$v){
-            $data[$k]['create_time']=date('Y-m-d H:i',$data[$k]['create_time']);
-            switch ($data[$k]['order_refer']){
+        foreach ($data as &$list){
+            $list['create_time']=date('Y-m-d H:i',$list['create_time']);
+            switch ($list['order_refer']){
                 case 1:
-                    $data[$k]['user_name']=LineSupplier::LINE_USER;
+                    $list['user_name']=LineSupplier::LINE_USER;
                     break;
                 case 2:
-                    $data[$k]['user_name']=User::find()
+                    $list['user_name']=User::find()
                         ->select('nickname')
-                        ->where(['id'=>$data[$k]['user_id']])
+                        ->where(['id'=>$list['user_id']])
                         ->asArray()
                         ->one()['nickname'];
                     break;
             }
-            if ($data[$k]['pay_status']==0 && $data[$k]['order_status']==0){
-                $data[$k]['status']=self::PAY_STATUS_DESC_UNPAID;
+            if ($list['pay_status']==0 && $list['order_status']==0){
+                $list['status']=self::PAY_STATUS_DESC_UNPAID;
             }else{
-                switch ($data[$k]['order_status']){
+                switch ($list['order_status']){
                     case 0:
-                        switch ($data[$k]['shipping_status']){
+                        switch ($list['shipping_status']){
                             case 0:
-                                $data[$k]['status']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
+                                $list['status']=self::SHIPPING_STATUS_DESC_UNSHIPPED;
                                 break;
                             case 1:
-                                $data[$k]['status']=self::ORDER_TYPE_DESC_UNRECEIVED;
+                                $list['status']=self::ORDER_TYPE_DESC_UNRECEIVED;
                                 break;
                             case 2:
-                                $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
+                                $list['status']=self::ORDER_TYPE_DESC_COMPLETED;
                                 break;
                         }
                         break;
                     case 1:
-                        switch($data[$k]['customer_service']){
+                        switch($list['customer_service']){
                             case 0:
-                                $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
+                                $list['status']=self::ORDER_TYPE_DESC_COMPLETED;
                                 break;
                             case 1:
-                                $data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN;
+                                $list['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN;
                                 break;
-                            case 2:$data[$k]['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
+                            case 2:$list['status']=self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER;
                                 break;
                         }
                         break;
                     case 2:
-                        $data[$k]['status']=self::ORDER_TYPE_DESC_CANCEL;
+                        $list['status']=self::ORDER_TYPE_DESC_CANCEL;
                         break;
                 }
             }
-            $data[$k]['send_time']=0;
-            $data[$k]['complete_time']=0;
-            $data[$k]['RemainingTime']=0;
+            $list['send_time']=0;
+            $list['complete_time']=0;
+            $list['RemainingTime']=0;
             //待收货订单状态判断操作
-            if ($data[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
+            if ($list['status']==self::ORDER_TYPE_DESC_UNRECEIVED){
                 $express=Express::find()
-                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
                     ->one();
                 if ($express)
                 {
-                    $data[$k]['send_time']=$express->create_time;
-                    $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-                    if ($data[$k]['RemainingTime']<=0){
-                        $data[$k]['complete_time']=$express->receive_time;
-                        $data[$k]['status']=self::ORDER_TYPE_DESC_COMPLETED;
-                        $data[$k]['is_unusual']=0;
-                        $supplier_id[$k]=self::find()
+                    $list['send_time']=$express->create_time;
+                    $list['RemainingTime']=Express::findRemainingTime($express);
+                    if ($list['RemainingTime']<=0){
+                        $list['complete_time']=$express->receive_time;
+                        $list['status']=self::ORDER_TYPE_DESC_COMPLETED;
+                        $list['is_unusual']=0;
+                        $supplier_id=self::find()
                             ->select('supplier_id')
-                            ->where(['order_no'=>$data[$k]['order_no']])
+                            ->where(['order_no'=>$list['order_no']])
                             ->asArray()
                             ->one()['supplier_id'];
-                        $money[$k]=($data[$k]['freight']+$data[$k]['supplier_price']*$data[$k]['goods_number']);
-                        $res[$k]=self::changeOrderStatus($data[$k]['order_no'],$data[$k]['sku'],$supplier_id[$k],$money[$k]);
+                        $money=($list['freight']+$list['supplier_price']*$list['goods_number']);
+                        $res=self::changeOrderStatus($list['order_no'],$list['sku'],$supplier_id,$money);
                         if (!$res || $res==false){
                             return false;
                         }
@@ -1393,32 +1393,32 @@ class GoodsOrder extends ActiveRecord
                 }
             };
             //已完成订单状态判断操作
-            if ($data[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
+            if ($list['status']==self::ORDER_TYPE_DESC_COMPLETED)
             {
                 $express=Express::find()
-                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
                     ->one();
                 if ($express){
-                    $data[$k]['send_time']=$express->create_time;
-                    $data[$k]['RemainingTime']=Express::findRemainingTime($express);
-                    if ($data[$k]['RemainingTime']<0)
+                    $list['send_time']=$express->create_time;
+                    $list['RemainingTime']=Express::findRemainingTime($express);
+                    if ($list['RemainingTime']<0)
                     {
-                        $data[$k]['RemainingTime']=0;
+                        $list['RemainingTime']=0;
                     }
-                    $data[$k]['complete_time']=$express->receive_time;
+                    $list['complete_time']=$express->receive_time;
                 }
-                if ($data[$k]['complete_time']!=0)
+                if ($list['complete_time']!=0)
                 {
 
-                        $code=GoodsComment::checkIsSetComment(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']]);
+                        $code=GoodsComment::checkIsSetComment(['order_no'=>$list['order_no'],'sku'=>$list['sku']]);
                         if ($code==200)
                         {
-                            $code=GoodsComment::CheckIsAuToComment($data[$k]['complete_time']);
+                            $code=GoodsComment::CheckIsAuToComment($list['complete_time']);
                             if ($code==200)
                             {
                                 $comment=GoodsComment::addCommentByModel(
-                                    ['order_no'=>$data[$k]['order_no'],
-                                    'sku'=>$data[$k]['sku'],
+                                    ['order_no'=>$list['order_no'],
+                                    'sku'=>$list['sku'],
                                     'store_service_score'=>10,
                                     'shipping_score'=>10,
                                     'score'=>10,
@@ -1428,51 +1428,51 @@ class GoodsOrder extends ActiveRecord
                                     ]);
                                     if ($comment!=1000)
                                     {
-                                $data[$k]['comment_id']=$comment['comment_id'];
+                                        $list['comment_id']=$comment['comment_id'];
                                     }
                                 }
                         }
                 }
-                $data[$k]['is_unusual']=0;
+                $list['is_unusual']=0;
             };
-            $data[$k]['comment_grade']=GoodsComment::findCommentGrade($data[$k]['comment_id']);
-            $data[$k]['pay_term']=0;
+            $list['comment_grade']=GoodsComment::findCommentGrade($list['comment_id']);
+            $list['pay_term']=0;
             //待付款订单状态判断操作
-            if ($data[$k]['status']==self::PAY_STATUS_DESC_UNPAID){
+            if ($list['status']==self::PAY_STATUS_DESC_UNPAID){
                 $time=time();
-                $pay_term=(strtotime($data[$k]['create_time'])+24*60*60);
+                $pay_term=(strtotime($list['create_time'])+24*60*60);
                 if (($pay_term-$time)<=0){
                     $res=Yii::$app->db
                         ->createCommand()
-                        ->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$data[$k]['order_no'].' and sku='.$data[$k]['sku'])
+                        ->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$list['order_no'].' and sku='.$list['sku'])
                         ->execute();
                     //减少销量，减少销售额，增加库存.减少商品销量
-                    OrderRefund::ReduceSold($data[$k]['supplier_id'],$data[$k]['goods_number'],$data[$k]['goods_price'],$data[$k]['freight'],$data[$k]['sku']);
-                    $data[$k]['status']=self::ORDER_TYPE_DESC_CANCEL;
+                    OrderRefund::ReduceSold($list['supplier_id'],$list['goods_number'],$list['goods_price'],$list['freight'],$list['sku']);
+                    $list['status']=self::ORDER_TYPE_DESC_CANCEL;
                 }else{
-                    $data[$k]['pay_term']=$pay_term-$time;
+                    $list['pay_term']=$pay_term-$time;
                 }
             }
             //是否收货状态判断操作
             if (
-                $data[$k]['status']==self::ORDER_TYPE_DESC_CANCEL
-                ||$data[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN
-                ||$data[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER)
+                $list['status']==self::ORDER_TYPE_DESC_CANCEL
+                ||$list['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN
+                ||$list['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER)
             {
                 $express=Express::find()
-                    ->where(['order_no'=>$data[$k]['order_no'],'sku'=>$data[$k]['sku']])
+                    ->where(['order_no'=>$list['order_no'],'sku'=>$list['sku']])
                     ->one();
                 if ($express)
                 {
-                    $data[$k]['complete_time']=$express->receive_time;
+                    $list['complete_time']=$express->receive_time;
                 }else{
-                    $data[$k]['complete_time']=0;
+                    $list['complete_time']=0;
                 }
             }
-            unset($data[$k]['customer_service']);
-            unset($data[$k]['pay_status']);
-            unset($data[$k]['order_status']);
-            unset($data[$k]['shipping_status']);
+            unset($list['customer_service']);
+            unset($list['pay_status']);
+            unset($list['order_status']);
+            unset($list['shipping_status']);
         }
         return $data;
     }
