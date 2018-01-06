@@ -1,12 +1,9 @@
 app.controller('order_goods', ['$rootScope', '$scope', '$stateParams', '_ajax', function ($rootScope, $scope, $stateParams, _ajax) {
-    console.log($rootScope);
     let fromStateName = $rootScope.fromState_name;
-    if (fromStateName === '') {
-        fromStateName = sessionStorage.getItem('fromStateName');
-    } else {
+    if (fromStateName !== '') {
         sessionStorage.setItem('fromStateName', fromStateName);
     }
-    switch (fromStateName) {
+    switch (sessionStorage.getItem('fromStateName')) {
         case 'comm_details':
             $rootScope.crumbs = [{
                 name: '商城管理',
@@ -30,29 +27,44 @@ app.controller('order_goods', ['$rootScope', '$scope', '$stateParams', '_ajax', 
             }];
             break;
         default:
-            $rootScope.crumbs = [{
-                name: '商城管理',
-                icon: 'icon-shangchengguanli',
-                link: $rootScope.mall_click
-            }, {
-                name: '商家管理',
-                link: 'store_mag'
-            }, {
-                name: '订单管理'
-            }, {
-                name: '订单详情',
-                link: -1
-            }, {
-                name: '商品详情'
-            }];
-            break;
+            if(sessionStorage.getItem('fromState') === 'search.order') {
+                $rootScope.crumbs = [{
+                    name: '商城管理',
+                    icon: 'icon-shangchengguanli',
+                    link: $rootScope.mall_click
+                }, {
+                    name: '搜索',
+                    link: 'search.order'
+                }, {
+                    name: '订单详情',
+                    link: -1
+                }, {
+                    name: '商品详情'
+                }];
+            } else {
+                $rootScope.crumbs = [{
+                    name: '商城管理',
+                    icon: 'icon-shangchengguanli',
+                    link: $rootScope.mall_click
+                }, {
+                    name: '商家管理',
+                    link: 'store_mag'
+                }, {
+                    name: '订单管理'
+                }, {
+                    name: '订单详情',
+                    link: -1
+                }, {
+                    name: '商品详情'
+                }];
+            }
     }
     let params = {
         order_no: $stateParams.orderNo,
         sku: $stateParams.sku
     };
 
-    _ajax.post('/order/goods-view', params, function (res) {
+    _ajax.get('/order/goods-view', params, function (res) {
         console.log(res, '商品详情页');
         $scope.data = res.data
     });

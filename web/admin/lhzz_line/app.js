@@ -750,7 +750,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             controller: 'comments'
         })
         .state('order_details', { // 订单详情
-            url: '/order/details?orderNo&sku&status&type',
+            url: '/order/details?orderNo&sku&status&type&fromState',
             templateUrl: 'pages/mall_manage/merchant_manage/order_manage/order/order_details.html',
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order_details.css',
             controller: 'order_details'
