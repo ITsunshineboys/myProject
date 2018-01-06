@@ -1435,40 +1435,26 @@ class OwnerController extends Controller
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
         $material[]   = BasisDecorationService::formula($goods,$get);
 
-
         //无计算公式
         $assort_material = AssortGoods::find()->asArray()->where(['state'=>1])->all();
-
-
         foreach ($assort_material as $one_without_assort){
+            $without_assort_name[] = $one_without_assort['category_id'];
+        }
 
-            $without_assort_name[] = $one_without_assort['title'];
-            $without_assort_one[$one_without_assort['title']] = $one_without_assort;
-        }
-        $without_assort_goods = Goods::assortList($without_assort_name,self::DEFAULT_CITY_CODE);
-        if ($without_assort_goods == null) {
-            $code = 1061;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $without_assort_goods_price = BasisDecorationService::priceConversion($without_assort_goods);
-        $material[] = BasisDecorationService::withoutAssortGoods($without_assort_goods_price,$assort_material,$post);
+        $_goods = Goods::assortList($without_assort_name,$get['city']);
+        $material[] = BasisDecorationService::withoutAssortGoods($_goods,$assort_material,$get);
 
 
 
         $condition_stairs = [];
         //  楼梯信息
-        if ($post['stairway_id'] == 1) {
+        if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
-            $stairs_price = BasisDecorationService::priceConversion($stairs);
-            foreach ($stairs_price as &$one_stairs_price) {
-
-                if ($one_stairs_price['value'] == $post['stairs'] && $one_stairs_price['style_id'] == $post['style']) {
+            foreach ($stairs as $one_stairs_price) {
+                if ($one_stairs_price['value'] == $get['stairs'] && $one_stairs_price['style_id'] == $get['style']) {
                     $one_stairs_price['quantity'] = 1;
-                    $one_stairs_price['cost'] = $one_stairs_price['platform_price'] * $one_stairs_price['quantity'];
-                    $one_stairs_price['procurement'] = $one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'];
+                    $one_stairs_price['cost'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['platform_price'],$one_stairs_price['quantity']),2);
+                    $one_stairs_price['procurement'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['purchase_price_decoration_company'],$one_stairs_price['quantity']),2);
                     $condition_stairs [] = $one_stairs_price;
                 }
 

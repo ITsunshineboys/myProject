@@ -1305,90 +1305,90 @@ class BasisDecorationService
         }
     }
 
-    /**
-     * 泥作地砖
-     * @param $goods
-     * @return array|bool
-     */
-    public static function floorTile($goods)
-    {
-        $id = [];
-        $goods_attr_details = [];
-        foreach ($goods as $one_goods) {
-            $id [] = $one_goods['id'];
-        }
-        $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
-
-        foreach ($goods_attr as $one_goods_attr) {
-            switch ($one_goods_attr) {
-                case $one_goods_attr['value'] == self::HOUSE_MESSAGE['kitchen']:
-                    $kitchen_id = $one_goods_attr['goods_id'];
-                    $goods_attr_details['kitchen']['id'] = $one_goods_attr['goods_id'];
-                    $goods_attr_details['kitchen']['name'] = $one_goods_attr['value'];
-                    break;
-                case $one_goods_attr['value'] == self::HOUSE_MESSAGE['toilet']:
-                    $toilet_id = $one_goods_attr['goods_id'];
-                    $goods_attr_details['toilet']['id'] = $one_goods_attr['goods_id'];
-                    $goods_attr_details['toilet']['name'] = $one_goods_attr['value'];
-                    break;
-                case $one_goods_attr['value'] == self::HOUSE_MESSAGE['hall']:
-                    $hall_id = $one_goods_attr['goods_id'];
-                    $goods_attr_details['hall']['id'] = $one_goods_attr['goods_id'];
-                    $goods_attr_details['hall']['name'] = $one_goods_attr['value'];
-                    break;
-            }
-        }
-        foreach ($goods_attr as  $goods_area) {
-            switch ($goods_area) {
-                case $goods_area['goods_id'] == $kitchen_id:
-                    if ($goods_area['name'] == self::UNITS['length']) {
-                        $kitchen_length = $goods_area['value'] / self::BRICK_UNITS;
-                    }
-                    if ($goods_area['name'] == self::UNITS['breadth']) {
-                        $kitchen_wide = $goods_area['value'] / self::BRICK_UNITS;
-                    }
-                    break;
-                case $goods_area['goods_id'] == $toilet_id:
-                    if ($goods_area['name'] == self::UNITS['length']) {
-                        $toilet_length = $goods_area['value'] / self::BRICK_UNITS;
-                    }
-                    if ($goods_area['name'] == self::UNITS['breadth']) {
-                        $toilet_wide = $goods_area['value'] / self::BRICK_UNITS;
-                    }
-                    break;
-                case $goods_area['goods_id'] == $hall_id:
-                    if ($goods_area['name'] == self::UNITS['length']) {
-                        $hall_length = $goods_area['value'] / self::BRICK_UNITS;
-                    }
-                    if ($goods_area['name'] == self::UNITS['breadth']) {
-                        $hall_wide = $goods_area['value'] / self::BRICK_UNITS;
-                    }
-                    break;
-            }
-        }
-        foreach ($goods as $goods_price)
-        {
-            switch ($goods_price)
-            {
-                case $goods_price['id'] == $kitchen_id:
-                    $goods_attr_details['kitchen']['price'] =  $goods_price['platform_price'];
-                    $goods_attr_details['kitchen']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
-                    break;
-                case $goods_price['id'] == $toilet_id:
-                    $goods_attr_details['toilet']['price'] =  $goods_price['platform_price'];
-                    $goods_attr_details['toilet']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
-                    break;
-                case $goods_price['id'] == $hall_id:
-                    $goods_attr_details['hall']['price'] =  $goods_price['platform_price'];
-                    $goods_attr_details['hall']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
-                    break;
-            }
-        }
-        $goods_attr_details['kitchen']['area'] = $kitchen_length * $kitchen_wide;
-        $goods_attr_details['toilet']['area'] = $toilet_length * $toilet_wide;
-        $goods_attr_details['hall']['area'] = $hall_length * $hall_wide;
-        return $goods_attr_details;
-    }
+//    /**
+//     * 泥作地砖
+//     * @param $goods
+//     * @return array|bool
+//     */
+//    public static function floorTile($goods)
+//    {
+//        $id = [];
+//        $goods_attr_details = [];
+//        foreach ($goods as $one_goods) {
+//            $id [] = $one_goods['id'];
+//        }
+//        $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
+//
+//        foreach ($goods_attr as $one_goods_attr) {
+//            switch ($one_goods_attr) {
+//                case $one_goods_attr['value'] == self::HOUSE_MESSAGE['kitchen']:
+//                    $kitchen_id = $one_goods_attr['goods_id'];
+//                    $goods_attr_details['kitchen']['id'] = $one_goods_attr['goods_id'];
+//                    $goods_attr_details['kitchen']['name'] = $one_goods_attr['value'];
+//                    break;
+//                case $one_goods_attr['value'] == self::HOUSE_MESSAGE['toilet']:
+//                    $toilet_id = $one_goods_attr['goods_id'];
+//                    $goods_attr_details['toilet']['id'] = $one_goods_attr['goods_id'];
+//                    $goods_attr_details['toilet']['name'] = $one_goods_attr['value'];
+//                    break;
+//                case $one_goods_attr['value'] == self::HOUSE_MESSAGE['hall']:
+//                    $hall_id = $one_goods_attr['goods_id'];
+//                    $goods_attr_details['hall']['id'] = $one_goods_attr['goods_id'];
+//                    $goods_attr_details['hall']['name'] = $one_goods_attr['value'];
+//                    break;
+//            }
+//        }
+//        foreach ($goods_attr as  $goods_area) {
+//            switch ($goods_area) {
+//                case $goods_area['goods_id'] == $kitchen_id:
+//                    if ($goods_area['name'] == self::UNITS['length']) {
+//                        $kitchen_length = $goods_area['value'] / self::BRICK_UNITS;
+//                    }
+//                    if ($goods_area['name'] == self::UNITS['breadth']) {
+//                        $kitchen_wide = $goods_area['value'] / self::BRICK_UNITS;
+//                    }
+//                    break;
+//                case $goods_area['goods_id'] == $toilet_id:
+//                    if ($goods_area['name'] == self::UNITS['length']) {
+//                        $toilet_length = $goods_area['value'] / self::BRICK_UNITS;
+//                    }
+//                    if ($goods_area['name'] == self::UNITS['breadth']) {
+//                        $toilet_wide = $goods_area['value'] / self::BRICK_UNITS;
+//                    }
+//                    break;
+//                case $goods_area['goods_id'] == $hall_id:
+//                    if ($goods_area['name'] == self::UNITS['length']) {
+//                        $hall_length = $goods_area['value'] / self::BRICK_UNITS;
+//                    }
+//                    if ($goods_area['name'] == self::UNITS['breadth']) {
+//                        $hall_wide = $goods_area['value'] / self::BRICK_UNITS;
+//                    }
+//                    break;
+//            }
+//        }
+//        foreach ($goods as $goods_price)
+//        {
+//            switch ($goods_price)
+//            {
+//                case $goods_price['id'] == $kitchen_id:
+//                    $goods_attr_details['kitchen']['price'] =  $goods_price['platform_price'];
+//                    $goods_attr_details['kitchen']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
+//                    break;
+//                case $goods_price['id'] == $toilet_id:
+//                    $goods_attr_details['toilet']['price'] =  $goods_price['platform_price'];
+//                    $goods_attr_details['toilet']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
+//                    break;
+//                case $goods_price['id'] == $hall_id:
+//                    $goods_attr_details['hall']['price'] =  $goods_price['platform_price'];
+//                    $goods_attr_details['hall']['purchase_price_decoration_company'] =  $goods_price['purchase_price_decoration_company'];
+//                    break;
+//            }
+//        }
+//        $goods_attr_details['kitchen']['area'] = $kitchen_length * $kitchen_wide;
+//        $goods_attr_details['toilet']['area'] = $toilet_length * $toilet_wide;
+//        $goods_attr_details['hall']['area'] = $hall_length * $hall_wide;
+//        return $goods_attr_details;
+//    }
 
 
     public static function formula($goods,$post)
@@ -1412,7 +1412,6 @@ class BasisDecorationService
                     $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
                     $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
                     $wood_floor [] = $one_goods;
-                    var_dump($wood_floor);die;
                     break;
                 case $one_goods['title'] == self::goodsNames()['marble']: // 大理石
                     if ($post['window'] > 1) {
@@ -1689,7 +1688,7 @@ class BasisDecorationService
         foreach ($goods as &$one){
             foreach ($assort_material as $value){
                 if ($one['title'] == $value['title']){
-                    $one['quantity'] =(int)$value['quantity'];
+                    $one['quantity'] =ceil($value['quantity']);
                     $one['cost'] = round($one['quantity'] * $one['platform_price'],2);
                     $one['procurement'] = round($one['quantity'] * $one['purchase_price_decoration_company'],2);
                 }
