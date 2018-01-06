@@ -3973,6 +3973,9 @@ class MallController extends Controller
         {
             if ($keyword) {
                 $where = " (sku like '%{$keyword}%' or title like '%{$keyword}%')";
+            }else
+            {
+                $where ='';
             }
         }
         $page = (int)Yii::$app->request->get('page', 1);
