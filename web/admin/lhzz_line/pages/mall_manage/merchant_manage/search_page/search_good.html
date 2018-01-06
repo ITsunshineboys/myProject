@@ -1,0 +1,242 @@
+<div class="search form-inline clearfix">
+    <span>商品状态</span>
+    <select class="form-control" ng-model="params.status">
+        <option value="4">全部</option>
+        <option value="2">已上架</option>
+        <option value="0">已下架</option>
+        <option value="1">等待上架</option>
+        <option value="3">已删除</option>
+    </select>
+
+    <div class="form-group pull-right">
+        <div class="input-group">
+            <input class="form-control" type="text" ng-model="basic.keyword" placeholder="搜索商品编号或名称">
+            <span class="glyphicon glyphicon-search"></span>
+        </div>
+        <button class="btn btn-default" ng-click="search()">查询</button>
+        <button class="btn btn-default" ng-click="filter = !filter"
+                ng-class={'btn-focus':filter}>
+            <i class="iconfont icon-shaixuan"></i>
+        </button>
+        <ul class="filter" ng-if="filter">
+            <li class="checkbox" ng-repeat="item in menu_list">
+                <label>
+                    <input type="checkbox" ng-model=item.value>{{item.name}}
+                </label>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--表格内容-->
+<table class="table table-responsive table-hover">
+    <thead>
+    <tr>
+        <th ng-if="menu_list[0].value">商品编号</th>
+        <th ng-if="menu_list[1].value">商品名称</th>
+        <th ng-if="menu_list[2].value">供货价格</th>
+        <th ng-if="menu_list[3].value">市场价格</th>
+        <th ng-if="menu_list[4].value">平台价格</th>
+        <th ng-if="menu_list[5].value">装修公司采购价格</th>
+        <th ng-if="menu_list[6].value">项目经理采购价格</th>
+        <th ng-if="menu_list[7].value">设计师采购价格</th>
+        <th ng-if="menu_list[8].value">库存</th>
+        <th ng-if="menu_list[9].value" ng-click="sortVolumn()">
+            销量
+            <span class="sort">
+                    <i class="iconfont icon-up"  ng-class="{'active':sortStyleFunc() == 4}"></i>
+                    <i class="iconfont icon-down"  ng-class="{'active':sortStyleFunc() == 3}"></i>
+                </span>
+        </th>
+        <th ng-if="menu_list[10].value">状态</th>
+        <th ng-if="menu_list[11].value">操作人员</th>
+        <th ng-if="menu_list[12].value">图片</th>
+        <th ng-if="menu_list[13].value">原因及备注</th>
+        <th ng-if="menu_list[14].value">详情</th>
+        <th ng-if="menu_list[15].value">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr ng-repeat="item in tabledetail track by $index">
+        <td ng-if="menu_list[0].value">{{item.sku}}</td>
+        <td ng-if="menu_list[1].value">{{item.title}}</td>
+        <td ng-if="menu_list[2].value">{{item.supplier_price | currency:"¥"}}</td>
+        <td ng-if="menu_list[3].value">{{item.market_price | currency:"¥"}}</td>
+        <td ng-if="menu_list[4].value">{{item.platform_price | currency:"¥"}}</td>
+        <td ng-if="menu_list[5].value">{{item.purchase_price_decoration_company | currency:"¥"}}</td>
+        <td ng-if="menu_list[6].value">{{item.purchase_price_manager | currency:"¥"}}</td>
+        <td ng-if="menu_list[7].value"> {{item.purchase_price_designer | currency:"¥"}}</td>
+        <td ng-if="menu_list[8].value">{{item.left_number}}</td>
+        <td ng-if="menu_list[9].value">{{item.sold_number}}</td>
+        <td ng-if="menu_list[10].value" ng-class="{'red':item.status==='已下架','green':item.status==='已上架','blue':item.status==='等待上架'}">{{item.status}}</td>
+        <td ng-if="menu_list[11].value">{{item.operator}}</td>
+        <td ng-if="menu_list[12].value"><img class="goodpic" ng-src="{{ item.cover_image}}" alt=""></td>
+
+        <td ng-if="menu_list[13].value&&(item.status==='已上架'||item.status==='已删除')"></td>
+        <td ng-if="menu_list[13].value&&item.status==='等待上架'"  data-toggle="modal" data-target="#wait_shelves_remarks_modal"><span class="wait_check" ng-bind="item.reason||'点击输入'" ng-click="checkReason(item.id,item.reason)"></span></td>
+        <td ng-if="menu_list[13].value&&item.status==='已下架'" data-toggle="modal" data-target="#show_reason"  ng-click="showOffReason(item.offline_reason)"><span class="off_reason">{{item.offline_reason}}</span></td>
+
+        <td ng-if="menu_list[14].value&&item.status!=='已删除'" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">编辑</td>
+        <td ng-if="menu_list[14].value&&item.status==='已删除'" class="blue" ui-sref="commodity_detail({id:item.id,storeid:storeid})">查看</td>
+
+        <td ng-if="menu_list[15].value&&item.status==='已上架'" class="blue" data-toggle="modal" data-target="#down_shelves_reason_modal"
+            ng-click="singlegoodOffline(item.id)">下架
+        </td>
+        <td ng-if="menu_list[15].value&&item.status==='已下架'" class="blue" data-toggle="modal" data-target="#up_shelves_modal"
+            ng-click="singlegoodOnline(item.id)">上架
+        </td>
+        <td ng-if="menu_list[15].value&&item.status==='等待上架'" class="blue" data-toggle="modal" data-target="#waitup_shelves_modal" ng-click="waitToOnline(item.id)">上架</td>
+        <td ng-if="menu_list[15].value&&item.status==='已删除'"></td>
+    </tr>
+    </tbody>
+
+
+</table>
+<tm-pagination conf="pageConfig"></tm-pagination>
+
+
+<!-----------------------------已上架---------------------------------------->
+<!--单个下架 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="down_shelves_reason_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">下架原因</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        下架原因（选填）
+                    </div>
+                    <div class="col-md-8">
+                        <textarea class="form-control" rows="10" ng-model="offline_reason"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureGoodOffline()'>确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click='cancelSingleOffline()'>取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-----------------------------已下架---------------------------------------->
+<!-- 下架原因-详情 -->
+<div class="modal fade" tabindex="-1" role="dialog" id="show_reason">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">详情</h4>
+            </div>
+            <div class="modal-body">
+                {{offreason}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--单个上架 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="up_shelves_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>是否确认上架1件商品</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureGoodOnline()'>确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--上架被移除 模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="up_not_shelves_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>{{cantonline}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click='sureCantOnline()'>确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-----------------------------等待上架---------------------------------------->
+<!--审核备注模态框-->
+<div class="modal fade" id="wait_shelves_remarks_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">审核备注</h4>
+            </div>
+            <div class="modal-body">
+                <span style="margin-right: 50px;vertical-align: top">审核备注（选填）</span>
+                <textarea placeholder="请填写等待上架原因，如选择多个则批量备注" cols="30" rows="10" ng-model="lastreason"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureCheckReason()">确认
+                </button>
+                <button type="button" class="btn btn-defalut" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--等待上架 上架模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="waitup_shelves_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>是否确认上架1件商品</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureWaitToOnline()">确认</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--等待上架 上架被移除模态框-->
+<div class="modal fade" tabindex="-1" role="dialog" id="waitup_not_shelves_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>{{waitcantonline}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="sureCantOnline()">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+

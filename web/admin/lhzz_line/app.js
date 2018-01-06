@@ -786,6 +786,12 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
             css: 'pages/mall_manage/merchant_manage/order_manage/css/order.css',
             controller: 'searchOrderCtrl'
         })
+        .state('search.goods', {  // 搜索商品
+            url: '/search-good',
+            templateUrl: 'pages/mall_manage/merchant_manage/search_page/search_good.html',
+            css: 'pages/mall_manage/merchant_manage/commodity_manage/css/commodity_manage.css',
+            controller: 'searchGood'
+        })
         .state('mall_data', { // 商城数据
             url: '/mall_data',
             templateUrl: 'pages/mall_manage/data_page/data_page.html',
