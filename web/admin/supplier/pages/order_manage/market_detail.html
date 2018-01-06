@@ -428,7 +428,7 @@
                     {{items.phone}}
                 </span>
                 <a ng-if="items.code=='shipped'" class="col-sm-offset-2 col-sm-10 control-label">
-                    {{items.content}}({{items.number}})
+                    <span ui-sref="express({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">{{items.content}}({{items.number}})</span>
                 </a>
             </div>
         <!--平台介入-->
@@ -459,7 +459,7 @@
                     {{items.phone}}
                 </span>
                 <a ng-if="items.code=='shipped'" class="col-sm-offset-2 col-sm-10 control-label">
-                    {{items.content}}({{items.number}})
+                    <span ui-sref="express({order_no:order_no,sku:sku,tabflag:tabflag,statename:statename})">{{items.content}}({{items.number}})</span>
                 </a>
             </div>
         </div>
