@@ -1124,11 +1124,9 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg' => '成功',
-            'data' => [
-                'mud_make_labor' => $total_labor_cost,
-                'data' => $material_total,
-                'total_cost' => round($total_cost,2),
-            ]
+            'mud_make_labor' => $total_labor_cost,
+            'data' => $material_total,
+            'total_cost' => round($total_cost,2),
         ]);
     }
 
