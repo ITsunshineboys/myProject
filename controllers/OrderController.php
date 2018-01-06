@@ -2015,7 +2015,7 @@ class OrderController extends Controller
             ->where(['uid'=>$user])
             ->one();
         if (!$lhzz){
-            $code = 1052;
+            $code = 403;
             return Json::encode([
                 'code' => 1052,
                 'msg' => \Yii::$app->params['errorCodes'][$code]
@@ -2243,8 +2243,6 @@ class OrderController extends Controller
                 ]);
             }
         }
-
-
         $supplier=Supplier::find()
             ->where(['uid'=>$user->id])
             ->one();
@@ -2261,7 +2259,6 @@ class OrderController extends Controller
             ]);
         }
         if(!$order){
-
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -3740,34 +3737,6 @@ class OrderController extends Controller
                                echo 'fail';
                                exit;
                             }
-                             $date=date('Ymd',time());
-                            $GoodsStat=GoodsStat::find()
-                                ->where(['supplier_id'=>$GoodsOrder->supplier_id])
-                                ->andWhere(['create_date'=>$date])
-                                ->one();
-                            if (!$GoodsStat)
-                            {
-                                $GoodsStat=new GoodsStat();
-                                $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
-                                $GoodsStat->sold_number=$Goods['goods_number'];
-                                $GoodsStat->amount_sold=$GoodsOrder->amount_order;
-                                $GoodsStat->create_date=$date;
-                                if ($GoodsStat->save(false))
-                                {
-                                    $code=500;
-                                    $tran->rollBack();
-                                    return $code;
-                                }
-                            }else{
-                                $GoodsStat->sold_number+=$Goods['goods_number'];
-                                $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
-                                if ($GoodsStat->save(false))
-                                {
-                                    $code=500;
-                                    $tran->rollBack();
-                                    return $code;
-                                }
-                            }
                         }
                         if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
                         {
@@ -3776,15 +3745,15 @@ class OrderController extends Controller
                         }
 //                            $role_id=$GoodsOrder->role_id;
 //                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
-                            $GoodsOrder->pay_status=1;
-                            $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
-                            $res=$GoodsOrder->save(false);
-                            if (!$res)
-                            {
-                                $tran->rollBack();
-                                echo 'fail';
-                                die;
-                            }
+                        $GoodsOrder->pay_status=1;
+                        $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
+                        $res=$GoodsOrder->save(false);
+                        if (!$res)
+                        {
+                            $tran->rollBack();
+                            echo 'fail';
+                            die;
+                        }
                         $access=new UserAccessdetail();
                         $access->uid=$user->id;
                         $access->role_id=$role_id;
@@ -5037,34 +5006,6 @@ class OrderController extends Controller
                         if ($Goods['order_status']!=0)
                         {
                            return false;
-                        }
-                        $date=date('Ymd',time());
-                        $GoodsStat=GoodsStat::find()
-                            ->where(['supplier_id'=>$GoodsOrder->supplier_id])
-                            ->andWhere(['create_date'=>$date])
-                            ->one();
-                        if (!$GoodsStat)
-                        {
-                            $GoodsStat=new GoodsStat();
-                            $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
-                            $GoodsStat->sold_number=$Goods['goods_number'];
-                            $GoodsStat->amount_sold=$GoodsOrder->amount_order;
-                            $GoodsStat->create_date=$date;
-                            if ($GoodsStat->save(false))
-                            {
-                                $code=500;
-                                $tran->rollBack();
-                                return false;
-                            }
-                        }else{
-                            $GoodsStat->sold_number+=$Goods['goods_number'];
-                            $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
-                            if ($GoodsStat->save(false))
-                            {
-                                $code=500;
-                                $tran->rollBack();
-                                return false;
-                            }
                         }
                     }
                     if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)

@@ -217,11 +217,20 @@ class GoodsOrder extends ActiveRecord
             $goods_order->district_code = $address->district;
             $goods_order->region = $address->region;
             $goods_order->consignee_mobile = $address->mobile;
-            $goods_order->invoice_type = $invoice->invoice_type;
-            $goods_order->invoice_header_type = $invoice->invoice_header_type;
-            $goods_order->invoicer_card = $invoice->invoicer_card;
-            $goods_order->invoice_header = $invoice->invoice_header;
-            $goods_order->invoice_content = $invoice->invoice_content;
+            $goods_order->invoice_type = $invoice['invoice_type'];
+            $goods_order->invoice_header_type = $invoice['invoice_header_type'];
+            if(!empty($invoice['invoicer_card']))
+            {
+                $goods_order->invoicer_card=$invoice['invoicer_card'];
+            }
+            if (!empty($invoice['invoice_header']))
+            {
+                $goods_order->invoice_header=$invoice['invoice_header'];
+            }
+            if (!empty($invoice['invoice_content']))
+            {
+                $goods_order->invoice_content=$invoice['invoice_content'];
+            }
             $res1 = $goods_order->save(false);
             if (!$res1) {
                 $tran->rollBack();
@@ -265,7 +274,7 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice);
+            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray());
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -414,7 +423,7 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice);
+            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray());
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -1437,6 +1446,8 @@ class GoodsOrder extends ActiveRecord
                         ->createCommand()
                         ->update(OrderGoods::tableName(), ['order_status' => 2],'order_no='.$data[$k]['order_no'].' and sku='.$data[$k]['sku'])
                         ->execute();
+                    //减少销量，减少销售额，增加库存.减少商品销量
+                    OrderRefund::ReduceSold($data[$k]['supplier_id'],$data[$k]['goods_number'],$data[$k]['goods_price'],$data[$k]['freight'],$data[$k]['sku']);
                     $data[$k]['status']=self::ORDER_TYPE_DESC_CANCEL;
                 }else{
                     $data[$k]['pay_term']=$pay_term-$time;
@@ -1791,8 +1802,6 @@ class GoodsOrder extends ActiveRecord
     public static function AgreeRefundHandle($order_no,$sku)
     {
         $time=time();
-//        $role_number=$supplier->shop_no;
-//        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
         $tran = Yii::$app->db->beginTransaction();
         try{
             $OrderGoods=OrderGoods::find()
@@ -1810,12 +1819,10 @@ class GoodsOrder extends ActiveRecord
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
             }else{
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
-
             }
             $order_refund=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
                 ->all();
-
             if (!$order_refund)
             {
                 $code=1000;
@@ -2014,9 +2021,7 @@ class GoodsOrder extends ActiveRecord
         };
         $tran = Yii::$app->db->beginTransaction();
         try{
-
             $role=Role::GetRoleByRoleId($user->last_role_id_app,$user);
-
             switch ($user->last_role_id_app)
             {
                 case 2:
@@ -2038,7 +2043,6 @@ class GoodsOrder extends ActiveRecord
                     $role_number=$role->aite_cube_no;
                     break;
             }
-
             $transaction_no=GoodsOrder::SetTransactionNo($role_number);
             foreach ($orders as $k =>$v){
                 $GoodsOrder=self::find()
@@ -2068,35 +2072,6 @@ class GoodsOrder extends ActiveRecord
                     {
                         $code=1000;
                         return $code;
-                    }
-                    $date=date('Ymd',time());
-                    $GoodsStat=GoodsStat::find()
-                        ->where(['supplier_id'=>$GoodsOrder->supplier_id])
-                        ->andWhere(['create_date'=>$date])
-                        ->one();
-                    if (!$GoodsStat)
-                    {
-                        $GoodsStat=new GoodsStat();
-                        $GoodsStat->supplier_id=$GoodsOrder->supplier_id;
-                        $GoodsStat->sold_number=(int)$Goods['goods_number'];
-                        $GoodsStat->amount_sold=$GoodsOrder->amount_order;
-                        $GoodsStat->create_date=$date;
-                        if (!$GoodsStat->save(false))
-                        {
-                            $code=500;
-                            $tran->rollBack();
-                            return $code;
-                        }
-                    }else{
-                        $GoodsStat->sold_number+=(int)$Goods['goods_number'];
-                        $GoodsStat->amount_sold+=$GoodsOrder->amount_order;
-                        $GoodsStat->create_date=$date;
-                        if (!$GoodsStat->save(false))
-                        {
-                            $code=500;
-                            $tran->rollBack();
-                            return $code;
-                        }
                     }
                 }
                 if ( !$GoodsOrder|| $GoodsOrder ->pay_status!=0)
@@ -3192,222 +3167,102 @@ class GoodsOrder extends ActiveRecord
                             return $code;
                         }
                     }
-                    $Goods=Goods::find()
-                        ->where(['id'=>$goods['goods_id']])
-                        ->asArray()
-                        ->one();
-                    $OrderGoods=new OrderGoods();
-                    $OrderGoods->order_no=$order_no;
-                    $OrderGoods->goods_number=$goods['goods_num'];
-                    $OrderGoods->goods_name=$Goods['title'];
-                    $OrderGoods->goods_price=$Goods["{$role_money}"];
-                    $OrderGoods->sku=$Goods['sku'];
-                    $OrderGoods->market_price=$Goods['market_price'];
-                    $OrderGoods->supplier_price=$Goods['supplier_price'];
-                    $OrderGoods->order_status=0;
-                    $OrderGoods->shipping_status=0;
-                    $OrderGoods->customer_service=0;
-                    $OrderGoods->is_unusual=0;
-                    $OrderGoods->freight=$freight;
-                    $OrderGoods->cover_image=$Goods['cover_image'];
-                    $OrderGoods->create_time=time();
-                    $OrderGoods->category_id=$Goods['category_id'];
-                    $OrderGoods->after_sale_services=$Goods['after_sale_services'];
-                    $OrderGoods->platform_price=$Goods['platform_price'];
-                    $OrderGoods->purchase_price_decoration_company=$Goods['purchase_price_decoration_company'];
-                    $OrderGoods->purchase_price_manager=$Goods['purchase_price_manager'];
-                    $OrderGoods->purchase_price_designer=$Goods['purchase_price_designer'];
-                    $OrderGoods->subtitle=$Goods['subtitle'];
-                    if (!$OrderGoods->save(false))
+                    $time=time();
+                    $Goods=Goods::findOne($goods['goods_id']);
+
+                    $Goods->left_number-=(int)$goods['goods_num'];
+                    $Goods->sold_number+=(int)$goods['goods_num'];
+                    if (!$Goods->save(false))
                     {
                         $tran->rollBack();
                         $code=500;
                         return $code;
                     }
-
-                    $style=Style::findOne($Goods['style_id']);
-                    if ($style)
-                    {
-                        $orderStyle=new OrderStyle();
-                        $orderStyle->order_no=$order_no;
-                        $orderStyle->sku=$Goods['sku'];
-                        $orderStyle->style=$style->style;
-                        $orderStyle->intro=$style->intro;
-                        $orderStyle->theme=$style->theme;
-                        $orderStyle->images=$style->images;
-                        if (!$orderStyle->save(false))
-                        {
-                            $code=1000;
-                            $tran->rollBack();
-                            return $code;
-                        }
-                    }
-                    $serires=Series::findOne($Goods['series_id']);
-                    if ($serires)
-                    {
-                        $orderSeries=new OrderSeries();
-                        $orderSeries->order_no=$order_no;
-                        $orderSeries->sku=$Goods['sku'];
-                        $orderSeries->series=$serires->series;
-                        $orderSeries->intro=$serires->intro;
-                        if (!$orderSeries->save(false))
-                        {
-                            $code=1000;
-                            $tran->rollBack();
-                            return $code;
-                        }
-                    }
-                    $goods_image=GoodsImage::find()
-                        ->where(['goods_id'=>$goods['goods_id']])
-                        ->all();
-                    if ($goods_image)
-                    {
-                        foreach ( $goods_image as &$image)
-                        {
-                            $orderGoodsImage=new OrderGoodsImage();
-                            $orderGoodsImage->order_no=$order_no;
-                            $orderGoodsImage->sku=$Goods['sku'];
-                            $orderGoodsImage->goods_id=$goods['goods_id'];
-                            $orderGoodsImage->image=$image->image;
-                            if (!$orderGoodsImage->save(false))
-                            {
-                                $code=1000;
-                                $tran->rollBack();
-                                return $code;
-                            }
-                        }
-                    }
-                    $GoodsBrand=GoodsBrand::findOne($Goods['brand_id']);
-                    if ($GoodsBrand)
-                    {
-                        $orderGoodsBrand=new OrderGoodsBrand();
-                        $orderGoodsBrand->order_no=$order_no;
-                        $orderGoodsBrand->sku=$Goods['sku'];
-                        $orderGoodsBrand->name=$GoodsBrand->name;
-                        $orderGoodsBrand->logo=$GoodsBrand->logo;
-                        $orderGoodsBrand->certificate=$GoodsBrand->certificate;
-                        if (!$orderGoodsBrand->save(false))
-                        {
-                            $code=1000;
-                            $tran->rollBack();
-                            return $code;
-                        }
-                    }
-                    $goodsAttr=GoodsAttr::find()
-                        ->where(['goods_id'=>$goods['goods_id']])
-                        ->all();
-                    if ($goodsAttr)
-                    {
-                        foreach ($goodsAttr as &$attr)
-                        {
-                            $orderGoodsAttr=new OrderGoodsAttr();
-                            $orderGoodsAttr->order_no=$order_no;
-                            $orderGoodsAttr->sku=$Goods['sku'];
-                            $orderGoodsAttr->name=$attr->name;
-                            $orderGoodsAttr->value=$attr->value;
-                            $orderGoodsAttr->unit=$attr->unit;
-                            $orderGoodsAttr->addition_type=$attr->addition_type;
-                            $orderGoodsAttr->goods_id=$attr->goods_id;
-                            if (!$orderGoodsAttr->save(false))
-                            {
-                                $code=1000;
-                                $tran->rollBack();
-                                return $code;
-                            }
-                        }
-                    }
-                    $LogisticTemp= LogisticsTemplate::find()
-                        ->where(['id'=>$Goods['logistics_template_id']])
-                        ->asArray()
+                    $date=date('Ymd',time());
+                    $GoodsStat=GoodsStat::find()
+                        ->where(['supplier_id'=>$Goods->supplier_id])
+                        ->andWhere(['create_date'=>$date])
                         ->one();
-                    if ($LogisticTemp)
+                    if (!$GoodsStat)
                     {
-                        $orderLogisticTemp=new  OrderLogisticsTemplate();
-                        $orderLogisticTemp->order_no=$order_no;
-                        $orderLogisticTemp->sku=$Goods['sku'];
-                        $orderLogisticTemp->name=$LogisticTemp['name'];
-                        $orderLogisticTemp->delivery_method=$LogisticTemp['delivery_method'];
-                        $orderLogisticTemp->delivery_cost_default=$LogisticTemp['delivery_cost_default'];
-                        $orderLogisticTemp->delivery_number_default=$LogisticTemp['delivery_number_default'];
-                        $orderLogisticTemp->delivery_cost_delta=$LogisticTemp['delivery_cost_delta'];
-                        $orderLogisticTemp->delivery_number_delta=$LogisticTemp['delivery_number_delta'];
-                        if (!$orderLogisticTemp->save(false))
+                        $GoodsStat=new GoodsStat();
+                        $GoodsStat->supplier_id=$Goods->supplier_id;
+                        $GoodsStat->sold_number=(int)$goods['goods_num'];
+                        $GoodsStat->amount_sold=($Goods["{$role_money}"]*$goods['goods_num']+$freight);
+                        $GoodsStat->create_date=$date;
+                        if (!$GoodsStat->save(false))
                         {
-                            $code=1000;
                             $tran->rollBack();
+                            $code=500;
                             return $code;
                         }
-                        $code=LogisticsDistrict::isApply($address->district,$Goods['logistics_template_id']);
-                        if ($code!=200)
+                    }else
+                    {
+                        $GoodsStat->sold_number+=(int)$goods['goods_num'];
+                        $GoodsStat->amount_sold+=($Goods["{$role_money}"]*$goods['goods_num']+$freight);
+                        if (!$GoodsStat->save(false))
                         {
-                            $code=1083;
                             $tran->rollBack();
+                            $code=500;
                             return $code;
                         }
-                        $LogisticDis=LogisticsDistrict::find()
-                            ->where(['template_id'=>$Goods['logistics_template_id']])
-                            ->all();
-                        if ($LogisticDis)
-                        {
-                            foreach ($LogisticDis as  &$dis)
-                            {
-                                $OrderLogisticDis=new OrderLogisticsDistrict();
-                                $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
-                                $OrderLogisticDis->district_code=$dis->district_code;
-                                $OrderLogisticDis->district_name=$dis->district_name;
-                                if (!$OrderLogisticDis->save(false))
-                                {
-                                    $code=1000;
-                                    $tran->rollBack();
-                                    return $code;
-                                }
-                            }
-                        }
+                    }
+                    $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $code=OrderStyle::AddNewData($Goods->style_id,$order_no,$Goods->sku);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $code=OrderSeries::AddNewData($Goods->series_id,$order_no,$Goods->sku);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $code=OrderGoodsImage::AddNewData($goods['goods_id'],$order_no,$Goods->sku);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $code=OrderGoodsBrand::AddNewData($Goods->brand_id,$order_no,$Goods->sku);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $code=OrderGoodsAttr::AddNewData($goods['goods_id'],$order_no,$Goods->sku);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
+                    $code=OrderLogisticsTemplate::AddNewData($Goods->logistics_template_id,$order_no,$Goods->sku);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
                     }
                     $money+=($Goods["{$role_money}"]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
-                $GoodsOrder=new GoodsOrder();
-                $GoodsOrder->order_no=$order_no;
-                $GoodsOrder->amount_order=$supplier['freight']*100+$money;
-                $GoodsOrder->supplier_id=$supplier['supplier_id'];
-                $GoodsOrder->pay_status=0;
-                $GoodsOrder->user_id=$user->id;
-                $GoodsOrder->pay_name=$pay_name;
-                $GoodsOrder->create_time=$time;
-                $GoodsOrder->order_refer=GoodsOrder::REFUND_HANDLE_STATUS_DISAGREE;
-                $GoodsOrder->return_insurance=0;
-                $GoodsOrder->role_id=$user->last_role_id_app;
-                $GoodsOrder->buyer_message=$supplier['buyer_message'];
-                $GoodsOrder->consignee=$address->consignee;
-                $GoodsOrder->district_code=$address->district;
-                $GoodsOrder->region=$address->region;
-                $GoodsOrder->consignee_mobile=$address->mobile;
-//                $invoice=Invoice::findOne($supplier['invoice_id']);
-//                $GoodsOrder->invoice_type=$invoice->invoice_type;
-//                $GoodsOrder->invoice_header_type=$invoice->invoice_header_type;
-//                $GoodsOrder->invoice_header=$invoice->invoice_header;
-//                $GoodsOrder->invoicer_card=$invoice->invoicer_card;
-//                $GoodsOrder->invoice_content=$invoice->invoice_content;
-                $GoodsOrder->invoice_type=$supplier['invoice_type'];
-                $GoodsOrder->invoice_header_type=$supplier['invoice_header_type'];
-                if(!empty($supplier['invoicer_card']))
+                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier);
+                if ($code!=200)
                 {
-                    $GoodsOrder->invoicer_card=$supplier['invoicer_card'];
-                }
-                if (!empty($supplier['invoice_header']))
-                {
-                    $GoodsOrder->invoice_header=$supplier['invoice_header'];
-                }
-                if (!empty($supplier['invoice_content']))
-                {
-                    $GoodsOrder->invoice_content=$supplier['invoice_content'];
-                }
-                if (!$GoodsOrder->save(false))
-                {
-
                     $tran->rollBack();
-
                     $code=500;
                     return $code;
                 }

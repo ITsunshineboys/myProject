@@ -294,6 +294,67 @@ class OrderRefund extends ActiveRecord
         return  $object;
     }
 
+    /**
+     * 减少销量，减少销售额，增加库存.减少商品销量
+     * @param $supplier_id
+     * @param $goods_num
+     * @param $goods_price
+     * @param $freight
+     * @param $sku
+     * @return int
+     */
+    public  static  function  ReduceSold($supplier_id,$goods_num,$goods_price,$freight,$sku)
+    {
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            //减少销量，减少销售额，增加库存.减少商品销量
+            $date=date('Ymd',time());
+            $GoodsStat=GoodsStat::find()
+                ->where(['supplier_id'=>$supplier_id])
+                ->andWhere(['create_date'=>$date])
+                ->one();
+            if (!$GoodsStat)
+            {
+                $GoodsStat=new GoodsStat();
+                $GoodsStat->supplier_id=$supplier_id;
+                $GoodsStat->sold_number=$goods_num;
+                $GoodsStat->amount_sold=(($goods_price*$goods_num)+$freight);
+                $GoodsStat->create_date=$date;
+                if (!$GoodsStat->save(false))
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+            }else{
+                $GoodsStat->sold_number-=$goods_num;
+                $GoodsStat->amount_sold-=(($goods_price*$goods_num)+$freight);
+                if (!$GoodsStat->save(false))
+                {
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+            }
+            $Goods=Goods::find()->where(['sku'=>$sku])->one();
+            $Goods->left_number+=$goods_num;
+            $Goods->sold_number-=$goods_num;
+            if (!$Goods->save(false))
+            {
+                $code=500;
+                $trans->rollBack();
+                return $code;
+            }
+            $trans->commit();
+            $code=200;
+            return $code;
+        } catch (\Exception $e) {
+            $code=500;
+            $trans->rollBack();
+            return $code;
+        }
+    }
+
 
 
 
