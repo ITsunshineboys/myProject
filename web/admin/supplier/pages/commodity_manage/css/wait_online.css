@@ -14,6 +14,10 @@ ul{
 .red_txt{
     color: #E51C23;
 }
+.small_txt{
+    font-size: 12px;
+    color: #ABABAB;
+}
 .remove_txt{
     padding-left: 15px;
     color: #E51C23;

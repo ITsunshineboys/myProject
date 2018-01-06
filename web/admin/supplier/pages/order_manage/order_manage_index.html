@@ -313,12 +313,6 @@
     </div>
     <!--售后-->
     <div ng-if="market_flag">
-        <div>
-            <span>总销量:</span>
-            <span></span>
-            <span>总金额</span>
-            <span></span>
-        </div>
         <div class="search form-inline clearfix">
             <div class="form-group pull-left">
                 <select  name="province" ng-model="wjparams.time_type" ng-change="wait_send_type(wjparams.time_type)" class="form-control" ng-options="item.value as item.name for item in time"></select>

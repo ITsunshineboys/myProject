@@ -474,6 +474,7 @@ select.form-control:focus {
     width: 138px;
     height: 138px;
     margin-right: 10px;
+    cursor: pointer;
 }
 .modal-img {
     display: flex;

@@ -19,9 +19,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     $scope.upload_dis = false;
     $scope.goods_all_attrs = [];//所有属性数据
     $scope.logistics = [];//物流模块列表
-    $scope.brand_null_flag = false;
     $scope.series_null_flag = false;
-		$scope.series_add_flag = false;
     $scope.style_null_flag = false;
     $scope.series_null_arr = [];
     $scope.style_null_arr = [];
@@ -148,11 +146,30 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 			}
 			// 风格默认勾选
 			for (let [key,value] of $scope.styles_arr.entries()) {
-				console.log(value);
 				let style_index = $scope.style_ids.findIndex(function (value1) {
 					return value.id == value1
 				})
 				style_index ===-1 ? value.status = false : value.status = true
+			}
+			// 风格关闭 提示
+			$scope.style_all_ids = []
+			for (let [key,value] of $scope.styles_arr.entries()) {
+				$scope.style_all_ids.push(value.id)
+			}
+			for(let [key,value] of $scope.style_ids.entries()){
+				for(let [key1,value1] of $scope.style_all_ids.entries()){
+					console.log(value.indexOf(value1))
+				}
+			}
+			let style_value = [...new Set($scope.style_all_ids.concat($scope.style_ids))]
+			if (style_value.length === $scope.style_all_ids.length ) {
+				$scope.style_null_flag=false
+			}else if (style_value.length > $scope.style_all_ids.length && style_value.length < $scope.style_all_ids.length + $scope.style_ids.length ){
+				$scope.style_null_flag=true
+				$scope.style_hint_words= '*该商品部分风格已下架'
+			}else if (style_value.length === $scope.style_all_ids.length + $scope.style_ids.length){
+				$scope.style_null_flag=true
+				$scope.style_hint_words= '*该商品原风格已下架'
 			}
 		});
 	})
