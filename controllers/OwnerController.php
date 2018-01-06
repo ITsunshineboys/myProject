@@ -1149,11 +1149,21 @@ class OwnerController extends Controller
     public function actionHandyman()
     {
         $get = \Yii::$app->request->get();
-        $get['12_dismantle'] = !isset($get['12_dismantle'])?:0;
-        $get['24_dismantle'] =!isset($get['24_dismantle'])?:0;
-        $get['repair'] =!isset($get['repair'])?:0;
-        $get['12_new_construction'] =!isset($get['12_new_construction'])?:0;
-        $get['24_new_construction'] =!isset($get['24_new_construction'])?:0;
+        if (!isset($get['12_dismantle']) || empty($get['12_dismantle'])){
+            $get['12_dismantle'] = 0;
+        }
+        if (!isset($get['24_dismantle'])|| empty($get['24_dismantle'])){
+            $get['24_dismantle'] = 0;
+        }
+        if (!isset($get['repair'])|| empty($get['repair'])){
+            $get['repair'] = 0;
+        }
+        if (!isset($get['12_new_construction'])|| empty($get['12_new_construction'])){
+            $get['12_new_construction'] = 0;
+        }
+        if (!isset($get['24_new_construction'])|| empty($get['24_new_construction'])){
+            $get['24_new_construction'] = 0;
+        }
 
 
         $labor_costs = LaborCost::profession($get['city'],self::WORK_CATEGORY['backman']);
@@ -1276,6 +1286,7 @@ class OwnerController extends Controller
         $material_total[] = BasisDecorationService::handyman(1,$get,$concrete_repair,$concrete_12,$concrete_24,$cement_attr);
         $material_total[] = BasisDecorationService::handyman(1,$get,$river_sand_repair,$river_sand_12,$river_sand_24,$river_sand_attr);
         $material_total[] = BasisDecorationService::handyman(2,$get,'','','',$air_brick_attr);
+        var_dump($material_total);die;
 
 
         //总费用
