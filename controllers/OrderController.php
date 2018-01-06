@@ -2414,6 +2414,76 @@ class OrderController extends Controller
     }
 
     /**
+     * app端  用户获取订单列表
+     * @return string
+     */
+    public function  actionFindOrderOne(){
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $request = Yii::$app->request;
+        $type=$request->get('type','all');
+        $page=$request->get('page','1');
+        $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
+        $role=$request->get('role','user');
+        switch ($role){
+            case 'user':
+                if ($type==GoodsOrder::ORDER_TYPE_ALL)
+                {
+                    $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app}";
+                }else
+                {
+                    $where=GoodsOrder::GetTypeWhere($type);
+                    $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app}  and order_refer = 2";
+                }
+                break;
+            case 'supplier':
+                $supplier=Supplier::find()
+                    ->where(['uid'=>$user->id])
+                    ->one();
+                if(!$supplier)
+                {
+                    $code=1010;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                if ($type==GoodsOrder::ORDER_TYPE_ALL){
+                    $where ="a.supplier_id={$supplier->id}";
+                }else{
+                    $where=GoodsOrder::GetTypeWhere($type);
+                    $where .=" and a.supplier_id={$supplier->id}  and a.order_refer = 2";
+                }
+                break;
+        }
+        if ($type=='all')
+        {
+            $where.=' and z.customer_service=0';
+        }
+        $paginationData = GoodsOrder::paginationByUserOrderListOne($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
+        if (is_numeric($paginationData))
+        {
+            $code=$paginationData;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=200;
+        return Json::encode([
+            'code'=>$code,
+            'msg'=>'ok',
+            'data'=>$paginationData
+        ]);
+    }
+
+    /**
     * 余额支付
     * @return string
     */

@@ -2321,6 +2321,181 @@ class GoodsOrder extends ActiveRecord
             ];
         }
     }
+
+    /**
+     * 分页数据
+     * @param array $where
+     * @param array $select
+     * @param int $page
+     * @param int $size
+     * @param $type
+     * @param $user
+     * @param $role
+     * @return array
+     */
+    public  static  function paginationByUserOrderListOne($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
+    {
+        $OrderList = (new Query())
+            ->from(self::tableName().' AS a')
+            ->leftJoin(OrderGoods::tableName().' AS z1','z.order_no = a.order_no')
+            ->select($select)
+            ->where($where)
+            ->all();
+        $arr=self::GetOrderStatus($OrderList);
+        $arr=self::findOrderData($arr,$user,$role);
+        if ($type=='all' || $type=='unpaid')
+        {
+            switch ($role){
+                case 'supplier':
+                    $where='pay_status=0  and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
+                    break;
+                case 'user':
+                    $where='pay_status=0  and user_id='.$user->id;
+                    break;
+            }
+            $GoodsOrder=self::find()
+                ->select('user_id,role_id,order_no,create_time,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
+                ->where($where)
+                ->asArray()
+                ->all();
+            foreach ($GoodsOrder AS $k =>$v){
+                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
+                $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
+                $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
+                $GoodsOrder[$k]['user_name']=$user->nickname;
+                $GoodsOrder[$k]['status']=self::PAY_STATUS_DESC_UNPAID;
+                $GoodsOrder[$k]['comment_grade']='';
+                $GoodsOrder[$k]['handle']='';
+                $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
+                if(!$sup)
+                {
+                    $code=500;
+                    return $code;
+                }
+                $GoodsOrder[$k]['shop_name']=$sup->shop_name;
+                if ($role=='user')
+                {
+                    $GoodsOrder[$k]['uid']=$sup->uid;
+                    $GoodsOrder[$k]['to_role_id']=6;
+                }else{
+                    $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
+                    $GoodsOrder[$k]['to_role_id']=$GoodsOrder[$k]['role_id'];
+                }
+
+                $GoodsOrder[$k]['list']=OrderGoods::find()
+                    ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
+                    ->andWhere(['order_status' =>0])
+                    ->select('goods_name
+                    ,goods_price
+                    ,goods_number
+                    ,market_price
+                    ,supplier_price
+                    ,sku
+                    ,freight
+                    ,cover_image
+                    ,order_status
+                    ,shipping_type
+                    ,after_sale_services')
+                    ->asArray()
+                    ->all();
+                if($GoodsOrder[$k]['list']==[])
+                {
+                    unset($GoodsOrder[$k]);
+                }else
+                {
+                    $GoodsOrder[$k]['all_freight']=0;
+                    $GoodsOrder[$k]['all_goods_num']=0;
+                    foreach ($GoodsOrder[$k]['list'] as $key =>$val){
+                        $GoodsOrder[$k]['all_freight']+=$GoodsOrder[$k]['list'][$key]['freight'];
+                        $GoodsOrder[$k]['list'][$key]['freight']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['freight']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['goods_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['market_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['supplier_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
+                        $GoodsOrder[$k]['list'][$key]['unusual']=OrderRefund::UNUSUAL_DESC;
+                        $GoodsOrder[$k]['after_sale_services']= $GoodsOrder[$k]['list'][$key]['after_sale_services'];
+                        unset($GoodsOrder[$k]['list'][$key]['after_sale_services']);
+                        unset($GoodsOrder[$k]['list'][$key]['order_status']);
+                        $GoodsOrder[$k]['all_goods_num']+=$GoodsOrder[$k]['list'][$key]['goods_number'];
+                    }
+                    $GoodsOrder[$k]['all_freight']= StringService::formatPrice($GoodsOrder[$k]['all_freight']*0.01);
+                    unset($GoodsOrder[$k]['pay_status']);
+                    unset($GoodsOrder[$k]['supplier_id']);
+                    $arr[]=$GoodsOrder[$k];
+                }
+            }
+        }
+        foreach ($arr as $key => $row)
+        {
+            $arr[$key]['type']=$type;
+            $arr[$key]['role']=$role;
+            if ($user->last_role_id_app==0)
+            {
+                $user->last_role_id_app=7;
+                $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
+            }else{
+                if ($user->last_role_id_app==7)
+                {
+                    $user->last_role_id_app=7;
+                    $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
+                }else{
+                    $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
+                }
+            }
+            $arr=self::switchStatus($arr,$role);
+            //2：上门维修, 3：上门退货, 4:上门换货, 5：退货, 6:换货
+            if ($role =='supplier')
+            {
+                $arr[$key]['is_support_after_sale']=0;
+            }else
+            {
+                $ar=explode(',',$arr[$key]['after_sale_services']);
+                if($arr[$key]['after_sale_services']=='0')
+                {
+                    $arr[$key]['is_support_after_sale']=0;
+                }else{
+                    if (in_array(2,$ar)
+                        || in_array(3,$ar)
+                        || in_array(4,$ar)
+                        || in_array(5,$ar)
+                        || in_array(6,$ar)
+                    )
+                    {
+                        $arr[$key]['is_support_after_sale']=1;
+                    }else{
+                        $arr[$key]['is_support_after_sale']=0;
+                    }
+                }
+                if (
+                    $arr[$key]['status']!=self::ORDER_TYPE_COMPLETED
+                    && $arr[$key]['status']!=self::ORDER_TYPE_UNCOMMENT)
+                {
+                    $arr[$key]['is_support_after_sale']=0;
+                }
+            }
+
+            unset( $arr[$key]['after_sale_services']);
+            $create_time[$key]  = $arr[$key]['create_time'];
+        }
+        if ($arr)
+        {
+            array_multisort($create_time, SORT_DESC, $arr);
+            $count=count($arr);
+            $total_page=ceil($count/$size);
+            $data=array_slice($arr, ($page-1)*$size,$size);
+            return
+                [
+                    'total_page' =>$total_page,
+                    'count'=>$count,
+                    'details' => $data
+                ];
+        }else{
+            return [
+                'total_page' =>0,
+                'count'=>0,
+                'details' => []
+            ];
+        }
+    }
     /**
      * @param $arr
      * @return mixed

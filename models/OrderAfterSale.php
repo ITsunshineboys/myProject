@@ -1500,6 +1500,16 @@ class OrderAfterSale extends ActiveRecord
                 'code'=>'',
                 'status'=>''
             ];
+
+        if ($action==self::AFTER_SALE_HANDLE_DISAGREE)
+        {
+            $code=self::CheckIsCloseOrder($OrderAfterSale,$data,self::AFTER_SALE_SUPPLIER_UN_SHIPPED);
+            if (!is_numeric($code))
+            {
+                $data[]=$code;
+                return $data;
+            }
+        }
             if(!$OrderAfterSale->supplier_express_id){
                 switch ($role)
                 {
