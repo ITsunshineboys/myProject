@@ -369,6 +369,7 @@ class SupplierController extends Controller
                     'shop_no' => $supplier->shop_no,
                     'icon' => $supplier->icon,
                     'id' => $supplier->id,
+                    'balance' => StringService::formatPrice($supplier->balance),
                 ]
             ],
         ]);
