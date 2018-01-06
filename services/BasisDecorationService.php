@@ -377,19 +377,19 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $electricity['quantity'] = self::algorithm(4,$points,$craft,$goods[1]['value']);
+                $electricity['quantity'] = ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
                 $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
                 $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
-                $electricity['quantity'] = $points;
+                $electricity['quantity'] = ceil($points);
                 $electricity['cost'] = round(self::algorithm(1,$points,$goods[0]['platform_price']),2);
                 $electricity['procurement'] = round(self::algorithm(1,$points,$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 3:
                 $quantity = self::algorithm(4,$points1,$craft,$goods[1]['value']);
                 $quantity1 = self::algorithm(4,$points,$craft1,$goods[1]['value']);
-                $electricity['quantity'] = self::algorithm(3,$quantity,$quantity1);
+                $electricity['quantity'] = ceil(self::algorithm(3,$quantity,$quantity1));
                 $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
                 $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;

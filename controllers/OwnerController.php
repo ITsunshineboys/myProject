@@ -377,7 +377,7 @@ class OwnerController extends Controller
         $goods_price[] = BasisDecorationService::plumberFormula(1,$strong_overall_points,$wire_attr,$wire);
         $goods_price[] = BasisDecorationService::plumberFormula(3,$strong_overall_points,$spool_attr,$spool,$spool1,$weak_overall_points);
         $goods_price[] = BasisDecorationService::plumberFormula(2,$total_points,$bottom_case_attr);
-        $total_cost = $goods_price[0]['cost']+$goods_price[1]['cost']+$goods_price[2]['cost']+$goods_price[3]['cost'];
+        $total_cost = round($goods_price[0]['cost']+$goods_price[1]['cost']+$goods_price[2]['cost']+$goods_price[3]['cost'],2);
 
         return Json::encode([
            'code' => 200,
