@@ -703,8 +703,8 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $data=Supplier::find()->where(['id'=>1])->column('id');
-        var_dump($data);
+      $data=OrderGoods::FindByOrderNoAndSku('0105130936','123386');
+      var_dump($data);
     }
     public  static  function  actionTest1()
     {
