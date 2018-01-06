@@ -833,10 +833,10 @@ class BasisDecorationService
 
     /**
      * 泥作费用
-     * @param int $area
-     * @param array $goods
-     * @param int $craft
-     * @param string $project
+     * @param $int
+     * @param $area
+     * @param $craft
+     * @param $goods
      * @return mixed
      */
     public static function mudMakeCost($int,$area,$craft,$goods)
@@ -880,140 +880,65 @@ class BasisDecorationService
 
     /**
      * 杂工拆除
-     * @param array $get_area
-     * @param $day_area
-     * @return mixed
+     * @param $int
+     * @param $get
+     * @param $day_12
+     * @param $day_24
+     * @return int
      */
-    public static function wallArea($get_area,$day_area,$_area)
+    public static function wallArea($int,$get,$day_12,$day_24=1)
     {
-        foreach ($day_area as $skill) {
-            switch ($skill) {
-                case $skill['worker_kind_details'] == self::BACKMAN_DETAILS['dismantle_12_area']:
-                    $dismantle_12 = $skill;
-                    break;
-                case $skill['worker_kind_details'] == self::BACKMAN_DETAILS['dismantle_24_area']:
-                    $dismantle_24 = $skill;
-                    break;
-                case $skill['worker_kind_details'] == self::BACKMAN_DETAILS['new_12_area']:
-                    $new_construction_12 = $skill;
-                    break;
-                case $skill['worker_kind_details'] == self::BACKMAN_DETAILS['new_24_area']:
-                    $new_construction_24 = $skill;
-                    break;
-                case $skill['worker_kind_details'] == self::BACKMAN_DETAILS['repair_length']:
-                    $repair = $skill;
-                    break;
-            }
+        switch ($int){
+            case $int == 1:
+                $_12 = self::algorithm(6,$get['12_dismantle'],$day_12);
+                $_24 = self::algorithm(6,$get['24_dismantle'],$day_24);
+                $_day = self::algorithm(3,$_12,$_24);
+                break;
+            case $int == 2:
+                $_12 = self::algorithm(6,$get['12_new_construction'],$day_12);
+                $_24 = self::algorithm(6,$get['12_new_construction'],$day_24);
+                $_day = self::algorithm(3,$_12,$_24);
+                break;
+            case $int == 3:
+                $_day = self::algorithm(6,$get['repair'],$day_12);
+                break;
         }
-//        12墙拆除天数=12墙拆除面积÷【每天拆除12墙面积】
-        $day['dismantle_12'] = $get_area['12_dismantle'] / $dismantle_12['quantity'];
-//        24墙拆除天数=24墙拆除面积÷【每天拆除24墙面积】
-        $day['dismantle_24'] = $get_area['24_dismantle'] / $dismantle_24['quantity'];
-//        ①拆除天数=12墙拆除天数+24墙拆除天数
-        $day['dismantle_day'] = $day['dismantle_12'] + $day['dismantle_24'];
 
-//        12墙新建天数=12墙新建面积÷【每天新建12墙面积】
-        $day['new_construction_12'] = $get_area['12_new_construction'] / $new_construction_12['quantity'];
-//        24墙新建天数=24墙新建面积÷【每天新建24墙面积】
-        $day['new_construction_24'] = $get_area['24_new_construction'] / $new_construction_24['quantity'];
-//        ②新建天数=12墙新建天数+24墙新建天数
-        $day['new_construction_day'] =  $day['new_construction_12'] + $day['new_construction_24'];
 
-//        ③补烂天数=补烂长度÷【每天补烂长度】
-        $day['repair_day'] = $get_area['repair'] / $repair['quantity'];
+        return $_day;
 
-//        总天数=拆除天数+新建天数+补烂天数
-        $day['total_day'] = ceil($day['dismantle_day'] + $day['new_construction_day'] + $day['repair_day'] + $_area);
-
-        return $day;
     }
 
     /**
-     * 杂工清运有建渣点
-     * @param array $get_area
-     * @param array $craft
+     * 杂工清运费
+     * @param $int
+     * @param $get
+     * @param $craft
+     * @param $fare
      * @return mixed
      */
-    public static function haveBuildingScrap($get_area,$craft)
+    public static function haveBuildingScrap($int,$get,$craft,$fare=300)
     {
-        $clear_12 = 0;
-        $clear_24 = 0;
-        foreach ($craft as $one_craft) {
-            switch ($one_craft) {
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['clear_12']:
-                    $clear_12 = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['clear_24']:
-                    $clear_24 = $one_craft['material'];
-                    break;
-            }
-        }
-//            运到小区楼下费用=（12墙拆除面积）×【40】
-        $transportation_cost['12_wall'] = $get_area['12_dismantle'] * $clear_12;
-//            运到小区楼下费用=（12墙拆除面积）×【20】
-        $transportation_cost['24_wall'] = $get_area['24_dismantle'] * $clear_24;
-//            清运建渣费用=清运24墙费用+清运12墙费用
-        $transportation_cost['cost'] = $transportation_cost['12_wall'] + $transportation_cost['24_wall'];
-        return $transportation_cost;
-    }
-
-    /**
-     * 杂工清运无建渣点
-     * @param array $get_area
-     * @param array $craft
-     * @return mixed
-     */
-    public static function nothingBuildingScrap($get_area,$craft)
-    {
-
-        $clear_12 = 0;
-        $vehicle_12_area = 0;
-        $clear_24 = 0;
-        $vehicle_24_area = 0;
-        $vehicle_cost = 0;
-
-        foreach ($craft as &$one_craft) {
-
-            switch ($one_craft) {
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['clear_12']:
-                    $clear_12 = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['vehicle_12_area']:
-                    $vehicle_12_area = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['clear_24']:
-                    $clear_24 = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['vehicle_24_area']:
-                    $vehicle_24_area = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['vehicle_cost']:
-                    $vehicle_cost = $one_craft['material'];
-                    break;
-            }
+        switch ($int){
+            case $int == 1:
+                //  有建渣点
+                $value['wall'] = round(self::algorithm(1,$get,$craft),2);
+                $value['cost'] =  $value['wall'];
+                break;
+            case $int == 2:
+                //  无建渣点
+                //        清运12墙费用=运到小区楼下费用+单独外运费用
+                //        单独外运费用=（12墙拆除面积÷【20】）×【300】
+                // 运到楼下费用
+                $cost = round(self::algorithm(6,$get,$craft),2);
+                $value['wall'] = round(self::algorithm(12,$get,$craft,$fare),2);
+                $value['cost'] =  self::algorithm(3,$cost,$value['wall']);
 
         }
 
-//            运到小区楼下费用=（12墙拆除面积）×【40】
-        $transportation_cost['12_wall'] = $get_area['12_dismantle'] * $clear_12;
-//            单独外运费用=（12墙拆除面积÷【20】）×【300】
-        $transportation_cost['12_wall_transportation'] = ceil($get_area['12_dismantle'] / $vehicle_12_area) * $vehicle_cost;
-//            清运12墙费用=运到小区楼下费用+单独外运费用
-        $transportation_cost['12_wall_cost'] = $transportation_cost['12_wall'] + $transportation_cost['12_wall_transportation'];
-
-
-//            运到小区楼下费用=（24墙拆除面积）×【20】
-        $transportation_cost['24_wall'] = $get_area['24_dismantle'] * $clear_24;
-//            单独外运费用=（24墙拆除面积÷【10】）×【300】
-        $transportation_cost['24_wall_transportation'] = ceil($get_area['24_dismantle'] / $vehicle_24_area) * $vehicle_cost;
-//            清运24墙费用=运到小区楼下费用+单独外运费用
-        $transportation_cost['24_wall_cost'] = $transportation_cost['24_wall'] + $transportation_cost['24_wall_transportation'];
-
-
-//            清运建渣费用=清运24墙费用+清运12墙费用
-        $transportation_cost['cost'] = $transportation_cost['12_wall_cost'] +  $transportation_cost['24_wall_cost'];
-        return $transportation_cost;
+        return $value;
     }
+
 
     /**
      * 杂工水泥计算公式
@@ -1979,8 +1904,62 @@ class BasisDecorationService
             case $int == 11:
                 $result = $value + $value1 + $value2 + $value3;
                 break;
+            case $int == 12:
+                $result = ($value / $value1) * $value2;
+                break;
+            case $int == 13:
+                $result = $value * $value1 + $value2;
+                break;
+            case $int == 14:
+                $result = $value / $value1 / $value2;
+                break;
         }
 
         return $result;
+    }
+
+    public static function handyman($int,$get,$value,$value1,$value2,$goods)
+    {
+        switch ($int){
+            case $int == 1:
+                $repair = self::algorithm(1,$get['repair'],$value);
+                $new_12 = self::algorithm(1,$get['12_new_construction'],$value1);
+                $new_24 = self::algorithm(1,$get['24_new_construction'],$value2);
+                $dosage = self::algorithm(5,$repair,$new_12,$new_24);
+                $max['quantity'] = ceil(self::algorithm(6,$dosage,$goods[1]['value']));
+                $max['cost'] = round(self::algorithm(1,$max['quantity'],$goods[0]['platform_price']),2);
+                $max['procurement'] = round(self::algorithm(1,$max['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+            case $int == 2:
+//                  空心砖费用：个数×抓取的商品价格
+//                  个数：（空心砖用量）
+//                  空心砖用量=12墙新建面积÷长÷高+24墙新建面积÷宽÷高
+                foreach ($goods[1] as $one_goods){
+                    if ($one_goods['name'] == '长'){
+                        $length = $one_goods['value'];
+                    }
+                    if ($one_goods['name'] == '宽'){
+                        $width = $one_goods['value'];
+                    }
+                    if ($one_goods['name'] == '高'){
+                        $altitude = $one_goods['value'];
+                    }
+                }
+                $new_12 = self::algorithm(12,$get['12_new_construction'],$length,$altitude);
+                $new_24 = self::algorithm(12,$get['24_new_construction'],$width,$altitude);
+                $dosage = self::algorithm(3,$new_12,$new_24);
+                $max['quantity'] = ceil($dosage);
+                $max['cost'] = round(self::algorithm(1,$max['quantity'],$goods[0]['platform_price']),2);
+                $max['procurement'] = round(self::algorithm(1,$max['quantity'],$goods[0]['purchase_price_decoration_company']),2);
+                break;
+
+        }
+
+        $goods[0]['quantity'] = $max['quantity'];
+        $goods[0]['cost'] = $max['cost'];
+        $goods[0]['procurement'] = $max['procurement'];
+
+        return $goods[0];
+
     }
 }
