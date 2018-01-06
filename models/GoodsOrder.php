@@ -128,7 +128,6 @@ class GoodsOrder extends ActiveRecord
     const SUPPLIER_MONEY='supplier_price';
     const STATUS_DESC_DETAILS=1;
     const SHIP_HANDLE='发货';
-
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -170,7 +169,6 @@ class GoodsOrder extends ActiveRecord
 
         return (int)$query->count();
     }
-
     /**
      * @param $order_no
      * @param array $select
@@ -184,8 +182,6 @@ class GoodsOrder extends ActiveRecord
             ->one();
         return $data;
     }
-
-
     /**
      * 添加表数据
      * @param $order_no
@@ -238,7 +234,6 @@ class GoodsOrder extends ActiveRecord
                 return 500;
         }
     }
-
     /**
      * 支付宝线下商城数据库操作
      * @param $arr
@@ -389,8 +384,6 @@ class GoodsOrder extends ActiveRecord
         new SmValidationService($sms);
         return true;
     }
-
-
     /**
      * 微信线下商城数据库操作
      * @param $arr
@@ -404,9 +397,9 @@ class GoodsOrder extends ActiveRecord
         $address_id=$arr[2];
         $pay_name=$arr[3];
         $invoice_id=$arr[4];
-        $supplier_id=$arr[5];
+        //$supplier_id=$arr[5];
         $freight=$arr[6];
-        $return_insurance=$arr[7];
+        //$return_insurance=$arr[7];
         $order_no=$arr[8];
         $buyer_message=$arr[9];
         $Goods=Goods::findOne($goods_id);
@@ -494,9 +487,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-
-
             //商品图片
             $code=OrderGoodsImage::AddNewData($goods_id,$order_no,$Goods->sku);
             if ($code!=200)
@@ -504,9 +494,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-
-
             //品牌
             $code=OrderGoodsBrand::AddNewData($Goods->brand_id,$order_no,$Goods->sku);
             if ($code!=200)
@@ -514,8 +501,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-
             //商品属性
             $code=OrderGoodsAttr::AddNewData($goods_id,$order_no,$Goods->sku);
             if ($code!=200)
@@ -523,8 +508,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-
             //物流末班
             $code=OrderLogisticsTemplate::AddNewData($Goods->logistics_template_id,$order_no,$Goods->sku);
             if ($code!=200)
@@ -532,8 +515,6 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-
             //详情描述
             $orderGoodsDescription=new OrderGoodsDescription();
             $orderGoodsDescription->order_no=$order_no;
@@ -777,8 +758,6 @@ class GoodsOrder extends ActiveRecord
         }
 
     }
-
-    
     /**
      * @param $goods_id
      * @param $goods_num
