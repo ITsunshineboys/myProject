@@ -256,16 +256,12 @@ class GoodsOrder extends ActiveRecord
         $freight=$arr[6];
         $return_insurance=$arr[7];
         $buyer_message=$arr[8];
-        $goods=(new Query())
-            ->from(Goods::tableName().' as a')
-            ->where(['a.id'=>$goods_id])
-            ->leftJoin(LogisticsTemplate::tableName().' as b','b.id=a.logistics_template_id')
-            ->one();
-        if ( !$goods ||($freight*100+$return_insurance*100+$goods['platform_price']*$goods_num)!=$post['total_amount']*100)
+        $Goods=Goods::findOne($goods_id);
+        if ( !$Goods ||($freight*100+$return_insurance*100+$Goods->platform_price*$goods_num)!=$post['total_amount']*100)
         {
             return false;
         }
-        $post['total_amount']=$freight*100+$return_insurance*100+$goods['platform_price']*$goods_num;
+        $post['total_amount']=$freight*100+$return_insurance*100+$Goods->platform_price*$goods_num;
         $address=UserAddress::findOne($address_id);
         $invoice=Invoice::findOne($invoice_id);
         if (!$address  || !$invoice){
@@ -274,13 +270,13 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$goods['supplier_id'],1,$time,1,0,$pay_name,$buyer_message,$address,$invoice);
+            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
-            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$goods,0,0,0,0,$freight*100);
+            $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$Goods,0,0,0,0,$freight*100);
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -288,10 +284,10 @@ class GoodsOrder extends ActiveRecord
             }
             $month=date('Ym',$time);
             $supplier=Supplier::find()
-                ->where(['id'=>$goods['supplier_id']])
+                ->where(['id'=>$Goods->supplier_id])
                 ->one();
             $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
-            $supplier->sales_amount_month=$supplier->sales_amount_month+$goods['platform_price']*$goods_num;
+            $supplier->sales_amount_month=$supplier->sales_amount_month+$Goods->platform_price*$goods_num;
             $supplier->month=$month;
             $res3=$supplier->save(false);
             if (!$res3){
@@ -300,13 +296,13 @@ class GoodsOrder extends ActiveRecord
             }
             $date=date('Ymd',time());
             $GoodsStat=GoodsStat::find()
-                ->where(['supplier_id'=>$goods['supplier_id']])
+                ->where(['supplier_id'=>$Goods->supplier_id])
                 ->andWhere(['create_date'=>$date])
                 ->one();
             if (!$GoodsStat)
             {
                 $GoodsStat=new GoodsStat();
-                $GoodsStat->supplier_id=$goods['supplier_id'];
+                $GoodsStat->supplier_id=$Goods->supplier_id;
                 $GoodsStat->sold_number=$goods_num;
                 $GoodsStat->amount_sold=$post['total_amount'];
                 $GoodsStat->create_date=$date;
@@ -325,7 +321,6 @@ class GoodsOrder extends ActiveRecord
                     return false;
                 }
             }
-            $Goods=Goods::findOne($goods_id);
             $Goods->left_number-=$goods_num;
             $Goods->sold_number+=$goods_num;
             if (!$Goods->save(false))
@@ -333,108 +328,48 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
-
-            $code=OrderStyle::AddNewData($Goods->style_id,$post['out_trade_no'],$goods['sku']);
+            $code=OrderStyle::AddNewData($Goods->style_id,$post['out_trade_no'],$Goods->sku);
+            if ($code!=200)
+            {
+                $tran->rollBack();
+                return false;
+            }
+            $code=OrderSeries::AddNewData($Goods->series_id,$post['out_trade_no'],$Goods->sku);
+            if ($code!=200)
+            {
+                $tran->rollBack();
+                return false;
+            }
+            $code=OrderGoodsImage::AddNewData($goods_id,$post['out_trade_no'],$Goods->sku);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
 
-            $code=OrderSeries::AddNewData($Goods->series_id,$post['out_trade_no'],$goods['sku']);
+            $code=OrderGoodsBrand::AddNewData($Goods->brand_id,$post['out_trade_no'],$Goods->sku);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
-            $code=OrderGoodsImage::AddNewData($goods_id,$post['out_trade_no'],$goods['sku']);
+            $code=OrderGoodsAttr::AddNewData($goods_id,$post['out_trade_no'],$Goods->sku);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
 
-
-            $GoodsBrand=GoodsBrand::findOne($Goods->brand_id);
-            if ($GoodsBrand)
+            $code=OrderLogisticsTemplate::AddNewData($Goods->logistics_template_id,$post['out_trade_no'],$Goods->sku);
+            if ($code!=200)
             {
-                $orderGoodsBrand=new OrderGoodsBrand();
-                $orderGoodsBrand->order_no=$post['out_trade_no'];
-                $orderGoodsBrand->sku=$goods['sku'];
-                $orderGoodsBrand->name=$GoodsBrand->name;
-                $orderGoodsBrand->logo=$GoodsBrand->logo;
-                $orderGoodsBrand->certificate=$GoodsBrand->certificate;
-                if (!$orderGoodsBrand->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
+                $tran->rollBack();
+                return false;
             }
-
-            $goodsAttr=GoodsAttr::find()
-                ->where(['goods_id'=>$goods_id])
-                ->all();
-            if ($goodsAttr)
-            {
-                foreach ( $goodsAttr as &$attr)
-                {
-                    $orderGoodsAttr=new OrderGoodsAttr();
-                    $orderGoodsAttr->order_no=$post['out_trade_no'];
-                    $orderGoodsAttr->sku=$goods['sku'];
-                    $orderGoodsAttr->name=$attr->name;
-                    $orderGoodsAttr->value=$attr->value;
-                    $orderGoodsAttr->unit=$attr->unit;
-                    $orderGoodsAttr->addition_type=$attr->addition_type;
-                    $orderGoodsAttr->goods_id=$attr->goods_id;
-                    if (!$orderGoodsAttr->save(false))
-                    {
-                        $tran->rollBack();
-                        return false;
-                    }
-                }
-            }
-
-            $LogisticTemp=LogisticsTemplate::findOne($Goods->logistics_template_id);
-            if ($LogisticTemp)
-            {
-                $orderLogisticTemp=new  OrderLogisticsTemplate();
-                $orderLogisticTemp->order_no=$post['out_trade_no'];
-                $orderLogisticTemp->sku=$goods['sku'];
-                $orderLogisticTemp->name=$LogisticTemp->name;
-                $orderLogisticTemp->delivery_method=$LogisticTemp->delivery_method;
-                $orderLogisticTemp->delivery_cost_default=$LogisticTemp->delivery_cost_default;
-                $orderLogisticTemp->delivery_number_default=$LogisticTemp->delivery_number_default;
-                $orderLogisticTemp->delivery_cost_delta=$LogisticTemp->delivery_cost_delta;
-                $orderLogisticTemp->delivery_number_delta=$LogisticTemp->delivery_number_delta;
-                if (!$orderLogisticTemp->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
-                }
-                $LogisticDis=LogisticsDistrict::find()
-                    ->where(['template_id'=>$Goods->logistics_template_id])
-                    ->all();
-                if ($LogisticDis)
-                {
-                    foreach ($LogisticDis as  &$dis)
-                    {
-                        $OrderLogisticDis=new OrderLogisticsDistrict();
-                        $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
-                        $OrderLogisticDis->district_code=$dis->district_code;
-                        $OrderLogisticDis->district_name=$dis->district_name;
-                        if (!$OrderLogisticDis->save(false))
-                        {
-                            $tran->rollBack();
-                            return false;
-                        }
-                    }
-                }
-            }
-
             $orderGoodsdescription=new OrderGoodsDescription();
             $orderGoodsdescription->order_no=$post['out_trade_no'];
-            $orderGoodsdescription->sku=$goods['sku'];
-            $orderGoodsdescription->description=$goods['description'];
+            $orderGoodsdescription->sku=$Goods->sku;
+            $orderGoodsdescription->description=$Goods->description;
             if (!$orderGoodsdescription->save(false))
             {
                 $tran->rollBack();
@@ -447,7 +382,7 @@ class GoodsOrder extends ActiveRecord
         }
         $sms['mobile']=$address->mobile;
         $sms['type']='gotOrder';
-        $sms['goods_title']=$goods['title'];
+        $sms['goods_title']=$Goods->title;
         $sms['order_no']=$post['out_trade_no'];
         $sms['recipient']=$address->consignee;
         $sms['phone_number']=$address->mobile;

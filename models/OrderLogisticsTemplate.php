@@ -60,4 +60,62 @@ class OrderLogisticsTemplate extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+
+
+    /**
+     * @param $logistics_template_id
+     * @param $order_no
+     * @param $sku
+     * @return bool|int
+     */
+    public  static  function  AddNewData($logistics_template_id,$order_no,$sku)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $LogisticTemp=LogisticsTemplate::find()
+                ->where(['id'=>$logistics_template_id])
+                ->asArray()
+                ->one();
+            if ($LogisticTemp)
+            {
+                $orderLogisticTemp=new  OrderLogisticsTemplate();
+                $orderLogisticTemp->order_no=$order_no;
+                $orderLogisticTemp->sku=$sku;
+                $orderLogisticTemp->name=$LogisticTemp['name'];
+                $orderLogisticTemp->delivery_method=$LogisticTemp['delivery_method'];
+                $orderLogisticTemp->delivery_cost_default=$LogisticTemp['delivery_cost_default'];
+                $orderLogisticTemp->delivery_number_default=$LogisticTemp['delivery_number_default'];
+                $orderLogisticTemp->delivery_cost_delta=$LogisticTemp['delivery_cost_delta'];
+                $orderLogisticTemp->delivery_number_delta=$LogisticTemp['delivery_number_delta'];
+                if (!$orderLogisticTemp->save(false))
+                {
+                    $tran->rollBack();
+                    return false;
+                }
+                $LogisticDis=LogisticsDistrict::find()
+                    ->where(['template_id'=>$logistics_template_id])
+                    ->all();
+                if ($LogisticDis)
+                {
+                    foreach ($LogisticDis as  &$dis)
+                    {
+                        $OrderLogisticDis=new OrderLogisticsDistrict();
+                        $OrderLogisticDis->order_template_id=$orderLogisticTemp->id;
+                        $OrderLogisticDis->district_code=$dis->district_code;
+                        $OrderLogisticDis->district_name=$dis->district_name;
+                        if (!$OrderLogisticDis->save(false))
+                        {
+                            $tran->rollBack();
+                            return false;
+                        }
+                    }
+                }
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return 500;
+        }
+    }
 }

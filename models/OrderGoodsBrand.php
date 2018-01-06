@@ -50,4 +50,39 @@ class OrderGoodsBrand extends \yii\db\ActiveRecord
             'certificate' => 'Certificate',
         ];
     }
+
+    /**
+     * @param $brand_id
+     * @param $order_no
+     * @param $sku
+     * @return int
+     */
+    public  static  function AddNewData($brand_id,$order_no,$sku)
+    {
+
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $GoodsBrand=GoodsBrand::findOne($brand_id);
+            if ($GoodsBrand)
+            {
+                $orderGoodsBrand=new OrderGoodsBrand();
+                $orderGoodsBrand->order_no=$order_no;
+                $orderGoodsBrand->sku=$sku;
+                $orderGoodsBrand->name=$GoodsBrand->name;
+                $orderGoodsBrand->logo=$GoodsBrand->logo;
+                $orderGoodsBrand->certificate=$GoodsBrand->certificate;
+                if (!$orderGoodsBrand->save(false))
+                {
+                    $tran->rollBack();
+                    return 500;
+                }
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return 500;
+        }
+
+    }
 }

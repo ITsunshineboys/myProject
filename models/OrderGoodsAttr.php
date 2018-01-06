@@ -56,4 +56,47 @@ class OrderGoodsAttr extends \yii\db\ActiveRecord
             'category_id' => 'Category ID',
         ];
     }
+
+    /**
+     * @param $goods_id
+     * @param $order_no
+     * @param $sku
+     * @return int
+     */
+    public  static  function  AddNewData($goods_id,$order_no,$sku)
+    {
+
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $goodsAttr=GoodsAttr::find()
+                ->where(['goods_id'=>$goods_id])
+                ->all();
+            if ($goodsAttr)
+            {
+                foreach ( $goodsAttr as &$attr)
+                {
+                    $orderGoodsAttr=new OrderGoodsAttr();
+                    $orderGoodsAttr->order_no=$order_no;
+                    $orderGoodsAttr->sku=$sku;
+                    $orderGoodsAttr->name=$attr->name;
+                    $orderGoodsAttr->value=$attr->value;
+                    $orderGoodsAttr->unit=$attr->unit;
+                    $orderGoodsAttr->addition_type=$attr->addition_type;
+                    $orderGoodsAttr->goods_id=$attr->goods_id;
+                    if (!$orderGoodsAttr->save(false))
+                    {
+                        $tran->rollBack();
+                        return 500;
+                    }
+                }
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return 500;
+        }
+    }
+
+
 }
