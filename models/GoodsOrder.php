@@ -207,7 +207,7 @@ class GoodsOrder extends ActiveRecord
             $goods_order->order_no = $order_no;
             $goods_order->amount_order = $amount_order;
             $goods_order->supplier_id = $supplier_id;
-            $goods_order->invoice_id = $invoice->id;
+//            $goods_order->invoice_id = $invoice->id;
             $goods_order->pay_status = $pay_status;
             $goods_order->create_time =$create_time;
             $goods_order->paytime =$create_time;
@@ -3501,8 +3501,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-echo 6;
-
                     $month=date('Ym',$time);
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
@@ -3515,10 +3513,10 @@ echo 6;
                         $tran->rollBack();
                         return false;
                     }
-                    echo 7;die;
                     $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
+                //$order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice
                 $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier);
                 if ($code!=200)
                 {
