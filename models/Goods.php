@@ -24,7 +24,7 @@ class Goods extends ActiveRecord
     const STATUS_OFFLINE = 0;
     const STATUS_WAIT_ONLINE = 1;
     const STATUS_ONLINE = 2;
-    const MORE_STATUS = [2,0];
+    const STATUS_ONLINE_OFFLINE = [2,0];
     const STATUS_DELETED = 3;
     const AFTER_SALE_SERVICE_NECESSARY = 0;
     const SCENARIO_ADD = 'add';
@@ -479,9 +479,9 @@ class Goods extends ActiveRecord
         $select = 'goods.left_number,goods.sku,goods.market_price,goods.supplier_id,goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name,goods.status';
         //TODO 修改
         if(is_array($title)){
-            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title],['in','goods.status', self::MORE_STATUS]];
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title],['in','goods.status', self::STATUS_ONLINE_OFFLINE]];
         }else{
-            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['gc.id'=>$title], ['in','goods.status', self::MORE_STATUS]];
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['gc.id'=>$title], ['in','goods.status', self::STATUS_ONLINE_OFFLINE]];
         }
 
         $all = self::find()
