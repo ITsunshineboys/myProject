@@ -404,6 +404,7 @@ class OrderGoods extends ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try {
+            echo 1;die;
             $OrderGoods=new self();
             $OrderGoods->order_no=$order_no;
             $OrderGoods->goods_id=$goods['id'];
