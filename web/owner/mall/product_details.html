@@ -1,11 +1,11 @@
 <div class="main_body">
-    <a class="header" ng-click="returnPrev()"><img src="images/nav_return_white.png" alt=""></a>
+    <a class="header" ng-click="goPrev()"><img src="images/nav_return_white.png" alt=""></a>
     <div class="main">
         <!--<div class="details_banner">-->
             <div class="carousel" style="margin-top: 0;">
                 <div class="swiper-container" style="width: 100%;height: 100%;">
                     <div class="swiper-wrapper" style="width: 100%;height: 100%;">
-                        <div class="swiper-slide" ng-repeat="item in cur_params.images" style="width: 100%;height: 100%;">
+                        <div class="swiper-slide" ng-repeat="item in goods_detail.images" style="width: 100%;height: 100%;">
                             <img ng-src="{{item}}" style="width: 100%;height: 100%;" alt="">
                         </div>
                     </div>
@@ -16,13 +16,13 @@
         <!--</div>-->
         <div class="intro_box">
             <div class="product_name">
-                {{cur_params.title}}
+                {{goods_detail.title}}
             </div>
-            <div class="introduce">{{check_goods.subtitle}}</div>
-            <p class="cost">{{check_goods.platform_price | currency:'￥'}}</p>
+            <div class="introduce">{{goods_detail.subtitle}}</div>
+            <p class="cost">{{goods_detail.platform_price | currency:'￥'}}</p>
         </div>
         <!--下拉选择数量-->
-        <div class="standard" ng-if="!!cur_status" data-toggle="modal" data-target="#myModal">
+        <div class="standard" ng-if="status!=0" data-toggle="modal" data-target="#myModal">
             <div class="standard_txt">选择数量</div>
             <div>
                 <img src="images/left_more.png" class="img_size" alt="">
@@ -31,7 +31,7 @@
         <!--服务项-->
         <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
             <ul>
-                <li ng-repeat="item in sale_services"><img src="images/right.png" alt=""/> &nbsp;<span>{{item}}</span></li>
+                <li ng-repeat="item in goods_detail.sale_services"><img src="images/right.png" alt=""/> &nbsp;<span>{{item}}</span></li>
                 <li>
                     <img src="images/left_more.png" class="img_size_1" alt="">
                 </li>
@@ -41,18 +41,18 @@
         <div class="shop_header">
             <div class="shop_header_child clearfix">
                 <div class="img_box pull-left">
-                    <img ng-src="{{supplier.icon}}" alt=""/>
+                    <img ng-src="{{shop_detail.icon}}" alt=""/>
                 </div>
-                <span class="pull-left">{{supplier.shop_name}}</span>
+                <span class="pull-left">{{shop_detail.shop_name}}</span>
             </div>
             <div class="shop_number">
                 <ul>
                     <li>
-                        <span class="num_shop">{{supplier.goods_number}}</span> <br/>
+                        <span class="num_shop">{{shop_detail.goods_number}}</span> <br/>
                         <span>商品数</span>
                     </li>
                     <li>
-                        <span class="num_shop">{{supplier.comprehensive_score}}</span> <br/>
+                        <span class="num_shop">{{shop_detail.comprehensive_score}}</span> <br/>
                         <span>综合详情</span>
                     </li>
                 </ul>
@@ -62,7 +62,7 @@
         <div class="pic_comment">
             <div>
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs pic_tabs" role="tablist">
+                <ul class="nav nav-tabs pic_tabs" role="tablist" ng-init="tab_title = 0">
                     <li role="presentation" ng-class="{'active':(tab_title==0)}"><a ng-click="(tab_title = 0)" aria-controls="home" role="tab" data-toggle="tab">图文详情
                         <hr></a></li>
                     <li role="presentation" ng-class="{'active':(tab_title==1)}"><a ng-click="(tab_title = 1)" aria-controls="profile" role="tab" data-toggle="tab">产品参数<hr></a></li>
@@ -72,7 +72,7 @@
                 <div class="tab-content" ng-switch on="tab_title">
                     <!--图文详情-->
                     <div role="tabpanel" id="home" ng-switch-when="0">
-                        <div class="tab_one" ng-bind-html="description | toHtml">
+                        <div class="tab_one" ng-bind-html="goods_detail.description | toHtml">
                             <!--<img src="images/banner1.png" alt=""/>-->
                             <!--<p>哈哈哈啊哈哈哈哈哈哈哈哈哈哈</p>-->
                         </div>
@@ -81,11 +81,11 @@
                     <div role="tabpanel" id="profile" ng-switch-when="1">
                         <div class="shop_two">
                             <ul>
-                                <li><span>产品编码</span><span class="comment_num">{{cur_params.code}}</span></li>
-                                <li><span>产品品牌</span><span class="comment_num">{{check_goods.name}}</span></li>
-                                <li ng-if="cur_params.series_name != ''"><span>系列</span><span class="comment_num">{{check_goods.series_name}}</span></li>
-                                <li ng-if="cur_params.style_name != ''"><span>风格</span><span class="comment_num">{{check_goods.style_name}}</span></li>
-                                <li ng-repeat="item in cur_params.attrs"><span>{{item.name}}</span><span class="comment_num">{{item.value}}</span></li>
+                                <li><span>产品编码</span><span class="comment_num">{{goods_detail.sku}}</span></li>
+                                <li><span>产品品牌</span><span class="comment_num">{{goods_detail.brand_name}}</span></li>
+                                <li ng-if="goods_detail.series_name != ''"><span>系列</span><span class="comment_num">{{goods_detail.series_name}}</span></li>
+                                <li ng-if="goods_detail.style_name != ''"><span>风格</span><span class="comment_num">{{goods_detail.style_name}}</span></li>
+                                <li ng-repeat="item in goods_detail.attrs"><span>{{item.name}}</span><span class="comment_num">{{item.value}}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -103,26 +103,26 @@
                 </div>
                 <div class="modal-body">
                     <div class="add_cart">
-                        <img ng-src="{{check_goods.cover_image}}" alt=""/>
+                        <img ng-src="{{goods_detail.cover_image}}" alt=""/>
                     </div>
                     <div class="div_pic">
-                        <span class="pic_data">{{current_good.platform_price | currency:'￥'}}</span>
-                        <span class="shu_pic">库存{{cur_params.left_number}}件</span>
+                        <span class="pic_data">{{goods_detail.platform_price | currency:'￥'}}</span>
+                        <span class="shu_pic">库存{{goods_detail.left_number}}件</span>
                     </div>
 
 
                     <div class="sl clearfix">
                         <span class="pull-left">购买数量</span>
                         <div class="input_div pull-right">
-                            <input class="min am-btn" ng-click="operate('check_goods',0,1,'quantity')" name="" type="button" value="-" />
-                            <input class="text_box" name=""  type="tel" ng-model="check_goods.quantity" />
-                            <input class="add am-btn" ng-click="operate('check_goods',1,cur_params.left_number,'quantity')" name="" type="button" value="+" />
+                            <input class="min am-btn" ng-click="changeQuantity(0)" name="" type="button" value="-" />
+                            <input class="text_box" oninput="this.value=this.value.replace(/[^0-9]/ig,'')" ng-change="changeQuantity()" name=""  type="tel" ng-model="goods_detail.quantity" />
+                            <input class="add am-btn" ng-click="changeQuantity(1)" name="" type="button" value="+" />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer_div">
                     <!--<button type="button" class=" resct_btn_one join_cart " data-dismiss="modal" data-toggle="modal" data-target="#myModalP">加入购物车</button>-->
-                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-click="first_replace()">{{cur_title}}</button>
+                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-click="first_replace()">{{status == 1?'更换':'添加'}}</button>
                 </div>
             </div>
         </div>
@@ -133,26 +133,26 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body-comment">
-                    <div ng-if="aftermarket.length!=0">
+                    <div ng-if="goods_detail.aftermarket.length!=0">
                     <div class="t-header-two" >
                         <h1>售后</h1>
                     </div>
                     <div class="service_comment">
                         <ul>
-                            <li ng-repeat="item in aftermarket">
+                            <li ng-repeat="item in goods_detail.aftermarket">
                                 <img src="images/right.png" alt=""/>
                                 <span>{{item}}</span>
                             </li>
                         </ul>
                     </div>
                     </div>
-                    <div ng-if="protection.length!=0">
+                    <div ng-if="goods_detail.protection.length!=0">
                     <div class="t-header-two" >
                         <h1>保障</h1>
                     </div>
                     <div class="service_comment">
                         <ul>
-                            <li class="" ng-repeat="item in protection">
+                            <li class="" ng-repeat="item in goods_detail.protection">
                                 <img src="images/right.png" alt=""/>
                                 <span>{{item}}</span>
                             </li>
@@ -166,8 +166,9 @@
             </div>
         </div>
     </div>
-    <div class="foot_tab" ng-if="!!cur_status">
-        <button class="add" data-toggle="modal" data-target="#myModal">{{cur_title}}</button>
+    <div style="height: 4.5rem"></div>
+    <div class="foot_tab" ng-if="status!=0">
+        <button class="add" data-toggle="modal" data-target="#myModal">{{status == 1?'更换':'添加'}}</button>
     </div>
     <div style="height: 4rem;" ng-if="!!cur_status"></div>
 </div>

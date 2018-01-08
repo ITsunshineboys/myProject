@@ -14,7 +14,7 @@
         <div class="have_data" ng-if="toponymy_list.length!=0">
             <ul class="cell_ul">
                 <li ng-repeat="item in toponymy_list">
-                    <a ui-sref="modelRoom({roomCode: item.district_code, toponymy: item.toponymy, street: item.street})">
+                    <a ui-sref="modelRoom({id:item.id})">
                         <div class="first_fru">{{item.toponymy}}</div>
                         <div class="second_fru">{{item.detailed_address}}</div>
                     </a>

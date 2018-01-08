@@ -1,17 +1,32 @@
 <div>
+    <header>
+        <div>
+            <a class="return_btn" ng-click="goPrev()">
+                <img src="images/mall_nav_return.png" class="in_span">
+            </a>
+            <p class="pic_span" style="text-align: center;">{{header_title}}</p>
+            <!--<p class="cur_location">-->
+            <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+            <!--<span class="postion_span">成都</span>-->
+            <!--</p>-->
+            <!--<p class="cur_location" ng-if="is_edit">-->
+            <!--<span class="postion_span" ng-click="switch_delete()">{{cur_operate}}</span>-->
+            <!--</p>-->
+        </div>
+    </header>
     <section>
         <!--便签栏-->
         <div class="memo_pad">
-            <li ng-click="sort('sold_number')" ng-class="{'filter_color':(platform_status == 0&&rate_status == 0)}">销量优先</li>
-            <li ng-click="sort('platform_price')" ng-class="{'filter_color':(platform_status != 0&&rate_status == 0)}">价格
-                <img src="images/down.png" alt="" ng-if="platform_status == 1">
-                <img src="images/up.png" alt="" ng-if="platform_status == 2">
-                <img src="images/no_color.png" alt="" ng-if="platform_status == 0">
+            <li ng-click="goods_sort('sold_number')" ng-class="{'filter_color':(params['sort[]'] == 'sold_number:3')}">销量优先</li>
+            <li ng-click="goods_sort('platform_price')" ng-class="{'filter_color':(params['sort[]'].indexOf('platform_price')!=-1)}">价格
+                <img src="images/down.png" alt="" ng-if="params['sort[]'] == 'platform_price:3'">
+                <img src="images/up.png" alt="" ng-if="params['sort[]'] == 'platform_price:4'">
+                <img src="images/no_color.png" alt="" ng-if="params['sort[]'].indexOf('platform_price')==-1">
             </li>
-            <li ng-click="sort('favourable_comment_rate')" ng-class="{'filter_color':(platform_status == 0&&rate_status != 0)}">好评率
-                <img src="images/down.png" alt="" ng-if="rate_status == 1">
-                <img src="images/up.png" alt="" ng-if="rate_status == 2">
-                <img src="images/no_color.png" alt="" ng-if="rate_status == 0">
+            <li ng-click="goods_sort('favourable_comment_rate')" ng-class="{'filter_color':(params['sort[]'].indexOf('favourable_comment_rate')!=-1)}">好评率
+                <img src="images/down.png" alt="" ng-if="params['sort[]'] == 'favourable_comment_rate:3'">
+                <img src="images/up.png" alt="" ng-if="params['sort[]'] == 'favourable_comment_rate:4'">
+                <img src="images/no_color.png" alt="" ng-if="params['sort[]'].indexOf('favourable_comment_rate')==-1">
             </li>
             <li data-toggle="modal" data-target="#myModal8">筛选
                 <img src="images/filter.png" alt="">
@@ -21,8 +36,8 @@
         <!--商品展示列表-->
         <div class="mall_list">
             <div class="flex_div" >
-                <div class="item_commodity clearfix"  ng-repeat="item in cur_replace_material"
-                     ng-click="go_details(item)">
+                <div class="item_commodity clearfix"  ng-repeat="item in filter_material"
+                     ng-click="goDetails(item)">
                     <div class="item_commodity_divimg pull-left">
                         <img ng-src="{{item.cover_image}}" alt="" class="img_item " />
                         <!--{{item.cover_image}}-->

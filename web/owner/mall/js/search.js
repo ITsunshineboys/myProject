@@ -1,11 +1,14 @@
-app.controller('search_ctrl',function ($scope,_ajax,$state) {
+app.controller('search_ctrl',function ($stateParams,$scope,_ajax,$state) {
     //初始化数据
     $scope.toponymy = {
         name:'',
         address:''
     }
-    if(sessionStorage.getItem('toponymy')!=null){
+    if(sessionStorage.getItem('toponymy')!=null){//无资料传参
         $scope.toponymy = JSON.parse(sessionStorage.getItem('toponymy'))
+    }
+    if($stateParams.toponymy!=''){//有资料传参
+        $scope.toponymy.name = $stateParams.toponymy
     }
     //返回上一页
     $scope.goPrev = function(){

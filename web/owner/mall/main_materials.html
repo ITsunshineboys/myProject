@@ -17,14 +17,14 @@
     </header>
     <section>
         <!--地面材料-->
-        <div ng-repeat="item in cur_item.second_level" class="detail_block">
+        <div ng-repeat="item in basic_materials.second_level" class="detail_block">
             <span class="second_title">{{item.title}}</span>
                 <ul>
-                    <li data-toggle="modal" data-target="#myModal" ng-click="get_basic_details(item1)"
-                        ng-repeat="item1 in item.goods_detail" class="main_details">
+                    <li data-toggle="modal" data-target="#myModal" ng-click="getDetails(item1)"
+                        ng-repeat="item1 in item.goods" class="main_details">
                         <span class="wall_span">{{item1.title}}&times;{{item1.quantity}}</span><br/>
                         <span class="wall_brand">{{item1.name}}</span>
-                        <span class="wall_money">{{item1.cost | currency:'￥'}}
+                        <span class="wall_money">￥{{item1.cost.toFixed(2)}}
                     <img src="images/left_more.png" alt=""></span>
                     </li>
                 </ul>
@@ -47,19 +47,19 @@
                 <div class="modal-content" id="whit" >
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div class="comment_img">
-                        <img ng-src="{{cur_goods.cover_image}}" alt=""/>
+                        <img ng-src="{{goods_details.cover_image}}" alt=""/>
                     </div>
                     <div class="comment">
-                        <p class="goods_name">{{cur_goods.goods_name}}</p>
-                        <p class="price">{{cur_goods.platform_price | currency:'￥'}}</p>
-                        <p>品牌名称：{{cur_goods.name}}</p>
+                        <p class="goods_name">{{goods_details.goods_name}}</p>
+                        <p class="price">{{goods_details.platform_price | currency:'￥'}}</p>
+                        <p>品牌名称：{{goods_details.name}}</p>
                         <p>
-                            <span ng-if="cur_goods.series_name!=undefined">系列：{{cur_goods.series_name}}</span>
-                            <span class="style_position" ng-if="cur_goods.style_name!=undefined">风格：{{cur_goods.style_name}}</span>
+                            <span ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</span>
+                            <span class="style_position" ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</span>
                         </p>
                     </div>
-                    <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
-                    <button type="button" class="go_replace" ng-click="replace_material()">更换</button>
+                    <button type="button" data-dismiss="modal" class="go_detail" ng-click="goDetails()">查看详情</button>
+                    <button type="button" data-dismiss="modal" class="go_replace" ng-click="goDetails(1)">更换</button>
                 </div>
             </div>
         </div>

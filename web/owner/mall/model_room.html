@@ -16,7 +16,7 @@
         <p class="title">小区信息</p>
         <div class="list_box clearfix">
             <div class="sub_title pull-left">小区选择</div>
-            <a ui-sref="nodata.cell_search({code: params.code, toponymy: params.toponymy, street: params.street})" class="input_box pull-left">
+            <a ui-sref="search({toponymy: params.toponymy})" class="input_box pull-left">
                 <input type="text" readonly ng-model="params.toponymy"/>
                 <img src="images/big.png"/>
             </a>

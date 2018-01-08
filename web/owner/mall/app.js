@@ -15,7 +15,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'nodata_ctrl'
             })
             .state('search',{//搜索页
-                url:'/search',
+                url:'/search?toponymy',
                 templateUrl:'search.html',
                 css:'css/cell_search.css',
                 controller:'search_ctrl'
@@ -27,25 +27,25 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'basic_ctrl'
             })
             .state('main_materials',{ // 主要材料
-                url:'/main_materials',
+                url:'/main_materials?index',
                 templateUrl:'main_materials.html',
                 css:['css/main.css','zui-1.7.0-dist/dist/css/zui.min.css','css/all.css'],
                 controller:'main_ctrl'
             })
             .state('other_materials',{    // 其他
-                url:'/other_materials',
+                url:'/other_materials?index',
                 templateUrl:'other_materials.html',
                 css:['css/other.css','css/all.css'],
                 controller:'other_ctrl'
             })
             .state('product_details',{//商品详情
-                url:'/product_details?index&status&id',
+                url:'/product_details?index&status&id&replace_id',
                 templateUrl:'product_details.html',
                 css:['css/product_details.css','css/all.css'],
                 controller:'product_details_ctrl'
             })
             .state('product_list',{//商品列表
-                url:'/product_list',
+                url:'/product_list?index&status&id&title&category_id',
                 templateUrl:'product_list.html',
                 css:['css/commodify.css','css/all.css'],
                 controller:'product_list_ctrl'
@@ -57,7 +57,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'level_three_ctrl'
             })
             .state('modelRoom',{ // 样板间
-                url:'/quotation?roomCode&toponymy&street',
+                url:'/quotation?roomCode&toponymy&street&id',
                 templateUrl:'model_room.html',
                 css: ['css/model_room.css', 'zui-1.7.0-dist/dist/css/zui.min.css'],
                 controller: 'modelRoomCtrl'

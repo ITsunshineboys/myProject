@@ -3,6 +3,8 @@
  */
 app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScroll", "$state", "$stateParams", "_ajax", function ($scope, $timeout, $location, $anchorScroll, $state, $stateParams, _ajax) {
     sessionStorage.removeItem('check_goods');
+    sessionStorage.removeItem('toponymy')
+    sessionStorage.removeItem('params')
     $scope.activeStatus = "";   // 户型选中状态值
     $scope.activeObj = {        // 选中的户型参数
         id: "",
@@ -20,9 +22,10 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
         text: ""
     };
     $scope.params = {
-        code: $stateParams.roomCode,            // 区编码
-        toponymy: $stateParams.toponymy,    // 小区名称
-        street: $stateParams.street         // 街道地址
+        id:$stateParams.id
+        // code: $stateParams.roomCode,            // 区编码
+        // toponymy: $stateParams.toponymy,    // 小区名称
+        // street: $stateParams.street         // 街道地址
     };
     let mySwiper;   // 轮播变量
     let huxingParams = {
@@ -44,9 +47,16 @@ app.controller("modelRoomCtrl", ["$scope", "$timeout", "$location", "$anchorScro
     $scope.isLoading = true;    // 加载动画显示
     $scope.materials = [];
     // 样板间信息
-    _ajax.get("/owner/case-list", $scope.params, function (res) {
+    _ajax.get("/owner/effect-case-list", {
+        id:$scope.params.id
+    }, function (res) {
         console.log(res, "样板间");
-        let data = res.data;
+        let data = res.data.list;
+        Object.assign($scope.params , {
+            code: data[0].district_code,            // 区编码
+            toponymy: data[0].toponymy,    // 小区名称
+            street: data[0].detailed_address         // 街道地址
+        })
         $scope.huxing = data;
         if (sessionStorage.getItem("activeObj") === null) {
             for (let i of data) {
