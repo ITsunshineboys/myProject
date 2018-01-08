@@ -7,6 +7,7 @@ import App from './App'
 import router from './router/index'
 import './assets/style/common.css'
 import 'animate.css'
+import 'flex.css'
 
 Vue.prototype.axios = api
 FastClick.attach(document.body)

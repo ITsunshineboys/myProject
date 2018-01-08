@@ -1,0 +1,269 @@
+<template>
+  <div>
+    <v-header></v-header>
+    <div class="store" flex="main:justify cross:center">
+      <div flex>
+        <div class="store-img">
+          <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
+        </div>
+        <div class="store-name">
+          <P>森达地板自营店</P>
+          <P class="experience-shop">线下体验店</P>
+        </div>
+      </div>
+      <div flex>
+        <div class="attention" flex="dir:top main:justify">
+          <span class="iconfont" :class="{'icon-heart': !isAttention, 'icon-heart-solid': isAttention}"></span>
+          <span>关注</span>
+        </div>
+        <div class="split-line"></div>
+        <div class="fans" flex="dir:top main:justify">
+          <span>12k</span>
+          <span>粉丝数</span>
+        </div>
+      </div>
+    </div>
+    <div :style="{minHeight: tabHeight + 'px'}" style="min-height: 44px;">
+      <sticky :offset="46" :check-sticky-support="false">
+        <tab class="tab" active-color="#222" bar-active-color="#222" defaultColor="#999" custom-bar-width="50px">
+          <tab-item @on-item-click="onClickTab" selected>店铺首页</tab-item>
+          <tab-item @on-item-click="onClickTab">全部商品</tab-item>
+        </tab>
+        <div class="goods-filter" v-if="tabActive == 1">
+          <div>销量优先</div>
+          <div class="active">
+            <span>价格</span>
+            <span class="sort">
+          <span class="iconfont icon-sort-up active"></span><span class="iconfont icon-sort-down"></span>
+        </span>
+          </div>
+          <div>
+            <span>好评率</span>
+            <span class="sort">
+          <span class="iconfont icon-sort-up"></span><span class="iconfont icon-sort-down"></span>
+        </span>
+          </div>
+        </div>
+      </sticky>
+    </div>
+    <div class="store-home" v-if="tabActive == 0">
+      <swiper :list="baseList" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
+      <div class="store-goods-list" flex>
+        <div class="store-goods-item" v-for="obj in 7">
+          <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
+          <p class="store-goods-title">本象联合木质椅</p>
+          <p class="store-goods-desc">无尽创意 无畏表达</p>
+          <p class="store-goods-price">￥3000</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="all-goods" v-else>
+      <goods-list></goods-list>
+    </div>
+
+    <div class="btn-group" flex>
+      <button class="" type="button">店铺介绍</button>
+      <button class="" type="button">联系商家</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import {Tab, TabItem, Swiper, Sticky} from 'vux'
+  import vHeader from '@/components/HeaderSearch'
+  import GoodsList from '@/components/GoodsList'
+
+  const baseList = [{
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg',
+    title: '送你一朵fua'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg',
+    title: '送你一辆车'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/5.jpg',
+    title: '送你一次旅行',
+    fallbackImg: 'https://static.vux.li/demo/3.jpg'
+  }]
+
+  export default {
+    components: {
+      Tab,
+      TabItem,
+      Swiper,
+      Sticky,
+      vHeader,
+      GoodsList
+    },
+    data () {
+      return {
+        isAttention: false, // 关注图标默认未关注
+        tabActive: 0,        // 默认选中店铺首页
+        tabHeight: 44,       // tab 默认最小高度为 44 像素
+        baseList: baseList
+      }
+    },
+    methods: {
+      onClickTab (index) {
+        this.tabActive = index
+        if (index === 0) {
+          // 当 tab 为店铺首页，tab 高度最小为 44 像素
+          this.tabHeight = 44
+        } else {
+          // 当 tab 为全部商品，tab 高度最小为 88 像素
+          this.tabHeight = 88
+        }
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .store {
+    margin-top: 46px;
+    margin-bottom: 10px;
+    padding: 9px 14px;
+    color: #999;
+    background-color:  #fff;
+  }
+
+  .store-img {
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .store-img img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .experience-shop {
+    font-size: 12px;
+  }
+
+  .icon-heart-solid {
+    color: #f18074;
+  }
+
+  .fans,
+  .attention {
+    font-size: 12px;
+    text-align: center;
+    line-height: normal;
+  }
+
+  .attention .iconfont {
+    font-size: 20px;
+  }
+
+  .fans span:first-child {
+    margin-top: 3px;
+  }
+
+  .split-line {
+    margin: 10px 6px 0;
+    width: 1px;
+    height: 20px;
+    background-color: #cdd3d7;
+  }
+
+  .vux-tab .vux-tab-item {
+    font-size: 16px;
+    background: none;
+  }
+
+  .store-goods-list,
+  .all-goods {
+    margin-bottom: 70px;
+  }
+
+  .store-goods-list {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+  }
+
+  .store-goods-item {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 168px;
+  }
+
+  .store-goods-item:nth-child(2n) {
+    margin-right: 0;
+  }
+
+  .store-goods-item img {
+    width: 168px;
+    height: 168px;
+  }
+
+  .store-goods-title {
+    font-size: 14px;
+  }
+
+  .store-goods-desc {
+    font-size: 12px;
+    color: #999999;
+  }
+
+  .store-goods-price {
+    font-size: 14px;
+    color: #ff7900;
+  }
+
+  .all-goods .goods-list {
+    margin-top: 10px;
+    background-color: #fff;
+  }
+
+  .goods-filter {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    background-color: #fff;
+  }
+
+  .goods-filter > div {
+    flex-grow: 1;
+    line-height: normal;
+    text-align: center;
+    color: #999;
+  }
+
+  .goods-filter > div.active {
+    color: #222;
+  }
+
+  .btn-group {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 16px 0;
+    background-color: #fff;
+  }
+
+  .btn-group button {
+    width: 50%;
+    line-height: normal;
+    font-size: 16px;
+    color: #666;
+    border: none;
+    background-color: transparent;
+  }
+
+  .btn-group button:first-child {
+    border-right: 1px solid #cdd3d7;
+  }
+</style>
+
+<style>
+  .vux-slider > .vux-indicator.dots > a > .vux-icon-dot.active {
+    width: 12px;
+    background-color: #222;
+  }
+</style>

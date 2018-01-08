@@ -41,7 +41,7 @@
       }
     },
     methods: {
-      isShow: function (bool) {
+      isShow (bool) {
         this.isPopOpen = bool
       }
     }

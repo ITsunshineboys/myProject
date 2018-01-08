@@ -107,7 +107,7 @@
       }
     },
     methods: {
-      isShow: function (bool) {
+      isShow (bool) {
         this.isMoreOpen = bool
       }
     }
@@ -177,8 +177,8 @@
 
   .btn {
     margin-top: 10px;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-left: 2px;
+    padding-right: 2px;
     width: 22%;
     height: 28px;
     line-height: 28px;

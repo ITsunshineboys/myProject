@@ -1,6 +1,6 @@
 <template>
   <div class="goods-list">
-    <div class="goods-item">
+    <div class="goods-item" v-for="i in 10">
       <div class="goods-item-img">
         <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
       </div>
@@ -9,19 +9,6 @@
         <p class="goods-item-desc">表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述</p>
         <p class="goods-item-data">
           <span>总销量242</span><span>95%好评</span>
-        </p>
-        <p class="goods-item-price">￥500.00</p>
-      </div>
-    </div>
-    <div class="goods-item">
-      <div class="goods-item-img">
-        <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
-      </div>
-      <div class="goods-item-text">
-        <p class="goods-item-title">标题</p>
-        <p class="goods-item-desc">表述</p>
-        <p class="goods-item-data">
-          <span>总销量24200万</span><span>95%好评</span>
         </p>
         <p class="goods-item-price">￥500.00</p>
       </div>
