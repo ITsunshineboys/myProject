@@ -1599,16 +1599,16 @@ class BasisDecorationService
 
         switch ($goods){
             case $goods['title'] == self::goodsNames()['wood_floor']:  // 木地板
-                $goods_area = GoodsAttr::findByGoodsIdUnit($goods['id']);
+                $goods_area = GoodsAttr::findByGoodsIdUnits($goods['id'],'');
                 foreach ($goods_area as $one_goods_area) {
                     if ($one_goods_area['name'] == self::UNITS['length']) {
-                        $length = $one_goods_area['value'] / self::BRICK_UNITS;
+                        $length = $one_goods_area['value'];
                     }
                     if ($one_goods_area['name'] == self::UNITS['breadth']) {
-                        $breadth = $one_goods_area['value'] / self::BRICK_UNITS;
+                        $breadth = $one_goods_area['value'];
                     }
                 }
-                $area = $length * $breadth;
+                $area = round($length * $breadth,2);
                 $quantity = ceil($post['bedroom_area'] / $area);
                 break;
             case $goods['title'] == self::goodsNames()['marble']:  // 大理石
