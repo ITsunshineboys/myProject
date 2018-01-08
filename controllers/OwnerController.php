@@ -1379,21 +1379,11 @@ class OwnerController extends Controller
                         }
 
                     }
-
                 }
-
             }
 
-
-//            foreach ($goods as &$default){
-//                    $default['goods_price'] = $default['goods_price'] * 1;
-////                if (empty($default['goods_price'])){
-////                    $default['goods_price'] = $default['price'] * 1;
-////                }
-//            }
             $special_offer = 0;
             $total_prices = 0;
-
             foreach ($goods as $price){
                 $total_prices += $price['price'];
                 $special_offer += $price['goods_price'];
