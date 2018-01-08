@@ -2350,7 +2350,6 @@ class GoodsOrder extends ActiveRecord
             ->limit($size)
             ->all();
         $arr=self::GetOrderStatus($OrderList);
-
         $arr=self::findOrderDataOne($arr,$user,$role);
         foreach ($arr as $key => $row)
         {

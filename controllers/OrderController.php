@@ -2396,18 +2396,19 @@ class OrderController extends Controller
             $where.=' and z.customer_service=0';
         }
         $sort=' a.create_time  desc';
-//        $paginationData = GoodsOrder::paginationByUserOrderList($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
         $paginationData = GoodsOrder::paginationByUserOrderListOne($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
         if (is_numeric($paginationData))
         {
             $code=$paginationData;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
         $code=200;
-        return Json::encode([
+        return Json::encode
+        ([
             'code'=>$code,
             'msg'=>'ok',
             'data'=>$paginationData
