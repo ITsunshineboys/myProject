@@ -248,3 +248,5 @@ alter table `user_accessdetail` drop column refund_bank_log_id  ;
 
 --all 2017.1.4   hyz
  ALTER TABLE `shipping_cart` ADD `session_id` varchar(30) DEFAULT '' COMMENT 'cookie';
+
+

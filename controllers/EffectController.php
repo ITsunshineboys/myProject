@@ -355,7 +355,7 @@ class EffectController extends Controller
 
         $post=Yii::$app->request->post();
         if(!isset($user) && $post['type']==1){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' =>$code,
                 'msg' =>\Yii::$app->params['errorCodes'][$code]

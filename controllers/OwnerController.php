@@ -276,7 +276,7 @@ class OwnerController extends Controller
         $str = trim(Yii::$app->request->get('str',''));
         $city_code = (int)trim(Yii::$app->request->get('city_code','510100'));
         if ($str != null){
-            $select = 'id,toponymy,province_code,city_code,district_code,street,type';
+            $select = 'id,toponymy,province_code,city_code,district_code,street';
             $effect = Effect::districtSearch($str,$select,$city_code);
             foreach ($effect as &$value){
                 $value['province']=District::findByCode($value['province_code'])['name'];
