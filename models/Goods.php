@@ -1414,7 +1414,7 @@ class Goods extends ActiveRecord
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
             'after_sale_services' => $this->afterSaleServicesReadable(), // explode(',', $this->after_sale_services),
-            'purchase_price_decoration_company' => $this->purchase_price_decoration_company,
+            'purchase_price_decoration_company' => StringService::formatPrice($this->purchase_price_decoration_company),
             'category_path' => $cate ? $cate->path : '',
             'supplier' => [
                 'id' => $supplier->id,
