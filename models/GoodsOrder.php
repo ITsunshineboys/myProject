@@ -3453,7 +3453,6 @@ class GoodsOrder extends ActiveRecord
                     }
                     //$order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight
                     $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
-
                     if ($code!=200)
                     {
                         $tran->rollBack();
@@ -3467,7 +3466,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 1;
                     $code=OrderSeries::AddNewData($Goods->series_id,$order_no,$Goods->sku);
                     if ($code!=200)
                     {
@@ -3475,7 +3473,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 2;
                     $code=OrderGoodsImage::AddNewData($goods['goods_id'],$order_no,$Goods->sku);
                     if ($code!=200)
                     {
@@ -3483,7 +3480,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 3;
                     $code=OrderGoodsBrand::AddNewData($Goods->brand_id,$order_no,$Goods->sku);
                     if ($code!=200)
                     {
@@ -3491,7 +3487,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 4;
                     $code=OrderGoodsAttr::AddNewData($goods['goods_id'],$order_no,$Goods->sku);
                     if ($code!=200)
                     {
@@ -3499,7 +3494,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 5;die;
                     $code=OrderLogisticsTemplate::AddNewData($Goods->logistics_template_id,$order_no,$Goods->sku);
                     if ($code!=200)
                     {
@@ -3507,7 +3501,7 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-
+echo 6;
 
                     $month=date('Ym',$time);
                     $Supplier=Supplier::find()
@@ -3521,6 +3515,7 @@ class GoodsOrder extends ActiveRecord
                         $tran->rollBack();
                         return false;
                     }
+                    echo 7;die;
                     $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
