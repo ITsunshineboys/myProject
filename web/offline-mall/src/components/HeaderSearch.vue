@@ -1,10 +1,14 @@
 <template>
   <div>
-    <x-header :left-options="{backText: '', preventGoBack: true}" @on-click-back="goHome" class="header-search">
-      <router-link :to="'/search'">
+    <x-header :left-options="{backText: '', preventGoBack: backWay}" @on-click-back="goHome" class="header-search" :backWay="backWay">
+
+      <router-link :to="'/search'" v-if="search==='true'">
         <search class="search" placeholder="请输入想购买的商品" cancel-text=""></search>
       </router-link>
-      <span class="iconfont icon-more" slot="right" @click="showMore"></span>
+
+      <div class="headTitle">{{headTitle}}</div>
+
+      <span class="iconfont icon-more" slot="right" @click="showMore" v-if="pop==='true'"></span>
     </x-header>
 
     <div class="pop-down" v-show="isShow" @click="showMore">
@@ -41,7 +45,11 @@
         default: function () {
           return {}
         }
-      }
+      },
+      search: '',
+      headTitle: '',
+      pop: '',
+      backWay: ''
     },
     data () {
       return {
@@ -171,5 +179,10 @@
     height: 8px;
     background-color: #d9ad65;
     border-radius: 50%;
+  }
+
+  .headTitle {
+    font-size: 18px;
+    color: rgba(102, 102, 102, 1);
   }
 </style>
