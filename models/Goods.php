@@ -1502,11 +1502,15 @@ class Goods extends ActiveRecord
      */
     public function setProfitRate()
     {
-        $this->profit_rate = (int)(
-            ($this->platform_price - $this->supplier_price)
-            / $this->supplier_price
-            * self::PROFIT_RATE_PRECISION
-        );
+        if ($this->status == self::STATUS_ONLINE) {
+            $this->profit_rate = (int)(
+                ($this->platform_price - $this->supplier_price)
+                / $this->supplier_price
+                * self::PROFIT_RATE_PRECISION
+            );
+        } else {
+            $this->profit_rate = 0;
+        }
 
         return $this;
     }
