@@ -594,6 +594,18 @@ class TestController extends Controller
                     return false;
                 }
             }
+            $month=date('Ym',$time);
+            $Supplier=Supplier::find()
+                ->where(['id'=>$goods->supplier_id])
+                ->one();
+            $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods_num;
+            $Supplier->sales_amount_month=$Supplier->sales_amount_month+$goods->toArray()['platform_price']*$goods_num;
+            $Supplier->month=$month;
+            if (!$Supplier->save(false))
+            {
+                $tran->rollBack();
+                return false;
+            }
 
             $LogisticTemp=LogisticsTemplate::find()->where(['id'=>$goods->logistics_template_id])->asArray()->one();
             if ($LogisticTemp)

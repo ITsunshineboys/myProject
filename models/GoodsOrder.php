@@ -3417,7 +3417,7 @@ class GoodsOrder extends ActiveRecord
                         $GoodsStat=new GoodsStat();
                         $GoodsStat->supplier_id=$Goods->supplier_id;
                         $GoodsStat->sold_number=(int)$goods['goods_num'];
-                        $GoodsStat->amount_sold=($Goods["{$role_money}"]*$goods['goods_num']+$freight);
+                        $GoodsStat->amount_sold=($Goods->toArray()[$role_money]*$goods['goods_num']+$freight);
                         $GoodsStat->create_date=$date;
                         if (!$GoodsStat->save(false))
                         {
@@ -3428,7 +3428,7 @@ class GoodsOrder extends ActiveRecord
                     }else
                     {
                         $GoodsStat->sold_number+=(int)$goods['goods_num'];
-                        $GoodsStat->amount_sold+=($Goods["{$role_money}"]*$goods['goods_num']+$freight);
+                        $GoodsStat->amount_sold+=($Goods->toArray()[$role_money]*$goods['goods_num']+$freight);
                         if (!$GoodsStat->save(false))
                         {
                             $tran->rollBack();
@@ -3485,7 +3485,19 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    $money+=($Goods["{$role_money}"]*$goods['goods_num']);
+                    $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
+
+                }
+                $month=date('Ym',$time);
+                $Supplier=Supplier::find()
+                    ->where(['id'=>$Goods->supplier_id])
+                    ->one();
+                $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods['goods_num'];
+                $Supplier->sales_amount_month=$Supplier->sales_amount_month+$Goods->toArray()[$role_money]*$goods['goods_num'];
+                $Supplier->month=$month;
+                if (!$Supplier->save(false)){
+                    $tran->rollBack();
+                    return false;
                 }
                 $total+=($money+$supplier['freight']*100);
                 $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier);
@@ -3497,6 +3509,8 @@ class GoodsOrder extends ActiveRecord
                 }
                 $orders[]=$order_no;
             }
+
+
              if (!$total==$total_amount*100)
              {
                  $code=1000;

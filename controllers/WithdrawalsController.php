@@ -341,59 +341,73 @@ class WithdrawalsController extends Controller
     * @return string
     */
     public function  actionSetPayPwd(){
-    $request=Yii::$app->request;
-    $user = Yii::$app->user->identity;
-    if (!$user){
-        $code=1052;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $supplier= Supplier::find()
-        ->where(['uid'=>$user->id])
-        ->one();
-    if (!$supplier){
-        $code=1034;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $key=trim($request->post('key',''));
-    if (!$key){
-        $code=1000;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
+        $request=Yii::$app->request;
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier= Supplier::find()
+            ->where(['uid'=>$user->id])
+            ->one();
+        if (!$supplier){
+            $code=1034;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $key=trim($request->post('key',''));
+        if (!$key){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
     $code=1000;
-    if (Yii::$app->getSecurity()->validatePassword(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
-        $pay_pwd_first=trim($request->post('pay_pwd_first',''));
-        $pay_pwd_secend=trim($request->post('pay_pwd_secend',''));
-        if (!User::CheckPaypwdFormat($pay_pwd_first) ||
-            !User::CheckPaypwdFormat($pay_pwd_secend)){
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        if ($pay_pwd_first !=  $pay_pwd_secend){
-            $code=1053;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd_secend);
-            $supplier->pay_password=$psw;
-            $res=$supplier->save(false);
-            if (!$res)
-            {
+        if (Yii::$app->getSecurity()->validatePassword(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
+            $pay_pwd_first=trim($request->post('pay_pwd_first',''));
+            $pay_pwd_secend=trim($request->post('pay_pwd_secend',''));
+            if (!User::CheckPaypwdFormat($pay_pwd_first) ||
+                !User::CheckPaypwdFormat($pay_pwd_secend)){
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            if ($pay_pwd_first !=  $pay_pwd_secend){
+                $code=1053;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd_secend);
+                $supplier->pay_password=$psw;
+                $res=$supplier->save(false);
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $code=200;
+                $tran->commit();
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => 'ok'
+                ]);
+            }catch (Exception $e){
                 $tran->rollBack();
                 $code=500;
                 return Json::encode([
@@ -401,49 +415,49 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $code=200;
-            $tran->commit();
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
         }
-    }
-    if (Yii::$app->getSecurity()->validatePassword(User::UNFIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true)
-    {
-        $sms_code=trim($request->post('sms_code',''));
-        $pay_pwd=trim($request->post('pay_pwd',''));
-        $codeValidationRes = SmValidationService::validCode($user->mobile,$sms_code);
-        if ($codeValidationRes !== true) {
-            $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        SmValidationService::deleteCode($user->mobile);
-        if (!User::CheckPaypwdFormat($pay_pwd))
+        if (Yii::$app->getSecurity()->validatePassword(User::UNFIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true)
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $tran = Yii::$app->db->beginTransaction();
-        try{
-            $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
-            $supplier->pay_password=$psw;
-            $res=$supplier->save(false);
-            if (!$res)
+            $sms_code=trim($request->post('sms_code',''));
+            $pay_pwd=trim($request->post('pay_pwd',''));
+            $codeValidationRes = SmValidationService::validCode($user->mobile,$sms_code);
+            if ($codeValidationRes !== true) {
+                $code = is_int($codeValidationRes) ? $codeValidationRes : 1002;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            SmValidationService::deleteCode($user->mobile);
+            if (!User::CheckPaypwdFormat($pay_pwd))
             {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $tran = Yii::$app->db->beginTransaction();
+            try{
+                $psw = Yii::$app->getSecurity()->generatePasswordHash($pay_pwd);
+                $supplier->pay_password=$psw;
+                $res=$supplier->save(false);
+                if (!$res)
+                {
+                    $tran->rollBack();
+                    $code=500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $code=200;
+                $tran->commit();
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => 'ok'
+                ]);
+            }catch (Exception $e){
                 $tran->rollBack();
                 $code=500;
                 return Json::encode([
@@ -451,63 +465,49 @@ class WithdrawalsController extends Controller
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
             }
-            $code=200;
-            $tran->commit();
-            return Json::encode([
-                'code' => $code,
-                'msg' => 'ok'
-            ]);
-        }catch (Exception $e){
-            $tran->rollBack();
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
         }
-    }
     }
     /**
     * 获取可用余额-商家后台
     * @return string
     */
     public function actionFindSupplierBalance(){
-    $user = Yii::$app->user->identity;
-    if (!$user){
-        $code=1052;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $m = Supplier::find()
-        ->select('availableamount')
-        ->where(['uid' => $user->id])
-        ->one();
-    if (!$m)
-    {
-        $code=1034;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $m = Supplier::find()
+            ->select('availableamount')
+            ->where(['uid' => $user->id])
+            ->one();
+        if (!$m)
+        {
+            $code=1034;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
 
-    if (!$m->availableamount)
-    {
-        $money=0.00;
-    }else{
-        $money=sprintf('%.2f', (float)$m->availableamount*0.01);
-    }
-    if ($m->availableamount<0){
-        $money=0.00;
-    }
-    $code=200;
-    return Json::encode([
-        'code' => $code,
-        'msg' => 'ok',
-        'data'=>$money
-    ]);
+        if (!$m->availableamount)
+        {
+            $money=0.00;
+        }else{
+            $money=sprintf('%.2f', (float)$m->availableamount*0.01);
+        }
+        if ($m->availableamount<0){
+            $money=0.00;
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>$money
+        ]);
     }
     /**
      * 商家提现申请
