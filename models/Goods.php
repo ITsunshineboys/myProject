@@ -1396,6 +1396,7 @@ class Goods extends ActiveRecord
         GoodsStat::updateDailyViewedNumberAndIpNumberBySupplierId($this->supplier_id, $ip);
 
         $styleIds = GoodsStyle::styleIdsByGoodsId($this->id);
+        $cate = GoodsCategory::findOne($this->category_id);
         return [
             'id' => $this->id,
             'status' => $this->status,
@@ -1413,6 +1414,8 @@ class Goods extends ActiveRecord
             'attrs' => GoodsAttr::frontDetailsByGoodsId($this->id),
             'images' => GoodsImage::imagesByGoodsId($this->id),
             'after_sale_services' => $this->afterSaleServicesReadable(), // explode(',', $this->after_sale_services),
+            'purchase_price_decoration_company' => $this->purchase_price_decoration_company,
+            'category_path' => $cate ? $cate->path : '',
             'supplier' => [
                 'id' => $supplier->id,
                 'shop_name' => $supplier->shop_name,
