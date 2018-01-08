@@ -478,9 +478,9 @@ class Goods extends ActiveRecord
         $select = 'goods.left_number,goods.sku,goods.market_price,goods.supplier_id,goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.purchase_price_decoration_company,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,goods.cover_image,supplier.shop_name,goods.title as goods_name';
         //TODO 修改
         if(is_array($title)){
-            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title], ['goods.status' => self::STATUS_ONLINE]];
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['in', 'gc.id', $title]];
         }else{
-            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['gc.id'=>$title], ['goods.status' => self::STATUS_ONLINE]];
+            $where=['and', ['logistics_district.district_code' => $city], ['gc.level' => $level], ['gc.id'=>$title]];
         }
 
         $all = self::find()
