@@ -1586,9 +1586,6 @@ class GoodsOrder extends ActiveRecord
                 ->andWhere(['<=', 't.create_time', $endTime]);
         }
 
-        if (YII_DEBUG) {
-            StringService::writeLog('test', ModelService::getSqlByQuery($query), 'supplier_sales_volumn');
-        }
         return (int)$query->one()[$retKeyName];
     }
 
@@ -1615,10 +1612,7 @@ class GoodsOrder extends ActiveRecord
                 ->andWhere(['>=', 't.create_time', $startTime])
                 ->andWhere(['<=', 't.create_time', $endTime]);
         }
-
-        if (YII_DEBUG) {
-            StringService::writeLog('test', ModelService::getSqlByQuery($query), 'supplier_sales_amount');
-        }
+        
         return (int)$query->one()[$retKeyName];
     }
 
