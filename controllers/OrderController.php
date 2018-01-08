@@ -2396,7 +2396,8 @@ class OrderController extends Controller
             $where.=' and z.customer_service=0';
         }
         $sort=' a.create_time  desc';
-        $paginationData = GoodsOrder::paginationByUserOrderList($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
+//        $paginationData = GoodsOrder::paginationByUserOrderList($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
+        $paginationData = GoodsOrder::paginationByUserOrderListOne($where, GoodsOrder::FIELDS_USERORDER_ADMIN, $page, $size,$type,$user,$role);
         if (is_numeric($paginationData))
         {
             $code=$paginationData;
