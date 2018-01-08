@@ -3406,7 +3406,6 @@ class GoodsOrder extends ActiveRecord
                             return $code;
                         }
                     }
-                    echo 1;
                     $time=time();
                     $Goods=Goods::findOne($goods['goods_id']);
                     if ($Goods->left_number<$goods['goods_num'])
@@ -3415,7 +3414,6 @@ class GoodsOrder extends ActiveRecord
                         $code=1085;
                         return $code;
                     }
-                    echo 2;
                     $Goods->left_number-=(int)$goods['goods_num'];
                     $Goods->sold_number+=(int)$goods['goods_num'];
                     if (!$Goods->save(false))
@@ -3424,7 +3422,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 3;
                     $date=date('Ymd',time());
                     $GoodsStat=GoodsStat::find()
                         ->where(['supplier_id'=>$Goods->supplier_id])
@@ -3454,15 +3451,14 @@ class GoodsOrder extends ActiveRecord
                             return $code;
                         }
                     }
-                    echo 4;
                     $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
+                    echo 2;die;
                     if ($code!=200)
                     {
                         $tran->rollBack();
                         $code=500;
                         return $code;
                     }
-                    echo 5;
                     $code=OrderStyle::AddNewData($Goods->style_id,$order_no,$Goods->sku);
                     if ($code!=200)
                     {
@@ -3471,7 +3467,6 @@ class GoodsOrder extends ActiveRecord
                         return $code;
                     }
                     $code=OrderSeries::AddNewData($Goods->series_id,$order_no,$Goods->sku);
-                    echo 6;
                     if ($code!=200)
                     {
                         $tran->rollBack();
@@ -3485,7 +3480,6 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    echo 2;die;
                     $code=OrderGoodsBrand::AddNewData($Goods->brand_id,$order_no,$Goods->sku);
                     if ($code!=200)
                     {
