@@ -163,6 +163,7 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                     sessionStorage.setItem('materials',JSON.stringify($scope.materials))//材料项保存
                     sessionStorage.removeItem('copies')//去除复制品
                     sessionStorage.setItem('worker_list',JSON.stringify($scope.worker_list))//工人项保存
+                    $state.go('nodata')
                 })
             }
         }else{
@@ -212,10 +213,13 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
             })
             $scope.worker_list.splice(index,1)
             sessionStorage.removeItem('other_data')
+            sessionStorage.removeItem('copies')
+            $state.go('nodata')
         }
     }
     //返回上一页
     $scope.goPrev = function () {
-        history.go(-1)
+        sessionStorage.removeItem('copies')
+        $state.go('nodata')
     }
 })

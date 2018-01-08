@@ -71,7 +71,7 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
     //跳转详情页
     $scope.goDetails = function (item) {
         $timeout(function () {
-            $state.go('product_details',{index:$stateParams.index,status:$stateParams.status,id:item.id,replace_id:$stateParams.id})
+            $state.go('product_details',{index:$stateParams.index,status:$stateParams.status,id:item.id,replace_id:$stateParams.id,title:$stateParams.title})
         },300)
     }
     //返回上一页

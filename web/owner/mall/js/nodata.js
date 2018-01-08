@@ -18,7 +18,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         style: '',  //风格
         window: 0,//飘窗
         high: '', //层高
-        province: 510000,   //省编码
+        // province: 510000,   //省编码
         city: 510100,      // 市编码
         stairway_id: 0,//有无楼梯
         stairs: 0//楼梯结构

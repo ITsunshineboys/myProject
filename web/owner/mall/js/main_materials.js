@@ -34,8 +34,17 @@ app.controller('main_ctrl',function ($timeout,_ajax,$scope,$state,$stateParams) 
             },300)
         }
     }
+    //保存数据
+    $scope.saveData = function () {
+        $scope.materials = JSON.parse(sessionStorage.getItem('materials'))
+        $scope.materials[$stateParams.index] = $scope.basic_materials
+        sessionStorage.setItem('materials',JSON.stringify($scope.materials))
+        sessionStorage.removeItem('copies')
+        $state.go('nodata')
+    }
     //返回上一页
     $scope.goPrev = function () {
-        history.go(-1)
+        sessionStorage.removeItem('copies')
+        $state.go('nodata')
     }
 })

@@ -39,7 +39,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'other_ctrl'
             })
             .state('product_details',{//商品详情
-                url:'/product_details?index&status&id&replace_id',
+                url:'/product_details?index&status&id&replace_id&title',
                 templateUrl:'product_details.html',
                 css:['css/product_details.css','css/all.css'],
                 controller:'product_details_ctrl'

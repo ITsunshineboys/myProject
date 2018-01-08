@@ -1,4 +1,4 @@
-app.controller('product_details_ctrl', function (_ajax, $scope, $state, $stateParams) {
+app.controller('product_details_ctrl', function ($timeout,_ajax, $scope, $state, $stateParams) {
     //初始化
     $scope.status = $stateParams.status
     $scope.materials = JSON.parse(sessionStorage.getItem('copies'))
@@ -18,8 +18,11 @@ app.controller('product_details_ctrl', function (_ajax, $scope, $state, $statePa
         }
         $scope.goods_detail = {//商品详情
             id:res.data.goods_view.id,//商品id
+            path:res.data.goods_view.category_path,//分类path
+            title:$stateParams.title,//三级分类名称
+            purchase_price_decoration_company:res.data.goods_view.purchase_price_decoration_company,//供货商价
             images: res.data.goods_view.images,//轮播图
-            title: res.data.goods_view.title,//商品名
+            goods_name: res.data.goods_view.title,//商品名
             subtitle: res.data.goods_view.subtitle,//商品特色
             platform_price: res.data.goods_view.platform_price,//平台价
             sale_services: res.data.goods_view.after_sale_services,//服务条款
@@ -74,6 +77,40 @@ app.controller('product_details_ctrl', function (_ajax, $scope, $state, $statePa
                     let index = value1.goods.findIndex(function (item) {
                         return item.id == $stateParams.replace_id
                     })
+                    if(index!=-1){
+                        value.cost += -value1.goods[index].cost + $scope.goods_detail.platform_price * $scope.goods_detail.quantity
+                        value1.cost += -value1.goods[index].cost + $scope.goods_detail.platform_price * $scope.goods_detail.quantity
+                        value.procurement += -value1.goods[index].procurement + $scope.goods_detail.purchase_price_decoration_company * $scope.goods_detail.quantity
+                        value1.procurement += -value1.goods[index].procurement + $scope.goods_detail.purchase_price_decoration_company * $scope.goods_detail.quantity
+                        value1.goods.splice(index,1,{
+                            left_number:$scope.goods_detail.left_number,
+                            sku:$scope.goods_detail.sku,
+                            id:$scope.goods_detail.id,
+                            category_id:$scope.goods_detail.path.split(',')[2],
+                            platform_price:$scope.goods_detail.platform_price,
+                            purchase_price_decoration_company:$scope.goods_detail.purchase_price_decoration_company,
+                            name:$scope.goods_detail.brand_name,
+                            title:$stateParams.title,
+                            series_name:$scope.goods_detail.series_name,
+                            style_name:$scope.goods_detail.style_name,
+                            subtitle:$scope.goods_detail.subtitle,
+                            path:$scope.goods_detail.path,
+                            cover_image:$scope.goods_detail.cover_image,
+                            quantity:$scope.goods_detail.quantity,
+                            goods_name:$scope.goods_detail.goods_name,
+                            shop_name:$scope.shop_detail.shop_name,
+                            cost:$scope.goods_detail.platform_price * $scope.goods_detail.quantity,
+                            procurement:$scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
+                        })
+                        sessionStorage.setItem('copies',JSON.stringify($scope.materials))
+                        if($stateParams.index == 1){
+                            $timeout(function () {
+                                $state.go('main_materials',{index:$stateParams.index})
+                            },300)
+                        }else{
+
+                        }
+                    }
                 }
             }
         }else{

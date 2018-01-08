@@ -16,7 +16,7 @@
         <!--</div>-->
         <div class="intro_box">
             <div class="product_name">
-                {{goods_detail.title}}
+                {{goods_detail.goods_name}}
             </div>
             <div class="introduce">{{goods_detail.subtitle}}</div>
             <p class="cost">{{goods_detail.platform_price | currency:'￥'}}</p>
@@ -122,7 +122,7 @@
                 </div>
                 <div class="modal-footer_div">
                     <!--<button type="button" class=" resct_btn_one join_cart " data-dismiss="modal" data-toggle="modal" data-target="#myModalP">加入购物车</button>-->
-                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-click="first_replace()">{{status == 1?'更换':'添加'}}</button>
+                    <button type="button" class=" resct_btn_two" data-dismiss="modal" ng-click="getGoods()">{{status == 1?'更换':'添加'}}</button>
                 </div>
             </div>
         </div>
