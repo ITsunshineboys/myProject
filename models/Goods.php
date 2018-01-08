@@ -507,7 +507,7 @@ class Goods extends ActiveRecord
                 && $one_goods['series_id'] != 0
             ){
 
-                $where_ = "id in ".$one_goods['series_id'];
+                $where_ = "id in (".$one_goods['series_id'].")";
                     $series = Series::find()->select('id,series')->where($where_)->all();
                     foreach ($series as $one_series){
                         $one_goods['series_id'] = $one_series['series'];
@@ -519,7 +519,7 @@ class Goods extends ActiveRecord
                 && $one_goods['style_id'] != 0
             ){
 
-                $where_ = "id in ".$one_goods['series_id'];
+                $where_ = "id in (".$one_goods['style_id'].")";
                 $series = Style::find()->select('id,style')->where($where_)->all();
                 foreach ($series as $one_series){
                     $one_goods['series_id'] = $one_series['style'];
