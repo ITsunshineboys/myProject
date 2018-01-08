@@ -1443,15 +1443,17 @@ class OwnerController extends Controller
         if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
             $stairs_details = StairsDetails::find()->asArray()->all();
-
             foreach ($stairs_details as $detail){
                if ($detail['id'] == $get['stairs']){
                    $sm = $detail['attribute'];
                }
             }
+
             foreach ($stairs as &$one_stairs_price) {
-                if ($one_stairs_price['value'] == $sm && $one_stairs_price['style_id'] == $get['style']) {
-                    echo 111;
+                if (
+                    $one_stairs_price['value'] == $sm
+                    && $one_stairs_price['style_id'] == $get['style']
+                ) {
                     $one_stairs_price['quantity'] = 1;
                     $one_stairs_price['cost'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['platform_price'],$one_stairs_price['quantity']),2);
                     $one_stairs_price['procurement'] = round(BasisDecorationService::algorithm(1,$one_stairs_price['purchase_price_decoration_company'],$one_stairs_price['quantity']),2);
@@ -1751,8 +1753,7 @@ class OwnerController extends Controller
 
             //   楼梯  数据
             if ($effect['stairway'] != 0){
-                $stairs = Goods::findByCategory(BasisDecorationService::GOODS_NAME['stairs']);
-                $stairs_price = BasisDecorationService::priceConversion($stairs);
+                $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
                 $effect_ = EffectPicture::find()->asArray()->where(['effect_id'=>$effect['id']])->one();
                 $stairs_details = StairsDetails::find()->asArray()->all();
                 foreach ($stairs_details as $detail){
@@ -1761,8 +1762,11 @@ class OwnerController extends Controller
                     }
                 }
                 $condition_stairs=[];
-                foreach ($stairs_price as &$one_stairs_price) {
-                    if ($one_stairs_price['value'] == $ma && $one_stairs_price['style_id'] == $effect_['style_id']) {
+                foreach ($stairs as &$one_stairs_price) {
+                    if (
+                        $one_stairs_price['value'] == $ma
+                        && $one_stairs_price['style_id'] == $effect_['style_id']
+                    ) {
                         $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
                         $where ="id in (".$substr.")";
                         $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();

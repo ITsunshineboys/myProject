@@ -501,11 +501,41 @@ class Goods extends ActiveRecord
             $one_goods['supplier_price'] =  $one_goods['supplier_price'] / 100;
             $one_goods['market_price']   =  $one_goods['market_price'] / 100;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
+
+            if (
+                isset($one_goods['series_id'])
+                && $one_goods['series_id'] != 0
+            ){
+
+                $where_ = "id in ".$one_goods['series_id'];
+                    $series = Series::find()->select('id,series')->where($where_)->all();
+                    foreach ($series as $one_series){
+                        $one_goods['series_id'] = $one_series['series'];
+                    }
+            }
+
+            if (
+                isset($one_goods['style_id'])
+                && $one_goods['style_id'] != 0
+            ){
+
+                $where_ = "id in ".$one_goods['series_id'];
+                $series = Style::find()->select('id,style')->where($where_)->all();
+                foreach ($series as $one_series){
+                    $one_goods['series_id'] = $one_series['style'];
+                }
+            }
         }
 
         return $all;
     }
 
+    /**
+     * @param $level
+     * @param $title
+     * @param int $city
+     * @return mixed
+     */
     public static function newMaterialAdd($level, $title, $city = self::DEFAULT_CITY)
     {
         if (empty($level) && empty($title)) {
