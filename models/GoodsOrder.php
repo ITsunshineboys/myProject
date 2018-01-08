@@ -3453,6 +3453,7 @@ class GoodsOrder extends ActiveRecord
                     }
                     //$order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight
                     $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
+                    echo $code;die;
                     if ($code!=200)
                     {
                         $tran->rollBack();
