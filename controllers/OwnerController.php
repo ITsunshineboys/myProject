@@ -357,7 +357,6 @@ class OwnerController extends Controller
 
         // 所需要材料查询
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CIRCUIT_MATERIAL);
-        var_dump($goods);die;
         $judge = BasisDecorationService::judge($goods,$get);
 
 

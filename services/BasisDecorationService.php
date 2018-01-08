@@ -354,10 +354,14 @@ class BasisDecorationService
             }
         }
         //  抓取利润最大的商品
-        var_dump($goods);
-        var_dump($one_goods);
-        var_dump($value);
-        die;
+        if ($one_goods == null){
+
+            return Json::encode([
+               'code'=>1000,
+               'msg'=>"缺少".$value."商品",
+            ]);
+
+        }
         $max_goods = self::profitMargin($one_goods);
         switch ($int){
             case $int == 1 ;
