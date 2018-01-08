@@ -285,9 +285,8 @@ class GoodsComment extends ActiveRecord
             return $code;
         }
         $goods=Goods::find()
-            ->where(['sku'=>52257])
+            ->where(['sku'=>$postData['sku']])
             ->one();
-        var_dump($goods);die;
         $list=self::GetAverageScore($postData,$goods->supplier_id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
