@@ -2350,7 +2350,7 @@ class GoodsOrder extends ActiveRecord
             ->limit($size)
             ->all();
         $arr=self::GetOrderStatus($OrderList);
-        $arr=self::findOrderDataOne($arr,$user,$role);
+        $arr=self::findOrderDataOne($arr,$role);
         foreach ($arr as $key => $row)
         {
             $arr[$key]['type']=$type;
@@ -2365,7 +2365,10 @@ class GoodsOrder extends ActiveRecord
                     $user->last_role_id_app=7;
                     $arr[$key]['availableamount']= StringService::formatPrice($user->availableamount*0.01);
                 }else{
-                    $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)->where(['uid'=>$user->id])->one()->availableamount*0.01);
+                    $arr[$key]['availableamount']= StringService::formatPrice(Role::CheckUserRole($user->last_role_id_app)
+                            ->where(['uid'=>$user->id])
+                            ->one()
+                            ->availableamount*0.01);
                 }
             }
             $arr=self::switchStatus($arr,$role);
@@ -2431,7 +2434,7 @@ class GoodsOrder extends ActiveRecord
      * @param $arr
      * @return mixed
      */
-    public static function  findOrderDataOne($arr,$user,$role)
+    public static function  findOrderDataOne($arr,$role)
     {
 
         foreach ($arr AS $k =>$v){
@@ -2444,11 +2447,23 @@ class GoodsOrder extends ActiveRecord
             }else if($arr[$k]['is_unusual']==2){
                 $arr[$k]['unusual']=OrderRefund::REFUND_FAIL;
             }
-            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
+            if(
+                $arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED
+                || $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN
+                || $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER
+                || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED
+                || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED
+            )
+            {
                 $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
             }
-            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
-                if (!$arr[$k]['comment_id'] || $arr[$k]['comment_id']==0){
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED)
+            {
+                if (
+                    !$arr[$k]['comment_id']
+                    || $arr[$k]['comment_id']==0
+                )
+                {
                     $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
                 }
             }

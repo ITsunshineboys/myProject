@@ -127,6 +127,16 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             return $code;
         }
+        if ($goods->status==Goods::STATUS_OFFLINE)
+        {
+            $code=1086;
+            return $code;
+        }
+        if ($goods->status!=Goods::STATUS_ONLINE)
+        {
+            $code=1078;
+            return $code;
+        }
         $LineSupplier=LineSupplier::findOne($post['line_id']);
         if (!$LineSupplier)
         {

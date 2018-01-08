@@ -441,7 +441,7 @@ class SupplierController extends Controller
     {
         $shop_no = trim(Yii::$app->request->get('shop_no', ''));
         $Supplier=Supplier::find()
-            ->select('shop_name,type_shop,category_id,district_code,id')
+            ->select('shop_name,type_shop,category_id,district_code,id,status')
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
@@ -453,6 +453,15 @@ class SupplierController extends Controller
                 'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        if ($Supplier['status']!=Supplier::STATUS_ONLINE)
+        {
+            $code=1076;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $line_supplier=LineSupplier::find()
             ->where(['supplier_id'=>$Supplier['id']])
             ->one();
@@ -503,34 +512,19 @@ class SupplierController extends Controller
         {
             $district_code=0;
         }
-        $pro=substr($district_code,0,2);
-        $ci=substr($district_code,2,2);
-        $dis=substr($district_code,4,2);
-//        if ($pro==0)
-//        {
-//            $code=0;
-//        }else{
-//            if ($ci==0){
-//                $code=$pro;
-//            }else if($dis==0){
-//                $code=$pro.$ci;
-//            }else{
-//                $code=$district_code;
-//            }
-//        }
         $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
-//        $district_code=LogisticsDistrict::GetVagueDistrictCode($district_code);
         $where="L.district_code  like '%{$district_code}%' ";
         if ($keyword)
         {
-            $where .=" and  CONCAT(S.shop_name,S.shop_no) like '%{$keyword}%'";
+            $where .=" and CONCAT(S.shop_name,S.shop_no) like '%{$keyword}%'";
         }
         if ($status==1 || $status==2)
         {
             $where .=" and  L.status={$status}";
         }
         $data=LineSupplier::pagination($where,$page,$size);
-        return Json::encode([
+        return Json::encode
+        ([
             'code'=>200,
             'msg' =>'ok',
             'data' => $data
@@ -555,7 +549,7 @@ class SupplierController extends Controller
         $supplier=Supplier::find()
             ->where(['shop_no'=>$post['shop_no']])
             ->one();
-        if (!$supplier)
+        if (!$supplier || $supplier->status!=Supplier::STATUS_ONLINE)
         {
             $code=1076;
             return Json::encode([
@@ -570,7 +564,7 @@ class SupplierController extends Controller
         {
             $code=1077;
             return Json::encode([
-                'code' => 1000,
+                'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
@@ -608,11 +602,12 @@ class SupplierController extends Controller
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
-        if (!$Supplier)
+        if (!$Supplier || $Supplier['status']!=Supplier::STATUS_ONLINE)
         {
+            $code=1076;
             return Json::encode([
-                'code' => 1000,
-                'msg' => '没有此商家,请重新输入',
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $line_supplier=LineSupplier::find()
@@ -621,7 +616,6 @@ class SupplierController extends Controller
         if ($line_supplier)
         {
             $Supplier['mobile']=$line_supplier['mobile'];
-
             $pro=substr($line_supplier['district_code'],0,2);
             $ci=substr($line_supplier['district_code'],2,2);
             $dis=substr($line_supplier['district_code'],4,2);
@@ -674,11 +668,15 @@ class SupplierController extends Controller
         $supplier=Supplier::find()
             ->where(['shop_no'=>$post['shop_no']])
             ->one();
-        if (!$supplier)
+        if (
+            !$supplier
+            || $supplier->status!=Supplier::STATUS_ONLINE
+        )
         {
+            $code=1076;
             return Json::encode([
-                'code' => 1000,
-                'msg' => '没有此商家,请重新输入',
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $code=Supplier::UpLineSupplier($post,$supplier->id);
@@ -731,10 +729,26 @@ class SupplierController extends Controller
     {
         $sku=\Yii::$app->request->get('sku');
         $goods=Goods::find()
-            ->select('title,supplier_id,id')
+            ->select('title,supplier_id,id,status')
             ->where(['sku'=>$sku])
             ->one();
         if (!$goods)
+        {
+            $code=1078;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        if ($goods->status==Goods::STATUS_OFFLINE)
+        {
+            $code=1086;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        if ($goods->status!=Goods::STATUS_ONLINE)
         {
             $code=1078;
             return Json::encode([
@@ -805,6 +819,22 @@ class SupplierController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg' => '没有此商品,请重新输入',
+            ]);
+        }
+        if ($goods->status==Goods::STATUS_OFFLINE)
+        {
+            $code=1086;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        if ($goods->status!=Goods::STATUS_ONLINE)
+        {
+            $code=1078;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $LineSupplierGoods=LineSupplierGoods::find()

@@ -21,6 +21,8 @@ use yii\db\Query;
 class LineSupplier extends \yii\db\ActiveRecord
 {
 
+    const STATUS_ON_LINE=2;
+    const STATUS_OFF_LINE=1;
     const PAGE_SIZE_DEFAULT=12;
     const  LINE_USER='线下店购买用户';
     /**
@@ -68,7 +70,7 @@ class LineSupplier extends \yii\db\ActiveRecord
     public static function pagination($where = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
         $orderBy = 'L.id DESC';
-        $select ="S.shop_no,L.supplier_id,L.district_code,L.address,L.status,S.shop_name,S.type_shop,S.category_id,C.title,C.path,C.parent_title";
+        $select ="S.shop_no,L.supplier_id,L.district_code,L.address,L.status,S.shop_name,S.type_shop,S.category_id,C.title,C.path,C.parent_title,S.status as type,L.id as line_supplier_id";
         $offset = ($page - 1) * $size;
         $List = (new Query())
             ->from(self::tableName().' as L')
@@ -91,6 +93,17 @@ class LineSupplier extends \yii\db\ActiveRecord
                     ->one();
                 $list['category']=$first_category->title.'-'.$list['parent_title'].'-'.$list['title'];
                 $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
+            if ($list['status']== self::STATUS_ON_LINE )
+            {
+                if ($list['type']!=Supplier::STATUS_ONLINE)
+                {
+                    $list['status']=self::STATUS_OFF_LINE;
+                    self::closeLineSupplier($list['line_supplier_id']);
+                }
+            }
+
+                unset($list['line_supplier_id']);
+                unset($list['type']);
                 unset($list['title']);
                 unset($list['path']);
                 unset($list['parent_title']);
@@ -103,6 +116,32 @@ class LineSupplier extends \yii\db\ActiveRecord
             ->where($where)
             ->count();
         return ModelService::pageDeal($List, $total, $page, $size);
+    }
+
+    /**
+     * @param $line_supplier_id
+     * @return int
+     */
+    public  static  function  closeLineSupplier($line_supplier_id)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $LineSupplier=self::findOne($line_supplier_id);
+            $LineSupplier->status=self::STATUS_OFF_LINE;
+            if (!$LineSupplier->save(false))
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
     }
 
     /**
