@@ -295,15 +295,6 @@ class OwnerController extends Controller
                 ]
             ]);
         }
-//        if ($id != null){
-//            $id_effect = Effect::findOne(['id'=>$id]);
-//            return Json::encode([
-//                'code' => 200,
-//                'msg'  => '成功',
-//                'data' => Effect::findAll(['toponymy'=>$id_effect->toponymy]),
-//            ]);
-//        }
-
     }
 
     /**
