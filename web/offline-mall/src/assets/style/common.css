@@ -31,7 +31,7 @@ body:after {
 }
 
 #app .vux-header + * {
-  margin-top: 40px;
+  margin-top: 46px;
 }
 
 #app .vux-header .vux-header-title {
