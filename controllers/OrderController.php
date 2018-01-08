@@ -2432,7 +2432,7 @@ class OrderController extends Controller
         $size=$request->get('size',GoodsOrder::PAGE_SIZE_DEFAULT);
         $role=$request->get('role','user');
         switch ($role){
-            case 'user':
+            case GoodsOrder::USER:
                 if ($type==GoodsOrder::ORDER_TYPE_ALL)
                 {
                     $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app}";
@@ -2442,7 +2442,7 @@ class OrderController extends Controller
                     $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app}  and order_refer = 2";
                 }
                 break;
-            case 'supplier':
+            case GoodsOrder::SUPPLIER:
                 $supplier=Supplier::find()
                     ->where(['uid'=>$user->id])
                     ->one();

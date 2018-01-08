@@ -128,6 +128,8 @@ class GoodsOrder extends ActiveRecord
     const SUPPLIER_MONEY='supplier_price';
     const STATUS_DESC_DETAILS=1;
     const SHIP_HANDLE='发货';
+    const SUPPLIER='supplier';
+    const USER='user';
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -2010,6 +2012,7 @@ class GoodsOrder extends ActiveRecord
             $code=1000;
             return $code;
         }
+
         if ($postData['total_amount'] > $user->availableamount){
             $code=1033;
             return $code;
@@ -2335,95 +2338,19 @@ class GoodsOrder extends ActiveRecord
      */
     public  static  function paginationByUserOrderListOne($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $type,$user,$role)
     {
+        $where.=' GROUP BY IF(a.pay_status=0,z.order_no,CONCAT(z.order_no,z.sku,z.create_time))';
+        $offset = ($page - 1) * $size;
         $OrderList = (new Query())
             ->from(self::tableName().' AS a')
-            ->leftJoin(OrderGoods::tableName().' AS z1','z.order_no = a.order_no')
+            ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
             ->select($select)
             ->where($where)
+            ->offset($offset)
+            ->limit($size)
             ->all();
         $arr=self::GetOrderStatus($OrderList);
-        $arr=self::findOrderData($arr,$user,$role);
-        if ($type=='all' || $type=='unpaid')
-        {
-            switch ($role){
-                case 'supplier':
-                    $where='pay_status=0  and supplier_id='.Supplier::find()->select('id')->where(['uid'=>$user->id])->one()->id;
-                    break;
-                case 'user':
-                    $where='pay_status=0  and user_id='.$user->id;
-                    break;
-            }
-            $GoodsOrder=self::find()
-                ->select('user_id,role_id,order_no,create_time,pay_status,amount_order,pay_name,buyer_message,order_refer,paytime,supplier_id')
-                ->where($where)
-                ->asArray()
-                ->all();
-            foreach ($GoodsOrder AS $k =>$v){
-                $GoodsOrder[$k]['amount_order']=sprintf('%.2f', (float) $GoodsOrder[$k]['amount_order']*0.01);
-                $GoodsOrder[$k]['create_time']=date('Y-m-d H:i',$GoodsOrder[$k]['create_time']);
-                $GoodsOrder[$k]['paytime']=date('Y-m-d H:i',$GoodsOrder[$k]['paytime']);
-                $GoodsOrder[$k]['user_name']=$user->nickname;
-                $GoodsOrder[$k]['status']=self::PAY_STATUS_DESC_UNPAID;
-                $GoodsOrder[$k]['comment_grade']='';
-                $GoodsOrder[$k]['handle']='';
-                $sup=Supplier::findOne($GoodsOrder[$k]['supplier_id']);
-                if(!$sup)
-                {
-                    $code=500;
-                    return $code;
-                }
-                $GoodsOrder[$k]['shop_name']=$sup->shop_name;
-                if ($role=='user')
-                {
-                    $GoodsOrder[$k]['uid']=$sup->uid;
-                    $GoodsOrder[$k]['to_role_id']=6;
-                }else{
-                    $GoodsOrder[$k]['uid']=$GoodsOrder[$k]['user_id'];
-                    $GoodsOrder[$k]['to_role_id']=$GoodsOrder[$k]['role_id'];
-                }
 
-                $GoodsOrder[$k]['list']=OrderGoods::find()
-                    ->where(['order_no'=>$GoodsOrder[$k]['order_no']])
-                    ->andWhere(['order_status' =>0])
-                    ->select('goods_name
-                    ,goods_price
-                    ,goods_number
-                    ,market_price
-                    ,supplier_price
-                    ,sku
-                    ,freight
-                    ,cover_image
-                    ,order_status
-                    ,shipping_type
-                    ,after_sale_services')
-                    ->asArray()
-                    ->all();
-                if($GoodsOrder[$k]['list']==[])
-                {
-                    unset($GoodsOrder[$k]);
-                }else
-                {
-                    $GoodsOrder[$k]['all_freight']=0;
-                    $GoodsOrder[$k]['all_goods_num']=0;
-                    foreach ($GoodsOrder[$k]['list'] as $key =>$val){
-                        $GoodsOrder[$k]['all_freight']+=$GoodsOrder[$k]['list'][$key]['freight'];
-                        $GoodsOrder[$k]['list'][$key]['freight']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['freight']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['goods_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['goods_price']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['market_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['market_price']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['supplier_price']= StringService::formatPrice($GoodsOrder[$k]['list'][$key]['supplier_price']*0.01);
-                        $GoodsOrder[$k]['list'][$key]['unusual']=OrderRefund::UNUSUAL_DESC;
-                        $GoodsOrder[$k]['after_sale_services']= $GoodsOrder[$k]['list'][$key]['after_sale_services'];
-                        unset($GoodsOrder[$k]['list'][$key]['after_sale_services']);
-                        unset($GoodsOrder[$k]['list'][$key]['order_status']);
-                        $GoodsOrder[$k]['all_goods_num']+=$GoodsOrder[$k]['list'][$key]['goods_number'];
-                    }
-                    $GoodsOrder[$k]['all_freight']= StringService::formatPrice($GoodsOrder[$k]['all_freight']*0.01);
-                    unset($GoodsOrder[$k]['pay_status']);
-                    unset($GoodsOrder[$k]['supplier_id']);
-                    $arr[]=$GoodsOrder[$k];
-                }
-            }
-        }
+        $arr=self::findOrderDataOne($arr,$user,$role);
         foreach ($arr as $key => $row)
         {
             $arr[$key]['type']=$type;
@@ -2478,8 +2405,13 @@ class GoodsOrder extends ActiveRecord
         }
         if ($arr)
         {
-            array_multisort($create_time, SORT_DESC, $arr);
-            $count=count($arr);
+            $count = (new Query())
+                ->from(self::tableName().' AS a')
+                ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
+                ->select('z.order_no')
+                ->where($where)
+                ->all();
+            $count=count($count);
             $total_page=ceil($count/$size);
             $data=array_slice($arr, ($page-1)*$size,$size);
             return
@@ -2488,13 +2420,130 @@ class GoodsOrder extends ActiveRecord
                     'count'=>$count,
                     'details' => $data
                 ];
-        }else{
-            return [
-                'total_page' =>0,
-                'count'=>0,
-                'details' => []
-            ];
+            }else{
+                return [
+                    'total_page' =>0,
+                    'count'=>0,
+                    'details' => []
+                ];
+            }
+    }
+    /**
+     * @param $arr
+     * @return mixed
+     */
+    public static function  findOrderDataOne($arr,$user,$role)
+    {
+
+        foreach ($arr AS $k =>$v){
+            $arr[$k]['paytime']=date('Y-m-d H:i',$arr[$k]['paytime']);
+            $arr[$k]['handle']='';
+            if ($arr[$k]['is_unusual']==1){
+                $arr[$k]['unusual']=self::ORDER_TYPE_DESC_APPLYREFUND;
+            }else if ($arr[$k]['is_unusual']==0){
+                $arr[$k]['unusual']=OrderRefund::UNUSUAL_DESC;
+            }else if($arr[$k]['is_unusual']==2){
+                $arr[$k]['unusual']=OrderRefund::REFUND_FAIL;
+            }
+            if($arr[$k]['status']==self::ORDER_TYPE_DESC_UNSHIPPED || $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_IN|| $arr[$k]['status']==self::ORDER_TYPE_DESC_CUSTOMER_SERVICE_OVER || $arr[$k]['status']==self::ORDER_TYPE_DESC_UNRECEIVED || $arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
+                $arr[$k]['handle']=OrderPlatForm::PLATFORM_HANDLE;
+            }
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_COMPLETED){
+                if (!$arr[$k]['comment_id'] || $arr[$k]['comment_id']==0){
+                    $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
+                }
+            }
+            $arr[$k]['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            $arr[$k]['goods_price']= StringService::formatPrice($arr[$k]['goods_price']*0.01);
+            $arr[$k]['market_price']= StringService::formatPrice($arr[$k]['market_price']*0.01);
+            $arr[$k]['supplier_price']= StringService::formatPrice($arr[$k]['supplier_price']*0.01);
+            $arr[$k]['freight']= StringService::formatPrice($arr[$k]['freight']*0.01);
+            $supplier=Supplier::find()
+                ->where(['id'=>$arr[$k]['supplier_id']])
+                ->one();
+            if ($supplier)
+            {
+                $arr[$k]['shop_name']=$supplier->shop_name;
+            }else
+            {
+                $arr[$k]['shop_name']='';
+            }
+
+            if ($role=='user')
+            {
+                $arr[$k]['uid']=$supplier->uid;
+                $arr[$k]['to_role_id']=6;
+            }else
+            {
+                $arr[$k]['uid']= $arr[$k]['user_id'];
+                $arr[$k]['to_role_id']=$arr[$k]['role_id'];
+            }
+            $arr_list=[];
+            $allFreight=0;
+            $allNumber=0;
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_UNPAID)
+            {
+                $orderGoods=OrderGoods::find()
+                    ->where(['order_no'=>$arr[$k]['order_no']])
+                    ->asArray()
+                    ->all();
+
+                foreach ($orderGoods as &$goodsList)
+                {
+                    $freight=StringService::formatPrice($goodsList['freight']*0.01);
+                    $arr_list[]=[
+                        'goods_name'=>$goodsList['goods_name'],
+                        'goods_price'=>$goodsList['goods_price'],
+                        'goods_number'=>$goodsList['goods_number'],
+                        'market_price'=>$goodsList['market_price'],
+                        'sku'=>$goodsList['sku'],
+                        'freight'=>$freight,
+                        'cover_image'=>$goodsList['cover_image'],
+                        'unusual'=>$arr[$k]['unusual'],
+                        'shipping_type'=>$goodsList['shipping_type'],
+                    ];
+                    $allFreight+=$freight;
+                    $allNumber+=$goodsList['goods_number'];
+                }
+            }else
+            {
+                $arr_list[]=[
+                    'goods_name'=>$arr[$k]['goods_name'],
+                    'goods_price'=>$arr[$k]['goods_price'],
+                    'goods_number'=>$arr[$k]['goods_number'],
+                    'market_price'=>$arr[$k]['market_price'],
+                    'sku'=>$arr[$k]['sku'],
+                    'freight'=>$arr[$k]['freight'],
+                    'cover_image'=>$arr[$k]['cover_image'],
+                    'unusual'=>$arr[$k]['unusual'],
+                    'shipping_type'=>$arr[$k]['shipping_type'],
+                ];
+                $allFreight+=$arr[$k]['freight'];
+                $allNumber+=$arr[$k]['goods_number'];
+            }
+            unset($arr[$k]['goods_name']);
+            unset($arr[$k]['goods_price']);
+            unset($arr[$k]['market_price']);
+            unset($arr[$k]['supplier_price']);
+            unset($arr[$k]['sku']);
+            unset($arr[$k]['cover_image']);
+            unset($arr[$k]['order_id']);
+            unset($arr[$k]['is_unusual']);
+            unset($arr[$k]['comment_id']);
+            unset($arr[$k]['return_insurance']);
+            unset($arr[$k]['send_time']);
+            unset($arr[$k]['complete_time']);
+            unset($arr[$k]['RemainingTime']);
+            unset($arr[$k]['supplier_id']);
+            unset($arr[$k]['role_id']);
+            unset($arr[$k]['pay_term']);
+            $arr[$k]['list']=$arr_list;
+            $arr[$k]['all_freight']= StringService::formatPrice($allFreight);
+            $arr[$k]['all_goods_num']= StringService::formatPrice($allNumber);
+            unset($arr[$k]['freight']);
+            unset($arr[$k]['goods_number']);
         }
+        return $arr;
     }
     /**
      * @param $arr
@@ -2579,8 +2628,8 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['role_id']);
             unset($arr[$k]['pay_term']);
             $arr[$k]['list']=[$arr_list];
-            $arr[$k]['all_freight']= StringService::formatPrice($arr[$k]['freight']*0.01);
-            $arr[$k]['all_goods_num']= StringService::formatPrice($arr[$k]['goods_number']*0.01);
+            $arr[$k]['all_freight']= StringService::formatPrice($arr[$k]['freight']);
+            $arr[$k]['all_goods_num']= StringService::formatPrice($arr[$k]['goods_number']);
             unset($arr[$k]['freight']);
             unset($arr[$k]['goods_number']);
         }

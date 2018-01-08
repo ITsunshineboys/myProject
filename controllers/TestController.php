@@ -703,7 +703,7 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-      $data=OrderGoods::FindByOrderNoAndSku('0105130936','123386');
+      $data=Goods::findOne(1);
       var_dump($data);
     }
     public  static  function  actionTest1()
