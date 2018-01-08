@@ -1307,7 +1307,7 @@ class OwnerController extends Controller
      */
     public function actionAddMaterials()
     {
-        $code = trim(Yii::$app->request->get('code',''));
+        $code = trim(Yii::$app->request->get('city',''));
         $series = trim(Yii::$app->request->get('series',''));
         $style = trim(Yii::$app->request->get('style',''));
         $area = trim(Yii::$app->request->get('area',''));
@@ -1315,7 +1315,6 @@ class OwnerController extends Controller
 
 
         $add_materials = DecorationAdd::findByAll($code,$style,$series,$area);
-
         if ($add_materials == null){
             $code = 1063;
             return Json::encode([
@@ -1325,7 +1324,6 @@ class OwnerController extends Controller
         }
 
         foreach ($add_materials as $one_materials){
-
             $codes [] = $one_materials['sku'];
         }
         $goods = Goods::findBySkuAll($codes);
@@ -1340,8 +1338,8 @@ class OwnerController extends Controller
             foreach ($goods as &$one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
                     $one_goods['quantity'] = (int)$material['quantity'];
-                    $one_goods['cost'] = $material['quantity'] * $one_goods['platform_price'];
-                    $one_goods['procurement'] = $material['quantity'] * $one_goods['purchase_price_decoration_company'];
+                    $one_goods['cost'] = round($material['quantity'] * $one_goods['platform_price'],2);
+                    $one_goods['procurement'] = round($material['quantity'] * $one_goods['purchase_price_decoration_company'],2);
                 }
             }
         }

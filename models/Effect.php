@@ -425,6 +425,8 @@ class Effect extends ActiveRecord
         }
         return $grouped;
     }
+
+
     public function beforeSave($insert)
     {
         if($insert){
