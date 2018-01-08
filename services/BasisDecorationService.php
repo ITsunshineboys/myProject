@@ -1408,17 +1408,18 @@ class BasisDecorationService
                             $breadth = $one_goods_area['value'];
                         }
                     }
-                    $area = round($length * $breadth,2);
-                    $one_goods['quantity'] = ceil($post['bedroom_area'] / $area);
-                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
-                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
+
+                    $area = round(self::algorithm(1,$length,$breadth),2);
+                    $one_goods['quantity'] = ceil(self::algorithm(6,$post['bedroom_area'],$area));
+                    $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
+                    $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
                     $wood_floor [] = $one_goods;
                     break;
                 case $one_goods['title'] == self::goodsNames()['marble']: // 大理石
                     if ($post['window'] > 1) {
                         $one_goods['quantity'] = $post['window'];
-                        $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
-                        $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
+                        $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'], $one_goods['quantity']),2);
+                        $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
                         $marble [] = $one_goods;
                     }else {
                         $marble = null;
