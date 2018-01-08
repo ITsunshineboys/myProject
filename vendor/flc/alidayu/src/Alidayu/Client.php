@@ -86,7 +86,7 @@ class Client
 
         // 请求数据
         $resp = $this->curl(
-            $this->app->sandbox ? $this->api_sandbox_uri : $this->api_uri,
+             $this->api_uri,
             $params
         );
 

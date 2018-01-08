@@ -3500,20 +3500,20 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
-                    $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
 
-                }
-                $month=date('Ym',$time);
-                $Supplier=Supplier::find()
-                    ->where(['id'=>$Goods->supplier_id])
-                    ->one();
-                $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods['goods_num'];
-                $Supplier->sales_amount_month=$Supplier->sales_amount_month+$Goods->toArray()[$role_money]*$goods['goods_num'];
-                $Supplier->month=$month;
-                if (!$Supplier->save(false))
-                {
-                    $tran->rollBack();
-                    return false;
+                    $month=date('Ym',$time);
+                    $Supplier=Supplier::find()
+                        ->where(['id'=>$Goods->supplier_id])
+                        ->one();
+                    $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods['goods_num'];
+                    $Supplier->sales_amount_month=$Supplier->sales_amount_month+$Goods->toArray()[$role_money]*$goods['goods_num'];
+                    $Supplier->month=$month;
+                    if (!$Supplier->save(false))
+                    {
+                        $tran->rollBack();
+                        return false;
+                    }
+                    $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
                 $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier);

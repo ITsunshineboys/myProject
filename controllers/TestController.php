@@ -30,6 +30,7 @@ use app\models\User;
 use app\models\UserAddress;
 use app\models\UserRole;
 use app\services\ExceptionHandleService;
+use app\services\SmValidationService;
 use app\services\StringService;
 use Symfony\Component\Yaml\Tests\B;
 use Yii;
@@ -39,6 +40,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\ServerErrorHttpException;
 
 class TestController extends Controller
 {
@@ -715,8 +717,31 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-      $data=Goods::findOne(1);
-      var_dump($data);
+        $sms['mobile'] = '13880414513';
+        $sms['type'] = 'resetMobile';
+        try {
+            new SmValidationService($sms);
+        } catch (\InvalidArgumentException $e) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        } catch (\Exception $e) {
+            $code = 1020;
+            if ($code == $e->getCode()) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+        }
     }
     public  static  function  actionTest1()
     {
