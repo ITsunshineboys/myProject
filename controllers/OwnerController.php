@@ -1325,7 +1325,7 @@ class OwnerController extends Controller
 
 
         $add_materials = DecorationAdd::findByAll($code,$style,$series,$area);
-        var_dump($add_materials);die;
+
         if ($add_materials == null){
             $code = 1063;
             return Json::encode([
@@ -1335,6 +1335,7 @@ class OwnerController extends Controller
         }
 
         foreach ($add_materials as $one_materials){
+
             $codes [] = $one_materials['sku'];
         }
         $goods = Goods::findBySkuAll($codes);

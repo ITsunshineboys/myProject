@@ -95,14 +95,34 @@ class DecorationAdd extends ActiveRecord
 
     public static function findByAll($code,$style,$series,$area)
     {
-        $select ='decoration_add.id,decoration_add.c_id,decoration_add.sku,d.quantity';
-        return self::find()
+
+//        $select ='decoration_add.id,decoration_add.c_id,decoration_add.sku,d.quantity';
+        $data=self::find()
             ->asArray()
-            ->select($select)
-            ->where(['decoration_add.city_code'=>$code])
-            ->andWhere(['or',['d.style_id'=>$style],['d.series_id'=>$series],['and',['<=','d.min_area',$area],['>=','d.max_area',$area]]])
-            ->leftJoin('decoration_message as d','d.decoration_add_id = decoration_add.id')
+            ->where(['city_code'=>$code])
             ->all();
+
+        foreach ($data as &$v){
+            $quantity=DecorationMessage::find()
+                ->select('max(quantity) as quantity')
+                ->where(['decoration_add_id'=>$v['id']])
+                ->andWhere(['or',['style_id'=>$style],['series_id'=>$series],['and',['<=','min_area',$area],['>=','max_area',$area]]])
+                ->asArray()
+                ->one();
+
+//            $quantity=arsort($quantity);
+//            $max=max($quantity);
+            $v['quantity']=$quantity['quantity'];
+        }
+        return $data;
+
+//        return self::find()
+//            ->asArray()
+//            ->select($select)
+//            ->leftJoin('decoration_message as d','d.decoration_add_id = decoration_add.id')
+//            ->where(['decoration_add.city_code'=>$code])
+//            ->andWhere(['or',['d.style_id'=>$style],['d.series_id'=>$series],['and',['<=','d.min_area',$area],['>=','d.max_area',$area]]])
+//            ->all();
     }
 
 
