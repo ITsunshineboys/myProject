@@ -166,7 +166,7 @@ class OwnerCashManager extends ActiveRecord {
      * @param string $orderBy
      * @return array
      */
-    public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
+    public static function  getCashListAll($where = [], $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT,$time_s, $orderBy = 'id DESC')
     {
 
         $query = (new Query())
@@ -174,7 +174,7 @@ class OwnerCashManager extends ActiveRecord {
             ->leftJoin(self::USER . ' u', 'g.uid = u.id')
             ->select(['g.id', 'g.cash_money', 'g.apply_time', 'u.aite_cube_no', 'u.nickname', 'g.uid', 'g.status', 'g.real_money', 'g.transaction_no', 'g.handle_time'])
             ->where($where)
-            ->orderBy('g.handle_time');
+            ->orderBy("$time_s Desc");
 
 
         $count = $query->count();
