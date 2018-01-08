@@ -17,6 +17,7 @@ class GoodsAttr extends ActiveRecord
 {
     const ADDITION_TYPE_NORMAL = 0;
     const ADDITION_TYPE_DROPDOWN_LIST = 1;
+    const ADDITION_TYPE_CHECKBOX = 2;
     const ERROR_CODE_SAME_NAME = 1009;
     const FROM_TYPE_LHZZ = 0;
     const FROM_TYPE_SUPPLIER = 1;
@@ -291,7 +292,7 @@ class GoodsAttr extends ActiveRecord
                 return $code;
             }
 
-            if (!$goodsAttr->save()) {
+            if (!$goodsAttr->save(false)) {
                 $code = 500;
                 return $code;
             }
