@@ -249,6 +249,7 @@ class GoodsComment extends ActiveRecord
      */
     public  static  function  addCommentByModel($postData)
     {
+        var_dump($postData);die;
         if(
             !array_key_exists('store_service_score', $postData)
             || !array_key_exists('shipping_score', $postData)
