@@ -353,6 +353,9 @@ class BasisDecorationService
             }
         }
         //  抓取利润最大的商品
+        var_dump($goods);
+        var_dump($one_goods);
+        die;
         $max_goods = self::profitMargin($one_goods);
         switch ($int){
             case $int == 1 ;
