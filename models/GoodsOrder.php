@@ -3495,7 +3495,8 @@ class GoodsOrder extends ActiveRecord
                 $Supplier->sales_volumn_month=$Supplier->sales_volumn_month+$goods['goods_num'];
                 $Supplier->sales_amount_month=$Supplier->sales_amount_month+$Goods->toArray()[$role_money]*$goods['goods_num'];
                 $Supplier->month=$month;
-                if (!$Supplier->save(false)){
+                if (!$Supplier->save(false))
+                {
                     $tran->rollBack();
                     return false;
                 }

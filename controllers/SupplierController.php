@@ -1055,7 +1055,7 @@ class SupplierController extends Controller
 
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -1116,6 +1116,9 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * @return string
+     */
     public  function  actionGetUpSupplierLineGoods()
     {
         $sku=Yii::$app->request->get('sku');

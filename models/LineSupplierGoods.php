@@ -17,6 +17,9 @@ use yii\db\Query;
  */
 class LineSupplierGoods extends \yii\db\ActiveRecord
 {
+
+    const STATUS_ON_LINE=2;
+    const STATUS_OFF_LINE=1;
     /**
      * @inheritdoc
      */
@@ -169,7 +172,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
     public static function pagination($where = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
         $orderBy = 'LG.id DESC';
-        $select ="LG.id as line_goods_id,LG.line_supplier_id,G.sku,G.title as goods_name,L.district_code,LG.status,L.id as line_id,S.shop_name as supplier_shop_name";
+        $select ="LG.id as line_goods_id,LG.line_supplier_id,G.sku,G.title as goods_name,L.district_code,LG.status,L.id as line_id,S.shop_name as supplier_shop_name,G.status as type";
         $offset = ($page - 1) * $size;
         $List = (new Query())
             ->from(self::tableName().' as LG')
@@ -186,6 +189,15 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         {
             $list['line_shop_name']=self::GetLineShopNameByLineId($list['line_supplier_id']);
             $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
+            if ($list['status']== self::STATUS_ON_LINE )
+            {
+                if ($list['type']!=Goods::STATUS_ONLINE)
+                {
+                    $list['status']=self::STATUS_OFF_LINE;
+                    self::closeLineGoods($list['line_goods_id']);
+                }
+            }
+            unset($list['type']);
             unset($list['line_supplier_id']);
             unset($list['district_code']);
         }
@@ -200,6 +212,32 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
         return ModelService::pageDeal($List, $total, $page, $size);
     }
 
+
+    /**
+     * @param $line_goods_id
+     * @return int
+     */
+    public  static  function  closeLineGoods($line_goods_id)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $LineSupplierGoods=self::findOne($line_goods_id);
+            $LineSupplierGoods->status=self::STATUS_OFF_LINE;
+            if (!$LineSupplierGoods->save(false))
+            {
+                $tran->rollBack();
+                $code=500;
+                return $code;
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (\Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
 
     /**
      * 获取线下商品名称 by  line_id
