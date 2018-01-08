@@ -1408,7 +1408,7 @@ class BasisDecorationService
                             $breadth = $one_goods_area['value'];
                         }
                     }
-                    $area = $length * $breadth;
+                    $area = round($length * $breadth,2);
                     $one_goods['quantity'] = ceil($post['bedroom_area'] / $area);
                     $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
                     $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
