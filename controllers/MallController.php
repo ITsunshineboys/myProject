@@ -3790,6 +3790,9 @@ class MallController extends Controller
         $goods->left_number = (int)Yii::$app->request->post('left_number', 0);
 
         if (!$goods->validate()) {
+            if (YII_DEBUG) {
+                StringService::writeLog('test', json_encode($goods->errors), 'actionGoodsInventoryReset');
+            }
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
