@@ -2326,7 +2326,7 @@ class GoodsOrder extends ActiveRecord
     }
 
     /**
-     * 分页数据
+     * 分页数据  niu   bi  le
      * @param array $where
      * @param array $select
      * @param int $page
@@ -2399,7 +2399,6 @@ class GoodsOrder extends ActiveRecord
                     $arr[$key]['is_support_after_sale']=0;
                 }
             }
-
             unset( $arr[$key]['after_sale_services']);
             $create_time[$key]  = $arr[$key]['create_time'];
         }

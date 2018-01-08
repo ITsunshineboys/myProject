@@ -1905,7 +1905,8 @@ class WithdrawalsController extends Controller
             ->where(['cityId'=>$city_id,'bankId'=>$bank->value])
             ->all();
         $code=200;
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$bankBranch
@@ -1928,11 +1929,15 @@ class WithdrawalsController extends Controller
         $bank_card=Yii::$app->request->post('bank_card');
         if (!$bank_card)
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $bank_card=Yii::$app->request->get('bank_card');
+            if (!$bank_card)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $sendUrl = 'http://api.avatardata.cn/Bank/Query?key=fc79d5cf0de64f9bb60759045e5977d0&cardnum='.$bank_card;
         $content =Wxpay::curl($sendUrl,false,0);
@@ -1964,14 +1969,6 @@ class WithdrawalsController extends Controller
             ]);
         }
 
-    }
-    /**
-     * @return string
-     */
-    public function  actionFindUser()
-    {
-        $user = User::find()->all();
-        return Json::encode([$user]);
     }
     /**
      * 业主提现列表
@@ -2058,35 +2055,30 @@ class WithdrawalsController extends Controller
         ]);
 
     }
+
+    /**
+     * @return string
+     */
     public  function actionFindUserAccessDetail()
     {
-    $user = Yii::$app->user->identity;
-    if (!$user){
-        $code=1052;
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return json_encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $data=UserAccessdetail::find()
+            ->where(['uid'=>$user->id])
+            ->andWhere(['role_id'=>$user->last_role_id_app])
+            ->one();
+        $code=200;
         return json_encode([
             'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
+            'msg' => 'ok',
+            'data'=>$data
         ]);
-    }
-    $data=UserAccessdetail::find()
-        ->where(['uid'=>$user->id])
-        ->andWhere(['role_id'=>$user->last_role_id_app])
-        ->one();
-    $code=200;
-    return json_encode([
-        'code' => $code,
-        'msg' => 'ok',
-        'data'=>$data
-    ]);
-    }
-    public  function  actionTest()
-    {
-    $user=User::find()
-        ->where(['mobile'=>Yii::$app->request->post('mobile', '')])
-        ->one();
-    $user->balance+=10000000;
-    $user->availableamount+=10000000;
-    $user->save(false);
     }
 
 }
