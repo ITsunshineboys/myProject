@@ -209,16 +209,15 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     });
     //判断属性是否为数字
     $scope.testNumber = function (item) {
-	    if(item.value!==undefined){
 		    let reg_value = reg.test(item.value);
 		    !reg_value ? item.status = true : item.status = false
-	    }
     }
-    $scope.leftNumber = function (value) {
-        if (value !== undefined) {
-            $scope.left_number = value.replace(/[^\d]/g, '')
-        }
-    };
+    // 库存
+    // $scope.leftNumber = function (value) {
+    //     if (value !== undefined) {
+    //         $scope.left_number = value.replace(/[^\d]/g, '')
+    //     }
+    // };
     /*----------------自己添加的属性--------------------*/
     $scope.own_attrs_arr = [];//自定义数组
     //添加属性

@@ -219,9 +219,13 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	};
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
-		if(item.value!==undefined){
 			let reg_value = reg.test(item.value);
 			!reg_value ? item.status = true : item.status = false
+	};
+	//库存
+	$scope.leftNumber=function (value) {
+		if(value!==undefined){
+			$scope.left_number = value.replace(/[^\d]/g,'')
 		}
 	};
 	//自己添加的属性
@@ -240,12 +244,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			console.log(value)
 		}
 	}
-	//库存
-	$scope.leftNumber=function (value) {
-		if(value!==undefined){
-			$scope.left_number = value.replace(/[^\d]/g,'')
-		}
-	};
 	/*----------------上传封面图-----------------------*/
     $scope.data = {
         file:null

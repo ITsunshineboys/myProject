@@ -107,17 +107,15 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
-		if(item.value!==undefined){
 			let reg_value = reg.test(item.value);
 			!reg_value ? item.status = true : item.status = false
-		}
 	};
 	//库存
-	$scope.leftNumber=function (value) {
-		if(value!==undefined){
-			$scope.left_number = value.replace(/[^\d]/g,'')
-		}
-	};
+	// $scope.leftNumber=function (value) {
+	// 	if(value!==undefined){
+	// 		$scope.left_number = value.replace(/[^\d]/g,'')
+	// 	}
+	// };
 	/*----------------自己添加的属性--------------------*/
 
 	$scope.own_all_attrs=[];//大后台属性和自己添加的属性 数组
