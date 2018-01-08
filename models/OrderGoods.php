@@ -429,7 +429,7 @@ class OrderGoods extends ActiveRecord
             $OrderGoods->purchase_price_designer=$goods['purchase_price_designer'];
             $OrderGoods->subtitle=$goods['subtitle'];
             $res1=$OrderGoods->save(false);
-            echo $res1;die;
+            echo 1;die;
             if (!$res1) {
                 $tran->rollBack();
                 return 500;
