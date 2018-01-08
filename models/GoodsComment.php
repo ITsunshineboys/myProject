@@ -242,14 +242,13 @@ class GoodsComment extends ActiveRecord
         }
 
     }
+
     /**
      * @param $postData
-     * @param $user
-     * @return int
+     * @return array|int
      */
     public  static  function  addCommentByModel($postData)
     {
-        var_dump($postData);die;
         if(
             !array_key_exists('store_service_score', $postData)
             || !array_key_exists('shipping_score', $postData)
@@ -281,13 +280,14 @@ class GoodsComment extends ActiveRecord
             $code=1000;
             return $code;
         }
-        $code=self::checkIsSetComment($orderGoods);
+        $code=self::checkIsSetComment($postData);
         if ($code !=200){
             return $code;
         }
         $goods=Goods::find()
             ->where(['sku'=>$postData['sku']])
             ->one();
+        var_dump($goods);die;
         $list=self::GetAverageScore($postData,$goods->supplier_id);
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
