@@ -123,9 +123,6 @@
       }
     },
     methods: {
-      qqq () {
-        console.log(this.checked_flag)
-      },
       toPay () {
         if (!this.consigneeFlag) {      // 已填写收货地址
           this.axios.get('/order/judge-address', {
@@ -219,7 +216,7 @@
         }
       }
     },
-    activated () {
+    created () {
       this.axios.get('/order/get-line-goods-info', {
         goods_id: 43,
         goods_num: 10

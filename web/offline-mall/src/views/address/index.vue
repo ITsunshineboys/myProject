@@ -1,19 +1,19 @@
 <template>
     <div>
       <x-header :left-options="{backText: ''}">编辑收货地址</x-header>
-      <div class="bg-white address-box">
-        <x-input class="consignee-box" v-model="consignee" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" :max=10></x-input>
-        <x-input class="phone-box" v-model="phoneNumber" title="联系电话" name="mobile"  placeholder="请输入联系电话" :max="11"></x-input>
-        <group class="choose-address-box" label-width="5rem" label-align="left">
-          <x-address :confirm-text="'确认'" :title="'地址选择'" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
-        </group>
-        <group class="address-detail-box" label-width="5rem">
-          <x-textarea  :title="'详细地址'" :placeholder="'请输入详细地址'" v-model="detailAddress" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
-        </group>
-      </div>
-      <x-button class="save-btn" :class="{'save-btn-true':consignee && phoneNumber && detailAddress}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!consignee || !phoneNumber || !detailAddress"></x-button>
-      <!--确认模态框-->
-      <Modal :modalStatus="modalStatus"></Modal>
+          <div class="bg-white address-box">
+            <x-input class="consignee-box" v-model="consignee" title="收货人" label-width="5rem" :placeholder="'请输入姓名'" :max=10></x-input>
+            <x-input class="phone-box" v-model="phoneNumber" title="联系电话" name="mobile"  placeholder="请输入联系电话" :max="11"></x-input>
+            <group class="choose-address-box" label-width="5rem" label-align="left">
+              <x-address :confirm-text="'确认'" :title="'地址选择'" v-model="addressValue" raw-value :list="addressData" value-text-align="right"></x-address>
+            </group>
+            <group class="address-detail-box" label-width="5rem">
+              <x-textarea  :title="'详细地址'" :placeholder="'请输入详细地址'" v-model="detailAddress" :max=30 :show-counter="false" :rows="1" autosize></x-textarea>
+            </group>
+          </div>
+          <x-button class="save-btn" :class="{'save-btn-true':consignee && phoneNumber && detailAddress}" type="primary" :text="'保存'" @click.native="btnClick" :disabled="!consignee || !phoneNumber || !detailAddress"></x-button>
+          <!--确认模态框-->
+          <Modal :modalStatus="modalStatus"></Modal>
     </div>
 </template>
 
