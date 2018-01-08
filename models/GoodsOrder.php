@@ -3501,6 +3501,7 @@ class GoodsOrder extends ActiveRecord
                         return $code;
                     }
 
+                    echo 1;die;
                     $month=date('Ym',$time);
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
