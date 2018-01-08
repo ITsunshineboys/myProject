@@ -2905,7 +2905,7 @@ class MallController extends Controller
             $goodsAttr->unit = $units[$i];
             $goodsAttr->addition_type = $additionTypes[$i];
             $goodsAttr->category_id = $categoryId;
-            $goodsAttr->addition_type == GoodsAttr::ADDITION_TYPE_DROPDOWN_LIST && $goodsAttr->value = $values[$i];
+            $goodsAttr->addition_type != GoodsAttr::ADDITION_TYPE_NORMAL && $goodsAttr->value = $values[$i];
 
             if (!$goodsAttr->validate()) {
                 $transaction->rollBack();
@@ -2923,7 +2923,7 @@ class MallController extends Controller
                 ]);
             }
 
-            if (!$goodsAttr->save()) {
+            if (!$goodsAttr->save(false)) {
                 $code = 500;
                 return Json::encode([
                     'code' => $code,
