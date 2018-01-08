@@ -1578,7 +1578,7 @@ class GoodsOrder extends ActiveRecord
         $query
             ->select('sum(og.goods_number) as ' . $retKeyName)
             ->from(self::tableName() .' as t')
-            ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_id = t.id')
+            ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_no = t.order_no')
             ->where(['t.supplier_id' => $supplierId, 't.pay_status' => self::PAY_STATUS_PAID]);
         if ($startTime + $endTime > 0) {
             $query
@@ -1605,7 +1605,7 @@ class GoodsOrder extends ActiveRecord
         $query
             ->select('sum(og.goods_number * og.goods_price) as ' . $retKeyName)
             ->from(self::tableName() .' as t')
-            ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_id = t.id')
+            ->leftJoin(OrderGoods::tableName() . ' as og', 'og.order_no = t.order_no')
             ->where(['t.supplier_id' => $supplierId, 't.pay_status' => self::PAY_STATUS_PAID]);
         if ($startTime + $endTime > 0) {
             $query
