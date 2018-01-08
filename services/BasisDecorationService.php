@@ -347,14 +347,14 @@ class BasisDecorationService
      */
     public static function goodsAttr($goods,$value,$name,$int = 1)
     {
+        $one_goods = [];
         foreach ($goods as $one){
             if ($one['title'] == $value){
                 $one_goods[] = $one;
             }
         }
         //  抓取利润最大的商品
-        var_dump($goods);
-//        var_dump($one_goods);
+        var_dump($one_goods);
         die;
         $max_goods = self::profitMargin($one_goods);
         switch ($int){
