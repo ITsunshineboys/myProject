@@ -33,7 +33,8 @@ class GoodsAttr extends ActiveRecord
 
     const ADDITION_TYPES = [
         self::ADDITION_TYPE_NORMAL => '普通添加',
-        self::ADDITION_TYPE_DROPDOWN_LIST => '下拉框添加'
+        self::ADDITION_TYPE_DROPDOWN_LIST => '下拉框添加',
+        self::ADDITION_TYPE_CHECKBOX => '复选框添加'
     ];
 
     /**
@@ -101,7 +102,7 @@ class GoodsAttr extends ActiveRecord
 
         foreach ($attrs as &$attr) {
             $attr['unit'] = self::UNITS[$attr['unit']];
-            $attr['addition_type'] == self::ADDITION_TYPE_DROPDOWN_LIST
+            $attr['addition_type'] != self::ADDITION_TYPE_NORMAL
             && $attr['value'] = explode(',', $attr['value']);
         }
 
@@ -150,6 +151,9 @@ class GoodsAttr extends ActiveRecord
                 $attr['addition_type'] = $lhzzAttr->addition_type;
                 if ($lhzzAttr->addition_type == self::ADDITION_TYPE_DROPDOWN_LIST) {
                     $attr['selected'] = $attr['value'];
+                    $attr['value'] = explode(',', $lhzzAttr->value);
+                } elseif ($lhzzAttr->addition_type == self::ADDITION_TYPE_CHECKBOX) {
+                    $attr['selected'] = explode(',', $attr['value']);
                     $attr['value'] = explode(',', $lhzzAttr->value);
                 }
             } else {
