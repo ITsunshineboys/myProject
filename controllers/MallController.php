@@ -3799,7 +3799,7 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$goods->save()) {
+        if (!$goods->save(false)) {
             $code = 500;
             return Json::encode([
                 'code' => $code,
