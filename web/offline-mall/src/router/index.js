@@ -11,6 +11,7 @@ import GoodDetail from '@/views/good_detail/index'  // 商品详情
 import AllComment from '@/views/comment/index'      // 全部评价
 import ClassList from '@/views/class/index'         // 分类列表
 import GoodsList from '@/views/goods_list/index'    // 商品列表
+import Agreement from '@/views/agreement/index'     // 商城购买协议
 
 Vue.use(Router)
 
@@ -68,6 +69,11 @@ export default new Router({
       path: '/goods-list',
       name: 'GoodsList',
       component: GoodsList
+    },
+    {
+      path: '/agreement',
+      name: 'Agreement',
+      component: Agreement
     }
   ]
 })

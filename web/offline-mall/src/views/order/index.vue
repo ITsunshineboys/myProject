@@ -60,9 +60,9 @@
     </div>
     <!--商城购买协议-->
     <div class="agreement-box">
-        <input type="checkbox" v-model="checked_flag" >
-        <span>已同意</span>
-        <a>《商城购买协议》</a>
+      <input id="agreement" type="checkbox" v-model="checked_flag">
+      <label for="agreement">已同意</label>
+      <router-link to="/agreement">《商城购买协议》</router-link>
     </div>
     <!--去付款按钮-->
     <div class="bg-white">
@@ -123,6 +123,9 @@
       }
     },
     methods: {
+      qqq () {
+        console.log(this.checked_flag)
+      },
       toPay () {
         if (!this.consigneeFlag) {      // 已填写收货地址
           this.axios.get('/order/judge-address', {
@@ -400,12 +403,12 @@
     height: 12px;
     border-radius: 2px;
   }
-  .agreement-box > span {
+  .agreement-box {
     font-size: 12px;
     color: #7c7c7c;
   }
   .agreement-box > a {
     font-size: 12px;
-    color: #222;
+    color: #222!important;
   }
 </style>
