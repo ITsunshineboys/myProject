@@ -289,10 +289,10 @@
                     </div>
                 </div>
 
-                <div class="special_requirements" ng-init="special_request=''">
+                <div class="special_requirements">
                     <div class="shu"></div>
                     <p class="title">特殊要求</p>
-                    <textarea class="main_text" maxlength="300" ng-model="ctrlScope.special_request"
+                    <textarea class="main_text" maxlength="300" ng-model="vm.special_request"
                               style="padding-left:.85rem ;padding-top: .85rem;" placeholder="请输入你的要求"></textarea>
                     <span style="font-size: 36px;">{{special_request.length}}/300</span>
                 </div>
@@ -301,8 +301,8 @@
                 <!--尾部结算-->
                 <div class="footer_settlement">
                     <div class="footer_set">
-                        <span class="first_span">{{discount_price | currency:'￥'}}</span>
-                        <span class="second_span">{{all_price | currency:'￥'}}</span><br/>
+                        <span class="first_span">￥{{special_offer.toFixed(2)}}</span>
+                        <span class="second_span">￥{{total_prices.toFixed(2)}}</span><br/>
                         <span class="three_span">未包含施工图费用，8项全场8折</span>
                     </div>
                     <!--<button>保存方案</button>-->

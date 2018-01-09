@@ -1,5 +1,7 @@
 app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScroll, $location, $q) {
+    //初始化
     $scope.vm = $scope
+    $scope.special_request = ''
     $scope.materials = []
     $scope.worker_list = []
     //监听滚动
@@ -416,6 +418,17 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                    arr1.bedroom_area = res.bedroom_area
                })
             })(),
+            (function () {
+               return _ajax.get('/owner/add-materials',{
+                   city:$scope.params.city,
+                   series:$scope.params.series,
+                   style:$scope.params.style,
+                   area:$scope.params.area
+               },function (res) {
+                   console.log('材料添加项');
+                   console.log(res);
+               })
+            })()
         ]).then(function () {
             console.log($scope.materials);
             console.log($scope.worker_list);
@@ -541,6 +554,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             ]).then(function () {
                 console.log($scope.materials);
                 console.log($scope.worker_list);
+                getPrice()
             })
         })
         // if(valid){
@@ -560,14 +574,16 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     //计算总价和折后价
     function getPrice() {
         let arr = [],arr1 = []
-        $scope.total_prices = 0//折后价
-        $scope.special_offer = 0//原价
+        $scope.total_prices = 0//原价
+        $scope.special_offer = 0//折后价
         for(let [key,value] of $scope.materials.entries()){
             arr.push({
-
+                category_id:value.id,
+                price:value.cost,
+                procurement:value.procurement
             })
             for(let [key1,value1] of value.second_level.entries()){
-                for(let [key2,value2] of value.goods.entries()){
+                for(let [key2,value2] of value1.goods.entries()){
                     arr1.push({
                         goods_id:value2.id,
                         num:value2.quantity
@@ -583,11 +599,20 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                },function (res) {
                    console.log('运费');
                    console.log(res);
+                   $scope.total_prices += +res.data
+                   $scope.special_offer += +res.data
                })
             })(),
             //总价
             (function () {
-
+                return _ajax.post('/owner/coefficient',{
+                    list:arr
+                },function (res) {
+                    console.log('总价');
+                    console.log(res);
+                    $scope.total_prices += +res.data.total_prices
+                    $scope.special_offer += +res.data.special_offer
+                })
             })()
         ]).then(function () {
             let worker_price = $scope.worker_list.reduce(function (prev,cur) {
