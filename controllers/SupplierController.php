@@ -298,7 +298,8 @@ class SupplierController extends Controller
         $size = (int)Yii::$app->request->get('size', ModelService::PAGE_SIZE_DEFAULT);
         $where = [
             'type' => GoodsRecommendSupplier::RECOMMEND_GOODS_TYPE_SECOND,
-            'status' => GoodsRecommendSupplier::STATUS_ONLINE,
+//            'status' => GoodsRecommendSupplier::STATUS_ONLINE,
+            'delete_time' => 0,
             'supplier_id' => $supplierId,
 //            'district_code' => $districtCode,
         ];
