@@ -62,6 +62,7 @@ class AuthService extends AccessControl
                 return true;
             }
 
+            StringService::writeLog('test', $code, 'auth');
             if ($this->denyCallback !== null) {
                 call_user_func($this->denyCallback, $code, $action);
             }
