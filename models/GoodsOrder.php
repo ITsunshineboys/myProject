@@ -207,7 +207,6 @@ class GoodsOrder extends ActiveRecord
             $goods_order->order_no = $order_no;
             $goods_order->amount_order = $amount_order;
             $goods_order->supplier_id = $supplier_id;
-//            $goods_order->invoice_id = $invoice->id;
             $goods_order->pay_status = $pay_status;
             $goods_order->create_time =$create_time;
             $goods_order->paytime =$create_time;
@@ -236,7 +235,8 @@ class GoodsOrder extends ActiveRecord
                 $goods_order->invoice_content=$invoice['invoice_content'];
             }
             $res1 = $goods_order->save(false);
-            if (!$res1) {
+            if (!$res1)
+            {
                 $tran->rollBack();
                 return 500;
             }
@@ -278,18 +278,21 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
+
             $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,7);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
+
             $code=OrderGoods::AddNewOrderData($post['out_trade_no'],$goods_num,$time,$Goods->toArray(),0,0,0,0,$freight*100);
             if ($code!=200)
             {
                 $tran->rollBack();
                 return false;
             }
+
             $month=date('Ym',$time);
             $supplier=Supplier::find()
                 ->where(['id'=>$Goods->supplier_id])
@@ -297,8 +300,8 @@ class GoodsOrder extends ActiveRecord
             $supplier->sales_volumn_month=$supplier->sales_volumn_month+$goods_num;
             $supplier->sales_amount_month=$supplier->sales_amount_month+$Goods->platform_price*$goods_num;
             $supplier->month=$month;
-            $res3=$supplier->save(false);
-            if (!$res3){
+            if (!$supplier->save(false))
+            {
                 $tran->rollBack();
                 return false;
             }
@@ -348,6 +351,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+
             $code=OrderGoodsImage::AddNewData($goods_id,$post['out_trade_no'],$Goods->sku);
             if ($code!=200)
             {
@@ -361,6 +365,7 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return false;
             }
+
             $code=OrderGoodsAttr::AddNewData($goods_id,$post['out_trade_no'],$Goods->sku);
             if ($code!=200)
             {

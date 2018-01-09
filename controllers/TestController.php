@@ -475,7 +475,9 @@ class TestController extends Controller
                 'msg'  =>'收货地址ID 或 发票ID 错误'
             ]);
         }
-        $user=User::find()->where(['mobile'=>$mobile])->one();
+        $user=User::find()
+            ->where(['mobile'=>$mobile])
+            ->one();
         $amount_order=$goods->platform_price*$goods_num+$freight;
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
@@ -717,13 +719,31 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $data=GoodsOrder::find()->where(['order_refer'=>2,'user_id'=>0])->all();
-        foreach ($data as &$list)
-        {
-            $list->order_refer=1;
-            $list->save(false);
+        $sms['mobile'] = '13880414513';
+        $sms['type'] = 'resetMobile';
+        try {
+            new SmValidationService($sms);
+        } catch (\InvalidArgumentException $e) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        } catch (ServerErrorHttpException $e) {
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        } catch (\Exception $e) {
+            $code = 1020;
+            if ($code == $e->getCode()) {
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
-
     }
     public  static  function  actionTest1()
     {

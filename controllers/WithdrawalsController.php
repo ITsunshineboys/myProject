@@ -242,7 +242,6 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-    //        $role_id=trim(Yii::$app->request->get('role_id',7));
         $role_id=$user->last_role_id_app;
         $data=UserBankInfo::findCapitalDetail($role_id,$user);
         $code=200;
