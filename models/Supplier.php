@@ -390,7 +390,7 @@ class Supplier extends ActiveRecord
             : Yii::$app->params['supplier']['quality_guarantee_deposit'];
 
         $supplier->scenario = self::SCENARIO_ADD;
-        if (!$supplier->validate()) {
+        if (!$supplier->validate()) {StringService::writeLog('test', json_encode($supplier->errors), 'supplier-add');
             $code = 1000;
             if (isset($supplier->errors['shop_name'])) {
                 $customErrCode = ModelService::customErrCode($supplier->errors['shop_name'][0]);
@@ -467,7 +467,7 @@ class Supplier extends ActiveRecord
                     ? trim($attrs['identity_card_back_image'])
                     : '';
 
-                if (!$user->validateIdentity($operator)) {
+                if (!$user->validateIdentity($operator)) {StringService::writeLog('test', json_encode($supplier->errors), 'supplier-add-validateIdentity');
                     $transaction->rollBack();
 
                     $code = 1000;
