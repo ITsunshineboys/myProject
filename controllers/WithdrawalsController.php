@@ -1885,11 +1885,17 @@ class WithdrawalsController extends Controller
         $city_id=$request->post('city_id');
         if (!$bank_name || !$city_id)
         {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
+            $bank_name=$request->get('bank_name');
+            $city_id=$request->get('city_id');
+            if (!$bank_name || !$city_id)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+
         }
         $bank=BankName::find()->where("  name  like '%{$bank_name}%'")->one();
         if (!$bank)
