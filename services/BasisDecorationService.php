@@ -1602,8 +1602,7 @@ class BasisDecorationService
             }
         }
         $style = self::style($goods_material);
-        $style = self::series($style);
-
+        
         return $style;
     }
 
@@ -1997,13 +1996,7 @@ class BasisDecorationService
                 }
             $one_goods['style_id'] = implode('、',$style_);
             }
-        }
-        return $goods;
-    }
 
-    public static function series($goods)
-    {
-        foreach ($goods as &$one_goods){
             if ($one_goods['series_id'] > 0){
                 $goods_style[] =  $one_goods['series_id'];
                 $style = Series::find()->asArray()->select('series')->where(['in','id',$goods_style])->all();
@@ -2016,4 +2009,5 @@ class BasisDecorationService
         }
         return $goods;
     }
+
 }
