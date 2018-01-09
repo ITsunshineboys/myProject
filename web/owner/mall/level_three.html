@@ -1,10 +1,25 @@
 <div class="back">
+    <header>
+        <div>
+            <a class="return_btn" ng-click="goPrev()">
+                <img src="images/mall_nav_return.png" class="in_span">
+            </a>
+            <p class="pic_span" style="text-align: center;">{{basic_materials.title}}</p>
+            <!--<p class="cur_location">-->
+            <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+            <!--<span class="postion_span">成都</span>-->
+            <!--</p>-->
+            <!--<p class="cur_location">-->
+                <!--<span class="postion_span" ng-click="changeEditStatus()">{{edit_status==0?'编辑':'完成'}}</span>-->
+            <!--</p>-->
+        </div>
+    </header>
     <section>
         <div class="container-fluid list_comment">
             <ul class="row">
-                <li class="col-xs-4" ng-repeat="item in all_three_level" ng-click="go_cur_goods(item)">
+                <li class="col-xs-4" ng-repeat="item in level_three" ng-click="goDetails(item)">
                     <div class="img_box">
-                        <img ng-src="{{baseUrl + item.icon}}" alt=""/>
+                        <img ng-src="{{item.icon}}" alt=""/>
                     </div>
                     <div class="img_txt">{{item.title}}</div>
                 </li>

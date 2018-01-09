@@ -31,7 +31,7 @@
         <!--服务项-->
         <div class="service_item" data-toggle="modal" data-target="#myModal_sec">
             <ul>
-                <li ng-repeat="item in goods_detail.sale_services"><img src="images/right.png" alt=""/> &nbsp;<span>{{item}}</span></li>
+                <li ng-repeat="item in goods_detail.sale_services | limitTo:3"><img src="images/right.png" alt=""/> &nbsp;<span>{{item}}</span></li>
                 <li>
                     <img src="images/left_more.png" class="img_size_1" alt="">
                 </li>

@@ -16,6 +16,9 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
         series:obj.series,
         style:obj.style
     }
+    if(sessionStorage.getItem('options')!=null){
+        $scope.params = JSON.parse(sessionStorage.getItem('options'))
+    }
     //请求风格、系列
     _ajax.get('/owner/series-and-style', {}, function (res) {
         console.log(res);
@@ -159,6 +162,7 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                             }
                         }
                     }
+                    sessionStorage.setItem('options',JSON.stringify($scope.params))
                     sessionStorage.setItem('other_data',JSON.stringify(res))//杂工项数据保存
                     sessionStorage.setItem('materials',JSON.stringify($scope.materials))//材料项保存
                     sessionStorage.removeItem('copies')//去除复制品
@@ -212,8 +216,11 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                 return item.worker_kind == res.labor_all_cost.worker_kind
             })
             $scope.worker_list.splice(index,1)
+            sessionStorage.removeItem('options')
             sessionStorage.removeItem('other_data')
             sessionStorage.removeItem('copies')
+            sessionStorage.setItem('materials',JSON.stringify($scope.materials))//材料项保存
+            sessionStorage.setItem('worker_list',JSON.stringify($scope.worker_list))//工人项保存
             $state.go('nodata')
         }
     }

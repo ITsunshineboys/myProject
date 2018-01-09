@@ -1,27 +1,42 @@
 <div class="back">
+    <header>
+        <div>
+            <a class="return_btn" ng-if="edit_status==0" ng-click="goPrev()">
+                <img src="images/mall_nav_return.png" class="in_span">
+            </a>
+            <p class="pic_span" style="text-align: center;">{{header_title}}</p>
+            <!--<p class="cur_location">-->
+            <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+            <!--<span class="postion_span">成都</span>-->
+            <!--</p>-->
+            <p class="cur_location">
+            <span class="postion_span" ng-click="changeEditStatus()">{{edit_status==0?'编辑':'完成'}}</span>
+            </p>
+        </div>
+    </header>
     <section style="overflow: hidden">
-        <!--移动家具-->
+        <!--其它材料-->
         <div class="sheet_material">
             <ul class="wall_ul">
-                <li ng-repeat="item in cur_item.second_level">
-                    <div ng-class="{'cur_animate':is_delete_btn}" class="goods_detail" data-target="#myModal" data-toggle="{{cur_content}}" ng-repeat="item1 in item.goods_detail"
-                         ng-click="get_basic_details(item1)">
+                <li ng-repeat="item in basic_materials.second_level">
+                    <div ng-class="{'cur_animate':edit_status == 1}" class="goods_detail" data-target="#myModal" data-toggle="{{modal_status}}" ng-repeat="item1 in item.goods"
+                         ng-click="getDetails(item1)">
                         <div class="wall_span_brand">
                             <span class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br>
                             <span class="wall_brand">{{item1.name}}</span>
                         </div>
                         <span class="wall_money">{{item1.cost | currency:'￥'}}
                             <img ng-if="!is_delete_btn" src="images/left_more.png" alt=""></span>
-                        <button class="del" ng-click="delete_item(item1)" ng-if="is_delete_btn">删除</button>
+                        <button class="del" ng-click="deleteItem(item1)" ng-if="edit_status == 1">删除</button>
                     </div>
                 </li>
             </ul>
-            <p ng-if="cur_item.count==0&&!!is_delete_btn" class="no_data">暂无材料显示</p>
+            <p ng-if="basic_materials.count==0&&edit_status == 1" class="no_data">暂无材料显示</p>
         </div>
 
         <!--添加材料按钮-->
         <div class="add_material">
-            <a ng-if="!is_delete_btn" ng-click="go_three_item()">
+            <a ng-if="edit_status == 0" ng-click="goLevelThree()">
                 <span>点击添加装修材料</span>
             </a>
         </div>
@@ -29,8 +44,8 @@
         <!--按钮、-->
         <div class="preservation">
             <span>合计：</span>
-            <span class="money_col">{{cur_item.cost | currency:'￥'}}</span>
-            <button ng-if="!is_delete_btn" ng-click="save()">保存</button>
+            <span class="money_col">{{basic_materials.cost | currency:'￥'}}</span>
+            <button ng-if="edit_status == 0" ng-click="save()">保存</button>
         </div>
 
         <!--模态框  ===== 更换材料 -->
@@ -41,19 +56,19 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                     <div class="comment_img">
-                        <img ng-src="{{cur_goods.cover_image}}" alt=""/>
+                        <img ng-src="{{goods_details.cover_image}}" alt=""/>
                     </div>
                     <div class="comment">
-                        <p class="goods_name">{{cur_goods.goods_name}}</p>
-                        <p class="price">{{cur_goods.platform_price | currency:'￥'}}</p>
-                        <p>品牌名称：{{cur_goods.name}}</p>
+                        <p class="goods_name">{{goods_details.goods_name}}</p>
+                        <p class="price">{{goods_details.platform_price | currency:'￥'}}</p>
+                        <p>品牌名称：{{goods_details.name}}</p>
                         <p>
-                            <span ng-if="cur_goods.series_name!=undefined">系列：{{cur_goods.series_name}}</span>
-                            <span class="style_position" ng-if="cur_goods.style_name!=undefined">风格：{{cur_goods.style_name}}</span>
+                            <span ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</span>
+                            <span class="style_position" ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</span>
                         </p>
                     </div>
-                    <button type="button" class="go_detail" ng-click="go_details()">查看详情</button>
-                    <button type="button" class="go_replace" ng-click="replace_material()">更换</button>
+                    <button type="button" data-dismiss="modal" class="go_detail" ng-click="goDetails()">查看详情</button>
+                    <button type="button" data-dismiss="modal" class="go_replace" ng-click="goDetails(1)">更换</button>
                 </div>
             </div>
         </div>

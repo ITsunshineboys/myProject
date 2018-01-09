@@ -51,7 +51,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'product_list_ctrl'
             })
             .state('level_three',{//三级列表
-                url:'/level_three',
+                url:'/level_three?status&index',
                 templateUrl:'level_three.html',
                 css:['css/movefurniture.css','css/all.css'],
                 controller:'level_three_ctrl'
