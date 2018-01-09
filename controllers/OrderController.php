@@ -2298,6 +2298,7 @@ class OrderController extends Controller
                     $where=GoodsOrder::GetTypeWhere($type);
                     $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app} ";
                 }
+                $where.=' and a.order_refer = 2';
                 break;
             case 'supplier':
                 $supplier=Supplier::find()
@@ -2319,7 +2320,7 @@ class OrderController extends Controller
                 }
                 break;
         }
-        $where.=' and a.order_refer = 2';
+
         if ($type=='all')
         {
             $where.=' and z.customer_service=0';
