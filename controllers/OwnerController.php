@@ -20,6 +20,7 @@ use app\models\EngineeringUniversalCriterion;
 use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
+use app\models\GoodsStyle;
 use app\models\LaborCost;
 use app\models\LogisticsTemplate;
 use app\models\MaterialPropertyClassify;
@@ -1327,6 +1328,7 @@ class OwnerController extends Controller
             $codes [] = $one_materials['sku'];
         }
         $goods = Goods::findBySkuAll($codes);
+        $style = BasisDecorationService::style($goods);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1335,7 +1337,7 @@ class OwnerController extends Controller
             ]);
         }
         foreach ($add_materials as $material){
-            foreach ($goods as &$one_goods){
+            foreach ($style as &$one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
                     $one_goods['quantity'] = (int)$material['quantity'];
                     $one_goods['cost'] = round($material['quantity'] * $one_goods['platform_price'],2);
@@ -1346,7 +1348,7 @@ class OwnerController extends Controller
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
-            'add_list' => $goods,
+            'add_list' => $style,
         ]);
     }
 

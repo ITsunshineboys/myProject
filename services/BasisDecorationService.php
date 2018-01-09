@@ -13,7 +13,9 @@ use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
+use app\models\GoodsStyle;
 use app\models\ProjectView;
+use app\models\Style;
 use app\models\WorkerCraftNorm;
 use yii\helpers\Json;
 
@@ -351,10 +353,13 @@ class BasisDecorationService
         foreach ($goods as $one){
             if ($one['title'] == $value){
                 $one_goods[] = $one;
+
             }
         }
+        $style = self::style($one_goods);
         //  抓取利润最大的商品
-        $max_goods = self::profitMargin($one_goods);
+        $max_goods = self::profitMargin($style);
+
         switch ($int){
             case $int == 1 ;
                 $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
@@ -1963,5 +1968,22 @@ class BasisDecorationService
 
         return $goods[0];
 
+    }
+
+    public static function style($goods)
+    {
+        foreach ($goods as &$one_goods){
+            if ($one_goods['style_id'] > 0){
+                $goods_style = GoodsStyle::styleIdsByGoodsId($one_goods['id']);
+                $goods_style[] =  $one_goods['style_id'];
+                $style = Style::find()->asArray()->select('style')->where(['in','id',$goods_style])->all();
+                $style_ = [];
+                foreach ($style as $one_style){
+                    $style_[] = $one_style['style'];
+                }
+            $one_goods['style_id'] = implode('、',$style_);
+            }
+        }
+        return $goods;
     }
 }

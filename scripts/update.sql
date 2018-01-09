@@ -252,4 +252,7 @@ alter table `user_accessdetail` drop column refund_bank_log_id  ;
 --all 2018.1.8  yr
  ALTER TABLE `effect` ADD `effect_image_address` varchar(255) NOT NULL DEFAULT '';
 
+ --all 2018.1.9  yr
+ alter table effect modify column house_image VARCHAR(255) COMMENT'户型图';
+
 
