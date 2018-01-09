@@ -767,16 +767,12 @@ button[disabled]{
     /* margin-left: 1rem; */
     margin-bottom: 1.2rem;
 }
-.left_main p{
-    
-}
 
 .pic_q{
     /*position: absolute;*/
     right: 1rem;
     bottom:0;
     margin-left: 4rem;
-    color: #959292;
     font-size: 1.1rem!important;
 }
 .dw{
@@ -852,7 +848,6 @@ button[disabled]{
     padding: 0;
 }
 .cur_title{
-    color: #666;
     font-size:1rem;
     display: block;
     white-space: nowrap;
@@ -861,7 +856,6 @@ button[disabled]{
     width: 6rem;
 }
 .dark{
-    color: #999;
     display: block;
     white-space: nowrap;
     overflow: hidden;

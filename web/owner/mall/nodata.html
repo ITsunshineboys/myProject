@@ -262,17 +262,17 @@
                                     <p class="pic" ng-if="item.cost != 0">{{item.cost | currency:'￥'}}</p>
                                     <ul ng-if="item.title == '辅材'||item.title == '主要材料'">
                                         <li ng-repeat="item1 in item.second_level">
-                                            <span class="cur_title">{{item1.title}}</span>
-                                            <span class="pic_q">￥{{item1.cost.toFixed(2)}}</span>
+                                            <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#999')}" class="cur_title">{{item1.title}}</span>
+                                            <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}" class="pic_q">￥{{item1.cost.toFixed(2)}}</span>
                                         </li>
                                     </ul>
                                     <ul ng-if="item.title != '辅材'&&item.title != '主要材料'">
                                         <div ng-repeat="item1 in item.second_level">
                                             <!--<div ng-repeat="item2 in item1.three_level">-->
                                             <li ng-repeat="item2 in item1.goods">
-                                                <p class="cur_title">{{item2.title}}</p>
-                                                <span class="pic_q dark price">{{item2.cost | currency:'￥'}}</span>
-                                                <span class="dark">{{item2.name}}</span>
+                                                <p ng-style="{'color':(item2.status == 0?'#D9AD65':'#999')}" class="cur_title">{{item2.title}}</p>
+                                                <span ng-style="{'color':(item2.status == 0?'#D9AD65':'#999')}" class="pic_q dark price">{{item2.cost | currency:'￥'}}</span>
+                                                <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}" class="dark">{{item2.name}}</span>
                                             </li>
                                             <!--</div>-->
                                         </div>

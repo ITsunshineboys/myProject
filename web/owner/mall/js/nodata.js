@@ -62,18 +62,11 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         $scope.materials = JSON.parse(sessionStorage.getItem('materials'))
         getPrice()
     }
-    /*存基本信息sessionStorage*/
+    /*存基本信息*/
     $scope.$watch('params', function (newVal, oldVal) {
-        console.log(newVal);
-        console.log(oldVal);
-        //检测初始和结束是否存在空值
-        let index = Object.entries(newVal).findIndex(function (item) {
-            return item[1] === ''
-        })
-        if (index == -1) {
-            if($scope.materials.length!=0){
-                $scope.materials = []
-            }
+        console.log(JSON.stringify(newVal) === JSON.stringify(oldVal));
+        if(!(JSON.stringify(newVal) === JSON.stringify(oldVal))){
+            $scope.materials = []
         }
     }, true)
     $scope.$watch('toponymy', function (newVal, oldVal) {
@@ -104,395 +97,210 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     })
     //生成材料
     $scope.getMaterials = function (valid, error) {
-        sessionStorage.setItem('params', JSON.stringify(newVal))
         let arr = angular.copy($scope.params)
         let arr1 = angular.copy($scope.params)
-        //分类商品初始化
-        $scope.materials = angular.copy($scope.first_level)
-        for (let [key, value] of $scope.materials.entries()) {
-            value.id = +value.id
-            value['cost'] = 0
-            value['count'] = 0
-            value['second_level'] = []
-            value['procurement'] = 0
-        }
-        //工人费用初始化
-        $scope.worker_list = []
-        //请求生成材料
-        $scope.words = '生成中...'
-        $q.all([
-            //水电工费用
-            (function () {
-                return _ajax.get('/owner/plumber-price', $scope.params, function (res) {
-                    console.log('水电工费用');
-                    console.log(res);
-                    let index = $scope.worker_list.findIndex(function (item) {
-                        return item.worker_kind == res.labor_all_cost.worker_kind
-                    })
-                    if (index == -1) {
-                        $scope.worker_list.push(res.labor_all_cost)
-                    } else {
-                        $scope.worker_list[index].price += res.labor_all_cost.price
-                    }
-                })
-            })(),
-            //强弱电
-            (function () {
-                return _ajax.get('/owner/electricity', $scope.params, function (res) {
-                    console.log('强弱电');
-                    console.log(res);
-                    //整合二级
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            if (value1.id == value.path.split(',')[0]) {
-                                let index = value1.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                let index1 = $scope.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                if (index == -1) {
-                                    value1.second_level.push({
-                                        id: +$scope.second_level[index1].id,
-                                        title: $scope.second_level[index1].title,
-                                        cost: 0,
-                                        procurement: 0,
-                                        goods: []
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            for (let [key2, value2] of value1.second_level.entries()) {
-                                if (value2.id == value.path.split(',')[1]) {
-                                    let index = value2.goods.findIndex(function (item) {
-                                        return item.id == value.id
-                                    })
-                                    value1.cost += value.cost
-                                    value1.procurement += value.procurement
-                                    value2.cost += value.cost
-                                    value2.procurement += value.procurement
-                                    if (index == -1) {
-                                        value2.goods.push(value)
-                                        value1.count++
-                                    } else {
-                                        value2.goods[index].quantity += value.quantity
-                                        value2.goods[index].cost += value.cost
-                                        value2.goods[index].procurement += value.procurement
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            })(),
-            //水路
-            (function () {
-                return _ajax.get('/owner/waterway', $scope.params, function (res) {
-                    console.log('水路');
-                    console.log(res);
-                    //整合二级
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            if (value1.id == value.path.split(',')[0]) {
-                                let index = value1.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                let index1 = $scope.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                if (index == -1) {
-                                    value1.second_level.push({
-                                        id: +$scope.second_level[index1].id,
-                                        title: $scope.second_level[index1].title,
-                                        cost: 0,
-                                        procurement: 0,
-                                        goods: []
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            for (let [key2, value2] of value1.second_level.entries()) {
-                                if (value2.id == value.path.split(',')[1]) {
-                                    let index = value2.goods.findIndex(function (item) {
-                                        return item.id == value.id
-                                    })
-                                    value1.cost += value.cost
-                                    value1.procurement += value.procurement
-                                    value2.cost += value.cost
-                                    value2.procurement += value.procurement
-                                    if (index == -1) {
-                                        value2.goods.push(value)
-                                        value1.count++
-                                    } else {
-                                        value2.goods[index].quantity += value.quantity
-                                        value2.goods[index].cost += value.cost
-                                        value2.goods[index].procurement += value.procurement
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            })(),
-            //防水
-            (function () {
-                return _ajax.get('/owner/waterproof', $scope.params, function (res) {
-                    console.log('防水');
-                    console.log(res);
-                    let index = $scope.worker_list.findIndex(function (item) {
-                        return item.worker_kind == res.labor_all_cost.worker_kind
-                    })
-                    if (index == -1) {
-                        $scope.worker_list.push(res.labor_all_cost)
-                    } else {
-                        $scope.worker_list[index].price += res.labor_all_cost.price
-                    }
-                    //整合二级
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            if (value1.id == value.path.split(',')[0]) {
-                                let index = value1.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                let index1 = $scope.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                if (index == -1) {
-                                    value1.second_level.push({
-                                        id: +$scope.second_level[index1].id,
-                                        title: $scope.second_level[index1].title,
-                                        cost: 0,
-                                        procurement: 0,
-                                        goods: []
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            for (let [key2, value2] of value1.second_level.entries()) {
-                                if (value2.id == value.path.split(',')[1]) {
-                                    let index = value2.goods.findIndex(function (item) {
-                                        return item.id == value.id
-                                    })
-                                    value1.cost += value.cost
-                                    value1.procurement += value.procurement
-                                    value2.cost += value.cost
-                                    value2.procurement += value.procurement
-                                    if (index == -1) {
-                                        value2.goods.push(value)
-                                        value1.count++
-                                    } else {
-                                        value2.goods[index].quantity += value.quantity
-                                        value2.goods[index].cost += value.cost
-                                        value2.goods[index].procurement += value.procurement
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Object.assign(arr, {waterproof_total_area: res.total_area})
-                })
-            })(),
-            //木作
-            (function () {
-                return _ajax.get('/owner/carpentry', $scope.params, function (res) {
-                    console.log('木作');
-                    console.log(res);
-                    let index = $scope.worker_list.findIndex(function (item) {
-                        return item.worker_kind == res.labor_all_cost.worker_kind
-                    })
-                    if (index == -1) {
-                        $scope.worker_list.push(res.labor_all_cost)
-                    } else {
-                        $scope.worker_list[index].price += res.labor_all_cost.price
-                    }
-                    //整合二级
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            if (value1.id == value.path.split(',')[0]) {
-                                let index = value1.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                let index1 = $scope.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                if (index == -1) {
-                                    value1.second_level.push({
-                                        id: +$scope.second_level[index1].id,
-                                        title: $scope.second_level[index1].title,
-                                        cost: 0,
-                                        procurement: 0,
-                                        goods: []
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            for (let [key2, value2] of value1.second_level.entries()) {
-                                if (value2.id == value.path.split(',')[1]) {
-                                    let index = value2.goods.findIndex(function (item) {
-                                        return item.id == value.id
-                                    })
-                                    value1.cost += value.cost
-                                    value1.procurement += value.procurement
-                                    value2.cost += value.cost
-                                    value2.procurement += value.procurement
-                                    if (index == -1) {
-                                        value2.goods.push(value)
-                                        value1.count++
-                                    } else {
-                                        value2.goods[index].quantity += value.quantity
-                                        value2.goods[index].cost += value.cost
-                                        value2.goods[index].procurement += value.procurement
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            })(),
-            //乳胶漆
-            (function () {
-                return _ajax.get('/owner/coating', $scope.params, function (res) {
-                    console.log('乳胶漆');
-                    console.log(res);
-                    let index = $scope.worker_list.findIndex(function (item) {
-                        return item.worker_kind == res.labor_all_cost.worker_kind
-                    })
-                    if (index == -1) {
-                        $scope.worker_list.push(res.labor_all_cost)
-                    } else {
-                        $scope.worker_list[index].price += res.labor_all_cost.price
-                    }
-                    //整合二级
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            if (value1.id == value.path.split(',')[0]) {
-                                let index = value1.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                let index1 = $scope.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                if (index == -1) {
-                                    value1.second_level.push({
-                                        id: +$scope.second_level[index1].id,
-                                        title: $scope.second_level[index1].title,
-                                        cost: 0,
-                                        procurement: 0,
-                                        goods: []
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of res.data.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            for (let [key2, value2] of value1.second_level.entries()) {
-                                if (value2.id == value.path.split(',')[1]) {
-                                    let index = value2.goods.findIndex(function (item) {
-                                        return item.id == value.id
-                                    })
-                                    value1.cost += value.cost
-                                    value1.procurement += value.procurement
-                                    value2.cost += value.cost
-                                    value2.procurement += value.procurement
-                                    if (index == -1) {
-                                        value2.goods.push(value)
-                                        value1.count++
-                                    } else {
-                                        value2.goods[index].quantity += value.quantity
-                                        value2.goods[index].cost += value.cost
-                                        value2.goods[index].procurement += value.procurement
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    arr1.bedroom_area = res.bedroom_area
-                })
-            })(),
-            //材料添加项
-            (function () {
-                return _ajax.get('/owner/add-materials', {
-                    city: $scope.params.city,
-                    series: $scope.params.series,
-                    style: $scope.params.style,
-                    area: $scope.params.area
-                }, function (res) {
-                    console.log('材料添加项');
-                    console.log(res);
-                    //整合二级
-                    for (let [key, value] of res.add_list.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            if (value1.id == value.path.split(',')[0]) {
-                                let index = value1.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                let index1 = $scope.second_level.findIndex(function (item) {
-                                    return item.id == value.path.split(',')[1]
-                                })
-                                if (index == -1) {
-                                    value1.second_level.push({
-                                        id: +$scope.second_level[index1].id,
-                                        title: $scope.second_level[index1].title,
-                                        cost: 0,
-                                        procurement: 0,
-                                        goods: []
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //整合商品
-                    for (let [key, value] of res.add_list.entries()) {
-                        for (let [key1, value1] of $scope.materials.entries()) {
-                            for (let [key2, value2] of value1.second_level.entries()) {
-                                if (value2.id == value.path.split(',')[1]) {
-                                    let index = value2.goods.findIndex(function (item) {
-                                        return item.id == value.id
-                                    })
-                                    value1.cost += value.cost
-                                    value1.procurement += value.procurement
-                                    value2.cost += value.cost
-                                    value2.procurement += value.procurement
-                                    if (index == -1) {
-                                        value2.goods.push(value)
-                                        value1.count++
-                                    } else {
-                                        value2.goods[index].quantity += value.quantity
-                                        value2.goods[index].cost += value.cost
-                                        value2.goods[index].procurement += value.procurement
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-            })()
-        ]).then(function () {
-            console.log($scope.materials);
-            console.log($scope.worker_list);
+        if(valid){
+            //分类商品初始化
+            $scope.materials = angular.copy($scope.first_level)
+            for (let [key, value] of $scope.materials.entries()) {
+                value.id = +value.id
+                value['cost'] = 0
+                value['count'] = 0
+                value['second_level'] = []
+                value['procurement'] = 0
+            }
+            //工人费用初始化
+            $scope.worker_list = []
+            //请求生成材料
+            $scope.words = '生成中...'
             $q.all([
-                //泥作(需要防水面积(防水))
+                //水电工费用
                 (function () {
-                    return _ajax.get('/owner/mud-make', arr, function (res) {
-                        console.log('泥作');
+                    return _ajax.get('/owner/plumber-price', $scope.params, function (res) {
+                        console.log('水电工费用');
+                        console.log(res);
+                        let index = $scope.worker_list.findIndex(function (item) {
+                            return item.worker_kind == res.labor_all_cost.worker_kind
+                        })
+                        if (index == -1) {
+                            $scope.worker_list.push(res.labor_all_cost)
+                        } else {
+                            $scope.worker_list[index].price += res.labor_all_cost.price
+                        }
+                    })
+                })(),
+                //强弱电
+                (function () {
+                    return _ajax.get('/owner/electricity', $scope.params, function (res) {
+                        console.log('强弱电');
+                        console.log(res);
+                        //整合二级
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                if (value1.id == value.path.split(',')[0]) {
+                                    let index = value1.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    let index1 = $scope.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    if (index == -1) {
+                                        value1.second_level.push({
+                                            id: +$scope.second_level[index1].id,
+                                            title: $scope.second_level[index1].title,
+                                            cost: 0,
+                                            procurement: 0,
+                                            goods: []
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                        //整合商品
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                for (let [key2, value2] of value1.second_level.entries()) {
+                                    if (value2.id == value.path.split(',')[1]) {
+                                        let index = value2.goods.findIndex(function (item) {
+                                            return item.id == value.id
+                                        })
+                                        value1.cost += value.cost
+                                        value1.procurement += value.procurement
+                                        value2.cost += value.cost
+                                        value2.procurement += value.procurement
+                                        if (index == -1) {
+                                            value2.goods.push(value)
+                                            value1.count++
+                                        } else {
+                                            value2.goods[index].quantity += value.quantity
+                                            value2.goods[index].cost += value.cost
+                                            value2.goods[index].procurement += value.procurement
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })(),
+                //水路
+                (function () {
+                    return _ajax.get('/owner/waterway', $scope.params, function (res) {
+                        console.log('水路');
+                        console.log(res);
+                        //整合二级
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                if (value1.id == value.path.split(',')[0]) {
+                                    let index = value1.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    let index1 = $scope.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    if (index == -1) {
+                                        value1.second_level.push({
+                                            id: +$scope.second_level[index1].id,
+                                            title: $scope.second_level[index1].title,
+                                            cost: 0,
+                                            procurement: 0,
+                                            goods: []
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                        //整合商品
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                for (let [key2, value2] of value1.second_level.entries()) {
+                                    if (value2.id == value.path.split(',')[1]) {
+                                        let index = value2.goods.findIndex(function (item) {
+                                            return item.id == value.id
+                                        })
+                                        value1.cost += value.cost
+                                        value1.procurement += value.procurement
+                                        value2.cost += value.cost
+                                        value2.procurement += value.procurement
+                                        if (index == -1) {
+                                            value2.goods.push(value)
+                                            value1.count++
+                                        } else {
+                                            value2.goods[index].quantity += value.quantity
+                                            value2.goods[index].cost += value.cost
+                                            value2.goods[index].procurement += value.procurement
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })(),
+                //防水
+                (function () {
+                    return _ajax.get('/owner/waterproof', $scope.params, function (res) {
+                        console.log('防水');
+                        console.log(res);
+                        let index = $scope.worker_list.findIndex(function (item) {
+                            return item.worker_kind == res.labor_all_cost.worker_kind
+                        })
+                        if (index == -1) {
+                            $scope.worker_list.push(res.labor_all_cost)
+                        } else {
+                            $scope.worker_list[index].price += res.labor_all_cost.price
+                        }
+                        //整合二级
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                if (value1.id == value.path.split(',')[0]) {
+                                    let index = value1.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    let index1 = $scope.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    if (index == -1) {
+                                        value1.second_level.push({
+                                            id: +$scope.second_level[index1].id,
+                                            title: $scope.second_level[index1].title,
+                                            cost: 0,
+                                            procurement: 0,
+                                            goods: []
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                        //整合商品
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                for (let [key2, value2] of value1.second_level.entries()) {
+                                    if (value2.id == value.path.split(',')[1]) {
+                                        let index = value2.goods.findIndex(function (item) {
+                                            return item.id == value.id
+                                        })
+                                        value1.cost += value.cost
+                                        value1.procurement += value.procurement
+                                        value2.cost += value.cost
+                                        value2.procurement += value.procurement
+                                        if (index == -1) {
+                                            value2.goods.push(value)
+                                            value1.count++
+                                        } else {
+                                            value2.goods[index].quantity += value.quantity
+                                            value2.goods[index].cost += value.cost
+                                            value2.goods[index].procurement += value.procurement
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Object.assign(arr, {waterproof_total_area: res.total_area})
+                    })
+                })(),
+                //木作
+                (function () {
+                    return _ajax.get('/owner/carpentry', $scope.params, function (res) {
+                        console.log('木作');
                         console.log(res);
                         let index = $scope.worker_list.findIndex(function (item) {
                             return item.worker_kind == res.labor_all_cost.worker_kind
@@ -550,14 +358,145 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                         }
                     })
                 })(),
-                //配套商品(需要卧室面积(乳胶漆))
+                //乳胶漆
                 (function () {
-                    return _ajax.get('/owner/assort-facility', arr1, function (res) {
-                        console.log('配套商品');
+                    return _ajax.get('/owner/coating', $scope.params, function (res) {
+                        console.log('乳胶漆');
+                        console.log(res);
+                        let index = $scope.worker_list.findIndex(function (item) {
+                            return item.worker_kind == res.labor_all_cost.worker_kind
+                        })
+                        if (index == -1) {
+                            $scope.worker_list.push(res.labor_all_cost)
+                        } else {
+                            $scope.worker_list[index].price += res.labor_all_cost.price
+                        }
+                        //整合二级
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                if (value1.id == value.path.split(',')[0]) {
+                                    let index = value1.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    let index1 = $scope.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    if (index == -1) {
+                                        value1.second_level.push({
+                                            id: +$scope.second_level[index1].id,
+                                            title: $scope.second_level[index1].title,
+                                            cost: 0,
+                                            procurement: 0,
+                                            goods: []
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                        //整合商品
+                        for (let [key, value] of res.data.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                for (let [key2, value2] of value1.second_level.entries()) {
+                                    if (value2.id == value.path.split(',')[1]) {
+                                        let index = value2.goods.findIndex(function (item) {
+                                            return item.id == value.id
+                                        })
+                                        value1.cost += value.cost
+                                        value1.procurement += value.procurement
+                                        value2.cost += value.cost
+                                        value2.procurement += value.procurement
+                                        if (index == -1) {
+                                            value2.goods.push(value)
+                                            value1.count++
+                                        } else {
+                                            value2.goods[index].quantity += value.quantity
+                                            value2.goods[index].cost += value.cost
+                                            value2.goods[index].procurement += value.procurement
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        arr1.bedroom_area = res.bedroom_area
+                    })
+                })(),
+                //材料添加项
+                (function () {
+                    return _ajax.get('/owner/add-materials', {
+                        city: $scope.params.city,
+                        series: $scope.params.series,
+                        style: $scope.params.style,
+                        area: $scope.params.area
+                    }, function (res) {
+                        console.log('材料添加项');
                         console.log(res);
                         //整合二级
-                        for (let [key2, value2] of res.data.goods.entries()) {
-                            for (let [key, value] of value2.entries()) {
+                        for (let [key, value] of res.add_list.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                if (value1.id == value.path.split(',')[0]) {
+                                    let index = value1.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    let index1 = $scope.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    if (index == -1) {
+                                        value1.second_level.push({
+                                            id: +$scope.second_level[index1].id,
+                                            title: $scope.second_level[index1].title,
+                                            cost: 0,
+                                            procurement: 0,
+                                            goods: []
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                        //整合商品
+                        for (let [key, value] of res.add_list.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                for (let [key2, value2] of value1.second_level.entries()) {
+                                    if (value2.id == value.path.split(',')[1]) {
+                                        let index = value2.goods.findIndex(function (item) {
+                                            return item.id == value.id
+                                        })
+                                        value1.cost += value.cost
+                                        value1.procurement += value.procurement
+                                        value2.cost += value.cost
+                                        value2.procurement += value.procurement
+                                        if (index == -1) {
+                                            value2.goods.push(value)
+                                            value1.count++
+                                        } else {
+                                            value2.goods[index].quantity += value.quantity
+                                            value2.goods[index].cost += value.cost
+                                            value2.goods[index].procurement += value.procurement
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })()
+            ]).then(function () {
+                console.log($scope.materials);
+                console.log($scope.worker_list);
+                $q.all([
+                    //泥作(需要防水面积(防水))
+                    (function () {
+                        return _ajax.get('/owner/mud-make', arr, function (res) {
+                            console.log('泥作');
+                            console.log(res);
+                            let index = $scope.worker_list.findIndex(function (item) {
+                                return item.worker_kind == res.labor_all_cost.worker_kind
+                            })
+                            if (index == -1) {
+                                $scope.worker_list.push(res.labor_all_cost)
+                            } else {
+                                $scope.worker_list[index].price += res.labor_all_cost.price
+                            }
+                            //整合二级
+                            for (let [key, value] of res.data.entries()) {
                                 for (let [key1, value1] of $scope.materials.entries()) {
                                     if (value1.id == value.path.split(',')[0]) {
                                         let index = value1.second_level.findIndex(function (item) {
@@ -578,10 +517,8 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     }
                                 }
                             }
-                        }
-                        //整合商品
-                        for (let [key3, value3] of res.data.goods.entries()) {
-                            for (let [key, value] of value3.entries()) {
+                            //整合商品
+                            for (let [key, value] of res.data.entries()) {
                                 for (let [key1, value1] of $scope.materials.entries()) {
                                     for (let [key2, value2] of value1.second_level.entries()) {
                                         if (value2.id == value.path.split(',')[1]) {
@@ -604,30 +541,92 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                                     }
                                 }
                             }
+                        })
+                    })(),
+                    //配套商品(需要卧室面积(乳胶漆))
+                    (function () {
+                        return _ajax.get('/owner/assort-facility', arr1, function (res) {
+                            console.log('配套商品');
+                            console.log(res);
+                            //整合二级
+                            for (let [key2, value2] of res.data.goods.entries()) {
+                                for (let [key, value] of value2.entries()) {
+                                    for (let [key1, value1] of $scope.materials.entries()) {
+                                        if (value1.id == value.path.split(',')[0]) {
+                                            let index = value1.second_level.findIndex(function (item) {
+                                                return item.id == value.path.split(',')[1]
+                                            })
+                                            let index1 = $scope.second_level.findIndex(function (item) {
+                                                return item.id == value.path.split(',')[1]
+                                            })
+                                            if (index == -1) {
+                                                value1.second_level.push({
+                                                    id: +$scope.second_level[index1].id,
+                                                    title: $scope.second_level[index1].title,
+                                                    cost: 0,
+                                                    procurement: 0,
+                                                    goods: []
+                                                })
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            //整合商品
+                            for (let [key3, value3] of res.data.goods.entries()) {
+                                for (let [key, value] of value3.entries()) {
+                                    for (let [key1, value1] of $scope.materials.entries()) {
+                                        for (let [key2, value2] of value1.second_level.entries()) {
+                                            if (value2.id == value.path.split(',')[1]) {
+                                                let index = value2.goods.findIndex(function (item) {
+                                                    return item.id == value.id
+                                                })
+                                                value1.cost += value.cost
+                                                value1.procurement += value.procurement
+                                                value2.cost += value.cost
+                                                value2.procurement += value.procurement
+                                                if (index == -1) {
+                                                    value2.goods.push(value)
+                                                    value1.count++
+                                                } else {
+                                                    value2.goods[index].quantity += value.quantity
+                                                    value2.goods[index].cost += value.cost
+                                                    value2.goods[index].procurement += value.procurement
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    })()
+                ]).then(function () {
+                    console.log($scope.materials);
+                    console.log($scope.worker_list);
+                    for(let [key,value] of $scope.materials.entries()){
+                        for(let [key1,value1] of value.second_level.entries()){
+                            let index = value1.goods.findIndex(function(item){
+                                return item.status == 0
+                            })
+                           value.status = index == -1?2:0
                         }
-                    })
-                })()
-            ]).then(function () {
-                console.log($scope.materials);
-                console.log($scope.worker_list);
-                getPrice()
+                    }
+                    sessionStorage.setItem('params', JSON.stringify($scope.params))
+                    getPrice()
+                })
             })
-        })
-        // if(valid){
-        //
-        // }else{
-        // $scope.submitted = true
-        // for (let [key, value] of error.entries()) {
-        //     if (value.$invalid) {
-        //         $anchorScroll.yOffset = 300
-        //         $location.hash(value.$name)
-        //         $anchorScroll()
-        //         break
-        //     }
-        // }
-        // }
+        }else{
+        $scope.submitted = true
+        for (let [key, value] of error.entries()) {
+            if (value.$invalid) {
+                $anchorScroll.yOffset = 300
+                $location.hash(value.$name)
+                $anchorScroll()
+                break
+            }
+        }
+        }
     }
-
     //计算总价和折后价
     function getPrice() {
         let arr = [], arr1 = []
@@ -677,9 +676,9 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             }, 0)
             $scope.total_prices += worker_price
             $scope.special_offer += worker_price
+            $scope.words = '生成材料'
         })
     }
-
     //跳转页面
     $scope.goInner = function (item, index) {
         sessionStorage.setItem('materials', JSON.stringify($scope.materials))

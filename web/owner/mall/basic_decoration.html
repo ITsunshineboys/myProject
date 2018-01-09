@@ -22,8 +22,8 @@
         <h1>{{item.title}}</h1>
         <ul class="wall_ul">
                 <li data-toggle="modal" data-target="#myModal" ng-class="{'last_item':$parent.$index == item.three_level.length-1&&$last}" ng-repeat="item1 in item.goods" ng-click="getDetails(item1)">
-                    <span class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br/>
-                    <span class="wall_brand">{{item1.name}}</span>
+                    <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br/>
+                    <span ng-style="{'color':(item2.status == 0?'#D9AD65':'#959292')}" class="wall_brand">{{item1.name}}</span>
                     <span class="wall_money">{{item1.cost | currency:"￥"}} <img
                             class="right_arrow" src="images/left_more.png" alt=""></span>
                 </li>

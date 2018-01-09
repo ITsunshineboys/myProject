@@ -340,7 +340,7 @@ app.service('_ajax', ["$http", "$state", function ($http, $state) {
             }
         };
     })
-    .directive('ngcLayDate', function ($timeout) {
+    .directive('ngcLayDate', function ($timeout,$parse) {
         return {
             require: '?ngModel',
             restrict: 'A',
@@ -350,6 +350,7 @@ app.service('_ajax', ["$http", "$state", function ($http, $state) {
                 minDate: '@'
             },
             link: function (scope, element, attr, ngModel) {
+                console.log(element.val());
                 let _date = null, _config = {};
                 // 渲染模板完成后执行
                 $timeout(function () {
@@ -359,11 +360,11 @@ app.service('_ajax', ["$http", "$state", function ($http, $state) {
                         format: attr.format != undefined && attr.format != '' ? attr.format : 'YYYY-MM-DD',
                         max: attr.hasOwnProperty('maxDate') ? attr.maxDate : '',
                         min: attr.hasOwnProperty('minDate') ? attr.minDate : '',
-                        choose: function (data) {
+                        choose: function () {
                             scope.$apply(setViewValue);
                         },
                         clear: function () {
-                            ngModel.$setViewValue(null);
+                            ngModel.$setViewValue('');
                         }
                     };
                     // 初始化
@@ -389,9 +390,10 @@ app.service('_ajax', ["$http", "$state", function ($http, $state) {
 
                     // 监听元素上的事件
                     element.on('blur keyup change', function () {
+                        console.log(element.val());
                         scope.$apply(setViewValue);
+                        console.log(element.val());
                     });
-
                     setViewValue();
 
                     // 更新模型上的视图值

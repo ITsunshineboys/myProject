@@ -90,7 +90,6 @@ header div i{
 .wall_span{
     display: inline-block;
     font-size: 1.3rem;
-    color: #666;
 }
 .left_com{
     width: .6rem;
@@ -104,9 +103,6 @@ header div i{
     right: 1rem;
     top: 1.5rem;
 
-}
-.wall_brand{
-    color: #999;
 }
 .shu_house{
     width: .3rem;

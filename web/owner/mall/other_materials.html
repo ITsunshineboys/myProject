@@ -22,11 +22,11 @@
                     <div ng-class="{'cur_animate':edit_status == 1}" class="goods_detail" data-target="#myModal" data-toggle="{{modal_status}}" ng-repeat="item1 in item.goods"
                          ng-click="getDetails(item1)">
                         <div class="wall_span_brand">
-                            <span class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br>
-                            <span class="wall_brand">{{item1.name}}</span>
+                            <span ng-style="{'color':(item2.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br>
+                            <span ng-style="{'color':(item2.status == 0?'#D9AD65':'#959292')}" class="wall_brand">{{item1.name}}</span>
                         </div>
                         <span class="wall_money">{{item1.cost | currency:'￥'}}
-                            <img ng-if="!is_delete_btn" src="images/left_more.png" alt=""></span>
+                            <img ng-if="edit_status==0" src="images/left_more.png" alt=""></span>
                         <button class="del" ng-click="deleteItem(item1)" ng-if="edit_status == 1">删除</button>
                     </div>
                 </li>

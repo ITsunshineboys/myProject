@@ -29,7 +29,6 @@ body{
     /*margin:30px 0;*/
 /*}*/
 .wall_brand{
-   color: #959292;
     font-size: 1.1rem;
     position: absolute;
     bottom: 1rem;
@@ -173,7 +172,6 @@ button.close{
 .wall_span{
     display: inline-block;
     top:1rem;
-    color: #4A4A4A;
     font-size: 1.3rem;
     font-family: PingFangSC-Regular;
     position: absolute;
