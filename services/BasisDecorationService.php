@@ -1596,7 +1596,7 @@ class BasisDecorationService
         $style = self::style($material);
 
         $goods_material = [];
-        foreach ($material as $one){
+        foreach ($style as $one){
             if($one != null){
                 $goods_material[] =   $one;
             }
