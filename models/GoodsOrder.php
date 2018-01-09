@@ -3402,14 +3402,14 @@ class GoodsOrder extends ActiveRecord
                 {
                     if (
                            !array_key_exists('goods_id',$goods)
-                        || !array_key_exists('goods_num',$goods))
+                        || !array_key_exists('goods_num',$goods)
+                    )
                     {
-
                         $tran->rollBack();
                         $code=1000;
                         return $code;
                     }
-                   $shoppingCart= ShippingCart::find()
+                    $shoppingCart= ShippingCart::find()
                         ->where(['uid'=>$user->id])
                         ->andWhere(['role_id'=>$user->last_role_id_app])
                         ->andWhere(['goods_id'=>$goods['goods_id']])
@@ -3519,6 +3519,13 @@ class GoodsOrder extends ActiveRecord
                         $code=500;
                         return $code;
                     }
+                    $code=LogisticsDistrict::isApply($address->district,$Goods->logistics_template_id);
+                    if ($code!=200)
+                    {
+                        $tran->rollBack();
+                        $code=500;
+                        return $code;
+                    }
                     $month=date('Ym',$time);
                     $Supplier=Supplier::find()
                         ->where(['id'=>$Goods->supplier_id])
@@ -3534,7 +3541,6 @@ class GoodsOrder extends ActiveRecord
                     $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
-                //$order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice
                 $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
                 if ($code!=200)
                 {
