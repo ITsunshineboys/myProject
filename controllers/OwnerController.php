@@ -1411,6 +1411,7 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $get = Yii::$app->request->get();
+        echo 22;die;
 
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
