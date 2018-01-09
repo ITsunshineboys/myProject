@@ -2984,7 +2984,7 @@ class GoodsOrder extends ActiveRecord
                     ->one()['uid'];
                 $output['to_role_id'] = 6;
             }
-            $output['send_time']=$send_time;
+            $output['send_time']=$send_time==0?'':$send_time;
             $output['complete_time']=$complete_time;
             $output['refund_status']=$refund['refund_status'];
             $output['apply_refund_time']=$refund['apply_refund_time'];
