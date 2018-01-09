@@ -1,14 +1,14 @@
 <template>
   <div>
-    <v-header></v-header>
+    <v-header headTitle="店铺首页" pop="true"></v-header>
     <div class="store" flex="main:justify cross:center">
       <div flex>
         <div class="store-img">
           <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
         </div>
         <div class="store-name">
-          <P>森达地板自营店</P>
-          <P class="experience-shop">线下体验店</P>
+          <p>森达地板自营店</p>
+          <p class="experience-shop" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
       <div flex>
@@ -63,9 +63,14 @@
     </div>
 
     <div class="btn-group" flex>
-      <button class="" type="button">店铺介绍</button>
+      <router-link :to="{path: 'shop-intro'}" tag="button" type="button">
+        店铺介绍
+      </router-link>
       <button class="" type="button">联系商家</button>
     </div>
+
+    <!-- 线下体验店详情弹窗 -->
+    <offline-alert @isShow="isShow" :show="isShowAlert" :offlineInfo="offlineInfo"></offline-alert>
   </div>
 </template>
 
@@ -73,6 +78,7 @@
   import {Tab, TabItem, Swiper, Sticky} from 'vux'
   import vHeader from '@/components/HeaderSearch'
   import GoodsList from '@/components/GoodsList'
+  import OfflineAlert from '@/components/OfflineAlert'
 
   const baseList = [{
     url: 'javascript:',
@@ -96,14 +102,21 @@
       Swiper,
       Sticky,
       vHeader,
-      GoodsList
+      GoodsList,
+      OfflineAlert
     },
     data () {
       return {
         isAttention: false, // 关注图标默认未关注
         tabActive: 0,        // 默认选中店铺首页
         tabHeight: 44,       // tab 默认最小高度为 44 像素
-        baseList: baseList
+        isShowAlert: false, // 是否显示线下体验店弹窗
+        baseList: baseList,
+        offlineInfo: {
+          address: '成都市金牛区就老是卡死了老是看见',
+          phone: '15932121321',
+          desc: '就是实体店啦傻逼，这也要看一下 ——鲁迅'
+        }
       }
     },
     methods: {
@@ -116,6 +129,14 @@
           // 当 tab 为全部商品，tab 高度最小为 88 像素
           this.tabHeight = 88
         }
+      },
+      /**
+       * 线下体验店弹窗
+       * 传值给父级，告知知否隐藏
+       * @param bool
+       */
+      isShow (bool) {
+        this.isShowAlert = bool
       }
     }
   }
