@@ -255,4 +255,7 @@ alter table `user_accessdetail` drop column refund_bank_log_id  ;
  --all 2018.1.9  yr
  alter table effect modify column house_image VARCHAR(255) COMMENT'户型图';
 
+ --all 2018.1.9 hj
+ alter table user modify column authKey varchar(50), modify column authKeyAdmin varchar(50), modify column oldAuthKey varchar(50), modify column oldAuthKeyAdmin varchar(50);
+
 

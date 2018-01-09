@@ -86,4 +86,16 @@ class RolePermission extends ActiveRecord
         return $rolePermissions;
         */
     }
+
+    /**
+     * Get all permissions
+     *
+     * @return array
+     */
+    public static function allPermissions()
+    {
+        return array_map(function ($value) {
+            return $value['controller'] . '/' . $value['action'];
+        }, self::find()->select(['controller', 'action'])->asArray()->all());
+    }
 }
