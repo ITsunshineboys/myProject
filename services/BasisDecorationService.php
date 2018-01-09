@@ -15,6 +15,7 @@ use app\models\GoodsAttr;
 use app\models\GoodsCategory;
 use app\models\GoodsStyle;
 use app\models\ProjectView;
+use app\models\Series;
 use app\models\Style;
 use app\models\WorkerCraftNorm;
 use yii\helpers\Json;
@@ -356,9 +357,9 @@ class BasisDecorationService
 
             }
         }
-        $style = self::style($one_goods);
+//        $style = self::style($one_goods);
         //  抓取利润最大的商品
-        $max_goods = self::profitMargin($style);
+        $max_goods = self::profitMargin($one_goods);
 
         switch ($int){
             case $int == 1 ;
@@ -1144,22 +1145,23 @@ class BasisDecorationService
      */
     public static function judge($goods,$get)
     {
+
         $v = [];
+        $style = Style::find()->select('style')->where(['id'=>$get['style']])->one();
+        $series = Series::find()->select('series')->where(['id'=>$get['series']])->one();
         foreach ($goods as $one_goods) {
-            $goods_style = GoodsStyle::styleIdsByGoodsId($one_goods['id']);
-            $goods_style[] =  $one_goods['style_id'];
+            if ($one_goods['style_id'] == $style->style
+                && $one_goods['series_id'] == 0){
+                $v[] = $one_goods;
+            }
 
-            foreach ($goods_style as $value){
-               if ($one_goods['series_id'] == $get['series']){
-                   $v [] = $one_goods;
-               }
-               if ($value == $get['style']){
-                   $v [] = $one_goods;
-               }
-                if ($value == 0 && $one_goods['series_id'] == 0){
-                    $v [] = $one_goods;
-                }
-
+            if ($one_goods['style_id'] == 0
+                && $one_goods['series_id'] == $series->series){
+                $v[] = $one_goods;
+            }
+            if (is_numeric($one_goods['style_id'])
+                && is_numeric($one_goods['series_id'])){
+                $v[] = $one_goods;
             }
         }
 
