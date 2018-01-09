@@ -2924,7 +2924,7 @@ class GoodsOrder extends ActiveRecord
                 $list[]=
                 [
                     'goods_price'=>$arr[$k]['goods_price'],
-                    'send_time'=>$send_time,
+                    'send_time'=>$send_time==0?'':$send_time,
                     'complete_time'=>$complete_time,
                     'automatic_receive_time'=>$automatic_receive_time,
                     'sku'=> $arr[$k]['sku'],
