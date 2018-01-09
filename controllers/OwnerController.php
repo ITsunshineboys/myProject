@@ -1585,6 +1585,7 @@ class OwnerController extends Controller
         ]);
 
     }
+
     /**
      * 案例列表
      * @return string
@@ -1623,7 +1624,7 @@ class OwnerController extends Controller
 
     }
 
-    
+
     /**
      * 案例数据
      * @return string
