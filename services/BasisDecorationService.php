@@ -2004,8 +2004,8 @@ class BasisDecorationService
     public static function series($goods)
     {
         foreach ($goods as &$one_goods){
-            if ($one_goods['style_id'] > 0){
-                $goods_style[] =  $one_goods['style_id'];
+            if ($one_goods['series_id'] > 0){
+                $goods_style[] =  $one_goods['series_id'];
                 $style = Series::find()->asArray()->select('series')->where(['in','id',$goods_style])->all();
                 $style_ = [];
                 foreach ($style as $one_style){
