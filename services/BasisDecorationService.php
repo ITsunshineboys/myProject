@@ -11,6 +11,7 @@ use app\controllers\OwnerController;
 use app\models\Effect;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
+use app\models\Goods;
 use app\models\GoodsAttr;
 use app\models\GoodsCategory;
 use app\models\GoodsStyle;
@@ -360,7 +361,6 @@ class BasisDecorationService
 //        $style = self::style($one_goods);
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
-
         switch ($int){
             case $int == 1 ;
                 $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
@@ -1424,7 +1424,6 @@ class BasisDecorationService
                             $breadth = $one_goods_area['value'];
                         }
                     }
-
                     $area = round(self::algorithm(1,$length,$breadth),2);
                     $one_goods['quantity'] = ceil(self::algorithm(6,$post['bedroom_area'],$area));
                     $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
@@ -1551,7 +1550,7 @@ class BasisDecorationService
                     break;
             }
         }
-
+die;
         $wf = isset($wood_floor) ? $wood_floor :[];
         $ma = isset($marble) ? $marble :[];
         $el = isset($elbow) ? $elbow :[];
@@ -1593,6 +1592,8 @@ class BasisDecorationService
         $material []  = self::profitMargin($spr);
         $material []  = self::profitMargin($sp);
         $material []  = self::profitMargin($cs);
+
+        $style = self::style($material);
 
         $goods_material = [];
         foreach ($material as $one){
