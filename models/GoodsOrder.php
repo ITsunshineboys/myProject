@@ -2525,7 +2525,7 @@ class GoodsOrder extends ActiveRecord
                     $freight=StringService::formatPrice($goodsList['freight']*0.01);
                     $arr_list[]=[
                         'goods_name'=>$goodsList['goods_name'],
-                        'goods_price'=>StringService::formatPrice($goodsList['freight']*0.01),
+                        'goods_price'=>StringService::formatPrice($goodsList['goods_price']*0.01),
                         'goods_number'=>$goodsList['goods_number'],
                         'market_price'=>StringService::formatPrice($goodsList['market_price']*0.01),
                         'supplier_price'=>StringService::formatPrice($goodsList['supplier_price']*0.01),
