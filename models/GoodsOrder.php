@@ -645,11 +645,15 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['mobile']=$arr[$k]['consignee_mobile'];
                     break;
                 case 2:
-                    $arr[$k]['mobile']=User::find()
+                    $user=User::find()
                         ->select('mobile')
                         ->where(['id'=>$arr[$k]['user_id']])
-                        ->one()
-                        ->mobile;
+                        ->one();
+                    if (!$user)
+                    {
+                        throw new yii\db\Exception("{$arr[$k]['user_id']}");
+                    }
+                    $arr[$k]['mobile']=$user->mobile;
                     break;
             }
             switch ($arr[$k]['role_id'])

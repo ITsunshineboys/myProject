@@ -8,6 +8,7 @@
         <div class="add_box">
             <button class="btn btn-primary" ng-click=selectAdd()><i class="iconfont icon-add"></i>下拉添加</button>
             <button class="btn btn-primary" ng-click="generalAdd()"><i class="iconfont icon-add"></i>普通添加</button>
+            <button class="btn btn-primary" ng-click="checkboxAdd()"><i class="iconfont icon-add"></i>复选框添加</button>
         </div>
         <!--属性设置-->
 
@@ -18,7 +19,7 @@
                     <td>单位</td>
                 </tr>
 
-                <form name="attr_form" novalidate action="">
+                <form name="attr_form" novalidate>
                 <tr ng-repeat="item in propattrs">
                     <td class="padding_right">
                         <span >
@@ -29,7 +30,7 @@
                     </td>
                     <td class="padding_right">
                         <input type="text" class="normal_input" ng-model="item.value" disabled=disabled ng-if="item.addition_type==0">
-                        <input type="text" class="normal_input" ng-model="item.value" ng-if="item.addition_type==1" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
+                        <input type="text" class="normal_input" ng-model="item.value" ng-if="item.addition_type==1||item.addition_type==2" ng-class={warningred:$index==tempcontent&&iswarningcontent==true} ng-blur=checkContent(item.value,$index)>
                     </td>
                     <td class="padding_right">
                         <select name="" class="select_css" ng-options="op.unit for op in unitarrs" ng-model="item.cur_unit"></select>
