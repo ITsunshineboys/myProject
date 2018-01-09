@@ -17,18 +17,16 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
     $scope.propid = $stateParams.propid;
     $scope.titles = $stateParams.titles;
     $scope.propattrs = $stateParams.propattrs;
-
-
     $scope.btnclick = true;
 
-    let namesarr = []; //属性名称数组
-    let valuesarr = [];//属性内容数组
-    let typesarr = [];//type数组
-    let unitsarr = [];//单位数组
-    let unit_value_arr = [];//单位真值数组
+    let namesarr = []; // 属性名称数组
+    let valuesarr = [];// 属性内容数组
+    let typesarr = []; // 添加类型数组
+    let unitsarr = []; // 单位数组
+    let unit_value_arr = []; // 单位真值数组
 
     /*单位默认*/
-    $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'MM'}, {unit: 'M'}, {unit: 'kg'}, {unit: 'M²'}]
+    $scope.unitarrs = [{unit: '无'}, {unit: 'L'}, {unit: 'mm'}, {unit: 'm'}, {unit: 'kg'}, {unit: 'm²'}]
     for (let [key, value] of $scope.propattrs.entries()) {
         for (let [key1, value1] of $scope.unitarrs.entries()) {
             if (value.unit == value1.unit) {
@@ -60,6 +58,17 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
         $scope.propattrs.push(obj);
     }
 
+    /*复选框添加方法*/
+    $scope.checkboxAdd = function () {
+        let obj = {
+            name: '',
+            value: '',
+            cur_unit: $scope.unitarrs[0],
+            addition_type: '2'
+        }
+        $scope.propattrs.push(obj);
+    }
+
 
     /*删除当前项*/
     $scope.deleteTr = function (obj) {
@@ -81,7 +90,6 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
     $scope.checkContent = function (obj, index) {
         $scope.iswarningcontent = false;
         if (obj == '') {
-            // console.log(1213123)
             $scope.tempcontent = index;
             $scope.iswarningcontent = true;
         } else {
@@ -120,16 +128,16 @@ edit_attribute.controller("edit_attribute_ctrl", function ($rootScope,$scope, $h
                 case "L":
                     unit_value_arr.push(1);
                     break;
-                case "M":
+                case "m":
                     unit_value_arr.push(2);
                     break;
-                case "M²":
+                case "m²":
                     unit_value_arr.push(3);
                     break;
                 case "kg":
                     unit_value_arr.push(4);
                     break;
-                case "MM":
+                case "mm":
                     unit_value_arr.push(5);
                     break;
             }
