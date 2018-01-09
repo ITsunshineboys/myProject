@@ -163,6 +163,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
   $scope.secondclass=[];//二级分类数组
   $scope.subClass = function (pid) {
     console.log(pid)
+    $scope.wjConfig.currentPage=1;
     pid!=0?($scope.two_select_flag=true,$scope.three_select_flag=false):($scope.two_select_flag=false,$scope.three_select_flag=false);
     $scope.down_two=pid;
     $scope.params.pid=$scope.down_two;
@@ -177,6 +178,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
   $scope.three_class=[];//二级分类数组
   $scope.three_Class = function (pid) {
     console.log(pid)
+    $scope.wjConfig.currentPage=1;
     pid!=0?$scope.three_select_flag=true:$scope.three_select_flag=false;
     if(pid==0){
       pid=$scope.down_two
@@ -193,6 +195,7 @@ brand_index.controller("brand_index_ctrl",function ($rootScope,$scope,$http,$sta
     //监听三级
   $scope.last_Class=function (pid) {
     console.log(pid)
+    $scope.wjConfig.currentPage=1;
     if(pid==0){
       pid=$scope.down_three
     }

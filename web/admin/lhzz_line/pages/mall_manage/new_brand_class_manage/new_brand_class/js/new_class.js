@@ -41,16 +41,19 @@ angular.module("new_class_module",[])
     $scope.select_value=$scope.status_select[0].id;//‘全部’为默认项
     //下拉框状态
     $scope.selectChange=function (value) {
+      $scope.Config.currentPage = 1
       $scope.params.status=value;
       tablePages();
     };
     //时间排序
     $scope.sortClick=function () {
+      $scope.Config.currentPage = 1
       $scope.params.sort_time===2?$scope.params.sort_time=1:$scope.params.sort_time=2;
       tablePages();
     };
     //开始和结束时间
     $scope.timeChange=function () {
+      $scope.Config.currentPage = 1
       tablePages();
     }
     //审核备注按钮

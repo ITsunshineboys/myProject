@@ -38,6 +38,7 @@ angular.module("new_brand_module",[])
     $scope.secondclass=[];//二级分类数组
     $scope.subClass = function (pid) {
       console.log(pid)
+      $scope.Config.currentPage = 1
       pid!=0?($scope.two_select_flag=true,$scope.three_select_flag=false):($scope.two_select_flag=false,$scope.three_select_flag=false);
       $scope.down_two=pid;
       $scope.params.pid=$scope.down_two;
@@ -51,6 +52,7 @@ angular.module("new_brand_module",[])
     $scope.three_class=[];//二级分类数组
     $scope.three_Class = function (pid) {
       console.log(pid)
+      $scope.Config.currentPage = 1
       pid!=0?$scope.three_select_flag=true:$scope.three_select_flag=false;
       if(pid==0){
         pid=$scope.down_two
@@ -69,6 +71,7 @@ angular.module("new_brand_module",[])
       if(pid==0){
         pid=$scope.down_three
       }
+      $scope.Config.currentPage = 1
       $scope.last_value=pid;
       $scope.params.pid=pid;
       tablePages();
