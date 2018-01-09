@@ -17,6 +17,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.goods_all_attrs = [];//所有属性数据
 	$scope.shop_logistics = [];//物流模板默认第一项
 	$scope.own_attrs_arr = [];//自己添加的属性数组
+	$scope.offline_style_ids = [] //下架的风格ids
 	$scope.attr_blur_flag = true
 	$scope.own_submitted = true
 	$scope.success_modal_flag = false // 添加成功，跳转列表页
@@ -352,7 +353,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 
 		/*判断必填项，全部ok，调用添加接口*/
 		if (valid && $scope.upload_cover_src && !$scope.price_flag && $scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
-			let description = UE.getEditor('editor').getContent();//富文本编辑器
+			$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.pass_attrs_name = []
 			$scope.pass_attrs_value = []
 			/*循环自己添加的属性*/
@@ -401,22 +402,16 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				left_number: +$scope.left_number,//库存
 				logistics_template_id: +$scope.shop_logistics,//物流模板
 				after_sale_services: $scope.after_sale_services.join(','),//售后、保障
-				description: description//描述
+				description: $scope.description//描述
 			}, function (res) {
 				console.log(res);
 				if (res.code === 200) {
-					if ($scope.error_modal_flag) {              // 部分系列或风格关闭情况后、点击确认
-						$('#on_shelves_add_success').modal('hide')
-						setTimeout(function () {
-							$state.go('commodity_manage');
-						}, 300)
-					}else{                                        // 正常添加
-						$('#on_shelves_add_success').modal('show')
-						$scope.success_modal_flag = true
-						$scope.error_modal_flag = false
-						$scope.default_modal_flag = false
-						$scope.add_moal_txt = '添加成功'
-					}
+					// 正常添加
+					$('#on_shelves_add_success').modal('show')
+					$scope.success_modal_flag = true
+					$scope.error_modal_flag = false
+					$scope.default_modal_flag = false
+					$scope.add_moal_txt = '添加成功'
 				} else if (res.code === 1045 || res.code === 1047) {  // 所选系列或风格，全部关闭
 					$('#on_shelves_add_success').modal('show')
 					$scope.default_modal_flag = true
@@ -429,12 +424,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 					$scope.default_modal_flag = false
 					$scope.success_modal_flag = false
 					$scope.add_moal_txt = res.msg
-					for (let [key,value2] of res.data.offline_style_ids.entries()){
-						let index = $scope.style_check_arr.findIndex((value) => {
-							return value == value2;
-						})
-						$scope.style_check_arr.splice(index,1)
-					}
+					$scope.offline_style_ids=res.data.offline_style_ids
 				}
 			})
 		} else {
@@ -459,6 +449,39 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			}
 		}
 	};
+	// 部分系列或风格关闭 模态框确认按钮
+	$scope.someModalBtn =function () {
+		for (let [key,value2] of $scope.offline_style_ids.entries()){
+			let index = $scope.style_check_arr.findIndex((value) => {
+				return value == value2;
+			})
+			$scope.style_check_arr.splice(index,1)
+		}
+		_ajax.post('/mall/goods-add',{
+			category_id: +$scope.category_id,      //三级分类id
+			title: $scope.goods_name,              //名称
+			subtitle: $scope.des_name,             //特色
+			brand_id: $scope.brand_model,      //品牌
+			style_id: $scope.style_check_arr.join(','),      //风格
+			series_id: $scope.series_model,    //系列
+			'names[]': $scope.pass_attrs_name,   // 属性名称
+			'values[]': $scope.pass_attrs_value, //属性值
+			cover_image: $scope.upload_cover_src,//封面图
+			'images[]': $scope.upload_img_arr,   //图片
+			supplier_price: +$scope.supplier_price * 100,//供货价
+			platform_price: +$scope.platform_price * 100,//平台价
+			market_price: +$scope.market_price * 100,//市场价
+			left_number: +$scope.left_number,//库存
+			logistics_template_id: +$scope.shop_logistics,//物流模板
+			after_sale_services: $scope.after_sale_services.join(','),//售后、保障
+			description: $scope.description//描述
+		},function (res) {
+			$('#on_shelves_add_success').modal('hide')
+			setTimeout(function () {
+				$state.go('commodity_manage');
+			}, 300)
+		})
+	}
 	//添加成功模态框确认按钮
 	$scope.on_shelves_add_success = function () {
 		setTimeout(function () {

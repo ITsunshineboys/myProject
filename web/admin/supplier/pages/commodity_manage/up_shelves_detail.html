@@ -376,12 +376,8 @@
         <!--按钮-->
         <div class="row">
             <div class="col-sm-12 control-label">
-                <button class="btn btn-primary" data-target="{{change_ok}}" data-toggle="modal"
-                        ng-click="edit_confirm(form.$valid,form.$error.required)" ng-disabled="upload_dis">保存
-                </button>
-                <button class="btn btn-default btn_left" ng-hide="show_flag" data-toggle="modal" data-target="#down_ok"
-                        ng-disabled="upload_dis">下架
-                </button>
+                <button class="btn btn-primary" ng-click="edit_confirm(form.$valid,form.$error.required)" ng-disabled="upload_dis">保存</button>
+                <button class="btn btn-default btn_left" ng-hide="show_flag" data-toggle="modal" data-target="#down_ok" ng-disabled="upload_dis">下架</button>
                 <button class="btn btn-default btn_left" ng-click="back_cm()">返回</button>
             </div>
         </div>
@@ -391,15 +387,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">
-                        提示
-                    </h4>
+                    <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <h5>保存成功</h5>
+                    {{add_moal_txt}}
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal" ng-click="change_go()">确认</button>
+                    <!--添加成功，跳转列表页-->
+                    <div ng-if="success_modal_flag">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="change_go()">确定</button>
+                    </div>
+                    <!--部分系列、风格关闭-->
+                    <div ng-if="error_modal_flag">
+                        <button type="button" class="btn btn-primary" ng-click="someModalBtn()">确定</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+                    </div>
+                    <!--关闭模态框，停留在当前页-->
+                    <div ng-if="default_modal_flag">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                    </div>
                 </div>
             </div>
         </div>
