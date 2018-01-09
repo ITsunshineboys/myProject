@@ -1592,7 +1592,7 @@ class BasisDecorationService
         $material []  = self::profitMargin($spr);
         $material []  = self::profitMargin($sp);
         $material []  = self::profitMargin($cs);
-var_dump($material);die;
+
         $style = self::style($material);
 
         $goods_material = [];
