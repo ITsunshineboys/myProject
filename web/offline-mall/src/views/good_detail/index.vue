@@ -16,6 +16,8 @@
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
 
+
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -32,7 +34,7 @@
           <span>({{good_detail.comments.total}})</span>
         </flexbox>
         <comment headshotStyle="headshot-style" nameStyle="name-style" dateStyle="date-style"
-                 :userName="good_detail.comments.latest.name" :userIcon="good_detail.comments.latest.icon || user_icon"
+                 :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
                  :commentDate="good_detail.comments.latest.create_time"
                  :content="good_detail.comments.latest.content"></comment>
         <flexbox justify="center" class="view-all">
@@ -58,6 +60,8 @@
             <br/>
             商品数
 
+
+
           </div>
           <span></span>
           <div>
@@ -65,12 +69,16 @@
             <br/>
             粉丝数
 
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
+
+
 
           </div>
         </flexbox>
@@ -161,9 +169,13 @@
 
 
 
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
+
+
 
 
 
@@ -257,6 +269,7 @@
         },
         banner_list: [],
         after_sale_services: [],      // 页面售后显示
+        user_name: '',
         show_count: false,            // 选择数量弹窗
         show_after_service: false,    // 售后弹窗
         show_share: false,            // 分享弹窗
@@ -285,8 +298,14 @@
     created () {
       this.axios.get('/mall/goods-view', {id: 332}, (res) => {
         this.good_detail = res.data.goods_view
+        // 用户名处理
+        let startStr = this.good_detail.comments.latest.name.charAt(0)
+        let endStr = this.good_detail.comments.latest.name.charAt(this.good_detail.comments.latest.name.length - 1)
+        this.user_name = startStr + '***' + endStr
+        // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
+        // 轮播图处理
         const imgList = this.good_detail.images  // 轮播图数组
         imgList.splice(0, 0, this.good_detail.cover_image)
         this.banner_list = imgList.map((item) => ({
