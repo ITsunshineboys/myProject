@@ -60,7 +60,7 @@ class GoodsStyle extends ActiveRecord
         $styleIds = self::find()
             ->asArray()
             ->select(['style_id'])
-            ->where(['goods_id' => 25])
+            ->where(['goods_id' => $goodsId])
             ->all();
         return array_map(function ($v) {
             return $v['style_id'];

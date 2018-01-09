@@ -1144,17 +1144,26 @@ class BasisDecorationService
      */
     public static function judge($goods,$get)
     {
+        $v = [];
         foreach ($goods as $one_goods) {
-            switch ($one_goods) {
-                case $one_goods['series_id'] == $get['series'] && $one_goods['style_id'] == $get['style']:
-                     $goods_judge[] = $one_goods;
-                    break;
-                default:
-                    $goods_judge[] = $one_goods;
-                    break;
+            $goods_style = GoodsStyle::styleIdsByGoodsId($one_goods['id']);
+            $goods_style[] =  $one_goods['style_id'];
+
+            foreach ($goods_style as $value){
+               if ($one_goods['series_id'] == $get['series']){
+                   $v [] = $one_goods;
+               }
+               if ($value == $get['style']){
+                   $v [] = $one_goods;
+               }
+                if ($value == 0 && $one_goods['series_id'] == 0){
+                    $v [] = $one_goods;
+                }
+
             }
         }
-        return $goods_judge;
+
+        return $v;
     }
 
     /**
