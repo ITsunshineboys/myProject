@@ -19,7 +19,8 @@ app1.controller('login_ctrl',function ($scope,$http,$document) {
     //登录按钮
     $scope.login=function () {
         sessionStorage.clear()
-        if($scope.username===''|| $scope.username===undefined){
+      console.log($scope.username);
+      if($scope.username===''|| $scope.username===undefined){
             $scope.error_flag = true;
             $scope.error_txt='请输入账号';
         }else if($scope.password==='' || $scope.password===undefined){

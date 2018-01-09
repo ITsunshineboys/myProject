@@ -16,7 +16,8 @@ app.controller("login_ctrl", function ($scope, $http, $document) {
     $scope.rolo_value = $scope.login_rolo[0].id;
     //登录按钮
     $scope.supplier_login = function () {
-        if($scope.phone_number===''|| $scope.phone_number===undefined){
+	    console.log($scope.phone_number);
+	    if($scope.phone_number===''|| $scope.phone_number===undefined){
             $scope.error_flag = true;
             $scope.error_flag_txt='请输入账号';
         }else if($scope.password_number==='' || $scope.password_number===undefined){
