@@ -1090,7 +1090,6 @@ class QuoteController extends Controller
                             $stair_id = $house['stair'];
                         }
                         $effect = (new Effect())->plotAdd($bedroom, $sittingRoom_diningRoom, $toilet, $kitchen, $window, $area, $high, $province, $province_code, $city, $city_code, $district, $district_code, $toponymy, $street, $particulars, $stairway, $house_image, $type, $sort_id, $stair_id);
-//                        var_dump($effect);die;
                         if (!$effect) {
                             $code = 500 ;
                             $transaction->rollBack();
@@ -1173,7 +1172,6 @@ class QuoteController extends Controller
                     }
 
                     $ids = implode(',',$ids);
-//                    $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
 
                     $effect_plot = EffectToponymy::find()->where(['id'=>$request['effect_id']])->one();
                     $effect_plot->effect_id=$effect_plot['effect_id'].','.$ids;
@@ -1196,7 +1194,6 @@ class QuoteController extends Controller
 
 
                 //  案例修改
-                $toponymy_ids=[];
                 if (isset($house['id'])) {
 
                     if ($house['is_ordinary'] == 0) {
@@ -1621,7 +1618,7 @@ class QuoteController extends Controller
     public function actionPlotEditView()
     {
         $post = \Yii::$app->request->post();
-//        $user = \Yii::$app->user->identity();
+
         $public_message = [];
         $public_message['effect'] = Effect::condition($post['street'],$post['toponymy'],$post['district']);
         $public_message['street'] =  $public_message['effect'][0]['street'];
