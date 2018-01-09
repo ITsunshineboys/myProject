@@ -1908,6 +1908,15 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
+            //减少销量，减少销售额，增加库存.减少商品销量
+            $code=OrderRefund::ReduceSold($GoodsOrder->supplier_id,$OrderGoods->goods_number,$OrderGoods->goods_price,$OrderGoods->freight,$sku);
+            if ($code!=200)
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
             $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已退至账户余额,点击查看详情",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if ($code!=200)
             {
