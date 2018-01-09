@@ -2293,10 +2293,10 @@ class OrderController extends Controller
             case 'user':
                 if ($type==GoodsOrder::ORDER_TYPE_ALL)
                 {
-                    $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app} and a.order_refer = 2 ";
+                    $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app} ";
                 }else{
                     $where=GoodsOrder::GetTypeWhere($type);
-                    $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app}  and a.order_refer = 2";
+                    $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app} ";
                 }
                 break;
             case 'supplier':
@@ -2312,13 +2312,14 @@ class OrderController extends Controller
                     ]);
                 }
                 if ($type==GoodsOrder::ORDER_TYPE_ALL){
-                    $where ="a.supplier_id={$supplier->id}";
+                    $where ="a.supplier_id={$supplier->id} ";
                 }else{
                     $where=GoodsOrder::GetTypeWhere($type);
-                    $where .=" and a.supplier_id={$supplier->id}  and a.order_refer = 2";
+                    $where .=" and a.supplier_id={$supplier->id}  ";
                 }
                 break;
         }
+        $where.=' and a.order_refer = 2';
         if ($type=='all')
         {
             $where.=' and z.customer_service=0';
