@@ -6,21 +6,6 @@
       <span>¥{{platform_price}}</span>
       <span v-show="show_offline" @click="show=true">线下体验商品</span>
     </div>
-
-
-    <alert v-model="show" :hide-on-blur="true">
-      <slot name="default" class="alert-content">
-        <i class="iconfont icon-close" @click="show=false"></i>
-        <div>
-          <span>该店铺的地址</span>
-          <p>四川省成都市蜀汉方式发送到方式发送到发送到发大水方法第三方</p>
-        </div>
-        <div>
-          <span>什么是线下体验商品？</span>
-          <p>四川省成都市蜀dasfdg对萨达撒发生的范德萨范德萨发范德萨发的说法师傅的说法撒</p>
-        </div>
-      </slot>
-    </alert>
   </div>
 </template>
 

@@ -8,13 +8,20 @@
     <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
             :show-desc-mask="false"></swiper>
     <div class="good-detail">
-      <goodsTitle :title="good_detail.title" :subtitle="good_detail.subtitle"
-                  :platform_price="good_detail.platform_price"
-                  :show_offline="good_detail.line_goods.is_offline_goods === '否' ? false:true"></goodsTitle>
+      <div class="title-container">
+        <p>{{good_detail.title}}</p>
+        <p>{{good_detail.subtitle}}</p>
+        <div class="price">
+          <span>¥{{good_detail.platform_price}}</span>
+          <span v-show="good_detail.line_goods.is_offline_goods === '否' ? false:true" @click="show=true">线下体验商品</span>
+        </div>
+      </div>
       <divider></divider>
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
+
+
 
 
 
@@ -62,6 +69,8 @@
 
 
 
+
+
           </div>
           <span></span>
           <div>
@@ -71,12 +80,16 @@
 
 
 
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
+
+
 
 
 
@@ -171,9 +184,13 @@
 
 
 
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
+
+
 
 
 
@@ -226,14 +243,16 @@
       <div @click="show_share = false">取消</div>
     </popup>
 
+    <offlineAlert :offlineInfo=offlineInfo  :show="show" :isOffline="false" @isShow=showOfflineAlert></offlineAlert>
+
   </div>
 </template>
 
 <script>
   import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
-  import goodsTitle from '../good_detail/title'
   import Divider from '@/components/Divider'
-  import comment from '../good_detail/comment.vue'
+  import comment from '../good_detail/comment'
+  import offlineAlert from '@/components/OfflineAlert'
   const afterserviceArr = ['上门维修', '上门退货', '上门换货', '退货', '换货']
 
   export default {
@@ -250,12 +269,13 @@
       TabItem,
       Popup,
       XNumber,
-      goodsTitle,
       Divider,
-      comment
+      comment,
+      offlineAlert
     },
     data () {
       return {
+        show: false,
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -266,6 +286,11 @@
           },
           supplier: {},
           attrs: ''
+        },
+        offlineInfo: {
+          address: '大环境的撒谎就开会开会',
+          phone: '1231545412312',
+          desc: '对萨达撒打撒多撒'
         },
         banner_list: [],
         after_sale_services: [],      // 页面售后显示
@@ -299,9 +324,7 @@
       this.axios.get('/mall/goods-view', {id: 332}, (res) => {
         this.good_detail = res.data.goods_view
         // 用户名处理
-        let startStr = this.good_detail.comments.latest.name.charAt(0)
-        let endStr = this.good_detail.comments.latest.name.charAt(this.good_detail.comments.latest.name.length - 1)
-        this.user_name = startStr + '***' + endStr
+        this.user_name = this.good_detail.comments.latest.name.substr(0, 6) + '...'
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容
@@ -337,6 +360,9 @@
           this.show_count = true
           obj === 'cart' ? this.count_cart = true : obj === 'now' ? this.count_now = true : this.default_count = true
         }
+      },
+      showOfflineAlert: function (bool) {
+        this.show = bool
       }
     }
   }
@@ -437,6 +463,43 @@
 
   .good-container .comment-count span:first-child {
     margin-right: 10px;
+  }
+
+  /*商品名称等内容*/
+  .good-container .title-container {
+    box-sizing: border-box;
+    height: 120px;
+    padding: 15px 14px 20px;
+  }
+
+  .good-container .title-container p:first-child {
+    font-size: 18px;
+    line-height: 20px;
+    color: rgba(102, 102, 102, 1)
+  }
+
+  .good-container .title-container p:nth-child(2) {
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 12px;
+    color: rgba(153, 153, 153, 1);
+  }
+
+  .good-container .title-container .price {
+    margin-top: 26px;
+  }
+
+  .good-container .title-container .price span:first-child {
+    font-size: 24px;
+    line-height: 19px;
+    color: rgba(217, 173, 101, 1);
+  }
+
+  .good-container .title-container .price span:last-child {
+    float: right;
+    font-size: 12px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 17px;
   }
 
   /*评价组件样式*/
