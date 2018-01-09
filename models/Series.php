@@ -42,7 +42,7 @@ class Series extends ActiveRecord
             ->asArray()
             ->select($select)
             ->where(['status'=>self::STATUS_ONLINE])
-            ->orderBy(['id'=>SORT_ASC])
+            ->orderBy(['series_grade'=>SORT_ASC])
             ->all();
         return $series;
     }
