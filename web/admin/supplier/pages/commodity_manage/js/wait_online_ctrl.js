@@ -11,6 +11,10 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		$scope.own_submitted = true
     $scope.series_null_arr=[];
     $scope.style_null_arr=[];
+		$scope.offline_style_ids = [] //下架的风格ids
+		$scope.success_modal_flag = false // 添加成功，跳转列表页
+		$scope.error_modal_flag = false   // 部分系列、风格关闭
+		$scope.default_modal_flag = false // 关闭模态框，停留在当前页
 		let pattern= /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
 		$scope.back_wait=function () {
 			$state.go('commodity_manage',{wait_flag:true})
@@ -385,7 +389,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				$scope.attr_blur_flag = true
 			}
 		}
-    let description = UE.getEditor('editor').getContent();//富文本编辑器
+		$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 		// 判断有无重复属性名
 		let arr=[];
 		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
@@ -407,7 +411,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		}
 
 		if(valid && $scope.upload_cover_src &&$scope.logistics_status && $scope.own_submitted && !$scope.price_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag){
-			$scope.change_ok='#change_ok';//编辑成功
 			$scope.after_sale_services=[];
 			//提供发票
 			if($scope.invoice_check){
@@ -459,13 +462,17 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				}
 			}
 			/*判断风格和系列是否存在，如果不存在，值传0*/
+			$scope.style_check_arr = []
+			console.log($scope.styles_arr);
 			for (let [key,value] of $scope.styles_arr.entries()) {
 				if (value.status === true) {
 					$scope.style_check_arr.push(value.id)
 				}
 			}
+			// 系列传值
 			$scope.series_model == undefined ? $scope.series_model=0 : $scope.series_model = $scope.series_model;
-			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = 0 : $scope.style_check_arr = $scope.style_check_arr.join(',')
+			// 风格传值
+			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = []: $scope.style_check_arr = $scope.style_check_arr
 			/*循环自己添加的属性*/
 			for(let[key,value] of $scope.own_attrs_arr.entries()){
 				$scope.pass_attrs_name.push(value.name);//属性名
@@ -504,7 +511,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				title:$scope.goods_name,//名称
 				subtitle:$scope.des_name,//特色
 				brand_id:+$scope.brand_model,//品牌
-				style_id:$scope.style_check_arr,//风格
+				style_id:$scope.style_check_arr.join(','),//风格
 				series_id:$scope.series_model,//系列
 				'names[]':$scope.pass_attrs_name,//属性名称
 				'values[]':$scope.pass_attrs_value,//属性值
@@ -516,9 +523,31 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				logistics_template_id:+$scope.shop_logistics,//物流模板id
 				after_sale_services:$scope.after_sale_services.join(','),//售后服务
 				left_number:+$scope.left_number,//库存
-				description:description//描述
+				description:$scope.description//描述
 			},function (res) {
 				console.log(res);
+				if (res.code === 200) {
+					// 正常添加
+					$('#change_ok').modal('show')
+					$scope.success_modal_flag = true
+					$scope.error_modal_flag = false
+					$scope.default_modal_flag = false
+					$scope.add_moal_txt = '保存成功'
+				} else if (res.code === 1045 || res.code === 1047) {  // 所选系列或风格，全部关闭
+					$('#change_ok').modal('show')
+					$scope.default_modal_flag = true
+					$scope.success_modal_flag = false
+					$scope.error_modal_flag = false
+					$scope.add_moal_txt = res.msg
+				}else if(res.code === 1046){                        // 部分系列或风格关闭
+					$('#change_ok').modal('show')
+					$scope.error_modal_flag = true
+					$scope.default_modal_flag = false
+					$scope.success_modal_flag = false
+					$scope.add_moal_txt = res.msg
+					$scope.offline_style_ids = []
+					$scope.offline_style_ids=res.data.offline_style_ids
+				}
 			});
 		}else{
 			$scope.submitted=true;
@@ -537,7 +566,39 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			}
 		}
 	};
-
+	// 部分系列或风格关闭 模态框确认按钮
+	$scope.someModalBtn =function () {
+		for (let [key,value2] of $scope.offline_style_ids.entries()){
+			let index = $scope.style_check_arr.findIndex((value) => {
+				return value == value2;
+			})
+			$scope.style_check_arr.splice(index,1)
+		}
+		_ajax.post('/mall/goods-edit',{
+			id:+$scope.goods_id, //id
+			title:$scope.goods_name,//名称
+			subtitle:$scope.des_name,//特色
+			brand_id:+$scope.brand_model,//品牌
+			style_id:$scope.style_check_arr.join(','),//风格
+			series_id:$scope.series_model,//系列
+			'names[]':$scope.pass_attrs_name,//属性名称
+			'values[]':$scope.pass_attrs_value,//属性值
+			cover_image:$scope.upload_cover_src,//封面图
+			'images[]':$scope.upload_img_arr,//多张图片
+			supplier_price:$scope.supplier_price*100,//供货价
+			platform_price:$scope.platform_price*100,//平台价
+			market_price:$scope.market_price*100,//市场价
+			logistics_template_id:+$scope.shop_logistics,//物流模板id
+			after_sale_services:$scope.after_sale_services.join(','),//售后服务
+			left_number:+$scope.left_number,//库存
+			description:$scope.description//描述
+		},function (res) {
+			$('#change_ok').modal('hide')
+			setTimeout(function () {
+				$state.go('commodity_manage');
+			}, 300)
+		})
+	}
 	/*-----------------------保存成功跳转--------------------------------*/
 	$scope.change_go=function () {
 		setTimeout(function () {

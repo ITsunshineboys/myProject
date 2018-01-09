@@ -2293,10 +2293,10 @@ class OrderController extends Controller
             case 'user':
                 if ($type==GoodsOrder::ORDER_TYPE_ALL)
                 {
-                    $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app}";
+                    $where ="a.user_id={$user->id} and role_id={$user->last_role_id_app} and a.order_refer = 2 ";
                 }else{
                     $where=GoodsOrder::GetTypeWhere($type);
-                    $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app}  and order_refer = 2";
+                    $where .= " and a.user_id={$user->id}  and role_id={$user->last_role_id_app}  and a.order_refer = 2";
                 }
                 break;
             case 'supplier':
