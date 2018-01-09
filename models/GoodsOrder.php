@@ -199,7 +199,7 @@ class GoodsOrder extends ActiveRecord
      * @param $invoice
      * @return int
      */
-    public  static  function  AddNewPayOrderData($order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice)
+    public  static  function  AddNewPayOrderData($order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice,$user_id,$role_id)
     {
         $tran = Yii::$app->db->beginTransaction();
         try {
@@ -221,6 +221,8 @@ class GoodsOrder extends ActiveRecord
             $goods_order->consignee_mobile = $address->mobile;
             $goods_order->invoice_type = $invoice['invoice_type'];
             $goods_order->invoice_header_type = $invoice['invoice_header_type'];
+            $goods_order->user_id=$user_id;
+            $goods_order->role_id=$role_id;
             if(!empty($invoice['invoicer_card']))
             {
                 $goods_order->invoicer_card=$invoice['invoicer_card'];
@@ -276,7 +278,7 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray());
+            $code=self::AddNewPayOrderData($post['out_trade_no'],$post['total_amount'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,7);
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -425,7 +427,7 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
-            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray());
+            $code=self::AddNewPayOrderData($order_no,$msg['total_fee'],$Goods->supplier_id,1,$time,1,0,$pay_name,$buyer_message,$address,$invoice->toArray(),0,7);
             if ($code!=200)
             {
                 $tran->rollBack();
@@ -652,8 +654,11 @@ class GoodsOrder extends ActiveRecord
                     if (!$user)
                     {
                         $arr[$k]['mobile']=$arr[$k]['consignee_mobile'];
+                    }else
+                    {
+                        $arr[$k]['mobile']=$user->mobile;
                     }
-                    $arr[$k]['mobile']=$user->mobile;
+
                     break;
             }
             switch ($arr[$k]['role_id'])
@@ -3530,7 +3535,7 @@ class GoodsOrder extends ActiveRecord
                 }
                 $total+=($money+$supplier['freight']*100);
                 //$order_no,$amount_order,$supplier_id,$pay_status,$create_time,$order_refer,$return_insurance=0,$pay_name,$buyer_message,$address,$invoice
-                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier);
+                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
                 if ($code!=200)
                 {
                     $tran->rollBack();

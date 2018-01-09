@@ -717,31 +717,13 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $sms['mobile'] = '13880414513';
-        $sms['type'] = 'resetMobile';
-        try {
-            new SmValidationService($sms);
-        } catch (\InvalidArgumentException $e) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        } catch (ServerErrorHttpException $e) {
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        } catch (\Exception $e) {
-            $code = 1020;
-            if ($code == $e->getCode()) {
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
+        $data=GoodsOrder::find()->where(['order_refer'=>2,'user_id'=>0])->all();
+        foreach ($data as &$list)
+        {
+            $list->order_refer=1;
+            $list->save(false);
         }
+
     }
     public  static  function  actionTest1()
     {
