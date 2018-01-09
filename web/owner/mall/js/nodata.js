@@ -87,6 +87,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     }
     //一级、二级分类数据请求
     _ajax.post('/owner/classify', {}, function (res) {
+        console.log('分类');
         console.log(res)
         $scope.first_level = res.data.pid.stair//一级
         $scope.second_level = res.data.pid.level//二级
@@ -425,12 +426,12 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                         console.log('泥作');
                         console.log(res);
                         let index = $scope.worker_list.findIndex(function (item) {
-                            return item.worker_kind == res.mud_make_labor.worker_kind
+                            return item.worker_kind == res.labor_all_cost.worker_kind
                         })
                         if(index == -1){
-                            $scope.worker_list.push(res.mud_make_labor)
+                            $scope.worker_list.push(res.labor_all_cost)
                         }else{
-                            $scope.worker_list[index].price += res.mud_make_labor.price
+                            $scope.worker_list[index].price += res.labor_all_cost.price
                         }
                         //整合二级
                         for (let [key, value] of res.data.entries()) {

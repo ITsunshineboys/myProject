@@ -1,4 +1,4 @@
-app.controller('product_details_ctrl', function ($timeout,_ajax, $scope, $state, $stateParams) {
+app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state, $stateParams) {
     //初始化
     $scope.status = $stateParams.status
     $scope.materials = JSON.parse(sessionStorage.getItem('copies'))
@@ -17,10 +17,10 @@ app.controller('product_details_ctrl', function ($timeout,_ajax, $scope, $state,
             }
         }
         $scope.goods_detail = {//商品详情
-            id:res.data.goods_view.id,//商品id
-            path:res.data.goods_view.category_path,//分类path
-            title:$stateParams.title,//三级分类名称
-            purchase_price_decoration_company:res.data.goods_view.purchase_price_decoration_company,//供货商价
+            id: res.data.goods_view.id,//商品id
+            path: res.data.goods_view.category_path,//分类path
+            title: $stateParams.title,//三级分类名称
+            purchase_price_decoration_company: res.data.goods_view.purchase_price_decoration_company,//供货商价
             images: res.data.goods_view.images,//轮播图
             goods_name: res.data.goods_view.title,//商品名
             subtitle: res.data.goods_view.subtitle,//商品特色
@@ -36,7 +36,7 @@ app.controller('product_details_ctrl', function ($timeout,_ajax, $scope, $state,
             series_name: res.data.goods_view.series_name,//系列名
             style_name: res.data.goods_view.style_name,//风格名
             attrs: res.data.goods_view.attrs,//属性
-            quantity:1//数量
+            quantity: 1//数量
         }
         $scope.shop_detail = {//店铺详情
             icon: res.data.goods_view.supplier.icon,//店铺头像
@@ -48,22 +48,22 @@ app.controller('product_details_ctrl', function ($timeout,_ajax, $scope, $state,
     //改变数量
     $scope.changeQuantity = function (flag) {
         if (flag == 1) {
-            if($scope.goods_detail.quantity >= $scope.goods_detail.left_number){
+            if ($scope.goods_detail.quantity >= $scope.goods_detail.left_number) {
                 $scope.goods_detail.quantity = $scope.goods_detail.left_number
-            }else{
-                $scope.goods_detail.quantity ++
+            } else {
+                $scope.goods_detail.quantity++
             }
-        } else if(flag == 0) {
-            if($scope.goods_detail.quantity <= 1){
+        } else if (flag == 0) {
+            if ($scope.goods_detail.quantity <= 1) {
                 $scope.goods_detail.quantity = 1
-            }else{
-                $scope.goods_detail.quantity --
+            } else {
+                $scope.goods_detail.quantity--
             }
-        }else{
-            if($scope.goods_detail.quantity!==''){
-                if($scope.goods_detail.quantity == 0){
+        } else {
+            if ($scope.goods_detail.quantity !== '') {
+                if ($scope.goods_detail.quantity == 0) {
                     $scope.goods_detail.quantity = 1
-                }else if(+$scope.goods_detail.quantity > +$scope.goods_detail.left_number){
+                } else if (+$scope.goods_detail.quantity > +$scope.goods_detail.left_number) {
                     $scope.goods_detail.quantity = $scope.goods_detail.left_number
                 }
             }
@@ -71,50 +71,114 @@ app.controller('product_details_ctrl', function ($timeout,_ajax, $scope, $state,
     }
     //更换或者添加商品
     $scope.getGoods = function () {
-        if($scope.status == 1){
-            for(let [key,value] of $scope.materials.entries()){
-                for(let [key1,value1] of value.second_level.entries()){
+        if ($scope.status == 1) {
+            for (let [key, value] of $scope.materials.entries()) {
+                for (let [key1, value1] of value.second_level.entries()) {
                     let index = value1.goods.findIndex(function (item) {
                         return item.id == $stateParams.replace_id
                     })
-                    if(index!=-1){
+                    if (index != -1) {
                         value.cost += -value1.goods[index].cost + $scope.goods_detail.platform_price * $scope.goods_detail.quantity
                         value1.cost += -value1.goods[index].cost + $scope.goods_detail.platform_price * $scope.goods_detail.quantity
                         value.procurement += -value1.goods[index].procurement + $scope.goods_detail.purchase_price_decoration_company * $scope.goods_detail.quantity
                         value1.procurement += -value1.goods[index].procurement + $scope.goods_detail.purchase_price_decoration_company * $scope.goods_detail.quantity
-                        value1.goods.splice(index,1,{
-                            left_number:$scope.goods_detail.left_number,
-                            sku:$scope.goods_detail.sku,
-                            id:$scope.goods_detail.id,
-                            category_id:$scope.goods_detail.path.split(',')[2],
-                            platform_price:$scope.goods_detail.platform_price,
-                            purchase_price_decoration_company:$scope.goods_detail.purchase_price_decoration_company,
-                            name:$scope.goods_detail.brand_name,
-                            title:$stateParams.title,
-                            series_name:$scope.goods_detail.series_name,
-                            style_name:$scope.goods_detail.style_name,
-                            subtitle:$scope.goods_detail.subtitle,
+                        value1.goods.splice(index, 1, {
+                            left_number: $scope.goods_detail.left_number,
+                            sku: $scope.goods_detail.sku,
+                            id: $scope.goods_detail.id,
+                            category_id: $scope.goods_detail.path.split(',')[2],
                             path:$scope.goods_detail.path,
-                            cover_image:$scope.goods_detail.cover_image,
-                            quantity:$scope.goods_detail.quantity,
-                            goods_name:$scope.goods_detail.goods_name,
-                            shop_name:$scope.shop_detail.shop_name,
-                            cost:$scope.goods_detail.platform_price * $scope.goods_detail.quantity,
-                            procurement:$scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
+                            platform_price: +$scope.goods_detail.platform_price,
+                            purchase_price_decoration_company: +$scope.goods_detail.purchase_price_decoration_company,
+                            name: $scope.goods_detail.brand_name,
+                            title: $stateParams.title,
+                            series_name: $scope.goods_detail.series_name,
+                            style_name: $scope.goods_detail.style_name,
+                            subtitle: $scope.goods_detail.subtitle,
+                            path: $scope.goods_detail.path,
+                            cover_image: $scope.goods_detail.cover_image,
+                            quantity: +$scope.goods_detail.quantity,
+                            goods_name: $scope.goods_detail.goods_name,
+                            shop_name: $scope.shop_detail.shop_name,
+                            cost: $scope.goods_detail.platform_price * $scope.goods_detail.quantity,
+                            procurement: $scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
                         })
-                        sessionStorage.setItem('copies',JSON.stringify($scope.materials))
-                        if($stateParams.index == 1){
+                        sessionStorage.setItem('copies', JSON.stringify($scope.materials))
+                        if ($stateParams.index == 1) {
                             $timeout(function () {
-                                $state.go('main_materials',{index:$stateParams.index})
-                            },300)
-                        }else{
-
+                                $state.go('main_materials', {index: $stateParams.index})
+                            }, 300)
+                        } else {
+                            $timeout(function () {
+                                $state.go('other_materials', {index: $stateParams.index})
+                            }, 300)
                         }
                     }
                 }
             }
-        }else{
-
+        } else {
+            //一级、二级分类数据请求
+            _ajax.post('/owner/classify', {}, function (res) {
+                console.log(res)
+                $scope.first_level = res.data.pid.stair//一级
+                $scope.second_level = res.data.pid.level//二级
+                //整合二级
+                for (let [key1, value1] of $scope.materials.entries()) {
+                    if (value1.id == $scope.goods_detail.path.split(',')[0]) {
+                        let index = value1.second_level.findIndex(function (item) {
+                            return item.id == $scope.goods_detail.path.split(',')[1]
+                        })
+                        let index1 = $scope.second_level.findIndex(function (item) {
+                            return item.id == $scope.goods_detail.path.split(',')[1]
+                        })
+                        if (index == -1) {
+                            value1.second_level.push({
+                                id: +$scope.second_level[index1].id,
+                                title: $scope.second_level[index1].title,
+                                cost: 0,
+                                procurement: 0,
+                                goods: []
+                            })
+                        }
+                    }
+                }
+                //整合商品
+                for (let [key1, value1] of $scope.materials.entries()) {
+                    for (let [key2, value2] of value1.second_level.entries()) {
+                        if (value2.id == $scope.goods_detail.path.split(',')[1]) {
+                            let index = value2.goods.findIndex(function (item) {
+                                return item.id == $scope.goods_detail.id
+                            })
+                            value1.cost += $scope.goods_detail.quantity * $scope.goods_detail.platform_price
+                            value1.procurement += $scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
+                            value2.cost += $scope.goods_detail.quantity * $scope.goods_detail.platform_price
+                            value2.procurement += $scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
+                            if (index == -1) {
+                                Object.assign($scope.goods_detail, {
+                                    title: $stateParams.title,
+                                    shop_name: $scope.shop_detail.shop_name,
+                                    cost: $scope.goods_detail.platform_price * $scope.goods_detail.quantity,
+                                    procurement: $scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
+                                })
+                                $scope.goods_detail.quantity = +$scope.goods_detail.quantity
+                                $scope.goods_detail.category_id = $scope.goods_detail.path.split(',')[2]
+                                $scope.goods_detail.name = $scope.goods_detail.brand_name
+                                delete $scope.goods_detail.brand_name
+                                value2.goods.push($scope.goods_detail)
+                                value1.count++
+                            } else {
+                                value2.goods[index].quantity += +$scope.goods_detail.quantity
+                                value2.goods[index].cost += $scope.goods_detail.quantity * $scope.goods_detail.platform_price
+                                value2.goods[index].procurement += $scope.goods_detail.quantity * $scope.goods_detail.purchase_price_decoration_company
+                            }
+                        }
+                    }
+                }
+                sessionStorage.setItem('copies', JSON.stringify($scope.materials))
+                $timeout(function () {
+                    $state.go('other_materials', {index: $stateParams.index})
+                }, 300)
+            })
         }
     }
     //返回前一页

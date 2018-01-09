@@ -15,7 +15,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'nodata_ctrl'
             })
             .state('search',{//搜索页
-                url:'/search?toponymy',
+                url:'/search',
                 templateUrl:'search.html',
                 css:'css/cell_search.css',
                 controller:'search_ctrl'

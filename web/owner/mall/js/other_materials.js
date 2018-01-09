@@ -32,6 +32,7 @@ app.controller('other_ctrl', function ($scope, $state, $stateParams, _ajax, $tim
                 key--
             }
         }
+        $scope.materials[$stateParams.index] = $scope.basic_materials
         sessionStorage.setItem('copies', JSON.stringify($scope.materials))
     }
     //获取商品详情
@@ -64,6 +65,14 @@ app.controller('other_ctrl', function ($scope, $state, $stateParams, _ajax, $tim
     //跳转三级页
     $scope.goLevelThree = function () {
         $state.go('level_three',{status:2,index:$stateParams.index})
+    }
+    //保存数据
+    $scope.saveData = function () {
+        $scope.materials = JSON.parse(sessionStorage.getItem('materials'))
+        $scope.materials[$stateParams.index] = $scope.basic_materials
+        sessionStorage.setItem('materials',JSON.stringify($scope.materials))
+        sessionStorage.removeItem('copies')
+        $state.go('nodata')
     }
     //返回上一页
     $scope.goPrev = function () {
