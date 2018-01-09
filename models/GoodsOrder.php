@@ -2373,7 +2373,6 @@ class GoodsOrder extends ActiveRecord
             ->orderBy('a.create_time DESC')
             ->limit($size)
             ->all();
-        var_dump($OrderList);die;
         $arr=self::GetOrderStatus($OrderList);
         $arr=self::findOrderDataOne($arr,$role);
         foreach ($arr as $key => $row)
