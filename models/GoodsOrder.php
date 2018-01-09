@@ -2430,6 +2430,7 @@ class GoodsOrder extends ActiveRecord
         }
         if ($arr)
         {
+
             $count = (new Query())
                 ->from(self::tableName().' AS a')
                 ->leftJoin(OrderGoods::tableName().' AS z','z.order_no = a.order_no')
@@ -2438,12 +2439,11 @@ class GoodsOrder extends ActiveRecord
                 ->all();
             $count=count($count);
             $total_page=ceil($count/$size);
-            $data=array_slice($arr, ($page-1)*$size,$size);
             return
                 [
                     'total_page' =>$total_page,
                     'count'=>$count,
-                    'details' => $data
+                    'details' => $arr
                 ];
             }else{
                 return [
