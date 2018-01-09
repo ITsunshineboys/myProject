@@ -232,7 +232,8 @@ class GoodsRecommendSupplier extends ActiveRecord
     {
         $where = [
             'type' => self::RECOMMEND_GOODS_TYPE_CAROUSEL,
-            'status' => self::STATUS_ONLINE,
+//            'status' => self::STATUS_ONLINE,
+            'delete_time' => 0,
             'supplier_id' => $supplierId,
         ];
         $districtCode && $where['district_code'] = $districtCode;
