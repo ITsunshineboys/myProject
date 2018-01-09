@@ -3516,15 +3516,13 @@ class GoodsOrder extends ActiveRecord
                     if ($code!=200)
                     {
                         $tran->rollBack();
-                        $code=500;
                         return $code;
                     }
                     $code=LogisticsDistrict::isApply($address->district,$Goods->logistics_template_id);
-                    if ($code!=200)
+                    if ($code==1000)
                     {
                         $tran->rollBack();
-                        $code=500;
-                        return $code;
+                        return 1083;
                     }
                     $month=date('Ym',$time);
                     $Supplier=Supplier::find()
