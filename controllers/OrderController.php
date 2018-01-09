@@ -2041,7 +2041,7 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         $apply_reason=trim($request->post('apply_reason',''));
-        if(!$order_no ||!$sku || !$apply_reason)
+        if(!$order_no  || !$apply_reason)
         {
             $code=1000;
             return Json::encode([
@@ -2075,100 +2075,25 @@ class OrderController extends Controller
             ->one();
         if ($GoodsOrder->pay_status==0)
         {
-            $OrderGoods=OrderGoods::find()
-                ->where(['order_no'=>$order_no])
-                ->all();
-            foreach ($OrderGoods as &$goods)
-            {
-                if ($goods->order_status ==2)
-                {
-                    $code=1034;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $trans = \Yii::$app->db->beginTransaction();
-                $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}";
-                try {
-                    $goods->order_status=2;
-                    $res=$goods->save(false);
-                    if (!$res){
-                        $code=500;
-                        $trans->rollBack();
-                        return Json::encode([
-                            'code' => $code,
-                            'msg' => \Yii::$app->params['errorCodes'][$code]
-                        ]);
-                    }
-                    $record=new UserNewsRecord();
-                    $record->uid=$supplier_user->id;
-                    $record->role_id=6;
-                    $record->title='已取消订单';
-                    $record->content=$content;
-                    $record->send_time=time();
-                    $record->order_no=$order_no;
-                    $record->sku=$sku;
-                     if (!$record->save(false))
-                     {
-                         $trans->rollBack();
-                         $code=500;
-                         return Json::encode([
-                             'code' => $code,
-                             'msg' => \Yii::$app->params['errorCodes'][$code]
-                         ]);
-                     }
-                    $trans->commit();
-                }catch (Exception $e)
-                {
-                    $trans->rollBack();
-                    $code=500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $registration_id=$supplier_user->registration_id;
-                $push=new Jpush();
-                $extras =[
-                    'role_id'=>6,
-                    'order_no'=>$order_no,
-                    'sku'=>$sku,
-                    'type'=>GoodsOrder::STATUS_DESC_DETAILS,
-                ];
-                //推送附加字段的类型
-                $m_time = '86400';//离线保留时间
-                $receive = ['registration_id'=>[$registration_id]];//设备的id标识
-                $title='已取消订单';
-                $result = $push->push($receive,$title,$content,$extras, $m_time);
-                if (!$result)
-                {
-                    $code=1000;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => \Yii::$app->params['errorCodes'][$code]
-                    ]);
-                }
-                $code=200;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => 'ok'
-                ]);
-            }
+            $code=GoodsOrder::UserCanCelOrder($order_no,$supplier_user);
+            return Json::encode([
+                'code' => $code,
+                'msg' => $code==200?'ok':Yii::$app->params['errorCodes'][$code]
+            ]);
         }
-           $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user,$supplier_user);
-           if ($code ==200)
-           {
-               return Json::encode([
-                   'code' => $code,
-                   'msg' => 'ok'
-               ]);
-           }else{
-               return Json::encode([
-                   'code' => $code,
-                   'msg' => \Yii::$app->params['errorCodes'][$code]
-               ]);
-           }
+        if (!$sku)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'ok'
+            ]);
+        }
+        $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user,$supplier_user);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':Yii::$app->params['errorCodes'][$code]
+        ]);
     }
     /**
      * get refund list

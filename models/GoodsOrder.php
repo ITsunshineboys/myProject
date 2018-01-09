@@ -3701,6 +3701,73 @@ class GoodsOrder extends ActiveRecord
     }
 
 
+    /**
+     * 用户取消订单
+     * @param $order_no
+     * @param $supplier_user
+     * @return int
+     */
+    public static  function  UserCanCelOrder($order_no,$supplier_user)
+    {
+        $OrderGoods=OrderGoods::find()
+            ->where(['order_no'=>$order_no])
+            ->all();
+        $GoodsOrder=self::FindByOrderNo($order_no);
+        $trans = \Yii::$app->db->beginTransaction();
+        try {
+            foreach ($OrderGoods as &$goods)
+            {
+                if ($goods->order_status ==2)
+                {
+                    $code=1034;
+                    return $code;
+                }
+                $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}";
+                $goods->order_status=2;
+                $res=$goods->save(false);
+                if (!$res){
+                    $code=500;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $Goods=Goods::find()->where(['sku'=>$goods->sku])->one();
+                if (!$Goods)
+                {
+                    $code=1000;
+                    $trans->rollBack();
+                    return $code;
+                }
+                $code=OrderRefund::ReduceSold($Goods->supplier_id,$goods->goods_number,$goods->goods_price,$goods->freight,$goods->sku);
+                if ($code!=200)
+                {
+                    $trans->rollBack();
+                    return $code;
+                }
+                $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'已取消订单',Yii::$app->params['supplierRoleId'],$content,$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
+                if ($code!=200)
+                {
+                    return $code;
+                }
+                $supplier=Supplier::findOne($GoodsOrder->supplier_id);
+                $code=UserNewsRecord::AddOrderNewRecord(User::findOne($GoodsOrder->user_id),'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$goods->sku,self::STATUS_DESC_DETAILS);
+                if ($code!=200)
+                {
+                    return $code;
+                }
+
+                $code=200;
+                return $code;
+            }
+            $trans->commit();
+        }catch (yii\db\Exception $e)
+        {
+            $trans->rollBack();
+            $code=500;
+            return $code;
+        }
+    }
+
+
 
 
 
