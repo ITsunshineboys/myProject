@@ -1550,7 +1550,7 @@ class BasisDecorationService
                     break;
             }
         }
-die;
+
         $wf = isset($wood_floor) ? $wood_floor :[];
         $ma = isset($marble) ? $marble :[];
         $el = isset($elbow) ? $elbow :[];
