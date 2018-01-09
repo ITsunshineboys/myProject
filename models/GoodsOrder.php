@@ -651,7 +651,7 @@ class GoodsOrder extends ActiveRecord
                         ->one();
                     if (!$user)
                     {
-                        throw new yii\db\Exception("{$arr[$k]['user_id']}");
+                        $arr[$k]['mobile']=$arr[$k]['consignee_mobile'];
                     }
                     $arr[$k]['mobile']=$user->mobile;
                     break;
