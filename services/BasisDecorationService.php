@@ -1594,7 +1594,8 @@ class BasisDecorationService
         $material []  = self::profitMargin($cs);
 
         $style = self::style($material);
-        var_dump($style);die;
+        var_dump($style);
+        echo 111;die;
 
         $goods_material = [];
         foreach ($style as $one){
