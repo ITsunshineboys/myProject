@@ -61,7 +61,7 @@
   }
 
   .offline-alert .weui-dialog {
-    max-width: 80%;
+    width: 65%;
     height: auto;
   }
 
