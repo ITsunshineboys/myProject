@@ -1623,8 +1623,7 @@ class OwnerController extends Controller
 
     }
 
-
-
+    
     /**
      * 案例数据
      * @return string

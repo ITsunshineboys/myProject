@@ -1602,7 +1602,7 @@ class BasisDecorationService
             }
         }
         $style = self::style($goods_material);
-        
+
         return $style;
     }
 
