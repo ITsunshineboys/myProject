@@ -2027,7 +2027,8 @@ class OrderController extends Controller
      * user apply refund
      * @return string
      */
-    public  function  actionUserCancelOrder(){
+    public  function  actionUserCancelOrder()
+    {
         $user = \Yii::$app->user->identity;
         if (!$user) {
             $code = 1052;
@@ -2040,7 +2041,8 @@ class OrderController extends Controller
         $order_no=trim($request->post('order_no',''));
         $sku=trim($request->post('sku',''));
         $apply_reason=trim($request->post('apply_reason',''));
-        if(!$order_no ||!$sku || !$apply_reason){
+        if(!$order_no ||!$sku || !$apply_reason)
+        {
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -2155,7 +2157,8 @@ class OrderController extends Controller
             }
         }
            $code=GoodsOrder::applyRefund($order_no,$sku,$apply_reason,$user,$supplier_user);
-           if ($code ==200){
+           if ($code ==200)
+           {
                return Json::encode([
                    'code' => $code,
                    'msg' => 'ok'
