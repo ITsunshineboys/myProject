@@ -137,8 +137,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" ng-click="reset_filter ()" class="btn btn-default reset_btn" >重置</button>
-                                <button type="button" ng-click="completeFilter ()" class="btn reset_btn last_btn"  data-dismiss="modal">完成</button>
+                                <button type="button" ng-click="resetFilter()" class="btn btn-default reset_btn" >重置</button>
+                                <button type="button" class="btn reset_btn last_btn"  data-dismiss="modal">完成</button>
                             </div>
                         </div>
                     </div>
@@ -153,13 +153,13 @@
                             </div>
                             <div class="modal-body">
                                 <div class="div_search">
-                                    <input class="brand_search" ng-model="ctrlScope.keyword" type="text" placeholder="请输入品牌...">
+                                    <input class="brand_search" ng-model="vm.keyword" type="text" placeholder="请输入品牌...">
                                     <img class="img_search" src="images/mall_searchbar.png" alt="">
                                 </div>
                                 <ul class="brands_more">
-                                    <li ng-repeat="item in all_goods_brands" ng-class="{'changeColor':cur_brand_copy.indexOf(item.id) != -1}" ng-click="all_change(4,item)">
+                                    <li ng-repeat="item in goods_brands" ng-class="{'changeColor':inner_brand.indexOf(item.id) != -1}" ng-click="filterGoods('inner_brand',item)">
                                         {{item.name}}
-                                        <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="cur_brand_copy.indexOf(item.id) != -1">
+                                        <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="inner_brand.indexOf(item.id) != -1">
                                     </li>
                                 </ul>
 
@@ -167,7 +167,7 @@
                             </div>
                             <div class="modal-footer footer_size">
                                 <button type="button" class="btn btn_brand"  data-dismiss="modal" >返回</button>
-                                <button type="button" class="btn btn_brandRight" data-dismiss="modal" ng-click="save_inner_data()">确定</button>
+                                <button type="button" class="btn btn_brandRight" data-dismiss="modal" ng-click="saveInnerBrand()">确定</button>
                             </div>
                         </div>
                     </div>
