@@ -289,7 +289,9 @@ class BasisDecorationService
         if (!self::$_goodsNames) {
             $idTitles = GoodsCategory::find()
                 ->select(['id', 'title'])
-                ->where(['deleted' => 0, 'level' => GoodsCategory::LEVEL3])
+//                ->where(['deleted' => 0, 'level' => GoodsCategory::LEVEL3])
+                    // TODO   不需要下架状态  Wch
+                ->where(['level' => GoodsCategory::LEVEL3])
                 ->andWhere(['in', 'id', self::GOODS_IDS])
                 ->asArray()
                 ->all();
