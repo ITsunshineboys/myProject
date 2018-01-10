@@ -1422,7 +1422,9 @@ class OwnerController extends Controller
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
         $material[]= BasisDecorationService::formula($goods,$get);
-        var_dump($material);die;
+        var_dump($goods);
+        var_dump($material);
+        die;
 
 
         //无计算公式
