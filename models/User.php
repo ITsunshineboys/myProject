@@ -1214,9 +1214,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function logout()
     {
-        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
-            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
-        }
+//        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
+//            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
+//        }
         Yii::$app->user->logout();
         $this->authKey = '';
         $this->save();
@@ -1901,11 +1901,11 @@ class User extends ActiveRecord implements IdentityInterface
 
         if ($roleId) {
             Yii::$app->session[self::LOGIN_ORIGIN_ADMIN] = $this->id;
-//            $this->oldAuthKeyAdmin = $this->authKeyAdmin;
+            $this->oldAuthKeyAdmin = $this->authKeyAdmin;
             $this->authKeyAdmin = $sessionId;
         } else {
             Yii::$app->session[self::LOGIN_ORIGIN_APP] = $this->id;
-//            $this->oldAuthKey = $this->authKey;
+            $this->oldAuthKey = $this->authKey;
             $this->authKey = $sessionId;
         }
         Yii::$app->session[self::LOGIN_ROLE_ID] = $roleId ? $roleId : Yii::$app->params['ownerRoleId'];
