@@ -1076,6 +1076,7 @@ class OwnerController extends Controller
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE,self::TILER_MATERIAL);
         $judge = BasisDecorationService::judge($goods,$get);
+        var_dump($judge);
 
         //商品属性
 //        $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
