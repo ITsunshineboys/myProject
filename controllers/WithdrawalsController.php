@@ -110,7 +110,13 @@ class WithdrawalsController extends Controller
         $position=trim($request->post('position',''));
         $bankbranch=trim($request->post('bankbranch',''));
         $role_id=trim($request->post('role_id',''));
-        if (!$bankname || !$bankcard || !$username || !$position || !$bankbranch  ){
+        if (
+            !$bankname
+            || !$bankcard
+            || !$username
+            || !$position
+//            || !$bankbranch
+        ){
             $code=1000;
             return Json::encode([
                 'code' => $code,
