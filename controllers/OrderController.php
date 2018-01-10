@@ -81,9 +81,9 @@ class OrderController extends Controller
         'delete-comment-details',
         'goods-view',
 //        'find-refund-detail',
-        'after-sale-supplier-send-man',
-        'after-sale-supplier-confirm',
-        'after-sale-delivery',
+//        'after-sale-supplier-send-man',
+//        'after-sale-supplier-confirm',
+//        'after-sale-delivery',
 //        'find-shipping-cart-list',
         'after-sale-detail-admin',
         'close-order'
