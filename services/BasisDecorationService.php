@@ -1153,16 +1153,16 @@ class BasisDecorationService
         $series = Series::find()->select('series')->where(['id'=>$get['series']])->one();
         foreach ($goods as $one_goods) {
             if ($one_goods['style_name'] == $style->style
-                && $one_goods['series_name'] == 0){
+                && $one_goods['series_name'] == null){
                 $v[] = $one_goods;
             }
 
-            if ($one_goods['style_name'] == 0
+            if ($one_goods['style_name'] == null
                 && $one_goods['series_name'] == $series->series){
                 $v[] = $one_goods;
             }
-            if (is_numeric($one_goods['style_name'])
-                && is_numeric($one_goods['series_name'])){
+            if ($one_goods['style_name'] == null
+                && $one_goods['series_name'] == null){
                 $v[] = $one_goods;
             }
         }
