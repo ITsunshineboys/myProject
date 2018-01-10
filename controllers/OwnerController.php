@@ -1390,6 +1390,7 @@ class OwnerController extends Controller
                 }
             }
 
+            var_dump($materials);die;
             $special_offer = 0;
             $total_prices = 0;
             foreach ($post['list'] as $price){
