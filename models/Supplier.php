@@ -602,6 +602,8 @@ class Supplier extends ActiveRecord
         if (isset($data['sales_amount_month'])) {
             if ($ym != $data['month']) {
                 $data['sales_amount_month'] = 0;
+            } else {
+                $data['sales_amount_month'] = StringService::formatPrice($data['sales_amount_month'] / 100);
             }
         }
 
