@@ -615,12 +615,20 @@ class SupplierController extends Controller
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
-        if (!$Supplier || $Supplier['status']!=Supplier::STATUS_ONLINE)
+        if (!$Supplier)
         {
             $code=1076;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        if ($Supplier['status']!=Supplier::STATUS_ONLINE && $Supplier['status']!=Supplier::STATUS_OFFLINE)
+        {
+            $code=1076;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $line_supplier=LineSupplier::find()
