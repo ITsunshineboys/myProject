@@ -502,29 +502,31 @@ class Goods extends ActiveRecord
             $one_goods['market_price']   =  $one_goods['market_price'] / 100;
             $one_goods['purchase_price_decoration_company'] =  $one_goods['purchase_price_decoration_company'] / 100;
 
+            $one_goods['series_name'] = $one_goods['series_id'];
+            $one_goods['style_name'] = $one_goods['style_id'];
+            unset($one_goods['series_id']);
+            unset($one_goods['style_id']);
             if (
-                isset($one_goods['series_id'])
-                && $one_goods['series_id'] != 0
+                isset($one_goods['series_name'])
+                && $one_goods['series_name'] != 0
             ){
 
                 $where_ = "id in (".$one_goods['series_id'].")";
                     $series = Series::find()->select('id,series')->where($where_)->all();
                     foreach ($series as $one_series){
                         $one_goods['series_name'] = $one_series['series'];
-                        unset($one_goods['series_id']);
                     }
             }
 
             if (
-                isset($one_goods['style_id'])
-                && $one_goods['style_id'] != 0
+                isset($one_goods['style_name'])
+                && $one_goods['style_name'] != 0
             ){
 
                 $where_ = "id in (".$one_goods['style_id'].")";
                 $series = Style::find()->select('id,style')->where($where_)->all();
                 foreach ($series as $one_series){
                     $one_goods['style_name'] = $one_series['style'];
-                    unset($one_goods['style_id']);
                 }
             }
         }
