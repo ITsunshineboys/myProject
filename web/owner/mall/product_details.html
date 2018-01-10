@@ -166,9 +166,11 @@
             </div>
         </div>
     </div>
-    <div style="height: 4.5rem"></div>
+    <div style="height: 4.5rem" ng-if="status!=0 || goods_detail.status==0"></div>
     <div class="foot_tab" ng-if="status!=0">
         <button class="add" data-toggle="modal" data-target="#myModal">{{status == 1?'更换':'添加'}}</button>
     </div>
-    <div style="height: 4rem;" ng-if="!!cur_status"></div>
+    <div class="foot_tab shelves" ng-if="goods_detail.status==0">
+        该商品已下架
+    </div>
 </div>
