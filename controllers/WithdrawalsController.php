@@ -116,7 +116,8 @@ class WithdrawalsController extends Controller
             || !$username
             || !$position
 //            || !$bankbranch
-        ){
+        )
+        {
             $code=1000;
             return Json::encode([
                 'code' => $code,
