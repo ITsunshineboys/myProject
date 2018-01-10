@@ -1075,14 +1075,12 @@ class OwnerController extends Controller
 
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE,self::TILER_MATERIAL);
-        var_dump($goods);
         $judge = BasisDecorationService::judge($goods,$get);
-        var_dump($judge);
 
         //商品属性
-//        $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
-//        $self_leveling_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['self_leveling'],'重');
-//        $river_sand_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['river_sand'],'重');
+        $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
+        $self_leveling_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['self_leveling'],'重');
+        $river_sand_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['river_sand'],'重');
         $wall_brick_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wall_brick'],'',2);
 
         //地砖 商品查询   44
