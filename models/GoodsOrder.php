@@ -2485,7 +2485,16 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
                 }
             }
-            $arr[$k]['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_UNPAID)
+            {
+                $arr[$k]['amount_order']= StringService::formatPrice($arr[$k]['amount_order']*0.01);
+            }else
+            {
+                $arr[$k]['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            }
+
+
             $arr[$k]['goods_price']= StringService::formatPrice($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']= StringService::formatPrice($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']= StringService::formatPrice($arr[$k]['supplier_price']*0.01);
@@ -2515,6 +2524,7 @@ class GoodsOrder extends ActiveRecord
             $allNumber=0;
             if ($arr[$k]['status']==self::ORDER_TYPE_DESC_UNPAID)
             {
+
                 $orderGoods=OrderGoods::find()
                     ->where(['order_no'=>$arr[$k]['order_no']])
                     ->asArray()
