@@ -3590,7 +3590,7 @@ class OrderController extends Controller
             ]);
         }
         $orderAmount=GoodsOrder::CalculationCost($orders);
-        if ( !$postData['total_amount']*100 == $orderAmount){
+        if ( $postData['total_amount']*100 != $orderAmount){
             $code=1000;
             return Json::encode([
                 'code' => $code,

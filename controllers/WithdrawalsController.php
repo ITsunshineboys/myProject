@@ -45,8 +45,7 @@ class WithdrawalsController extends Controller
         'check-cash-money',
         'check-supplier-pay-pwd',
         'set-bank-card',
-        'find-bank-card',
-        'find-balance',
+        'find-bank-card'
     ];
     /**
      * @inheritdoc
