@@ -36,8 +36,25 @@
 
     <ul class="store-info">
       <li flex="main:justify cross:center">
-        <span class="store-title">开店时间</span>
-        <span class="store-score">2015-09-22</span>
+        <span class="store-title">综合评分</span>
+        <span class="store-score">9.5</span>
+      </li>
+      <li flex="main:justify cross:center">
+        <span class="store-title">配送员服务</span>
+        <span class="store-score">9.5</span>
+      </li>
+    </ul>
+    <ul class="store-info">
+      <li flex="main:justify cross:center">
+        <span class="store-title">掌柜名</span>
+        <span class="store-msg" flex="cross:center">
+          <span>冬瓜先生</span>
+          <span class="iconfont icon-service"></span>
+        </span>
+      </li>
+      <li flex="main:justify cross:center">
+        <span class="store-title">质保金</span>
+        <span class="store-score" style="color: #d9ad65;">5000质保金</span>
       </li>
     </ul>
     <!-- 线下体验店详情弹窗 -->
@@ -148,6 +165,12 @@
   .store-msg {
     font-size: 14px;
     color: #999999;
+  }
+
+  .store-msg .iconfont {
+    margin-left: 5px;
+    color: #222;
+    font-size: 18px;
   }
 
   .store-score {
