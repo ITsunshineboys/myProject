@@ -1377,7 +1377,9 @@ class OwnerController extends Controller
                             $materials['goods_price'] = $materials['procurement'] / ($one_coefficient['coefficient'] / 100);
                             $goods []                 = $materials;
                         }
-
+                    }else{
+                        $materials['goods_price'] = $materials['procurement'] / 1;
+                        $goods []                 = $materials;
                     }
                 }
             }
