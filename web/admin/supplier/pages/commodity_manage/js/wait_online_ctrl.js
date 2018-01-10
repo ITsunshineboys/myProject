@@ -178,6 +178,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.goods_input_attrs=[];//普通文本框
 	$scope.merchant_add_attrs = [] ; // 商家自己添加的属性
 	$scope.goods_select_attrs=[];//下拉框
+	$scope.goods_check_attrs = []; // 复选框
 	$scope.goods_select_value=[];//下拉框的值
 	$scope.pass_attrs_name=[];//名称
 	$scope.pass_attrs_value=[];//值
@@ -186,12 +187,14 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	  $scope.goods_all_attrs=res.data.goods_attrs_admin;
 	  //循环所有获取到的属性值，判断是普通文本框还是下拉框
 	  for (let [key, value] of $scope.goods_all_attrs.entries()) {
-		  if (value.addition_type === 1) {
-			  $scope.goods_select_attrs.push(value);
-		  } else if (value.addition_type === 0 && value.from_type === 0) {
+		  if (value.addition_type === 0 && value.from_type === 0) {   // 文本框
 			  $scope.goods_input_attrs.push(value);
-		  }else if(value.from_type === 1) {
+		  } else if (value.addition_type === 1) {                     // 下拉框
+			  $scope.goods_select_attrs.push(value);
+		  }else if(value.from_type === 1) {                         // 商家自己添加的属性
 			  $scope.merchant_add_attrs.push(value)
+		  }else if (value.addition_type ===2 && value.from_type === 0) {
+			  $scope.goods_check_attrs.push(value);
 		  }
 	  }
 	  //循环添加名称和值
@@ -204,7 +207,12 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 		  $scope.goods_select_attrs_value.push(value.value);//下拉框的值
 	  }
   });
-
+	// 复选框 点击事件
+	$scope.attr_check_click=function ($event,select,items) {
+		if($event.target.localName =='input'){
+			select.indexOf(items) === -1 ? select.push(items) : select.splice(select.indexOf(items),1)
+		}
+	}
 	/*----------------自己添加的属性--------------------*/
 	$scope.own_attrs_arr=[];//自定义数组
 	//添加属性
@@ -227,12 +235,12 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			!reg_value ? item.status = true : item.status = false
 	};
 	//库存
-	$scope.leftNumber=function (value) {
-		if(value!==undefined){
-			$scope.left_number = value.replace(/[^\d]/g,'')
-		}
-	};
-	//自己添加的属性
+	// $scope.leftNumber=function (value) {
+	// 	if(value!==undefined){
+	// 		$scope.left_number = value.replace(/[^\d]/g,'')
+	// 	}
+	// };
+	//判断自己添加的属性，和之前的属性名有无重复
 	$scope.own_input_change = function () {
 		let arr=[];
 		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
@@ -389,7 +397,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				$scope.attr_blur_flag = true
 			}
 		}
-		$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 		// 判断有无重复属性名
 		let arr=[];
 		arr=$scope.goods_all_attrs.concat($scope.own_attrs_arr);
@@ -409,8 +416,9 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 				$scope.own_submitted = true
 			}
 		}
-
+		// 判断 input框不能为空、封面图、轮播图、无重复属性名、价格、有品牌、属性输入规则符合标准
 		if(valid && $scope.upload_cover_src &&$scope.logistics_status && $scope.own_submitted && !$scope.price_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag){
+			$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.after_sale_services=[];
 			//提供发票
 			if($scope.invoice_check){
@@ -461,9 +469,8 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 					$scope.after_sale_services.splice(del_index,1);
 				}
 			}
-			/*判断风格和系列是否存在，如果不存在，值传0*/
+			/*判断风格和系列是否存在，如果不存在，值传[] */
 			$scope.style_check_arr = []
-			console.log($scope.styles_arr);
 			for (let [key,value] of $scope.styles_arr.entries()) {
 				if (value.status === true) {
 					$scope.style_check_arr.push(value.id)
@@ -473,25 +480,30 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			$scope.series_model == undefined ? $scope.series_model=0 : $scope.series_model = $scope.series_model;
 			// 风格传值
 			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = []: $scope.style_check_arr = $scope.style_check_arr
-			/*循环自己添加的属性*/
-			for(let[key,value] of $scope.own_attrs_arr.entries()){
-				$scope.pass_attrs_name.push(value.name);//属性名
-				$scope.pass_attrs_value.push(value.value);//属性值
-			}
-			/*如果没有属性，则传空数组*/
-			if($scope.pass_attrs_name[0]==undefined){
-				$scope.pass_attrs_name=[];
-			}
-			if($scope.pass_attrs_value[0]==undefined){
-				$scope.pass_attrs_value=[];
-			}
-			/*判断是默认属性是 下拉框还是普通文本框*/
+
+			/*-----------------属性传值-------------------*/
+			// 文本框
       if($scope.goods_input_attrs[0]!=undefined){
           for(let[key,value] of $scope.goods_input_attrs.entries()){
               $scope.pass_attrs_name.push(value.name);
               $scope.pass_attrs_value.push(value.value);
           }
       }
+			// 下拉框
+			if($scope.goods_select_attrs[0]!=undefined){
+				for(let[key,value] of $scope.goods_select_attrs.entries()){
+					$scope.pass_attrs_name.push(value.name);
+					$scope.pass_attrs_value.push(value.selected);
+				}
+			}
+			// 复选框
+			if($scope.goods_check_attrs[0]!=undefined){
+				for (let [key,value] of $scope.goods_check_attrs.entries()) {
+					$scope.pass_attrs_name.push(value.name);
+					$scope.pass_attrs_value.push(value.selected);
+				}
+			}
+      // 商家之前自己添加的属性
 			if($scope.merchant_add_attrs[0]!=undefined){
 				for(let[key,value] of $scope.merchant_add_attrs.entries()){
 					console.log(value);
@@ -499,13 +511,22 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 					$scope.pass_attrs_value.push(value.value);
 				}
 			}
-
-      if($scope.goods_select_attrs[0]!=undefined){
-          for(let[key,value] of $scope.goods_select_attrs.entries()){
-              $scope.pass_attrs_name.push(value.name);
-              $scope.pass_attrs_value.push(value.selected);
-          }
-      }
+			// 商家本次自己添加的属性
+			if($scope.own_attrs_arr[0]!=undefined) {
+				for (let [key, value] of $scope.own_attrs_arr.entries()) {
+					$scope.pass_attrs_name.push(value.name);//属性名
+					$scope.pass_attrs_value.push(value.value);//属性值
+				}
+			}
+			// 如果没有属性，则传空数组
+			if($scope.pass_attrs_name[0]==undefined){
+				$scope.pass_attrs_name=[];
+			}
+			if($scope.pass_attrs_value[0]==undefined){
+				$scope.pass_attrs_value=[];
+			}
+			console.log($scope.pass_attrs_name);
+			console.log($scope.pass_attrs_value);
 			_ajax.post('/mall/goods-edit',{
 				id:+$scope.goods_id, //id
 				title:$scope.goods_name,//名称
