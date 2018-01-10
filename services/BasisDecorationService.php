@@ -2003,6 +2003,9 @@ class BasisDecorationService
                 }
             $one_goods['style_name'] = implode('、',$style_);
             unset($one_goods['style_id']);
+            }else{
+                $one_goods['style_name'] = '';
+                unset($one_goods['style_id']);
             }
 
             if ($one_goods['series_id'] > 0){
@@ -2013,6 +2016,9 @@ class BasisDecorationService
                     $style_[] = $one_style['series'];
                 }
                 $one_goods['series_id'] = implode('、',$style_);
+                unset($one_goods['series_id']);
+            }else{
+                $one_goods['series_name'] = '';
                 unset($one_goods['series_id']);
             }
         }
