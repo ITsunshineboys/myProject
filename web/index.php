@@ -9,9 +9,8 @@ define('YII_ENV', $config['params']['online']['env']);
 require(__DIR__ . '/../vendor/autoload.php');
 require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
-if (YII_DEBUG) {
-
-
+//if (YII_DEBUG)
+//{
     $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : 'http://cross.local.com:808';
 
     $allow_origin = array(
@@ -23,7 +22,7 @@ if (YII_DEBUG) {
         header('Access-Control-Allow-Origin:'.$origin);
         header("Access-Control-Allow-Credentials: true");
     }
-}
+//}
 
 
 (new yii\web\Application($config))->run();
