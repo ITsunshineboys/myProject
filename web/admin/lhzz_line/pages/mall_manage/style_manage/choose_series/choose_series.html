@@ -1,17 +1,6 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/choose_series/css/choose_series.css">
 <div ng-controller="choose_series">
-    <!--顶部导航-->
-    <!--<div class="topnav">-->
-        <!--<span class="glyphicon glyphicon-certificate"></span>-->
-        <!--<h6>商城管理</h6>-->
-        <!--<h6>> 系列/风格/属性管理 </h6>-->
-        <!--<h6>> 选择拥有系列的分类 </h6>-->
-    <!--</div>-->
-
-    <!--内容-->
-    <div class="choose_series_content">
-        <p>选择拥有系列的分类</p>
-
+        <p class="choose_series_content">选择拥有系列的分类</p>
         <!--四个 ul-->
         <div class="ulright">
             <!--一级-->
@@ -20,10 +9,8 @@
                     {{n.title}}
                 </li>
             </ul>
-
              <!--二级-->
             <ul >
-                <!--ng-click="getMoreThree (n.id)"-->
                 <li ng-repeat=" n in second track by $index" ng-class="{'active':twoColor== n}" ng-click="getMoreThree (n)">
                     {{n.title}}
                 </li>
@@ -31,31 +18,24 @@
 
             <!--三级-->
             <ul class="thirdul">
-                <li ng-repeat="n in three track by $index" ng-class="{'active':threeColor==n}">
+                <li ng-repeat="n in three track by $index">
                     <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
                     {{n.title}}
                 </li>
-                <!--<li><input type="checkbox">墙面附着剂</li>-->
             </ul>
 
             <ul class="lastul">
-
                 <li ng-repeat="item in item_check track by $index">
                     {{item.title}}
                     <img ng-click="delete_item(item)" src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
                 </li>
-                <!--<li>-->
-                    <!--石膏粉-->
-                    <!--<img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">-->
-                <!--</li>-->
             </ul>
         </div>
 
-        <div class="btn_sure">
-            <button id="save" data-toggle="modal" ng-click="send_series()" data-target="#suremodal">保存</button>
-            <button ui-sref="style_index">返回</button>
+        <div class="btn-fixed">
+            <button class="btn btn-primary btn-right" id="save" data-toggle="modal" data-target="#suremodal" ng-click="send_series()" >保存</button>
+            <button class="btn btn-default" ui-sref="style_index">返回</button>
         </div>
-    </div>
 
     <!--保存提示框-->
     <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
