@@ -36,6 +36,7 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
             series_name: res.data.goods_view.series_name,//系列名
             style_name: res.data.goods_view.style_name,//风格名
             attrs: res.data.goods_view.attrs,//属性
+            status:res.data.goods_view.status,//商品是否下架,0为下架
             quantity: 1//数量
         }
         $scope.shop_detail = {//店铺详情
