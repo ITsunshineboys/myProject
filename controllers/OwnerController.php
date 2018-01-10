@@ -350,7 +350,6 @@ class OwnerController extends Controller
         // 所需要材料查询
         $goods = Goods::priceDetail(self::WALL_SPACE, self::CIRCUIT_MATERIAL);
         $judge = BasisDecorationService::judge($goods,$get);
-var_dump($judge);die;
 
         // 当地工艺
         $weak_craft = WorkerType::craft(self::CRAFT_NAME['weak'],$get['city']);  // 弱电工艺
@@ -377,6 +376,7 @@ var_dump($judge);die;
 
         //商品属性抓取
         $reticle_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['reticle'],'长');
+        var_dump($reticle_attr);die;
         $wire_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['wire'],'长');
         $spool_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['spool'],'长');
         $bottom_case_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['bottom_case'],'长');
