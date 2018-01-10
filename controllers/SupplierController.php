@@ -599,7 +599,7 @@ class SupplierController extends Controller
     {
         $shop_no = trim(Yii::$app->request->get('shop_no', ''));
         $Supplier=Supplier::find()
-            ->select('shop_name,type_shop,category_id,id')
+            ->select('shop_name,type_shop,category_id,id,status')
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();

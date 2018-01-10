@@ -745,10 +745,6 @@ class TestController extends Controller
             }
         }
     }
-    public  static  function  actionTest1()
-    {
-        var_dump(Yii::$app->session['cart_goods']);
-    }
 
 
 
