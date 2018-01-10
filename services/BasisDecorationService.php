@@ -1165,6 +1165,10 @@ class BasisDecorationService
                 && $one_goods['series_name'] == $series->series){
                 $v[] = $one_goods;
             }
+            if ($one_goods['style_name'] == $style->style
+                && $one_goods['series_name'] == $series->series){
+                $v[] = $one_goods;
+            }
             if ($one_goods['style_name'] == null
                 && $one_goods['series_name'] == null){
                 $v[] = $one_goods;
