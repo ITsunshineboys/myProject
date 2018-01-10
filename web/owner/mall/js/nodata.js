@@ -66,6 +66,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     $scope.$watch('params', function (newVal, oldVal) {
         console.log(JSON.stringify(newVal) === JSON.stringify(oldVal));
         if(!(JSON.stringify(newVal) === JSON.stringify(oldVal))){
+            sessionStorage.setItem('params', JSON.stringify($scope.params))
             $scope.materials = []
         }
     }, true)
@@ -611,7 +612,6 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                            value.status = index == -1?2:0
                         }
                     }
-                    sessionStorage.setItem('params', JSON.stringify($scope.params))
                     getPrice()
                 })
             })
