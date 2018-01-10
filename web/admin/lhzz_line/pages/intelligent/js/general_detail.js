@@ -191,6 +191,7 @@ app.controller('general_detail_ctrl',function (_ajax,$scope,$rootScope,$statePar
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
         let arr = [],arr1 = [],obj = {}
+        $scope.total_count.count = 0
         //获取一级总点位
         for(let [key,value] of $scope.one_title.entries()){
             arr.push({
@@ -202,6 +203,7 @@ app.controller('general_detail_ctrl',function (_ajax,$scope,$rootScope,$statePar
         //获取二级数据
         for(let [key,value] of $scope.one_title.entries()){
             for(let [key1,value1] of value.two_title.entries()){
+                $scope.total_count.count += +value1.count
                 for(let [key2,value2] of arr.entries()){
                     if(value.id == value2.two_id){
                         value2.count += +value1.count
