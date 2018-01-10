@@ -64,7 +64,7 @@ class OrderController extends Controller
     const ACCESS_LOGGED_IN_USER = [
         'getsupplierorderdetails',
         'expressupdate',
-        'supplierdelivery',
+//        'supplierdelivery',
         'getplatformdetail',
         'getorderdetailsall',
         'platformhandlesubmit',
