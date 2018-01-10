@@ -2466,6 +2466,14 @@ class QuoteController extends Controller
 //        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
 
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
+        $d_add = DecorationAdd::find()->where(['sku'=>$goods[0]['sku']])->one();
+        if ($d_add){
+            $code=1080;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '该商品已添加',
+            ]);
+        }
         if (isset($goods['0'])) {
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
