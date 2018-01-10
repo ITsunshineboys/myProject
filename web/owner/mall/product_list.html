@@ -110,9 +110,9 @@
                                         <span class="style_size">价格区间</span>
                                     </div>
                                     <div class="price_range">
-                                        <input type="text" placeholder="最低价" ng-model="params.platform_price_min" ng-blur="choosePrice('platform_price_min')" maxlength="8" oninput="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/> &nbsp; &nbsp;
+                                        <input type="text" placeholder="最低价" ng-model="params.platform_price_min" ng-blur="choosePrice('platform_price_min')" maxlength="8" oninput="this.value=this.value.replace(/[^\d]/g,'')" pattern="[1-9]\d*"/> &nbsp; &nbsp;
                                         <span> ———</span>
-                                        <input type="text" placeholder="最高价" ng-model="params.platform_price_max" ng-blur="choosePrice('platform_price_max')" maxlength="8" oninput="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " pattern="[1-9]\d*"/>
+                                        <input type="text" placeholder="最高价" ng-model="params.platform_price_max" ng-blur="choosePrice('platform_price_max')" maxlength="8" oninput="this.value=this.value.replace(/[^\d]/g,'')"  pattern="[1-9]\d*"/>
                                     </div>
 
 

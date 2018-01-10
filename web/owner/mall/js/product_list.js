@@ -103,6 +103,7 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
     //价格区间
     $scope.choosePrice = function (str) {
         if ($scope.params[str] != '') {
+            console.log($scope.params[str]);
             if (str === 'platform_price_min') {
                 if($scope.params.platform_price_max!=''&&+$scope.params[str] > +$scope.params.platform_price_max){
                     let num = $scope.params.platform_price_max
