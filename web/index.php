@@ -15,7 +15,8 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
     $allow_origin = array(
         'http://cross.local.com:808',
-        'http://localhost:8080'
+        'http://localhost:8080',
+        'http://0.0.0.0:8080'
     );
 
     if(in_array($origin, $allow_origin)){
