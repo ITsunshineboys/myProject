@@ -281,7 +281,7 @@ class SiteController extends Controller
 
         return Json::encode([
             'code' => 200,
-            'msg' => '登出成功',
+            'msg' => '退出成功',
         ]);
     }
 
