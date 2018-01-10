@@ -360,10 +360,11 @@ class BasisDecorationService
 
             }
         }
-        var_dump($one_goods);die;
+
 //        $style = self::style($one_goods);
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
+        var_dump($max_goods);die;
         switch ($int){
             case $int == 1 ;
                 $goods_attr = GoodsAttr::findByGoodsIdUnit($max_goods['id'],$name);
