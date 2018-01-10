@@ -886,6 +886,7 @@ class OwnerController extends Controller
 
 
         $goods = Goods::priceDetail(self::WALL_SPACE, self::LATEX_MATERIAL);
+        var_dump($goods);die;
         $judge = BasisDecorationService::judge($goods,$get);
 
 
