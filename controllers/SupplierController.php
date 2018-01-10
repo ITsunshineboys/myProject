@@ -29,7 +29,7 @@ class SupplierController extends Controller
     const ACCESS_LOGGED_IN_USER = [
         'certification-view',
         'certification',
-        'index-app',
+//        'index-app',
         'reset-district',
         'reset-icon',
         'shop-types',
