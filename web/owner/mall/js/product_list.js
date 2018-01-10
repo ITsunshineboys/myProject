@@ -1,4 +1,6 @@
 app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$timeout) {
+    //初始化
+    $scope.vm = $scope
     //获取头部名称
     $scope.header_title = $stateParams.title
     //商品列表部分
@@ -42,6 +44,7 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
     $scope.style_arr = []//风格选择
     $scope.series_arr = []//系列选择
     $scope.brand_arr = []//品牌选择
+    $scope.inner_brand = angular.copy($scope.brand_arr)//内层品牌选择
     //请求风格、系列以及品牌
     _ajax.get('/mall/category-brands-styles-series', {
         category_id: $scope.params.category_id,
@@ -91,14 +94,29 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
             }else{
                 $scope.brand_arr.splice($scope.brand_arr.indexOf(item.id),1)
             }
+            $scope.inner_brand = angular.copy($scope.brand_arr)
+        }else if(str === 'inner_brand'){
+            if($scope.inner_brand.indexOf(item.id) == -1){
+                $scope.inner_brand.push(item.id)
+            }else{
+                $scope.inner_brand.splice($scope.inner_brand.indexOf(item.id),1)
+            }
         }
     }
     //完成筛选
-    $scope.completeFilter = function () {
-        $scope.params.style_id = $scope.style_arr.join(',')
-        $scope.params.series_id = $scope.series_arr.join(',')
-        $scope.params.brand_id = $scope.brand_arr.join(',')
-        tablePages()
+    // $scope.completeFilter = function () {
+    //     $scope.params.style_id = $scope.style_arr.join(',')
+    //     $scope.params.series_id = $scope.series_arr.join(',')
+    //     $scope.params.brand_id = $scope.brand_arr.join(',')
+    //     tablePages()
+    // }
+    //重置筛选
+    $scope.resetFilter = function () {
+        $scope.params.platform_price_max = ''
+        $scope.params.platform_price_min = ''
+        $scope.style_arr = []
+        $scope.series_arr = []
+        $scope.brand_arr = []
     }
     //价格区间
     $scope.choosePrice = function (str) {
@@ -119,12 +137,23 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
             }
         }
     }
+    //保存内层品牌
+    $scope.saveInnerBrand = function () {
+        $scope.brand_arr = $scope.inner_brand
+    }
     //跳转详情页
     $scope.goDetails = function (item) {
         $timeout(function () {
             $state.go('product_details',{index:$stateParams.index,status:$stateParams.status,id:item.id,replace_id:$stateParams.id,title:$stateParams.title})
         },300)
     }
+    $('#myModal8').on('hidden.bs.modal',function () {
+        console.log(1234);
+        $scope.params.style_id = $scope.style_arr.join(',')
+        $scope.params.series_id = $scope.series_arr.join(',')
+        $scope.params.brand_id = $scope.brand_arr.join(',')
+        tablePages()
+    })
     //返回上一页
     $scope.goPrev = function () {
         history.go(-1)
