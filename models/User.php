@@ -1201,9 +1201,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function adminLogout()
     {
-        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])) {
-            unset(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN]);
-        }
+//        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN])) {
+//            unset(Yii::$app->session[self::LOGIN_ORIGIN_ADMIN]);
+//        }
         Yii::$app->user->logout();
         $this->authKeyAdmin = '';
         $this->save();
