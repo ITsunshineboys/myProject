@@ -1088,15 +1088,26 @@ class OwnerController extends Controller
         foreach ($brick as &$one_brick){
             $one_brick['attr'] = GoodsAttr::findByGoodsIdUnits($one_brick['id'],'');
         }
+        $series = Series::find()->select('id,series')->where(['id'=>$get['series']])->one();
+        $style = Style::find()->select('id,style')->where(['id'=>$get['style']])->one();
         foreach ($brick as $one_brick){
             foreach ($one_brick['attr'] as $attr_){
-                if ($attr_['value'] == '卫生间'){
+                if ($attr_['value'] == '卫生间'
+                    && $one_brick['series_name'] == $series->series
+                    && $one_brick['style_name'] == $style->style
+                ){
                     $toilet_goods[] = $one_brick;
                 }
-                if ($attr_['value'] == '厨房'){
+                if ($attr_['value'] == '厨房'
+                    && $one_brick['series_name'] == $series->series
+                    && $one_brick['style_name'] == $style->style
+                ){
                     $kitchen_goods[] = $one_brick;
                 }
-                if ($attr_['value'] == '客厅'){
+                if ($attr_['value'] == '客厅'
+                    && $one_brick['series_name'] == $series->series
+                    && $one_brick['style_name'] == $style->style
+                ){
                     $hall_goods[] = $one_brick;
                 }
             }
