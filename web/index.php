@@ -13,7 +13,7 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 //{
 
 
-        header('Access-Control-Allow-Origin:http://localhost:8080');
+        header('Access-Control-Allow-Origin:http://0.0.0.0:8080');
         header("Access-Control-Allow-Credentials: true");
 
 //}
