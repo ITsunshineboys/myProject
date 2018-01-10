@@ -1391,7 +1391,7 @@ class OwnerController extends Controller
             }
         }
 
-       
+
         $special_offer = 0;
         $total_prices = 0;
         foreach ($post['list'] as $price){
