@@ -33,7 +33,6 @@ class WithdrawalsController extends Controller
      * Actions accessed by logged-in users
      */
     const ACCESS_LOGGED_IN_USER = [
-        'find-balance',
         'check-isset-pay-pwd',
         'send-pay-code',
         'set-pay-pwd',
@@ -45,8 +44,7 @@ class WithdrawalsController extends Controller
         'check-cash-money',
         'check-supplier-pay-pwd',
         'set-bank-card',
-        'find-bank-card',
-        'find-balance',
+        'find-bank-card'
     ];
     /**
      * @inheritdoc
@@ -245,7 +243,8 @@ class WithdrawalsController extends Controller
         $role_id=$user->last_role_id_app;
         $data=UserBankInfo::findCapitalDetail($role_id,$user);
         $code=200;
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$data
