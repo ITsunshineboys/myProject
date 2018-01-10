@@ -12,7 +12,6 @@ use app\models\User;
 use app\models\RolePermission;
 use Yii;
 use yii\filters\AccessControl;
-use yii\log\Logger;
 
 class AuthService extends AccessControl
 {
@@ -32,17 +31,16 @@ class AuthService extends AccessControl
         if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_ADMIN])
             || !empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])
         ) {
-            if (!YII_DEBUG && User::checkKickedout()) {
+            if (!YII_DEBUG && $user->isKickedout()) {
                 if ($this->denyCallback !== null) {
                     call_user_func($this->denyCallback, $kickedOutcode, $action);
                 }
                 return false;
             }
 
-            $path = Yii::$app->controller->id . '/' . $action->id;
-            if (in_array($path, RolePermission::allPermissions())) {
+            if (RolePermission::isAdminApi(Yii::$app->controller->id, $action->id)) {
                 if (!$user->checkAdminLogin()
-                    || !in_array($path, RolePermission::rolePermissions($user->login_role_id))
+                    || !RolePermission::hasPermission(Yii::$app->controller->id, $action->id, $user->login_role_id)
                 ) {
                     if ($this->denyCallback !== null) {
                         call_user_func($this->denyCallback, $denyCode, $action);

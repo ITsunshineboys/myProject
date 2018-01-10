@@ -641,6 +641,23 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @return bool
      */
+    public function isKickedout()
+    {
+        $sessId = Yii::$app->session->id;
+        if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_ADMIN])) {
+            return $this->authKeyAdmin != $sessId;
+        }
+        if (!empty(Yii::$app->session[User::LOGIN_ORIGIN_APP])) {
+            return $this->authKey != $sessId;
+        }
+        return false;
+    }
+
+    /**
+     * Check if kicked out
+     *
+     * @return bool
+     */
     public static function checkKickedout()
     {
         if (Yii::$app->session->getHasSessionId()) {

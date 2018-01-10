@@ -98,4 +98,31 @@ class RolePermission extends ActiveRecord
             return $value['controller'] . '/' . $value['action'];
         }, self::find()->select(['controller', 'action'])->asArray()->all());
     }
+
+    /**
+     * Check if admin api
+     *
+     * @param string $controller controller
+     * @param string $action action
+     * @return bool
+     */
+    public static function isAdminApi($controller, $action)
+    {
+        return self::find()->where(compact('controller', 'action'))->exists();
+    }
+
+    /**
+     * Check if has permission
+     *
+     * @param string $controller controller
+     * @param string $action action
+     * @param int $roleId role id
+     * @return bool
+     */
+    public static function hasPermission($controller, $action, $roleId)
+    {
+        return self::find()
+            ->where(['controller' => $controller, 'action' => $action, 'role_id' => $roleId])
+            ->exists();
+    }
 }
