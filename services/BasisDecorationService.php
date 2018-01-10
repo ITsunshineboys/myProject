@@ -2015,7 +2015,7 @@ class BasisDecorationService
                 foreach ($style as $one_style){
                     $style_[] = $one_style['series'];
                 }
-                $one_goods['series_id'] = implode('、',$style_);
+                $one_goods['series_name'] = implode('、',$style_);
                 unset($one_goods['series_id']);
             }else{
                 $one_goods['series_name'] = '';
