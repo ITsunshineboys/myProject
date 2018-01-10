@@ -1377,24 +1377,25 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $goods = [];
+
         if (is_array($post)){
+            $goods = [];
             foreach ($coefficient as $one_coefficient) {
                 $classify = GoodsCategory::find()->select('id,title')->where(['id' => $one_coefficient['category_id']])->asArray()->one();
                 foreach ($post['list'] as &$materials) {
                     if ($materials['price'] != 0) {
-                        if ($classify['id'] == $materials['category_id']) {
-                            $materials['goods_price'] = $materials['procurement'] / ($one_coefficient['coefficient'] / 100);
-                            $goods []                 = $materials;
-                        }
+//                        if ($classify['id'] == $materials['category_id']) {
+//                            $materials['goods_price'] = $materials['procurement'] / ($one_coefficient['coefficient'] / 100);
+//                            $goods [] = $materials;
+//                        }
                     }else{
                         $materials['goods_price'] = $materials['procurement'] / 1;
-                        $goods []                 = $materials;
+                        $goods [] = $materials;
                     }
                 }
             }
-
             var_dump($goods);die;
+
             $special_offer = 0;
             $total_prices = 0;
             foreach ($goods as $price){
@@ -1413,8 +1414,6 @@ class OwnerController extends Controller
                 ],
             ]);
         }
-
-
     }
 
     /**
