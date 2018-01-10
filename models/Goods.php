@@ -516,6 +516,8 @@ class Goods extends ActiveRecord
                     foreach ($series as $one_series){
                         $one_goods['series_name'] = $one_series['series'];
                     }
+            }else{
+                $one_goods['series_name'] = '';
             }
 
             if (
@@ -528,6 +530,8 @@ class Goods extends ActiveRecord
                 foreach ($series as $one_series){
                     $one_goods['style_name'] = $one_series['style'];
                 }
+            }else{
+                $one_goods['style_name'] = '';
             }
         }
 
