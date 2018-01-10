@@ -75,7 +75,6 @@ class OrderController extends Controller
         'get-comment',
         'comment-reply',
         'supplier-after-sale-handle',
-        'refund-handle',
         'supplier-delete-comment',
         'delete-comment-list',
         'delete-comment-details',
