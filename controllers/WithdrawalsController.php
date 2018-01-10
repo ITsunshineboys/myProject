@@ -43,7 +43,6 @@ class WithdrawalsController extends Controller
         'find-supplier-access-detail-list',
         'check-cash-money',
         'check-supplier-pay-pwd',
-        'set-bank-card',
         'find-bank-card'
     ];
     /**
