@@ -11,18 +11,11 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 //if (YII_DEBUG)
 //{
-    $origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : 'http://cross.local.com:808';
 
-    $allow_origin = array(
-        'http://cross.local.com:808',
-        'http://localhost:8080',
-        'http://0.0.0.0:8080'
-    );
 
-    if(in_array($origin, $allow_origin)){
-        header('Access-Control-Allow-Origin:'.$origin);
+        header('Access-Control-Allow-Origin:http://localhost:8080');
         header("Access-Control-Allow-Credentials: true");
-    }
+
 //}
 
 
