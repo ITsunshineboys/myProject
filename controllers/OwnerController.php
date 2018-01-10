@@ -1394,6 +1394,7 @@ class OwnerController extends Controller
                 }
             }
 
+            var_dump($goods);die;
             $special_offer = 0;
             $total_prices = 0;
             foreach ($goods as $price){
