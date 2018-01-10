@@ -147,12 +147,15 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
             $state.go('product_details',{index:$stateParams.index,status:$stateParams.status,id:item.id,replace_id:$stateParams.id,title:$stateParams.title})
         },300)
     }
+    //关闭模态框事件
     $('#myModal8').on('hidden.bs.modal',function () {
-        console.log(1234);
         $scope.params.style_id = $scope.style_arr.join(',')
         $scope.params.series_id = $scope.series_arr.join(',')
         $scope.params.brand_id = $scope.brand_arr.join(',')
         tablePages()
+    })
+    $('#myModal_brand').on('hidden.bs.modal',function () {
+        $scope.keywords = ''
     })
     //返回上一页
     $scope.goPrev = function () {

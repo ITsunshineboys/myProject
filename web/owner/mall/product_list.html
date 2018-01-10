@@ -157,7 +157,7 @@
                                     <img class="img_search" src="images/mall_searchbar.png" alt="">
                                 </div>
                                 <ul class="brands_more">
-                                    <li ng-repeat="item in goods_brands" ng-class="{'changeColor':inner_brand.indexOf(item.id) != -1}" ng-click="filterGoods('inner_brand',item)">
+                                    <li ng-repeat="item in goods_brands | filter:{name:keyword}" ng-class="{'changeColor':inner_brand.indexOf(item.id) != -1}" ng-click="filterGoods('inner_brand',item)">
                                         {{item.name}}
                                         <img src="images/mall_popup_list_checkbox_selected.png" alt="" ng-if="inner_brand.indexOf(item.id) != -1">
                                     </li>

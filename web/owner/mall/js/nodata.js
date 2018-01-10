@@ -609,7 +609,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                             let index = value1.goods.findIndex(function(item){
                                 return item.status == 0
                             })
-                           value.status = index == -1?2:0
+                           value1.status = index == -1?2:0
                         }
                     }
                     getPrice()
