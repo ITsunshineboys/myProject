@@ -1214,9 +1214,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function logout()
     {
-//        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
-//            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
-//        }
+        if (!empty(Yii::$app->session[self::LOGIN_ORIGIN_APP])) {
+            unset(Yii::$app->session[self::LOGIN_ORIGIN_APP]);
+        }
         Yii::$app->user->logout();
         $this->authKey = '';
         $this->save();
