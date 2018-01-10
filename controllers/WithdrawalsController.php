@@ -334,7 +334,7 @@ class WithdrawalsController extends Controller
         );
     }
     /**
-    * 设置支付密码
+    * 商家设置支付密码
     * @return string
     */
     public function  actionSetPayPwd(){
