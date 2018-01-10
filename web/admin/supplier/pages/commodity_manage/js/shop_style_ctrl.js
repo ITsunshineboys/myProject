@@ -12,7 +12,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.price_flag = false;//价格flag
 	$scope.myng = $scope;
 	$scope.style_check_arr = [] // 风格id 数组
+	$scope.attrs_check_arr = [] // 属性内容 数组
 	$scope.style_check_model = ''
+	$scope.attrs_check_model = ''
 	$scope.logistics = [];//物流模块列表
 	$scope.goods_all_attrs = [];//所有属性数据
 	$scope.shop_logistics = [];//物流模板默认第一项
@@ -83,6 +85,7 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	/*---------------属性获取-----------------*/
 	$scope.goods_input_attrs = [];//普通文本框
 	$scope.goods_select_attrs = [];//下拉框
+	$scope.goods_check_attrs = []; // 复选框
 	$scope.goods_select_value = [];//下拉框的值
 	$scope.pass_attrs_name = [];//名称
 	$scope.pass_attrs_value = [];//值
@@ -91,12 +94,14 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	//大后台添加的属性
 	_ajax.get('/mall/category-attrs', {category_id: +$scope.category_id}, function (res) {
 		$scope.goods_all_attrs = res.data.category_attrs;
-		//循环所有获取到的属性值，判断是普通文本框还是下拉框
+		//循环所有获取到的属性值，判断是普通文本框、下拉框、复选框
 		for (let [key, value] of $scope.goods_all_attrs.entries()) {
-			if (value.addition_type == 1) {
-				$scope.goods_select_attrs.push(value);
-			} else {
+			if (value.addition_type == 0) {   // 下拉框
 				$scope.goods_input_attrs.push(value);
+			} else if (value.addition_type == 1) {
+				$scope.goods_select_attrs.push(value);
+			}else if (value.addition_type == 2) {
+				$scope.goods_check_attrs.push(value);
 			}
 		}
 		//循环下拉框的值
@@ -104,8 +109,27 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			$scope.goods_select_attrs_value.push(value.value);//下拉框的值
 			value.value = value.value[0]
 		}
+		//循环属性复选框
+		for (let [key, value] of $scope.goods_check_attrs.entries()) {
+			value.attrs_value=[]
+		}
 	})
-
+	// 属性复选框
+	$scope.attrs_check_change = function (status,item,items) {
+		if(status === true){
+			item.attrs_value.push(items)
+		} else {
+			attrs_check_del(item,items)
+		}
+	}
+	function attrs_check_del(item,items) {
+		let del_index = item.attrs_value.findIndex(function (value, index, arr) {
+			return value == items;
+		});
+		if (del_index != -1) {
+			item.attrs_value.splice(del_index, 1);
+		}
+	}
 	//判断属性是否为数字
 	$scope.testNumber=function (item) {
 			let reg_value = reg.test(item.value);
@@ -213,9 +237,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	//售后、保障
 	$scope.after_sale_services = [];//售后、保障传值数组
 	$scope.invoice_check = true;
-
-	//价格、库存
-
 
 	//市场价
 	$scope.my_market_price = function (value) {
@@ -356,25 +377,35 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.pass_attrs_name = []
 			$scope.pass_attrs_value = []
-			/*循环自己添加的属性*/
+			/* ---------------属性传值---------------- */
+			// 自己添加的属性
 			for (let [key, value] of $scope.own_attrs_arr.entries()) {
 				$scope.pass_attrs_name.push(value.name);//属性名
 				$scope.pass_attrs_value.push(value.value);//属性值
 			}
-			/*判断是默认属性是 下拉框还是普通文本框*/
+			// 文本框
 			if ($scope.goods_input_attrs[0] != undefined) {
 				for (let [key, value] of $scope.goods_input_attrs.entries()) {
 					$scope.pass_attrs_name.push(value.name)
 					$scope.pass_attrs_value.push(value.value);
 				}
 			}
-			//下拉框
+			// 下拉框
 			if ($scope.goods_select_attrs[0] != undefined) {
 				for (let [key, value] of $scope.goods_select_attrs.entries()) {
 					$scope.pass_attrs_name.push(value.name);
 					$scope.pass_attrs_value.push(value.value);
 				}
 			}
+			// 复选框
+			if ($scope.goods_check_attrs[0] != undefined) {
+				for (let [key, value] of $scope.goods_check_attrs.entries()) {
+					$scope.pass_attrs_name.push(value.name)
+					$scope.pass_attrs_value.push(value.attrs_value.join(','));
+				}
+			}
+			console.log($scope.pass_attrs_name);
+			console.log($scope.pass_attrs_value);
 			/*判断风格和系列是否存在，如果不存在，值传0*/
 			$scope.series_model == undefined ? $scope.series_model = 0 : $scope.series_model = $scope.series_model;
 			$scope.style_check_arr[0] == undefined ? $scope.style_check_arr = [] : $scope.style_check_arr = $scope.style_check_arr

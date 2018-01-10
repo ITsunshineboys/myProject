@@ -123,6 +123,23 @@
                         <span class="prompt_txt">*属性内容限1～10个字符</span>
                     </div>
                 </div>
+                <!--复选框-->
+                    <div class="row" ng-repeat="item in goods_check_attrs">
+                    <div class="col-sm-offset-2 col-sm-3 control-label">
+                        <img src="pages/commodity_manage/image/red.png" alt=""/>
+                        <span style="display: inline-block;width: 15px">&nbsp;</span>
+                        <span class="name_width">{{item.name}}</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <label ng-repeat="items in item.value" style="margin-right: 10px">
+                            <input type="checkbox" ng-model="attrs_check_model" ng-change="attrs_check_change(attrs_check_model,item,items)">
+                            <span class="cursor" style="font-weight: normal">{{items}}</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-1 control-label">
+                        <span>{{item.unit}}</span>
+                    </div>
+                </div>
                 <!--自己添加的属性-->
                 <div class="row" ng-repeat="item in own_attrs_arr track by $index">
                     <div class="col-sm-offset-2 col-sm-3">
