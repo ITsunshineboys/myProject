@@ -64,7 +64,7 @@ class OwnerController extends Controller
     const WATERPROOF_MATERIAL= [56];             // 防水材料id
     const CARPENTRY_MATERIAL = [22,9,12,13];     // 木作材料id
     const LATEX_MATERIAL     = [38,24,25,28,5];  // 乳胶漆材料id
-    const TILER_MATERIAL     = [172,36,6,45];       // 泥工材料id
+    const TILER_MATERIAL     = [45];       // 泥工材料id
     const BACKMAN_MATERIAL   = [172,6,3];      // 杂工材料id
     const BRICK   = [44];      // 杂工材料id
 
@@ -1075,6 +1075,7 @@ class OwnerController extends Controller
 
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE,self::TILER_MATERIAL);
+        var_dump($goods);die;
         $judge = BasisDecorationService::judge($goods,$get);
         var_dump($judge);
 
