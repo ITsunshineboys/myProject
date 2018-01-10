@@ -1996,7 +1996,8 @@ class BasisDecorationService
                 foreach ($style as $one_style){
                     $style_[] = $one_style['style'];
                 }
-            $one_goods['style_id'] = implode('、',$style_);
+            $one_goods['style_name'] = implode('、',$style_);
+            unset($one_goods['style_id']);
             }
 
             if ($one_goods['series_id'] > 0){
@@ -2007,6 +2008,7 @@ class BasisDecorationService
                     $style_[] = $one_style['series'];
                 }
                 $one_goods['series_id'] = implode('、',$style_);
+                unset($one_goods['series_id']);
             }
         }
         return $goods;
