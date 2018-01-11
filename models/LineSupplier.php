@@ -93,14 +93,18 @@ class LineSupplier extends \yii\db\ActiveRecord
                     ->one();
                 $list['category']=$first_category->title.'-'.$list['parent_title'].'-'.$list['title'];
                 $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
-//            if ($list['status']== self::STATUS_ON_LINE )
-//            {
-//                if ($list['type']!=Supplier::STATUS_ONLINE)
-//                {
-//                    $list['status']=self::STATUS_OFF_LINE;
-//                    self::closeLineSupplier($list['line_supplier_id']);
-//                }
-//            }
+            if ($list['status']== self::STATUS_ON_LINE )
+            {
+                if (
+                    $list['type']!=Supplier::STATUS_ONLINE
+                    && $list['type']!=Supplier::STATUS_OFFLINE
+                    && $list['type']!=Supplier::STATUS_APPROVED
+                )
+                {
+                    $list['status']=self::STATUS_OFF_LINE;
+                    self::closeLineSupplier($list['line_supplier_id']);
+                }
+            }
                 unset($list['line_supplier_id']);
                 unset($list['type']);
                 unset($list['title']);
@@ -170,6 +174,12 @@ class LineSupplier extends \yii\db\ActiveRecord
         if (!$supplier)
         {
             $code=1000;
+            return $code;
+        }
+        if ($supplier->status!= Supplier::STATUS_OFFLINE && $supplier->status!=Supplier::STATUS_ONLINE
+            && $supplier->status!=Supplier::STATUS_APPROVED)
+        {
+            $code=1089;
             return $code;
         }
         $LineSupplier=self::find()
