@@ -789,8 +789,7 @@ class BasisDecorationService
     public  static function paintedPerimeter($area,$value,$wall = 4)
     {
   //      （卧室地面积÷卧室个数）开平方×4×卧室个数
-        $sqrt = self::algorithm(6,$area,$value);
-        var_dump($sqrt);die;
+        $sqrt = sqrt(self::algorithm(6,$area,$value));
         $v = self::algorithm(10,$sqrt,$wall,$value);
 
         return $v;
