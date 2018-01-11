@@ -93,14 +93,14 @@ class LineSupplier extends \yii\db\ActiveRecord
                     ->one();
                 $list['category']=$first_category->title.'-'.$list['parent_title'].'-'.$list['title'];
                 $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
-            if ($list['status']== self::STATUS_ON_LINE )
-            {
-                if ($list['type']!=Supplier::STATUS_ONLINE)
-                {
-                    $list['status']=self::STATUS_OFF_LINE;
-                    self::closeLineSupplier($list['line_supplier_id']);
-                }
-            }
+//            if ($list['status']== self::STATUS_ON_LINE )
+//            {
+//                if ($list['type']!=Supplier::STATUS_ONLINE)
+//                {
+//                    $list['status']=self::STATUS_OFF_LINE;
+//                    self::closeLineSupplier($list['line_supplier_id']);
+//                }
+//            }
 
                 unset($list['line_supplier_id']);
                 unset($list['type']);
