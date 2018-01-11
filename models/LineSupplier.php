@@ -101,7 +101,6 @@ class LineSupplier extends \yii\db\ActiveRecord
 //                    self::closeLineSupplier($list['line_supplier_id']);
 //                }
 //            }
-
                 unset($list['line_supplier_id']);
                 unset($list['type']);
                 unset($list['title']);
