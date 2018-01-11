@@ -36,20 +36,20 @@
       Search
     },
     props: {
-      goLink: {
+      goLink: {       // backWay 为 true 时，跳转的链接
         type: String,
         default: '/'
       },
-      goParams: {
+      goParams: {     // 跳转指定页面的参数
         type: Object,
         default: function () {
           return {}
         }
       },
-      search: '',
-      headTitle: '',
-      pop: '',
-      backWay: ''
+      search: '',     // true 为显示 搜索框
+      headTitle: '',  // 标题
+      pop: '',        // true 为显示 more 按钮
+      backWay: ''     // 返回按钮返回方式，true 为 跳转到 goLink 的地址， false 为返回上一页
     },
     data () {
       return {
@@ -66,6 +66,7 @@
       },
       showMore () {
         this.isShow = !this.isShow
+        // 向上传递 isShow 值，为判断弹框是否显示
         this.$emit('show', this.isShow)
       }
     }

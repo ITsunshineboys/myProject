@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header :go-link="'/'" @show="isShow"></v-header>
+    <v-header :go-link="'/'" @show="isShow" search="true" pop="true" backWay="true"></v-header>
     <div class="goods-filter">
       <div>销量优先</div>
       <div class="active">
@@ -105,6 +105,10 @@
         isSeriesOpen: false,    // 系列是否显示
         isBrandOpen: false      // 品牌是否显示
       }
+    },
+    activated () {
+      // do somethings
+      this.axios.get('/mall/category-goods', {})
     },
     methods: {
       isShow (bool) {

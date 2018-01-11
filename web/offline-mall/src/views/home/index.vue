@@ -17,10 +17,11 @@
     </flexbox>
     <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171"></swiper>
     <flexbox :gutter="0" class="category" wrap="wrap">
-      <flexbox-item style="text-align: center;padding: 12px 0;" :span="1/4" v-for="(item,index) in category_list"
-                    :key="index">
-        <img width="32px" height="32px" :src="item.icon">
-        <p style="font-size: 14px;color: #999;line-height: 20px;">{{item.title}}</p>
+      <flexbox-item style="text-align: center;padding: 12px 0;" :span="1/4" v-for="(item,index) in category_list" :key="index">
+        <router-link :to="'/class/' + item.id">
+          <img width="32px" height="32px" :src="item.icon">
+          <p style="font-size: 14px;color: #999;line-height: 20px;">{{item.title}}</p>
+        </router-link>
       </flexbox-item>
     </flexbox>
     <card :header="{title:'推荐'}" class="command">

@@ -52,7 +52,7 @@ export default new Router({
       name: 'Invoice',
       component: Invoice
     }, {
-      path: '/class',
+      path: '/class/:id',
       name: 'ClassList',
       component: ClassList
     }, {

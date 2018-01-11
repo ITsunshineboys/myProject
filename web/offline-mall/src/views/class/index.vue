@@ -1,24 +1,24 @@
 <template>
   <div class="class-list">
-    <v-header :go-link="'/'" @show="isShow"></v-header>
+    <header-search pop="true" search="true"></header-search>
     <div class="content">
       <div class="content-left" :class="{'pop-open': isPopOpen}">
-        <div class="active" v-for="obj in 20">
-          <a href="javascript: void (0);">01</a>
+        <div v-for="obj in classData" @click="selectClass(obj.id)" :class="{'active': obj.id === isSelectClass}">
+          <a href="javascript: void (0);">{{obj.title}}</a>
         </div>
       </div>
       <div class="content-right" :class="{'pop-open': isPopOpen}">
-        <div class="cateList" v-for="obj in 10">
+        <div class="cateList" v-for="obj in secondClass">
           <div class="hd">
-            <span class="text">地面材料</span>
+            <span class="text">{{obj.title}}</span>
           </div>
           <ul class="list">
-            <li class="cate-item" v-for="obj in 8">
-              <router-link to="/">
+            <li class="cate-item" v-for="item in obj.children">
+              <router-link to="/goods-list">
                 <div class="cate-img-wrapper">
-                  <img src="http://service.cdlhzz.cn/static/image/2017/12/15/1513310448673.jpg">
+                  <img :src="item.icon">
                 </div>
-                <div class="name">木地板</div>
+                <div class="name">{{item.title}}</div>
               </router-link>
             </li>
           </ul>
@@ -29,20 +29,46 @@
 </template>
 
 <script>
-  import vHeader from '@/components/HeaderSearch'
+  import HeaderSearch from '@/components/HeaderSearch'
 
   export default {
     components: {
-      vHeader
+      HeaderSearch
     },
     data () {
       return {
-        isPopOpen: false
+        isPopOpen: false,
+        isSelectClass: null,
+        classData: [],
+        secondClass: []
       }
+    },
+    activated () {
+      console.log(this.$route.params)
+      this.isSelectClass = this.$route.params.id
+      this.axios.get('/mall/categories-with-children', '', response => {
+        console.log(response)
+        let data = response.data.categories
+        this.classData = data
+        for (let obj of data) {
+          if (obj.id === this.$route.params.id) {
+            this.secondClass = obj.children
+          }
+        }
+      })
     },
     methods: {
       isShow (bool) {
         this.isPopOpen = bool
+      },
+      selectClass (id) {
+        console.log(this.$router)
+        this.isSelectClass = id
+        for (let obj of this.classData) {
+          if (id === obj.id) {
+            this.secondClass = obj.children
+          }
+        }
       }
     }
   }
