@@ -648,13 +648,13 @@ class Supplier extends ActiveRecord
         foreach ($roleList as $item){
             $data[]=$item['user_id'];
         }
-
+        $andwhere=['uid'=>$data];
         $select = array_diff($select, self::FIELDS_EXTRA);
         $offset = ($page - 1) * $size;
         $supplierList = self::find()
             ->select($select)
             ->where($where)
-            ->andWhere(['uid'=>$data])
+            ->andWhere($andwhere)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
@@ -684,7 +684,7 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        $total = self::find()->where($where)->count();
+        $total =self::find()->where($where)->andWhere($andwhere)->count();
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
 

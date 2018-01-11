@@ -94,11 +94,12 @@ class OwnerCashManager extends ActiveRecord {
         foreach ($roleList as $item){
             $data[]=$item['user_id'];
         }
+        $andwhere=['id'=>$data];
         $offset = ($page - 1) * $size;
         $userList = User::find()
             ->select($select)
             ->where($where)
-            ->andWhere(['id'=>$data])
+            ->andWhere($andwhere)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
@@ -111,7 +112,7 @@ class OwnerCashManager extends ActiveRecord {
                 $user['status']=$user['deadtime']>0?'已关闭':'正常';
             }
         }
-        $count=User::find()->where($where)->count();
+        $count=User::find()->where($where)->andWhere($andwhere)->count();
         return ModelService::pageDeal($userList,$count,$page,$size);
 
 
