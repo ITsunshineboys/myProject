@@ -110,7 +110,7 @@ class OrderController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-//                    'after-sale-delivery' =>['post',],
+                    'after-sale-delivery' =>['post',],
                     'after-sale-supplier-send-man' =>['post',],
                     'after-sale-supplier-confirm' =>['post',],
                     'supplier-after-sale-handle' =>['post',],
