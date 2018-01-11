@@ -844,8 +844,6 @@ class OwnerController extends Controller
         $bedroom_primer_area = BasisDecorationService::paintedArea($bedroom_area,$get['area'],$get['high'],$get['bedroom'],4);
         $hall_primer_area = BasisDecorationService::paintedArea($hall_area,$get['area'],$get['high'],$get['hall'],3);
 
-var_dump($bedroom_primer_area);
-var_dump($hall_primer_area);die;
         // 其它面积查询
         $other = Apartment::find()->asArray()->where(['points_id'=>5])->andWhere(['<=','min_area',$get['area']])->andWhere(['>=','max_area',$get['area']])->all();
         foreach ($other as $one_other){
@@ -876,8 +874,13 @@ var_dump($hall_primer_area);die;
 //        卧室周长 客餐厅及过道周长
         $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($bedroom_primer_area[1],$get['bedroom'],4);
         $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($hall_primer_area[1],$get['hall'],3);
+        var_dump($bedroom_primer_area[1]);
+        var_dump($get['bedroom']);
         var_dump($bedroom_primer_perimeter);
-        var_dump($drawing_room_perimeter);die;
+        var_dump($hall_primer_area[1]);
+        var_dump($get['hall']);
+        var_dump($drawing_room_perimeter);
+        die;
 
 //        阴角线长度   阴角线天数
         $concave_line_length = BasisDecorationService::algorithm(5,$bedroom_primer_perimeter,$drawing_room_perimeter,$v2);
