@@ -46,10 +46,15 @@ class WorksWorkerData extends ActiveRecord
 
     public static function findById($id)
     {
-        return self::find()
+        $row = self::find()
             ->asArray()
             ->where(['effect_id'=>$id])
             ->all();
+        foreach ($row as &$one){
+            $one['worker_price'] = $one['worker_price'] / 100;
+        }
+
+        return $row;
     }
 
 
@@ -62,7 +67,6 @@ class WorksWorkerData extends ActiveRecord
             ->all();
         $worker_list=WorkerType::laborlist();
         foreach ($data as &$v){
-            $v['worker_price']=sprintf('2.%f',$v['worker_price']*0.01);
             foreach ($worker_list as $item){
                 if($v['worker_kind']==$item['worker_name']){
                     $v['worker_id']=$item['id'];

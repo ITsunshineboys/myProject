@@ -70,21 +70,18 @@ class Effect extends ActiveRecord
      * @param string $search
      * @return array|ActiveRecord[]
      */
-    public static function districtSearch($search = '花好月圆',$select = [],$city_code)
+    public static function districtSearch($search = '花好月圆',$select = [])
     {
-
-        $andWhere = " city_code=$city_code";
-        $detail = EffectToponymy::find()
+        $andWhere = 'type != 2';
+        $detail = self::find()
             ->asArray()
             ->select($select)
             ->where(['like','toponymy',$search])
             ->andWhere($andWhere)
-//            ->groupBy('toponymy')
+            ->groupBy('toponymy')
             ->all();
         return $detail;
     }
-
-
     public static  function  chinanum($num){
     $china=array('零','一','二','三','四','五','六','七','八','九');
     $arr=str_split($num);
