@@ -167,22 +167,22 @@ class Role extends ActiveRecord
     {
         switch ($role_id)
         {
-            case 2:
+            case Yii::$app->params['workerRoleId']:
                 $user_role_number=$userRole->worker_type_id;
                 break;
-            case 3:
+            case Yii::$app->params['designerRoleId']:
                 $user_role_number=$userRole->decoration_company_id;
                 break;
-            case 4:
+            case Yii::$app->params['managerRoleId']:
                 $user_role_number=$userRole->decoration_company_id;
                 break;
-            case 5:
+            case Yii::$app->params['decorationCompanyRoleId']:
                 $user_role_number=$userRole->id;
                 break;
-            case 6:
+            case Yii::$app->params['supplierRoleId']:
                 $user_role_number=$userRole->shop_no;
                 break;
-            case 7:
+            case Yii::$app->params['ownerRoleId']:
                 $user_role_number=$userRole->aite_cube_no;
                 break;
         }
