@@ -2152,7 +2152,11 @@ class OrderController extends Controller
         $sku=$request->post('sku','');
         $handle_reason=$request->post('handle_reason','');
         $handle=$request->post('handle','');
-        if (!$order_no  || ! $sku || !$handle)
+        if (
+            !$order_no
+            || !$sku
+            || !$handle
+        )
         {
             $code=1000;
             return Json::encode([
@@ -2192,7 +2196,6 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
         $order_refund=OrderRefund::find()
             ->select('order_no,sku,handle,apply_reason,create_time,handle_time,refund_time,handle_reason')
             ->where(['order_no'=>$order_no])
@@ -2212,19 +2215,12 @@ class OrderController extends Controller
         {
             $handle_reason='';
         }
-        $code=GoodsOrder::RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier);
-        if ($code ==200){
-            return Json::encode
-            ([
-                'code' => $code,
-                'msg'  => 'ok',
-            ]);
-        }else{
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
+        $code=GoodsOrder::RefundHandle($order_no,$sku,$handle,$handle_reason);
+        return Json::encode
+        ([
+            'code' => $code,
+            'msg'  => $code==200?'ok':Yii::$app->params['errorCodes'][$code],
+        ]);
     }
      /**
       * 获取退款详情

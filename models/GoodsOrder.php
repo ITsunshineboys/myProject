@@ -1736,7 +1736,7 @@ class GoodsOrder extends ActiveRecord
      * @param $handle_reason
      * @return int
      */
-    public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason)
     {
         if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
         {
@@ -1745,7 +1745,7 @@ class GoodsOrder extends ActiveRecord
         }
         if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE)
         {
-            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$supplier);
+            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason);
             return $code;
         }
     }
@@ -1758,10 +1758,9 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @param $handle
      * @param $handle_reason
-     * @param $supplier
      * @return int
      */
-    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$supplier)
+    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason)
     {
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
@@ -1774,11 +1773,9 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
             $order_refund=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
                 ->all();
-
             if (!$order_refund)
             {
                 $code=1000;
@@ -1799,6 +1796,10 @@ class GoodsOrder extends ActiveRecord
 
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $role=User::findOne($GoodsOrder->user_id);
+            $supplier=Supplier::find()
+                ->where(['id'=>$GoodsOrder->supplier_id])
+                ->select('shop_name')
+                ->one();
             $code=UserNewsRecord::AddOrderNewRecord($role,'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if ($code!=200)
             {
