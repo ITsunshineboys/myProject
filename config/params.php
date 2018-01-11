@@ -2,7 +2,7 @@
 
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
-$auth = require(__DIR__ . '/auth.php');
+//$auth = require(__DIR__ . '/auth.php');
 //$paramsOnline = require(__DIR__ . '/params_online.php');
 
 return [
@@ -224,7 +224,7 @@ return [
     ],
     'districts' => $districts,
 //    'pinyin'=>$pinyin,
-    'auth' => $auth,
+//    'auth' => $auth,
     'goods' => [
         'maxImagesCnt' => 5,
         'viewCacheTime' => 60, // unit: second
