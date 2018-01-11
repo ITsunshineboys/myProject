@@ -1,9 +1,9 @@
 <template>
   <div class="comment-container">
     <div class="top-container">
-      <img :class="headshotStyle" class="user-pic" :src="userIcon" alt="用户头像">
-      <span :class="nameStyle" class="user-name">{{userName}}</span>
-      <span :class="dateStyle" class="comment-date">{{commentDate}}</span>
+      <img :src="userIcon" alt="用户头像">
+      <span class="user-name">{{userName}}</span>
+      <span class="comment-date">{{commentDate}}</span>
     </div>
     <p>{{content}}</p>
   </div>
@@ -12,7 +12,7 @@
 <script type="text/ecmascript-6">
   export default {
     name: 'comment',
-    props: ['headshotStyle', 'nameStyle', 'dateStyle', 'userIcon', 'userName', 'commentDate', 'content']
+    props: ['userIcon', 'userName', 'commentDate', 'content']
   }
 </script>
 
@@ -24,9 +24,9 @@
   }
 
   .top-container,
-  .user-pic,
+  .top-container img,
   .user-name,
-  .comment-date{
+  .comment-date {
     vertical-align: middle;
   }
 
@@ -35,19 +35,31 @@
     line-height: 50px;
   }
 
+  .top-container img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+
+  .user-name {
+    font-size: 16px;
+    color: rgba(153, 153, 153, 1);
+  }
+
   .comment-date {
     float: right;
     margin-top: 4px;
+    font-size: 14px;
+    color: rgba(153, 153, 153, 1);
   }
 
   p {
-    font-size:14px;
+    font-size: 14px;
     letter-spacing: 0.5px;
-    color:rgba(153,153,153,1);
-    line-height:20px;
+    color: rgba(153, 153, 153, 1);
+    line-height: 20px;
     height: 40px;
     overflow: hidden;
-    /*white-space: nowrap;*/
-    /*text-overflow: ellipsis;*/
   }
 </style>
