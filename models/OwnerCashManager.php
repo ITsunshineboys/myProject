@@ -140,7 +140,6 @@ class OwnerCashManager extends ActiveRecord {
         $array=(new Query())
             ->select('sb.bankname,sb.bankcard,sb.username,sb.position,sb.bankbranch')
             ->from('user_bankinfo as ub')
-//            ->leftJoin('user_bankinfo as ub', 'ub.uid=u.id')
             ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
             ->where(['ub.uid'=>$user_id,'ub.role_id'=>self::OWNER_ROLE])
             ->one();
@@ -150,15 +149,10 @@ class OwnerCashManager extends ActiveRecord {
         $freeze_money = (new Query())->from('user_freezelist')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 0])->sum('freeze_money');
         $cashed_money = (new Query())->from('user_cashregister')->where(['uid' => $user_id])->andWhere(['role_id' => self::OWNER_ROLE])->andWhere(['status' => 2])->sum('cash_money');
         $data['freeze_money'] = sprintf('%.2f', (float)$freeze_money * 0.01);
-//            $array['balance'] = sprintf('%.2f', (float)$array['balance'] * 0.01);
-        $data['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
-//        if($array){
-       $data= array_merge($array,$data,$user_info);
-//            $array['availableamount'] = sprintf('%.2f', (float)$array['availableamount'] * 0.01);
-//        }else{
-//            return null;
-//        }
 
+        $data['cashed_money'] = sprintf('%.2f', (float)$cashed_money * 0.01);
+
+       $data= array_merge($array,$data,$user_info);
         return $data;
 
 
