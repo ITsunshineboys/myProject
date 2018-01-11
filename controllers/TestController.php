@@ -720,11 +720,15 @@ class TestController extends Controller
     public  static  function  actionTest()
     {
         $user=Yii::$app->user->identity;
-        $data=UserRole::find()->where(['user_id'=>$user->id])->all();
+//        $data=UserRole::find()->where(['user_id'=>$user->id])->all();
         return Json::encode([
             'code' => 200,
             'msg'  => 'ok',
-            'data' =>$data
+            'data' =>[
+                'user1'=>User::findOne(171),
+                'user2'=>User::findOne(58),
+                'user_2'=>UserRole::find()->where(['user_id'=>$user->id])->all()
+            ]
         ]);
 
     }
