@@ -88,12 +88,17 @@ class OwnerCashManager extends ActiveRecord {
      * @param string $orderBy
      * @return array|null|ActiveRecord[]
      */
-    public static function pagination($where = [], $select, $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
-
+    public static function Ownerpagination($where = [], $select, $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
+        $roleList=UserRole::find()->where(['role_id'=>7,'review_status'=>2])->asArray()->all();
+        $data=[];
+        foreach ($roleList as $item){
+            $data[]=$item['user_id'];
+        }
         $offset = ($page - 1) * $size;
         $userList = User::find()
             ->select($select)
             ->where($where)
+            ->andWhere(['id'=>$data])
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)

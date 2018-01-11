@@ -560,7 +560,7 @@ class SupplieraccountController extends  Controller{
         if($status!=-1){
             $where.= $status == self::STATUS_ONLINE ? ' and  deadtime = 0':' and deadtime >0' ;
         }
-        $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
+        $paginationData = OwnerCashManager::Ownerpagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
 
         return Json::encode([
             'code' => 200,
