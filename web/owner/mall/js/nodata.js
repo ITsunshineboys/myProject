@@ -20,7 +20,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         style: '',  //风格
         window: 0,//飘窗
         high: '', //层高
-        // province: 510000,   //省编码
+        province: 510000,   //省编码
         city: 510100,      // 市编码
         stairway_id: 0,//有无楼梯
         stairs: 0//楼梯结构
@@ -47,8 +47,8 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
     })
     //小区信息
     $scope.toponymy = {
-        name: '',
-        address: ''
+        name: '',//小区名称
+        address: ''//小区地址
     }
     //获取表单数据
     if (sessionStorage.getItem('toponymy') != null) {
@@ -684,7 +684,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             $scope.words = ''
         })
     }
-    //跳转页面
+    //跳转内页页面
     $scope.goInner = function (item, index) {
         sessionStorage.setItem('materials', JSON.stringify($scope.materials))
         sessionStorage.setItem('copies', JSON.stringify($scope.materials))
@@ -696,6 +696,46 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         } else {
             $state.go('other_materials', {index: index})
         }
+    }
+    //跳转申请样板间
+    $scope.apply_case = function () {
+        let materials = []
+        let obj = {
+            province_code:$scope.params.province,
+            city_code:$scope.params.city,
+            street:$scope.toponymy.address,
+            toponymy:$scope.toponymy.name,
+            sittingRoom_diningRoom:$scope.params.hall,
+            window:$scope.params.window,
+            bedroom:$scope.params.bedroom,
+            area:$scope.params.area,
+            high:$scope.params.high,
+            toilet:$scope.params.toilet,
+            kitchen:$scope.params.kitchen,
+            stair_id:$scope.params.stairway_id,
+            stairway:$scope.params.stairway,
+            series:$scope.params.series,
+            style:$scope.params.style,
+            type:0,
+            requirement:$scope.special_request,
+            original_price:$scope.total_prices,
+            sale_price:$scope.special_offer
+        }
+        for(let [key,value] of $scope.materials.entries()){
+            for(let [key1,value1] of value.second_level.entries()){
+                for(let [key2,value2] of value1.goods.entries()){
+                    materials.push({
+                        goods_id:value2.id,
+                        price:value2.cost,
+                        count:value2.quantity,
+                        first_cate_id:value.id
+                    })
+                }
+            }
+        }
+        obj.materials = materials
+        sessionStorage.setItem('payParams',JSON.stringify(obj))
+        $state.go('deposit')
     }
     //返回上一页
     $scope.goPrev = function () {

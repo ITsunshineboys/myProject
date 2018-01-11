@@ -20,7 +20,7 @@
         <div ng-repeat="item in basic_materials.second_level" class="detail_block">
             <span class="second_title">{{item.title}}</span>
             <ul>
-                <li data-toggle="modal" data-target="#myModal" ng-cplick="getDetails(item1)"
+                <li data-toggle="modal" data-target="#myModal" ng-click="getDetails(item1)"
                     ng-repeat="item1 in item.goods" class="main_details">
                     <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}&times;{{item1.quantity}}</span><br/>
                     <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}"
