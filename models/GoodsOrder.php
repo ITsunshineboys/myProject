@@ -2858,10 +2858,10 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**获取订单详情信息
+    /**
+     * 获取订单详情信息
      * @param $postData
-     * @param $user
-     * @return array|mixed|null
+     * @return mixed|null
      */
     public  static  function  FindUserOrderDetails($postData)
     {

@@ -2418,7 +2418,8 @@ class OrderController extends Controller
         )
         {
             $postData = Yii::$app->request->get();
-            if(!array_key_exists('order_no', $postData)){
+            if(!array_key_exists('order_no', $postData))
+            {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -2432,7 +2433,8 @@ class OrderController extends Controller
              || !$postData['sku']==0
          )
          {
-            $record=UserNewsRecord::find()
+
+             $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
                 ->andWhere(['sku'=>$postData['sku']])
                 ->all();
