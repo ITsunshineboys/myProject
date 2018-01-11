@@ -1,4 +1,4 @@
-app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$timeout) {
+app.controller('product_list_ctrl', function (_ajax, $scope, $state, $stateParams, $timeout) {
     //初始化
     $scope.vm = $scope
     //获取头部名称
@@ -57,49 +57,49 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
     tablePages()
     //商品排序
     $scope.goods_sort = function (str) {
-        if(str == 'sold_number'){
+        if (str == 'sold_number') {
             $scope.params["sort[]"] = 'sold_number:3'
-        }else if(str == 'platform_price'){
-            if($scope.params["sort[]"].indexOf('platform_price') == -1){
+        } else if (str == 'platform_price') {
+            if ($scope.params["sort[]"].indexOf('platform_price') == -1) {
                 $scope.params["sort[]"] = 'platform_price:4'
-            }else{
-                $scope.params["sort[]"] = str + ($scope.params["sort[]"] == 'platform_price:3'?':4':':3')
+            } else {
+                $scope.params["sort[]"] = str + ($scope.params["sort[]"] == 'platform_price:3' ? ':4' : ':3')
             }
-        }else if(str == 'favourable_comment_rate'){
-            if($scope.params["sort[]"].indexOf('favourable_comment_rate') == -1){
+        } else if (str == 'favourable_comment_rate') {
+            if ($scope.params["sort[]"].indexOf('favourable_comment_rate') == -1) {
                 $scope.params["sort[]"] = 'favourable_comment_rate:4'
-            }else{
-                $scope.params["sort[]"] = str + ($scope.params["sort[]"] == 'favourable_comment_rate:3'?':4':':3')
+            } else {
+                $scope.params["sort[]"] = str + ($scope.params["sort[]"] == 'favourable_comment_rate:3' ? ':4' : ':3')
             }
         }
         tablePages()
     }
     //风格、系列以及品牌选择
-    $scope.filterGoods = function (str,item) {
-        if(str === 'style'){
-            if($scope.style_arr.indexOf(item.id) == -1){
+    $scope.filterGoods = function (str, item) {
+        if (str === 'style') {
+            if ($scope.style_arr.indexOf(item.id) == -1) {
                 $scope.style_arr.push(item.id)
-            }else{
-                $scope.style_arr.splice($scope.style_arr.indexOf(item.id),1)
+            } else {
+                $scope.style_arr.splice($scope.style_arr.indexOf(item.id), 1)
             }
-        }else if(str === 'series'){
-            if($scope.series_arr.indexOf(item.id) == -1){
+        } else if (str === 'series') {
+            if ($scope.series_arr.indexOf(item.id) == -1) {
                 $scope.series_arr.push(item.id)
-            }else{
-                $scope.series_arr.splice($scope.series_arr.indexOf(item.id),1)
+            } else {
+                $scope.series_arr.splice($scope.series_arr.indexOf(item.id), 1)
             }
-        }else if(str === 'brand'){
-            if($scope.brand_arr.indexOf(item.id) == -1){
+        } else if (str === 'brand') {
+            if ($scope.brand_arr.indexOf(item.id) == -1) {
                 $scope.brand_arr.push(item.id)
-            }else{
-                $scope.brand_arr.splice($scope.brand_arr.indexOf(item.id),1)
+            } else {
+                $scope.brand_arr.splice($scope.brand_arr.indexOf(item.id), 1)
             }
             $scope.inner_brand = angular.copy($scope.brand_arr)
-        }else if(str === 'inner_brand'){
-            if($scope.inner_brand.indexOf(item.id) == -1){
+        } else if (str === 'inner_brand') {
+            if ($scope.inner_brand.indexOf(item.id) == -1) {
                 $scope.inner_brand.push(item.id)
-            }else{
-                $scope.inner_brand.splice($scope.inner_brand.indexOf(item.id),1)
+            } else {
+                $scope.inner_brand.splice($scope.inner_brand.indexOf(item.id), 1)
             }
         }
     }
@@ -123,13 +123,13 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
         if ($scope.params[str] != '') {
             console.log($scope.params[str]);
             if (str === 'platform_price_min') {
-                if($scope.params.platform_price_max!=''&&+$scope.params[str] > +$scope.params.platform_price_max){
+                if ($scope.params.platform_price_max != '' && +$scope.params[str] > +$scope.params.platform_price_max) {
                     let num = $scope.params.platform_price_max
                     $scope.params.platform_price_max = $scope.params[str]
                     $scope.params[str] = num
                 }
             } else if (str === 'platform_price_max') {
-                if($scope.params.platform_price_min!=''&&+$scope.params[str] < +$scope.params.platform_price_min){
+                if ($scope.params.platform_price_min != '' && +$scope.params[str] < +$scope.params.platform_price_min) {
                     let num = $scope.params.platform_price_min
                     $scope.params.platform_price_min = $scope.params[str]
                     $scope.params[str] = num
@@ -144,17 +144,23 @@ app.controller('product_list_ctrl',function (_ajax,$scope,$state,$stateParams,$t
     //跳转详情页
     $scope.goDetails = function (item) {
         $timeout(function () {
-            $state.go('product_details',{index:$stateParams.index,status:$stateParams.status,id:item.id,replace_id:$stateParams.id,title:$stateParams.title})
-        },300)
+            $state.go('product_details', {
+                index: $stateParams.index,
+                status: $stateParams.status,
+                id: item.id,
+                replace_id: $stateParams.id,
+                title: $stateParams.title
+            })
+        }, 300)
     }
     //关闭模态框事件
-    $('#myModal8').on('hidden.bs.modal',function () {
+    $('#myModal8').on('hidden.bs.modal', function () {
         $scope.params.style_id = $scope.style_arr.join(',')
         $scope.params.series_id = $scope.series_arr.join(',')
         $scope.params.brand_id = $scope.brand_arr.join(',')
         tablePages()
     })
-    $('#myModal_brand').on('hidden.bs.modal',function () {
+    $('#myModal_brand').on('hidden.bs.modal', function () {
         $scope.keywords = ''
     })
     //返回上一页
