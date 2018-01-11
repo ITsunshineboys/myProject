@@ -62,10 +62,8 @@
                         <p class="goods_name">{{goods_details.goods_name}}</p>
                         <p class="price">{{goods_details.platform_price | currency:'￥'}}</p>
                         <p>品牌名称：{{goods_details.name}}</p>
-                        <p>
-                            <span ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</span>
-                            <span class="style_position" ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</span>
-                        </p>
+                        <p ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</p>
+                        <p ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</p>
                     </div>
                     <button type="button" data-dismiss="modal" class="go_detail" ng-click="goDetails()">查看详情</button>
                     <button type="button" data-dismiss="modal" class="go_replace" ng-click="goDetails(1)">更换</button>

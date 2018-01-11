@@ -6,6 +6,7 @@ app.controller('home_ctrl',function ($scope,_ajax) {
     sessionStorage.removeItem('other_data')
     //主页推荐
     _ajax.get('/owner/homepage', {}, function (res) {
+        console.log('首页推荐');
         console.log(res);
         $scope.recommend_list = res.data
     });

@@ -6,8 +6,8 @@
             </a>
             <p class="pic_span" style="text-align: center;">基础装修</p>
             <!--<p class="cur_location">-->
-                <!--<i class="icon icon-map-marker icon-3x map"></i>-->
-                <!--<span class="postion_span">成都</span>-->
+            <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+            <!--<span class="postion_span">成都</span>-->
             <!--</p>-->
             <!--<p class="cur_location" ng-if="is_edit">-->
             <!--<span class="postion_span" ng-click="switch_delete()">{{cur_operate}}</span>-->
@@ -15,83 +15,100 @@
         </div>
     </header>
     <form name="handyman_options" novalidate>
-    <!--辅材-->
-    <div class="wall_material" ng-repeat="item in basic_materials.second_level | orderBy:'id'">
-        <!--<div class="divide"></div>-->
-        <div class="shu"></div>
-        <h1>{{item.title}}</h1>
-        <ul class="wall_ul">
-                <li data-toggle="modal" data-target="#myModal" ng-class="{'last_item':$parent.$index == item.three_level.length-1&&$last}" ng-repeat="item1 in item.goods" ng-click="getDetails(item1)">
+        <!--辅材-->
+        <div class="wall_material" ng-repeat="item in basic_materials.second_level | orderBy:'id'">
+            <!--<div class="divide"></div>-->
+            <div class="shu"></div>
+            <h1>{{item.title}}</h1>
+            <ul class="wall_ul">
+                <li data-toggle="modal" data-target="#myModal"
+                    ng-class="{'last_item':$parent.$index == item.three_level.length-1&&$last}"
+                    ng-repeat="item1 in item.goods" ng-click="getDetails(item1)">
                     <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}x{{item1.quantity}}</span><br/>
-                    <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}" class="wall_brand">{{item1.name}}</span>
+                    <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}"
+                          class="wall_brand">{{item1.name}}</span>
                     <span class="wall_money">{{item1.cost | currency:"￥"}} <img
                             class="right_arrow" src="images/left_more.png" alt=""></span>
                 </li>
-        </ul>
-    </div>
+            </ul>
+        </div>
 
-    <!--工人费用-->
-    <div class="sheet_material" style="font-size: 1.3rem!important;">
-        <div class="shu"></div>
-        <h1>杂工</h1>
-                    <ul class="wall_ul">
-                        <li>
-                            <span class="check_word">12墙拆除</span>
-                            <input type="text" name="twelve_dismantle" maxlength="8" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_span" ng-model="params['12_dismantle']"/>
-                            <span class="handyman_sec">m <sup>2</sup></span>
-                            <p class="error_tips" ng-if="handyman_options.twelve_dismantle.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
-                        </li>
-                        <li>
-                            <span class="check_word">24墙拆除</span>
-                            <input type="text" name="twenty_four_dismantle" maxlength="8" placeholder="请输入数值" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
-                                   ng-model="params['24_dismantle']"/>
-                            <span class="handyman_sec">m <sup>2</sup></span>
-                            <p class="error_tips" ng-if="handyman_options.twenty_four_dismantle.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
-                        </li>
-                        <li>
-                            <span class="check_word" id="bulan">补烂</span>
-                            <input type="text" name="repair" placeholder="请输入数值" maxlength="8" class="handyman_span" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" ng-model="params.repair"/>
-                            <span class="handyman_sec">m&nbsp;&ensp;</span>
-                            <p class="error_tips" ng-if="handyman_options.repair.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
-                        </li>
-                        <li>
-                            <span class="check_word">12墙新建</span>
-                            <span class="two-sided">(含双面抹灰)</span>
-                            <input type="text" name="twelve_new_construction" maxlength="8" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_span"
-                                   ng-model="params['12_new_construction']"/>
-                            <span class="handyman_sec">m <sup>2</sup></span>
-                            <p class="error_tips big_error" ng-if="handyman_options.twelve_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
-                        </li>
-                        <li>
-                            <span class="check_word">24墙新建</span>
-                            <span class="two-sided">(含双面抹灰)</span>
-                            <input type="text" name="twenty_four_new_construction" maxlength="8" placeholder="请输入数值" ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/" class="handyman_span"
-                                   ng-model="params['24_new_construction']"/>
-                            <span class="handyman_sec">m <sup>2</sup></span>
-                            <p class="error_tips big_error" ng-if="handyman_options.twenty_four_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
-                        </li>
-                        <li>
-                            <input type="radio" name="building_scrap" id="yes" ng-checked="params.building_scrap==1"
-                                   ng-click="vm.building_scrap = true" class="zagong_check zagong_radio"/>
-                            <img src="images/mall_list_radio.png" alt=""/>
-                            <label class="jianzha" for="yes">小区有建渣</label>
-                        </li>
-                        <li style="border: 0!important;">
-                            <input type="radio" name="building_scrap" id="no" ng-checked="params.building_scrap==0"
-                                   ng-click="vm.building_scrap = false" class="zagong_check zagong_radio"/>
-                            <img src="images/mall_list_radio.png" alt=""/>
-                            <label class="jianzha" for="no">小区无建渣</label>
-                        </li>
-                    </ul>
-            </div>
-    </div>
-    <div style="height: 4rem"></div>
-    <!--按钮、-->
-    <div class="preservation">
-        <span>合计：</span>
-        <span class="money_col">{{basic_materials.cost | currency:'￥'}}</span>
-        <button ng-click="getHandyman(handyman_options.$valid)">保存</button>
-    </div>
+        <!--工人费用-->
+        <div class="sheet_material" style="font-size: 1.3rem!important;">
+            <div class="shu"></div>
+            <h1>杂工</h1>
+            <ul class="wall_ul">
+                <li>
+                    <span class="check_word">12墙拆除</span>
+                    <input type="text" name="twelve_dismantle" maxlength="8" placeholder="请输入数值"
+                           ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                           class="handyman_span" ng-model="params['12_dismantle']"/>
+                    <span class="handyman_sec">m <sup>2</sup></span>
+                    <p class="error_tips" ng-if="handyman_options.twelve_dismantle.$error.pattern">
+                        请输入小于1000的数字，可精确到小数点后两位</p>
+                </li>
+                <li>
+                    <span class="check_word">24墙拆除</span>
+                    <input type="text" name="twenty_four_dismantle" maxlength="8" placeholder="请输入数值"
+                           class="handyman_span"
+                           ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                           ng-model="params['24_dismantle']"/>
+                    <span class="handyman_sec">m <sup>2</sup></span>
+                    <p class="error_tips" ng-if="handyman_options.twenty_four_dismantle.$error.pattern">
+                        请输入小于1000的数字，可精确到小数点后两位</p>
+                </li>
+                <li>
+                    <span class="check_word" id="bulan">补烂</span>
+                    <input type="text" name="repair" placeholder="请输入数值" maxlength="8" class="handyman_span"
+                           ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                           ng-model="params.repair"/>
+                    <span class="handyman_sec">m&nbsp;&ensp;</span>
+                    <p class="error_tips" ng-if="handyman_options.repair.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                </li>
+                <li>
+                    <span class="check_word">12墙新建</span>
+                    <span class="two-sided">(含双面抹灰)</span>
+                    <input type="text" name="twelve_new_construction" maxlength="8" placeholder="请输入数值"
+                           ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                           class="handyman_span"
+                           ng-model="params['12_new_construction']"/>
+                    <span class="handyman_sec">m <sup>2</sup></span>
+                    <p class="error_tips big_error" ng-if="handyman_options.twelve_new_construction.$error.pattern">
+                        请输入小于1000的数字，可精确到小数点后两位</p>
+                </li>
+                <li>
+                    <span class="check_word">24墙新建</span>
+                    <span class="two-sided">(含双面抹灰)</span>
+                    <input type="text" name="twenty_four_new_construction" maxlength="8" placeholder="请输入数值"
+                           ng-pattern="/^[1-9]{1}\d{0,2}\.\d{1,2}$|^[1-9]{1}\d{0,2}$|^0\.[1-9]]$|^0\.0[1-9]$/"
+                           class="handyman_span"
+                           ng-model="params['24_new_construction']"/>
+                    <span class="handyman_sec">m <sup>2</sup></span>
+                    <p class="error_tips big_error"
+                       ng-if="handyman_options.twenty_four_new_construction.$error.pattern">请输入小于1000的数字，可精确到小数点后两位</p>
+                </li>
+                <li>
+                    <input type="radio" name="building_scrap" id="yes" ng-checked="params.building_scrap==1"
+                           ng-click="vm.building_scrap = true" class="zagong_check zagong_radio"/>
+                    <img src="images/mall_list_radio.png" alt=""/>
+                    <label class="jianzha" for="yes">小区有建渣</label>
+                </li>
+                <li style="border: 0!important;">
+                    <input type="radio" name="building_scrap" id="no" ng-checked="params.building_scrap==0"
+                           ng-click="vm.building_scrap = false" class="zagong_check zagong_radio"/>
+                    <img src="images/mall_list_radio.png" alt=""/>
+                    <label class="jianzha" for="no">小区无建渣</label>
+                </li>
+            </ul>
+        </div>
+        </div>
+        <div style="height: 4rem"></div>
+        <!--按钮、-->
+        <div class="preservation">
+            <span>合计：</span>
+            <span class="money_col">{{basic_materials.cost | currency:'￥'}}</span>
+            <button ng-click="getHandyman(handyman_options.$valid)">保存</button>
+        </div>
     </form>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -105,10 +122,8 @@
                     <p class="goods_name">{{goods_details.goods_name}}</p>
                     <p class="price">{{goods_details.platform_price | currency:'￥'}}</p>
                     <p>品牌名称：{{goods_details.name}}</p>
-                    <p>
-                        <span ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</span>
-                        <span class="style_position" ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</span>
-                    </p>
+                    <p ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</p>
+                    <p ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</p>
                 </div>
                 <button data-dismiss="modal" type="button" class="go_detail" ng-click="goDetails()">查看详情</button>
             </div>
