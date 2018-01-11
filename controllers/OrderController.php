@@ -3251,7 +3251,6 @@ class OrderController extends Controller
         }else{
             $data[]=[];
         }
-
         $unreceived=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
             ->asArray()
@@ -3287,7 +3286,8 @@ class OrderController extends Controller
                     'time' => $unreceived['create_time'],
                     'stage' => $unreceived['order_type']
                 ];
-                switch ($unreceived['handle']) {
+                switch ($unreceived['handle'])
+                {
                     case 1:
                         $type = '同意';
                         $reason = '';
@@ -3671,8 +3671,6 @@ class OrderController extends Controller
                             echo 'fail';
                             exit;
                         }
-//                            $role_id=$GoodsOrder->role_id;
-//                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
                         $GoodsOrder->pay_status=1;
                         $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
                         $res=$GoodsOrder->save(false);
