@@ -725,7 +725,7 @@ class TestController extends Controller
             'code' => 200,
             'msg'  => 'ok',
             'data' =>[
-                'user1'=>User::findOne(171),
+                'user1'=>User::findOne(64),
                 'user2'=>User::findOne(58),
                 'user_2'=>UserRole::find()->where(['user_id'=>$user->id])->all()
             ]
