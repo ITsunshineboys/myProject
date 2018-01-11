@@ -1315,12 +1315,12 @@ class QuoteController extends Controller
                                 if (!empty($worker['id'])) {
                                     $worker_id    = $worker['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
                                 } else {
                                     $worker_id    = $house['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                                 }
                             }
@@ -1934,12 +1934,12 @@ class QuoteController extends Controller
                                 if (!empty($worker['id'])) {
                                     $worker_id    = $worker['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
                                 } else {
                                     $worker_id    = $house['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                                 }
                             }
