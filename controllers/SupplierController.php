@@ -1071,7 +1071,7 @@ class SupplierController extends Controller
                 'review_apply_time'=>date('Y-m-d H:i',$user_role->review_apply_time),
                 'review_time'=>$review_time,
                 'review_status'=>$user_role->review_status,
-                'review_remark'=>$user_role->review_remark,
+                'review_remark'=>$user_role->review_status==UserRole::REVIEW_AGREE?$Supplier->approve_reason:$Supplier->reject_reason,
                 'reviewer_name'=>$reviewer_name,
             ]
         ]);
