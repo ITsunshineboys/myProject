@@ -930,7 +930,11 @@ class OwnerController extends Controller
 //        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
 //        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
         $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
-        var_dump($material_total);die;
+        var_dump($finishing_coat_area);
+        var_dump($land);
+        var_dump($land_attr);
+        var_dump($material_total);
+        die;
 
 
 
