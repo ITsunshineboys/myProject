@@ -851,9 +851,9 @@ class OwnerController extends Controller
             if ($one_other['project_name'] == '其他乳胶漆面积'){
                 $v = $one_other['project_value'];
             }
-            if ($one_other['project_name'] == '其他腻子面积'){
-                $v1 = $one_other['project_value'];
-            }
+//            if ($one_other['project_name'] == '其他腻子面积'){
+//                $v1 = $one_other['project_value'];
+//            }
             if ($one_other['project_name'] == '其他阴角线长度'){
                 $v2 = $one_other['project_value'];
             }
@@ -881,7 +881,7 @@ class OwnerController extends Controller
         $concave_line_day = BasisDecorationService::algorithm(6,$concave_line_length,$thread);
 
 //        腻子面积   腻子天数
-        $putty_area = BasisDecorationService::algorithm(3,$primer_area,$v1);
+        $putty_area = BasisDecorationService::algorithm(3,$primer_area,0);
         $putty_day = BasisDecorationService::algorithm(6,$putty_area,$putty);
 
 
@@ -925,13 +925,12 @@ class OwnerController extends Controller
 
 
 //        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
-        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
-        var_dump($putty_area);
-        var_dump($putty);
-        var_dump($putty_attr);
-        var_dump($material_total);
-        die;
-//        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
+        var_dump($primer_area);
+        var_dump($undercoat);
+        var_dump($undercoat_attr);
+        var_dump($material_total);die;
 //        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
 //        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
 //        $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
