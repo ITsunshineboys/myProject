@@ -1148,7 +1148,16 @@ class SupplierController extends Controller
             {
                 $tran->rollBack();
             }
-            $supplier->status=Supplier::STATUS_ONLINE;
+
+            if ($status==1) {
+                $supplier->status=Supplier::STATUS_OFFLINE;
+                $supplier->reject_reason=$review_remark;
+            }
+            if ($status==2)
+            {
+                $supplier->status=Supplier::STATUS_ONLINE;
+                $supplier->approve_reason=$review_remark;
+            }
             if (!$supplier->save(false))
             {
                 $tran->rollBack();
