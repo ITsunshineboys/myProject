@@ -30,6 +30,8 @@ class UserRole extends ActiveRecord
         1 =>'审核不通过',
         2 =>'审核通过',
     ];
+    const REVIEW_AGREE=2;
+    const REVIEW_DISAGREE=1;
     /**
      * Get roles status by user id
      *

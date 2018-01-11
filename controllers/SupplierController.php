@@ -1094,7 +1094,7 @@ class SupplierController extends Controller
         }
         $status=Yii::$app->request->post('status');
         $review_remark=Yii::$app->request->post('review_remark');
-        if ($status!=1 && $status!=2 )
+        if ($status!=UserRole::REVIEW_AGREE && $status!=UserRole::REVIEW_DISAGREE )
         {
             $code = 1000;
             return Json::encode([
@@ -1113,7 +1113,7 @@ class SupplierController extends Controller
         }
         $user_role=UserRole::find()
              ->where(['user_id'=>$supplier->uid])
-             ->andWhere(['role_id'=>6])
+             ->andWhere(['role_id'=>Yii::$app->params['supplierRoleId']])
              ->one();
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
@@ -1125,12 +1125,11 @@ class SupplierController extends Controller
             {
                 $tran->rollBack();
             }
-
-            if ($status==1) {
+            if ($status==UserRole::REVIEW_DISAGREE) {
                 $supplier->status=Supplier::STATUS_OFFLINE;
                 $supplier->reject_reason=$review_remark;
             }
-            if ($status==2)
+            if ($status==UserRole::REVIEW_AGREE)
             {
                 $supplier->status=Supplier::STATUS_ONLINE;
                 $supplier->approve_reason=$review_remark;
