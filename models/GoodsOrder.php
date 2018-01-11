@@ -1658,16 +1658,9 @@ class GoodsOrder extends ActiveRecord
             {
                 case 0:
                     $shipping_status=self::ORDER_TYPE_UNSHIPPED;
-//                    $refunds=OrderRefund::find()
-//                        ->select('id')
-//                        ->where(['order_no'=>$order_no])
-//                        ->andWhere(['sku'=>$sku])
-//                        ->andWhere(['order_type'=>$shipping_status])
-//                        ->one();
                     break;
                 case 1:
                     $shipping_status=self::ORDER_TYPE_UNRECEIVED;
-
                     break;
             }
             $refunds=OrderRefund::find()
@@ -1675,7 +1668,6 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
                 ->andWhere(['order_type'=>$shipping_status])
-//                ->orFilterWhere(['handle'=>0])
                 ->one();
             $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
             $res2=$order->save(false);
@@ -1684,10 +1676,7 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return $code;
             }
-
-            $title='申请取消订单';
-            $content="订单号{$order_no},{$order->goods_name}";
-            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,$title,6,$content,$order_no,$sku,self::STATUS_DESC_DETAILS);
+            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'申请取消订单',6,"订单号{$order_no},{$order->goods_name}",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if (!$code==200)
             {
                 $trans->rollBack();
