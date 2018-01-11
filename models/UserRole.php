@@ -313,5 +313,17 @@ class UserRole extends ActiveRecord
         ];
     }
 
-
+    /**
+     * Do some ops after updated model
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if (isset($changedAttributes['review_status'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_PREFIX_ROLES_STATUS . $this->user_id);
+        }
+    }
 }
