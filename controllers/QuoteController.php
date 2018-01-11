@@ -850,7 +850,7 @@ class QuoteController extends Controller
                             foreach ($house['worker_list'] as $worker) {
                                 $worker_id         = $effect_id;
                                 $worker_kind       = $worker['worker_kind'];
-                                $worker_price      = $worker['price'];
+                                $worker_price      = $worker['price']*100;
                                 $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                             }
 
