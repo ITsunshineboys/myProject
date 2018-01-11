@@ -238,8 +238,6 @@
             <div class="btn_vr" ng-if="words !=''">
                 <button type="button" ng-click="getMaterials(area_news.$valid,area_news.$error.required)" ng-disabled="words == '生成中...'">{{words}}</button>
             </div>
-
-
             <!--材料选择-->
             <div ng-if="materials.length != 0&&words == ''">
                 <div class="material_choose">
@@ -306,7 +304,7 @@
                         <span class="three_span">未包含施工图费用，8项全场8折</span>
                     </div>
                     <!--<button>保存方案</button>-->
-                    <button type="button" class="primary_btn" ng-click="go_apply_case()">申请样板间</button>
+                    <button type="button" class="primary_btn" ng-click="apply_case()">申请样板间</button>
                 </div>
             </div>
         </form>
