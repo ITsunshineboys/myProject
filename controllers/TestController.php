@@ -727,7 +727,10 @@ class TestController extends Controller
             'data' =>[
                 'user1'=>User::findOne(64),
                 'user2'=>User::findOne(58),
-                'user_2'=>UserRole::find()->where(['user_id'=>$user->id])->all()
+                'user3'=>User::findOne(136),
+                'user_1'=>UserRole::find()->where(['user_id'=>64])->all(),
+                'user_2'=>UserRole::find()->where(['user_id'=>58])->all(),
+                'user_3'=>UserRole::find()->where(['user_id'=>136])->all(),
             ]
         ]);
 
