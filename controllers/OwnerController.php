@@ -881,7 +881,7 @@ class OwnerController extends Controller
         $concave_line_day = BasisDecorationService::algorithm(6,$concave_line_length,$thread);
 
 //        腻子面积   腻子天数
-        $putty_area = BasisDecorationService::algorithm(3,$finishing_coat_area,$v1);
+        $putty_area = BasisDecorationService::algorithm(3,$primer_area,$v1);
         $putty_day = BasisDecorationService::algorithm(6,$putty_area,$putty);
 
 
