@@ -192,22 +192,7 @@ class UserRole extends ActiveRecord
                 $list['review_time']=date('Y-m-d H:i',$list['review_time']);
             }
             $list['review_apply_time']=date('Y-m-d H:i',$list['review_apply_time']);
-            switch ($list['type_shop'])
-            {
-                case 0:
-                    //:旗舰店, 1:自营店, 2:专营店, 3:专卖店
-                    $list['type_shop']='旗舰店';
-                    break;
-                case 1:
-                    $list['type_shop']='自营店';
-                    break;
-                case 2:
-                    $list['type_shop']='专营店';
-                    break;
-                case 3:
-                    $list['type_shop']='专卖店';
-                    break;
-            }
+            $list['type_shop']=Supplier::TYPE_SHOP[$list['type_shop']];
             $list['supplier_id']=$list['id'];
             unset($list['id']);
         }
