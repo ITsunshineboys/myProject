@@ -1031,6 +1031,7 @@ class SupplierController extends Controller
             ->where(['user_id'=>$user->id])
             ->andWhere(['role_id'=>Yii::$app->params['supplierRoleId']])
             ->one();
+        var_dump($user_role);die;
         $shop_type=Supplier::TYPE_SHOP[$Supplier->type_shop];
         $type_org=Supplier::TYPE_ORG[$Supplier->type_org];
         $reviewer=User::find()
