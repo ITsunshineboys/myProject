@@ -151,7 +151,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
 
-        $where=" ur.role_id=6 and ur.review_status=2 ";
+        $where="ur.review_status=2 ";
         if(!$keyword) {
             if ($type_shop != $vaue_all){
                 $where.= " and s.type_shop = {$type_shop}";
