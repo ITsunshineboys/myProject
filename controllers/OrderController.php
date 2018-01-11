@@ -71,17 +71,20 @@ class OrderController extends Controller
         'get-comment',
         'comment-reply',
         'supplier-after-sale-handle',
+        'refund-handle',
         'supplier-delete-comment',
         'delete-comment-list',
         'delete-comment-details',
         'goods-view',
         'after-sale-supplier-send-man',
         'after-sale-supplier-confirm',
-//        'after-sale-delivery',
-//        'find-shipping-cart-list',
+        'after-sale-delivery',
         'after-sale-detail-admin',
-        'close-order'
+        'close-order',
+        'supplierdelivery',
+        'find-refund-detail'
     ];
+
     /**
      * @inheritdoc
      */
@@ -1653,7 +1656,8 @@ class OrderController extends Controller
         if ($data['code']!=200)
         {
             $code = $data['code'];
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
