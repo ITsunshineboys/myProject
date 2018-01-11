@@ -30,6 +30,7 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 		$scope.error_modal_flag = false   // 部分系列、风格关闭
 		$scope.default_modal_flag = false // 关闭模态框，停留在当前页
     let reg = /^\d+(\.\d{1,2})?$/;//小数点后两位
+		let reg_number = /^[0-9]{0,}$/; // 只能输入数字
     let pattern = /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
     $scope.myng = $scope;
     let goods_item = $stateParams.item;//点击对应的那条数据
@@ -217,20 +218,19 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
     //判断属性是否为数字
     $scope.testNumber = function (item) {
 		    let reg_value = reg.test(item.value);
-		    !reg_value ? item.status = true : item.status = false
+		    reg_value ? item.status = false : item.status = true
     }
+		//库存 只能输入正整数
+		$scope.onlyNumbers=function (left_number) {
+			let reg_status = reg_number.test(left_number)
+			reg_status ? $scope.left_number_flag = false :$scope.left_number_flag = true
+		}
 		// 复选框 点击事件
 		$scope.attr_check_click=function ($event,select,items) {
 			if($event.target.localName =='input'){
 				select.indexOf(items) === -1 ? select.push(items) : select.splice(select.indexOf(items),1)
 			}
 		}
-    // 库存
-    // $scope.leftNumber = function (value) {
-    //     if (value !== undefined) {
-    //         $scope.left_number = value.replace(/[^\d]/g, '')
-    //     }
-    // };
     /*----------------自己添加的属性--------------------*/
     $scope.own_attrs_arr = [];//自定义数组
     //添加属性
@@ -426,8 +426,18 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 			    $scope.own_submitted = true
 		    }
 	    }
-
-        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && $scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
+	    // 判断属性复选框
+	    for (let [key, value] of $scope.goods_check_attrs.entries()) {
+		    console.log(value);
+		    if(value.selected.length>0){
+			    $scope.attrs_check_flag=true
+		    }else{
+			    $scope.attrs_check_flag=false
+			    break
+		    }
+	    }
+		// 判断 input框不能为空、封面图、物流模板、价格、库存、无重复属性名、有品牌、属性输入规则符合标准、属性复选框
+        if (valid && $scope.upload_cover_src && $scope.logistics_status && !$scope.price_flag && !$scope.left_number_flag && $scope.own_submitted && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag) {
             $scope.description = UE.getEditor('editor').getContent();//富文本编辑器
             $scope.after_sale_services = [];
             //提供发票
