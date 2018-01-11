@@ -925,11 +925,12 @@ class OwnerController extends Controller
 
 
 //        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
-        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
         $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
+        var_dump($material_total);die;
 
 
 
