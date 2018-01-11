@@ -2426,7 +2426,6 @@ class OrderController extends Controller
              || !$postData['sku']==0
          )
          {
-
              $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
                 ->andWhere(['sku'=>$postData['sku']])
@@ -2435,7 +2434,7 @@ class OrderController extends Controller
             {
                 if ($rec)
                 {
-                    $rec->status=1;
+                    $rec->status=UserNewsRecord::STATUS_HAVE_READ;
                     $rec->save(false);
                 }
             }
@@ -2447,7 +2446,7 @@ class OrderController extends Controller
             {
                 if ($rec)
                 {
-                    $rec->status=1;
+                    $rec->status=UserNewsRecord::STATUS_HAVE_READ;
                     $rec->save(false);
                 }
             }

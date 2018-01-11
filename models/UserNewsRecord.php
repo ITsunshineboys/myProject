@@ -14,6 +14,8 @@ use Yii;
 class UserNewsRecord extends ActiveRecord
 {
 
+    const STATUS_UNREAD=0;
+    const STATUS_HAVE_READ=1;
 
     /**
      * @return string 返回该AR类关联的数据表名

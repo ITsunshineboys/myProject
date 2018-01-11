@@ -918,8 +918,6 @@ class SupplierController extends Controller
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
-
-
     /**
      * 删除线下体验店商品
      * @return string
@@ -932,8 +930,6 @@ class SupplierController extends Controller
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
-
-
     /**
      * 商家入驻列表
      * @return string
@@ -956,10 +952,13 @@ class SupplierController extends Controller
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
 
-            if (($startTime && !StringService::checkDate($startTime))
+            if (
+                ($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ){
-                return Json::encode([
+            )
+            {
+                return Json::encode
+                ([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
@@ -984,7 +983,7 @@ class SupplierController extends Controller
         $keyword=$request->get('keyword');
         if ($keyword)
         {
-                $where .=" and CONCAT(U.mobile,S.shop_name,U.aite_cube_no) like '%{$keyword}%'";
+            $where .=" and CONCAT(U.mobile,S.shop_name,U.aite_cube_no) like '%{$keyword}%'";
         }
         $sort = Yii::$app->request->get('sort', []);
         $model = new UserRole();
@@ -1007,8 +1006,6 @@ class SupplierController extends Controller
             ]
         ]);
     }
-
-
     /**
      * 入驻详情
      * @return string
@@ -1076,8 +1073,6 @@ class SupplierController extends Controller
             ]
         ]);
     }
-
-
     /**
      * 商家入驻审核
      * @return string
@@ -1153,7 +1148,6 @@ class SupplierController extends Controller
             ]);
         }
     }
-
     /**
      * @return string
      */
@@ -1172,6 +1166,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $lineGoods=LineSupplierGoods::find()
             ->where(['goods_id'=>$Goods->id])
             ->one();
@@ -1183,6 +1178,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $belongSupplier=Supplier::findOne($Goods->supplier_id);
         if (!$belongSupplier)
         {
@@ -1202,6 +1198,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $lineShop=Supplier::findOne($lineSupplier->supplier_id);
         if (!$lineShop)
         {
@@ -1232,12 +1229,4 @@ class SupplierController extends Controller
             ]
         ]);
     }
-
-
-
-
-
-
-
-
 }
