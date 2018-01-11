@@ -1084,7 +1084,6 @@ class SupplierController extends Controller
      */
     public  static function actionSupplierBeAuditedApplyHandle()
     {
-
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=403;
