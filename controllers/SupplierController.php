@@ -1010,6 +1010,7 @@ class SupplierController extends Controller
 
 
     /**
+     * 入驻详情
      * @return string
      */
     public  function  actionSupplierBeAuditedDetail()
@@ -1078,6 +1079,7 @@ class SupplierController extends Controller
 
 
     /**
+     * 商家入驻审核
      * @return string
      */
     public  static function actionSupplierBeAuditedApplyHandle()
@@ -1092,9 +1094,7 @@ class SupplierController extends Controller
             ]);
         }
         $status=Yii::$app->request->post('status');
-
         $review_remark=Yii::$app->request->post('review_remark');
-
         if ($status!=1 && $status!=2 )
         {
             $code = 1000;
