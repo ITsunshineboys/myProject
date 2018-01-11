@@ -719,8 +719,35 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $code=UserRole::VerifyRolePermissions(6);
+        $user=Yii::$app->user->identity;
+//        $data=UserRole::find()->where(['user_id'=>$user->id])->all();
+        return Json::encode([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' =>[
+                'user1'=>User::findOne(64),
+                'user2'=>User::findOne(58),
+                'user3'=>User::findOne(136),
+                'user_1'=>UserRole::find()->where(['user_id'=>64])->all(),
+                'user_2'=>UserRole::find()->where(['user_id'=>58])->all(),
+                'user_3'=>UserRole::find()->where(['user_id'=>136])->all(),
+            ]
+        ]);
 
+    }
+
+    public  static  function  actionTest1()
+    {
+        $user=Yii::$app->user->identity;
+        $data=UserRole::find()
+            ->where(['user_id'=>$user->id])
+            ->all();
+        return Json::encode
+        ([
+            'code' => 200,
+            'msg'  => 'ok',
+            'data' =>$data
+        ]);
     }
 
 

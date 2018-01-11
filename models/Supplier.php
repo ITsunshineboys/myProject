@@ -143,7 +143,8 @@ class Supplier extends ActiveRecord
         'balance',
         'category_id',
         'create_time',
-        'type_shop'
+        'type_shop',
+
     ];
     const FIELDS_LIST = [
         'id',
@@ -642,9 +643,13 @@ class Supplier extends ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
 
+        $roleList=UserRole::find()->where(['role_id'=>6,'review_status'=>2])->asArray()->all();
+        $data=[];
+        foreach ($roleList as $item){
+            $data[]=$item['user_id'];
+        }
+        $andwhere=['uid'=>$data];
         $select = array_diff($select, self::FIELDS_EXTRA);
-        $keys = implode(',', array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
-        $andwhere = "  status in ({$keys})";
         $offset = ($page - 1) * $size;
         $supplierList = self::find()
             ->select($select)
@@ -679,7 +684,7 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        $total = self::find()->where($where)->andWhere($andwhere)->count();
+        $total =self::find()->where($where)->andWhere($andwhere)->count();
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
 

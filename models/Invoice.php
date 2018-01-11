@@ -57,11 +57,13 @@ class Invoice extends ActiveRecord
             $creat_time=date('Y-m-d H:i:s',time());
             $invoicetoken=md5($invoice_type.$invoice_header.$creat_time);
             $data=self::find()
-                ->where(['invoice_type'=>$invoice_type,
+                ->where([
+                    'invoice_type'=>$invoice_type,
                     'invoice_header_type'=>$invoice_header_type,
                     'invoice_header'=>$invoice_header,
                     'invoice_content'=>$invoice_content,
-                    'invoicer_card'=>$invoicer_card])
+                    'invoicer_card'=>$invoicer_card
+                ])
                 ->asArray()
                 ->one();
             if ($data){
@@ -70,7 +72,6 @@ class Invoice extends ActiveRecord
                 $invoice->invoice_header=$invoice_header;
                 $invoice->invoice_type=$invoice_type;
                 $invoice->invoice_content=$invoice_content;
-                // $invoice->creat_time=$creat_time;
                 $invoice->invoicer_card=$invoicer_card;
                 $invoice->invoicetoken=$invoicetoken;
                 $res=$invoice->save(false);
@@ -142,7 +143,7 @@ class Invoice extends ActiveRecord
             $tran->commit();
             $code=200;
             return $code;
-        }catch (Exception $e)
+        }catch (\Exception $e)
         {
             $code=500;
             $tran->rollBack();

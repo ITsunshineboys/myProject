@@ -72,7 +72,6 @@ class Effect extends ActiveRecord
      */
     public static function districtSearch($search = '花好月圆',$select = [],$city_code)
     {
-
         $andWhere = " city_code=$city_code";
         $detail = EffectToponymy::find()
             ->asArray()
@@ -83,8 +82,6 @@ class Effect extends ActiveRecord
             ->all();
         return $detail;
     }
-
-
     public static  function  chinanum($num){
     $china=array('零','一','二','三','四','五','六','七','八','九');
     $arr=str_split($num);

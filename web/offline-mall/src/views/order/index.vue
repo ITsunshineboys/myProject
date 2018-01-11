@@ -216,7 +216,7 @@
         }
       }
     },
-    created () {
+    activated () {
       this.axios.get('/order/get-line-goods-info', {
         goods_id: 43,
         goods_num: 10

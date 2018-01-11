@@ -29,7 +29,8 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.first_category_title = $stateParams.first_category_title;//一级分类名称
 	$scope.second_category_title = $stateParams.second_category_title;//二级分类名称
 	$scope.third_category_title = $stateParams.third_category_title;//三级分类名称
-	let reg = /^\d+(\.\d{1,2})?$/;
+	let reg = /^\d+(\.\d{1,2})?$/; // 数字或数字最多保留两位小数
+	let reg_number = /^[0-9]{0,}$/; // 只能输入数字
 	let pattern = /^[\u4E00-\u9FA5A-Za-z0-9\,\，\s]+$/;//只能输入中文、数字、字母、中英文逗号、空格
 	$scope.config = $rootScope.config;//富文本编辑器配置
 
@@ -130,17 +131,16 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 			item.attrs_value.splice(del_index, 1);
 		}
 	}
-	//判断属性是否为数字
+	//判断属性内容是否符合规则（数字或数字后保留两位小数）
 	$scope.testNumber=function (item) {
-			let reg_value = reg.test(item.value);
-			!reg_value ? item.status = true : item.status = false
+		let reg_value = reg.test(item.value);
+		reg_value ? item.status = false : item.status = true
 	};
-	//库存
-	// $scope.leftNumber=function (value) {
-	// 	if(value!==undefined){
-	// 		$scope.left_number = value.replace(/[^\d]/g,'')
-	// 	}
-	// };
+	//库存 只能输入正整数
+	$scope.onlyNumbers=function (left_number) {
+		let reg_status = reg_number.test(left_number)
+		reg_status ? $scope.left_number_flag = false :$scope.left_number_flag = true
+	}
 	/*----------------自己添加的属性--------------------*/
 
 	$scope.own_all_attrs=[];//大后台属性和自己添加的属性 数组
@@ -371,9 +371,18 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 				$scope.own_submitted = true
 			}
 		}
+		// 判断属性复选框
+		for (let [key, value] of $scope.goods_check_attrs.entries()) {
+			if(value.attrs_value.length>0){
+				$scope.attrs_check_flag=true
+			}else{
+				$scope.attrs_check_flag=false
+				break
+			}
+		}
 
-		/*判断必填项，全部ok，调用添加接口*/
-		if (valid && $scope.upload_cover_src && !$scope.price_flag && $scope.own_submitted && $scope.logistics_flag1 && $scope.brands_arr.length > 0 && $scope.attr_blur_flag) {
+		// 判断 input框不能为空、封面图、物流模板、无重复属性名、价格、库存、有品牌、属性输入规则符合标准、属性复选框
+		if (valid && $scope.upload_cover_src && $scope.logistics_flag1 && $scope.own_submitted && !$scope.price_flag && !$scope.left_number_flag && $scope.brands_arr.length > 0 && $scope.attr_blur_flag && $scope.attrs_check_flag) {
 			$scope.description = UE.getEditor('editor').getContent();//富文本编辑器
 			$scope.pass_attrs_name = []
 			$scope.pass_attrs_value = []

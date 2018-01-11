@@ -1694,7 +1694,7 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return $code;
             }
-            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'申请取消订单',6,"订单号{$order_no},{$order->goods_name}",$order_no,$sku,self::STATUS_DESC_DETAILS);
+            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'申请取消订单',Yii::$app->params['supplierRoleId'],"订单号{$order_no},{$order->goods_name}",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if (!$code==200)
             {
                 $trans->rollBack();
@@ -2058,22 +2058,22 @@ class GoodsOrder extends ActiveRecord
             $role=Role::GetRoleByRoleId($user->last_role_id_app,$user);
             switch ($user->last_role_id_app)
             {
-                case 2:
+                case Yii::$app->params['workerRoleId']:
                     $role_number=$role->worker_type_id;
                     break;
-                case 3:
+                case Yii::$app->params['designerRoleId']:
                     $role_number=$role->decoration_company_id;
                     break;
-                case 4:
+                case Yii::$app->params['managerRoleId']:
                     $role_number=$role->decoration_company_id;
                     break;
-                case 5:
+                case Yii::$app->params['decorationCompanyRoleId']:
                     $role_number=$role->id;
                     break;
-                case 6:
+                case Yii::$app->params['supplierRoleId']:
                     $role_number=$role->shop_no;
                     break;
-                case 7:
+                case Yii::$app->params['ownerRoleId']:
                     $role_number=$role->aite_cube_no;
                     break;
             }

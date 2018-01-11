@@ -881,7 +881,7 @@ class OwnerController extends Controller
         $concave_line_day = BasisDecorationService::algorithm(6,$concave_line_length,$thread);
 
 //        腻子面积   腻子天数
-        $putty_area = BasisDecorationService::algorithm(3,$finishing_coat_area,$v1);
+        $putty_area = BasisDecorationService::algorithm(3,$primer_area,$v1);
         $putty_day = BasisDecorationService::algorithm(6,$putty_area,$putty);
 
 
@@ -926,10 +926,16 @@ class OwnerController extends Controller
 
 //        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
         $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
-        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
-        $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
+        var_dump($putty_area);
+        var_dump($putty);
+        var_dump($putty_attr);
+        var_dump($material_total);
+        die;
+//        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
+//        $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
+
 
 
 
@@ -1808,13 +1814,143 @@ class OwnerController extends Controller
 //        ]);
 //    }
 
+
     public function actionParticulars()
     {
         $id = (int)Yii::$app->request->get('id','');
-        $effect = Effect::find()->where(['id'=>$id])->one();
+        $effect = Effect::find()->asArray()->select('id,bedroom,sittingRoom_diningRoom as hall,toilet,kitchen,window,area,high,province,city,district,toponymy,street,particulars,stairway,stair_id,house_image,type,city_code')->where(['id'=>$id])->one();
+        $effect['street'] = $effect['province'].$effect['city'].$effect['district'].$effect['street'];
+        $effect['case_picture'] = EffectPicture::find()->where(['effect_id'=>$id])->one();
         if ($effect['type'] == 0){
-
+            return Json::encode([
+               'code' => 200,
+               'msg' => 'ok',
+               'effect' => $effect,
+            ]);
         }
+
+        $worker_data = WorksWorkerData::findById($id);
+        $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where(['effect_id'=>$id])->all();
+
+        if (!$data){
+            return Json::encode([
+                'code' => 200,
+                'msg' => 'ok',
+                'effect' => $effect,
+                'worker_cost' => $worker_data,
+                'data' => $data,
+            ]);
+        }
+        $sku = [];
+        foreach ($data as $one_data){
+            $sku [] = $one_data['goods_code'];
+        }
+        $goods  = Goods::findBySkuAll($sku);
+        foreach ($data as $case_works_datum) {
+            foreach ($goods as &$one_goods) {
+                if ($one_goods['sku'] == $case_works_datum['goods_code']) {
+                    $one_goods['goods_first']  = $case_works_datum['goods_first'];
+                    $one_goods['goods_second'] = $case_works_datum['goods_second'];
+                    $one_goods['goods_three']  = $case_works_datum['goods_three'];
+                    $one_goods['quantity']     = $case_works_datum['goods_quantity'];
+                    $one_goods['cost']         = $one_goods['quantity'] * $one_goods['platform_price'];
+                    $one_goods['procurement']  = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
+                }
+            }
+        }
+
+
+        //  匹配 通用管理 数据
+        $assort_goods = AssortGoods::find()->asArray()->where(['state'=>0])->all();
+        $goods_ = [];
+        foreach ($assort_goods as $assort){
+            foreach ($goods as $woks){
+                if ($assort['category_id'] == $woks['category_id']){
+                    $goods_[] = $woks;
+                }
+            }
+        }
+        $_style = BasisDecorationService::style($goods_);
+
+        //  大理石 数据
+        if ($effect['window'] != 0){
+            $stone  = Goods::priceDetail(3,52,$effect['city_code']);
+            foreach ($stone as &$_goods){
+                $substr = substr($_goods['path'],0,strlen($_goods['path'])-1);
+                $where ="id in (".$substr.")";
+                $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
+                $_goods['goods_first'] = $goods_category['0']['title'];
+                $_goods['goods_second'] = $goods_category['1']['title'];
+                $_goods['goods_three'] = $goods_category['2']['title'];
+
+                $_goods['quantity'] = $effect['window'];
+                $_goods['cost'] = round($_goods['quantity'] * $_goods['platform_price'],2);
+                $_goods['procurement'] = round($_goods['quantity'] * $_goods['purchase_price_decoration_company'],2);
+                $marble[] = $_goods;
+            }
+            $griotte = BasisDecorationService::profitMargin($marble);
+        }else{
+            $griotte = [];
+        }
+
+
+
+        //   楼梯  数据
+        if ($effect['stairway'] != 0){
+            $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
+            $stairs_details = StairsDetails::find()->asArray()->all();
+            $ma = [];
+            foreach ($stairs_details as $detail){
+                if ($effect['stair_id'] == $detail['id'] ){
+                    $ma = $detail['attribute'];
+                }
+            }
+
+            $condition_stairs=[];
+            foreach ($stairs as &$one_stairs_price) {
+                if (
+                    $one_stairs_price['value'] == $ma
+                    && $one_stairs_price['style_id'] == $effect['case_picture']->style_id
+                ) {
+                    $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
+                    $where ="id in (".$substr.")";
+                    $goods_category = GoodsCategory::find()->asArray()->select('id,title')->where($where)->all();
+                    $one_stairs_price['quantity'] = 1;
+                    $one_stairs_price['goods_first'] = $goods_category['0']['title'];
+                    $one_stairs_price['goods_second'] = $goods_category['1']['title'];
+                    $one_stairs_price['goods_three'] = $goods_category['2']['title'];
+                    $one_stairs_price['cost'] = round($one_stairs_price['platform_price'] * $one_stairs_price['quantity'],2);
+                    $one_stairs_price['procurement'] = round($one_stairs_price['purchase_price_decoration_company'] * $one_stairs_price['quantity'],2);
+                    unset($one_stairs_price['path']);
+                    $condition_stairs [] = $one_stairs_price;
+                }
+            }
+            $style = BasisDecorationService::style($condition_stairs);
+            $material = BasisDecorationService::profitMargin($style);
+
+        }else{
+            $material = [];
+        }
+
+
+        //  合并 三个数组  $goods_     $material    $griotte
+        $_goods = [];
+        foreach ($_style as $value){
+            $_goods [] = $value;
+        }
+        $_goods [] = $material;
+        $_goods [] = $griotte;
+        $array_filter = array_filter($_goods);
+        $array_merge = array_merge($array_filter);
+
+
+        return Json::encode([
+            'code' => 200,
+            'msg' => 'ok',
+            'effect' => $effect,
+            'worker_cost' => $worker_data,
+            'goods' => $array_merge,
+        ]);
 
     }
 

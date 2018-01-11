@@ -112,7 +112,10 @@
 
 
                     <div class="sl clearfix">
-                        <span class="pull-left">购买数量</span>
+                        <div class="pull-left">
+                            <p style="font-size: 36px;color: #999;">购买数量</p>
+                            <p style="color: #D9AD65;font-size: 28px;">建议数量：{{recommend_quantity}}件</p>
+                        </div>
                         <div class="input_div pull-right">
                             <input class="min am-btn" ng-click="changeQuantity(0)" name="" type="button" value="-" />
                             <input class="text_box" oninput="this.value=this.value.replace(/[^0-9]/ig,'')" ng-change="changeQuantity()" name=""  type="tel" ng-model="goods_detail.quantity" />

@@ -151,7 +151,7 @@ class SupplieraccountController extends  Controller{
             ]);
         }
 
-        $where='1';
+        $where="1";
         if(!$keyword) {
             if ($type_shop != $vaue_all){
                 $where.= " and type_shop = {$type_shop}";
@@ -165,7 +165,7 @@ class SupplieraccountController extends  Controller{
                 $where.= " and status ={$status} ";
             }else{
                 $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
-                $where.= " and  status in ({$keys}) ";
+                $where.= " and status in ({$keys}) ";
 
             }
             if ($category_id) {
@@ -560,7 +560,7 @@ class SupplieraccountController extends  Controller{
         if($status!=-1){
             $where.= $status == self::STATUS_ONLINE ? ' and  deadtime = 0':' and deadtime >0' ;
         }
-        $paginationData = OwnerCashManager::pagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
+        $paginationData = OwnerCashManager::Ownerpagination($where, OwnerCashManager::FIELDS_USER_MANAGER, $page, $size);
 
         return Json::encode([
             'code' => 200,

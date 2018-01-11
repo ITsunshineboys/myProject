@@ -71,17 +71,20 @@ class OrderController extends Controller
         'get-comment',
         'comment-reply',
         'supplier-after-sale-handle',
+        'refund-handle',
         'supplier-delete-comment',
         'delete-comment-list',
         'delete-comment-details',
         'goods-view',
         'after-sale-supplier-send-man',
         'after-sale-supplier-confirm',
-//        'after-sale-delivery',
-//        'find-shipping-cart-list',
+        'after-sale-delivery',
         'after-sale-detail-admin',
-        'close-order'
+        'close-order',
+        'supplierdelivery',
+        'find-refund-detail'
     ];
+
     /**
      * @inheritdoc
      */
@@ -107,7 +110,7 @@ class OrderController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-//                    'after-sale-delivery' =>['post',],
+                    'after-sale-delivery' =>['post',],
                     'after-sale-supplier-send-man' =>['post',],
                     'after-sale-supplier-confirm' =>['post',],
                     'supplier-after-sale-handle' =>['post',],
@@ -242,7 +245,8 @@ class OrderController extends Controller
         $invoicer_card =trim($request->post('invoicer_card'));
         if ($invoicer_card){
             $isMatched = preg_match('/^(?!(?:\d+)$)[\dA-Z]{18}$/', $invoicer_card, $matches);
-            if ($isMatched==false){
+            if ($isMatched==false)
+            {
                 $code=1000;
                 return Json::encode([
                     'code' => $code,
@@ -257,7 +261,8 @@ class OrderController extends Controller
             return Json::encode([
                 'code' => $code,
                 'msg'  =>'ok',
-                'data' =>[
+                'data' =>
+                [
                     'invoice_id'=>$res
                 ]
             ]);
@@ -295,9 +300,9 @@ class OrderController extends Controller
             ]);
         }
         return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok',
-            'data' => $data
+            'code'=>200,
+            'msg' =>'ok',
+            'data'=>$data
         ]);
     }
 
@@ -1653,25 +1658,17 @@ class OrderController extends Controller
         if ($data['code']!=200)
         {
             $code = $data['code'];
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-        $res=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$data['data']);
-        if ($res==200){
             return Json::encode
             ([
-                'code' => 200,
-                'msg' => 'ok',
-            ]);
-        }else{
-            $code = $res;
-            return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        $code=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$data['data']);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
+        ]);
     }
     /**
      * 添加快递单号
@@ -2429,7 +2426,6 @@ class OrderController extends Controller
              || !$postData['sku']==0
          )
          {
-
              $record=UserNewsRecord::find()
                 ->where(['order_no'=>$postData['order_no']])
                 ->andWhere(['sku'=>$postData['sku']])
@@ -2438,7 +2434,7 @@ class OrderController extends Controller
             {
                 if ($rec)
                 {
-                    $rec->status=1;
+                    $rec->status=UserNewsRecord::STATUS_HAVE_READ;
                     $rec->save(false);
                 }
             }
@@ -2450,7 +2446,7 @@ class OrderController extends Controller
             {
                 if ($rec)
                 {
-                    $rec->status=1;
+                    $rec->status=UserNewsRecord::STATUS_HAVE_READ;
                     $rec->save(false);
                 }
             }
@@ -3256,7 +3252,6 @@ class OrderController extends Controller
         }else{
             $data[]=[];
         }
-
         $unreceived=OrderRefund::find()
             ->where(['order_no'=>$order_no,'sku'=>$sku,'order_type'=>GoodsOrder::ORDER_TYPE_UNRECEIVED])
             ->asArray()
@@ -3292,7 +3287,8 @@ class OrderController extends Controller
                     'time' => $unreceived['create_time'],
                     'stage' => $unreceived['order_type']
                 ];
-                switch ($unreceived['handle']) {
+                switch ($unreceived['handle'])
+                {
                     case 1:
                         $type = '同意';
                         $reason = '';
@@ -3676,8 +3672,6 @@ class OrderController extends Controller
                             echo 'fail';
                             exit;
                         }
-//                            $role_id=$GoodsOrder->role_id;
-//                            $user=User::find()->where(['id'=>$GoodsOrder->user_id])->one();
                         $GoodsOrder->pay_status=1;
                         $GoodsOrder->pay_name=PayService::ALI_APP_PAY;
                         $res=$GoodsOrder->save(false);
@@ -3744,7 +3738,6 @@ class OrderController extends Controller
             ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
             ->where(" g.supplier_id={$supplier_id} ")
             ->count();
-//        $role_id=$user->last_role_id_app;
         //Get 待付款订单  and g.role_id={$role_id}
         $unpaid=(new Query())
             ->from(GoodsOrder::tableName().' as g')
@@ -5484,13 +5477,6 @@ class OrderController extends Controller
                                 break;
                             case 1:
                                 $code=200;
-//                                return Json::encode(
-//                                    [
-//                                        'code'=>$code,
-//                                        'msg'=>'ok',
-//                                        'data'=>$operation
-//                                    ]
-//                                );
                                 return Json::encode(
                                     [
                                         'code'=>$code,
@@ -5500,48 +5486,6 @@ class OrderController extends Controller
                                 );
                                 break;
                             case 2:
-//                                $code=200;
-//                                $orderAfterSale=OrderAfterSale::find()
-//                                    ->select('type')
-//                                    ->where(['order_no'=>$order_no])
-//                                    ->andWhere(['sku'=>$sku])
-//                                    ->one();
-//                                //1. 退货  2.换货  3.上门维修  4. 上门换货   5.上门退货
-//                                switch ($orderAfterSale->type)
-//                                {
-//                                    case 1:
-//                                        $data[]=[
-//                                            'name'=>'退货',
-//                                            'value'=>3,
-//                                        ];
-//                                        break;
-//                                    case 2:
-//                                        $data[]=[
-//                                            'name'=>'换货',
-//                                            'value'=>4,
-//                                        ];
-//                                        break;
-//                                    case 3:
-//                                        $data[]=[
-//                                            'name'=>'上门维修',
-//                                            'value'=>5,
-//                                        ];
-//                                        break;
-//                                    case 4:
-//                                        $data[]=[
-//                                            'name'=>'上门换货',
-//                                            'value'=>7,
-//                                        ];
-//                                        break;
-//                                    case 5:
-//                                        $data[]=[
-//                                            'name'=>'上门退货',
-//                                            'value'=>6,
-//                                        ];
-//                                        break;
-//                                    case 6:
-//                                        break;
-//                                }
                                 $code=200;
                                 $after=explode(',',$OrderGoods->after_sale_services);
                                 $data=[];
@@ -5661,7 +5605,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        //default=1000
         $addressList = UserAddress::find()
             ->where(['uid' => $user->id])
             ->andWhere(['default'=>1])

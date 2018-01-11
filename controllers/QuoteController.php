@@ -850,7 +850,7 @@ class QuoteController extends Controller
                             foreach ($house['worker_list'] as $worker) {
                                 $worker_id         = $effect_id;
                                 $worker_kind       = $worker['worker_kind'];
-                                $worker_price      = $worker['price'];
+                                $worker_price      = $worker['price']*100;
                                 $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                             }
 
@@ -1315,12 +1315,12 @@ class QuoteController extends Controller
                                 if (!empty($worker['id'])) {
                                     $worker_id    = $worker['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
                                 } else {
                                     $worker_id    = $house['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                                 }
                             }
@@ -1934,12 +1934,12 @@ class QuoteController extends Controller
                                 if (!empty($worker['id'])) {
                                     $worker_id    = $worker['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     (new WorksWorkerData())->plotEdit($worker_id, $worker_kind, $worker_price);
                                 } else {
                                     $worker_id    = $house['id'];
                                     $worker_kind  = $worker['worker_kind'];
-                                    $worker_price = $worker['price'];
+                                    $worker_price = $worker['price']*100;
                                     $works_worker_data = (new WorksWorkerData())->plotAdd($worker_id, $worker_kind, $worker_price);
                                 }
                             }
@@ -3115,30 +3115,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $data= [
-            ['name'=>'万科翡翠公园'],
-            ['name'=>'万科城市花园'],
-            ['name'=>'万科锦西润园'],
-            ['name'=>'万科金域蓝湾'],
-            ['name'=>'万科金域蓝湾'],
-            ['name'=>'万科朗润园'],
-            ['name'=>'恒大都会华庭'],
-            ['name'=>'恒大望江华府'],
-            ['name'=>'恒大豪庭'],
-            ['name'=>'恒大绿洲'],
-            ['name'=>'龙湖时代天街'],
-            ['name'=>'龙湖三千集'],
-            ['name'=>'龙湖三千里'],
-            ['name'=>'龙湖三千城'],
-            ['name'=>'龙湖金楠天街'],
-            ['name'=>'龙湖丽景'],
-        ];
-        foreach ($data as $v){
-            $effect= new Effect();
-            $effect->toponymy=$v['name'];
-            $effect->type=3;
-            $a=$effect->save(false);
-        }
-        var_dump($a);
+
+        var_dump(Goods::find()->where(['category_id'=>3])->asArray()->all());
     }
 }

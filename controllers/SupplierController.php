@@ -918,8 +918,6 @@ class SupplierController extends Controller
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
-
-
     /**
      * 删除线下体验店商品
      * @return string
@@ -932,8 +930,6 @@ class SupplierController extends Controller
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);
     }
-
-
     /**
      * 商家入驻列表
      * @return string
@@ -956,10 +952,13 @@ class SupplierController extends Controller
             $startTime = trim(Yii::$app->request->get('start_time', ''));
             $endTime = trim(Yii::$app->request->get('end_time', ''));
 
-            if (($startTime && !StringService::checkDate($startTime))
+            if (
+                ($startTime && !StringService::checkDate($startTime))
                 || ($endTime && !StringService::checkDate($endTime))
-            ){
-                return Json::encode([
+            )
+            {
+                return Json::encode
+                ([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code],
                 ]);
@@ -984,7 +983,7 @@ class SupplierController extends Controller
         $keyword=$request->get('keyword');
         if ($keyword)
         {
-                $where .=" and CONCAT(U.mobile,S.shop_name,U.aite_cube_no) like '%{$keyword}%'";
+            $where .=" and CONCAT(U.mobile,S.shop_name,U.aite_cube_no) like '%{$keyword}%'";
         }
         $sort = Yii::$app->request->get('sort', []);
         $model = new UserRole();
@@ -1007,9 +1006,8 @@ class SupplierController extends Controller
             ]
         ]);
     }
-
-
     /**
+     * 入驻详情
      * @return string
      */
     public  function  actionSupplierBeAuditedDetail()
@@ -1028,36 +1026,14 @@ class SupplierController extends Controller
         $user=User::findOne($Supplier->uid);
         $user_role=UserRole::find()
             ->where(['user_id'=>$user->id])
-            ->andWhere(['role_id'=>6])
+            ->andWhere(['role_id'=>Yii::$app->params['supplierRoleId']])
             ->one();
-        //0:旗舰店, 1:自营店, 2:专营店, 3:专卖店
-        switch ($Supplier->type_shop)
-        {
-            case  0:
-                $shop_type='旗舰店';
-                break;
-            case  1:
-                $shop_type='自营店';
-                break;
-            case  2:
-                $shop_type='专营店';
-                break;
-            case  3:
-                $shop_type='专卖店';
-                break;
-        }
-        switch ($Supplier->type_org)
-        {
-            case 0:
-                $type_org='个体工商户';
-                break;
-            case 1:
-                $type_org='企业';
-                break;
-        }
+        $shop_type=Supplier::TYPE_SHOP[$Supplier->type_shop];
+        $type_org=Supplier::TYPE_ORG[$Supplier->type_org];
         $reviewer=User::find()
             ->where(['id'=>$user_role->reviewer_uid])
-            ->select('nickname')->one();
+            ->select('nickname')
+            ->one();
         if ($reviewer)
         {
             $reviewer_name=$reviewer->nickname;
@@ -1092,19 +1068,17 @@ class SupplierController extends Controller
                 'review_apply_time'=>date('Y-m-d H:i',$user_role->review_apply_time),
                 'review_time'=>$review_time,
                 'review_status'=>$user_role->review_status,
-                'review_remark'=>$user_role->review_remark,
+                'review_remark'=>$user_role->review_status==UserRole::REVIEW_AGREE?$Supplier->approve_reason:$Supplier->reject_reason,
                 'reviewer_name'=>$reviewer_name,
             ]
         ]);
     }
-
-
     /**
+     * 商家入驻审核
      * @return string
      */
     public  static function actionSupplierBeAuditedApplyHandle()
     {
-
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=403;
@@ -1114,10 +1088,8 @@ class SupplierController extends Controller
             ]);
         }
         $status=Yii::$app->request->post('status');
-
         $review_remark=Yii::$app->request->post('review_remark');
-
-        if ($status!=1 && $status!=2 )
+        if ($status!=UserRole::REVIEW_AGREE && $status!=UserRole::REVIEW_DISAGREE )
         {
             $code = 1000;
             return Json::encode([
@@ -1136,7 +1108,7 @@ class SupplierController extends Controller
         }
         $user_role=UserRole::find()
              ->where(['user_id'=>$supplier->uid])
-             ->andWhere(['role_id'=>6])
+             ->andWhere(['role_id'=>Yii::$app->params['supplierRoleId']])
              ->one();
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
@@ -1144,11 +1116,20 @@ class SupplierController extends Controller
             $user_role->review_status=$status;
             $user_role->review_time=$time;
             $user_role->review_remark=$review_remark;
+            $user_role->reviewer_uid=$user->id;
             if (!$user_role->save(false))
             {
                 $tran->rollBack();
             }
-            $supplier->status=Supplier::STATUS_ONLINE;
+            if ($status==UserRole::REVIEW_DISAGREE) {
+                $supplier->status=Supplier::STATUS_OFFLINE;
+                $supplier->reject_reason=$review_remark;
+            }
+            if ($status==UserRole::REVIEW_AGREE)
+            {
+                $supplier->status=Supplier::STATUS_ONLINE;
+                $supplier->approve_reason=$review_remark;
+            }
             if (!$supplier->save(false))
             {
                 $tran->rollBack();
@@ -1167,7 +1148,6 @@ class SupplierController extends Controller
             ]);
         }
     }
-
     /**
      * @return string
      */
@@ -1186,6 +1166,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $lineGoods=LineSupplierGoods::find()
             ->where(['goods_id'=>$Goods->id])
             ->one();
@@ -1197,6 +1178,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $belongSupplier=Supplier::findOne($Goods->supplier_id);
         if (!$belongSupplier)
         {
@@ -1216,6 +1198,7 @@ class SupplierController extends Controller
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $lineShop=Supplier::findOne($lineSupplier->supplier_id);
         if (!$lineShop)
         {
@@ -1246,12 +1229,4 @@ class SupplierController extends Controller
             ]
         ]);
     }
-
-
-
-
-
-
-
-
 }

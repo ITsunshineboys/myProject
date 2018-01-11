@@ -30,6 +30,8 @@ class UserRole extends ActiveRecord
         1 =>'审核不通过',
         2 =>'审核通过',
     ];
+    const REVIEW_AGREE=2;
+    const REVIEW_DISAGREE=1;
     /**
      * Get roles status by user id
      *
@@ -190,22 +192,7 @@ class UserRole extends ActiveRecord
                 $list['review_time']=date('Y-m-d H:i',$list['review_time']);
             }
             $list['review_apply_time']=date('Y-m-d H:i',$list['review_apply_time']);
-            switch ($list['type_shop'])
-            {
-                case 0:
-                    //:旗舰店, 1:自营店, 2:专营店, 3:专卖店
-                    $list['type_shop']='旗舰店';
-                    break;
-                case 1:
-                    $list['type_shop']='自营店';
-                    break;
-                case 2:
-                    $list['type_shop']='专营店';
-                    break;
-                case 3:
-                    $list['type_shop']='专卖店';
-                    break;
-            }
+            $list['type_shop']=Supplier::TYPE_SHOP[$list['type_shop']];
             $list['supplier_id']=$list['id'];
             unset($list['id']);
         }
@@ -274,31 +261,27 @@ class UserRole extends ActiveRecord
     /**
      * 验证角色
      * @param $role_id
-     * @return int
+     * @return array
      */
     public  static function  VerifyRolePermissions($role_id)
     {
+        $user=Yii::$app->user->identity;
+        if (!$user)
+        {
+            return [
+                'code'=>403,
+                'data'=>''
+            ];
+        }
         switch ( $role_id)
         {
             case Yii::$app->params['ownerRoleId']:
-                $role=Yii::$app->user->identity;
+                $role=$user;
                 break;
             case Yii::$app->params['supplierRoleId']:
-                $user=Yii::$app->user->identity;
-                if (!$user)
-                {
-                    return 403;
-                    break;
-                }
                 $role=Supplier::find()->select('id')->where(['uid'=>$user->id])->one();
                 break;
             case Yii::$app->params['lhzzRoleId']:
-                $user=Yii::$app->user->identity;
-                if (!$user)
-                {
-                    return 403;
-                    break;
-                }
                 $role=Lhzz::find()->select('id')->where(['uid'=>$user->id])->one();
                 break;
         }
@@ -315,5 +298,17 @@ class UserRole extends ActiveRecord
         ];
     }
 
-
+    /**
+     * Do some ops after updated model
+     *
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if (isset($changedAttributes['review_status'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_PREFIX_ROLES_STATUS . $this->user_id);
+        }
+    }
 }
