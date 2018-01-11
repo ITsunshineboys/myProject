@@ -272,7 +272,7 @@ class UserRole extends ActiveRecord
 
 
     /**
-     *  验证角色
+     * 验证角色
      * @param $role_id
      * @return array
      */

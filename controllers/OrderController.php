@@ -1662,20 +1662,11 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $res=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$data['data']);
-        if ($res==200){
-            return Json::encode
-            ([
-                'code' => 200,
-                'msg' => 'ok',
-            ]);
-        }else{
-            $code = $res;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+        $code=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$data['data']);
+        return Json::encode([
+            'code' => $code,
+            'msg' => $code==200?'ok':\Yii::$app->params['errorCodes'][$code],
+        ]);
     }
     /**
      * 添加快递单号
@@ -3748,7 +3739,6 @@ class OrderController extends Controller
             ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
             ->where(" g.supplier_id={$supplier_id} ")
             ->count();
-//        $role_id=$user->last_role_id_app;
         //Get 待付款订单  and g.role_id={$role_id}
         $unpaid=(new Query())
             ->from(GoodsOrder::tableName().' as g')
@@ -5488,13 +5478,6 @@ class OrderController extends Controller
                                 break;
                             case 1:
                                 $code=200;
-//                                return Json::encode(
-//                                    [
-//                                        'code'=>$code,
-//                                        'msg'=>'ok',
-//                                        'data'=>$operation
-//                                    ]
-//                                );
                                 return Json::encode(
                                     [
                                         'code'=>$code,
@@ -5504,48 +5487,6 @@ class OrderController extends Controller
                                 );
                                 break;
                             case 2:
-//                                $code=200;
-//                                $orderAfterSale=OrderAfterSale::find()
-//                                    ->select('type')
-//                                    ->where(['order_no'=>$order_no])
-//                                    ->andWhere(['sku'=>$sku])
-//                                    ->one();
-//                                //1. 退货  2.换货  3.上门维修  4. 上门换货   5.上门退货
-//                                switch ($orderAfterSale->type)
-//                                {
-//                                    case 1:
-//                                        $data[]=[
-//                                            'name'=>'退货',
-//                                            'value'=>3,
-//                                        ];
-//                                        break;
-//                                    case 2:
-//                                        $data[]=[
-//                                            'name'=>'换货',
-//                                            'value'=>4,
-//                                        ];
-//                                        break;
-//                                    case 3:
-//                                        $data[]=[
-//                                            'name'=>'上门维修',
-//                                            'value'=>5,
-//                                        ];
-//                                        break;
-//                                    case 4:
-//                                        $data[]=[
-//                                            'name'=>'上门换货',
-//                                            'value'=>7,
-//                                        ];
-//                                        break;
-//                                    case 5:
-//                                        $data[]=[
-//                                            'name'=>'上门退货',
-//                                            'value'=>6,
-//                                        ];
-//                                        break;
-//                                    case 6:
-//                                        break;
-//                                }
                                 $code=200;
                                 $after=explode(',',$OrderGoods->after_sale_services);
                                 $data=[];
@@ -5665,7 +5606,6 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        //default=1000
         $addressList = UserAddress::find()
             ->where(['uid' => $user->id])
             ->andWhere(['default'=>1])
