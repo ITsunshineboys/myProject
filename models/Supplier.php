@@ -136,14 +136,18 @@ class Supplier extends ActiveRecord
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_ADMIN = [
-        'id',
-        'shop_no',
-        'status',
-        'shop_name',
-        'balance',
-        'category_id',
-        'create_time',
-        'type_shop'
+        's.id',
+        's.shop_no',
+        's.status',
+        's.shop_name',
+        's.balance',
+        's.category_id',
+        's.create_time',
+        's.type_shop',
+        'ur.review_status',
+        'ur.user_id',
+        'ur.role_id',
+        'ur.review_status'
     ];
     const FIELDS_LIST = [
         'id',
@@ -643,19 +647,17 @@ class Supplier extends ActiveRecord
     {
 
         $select = array_diff($select, self::FIELDS_EXTRA);
-        $keys = implode(',', array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
-        $andwhere = "  status in ({$keys})";
         $offset = ($page - 1) * $size;
-        $supplierList = self::find()
+        $supplierList = (new Query())
+            ->from(UserRole::tableName().' as ur')
+            ->leftJoin(Supplier::tableName(). ' as s','ur.user_id=s.uid')
             ->select($select)
             ->where($where)
-            ->andWhere($andwhere)
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
-            ->asArray()
+//            ->asArray()
             ->all();
-
         foreach ($supplierList as &$supplier) {
 
             if (isset($supplier['create_time'])) {
@@ -679,7 +681,7 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        $total = self::find()->where($where)->andWhere($andwhere)->count();
+        $total = self::find()->where($where)->count();
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
 
