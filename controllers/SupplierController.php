@@ -1121,6 +1121,7 @@ class SupplierController extends Controller
             $user_role->review_status=$status;
             $user_role->review_time=$time;
             $user_role->review_remark=$review_remark;
+            $user_role->reviewer_uid=$user->id;
             if (!$user_role->save(false))
             {
                 $tran->rollBack();
