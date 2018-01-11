@@ -270,6 +270,18 @@ class SiteController extends Controller
     }
 
     /**
+     * @return string
+     */
+    public  function actionCheckIsLogin()
+    {
+        $user = Yii::$app->user->identity;
+        $code=$user?200:403;
+        return Json::encode([
+            'code' =>$code,
+            'msg' =>$user?'ok':Yii::$app->params['errorCodes'][$code],
+        ]);
+    }
+    /**
      * Logout action(app).
      *
      * @return string

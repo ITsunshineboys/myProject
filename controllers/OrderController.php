@@ -2400,17 +2400,23 @@ class OrderController extends Controller
      * 获取订单详情
      * @return string
      */
-    public function  actionUserOrderDetails(){
+    public function  actionUserOrderDetails()
+    {
         $user = Yii::$app->user->identity;
-        if (!$user){
+        if (!$user)
+        {
             $code=1052;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $postData = Yii::$app->request->post();
-        if(!array_key_exists('order_no', $postData)){
+        if(
+            !array_key_exists('order_no', $postData)
+        )
+        {
             $postData = Yii::$app->request->get();
             if(!array_key_exists('order_no', $postData)){
                 $code=1000;
@@ -2420,6 +2426,7 @@ class OrderController extends Controller
                 ]);
             }
         }
+
          if(
              array_key_exists('sku', $postData)
              || !$postData['sku']==0
@@ -2480,14 +2487,10 @@ class OrderController extends Controller
             ]);
         }
         $postData=yii::$app->request->get();
-//        $model = new UploadForm;
-//        return  Json::encode([
-//            'data'=>UploadedFile::getInstances($model, 'file'),
-//            'num'=>count($model->file)
-//        ]);
         $uploadsData=FileService::uploadMore();
         if (!$uploadsData ==1000){
-            if (is_numeric($uploadsData)){
+            if (is_numeric($uploadsData))
+            {
                 $code=$uploadsData;
                 return Json::encode([
                     'code' => $code,
