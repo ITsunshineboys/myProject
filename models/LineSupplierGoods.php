@@ -297,6 +297,12 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             $code=1000;
             return $code;
         }
+        $goods=Goods::findOne($LineSupplierGoods->goods_id);
+        if ($goods->status!=Goods::STATUS_ONLINE && $goods->status!=Goods::STATUS_OFFLINE)
+        {
+            $code=1088;
+            return $code;
+        }
         $tran = Yii::$app->db->beginTransaction();
         try{
             $LineSupplierGoods->status=(int)$post['status'];
