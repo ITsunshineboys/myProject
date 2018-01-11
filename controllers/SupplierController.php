@@ -1028,13 +1028,14 @@ class SupplierController extends Controller
         $user=User::findOne($Supplier->uid);
         $user_role=UserRole::find()
             ->where(['user_id'=>$user->id])
-            ->andWhere(['role_id'=>6])
+            ->andWhere(['role_id'=>Yii::$app->params['supplierRoleId']])
             ->one();
         $shop_type=Supplier::TYPE_SHOP[$Supplier->type_shop];
         $type_org=Supplier::TYPE_ORG[$Supplier->type_org];
         $reviewer=User::find()
             ->where(['id'=>$user_role->reviewer_uid])
-            ->select('nickname')->one();
+            ->select('nickname')
+            ->one();
         if ($reviewer)
         {
             $reviewer_name=$reviewer->nickname;
