@@ -201,7 +201,10 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
             if ($list['status']== self::STATUS_ON_LINE )
             {
-                if ($list['type']!=Goods::STATUS_ONLINE && $list['type'] !=Goods::STATUS_OFFLINE)
+                if (
+                    $list['type']!=Goods::STATUS_ONLINE
+                    && $list['type'] !=Goods::STATUS_OFFLINE
+                )
                 {
                     $list['status']=self::STATUS_OFF_LINE;
                     self::closeLineGoods($list['line_goods_id']);

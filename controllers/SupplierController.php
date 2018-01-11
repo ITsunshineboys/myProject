@@ -884,7 +884,8 @@ class SupplierController extends Controller
     {
         $post=Yii::$app->request->post();
         $code=LineSupplierGoods::UpLineGoods($post);
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);

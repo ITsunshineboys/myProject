@@ -972,11 +972,29 @@ class GoodsOrder extends ActiveRecord
      * @param $order_no
      * @param $waybillnumber
      * @param $shipping_type
+     * @param $supplier_id
      * @return int
      */
-    public static function SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type){
+    public static function SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$supplier_id)
+    {
         $create_time=time();
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        if (!$OrderGoods)
+        {
+            $code=1000;
+            return$code;
+        }
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder)
+        {
+            $code=1000;
+            return $code;
+        }
+        if ($GoodsOrder->supplier_id!=$supplier_id)
+        {
+            $code=1034;
+            return $code;
+        }
         $trans = \Yii::$app->db->beginTransaction();
         try {
             if($shipping_type==1){
@@ -1053,7 +1071,7 @@ class GoodsOrder extends ActiveRecord
                     }
                 }
             }
-            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+
             if($GoodsOrder->order_refer==1)
             {
                 if ($shipping_type==1)

@@ -10,18 +10,15 @@ use app\models\OrderLogisticsTemplate;
 use app\models\OrderSeries;
 use app\models\OrderStyle;
 use app\models\UserAddress;
+use app\models\UserRole;
 use app\services\ModelService;
 use Yii;
 use app\models\OrderPlatForm;
 use app\models\CommentImage;
 use app\models\CommentReply;
 use app\models\Effect;
-use app\models\EffectEarnest;
-use app\models\EffectMaterial;
-use app\models\EffectPicture;
 use app\models\GoodsComment;
 use app\models\GoodsBrand;
-use app\models\GoodsStat;
 use app\models\Jpush;
 use app\models\GoodsCategory;
 use app\models\Role;
@@ -64,7 +61,6 @@ class OrderController extends Controller
     const ACCESS_LOGGED_IN_USER = [
         'getsupplierorderdetails',
         'expressupdate',
-//        'supplierdelivery',
         'getplatformdetail',
         'getorderdetailsall',
         'platformhandlesubmit',
@@ -75,12 +71,10 @@ class OrderController extends Controller
         'get-comment',
         'comment-reply',
         'supplier-after-sale-handle',
-        'refund-handle',
         'supplier-delete-comment',
         'delete-comment-list',
         'delete-comment-details',
         'goods-view',
-//        'find-refund-detail',
         'after-sale-supplier-send-man',
         'after-sale-supplier-confirm',
 //        'after-sale-delivery',
@@ -1655,17 +1649,19 @@ class OrderController extends Controller
                 ]);
             }
         }
-
-        if (!OrderGoods::FindByOrderNoAndSku($order_no,$sku))
+        $data= UserRole::VerifyRolePermissions(Yii::$app->params['supplierRoleId']);
+        if ($data['code']!=200)
         {
+            $code = $data['code'];
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $res=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type);
+        $res=GoodsOrder::SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$data['data']);
         if ($res==200){
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => 200,
                 'msg' => 'ok',
             ]);
@@ -2139,13 +2135,17 @@ class OrderController extends Controller
      * @return string
      */
     public function  actionRefundHandle(){
-        $user = \Yii::$app->user->identity;
-        if (!$user) {
-            $code = 1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
+
+        $data=UserRole::VerifyRolePermissions(Yii::$app->params['supplierRoleId']);
+        {
+            if ($data['code']!=200)
+            {
+                $code=$data['code'];
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
         }
         $request=yii::$app->request;
         $order_no=$request->post('order_no','');
@@ -2171,21 +2171,10 @@ class OrderController extends Controller
                 ]);
             }
         }
-        $supplier=Supplier::find()
-            ->where(['uid'=>$user->id])
-            ->one();
         $order=GoodsOrder::find()
-            ->select('id')
-            ->where(['order_no'=>$order_no,'supplier_id'=>$supplier->id])
+            ->select('id,supplier_id')
+            ->where(['order_no'=>$order_no])
             ->one();
-        if (!$supplier )
-        {
-            $code=1010;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
         if(!$order){
             $code=1000;
             return Json::encode([
@@ -2193,6 +2182,17 @@ class OrderController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        if (
+            $order->supplier_id!=$data['data']
+        )
+        {
+            $code=1034;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
         $order_refund=OrderRefund::find()
             ->select('order_no,sku,handle,apply_reason,create_time,handle_time,refund_time,handle_reason')
             ->where(['order_no'=>$order_no])
