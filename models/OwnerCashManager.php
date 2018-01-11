@@ -111,7 +111,7 @@ class OwnerCashManager extends ActiveRecord {
                 $user['status']=$user['deadtime']>0?'已关闭':'正常';
             }
         }
-        $count=User::find()->where($where)->count();
+        $count=count($userList);
         return ModelService::pageDeal($userList,$count,$page,$size);
 
 

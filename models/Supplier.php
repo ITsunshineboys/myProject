@@ -684,7 +684,7 @@ class Supplier extends ActiveRecord
                 $supplier['type_shop'] = self::TYPE_SHOP[$supplier['type_shop']];
             }
         }
-        $total = self::find()->where($where)->count();
+        $total = count($supplierList);
         return ModelService::pageDeal($supplierList, $total, $page, $size);
     }
 
