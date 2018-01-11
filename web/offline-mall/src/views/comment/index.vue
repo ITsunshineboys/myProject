@@ -32,10 +32,10 @@
     data () {
       return {
         count: {
-          all: 0,
-          good: 0,
-          medium: 0,
-          poor: 0
+          all: 0,     // 全部评论数
+          good: 0,    // 好评数
+          medium: 0,  // 中评数
+          poor: 0     // 差评数
         },
         user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
         comment_details: '',
@@ -51,6 +51,7 @@
       })
     },
     methods: {
+      // 选项卡切换优化方法
       tabHandler: function (obj) {
         if (this.last_tab !== obj) {
           this.last_tab = obj
