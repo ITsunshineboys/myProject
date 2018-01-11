@@ -1030,31 +1030,8 @@ class SupplierController extends Controller
             ->where(['user_id'=>$user->id])
             ->andWhere(['role_id'=>6])
             ->one();
-        //0:旗舰店, 1:自营店, 2:专营店, 3:专卖店
-        switch ($Supplier->type_shop)
-        {
-            case  0:
-                $shop_type='旗舰店';
-                break;
-            case  1:
-                $shop_type='自营店';
-                break;
-            case  2:
-                $shop_type='专营店';
-                break;
-            case  3:
-                $shop_type='专卖店';
-                break;
-        }
-        switch ($Supplier->type_org)
-        {
-            case 0:
-                $type_org='个体工商户';
-                break;
-            case 1:
-                $type_org='企业';
-                break;
-        }
+        $shop_type=Supplier::TYPE_SHOP[$Supplier->type_shop];
+        $type_org=Supplier::TYPE_ORG[$Supplier->type_org];
         $reviewer=User::find()
             ->where(['id'=>$user_role->reviewer_uid])
             ->select('nickname')->one();
