@@ -2,7 +2,7 @@
 
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
-$auth = require(__DIR__ . '/auth.php');
+//$auth = require(__DIR__ . '/auth.php');
 //$paramsOnline = require(__DIR__ . '/params_online.php');
 
 return [
@@ -105,7 +105,10 @@ return [
         1083 => '商品不支持配送至该地区!',
         1084 => '请勿绑定自身用户!',
         1085 => '商品库存不足!',
-        1086 => '该商品已下架,请重新输入!'
+        1086 => '该商品已下架,请重新输入!',
+        1087 => '该商品已添加，请勿重复抓取',
+        1088 => '该商品未通过审核或者已删除，无法开启',
+        1089 => '该商家未通过审核，无法开启',
     ],
     'okMsgs' => [
         'site/reset-icon' => '上传头像成功',
@@ -223,7 +226,7 @@ return [
     ],
     'districts' => $districts,
 //    'pinyin'=>$pinyin,
-    'auth' => $auth,
+//    'auth' => $auth,
     'goods' => [
         'maxImagesCnt' => 5,
         'viewCacheTime' => 60, // unit: second

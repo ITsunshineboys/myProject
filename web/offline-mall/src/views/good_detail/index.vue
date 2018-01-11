@@ -1,10 +1,28 @@
 <template>
   <div class="good-container">
+    <!-- 顶部icon -->
     <div class="guide-icon">
       <i class="iconfont icon-return"></i>
       <i class="iconfont icon-share" @click="show_share = true"></i>
-      <i class="iconfont icon-more"></i>
+      <i class="iconfont icon-more" @click="isShow=!isShow"></i>
     </div>
+
+    <!--右上弹窗-->
+    <div v-show="isShow" class="pop-down">
+      <ul>
+        <router-link :to="'/'" tag="li">
+          <span class="iconfont icon-home"></span>
+          <span class="pop-text">商城首页</span>
+        </router-link>
+        <li>
+          <span class="iconfont icon-news-circle"></span>
+          <span class="pop-text">消息</span>
+          <span class="pop-dot"></span>
+        </li>
+      </ul>
+    </div>
+
+    <!--轮播-->
     <swiper loop auto :list="banner_list" height="375px" dots-class="custom-bottom" dots-position="center"
             :show-desc-mask="false"></swiper>
     <div class="good-detail">
@@ -21,10 +39,6 @@
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
 
-
-
-
-
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -33,15 +47,14 @@
           </div>
         </cell-box>
       </group>
-      <Divider></Divider>
+      <divider></divider>
       <!--评价-->
       <div v-if="good_detail.comments.total">
         <flexbox justify="flex-start" class="comment-count">
           <span class="sum-comment">评价</span>
           <span>({{good_detail.comments.total}})</span>
         </flexbox>
-        <comment headshotStyle="headshot-style" nameStyle="name-style" dateStyle="date-style"
-                 :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
+        <comment :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
                  :commentDate="good_detail.comments.latest.create_time"
                  :content="good_detail.comments.latest.content"></comment>
         <flexbox justify="center" class="view-all">
@@ -52,7 +65,7 @@
             <i class="iconfont icon-arrow-line-right"></i>
           </router-link>
         </flexbox>
-        <Divider></Divider>
+        <divider></divider>
       </div>
 
       <!--店铺简介-->
@@ -67,20 +80,12 @@
             <br/>
             商品数
 
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.follower_number}}</span>
             <br/>
             粉丝数
-
-
-
-
 
           </div>
           <span></span>
@@ -89,28 +94,26 @@
             <br/>
             综合评分
 
-
-
-
-
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
           <button type="button">进店逛逛</button>
         </flexbox>
       </card>
-      <Divider></Divider>
+      <divider></divider>
 
       <!--底部选项卡-->
       <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
         <tab-item selected @on-item-click="tabHandler('des')">图文详情</tab-item>
         <tab-item @on-item-click="tabHandler('params')">产品参数</tab-item>
       </tab>
+      <!-- 图文详情 -->
       <div v-show="show_description" class="description-container">
         <flexbox>
           <flexbox-item class="description" v-html="good_detail.description"></flexbox-item>
         </flexbox>
       </div>
+      <!-- 产品参数 -->
       <div v-show="!show_description">
         <flexbox orient="vertical" class="pro-params" align="flex-start">
           <flexbox-item>
@@ -144,7 +147,7 @@
             </flexbox>
           </flexbox-item>
         </flexbox>
-        <Divider></Divider>
+        <divider></divider>
       </div>
 
       <!--底部按钮-->
@@ -180,21 +183,9 @@
             加入购物车
 
 
-
-
-
-
-
-
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
-
-
-
-
-
-
 
 
           </flexbox-item>
@@ -243,16 +234,17 @@
       <div @click="show_share = false">取消</div>
     </popup>
 
-    <offlineAlert :offlineInfo=offlineInfo  :show="show" :isOffline="false" @isShow=showOfflineAlert></offlineAlert>
+    <!--线下商品介绍弹窗-->
+    <offlinealert :offlineInfo=offlineInfo :show="show" :isOffline="false" @isShow=showOfflineAlert></offlinealert>
 
   </div>
 </template>
 
 <script>
   import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
-  import Divider from '@/components/Divider'
+  import divider from '@/components/Divider'
   import comment from '../good_detail/comment'
-  import offlineAlert from '@/components/OfflineAlert'
+  import offlinealert from '@/components/OfflineAlert'
   const afterserviceArr = ['上门维修', '上门退货', '上门换货', '退货', '换货']
 
   export default {
@@ -269,13 +261,14 @@
       TabItem,
       Popup,
       XNumber,
-      Divider,
+      divider,
       comment,
-      offlineAlert
+      offlinealert
     },
     data () {
       return {
-        show: false,
+        isShow: false,  // 右上角弹窗
+        show: false,    // 线下商品简介
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -339,16 +332,19 @@
     },
     methods: {
       // 判断是否显示售后
-      afterServiceShow: function () {
+      afterServiceShow () {
         for (let [key, value] of this.all_after_sale_services.entries()) {    // eslint-disable-line
           if (afterserviceArr.indexOf(value) !== -1) {
             this.pop.show_service = true
           }
         }
       },
+      // 图片详情 选项卡切换
       tabHandler: function (obj) {
         obj === 'des' ? this.show_description = true : this.show_description = false
       },
+
+      // 选择数量 弹出层按钮显示处理
       showCount: function (obj) {
         if (obj === 'all') {
           this.show_count = false
@@ -361,6 +357,8 @@
           obj === 'cart' ? this.count_cart = true : obj === 'now' ? this.count_now = true : this.default_count = true
         }
       },
+
+      // 线下商品弹窗处理
       showOfflineAlert: function (bool) {
         this.show = bool
       }
@@ -371,6 +369,7 @@
 <style>
   .good-container {
     background: rgba(255, 255, 255, 1);
+    position: relative;
   }
 
   .good-container .custom-bottom {
@@ -417,6 +416,75 @@
   .good-container .guide-icon .icon-more {
     right: 14px;
   }
+
+  /*右上弹窗样式*/
+  .good-container .pop-down {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 200;
+  }
+
+  .good-container .pop-down ul {
+    position: absolute;
+    top: 69px;
+    right: 6px;
+    padding-left: 0;
+    width: 140px;
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+  }
+
+  .good-container .pop-down ul:before {
+    content: "";
+    position: absolute;
+    right: 8px;
+    top: -6px;
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border-style: solid;
+    border-color: #e5e5e5;
+    border-width: 1px 0 0 1px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  .good-container .pop-down ul li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+  }
+
+  .good-container .pop-down ul li .iconfont {
+    flex: 0 0;
+    padding: 0 14px;
+    font-size: 18px;
+  }
+
+  .good-container .pop-text {
+    flex: 1 1;
+    color: #666;
+    border-bottom: 1px solid #e6e6e6;
+  }
+
+  .good-container .pop-down ul li:last-child .pop-text {
+    border-bottom: none;
+  }
+
+  .good-container .pop-dot {
+    margin-right: 14px;
+    width: 8px;
+    height: 8px;
+    background-color: #d9ad65;
+    border-radius: 50%;
+  }
+
+  /*右上弹窗样式结束*/
 
   .good-container .choose-count {
     border-bottom: 1px solid #E9EDEE;
@@ -500,24 +568,6 @@
     font-size: 12px;
     color: rgba(153, 153, 153, 1);
     line-height: 17px;
-  }
-
-  /*评价组件样式*/
-  .good-container .headshot-style {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-  }
-
-  .good-container .name-style {
-    font-size: 16px;
-    color: rgba(153, 153, 153, 1);
-  }
-
-  .good-container .date-style {
-    font-size: 14px;
-    color: rgba(153, 153, 153, 1);
   }
 
   .good-container .view-all {
@@ -899,5 +949,7 @@
     font-size: 12px;
     color: rgba(153, 153, 153, 1);
   }
+
+
 </style>
 

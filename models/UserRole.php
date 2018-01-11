@@ -270,4 +270,50 @@ class UserRole extends ActiveRecord
 
     }
 
+
+    /**
+     * 验证角色
+     * @param $role_id
+     * @return int
+     */
+    public  static function  VerifyRolePermissions($role_id)
+    {
+        switch ( $role_id)
+        {
+            case Yii::$app->params['ownerRoleId']:
+                $role=Yii::$app->user->identity;
+                break;
+            case Yii::$app->params['supplierRoleId']:
+                $user=Yii::$app->user->identity;
+                if (!$user)
+                {
+                    return 403;
+                    break;
+                }
+                $role=Supplier::find()->select('id')->where(['uid'=>$user->id])->one();
+                break;
+            case Yii::$app->params['lhzzRoleId']:
+                $user=Yii::$app->user->identity;
+                if (!$user)
+                {
+                    return 403;
+                    break;
+                }
+                $role=Lhzz::find()->select('id')->where(['uid'=>$user->id])->one();
+                break;
+        }
+        if (!$role)
+        {
+            return [
+                'code'=>1034,
+                'data'=>''
+            ];
+        }
+        return [
+            'code'=>200,
+            'data'=>$role->id
+        ];
+    }
+
+
 }

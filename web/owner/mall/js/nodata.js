@@ -68,10 +68,15 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         if(!(JSON.stringify(newVal) === JSON.stringify(oldVal))){
             sessionStorage.setItem('params', JSON.stringify($scope.params))
             $scope.materials = []
+            $scope.words = '生成材料'
         }
     }, true)
     $scope.$watch('toponymy', function (newVal, oldVal) {
-        sessionStorage.setItem('toponymy', JSON.stringify(newVal))
+        if(!(JSON.stringify(newVal) === JSON.stringify(oldVal))){
+            sessionStorage.setItem('toponymy', JSON.stringify(newVal))
+            $scope.materials = []
+            $scope.words = '生成材料'
+        }
     }, true)
     //改变室厅厨卫
     $scope.changeQuantity = function (str, flag, limit) {
@@ -676,7 +681,7 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             }, 0)
             $scope.total_prices += worker_price
             $scope.special_offer += worker_price
-            $scope.words = '生成材料'
+            $scope.words = ''
         })
     }
     //跳转页面

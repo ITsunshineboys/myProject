@@ -972,11 +972,29 @@ class GoodsOrder extends ActiveRecord
      * @param $order_no
      * @param $waybillnumber
      * @param $shipping_type
+     * @param $supplier_id
      * @return int
      */
-    public static function SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type){
+    public static function SupplierDelivery($sku,$order_no,$waybillnumber,$shipping_type,$supplier_id)
+    {
         $create_time=time();
         $OrderGoods=OrderGoods::FindByOrderNoAndSku($order_no,$sku);
+        if (!$OrderGoods)
+        {
+            $code=1000;
+            return$code;
+        }
+        $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+        if (!$GoodsOrder)
+        {
+            $code=1000;
+            return $code;
+        }
+        if ($GoodsOrder->supplier_id!=$supplier_id)
+        {
+            $code=1034;
+            return $code;
+        }
         $trans = \Yii::$app->db->beginTransaction();
         try {
             if($shipping_type==1){
@@ -1053,7 +1071,7 @@ class GoodsOrder extends ActiveRecord
                     }
                 }
             }
-            $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
+
             if($GoodsOrder->order_refer==1)
             {
                 if ($shipping_type==1)
@@ -1658,16 +1676,9 @@ class GoodsOrder extends ActiveRecord
             {
                 case 0:
                     $shipping_status=self::ORDER_TYPE_UNSHIPPED;
-//                    $refunds=OrderRefund::find()
-//                        ->select('id')
-//                        ->where(['order_no'=>$order_no])
-//                        ->andWhere(['sku'=>$sku])
-//                        ->andWhere(['order_type'=>$shipping_status])
-//                        ->one();
                     break;
                 case 1:
                     $shipping_status=self::ORDER_TYPE_UNRECEIVED;
-
                     break;
             }
             $refunds=OrderRefund::find()
@@ -1675,7 +1686,6 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no])
                 ->andWhere(['sku'=>$sku])
                 ->andWhere(['order_type'=>$shipping_status])
-//                ->orFilterWhere(['handle'=>0])
                 ->one();
             $order->is_unusual=self::UNUSUAL_STATUS_REFUND;
             $res2=$order->save(false);
@@ -1684,10 +1694,7 @@ class GoodsOrder extends ActiveRecord
                 $trans->rollBack();
                 return $code;
             }
-
-            $title='申请取消订单';
-            $content="订单号{$order_no},{$order->goods_name}";
-            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,$title,6,$content,$order_no,$sku,self::STATUS_DESC_DETAILS);
+            $code=UserNewsRecord::AddOrderNewRecord($supplier_user,'申请取消订单',6,"订单号{$order_no},{$order->goods_name}",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if (!$code==200)
             {
                 $trans->rollBack();
@@ -1729,7 +1736,7 @@ class GoodsOrder extends ActiveRecord
      * @param $handle_reason
      * @return int
      */
-    public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason,$user,$supplier)
+    public  static  function RefundHandle($order_no,$sku,$handle,$handle_reason)
     {
         if ($handle ==self::REFUND_HANDLE_STATUS_AGREE)
         {
@@ -1738,7 +1745,7 @@ class GoodsOrder extends ActiveRecord
         }
         if ($handle ==self::REFUND_HANDLE_STATUS_DISAGREE)
         {
-            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$supplier);
+            $code=self::disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason);
             return $code;
         }
     }
@@ -1751,10 +1758,9 @@ class GoodsOrder extends ActiveRecord
      * @param $sku
      * @param $handle
      * @param $handle_reason
-     * @param $supplier
      * @return int
      */
-    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason,$supplier)
+    public static function  disAgreeRefundHandle($order_no,$sku,$handle,$handle_reason)
     {
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
@@ -1767,11 +1773,9 @@ class GoodsOrder extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
             $order_refund=OrderRefund::find()
                 ->where(['order_no'=>$order_no,'sku'=>$sku,'handle'=>0])
                 ->all();
-
             if (!$order_refund)
             {
                 $code=1000;
@@ -1792,6 +1796,10 @@ class GoodsOrder extends ActiveRecord
 
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
             $role=User::findOne($GoodsOrder->user_id);
+            $supplier=Supplier::find()
+                ->where(['id'=>$GoodsOrder->supplier_id])
+                ->select('shop_name')
+                ->one();
             $code=UserNewsRecord::AddOrderNewRecord($role,'取消订单反馈',$GoodsOrder->role_id,"您的订单{$order_no},已被{$supplier->shop_name}商家驳回.",$order_no,$sku,self::STATUS_DESC_DETAILS);
             if ($code!=200)
             {
@@ -2485,7 +2493,16 @@ class GoodsOrder extends ActiveRecord
                     $arr[$k]['status']=self::ORDER_TYPE_DESC_UNCOMMENT;
                 }
             }
-            $arr[$k]['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+
+            if ($arr[$k]['status']==self::ORDER_TYPE_DESC_UNPAID)
+            {
+                $arr[$k]['amount_order']= StringService::formatPrice($arr[$k]['amount_order']*0.01);
+            }else
+            {
+                $arr[$k]['amount_order']= StringService::formatPrice(($arr[$k]['goods_price']*$arr[$k]['goods_number']+$arr[$k]['freight'])*0.01);
+            }
+
+
             $arr[$k]['goods_price']= StringService::formatPrice($arr[$k]['goods_price']*0.01);
             $arr[$k]['market_price']= StringService::formatPrice($arr[$k]['market_price']*0.01);
             $arr[$k]['supplier_price']= StringService::formatPrice($arr[$k]['supplier_price']*0.01);
@@ -2515,6 +2532,7 @@ class GoodsOrder extends ActiveRecord
             $allNumber=0;
             if ($arr[$k]['status']==self::ORDER_TYPE_DESC_UNPAID)
             {
+
                 $orderGoods=OrderGoods::find()
                     ->where(['order_no'=>$arr[$k]['order_no']])
                     ->asArray()
@@ -2848,10 +2866,10 @@ class GoodsOrder extends ActiveRecord
     }
 
 
-    /**获取订单详情信息
+    /**
+     * 获取订单详情信息
      * @param $postData
-     * @param $user
-     * @return array|mixed|null
+     * @return mixed|null
      */
     public  static  function  FindUserOrderDetails($postData)
     {
@@ -2903,9 +2921,12 @@ class GoodsOrder extends ActiveRecord
                 }
                 $arr[$k]['return_insurance'] =  StringService::formatPrice($arr[$k]['return_insurance'] * 0.01);
                 $arr[$k]['goods_price'] =  StringService::formatPrice($arr[$k]['goods_price'] * 0.01);
-                if ($arr[$k]['send_time'] == 0) {
+                if ($arr[$k]['send_time'] == 0)
+                {
                     $send_time = $arr[$k]['send_time'];
-                } else {
+                }
+                else
+                {
                     $send_time = date('Y-m-d H:i', $arr[$k]['send_time']);
                 }
                 if ($arr[$k]['complete_time'] == 0) {

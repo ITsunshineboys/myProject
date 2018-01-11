@@ -1,12 +1,12 @@
 <template>
   <div>
     <HeaderCommon search="false" headTitle="全部评价" pop="true" :backWay="false"></HeaderCommon>
-    <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
-      <tab-item selected @on-item-click="tabHandler('all')">全部 （{{count.good + count.medium + count.poor}}）</tab-item>
-      <tab-item @on-item-click="tabHandler('good')">好评 （{{count.good}}）</tab-item>
-      <tab-item @on-item-click="tabHandler('medium')">中评 （{{count.medium}}）</tab-item>
-      <tab-item @on-item-click="tabHandler('poor')">差评 （{{count.poor}}）</tab-item>
-    </tab>
+      <tab defaultColor="#999" active-color="#222" bar-active-color="#222" custom-bar-width="50px" class="tab">
+        <tab-item selected @on-item-click="tabHandler('all')">全部 （{{count.good + count.medium + count.poor}}）</tab-item>
+        <tab-item @on-item-click="tabHandler('good')">好评 （{{count.good}}）</tab-item>
+        <tab-item @on-item-click="tabHandler('medium')">中评 （{{count.medium}}）</tab-item>
+        <tab-item @on-item-click="tabHandler('poor')">差评 （{{count.poor}}）</tab-item>
+      </tab>
     <Divider></Divider>
     <userComment v-for="item in comment_details" :key="item.id"
                  :userIcon="item.icon || user_icon" :commentLevel="item.score" :commentDate="item.create_time"

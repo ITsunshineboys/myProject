@@ -454,7 +454,7 @@ class SupplierController extends Controller
                 'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        if ($Supplier['status']!=Supplier::STATUS_ONLINE)
+        if ($Supplier['status']!=Supplier::STATUS_ONLINE && $Supplier['status']!=Supplier::STATUS_OFFLINE)
         {
             $code=1076;
             return Json::encode([
@@ -550,7 +550,19 @@ class SupplierController extends Controller
         $supplier=Supplier::find()
             ->where(['shop_no'=>$post['shop_no']])
             ->one();
-        if (!$supplier || $supplier->status!=Supplier::STATUS_ONLINE)
+        if (!$supplier)
+        {
+            $code=1076;
+            return Json::encode
+            ([
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (
+            $supplier->status!=Supplier::STATUS_ONLINE
+            && $supplier->status!=Supplier::STATUS_OFFLINE
+        )
         {
             $code=1076;
             return Json::encode([
@@ -603,12 +615,20 @@ class SupplierController extends Controller
             ->where(['shop_no'=>$shop_no])
             ->asArray()
             ->one();
-        if (!$Supplier || $Supplier['status']!=Supplier::STATUS_ONLINE)
+        if (!$Supplier)
         {
             $code=1076;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        if ($Supplier['status']!=Supplier::STATUS_ONLINE && $Supplier['status']!=Supplier::STATUS_OFFLINE)
+        {
+            $code=1076;
+            return Json::encode([
+                'code' => $code,
+                'msg' =>Yii::$app->params['errorCodes'][$code],
             ]);
         }
         $line_supplier=LineSupplier::find()
@@ -864,7 +884,8 @@ class SupplierController extends Controller
     {
         $post=Yii::$app->request->post();
         $code=LineSupplierGoods::UpLineGoods($post);
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 200 == $code ? 'ok' : Yii::$app->params['errorCodes'][$code],
         ]);

@@ -2466,6 +2466,7 @@ class QuoteController extends Controller
 //        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
 
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
+
         if (isset($goods['0'])) {
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
@@ -2477,6 +2478,16 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
                 'goods'=> [],
                 'goods_attr'=> [],
+            ]);
+        }
+
+        // TODO 增加查询 decorationAdd表 如果有数据就提示  yr
+        $d_add = DecorationAdd::find()->where(['sku'=>$goods[0]['sku']])->one();
+        if ($d_add){
+            $code=1087;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
 

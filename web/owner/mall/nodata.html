@@ -235,13 +235,13 @@
                     </ul>
                 </div>
             </div>
-            <div class="btn_vr" ng-if="materials.length == 0">
+            <div class="btn_vr" ng-if="words !=''">
                 <button type="button" ng-click="getMaterials(area_news.$valid,area_news.$error.required)" ng-disabled="words == '生成中...'">{{words}}</button>
             </div>
 
 
             <!--材料选择-->
-            <div ng-if="materials.length != 0">
+            <div ng-if="materials.length != 0&&words == ''">
                 <div class="material_choose">
                     <div class="left_main">
                         <div class="shu"></div>

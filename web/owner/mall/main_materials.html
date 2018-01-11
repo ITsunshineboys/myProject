@@ -7,8 +7,8 @@
             </a>
             <p class="pic_span" style="text-align: center;">主材料</p>
             <!--<p class="cur_location">-->
-                <!--<i class="icon icon-map-marker icon-3x map"></i>-->
-                <!--<span class="postion_span">成都</span>-->
+            <!--<i class="icon icon-map-marker icon-3x map"></i>-->
+            <!--<span class="postion_span">成都</span>-->
             <!--</p>-->
             <!--<p class="cur_location" ng-if="is_edit">-->
             <!--<span class="postion_span" ng-click="switch_delete()">{{cur_operate}}</span>-->
@@ -19,17 +19,17 @@
         <!--地面材料-->
         <div ng-repeat="item in basic_materials.second_level" class="detail_block">
             <span class="second_title">{{item.title}}</span>
-                <ul>
-                    <li data-toggle="modal" data-target="#myModal" ng-click="getDetails(item1)"
-                        ng-repeat="item1 in item.goods" class="main_details">
-                        <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}&times;{{item1.quantity}}</span><br/>
-                        <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}" class="wall_brand">{{item1.name}}</span>
-                        <span class="wall_money">￥{{item1.cost.toFixed(2)}}
+            <ul>
+                <li data-toggle="modal" data-target="#myModal" ng-cplick="getDetails(item1)"
+                    ng-repeat="item1 in item.goods" class="main_details">
+                    <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#666')}" class="wall_span">{{item1.title}}&times;{{item1.quantity}}</span><br/>
+                    <span ng-style="{'color':(item1.status == 0?'#D9AD65':'#959292')}"
+                          class="wall_brand">{{item1.name}}</span>
+                    <span class="wall_money">￥{{item1.cost.toFixed(2)}}
                     <img src="images/left_more.png" alt=""></span>
-                    </li>
-                </ul>
+                </li>
+            </ul>
         </div>
-
 
 
         <!--按钮、-->
@@ -44,8 +44,9 @@
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
-                <div class="modal-content" id="whit" >
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-content" id="whit">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <div class="comment_img">
                         <img ng-src="{{goods_details.cover_image}}" alt=""/>
                     </div>
@@ -53,10 +54,9 @@
                         <p class="goods_name">{{goods_details.goods_name}}</p>
                         <p class="price">{{goods_details.platform_price | currency:'￥'}}</p>
                         <p>品牌名称：{{goods_details.name}}</p>
-                        <p>
-                            <span ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</span>
-                            <span class="style_position" ng-if="goods_details.style_name!=''">风格：{{goods_details.style_name}}</span>
-                        </p>
+                        <p ng-if="goods_details.series_name!=''">系列：{{goods_details.series_name}}</p>
+                        <p class="style_position" ng-if="goods_details.style_name!=''">
+                            风格：{{goods_details.style_name}}</p>
                     </div>
                     <button type="button" data-dismiss="modal" class="go_detail" ng-click="goDetails()">查看详情</button>
                     <button type="button" data-dismiss="modal" class="go_replace" ng-click="goDetails(1)">更换</button>
