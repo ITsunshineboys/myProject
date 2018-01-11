@@ -67,7 +67,7 @@ class WorksWorkerData extends ActiveRecord
             ->all();
         $worker_list=WorkerType::laborlist();
         foreach ($data as &$v){
-            $v['worker_price']=sprintf('%.2f',$v['worker_price']*0.01);
+            $v['worker_price']=$v['worker_price']/100;
             foreach ($worker_list as $item){
                 if($v['worker_kind']==$item['worker_name']){
                     $v['worker_id']=$item['id'];
