@@ -136,18 +136,15 @@ class Supplier extends ActiveRecord
     const OFFLINE_SHOP_NOT_SUPPORT = 0; // 不支持线下商店
     const PAGE_SIZE_DEFAULT = 12;
     const FIELDS_ADMIN = [
-        's.id',
-        's.shop_no',
-        's.status',
-        's.shop_name',
-        's.balance',
-        's.category_id',
-        's.create_time',
-        's.type_shop',
-        'ur.review_status',
-        'ur.user_id',
-        'ur.role_id',
-        'ur.review_status'
+        'id',
+        'shop_no',
+        'status',
+        'shop_name',
+        'balance',
+        'category_id',
+        'create_time',
+        'type_shop',
+
     ];
     const FIELDS_LIST = [
         'id',
@@ -646,18 +643,24 @@ class Supplier extends ActiveRecord
     public static function pagination($where = [], $select = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC')
     {
 
+        $roleList=UserRole::find()->where(['role_id'=>6,'review_status'=>2])->asArray()->all();
+        $data=[];
+        foreach ($roleList as $item){
+            $data[]=$item['user_id'];
+        }
+
         $select = array_diff($select, self::FIELDS_EXTRA);
         $offset = ($page - 1) * $size;
-        $supplierList = (new Query())
-            ->from(UserRole::tableName().' as ur')
-            ->leftJoin(Supplier::tableName(). ' as s','ur.user_id=s.uid')
+        $supplierList = self::find()
             ->select($select)
             ->where($where)
+            ->andWhere(['uid'=>$data])
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
-//            ->asArray()
+            ->asArray()
             ->all();
+
         foreach ($supplierList as &$supplier) {
 
             if (isset($supplier['create_time'])) {

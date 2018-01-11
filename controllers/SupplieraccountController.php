@@ -151,21 +151,21 @@ class SupplieraccountController extends  Controller{
             ]);
         }
 
-        $where="ur.review_status=2 ";
+        $where="1";
         if(!$keyword) {
             if ($type_shop != $vaue_all){
-                $where.= " and s.type_shop = {$type_shop}";
+                $where.= " and type_shop = {$type_shop}";
             }else{
                 $keys=implode(',',array_keys(Supplier::TYPE_SHOP));
-                $where.= " and s.type_shop in ({$keys}) ";
+                $where.= " and type_shop in ({$keys}) ";
 
             }
 
             if ($status != $vaue_all){
-                $where.= " and s.status ={$status} ";
+                $where.= " and status ={$status} ";
             }else{
                 $keys=implode(',',array_keys(Supplier::STATUSES_ONLINE_OFFLINE));
-                $where.= " and s.status in ({$keys}) ";
+                $where.= " and status in ({$keys}) ";
 
             }
             if ($category_id) {
@@ -173,15 +173,15 @@ class SupplieraccountController extends  Controller{
                 $cate_ids=Supplier::getcategory($category_id);
                     if(is_array($cate_ids)){
                         $ids=  implode(',',$cate_ids);
-                        $where.=" and s.category_id in ({$ids})";
+                        $where.=" and category_id in ({$ids})";
 
                     }else{
-                        $where.=" and s.category_id ={$category_id}";
+                        $where.=" and category_id ={$category_id}";
                     }
             }
 
         }else{
-            $where=" s.shop_no like '%{$keyword}%' or s.shop_name like '%{$keyword}%'";
+            $where=" shop_no like '%{$keyword}%' or shop_name like '%{$keyword}%'";
         }
 
         $page = (int)Yii::$app->request->get('page', 1);
