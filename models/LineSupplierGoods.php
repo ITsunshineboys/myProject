@@ -182,7 +182,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
     public static function pagination($where = [], $page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
         $orderBy = 'LG.id DESC';
-        $select ="LG.id as line_goods_id,LG.line_supplier_id,G.sku,G.title as goods_name,L.district_code,LG.status,L.id as line_id,S.shop_name as supplier_shop_name,G.status as type";
+        $select ="LG.id as line_goods_id,LG.line_supplier_id,G.sku,G.title as goods_name,L.district_code,LG.status,L.id as line_id,S.shop_name as line_shop_name,G.status as type,G.supplier_id as belong_supplier_id";
         $offset = ($page - 1) * $size;
         $List = (new Query())
             ->from(self::tableName().' as LG')
@@ -197,7 +197,7 @@ class LineSupplierGoods extends \yii\db\ActiveRecord
             ->all();
         foreach ($List as &$list)
         {
-            $list['line_shop_name']=self::GetLineShopNameByLineId($list['line_supplier_id']);
+            $list['supplier_shop_name']=Supplier::findOne($list['belong_supplier_id'])->shop_name;
             $list['district']=LogisticsDistrict::GetLineDistrictByDistrictCode($list['district_code']);
             if ($list['status']== self::STATUS_ON_LINE )
             {
