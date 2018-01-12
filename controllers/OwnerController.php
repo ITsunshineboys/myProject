@@ -955,6 +955,9 @@ class OwnerController extends Controller
             'data' => $material_total,
             'total_cost' => round($total_cost,2),
             'bedroom_area' => round($bedroom_primer_area[1],2),
+            'primer_area' => round($primer_area,2),
+            'string_length' => round($concave_line_length,2),
+            'string_length' => round($concave_line_length,2),
         ]);
     }
 
@@ -1142,6 +1145,7 @@ class OwnerController extends Controller
             'labor_all_cost' => $total_labor_cost,
             'data' => $material_total,
             'total_cost' => round($total_cost,2),
+            'hall_area' => round($drawing_room_area,2),
         ]);
     }
 
@@ -1273,7 +1277,7 @@ class OwnerController extends Controller
         $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
         $labor_cost['worker_kind'] = $labor_costs['worker_name'];
 
-        
+
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
         $judge = BasisDecorationService::judge($goods,$get);
