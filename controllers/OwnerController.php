@@ -1264,20 +1264,18 @@ class OwnerController extends Controller
             $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
         } else {
             $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$rubbish_12,$vehicle_12,$fare);
-//            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$rubbish_24,$vehicle_24,$fare);
-            var_dump($cost_12);
-//            var_dump($cost_24);
-//            $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
+            $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$rubbish_24,$vehicle_24,$fare);
+            $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
 
         }
 
 //        总人工费
-//        $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
-//        $labor_cost['worker_kind'] = $labor_costs['worker_name'];
-//
-//        var_dump($total_day);
-//        var_dump($labor_costs['univalence']);
-//        var_dump($building_scrap);
+        $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
+        $labor_cost['worker_kind'] = $labor_costs['worker_name'];
+
+        var_dump($total_day);
+        var_dump($labor_costs['univalence']);
+        var_dump($building_scrap);
         die;
 
 
