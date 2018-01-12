@@ -942,7 +942,7 @@ class BasisDecorationService
                 //        清运12墙费用=运到小区楼下费用+单独外运费用
                 //        单独外运费用=（12墙拆除面积÷【20】）×【300】
                 // 运到楼下费用
-                $cost = ceil(self::algorithm(6,$get,$craft));
+                $cost = ceil(self::algorithm(1,$get,$craft));
                 var_dump($cost);
                 $value_ = ceil(self::algorithm(6,$get,$craft1));
                 var_dump($value_);
