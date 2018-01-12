@@ -302,13 +302,13 @@ class Effect extends ActiveRecord
         $effect_id=EffectEarnest::find()->where(['id'=>$enst_id])->select('effect_id')->asArray()->one()['effect_id'];
 
         if($array==false){
-            $data=null;
+            $data=[];
         }
         if(!isset($array['sale_price'])){
-            $array['sale_price']=null;
+            $array['sale_price']=[];
         }
         if(!isset($array['original_price'])){
-            $array['original_price']=null;
+            $array['original_price']=[];
         }
 
         $array['add_time']=date('Y-m-d H:i:s',$array['add_time']);
