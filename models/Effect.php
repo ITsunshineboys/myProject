@@ -176,7 +176,6 @@ class Effect extends ActiveRecord
                 }
 
             }
-
             $effect_earnest=new EffectEarnest();
             $effect_earnest->effect_id=$id;
             $effect_earnest->phone=$post['phone'];
