@@ -14,7 +14,7 @@
           </div>
           <ul class="list">
             <li class="cate-item" v-for="item in obj.children">
-              <router-link to="/goods-list">
+              <router-link :to="'/goods-list/' + item.id">
                 <div class="cate-img-wrapper">
                   <img :src="item.icon">
                 </div>
@@ -44,7 +44,6 @@
       }
     },
     activated () {
-      console.log(this.$route.params)
       this.isSelectClass = this.$route.params.id
       this.axios.get('/mall/categories-with-children', '', response => {
         console.log(response)
@@ -62,7 +61,6 @@
         this.isPopOpen = bool
       },
       selectClass (id) {
-        console.log(this.$router)
         this.isSelectClass = id
         for (let obj of this.classData) {
           if (id === obj.id) {

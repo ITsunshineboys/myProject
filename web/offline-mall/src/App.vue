@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <keep-alive>
+    <transition>
+      <keep-alive>
         <router-view></router-view>
-    </keep-alive>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 

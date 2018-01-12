@@ -60,7 +60,7 @@ export default new Router({
       name: 'PaySuccess',
       component: PaySuccess
     }, {
-      path: '/goods-list',
+      path: '/goods-list/:id',
       name: 'GoodsList',
       component: GoodsList
     }, {

@@ -1,23 +1,30 @@
 <template>
   <div class="goods-list">
-    <div class="goods-item" v-for="i in 10">
+    <div class="goods-item" v-for="obj in goodsList">
       <div class="goods-item-img">
-        <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
+        <img :src="obj.cover_image">
       </div>
       <div class="goods-item-text">
-        <p class="goods-item-title">标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题</p>
-        <p class="goods-item-desc">表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述表述</p>
+        <p class="goods-item-title">{{obj.title}}</p>
+        <p class="goods-item-desc">{{obj.subtitle}}</p>
         <p class="goods-item-data">
-          <span>总销量242</span><span>95%好评</span>
+          <span>总销量{{obj.sold_number || 0}}</span><span>{{obj.favourable_comment_rate}}%好评</span>
         </p>
-        <p class="goods-item-price">￥500.00</p>
+        <p class="goods-item-price">￥{{obj.platform_price}}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-    export default {}
+    export default {
+      props: {
+        goodsList: {
+          type: Array,
+          default: []
+        }
+      }
+    }
 </script>
 
 <style scoped>

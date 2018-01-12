@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-header :go-link="'/'" @show="isShow" search="true" pop="true" backWay="true"></v-header>
+    <header-search pop="true" search="true"></header-search>
     <div class="goods-filter">
       <div>销量优先</div>
       <div class="active">
@@ -20,7 +20,7 @@
         <span class="iconfont icon-filter"></span>
       </div>
     </div>
-    <goods-list></goods-list>
+    <goods-list :goods-list="goodsListData"></goods-list>
 
     <!-- 筛选 -->
     <popup class="modal-filter" position="right" v-model="isModalOpen">
@@ -81,7 +81,7 @@
 
 <script>
   import {Popup, Group, Cell, Checker, CheckerItem} from 'vux'
-  import vHeader from '@/components/HeaderSearch'
+  import HeaderSearch from '@/components/HeaderSearch'
   import GoodsList from '@/components/GoodsList'
 
   export default {
@@ -92,23 +92,37 @@
       Checker,
       CheckerItem,
       GoodsList,
-      vHeader
+      HeaderSearch
     },
     data () {
       return {
+        isMoreOpen: false,  // 头部更多选项是否显示
+        isModalOpen: false, // 模态框是否显示
+        isStyleOpen: false, // 风格是否显示
+        isSeriesOpen: false,  // 系列是否显示
+        isBrandOpen: false, // 品牌是否显示
         styleParams: '',
         seriesParams: '',
         brandParams: [],
-        isMoreOpen: false,      // 头部更多选项是否显示
-        isModalOpen: false,     // 模态框是否显示
-        isStyleOpen: false,     // 风格是否显示
-        isSeriesOpen: false,    // 系列是否显示
-        isBrandOpen: false      // 品牌是否显示
+        goodsListData: [],  // 商品列表数据
+        goodsListParams: {
+          district_code: 510100,  // 城市 code
+          category_id: null, // 3级分类ID
+          'sort[]': 'sold_number:3',  // 默认按照销量优先降序排序
+          page: 1,
+          brand_id: null, // 筛选品牌ID
+          style_id: null, // 筛选风格ID
+          series_id: null // 筛选系列ID
+        }
       }
     },
     activated () {
-      // do somethings
-      this.axios.get('/mall/category-goods', {})
+      this.goodsListParams.category_id = this.$route.params.id
+      this.axios.get('/mall/category-goods', this.goodsListParams, res => {
+        console.log(res)
+        let data = res.data.category_goods
+        this.goodsListData = data
+      })
     },
     methods: {
       isShow (bool) {
