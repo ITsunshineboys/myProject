@@ -1385,7 +1385,7 @@ class OwnerController extends Controller
                     if ($classify['id'] == $materials['category_id']) {
                         $materials['goods_price'] = $materials['procurement'] / ($one_coefficient['coefficient'] / 100);
                     }else{
-                        $materials['goods_price'] = $materials['procurement'] / 100;
+                        $materials['goods_price'] = $materials['procurement'] ;
                     }
                 }
             }
