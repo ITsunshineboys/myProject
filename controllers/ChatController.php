@@ -418,6 +418,8 @@ class ChatController extends Controller
                   $count=count($all);
                   if ($count>99){
                       $v['count'] ='99+';
+                  }else{
+                      $v['count']=$count;
                   }
                   if($count==0){
                       $v['status']=1;
@@ -431,6 +433,8 @@ class ChatController extends Controller
                   $count=count($all);
                   if ($count>99){
                       $v['count'] ='99+';
+                  }else{
+                      $v['count']=$count;
                   }
                   if($count==0){
                       $v['status']=1;
@@ -441,9 +445,12 @@ class ChatController extends Controller
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['uid']])->one()['icon'];
                   $v['count']=count($all);
+
                   $count=count($all);
                   if ($count>99){
                       $v['count'] ='99+';
+                  }else{
+                      $v['count']=$count;
                   }
                   if($count==0){
                       $v['status']=1;
