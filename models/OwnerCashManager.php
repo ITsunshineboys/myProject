@@ -89,7 +89,10 @@ class OwnerCashManager extends ActiveRecord {
      * @return array|null|ActiveRecord[]
      */
     public static function Ownerpagination($where = [], $select, $page = 1, $size = ModelService::PAGE_SIZE_DEFAULT, $orderBy = 'id DESC'){
-        $roleList=UserRole::find()->where(['role_id'=>7,'review_status'=>2])->asArray()->all();
+        $roleList=UserRole::find()
+            ->where(['role_id'=>\Yii::$app->params['ownerRoleId'],'review_status'=>2])
+            ->asArray()
+            ->all();
         $data=[];
         foreach ($roleList as $item){
             $data[]=$item['user_id'];
