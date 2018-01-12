@@ -1273,12 +1273,7 @@ class OwnerController extends Controller
         $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
         $labor_cost['worker_kind'] = $labor_costs['worker_name'];
 
-        var_dump($total_day);
-        var_dump($labor_costs['univalence']);
-        var_dump($building_scrap);
-        die;
-
-
+        
         //材料费
         $goods = Goods::priceDetail(self::WALL_SPACE, self::BACKMAN_MATERIAL);
         $judge = BasisDecorationService::judge($goods,$get);
