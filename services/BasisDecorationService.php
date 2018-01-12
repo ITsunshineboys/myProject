@@ -19,6 +19,7 @@ use app\models\ProjectView;
 use app\models\Series;
 use app\models\Style;
 use app\models\WorkerCraftNorm;
+use app\models\WorkerType;
 use yii\helpers\Json;
 
 class BasisDecorationService
@@ -2028,21 +2029,48 @@ class BasisDecorationService
     public static function count($goods,$get)
     {
         $goods_attr = GoodsAttr::findByGoodsIdUnit($goods['id'],'');
+        $craft = WorkerType::craft(OwnerController::CRAFT_NAME['oil_paint'],$get['city']);
+        foreach ($craft as $one_value){
+            // 腻子用量
+            if ($one_value['id'] == OwnerController::ROOM['putty']){
+                $putty = $one_value['material'];
+            }
+            // 底漆用量
+            if ($one_value['id'] == OwnerController::ROOM['undercoat']){
+                $undercoat = $one_value['material'];
+            }
+            // 面漆用量
+            if ($one_value['id'] == OwnerController::ROOM['finishing']){
+                $finishing = $one_value['material'];
+            }
+            // 阴角线用量
+            if ($one_value['id'] == OwnerController::ROOM['wire']){
+                $wire = $one_value['material'];
+            }
+        }
+        $craft_ = WorkerType::craft(OwnerController::CRAFT_NAME['tiler'],$get['city']);
+        foreach ($craft_ as $oneValue){
+            // 自流平用量
+            if ($oneValue['id'] == OwnerController::ROOM['self_leveling']){
+                $self_leveling = $oneValue['material'];
+            }
+        }
         switch ($goods['category_id']){
             case $goods['category_id'] == 38: // 腻子面积
-                //            个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
-                //   腻子面积：乳胶漆底漆面积
-                $value = 0;
+                $value = self::algorithm(4,$get['primer_area'],$putty,$goods_attr['value']);
                 break;
             case $goods['category_id']  == 24:// 底漆
+                $value = self::algorithm(4,$get['primer_area'],$undercoat,$goods_attr['value']);
                 break;
             case $goods['category_id']  == 25: // 面漆
+                $area = $get['primer_area'] * 2;
+                $value = self::algorithm(4,$area,$finishing,$goods_attr['value']);
                 break;
             case $goods['category_id']  == 28:// 阴角线
+                $value = self::algorithm(4,$get['string_length'],$wire,$goods_attr['value']);
                 break;
             case $goods['category_id']  == 36: // 自流平
-//                个数：（自流平面积×【3kg】÷抓取的商品的KG）
-//                  自流平面积=客厅面积
+                $value = self::algorithm(4,$get['hall_area'],$self_leveling,$goods_attr['value']);
                 break;
         }
 
