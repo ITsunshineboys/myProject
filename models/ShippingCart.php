@@ -347,4 +347,120 @@ class ShippingCart extends \yii\db\ActiveRecord
         return is_null(json_decode($str));
     }
 
+
+    public  static  function  ShippingListNoLogin($session_id)
+    {
+        $data=self::find()
+            ->where(['session_id'=>$session_id])
+            ->asArray()
+            ->all();
+        if (!$data)
+        {
+            return [
+                'normal_goods'=>[],
+                'invalid_goods'=>[]
+            ];
+        }
+        foreach ($data as  &$list)
+        {
+            $go=Goods::findOne($list['goods_id']);
+            if ($go)
+            {
+                $supplierIds[]=$go->toArray()['supplier_id'];
+            }
+
+        }
+        $supIds=[];
+        foreach ($supplierIds as &$supplierId)
+        {
+            if (!in_array($supplierId,$supIds))
+            {
+                $supIds[]=$supplierId;
+            }
+        }
+        $money='platform_price';
+        $mix=[];
+        foreach ($supIds as $supId)
+        {
+            $Goods=(new Query())
+                ->from(self::tableName().' as s')
+                ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status,g.subtitle")
+                ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
+                ->where(['s.session_id'=>$session_id])
+                ->andWhere(['g.supplier_id'=>$supId])
+                ->andWhere('g.status =2')
+                ->all();
+            foreach ($Goods as &$list)
+            {
+                $list['platform_price']= StringService::formatPrice($list[$money]*0.01);
+                if ($money!='platform_price')
+                {
+                    unset($list[$money]);
+                }
+            }
+            if ($Goods)
+            {
+                $mix[]=[
+                    'shop_name'=>Supplier::find()
+                        ->select(['shop_name'])
+                        ->where(['id'=>$supId])
+                        ->one()
+                        ->shop_name,
+                    'goods'=>$Goods,
+                ];
+            }
+        }
+        $invalid_goods=(new Query())
+            ->from(self::tableName().' as s')
+            ->select("g.id,g.cover_image,g.title,g.{$money},g.left_number,s.goods_num,g.status,g.subtitle")
+            ->leftJoin(Goods::tableName().' as g','g.id=s.goods_id')
+            ->where(['s.session_id'=>$session_id])
+            ->andWhere('g.status !=2')
+            ->all();
+        foreach ($invalid_goods as &$list)
+        {
+            $list['platform_price']= StringService::formatPrice($list[$money]*0.01);
+            if ($money!='platform_price')
+            {
+                unset($list[$money]);
+            }
+        }
+        return [
+            'normal_goods'=>$mix,
+            'invalid_goods'=>$invalid_goods
+        ];
+    }
+
+
+    /**
+     * H5  与  app  购物车交互
+     * @param $session_id
+     * @param $user
+     * @return int
+     */
+    public  static  function  MergeShippingCartNoLogin($session_id,$user)
+    {
+        $shipping_cart=self::find()->where(['session_id'=>$session_id])->all();
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            foreach ( $shipping_cart as &$list)
+            {
+                $list->uid=$user->id;
+                $list->role_id=$user->last_role_id_app;
+                if (!$list->save(false))
+                {
+                    $tran->rollBack();
+                }
+            }
+            $tran->commit();
+            $code=200;
+            return $code;
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code=500;
+            return $code;
+        }
+
+    }
+
 }
