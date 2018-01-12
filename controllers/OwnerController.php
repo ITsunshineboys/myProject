@@ -1265,6 +1265,8 @@ class OwnerController extends Controller
         } else {
             $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$vehicle_12,$fare);
             $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$vehicle_24,$fare);
+            var_dump($cost_12);
+            var_dump($cost_24);
             $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
 
         }
@@ -1272,6 +1274,7 @@ class OwnerController extends Controller
 //        总人工费
         $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
         $labor_cost['worker_kind'] = $labor_costs['worker_name'];
+
         var_dump($total_day);
         var_dump($labor_costs['univalence']);
         var_dump($building_scrap);
