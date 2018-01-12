@@ -4663,7 +4663,7 @@ class OrderController extends Controller
 //            $carts[]=$list['id'];
 //        }
         $andWhere=['uid'=>$user->id,'role_id'=>$user->last_role_id_app];
-        $code=ShippingCart::DelShippingCartData($orders,$andWhere);
+        $code=ShippingCart::DelShippingCartData(ShippingCart::isNotJson($orders)?$orders:Json::decode($orders),$andWhere);
         if ($code==200)
         {
             return Json::encode

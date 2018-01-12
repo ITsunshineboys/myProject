@@ -338,5 +338,8 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
     }
 
+    public  static  function isNotJson($str){
+        return is_null(json_decode($str));
+    }
 
 }
