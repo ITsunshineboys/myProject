@@ -238,6 +238,11 @@ class ShippingCart extends \yii\db\ActiveRecord
     }
 
 
+    /**
+     * @param $goods_id
+     * @param $goods_num
+     * @return int|string
+     */
     public  static  function  addShippingCartNoLogin($goods_id,$goods_num)
     {
         if (!isset($_COOKIE['PHPSESSID']))

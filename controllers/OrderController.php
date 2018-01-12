@@ -4993,6 +4993,11 @@ class OrderController extends Controller
                 'msg'=>Yii::$app->params['errorCodes'][$code]
             ]);
         }
+//        $session_id=Yii::$app->request->get('session_id');
+//        if (!$session_id)
+//        {
+//
+//        }
         $data=ShippingCart::ShippingList($user);
         if (is_numeric($data))
         {
@@ -5002,7 +5007,8 @@ class OrderController extends Controller
                 'msg'=>Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        return Json::encode([
+        return Json::encode
+        ([
             'code'=>200,
             'msg'=>'ok',
             'data'=>$data
@@ -5049,7 +5055,8 @@ class OrderController extends Controller
                 ]
             );
         }
-        if ($request->post('type')==1){
+//        if ($request->post('type')==1)
+//        {
             $code=ShippingCart::addShippingCartNoLogin($goods_id,$goods_num);
             if ($code==1000)
             {
@@ -5067,27 +5074,27 @@ class OrderController extends Controller
                     'data'=>$code
                 ]);
             }
-        }else
-        {
-            $user = Yii::$app->user->identity;
-            $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
-            if ($code==200)
-            {
-                return Json::encode([
-                    'code'=>$code,
-                    'msg'=>'ok',
-                    'data'=>''
-                ]);
-            }else
-            {
-                return Json::encode(
-                    [
-                        'code'=>$code,
-                        'msg'=>Yii::$app->params['errorCodes'][$code]
-                    ]
-                );
-            }
-        }
+//        }else
+//        {
+//            $user = Yii::$app->user->identity;
+//            $code=ShippingCart::addShippingCart($goods_id,$user,$goods_num);
+//            if ($code==200)
+//            {
+//                return Json::encode([
+//                    'code'=>$code,
+//                    'msg'=>'ok',
+//                    'data'=>''
+//                ]);
+//            }else
+//            {
+//                return Json::encode(
+//                    [
+//                        'code'=>$code,
+//                        'msg'=>Yii::$app->params['errorCodes'][$code]
+//                    ]
+//                );
+//            }
+//        }
 
     }
     /**
