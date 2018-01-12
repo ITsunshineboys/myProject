@@ -875,7 +875,8 @@ class OwnerController extends Controller
         $bedroom_primer_perimeter = BasisDecorationService::paintedPerimeter($bedroom_primer_area[1],$get['bedroom'],4);
         $drawing_room_perimeter = BasisDecorationService::paintedPerimeter($hall_primer_area[1],$get['hall'],3);
 
-
+var_dump($bedroom_primer_perimeter);
+var_dump($drawing_room_perimeter);die;
 //        阴角线长度   阴角线天数
         $concave_line_length = BasisDecorationService::algorithm(5,$bedroom_primer_perimeter,$drawing_room_perimeter,$v2);
         $concave_line_day = BasisDecorationService::algorithm(6,$concave_line_length,$thread);
@@ -925,10 +926,10 @@ class OwnerController extends Controller
 
 
 //        腻子费用   底漆费用  面漆费用   阴角线费用   石膏粉费用
-//        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
-//        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
-//        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
-//        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$putty_area,$putty,$putty_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$primer_area,$undercoat,$undercoat_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$finishing_coat_area,$finishing,$finishing_attr);
+        $material_total[] = BasisDecorationService::paintedCost(1,$concave_line_length,$wire,$wire_attr);
         $material_total[] = BasisDecorationService::paintedCost(2,$finishing_coat_area,$land,$land_attr);
 
 
