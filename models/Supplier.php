@@ -346,7 +346,10 @@ class Supplier extends ActiveRecord
                 }
             }
 
-            Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
+            $cacheDelRes = Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
+            if (YII_DEBUG) {
+                StringService::writeLog('test', var_export($cacheDelRes, true), 'supplier-cert');
+            }
 
             $transaction->commit();
             $code = 200;
