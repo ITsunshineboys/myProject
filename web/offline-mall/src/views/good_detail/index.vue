@@ -51,7 +51,7 @@
       <!--评价-->
       <div v-if="good_detail.comments.total">
         <flexbox justify="flex-start" class="comment-count">
-          <span class="sum-comment">评价</span>
+          <span class="sum-comment">test</span>
           <span>({{good_detail.comments.total}})</span>
         </flexbox>
         <comment :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
@@ -80,6 +80,26 @@
             <br/>
             商品数
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           </div>
           <span></span>
           <div>
@@ -87,12 +107,52 @@
             <br/>
             粉丝数
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           </div>
         </flexbox>
@@ -179,14 +239,12 @@
           </group>
         </group>
         <flexbox class="count-bottom-btn">
-          <flexbox-item alt="cart" v-if="count_cart||default_count">
+          <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
-
 
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
-
 
           </flexbox-item>
         </flexbox>
@@ -286,6 +344,7 @@
           desc: '对萨达撒打撒多撒'
         },
         banner_list: [],
+        goodcookie: '',
         after_sale_services: [],      // 页面售后显示
         user_name: '',
         show_count: false,            // 选择数量弹窗
@@ -300,6 +359,7 @@
         count_cart: false,            // 加入购物车按钮显示
         count_now: false,             // 立即购买按钮显示
         default_count: false,         // 两个按钮显示
+        checkin: 1,                    // 是否登录默认登录
         afterservice_arr: ['上门维修', '上门退货', '上门换货', '退货', '换货'],
         safeguard_arr: ['提供发票', '上门安装'],
         user_icon: require('../../assets/images/user_icon_default.png'), // 默认用户头像
@@ -357,10 +417,20 @@
           obj === 'cart' ? this.count_cart = true : obj === 'now' ? this.count_now = true : this.default_count = true
         }
       },
-
       // 线下商品弹窗处理
       showOfflineAlert: function (bool) {
         this.show = bool
+      },
+      // 添加购物车
+      addCart () {
+        this.axios.post('/order/add-shipping-cart', {
+          goods_id: 332,
+          goods_num: this.count
+        }, (res) => {
+          if (res.code === 200) {
+            window.AndroidWebView.showInfoFromJs(res.data)
+          }
+        })
       }
     }
   }

@@ -8,6 +8,7 @@ import router from './router/index'
 import './assets/style/common.css'
 import 'animate.css'
 import 'flex.css'
+import comJs from '@/utils/common'
 
 Vue.prototype.axios = api
 FastClick.attach(document.body)
@@ -16,6 +17,7 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
+  comJs,
   router,
   render: h => h(App)
 }).$mount('#app-box')

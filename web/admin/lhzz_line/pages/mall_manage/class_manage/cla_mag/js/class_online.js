@@ -81,6 +81,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         subClass(value);
         $scope.params.pid = value;
         $scope.table.keyword = '';
+        $scope.pageConfig.currentPage = 1;
         tableList()
     });
 
@@ -96,11 +97,13 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         if (value) {
             $scope.params.pid = value;
             $scope.table.keyword = '';
+            $scope.pageConfig.currentPage = 1;
             tableList()
         } else {
             //二级分类id为0
             $scope.params.pid = $scope.dropdown.firstselect;
             $scope.table.keyword = '';
+            $scope.pageConfig.currentPage = 1;
             tableList()
         }
     });
@@ -110,7 +113,7 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
         $scope.table.roles.length = 0;
         $scope.dropdown.firstselect = 0;
         $scope.params['sort[]'] = 'online_time:3';
-        $scope.params.page = 1;
+        $scope.pageConfig.currentPage = 1;
         tableList();
     }
 
