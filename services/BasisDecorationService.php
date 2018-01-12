@@ -1973,7 +1973,6 @@ class BasisDecorationService
                     }
                 }
                 $new_12 = self::algorithm(14,$get['12_new_construction'],$length,$altitude);
-                var_dump($new_12);
                 $new_24 = self::algorithm(14,$get['24_new_construction'],$width,$altitude);
                 $dosage = self::algorithm(3,$new_12,$new_24);
                 $max['quantity'] = (int)ceil($dosage);
