@@ -415,8 +415,11 @@ class ChatController extends Controller
                   $v['nickname']=Supplier::find()->select('shop_name')->asArray()->where(['uid'=>$v['uid']])->one()['shop_name'];
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
                   $v['icon']=Supplier::find()->select('icon')->asArray()->where(['uid'=>$v['uid']])->one()['icon'];
-                  $v['count']=count($all);
-                  if($v['count']==0){
+                  $count=count($all);
+                  if ($count>99){
+                      $v['count'] ='99+';
+                  }
+                  if($count==0){
                       $v['status']=1;
                   }
                   break;
@@ -425,7 +428,11 @@ class ChatController extends Controller
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['uid']])->one()['icon'];
                   $v['count']=count($all);
-                  if($v['count']==0){
+                  $count=count($all);
+                  if ($count>99){
+                      $v['count'] ='99+';
+                  }
+                  if($count==0){
                       $v['status']=1;
                   }
                   break;
@@ -434,7 +441,11 @@ class ChatController extends Controller
                   $v['Hx_name']=User::find()->select('username')->asArray()->where(['id'=>$v['uid']])->one()['username'];
                   $v['icon']=User::find()->select('icon')->asArray()->where(['id'=>$v['uid']])->one()['icon'];
                   $v['count']=count($all);
-                  if($v['count']==0){
+                  $count=count($all);
+                  if ($count>99){
+                      $v['count'] ='99+';
+                  }
+                  if($count==0){
                       $v['status']=1;
                   }
                   break;
@@ -476,17 +487,18 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-        $page=\Yii::$app->request->get('page',1);
-        $size=(int)\Yii::$app->request->get('size',self::DEAF_SIZE);
-        $query=(new Query())
+
+        $new_infos=(new Query())
             ->from('user_news_record')
             ->where(['role_id'=>$role_id,'uid'=>$u_id])
-            ->orderBy('send_time Desc');
-        $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
-        $new_infos=$query->offset($pagination->offset)
-            ->limit($pagination->limit)
+            ->orderBy('send_time Desc')
+            ->limit(50)
             ->all();
+//        $count = $query->count();
+//        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+//        $new_infos=$query->offset($pagination->offset)
+//            ->limit($pagination->limit)
+
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d',$info['send_time']);
              $info['image']=OrderGoods::find()
@@ -503,7 +515,7 @@ class ChatController extends Controller
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
-            'data'=> ModelService::pageDeal($new_infos, $count, $page, $size)
+            'data'=>$new_infos
         ]);
 
     }
