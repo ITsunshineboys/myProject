@@ -1067,7 +1067,7 @@ class OwnerController extends Controller
 //        贴砖天数   总天数：保护层天数+贴砖天数
         $tiling_day = BasisDecorationService::algorithm(3,$wall_day,$floor_tile_day);
         $total_day = ceil(BasisDecorationService::algorithm(3,$tiling_day,$covering_layer_day));
-        
+
         //总的人工费
         $total_labor_cost['price'] = BasisDecorationService::algorithm(1,$total_day,$labor_costs['univalence']);
         $total_labor_cost['worker_kind'] = $labor_costs['worker_name'];
@@ -1966,8 +1966,10 @@ class OwnerController extends Controller
             ->one();
 
 
+
         // 判断是否有计算公式
         $change_goods = 0;
+        $change_goods = BasisDecorationService::count($goods);
         $value = BasisDecorationService::judgeGoods($goods['category_id'],self::MATERIALS);
 
         //  无计算公式

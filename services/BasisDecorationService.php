@@ -807,12 +807,12 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $value ['quantity'] = (int)ceil(self::algorithm(4,$area,$craft,$goods[1]['value']),2);
+                $value ['quantity'] = (int)ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
                 $value ['cost'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['platform_price']),2);
                 $value ['procurement'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
-                $value ['quantity'] = (int)ceil(self::algorithm(4,$craft,$area,$goods[1]['value']),2);
+                $value ['quantity'] = (int)ceil(self::algorithm(4,$craft,$area,$goods[1]['value']));
                 $value ['cost'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['platform_price']),2);
                 $value ['procurement'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['purchase_price_decoration_company']),2);
         }
@@ -2023,6 +2023,11 @@ class BasisDecorationService
             }
         }
         return $goods;
+    }
+
+    public static function count($goods)
+    {
+
     }
 
 }
