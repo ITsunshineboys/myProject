@@ -1833,7 +1833,7 @@ class OwnerController extends Controller
                 'msg' => 'ok',
                 'effect' => $effect,
                 'worker_cost' => $worker_data,
-                'data' => $data,
+                'goods' =>[],
             ]);
         }
         $sku = [];
