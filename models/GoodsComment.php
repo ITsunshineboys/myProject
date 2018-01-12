@@ -238,6 +238,7 @@ class GoodsComment extends ActiveRecord
             {
                 $favourable_comment_rate=self::find()
                     ->select("FORMAT((count(IF(score>=8,true,null))/count(*)),2) as favourable_comment_rate")
+                    ->where(['goods_id'=>$goods->id])
                     ->one();
                 $goods->favourable_comment_rate=$favourable_comment_rate*100;
                 $goods->comment_number+=1;
