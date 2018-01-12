@@ -1966,10 +1966,10 @@ class OwnerController extends Controller
             ->one();
 
 
-
         // 判断是否有计算公式
         $change_goods = 0;
         $change_goods = BasisDecorationService::count($goods);
+        var_dump($change_goods);die;
         $value = BasisDecorationService::judgeGoods($goods['category_id'],self::MATERIALS);
 
         //  无计算公式

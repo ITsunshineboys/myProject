@@ -340,7 +340,7 @@ class GoodsAttr extends ActiveRecord
             ->one();
 
             if ($row['unit'] == 5){
-                $row['value'] = $row['value'] * 100;
+                $row['value'] = $row['value'] / 1000;
             }
 
         return $row;

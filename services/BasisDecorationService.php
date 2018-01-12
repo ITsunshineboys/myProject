@@ -2025,9 +2025,28 @@ class BasisDecorationService
         return $goods;
     }
 
-    public static function count($goods)
+    public static function count($goods,$get)
     {
+        $goods_attr = GoodsAttr::findByGoodsIdUnit($goods['id'],'');
+        switch ($goods['category_id']){
+            case $goods['category_id'] == 38: // 腻子面积
+                //            个数：（腻子面积×【0.33kg】÷抓取的商品的规格重量）
+                //   腻子面积：乳胶漆底漆面积
+                $value = 0;
+                break;
+            case $goods['category_id']  == 24:// 底漆
+                break;
+            case $goods['category_id']  == 25: // 面漆
+                break;
+            case $goods['category_id']  == 28:// 阴角线
+                break;
+            case $goods['category_id']  == 36: // 自流平
+//                个数：（自流平面积×【3kg】÷抓取的商品的KG）
+//                  自流平面积=客厅面积
+                break;
+        }
 
+        return $value;
     }
 
 }
