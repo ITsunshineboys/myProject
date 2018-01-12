@@ -468,6 +468,7 @@ class MallController extends Controller
             ? Goods::pagination($where, $select, $page, $size, $orderBy)
             : Goods::pagination($where, $select, $page, $size);
         $ret['data']['category_goods'] = $categoryGoods;
+        $ret['data']['total'] =  Goods::find()->where($where)->count();
         return Json::encode($ret);
     }
 
