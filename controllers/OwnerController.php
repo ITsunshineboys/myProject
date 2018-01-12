@@ -1285,10 +1285,9 @@ class OwnerController extends Controller
         $cement_attr = BasisDecorationService::goodsAttr($judge,BasisDecorationService::goodsNames()['cement'],'重');
 
         //水泥费用   河沙费用   空心砖费用
-//        $material_total[] = BasisDecorationService::handyman(1,$get,$concrete_repair,$concrete_12,$concrete_24,$cement_attr);
-//        $material_total[] = BasisDecorationService::handyman(1,$get,$river_sand_repair,$river_sand_12,$river_sand_24,$river_sand_attr);
+        $material_total[] = BasisDecorationService::handyman(1,$get,$concrete_repair,$concrete_12,$concrete_24,$cement_attr);
+        $material_total[] = BasisDecorationService::handyman(1,$get,$river_sand_repair,$river_sand_12,$river_sand_24,$river_sand_attr);
         $material_total[] = BasisDecorationService::handyman(2,$get,'','','',$air_brick_attr);
-        var_dump($material_total);die;
 
 
         //总费用
