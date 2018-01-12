@@ -4976,14 +4976,6 @@ class OrderController extends Controller
      */
     public function  actionFindShippingCartList()
     {
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
         $request=Yii::$app->request;
         if (!$request->isGet)
         {
@@ -4993,12 +4985,31 @@ class OrderController extends Controller
                 'msg'=>Yii::$app->params['errorCodes'][$code]
             ]);
         }
-//        $session_id=Yii::$app->request->get('session_id');
-//        if (!$session_id)
-//        {
-//
-//        }
-        $data=ShippingCart::ShippingList($user);
+        $user=Yii::$app->user->identity;
+        $session_id=Yii::$app->request->get('session_id');
+        if ($session_id)
+        {
+            if ($user)
+            {
+                ShippingCart::MergeShippingCartNoLogin($session_id,$user);
+                $data=ShippingCart::ShippingList($user);
+            }else
+            {
+                $data=ShippingCart::ShippingListNoLogin($session_id);
+            }
+        }else
+        {
+            if (!$user)
+            {
+                return Json::encode
+                ([
+                    'code'=>200,
+                    'msg'=>'ok',
+                    'data'=>[]
+                ]);
+            }
+            $data=ShippingCart::ShippingList($user);
+        }
         if (is_numeric($data))
         {
             $code=$data;
