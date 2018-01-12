@@ -1261,11 +1261,11 @@ class OwnerController extends Controller
         if ($get['building_scrap'] == 1) {
             $cost_12 = BasisDecorationService::haveBuildingScrap(1,$get['12_dismantle'],$rubbish_12);
             $cost_24 = BasisDecorationService::haveBuildingScrap(1,$get['24_dismantle'],$rubbish_24);
-            $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
+            $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
         } else {
             $cost_12 = BasisDecorationService::haveBuildingScrap(2,$get['12_dismantle'],$vehicle_12,$fare);
             $cost_24 = BasisDecorationService::haveBuildingScrap(2,$get['24_dismantle'],$vehicle_24,$fare);
-            $building_scrap = BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']);
+            $building_scrap = ceil(BasisDecorationService::algorithm(3,$cost_12['cost'],$cost_24['cost']));
 
         }
 
