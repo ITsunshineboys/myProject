@@ -325,25 +325,25 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
-                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']])->one();
-                if (!$userRole) {
-                    $transaction->rollBack();
-
-                    $code = 500;
-                    return $code;
-                }
-
-                $userRole->review_time = time();
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
-                if ($operator) {
-                    $userRole->reviewer_uid = $operator->id;
-                }
-                if (!$userRole->save()) {
-                    $transaction->rollBack();
-
-                    $code = 500;
-                    return $code;
-                }
+//                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']])->one();
+//                if (!$userRole) {
+//                    $transaction->rollBack();
+//
+//                    $code = 500;
+//                    return $code;
+//                }
+//
+//                $userRole->review_time = time();
+//                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+//                if ($operator) {
+//                    $userRole->reviewer_uid = $operator->id;
+//                }
+//                if (!$userRole->save()) {
+//                    $transaction->rollBack();
+//
+//                    $code = 500;
+//                    return $code;
+//                }
             }
 
             $cacheDelRes = Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
