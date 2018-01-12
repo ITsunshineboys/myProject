@@ -1972,6 +1972,11 @@ class BasisDecorationService
                         $altitude = $one_goods['value'];
                     }
                 }
+                var_dump($get['12_new_construction']);
+                var_dump($get['24_new_construction']);
+                var_dump($length);
+                var_dump($width);
+                var_dump($altitude);
                 $new_12 = self::algorithm(12,$get['12_new_construction'],$length,$altitude);
                 var_dump($new_12);
                 $new_24 = self::algorithm(12,$get['24_new_construction'],$width,$altitude);
