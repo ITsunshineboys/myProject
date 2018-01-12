@@ -329,13 +329,18 @@ class Goods extends ActiveRecord
     {
         $goodsIds = self::findIdsBySupplierId($supplierId);
         if ($goodsIds) {
+            $where = [
+                'and',
+                ['status' => self::STATUS_ONLINE],
+                ['in', 'id', $goodsIds]
+            ];
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
                 'offline_reason' => Yii::$app->params['supplier']['offline_reason'],
                 'offline_uid' => $operator->id,
                 'offline_person' => $operator->nickname,
-            ], ['in', 'id', $goodsIds]);
+            ], $where);
         }
     }
 
