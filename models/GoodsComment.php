@@ -192,7 +192,8 @@ class GoodsComment extends ActiveRecord
             $comment->shipping_score=$postData['shipping_score'];
             $comment->score=$postData['score'];
             $res=$comment->save(false);
-            if (!$res){
+            if (!$res)
+            {
                 $code=500;
                 $tran->rollBack();
                 return $code;
@@ -231,6 +232,21 @@ class GoodsComment extends ActiveRecord
                 $code=500;
                 $tran->rollBack();
                 return $code;
+            }
+
+            if (in_array($postData['score'],self::SCORE_GOOD))
+            {
+                $favourable_comment_rate=self::find()
+                    ->select("FORMAT((count(IF(score>=8,true,null))/count(*)),2) as favourable_comment_rate")
+                    ->one();
+                $goods->favourable_comment_rate=$favourable_comment_rate*100;
+                $goods->comment_number+=1;
+                if ($goods->save(false))
+                {
+                    $code=500;
+                    $tran->rollBack();
+                    return $code;
+                }
             }
             $tran->commit();
             $code=200;
