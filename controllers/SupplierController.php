@@ -1134,7 +1134,7 @@ class SupplierController extends Controller
             }
             if ($status==UserRole::REVIEW_AGREE)
             {
-                $supplier->status=Supplier::STATUS_ONLINE;
+                $supplier->status=Supplier::STATUS_OFFLINE;
                 $supplier->approve_reason=$review_remark;
             }
             if (!$supplier->save(false))
