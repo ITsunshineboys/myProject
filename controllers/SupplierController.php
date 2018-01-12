@@ -1094,6 +1094,7 @@ class SupplierController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $status=Yii::$app->request->post('status');
         $review_remark=Yii::$app->request->post('review_remark');
         if ($status!=UserRole::REVIEW_AGREE && $status!=UserRole::REVIEW_DISAGREE )
@@ -1104,6 +1105,7 @@ class SupplierController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $supplier_id=Yii::$app->request->post('supplier_id');
         $supplier=Supplier::findOne($supplier_id);
         if (!$supplier) {
@@ -1113,10 +1115,19 @@ class SupplierController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $user_role=UserRole::find()
              ->where(['user_id'=>$supplier->uid])
              ->andWhere(['role_id'=>Yii::$app->params['supplierRoleId']])
              ->one();
+        if (!$user_role) {
+            $code = 1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
         $tran = Yii::$app->db->beginTransaction();
         $time=time();
         try{
@@ -1127,20 +1138,64 @@ class SupplierController extends Controller
             if (!$user_role->save(false))
             {
                 $tran->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
+
             if ($status==UserRole::REVIEW_DISAGREE) {
                 $supplier->status=Supplier::STATUS_NOT_APPROVED;
                 $supplier->reject_reason=$review_remark;
             }
+
             if ($status==UserRole::REVIEW_AGREE)
             {
+                $certificatedUser = User::findOne($supplier->uid);
+                if (!$certificatedUser || !$certificatedUser->validateIdentity()) {
+                    $tran->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+
+                if (!User::checkIdentityAuthorized($certificatedUser->identity_no)
+                    && 200 != $certificatedUser->certificate(
+                    $certificatedUser->identity_no,
+                    $certificatedUser->legal_person,
+                    $certificatedUser->identity_card_back_image,
+                    $certificatedUser->identity_card_front_image,
+                    $user)
+                ) {
+                    $tran->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+
                 $supplier->status=Supplier::STATUS_OFFLINE;
                 $supplier->approve_reason=$review_remark;
             }
+
             if (!$supplier->save(false))
             {
                 $tran->rollBack();
+
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
             }
+
             $tran->commit();
             return Json::encode([
                 'code' =>  200,
@@ -1148,6 +1203,7 @@ class SupplierController extends Controller
             ]);
         }catch (\Exception $e){
             $tran->rollBack();
+
             $code=500;
             return Json::encode([
                 'code' => $code,
