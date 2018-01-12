@@ -387,19 +387,19 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $electricity['quantity'] = ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
+                $electricity['quantity'] = (int)ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
                 $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
                 $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
-                $electricity['quantity'] = ceil($points);
+                $electricity['quantity'] = (int)ceil($points);
                 $electricity['cost'] = round(self::algorithm(1,$points,$goods[0]['platform_price']),2);
                 $electricity['procurement'] = round(self::algorithm(1,$points,$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 3:
                 $quantity = self::algorithm(4,$points1,$craft,$goods[1]['value']);
                 $quantity1 = self::algorithm(4,$points,$craft1,$goods[1]['value']);
-                $electricity['quantity'] = ceil(self::algorithm(3,$quantity,$quantity1));
+                $electricity['quantity'] = (int)ceil(self::algorithm(3,$quantity,$quantity1));
                 $electricity['cost'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['platform_price']),2);
                 $electricity['procurement'] = round(self::algorithm(1,$electricity['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -424,7 +424,7 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $value['quantity'] = ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
+                $value['quantity'] = (int)ceil(self::algorithm(4,$points,$craft,$goods[1]['value']));
                 $value['cost'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
                 $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -478,7 +478,7 @@ class BasisDecorationService
     {
 
 //            个数：（防水总面积×【1.25】÷抓取的商品的KG）
-        $value['quantity'] = ceil(self::algorithm(4,$area,$crafts,$goods[1]['value']));
+        $value['quantity'] = (int)ceil(self::algorithm(4,$area,$crafts,$goods[1]['value']));
 //            防水涂剂费用：个数×抓取的商品价格
         $value['cost'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
         $value['procurement'] =  round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
@@ -617,7 +617,7 @@ class BasisDecorationService
                 // 石膏板费用：个数×商品价格     个数：（造型长度÷【2.5】m+平顶面积÷【2.5】m²+【1】张）
                 $modelling_length = self::algorithm(6,$length,$value);
                 $flat_area = self::algorithm(6,$area,$value1);
-                $cost['quantity'] = ceil(self::algorithm(5,$modelling_length,$flat_area,$value2));
+                $cost['quantity'] = (int)ceil(self::algorithm(5,$modelling_length,$flat_area,$value2));
                 $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
                 $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -625,13 +625,13 @@ class BasisDecorationService
                 // 龙骨费用：个数×商品价格   个数=个数1+个数2 个数1：（造型长度÷【1.5m】） 个数2：（平顶面积÷【1.5m²】）
                 $modelling_length = self::algorithm(6,$length,$value);
                 $flat_area = self::algorithm(6,$area,$value1);
-                $cost['quantity'] = ceil(self::algorithm(3,$modelling_length,$flat_area));
+                $cost['quantity'] = (int)ceil(self::algorithm(3,$modelling_length,$flat_area));
                 $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
                 $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 3;
                 // 木工板费用：个数×商品价格   个数：【1】
-                $cost['quantity'] = ceil($length);
+                $cost['quantity'] = (int)ceil($length);
                 $cost['cost'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['platform_price']),2);
                 $cost['procurement'] = round(self::algorithm(1,$cost['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -807,12 +807,12 @@ class BasisDecorationService
     {
         switch ($int){
             case $int == 1:
-                $value ['quantity'] = ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
+                $value ['quantity'] = (int)ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
                 $value ['cost'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['platform_price']),2);
                 $value ['procurement'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
-                $value ['quantity'] = ceil(self::algorithm(4,$craft,$area,$goods[1]['value']));
+                $value ['quantity'] = (int)ceil(self::algorithm(4,$craft,$area,$goods[1]['value']));
                 $value ['cost'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['platform_price']),2);
                 $value ['procurement'] = round(self::algorithm(1,$value ['quantity'],$goods[0]['purchase_price_decoration_company']),2);
         }
@@ -853,13 +853,13 @@ class BasisDecorationService
     {
         switch ($int){
             case $int ==1:
-                $value['quantity'] = ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
+                $value['quantity'] = (int)ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
                 $value['cost'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['platform_price']),2);
                 $value['procurement'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
                 $area_ = self::algorithm(1,$goods[1][0]['value'],$goods[1][1]['value']);
-                $value['quantity'] = ceil(self::algorithm(6,$area,$area_));
+                $value['quantity'] = (int)ceil(self::algorithm(6,$area,$area_));
                 $value['cost'] = round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
                 $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -1953,7 +1953,7 @@ class BasisDecorationService
                 $new_12 = self::algorithm(1,$get['12_new_construction'],$value1);
                 $new_24 = self::algorithm(1,$get['24_new_construction'],$value2);
                 $dosage = self::algorithm(5,$repair,$new_12,$new_24);
-                $max['quantity'] = ceil(self::algorithm(6,$dosage,$goods[1]['value']));
+                $max['quantity'] = (int)ceil(self::algorithm(6,$dosage,$goods[1]['value']));
                 $max['cost'] = round(self::algorithm(1,$max['quantity'],$goods[0]['platform_price']),2);
                 $max['procurement'] = round(self::algorithm(1,$max['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
@@ -1975,7 +1975,7 @@ class BasisDecorationService
                 $new_12 = self::algorithm(12,$get['12_new_construction'],$length,$altitude);
                 $new_24 = self::algorithm(12,$get['24_new_construction'],$width,$altitude);
                 $dosage = self::algorithm(3,$new_12,$new_24);
-                $max['quantity'] = ceil($dosage);
+                $max['quantity'] = (int)ceil($dosage);
                 $max['cost'] = round(self::algorithm(1,$max['quantity'],$goods[0]['platform_price']),2);
                 $max['procurement'] = round(self::algorithm(1,$max['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
