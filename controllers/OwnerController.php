@@ -1440,6 +1440,7 @@ class OwnerController extends Controller
         //  楼梯信息
         if ($get['stairway_id'] == 1) {
             $stairs = Goods::findByCategory(BasisDecorationService::goodsNames()['stairs']);
+            var_dump($stairs);die;
             $stairs_details = StairsDetails::find()->asArray()->all();
             foreach ($stairs_details as $detail){
                if ($detail['id'] == $get['stairs']){
