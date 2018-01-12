@@ -3115,7 +3115,9 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-
-        var_dump(Goods::find()->where(['category_id'=>3])->asArray()->all());
+        $a = ProjectView::updateAll(['project_view'],[
+            'unit'=>1,
+        ],['id'=>9]);
+        return $a;
     }
 }
