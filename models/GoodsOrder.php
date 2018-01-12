@@ -3357,25 +3357,28 @@ class GoodsOrder extends ActiveRecord
      * @param $address_id
      * @param $suppliers
      * @param $total_amount
-     * @param $pay_way
      * @return array|int
      */
-    public static  function AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way)
+    public static  function AppBuy($user,$address_id,$suppliers,$total_amount)
     {
         $total=0;
         //1:余额支付  2：支付宝app支付  3：微信APP支付
-        switch ($pay_way)
-        {
-            case 1:
-                $pay_name=PayService::BALANCE_PAY;
-                break;
-            case 2:
-                $pay_name=PayService::ALI_APP_PAY;
-                break;
-            case 3:
-                $pay_name=PayService::WE_CHAT_APP_PAY;
-                break;
-        }
+//        switch ($pay_way)
+//        {
+//            case 1:
+//                $pay_name=PayService::BALANCE_PAY;
+//                break;
+//            case 2:
+//                $pay_name=PayService::ALI_APP_PAY;
+//                break;
+//            case 3:
+//                $pay_name=PayService::WE_CHAT_APP_PAY;
+//                break;
+//        }
+//        if (!$pay_name)
+//        {
+//            $pay_name=PayService::BALANCE_PAY;
+//        }
         $address=UserAddress::findOne($address_id);
         if (!$address)
         {
@@ -3560,7 +3563,7 @@ class GoodsOrder extends ActiveRecord
                     $money+=($Goods->toArray()[$role_money]*$goods['goods_num']);
                 }
                 $total+=($money+$supplier['freight']*100);
-                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,$pay_name,$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
+                $code=self::AddNewPayOrderData($order_no,$supplier['freight']*100+$money,$supplier['supplier_id'],0,$time,2,0,'在线支付',$supplier['buyer_message'],$address,$supplier,$user->id,$user->last_role_id_app);
                 if ($code!=200)
                 {
                     $tran->rollBack();

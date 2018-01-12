@@ -240,7 +240,6 @@ class ShippingCart extends \yii\db\ActiveRecord
 
     public  static  function  addShippingCartNoLogin($goods_id,$goods_num)
     {
-
         if (!isset($_COOKIE['PHPSESSID']))
         {
             Yii::$app->session['shipping_card_goods']=1;

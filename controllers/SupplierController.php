@@ -691,10 +691,17 @@ class SupplierController extends Controller
             ->one();
         if (
             !$supplier
-            || $supplier->status!=Supplier::STATUS_ONLINE
         )
         {
             $code=1076;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+        if ($supplier->status!=Supplier::STATUS_ONLINE  &&$supplier->status!=Supplier::STATUS_OFFLINE)
+        {
+            $code=1088;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],

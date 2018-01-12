@@ -4666,7 +4666,8 @@ class OrderController extends Controller
         $code=ShippingCart::DelShippingCartData($orders,$andWhere);
         if ($code==200)
         {
-            return Json::encode([
+            return Json::encode
+            ([
                 'code'=>$code,
                 'msg'=>'ok'
             ]);
@@ -4697,21 +4698,20 @@ class OrderController extends Controller
         $suppliers=Json::decode($request->post('suppliers'));
         $total_amount=$request->post('total_amount');
         $address_id=$request->post('address_id');
-        $pay_way=$request->post('pay_way');
         if(
             !$suppliers
             ||  !$total_amount
             || !$address_id
-            || !$pay_way
         )
         {
             $code=1000;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg'  => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount,$pay_way);
+        $orders=GoodsOrder::AppBuy($user,$address_id,$suppliers,$total_amount);
         if (
             $orders==500
             || $orders==1000
@@ -5203,8 +5203,6 @@ class OrderController extends Controller
      */
     public function  actionFindAppGoodsData()
     {
-        $data=file_get_contents("php://input");
-        $arr=(array)json_decode($data);
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
@@ -5213,7 +5211,48 @@ class OrderController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $goods=$arr['goods'];
+        $postData=Yii::$app->request->post();
+        if ($postData)
+        {
+            $goods=Json::decode($postData['goods']);
+            $all_money=0;
+            foreach ($goods as &$good)
+            {
+                $Good=Goods::findOne($good['goods_id']);
+                if (!$Good)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $Good=$Good->toArray();
+                $Good['goods_num']=$good['goods_num'];
+                $Goods[]=$Good;
+            }
+        }else
+        {
+            $data=file_get_contents("php://input");
+            $arr=(array)json_decode($data);
+            $goods=$arr['goods'];
+            $all_money=0;
+            foreach ($goods as &$good)
+            {
+                $Good=Goods::findOne($good->goods_id);
+                if (!$Good)
+                {
+                    $code=1000;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg'  => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
+                $Good=$Good->toArray();
+                $Good['goods_num']=$good->goods_num;
+                $Goods[]=$Good;
+            }
+        }
         if (!$goods)
         {
             $code=1000;
@@ -5221,31 +5260,6 @@ class OrderController extends Controller
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
-        }
-
-        $all_money=0;
-        if (!$goods)
-        {
-            $code=1000;
-            return Json::encode([
-                'code' => $code,
-                'msg'  => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        foreach ($goods as &$good)
-        {
-            $Good=Goods::findOne($good->goods_id);
-            if (!$Good)
-            {
-                $code=1000;
-                return Json::encode([
-                    'code' => $code,
-                    'msg'  => Yii::$app->params['errorCodes'][$code]
-                ]);
-            }
-            $Good=$Good->toArray();
-            $Good['goods_num']=$good->goods_num;
-            $Goods[]=$Good;
         }
         if (!$Goods)
         {
