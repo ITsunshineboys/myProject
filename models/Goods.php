@@ -1013,7 +1013,7 @@ class Goods extends ActiveRecord
     public static function findByCategory($condition)
     {
         if ($condition) {
-            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.market_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,supplier.shop_name,goods.cover_image,goods.title as goods_name";
+            $select = "goods.id,goods.category_id,goods.platform_price,goods.supplier_price,goods.market_price,goods.purchase_price_decoration_company,goods_attr.value,goods_brand.name,gc.title,logistics_district.district_name,goods.series_id,goods.style_id,goods.subtitle,goods.profit_rate,gc.path,supplier.shop_name,goods.cover_image,goods.title as goods_name,goods.status";
             $goods = self::find()
                 ->asArray()
                 ->select($select)
