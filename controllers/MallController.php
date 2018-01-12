@@ -5552,9 +5552,13 @@ class MallController extends Controller
         }
 
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
-        $res = $supplier->status == Supplier::STATUS_OFFLINE
-            ? $supplier->online($operator)
-            : $supplier->offline($operator);
+        if ($supplier->status == Supplier::STATUS_OFFLINE) {
+            $res = $supplier->online($operator);
+        } elseif ($supplier->status == Supplier::STATUS_ONLINE) {
+            $res = $supplier->offline($operator);
+        } else {
+            $res = 1000;
+        }
         return Json::encode([
             'code' => $res,
             'msg' => 200 == $res ? 'OK' : Yii::$app->params['errorCodes'][$res]
