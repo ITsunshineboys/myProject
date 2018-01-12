@@ -1272,11 +1272,6 @@ class OwnerController extends Controller
 //        总人工费
         $labor_cost['price'] = BasisDecorationService::algorithm(13,$total_day,$labor_costs['univalence'],$building_scrap);
         $labor_cost['worker_kind'] = $labor_costs['worker_name'];
-        var_dump($total_day);
-
-        var_dump($labor_costs['univalence']);
-        var_dump($building_scrap);
-        var_dump($labor_cost);die;
 
 
         //材料费
