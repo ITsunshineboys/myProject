@@ -1973,8 +1973,11 @@ class BasisDecorationService
                     }
                 }
                 $new_12 = self::algorithm(12,$get['12_new_construction'],$length,$altitude);
+                var_dump($new_12);
                 $new_24 = self::algorithm(12,$get['24_new_construction'],$width,$altitude);
                 $dosage = self::algorithm(3,$new_12,$new_24);
+                var_dump($new_24);
+                var_dump($dosage);
                 $max['quantity'] = (int)ceil($dosage);
                 $max['cost'] = round(self::algorithm(1,$max['quantity'],$goods[0]['platform_price']),2);
                 $max['procurement'] = round(self::algorithm(1,$max['quantity'],$goods[0]['purchase_price_decoration_company']),2);
