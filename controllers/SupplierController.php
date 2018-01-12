@@ -1129,7 +1129,7 @@ class SupplierController extends Controller
                 $tran->rollBack();
             }
             if ($status==UserRole::REVIEW_DISAGREE) {
-                $supplier->status=Supplier::STATUS_DESC_NOT_APPROVED;
+                $supplier->status=Supplier::STATUS_NOT_APPROVED;
                 $supplier->reject_reason=$review_remark;
             }
             if ($status==UserRole::REVIEW_AGREE)
