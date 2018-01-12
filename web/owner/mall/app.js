@@ -57,7 +57,7 @@ let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
                 controller:'level_three_ctrl'
             })
             .state('modelRoom',{ // 样板间
-                url:'/quotation?roomCode&toponymy&street&id',
+                url:'/quotation?effect_id&id',
                 templateUrl:'model_room.html',
                 css: ['css/model_room.css', 'zui-1.7.0-dist/dist/css/zui.min.css'],
                 controller: 'modelRoomCtrl'
