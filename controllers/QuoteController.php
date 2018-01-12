@@ -3115,7 +3115,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        $a = ProjectView::updateAll(['project_view'],[
+        $a = ProjectView::updateAll([
             'unit'=>1,
         ],['id'=>9]);
         return $a;
