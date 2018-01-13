@@ -3112,12 +3112,37 @@ class GoodsOrder extends ActiveRecord
      */
     public  static function  GetRefundData($order_no,$sku,$type,$role_id)
     {
+            $refund_unshipped=OrderRefund::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
+                ->one();
+            if ($type==2)
+            {
+                if (!$refund_unshipped)
+                {
+                    //无 代发货退款记录
+                    return [
+                        'refund_status'=>0,
+                        'apply_refund_time'=>'',
+                        'apply_refund_reason'=>'',
+                    ];
+                }else
+                {
+                    $data=[
+                        'refund_status'=>2,
+                        'apply_refund_time'=>date('Y-m-d H:i',$refund_unshipped->create_time),
+                        'apply_refund_reason'=>$refund_unshipped->apply_reason,
+                    ];
+                }
+                return $data;
+            }
+            $refund_unreceived=OrderRefund::find()
+                ->where(['order_no'=>$order_no,'sku'=>$sku])
+                ->andWhere(['order_type'=>self::ORDER_TYPE_UNRECEIVED])
+                ->one();
             if ($type==3)
             {
-                $refund_unshipped=OrderRefund::find()
-                    ->where(['order_no'=>$order_no,'sku'=>$sku])
-                    ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
-                    ->one();
+
                 if (!$refund_unshipped)
                 {
                     //无 代发货退款记录
@@ -3149,16 +3174,9 @@ class GoodsOrder extends ActiveRecord
             }
             if ($type==5 || $type==6  || $type==7)
             {
-                $refund_unreceived=OrderRefund::find()
-                    ->where(['order_no'=>$order_no,'sku'=>$sku])
-                    ->andWhere(['order_type'=>self::ORDER_TYPE_UNRECEIVED])
-                    ->one();
+
                 if (!$refund_unreceived)
                 {
-                    $refund_unshipped=OrderRefund::find()
-                        ->where(['order_no'=>$order_no,'sku'=>$sku])
-                        ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
-                        ->one();
                     if (!$refund_unshipped)
                     {
                         return [
@@ -3184,9 +3202,7 @@ class GoodsOrder extends ActiveRecord
                                 ];
                             }
                         }
-
                         return $data;
-
                     }
                 }
                 if ($refund_unreceived->handle==0)
