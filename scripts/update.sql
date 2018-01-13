@@ -261,4 +261,7 @@ alter table `user_accessdetail` drop column refund_bank_log_id  ;
   --all 2018.1.13  hyz
    ALTER TABLE `goods` ADD  `favourable_comment_number` int(10) NOT NULL COMMENT '好评数' ;
 
+--all 2018.1.13 hj
+alter table goods modify `favourable_comment_rate` tinyint unsigned not null default 100 comment '好评率';
+
 
