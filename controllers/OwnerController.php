@@ -1973,6 +1973,7 @@ class OwnerController extends Controller
             ->one();
 
         $change_goods = BasisDecorationService::count($goods,$get);
+        var_dump($change_goods);
         if ($change_goods != 0){
             echo 1111;die;
             return Json::encode([
