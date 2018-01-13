@@ -1674,10 +1674,10 @@ class GoodsOrder extends ActiveRecord
                 ->one();
             switch ($order->shipping_status)
             {
-                case LogisticsTemplate::DELIVERY_METHOD_LOGISTICS:
+                case 0:
                     $shipping_status=self::ORDER_TYPE_UNSHIPPED;
                     break;
-                case LogisticsTemplate::DELIVERY_METHOD_HOME:
+                case 1:
                     $shipping_status=self::ORDER_TYPE_UNRECEIVED;
                     break;
             }
