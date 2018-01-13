@@ -1590,12 +1590,13 @@ class WithdrawalsController extends Controller
             || $access['access_type']==UserAccessdetail::ACCESS_TYPE_REFUND
         )
         {
-            //"1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用"
+            //"1.充值 2.扣款 3.已提现 4.提现中  5.驳回 6.货款 7.使用  11.退款"
             $access['access_money']=sprintf('%.2f',(float)$access['access_money']*0.01);
-            $name="出账金额";
+            $name="入账金额";
         }else{
             $access['access_money']=sprintf('%.2f',-$access['access_money']*0.01);
-            $name="入账金额";
+
+            $name="出账金额";
         }
         $type=UserAccessdetail::findAccessType($access['access_type']);
         $list[]=[
@@ -1810,7 +1811,7 @@ class WithdrawalsController extends Controller
                     ];
                     $list[]=[
                         'name'=>'退款金额',
-                        'value'=>StringService::formatPrice($access['access_money']*0.01)
+                        'value'=>StringService::formatPrice($access['access_money'])
                     ];
 //                    $refund_bank=BankinfoLog::findOne($access['refund_bank_log_id']);
 //                    $list[]=[
