@@ -1585,11 +1585,28 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         $user_audit=UserRole::find()->where(['id'=>$id])->one();
+        if(!$user_audit){
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
         $user_audit->review_status=$status;
         $user_audit->review_time=time();
         $user_audit->review_remark=$review_remark;
-        $user_audit->reviewer_uid=$user->getId();
+        $operator = UserRole::roleUser($user, $user->login_role_id);
+        if (!$operator) {
+            $code=500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+
+        $user_audit->reviewer_uid=$operator->id;
         if(!$user_audit->save(false)){
             $code=500;
             return Json::encode([
@@ -1597,6 +1614,7 @@ class SupplieraccountController extends  Controller{
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+
         return Json::encode([
             'code'=>200,
             'msg'=>'ok',
