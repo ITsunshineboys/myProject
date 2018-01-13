@@ -235,6 +235,7 @@ class GoodsComment extends ActiveRecord
             }
             $comment_number= $goods->comment_number+1;
             $goods->comment_number+=$comment_number;
+            $code=self::UpPraiseRate($postData['score'],$goods->id);
             if (in_array($postData['score'],self::SCORE_GOOD))
             {
                 $favourable_comment_number=$goods->favourable_comment_number+1;
@@ -244,7 +245,7 @@ class GoodsComment extends ActiveRecord
 //                    ->where(['goods_id'=>$goods->id])
 //                    ->one()->favourable_comment_rate;
             }
-            $favourable_comment_rate=ceil($goods->favourable_comment_number/$comment_number)*100;
+            $favourable_comment_rate=($goods->favourable_comment_number/$comment_number)*100;
             $goods->favourable_comment_rate=(int)$favourable_comment_rate;
             if ($goods->save(false))
             {
@@ -260,6 +261,11 @@ class GoodsComment extends ActiveRecord
             $tran->rollBack();
             return $code;
         }
+
+    }
+
+    public  static  function  UpPraiseRate($score,$goods_id)
+    {
 
     }
 

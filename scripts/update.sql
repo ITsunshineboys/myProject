@@ -258,4 +258,7 @@ alter table `user_accessdetail` drop column refund_bank_log_id  ;
  --all 2018.1.9 hj
  alter table user modify column authKey varchar(50), modify column authKeyAdmin varchar(50), modify column oldAuthKey varchar(50), modify column oldAuthKeyAdmin varchar(50);
 
+  --all 2018.1.13  hyz
+   ALTER TABLE `goods` ADD  `favourable_comment_number` int(10) NOT NULL COMMENT '好评数' ;
+
 
