@@ -609,7 +609,6 @@ class OwnerController extends Controller
         $craft = WorkerType::craft(self::CRAFT_NAME['waterproof'],$get['city']);
 
         //人工总费用（防水总面积÷【每天做工面积】）×【工人每天费用】
-//        $labor_all_cost['price'] = BasisDecorationService::p($total_area,$area,$labor_cost['univalence']);
         $labor_all_cost['price'] = BasisDecorationService::algorithm(12,$total_area,$area,$labor_cost['univalence']);
         $labor_all_cost['worker_kind'] = $labor_cost['worker_name'];
 
@@ -669,26 +668,41 @@ class OwnerController extends Controller
         $coefficient = EngineeringStandardCarpentryCoefficient::findByAll(['and',['city_code'=>$get['city']],['project'=>$get['series']],['project'=>$get['style']]]);
         foreach ($coefficient as $one_){
             // 系列系数2
-            if ($one_['series_or_style'] == 0 && $one_['coefficient'] == 2 && $one_['project'] == $get['series']){
+            if ($one_['series_or_style'] == 0
+                && $one_['coefficient'] == 2
+                && $one_['project'] == $get['series']
+            ){
                 $coefficient2 = $one_['value'];
             }
             // 系列系数1
-            if ($one_['series_or_style'] == 0 && $one_['coefficient'] == 1 && $one_['project'] == $get['series']){
+            if ($one_['series_or_style'] == 0
+                && $one_['coefficient'] == 1
+                && $one_['project'] == $get['series']
+            ){
                 $coefficient1 = $one_['value'];
             }
 
             // 风格系数1
-            if ($one_['series_or_style'] == 1 && $one_['coefficient'] == 1 && $one_['project'] == $get['style']){
+            if ($one_['series_or_style'] == 1
+                && $one_['coefficient'] == 1
+                && $one_['project'] == $get['style']
+            ){
                 $coefficient3 = $one_['value'];
             }
 
             // 系列系数3
-            if ($one_['series_or_style'] == 0 && $one_['coefficient'] == 3 && $one_['project'] == $get['series']){
+            if ($one_['series_or_style'] == 0
+                && $one_['coefficient'] == 3
+                && $one_['project'] == $get['series']
+            ){
                 $coefficient4 = $one_['value'];
             }
 
             // 风格系数2
-            if ($one_['series_or_style'] == 1 && $one_['coefficient'] == 2 && $one_['project'] == $get['style']){
+            if ($one_['series_or_style'] == 1
+                && $one_['coefficient'] == 2
+                && $one_['project'] == $get['style']
+            ){
                 $coefficient5 = $one_['value'];
             }
         }
