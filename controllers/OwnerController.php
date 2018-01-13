@@ -1974,6 +1974,7 @@ class OwnerController extends Controller
 
         $change_goods = BasisDecorationService::count($goods,$get);
         if ($change_goods != 0){
+            echo 1111;die;
             return Json::encode([
                 'code' => 200,
                 'msg' => 'ok',
@@ -1985,6 +1986,7 @@ class OwnerController extends Controller
 
         //  无计算公式
         if ($value == false) {
+            echo 222;die;
             $assort_goods = AssortGoods::find()
                 ->where(['state'=>1])
                 ->andWhere(['category_id'=>$goods['category_id']])
@@ -1994,6 +1996,7 @@ class OwnerController extends Controller
 
         // 有计算公式
         if ($value == true){
+            echo 333;die;
             $material = BasisDecorationService::oneFormula($goods,$get);
             $change_goods = $material;
         }
