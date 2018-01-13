@@ -2100,7 +2100,7 @@ class BasisDecorationService
 
 
 
-        
+
         switch ($goods['category_id']){
             case $goods['category_id'] == 38: // 腻子面积
                 $value = ceil(self::algorithm(4,$total_area,$putty,$goods_attr['value']));

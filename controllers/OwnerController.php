@@ -1825,6 +1825,12 @@ class OwnerController extends Controller
         }
 
         $worker_data = WorksWorkerData::findById($id);
+        if ($worker_data){
+            foreach ($worker_data as &$one_){
+                $one_['price'] = $one_['worker_price'];
+                unset($one_['worker_price']);
+            }
+        }
         $data = WorksData::find()->asArray()->select('effect_id,goods_first,goods_second,goods_three,three_category_id as id,goods_code,goods_quantity')->where(['effect_id'=>$id])->all();
 
         if (!$data){
