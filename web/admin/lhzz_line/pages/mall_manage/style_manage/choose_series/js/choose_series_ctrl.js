@@ -81,13 +81,6 @@ choose_series.controller("choose_series", function ($scope, $http, $state,$rootS
   };
   //添加拥有系列的三级
   $scope.check_item = function (item) {
-    console.log(item);
-    // if (item.complete) {
-    //   $scope.item_check.push(item);
-    //   console.log($scope.item_check)
-    // } else {
-    //   $scope.item_check.splice($scope.item_check.indexOf(item), 1)
-    // }
     $scope.add_three=0;
     for(let[key,value] of $scope.item_check.entries()){
       if(item.id==value.id){
@@ -101,12 +94,9 @@ choose_series.controller("choose_series", function ($scope, $http, $state,$rootS
     if($scope.add_three!=1){
       $scope.item_check.unshift(item);
     }
-
   };
   //删除拥有系列的三级
   $scope.delete_item = function (item) {
-    // item.complete = false;
-    // $scope.item_check.splice($scope.item_check.indexOf(item), 1)
     for(let[key,value] of $scope.three.entries()){
       console.log(value)
       if(item.id==value.id){
@@ -119,7 +109,6 @@ choose_series.controller("choose_series", function ($scope, $http, $state,$rootS
 
   $scope.send_series = function () {
     let obj = {};
-    //let series = series
     for (let [key, value] of $scope.item_check.entries()) {
       if (value.pid in obj) {
         obj[value.pid + ''].push(+value.id)

@@ -19,8 +19,10 @@
             <!--三级-->
             <ul class="thirdul">
                 <li ng-repeat="n in three track by $index">
-                    <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
-                    {{n.title}}
+                    <label>
+                        <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
+                        {{n.title}}
+                    </label>
                 </li>
             </ul>
 
@@ -38,20 +40,18 @@
         </div>
 
     <!--保存提示框-->
-    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
+    <div class="modal fade" id="suremodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
                 </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">保存成功</h6>
+                <div class="modal-body">
+                    <p>保存成功</p>
                 </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="back_return()">确认</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="back_return()">确认</button>
                 </div>
             </div>
         </div>

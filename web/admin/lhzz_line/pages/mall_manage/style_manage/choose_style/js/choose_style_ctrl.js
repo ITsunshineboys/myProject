@@ -1,125 +1,115 @@
 var choose_style = angular.module("choose_styleModule",[]);
-choose_style.controller("choose_style",function ($scope,$stateParams,$http,$state) {
-	$scope.name = "吞吞吐吐";
+choose_style.controller("choose_style",function ($scope,$http,$state,_ajax,$rootScope) {
+	$scope.back_index=function () {
+    $state.go("style_index",{showstyle:true});
+  }
+  $rootScope.crumbs = [{
+    name: '商城管理',
+    icon: 'icon-shangchengguanli',
+    link: $rootScope.mall_click
+  }, {
+    name: '系列/风格/属性管理',
+    link: $scope.back_index
+  }, {
+    name: '选择风格'
+  }];
 	$scope.showstyle = true
-
 	//风格管理
-
 	$scope.item_check = [];
 	//获取一级
-	$http({
-		method: 'get',
-		url: baseUrl+'/mall/categories'
-	}).then(function successCallback(response) {
-		$scope.details = response.data.data.categories;
-		$scope.oneColor= $scope.details[0];
-		// console.log(response);
-
-	});
+  _ajax.get('/mall/categories', {}, function (res) {
+    $scope.details = res.data.categories;
+    $scope.oneColor = $scope.details[0];
+  })
 	//获取二级
-	$http({
-		method: 'get',
-		url: baseUrl+'/mall/categories?pid=1'
-	}).then(function successCallback(response) {
-		$scope.second = response.data.data.categories;
-		$scope.twoColor= $scope.second[0];
-		// console.log(response)
-	});
+  _ajax.get('/mall/categories', {pid: 1}, function (res) {
+    $scope.second = res.data.categories;
+    $scope.twoColor = $scope.second[0];
+  })
 	//获取三级
-	$http({
-		method: 'get',
-		url: baseUrl+'/mall/categories?pid=2'
-	}).then(function successCallback(response) {
-        console.log(response);
-		$scope.three = response.data.data.categories;
-		for(let [key,value] of $scope.three.entries()){
-			if($scope.item_check.length == 0){
-				value['complete'] = false
-			}else{
-				for(let [key1,value1] of $scope.item_check.entries()){
-					if(value.id == value1.id){
-						value.complete = true
-					}
-				}
-			}
-		}
-
-	});
+  _ajax.get('/mall/categories', {pid: 2}, function (res) {
+    $scope.three = res.data.categories;
+    for (let [key, value] of  Object.entries($scope.three)) {
+      if ($scope.item_check.length == 0) {
+        value.complete = false
+      } else {
+        for (let [key1, value1] of $scope.item_check.entries()) {
+          if (value.id == value1.id) {
+            value.complete = true
+          }
+        }
+      }
+    }
+  })
 	//点击一级 获取相对应的二级
-	$scope.getMore = function (n) {
-		$scope.oneColor = n;
-		$http({
-			method: 'get',
-			url: baseUrl+'/mall/categories?pid='+ n.id
-		}).then(function successCallback(response) {
-			$scope.second = response.data.data.categories;
-			//console.log(response.data.data.categories[0].id);
-			console.log(response);
-			$scope.twoColor = $scope.second[0];
-			$http({
-				method: 'get',
-				url: baseUrl+'/mall/categories?pid='+ $scope.second[0].id
-			}).then(function successCallback(response) {
-				$scope.three = response.data.data.categories;
-				//console.log(response.data.data.categories[0].id);
-				for(let [key,value] of $scope.three.entries()){
-					if($scope.item_check.length == 0){
-						value['complete'] = false
-					}else{
-						for(let [key1,value1] of $scope.item_check.entries()){
-							if(value.id == value1.id){
-								value.complete = true
-							}
-						}
-					}
-				}
-				console.log(response);
-			});
-		});
-
-	}
+  $scope.getMore = function (n) {
+    $scope.oneColor = n;
+    _ajax.get('/mall/categories', {pid: n.id}, function (res) {
+      $scope.second = res.data.categories;
+      $scope.twoColor = $scope.second[0];
+      _ajax.get('/mall/categories', {pid: $scope.second[0].id}, function (res) {
+        $scope.three = res.data.categories;
+        for (let [key, value] of $scope.three.entries()) {
+          if ($scope.item_check.length == 0) {
+            value.complete = false
+          } else {
+            for (let [key1, value1] of $scope.item_check.entries()) {
+              if (value.id == value1.id) {
+                value.complete = true
+              }
+            }
+          }
+        }
+      })
+    })
+  };
 	//点击二级 获取相对应的三级
     $scope.three = []
-	$scope.getMoreThree = function (n) {
-		$scope.id=n;
-		$scope.twoColor = n;
-		$http({
-			method: 'get',
-			url: baseUrl+'/mall/categories?pid='+ n.id
-		}).then(function successCallback(response) {
-			$scope.three = response.data.data.categories;
-            // console.log($scope.three);
-			for(let [key,value] of $scope.three.entries()){
-				if($scope.item_check.length == 0){
-					value['complete'] = false
-				}else{
-					for(let [key1,value1] of $scope.item_check.entries()){
-						if(value.id == value1.id){
-							value.complete = true
-						}
-					}
-				}
-
-			}
-
-		});
-	}
+  $scope.getMoreThree = function (n) {
+    $scope.id = n;
+    $scope.twoColor = n;
+    _ajax.get('/mall/categories',{pid:n.id},function (res) {
+      $scope.three = res.data.categories;
+      for (let [key, value] of $scope.three.entries()) {
+        if ($scope.item_check.length == 0) {
+          value.complete = false
+        } else {
+          for (let [key1, value1] of $scope.item_check.entries()) {
+            if (value.id == value1.id) {
+              value.complete = true
+            }
+          }
+        }
+      }
+    })
+  };
 
 	//添加拥有系列的三级
-	$scope.check_item = function(item){
-		console.log(item);
-		if(item.complete){
-			$scope.item_check.push(item)
-		}else{
-			$scope.item_check.splice($scope.item_check.indexOf(item),1)
-		}
-
-	};
+  $scope.check_item = function (item) {
+    $scope.add_three=0;
+    for(let[key,value] of $scope.item_check.entries()){
+      if(item.id==value.id){
+        $scope.item_check.splice(key,1);
+        $scope.add_three=1;
+        break;
+      }else{
+        $scope.add_three=0
+      }
+    }
+    if($scope.add_three!=1){
+      $scope.item_check.unshift(item);
+    }
+  };
 	//删除拥有系列的三级
-	$scope.delete_item = function (item) {
-		item.complete = false;
-		$scope.item_check.splice($scope.item_check.indexOf(item),1)
-	};
+  $scope.delete_item = function (item) {
+    for(let[key,value] of $scope.three.entries()){
+      console.log(value)
+      if(item.id==value.id){
+        value.complete=false;
+      }
+    }
+    $scope.item_check.splice($scope.item_check.indexOf(item),1);
+  };
 	//模态框确认按钮保存数据发送后台
 	$scope.send_series = function(){
 		let obj = {};
@@ -130,23 +120,13 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 				obj[value.pid+''] = [+value.id]
 			}
 		}
-
-		console.log(obj);
 		//发送分类所拥有的系类分类、
-		let config = {
-			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-			transformRequest: function (data) {
-				return $.param(data)
-			}
-		};
-		$http.post(baseUrl+'/mall/categories-style-series-reset',{
-			category_ids:obj,
-			type:'style'
-		},config).then(function(response){
-			console.log(response)
-		}, function (error) {
-			console.log(error)
-		})
+    _ajax.post('/mall/categories-style-series-reset',{
+      category_ids: obj,
+      type: 'style'
+    },function (res) {
+      console.log(res)
+    })
 	};
 
 	$scope.back_return =function () {
@@ -156,26 +136,19 @@ choose_style.controller("choose_style",function ($scope,$stateParams,$http,$stat
 
 	}
 	//默认进页面获取三级分类所具有的系类
-	$http({
-		method: 'get',
-		url: baseUrl+'/mall/categories-have-style-series?type='+'style'
-	}).then(function successCallback(response) {
-		console.log(response);
-
-		$scope.item_check = response.data.data.have_style_series_categories;
-		for(let [key,value] of Object.entries($scope.three)){
-			if($scope.item_check.length == 0){
-				value['complete'] = false
-			}else{
-				for(let [key1,value1] of $scope.item_check.entries()){
-					if(value.id == value1.id){
-						value.complete =true
-					}
-				}
-			}
-		}
-
-		console.log($scope.item_check);
-
-	});
+  _ajax.get('/mall/categories-have-style-series',{type:'style'},function (res) {
+    console.log(res);
+    $scope.item_check = res.data.have_style_series_categories;
+    for (let [key, value] of Object.entries($scope.three)) {
+      if ($scope.item_check.length == 0) {
+        value.complete = false
+      } else {
+        for (let [key1, value1] of $scope.item_check.entries()) {
+          if (value.id == value1.id) {
+            value.complete = true
+          }
+        }
+      }
+    }
+  })
 });

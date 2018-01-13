@@ -5,6 +5,11 @@
 }
 
 /*选择拥有系列的分类*/
+.ulright li label{
+    font-weight: normal;
+    width: 100%;
+    cursor: pointer;
+}
 .ulright{
     display: inline-block;
     margin-top: 11px;
@@ -19,6 +24,7 @@
     margin-right: 9px;
     vertical-align: top;
     overflow: auto;
+    cursor:pointer;
 }
 .active{
     color: #487AF8;
@@ -58,44 +64,3 @@
 .btn-right{
     margin-right: 20px;
 }
-#save{
-    color:#487AF8;
-    background-color: #F2F4FF;
-    border: 1px solid #487AF8;
-}
-
-/*确认提示框*/
-#save_content{
-    width: 636px;
-    height: 256px;
-}
-
-#tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
-#caozuo_sure{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #487AF8;
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    margin-top: 54px;
-}
-
-#caozuo_sure{
-    float: right;
-    margin-right: 40px;
-}
-

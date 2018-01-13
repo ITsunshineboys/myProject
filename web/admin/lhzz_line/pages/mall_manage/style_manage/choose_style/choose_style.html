@@ -1,17 +1,7 @@
 <link rel="stylesheet" href="pages/mall_manage/style_manage/choose_style/css/choose_style.css">
 <div ng-controller="choose_style">
-    <!--顶部导航-->
-    <!--<div class="topnav">-->
-        <!--<span class="glyphicon glyphicon-certificate"></span>-->
-        <!--<h6>商城管理</h6>-->
-        <!--<h6>> 系列/风格/属性管理 </h6>-->
-        <!--<h6>> 选择拥有风格的分类 </h6>-->
-    <!--</div>-->
-
     <!--内容-->
-    <div class="choose_series_content">
-        <p>选择拥有风格的分类</p>
-
+        <p class="choose_series_p">选择拥有风格的分类</p>
         <!--四个ul-->
         <div class="ulright">
             <!--一级-->
@@ -20,58 +10,46 @@
                     {{n.title}}
                 </li>
             </ul>
-
             <!--二级-->
             <ul >
-                <!--ng-click="getMoreThree (n.id)"-->
                 <li ng-repeat=" n in second track by $index" ng-class="{'active':twoColor== n}" ng-click="getMoreThree (n)">
                     {{n.title}}
                 </li>
             </ul>
-
             <!--三级-->
             <ul class="thirdul">
                 <li ng-repeat="n in three track by $index" ng-class="{'active':threeColor==n}">
-                    <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
-                    {{n.title}}
+                    <label>
+                        <input type="checkbox" ng-click="check_item(n)" ng-model="n.complete">
+                        {{n.title}}
+                    </label>
                 </li>
-                <!--<li><input type="checkbox">墙面附着剂</li>-->
             </ul>
-
             <ul class="lastul">
-
                 <li ng-repeat="item in item_check track by $index">
                     {{item.title}}
                     <img ng-click="delete_item(item)" src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">
                 </li>
-                <!--<li>-->
-                <!--石膏粉-->
-                <!--<img src="pages/mall_manage/style_manage/choose_series/image/close.png" alt="">-->
-                <!--</li>-->
             </ul>
         </div>
-
-        <div class="btn_sure">
-            <button id="save" data-toggle="modal" ng-click="send_series()" data-target="#suremodal">保存</button>
-            <button  ui-sref="style_index({showstyle:true})">返回</button>
+        <div class="btn-fixed">
+            <button class="btn btn-primary btn-right"  data-toggle="modal" data-target="#suremodal" ng-click="send_series()" >保存</button>
+            <button class="btn btn-default"  ui-sref="style_index({showstyle:true})">返回</button>
         </div>
-    </div>
 
     <!--保存提示框-->
-    <div class="modal fade" id="suremodal" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content" id="save_content">
-                <div class="modal-header" id="save_header">
-                    <h4 class="modal-title" id="tishi">
-                        提示
-                    </h4>
+    <div class="modal fade" id="suremodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
                 </div>
-                <div class="modal-body" id="save_body">
-                    <h6 id="tishi_wenzi">保存成功</h6>
+                <div class="modal-body">
+                    <p>保存成功</p>
                 </div>
-
-                <div class="btn_modal_two">
-                    <button id="caozuo_sure" data-dismiss="modal" ng-click="back_return()">确认</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="back_return()">确认</button>
                 </div>
             </div>
         </div>

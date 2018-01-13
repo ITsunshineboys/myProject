@@ -1,54 +1,15 @@
-/*顶部导航*/
-ul{
-    padding: 0;
-    list-style: none;
-}
 
-.topnav {
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px solid #999;
-    overflow: hidden;
-}
-
-.topnav span {
-    float: left;
-    margin: 20px 0 20px 40px;
-}
-
-.topnav h6 {
-    float: left;
-    font-size: 14px;
-    line-height: 36px;
-    margin-left: 5px;
-    font-family: PingFangSC-Semibold;
-    font-size: 14px;
-    font-weight: bold;
-    color: #2F3033;
-}
-
-.topnav h6:last-child{
-    font-weight: 400;
-}
-.active{
-    color: #487AF8;
-}
-.topnav h6:last-child{
-    color: gray;
-}
-
-/*选择拥有系列的分类*/
-.choose_series_content{
-    padding-top: 48px;
-    padding-left: 40px;
-}
-
-.choose_series_content p{
+.choose_series_p{
     font-size: 14px;
     color: #666F80;
 }
 
 /*选择拥有系列的分类*/
+.ulright li label{
+    font-weight: normal;
+    width: 100%;
+    cursor: pointer;
+}
 .ulright{
     display: inline-block;
     margin-top: 11px;
@@ -63,6 +24,7 @@ ul{
     margin-right: 9px;
     vertical-align: top;
     overflow: auto;
+    cursor: pointer;
 }
 
 .ulright ul li{
@@ -91,64 +53,11 @@ ul{
     top: 7px;
 
 }
-
-/*两个按钮*/
-.btn_sure{
-    margin-top: 92px;
+.btn-fixed{
+    position: fixed;
+    bottom: 40px;
 }
-
-
-.btn_sure button{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #c2c2c2;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    color: #5e6166;
-    background-color: white;
+.btn-right{
     margin-right: 20px;
-}
-
-#save{
-    color:#487AF8;
-    background-color: #F2F4FF;
-    border: 1px solid #487AF8;
-}
-
-/*确认提示框*/
-#save_content{
-    width: 636px;
-    height: 256px;
-}
-
-#tishi{
-    padding-left: 13px;
-    padding-top: 6px;
-    font-weight: bold;
-}
-
-#tishi_wenzi{
-    font-size: 16px;
-    padding-left: 13px;
-}
-
-#caozuo_sure{
-    width: 80px;
-    height: 34px;
-    border: 1px solid #487AF8;
-    color: #487AF8;
-    background-color: #F2F4FF;
-    border-radius: 3px;
-    padding-left: 5px;
-    line-height: 34px;
-    font-size: 12px;
-    margin-top: 54px;
-}
-
-#caozuo_sure{
-    float: right;
-    margin-right: 40px;
 }
 
