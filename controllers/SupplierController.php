@@ -1164,13 +1164,23 @@ class SupplierController extends Controller
                     ]);
                 }
 
+                $operator = UserRole::roleUser($user,$user->login_role_id);
+                if (!$operator) {
+                    $tran->rollBack();
+
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => Yii::$app->params['errorCodes'][$code]
+                    ]);
+                }
                 if (!User::checkIdentityAuthorized($certificatedUser->identity_no)
                     && 200 != $certificatedUser->certificate(
                     $certificatedUser->identity_no,
                     $certificatedUser->legal_person,
                     $certificatedUser->identity_card_back_image,
                     $certificatedUser->identity_card_front_image,
-                    $user)
+                    $operator)
                 ) {
                     $tran->rollBack();
 
