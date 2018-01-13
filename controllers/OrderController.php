@@ -5630,7 +5630,8 @@ class OrderController extends Controller
     public function  actionFindDefaultAddress()
     {
         $user = Yii::$app->user->identity;
-        if (!$user){
+        if (!$user)
+        {
             $code=1052;
             return Json::encode([
                 'code' => $code,

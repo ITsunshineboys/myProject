@@ -249,7 +249,7 @@ class OrderGoods extends ActiveRecord
     /**
      * @param $order_no
      * @param $sku
-     * @return array|int
+     * @return array
      */
     public  static  function  GetOrderDetails($order_no,$sku)
     {
@@ -392,7 +392,6 @@ class OrderGoods extends ActiveRecord
 
     /**
      * @param $order_no
-     * @param $goods_id
      * @param $goods_num
      * @param $time
      * @param $goods
@@ -449,6 +448,10 @@ class OrderGoods extends ActiveRecord
     }
 
 
+    /**
+     * @param $user
+     * @return array
+     */
     public  static  function  FindOrderNumBer($user)
     {
         if ($user->last_role_id_app==6)

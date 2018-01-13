@@ -55,6 +55,15 @@ class OrderAfterSale extends ActiveRecord
     const AFTER_SALE_USER_UN_CONFIRM='unconfirm';
     const AFTER_STATUS_IN='in';
     const AFTER_STATUS_OVER='over';
+
+    const AFTER_STATUS_BUYER_EXPRESS_UN_CONFIRM=0;
+    const AFTER_STATUS_BUYER_EXPRESS_CONFIRM=1;
+    const AFTER_STATUS_BUYER_UN_CONFIRM=0;
+    const AFTER_STATUS_BUYER_CONFIRM=1;
+    const AFTER_STATUS_SUPPLIER_EXPRESS_UN_CONFIRM=0;
+    const AFTER_STATUS_SUPPLIER_EXPRESS_CONFIRM=1;
+    const AFTER_STATUS_SUPPLIER_UN_CONFIRM=0;
+    const AFTER_STATUS_SUPPLIER_CONFIRM=1;
     /**
      * @return string 返回该AR类关联的数据表名
      */
@@ -2045,9 +2054,9 @@ class OrderAfterSale extends ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
-            if ($type=='received')
+            if ($type==GoodsOrder::ORDER_TYPE_RECEIVED)
             {
-                $OrderAfterSale->buyer_express_confirm=1;
+                $OrderAfterSale->buyer_express_confirm=self::AFTER_STATUS_BUYER_EXPRESS_CONFIRM;
                 $express=Express::findOne($OrderAfterSale->supplier_express_id);
                 $express->receive_time=time();
                 if (!$express->save(false))
@@ -2055,7 +2064,7 @@ class OrderAfterSale extends ActiveRecord
                     $tran->rollBack();
                 }
             }else{
-                $OrderAfterSale->buyer_confirm=1;
+                $OrderAfterSale->buyer_confirm=self::AFTER_STATUS_BUYER_CONFIRM;
                 $OrderAfterSale->worker_name='';
                 $OrderAfterSale->worker_mobile='';
                 $OrderAfterSale->buyer_confirm_time=time();
@@ -2094,7 +2103,7 @@ class OrderAfterSale extends ActiveRecord
             switch ($OrderGoods->order_status)
             {
                 case 0:
-                    $OrderGoods->order_status=2;
+                    $OrderGoods->order_status=GoodsOrder::ORDER_STATUS_CANCEL;
                     if (!$OrderGoods->save(false)){
                         $tran->rollBack();
                     }

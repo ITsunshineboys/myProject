@@ -44,6 +44,7 @@ class GoodsOrder extends ActiveRecord
     const ORDER_TYPE_UNSHIPPED='unshipped';
     const ORDER_TYPE_SHIPPED='shipped';
     const ORDER_TYPE_UNRECEIVED='unreceived';
+    const ORDER_TYPE_RECEIVED='received';
     const ORDER_TYPE_COMPLETED='completed';
     const ORDER_TYPE_CANCEL='cancel';
     const ORDER_TYPE_CUSTOMER_SERVICE='customer_service';
@@ -2170,13 +2171,14 @@ class GoodsOrder extends ActiveRecord
     public  static  function CalculationCost($orders)
     {
         $orderAmount=0;
-        foreach ($orders as $k =>$v){
+        foreach ($orders as &$order_no){
             $GoodsOrder=GoodsOrder::find()
-                ->where(['order_no'=>$orders[$k]])
+                ->select('amount_order')
+                ->where(['order_no'=>$order_no])
                 ->asArray()
                 ->all();
-            foreach ($GoodsOrder as $key =>$val){
-                $orderAmount+=$GoodsOrder[$key]['amount_order'];
+            foreach ($GoodsOrder as &$list){
+                $orderAmount+=$list['amount_order'];
             }
         }
         return $orderAmount;
