@@ -371,7 +371,7 @@ class GoodsComment extends ActiveRecord
      * @param $list
      * @return int
      */
-    public static  function commendSupplierDatabase($orderGoods,$comment,$postData,$goods,$time,$list)
+    public static  function commendSupplierDatabase($orderGoods,$comment,$goods,$list)
     {
         $tran = Yii::$app->db->beginTransaction();
         try {

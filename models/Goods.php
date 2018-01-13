@@ -1598,7 +1598,7 @@ class Goods extends ActiveRecord
         try {
 
             $comment_number= $this->comment_number+1;
-            $this->comment_number+=$comment_number;
+            $this->comment_number=$comment_number;
             if (in_array($score,GoodsComment::SCORE_GOOD))
             {
                 $favourable_comment_number=$this->favourable_comment_number+1;
