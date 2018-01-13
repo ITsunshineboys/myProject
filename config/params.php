@@ -114,6 +114,7 @@ return [
     ],
     'okMsgs' => [
         'site/reset-icon' => '上传头像成功',
+        'site/check-mobile-registered' => '此手机号未注册',
     ],
     'events' => [
         'supplier' => [
