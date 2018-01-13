@@ -1703,7 +1703,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>'*****'.substr($cashData['bankcard'],$count-5,4)
+                    'value'=>'**** **** ****'.substr($cashData['bankcard'],$count-5,4)
                 ];
                 $list[]=[
                     'name'=>'申请时间',
