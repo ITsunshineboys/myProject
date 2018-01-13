@@ -34,6 +34,9 @@ class OrderGoods extends ActiveRecord
     const STATUS_TYPE_CUSTOMER_SERVICE_OVER=10;
     const STATUS_TYPE_COMPLETED=11;
     const STATUS_TYPE_CUSTOMER_UNCOMMENT=12;
+    const UNUSUAL_STATUS_UN=0;
+    const UNUSUAL_STATUS_HAVE=1;
+    const UNUSUAL_STATUS_NO=2;
 
     /**
      * @return string 返回该AR类关联的数据表名

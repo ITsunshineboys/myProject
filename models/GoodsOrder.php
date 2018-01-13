@@ -1766,7 +1766,7 @@ class GoodsOrder extends ActiveRecord
         $time=time();
         try{
             $order_goodslist=OrderGoods::find()->where(['order_no'=>$order_no,'sku'=>$sku])->one();
-            $order_goodslist->is_unusual=0;
+            $order_goodslist->is_unusual=OrderGoods::UNUSUAL_STATUS_UN;
             $res1=$order_goodslist->save(false);
             if (!$res1){
                 $code=500;
@@ -1832,6 +1832,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->one();
             $OrderGoods->order_status=self::ORDER_STATUS_CANCEL;
+            $OrderGoods->is_unusual=OrderGoods::UNUSUAL_STATUS_UN;
             $res1=$OrderGoods->save(false);
             if (!$res1){
                 $code=500;
