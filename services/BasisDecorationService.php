@@ -35,7 +35,7 @@ class BasisDecorationService
     ];
 
     private static $_goodsNames;
-    private static $_carpentryNames;
+//    private static $_carpentryNames;
 
     const GOODS_IDS = [
         'reticle'=>32,
@@ -332,17 +332,17 @@ class BasisDecorationService
         return self::algorithm(6,$p,$d);
     }
 
-    public static function P($points,$day_points,$labor)
-    {
-        $p = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
-        $l = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value2'];
-        $d = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
-
-        //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
-        $algorithm = ceil(self::algorithm(6,$p,$d));
-
-        return self::algorithm(1,$algorithm,$l);
-    }
+//    public static function P($points,$day_points,$labor)
+//    {
+//        $p = !empty($points)    ? $points    : self::DEFAULT_VALUE['value1'];
+//        $l = !empty($labor)     ? $labor     : self::DEFAULT_VALUE['value2'];
+//        $d = !empty($day_points)? $day_points: self::DEFAULT_VALUE['value1'];
+//
+//        //人工费：（电路总点位÷【每天做工点位】）×【工人每天费用】
+//        $algorithm = ceil(self::algorithm(6,$p,$d));
+//
+//        return self::algorithm(1,$algorithm,$l);
+//    }
 
 
     /**
@@ -497,48 +497,48 @@ class BasisDecorationService
      * @param array $arr
      * @return int|mixed
      */
-    public static function groundArea($arr)
-    {
-        $all_area = [];
-        //总面积
-        $all_area ['hostToilet_area'] =  $arr ['hostToilet_area'];
-        $all_area ['kitchen_area'] =  $arr ['kitchen_area'];
-        $all_area ['toilet_balcony_area'] =  $arr ['toilet_balcony_area'];
-        $all_area ['kitchen_balcony_area'] =  $arr ['kitchen_balcony_area'];
-        $area = 0;
-        foreach ($all_area as $v=>$k) {
-            $area += $k;
-        }
-        return $area;
-    }
+//    public static function groundArea($arr)
+//    {
+//        $all_area = [];
+//        //总面积
+//        $all_area ['hostToilet_area'] =  $arr ['hostToilet_area'];
+//        $all_area ['kitchen_area'] =  $arr ['kitchen_area'];
+//        $all_area ['toilet_balcony_area'] =  $arr ['toilet_balcony_area'];
+//        $all_area ['kitchen_balcony_area'] =  $arr ['kitchen_balcony_area'];
+//        $area = 0;
+//        foreach ($all_area as $v=>$k) {
+//            $area += $k;
+//        }
+//        return $area;
+//    }
 
     /**
      * 墙面空间计算
      * @param array $arr
      * @return int|mixed
      */
-    public static function wallSpace($arr)
-    {
-        $all_area = [];
-        $toilet_wall_space_high = '1.8';
-        $kitchen_wall_space_high = '0.3';
-
-        //总周长
-        $all_area ['toilet_perimeter'] =  $arr ['toilet_perimeter'];
-        $all_area ['kitchen_perimeter'] =  $arr ['kitchen_perimeter'];
-        $all_area ['toilet_balcony_perimeter'] =  $arr ['toilet_balcony_perimeter'];
-        $all_area ['kitchen_balcony_perimeter'] =  $arr ['kitchen_balcony_perimeter'];
-        $area_all = [];
-        $area_all[] = $all_area ['toilet_perimeter'] * $toilet_wall_space_high;
-        $area_all[] = $all_area ['toilet_balcony_perimeter'] * $toilet_wall_space_high;
-        $area_all[] = $all_area ['kitchen_perimeter'] * $kitchen_wall_space_high;
-        $area_all[] = $all_area ['kitchen_balcony_perimeter'] * $kitchen_wall_space_high;
-        $area = 0;
-        foreach ($area_all as $v=>$k) {
-            $area += $k;
-        }
-        return $area;
-    }
+//    public static function wallSpace($arr)
+//    {
+//        $all_area = [];
+//        $toilet_wall_space_high = '1.8';
+//        $kitchen_wall_space_high = '0.3';
+//
+//        //总周长
+//        $all_area ['toilet_perimeter'] =  $arr ['toilet_perimeter'];
+//        $all_area ['kitchen_perimeter'] =  $arr ['kitchen_perimeter'];
+//        $all_area ['toilet_balcony_perimeter'] =  $arr ['toilet_balcony_perimeter'];
+//        $all_area ['kitchen_balcony_perimeter'] =  $arr ['kitchen_balcony_perimeter'];
+//        $area_all = [];
+//        $area_all[] = $all_area ['toilet_perimeter'] * $toilet_wall_space_high;
+//        $area_all[] = $all_area ['toilet_balcony_perimeter'] * $toilet_wall_space_high;
+//        $area_all[] = $all_area ['kitchen_perimeter'] * $kitchen_wall_space_high;
+//        $area_all[] = $all_area ['kitchen_balcony_perimeter'] * $kitchen_wall_space_high;
+//        $area = 0;
+//        foreach ($area_all as $v=>$k) {
+//            $area += $k;
+//        }
+//        return $area;
+//    }
 
     /**
      * 木作人工计算公式
@@ -548,14 +548,14 @@ class BasisDecorationService
      * @param $worker_day_cost
      * @return float
      */
-    public static function carpentryLabor($modelling_day,$flat_day,$video_wall = 1,$worker_day_cost)
-    {
-        if(!empty($modelling_day) && !empty($flat_day) ) {
-            //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
-            $artificial_fee = ceil($modelling_day + $flat_day + $video_wall) * $worker_day_cost;
-        }
-       return $artificial_fee;
-    }
+//    public static function carpentryLabor($modelling_day,$flat_day,$video_wall = 1,$worker_day_cost)
+//    {
+//        if(!empty($modelling_day) && !empty($flat_day) ) {
+//            //人工费：（造型天数+平顶天数+【1】天）×【工人每天费用】
+//            $artificial_fee = ceil($modelling_day + $flat_day + $video_wall) * $worker_day_cost;
+//        }
+//       return $artificial_fee;
+//    }
 
 
     /**
@@ -568,37 +568,37 @@ class BasisDecorationService
      * @param int $style
      * @return float|int
      */
-    public static function flatDay($area,$day_area,$series = 1,$style = 1)
-    {
-        //平顶面积
-        $flat_area = $area['flat_area'];
-
-        $series_ = EngineeringStandardCarpentryCoefficient::find()
-            ->where(['and',['series_or_style'=>0],['coefficient'=>3]])
-            ->asArray()
-            ->all();
-        foreach ($series_ as $one_series){
-            if ($one_series['project'] == $series){
-                $series_one = $one_series['value']*0.01;
-            }
-        }
-
-
-        $style_ = EngineeringStandardCarpentryCoefficient::find()
-            ->where(['and',['series_or_style'=>1],['coefficient'=>2]])
-            ->asArray()
-            ->all();
-        foreach ($style_ as $one_style){
-            if ($one_style['project'] == $style){
-                $style_one = $one_style['value']*0.01;
-            }
-        }
-
-
-        //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
-        $flat_day = $flat_area / $day_area * $series_one * $style_one;
-        return $flat_day;
-    }
+//    public static function flatDay($area,$day_area,$series = 1,$style = 1)
+//    {
+//        //平顶面积
+//        $flat_area = $area['flat_area'];
+//
+//        $series_ = EngineeringStandardCarpentryCoefficient::find()
+//            ->where(['and',['series_or_style'=>0],['coefficient'=>3]])
+//            ->asArray()
+//            ->all();
+//        foreach ($series_ as $one_series){
+//            if ($one_series['project'] == $series){
+//                $series_one = $one_series['value']*0.01;
+//            }
+//        }
+//
+//
+//        $style_ = EngineeringStandardCarpentryCoefficient::find()
+//            ->where(['and',['series_or_style'=>1],['coefficient'=>2]])
+//            ->asArray()
+//            ->all();
+//        foreach ($style_ as $one_style){
+//            if ($one_style['project'] == $style){
+//                $style_one = $one_style['value']*0.01;
+//            }
+//        }
+//
+//
+//        //平顶天数=平顶面积÷【每天做平顶面积】×系列系数3×风格系数2
+//        $flat_day = $flat_area / $day_area * $series_one * $style_one;
+//        return $flat_day;
+//    }
 
     /**
      * 木作计算公式
@@ -657,35 +657,35 @@ class BasisDecorationService
      * @param array $goods
      * @return float
      */
-    public static function carpentryKeelCost($modelling_length,$flat_area,$goods,$crafts)
-    {
-        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)) {
-            foreach ($goods as $price) {
-                if($price['title'] == self::goodsNames()['keel']) {
-                    $goods_price = $price;
-                }
-            }
-
-
-            foreach ($crafts as $craft) {
-                if($craft['project_details'] == self::DetailsId2Title()['keel_sculpt']) {
-                    $keel_sculpt = $craft['material'];
-                }
-                if($craft['project_details'] == self::DetailsId2Title()['keel_area']) {
-                    $keel_area = $craft['material'];
-                }
-            }
-//          个数=个数1+个数2
-//          个数1：（造型长度÷【1.5m】）
-//          个数2：（平顶面积÷【1.5m²】）
-
-            $keel_cost['quantity'] = ceil($modelling_length / $keel_sculpt + $flat_area /$keel_area);
-//          主龙骨费用：个数×商品价格
-            $keel_cost['cost'] = round($keel_cost['quantity'] * $goods_price['platform_price'],2);
-            $keel_cost['procurement'] = round($keel_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
-        }
-        return $keel_cost;
-    }
+//    public static function carpentryKeelCost($modelling_length,$flat_area,$goods,$crafts)
+//    {
+//        if(!empty($modelling_length) &&!empty($flat_area) && !empty($goods)) {
+//            foreach ($goods as $price) {
+//                if($price['title'] == self::goodsNames()['keel']) {
+//                    $goods_price = $price;
+//                }
+//            }
+//
+//
+//            foreach ($crafts as $craft) {
+//                if($craft['project_details'] == self::DetailsId2Title()['keel_sculpt']) {
+//                    $keel_sculpt = $craft['material'];
+//                }
+//                if($craft['project_details'] == self::DetailsId2Title()['keel_area']) {
+//                    $keel_area = $craft['material'];
+//                }
+//            }
+////          个数=个数1+个数2
+////          个数1：（造型长度÷【1.5m】）
+////          个数2：（平顶面积÷【1.5m²】）
+//
+//            $keel_cost['quantity'] = ceil($modelling_length / $keel_sculpt + $flat_area /$keel_area);
+////          主龙骨费用：个数×商品价格
+//            $keel_cost['cost'] = round($keel_cost['quantity'] * $goods_price['platform_price'],2);
+//            $keel_cost['procurement'] = round($keel_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
+//        }
+//        return $keel_cost;
+//    }
 
     /**
      * 木作丝杆计算公式
@@ -696,68 +696,68 @@ class BasisDecorationService
      * @param array $goods
      * @return float
      */
-    public static function carpentryPoleCost($modelling_length,$flat_area,$goods,$crafts)
-    {
+//    public static function carpentryPoleCost($modelling_length,$flat_area,$goods,$crafts)
+//    {
+//
+//        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)) {
+//            foreach ($goods as $price) {
+//                if($price['title'] == self::goodsNames()['lead_screw']) {
+//                    $goods_price = $price;
+//                }
+//            }
+//
+//            foreach ($crafts as $craft) {
+//                if($craft['project_details'] == self::DetailsId2Title()['screw_rod_sculpt']) {
+//                    $screw_rod_sculpt = $craft['material'];
+//                }
+//                if($craft['project_details'] == self::DetailsId2Title()['screw_rod_area']) {
+//                    $screw_rod_area = $craft['material'];
+//                }
+//            }
+//
+////            个数=个数1+个数2
+////            个数1：（造型长度÷【2m】）
+////            个数2：（平顶面积÷【2m²】
+//            $pole_cost['quantity'] = ceil($modelling_length / $screw_rod_sculpt + $flat_area / $screw_rod_area);
+//
+////            丝杆费用：个数×抓取的商品价格
+//            $pole_cost['cost'] = round($pole_cost['quantity'] * $goods_price['platform_price'],2);
+//
+//            $pole_cost['procurement'] = round($pole_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
+//        }
+//        return $pole_cost;
+//    }
 
-        if(!empty($modelling_length) && !empty($flat_area) && !empty($goods)) {
-            foreach ($goods as $price) {
-                if($price['title'] == self::goodsNames()['lead_screw']) {
-                    $goods_price = $price;
-                }
-            }
-
-            foreach ($crafts as $craft) {
-                if($craft['project_details'] == self::DetailsId2Title()['screw_rod_sculpt']) {
-                    $screw_rod_sculpt = $craft['material'];
-                }
-                if($craft['project_details'] == self::DetailsId2Title()['screw_rod_area']) {
-                    $screw_rod_area = $craft['material'];
-                }
-            }
-
-//            个数=个数1+个数2
-//            个数1：（造型长度÷【2m】）
-//            个数2：（平顶面积÷【2m²】
-            $pole_cost['quantity'] = ceil($modelling_length / $screw_rod_sculpt + $flat_area / $screw_rod_area);
-
-//            丝杆费用：个数×抓取的商品价格
-            $pole_cost['cost'] = round($pole_cost['quantity'] * $goods_price['platform_price'],2);
-
-            $pole_cost['procurement'] = round($pole_cost['quantity'] * $goods_price['purchase_price_decoration_company'],2);
-        }
-        return $pole_cost;
-    }
-
-    public static function carpentryBlockboard($goods,$post)
-    {
-
-
-        foreach ($goods as $one_goods){
-            if ($one_goods['title'] == self::goodsNames()['slab']){
-                $blockboard = $one_goods;
-            }
-        }
-
-        $a = EngineeringStandardCraft::find()
-            ->asArray()
-            ->where(['project'=>OwnerController::PROJECT_NAME['carpentry']])
-            ->andWhere(['project_details'=>self::DetailsId2Title()['tv_slab']])
-            ->andWhere(['city_code'=>$post['city']])
-            ->one();
-        if ($a){
-            $tv = $a['material']/100;
-        }else{
-            $tv = 1;
-        }
-
-//      个数
-        $pole_cost['quantity'] = (int)$tv;
-//      费用
-        $pole_cost['cost'] = round($pole_cost['quantity'] * $blockboard['platform_price'],2);
-        $pole_cost['procurement'] = round($pole_cost['quantity'] * $blockboard['purchase_price_decoration_company'],2);
-
-        return $pole_cost;
-    }
+//    public static function carpentryBlockboard($goods,$post)
+//    {
+//
+//
+//        foreach ($goods as $one_goods){
+//            if ($one_goods['title'] == self::goodsNames()['slab']){
+//                $blockboard = $one_goods;
+//            }
+//        }
+//
+//        $a = EngineeringStandardCraft::find()
+//            ->asArray()
+//            ->where(['project'=>OwnerController::PROJECT_NAME['carpentry']])
+//            ->andWhere(['project_details'=>self::DetailsId2Title()['tv_slab']])
+//            ->andWhere(['city_code'=>$post['city']])
+//            ->one();
+//        if ($a){
+//            $tv = $a['material']/100;
+//        }else{
+//            $tv = 1;
+//        }
+//
+////      个数
+//        $pole_cost['quantity'] = (int)$tv;
+////      费用
+//        $pole_cost['cost'] = round($pole_cost['quantity'] * $blockboard['platform_price'],2);
+//        $pole_cost['procurement'] = round($pole_cost['quantity'] * $blockboard['purchase_price_decoration_company'],2);
+//
+//        return $pole_cost;
+//    }
 
     /**
      * 乳胶漆面积计算公式
@@ -961,51 +961,51 @@ class BasisDecorationService
      * @param array $goods
      * @return mixed
      */
-    public static function cementCost($get_area,$craft,$goods,$goods_attr)
-    {
-        $cement_12 = 0;
-        $cement_24 = 0;
-        $repair = 0;
-        foreach ($craft as $one_craft) {
-            switch ($one_craft) {
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['12_cement_dosage']:
-                    $cement_12 = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['24_cement_dosage']:
-                    $cement_24 = $one_craft['material'];
-                    break;
-                case $one_craft['project_details'] == self::BACKMAN_DETAILS['repair_cement_dosage']:
-                    $repair = $one_craft['material'];
-                    break;
-            }
-        }
-        $value = 0;
-        foreach ($goods_attr as $one_goods) {
-            $value = $one_goods['value'];
-        }
-
-//            水泥用量=新建用量+补烂用量
-//        新建用量=12墙新建面积×【10kg】+24墙新建面积×【15kg】+补烂长度×【2kg】
-        $new_12 = $get_area['12_new_construction'] * $cement_12;
-        $new_24 = $get_area['24_new_construction'] * $cement_24;
-        $new_repair = $get_area['repair'] * $repair;
-        $new_dosage = $new_12 + $new_24 + $new_repair;
-
-        if ($new_dosage == 0){
-            $cement['quantity'] = 0;
-            $cement['cost'] = 0;
-            $cement['procurement'] =0;
-            return $cement;
-        }
-
-
-//        个数：（水泥用量÷抓取的商品的KG）
-        $cement['quantity'] = ceil($new_dosage / $value);
-//        水泥费用：个数×抓取的商品价格
-        $cement['cost'] = round($cement['quantity'] * $goods['platform_price'],2);
-        $cement['procurement'] = round($cement['quantity'] * $goods['purchase_price_decoration_company'],2);
-        return $cement;
-    }
+//    public static function cementCost($get_area,$craft,$goods,$goods_attr)
+//    {
+//        $cement_12 = 0;
+//        $cement_24 = 0;
+//        $repair = 0;
+//        foreach ($craft as $one_craft) {
+//            switch ($one_craft) {
+//                case $one_craft['project_details'] == self::BACKMAN_DETAILS['12_cement_dosage']:
+//                    $cement_12 = $one_craft['material'];
+//                    break;
+//                case $one_craft['project_details'] == self::BACKMAN_DETAILS['24_cement_dosage']:
+//                    $cement_24 = $one_craft['material'];
+//                    break;
+//                case $one_craft['project_details'] == self::BACKMAN_DETAILS['repair_cement_dosage']:
+//                    $repair = $one_craft['material'];
+//                    break;
+//            }
+//        }
+//        $value = 0;
+//        foreach ($goods_attr as $one_goods) {
+//            $value = $one_goods['value'];
+//        }
+//
+////            水泥用量=新建用量+补烂用量
+////        新建用量=12墙新建面积×【10kg】+24墙新建面积×【15kg】+补烂长度×【2kg】
+//        $new_12 = $get_area['12_new_construction'] * $cement_12;
+//        $new_24 = $get_area['24_new_construction'] * $cement_24;
+//        $new_repair = $get_area['repair'] * $repair;
+//        $new_dosage = $new_12 + $new_24 + $new_repair;
+//
+//        if ($new_dosage == 0){
+//            $cement['quantity'] = 0;
+//            $cement['cost'] = 0;
+//            $cement['procurement'] =0;
+//            return $cement;
+//        }
+//
+//
+////        个数：（水泥用量÷抓取的商品的KG）
+//        $cement['quantity'] = ceil($new_dosage / $value);
+////        水泥费用：个数×抓取的商品价格
+//        $cement['cost'] = round($cement['quantity'] * $goods['platform_price'],2);
+//        $cement['procurement'] = round($cement['quantity'] * $goods['purchase_price_decoration_company'],2);
+//        return $cement;
+//    }
 
     /**
      * 杂工空心砖计算公式
@@ -1014,38 +1014,38 @@ class BasisDecorationService
      * @param array $goods_standard
      * @return mixed
      */
-    public static function brickCost($get_area,$goods,$goods_standard )
-    {
-        if ($get_area && $goods && $goods_standard) {
-            $length = 0;
-            $wide = 0;
-            $high = 0;
-            foreach ($goods_standard as $standard) {
-                if ($standard['name'] == self::UNITS['long']) {
-                    $length = $standard['value'] / self::BRICK_UNITS;
-                }
-                if ($standard['name'] == self::UNITS['wide']) {
-                    $wide = $standard['value'] / self::BRICK_UNITS;
-                }
-                if ($standard['name'] == self::UNITS['high']) {
-                    $high = $standard['value'] / self::BRICK_UNITS;
-                }
-            }
-//        空心砖费用：个数×抓取的商品价格
-//        个数：（空心砖用量）
-//        空心砖用量=12墙新建面积÷长÷高+24墙新建面积÷宽÷高
-            $dosage_12 = $get_area['12_new_construction'] / $length / $wide;
-            $dosage_24 = $get_area['24_new_construction'] / $wide / $high;
-            $brick['quantity'] = ceil($dosage_12 + $dosage_24);
-            $brick['cost'] = round($brick['quantity'] * $goods['platform_price'],2);
-            $brick['procurement'] = round($brick['quantity'] * $goods['purchase_price_decoration_company'],2);
-        } else {
-            $brick['quantity'] = 0;
-            $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
-            $brick['procurement'] = $brick['quantity'] * $goods['purchase_price_decoration_company'];
-        }
-        return $brick;
-    }
+//    public static function brickCost($get_area,$goods,$goods_standard )
+//    {
+//        if ($get_area && $goods && $goods_standard) {
+//            $length = 0;
+//            $wide = 0;
+//            $high = 0;
+//            foreach ($goods_standard as $standard) {
+//                if ($standard['name'] == self::UNITS['long']) {
+//                    $length = $standard['value'] / self::BRICK_UNITS;
+//                }
+//                if ($standard['name'] == self::UNITS['wide']) {
+//                    $wide = $standard['value'] / self::BRICK_UNITS;
+//                }
+//                if ($standard['name'] == self::UNITS['high']) {
+//                    $high = $standard['value'] / self::BRICK_UNITS;
+//                }
+//            }
+////        空心砖费用：个数×抓取的商品价格
+////        个数：（空心砖用量）
+////        空心砖用量=12墙新建面积÷长÷高+24墙新建面积÷宽÷高
+//            $dosage_12 = $get_area['12_new_construction'] / $length / $wide;
+//            $dosage_24 = $get_area['24_new_construction'] / $wide / $high;
+//            $brick['quantity'] = ceil($dosage_12 + $dosage_24);
+//            $brick['cost'] = round($brick['quantity'] * $goods['platform_price'],2);
+//            $brick['procurement'] = round($brick['quantity'] * $goods['purchase_price_decoration_company'],2);
+//        } else {
+//            $brick['quantity'] = 0;
+//            $brick['cost'] = $brick['quantity'] * $goods['platform_price'];
+//            $brick['procurement'] = $brick['quantity'] * $goods['purchase_price_decoration_company'];
+//        }
+//        return $brick;
+//    }
 
     /**
      * @param array $get_area
@@ -1053,46 +1053,46 @@ class BasisDecorationService
      * @param array $craft
      * @return mixed
      */
-    public static function riverSandCost($get_area,$goods,$craft,$goods_attr)
-    {
-
-        if ($get_area && $goods && $craft) {
-            foreach ($craft as $one_craft) {
-                if ($one_craft['project_details'] == self::BACKMAN_DETAILS['12_river_sand_dosage']) {
-                    $river_sand_12 = $one_craft['material'];
-
-                }
-                if ($one_craft['project_details'] == self::BACKMAN_DETAILS['24_river_sand_dosage']) {
-                    $river_sand_24 = $one_craft['material'];
-                }
-                if ($one_craft['project_details'] == self::BACKMAN_DETAILS['repair_river_sand_dosage']) {
-                    $river_sand_repair = $one_craft['material'];
-                }
-
-            }
-
-            $value = '';
-            foreach ($goods_attr as $one_goods_attr) {
-                $value = $one_goods_attr['value'];
-            }
-//              河沙用量=新建用量+补烂用量
-//              新建用量=12墙新建面积×【3kg】+24墙新建面积×【3kg】+补烂长度×【2kg】
-            $dosage_12 = $get_area['12_new_construction'] * $river_sand_12;
-            $dosage_24 = $get_area['24_new_construction'] * $river_sand_24;
-            $dosage_repair = $get_area['repair'] * $river_sand_repair;
-            $river_sand_dosage = $dosage_12 + $dosage_24 + $dosage_repair;
-//              个数：（河沙用量÷抓取的商品的KG）
-            $river_sand['quantity'] =  ceil($river_sand_dosage / $value);
-//              河沙费用：个数×抓取的商品价格
-            $river_sand['cost'] =   round($river_sand['quantity'] * $goods['platform_price'],2);
-            $river_sand['procurement'] =   round($river_sand['quantity'] * $goods['purchase_price_decoration_company'],2);
-        } else {
-            $river_sand['quantity'] =  0;
-            $river_sand['cost'] =  0;
-            $river_sand['procurement'] = 0;
-        }
-        return $river_sand;
-    }
+//    public static function riverSandCost($get_area,$goods,$craft,$goods_attr)
+//    {
+//
+//        if ($get_area && $goods && $craft) {
+//            foreach ($craft as $one_craft) {
+//                if ($one_craft['project_details'] == self::BACKMAN_DETAILS['12_river_sand_dosage']) {
+//                    $river_sand_12 = $one_craft['material'];
+//
+//                }
+//                if ($one_craft['project_details'] == self::BACKMAN_DETAILS['24_river_sand_dosage']) {
+//                    $river_sand_24 = $one_craft['material'];
+//                }
+//                if ($one_craft['project_details'] == self::BACKMAN_DETAILS['repair_river_sand_dosage']) {
+//                    $river_sand_repair = $one_craft['material'];
+//                }
+//
+//            }
+//
+//            $value = '';
+//            foreach ($goods_attr as $one_goods_attr) {
+//                $value = $one_goods_attr['value'];
+//            }
+////              河沙用量=新建用量+补烂用量
+////              新建用量=12墙新建面积×【3kg】+24墙新建面积×【3kg】+补烂长度×【2kg】
+//            $dosage_12 = $get_area['12_new_construction'] * $river_sand_12;
+//            $dosage_24 = $get_area['24_new_construction'] * $river_sand_24;
+//            $dosage_repair = $get_area['repair'] * $river_sand_repair;
+//            $river_sand_dosage = $dosage_12 + $dosage_24 + $dosage_repair;
+////              个数：（河沙用量÷抓取的商品的KG）
+//            $river_sand['quantity'] =  ceil($river_sand_dosage / $value);
+////              河沙费用：个数×抓取的商品价格
+//            $river_sand['cost'] =   round($river_sand['quantity'] * $goods['platform_price'],2);
+//            $river_sand['procurement'] =   round($river_sand['quantity'] * $goods['purchase_price_decoration_company'],2);
+//        } else {
+//            $river_sand['quantity'] =  0;
+//            $river_sand['cost'] =  0;
+//            $river_sand['procurement'] = 0;
+//        }
+//        return $river_sand;
+//    }
 
     /**
      * 木地板计算公式
@@ -1101,32 +1101,32 @@ class BasisDecorationService
      * @param array $goods
      * @return mixed
      */
-    public static function woodFloorCost($bedroom_area,$area,$goods,$nature)
-    {
-        if ($bedroom_area && $area && $goods) {
-            foreach ($bedroom_area as $one_bedroom) {
-                //        卧室地面积=【z】%×（房屋面积）
-                $bedroom = $one_bedroom['project_value'] * $area;
-            }
-//        木地板面积=卧室地面积
-            $wood_floor_area =  $bedroom;
-
-            foreach ($nature as $one_nature) {
-                if ($one_nature['name'] == self::UNITS['length'] ) {
-                    $length = $one_nature['value'] / self::BRICK_UNITS;
-                }
-                if ($one_nature['name'] == self::UNITS['length'] ) {
-                    $wide = $one_nature['value'] / self::BRICK_UNITS;
-                }
-            }
-            $wood_floor_area_1 = $length * $wide;
-            //        个数：（木地板面积÷抓取木地板面积）
-            $wood_floor['quantity'] = ceil($wood_floor_area / $wood_floor_area_1);
-            //        木地板费用：个数×抓取的商品价格
-            $wood_floor['cost'] = $wood_floor['quantity'] * $goods['platform_price'];
-        }
-        return $wood_floor;
-    }
+//    public static function woodFloorCost($bedroom_area,$area,$goods,$nature)
+//    {
+//        if ($bedroom_area && $area && $goods) {
+//            foreach ($bedroom_area as $one_bedroom) {
+//                //        卧室地面积=【z】%×（房屋面积）
+//                $bedroom = $one_bedroom['project_value'] * $area;
+//            }
+////        木地板面积=卧室地面积
+//            $wood_floor_area =  $bedroom;
+//
+//            foreach ($nature as $one_nature) {
+//                if ($one_nature['name'] == self::UNITS['length'] ) {
+//                    $length = $one_nature['value'] / self::BRICK_UNITS;
+//                }
+//                if ($one_nature['name'] == self::UNITS['length'] ) {
+//                    $wide = $one_nature['value'] / self::BRICK_UNITS;
+//                }
+//            }
+//            $wood_floor_area_1 = $length * $wide;
+//            //        个数：（木地板面积÷抓取木地板面积）
+//            $wood_floor['quantity'] = ceil($wood_floor_area / $wood_floor_area_1);
+//            //        木地板费用：个数×抓取的商品价格
+//            $wood_floor['cost'] = $wood_floor['quantity'] * $goods['platform_price'];
+//        }
+//        return $wood_floor;
+//    }
 
     /**
      * 大理石计算公式
@@ -1134,14 +1134,14 @@ class BasisDecorationService
      * @param array $goods
      * @return mixed
      */
-    public static function marbleCost($post,$goods)
-    {
-        //        个数=飘窗米数
-        $marble['quantity'] = $post;
-        //        大理石费用：个数×抓取的商品价格
-        $marble['cost'] = $marble['quantity'] * $goods['platform_price'];
-        return $marble;
-    }
+//    public static function marbleCost($post,$goods)
+//    {
+//        //        个数=飘窗米数
+//        $marble['quantity'] = $post;
+//        //        大理石费用：个数×抓取的商品价格
+//        $marble['cost'] = $marble['quantity'] * $goods['platform_price'];
+//        return $marble;
+//    }
 
 
     /**
@@ -1184,43 +1184,43 @@ class BasisDecorationService
      * @param $goods
      * @return mixed
      */
-    public static function mudMakeMaterial($goods)
-    {
-        if ($goods) {
-            $property = [];
-            $id = [];
-            foreach ($goods as $one_goods) {
-                $id[] = $one_goods['id'];
-            }
-            $goods_property = GoodsAttr::findByGoodsIdUnit($id);
-            if ($goods_property == null){
-                $code = 1061;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                    'data' => $goods,
-                ]);
-            }
-            foreach ($goods_property as $one_goods_property) {
-                switch ($one_goods_property) {
-                    case $one_goods_property['title'] == self::goodsNames()['river_sand']:
-                        $property['river_sand']['title'] = self::goodsNames()['river_sand'];
-                        $property['river_sand']['value'] = $one_goods_property['value'];
-                        break;
-                    case $one_goods_property['title'] == self::goodsNames()['cement']:
-                        $property['concrete']['title'] = self::goodsNames()['cement'];
-                        $property['concrete']['value'] = $one_goods_property['value'];
-                        break;
-                    case $one_goods_property['title'] == self::goodsNames()['self_leveling']:
-                        $property['self_leveling']['title'] = self::goodsNames()['self_leveling'];
-                        $property['self_leveling']['value'] = $one_goods_property['value'];
-                        break;
-                }
-            }
-
-            return $property;
-        }
-    }
+//    public static function mudMakeMaterial($goods)
+//    {
+//        if ($goods) {
+//            $property = [];
+//            $id = [];
+//            foreach ($goods as $one_goods) {
+//                $id[] = $one_goods['id'];
+//            }
+//            $goods_property = GoodsAttr::findByGoodsIdUnit($id);
+//            if ($goods_property == null){
+//                $code = 1061;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => \Yii::$app->params['errorCodes'][$code],
+//                    'data' => $goods,
+//                ]);
+//            }
+//            foreach ($goods_property as $one_goods_property) {
+//                switch ($one_goods_property) {
+//                    case $one_goods_property['title'] == self::goodsNames()['river_sand']:
+//                        $property['river_sand']['title'] = self::goodsNames()['river_sand'];
+//                        $property['river_sand']['value'] = $one_goods_property['value'];
+//                        break;
+//                    case $one_goods_property['title'] == self::goodsNames()['cement']:
+//                        $property['concrete']['title'] = self::goodsNames()['cement'];
+//                        $property['concrete']['value'] = $one_goods_property['value'];
+//                        break;
+//                    case $one_goods_property['title'] == self::goodsNames()['self_leveling']:
+//                        $property['self_leveling']['title'] = self::goodsNames()['self_leveling'];
+//                        $property['self_leveling']['value'] = $one_goods_property['value'];
+//                        break;
+//                }
+//            }
+//
+//            return $property;
+//        }
+//    }
 
     /**
      * 利润率最大
@@ -1267,71 +1267,71 @@ class BasisDecorationService
      * @param $post
      * @return mixed
      */
-    public static function coatingSeriesAndStyle($goods_price,$post)
-    {
-        foreach ($goods_price as $goods) {
-            switch ($goods) {
-                case $goods['title'] == self::goodsNames()['putty'] && $goods['series_id'] == $post['series']:
-                    $all_goods[] = $goods;
-                    $goods_max = self::profitMargin($goods);
-                    $goods_all ['putty'] = $goods_max;
-                    break;
-                case $goods['title'] == self::goodsNames()['emulsion_varnish_primer'] && $goods['series_id'] == $post['series']:
-                    $all_goods[] = $goods;
-                    $goods_max = self::profitMargin($goods);
-                    $goods_all ['primer'] = $goods_max;
-                    break;
-                case $goods['title'] == self::goodsNames()['emulsion_varnish_surface'] && $goods['series_id'] == $post['series']:
-                    $all_goods[] = $goods;
-                    $goods_max = self::profitMargin($goods);
-                    $goods_all ['finishing_coat'] = $goods_max;
-                    break;
-                case $goods['title'] == self::goodsNames()['concave_line'] && $goods['style_id'] == $post['style']:
-                    $all_goods[] = $goods;
-                    $goods_max = self::profitMargin($goods);
-                    $goods_all ['concave_line'] = $goods_max;
-                    break;
-                case $goods['title'] == self::goodsNames()['land_plaster'] && $goods['style_id'] == 0 && $goods['series_id'] == 0:
-                    $all_goods[] = $goods;
-                    $goods_max = self::profitMargin($goods);
-                    $goods_all ['gypsum_powder'] = $goods_max;
-                    break;
-            }
-        }
-        return $goods_all;
-    }
+//    public static function coatingSeriesAndStyle($goods_price,$post)
+//    {
+//        foreach ($goods_price as $goods) {
+//            switch ($goods) {
+//                case $goods['title'] == self::goodsNames()['putty'] && $goods['series_id'] == $post['series']:
+//                    $all_goods[] = $goods;
+//                    $goods_max = self::profitMargin($goods);
+//                    $goods_all ['putty'] = $goods_max;
+//                    break;
+//                case $goods['title'] == self::goodsNames()['emulsion_varnish_primer'] && $goods['series_id'] == $post['series']:
+//                    $all_goods[] = $goods;
+//                    $goods_max = self::profitMargin($goods);
+//                    $goods_all ['primer'] = $goods_max;
+//                    break;
+//                case $goods['title'] == self::goodsNames()['emulsion_varnish_surface'] && $goods['series_id'] == $post['series']:
+//                    $all_goods[] = $goods;
+//                    $goods_max = self::profitMargin($goods);
+//                    $goods_all ['finishing_coat'] = $goods_max;
+//                    break;
+//                case $goods['title'] == self::goodsNames()['concave_line'] && $goods['style_id'] == $post['style']:
+//                    $all_goods[] = $goods;
+//                    $goods_max = self::profitMargin($goods);
+//                    $goods_all ['concave_line'] = $goods_max;
+//                    break;
+//                case $goods['title'] == self::goodsNames()['land_plaster'] && $goods['style_id'] == 0 && $goods['series_id'] == 0:
+//                    $all_goods[] = $goods;
+//                    $goods_max = self::profitMargin($goods);
+//                    $goods_all ['gypsum_powder'] = $goods_max;
+//                    break;
+//            }
+//        }
+//        return $goods_all;
+//    }
 
     /**
      * 墙砖面积计算
      * @param $id
      * @return bool|float|int
      */
-    public static function wallBrickAttr($id)
-    {
-        if ($id) {
-            $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
-            if ($goods_attr == null){
-                $code = 1061;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code],
-                ]);
-            }
-            foreach ($goods_attr as $one_goods_attr) {
-                if ($one_goods_attr['name'] == self::UNITS['length']) {
-                    $length = $one_goods_attr['value'] / self::BRICK_UNITS;
-                }
-                if ($one_goods_attr['name'] == self::UNITS['breadth']) {
-                    $wide = $one_goods_attr['value'] / self::BRICK_UNITS;
-                }
-            }
-            $goods_area = $length * $wide;
-            return $goods_area;
-        }else
-        {
-            return false;
-        }
-    }
+//    public static function wallBrickAttr($id)
+//    {
+//        if ($id) {
+//            $goods_attr = GoodsAttr::findByGoodsIdUnit($id);
+//            if ($goods_attr == null){
+//                $code = 1061;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => \Yii::$app->params['errorCodes'][$code],
+//                ]);
+//            }
+//            foreach ($goods_attr as $one_goods_attr) {
+//                if ($one_goods_attr['name'] == self::UNITS['length']) {
+//                    $length = $one_goods_attr['value'] / self::BRICK_UNITS;
+//                }
+//                if ($one_goods_attr['name'] == self::UNITS['breadth']) {
+//                    $wide = $one_goods_attr['value'] / self::BRICK_UNITS;
+//                }
+//            }
+//            $goods_area = $length * $wide;
+//            return $goods_area;
+//        }else
+//        {
+//            return false;
+//        }
+//    }
 
 //    /**
 //     * 泥作地砖
@@ -1708,11 +1708,11 @@ class BasisDecorationService
     }
 
     /**
-     * 无分类的商品
-     * @param $without_assort_goods_price
+     *  无分类的商品
+     * @param $goods
      * @param $assort_material
      * @param $post
-     * @return array
+     * @return mixed
      */
     public static function withoutAssortGoods($goods,$assort_material,$post)
     {
@@ -1949,6 +1949,16 @@ class BasisDecorationService
         return $result;
     }
 
+    /**
+     * 杂工 材料计算公式
+     * @param $int
+     * @param $get
+     * @param $value
+     * @param $value1
+     * @param $value2
+     * @param $goods
+     * @return mixed
+     */
     public static function handyman($int,$get,$value,$value1,$value2,$goods)
     {
         switch ($int){
@@ -1994,6 +2004,11 @@ class BasisDecorationService
 
     }
 
+    /**
+     * 风格 系列的id转换
+     * @param $goods
+     * @return mixed
+     */
     public static function style($goods)
     {
         foreach ($goods as &$one_goods){
@@ -2029,6 +2044,12 @@ class BasisDecorationService
         return $goods;
     }
 
+    /**
+     * 腻子 底漆 面漆 阴角线  自流平 的默认熟练
+     * @param $goods
+     * @param $get
+     * @return float|int
+     */
     public static function count($goods,$get)
     {
         $goods_attr = GoodsAttr::findByGoodsIdUnit($goods['id'],'');
