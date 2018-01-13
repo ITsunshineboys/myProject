@@ -2063,14 +2063,14 @@ class BasisDecorationService
 
         // 房间百分比查询
         $ratio = ProjectView::findById(68,10000);
-        foreach ($ratio as $value){
+        foreach ($ratio as $value_){
             // 客厅百分比
-            if ($value['id'] == OwnerController::ROOM['hall_area']){
-                $hall_area = $value['project_value'];
+            if ($value_['id'] == OwnerController::ROOM['hall_area']){
+                $hall_area = $value_['project_value'];
             }
             // 卧室百分比
-            if ($value['id'] == OwnerController::ROOM['bedroom_area']){
-                $bedroom_area = $value['project_value'];
+            if ($value_['id'] == OwnerController::ROOM['bedroom_area']){
+                $bedroom_area = $value_['project_value'];
             }
         }
 
