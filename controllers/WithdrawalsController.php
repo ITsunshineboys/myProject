@@ -1700,9 +1700,10 @@ class WithdrawalsController extends Controller
                     ->leftJoin(BankinfoLog::tableName().' as b','c.bank_log_id=b.id')
                     ->where(['c.transaction_no'=>$transaction_no])
                     ->one();
+                $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']
+                    'value'=>'*****'.substr($cashData['bankcard'],$count-4,4)
                 ];
                 $list[]=[
                     'name'=>'申请时间',
