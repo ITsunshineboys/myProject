@@ -3119,7 +3119,7 @@ class GoodsOrder extends ActiveRecord
                 ->where(['order_no'=>$order_no,'sku'=>$sku])
                 ->andWhere(['order_type'=>self::ORDER_TYPE_UNSHIPPED])
                 ->one();
-            if ($type==2)
+            if ($type==2  )
             {
                 if (!$refund_unshipped)
                 {
@@ -3175,7 +3175,7 @@ class GoodsOrder extends ActiveRecord
                     return $data;
                 }
             }
-            if ($type==5 || $type==6  || $type==7)
+            if ( $type==5 || $type==6  || $type==7  || $type ==4)
             {
 
                 if (!$refund_unreceived)
