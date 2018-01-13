@@ -1994,7 +1994,7 @@ class BasisDecorationService
 
     }
 
-    public static function style($goods,$get)
+    public static function style($goods)
     {
         foreach ($goods as &$one_goods){
             if ($one_goods['style_id'] > 0){
