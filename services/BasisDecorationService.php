@@ -2098,6 +2098,9 @@ class BasisDecorationService
         $hall__length = self::paintedPerimeter($hall_[1],$get['hall'],3);
         $total_length = self::algorithm(5,$bedroom_length,$hall__length,$v2);
 
+
+
+        
         switch ($goods['category_id']){
             case $goods['category_id'] == 38: // 腻子面积
                 $value = ceil(self::algorithm(4,$total_area,$putty,$goods_attr['value']));
