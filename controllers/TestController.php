@@ -719,7 +719,7 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        echo strlen('asdasd');die;
+//        echo strlen('asdasd');die;
 
 //            if(strpos('www.idc-gz.com','idc-gz') !== false){
 //                  echo '包含';
@@ -727,6 +727,7 @@ class TestController extends Controller
 //                echo '不包含';
 //            }
 //             die;
+        echo '**** **** **** 198';die;
             $card='6212264402041716626';
             $bankList=\Yii::$app->params['bankList'];
 

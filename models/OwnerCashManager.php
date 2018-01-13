@@ -145,6 +145,7 @@ class OwnerCashManager extends ActiveRecord {
             ->from('user_bankinfo as ub')
             ->leftJoin('bankinfo_log as sb', 'sb.id=ub.log_id')
             ->where(['ub.uid'=>$user_id,'ub.role_id'=>self::OWNER_ROLE])
+            ->andWhere(['ub.selected'=>1])
             ->one();
         if(!$array){
             $array=[];
