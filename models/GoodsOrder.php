@@ -3236,6 +3236,11 @@ class GoodsOrder extends ActiveRecord
                 ];
                 return $data;
             }
+        return [
+            'refund_status'=>0,
+            'apply_refund_time'=>'',
+            'apply_refund_reason'=>'',
+        ];
     }
     /**
      * 设置平台角色
