@@ -2950,8 +2950,8 @@ class GoodsOrder extends ActiveRecord
                     'automatic_receive_time'=>$automatic_receive_time,
                     'sku'=> $arr[$k]['sku'],
                     'goods_name'=>$arr[$k]['goods_name'],
-                    'waybillnumber'=>$arr[$k]['waybillnumber'],
-                    'waybillname'=>$arr[$k]['waybillname'],
+                    'waybillnumber'=>$arr[$k]['waybillnumber']?$arr[$k]['waybillnumber']:'',
+                    'waybillname'=>$arr[$k]['waybillname']?$arr[$k]['waybillname']:'',
                     'shipping_type'=>$arr[$k]['shipping_type'],
                     'username'=>$username,
                     'comment_grade'=>$arr[$k]['comment_grade'],
@@ -3149,8 +3149,6 @@ class GoodsOrder extends ActiveRecord
             }
             if ($type==5 || $type==6  || $type==7)
             {
-
-
                 $refund_unreceived=OrderRefund::find()
                     ->where(['order_no'=>$order_no,'sku'=>$sku])
                     ->andWhere(['order_type'=>self::ORDER_TYPE_UNRECEIVED])
