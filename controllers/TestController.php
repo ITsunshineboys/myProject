@@ -719,6 +719,7 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
+        echo strlen('asdasd');die;
 
 //            if(strpos('www.idc-gz.com','idc-gz') !== false){
 //                  echo '包含';
