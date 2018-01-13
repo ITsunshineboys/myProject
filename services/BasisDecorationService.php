@@ -856,10 +856,8 @@ class BasisDecorationService
         switch ($int){
             case $int ==1:
                 $value['quantity'] = (int)ceil(self::algorithm(4,$area,$craft,$goods[1]['value']));
-                var_dump($value['quantity']);
-                $value['cost'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['platform_price']),2);
-                var_dump( $value['cost']);die;
-                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$craft,$goods[0]['purchase_price_decoration_company']),2);
+                $value['cost'] = round(self::algorithm(1,$value['quantity'],$goods[0]['platform_price']),2);
+                $value['procurement'] = round(self::algorithm(1,$value['quantity'],$goods[0]['purchase_price_decoration_company']),2);
                 break;
             case $int == 2:
                 $area_ = self::algorithm(1,$goods[1][0]['value'],$goods[1][1]['value']);
