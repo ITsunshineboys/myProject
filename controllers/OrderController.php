@@ -5005,7 +5005,10 @@ class OrderController extends Controller
                 ([
                     'code'=>200,
                     'msg'=>'ok',
-                    'data'=>[]
+                    'data'=>[
+                        'normal_goods'=>[],
+                        'invalid_goods'=>[]
+                    ]
                 ]);
             }
             $data=ShippingCart::ShippingList($user);
