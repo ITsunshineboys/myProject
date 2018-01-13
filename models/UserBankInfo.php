@@ -12,6 +12,9 @@ class UserBankInfo extends \yii\db\ActiveRecord
 {
 
 
+    const DEBIT_CARD='借记卡';
+    const CREDIT_CARD='信用卡';
+    const EXCHANGE_CARD='贷记卡';
 
     /**
      * @inheritdoc
@@ -59,7 +62,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
     public static  function  SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user)
     {
         $time=time();
-        if ($role_id==6)
+        if ($role_id==Yii::$app->params['supplierRoleId'])
         {
             $bankInfo=self::find()
                 ->where(['uid'=>$user->id,'role_id'=>$role_id,'selected'=>1])
@@ -155,17 +158,17 @@ class UserBankInfo extends \yii\db\ActiveRecord
             }
         }else
         {
-           $cardType=Yii::$app->request->post('cardtype');
+            $cardType=Yii::$app->request->post('cardtype');
             if (!$cardType)
             {
                 $code=1000;
                 return $code;
             }
-            if ($cardType=='借记卡')
+            if ($cardType==self::DEBIT_CARD)
             {
                 $cardType=2;
             }
-            if ($cardType=='信用卡')
+            if ($cardType==self::CREDIT_CARD)
             {
                 $cardType=1;
             }
@@ -223,7 +226,8 @@ class UserBankInfo extends \yii\db\ActiveRecord
                 $bankInfo->role_id=$role_id;
                 $bankInfo->selected=1;
                 $res1=$bankInfo->save(false);
-                if (!$res1){
+                if (!$res1)
+                {
                     $code=500;
                     $trans->rollBack();
                     return $code;
@@ -287,4 +291,52 @@ class UserBankInfo extends \yii\db\ActiveRecord
         ];
     }
 
+
+    /**
+     * @param $bank_card
+     * @return int
+     */
+    public  static  function  GetBankName($bank_card)
+    {
+        $bankList=\Yii::$app->params['bankList'];
+        $card_8 = substr($bank_card, 0, 8);
+        if (isset($bankList[$card_8]))
+        {
+            return $bankList[$card_8];
+        }
+        $card_6 = substr($bank_card, 0, 6);
+        if (isset($bankList[$card_6]))
+        {
+            return $bankList[$card_6];
+        }
+        $card_5 = substr($bank_card, 0, 5);
+        if (isset($bankList[$card_5]))
+        {
+            return $bankList[$card_5];
+        }
+        $card_4 = substr($bank_card, 0, 4);
+        if (isset($bankList[$card_4]))
+        {
+            return $bankList[$card_4];
+        }
+        return 1048;
+    }
+
+    /**
+     * @param $bankName
+     * @return string
+     */
+    public  static  function  GetCardType($bankName)
+    {
+        if(strpos($bankName,self::EXCHANGE_CARD) !== false){
+             return self::CREDIT_CARD;
+        }
+        if(strpos($bankName,self::CREDIT_CARD) !== false){
+            return self::CREDIT_CARD;
+        }
+        if(strpos($bankName,self::DEBIT_CARD) !== false){
+            return self::DEBIT_CARD;
+        }
+        return 1000;
+    }
 }

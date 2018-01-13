@@ -115,7 +115,6 @@ class WithdrawalsController extends Controller
             || !$bankcard
             || !$username
             || !$position
-//            || !$bankbranch
         ){
             $code=1000;
             return Json::encode([
@@ -1948,35 +1947,62 @@ class WithdrawalsController extends Controller
                 ]);
             }
         }
-        $sendUrl = 'http://api.avatardata.cn/Bank/Query?key=fc79d5cf0de64f9bb60759045e5977d0&cardnum='.$bank_card;
-        $content =Wxpay::curl($sendUrl,false,0);
-        if($content){
-            $result = json_decode($content,true);
-            if ($result['error_code']==0)
-            {
-                $code=200;
-                return Json::encode([
-                    'code' => $code,
-                    'msg' => 'ok',
-                    'data'=>[
-                        'bank_name'=>$result['result']['bankname'],
-                        'cardtype'=>$result['result']['cardtype']
-                    ]
-                ]);
-            }else{
-                $code=1000;
-                 return Json::encode([
-                    'code' => $code,
-                    'msg' => '银行卡格式不对'
-                 ]);
-            }
-        }else{
-            $code=1000;
+        $bankName=UserBankInfo::GetBankName($bank_card);
+        if (is_numeric($bankName))
+        {
+            $code=$bankName;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
+        $cardType=UserBankInfo::GetCardType($bankName);
+        if (is_numeric($cardType))
+        {
+            $code=$cardType;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $code=200;
+        return Json::encode([
+            'code' => $code,
+            'msg' => 'ok',
+            'data'=>[
+                'bank_name'=>explode('-',$bankName)[0],
+                'cardtype'=>$cardType
+            ]
+        ]);
+//        $sendUrl = 'http://api.avatardata.cn/Bank/Query?key=fc79d5cf0de64f9bb60759045e5977d0&cardnum='.$bank_card;
+//        $content =Wxpay::curl($sendUrl,false,0);
+//        if($content){
+//            $result = json_decode($content,true);
+//            if ($result['error_code']==0)
+//            {
+//                $code=200;
+//                return Json::encode([
+//                    'code' => $code,
+//                    'msg' => 'ok',
+//                    'data'=>[
+//                        'bank_name'=>$result['result']['bankname'],
+//                        'cardtype'=>$result['result']['cardtype']
+//                    ]
+//                ]);
+//            }else{
+//                $code=1000;
+//                 return Json::encode([
+//                    'code' => $code,
+//                    'msg' => '银行卡格式不对'
+//                 ]);
+//            }
+//        }else{
+//            $code=1000;
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
 
     }
     /**

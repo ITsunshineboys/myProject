@@ -267,7 +267,8 @@ class OrderGoods extends ActiveRecord
         $sku=explode('+',$order_information['sku']);
         //获取商品属性
         $ordergoodsinformation=GoodsOrder::GetOrderGoodsInformation($goods_name,$goods_id,$order_no,$sku);
-        if (!$ordergoodsinformation){
+        if (!$ordergoodsinformation)
+        {
             $code = 1000;
             return $code;
         }
@@ -303,7 +304,8 @@ class OrderGoods extends ActiveRecord
                 break;
         }
         $goods_data=[];
-        if ($order_information['goods_name']=='+'){
+        if ($order_information['goods_name']=='+')
+        {
             $goods_data['goods_name']='';
         }else{
             $goods_data['goods_name']=$order_information['goods_name'];

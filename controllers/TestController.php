@@ -719,20 +719,36 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        $user=Yii::$app->user->identity;
-//        $data=UserRole::find()->where(['user_id'=>$user->id])->all();
-        return Json::encode([
-            'code' => 200,
-            'msg'  => 'ok',
-            'data' =>[
-                'user1'=>User::findOne(64),
-                'user2'=>User::findOne(58),
-                'user3'=>User::findOne(136),
-                'user_1'=>UserRole::find()->where(['user_id'=>64])->all(),
-                'user_2'=>UserRole::find()->where(['user_id'=>58])->all(),
-                'user_3'=>UserRole::find()->where(['user_id'=>136])->all(),
-            ]
-        ]);
+
+//            if(strpos('www.idc-gz.com','idc-gz') !== false){
+//                  echo '包含';
+//            }else{
+//                echo '不包含';
+//            }
+//             die;
+            $card='6212264402041716626';
+            $bankList=\Yii::$app->params['bankList'];
+
+            $card_8 = substr($card, 0, 8);
+            if (isset($bankList[$card_8])) {
+                echo $bankList[$card_8];
+                exit;
+            }
+            $card_6 = substr($card, 0, 6);
+            if (isset($bankList[$card_6])) {
+                echo $bankList[$card_6];
+                exit;
+            }
+            $card_5 = substr($card, 0, 5);
+            if (isset($bankList[$card_5])) {
+                echo $bankList[$card_5];exit;
+            }
+            $card_4 = substr($card, 0, 4);
+            if (isset($bankList[$card_4])) {
+                echo $bankList[$card_4];exit;
+            }
+            echo '该卡号信息暂未录入';
+
 
     }
 

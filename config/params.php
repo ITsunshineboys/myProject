@@ -4,7 +4,7 @@ $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
 //$auth = require(__DIR__ . '/auth.php');
 //$paramsOnline = require(__DIR__ . '/params_online.php');
-
+$bank = require(__DIR__ . '/bank.php');
 return [
     'adminEmail' => 'admin@example.com',
     'offsetAiteCubeNo' => 10001,
@@ -69,6 +69,7 @@ return [
         1045 => '所选风格已关闭，请确认后上传',
         1046 => '{{style_names}}已关闭，是否确认将商品添加进剩余风格',
         1047 => '所选系列已关闭，请确认后上传',
+        1048 => '银行卡格式错误,请从新填写',
         1050 => '请求方式错误',
         1051 => '失败',
         1052 => '未登录',
@@ -272,5 +273,6 @@ return [
             '支持',
         ],
     ],
+    'bankList'=>$bank,
 //    'online' => $paramsOnline,
 ];
