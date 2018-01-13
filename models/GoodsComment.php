@@ -233,21 +233,24 @@ class GoodsComment extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
-
+            $comment_number= $goods->comment_number+1;
+            $goods->comment_number+=$comment_number;
             if (in_array($postData['score'],self::SCORE_GOOD))
             {
-                $favourable_comment_rate=self::find()
-                    ->select("FORMAT((count(IF(score>=8,true,null))/count(*)),2) as favourable_comment_rate")
-                    ->where(['goods_id'=>$goods->id])
-                    ->one()->favourable_comment_rate;
-                $goods->favourable_comment_rate=$favourable_comment_rate*100;
-                $goods->comment_number+=1;
-                if ($goods->save(false))
-                {
-                    $code=500;
-                    $tran->rollBack();
-                    return $code;
-                }
+                $favourable_comment_number=$goods->favourable_comment_number+1;
+                $goods->favourable_comment_number=$favourable_comment_number;
+//                $favourable_comment_rate=self::find()
+//                    ->select("FORMAT((count(IF(score>=8,true,null))/count(*)),2) as favourable_comment_rate")
+//                    ->where(['goods_id'=>$goods->id])
+//                    ->one()->favourable_comment_rate;
+            }
+            $favourable_comment_rate=ceil($goods->favourable_comment_number/$comment_number)*100;
+            $goods->favourable_comment_rate=(int)$favourable_comment_rate;
+            if ($goods->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
             }
             $tran->commit();
             $code=200;
