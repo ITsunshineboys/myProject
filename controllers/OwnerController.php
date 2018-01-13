@@ -955,9 +955,6 @@ class OwnerController extends Controller
             'data' => $material_total,
             'total_cost' => round($total_cost,2),
             'bedroom_area' => round($bedroom_primer_area[1],2),
-            'primer_area' => round($primer_area,2),
-            'string_length' => round($concave_line_length,2),
-            'string_length' => round($concave_line_length,2),
         ]);
     }
 
@@ -1850,8 +1847,8 @@ class OwnerController extends Controller
                     $one_goods['goods_first']  = $case_works_datum['goods_first'];
                     $one_goods['goods_second'] = $case_works_datum['goods_second'];
                     $one_goods['goods_three']  = $case_works_datum['goods_three'];
-                    $one_goods['quantity']     = $case_works_datum['goods_quantity'];
-                    $one_goods['cost']         = $one_goods['quantity'] * $one_goods['platform_price'];
+                    $one_goods['quantity']     = ceil($case_works_datum['goods_quantity']);
+                    $one_goods['cost']         = round($one_goods['quantity'] * $one_goods['platform_price'],2);
                     $one_goods['procurement']  = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
                 }
             }

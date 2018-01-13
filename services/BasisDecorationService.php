@@ -8,6 +8,7 @@
 namespace app\services;
 
 use app\controllers\OwnerController;
+use app\models\Apartment;
 use app\models\Effect;
 use app\models\EngineeringStandardCarpentryCoefficient;
 use app\models\EngineeringStandardCraft;
@@ -1993,7 +1994,7 @@ class BasisDecorationService
 
     }
 
-    public static function style($goods)
+    public static function style($goods,$get)
     {
         foreach ($goods as &$one_goods){
             if ($one_goods['style_id'] > 0){
@@ -2057,22 +2058,62 @@ class BasisDecorationService
                 $self_leveling = $oneValue['material'];
             }
         }
+
+
+
+        // 房间百分比查询
+        $ratio = ProjectView::findById(68,10000);
+        foreach ($ratio as $value){
+            // 客厅百分比
+            if ($value['id'] == OwnerController::ROOM['hall_area']){
+                $hall_area = $value['project_value'];
+            }
+            // 卧室百分比
+            if ($value['id'] == OwnerController::ROOM['bedroom_area']){
+                $bedroom_area = $value['project_value'];
+            }
+        }
+
+
+        // 其它面积查询
+        $other = Apartment::find()->asArray()->where(['points_id'=>5])->andWhere(['<=','min_area',$get['area']])->andWhere(['>=','max_area',$get['area']])->all();
+        foreach ($other as $one_other){
+            if ($one_other['project_name'] == '其他乳胶漆面积'){
+                $v = $one_other['project_value'];
+            }
+//            if ($one_other['project_name'] == '其他腻子面积'){
+//                $v1 = $one_other['project_value'];
+//            }
+            if ($one_other['project_name'] == '其他阴角线长度'){
+                $v2 = $one_other['project_value'];
+            }
+        }
+
+        // 底漆面积
+        $hall_ = self::paintedArea($hall_area,$get['area'],$get['high'],$get['hall'],3);
+        $bedroom_ = self::paintedArea($bedroom_area,$get['area'],$get['high'],$get['bedroom'],4);
+        $total_area = self::algorithm(5,$hall_[0],$bedroom_[0],$v);
+        // 周长
+        $bedroom_length = self::paintedPerimeter($bedroom_[1],$get['bedroom'],4);
+        $hall__length = self::paintedPerimeter($hall_[1],$get['hall'],3);
+        $total_length = self::algorithm(5,$bedroom_length,$hall__length,$v2);
+
         switch ($goods['category_id']){
             case $goods['category_id'] == 38: // 腻子面积
-                $value = self::algorithm(4,$get['primer_area'],$putty,$goods_attr['value']);
+                $value = ceil(self::algorithm(4,$total_area,$putty,$goods_attr['value']));
                 break;
             case $goods['category_id']  == 24:// 底漆
-                $value = self::algorithm(4,$get['primer_area'],$undercoat,$goods_attr['value']);
+                $value = ceil(self::algorithm(4,$total_area,$undercoat,$goods_attr['value']));
                 break;
             case $goods['category_id']  == 25: // 面漆
-                $area = $get['primer_area'] * 2;
-                $value = self::algorithm(4,$area,$finishing,$goods_attr['value']);
+                $surface_area = $total_area * 2;
+                $value = ceil(self::algorithm(4,$surface_area,$finishing,$goods_attr['value']));
                 break;
             case $goods['category_id']  == 28:// 阴角线
-                $value = self::algorithm(4,$get['string_length'],$wire,$goods_attr['value']);
+                $value = ceil(self::algorithm(4,$total_length,$wire,$goods_attr['value']));
                 break;
             case $goods['category_id']  == 36: // 自流平
-                $value = self::algorithm(4,$get['hall_area'],$self_leveling,$goods_attr['value']);
+                $value = ceil(self::algorithm(4,$hall_[0],$self_leveling,$goods_attr['value']));
                 break;
         }
 
