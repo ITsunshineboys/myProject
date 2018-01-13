@@ -14,6 +14,9 @@ class OrderRefund extends ActiveRecord
 {
     const  UNUSUAL_DESC='无异常';
     const REFUND_FAIL='退款失败';
+    const HANDLE_AGREE=1;
+    const HANDLE_DISAGREE=2;
+    const HANDLE_UN_HANDLE=0;
     /**
      * @return string 返回该AR类关联的数据表名
      */

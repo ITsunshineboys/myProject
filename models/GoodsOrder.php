@@ -1674,10 +1674,10 @@ class GoodsOrder extends ActiveRecord
                 ->one();
             switch ($order->shipping_status)
             {
-                case 0:
+                case LogisticsTemplate::DELIVERY_METHOD_LOGISTICS:
                     $shipping_status=self::ORDER_TYPE_UNSHIPPED;
                     break;
-                case 1:
+                case LogisticsTemplate::DELIVERY_METHOD_HOME:
                     $shipping_status=self::ORDER_TYPE_UNRECEIVED;
                     break;
             }
@@ -1840,7 +1840,7 @@ class GoodsOrder extends ActiveRecord
                 return $code;
             }
             $GoodsOrder=GoodsOrder::FindByOrderNo($order_no);
-            if ($OrderGoods->shipping_status==0){
+            if ($OrderGoods->shipping_status==LogisticsTemplate::DELIVERY_METHOD_LOGISTICS){
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number+$OrderGoods->freight;
             }else{
                 $refund_money=$OrderGoods->goods_price*$OrderGoods->goods_number;
@@ -1866,7 +1866,7 @@ class GoodsOrder extends ActiveRecord
                             ->one();
                         if ($order_refund_unshipped)
                         {
-                            $order_refund_unshipped->handle=2;
+                            $order_refund_unshipped->handle=OrderRefund::HANDLE_DISAGREE;
                             $order_refund_unshipped->handle_reason='';
                             $order_refund_unshipped->handle_time=$time;
                             if (!$order_refund_unshipped->save(false))
@@ -1876,7 +1876,7 @@ class GoodsOrder extends ActiveRecord
                                 return $code;
                             }
                         }
-                        $refunds->handle=1;
+                        $refunds->handle=OrderRefund::HANDLE_AGREE;
                         $refunds->handle_reason='';
                         $refunds->handle_time=$time;
                         if (!$refunds->save(false))
