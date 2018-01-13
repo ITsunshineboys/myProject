@@ -157,6 +157,7 @@ class GoodsComment extends ActiveRecord
                 return $code;
             }
         }
+
         $goodsOrder=GoodsOrder::find()
             ->where(['order_no'=>$postData['order_no']])
             ->one();
@@ -165,6 +166,7 @@ class GoodsComment extends ActiveRecord
             ->one();
         if (!$orderGoods || !$goodsOrder)
         {
+
             $code=1000;
             return $code;
         }
@@ -179,6 +181,7 @@ class GoodsComment extends ActiveRecord
         $time=time();
         $tran = Yii::$app->db->beginTransaction();
         try{
+
             $comment=new GoodsComment();
             $comment->goods_id=$goods->id;
             $comment->uid=$user->id;
@@ -198,6 +201,7 @@ class GoodsComment extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
             if (is_array($uploadsData)){
                 foreach ($uploadsData as &$uploads){
                     $comment_image=new CommentImage();
@@ -342,6 +346,7 @@ class GoodsComment extends ActiveRecord
                 $tran->rollBack();
                 return $code;
             }
+
             $code=$goods->UpPraiseRate($postData['score']);
             if ($code!=200)
             {

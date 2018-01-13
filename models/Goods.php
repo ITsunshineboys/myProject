@@ -1596,6 +1596,7 @@ class Goods extends ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try {
+
             $comment_number= $this->comment_number+1;
             $this->comment_number+=$comment_number;
             if (in_array($score,GoodsComment::SCORE_GOOD))
@@ -1609,7 +1610,7 @@ class Goods extends ActiveRecord
             }
             $favourable_comment_rate=($this->favourable_comment_number/$comment_number)*100;
             $this->favourable_comment_rate=(int)$favourable_comment_rate;
-            if ($this->save(false))
+            if (!$this->save(false))
             {
                 $code=500;
                 $tran->rollBack();
