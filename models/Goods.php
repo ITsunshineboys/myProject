@@ -1586,4 +1586,40 @@ class Goods extends ActiveRecord
     {
 
     }
+
+
+    /**
+     * @param $score
+     * @return int
+     */
+    public   function  UpPraiseRate($score)
+    {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            $comment_number= $this->comment_number+1;
+            $this->comment_number+=$comment_number;
+            if (in_array($score,GoodsComment::SCORE_GOOD))
+            {
+                $favourable_comment_number=$this->favourable_comment_number+1;
+                $this->favourable_comment_number=$favourable_comment_number;
+//                $favourable_comment_rate=self::find()
+//                    ->select("FORMAT((count(IF(score>=8,true,null))/count(*)),2) as favourable_comment_rate")
+//                    ->where(['goods_id'=>$goods->id])
+//                    ->one()->favourable_comment_rate;
+            }
+            $favourable_comment_rate=($this->favourable_comment_number/$comment_number)*100;
+            $this->favourable_comment_rate=(int)$favourable_comment_rate;
+            if ($this->save(false))
+            {
+                $code=500;
+                $tran->rollBack();
+                return $code;
+            }
+            $tran->commit();
+            return 200;
+        }catch (\Exception $e) {
+            $tran->rollBack();
+            return 500;
+        }
+    }
 }
