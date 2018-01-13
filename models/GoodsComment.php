@@ -472,7 +472,7 @@ class GoodsComment extends ActiveRecord
             $code=200;
             return $code;
         }else{
-            $code=1032;
+            $code=1090;
             return $code;
         }
     }
