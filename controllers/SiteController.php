@@ -265,7 +265,7 @@ class SiteController extends Controller
 
         return Json::encode([
             'code' => 200,
-            'msg' => Yii::$app->params['okMsgs']['site/check-mobile-registered'],
+            'msg' => Yii::$app->params['okMsgs'][$this->id . '/' . $this->action->id],
         ]);
     }
 
