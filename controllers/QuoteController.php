@@ -3116,7 +3116,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       echo date("Y-m-d", strtotime("-2 week"));
+       echo strtotime("-2 week");
 
     }
 }
