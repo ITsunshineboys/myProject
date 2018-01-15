@@ -167,6 +167,7 @@ class ShippingCart extends \yii\db\ActiveRecord
     {
         $tran = Yii::$app->db->beginTransaction();
         try{
+//            $code=self::deleteAll("goods_id=".{$carts});
             foreach ($carts as &$cart)
             {
                 $ca=self::find()
@@ -343,8 +344,12 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
     }
 
-    public  static  function isNotJson($str){
-        return is_null(json_decode($str));
+    public  static  function isNotJson($str)
+    {
+        if (is_array($str)){
+            return false;
+        }
+        return is_array(json_decode($str));
     }
 
 
