@@ -5233,9 +5233,9 @@ class OrderController extends Controller
             ]);
         }
         $postData=Yii::$app->request->post();
-        if ($postData)
+        if ($postData && is_array($postData))
         {
-            $goods=Json::decode($postData['goods']);
+            $goods=json_decode($postData['goods']);
             $all_money=0;
             foreach ($goods as &$good)
             {
@@ -5255,7 +5255,7 @@ class OrderController extends Controller
         }else
         {
             $data=file_get_contents("php://input");
-            $arr=(array)json_decode($data);
+            $arr=json_decode($data);
             $goods=$arr['goods'];
             $all_money=0;
             foreach ($goods as &$good)
