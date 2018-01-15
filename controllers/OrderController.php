@@ -2423,7 +2423,7 @@ class OrderController extends Controller
 
          if(
              array_key_exists('sku', $postData)
-             || !$postData['sku']==0
+             && $postData['sku']!=0
          )
          {
              $record=UserNewsRecord::find()
