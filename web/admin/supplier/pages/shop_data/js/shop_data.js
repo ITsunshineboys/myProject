@@ -40,7 +40,7 @@ angular.module('shop_data_module',[])
   });
   //监听开始和结束时间
     $scope.time_change=function (value) {
-	    if(value=='custom'){
+	    if(value=='custom'||value=='all'){
 		    $scope.params.start_time='';
 		    $scope.params.end_time='';
       }
