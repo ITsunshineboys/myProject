@@ -85,6 +85,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function beforedecorationimgs($works_id,$worker_order_no){
+
         $data=WorkerOrderImg::find()
             ->select('order_img')
             ->where(['worker_order_no'=>$worker_order_no])
@@ -97,7 +98,7 @@ class WorkerWorks extends \yii\db\ActiveRecord
                 $img_ids = $works_detail->img_ids;
 
                 if ($img_ids) {
-                    $time=WorkResult::find()->asArray()->orderBy('create_time Asc')->where(['works_id'=>$works_id])->all();
+                    $time=WorkResult::find()->asArray()->orderBy('create_time Asc')->where(['order_no'=>$worker_order_no])->all();
                     if(!$time){
                         return null;
                     }
@@ -128,13 +129,13 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @param $works_id
      * @return array|string
      */
-    public static function Indecorationimgs($works_id){
+    public static function Indecorationimgs($works_id,$order_no){
         $works_detail =WorkerWorksDetail::worksdetailbyworksId($works_id);
         if ($works_detail) {
             $img_ids = $works_detail->img_ids;
 
             if ($img_ids) {
-                $time=WorkResult::find()->asArray()->orderBy('create_time Desc')->where(['works_id'=>$works_id])->all();
+                $time=WorkResult::find()->asArray()->orderBy('create_time Desc')->where(['order_no'=>$order_no])->all();
                 if(!$time){
                     return null;
                 }
@@ -164,15 +165,15 @@ class WorkerWorks extends \yii\db\ActiveRecord
      * @param $works_id
      * @return array|string
      */
-    public static function afterdecorationimgs($works_id){
+    public static function afterdecorationimgs($works_id,$order_no){
         $works_detail =WorkerWorksDetail::worksdetailbyworksId($works_id);
         if ($works_detail) {
             $img_ids = $works_detail->img_ids;
-
+            $data=[];
             if ($img_ids) {
-                $time=WorkResult::find()->asArray()->orderBy('create_time Desc')->where(['works_id'=>$works_id])->all();
+                $time=WorkResult::find()->asArray()->orderBy('create_time Desc')->where(['order_no'=>$order_no])->all();
                 if(!$time){
-                    return null;
+                    return [];
                 }
                 $ids = explode(',', $img_ids);
                 foreach ($ids as $id){
@@ -208,13 +209,14 @@ class WorkerWorks extends \yii\db\ActiveRecord
             ->asArray()
             ->where(['id'=>$works_id])
             ->one();
+
         if(!$array){
-            return null;
+            return [];
         }
         $time=WorkerOrder::find()
             ->asArray()
-            ->select('worker_order.start_time,worker_order.end_time,worker_type.worker_type')
-            ->leftJoin('worker_type','worker_order.worker_type_id=worker_type.id')
+            ->select('worker_order.start_time,worker_order.end_time,worker_service.service_name')
+            ->leftJoin('worker_service','worker_order.worker_type_id=worker_service.id')
             ->where(['worker_order.order_no'=>$array['order_no']])
             ->one();
         $time['start_time']=date('Y-m-d',$time['start_time']);
@@ -224,9 +226,9 @@ class WorkerWorks extends \yii\db\ActiveRecord
         //装修前---下单用户上传的
         $before_decoration_imgs=self::beforedecorationimgs($works_id,$array['order_no']);
         //装修中---工人上传的 截取中间日期
-        $In_decoration_imgs=self::Indecorationimgs($works_id);
+        $In_decoration_imgs=self::Indecorationimgs($works_id,$array['order_no']);
         //装修后--工人上传的 截取最后一次上传的日期
-        $after_decoration_imgs=self::afterdecorationimgs($works_id);
+        $after_decoration_imgs=self::afterdecorationimgs($works_id,$array['order_no']);
         if($before_decoration_imgs || $In_decoration_imgs || $after_decoration_imgs){
             $data['before_decoration_imgs']=$before_decoration_imgs;
             $data['in_decoration_imgs']=$In_decoration_imgs;

@@ -540,8 +540,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
         foreach ($arr as &$v) {
             $worker = Worker::find()->where(['id' => $v['worker_id']])->one();
             $worker && $worker_type_id = $worker->worker_type_id;
-            $worker_type_id && $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one();
-            $worker_type && $v[''] = $worker_type->worker_name;
+            $worker_type_id && $worker_type = WorkerService::find()->where(['id' => $worker_type_id])->one();
+            $worker_type && $v['worker_name'] = $worker_type->service_name;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
@@ -1025,13 +1025,15 @@ class WorkerOrder extends \yii\db\ActiveRecord
             $fasts_order=WorkerFastOrder::find()->asArray()->where(['worker_order_id'=>$order['id']])->all();
             foreach ($fasts_order as &$fast){
 
-                $fast['worker_items']=WorkerType::find()->asArray()->select('worker_name')->where("id in ({$fast['worker_item_ids']})")->all();
-               $fast['worker_type']=WorkerType::find()->asArray()->select('worker_name')->where(['id'=>$fast['worker_type_id']])->one();
+                $fast['worker_items']=WorkerService::find()->asArray()->select('service_name')->where("id in ({$fast['worker_item_ids']})")->all();
+               $fast['worker_type']=WorkerService::find()->asArray()->select('service_name')->where(['id'=>$fast['worker_type_id']])->one()['service_name'];
+
                unset($fast['worker_order_id']);
                unset($fast['worker_item_ids']);
                unset($fast['worker_type_id']);
                unset($fast['id']);
             }
+
         $order['worker_type_id']=WorkerService::getparenttype($order['worker_type_id']);
         $order['create_time'] && $order['create_time']= date('Y-m-d H:i', $order['create_time']);
         $order['modify_time'] && $order['modify_time']  = date('Y-m-d H:i', $order['modify_time']);

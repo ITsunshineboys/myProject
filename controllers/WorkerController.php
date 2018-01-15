@@ -9,6 +9,7 @@ use app\models\Worker;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
 use app\models\WorkerRank;
+use app\models\WorkerService;
 use app\models\WorkerType;
 use app\models\WorkerValuedetails;
 use app\models\WorkerWorks;
@@ -899,6 +900,7 @@ class WorkerController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code]
             ]);
         }
+//        $worker_order=WorkerWorks::find()->select('order_no')->asArray()->where(['id'=>$works_id])->one()['order_no'];
             $data=WorkerWorks::GetWorksDetail($works_id);
         return Json::encode([
             'code' => 200,
@@ -951,48 +953,48 @@ class WorkerController extends Controller
         ]);
     }
 
-    /**
-     * 工人抢单
-     * @return int|string
-     */
-    public function actionGrabsingle(){
-        $uid = self::userIdentity();
-        if (!is_int($uid)) {
-            return $uid;
-        }
-        $code=1000;
-        $order_id=(int)(\Yii::$app->request->get('order_id'));
-        if(!$order_id){
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $worker_id=Worker::getWorkerByUid($uid)->id;
-        $worker_order=WorkerOrder::find()
-            ->where(['id'=>$order_id])
-            ->one();
-
-       $worker_order->worker_id=$worker_id;
-       $worker_order->is_old=WorkerOrder::IS_OLD;
-       $worker_order->status=self::STATUS_JDED;
-
-       if(!$worker_order->update(false)){
-           $code=500;
-           return Json::encode([
-               'code' => $code,
-               'msg' => \Yii::$app->params['errorCodes'][$code]
-           ]);
-       }
-       return Json::encode([
-           'code'=>200,
-           'msg'=>'ok',
-           'data'=>[
-               'order_id'=>$order_id
-           ]
-       ]);
-
-    }
+//    /**
+//     * 工人抢单
+//     * @return int|string
+//     */
+//    public function actionGrabsingle(){
+//        $uid = self::userIdentity();
+//        if (!is_int($uid)) {
+//            return $uid;
+//        }
+//        $code=1000;
+//        $order_id=(int)(\Yii::$app->request->get('order_id'));
+//        if(!$order_id){
+//            return Json::encode([
+//                'code' => $code,
+//                'msg' => \Yii::$app->params['errorCodes'][$code]
+//            ]);
+//        }
+//        $worker_id=Worker::getWorkerByUid($uid)->id;
+//        $worker_order=WorkerOrder::find()
+//            ->where(['id'=>$order_id])
+//            ->one();
+//
+//       $worker_order->worker_id=$worker_id;
+//       $worker_order->is_old=WorkerOrder::IS_OLD;
+//       $worker_order->status=self::STATUS_JDED;
+//
+//       if(!$worker_order->update(false)){
+//           $code=500;
+//           return Json::encode([
+//               'code' => $code,
+//               'msg' => \Yii::$app->params['errorCodes'][$code]
+//           ]);
+//       }
+//       return Json::encode([
+//           'code'=>200,
+//           'msg'=>'ok',
+//           'data'=>[
+//               'order_id'=>$order_id
+//           ]
+//       ]);
+//
+//    }
 
     /**
      * 工人更新每天工作进度+上传图片
@@ -1040,7 +1042,7 @@ class WorkerController extends Controller
 
 
         $worker_info['worker_rank']=WorkerRank::RankName($worker_info['level'])['rank_name'];
-        $worker_info['worker_type']=WorkerType::gettype($worker_info['worker_type_id']);
+        $worker_info['worker_type']=WorkerService::getparenttype($worker_info['worker_type_id']);
 
         $worker_rank['rank']=array_values(WorkerRank::find()
             ->asArray()
