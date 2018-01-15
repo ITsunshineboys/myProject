@@ -12,6 +12,7 @@ use app\models\User;
 use app\models\Worker;
 use app\models\WorkerOrder;
 use app\models\WorkerRank;
+use app\models\WorkerService;
 use app\models\WorkerType;
 use app\services\ExceptionHandleService;
 use app\services\StringService;
@@ -168,29 +169,43 @@ class WorkerManagementController extends Controller
      */
     public function actionWorkerTypeAdd()
     {
-        $worker_type                 = new  WorkerType();
-        $worker_type->worker_name    = \Yii::$app->request->post('worker', '');
-        $worker_type->establish_time = time();
-        $worker_type->status         = WorkerType::PARENT;
-        if (!$worker_type->save()) {
-            $code = 1000;
+        $worker_service                 = new  WorkerService();
+        $worker_service->service_name    = \Yii::$app->request->post('worker_name', '');
+        $worker_service->create_time= time();
+        $worker_service->status         = WorkerType::PARENT;
+        $worker_service->pid         = WorkerType::PARENT;
+        $tran=\Yii::$app->db->beginTransaction();
+        try{
+            if (!$worker_service->save(false)) {
+                $tran->rollBack();
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+            $id   = $worker_service->attributes['id'];
+            $post = \Yii::$app->request->post();
+            foreach ($post['rank'] as $one_post) {
+                $worker_rank = (new WorkerRank())->ByInsert($id, $one_post['name'], $one_post['min'], $one_post['max']);
+            }
+            if (!$worker_rank) {
+                $tran->rollBack();
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+        }catch (Exception $e){
+            $tran->rollBack();
+            $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        $id   = $worker_type->attributes['id'];
-        $post = \Yii::$app->request->post();
-        foreach ($post['rank'] as $one_post) {
-            $worker_rank = (new WorkerRank())->ByInsert($id, $one_post['rank'], $one_post['min'], $one_post['max']);
-        }
-        if (!$worker_rank) {
-            $code = 1000;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
 
         return Json::encode([
             'code' => 200,
@@ -208,10 +223,10 @@ class WorkerManagementController extends Controller
         $post = \Yii::$app->request->post();
         //  修改工种类型
         if (isset($post['edit'])) {
-            $worker              = WorkerType::findOne(['id' => $post['edit']['id']]);
+            $worker              = WorkerService::findOne(['id' => $post['edit']['id']]);
             $worker->worker_name = $post['edit']['worker_name'];
             if (!$worker->save()) {
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
@@ -221,7 +236,7 @@ class WorkerManagementController extends Controller
                 $rank = (new WorkerRank())->ByUpdate($one_post);
             }
             if (!$rank) {
-                $code = 1000;
+                $code = 500;
                 return Json::encode([
                     'code' => $code,
                     'msg' => \Yii::$app->params['errorCodes'][$code],
