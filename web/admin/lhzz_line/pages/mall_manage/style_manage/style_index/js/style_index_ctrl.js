@@ -259,6 +259,7 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
         $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
         $scope.dropdown.keyword = '';
+        $scope.attr_params.keyword = '';
         $scope.pageConfig.currentPage = 1;
         $scope.attr_params.pid = value;
         !value ? value : subClass(value);
@@ -269,6 +270,7 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     $scope.$watch('dropdown.secselect', function (value, oldValue) {
         $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
         $scope.dropdown.keyword = '';
+        $scope.attr_params.keyword = '';
         $scope.pageConfig.currentPage = 1;
         if (value == oldValue) {
             return
@@ -295,14 +297,14 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         $scope.attr_params.page = 1;
         $scope.attr_params['sort[]'] = 'attr_op_time:3';      // 最后操作时间排序
         // $scope.dropdown.firstselect = 0;
-        $scope.attr_params.page = 1;
+        $scope.pageConfig.currentPage = 1;
+        $scope.attr_params.keyword = $scope.dropdown.keyword;
         tableList();
     }
 
 
     /*列表数据获取*/
     function tableList() {
-        $scope.attr_params.keyword = $scope.dropdown.keyword;
         $scope.attr_params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/goods-attr-list-admin',$scope.attr_params,function (res) {
             console.log(res);
