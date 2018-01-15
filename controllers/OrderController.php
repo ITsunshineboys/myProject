@@ -5256,7 +5256,7 @@ class OrderController extends Controller
         {
             $data=file_get_contents("php://input");
             $arr=json_decode($data);
-            $goods=$arr['goods'];
+            $goods=$arr->goods;
             $all_money=0;
             foreach ($goods as &$good)
             {
