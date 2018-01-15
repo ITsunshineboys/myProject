@@ -10,3 +10,4 @@ config/db.php
 config/web.php
 config/params_online.php
 baseUrl.js
+.komodoproject
