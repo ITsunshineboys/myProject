@@ -679,10 +679,6 @@ class SupplierCashController extends Controller
 
     public function actionTest()
     {
-//       $user=User::find()->where(['id'=>8])->one();
-//       $user->availableamount=99889865;
-//       $user->save(false);
-//       var_dump($user);die;
       var_dump(BankinfoLog::find()->asArray()->all());
       var_dump(UserBankInfo::find()->asArray()->all());
 

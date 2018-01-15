@@ -59,7 +59,7 @@ class EffectController extends Controller
     }
 
     /**
-     * 前台新样板间申请
+     * H5新样板间申请
      * @return string
      *
      */
@@ -93,71 +93,8 @@ class EffectController extends Controller
         ]);
 
     }
-    /**
-     * 获取户型列表
-     * @return string
-     */
-    public function actionGetparticulars(){
-        $particulars=(new Query())->select('particulars')->from('effect')->distinct()->all();
-
-        return json_encode([
-            'code'=>200,
-            'msg'=>'ok',
-            'data'=>$particulars
-        ]);
-
-    }
-
-    /**
-     * 支付定金/获取用户信息
-     * @return array
-     *
-     */
-    public function actionEffectEarnest()
-    {
-        $code = 1000;
-        $request = new Request();
-
-        if ($request->isPost) {
-            $model = new Effectearnest();
-            //保存样板Id
-            $model->effect_id = trim($request->post('effect_id', ''), '');
-            $name = $model->name = trim($request->post('name', ''), '');
-            $phone = $model->phone = trim($request->post('phone', ''), '');
-            if (!preg_match('/^[1][3,5,7,8]\d{9}$/', $phone)) {
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
-
-                ]);
-            }
-
-            if (!$model->validate()) {
-                return json_encode([
-                    'code' => $code,
-                    'msg' => \Yii::$app->params['errorCodes'][$code]
 
 
-                ]);
-            } else {
-                $model->save();
-                return json_encode([
-                    'code' => 200,
-                    'msg' => 'ok',
-
-                ]);
-
-            }
-        } else {
-            $code=500;
-            return json_encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code]
-
-            ]);
-        }
-
-    }
     /**
      * 查看样板间备注详情
      * @return string
@@ -166,7 +103,7 @@ class EffectController extends Controller
     public function actionRemarkView(){
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -206,7 +143,7 @@ class EffectController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
@@ -277,7 +214,7 @@ class EffectController extends Controller
     {
         $user = Yii::$app->user->identity;
         if (!$user){
-            $code=1052;
+            $code=403;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
