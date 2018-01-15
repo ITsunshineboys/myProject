@@ -1656,7 +1656,7 @@ class OwnerController extends Controller
                     $one_goods['goods_first']  = $case_works_datum['goods_first'];
                     $one_goods['goods_second'] = $case_works_datum['goods_second'];
                     $one_goods['goods_three']  = $case_works_datum['goods_three'];
-                    $one_goods['quantity']     = ceil($case_works_datum['goods_quantity']);
+                    $one_goods['quantity']     = (int)ceil($case_works_datum['goods_quantity']);
                     $one_goods['cost']         = round($one_goods['quantity'] * $one_goods['platform_price'],2);
                     $one_goods['procurement']  = round($one_goods['purchase_price_decoration_company'] * $case_works_datum['goods_quantity'],2);
                 }
@@ -1687,7 +1687,7 @@ class OwnerController extends Controller
                 $_goods['goods_second'] = $goods_category['1']['title'];
                 $_goods['goods_three'] = $goods_category['2']['title'];
 
-                $_goods['quantity'] = $effect['window'];
+                $_goods['quantity'] = (int)$effect['window'];
                 $_goods['cost'] = round($_goods['quantity'] * $_goods['platform_price'],2);
                 $_goods['procurement'] = round($_goods['quantity'] * $_goods['purchase_price_decoration_company'],2);
                 $marble[] = $_goods;
