@@ -210,7 +210,7 @@ app.config(function ($stateProvider, $httpProvider, $urlRouterProvider) {
           /*等待上架*/
             url: "/wait_online",
             templateUrl: "pages/commodity_manage/wait_online.html",
-            params: {item: '', flag: ''}
+            params: {item: ''}
         })
 })
     .directive('wdatePicker',function(){

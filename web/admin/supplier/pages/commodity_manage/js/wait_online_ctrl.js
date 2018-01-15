@@ -32,11 +32,6 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 	$scope.myng=$scope;
 	let goods_item=$stateParams.item;//点击对应的那条数据
 	console.log(goods_item);
-	if($stateParams.flag==0){
-		$scope.show_flag=false;
-	}else if($stateParams.flag==1){
-		$scope.show_flag=true;
-	}
 	$scope.goods_id=goods_item.id;//
 	$scope.category_title=goods_item.category_title;//三级分类
 	$scope.goods_name=goods_item.title;//商品名称

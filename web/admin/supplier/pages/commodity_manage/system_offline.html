@@ -161,10 +161,8 @@
     <div class="row">
         <div class="col-sm-offset-2 col-sm-10 control-label row_left">
             <span class="col-sm-2 control-label">城市选择</span>
-            <span class="col-sm-2 control-label"
-                  ng-repeat="item in logistics_district_names_arr.slice(0,3)">{{item}}</span>
-            <a class="col-sm-1 control-label" ng-if='logistics_district_names_arr.length>3' style="padding: 0"
-               data-toggle="modal" data-target="#show_city">查看</a>
+            <span class="col-sm-1 control-label" ng-repeat="item in logistics_district_names_arr.slice(0,3)">{{item}}</span>
+            <a class="col-sm-1 control-label" ng-if='logistics_district_names_arr.length>3' style="padding: 0" data-toggle="modal" data-target="#show_city">查看</a>
         </div>
     </div>
     <div class="row">
@@ -264,7 +262,7 @@
         <span class="col-sm-10 control-label">{{detail_item.offline_time}}</span>
     </div>
 
-    <div class="row">
+    <div class="row" style="margin-bottom: 0">
         <div class="col-sm-12 control-label">
             <button class="btn btn-default" ui-sref="commodity_manage({down_flag:true})">返回</button>
         </div>

@@ -393,10 +393,9 @@
             </div>
 
             <!--按钮-->
-            <div class="row">
-                <div class="col-sm-12 control-label">
+            <div class="row" style="margin-bottom: 0">
+                <div class="col-sm-12">
                     <button class="btn btn-primary" ng-click="edit_confirm(form.$valid,form.$error.required)">保存</button>
-                    <button class="btn btn-default btn_left" ng-hide="show_flag" data-toggle="modal" data-target="#down_ok">下架</button>
                     <button class="btn btn-default btn_left" ng-click="back_wait()">返回</button>
                 </div>
             </div>
@@ -426,25 +425,6 @@
                     <div ng-if="default_modal_flag">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--下架模态框-->
-    <div class="modal fade" id="down_ok" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">
-                        提示
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <h5>是否确认下架？</h5>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal" ng-click="down_btn(goods_id)">确认</button>
-                    <button class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
