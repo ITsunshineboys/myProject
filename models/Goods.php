@@ -287,21 +287,14 @@ class Goods extends ActiveRecord
      */
     public static function disableGoodsByCategoryId($categoryId, ActiveRecord $operator, $offlineReason = '')
     {
-        $goodsIds = self::findIdsByCategoryId($categoryId);
-        if ($goodsIds) {
-            $where = [
-                'and',
-                ['status' => self::STATUS_ONLINE],
-                ['in', 'id', $goodsIds]
-            ];
-            self::updateAll([
-                'status' => self::STATUS_OFFLINE,
-                'offline_time' => time(),
-                'offline_reason' => $offlineReason ? $offlineReason : Yii::$app->params['category']['offline_reason'],
-                'offline_uid' => $operator->id,
-                'offline_person' => $operator->nickname,
-            ], $where);
-        }
+        $where = ['status' => self::STATUS_ONLINE, 'category_id' => $categoryId];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => $offlineReason ? $offlineReason : Yii::$app->params['category']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
     }
 
     /**
@@ -364,6 +357,24 @@ class Goods extends ActiveRecord
     }
 
     /**
+     * Disable goods by supplier id
+     *
+     * @param int $supplierId supplier id
+     * @param ActiveRecord $operator $operator
+     */
+    public static function disableGoodsBySupplierId($supplierId, ActiveRecord $operator)
+    {
+        $where = ['status' => self::STATUS_ONLINE, 'supplier_id' => $supplierId];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->params['supplier']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
+    }
+
+    /**
      * Get goods ids by supplier id
      *
      * @param  int $supplierId supplier id
@@ -410,21 +421,14 @@ class Goods extends ActiveRecord
      */
     public static function disableGoodsByBrandId($brandId, ActiveRecord $operator)
     {
-        $goodsIds = self::findIdsByBrandId($brandId);
-        if ($goodsIds) {
-            $where = [
-                'and',
-                ['status' => self::STATUS_ONLINE],
-                ['in', 'id', $goodsIds]
-            ];
-            self::updateAll([
-                'status' => self::STATUS_OFFLINE,
-                'offline_time' => time(),
-                'offline_reason' => Yii::$app->params['brand']['offline_reason'],
-                'offline_uid' => $operator->id,
-                'offline_person' => $operator->nickname,
-            ], $where);
-        }
+        $where = ['status' => self::STATUS_ONLINE, 'brand_id' => $brandId];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->params['brand']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
     }
 
     /**
