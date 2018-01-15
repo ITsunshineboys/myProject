@@ -357,7 +357,7 @@ class User extends ActiveRecord implements IdentityInterface
             $code = 1010;
             return $code;
         } else {
-            if (UserRole::find()->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED])->count() >= Yii::$app->params['maxRolesNumber']) {
+            if (UserRole::find()->where(['user_id' => $user->id, 'review_status' => Role::AUTHENTICATION_STATUS_APPROVED, 'role_id' => Yii::$app->params['supplierRoleId']])->exists()) {
                 $code = 1011;
                 return $code;
             }
