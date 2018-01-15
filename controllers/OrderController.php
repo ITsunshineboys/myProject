@@ -4672,7 +4672,8 @@ class OrderController extends Controller
                 'msg'=>'ok'
             ]);
         }else{
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
