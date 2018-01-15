@@ -697,6 +697,82 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
             $state.go('other_materials', {index: index})
         }
     }
+    //保存方案
+    $scope.saveProgramme = function () {
+        
+    }
+    //跳转申请样板间
+    // $scope.applyCase = function () {
+    //     let materials = []//申请材料项
+    //     let status = false//材料是否存在下架
+    //     //整合申请样板间所需传值
+    //     let obj = {
+    //         province_code:$scope.params.province,
+    //         city_code:$scope.params.city,
+    //         street:$scope.toponymy.address,
+    //         toponymy:$scope.toponymy.name,
+    //         sittingRoom_diningRoom:$scope.params.hall,
+    //         window:$scope.params.window,
+    //         bedroom:$scope.params.bedroom,
+    //         area:$scope.params.area,
+    //         high:$scope.params.high,
+    //         toilet:$scope.params.toilet,
+    //         kitchen:$scope.params.kitchen,
+    //         stair_id:$scope.params.stairway_id,
+    //         stairway:$scope.params.stairway,
+    //         series:$scope.params.series,
+    //         style:$scope.params.style,
+    //         type:0,
+    //         requirement:$scope.special_request,
+    //         original_price:$scope.total_prices,
+    //         sale_price:$scope.special_offer
+    //     }
+    //     for(let [key,value] of $scope.materials.entries()){
+    //         for(let [key1,value1] of value.second_level.entries()){
+    //             for(let [key2,value2] of value1.goods.entries()){
+    //                 materials.push({
+    //                     goods_id:value2.id,
+    //                     price:value2.cost,
+    //                     count:value2.quantity,
+    //                     first_cate_id:value.id
+    //                 })
+    //             }
+    //         }
+    //     }
+    //     obj.materials = materials
+    //     //遍历是否存在下架商品
+    //     for(let [key,value] of $scope.materials.entries()){
+    //         let index = value.second_level.findIndex(function (item) {
+    //             return item.status == 0
+    //         })
+    //         if(index == -1){
+    //             status = false
+    //         }else{
+    //             status = true
+    //             break
+    //         }
+    //     }
+    //     //模态框配置
+    //     let all_modal = function ($scope, $uibModalInstance) {
+    //         $scope.btn_word = '确认'
+    //         $scope.big_word = '手机号输入不正确'
+    //         $scope.common_house = function () {
+    //             $uibModalInstance.close()
+    //         }
+    //     }
+    //     all_modal.$inject = ['$scope', '$uibModalInstance']
+    //     if(status){
+    //         $uibModal.open({
+    //             templateUrl: 'cur_model.html',
+    //             controller: all_modal,
+    //             windowClass:'cur_modal',
+    //             backdrop:'static'
+    //         })
+    //     }else{
+    //         sessionStorage.setItem('payParams',JSON.stringify(obj))
+    //         $state.go('deposit')
+    //     }
+    // }
     //跳转申请样板间
     $scope.applyCase = function () {
         let materials = []//申请材料项
@@ -735,7 +811,6 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
                 }
             }
         }
-        obj.materials = materials
         //遍历是否存在下架商品
         for(let [key,value] of $scope.materials.entries()){
             let index = value.second_level.findIndex(function (item) {
@@ -750,13 +825,22 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
         }
         //模态框配置
         let all_modal = function ($scope, $uibModalInstance) {
-            $scope.btn_word = '确认'
-            $scope.big_word = '手机号输入不正确'
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
+        let all_modal1 = function ($scope, $uibModalInstance) {
+            $scope.save_status = true
+            $scope.return = function () {
+                $uibModalInstance.close()
+            }
+            $scope.viewDetails = function () {
+                // $uibModalInstance.close()
+            }
+        }
+        all_modal1.$inject = ['$scope', '$uibModalInstance']
+        //判断是否登录
         if(status){
             $uibModal.open({
                 templateUrl: 'cur_model.html',
@@ -765,8 +849,24 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
                 backdrop:'static'
             })
         }else{
-            sessionStorage.setItem('payParams',JSON.stringify(obj))
-            $state.go('deposit')
+            _ajax.get('/site/check-is-login',{},function (res) {
+                if(res.code == 403){
+                    obj.materials = materials
+                    sessionStorage.setItem('payParams',JSON.stringify(obj))
+                    $state.go('deposit')
+                }else if(res.code == 200){
+                    _ajax.post('/effect/app-apply-effect',obj,function (res) {
+                        if(res.code == 200){
+                            $uibModal.open({
+                                templateUrl: 'cur_model.html',
+                                controller: all_modal1,
+                                windowClass:'cur_modal',
+                                backdrop:'static'
+                            })
+                        }
+                    })
+                }
+            })
         }
     }
     //返回上一页

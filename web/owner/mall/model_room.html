@@ -175,14 +175,14 @@
                     <div class="decoration">
                         <div ng-repeat="second in obj.second_level">
                             <div ng-if="obj.id == 1 || obj.id == 14">
-                                <span>{{second.title}}</span>
-                                <span class="pic_q">{{'¥' + second.cost.toFixed(2)}}</span>
+                                <span ng-style="{'color':(obj.status == 0?'#D9AD65':'#999')}">{{second.title}}</span>
+                                <span ng-style="{'color':(obj.status == 0?'#D9AD65':'#999')}" class="pic_q">{{'¥' + second.cost.toFixed(2)}}</span>
                             </div>
                             <div ng-if="obj.id != 1 && obj.id != 14" ng-repeat="data in second.goods">
-                                <span class="brand">{{data.title}}</span>
+                                <span class="brand" ng-style="{'color':(data.status == 0?'#D9AD65':'#999')}">{{data.title}}</span>
                                 <br>
-                                <span>{{data.name}}</span>
-                                <span class="pic_q">{{'¥' + data.cost.toFixed(2)}}</span>
+                                <span ng-style="{'color':(data.status == 0?'#D9AD65':'#999')}">{{data.name}}</span>
+                                <span ng-style="{'color':(data.status == 0?'#D9AD65':'#999')}" class="pic_q">{{'¥' + data.cost.toFixed(2)}}</span>
                             </div>
                         </div>
                     </div>

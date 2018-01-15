@@ -928,7 +928,7 @@ button[disabled]{
     box-shadow: 0 -1px 0 rgba(0,0,0,0.2);
 }
 .footer_set{
-    width:calc(100% - 11rem);
+    width:calc(100% - 12rem);/*修改过*/
     float: left;
     padding-left:1.19rem;
     height:4rem;
@@ -958,10 +958,10 @@ button[disabled]{
     bottom: .3rem;
     left: 1.4rem;
 }
-.footer_settlement button:last-of-type{
+.footer_settlement button{/*修改过*/
     border:none;
     float: left;
-    width:11rem;
+    width:6rem;
     height: 4rem;
     color: #fff;
     font-size:1.2rem;

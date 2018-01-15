@@ -1,7 +1,7 @@
 // /**
 //  * Created by xl on 2017/6/29 0029.
 //  */
-app.controller("modelRoomCtrl", ["$q","$scope", "$timeout", "$location", "$anchorScroll", "$state", "$stateParams", "_ajax", function ($q,$scope, $timeout, $location, $anchorScroll, $state, $stateParams, _ajax) {
+app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$location", "$anchorScroll", "$state", "$stateParams", "_ajax", function ($uibModal,$q,$scope, $timeout, $location, $anchorScroll, $state, $stateParams, _ajax) {
     /*   sessionStorage.removeItem('check_goods');
        sessionStorage.removeItem('toponymy')
        sessionStorage.removeItem('params')
@@ -726,9 +726,11 @@ app.controller("modelRoomCtrl", ["$q","$scope", "$timeout", "$location", "$ancho
     //跳转申请样板间
     $scope.applyCase = function () {
         let materials = []
+        let status = false
         let obj = {
             province_code:510100,
             city_code:$scope.active_case.city_code,
+            district_code:$scope.active_case.district_code,
             street:$scope.active_case.detailed_address,
             toponymy:$scope.active_case.toponymy,
             sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
@@ -762,7 +764,35 @@ app.controller("modelRoomCtrl", ["$q","$scope", "$timeout", "$location", "$ancho
             }
             obj.materials = materials
         }
-        sessionStorage.setItem('payParams',JSON.stringify(obj))
-        $state.go('deposit')
+        //遍历是否存在下架商品
+        for(let [key,value] of $scope.materials.entries()){
+            let index = value.second_level.findIndex(function (item) {
+                return item.status == 0
+            })
+            if(index == -1){
+                status = false
+            }else{
+                status = true
+                break
+            }
+        }
+        //模态框配置
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        if(status){
+            $uibModal.open({
+                templateUrl: 'cur_model.html',
+                controller: all_modal,
+                windowClass:'cur_modal',
+                backdrop:'static'
+            })
+        }else{
+            sessionStorage.setItem('payParams',JSON.stringify(obj))
+            $state.go('deposit')
+        }
     }
 }]);

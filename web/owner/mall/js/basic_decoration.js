@@ -89,18 +89,29 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                             }
                         }
                         console.log($scope.materials);
-                        for(let [key,value] of $scope.materials.entries()){
+                        let materials = angular.copy($scope.materials)
+                        for(let [key,value] of materials.entries()){
                             for(let [key1,value1] of value.second_level.entries()){
-                                if(value1.cost == 0){
-                                    value.second_level.splice(key1,1)
-                                    key1 --
-                                    continue
+                                let index = $scope.materials[key].second_level.findIndex(function (item) {
+                                    return item.id == value1.id
+                                })
+                                if(value1.cost === 0){
+                                    if(index != -1){
+                                        $scope.materials[key].count -= $scope.materials[key].second_level[index].goods.length
+                                        $scope.materials[key].second_level.splice(index,1)
+                                    }
                                 }else{
                                     for(let [key2,value2] of value1.goods.entries()){
+                                        if(index!=-1){
+                                            let index1 = $scope.materials[key].second_level[index].goods.findIndex(function (item) {
+                                                return item.id == value2.id
+                                            })
+                                        }
                                         if(value2.cost == 0){
-                                            value1.goods.splice(key2,1)
-                                            key2 --
-                                            continue
+                                            if(index1!=-1){
+                                                $scope.materials[key].count --
+                                                $scope.materials[key].second_level[index].splice(index1,1)
+                                            }
                                         }
                                     }
                                 }
@@ -201,18 +212,29 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                     }
                 }
                 console.log($scope.materials);
-                for(let [key,value] of $scope.materials.entries()){
+                let materials = angular.copy($scope.materials)
+                for(let [key,value] of materials.entries()){
                     for(let [key1,value1] of value.second_level.entries()){
-                        if(value1.cost == 0){
-                            value.second_level.splice(key1,1)
-                            key1 --
-                            continue
+                        let index = $scope.materials[key].second_level.findIndex(function (item) {
+                            return item.id == value1.id
+                        })
+                        if(value1.cost === 0){
+                            if(index != -1){
+                                $scope.materials[key].count -= $scope.materials[key].second_level[index].goods.length
+                                $scope.materials[key].second_level.splice(index,1)
+                            }
                         }else{
                             for(let [key2,value2] of value1.goods.entries()){
+                                if(index!=-1){
+                                    let index1 = $scope.materials[key].second_level[index].goods.findIndex(function (item) {
+                                        return item.id == value2.id
+                                    })
+                                }
                                 if(value2.cost == 0){
-                                    value1.goods.splice(key2,1)
-                                    key2 --
-                                    continue
+                                    if(index1!=-1){
+                                        $scope.materials[key].count --
+                                        $scope.materials[key].second_level[index].splice(index1,1)
+                                    }
                                 }
                             }
                         }
