@@ -5256,6 +5256,14 @@ class OrderController extends Controller
         {
             $data=file_get_contents("php://input");
             $arr=json_decode($data);
+            if (!$arr)
+            {
+                $code=1000;
+                return Json::encode([
+                    'code' => $code,
+                    'msg'  => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
             $goods=$arr->goods;
             $all_money=0;
             foreach ($goods as &$good)
