@@ -21,6 +21,10 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
         'sort[]': 'review_apply_time:3' //排序规则 默认按申请时间降序排列
     }
 
+    $scope.table = {
+        keyword : '' // 输入框值
+    }
+
     /*分页配置*/
     $scope.pageConfig = {
         showJump: true,
@@ -41,11 +45,12 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
         if (value == oldValue) {
             return
         }
-        if (value == 'all' && $scope.params.keyword != '') {
+        if (value == 'all' && $scope.table.keyword != '') {
             return
         }
         if (value != 'custom') {
-            $scope.keyword = '';                // 关键字查询
+            $scope.table.keyword = '';                // 关键字查询
+            $scope.params.keyword = '';
             $scope.params.start_time = '';     // 自定义开始时间
             $scope.params.end_time = '';       // 自定义结束时间
             $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
@@ -61,7 +66,8 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
             return
         }
         if ($scope.params.end_time != '') {
-            $scope.keyword = '';        // 关键字查询
+            $scope.table.keyword = '';        // 关键字查询
+            $scope.params.keyword = '';
             $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
             $scope.pageConfig.currentPage = 1;
             tableList()
@@ -74,7 +80,8 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
             return
         }
         if ($scope.params.start_time != '') {
-            $scope.keyword = '';        // 关键字查询
+            $scope.table.keyword = '';        // 关键字查询
+            $scope.params.keyword = '';
             $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
             $scope.pageConfig.currentPage = 1;
             tableList();
@@ -87,6 +94,7 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
         $scope.params.start_time = '';     // 自定义开始时间
         $scope.params.end_time = '';       // 自定义结束时间
         $scope.params['sort[]'] = 'review_apply_time:3'; //申请时间排序
+        $scope.params.keyword = $scope.table.keyword;
         $scope.pageConfig.currentPage = 1;
         tableList();
     };
@@ -100,7 +108,6 @@ app.controller('settle_verify_pass', ['$rootScope', '$scope', '$state', '$stateP
 
     /*列表数据获取*/
     function tableList() {
-        $scope.params.keyword = $scope.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/supplier/supplier-be-audited-list', $scope.params, function (res) {
             $scope.pageConfig.totalItems = res.data.list.count;
