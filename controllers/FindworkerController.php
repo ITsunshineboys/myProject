@@ -7,6 +7,7 @@ use app\models\Worker;
 use app\models\WorkerItem;
 use app\models\WorkerOrder;
 use app\models\WorkerOrderItem;
+use app\models\WorkerService;
 use app\models\WorkerSkill;
 use app\models\WorkerType;
 use app\models\WorkerWorks;
@@ -78,8 +79,8 @@ class FindworkerController extends Controller{
      */
     public function actionServiceList()
     {
-        $parents = WorkerType::parent();
-        $data=WorkerType::getworkertype($parents);
+        $parents = WorkerService::parent();
+        $data=WorkerService::getworkertype($parents);
         if(!$data){
             $code=1000;
             return Json::encode([
@@ -90,10 +91,10 @@ class FindworkerController extends Controller{
             $parent=[];
             for ($i=0;$i<count($data);$i++){
                 $parent[]=[
-                      'image'=>$parents[$i]['image'],
+                      'image'=>$parents[$i]['service_image'],
                       'id'=>$parents[$i]['id'],
                       'worker_type_label'=>$data[$i],
-                    'parent_name'=>$parents[$i]['worker_name']
+                    'parent_name'=>$parents[$i]['service_name']
                   ];
             }
         return Json::encode([
@@ -289,8 +290,8 @@ class FindworkerController extends Controller{
             ]);
         }
 
-        $data['worker_type']=WorkerType::find()->where(['id'=>$worker_type_id])->select('worker_name,id')->one();
-        $data['item']=WorkerType::find()->asArray()->where(['pid'=>$worker_type_id])->select('worker_name,id')->all();
+        $data['worker_type']=WorkerService::find()->where(['id'=>$worker_type_id])->select('service_name,id')->one();
+        $data['item']=WorkerService::find()->asArray()->where(['pid'=>$worker_type_id])->select('service_name,id')->all();
 
             return Json::encode([
                 'code'=>200,

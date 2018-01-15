@@ -50,4 +50,21 @@ class WorkerService extends \yii\db\ActiveRecord
             ->andWhere(['pid'=>0])
             ->one()['service_name'];
     }
+
+    public static function parent(){
+        return self::find()->where(['pid'=>0,'status'=>1])->asArray()->all();
+    }
+
+    /**
+     * 根据父级工种找子级
+     *@return string
+     */
+    public static function getworkertype($parents){
+
+        foreach ($parents as $k=>$chlid){
+            $data[$k]=self::find()->select('service_name')->where(['pid'=>$chlid['id']])->asArray()->all();
+
+        }
+        return $data;
+    }
 }
