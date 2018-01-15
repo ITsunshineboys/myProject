@@ -165,6 +165,7 @@ class DecorationAdd extends ActiveRecord
             if(isset($effect['add_time'])){
                 $effect['add_time']=date('Y-m-d H:i', $effect['add_time']);
             }
+
         }
 
         return [

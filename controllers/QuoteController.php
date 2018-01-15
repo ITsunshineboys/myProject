@@ -2445,11 +2445,23 @@ class QuoteController extends Controller
      */
     public function actionDecorationList()
     {
+
         $page = (int)trim(\Yii::$app->request->get('page', 1));
         $size = (int)trim(\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT));
         $city = (int)trim(\Yii::$app->request->get('city', DecorationAdd::PAGE_SIZE_DEFAULT));
+        $data=DecorationAdd::find()->asArray()->select('sku')->all();
+        foreach ($data as $v){
+            $goods_status=Goods::find()
+                ->select('status')
+                ->where(['sku'=>$v['sku']])
+                ->asArray()
+                ->one()['status'];
+            if($goods_status!=2){
+                DecorationAdd::deleteAll(['sku'=>$v['sku']]);
+            }
+        }
         $where  = 'city_code = '.$city;
-        $select = 'id,c_id,add_time,correlation_message';
+        $select = 'id,c_id,add_time,correlation_message,sku';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
         foreach ($decoration_add['details'] as &$one){
             $category_name = GoodsCategory::find()->asArray()->select('title')->where(['id'=>$one['c_id']])->one();

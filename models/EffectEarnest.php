@@ -105,6 +105,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
             ->orderBy($orderBy)
             ->offset($offset)
             ->limit($size)
+            ->orderBy('create_time Desc')
             ->asArray()
             ->all();
 
