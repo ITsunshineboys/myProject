@@ -4237,19 +4237,19 @@ class MallController extends Controller
             ]);
         }
 
-        $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile);
-        if (is_int($checkRoleRes)) {
-            return Json::encode([
-                'code' => $checkRoleRes,
-                'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
-            ]);
-        }
+//        $checkRoleRes = User::checkRoleAndGetIdentityByMobile($mobile);
+//        if (is_int($checkRoleRes)) {
+//            return Json::encode([
+//                'code' => $checkRoleRes,
+//                'msg' => Yii::$app->params['errorCodes'][$checkRoleRes],
+//            ]);
+//        }
 
         return Json::encode([
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-//                'identity' => ModelService::viewModelByFields($checkRoleRes, User::FIELDS_VIEW_IDENTITY),
+                'identity' => ModelService::viewModelByFields(new User, User::FIELDS_VIEW_IDENTITY),
             ],
         ]);
     }

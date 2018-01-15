@@ -341,10 +341,7 @@ class Supplier extends ActiveRecord
                 }
             }
 
-            $cacheDelRes = Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
-            if (YII_DEBUG) {
-                StringService::writeLog('test', var_export($cacheDelRes, true), 'supplier-cert');
-            }
+            Yii::$app->cache->delete(UserRole::CACHE_KEY_PREFIX_ROLES_STATUS . $user->id);
 
             $transaction->commit();
             $code = 200;
@@ -456,7 +453,7 @@ class Supplier extends ActiveRecord
             }
 
             $user->refresh();
-            if (empty($user->identity_no)) {
+            if (!empty($attrs['identity_card_no'])) {
                 $user->legal_person = isset($attrs['legal_person']) ? trim($attrs['legal_person']) : '';
                 $user->identity_no = isset($attrs['identity_card_no']) ? trim($attrs['identity_card_no']) : '';
                 $user->identity_card_front_image = isset($attrs['identity_card_front_image'])
@@ -473,31 +470,24 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
-                if (User::checkIdentityExisting($user->identity_no)) {
-                    $transaction->rollBack();
-
-                    $code = 1038;
-                    return $code;
-                }
-
                 if (!$user->save()) {
                     $transaction->rollBack();
 
                     $code = 500;
                     return $code;
                 }
+            }
 
-                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']])->one();
-                if (!$userRole) {
-                    $transaction->rollBack();
-
-                    $code = 500;
-                    return $code;
-                }
-
-                $userRole->review_time = time();
-                $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
+            if (!User::checkIdentityAuthorized($user->identity_no)) {
+                UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
+                $userRole = new UserRole;
+                $userRole->user_id = $user->id;
+                $userRole->role_id = Yii::$app->params['ownerRoleId'];
+                $userRole->review_apply_time = time();
+                $userRole->review_status = Role::AUTHENTICATION_STATUS_IN_PROCESS;
                 if ($operator) {
+                    $userRole->review_time = time();
+                    $userRole->review_status = Role::AUTHENTICATION_STATUS_APPROVED;
                     $userRole->reviewer_uid = $operator->id;
                 }
                 if (!$userRole->save()) {
