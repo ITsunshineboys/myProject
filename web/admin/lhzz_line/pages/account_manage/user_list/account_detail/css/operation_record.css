@@ -13,3 +13,10 @@
 .back-btn {
     margin-top: 100px;
 }
+
+
+.modal-body {
+    word-wrap: break-word;
+    overflow: hidden;
+    width: 100%;
+}

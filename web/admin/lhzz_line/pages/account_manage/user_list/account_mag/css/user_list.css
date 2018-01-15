@@ -14,11 +14,11 @@ table {
     margin-left: 16px;
 }
 
-.word-blue{
+.word-blue {
     color: #5677FC;
 }
 
-.close-reason span{
+.close-reason span {
     display: inline-block;
     width: 50px;
     border-radius: 3px;
@@ -30,17 +30,25 @@ table {
     text-overflow: ellipsis;
 }
 
-.open_modal .modal-body{
+.open_modal .modal-body {
     height: 100px;
 }
 
-.close_reason_modal .modal-body{
+.close_reason_modal .modal-body {
     height: 240px;
 
 }
-.close_reason_modal .modal-body span:first-child{
+
+.close_reason_modal .modal-body span:first-child {
     margin-right: 30px
 }
+
+.modal-body {
+    word-wrap: break-word;
+    overflow: hidden;
+    width: 100%;
+}
+
 
 
 
