@@ -494,17 +494,14 @@ class ChatController extends Controller
             return $user;
         }
         list($u_id, $role_id) = $user;
-
+        $weak_t2=strtotime("-2 week");
         $new_infos=(new Query())
             ->from('user_news_record')
             ->where(['role_id'=>$role_id,'uid'=>$u_id])
+            ->andWhere("send_time>=$weak_t2")
             ->orderBy('send_time Desc')
             ->limit(50)
             ->all();
-//        $count = $query->count();
-//        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
-//        $new_infos=$query->offset($pagination->offset)
-//            ->limit($pagination->limit)
 
          foreach ($new_infos as $k=>&$info){
              $info['send_time']=date('Y-m-d',$info['send_time']);
