@@ -3800,6 +3800,7 @@ class GoodsOrder extends ActiveRecord
                 if ($goods->order_status ==2)
                 {
                     $code=1034;
+                    $trans->rollBack();
                     return $code;
                 }
                 $content = "订单号{$order_no},{$OrderGoods[0]->goods_name}";
@@ -3810,6 +3811,7 @@ class GoodsOrder extends ActiveRecord
                     $trans->rollBack();
                     return $code;
                 }
+
                 $Goods=Goods::find()->where(['sku'=>$goods->sku])->one();
                 if (!$Goods)
                 {
@@ -3834,11 +3836,11 @@ class GoodsOrder extends ActiveRecord
                 {
                     return $code;
                 }
-
+                $trans->commit();
                 $code=200;
                 return $code;
             }
-            $trans->commit();
+
         }catch (yii\db\Exception $e)
         {
             $trans->rollBack();
