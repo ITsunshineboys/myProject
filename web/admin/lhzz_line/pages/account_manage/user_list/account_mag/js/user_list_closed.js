@@ -50,6 +50,7 @@ app.controller('account_user_list_closed', ['$scope', '$stateParams', '_ajax', '
     // 时间筛选器
     $scope.$watch('params.time_type', function (value, oldValue) {
         $scope.table.keyword = '';
+        $scope.params.keyword = '';
         $scope.table.roles.length = 0;
         if (value == oldValue) {
             return
@@ -71,6 +72,7 @@ app.controller('account_user_list_closed', ['$scope', '$stateParams', '_ajax', '
     /*搜索*/
     $scope.search = () => {
         $scope.table.roles.length = 0;
+        $scope.params.keyword = $scope.table.keyword;
         $scope.params.time_type = 'all';   // 时间类型
         $scope.params.start_time = '';     // 自定义开始时间
         $scope.params.end_time = '';       // 自定义结束时间
@@ -84,6 +86,7 @@ app.controller('account_user_list_closed', ['$scope', '$stateParams', '_ajax', '
     // 开始时间
     $scope.$watch('params.start_time', function (value, oldValue) {
         $scope.table.keyword = '';
+        $scope.params.keyword = '';
         $scope.table.roles.length = 0;
         if (value == oldValue) {
             return;
@@ -98,6 +101,7 @@ app.controller('account_user_list_closed', ['$scope', '$stateParams', '_ajax', '
     // 结束时间
     $scope.$watch('params.end_time', function (value, oldValue) {
         $scope.table.keyword = '';
+        $scope.params.keyword = '';
         $scope.table.roles.length = 0;
         if (value == oldValue) {
             return
@@ -155,16 +159,15 @@ app.controller('account_user_list_closed', ['$scope', '$stateParams', '_ajax', '
     };
 
 
-    //查看跳转
+    // 查看跳转
     $scope.checkAccount = (item) => {
         sessionStorage.setItem('account_detail',JSON.stringify(item));
         $state.go('account_mag_detail');
     }
 
 
-
+    // 列表数据
     function tableList() {
-        $scope.params.keyword = $scope.table.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/user-list',$scope.params,function (res) {
             $scope.pageConfig.totalItems = res.data.user_list.total;
