@@ -3116,9 +3116,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-        var_dump(EffectEarnest::deleteAll(['id'=>65]));
-        var_dump(EffectEarnest::deleteAll(['id'=>66]));
-        var_dump(EffectEarnest::deleteAll(['id'=>69]));
+       echo date("Y-m-d", strtotime("-1 week"));
 
     }
 }
