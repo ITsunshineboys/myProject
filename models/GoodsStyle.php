@@ -66,4 +66,37 @@ class GoodsStyle extends ActiveRecord
             return $v['style_id'];
         }, $styleIds);
     }
+
+    /**
+     * Get goods id list by style id
+     *
+     * @param $styleId style id
+     * @return array
+     */
+    public static function goodsIdsByStyleId($styleId)
+    {
+        $goodsIds = self::find()
+            ->asArray()
+            ->select(['goods_id'])
+            ->where(['style_id' => $styleId])
+            ->all();
+        return array_map(function ($v) {
+            return $v['goods_id'];
+        }, $goodsIds);
+    }
+
+    /**
+     * Get goods ids which have only one style
+     *
+     * @param $styleId style id default 0
+     * @return array
+     */
+    public static function goodsIdsOneStyle($styleId = 0)
+    {
+        $where = '1';
+        $styleId && $where .= ' and style_id = ' . $styleId;
+        return Yii::$app->db
+            ->createCommand('select goods_id from ' . self::tableName() . ' where ' . $where . 'group by goods_id having count(*) = 1')
+            ->queryColumn();
+    }
 }

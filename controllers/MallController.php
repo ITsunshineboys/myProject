@@ -4698,17 +4698,54 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$series_edit->save()) {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            if (!$series_edit->save(false)) {
+                $tran->rollBack();
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if ($series_edit->status == ModelService::STATUS_OFFLINE) {
+                $user = Yii::$app->user->identity;
+                if (!$user) {
+                    $tran->rollBack();
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                $operator = UserRole::roleUser($user, Yii::$app->params['lhzzRoleId']);
+                if (!$operator) {
+                    $tran->rollBack();
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                Goods::disableGoodsBySeriesId($series_edit->id, $operator);
+            }
+
+            $tran->commit();
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok'
+            ]);
+        } catch (\Exception $e) {
+            $tran->rollBack();
             $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok'
-        ]);
     }
 
     /**
@@ -4830,17 +4867,54 @@ class MallController extends Controller
             ]);
         }
 
-        if (!$series_edit->save()) {
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            if (!$series_edit->save(false)) {
+                $tran->rollBack();
+                $code = 500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => \Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            if ($series_edit->status == ModelService::STATUS_OFFLINE) {
+                $user = Yii::$app->user->identity;
+                if (!$user) {
+                    $tran->rollBack();
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                $operator = UserRole::roleUser($user, Yii::$app->params['lhzzRoleId']);
+                if (!$operator) {
+                    $tran->rollBack();
+                    $code = 500;
+                    return Json::encode([
+                        'code' => $code,
+                        'msg' => \Yii::$app->params['errorCodes'][$code],
+                    ]);
+                }
+
+                Goods::disableGoodsByStyleId($series_edit->id, $operator);
+            }
+
+            $tran->commit();
+            return Json::encode([
+                'code'=>200,
+                'msg'=>'ok'
+            ]);
+        } catch (\Exception $e) {
+            $tran->rollBack();
             $code = 500;
             return Json::encode([
                 'code' => $code,
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-        return Json::encode([
-            'code'=>200,
-            'msg'=>'ok'
-        ]);
     }
 
     /**

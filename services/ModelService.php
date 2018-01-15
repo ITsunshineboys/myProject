@@ -45,6 +45,8 @@ class ModelService
     const SCENARIO_REVIEW = 'review';
     const SCENARIO_ADD = 'add';
     const SCENARIO_EDIT = 'edit';
+    const STATUS_ONLINE = 1;
+    const STATUS_OFFLINE = 0;
 
     /**
      * Generate sorting statements for query

@@ -289,8 +289,11 @@ class Goods extends ActiveRecord
     {
         $goodsIds = self::findIdsByCategoryId($categoryId);
         if ($goodsIds) {
-            $goodsIds = implode(',', $goodsIds);
-            $where = 'id in(' . $goodsIds . ')';
+            $where = [
+                'and',
+                ['status' => self::STATUS_ONLINE],
+                ['in', 'id', $goodsIds]
+            ];
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
@@ -320,28 +323,44 @@ class Goods extends ActiveRecord
     }
 
     /**
-     * Disable goods by supplier id
+     * Disable goods by style id
      *
-     * @param int $supplierId supplier id
+     * @param int $styleId style id
      * @param ActiveRecord $operator $operator
      */
-    public static function disableGoodsBySupplierId($supplierId, ActiveRecord $operator)
+    public static function disableGoodsByStyleId($styleId, ActiveRecord $operator)
     {
-        $goodsIds = self::findIdsBySupplierId($supplierId);
-        if ($goodsIds) {
-            $where = [
-                'and',
-                ['status' => self::STATUS_ONLINE],
-                ['in', 'id', $goodsIds]
-            ];
-            self::updateAll([
-                'status' => self::STATUS_OFFLINE,
-                'offline_time' => time(),
-                'offline_reason' => Yii::$app->params['supplier']['offline_reason'],
-                'offline_uid' => $operator->id,
-                'offline_person' => $operator->nickname,
-            ], $where);
-        }
+        $goodsIds = GoodsStyle::goodsIdsOneStyle($styleId);
+        $where = [
+            'and',
+            ['status' => self::STATUS_ONLINE],
+            ['in', 'id', $goodsIds]
+        ];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->params['style_series']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
+    }
+
+    /**
+     * Disable goods by series id
+     *
+     * @param int $seriesId series id
+     * @param ActiveRecord $operator $operator
+     */
+    public static function disableGoodsBySeriesId($seriesId, ActiveRecord $operator)
+    {
+        $where = ['status' => self::STATUS_ONLINE, 'series_id' => $seriesId];
+        self::updateAll([
+            'status' => self::STATUS_OFFLINE,
+            'offline_time' => time(),
+            'offline_reason' => Yii::$app->params['style_series']['offline_reason'],
+            'offline_uid' => $operator->id,
+            'offline_person' => $operator->nickname,
+        ], $where);
     }
 
     /**
@@ -393,8 +412,11 @@ class Goods extends ActiveRecord
     {
         $goodsIds = self::findIdsByBrandId($brandId);
         if ($goodsIds) {
-            $goodsIds = implode(',', $goodsIds);
-            $where = 'id in(' . $goodsIds . ')';
+            $where = [
+                'and',
+                ['status' => self::STATUS_ONLINE],
+                ['in', 'id', $goodsIds]
+            ];
             self::updateAll([
                 'status' => self::STATUS_OFFLINE,
                 'offline_time' => time(),
