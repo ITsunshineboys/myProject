@@ -1599,7 +1599,7 @@ class WithdrawalsController extends Controller
 
                 $list[]=[
                     'name'=>'时间',
-                    'value'=>$access['create_time']
+                    'value'=>date('Y-m-d H:i',$access['create_time'])
                 ];
                 $list[]=[
                     'name'=>'交易单号',
@@ -1608,18 +1608,23 @@ class WithdrawalsController extends Controller
                 break;
             case 2:
 
+                $OrderGoods=OrderGoods::FindByOrderNoAndSku($access['order_no'],$access['sku']);
                 //此处有改动未修复
                 $list[]=[
-                    'name'=>'充值方式',
-                    'value'=>'支付宝支付'
+                    'name'=>'商品名称',
+                    'value'=>$OrderGoods->goods_name
                 ];
                 $list[]=[
                     'name'=>'时间',
-                    'value'=>$access['create_time']
+                    'value'=>date('Y-m-d H:i',$access['create_time'])
                 ];
                 $list[]=[
                     'name'=>'交易单号',
                     'value'=>$transaction_no
+                ];
+                $list[]=[
+                    'name'=>'商品订单号',
+                    'value'=>$OrderGoods->order_no
                 ];
                 break;
             case 3:
@@ -1695,7 +1700,7 @@ class WithdrawalsController extends Controller
             case 6:
                 $list[]=[
                     'name'=>'时间',
-                    'value'=>$access['create_time']
+                    'value'=>date('Y-m-d H:i',$access['create_time'])
                 ];
 
                 $list[]=[
@@ -1756,7 +1761,7 @@ class WithdrawalsController extends Controller
                     ];
                     $list_payment[]=[
                         'name'=>'时间',
-                        'value'=>$access['create_time']
+                        'value'=>date('Y-m-d H:i',$access['create_time'])
                     ];
                     $list_payment[]=[
                         'name'=>'交易单号',
@@ -1799,7 +1804,7 @@ class WithdrawalsController extends Controller
                     ];
                     $list[]=[
                         'name'=>'下单时间',
-                        'value'=>$GoodsOrder->create_time
+                        'value'=>date('Y-m-d H:i',$GoodsOrder->create_time)
                     ];
                     $list[]=[
                         'name'=>'付款方式',
