@@ -86,7 +86,7 @@ let app = angular.module("app", ["ui.bootstrap","ui.router","ngAnimate",'angular
                 deferred.resolve(response)
                 let res = response.data;
                 if (res.code === 403) {
-                    $state.go('login')
+                    // $state.go('login')
                 } else if (res.code === 200 || res.code === 201 || res.code === 1068) {
                     if (typeof callback === 'function') {
                             callback(res)

@@ -699,7 +699,49 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
     }
     //保存方案
     $scope.saveProgramme = function () {
-        
+        let materials = []
+        //整合申请样板间所需传值
+        let obj = {
+            province_code:$scope.params.province,
+            city_code:$scope.params.city,
+            street:$scope.toponymy.address,
+            toponymy:$scope.toponymy.name,
+            sittingRoom_diningRoom:$scope.params.hall,
+            window:$scope.params.window,
+            bedroom:$scope.params.bedroom,
+            area:$scope.params.area,
+            high:$scope.params.high,
+            toilet:$scope.params.toilet,
+            kitchen:$scope.params.kitchen,
+            stair_id:$scope.params.stairway_id,
+            stairway:$scope.params.stairway,
+            series:$scope.params.series,
+            style:$scope.params.style,
+            type:0,
+            requirement:$scope.special_request,
+            original_price:$scope.total_prices,
+            sale_price:$scope.special_offer
+        }
+        for(let [key,value] of $scope.materials.entries()){
+            for(let [key1,value1] of value.second_level.entries()){
+                for(let [key2,value2] of value1.goods.entries()){
+                    materials.push({
+                        goods_id:value2.id,
+                        price:value2.cost,
+                        count:value2.quantity,
+                        first_cate_id:value.id
+                    })
+                }
+            }
+        }
+        obj.materials = materials
+        _ajax.post('/effect/app-apply-effect',obj,function (res) {
+            if(res.code == 403){
+                window.AndroidWebView.skipIntent()
+            }else{
+
+            }
+        })
     }
     //跳转申请样板间
     // $scope.applyCase = function () {
