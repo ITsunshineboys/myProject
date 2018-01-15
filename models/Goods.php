@@ -863,6 +863,11 @@ class Goods extends ActiveRecord
         if ($user->login_role_id == Yii::$app->params['lhzzRoleId']
             && in_array($this->status, [self::STATUS_WAIT_ONLINE, self::STATUS_OFFLINE])
         ) {
+            if ($this->status == self::STATUS_OFFLINE && $this->offline_uid == 0) {
+                $code = 1049;
+                return $code;
+            }
+
             if (!$this->validateCategoryId('category_id')) {
                 $code = 1012;
                 return $code;
