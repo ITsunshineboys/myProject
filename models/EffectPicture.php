@@ -48,7 +48,7 @@ class EffectPicture extends ActiveRecord
             'images_user'    => $images_user,
             'series_id'      => $series_id,
             'style_id'       => $style_id,
-        ],['id'=>$id])->execute();
+        ],['effect_id'=>$id])->execute();
 
         return $res;
     }
