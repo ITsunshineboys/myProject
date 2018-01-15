@@ -73,6 +73,8 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
         subClass(value);
         $scope.params.pid = value;
         $scope.table.keyword = '';
+        $scope.params.keyword = '';
+        $scope.pageConfig.currentPage = 1;
         tableList()
     });
 
@@ -88,11 +90,15 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
         if (value) {
             $scope.params.pid = value;
             $scope.table.keyword = '';
+            $scope.params.keyword = '';
+            $scope.pageConfig.currentPage = 1;
             tableList()
         } else {
             //二级分类id为0
             $scope.params.pid = $scope.dropdown.firstselect;
             $scope.table.keyword = '';
+            $scope.params.keyword = '';
+            $scope.pageConfig.currentPage = 1;
             tableList()
         }
     });
@@ -102,14 +108,14 @@ app.controller('class_offline', ['$scope', '$stateParams', '_ajax', function ($s
         $scope.table.roles.length = 0;
         $scope.dropdown.firstselect = 0;
         $scope.params['sort[]'] = 'offline_time:3';
-        $scope.params.page = 1;
+        $scope.pageConfig.currentPage = 1;
+        $scope.params.keyword = $scope.table.keyword;
         tableList();
     }
 
 
     /*列表数据获取*/
     function tableList() {
-        $scope.params.keyword = $scope.table.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
             $scope.pageConfig.totalItems = res.data.category_list_admin.total;
