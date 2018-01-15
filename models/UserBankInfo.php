@@ -162,6 +162,18 @@ class UserBankInfo extends \yii\db\ActiveRecord
             {
                 $cardType=1;
             }
+            $userRole=UserRole::find()->where(['user_id'=>$user->id])->one();
+            if (!$userRole || !$user->identity_no)
+            {
+               return  1091;
+            }
+
+            $code=$userRole->checkIsAuthentication();
+            if ($code!=200)
+            {
+                return $code;
+            }
+
             $bankInfolog=(new Query())
                 ->from(self::tableName().' as B')
                 ->leftJoin(BankinfoLog::tableName().' as L','B.log_id=L.id')

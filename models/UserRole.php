@@ -32,6 +32,7 @@ class UserRole extends ActiveRecord
     ];
     const REVIEW_AGREE=2;
     const REVIEW_DISAGREE=1;
+    const  REVIEW_BE_AUDITED=0;
     /**
      * Get roles status by user id
      *
@@ -310,5 +311,26 @@ class UserRole extends ActiveRecord
         if (isset($changedAttributes['review_status'])) {
             Yii::$app->cache->delete(self::CACHE_KEY_PREFIX_ROLES_STATUS . $this->user_id);
         }
+    }
+
+
+    /**
+     * @return int
+     */
+    public  function  checkIsAuthentication()
+    {
+        switch ($this->review_status)
+        {
+            case self::REVIEW_AGREE:
+                $code= 200;
+                break;
+            case self::REVIEW_DISAGREE:
+                $code= 1092;
+                break;
+            case self::REVIEW_BE_AUDITED:
+                $code= 1091;
+                break;
+        }
+        return $code;
     }
 }

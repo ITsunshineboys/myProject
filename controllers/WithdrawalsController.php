@@ -14,6 +14,7 @@ use app\models\UserAccessdetail;
 use app\models\UserCashregister;
 use app\models\UserBankInfo;
 use app\models\UserFreezelist;
+use app\models\UserRole;
 use app\services\ModelService;
 use app\services\SmValidationService;
 use app\services\ExceptionHandleService;
@@ -115,7 +116,8 @@ class WithdrawalsController extends Controller
             || !$bankcard
             || !$username
             || !$position
-        ){
+        )
+        {
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -126,6 +128,7 @@ class WithdrawalsController extends Controller
         {
             $role_id=$user->last_role_id_app;
         }
+
         $code=UserBankInfo::SetBankCard($bankname,$bankcard,$username,$position,$bankbranch,$role_id,$user);
         if ($code==200)
         {
@@ -225,8 +228,7 @@ class WithdrawalsController extends Controller
             $data=[];
         }
         $code=200;
-        return Json::encode
-        ([
+        return Json::encode([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$data
@@ -286,7 +288,8 @@ class WithdrawalsController extends Controller
         $data['key']=$payPassword? \Yii::$app->getSecurity()->generatePasswordHash(User::UNFIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time())):\Yii::$app->getSecurity()->generatePasswordHash(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()));
          $data['mobile']=$user->mobile;
          $code=200;
-         return Json::encode([
+         return Json::encode
+         ([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$data
@@ -521,8 +524,7 @@ class WithdrawalsController extends Controller
         $request=Yii::$app->request;
         $money=trim($request->post('money',''));
         $pay_password=trim($request->post('pay_pwd',''));
-        if (!$money ||!$pay_password)
-        {
+        if (!$money ||!$pay_password){
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -530,8 +532,7 @@ class WithdrawalsController extends Controller
             ]);
         }
         $user = Yii::$app->user->identity;
-        if (!$user)
-        {
+        if (!$user){
             $code=1052;
             return Json::encode([
                 'code' => $code,
@@ -574,7 +575,7 @@ class WithdrawalsController extends Controller
             ]);
         }
         $userBankInfo=UserBankInfo::find()
-            ->where(['uid'=>$user->id,'role_id'=>6])
+            ->where(['uid'=>$user->id,'role_id'=>Yii::$app->params['supplierRoleId']])
             ->andWhere(['selected'=>1])
             ->one();
         if (!$userBankInfo)
