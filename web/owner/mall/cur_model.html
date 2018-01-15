@@ -1,0 +1,14 @@
+<div class="modal-body" ng-if="!save_status">
+    <p>您好，您所申请的样板间部分商品已下架，请及时与我们客服人员联系！</p>
+    <p>联系电话：400-800-8764</p>
+</div>
+<div ng-if="!save_status" class="modal-footer" ng-click="common_house()">
+    确认
+</div>
+<div class="modal-body apply" ng-if="save_status">
+    <p>申请成功，我们会在3天内和你联系</p>
+</div>
+<div ng-if="save_status" style="padding: 0!important;height: 3rem!important;" class="modal-footer">
+    <button ng-click="return()">返回</button>
+    <button ng-click="viewDetails()">查看详情</button>
+</div>
