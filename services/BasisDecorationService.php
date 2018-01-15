@@ -717,9 +717,6 @@ class BasisDecorationService
                 break;
             case $int == 2:
                 //  无建渣点
-                //        清运12墙费用=运到小区楼下费用+单独外运费用
-                //        单独外运费用=（12墙拆除面积÷【20】）×【300】
-                // 运到楼下费用
                 $cost = ceil(self::algorithm(1,$get,$craft));
                 $value_ = ceil(self::algorithm(6,$get,$craft1));
                 $value['wall'] = round(self::algorithm(1,$value_,$fare),2);
@@ -1437,7 +1434,7 @@ class BasisDecorationService
     }
 
     /**
-     * 腻子 底漆 面漆 阴角线  自流平 的默认熟练
+     * 腻子 底漆 面漆 阴角线  自流平 的默认数量
      * @param $goods
      * @param $get
      * @return float|int
