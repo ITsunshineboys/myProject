@@ -1,5 +1,5 @@
 let style_index = angular.module("styleindexModule", []);
-style_index.controller("style_index", function ($rootScope,$scope, $http, $stateParams,_ajax) {
+style_index.controller("style_index", function ($rootScope, $scope, $http, $stateParams, _ajax) {
     $rootScope.crumbs = [{
         name: '商城管理',
         icon: 'icon-shangchengguanli',
@@ -22,13 +22,13 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     };
     $scope.params = {
         page: 1,                        // 当前页数
-        sort:0
+        sort: 0
     };
-    let tablePages=function () {
-        $scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
-        _ajax.get('/mall/style-time-sort',$scope.params,function (res) {
+    let tablePages = function () {
+        $scope.params.page = $scope.Config.currentPage;//点击页数，传对应的参数
+        _ajax.get('/mall/style-time-sort', $scope.params, function (res) {
             console.log(res);
-            $scope.style_arr=res.list.details;
+            $scope.style_arr = res.list.details;
             $scope.Config.totalItems = res.list.total;
         })
     };
@@ -61,7 +61,7 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
     /*分类选择一级下拉框*/
     function firstClass() {
-        _ajax.get('/mall/categories-manage-admin',{},function (res) {
+        _ajax.get('/mall/categories-manage-admin', {}, function (res) {
             $scope.firstclass = res.data.categories;
             $scope.dropdown.firstselect = res.data.categories[0].id;
         })
@@ -92,10 +92,9 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         $scope.showseries = true;
         $scope.showstyle = false;
         $scope.showattr = false;
-        $scope.ser_time_img='lib/images/sort_down.png';
-        _ajax.get('/mall/series-time-sort',{sort:0},function (res) {
-            console.log(res);
-            $scope.series_arr=res.list;
+        $scope.ser_time_img = 'lib/images/sort_down.png';
+        _ajax.get('/mall/series-time-sort', {sort: 0}, function (res) {
+            $scope.series_arr = res.list;
         });
     };
     //风格
@@ -103,10 +102,10 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         $scope.showseries = false;
         $scope.showstyle = true;
         $scope.showattr = false;
-        $scope.params.page=1;
-        $scope.params.sort=0;
-        $scope.style_time_img='lib/images/sort_down.png';
-        $scope.Config.currentPage=1;
+        $scope.params.page = 1;
+        $scope.params.sort = 0;
+        $scope.style_time_img = 'lib/images/sort_down.png';
+        $scope.Config.currentPage = 1;
         tablePages();
     };
 
@@ -118,9 +117,11 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         $scope.attr_params = {
             pid: 0,   //父分类id
             page: 1,  //当前页数
+            keyword: '',
             'sort[]': "attr_op_time:3" //排序规则 默认按最后操作时间降序排列
         }
         $scope.pageConfig.currentPage = 1;
+        $scope.dropdown.keyword = '';
         firstClass()
         tableList();
 
@@ -130,97 +131,97 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /************************系列开始*******************************/
 
 //	系列——展示数据
-    _ajax.get('/mall/series-time-sort',{sort:0},function (res) {
-        $scope.series_arr=res.list;
+    _ajax.get('/mall/series-time-sort', {sort: 0}, function (res) {
+        $scope.series_arr = res.list;
     })
     //开启操作
-    $scope.open_status=function (item) {
-        $scope.open_item=item;
+    $scope.open_status = function (item) {
+        $scope.open_item = item;
     };
     //开启确认按钮
-    $scope.open_btn_ok=function () {
-        _ajax.post('/mall/series-status',{
-            id:+$scope.open_item.id,
-            status:1
-        },function (res) {
-            _ajax.get('/mall/series-time-sort',{},function (res) {
-                $scope.series_arr=res.list;
+    $scope.open_btn_ok = function () {
+        _ajax.post('/mall/series-status', {
+            id: +$scope.open_item.id,
+            status: 1
+        }, function (res) {
+            _ajax.get('/mall/series-time-sort', {}, function (res) {
+                $scope.series_arr = res.list;
             })
         })
     };
 
     //关闭操作
-    $scope.close_status=function (item) {
-        $scope.close_item=item;
+    $scope.close_status = function (item) {
+        $scope.close_item = item;
     };
     //关闭确认按钮
-    $scope.close_btn_ok=function () {
-        _ajax.post('/mall/series-status',{
-            id:+$scope.close_item.id,
-            status:0
-        },function (res) {
-            _ajax.get('/mall/series-time-sort',{},function (res) {
-                $scope.series_arr=res.list;
+    $scope.close_btn_ok = function () {
+        _ajax.post('/mall/series-status', {
+            id: +$scope.close_item.id,
+            status: 0
+        }, function (res) {
+            _ajax.get('/mall/series-time-sort', {}, function (res) {
+                $scope.series_arr = res.list;
             })
         })
     };
     //系类时间排序
-    $scope.ser_time_img='lib/images/sort_down.png';
-    $scope.ser_time_sort=function () {
-        if($scope.ser_time_img=='lib/images/sort_down.png'){
-            $scope.ser_time_img='lib/images/sort_up.png';
-            $scope.ser_sort_num=1;
-        }else{
-            $scope.ser_time_img='lib/images/sort_down.png';
-            $scope.ser_sort_num=0;
+    $scope.ser_time_img = 'lib/images/sort_down.png';
+    $scope.ser_time_sort = function () {
+        if ($scope.ser_time_img == 'lib/images/sort_down.png') {
+            $scope.ser_time_img = 'lib/images/sort_up.png';
+            $scope.ser_sort_num = 1;
+        } else {
+            $scope.ser_time_img = 'lib/images/sort_down.png';
+            $scope.ser_sort_num = 0;
         }
-        _ajax.get('/mall/series-time-sort',{sort:$scope.ser_sort_num},function (res) {
-            $scope.series_arr=res.list;
+        _ajax.get('/mall/series-time-sort', {sort: $scope.ser_sort_num}, function (res) {
+            $scope.series_arr = res.list;
         })
     };
     /******************************系列结束******************************/
 
     /*********************************风格开始*******************************/
     //风格时间排序
-    $scope.style_time_img='lib/images/sort_down.png';
-    $scope.style_time_sort=function () {
-        if($scope.style_time_img=='lib/images/sort_down.png'){
-            $scope.style_time_img='lib/images/sort_up.png';
-            $scope.params.sort=1;
-            $scope.Config.currentPage=1;
+    $scope.style_time_img = 'lib/images/sort_down.png';
+    $scope.style_time_sort = function () {
+        if ($scope.style_time_img == 'lib/images/sort_down.png') {
+            $scope.style_time_img = 'lib/images/sort_up.png';
+            $scope.params.sort = 1;
+            $scope.Config.currentPage = 1;
             tablePages();
-        }else{
-            $scope.style_time_img='lib/images/sort_down.png';
-            $scope.params.sort=0;
-            $scope.Config.currentPage=1;
+        } else {
+            $scope.style_time_img = 'lib/images/sort_down.png';
+            $scope.params.sort = 0;
+            $scope.Config.currentPage = 1;
             tablePages();
         }
     }
 //开启操作
-    $scope.style_open=function (item) {
-        $scope.style_open_item=item;
+    $scope.style_open = function (item) {
+        $scope.style_open_item = item;
     };
     //开启确认按钮
-    $scope.style_open_btn_ok=function () {
-        _ajax.post('/mall/style-status',{
-            id:+$scope.style_open_item.id,
-            status:1
-        },function (res) {
-            $scope.Config.currentPage=1;
+    $scope.style_open_btn_ok = function () {
+        _ajax.post('/mall/style-status', {
+            id: +$scope.style_open_item.id,
+            status: 1
+        }, function (res) {
+            $scope.Config.currentPage = 1;
             tablePages();
         })
     };
 //关闭操作
-    $scope.style_close=function (item) {
-        $scope.style_close_item=item;
+    $scope.style_close = function (item) {
+        $scope.style_close_item = item;
     };
 //关闭确认按钮
-    $scope.style_close_btn_ok=function () {
-        _ajax.post('/mall/style-status',{
-            id:+$scope.style_close_item.id,
-            status:0
-        },function (res) {
-            $scope.Config.currentPage=1;
+    $scope.style_close_btn_ok = function () {
+        _ajax.post('/mall/style-status', {
+            id: +$scope.style_close_item.id,
+            status: 0
+        }, function (res) {
+            $scope.Config.currentPage = 1;
             tablePages();
         })
     };
@@ -234,8 +235,10 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
         pid: 0,   //父分类id
         page: 1,  //当前页数
         'sort[]': "attr_op_time:3", //排序规则 默认按最后操作时间降序排列
-        keyword:''
+        keyword: ''
     }
+
+    // $scope.attr_params.keyword = $scope.dropdown.keyword;
 
     /*排序按钮样式控制*/
     $scope.sortStyleFunc = () => {
@@ -245,7 +248,7 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
 
     /*分类选择二级下拉框*/
     function subClass(obj) {
-        _ajax.get('/mall/categories-manage-admin',{pid: obj},function (res) {
+        _ajax.get('/mall/categories-manage-admin', {pid: obj}, function (res) {
             $scope.secondclass = res.data.categories;
             $scope.dropdown.secselect = res.data.categories[0].id;
         })
@@ -306,11 +309,12 @@ style_index.controller("style_index", function ($rootScope,$scope, $http, $state
     /*列表数据获取*/
     function tableList() {
         $scope.attr_params.page = $scope.pageConfig.currentPage;
-        _ajax.get('/mall/goods-attr-list-admin',$scope.attr_params,function (res) {
+        _ajax.get('/mall/goods-attr-list-admin', $scope.attr_params, function (res) {
             console.log(res);
             $scope.pageConfig.totalItems = res.data.goods_attr_list_admin.total;
             $scope.listdata = res.data.goods_attr_list_admin.details;
         })
     }
+
     /*********************************属性结束******************************/
 });

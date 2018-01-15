@@ -124,7 +124,6 @@ app.controller('class_online', ['$scope', '$stateParams', '_ajax', function ($sc
 
     /*列表数据获取*/
     function tableList() {
-        $scope.params.keyword = $scope.table.keyword;
         $scope.params.page = $scope.pageConfig.currentPage;
         _ajax.get('/mall/category-list-admin',$scope.params,function (res) {
             $scope.pageConfig.totalItems = res.data.category_list_admin.total;
