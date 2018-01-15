@@ -327,7 +327,7 @@ class Effect extends ActiveRecord
                 ['name'=>'申请时间','value'=>$array['create_time']]
             ];
         if( $array['type']==1 && ($array['name']=='' && $array['phone']=='')){
-           unset($data['user_view']);
+            $data['user_view']=[];
         }elseif ( $array['type']==0 && ($array['name']=='' && $array['phone']=='')){
             $data['user_view']=[];
         }
