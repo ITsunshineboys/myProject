@@ -4193,18 +4193,31 @@ class MallController extends Controller
         $data = Yii::$app->request->post();
         $data['status'] = Supplier::STATUS_ONLINE;
         $operator = UserRole::roleUser(Yii::$app->user->identity, Yii::$app->session[User::LOGIN_ROLE_ID]);
-        $code = Supplier::add($checkRoleRes, $data, $operator);
-        if (200 != $code) {
+
+        $tran = Yii::$app->db->beginTransaction();
+        try {
+            Supplier::deleteAll(['uid' => $checkRoleRes->id]);
+            $code = Supplier::add($checkRoleRes, $data, $operator);
+            if (200 != $code) {
+                $tran->rollBack();
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code],
+                ]);
+            }
+
+            $tran->commit();
+            return Json::encode([
+                'code' => $code,
+                'msg' => 'OK',
+            ]);
+        } catch (\Exception $e) {
+            $tran->rollBack();
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
-
-        return Json::encode([
-            'code' => $code,
-            'msg' => 'OK',
-        ]);
     }
 
     /**
