@@ -826,6 +826,9 @@ class BasisDecorationService
                         }
                     }
                     $area = round(self::algorithm(1,$length,$breadth),2);
+                    var_dump($length);
+                    var_dump($breadth);
+                    var_dump($area);die;
                     $one_goods['quantity'] = (int)ceil(self::algorithm(6,$post['bedroom_area'],$area));
                     $one_goods['cost'] = round(self::algorithm(1,$one_goods['platform_price'],$one_goods['quantity']),2);
                     $one_goods['procurement'] = round(self::algorithm(1,$one_goods['purchase_price_decoration_company'],$one_goods['quantity']),2);
