@@ -344,12 +344,15 @@ class ShippingCart extends \yii\db\ActiveRecord
         }
     }
 
-    public  static  function isNotJson($str)
+    public  static  function isJson($str)
     {
         if (is_array($str)){
             return false;
         }
-        return is_array(json_decode($str));
+        if (is_array(json_decode($str)))
+        {
+            return true;
+        }
     }
 
 
