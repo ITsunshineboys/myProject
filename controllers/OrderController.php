@@ -5233,7 +5233,7 @@ class OrderController extends Controller
             ]);
         }
         $postData=Yii::$app->request->post();
-        if ($postData && is_array($postData))
+        if ($postData)
         {
             $goods=json_decode($postData['goods']);
             $all_money=0;
