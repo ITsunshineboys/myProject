@@ -1,4 +1,4 @@
-app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScroll, $location, $q) {
+app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, $anchorScroll, $location, $q) {
     //初始化
     $scope.vm = $scope
     $scope.special_request = ''
@@ -609,14 +609,6 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                 ]).then(function () {
                     console.log($scope.materials);
                     console.log($scope.worker_list);
-                    for(let [key,value] of $scope.materials.entries()){
-                        for(let [key1,value1] of value.second_level.entries()){
-                            let index = value1.goods.findIndex(function(item){
-                                return item.status == 0
-                            })
-                           value1.status = index == -1?2:0
-                        }
-                    }
                     getPrice()
                 })
             })
@@ -676,6 +668,14 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
                 })
             })()
         ]).then(function () {
+            for(let [key,value] of $scope.materials.entries()){
+                for(let [key1,value1] of value.second_level.entries()){
+                    let index = value1.goods.findIndex(function(item){
+                        return item.status == 0
+                    })
+                    value1.status = index == -1?2:0
+                }
+            }
             let worker_price = $scope.worker_list.reduce(function (prev, cur) {
                 return prev + cur.price
             }, 0)
@@ -698,8 +698,10 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
         }
     }
     //跳转申请样板间
-    $scope.apply_case = function () {
-        let materials = []
+    $scope.applyCase = function () {
+        let materials = []//申请材料项
+        let status = false//材料是否存在下架
+        //整合申请样板间所需传值
         let obj = {
             province_code:$scope.params.province,
             city_code:$scope.params.city,
@@ -734,8 +736,38 @@ app.controller('nodata_ctrl', function ($http, _ajax, $state, $scope, $anchorScr
             }
         }
         obj.materials = materials
-        sessionStorage.setItem('payParams',JSON.stringify(obj))
-        $state.go('deposit')
+        //遍历是否存在下架商品
+        for(let [key,value] of $scope.materials.entries()){
+            let index = value.second_level.findIndex(function (item) {
+                return item.status == 0
+            })
+            if(index == -1){
+                status = false
+            }else{
+                status = true
+                break
+            }
+        }
+        //模态框配置
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.btn_word = '确认'
+            $scope.big_word = '手机号输入不正确'
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        if(status){
+            $uibModal.open({
+                templateUrl: 'cur_model.html',
+                controller: all_modal,
+                windowClass:'cur_modal',
+                backdrop:'static'
+            })
+        }else{
+            sessionStorage.setItem('payParams',JSON.stringify(obj))
+            $state.go('deposit')
+        }
     }
     //返回上一页
     $scope.goPrev = function () {

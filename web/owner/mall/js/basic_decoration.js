@@ -54,17 +54,17 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
     }
     //请求杂工数据
     $scope.getHandyman = function (valid) {
-        let obj = angular.copy($scope.params)
+        let obj1 = angular.copy($scope.params)
         for(let [key,value] of Object.entries($scope.params)){
             if(value === ''){
-               delete obj[key]
+               delete obj1[key]
             }
         }
         console.log($scope.params);
         console.log(obj);
         if($scope.params['12_dismantle']!=''||$scope.params['24_dismantle']!=''||$scope.params['repair']!=''||$scope.params['12_new_construction']!=''||$scope.params['24_new_construction']!=''){
             if(valid){
-                _ajax.get('/owner/handyman',obj,function (res) {
+                _ajax.get('/owner/handyman',obj1,function (res) {
                     console.log('杂工');
                     console.log(res);
                     if(sessionStorage.getItem('other_data')!=null){
@@ -164,10 +164,17 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
                     }
                     sessionStorage.setItem('options',JSON.stringify($scope.params))
                     sessionStorage.setItem('other_data',JSON.stringify(res))//杂工项数据保存
-                    sessionStorage.setItem('materials',JSON.stringify($scope.materials))//材料项保存
                     sessionStorage.removeItem('copies')//去除复制品
                     sessionStorage.setItem('worker_list',JSON.stringify($scope.worker_list))//工人项保存
-                    $state.go('nodata')
+                    //材料项保存
+                    console.log(obj);
+                    if(sessionStorage.getItem('materials')!=null){
+                        sessionStorage.setItem('materials',JSON.stringify($scope.materials))
+                        $state.go('nodata')
+                    }else if(sessionStorage.getItem('quotation_materials')!=null){
+                        sessionStorage.setItem('quotation_materials',JSON.stringify($scope.materials))
+                        $state.go('modelRoom',{effect_id:obj.effect_id,id:obj.id})
+                    }
                 })
             }
         }else{
@@ -219,14 +226,24 @@ app.controller('basic_ctrl',function ($timeout,$scope,$state,$stateParams,_ajax)
             sessionStorage.removeItem('options')
             sessionStorage.removeItem('other_data')
             sessionStorage.removeItem('copies')
-            sessionStorage.setItem('materials',JSON.stringify($scope.materials))//材料项保存
             sessionStorage.setItem('worker_list',JSON.stringify($scope.worker_list))//工人项保存
-            $state.go('nodata')
+            //材料项保存
+            if(sessionStorage.getItem('materials')!=null){
+                sessionStorage.setItem('materials',JSON.stringify($scope.materials))
+                $state.go('nodata')
+            }else if(sessionStorage.getItem('quotation_materials')!=null){
+                sessionStorage.setItem('quotation_materials',JSON.stringify($scope.materials))
+                $state.go('modelRoom',{effect_id:obj.effect_id,id:obj.id})
+            }
         }
     }
     //返回上一页
     $scope.goPrev = function () {
         sessionStorage.removeItem('copies')
-        $state.go('nodata')
+        if(sessionStorage.getItem('materials')!=null){
+            $state.go('nodata')
+        }else if(sessionStorage.getItem('quotation_materials')!=null){
+            $state.go('modelRoom',{effect_id:obj.effect_id,id:obj.id})
+        }
     }
 })

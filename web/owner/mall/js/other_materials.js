@@ -5,6 +5,7 @@ app.controller('other_ctrl', function ($scope, $state, $stateParams, _ajax, $tim
     $scope.header_title = $scope.basic_materials.title
     $scope.edit_status = 0
     $scope.modal_status = 'modal'
+    let obj = JSON.parse(sessionStorage.getItem('params'))
     //切换编辑状态
     $scope.changeEditStatus = function () {
         $scope.edit_status = $scope.edit_status == 0 ? 1 : 0
@@ -68,15 +69,25 @@ app.controller('other_ctrl', function ($scope, $state, $stateParams, _ajax, $tim
     }
     //保存数据
     $scope.saveData = function () {
-        $scope.materials = JSON.parse(sessionStorage.getItem('materials'))
         $scope.materials[$stateParams.index] = $scope.basic_materials
-        sessionStorage.setItem('materials',JSON.stringify($scope.materials))
         sessionStorage.removeItem('copies')
-        $state.go('nodata')
+        //材料项保存
+        if(sessionStorage.getItem('materials')!=null){
+            sessionStorage.setItem('materials',JSON.stringify($scope.materials))
+            $state.go('nodata')
+        }else if(sessionStorage.getItem('quotation_materials')!=null){
+            sessionStorage.setItem('quotation_materials',JSON.stringify($scope.materials))
+            $state.go('modelRoom',{effect_id:obj.effect_id,id:obj.id})
+        }
     }
     //返回上一页
     $scope.goPrev = function () {
         sessionStorage.removeItem('copies')
-        $state.go('nodata')
+        //材料项保存
+        if(sessionStorage.getItem('materials')!=null){
+            $state.go('nodata')
+        }else if(sessionStorage.getItem('quotation_materials')!=null){
+            $state.go('modelRoom',{effect_id:obj.effect_id,id:obj.id})
+        }
     }
 })

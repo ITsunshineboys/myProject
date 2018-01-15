@@ -3,6 +3,7 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
     $scope.status = $stateParams.status
     $scope.materials = JSON.parse(sessionStorage.getItem('copies'))
     $scope.params = JSON.parse(sessionStorage.getItem('params'))
+    $scope.recommend_quantity = ''
      //获取详情数据
     _ajax.get('/mall/goods-view', {
         id: $stateParams.id
@@ -47,14 +48,16 @@ app.controller('product_details_ctrl', function ($timeout, _ajax, $scope, $state
             comprehensive_score: res.data.goods_view.supplier.comprehensive_score,//综合详情
         }
         if($scope.status == 1){
-            _ajax.get('/owner/change-goods',Object.assign($scope.params,{
-                id:$scope.goods_detail.id
-            }),function (res) {
-                console.log('更换默认数量');
-                console.log(res);
-                $scope.goods_detail.quantity = res.quantity
-                $scope.recommend_quantity = res.quantity//推荐数量
-            })
+            if(sessionStorage.getItem('materials')!=null){
+                _ajax.get('/owner/change-goods',Object.assign($scope.params,{
+                    id:$scope.goods_detail.id
+                }),function (res) {
+                    console.log('更换默认数量');
+                    console.log(res);
+                    $scope.goods_detail.quantity = res.quantity
+                    $scope.recommend_quantity = res.quantity//推荐数量
+                })
+            }
         }
     })
     //改变数量

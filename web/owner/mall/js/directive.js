@@ -15,10 +15,10 @@ app.directive('water', function ($timeout) {
         link: function (scope, element, attrs) {
             scope.$on('ngRepeatFinished', function () {
                 let $grid = $('.grid')
-                console.log($grid)
+                // console.log($grid)
                 let cur_height = [0, 0]
                 $grid.each(function () {
-                    console.log(cur_height)
+                    // console.log(cur_height)
                     let min = parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[1] : cur_height[0]
                     let minIndex = cur_height[0] > cur_height[1] ? 1 : 0
                     $(this).css({
@@ -29,8 +29,8 @@ app.directive('water', function ($timeout) {
                     $('.basis_decoration').outerHeight(parseFloat(cur_height[0]) > parseFloat(cur_height[1]) ? cur_height[0] : cur_height[1])
                 })
             })
-            console.log(element)
-            console.log(element.find('div'))
+            // console.log(element)
+            // console.log(element.find('div'))
             if (scope.$last === true) {
                 $timeout(function () {
                     scope.$emit('ngRepeatFinished')

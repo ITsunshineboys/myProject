@@ -1,4 +1,4 @@
-let app = angular.module("app", ["ui.router","ngAnimate",'angularCSS'])
+let app = angular.module("app", ["ui.bootstrap","ui.router","ngAnimate",'angularCSS'])
     .config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
         $stateProvider
