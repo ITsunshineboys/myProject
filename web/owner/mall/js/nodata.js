@@ -824,12 +824,14 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
             }
         }
         //模态框配置
+        /*下架商品模态框*/
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
+        /*保存成功模态框*/
         let all_modal1 = function ($scope, $uibModalInstance) {
             $scope.save_status = true
             $scope.return = function () {
