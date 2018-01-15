@@ -61,5 +61,19 @@ h3 {
     color: #5677FC!important;
 }
 
+/* 评论图片放大 */
+.modal-img {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.modal-img button {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    z-index: 10;
+}
+
 
 
