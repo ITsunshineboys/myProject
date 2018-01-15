@@ -351,6 +351,10 @@ class BasisDecorationService
             }
         }
 
+        if (!$one_goods){
+            return [[],0];
+        }
+
 //        $style = self::style($one_goods);
         //  抓取利润最大的商品
         $max_goods = self::profitMargin($one_goods);
