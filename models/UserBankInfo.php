@@ -38,16 +38,6 @@ class UserBankInfo extends \yii\db\ActiveRecord
     }
 
 
-    /**添加、修改银行卡操作
-     * @param $bankname
-     * @param $bankcard
-     * @param $username
-     * @param $position
-     * @param $bankbranch
-     * @param $role_id
-     * @param $user
-     * @return int
-     */
      /**
      * 添加、修改银行卡操作
      * @param $bankname

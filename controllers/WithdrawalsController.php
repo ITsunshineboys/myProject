@@ -225,7 +225,8 @@ class WithdrawalsController extends Controller
             $data=[];
         }
         $code=200;
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$data
@@ -285,7 +286,8 @@ class WithdrawalsController extends Controller
         $data['key']=$payPassword? \Yii::$app->getSecurity()->generatePasswordHash(User::UNFIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time())):\Yii::$app->getSecurity()->generatePasswordHash(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()));
          $data['mobile']=$user->mobile;
          $code=200;
-         return Json::encode([
+         return Json::encode
+         ([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$data
@@ -370,7 +372,6 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-    $code=1000;
         if (Yii::$app->getSecurity()->validatePassword(User::FIRST_SET_PAYPASSWORD.$user->id.date('Y-m-d',time()), $key)==true){
             $pay_pwd_first=trim($request->post('pay_pwd_first',''));
             $pay_pwd_secend=trim($request->post('pay_pwd_secend',''));
@@ -469,6 +470,7 @@ class WithdrawalsController extends Controller
             }
         }
     }
+
     /**
     * 获取可用余额-商家后台
     * @return string
@@ -519,7 +521,8 @@ class WithdrawalsController extends Controller
         $request=Yii::$app->request;
         $money=trim($request->post('money',''));
         $pay_password=trim($request->post('pay_pwd',''));
-        if (!$money ||!$pay_password){
+        if (!$money ||!$pay_password)
+        {
             $code=1000;
             return Json::encode([
                 'code' => $code,
@@ -527,7 +530,8 @@ class WithdrawalsController extends Controller
             ]);
         }
         $user = Yii::$app->user->identity;
-        if (!$user){
+        if (!$user)
+        {
             $code=1052;
             return Json::encode([
                 'code' => $code,
@@ -556,7 +560,8 @@ class WithdrawalsController extends Controller
         }
         if ($money*100>$availableamount){
             $code=1054;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -569,7 +574,7 @@ class WithdrawalsController extends Controller
             ]);
         }
         $userBankInfo=UserBankInfo::find()
-            ->where(['uid'=>$user->id,'role_id'=>6])
+            ->where(['uid'=>$user->id,'role_id'=>Yii::$app->params['supplierRoleId']])
             ->andWhere(['selected'=>1])
             ->one();
         if (!$userBankInfo)
@@ -822,23 +827,6 @@ class WithdrawalsController extends Controller
      */
     public  function actionAdminUserAccessDetail()
     {
-    //        $user = Yii::$app->user->identity;
-    //        if (!$user){
-    //            $code=1052;
-    //            return Json::encode([
-    //                'code' => $code,
-    //                'msg' => Yii::$app->params['errorCodes'][$code]
-    //            ]);
-    //        }
-    //        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-    //        if (!$supplier)
-    //        {
-    //            $code=1010;
-    //            return Json::encode([
-    //                'code' => $code,
-    //                'msg' => Yii::$app->params['errorCodes'][$code]
-    //            ]);
-    //        }
             $request = Yii::$app->request;
             $transaction_no=$request->get('transaction_no');
             if (!$transaction_no)
@@ -901,23 +889,6 @@ class WithdrawalsController extends Controller
      */
     public function  actionSupplierAccessDetail()
     {
-    //        $user = Yii::$app->user->identity;
-    //        if (!$user){
-    //            $code=1052;
-    //            return Json::encode([
-    //                'code' => $code,
-    //                'msg' => Yii::$app->params['errorCodes'][$code]
-    //            ]);
-    //        }
-    //        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-    //        if (!$supplier)
-    //        {
-    //            $code=1010;
-    //            return Json::encode([
-    //                'code' => $code,
-    //                'msg' => Yii::$app->params['errorCodes'][$code]
-    //            ]);
-    //        }
         $request = Yii::$app->request;
         $transaction_no=trim($request->post('transaction_no',''));
         if (!$transaction_no)
@@ -933,14 +904,13 @@ class WithdrawalsController extends Controller
             }
         }
         $accessDetail=UserAccessdetail::find()
-    //            ->where(['uid'=>$user->id])
-    //            ->andWhere(['role_id'=>6])
             ->andWhere(['transaction_no'=>$transaction_no])
             ->asArray()
             ->one();
             if (!$accessDetail){
                 $code=1000;
-                return Json::encode([
+                return Json::encode
+                ([
                     'code' => $code,
                     'msg' => Yii::$app->params['errorCodes'][$code]
                 ]);
@@ -1272,8 +1242,10 @@ class WithdrawalsController extends Controller
             echo "fail";    //请不要修改或删除
         }
     }
-    /**解绑银行卡
-    * @return string
+
+    /**
+     * 解绑银行卡
+     * @return string
      */
     public function  actionDelBankCard()
     {
@@ -1300,7 +1272,8 @@ class WithdrawalsController extends Controller
         if (!$bank)
         {
             $code=1000;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
@@ -1361,163 +1334,161 @@ class WithdrawalsController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-
     }
     /**
      * 用户提现申请
      * @return string
      */
     public function actionUserWithdrawalsApply(){
-    $request=Yii::$app->request;
-    $money=trim($request->post('money',''));
-    $pay_password=trim($request->post('pay_pwd',''));
-    $bank_id=trim($request->post('bank_id',''));
-    if (!$money ||!$pay_password  || !$bank_id){
-        $code=1000;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $user = Yii::$app->user->identity;
-    if (!$user){
-        $code=1052;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $role_id=$user->last_role_id_app;
-    $role=Role::GetRoleByRoleId($role_id,$user);
-    if (!$role)
-    {
-        $code=1000;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    $availableamount =$role->availableamount;
-    $pwd=$role->pay_password;
-    if ($money*100>$availableamount){
-        $code=1054;
+        $request=Yii::$app->request;
+        $money=trim($request->post('money',''));
+        $pay_password=trim($request->post('pay_pwd',''));
+        $bank_id=trim($request->post('bank_id',''));
+        if (!$money ||!$pay_password  || !$bank_id){
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $role_id=$user->last_role_id_app;
+        $role=Role::GetRoleByRoleId($role_id,$user);
+        if (!$role)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $availableamount =$role->availableamount;
+        $pwd=$role->pay_password;
+        if ($money*100>$availableamount){
+            $code=1054;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        if (!$pwd)
+        {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '您还未设置交易密码，请先去设置'
+            ]);
+        }
+        if (!Yii::$app->getSecurity()->validatePassword($pay_password, $pwd)==true){
+            $code=1055;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+                'data'=>$user->mobile
+            ]);
+        }
 
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
-    if (!$pwd)
-    {
-        $code=1000;
-        return Json::encode([
-            'code' => $code,
-            'msg' => '您还未设置交易密码，请先去设置'
-        ]);
-    }
-    if (!Yii::$app->getSecurity()->validatePassword($pay_password, $pwd)==true){
-        $code=1055;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code],
-            'data'=>$user->mobile
-        ]);
-    }
-
-    $userBankInfo=UserBankInfo::find()
-        ->where(['id'=>$bank_id,'uid'=>$user->id])
-        ->one();
-    if (!$userBankInfo)
-    {
-        $code=1000;
-        return Json::encode([
-            'code' => $code,
-            'msg' => '你尚未绑定银行卡'
-        ]);
-    }
-    switch ($role_id)
-    {
-        case 2:
-            $role_number=$role->worker_type_id;
-            break;
-        case 3:
-            $role_number=$role->decoration_company_id;
-            break;
-        case 4:
-            $role_number=$role->decoration_company_id;
-            break;
-        case 5:
-            $role_number=$role->id;
-            break;
-        case 6:
-            $role_number=$role->shop_no;
-            break;
-        case 7:
-            $role_number=$role->aite_cube_no;
-            break;
-    }
-    $transaction_no=GoodsOrder::SetTransactionNo($role_number);
-    $time=time();
-    $tran = Yii::$app->db->beginTransaction();
-    try{
-        $UserCashRegister= new UserCashregister();
-        $UserCashRegister->uid=$user->id;
-        $UserCashRegister->role_id=$role_id;
-        $UserCashRegister->cash_money=$money*100;
-        $UserCashRegister->apply_time=$time;
-        $UserCashRegister->status=1; //1:提现中  2.已提现  3.驳回
-        $UserCashRegister->transaction_no=$transaction_no;
-        $UserCashRegister->bank_log_id=$userBankInfo->log_id;
-        $res1=$UserCashRegister->save(false);
-        if (!$res1)
+        $userBankInfo=UserBankInfo::find()
+            ->where(['id'=>$bank_id,'uid'=>$user->id])
+            ->one();
+        if (!$userBankInfo)
         {
+            $code=1000;
+            return Json::encode([
+                'code' => $code,
+                'msg' => '你尚未绑定银行卡'
+            ]);
+        }
+        switch ($role_id)
+        {
+            case 2:
+                $role_number=$role->worker_type_id;
+                break;
+            case 3:
+                $role_number=$role->decoration_company_id;
+                break;
+            case 4:
+                $role_number=$role->decoration_company_id;
+                break;
+            case 5:
+                $role_number=$role->id;
+                break;
+            case 6:
+                $role_number=$role->shop_no;
+                break;
+            case 7:
+                $role_number=$role->aite_cube_no;
+                break;
+        }
+        $transaction_no=GoodsOrder::SetTransactionNo($role_number);
+        $time=time();
+        $tran = Yii::$app->db->beginTransaction();
+        try{
+            $UserCashRegister= new UserCashregister();
+            $UserCashRegister->uid=$user->id;
+            $UserCashRegister->role_id=$role_id;
+            $UserCashRegister->cash_money=$money*100;
+            $UserCashRegister->apply_time=$time;
+            $UserCashRegister->status=1; //1:提现中  2.已提现  3.驳回
+            $UserCashRegister->transaction_no=$transaction_no;
+            $UserCashRegister->bank_log_id=$userBankInfo->log_id;
+            $res1=$UserCashRegister->save(false);
+            if (!$res1)
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $role->availableamount=$role->availableamount-$money*100;
+            $role->balance=$role->balance-$money*100;
+            $res2=$role->save(false);
+            if (!$res2)
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $UserAccessdetail=new UserAccessdetail();
+            $UserAccessdetail->access_type=4;
+            $UserAccessdetail->uid=$user->id;
+            $UserAccessdetail->role_id=$role_id;
+            $UserAccessdetail->access_money=$money*100;
+            $UserAccessdetail->create_time=$time;
+            $UserAccessdetail->transaction_no=$transaction_no;
+            if (!$UserAccessdetail->save(false))
+            {
+                $code=500;
+                return Json::encode([
+                    'code' => $code,
+                    'msg' => Yii::$app->params['errorCodes'][$code]
+                ]);
+            }
+            $code=200;
+            $tran->commit();
+              return Json::encode([
+                'code' => $code,
+                'msg' => 'ok',
+                'data'=>date('Y-m-d h:i',$time+21*60*60*3)
+            ]);
+        }catch (\Exception $e){
+            $tran->rollBack();
             $code=500;
             return Json::encode([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);
         }
-        $role->availableamount=$role->availableamount-$money*100;
-        $role->balance=$role->balance-$money*100;
-        $res2=$role->save(false);
-        if (!$res2)
-        {
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $UserAccessdetail=new UserAccessdetail();
-        $UserAccessdetail->access_type=4;
-        $UserAccessdetail->uid=$user->id;
-        $UserAccessdetail->role_id=$role_id;
-        $UserAccessdetail->access_money=$money*100;
-        $UserAccessdetail->create_time=$time;
-        $UserAccessdetail->transaction_no=$transaction_no;
-        if (!$UserAccessdetail->save(false))
-        {
-            $code=500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $code=200;
-        $tran->commit();
-          return Json::encode([
-            'code' => $code,
-            'msg' => 'ok',
-            'data'=>date('Y-m-d h:i',$time+21*60*60*3)
-        ]);
-    }catch (\Exception $e){
-        $tran->rollBack();
-        $code=500;
-        return Json::encode([
-            'code' => $code,
-            'msg' => Yii::$app->params['errorCodes'][$code]
-        ]);
-    }
     }
      /**
      * app端交易明细
@@ -1660,7 +1631,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-5,4).")"];
+                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-4,4).")"];
                 $list[]=[
                     'name'=>'申请时间',
                     'value'=>date('Y-m-d H:i',$cashData['apply_time'])
@@ -1683,7 +1654,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-5,4).")"];
+                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-4,4).")"];
                 $list[]=[
                     'name'=>'申请时间',
                     'value'=>date('Y-m-d H:i',$cashData['apply_time'])
@@ -1703,7 +1674,7 @@ class WithdrawalsController extends Controller
                 $count=strlen($cashData['bankcard']);
                 $list[]=[
                     'name'=>'到账银行卡',
-                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-5,4).")"];
+                    'value'=>$cashData['bankname']."(".substr($cashData['bankcard'],$count-4,4).")"];
                 $list[]=[
                     'name'=>'申请时间',
                     'value'=>date('Y-m-d H:i',$cashData['apply_time'])
