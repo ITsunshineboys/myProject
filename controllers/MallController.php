@@ -4249,7 +4249,7 @@ class MallController extends Controller
             'code' => 200,
             'msg' => 'OK',
             'data' => [
-                'identity' => ModelService::viewModelByFields($checkRoleRes, User::FIELDS_VIEW_IDENTITY),
+//                'identity' => ModelService::viewModelByFields($checkRoleRes, User::FIELDS_VIEW_IDENTITY),
             ],
         ]);
     }
