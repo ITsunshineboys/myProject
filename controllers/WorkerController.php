@@ -1037,6 +1037,8 @@ class WorkerController extends Controller
             ->asArray()
             ->where(['uid'=>$uid])
             ->one();
+
+
         $worker_info['worker_rank']=WorkerRank::RankName($worker_info['level'])['rank_name'];
         $worker_info['worker_type']=WorkerType::gettype($worker_info['worker_type_id']);
 
@@ -1092,7 +1094,7 @@ class WorkerController extends Controller
         if (!is_int($uid)) {
             return $uid;
         }
-        $type=(int)trim(\Yii::$app->request->get('type'));
+        $type=(int)trim(\Yii::$app->request->get('type',1));
         $where=[];
             switch ($type){
                case $type==1:
@@ -1113,6 +1115,7 @@ class WorkerController extends Controller
             ->all();
         foreach ($data as &$v){
             $v['sku']?$v['sku']:$v['sku']='';
+            $v['order_no']?$v['order_no']:$v['order_no']='';
             if($v['send_time']==date('Y-m-d',time())){
                 $v['send_time']=date('H:i',$v['send_time']);
 
