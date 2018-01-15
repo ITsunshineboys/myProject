@@ -19,6 +19,7 @@ use app\models\DecorationParticulars;
 use app\models\District;
 use app\models\Effect;
 
+use app\models\EffectEarnest;
 use app\models\EffectPicture;
 use app\models\EffectToponymy;
 use app\models\EngineeringCraftName;
@@ -3115,6 +3116,9 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
+        var_dump(EffectEarnest::deleteAll(['id'=>65]));
+        var_dump(EffectEarnest::deleteAll(['id'=>66]));
+        var_dump(EffectEarnest::deleteAll(['id'=>69]));
 
     }
 }
