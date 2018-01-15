@@ -1354,7 +1354,6 @@ class OwnerController extends Controller
             $codes [] = $one_materials['sku'];
         }
         $goods = Goods::findBySkuAll($codes);
-        $style = BasisDecorationService::style($goods);
         if ($goods == null){
             $code = 1061;
             return Json::encode([
@@ -1362,6 +1361,7 @@ class OwnerController extends Controller
                 'msg' => Yii::$app->params['errorCodes'][$code],
             ]);
         }
+        $style = BasisDecorationService::style($goods);
         foreach ($add_materials as $material){
             foreach ($style as &$one_goods){
                 if ($one_goods['sku'] == $material['sku']) {
