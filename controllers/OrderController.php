@@ -5233,16 +5233,17 @@ class OrderController extends Controller
             ]);
         }
         $postData=file_get_contents("php://input");
-
-
-//        $postData=Yii::$app->request->post();
+        if (!$postData)
+        {
+            $postData=Yii::$app->request->post();
+        }
         if ( is_array($postData) )
         {
-            $goods=json_decode($postData['goods']);
+            $goods=(array)json_decode($postData['goods']);
             $all_money=0;
             foreach ($goods as &$good)
             {
-                $Good=Goods::findOne($good['goods_id']);
+                $Good=Goods::findOne($good->goods_id);
                 if (!$Good)
                 {
                     $code=1000;
@@ -5252,7 +5253,7 @@ class OrderController extends Controller
                     ]);
                 }
                 $Good=$Good->toArray();
-                $Good['goods_num']=$good['goods_num'];
+                $Good['goods_num']=$good->goods_num;
                 $Goods[]=$Good;
             }
         }else
