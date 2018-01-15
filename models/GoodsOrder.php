@@ -2880,12 +2880,24 @@ class GoodsOrder extends ActiveRecord
         $array=self::GetOrderList()
             ->leftJoin(Express::tableName().' AS b','b.order_no =a.order_no and b.sku=z.sku')
             ->select($select);
-        if($postData==''){
+        if($postData=='')
+        {
             $array=[];
         }else{
-            $array=$array
-                ->where(['a.order_no'=>$postData['order_no']])
-                ->all();
+            if(
+                array_key_exists('sku', $postData)
+                && $postData['sku']!=0
+            ){
+                $array=$array
+                    ->where(['a.order_no'=>$postData['order_no'],'z.sku'=>$postData['sku']])
+                    ->all();
+
+            }else{
+                $array=$array
+                    ->where(['a.order_no'=>$postData['order_no']])
+                    ->all();
+            }
+
         };
         if(!$array){
             return null;
