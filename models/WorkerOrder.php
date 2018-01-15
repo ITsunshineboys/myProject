@@ -123,7 +123,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
         $worker = Worker::getWorkerByUid($uid);
         $worker_id = $worker->id;
         $query = self::find()
-            ->select(['id','worker_id','create_time', 'amount', 'status'])
+            ->select(['id','worker_id','create_time', 'amount', 'status','order_no'])
             ->where(['worker_id' => $worker_id]);
         if ($status == WorkerController::STATUS_ALL) {
 
@@ -147,7 +147,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->all();
 
         $worker_type_id = Worker::find()->where(['id' => $worker_id])->one()->worker_type_id;
-        $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_name;
+        $worker_type = WorkerService::find()->where(['id' => $worker_type_id])->one()->service_name;
 
         foreach ($arr as &$v) {
             $v['worker_name'] = $worker_type;
@@ -194,13 +194,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-//        $worker_type_id = Worker::find()->where(['id' => $worker_id])->one()->worker_type_id;
-//        $worker_type = WorkerType::find()->where(['id' => $worker_type_id])->one()->worker_type;
-
         foreach ($arr as &$v) {
 
-
-                $v['worker_name'] = WorkerType::find()->where(['id' => $v['worker_type_id']])->one()->worker_name;
+                $v['worker_name'] = WorkerService::find()->asArray()->where(['id' => $v['worker_type_id']])->one()['service_name'];
                 $v['create_time'] = date('Y-m-d ', $v['create_time']);
                 $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
                 $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
@@ -423,7 +419,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
 
         $worker_type_id = $order['worker_type_id'];
-        $type=WorkerType::getparenttype($worker_type_id);
+        $type=WorkerService::getparenttype($worker_type_id);
         switch ($type){
             case '泥工':
                 $data=self::MudorderView($order['id']);
@@ -445,7 +441,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 break;
         }
 
-        $order['worker_type_id']=WorkerType::getparenttype($order['worker_type_id']);
+        $order['worker_type_id']=WorkerService::getparenttype($order['worker_type_id']);
         $order['create_time'] && $order['create_time']= date('Y-m-d H:i', $order['create_time']);
         $order['modify_time'] && $order['modify_time']  = date('Y-m-d H:i', $order['modify_time']);
         $order['start_time'] && $order['start_time'] = date('Y-m-d H:i', $order['start_time']);
@@ -493,8 +489,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
         foreach ($arr as &$v) {
-            $worker_type = WorkerType::find()->where(['id' => $v['worker_type_id']])->one();
-            $worker_type && $v['worker_name'] = $worker_type->worker_name;
+            $worker_type = WorkerService::find()->where(['id' => $v['worker_type_id']])->one();
+            $worker_type && $v['worker_name'] = $worker_type->service_name;
             $v['create_time'] = date('Y-m-d H:i', $v['create_time']);
             $v['amount'] = sprintf('%.2f', (float)$v['amount'] / 100);
             $v['status'] = self::USER_WORKER_ORDER_STATUS[$v['status']];
@@ -581,7 +577,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->select('mobile')
                 ->where(['id' => $worker['uid']])
                 ->one()['mobile'];
-            $worker['worker_type_id']=WorkerType::getparenttype($worker['worker_type_id']);
+            $worker['worker_type_id']=WorkerService::getparenttype($worker['worker_type_id']);
             $rank=WorkerRank::find()
                 ->asArray()
                 ->where(['id'=>$worker['level']])
@@ -664,9 +660,10 @@ class WorkerOrder extends \yii\db\ActiveRecord
             ->one();
 
         $renovation_infos=[];
-        if($worker_order['status']==self::WORKER_ORDER_PREPARE || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_TOYI ){
+        $data=[];
+        if($worker_order['status']==self::WORKER_ORDER_NOT_BEGIN || $worker_order['status']==self::WORKER_WORKS_AFTER || $worker_order['status']==self::WORKER_ORDER_READY ){
             $data['time']=date('Y-m-d',time());
-            $data['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+            $data['status']='未开始';
             $data['renovation_infos']=$renovation_infos;
             return $data;
         }elseif($worker_order['status']==self::WORKER_ORDER_ING ){
@@ -677,8 +674,9 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     ->asArray()
                     ->where(['uid'=>$uid])
                     ->one();
+
                 $data['view']['time']=date('Y-m-d',time());
-                $data['view']['status']=self::WORKER_ORDER_STATUS[$worker_order['status']];
+                $data['view']['status']=self::USER_WORKER_ORDER_STATUS[$worker_order['status']];
                 $work_result['result']=WorkResult::find()
                     ->asArray()
                     ->where(['order_no'=>$order_no])
@@ -704,7 +702,8 @@ class WorkerOrder extends \yii\db\ActiveRecord
                     ->asArray()
                     ->where(['uid' => $uid])
                     ->one();
-                $data['view']['status'] = self::WORKER_ORDER_STATUS[$worker_order['status']];
+
+                $data['view']['status'] = self::USER_WORKER_ORDER_STATUS[$worker_order['status']];
                 $work_result['result'] = WorkResult::find()
                     ->asArray()
                     ->where(['order_no' => $order_no])
@@ -1033,7 +1032,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                unset($fast['worker_type_id']);
                unset($fast['id']);
             }
-        $order['worker_type_id']=WorkerType::getparenttype($order['worker_type_id']);
+        $order['worker_type_id']=WorkerService::getparenttype($order['worker_type_id']);
         $order['create_time'] && $order['create_time']= date('Y-m-d H:i', $order['create_time']);
         $order['modify_time'] && $order['modify_time']  = date('Y-m-d H:i', $order['modify_time']);
         $order['start_time'] && $order['start_time'] = date('Y-m-d H:i', $order['start_time']);
@@ -1097,7 +1096,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 $code = 500;
                 return $code;
             }
-            $type=WorkerType::getparenttype($array['worker_type_id']);
+            $type=WorkerService::getparenttype($array['worker_type_id']);
             if(!$type){
                 return 1000;
             }
@@ -1846,14 +1845,14 @@ class WorkerOrder extends \yii\db\ActiveRecord
     {
         $offset = ($page - 1) * $size;
 
-        $select = 'worker_order.con_people,worker_order.con_tel,worker_order.order_no,worker_order.create_time,user.aite_cube_no,worker_type.worker_name,worker_order.amount,worker_order.status';
+        $select = 'worker_order.con_people,worker_order.con_tel,worker_order.order_no,worker_order.create_time,user.aite_cube_no,worker_service.service_name,worker_order.amount,worker_order.status';
         $details = self::find()
             ->select($select)
             ->where($where)
             ->andWhere(['is_old'=>0])
             ->leftJoin('worker','worker.id = worker_order.worker_id')
             ->leftJoin('user','user.id = worker.uid')
-            ->leftJoin('worker_type','worker_type.id = worker_order.id')
+            ->leftJoin('worker_service','worker_service.id = worker_order.id')
             ->offset($offset)
             ->limit($size)
             ->groupBy('worker_order.order_no')
@@ -2035,7 +2034,7 @@ class WorkerOrder extends \yii\db\ActiveRecord
                 ->select('mobile')
                 ->where(['id' => $worker['uid']])
                 ->one()['mobile'];
-            $worker['worker_type_id'] = WorkerType::getparenttype($worker['worker_type_id']);
+            $worker['worker_type_id'] = WorkerService::getparenttype($worker['worker_type_id']);
             $worker['aite_cube_no']=User::find()->asArray()->where(['id'=>$worker['uid']])->select('aite_cube_no')->one()['aite_cube_no'];
             $rank = WorkerRank::find()
                 ->asArray()

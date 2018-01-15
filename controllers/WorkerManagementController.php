@@ -629,7 +629,11 @@ class WorkerManagementController extends Controller
     {
         $id = (int)trim(\Yii::$app->request->get('id',''));
         $worker_order = WorkerOrder::MangeOrderView($id);
-        return Json::encode($worker_order);
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok',
+            'data'=>$worker_order
+        ]);
     }
 
     /**

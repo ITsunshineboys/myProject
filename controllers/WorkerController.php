@@ -198,7 +198,7 @@ class WorkerController extends Controller
         }
 
         $request = \Yii::$app->request;
-        //智管工地 status (0,4,5)
+        //智管工地 status (0,3,4,5)
         $status = (int)$request->get('status',self::STATUS_ALL);
         $page = (int)$request->get('page', 1);
         $page_size = (int)$request->get('size', ModelService::PAGE_SIZE_DEFAULT);

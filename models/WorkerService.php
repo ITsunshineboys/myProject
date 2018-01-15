@@ -37,4 +37,17 @@ class WorkerService extends \yii\db\ActiveRecord
         ];
     }
 
+
+    /**
+     * @param $worker_type_id
+     * @return mixed
+     */
+    public static function getparenttype($worker_type_id){
+        return self::find()
+            ->select('service_name')
+            ->asArray()
+            ->where(['id'=>$worker_type_id,'status'=>1])
+            ->andWhere(['pid'=>0])
+            ->one()['service_name'];
+    }
 }
