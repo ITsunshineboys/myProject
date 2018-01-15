@@ -333,6 +333,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
     public static function PlanList($uid,$type){
         $effect_earnests=EffectEarnest::find()
             ->where(['uid'=>$uid,'type'=>$type,'item'=>1])
+            ->orderBy('create_time Desc')
             ->asArray()
             ->all();
 
@@ -349,6 +350,7 @@ class EffectEarnest extends \yii\db\ActiveRecord
                 ->leftJoin('style as st','st.id=ep.style_id')
                 ->leftJoin('series as se','se.id=ep.series_id')
                 ->where(['e.id'=>$effect_earnest['effect_id']])
+
                 ->one();
 
 
