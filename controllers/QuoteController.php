@@ -2486,7 +2486,15 @@ class QuoteController extends Controller
 //        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
         //TODO 修改
 //        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
-
+        // TODO 增加查询 decorationAdd表 如果有数据就提示  yr
+        $d_add = DecorationAdd::find()->where(['cid'=>$category_id])->one();
+        if ($d_add){
+            $code=1087;
+            return Json::encode([
+                'code' => $code,
+                'msg' => \Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
         $goods  = Goods::priceDetail(self::CATEGORY_LEVEL,$category_id);
 
         if (isset($goods['0'])) {
@@ -2503,15 +2511,7 @@ class QuoteController extends Controller
             ]);
         }
 
-        // TODO 增加查询 decorationAdd表 如果有数据就提示  yr
-        $d_add = DecorationAdd::find()->where(['sku'=>$goods[0]['sku']])->one();
-        if ($d_add){
-            $code=1087;
-            return Json::encode([
-                'code' => $code,
-                'msg' => \Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
+
 
         return Json::encode([
             'code' => 200,
