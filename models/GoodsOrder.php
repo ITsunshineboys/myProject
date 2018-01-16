@@ -3490,6 +3490,17 @@ class GoodsOrder extends ActiveRecord
 //                        }
 //                    }
                     $time=time();
+
+                    $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
+                    $goods_freight=self::CalculationFreight($goods);
+                    if ($goods_freight*0.01==0)
+                    {
+                        $freight=0;
+                    }
+                    if ($goods_freight*0.01==$supplier['freight'])
+                    {
+                        $freight=$goods_freight;
+                    }
                     $Goods=Goods::findOne($goods['goods_id']);
                     if ($Goods->left_number<$goods['goods_num'])
                     {
@@ -3535,16 +3546,7 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                     //$order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight
-                    $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
-                    $goods_freight=self::CalculationFreight($goods);
-                    if ($goods_freight*0.01==0)
-                    {
-                        $freight=0;
-                    }
-                    if ($goods_freight*0.01==$supplier['freight'])
-                    {
-                        $freight=$goods_freight;
-                    }
+
                     $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
                     if ($code!=200)
                     {
