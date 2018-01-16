@@ -537,31 +537,32 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     })
     //获取案例材料和价格数据
     $scope.getMaterials = function (obj,item,result) {
-        $scope.active_case = obj
-        console.log(obj.type);
-        //风格、系列以及楼梯选择
-        let stair_index = $scope.stairs.findIndex(function (item) {
-            return item.id == $scope.active_case.stair_id
-        })
-        if($scope.active_case.type == 1){
-            let style_index = $scope.style.findIndex(function (item) {
-                return item.id == $scope.active_case.case_picture[0].style_id
-            })
-            let series_index = $scope.series.findIndex(function (item) {
-                return item.id == $scope.active_case.case_picture[0].series_id
-            })
-            $scope.params = {
-                style:$scope.style[style_index].id,
-                series:$scope.series[series_index],
-                stair:stair_index == -1?0:$scope.stairs[stair_index].id
-            }
-        }else{
-            $scope.params = {
-                stair:stair_index == -1?0:$scope.stairs[stair_index].id
-            }
-        }
         if(item!=undefined){
             $scope.params[item] = result
+        }else{
+            $scope.active_case = obj
+            console.log(obj.type);
+            //风格、系列以及楼梯选择
+            let stair_index = $scope.stairs.findIndex(function (item) {
+                return item.id == $scope.active_case.stair_id
+            })
+            if($scope.active_case.type == 1){
+                let style_index = $scope.style.findIndex(function (item) {
+                    return item.id == $scope.active_case.case_picture[0].style_id
+                })
+                let series_index = $scope.series.findIndex(function (item) {
+                    return item.id == $scope.active_case.case_picture[0].series_id
+                })
+                $scope.params = {
+                    style:$scope.style[style_index].id,
+                    series:$scope.series[series_index],
+                    stair:stair_index == -1?0:$scope.stairs[stair_index].id
+                }
+            }else{
+                $scope.params = {
+                    stair:stair_index == -1?0:$scope.stairs[stair_index].id
+                }
+            }
         }
         //获取案例商品数据
         if(obj.type == 1&&$scope.params.series.id == obj.case_picture[0].series_id&&

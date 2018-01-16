@@ -89,7 +89,7 @@
                 <li ng-repeat="item in series">
                     <label>
                         <input type="radio" name="series" ng-checked="item.id == params.series.id"
-                               ng-click="params.series = item;getMaterials(active_case,'series',item)">
+                               ng-click="getMaterials(active_case,'series',item)">
                         <span ng-show="item.id != params.series.id"></span>
                         <img class="checked-active" src="images/mall_list_radio.png" ng-show="item.id == params.series.id"/>
                         <span>{{item.series}}</span>
@@ -121,7 +121,7 @@
         </div>
     </div>
 
-    <div class="background_w" ng-if="materials.length == 0">
+    <div class="background_w">
         <div class="choose_style clearfix">
             <div class="shu"></div>
             <div class="title">样板间实图</div>

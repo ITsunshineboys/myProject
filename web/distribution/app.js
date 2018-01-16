@@ -1,4 +1,4 @@
-var app = angular.module("app", ['ionic', 'distribution', 'angularCSS'])
+var app = angular.module("app", ['ionic', 'angularCSS'])
 app.config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/login')
     $stateProvider

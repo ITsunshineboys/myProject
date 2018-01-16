@@ -697,8 +697,13 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
             $state.go('other_materials', {index: index})
         }
     }
+    function showInfo() {
+        alert('1111')
+    }
     //保存方案
     $scope.saveProgramme = function () {
+        window.AndroidWebView.skipIntent()
+        return ;
         let materials = []
         //整合申请样板间所需传值
         let obj = {
@@ -717,7 +722,7 @@ app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, 
             stairway:$scope.params.stairway,
             series:$scope.params.series,
             style:$scope.params.style,
-            type:0,
+            type:1,
             requirement:$scope.special_request,
             original_price:$scope.total_prices,
             sale_price:$scope.special_offer
