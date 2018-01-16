@@ -4,9 +4,7 @@ angular.module('shop_data_module',[])
         name: '店铺数据',
         icon: 'icon-shuju',
     }];
-
-    $scope.myng=$scope;
-  $scope.data_list=[];
+  $scope.data_list=[]; // 列表数据数组
     /*分页配置*/
     $scope.wjConfig = {
         showJump: true,
@@ -25,12 +23,12 @@ angular.module('shop_data_module',[])
     let tablePages=function () {
         $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
         _ajax.get('/mall/shop-data',$scope.params,function (res) {
-            $scope.data_list=res.data.shop_data.details;
+            $scope.data_list = res.data.shop_data.details;
             $scope.wjConfig.totalItems = res.data.shop_data.total;
-            $scope.total_sold_number=res.data.shop_data.total_sold_number;//销量
-            $scope.total_amount_sold=res.data.shop_data.total_amount_sold;//销量额
-            $scope.total_ip_number=res.data.shop_data.total_ip_number;//游客数
-            $scope.total_viewed_number=res.data.shop_data.total_viewed_number;//访问量
+            $scope.total_sold_number = res.data.shop_data.total_sold_number;//销量
+            $scope.total_amount_sold = res.data.shop_data.total_amount_sold;//销量额
+            $scope.total_ip_number = res.data.shop_data.total_ip_number;//游客数
+            $scope.total_viewed_number = res.data.shop_data.total_viewed_number;//访问量
         });
     };
   //时间类型
@@ -40,12 +38,11 @@ angular.module('shop_data_module',[])
   });
   //监听开始和结束时间
     $scope.time_change=function (value) {
-	    if(value=='custom'||value=='all'){
-		    $scope.params.start_time='';
-		    $scope.params.end_time='';
+	    if(value == 'custom'|| value == 'all'){
+		    $scope.params.start_time = '';
+		    $scope.params.end_time = '';
       }
 	    $scope.wjConfig.currentPage = 1; //页数跳转到第一页
         tablePages();
     };
-
 });

@@ -5,19 +5,18 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         name: '店铺装修',
         icon: 'icon-icon_dianpuzhuangxiu',
     }];
-  $scope.myng=$scope;
-  $scope.filter=false;
-  $scope.b_menu_flag=false;
-  $scope.r_menu_flag=false;
-  $scope.banner_menu_flag=false;
+  $scope.filter=false; // menu状态
+  $scope.b_menu_flag=false; // banner列表状态
+  $scope.r_menu_flag=false; // 推荐列表状态
+	$scope.selectAll_modal=false; // 全选状态
   $scope.banner_list=[];//Banner
   $scope.recommend_list=[];//推荐
   $scope.delete_arr=[];//删除个数数组
-  $scope.b_tab_class='bottom_border';//默认给Banner加class
-  $scope.b_show_table_flag=true;
-  $scope.r_show_table_flag=false;
-	$scope.upload_dis=false;
-	$scope.upload_txt='上传';
+  $scope.b_show_table_flag=true;  // tab栏-banner
+  $scope.r_show_table_flag=false; // tab栏-推荐
+	$scope.upload_dis=false; // 图片上传按钮 disable状态
+	$scope.upload_txt='上传'; // 图片上传按钮 默认文字
+  // banner栏
   $scope.banner_tab=function () {
 	  $scope.show_hide_menu();
     $scope.r_tab_class='';
@@ -31,9 +30,9 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
 	  }
 	  $scope.selectAll_modal = false;
   };
+	// 推荐栏
   $scope.recommend_tab=function () {
 	  $scope.show_hide_menu();
-    $scope.b_tab_class='';
     $scope.b_show_table_flag=false;
     $scope.r_show_table_flag=true;
 	  $scope.filter=false;
@@ -50,7 +49,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
 	  (!!$scope.filter&&!!$scope.b_show_table_flag)?$scope.b_menu_flag=true:$scope.b_menu_flag=false;
 	  (!!$scope.filter&&!!$scope.r_show_table_flag)?$scope.r_menu_flag=true:$scope.r_menu_flag=false;
   }
-
   /*判断类型为Banner还是推荐，请求列表接口*/
   $scope.judgment=function () {
     if($scope.b_show_table_flag){
@@ -73,8 +71,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         });
     }
   };
-
-  $scope.selectAll_modal=false;
+  // 全选按钮
   $scope.selectAll= function (m) {
     if($scope.b_show_table_flag) {
       for (let [key, value] of $scope.banner_list.entries()) {
@@ -100,7 +97,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
       }
     }
   };
-
 
   /*--------------------------Banner----------------------------------*/
   _ajax.get('/mall/recommend-admin-index-supplier',{
@@ -183,7 +179,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     }
   };
 
-  //Banner - 上传图片
+  // Banner - 上传图片
   $scope.banner_add_upload = function (file) {
     if(!$scope.data.file){
       return
@@ -212,7 +208,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
   //Banner - 添加确认按钮
   $scope.shop_sku_error='商品编号不能为空';
   $scope.banner_add_btn = function (valid) {
-      console.log(valid)
     if($scope.banner_add_title==''){
         $scope.banner_num_error=true;
         $scope.shop_sku_error='商品编号错误，请重新添加';
@@ -413,7 +408,6 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
         }
       }
     }
-
   };
   $scope.banner_del_confirm=function () {
     _ajax.post('/mall/recommend-delete-batch-supplier',{ids:$scope.delete_arr.join(',')},function (res) {
@@ -432,7 +426,7 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
     $scope.recommend_list[idx] = $scope.recommend_list[index];
     $scope.recommend_list[index] = obj
   };
-  //
+  // 保存按钮
   $scope.sort_order=[];
   $scope.banner_save_btn=function () {
     $scope.sort_order=[];
@@ -446,13 +440,13 @@ shop_decoration.controller('shop_decoration_ctrl',function ($rootScope,$scope,$h
       }
     }
   };
+  // 保存模态框确认按钮
   $scope.save_confirm=function () {
     console.log($scope.sort_order);
     _ajax.post('/mall/recommend-sort-supplier',{ids:$scope.sort_order.join(',')},function (res) {
         console.log(res);
     })
   };
-
 
   /*--------------------------推荐-----------------------------*/
   _ajax.get('/mall/recommend-admin-index-supplier',{

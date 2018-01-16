@@ -1,6 +1,6 @@
 angular.module('income_pay_module',[])
 .controller('income_pay_ctrl',function ($rootScope,$scope,$http,$state,_ajax) {
-    $scope.myng=$scope;
+	  $scope.income_pay_list=[]; // 列表数据
     $rootScope.crumbs = [{
         name: '钱包',
         icon: 'icon-qianbao',
@@ -23,8 +23,8 @@ angular.module('income_pay_module',[])
         keyword: '',                    // 关键字查询
         start_time: '',                 // 自定义开始时间
         end_time: '',                   // 自定义结束时间
-        type: '7',                      // 类型选择
-        sort_time:'2'                   //默认降序
+        type: '0',                      // 类型选择
+        sort_time:2                    //默认降序
     };
     let tablePages=function () {
         $scope.params.page=$scope.wjConfig.currentPage;//点击页数，传对应的参数
@@ -33,8 +33,6 @@ angular.module('income_pay_module',[])
             $scope.wjConfig.totalItems = res.data.count;
         });
     };
-
-  $scope.income_pay_list=[];
   //状态
   $scope.status_arr=[
     {id:0,value:'全部'},
@@ -103,11 +101,8 @@ angular.module('income_pay_module',[])
     };
 
     //时间排序
-    $scope.params.sort_time=2;//默认降序
-
     $scope.time_sort=function () {
-      //图标和排序
-	    $scope.params.sort_time==2?$scope.params.sort_time=1:$scope.params.sort_time=2;
+	    $scope.params.sort_time === 2 ? $scope.params.sort_time = 1 : $scope.params.sort_time = 2;
       $scope.wjConfig.currentPage = 1; //页数跳转到第一页
       tablePages();
     };

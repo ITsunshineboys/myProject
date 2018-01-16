@@ -1,12 +1,11 @@
 ;
 angular.module('supplier_wallet_module',[])
 .controller('supplier_wallet_ctrl',function ($rootScope,$scope,$http,$state,_ajax) {
+	$scope.supplier_wallet_list=[]; // 列表数据
     $rootScope.crumbs = [{
         name: '钱包',
         icon: 'icon-qianbao'
     }];
-
-    $scope.myng=$scope;
     /*分页配置*/
     $scope.wjConfig = {
         showJump: true,
@@ -31,9 +30,6 @@ angular.module('supplier_wallet_module',[])
             $scope.wjConfig.totalItems = res.data.count;
         })
     };
-
-
-  $scope.supplier_wallet_list=[];
   //状态
   $scope.status_arr=[{id:0,value:'全部'},{id:1,value:'提现中'},{id:2,value:'已提现'},{id:3,value:'驳回'}];
   $scope.params.status=$scope.status_arr[0].id;
@@ -52,7 +48,7 @@ angular.module('supplier_wallet_module',[])
     }
   //监听开始和结束时间
     $scope.time_change=function () {
-        $scope.wjConfig.currentPage=1;
+	    $scope.wjConfig.currentPage=1;
         tablePages();
     };
 });

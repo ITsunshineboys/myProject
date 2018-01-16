@@ -14,24 +14,23 @@ angular.module("brand_index_module",[])
 		}
 	};
 	$scope.params = {
-		page: 1,                        // 当前页数
-		sort_time: '2',               // 时间类型
+		page: 1,                     // 当前页数
+		sort_time: 2,               // 时间类型
 	};
 	let tablePages=function () {
-		$scope.params.page=$scope.Config.currentPage;//点击页数，传对应的参数
+		$scope.params.page=$scope.Config.currentPage;// 点击页数，传对应的参数
 		_ajax.get('/supplieraccount/supplier-brand-list',$scope.params,function (res) {
 			console.log(res);
 			$scope.brand_list=res.data.details;
 			$scope.Config.totalItems = res.data.total;
 		});
 	};
-		$scope.params.sort_time=2;//申请时间排序状态
-	//审核备注
+	// 审核备注
 	$scope.remark=function (value) {
 		$scope.remark_value=value;
 		$("#remark_modal").modal('show');
 	}
-	//申请时间
+	// 申请时间
 	$scope.sortClick=function () {
 		$scope.params.sort_time===2?$scope.params.sort_time=1:$scope.params.sort_time=2;
 		tablePages();

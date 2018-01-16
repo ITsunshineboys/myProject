@@ -8,7 +8,7 @@ angular.module('wallet_detail_module',[])
     }, {
         name: '钱包详情',
     }];
-  $scope.wallet_detail=[];
+  $scope.wallet_detail=[]; // 列表数据
   _ajax.get('/supplier-cash/get-cash',{transaction_no:$stateParams.transaction_no},function (res) {
       console.log(res);
       $scope.wallet_detail=res.data;
@@ -23,5 +23,4 @@ angular.module('wallet_detail_module',[])
                 $state.go('supplier_wallet')
         }
     };
-
 });
