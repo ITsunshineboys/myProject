@@ -7,7 +7,9 @@
  */
 namespace app\models;
 
+use yii\data\Pagination;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 
 class DecorationAdd extends ActiveRecord
 {
@@ -151,28 +153,33 @@ class DecorationAdd extends ActiveRecord
 
     public static function pagination($where,$select,$page = 1, $size = self::PAGE_SIZE_DEFAULT)
     {
-        $offset = ($page - 1) * $size;
-        $List = self::find()
+        $query = (new Query())
+            ->from( 'decoration_add as da')
+            ->leftJoin('goods_category as gc', 'gc.id = da.c_id')
             ->select($select)
             ->where($where)
-            ->orderBy(['add_time' => SORT_ASC])
-            ->offset($offset)
-            ->limit($size)
-            ->asArray()
+            ->orderBy(['da.add_time' => SORT_ASC]);
+
+        $count = $query->count();
+
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $size, 'pageSizeParam' => false]);
+        $arr = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
             ->all();
 
-        foreach ($List as &$effect) {
+        foreach ($arr as &$effect) {
             if(isset($effect['add_time'])){
                 $effect['add_time']=date('Y-m-d H:i', $effect['add_time']);
             }
+            $effect['three_materials']=$effect['title'];
 
         }
 
         return [
-            'total' => (int)self::find()->where($where)->asArray()->count(),
+            'total' => (int)$count,
             'page'=>$page,
             'size'=>$size,
-            'details' => $List
+            'details' => $arr
         ];
     }
 

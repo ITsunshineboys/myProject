@@ -2451,6 +2451,7 @@ class QuoteController extends Controller
         $city = (int)trim(\Yii::$app->request->get('city', 510100));
         $keyword=trim(\Yii::$app->request->get('keyword'));
         $data=DecorationAdd::find()->asArray()->select('sku')->all();
+
         foreach ($data as $v){
             $goods_status=Goods::find()
                 ->select('status')
@@ -2461,17 +2462,24 @@ class QuoteController extends Controller
                 DecorationAdd::deleteAll(['sku'=>$v['sku']]);
             }
         }
-        $where  = 'city_code = '.$city;
+        $where  = 'da.city_code = '.$city;
         if($keyword){
-           $where.=" and correlation_message like '%{$keyword}%'";
+            $where.=" and gc.title like '%{$keyword}%'";
         }
-        $select = 'id,c_id,add_time,correlation_message,sku';
+
+//
+        $select = 'da.id,da.c_id,da.add_time,da.correlation_message,da.sku,gc.title';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
-        foreach ($decoration_add['details'] as &$one){
-            $category_name = GoodsCategory::find()->asArray()->select('title')->where(['id'=>$one['c_id']])->one();
-            $one['three_materials'] = $category_name['title'];
-            unset($one['c_id']);
-        }
+
+//        foreach ($decoration_add['details'] as &$one){
+//            $category_name = GoodsCategory::find()
+//                ->asArray()
+//                ->select('title')
+//                ->where(['id'=>$one['c_id']])
+//                ->one();
+//            $one['three_materials'] = $category_name['title'];
+//            unset($one['c_id']);
+//        }
 
         return Json::encode([
             'code' => 200,
