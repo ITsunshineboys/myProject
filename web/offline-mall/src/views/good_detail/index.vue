@@ -51,7 +51,7 @@
       <!--评价-->
       <div v-if="good_detail.comments.total">
         <flexbox justify="flex-start" class="comment-count">
-          <span class="sum-comment">test</span>
+          <span class="sum-comment">评价</span>
           <span>({{good_detail.comments.total}})</span>
         </flexbox>
         <comment :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
@@ -81,25 +81,6 @@
             商品数
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
@@ -107,52 +88,12 @@
             <br/>
             粉丝数
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
           </div>
         </flexbox>
@@ -242,9 +183,17 @@
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
 
+
+
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
+
+
+
+
 
           </flexbox-item>
         </flexbox>
@@ -295,11 +244,17 @@
     <!--线下商品介绍弹窗-->
     <offlinealert :offlineInfo=offlineInfo :show="show" :isOffline="false" @isShow=showOfflineAlert></offlinealert>
 
+    <!--加入购物车成功提示-->
+    <toast v-model="cart_success" width="200px" position="middle" :time="2000" :is-show-mask="true">
+      <i class="iconfont icon-checkbox-circle-chec"></i>
+      <p>成功添加到购物车</p>
+    </toast>
+
   </div>
 </template>
 
 <script>
-  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber} from 'vux'
+  import {Swiper, Group, Cell, CellBox, Flexbox, FlexboxItem, Card, Tab, TabItem, Popup, XNumber, Toast} from 'vux'
   import divider from '@/components/Divider'
   import comment from '../good_detail/comment'
   import offlinealert from '@/components/OfflineAlert'
@@ -319,6 +274,7 @@
       TabItem,
       Popup,
       XNumber,
+      Toast,
       divider,
       comment,
       offlinealert
@@ -327,6 +283,7 @@
       return {
         isShow: false,  // 右上角弹窗
         show: false,    // 线下商品简介
+        cart_success: false, // 添加购物车成功toast
         good_detail: {
           line_goods: {
             is_offline_goods: ''
@@ -428,6 +385,8 @@
           goods_num: this.count
         }, (res) => {
           if (res.code === 200) {
+            this.showCount('all')
+            this.cart_success = true // 购物车添加成功弹窗显示
             window.AndroidWebView.showInfoFromJs(res.data)
           }
         })
@@ -1018,6 +977,28 @@
   .good-container .share-icon > div > span {
     font-size: 12px;
     color: rgba(153, 153, 153, 1);
+  }
+
+  /*添加购物车成功弹窗*/
+  .good-container .weui-toast {
+    text-align: center;
+    padding-top: 31px;
+    background: rgba(74, 74, 74, 0.7);
+    border-radius: 6px;
+  }
+
+  .good-container .weui-toast .weui-icon-success-no-circle {
+    display: none;
+  }
+
+  .good-container .weui-toast i {
+    font-size: 18px;
+  }
+
+  .good-container .weui-toast p {
+    margin-top: 5px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 1);
   }
 
 
