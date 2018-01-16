@@ -709,8 +709,6 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
     }
     //保存方案
     $scope.saveProgramme = function () {
-        window.AndroidWebView.skipIntent()
-        return ;
         let materials = []
         //整合申请样板间所需传值
         let obj = {
