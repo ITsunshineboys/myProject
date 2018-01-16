@@ -2,7 +2,7 @@ angular.module("brand_detail_module",[])
 	.controller("brand_detail_ctrl",function ($rootScope,$scope,$http,_ajax,$stateParams) {
 		$rootScope.crumbs = [{
 			name: '品牌管理',
-			icon: 'icon-shangchengguanli',
+			icon: 'icon-Brand',
 			link: 'brand_index'
 		},{
 			name: '品牌详情'
