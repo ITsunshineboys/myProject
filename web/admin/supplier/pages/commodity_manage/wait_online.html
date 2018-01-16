@@ -58,7 +58,7 @@
                     <span>选择系列</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
+                    <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.name for item in series_arr"></select>
                 </div>
                 <div class="col-sm-6 control-label small_txt" ng-class="{'remove_txt':series_down_flag}" ng-if="series_null_flag || series_down_flag">
                     <span>{{series_hint_words}}</span>
@@ -72,7 +72,7 @@
                 <div class="col-sm-10">
                     <label ng-repeat="item in styles_arr" style="margin-right: 20px">
                         <input type="checkbox" ng-model="item.status">
-                        <span class="cursor" style="font-weight: normal">{{item.style}}</span>
+                        <span class="cursor" style="font-weight: normal">{{item.name}}</span>
                     </label>
                     <span class="small_txt remove_txt" ng-if="style_null_flag">{{style_hint_words}}</span>
                 </div>

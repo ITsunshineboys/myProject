@@ -54,7 +54,7 @@
                     <span>选择系列</span>
                 </div>
                 <div class="col-sm-4">
-                    <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.series for item in series_arr"></select>
+                    <select class="form-control" ng-model="myng.series_model" ng-options="item.id as item.name for item in series_arr"></select>
                 </div>
                 <div class="col-sm-6 control-label small_txt">
                     <span>*添加系列，便于智能报价抓取该商品</span>
@@ -68,7 +68,7 @@
                 <div class="col-sm-10 control-label">
                     <label ng-repeat="item in styles_arr" style="margin-right: 20px">
                         <input type="checkbox" ng-model="style_check_model" ng-change="style_change(style_check_model, item)">
-                        <span class="cursor" style="font-weight: normal">{{item.style}}</span>
+                        <span class="cursor" style="font-weight: normal">{{item.name}}</span>
                     </label>
                     <span class="small_txt">*添加风格，便于智能报价抓取该商品</span>
                 </div>

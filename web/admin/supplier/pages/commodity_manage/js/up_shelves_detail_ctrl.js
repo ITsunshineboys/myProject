@@ -185,10 +185,9 @@ up_shelves_detail.controller("up_shelves_detail_ctrl", function ($rootScope, $sc
 		$scope.merchant_add_attrs = [] ; // 商家自己添加的属性
     $scope.goods_select_attrs = [];//下拉框
 		$scope.goods_check_attrs = []; // 复选框
-    $scope.goods_select_value = [];//下拉框的值
-    $scope.pass_attrs_name = [];//名称
-    $scope.pass_attrs_value = [];//值
-    $scope.goods_select_attrs_value = []
+    $scope.pass_attrs_name = [];//传的名称
+    $scope.pass_attrs_value = [];//传的值
+    $scope.goods_select_attrs_value = [];// 属性下拉框的值
     /*大后台属性值获取*/
     _ajax.get('/mall/goods-attrs-admin', {goods_id: +$scope.goods_id}, function (res) {
         console.log(res);

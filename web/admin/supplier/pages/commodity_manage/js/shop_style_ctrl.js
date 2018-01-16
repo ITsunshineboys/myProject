@@ -87,11 +87,9 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	$scope.goods_input_attrs = [];//普通文本框
 	$scope.goods_select_attrs = [];//下拉框
 	$scope.goods_check_attrs = []; // 复选框
-	$scope.goods_select_value = [];//下拉框的值
-	$scope.pass_attrs_name = [];//名称
-	$scope.pass_attrs_value = [];//值
-	$scope.goods_select_attrs_value = [];//下拉框值
-	$scope.goods_select_value_pass = [];//传值的下拉框值
+	$scope.goods_select_attrs_value = [];//属性下拉框的值
+	$scope.pass_attrs_name = [];//接口传的属性名称
+	$scope.pass_attrs_value = [];//接口传的属性值
 	//大后台添加的属性
 	_ajax.get('/mall/category-attrs', {category_id: +$scope.category_id}, function (res) {
 		$scope.goods_all_attrs = res.data.category_attrs;
@@ -241,13 +239,11 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 	//市场价
 	$scope.my_market_price = function (value) {
 		let reg_value = reg.test(value);
-
 		if (!reg_value) {
 			$scope.price_flag = true;
 		} else {
 			(+$scope.market_price >= +$scope.platform_price) && (+$scope.platform_price >= +$scope.supplier_price) ? $scope.price_flag = false : $scope.price_flag = true;
 		}
-		console.log(reg_value)
 	};
 	//平台价
 	$scope.my_platform_price = function (value) {
@@ -480,7 +476,6 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		//名称输入框为空， 文本框变红，并跳转到对于的位置
 		if (!valid) {
 			$scope.submitted = true;
-			// if(value.$invalid=true){
 			for (let [key, value] of error.entries()) {
 				if (value.$invalid) {
 					$anchorScroll.yOffset = 150;
@@ -532,4 +527,3 @@ shop_style_let.controller("shop_style_ctrl", function ($rootScope, $scope, $http
 		}, 300)
 	}
 });
-
