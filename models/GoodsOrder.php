@@ -3456,10 +3456,11 @@ class GoodsOrder extends ActiveRecord
                     $count=1;
                 }
                 $freight=($supplier['freight']/$count)*100;
+                $supplier_number=0;
                 foreach ($supplier['goods'] as &$goods)
                 {
                     if (
-                           !array_key_exists('goods_id',$goods)
+                        !array_key_exists('goods_id',$goods)
                         || !array_key_exists('goods_num',$goods)
                     )
                     {
@@ -3467,6 +3468,11 @@ class GoodsOrder extends ActiveRecord
                         $code=1000;
                         return $code;
                     }
+                    $supplier_number+=$goods['goods_num'];
+                }
+                foreach ($supplier['goods'] as &$goods)
+                {
+
 //                    $shoppingCart= ShippingCart::find()
 //                        ->where(['uid'=>$user->id])
 //                        ->andWhere(['role_id'=>$user->last_role_id_app])
@@ -3528,6 +3534,7 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                     //$order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight
+//                    $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
                     $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
                     if ($code!=200)
                     {

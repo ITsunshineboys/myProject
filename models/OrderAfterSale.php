@@ -459,7 +459,7 @@ class OrderAfterSale extends ActiveRecord
             'value'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->create_time),
             'phone'=>'',
-            'content'=>'',
+            'content'=>$OrderAfterSale->description,
             'number'=>'',
             'code'=>'',
             'status'=>''
@@ -700,7 +700,7 @@ class OrderAfterSale extends ActiveRecord
             'value'=>self::AFTER_SALE_SERVICES[$OrderAfterSale->type],
             'time'=>date('Y-m-d H:i',$OrderAfterSale->create_time),
             'phone'=>'',
-            'content'=>'',
+            'content'=>$OrderAfterSale->description,
             'number'=>'',
             'code'=>'',
             'status'=>''

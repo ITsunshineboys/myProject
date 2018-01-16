@@ -38,7 +38,7 @@ class UserBankInfo extends \yii\db\ActiveRecord
     }
 
 
-     /**
+    /**
      * 添加、修改银行卡操作
      * @param $bankname
      * @param $bankcard
