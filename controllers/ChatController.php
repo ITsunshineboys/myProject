@@ -233,7 +233,6 @@ class ChatController extends Controller
         }
 
        foreach ($data as $k=>&$v){
-
            $v['content']=ChatRecord::userTextDecode($v['content']);
             $all=ChatRecord::find()->asArray()->where(['send_uid'=>$v['uid'],'to_uid'=>$u_id])->andWhere(['status'=>0])->orderBy('send_time Desc')->all();
 
@@ -383,4 +382,35 @@ class ChatController extends Controller
         ]);
     }
 
+
+    public function actionDelChatNews(){
+        $user = self::getUser();
+        if (!is_array($user)) {
+            return $user;
+        }
+        list($uid, $role_id) = $user;
+
+        $to_uid=(int)\Yii::$app->request->get('to_uid');
+        $to_role_id=(int)\Yii::$app->request->get('to_role_id');
+
+
+        $data=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$to_uid) or (send_uid=$to_uid and to_uid=$uid)) and ((send_role_id=$to_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$to_role_id")->queryAll();
+        var_dump($data);die;
+        foreach ($data as &$v) {
+            $chat = ChatRecord::find()->where(['id' => $v['id']])->one();
+            $chat->del_status = 1;
+            $res = $chat->save(false);
+            if(!$res){
+                $code=500;
+                return Json::encode([
+                    'code'=>\Yii::$app->params['errorCodes'][$code],
+                    'msg'=>'ok',
+                ]);
+            }
+        }
+        return Json::encode([
+            'code'=>200,
+            'msg'=>'ok'
+        ]);
+    }
 }

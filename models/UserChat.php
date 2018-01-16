@@ -349,6 +349,7 @@ class UserChat extends \yii\db\ActiveRecord
             $v['content']=ChatRecord::userTextDecode($v['content']);
            $chat= ChatRecord::find()->where(['id'=>$v['id']])->one();
            $chat->status=1;
+           $chat->del_status=0;
           $res= $chat->save(false);
           if(!$res){
               return 500;
