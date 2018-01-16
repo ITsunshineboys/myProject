@@ -171,10 +171,10 @@ class DecorationAdd extends ActiveRecord
             if(isset($effect['add_time'])){
                 $effect['add_time']=date('Y-m-d H:i', $effect['add_time']);
             }
-            $effect['three_materials']=$effect['title'];
-
+            if(isset($effect['title'])){
+                $effect['three_materials']=$effect['title'];
+            }
         }
-
         return [
             'total' => (int)$count,
             'page'=>$page,
