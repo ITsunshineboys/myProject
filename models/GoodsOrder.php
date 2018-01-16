@@ -1499,6 +1499,7 @@ class GoodsOrder extends ActiveRecord
                     ->one();
                 if ($express)
                 {
+                    $list['send_time']=$express->create_time;
                     $list['complete_time']=$express->receive_time;
                 }else{
                     $list['complete_time']=0;
