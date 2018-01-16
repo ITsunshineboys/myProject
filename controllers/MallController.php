@@ -2037,6 +2037,7 @@ class MallController extends Controller
 
         $brandApplication->review_note = trim(Yii::$app->request->post('review_note', ''));
 
+        $brandApplication->scenario = ModelService::SCENARIO_REVIEW;
         if (!$brandApplication->validate()) {
             return Json::encode([
                 'code' => $code,
