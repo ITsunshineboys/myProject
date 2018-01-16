@@ -164,8 +164,8 @@ class BrandApplication extends ActiveRecord
     {
         return [
             [['category_id', 'brand_id', 'authorization_start', 'authorization_end'], 'required'],
-            [['brand_id'], 'validateBrandId'],
-            [['category_id'], 'validateCategoryId'],
+            [['brand_id'], 'validateBrandId', 'on' => [ModelService::SCENARIO_ADD, ModelService::SCENARIO_EDIT]],
+            [['category_id'], 'validateCategoryId', 'on' => [ModelService::SCENARIO_ADD, ModelService::SCENARIO_EDIT]],
             [['review_status'], 'in', 'range' => ModelService::REVIEW_STATUSES, 'on' => ModelService::SCENARIO_REVIEW],
         ];
     }
