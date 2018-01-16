@@ -256,6 +256,7 @@ app.directive('water', function ($timeout) {
     .directive('repeatDone', function () {
         return {
             link: function (scope, element, attrs) {
+                console.log(element);
                 if (scope.$last) {
                     scope.$eval(attrs.repeatDone);
                 }
