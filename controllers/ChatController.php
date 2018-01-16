@@ -382,7 +382,10 @@ class ChatController extends Controller
         ]);
     }
 
-
+    /**
+     * 删除聊天
+     * @return array|string
+     */
     public function actionDelChatNews(){
         $user = self::getUser();
         if (!is_array($user)) {
@@ -390,8 +393,8 @@ class ChatController extends Controller
         }
         list($uid, $role_id) = $user;
 
-        $to_uid=(int)\Yii::$app->request->get('to_uid');
-        $to_role_id=(int)\Yii::$app->request->get('to_role_id');
+        $to_uid=(int)\Yii::$app->request->post('to_uid');
+        $to_role_id=(int)\Yii::$app->request->post('to_role_id');
 
         $data=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$to_uid) or (send_uid=$to_uid and to_uid=$uid)) and ((send_role_id=$to_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$to_role_id))")->queryAll();
         foreach ($data as &$v) {
