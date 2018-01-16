@@ -3456,7 +3456,7 @@ class GoodsOrder extends ActiveRecord
                 {
                     $count=1;
                 }
-                $freight=($supplier['freight']/$count)*100;
+//                $freight=($supplier['freight']/$count)*100;
                 $supplier_number=0;
                 foreach ($supplier['goods'] as &$goods)
                 {
@@ -3535,7 +3535,16 @@ class GoodsOrder extends ActiveRecord
                         }
                     }
                     //$order_no,$goods_num,$time,$goods,$order_status,$shipping_status,$customer_service,$is_unusual,$freight
-//                    $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
+                    $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
+                    $goods_freight=self::CalculationFreight($goods);
+                    if ($goods_freight*0.01==0)
+                    {
+                        $freight=0;
+                    }
+                    if ($goods_freight*0.01==$supplier['freight'])
+                    {
+                        $freight=$goods_freight;
+                    }
                     $code=OrderGoods::AddNewOrderData($order_no,$goods['goods_num'],$time,$Goods->toArray(),0,0,0,0,$freight);
                     if ($code!=200)
                     {
