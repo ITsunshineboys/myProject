@@ -1,9 +1,16 @@
-app.controller('nodata_ctrl', function ($uibModal,$http, _ajax, $state, $scope, $anchorScroll, $location, $q) {
+app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state, $scope, $anchorScroll, $location, $q) {
     //初始化
     $scope.vm = $scope
     $scope.special_request = ''
     $scope.materials = []
     $scope.worker_list = []
+    $scope.showAll = function () {
+        var swiper = new Swiper(".swiper-container", {
+            autoplay: 3000,
+            loop: true,
+            pagination: ".swiper-pagination"
+        })
+    }
     //监听滚动
     // window.addEventListener('scroll',function (event) {
     //     console.log(document.body.scrollTop);
