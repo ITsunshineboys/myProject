@@ -31,6 +31,7 @@
           <span>创建时间</span>
           <img ng-click="ser_time_sort()" src="{{ser_time_img}}" width="10">
         </th>
+        <th>等级</th>
         <th>状态</th>
         <th>详情</th>
         <th>操作</th>
@@ -40,6 +41,7 @@
       <tr ng-repeat="item in series_arr">
         <td>{{item.series}}</td>
         <td>{{item.creation_time}}</td>
+        <td>{{item.series_grade}}</td>
         <td class="color_red" ng-if="item.status=='0'">关闭</td>
         <td class="color_skyblue" ng-if="item.status=='1'">启用中</td>
         <td ui-sref="series_detail({item:item,ser_arr:series_arr,index:$index})"><a href="">编辑</a></td>
