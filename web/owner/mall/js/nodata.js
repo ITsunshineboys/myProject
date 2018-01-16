@@ -7,11 +7,11 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
     $scope.showAll = function () {
         $timeout(function () {
             var swiper = new Swiper(".swiper-container", {
-                autoplay: 1000,
+                autoplay: 3000,
                 loop: true,
                 pagination: ".swiper-pagination"
             })
-        },300)
+        },0)
     }
     //监听滚动
     // window.addEventListener('scroll',function (event) {
