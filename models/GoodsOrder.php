@@ -3491,6 +3491,10 @@ class GoodsOrder extends ActiveRecord
 //                    }
                     $time=time();
 
+                    if ($supplier_number==0)
+                    {
+                        $supplier_number=1;
+                    }
                     $freight=$supplier['freight']*($goods['goods_num']/$supplier_number)*100;
                     $goods_freight=self::CalculationFreight($goods);
                     if ($goods_freight*0.01==0)
