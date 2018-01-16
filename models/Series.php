@@ -55,7 +55,7 @@ class Series extends ActiveRecord
      * @param array $select select fields default id and series
      * @return array
      */
-    public static function seriesByCategoryId($categoryId, $statuses = [self::STATUS_ONLINE], $select = ['id','series'])
+    public static function seriesByCategoryId($categoryId, $statuses = [self::STATUS_ONLINE], $select = ['id','series as name'])
     {
         if (!GoodsCategory::find()->where(['id' => $categoryId, 'has_series' => 1])->exists()) {
             return [];
