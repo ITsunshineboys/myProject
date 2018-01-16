@@ -185,6 +185,7 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
     }
     //抓取材料
     $scope.getMaterialDetail = function () {
+        let str = ''
         console.log($scope.cur_level_three);
         let next_all_modal = function ($scope, $uibModalInstance) {
             $scope.cur_title = '抓取材料信息错误，请重新抓取'
@@ -193,6 +194,13 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
             }
         }
         next_all_modal.$inject = ['$scope', '$uibModalInstance']
+        let first_all_modal = function ($scope, $uibModalInstance) {
+            $scope.cur_title = str
+            $scope.common_house = function () {
+                $uibModalInstance.close()
+            }
+        }
+        first_all_modal.$inject = ['$scope', '$uibModalInstance']
         _ajax.get('/quote/decoration-add-classify', {
             category_id: $scope.cur_level_three.id
         }, function (res) {
@@ -209,6 +217,12 @@ app.controller('material_detail_ctrl', function ($rootScope, _ajax, $scope, $sta
                 }
                 //商品属性
                 $scope.other_attr = res.goods_attr
+            }else if(res.code == 1087){
+                str = res.msg
+                $uibModal.open({
+                    templateUrl: 'pages/intelligent/cur_model.html',
+                    controller: first_all_modal
+                })
             }else{
                 $uibModal.open({
                     templateUrl: 'pages/intelligent/cur_model.html',
