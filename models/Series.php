@@ -105,7 +105,7 @@ class Series extends ActiveRecord
         if ($sort  == self::STATUS_OFFLINE){
             $series= self::find()
                 ->asArray()
-                ->orderBy(['creation_time'=>SORT_DESC])
+                ->orderBy(['creation_time'=>SORT_DESC,'series_grade'=>SORT_ASC])
                 ->offset($offset)
                 ->limit($size)
                 ->all();
