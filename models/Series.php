@@ -77,10 +77,10 @@ class Series extends ActiveRecord
     {
         $offset = ($page - 1) * $size;
         $list = self::find()
-            ->orderBy(['series_grade' => SORT_ASC])
             ->offset($offset)
             ->limit($size)
             ->asArray()
+            ->orderBy('series_grade ASC')
             ->all();
 
         foreach ($list as &$effect) {
