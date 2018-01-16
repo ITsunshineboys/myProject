@@ -80,7 +80,7 @@ class Series extends ActiveRecord
             ->offset($offset)
             ->limit($size)
             ->asArray()
-            ->orderBy('series_grade ASC')
+            ->orderBy(['series_grade'=>SORT_ASC])
             ->all();
 
         foreach ($list as &$effect) {
@@ -105,7 +105,7 @@ class Series extends ActiveRecord
         if ($sort  == self::STATUS_OFFLINE){
             $series= self::find()
                 ->asArray()
-                ->orderBy(['creation_time'=>SORT_DESC,'series_grade'=>SORT_ASC])
+                ->orderBy(['series_grade'=>SORT_ASC])
                 ->offset($offset)
                 ->limit($size)
                 ->all();
