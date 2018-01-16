@@ -2487,7 +2487,7 @@ class QuoteController extends Controller
         //TODO 修改
 //        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
         // TODO 增加查询 decorationAdd表 如果有数据就提示  yr
-        $d_add = DecorationAdd::find()->where(['cid'=>$category_id])->one();
+        $d_add = DecorationAdd::find()->where(['c_id'=>$category_id])->one();
         if ($d_add){
             $code=1087;
             return Json::encode([
