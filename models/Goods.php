@@ -892,6 +892,11 @@ class Goods extends ActiveRecord
                 $code = 1042;
                 return $code;
             }
+
+            if (!$this->validateBrandCategory()) {
+                $code = 1093;
+                return $code;
+            }
         } else {
             $this->offline_uid > 0 && $code = 403;
         }
@@ -944,6 +949,16 @@ class Goods extends ActiveRecord
 
         $this->addError($attribute);
         return false;
+    }
+
+    /**
+     * Check if goods'category has its brand
+     *
+     * @return bool
+     */
+    public function validateBrandCategory()
+    {
+        return BrandCategory::find()->where(['brand_id' => $this->brand_id, 'category_id' => $this->category_id])->exists();
     }
 
     /**
