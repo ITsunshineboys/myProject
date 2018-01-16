@@ -2448,7 +2448,8 @@ class QuoteController extends Controller
 
         $page = (int)trim(\Yii::$app->request->get('page', 1));
         $size = (int)trim(\Yii::$app->request->get('size', DecorationAdd::PAGE_SIZE_DEFAULT));
-        $city = (int)trim(\Yii::$app->request->get('city', DecorationAdd::PAGE_SIZE_DEFAULT));
+        $city = (int)trim(\Yii::$app->request->get('city', 510100));
+        $keyword=trim(\Yii::$app->request->get('keyword'));
         $data=DecorationAdd::find()->asArray()->select('sku')->all();
         foreach ($data as $v){
             $goods_status=Goods::find()
@@ -2461,6 +2462,9 @@ class QuoteController extends Controller
             }
         }
         $where  = 'city_code = '.$city;
+        if($keyword){
+           $where.="and correlation_message like {$keyword}";
+        }
         $select = 'id,c_id,add_time,correlation_message,sku';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
         foreach ($decoration_add['details'] as &$one){
