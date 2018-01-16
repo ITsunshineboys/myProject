@@ -745,11 +745,29 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
             }
         }
         obj.materials = materials
+        /*保存成功模态框*/
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.tips = '方案保存成功'
+            $scope.save_status = true
+            $scope.return = function () {
+                $uibModalInstance.close()
+            }
+            $scope.viewDetails = function () {
+                // $uibModalInstance.close()
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
         _ajax.post('/effect/app-apply-effect',obj,function (res) {
+            console.log(res);
             if(res.code == 403){
                 window.AndroidWebView.skipIntent()
             }else{
-
+                $uibModal.open({
+                    templateUrl: 'cur_model.html',
+                    controller: all_modal,
+                    windowClass:'cur_modal',
+                    backdrop:'static'
+                })
             }
         })
     }
@@ -885,6 +903,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
         all_modal.$inject = ['$scope', '$uibModalInstance']
         /*保存成功模态框*/
         let all_modal1 = function ($scope, $uibModalInstance) {
+            $scope.tips = '申请成功，我们会在3天内和你联系'
             $scope.save_status = true
             $scope.return = function () {
                 $uibModalInstance.close()
