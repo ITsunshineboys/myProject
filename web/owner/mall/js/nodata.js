@@ -10,6 +10,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
             loop: true,
             pagination: ".swiper-pagination"
         })
+        swiper.reLoop()
     }
     //监听滚动
     // window.addEventListener('scroll',function (event) {
