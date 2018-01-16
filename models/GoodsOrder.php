@@ -3451,11 +3451,11 @@ class GoodsOrder extends ActiveRecord
                 }
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
-                $count=count($supplier['goods']);
-                if ($count==0)
-                {
-                    $count=1;
-                }
+//                $count=count($supplier['goods']);
+//                if ($count==0)
+//                {
+//                    $count=1;
+//                }
 //                $freight=($supplier['freight']/$count)*100;
                 $supplier_number=0;
                 foreach ($supplier['goods'] as &$goods)
