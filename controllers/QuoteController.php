@@ -2463,7 +2463,7 @@ class QuoteController extends Controller
         }
         $where  = 'city_code = '.$city;
         if($keyword){
-           $where.="and correlation_message like {$keyword}";
+           $where.=" and correlation_message like %{$keyword}%";
         }
         $select = 'id,c_id,add_time,correlation_message,sku';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
