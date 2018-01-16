@@ -256,13 +256,9 @@ app.directive('water', function ($timeout) {
     .directive('repeatDone', function () {
         return {
             link: function (scope, element, attrs) {
-                console.log(scope.cur_style);
                 if (scope.$last) {
                     scope.$eval(attrs.repeatDone);
                 }
-                scope.$watch('cur_style',function (newVal,oldVal) {
-                    scope.$eval(attrs.repeatDone);
-                },true)
             }
         }
     })
