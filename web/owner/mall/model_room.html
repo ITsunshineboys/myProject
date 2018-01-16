@@ -128,8 +128,8 @@
             <div class="carousel">
                 <div id="swiperList" class="swiper-container">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" style="height: 16rem;"
-                             ng-repeat="item in roomPicture.split(',')">
+                        <div repeat-done="showAll()" class="swiper-slide" style="height: 16rem;"
+                             ng-repeat="item in active_case.case_picture[0].effect_images.split(',')">
                             <img ng-src="{{item}}">
                         </div>
                     </div>

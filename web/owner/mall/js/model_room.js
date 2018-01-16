@@ -487,7 +487,15 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                });
            })
        }*/
-
+    $scope.showAll = function () {
+        $timeout(function () {
+            var swiper = new Swiper(".swiper-container", {
+                autoplay: 3000,
+                loop: true,
+                pagination: ".swiper-pagination"
+            })
+        },0)
+    }
     //初始化
     $scope.special_request = ''
     //一级、二级分类数据请求
