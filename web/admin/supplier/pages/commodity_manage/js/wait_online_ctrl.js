@@ -121,7 +121,7 @@ wait_online.controller("wait_online",function ($rootScope,$scope,$http,$statePar
 			//循环系列列表
 			for(let [key,value] of $scope.series_arr.entries()){
 				$scope.series_null_arr.push(value.series);
-				if(value.series==$scope.detail_ser){
+				if(value.name==$scope.detail_ser){
 					$scope.series_arr.splice(key,1);
 					$scope.series_arr.unshift(value);
 					//把对应的系列前置到下拉框第一项
