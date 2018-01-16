@@ -5,11 +5,13 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
     $scope.materials = []
     $scope.worker_list = []
     $scope.showAll = function () {
-        var swiper = new Swiper(".swiper-container", {
-            autoplay: 3000,
-            loop: true,
-            pagination: ".swiper-pagination"
-        })
+        $timeout(function () {
+            var swiper = new Swiper(".swiper-container", {
+                autoplay: 1000,
+                loop: true,
+                pagination: ".swiper-pagination"
+            })
+        },300)
     }
     //监听滚动
     // window.addEventListener('scroll',function (event) {
