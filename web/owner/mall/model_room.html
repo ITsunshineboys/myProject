@@ -100,7 +100,7 @@
 
         <!--适合人群-->
         <div class="tag">
-            <span ng-repeat="item in params.series.theme.split(',')">{{item}}</span>
+            <span ng-repeat="item in params.series.theme.split(',') track by $index">{{item}}</span>
         </div>
         <div class="fit">
             <h1>适合人群</h1>

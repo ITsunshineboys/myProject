@@ -195,7 +195,7 @@
                     </ul>
                 </div>
                 <div class="tag">
-                    <span ng-cloak ng-repeat="item in cur_series.theme.split(',')">{{item}}</span></div>
+                    <span ng-cloak ng-repeat="item in cur_series.theme.split(',') track by $index">{{item}}</span></div>
                 <div class="fit">
                     <h1>适合人群</h1>
                     <p ng-cloak>{{cur_series.intro}}</p>
@@ -229,7 +229,7 @@
                 </div>
                 <div class="note">
                     <ul>
-                        <li ng-repeat="item in cur_style.theme.split(',')">
+                        <li ng-repeat="item in cur_style.theme.split(',') track by $index">
                             <button type="button" ng-cloak>{{item}}</button>
                         </li>
                     </ul>

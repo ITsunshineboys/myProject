@@ -1,9 +1,21 @@
 <div class="add_material">
-    <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>{{province_name}}-{{city_name}}
+    <h6 class="location"><i style="margin-right: 5px;font-size: 20px;" class="glyphicon glyphicon-map-marker"
+                            aria-hidden="true"></i>{{province_name}}-{{city_name}}
     </h6>
-    <div class="form-group">
-        <button ui-sref="material_detail({status:0})"><i class="iconfont icon-add" style="margin-right: 5px;" aria-hidden="true"></i>添加新材料</button>
-        <button ng-click="refresh()" ng-disabled="status_words=='刷新中...'">{{status_words}}</button>
+    <div class="search form-inline clearfix">
+        <div class="form-group">
+            <button ui-sref="material_detail({status:0})"><i class="iconfont icon-add" style="margin-right: 5px;"
+                                                             aria-hidden="true"></i>添加新材料
+            </button>
+            <button ng-click="refresh()" ng-disabled="status_words=='刷新中...'">{{status_words}}</button>
+        </div>
+        <div class="form-group pull-right">
+            <div class="input-group">
+                <input id="search" class="form-control" type="text" placeholder="搜索小区名称" ng-model="vm.keyword">
+                <span class="glyphicon glyphicon-search"></span>
+            </div>
+            <button class="btn btn-default" ng-click="getKeywordHouseList()">查询</button>
+        </div>
     </div>
     <table class="table table-responsive table-hover">
         <tr>
