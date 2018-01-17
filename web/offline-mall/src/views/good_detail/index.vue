@@ -3,7 +3,7 @@
     <!-- 顶部icon -->
     <div class="guide-icon">
       <i class="iconfont icon-return" @click="$router.go(-1)"></i>
-      <i class="iconfont icon-share" @click="show_share = true"></i>
+      <i class="iconfont icon-share" @click="androidShare"></i>
       <i class="iconfont icon-more" @click="isShow=!isShow"></i>
     </div>
 
@@ -117,7 +117,9 @@
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
-          <button type="button">进店逛逛</button>
+          <router-link :to="'/store/' + good_detail.supplier.id">
+             <button type="button">进店逛逛</button>
+          </router-link>
         </flexbox>
       </card>
       <divider></divider>
@@ -263,16 +265,16 @@
     </popup>
 
     <!-- 分享弹窗 -->
-    <popup v-model="show_share" class="show_share">
-      <div>分享</div>
-      <div class="share-icon">
-        <div v-for="item in share_content">
-          <img :src="item.image" alt=""><br/>
-          <span>{{item.title}}</span>
-        </div>
-      </div>
-      <div @click="show_share = false">取消</div>
-    </popup>
+    <!--<popup v-model="show_share" class="show_share">-->
+      <!--<div>分享</div>-->
+      <!--<div class="share-icon">-->
+        <!--<div v-for="item in share_content">-->
+          <!--<img :src="item.image" alt=""><br/>-->
+          <!--<span>{{item.title}}</span>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div @click="show_share = false">取消</div>-->
+    <!--</popup>-->
 
     <!--线下商品介绍弹窗-->
     <offlinealert :offlineInfo=offlineInfo :show="show" :isOffline="false" @isShow=showOfflineAlert></offlinealert>
@@ -357,8 +359,8 @@
         share_content: [
           {image: require('../../assets/images/weixin.png'), title: '微信'},
           {image: require('../../assets/images/pengyouquan.png'), title: '朋友圈'},
-          {image: require('../../assets/images/sina.png'), title: '购物车'},
-          {image: require('../../assets/images/qq.png'), title: '我的'},
+          {image: require('../../assets/images/sina.png'), title: '新浪微博'},
+          {image: require('../../assets/images/qq.png'), title: 'QQ'},
           {image: require('../../assets/images/qzone.png'), title: 'QQ空间'}
         ]
 
@@ -366,6 +368,7 @@
     },
     activated () {
       this.good_id = this.$route.params.id
+      this.isShow = false
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
         this.good_detail = res.data.goods_view
         // 用户名处理
@@ -427,6 +430,17 @@
             window.AndroidWebView.showInfoFromJs(res.data)
           }
         })
+      },
+      // 立即购买
+      buyNow () {
+          /*
+          * 商品id 购买数量
+          * */
+        window.AndroidWebView.skipIntent(this.good_id, this.count)
+      },
+      // 分享
+      androidShare () {
+        window.AndroidWebView.share()
       }
     }
   }
@@ -707,7 +721,7 @@
     padding-bottom: 20px;
   }
 
-  .good-container .view-shop-btn > button {
+  .good-container .view-shop-btn button {
     width: 100px;
     height: 34px;
     line-height: 17px;
@@ -994,13 +1008,10 @@
 
   .good-container .share-icon > div {
     float: left;
-    width: 46px !important;
+    width: 48px !important;
     height: 75px;
     text-align: center;
-  }
-
-  .good-container .share-icon > div {
-    margin-right: 42px;
+    margin-right: 40px;
   }
 
   .good-container .share-icon > div:nth-child(4) {
