@@ -4832,12 +4832,14 @@ class OrderController extends Controller
 //        };
         $data=Wxpay::OrderAppPay($orderAmount,$postData['list']);
         $code=200;
-        return Json::encode([
+        return Json::encode
+        ([
             'code' => $code,
             'msg' => 'ok',
             'data'=>$data
         ]);
     }
+
     /**
      * @return bool
      */
@@ -4856,11 +4858,11 @@ class OrderController extends Controller
             }
             $orders= explode(',',base64_decode($msg['attach']));
             $total_amount=$msg['total_fee'];
-//            $orderAmount=GoodsOrder::CalculationCost($orders);
-//                    if (!$total_amount==$orderAmount)
-//                    {
-//                        return false;
-//                    }
+            $orderAmount=GoodsOrder::CalculationCost($orders);
+            if (!$total_amount==$orderAmount)
+            {
+                return false;
+            }
             $tran = Yii::$app->db->beginTransaction();
             try{
                 $Ord= GoodsOrder::find()
@@ -5370,7 +5372,6 @@ class OrderController extends Controller
                 'code' => 200,
                 'msg' => 'ok'
             ]);
-
         }
         $code=ShippingCart::DelInvalidGoods($Goods,$user);
         if ($code==200)
