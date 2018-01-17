@@ -192,10 +192,10 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
                 $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
             }
             if(sessionStorage.getItem('deleteHouse')!=null){
-                $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+                $scope.delete_house = JSON.parse(sessionStorage.getItem('deleteHouse'))
             }
             if(sessionStorage.getItem('deleteDrawing')!=null){
-                $scope.drawing_informations = JSON.parse(sessionStorage.getItem('drawingInformation'))
+                $scope.delete_drawing = JSON.parse(sessionStorage.getItem('deleteDrawing'))
             }
             if(sessionStorage.getItem('params')!=null){
                 $scope.params = JSON.parse(sessionStorage.getItem('params'))
@@ -330,6 +330,8 @@ app.controller('house_detail_ctrl', function ($scope, $rootScope, _ajax, $uibMod
         sessionStorage.setItem('houseInformation',JSON.stringify($scope.house_informations))
         sessionStorage.setItem('drawingInformation',JSON.stringify($scope.drawing_informations))
         sessionStorage.setItem('params',JSON.stringify($scope.params))
+        sessionStorage.setItem('deleteHouse',JSON.stringify($scope.delete_house))
+        sessionStorage.setItem('deleteDrawing',JSON.stringify($scope.delete_drawing))
         if(item.is_ordinary == 0){
             $state.go('edit_house',({index:$stateParams.index,cur_index:index}))
         }else if(item.is_ordinary == 1){

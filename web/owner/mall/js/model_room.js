@@ -646,6 +646,12 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 getPrice()
             }
         }else{
+            _ajax.get('/owner/particulars',{
+                id:obj.id
+            },function (res) {
+                console.log('普通户型');
+                console.log(res);
+            })
             $scope.materials = []
         }
     }
