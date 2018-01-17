@@ -325,8 +325,8 @@ class Supplier extends ActiveRecord
                     return $code;
                 }
 
-                $userRole = UserRole::find()->where(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']])->one();
-                if (!$userRole) {
+                if (!UserRole::roleUser($user, Yii::$app->params['ownerRoleId'])) {
+                    UserRole::deleteAll(['user_id' => $user->id, 'role_id' => Yii::$app->params['ownerRoleId']]);
                     $userRole = new UserRole;
                     $userRole->user_id = $user->id;
                     $userRole->role_id = Yii::$app->params['ownerRoleId'];
