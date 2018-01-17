@@ -465,6 +465,19 @@ class OrderGoods extends ActiveRecord
                 ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
                 ->where(" g.supplier_id={$supplier->id} ")
                 ->count();
+//            $data = (new Query())
+//                ->select((new Query())
+//                    ->from(GoodsOrder::tableName().' as g')
+//                    ->select('g.id')
+//                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+//                    ->where(" g.supplier_id={$supplier->id} ")
+//                    ->count().' as all,'.(new Query())
+//                        ->from(GoodsOrder::tableName().' as g')
+//                        ->select('g.id')
+//                        ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+//                        ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
+//                        ->count().' as unpaid')
+//                ->one();
 //        $role_id=$user->last_role_id_app;
             //Get 待付款订单  and g.role_id={$role_id}
             $unpaid=(new Query())

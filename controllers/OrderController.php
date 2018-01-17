@@ -2176,7 +2176,8 @@ class OrderController extends Controller
             ->select('id,supplier_id')
             ->where(['order_no'=>$order_no])
             ->one();
-        if(!$order){
+        if(!$order)
+        {
             $code=1000;
             return Json::encode([
                 'code' => $code,

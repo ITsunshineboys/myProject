@@ -719,38 +719,29 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-//        echo strlen('asdasd');die;
-
-//            if(strpos('www.idc-gz.com','idc-gz') !== false){
-//                  echo '包含';
-//            }else{
-//                echo '不包含';
-//            }
-//             die;
-        echo '**** **** **** 198';die;
-            $card='6212264402041716626';
-            $bankList=\Yii::$app->params['bankList'];
-
-            $card_8 = substr($card, 0, 8);
-            if (isset($bankList[$card_8])) {
-                echo $bankList[$card_8];
-                exit;
-            }
-            $card_6 = substr($card, 0, 6);
-            if (isset($bankList[$card_6])) {
-                echo $bankList[$card_6];
-                exit;
-            }
-            $card_5 = substr($card, 0, 5);
-            if (isset($bankList[$card_5])) {
-                echo $bankList[$card_5];exit;
-            }
-            $card_4 = substr($card, 0, 4);
-            if (isset($bankList[$card_4])) {
-                echo $bankList[$card_4];exit;
-            }
-            echo '该卡号信息暂未录入';
-
+        $user = Yii::$app->user->identity;
+        if (!$user){
+            $code=1052;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
+        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
+        $data = (new Query())
+            ->select((new Query())
+                    ->from(GoodsOrder::tableName().' as g')
+                    ->select('g.id')
+                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                    ->where(" g.supplier_id={$supplier->id} ")
+                    ->count().' as all,'.(new Query())
+                    ->from(GoodsOrder::tableName().' as g')
+                    ->select('g.id')
+                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+                    ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
+                    ->count().' as unpaid')
+            ->one();
+        return Json::encode($data);
 
     }
 
