@@ -1552,7 +1552,6 @@ class BasisDecorationService
     {
 
         foreach ($goods as &$oneGoods){
-
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
@@ -1590,8 +1589,8 @@ class BasisDecorationService
 
         $hallLampAll =  array_filter($hallLamp);
         $toiletLampAll = array_filter($toiletLamp);
-        $bedroomLampAll = array_filter($bedroomLamp);
-        $kitchenLampAll = array_filter($kitchenLamp);
+        $bedroomLampAll= array_filter($bedroomLamp);
+        $kitchenLampAll= array_filter($kitchenLamp);
 
         $goodsLamp[] = self::profitMargin($hallLampAll);
         $goodsLamp[] = self::profitMargin($toiletLampAll);
@@ -1600,7 +1599,7 @@ class BasisDecorationService
 
 
         $style = self::style($goodsLamp);
-var_dump($style);die;
+echo 1111;die;
         return $style;
     }
 }
