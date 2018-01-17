@@ -1558,6 +1558,7 @@ class BasisDecorationService
             }
         }
 
+        var_dump($hallLamp);die;
 
         foreach ($hallLamp as &$lamp){
             $lamp['quantity'] = (int)ceil($get['hall']);
