@@ -1566,6 +1566,7 @@ class BasisDecorationService
             unset($lamp[1]);
         }
 
+
         var_dump($hallLamp);
         die;
         foreach ($bedroomLamp as &$bedroom){
