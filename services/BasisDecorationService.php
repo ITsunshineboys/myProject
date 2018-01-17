@@ -1589,6 +1589,7 @@ class BasisDecorationService
         $goodsLamp[] = self::profitMargin($kitchenLamp);
 
         $style = self::style($goodsLamp);
+        var_dump($style);die;
 
         return $style;
     }
