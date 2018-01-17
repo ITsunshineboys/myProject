@@ -1543,7 +1543,7 @@ class BasisDecorationService
 
     public static function lamp($goods,$get)
     {
-        foreach ($goods as $oneGoods){
+        foreach ($goods as &$oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $hallLamp[] = $oneGoods;
             }
@@ -1565,7 +1565,8 @@ class BasisDecorationService
             $lamp['procurement'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
             unset($lamp[0]);
         }
-        var_dump($hallLamp);die;
+        var_dump($hallLamp);
+        die;
         foreach ($bedroomLamp as &$bedroom){
             $bedroom['quantity'] = (int)ceil($get['bedroom']);
             $bedroom['cost'] = round(self::algorithm(1,$bedroom['quantity'],$bedroom[0]['platform_price']),2);
