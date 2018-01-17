@@ -777,7 +777,6 @@ class BasisDecorationService
      */
     public static function profitMargin($goods,$value = 1)
     {
-        var_dump($goods);die;
         switch ($value){
             case $value == 1:
                 if (count($goods) == count($goods, 1)) {
