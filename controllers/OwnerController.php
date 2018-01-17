@@ -1638,7 +1638,7 @@ class OwnerController extends Controller
                'effect' => $effect,
             ]);
         }
-var_dump($effect);die;
+
         $worker_data = WorksWorkerData::findById($id);
         if ($worker_data){
             foreach ($worker_data as &$one_){
@@ -1726,7 +1726,7 @@ var_dump($effect);die;
             foreach ($stairs as &$one_stairs_price) {
                 if (
                     $one_stairs_price['value'] == $ma
-                    && $one_stairs_price['style_id'] == $effect['case_picture']->style_id
+                    && $one_stairs_price['style_id'] == $effect['case_picture'][0]['style_id']
                 ) {
                     $substr = substr($one_stairs_price['path'],0,strlen($one_stairs_price['path'])-1);
                     $where ="id in (".$substr.")";
