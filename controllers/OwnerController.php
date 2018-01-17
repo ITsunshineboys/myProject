@@ -1437,6 +1437,14 @@ class OwnerController extends Controller
 
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
+        $lamp = [];
+        foreach ($goods as $oneLamp){
+            if ($oneLamp['title'] == BasisDecorationService::goodsNames()['lamp']){
+                $lamp[] = $oneLamp;
+            }
+        }
+
+        var_dump($lamp);die;
         $material[]= BasisDecorationService::formula($goods,$get);
         var_dump($material);
         die;
