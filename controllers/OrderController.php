@@ -2370,7 +2370,8 @@ class OrderController extends Controller
         if (Yii::$app->getSecurity()->validatePassword($postData['pay_password'],$user->pay_password)==false)
         {
             $code=1055;
-            return Json::encode([
+            return Json::encode
+            ([
                 'code'=>$code,
                 'msg'=>Yii::$app->params['errorCodes'][$code],
                 'data'=>$user->mobile
@@ -2378,12 +2379,14 @@ class OrderController extends Controller
         }
         $code=GoodsOrder::orderBalanceSub($postData,$user);
         if ($code==200){
-            return Json::encode([
+            return Json::encode
+            ([
                 'code'=>$code,
                 'msg'=>'ok'
             ]);
         }else{
-            return Json::encode([
+            return Json::encode
+            ([
                 'code' => $code,
                 'msg' => Yii::$app->params['errorCodes'][$code]
             ]);

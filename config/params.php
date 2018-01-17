@@ -1,4 +1,4 @@
-?php
+<?php
 
 $districts = require(__DIR__ . '/districts.php'); // district data
 //$pinyin = require(__DIR__ . '/pinyin.php');
