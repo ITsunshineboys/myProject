@@ -1550,8 +1550,7 @@ class BasisDecorationService
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                unset($oneGoods[1]);
-                $hallLamp [] = $oneGoods;
+                $hallLamp [] = $oneGoods[0];
             }
 
 
@@ -1559,8 +1558,7 @@ class BasisDecorationService
                 $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                unset($oneGoods[1]);
-                $bedroomLamp[] = $oneGoods;
+                $bedroomLamp[] = $oneGoods[0];
             }
 
 
@@ -1568,8 +1566,7 @@ class BasisDecorationService
                 $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                unset($oneGoods[1]);
-                $toiletLamp[] = $oneGoods;
+                $toiletLamp[] = $oneGoods[0];
             }
 
 
@@ -1577,8 +1574,7 @@ class BasisDecorationService
                 $oneGoods[0]['quantity'] = (int)ceil($get['kitchen']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                unset($oneGoods[1]);
-                $kitchenLamp[] = $oneGoods;
+                $kitchenLamp[] = $oneGoods[0];
             }
         }
 
