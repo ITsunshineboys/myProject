@@ -1434,6 +1434,7 @@ class OwnerController extends Controller
     public function actionAssortFacility()
     {
         $get = Yii::$app->request->get();
+        var_dump($get);die;
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
         $lamp = [];
@@ -1447,7 +1448,6 @@ class OwnerController extends Controller
         var_dump($material);die;
 
         $material[]= BasisDecorationService::formula($goods,$get);
-
 
 
         //无计算公式
