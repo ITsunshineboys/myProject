@@ -1591,14 +1591,14 @@ class BasisDecorationService
                 $bedroomLamp[] = [];
             }
         }
-echo  22222222;die;
+
 
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
         $goodsLamp[] = self::profitMargin($kitchenLamp);
 
-
+echo 111;die;
         $goodsMaterial = [];
         foreach ($goodsLamp as $one){
             if($one != null){
