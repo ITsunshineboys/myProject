@@ -782,7 +782,7 @@ class BasisDecorationService
                 if (count($goods) == count($goods, 1)) {
                     return $goods;
                 } elseif ($goods == null){
-                    return new \stdClass;
+                    return [];
                 } else {
                     $max =[];
                     $len = count($goods);
