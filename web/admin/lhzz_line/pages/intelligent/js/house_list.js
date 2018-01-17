@@ -18,6 +18,7 @@ app.controller('house_list_ctrl',function ($scope,$state,$stateParams,$uibModal,
     sessionStorage.removeItem('drawingInformation')
     sessionStorage.removeItem('deleteHouse')
     sessionStorage.removeItem('deleteDrawing')
+    sessionStorage.removeItem('params')
     //分页配置
     $scope.Config = {
         showJump: true,
