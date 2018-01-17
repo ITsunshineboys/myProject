@@ -719,6 +719,7 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
+        echo 1;die;
         $user = Yii::$app->user->identity;
         if (!$user){
             $code=1052;
