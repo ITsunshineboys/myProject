@@ -2,10 +2,6 @@
 .add_drawing .form-horizontal .form-group{
     margin-left:0px!important;
 }
-.add_drawing{
-    padding-left:40px;
-    padding-right:40px;
-}
 .add_drawing h1{
     font-size:18px !important;
 }

@@ -1,9 +1,4 @@
 /*分销详情*/
-.distribution_detail{
-    padding-left:40px;
-    padding-right:40px;
-    padding-top:15px;
-}
 .distribution_detail .row > p,.distribution_detail .row > div{
     margin-top:15px;
     margin-bottom:15px;

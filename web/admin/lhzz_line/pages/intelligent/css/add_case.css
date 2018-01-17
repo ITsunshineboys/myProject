@@ -2,10 +2,10 @@
 .add_case .form-horizontal .form-group{
     margin-left:0px!important;
 }
-.add_case{
-    padding-left:40px;
-    padding-right:40px;
-}
+/*.add_case{*/
+    /*padding-left:40px;*/
+    /*padding-right:40px;*/
+/*}*/
 .add_case h1{
     font-size:18px !important;
 }

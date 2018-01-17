@@ -1,7 +1,5 @@
 /*=智能报价主页*/
 .intelligent_index{
-    margin-left:40px;
-    margin-right:40px;
     border-bottom:.5px solid #E6E9F0;
 }
 .intelligent_index button{
@@ -30,8 +28,6 @@
 }
 
 .all_btn{
-    margin-left:40px;
-    margin-right:40px;
     padding-top:30px;
 }
 .all_btn button{

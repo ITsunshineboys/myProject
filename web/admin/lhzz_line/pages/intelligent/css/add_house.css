@@ -1,8 +1,4 @@
 /*添加小区信息*/
-.add_house{
-    padding-left:40px;
-    padding-right:40px;
-}
 .house_msg_header,.add_house{
     position: relative;
 }
