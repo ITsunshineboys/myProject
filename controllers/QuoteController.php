@@ -1050,11 +1050,21 @@ class QuoteController extends Controller
 
                         if (!empty($house['drawing_list'])) {
                             foreach ($house['drawing_list'] as $images) {
-                                $effect_images  = $images['all_drawing'];
-                                $series_id      = $images['series'];
-                                $style_id       = $images['style'];
-                                $images_user    = $images['drawing_name'];
-                                $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                                if(!isset($images['id'])){
+                                    $effect_images  = $images['all_drawing'];
+                                    $series_id      = $images['series'];
+                                    $style_id       = $images['style'];
+                                    $images_user    = $images['drawing_name'];
+                                    $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
+                                }else{
+                                    $images_id     = $images['id'];
+                                    $effect_images = $images['all_drawing'];
+                                    $series_id     = $images['series'];
+                                    $style_id      = $images['style'];
+                                    $images_user   = $images['drawing_name'];
+                                    (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                }
+
                             }
                             if (!$effect_picture) {
                                 $transaction->rollBack();
