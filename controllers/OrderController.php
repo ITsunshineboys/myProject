@@ -5357,7 +5357,7 @@ class OrderController extends Controller
            $Good=Goods::findOne($list['goods_id']);
            if ($Good)
            {
-               if(!$Good->status==2)
+               if($Good->status!=Goods::STATUS_ONLINE)
                {
                    $Goods[]=$Good->id;
                }
