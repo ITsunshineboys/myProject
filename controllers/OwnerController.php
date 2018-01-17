@@ -1439,8 +1439,9 @@ class OwnerController extends Controller
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
         $lamp = [];
         foreach ($goods as $oneLamp){
-            if ($oneLamp['title'] == BasisDecorationService::goodsNames()['lamp']){
-                $lamp[] = $oneLamp;
+            if ($oneLamp['title'] == BasisDecorationService::goodsNames()['lamp'] && $oneLamp['series_id'] == $get['series'] && $oneLamp['style_id'] == $get['style']){
+               $attr = BasisDecorationService::goodsAttr($oneLamp,BasisDecorationService::goodsNames()['lamp'],'',2);
+               $lamp [] = $attr;
             }
         }
 
