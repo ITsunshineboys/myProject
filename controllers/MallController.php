@@ -1916,12 +1916,12 @@ class MallController extends Controller
                             'msg' => Yii::$app->params['errorCodes'][$code],
                         ]);
                     }
-                }
-            }
 
-            foreach (array_diff($categoryIdsArrOld, $categoryIdsArr) as $cateId) {
-                if (!BrandCategory::cateHasBrand($cateId)) {
-                    Goods::disableGoodsByCategoryId($cateId, $operator);
+                    foreach (array_diff($categoryIdsArrOld, $categoryIdsArr) as $cateId) {
+                        if (!BrandCategory::cateHasBrand($cateId)) {
+                            Goods::disableGoodsByCategoryId($cateId, $operator);
+                        }
+                    }
                 }
             }
 
