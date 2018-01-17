@@ -1439,6 +1439,7 @@ class Goods extends ActiveRecord
         }
         return [
             'id' => $this->id,
+            'uid'=>$this->uid,
             'logistics_template_id' => $this->logistics_template_id,
             'category_title' => $categoryTitle,
             'title' => $this->title,

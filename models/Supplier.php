@@ -104,7 +104,6 @@ class Supplier extends ActiveRecord
         'reject_reason',
     ];
     const FIELDS_VIEW_MALL_MODEL = [
-        'uid',
         'icon',
         'shop_no',
         'shop_name',
