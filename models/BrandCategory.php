@@ -128,7 +128,11 @@ class BrandCategory extends ActiveRecord
         $from = " from {{%" . self::tableName() . "}} bc
             ,{{%" . GoodsBrand::tableName() . "}} b
             ,{{%" . GoodsCategory::tableName() . "}} c";
-        $isSupplier && $from .= ",{{%" . BrandApplication::tableName() . "}} ba";
+        if (!$isSupplier) {
+            $from .= ",{{%" . Goods::tableName() . "}} g";
+        } else {
+            $from .= ",{{%" . BrandApplication::tableName() . "}} ba";
+        }
         $sql .= $from;
 
         $where = " where bc.brand_id = b.id 
@@ -136,8 +140,12 @@ class BrandCategory extends ActiveRecord
             and b.status = " . GoodsBrand::STATUS_ONLINE . " 
             and c.deleted = 0
             and bc.category_id = {$categoryId}";
-        $isSupplier && $where .= " and ba.brand_id = b.id and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
-            . " and ba.supplier_id = " . $userRole->id;
+        if (!$isSupplier) {
+            $where .= " and g.brand_id = b.id and g.category_id = c.id and g.status = " . Goods::STATUS_ONLINE;
+        } else {
+            $where .= " and ba.brand_id = b.id and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE
+                . " and ba.supplier_id = " . $userRole->id;
+        }
 
         $sql .= $where;
         $orderBy = " order by convert(b.name using gbk) asc";
