@@ -825,6 +825,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                window.AndroidWebView.skipZhuangXiu()
                 // $uibModalInstance.close()
             }
         }
@@ -909,6 +910,7 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                window.AndroidWebView.skipZhuangXiu()
                 // $uibModalInstance.close()
             }
         }
