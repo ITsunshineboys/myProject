@@ -1551,7 +1551,7 @@ class BasisDecorationService
     public static function lamp($goods,$get)
     {
 
-        foreach ($goods as $oneGoods){
+        foreach ($goods as &$oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
@@ -1592,9 +1592,6 @@ class BasisDecorationService
 
         die;
 //        $goodsLamp[] = self::profitMargin($hallLampAll);
-//        $goodsLamp[] = self::profitMargin($toiletLampAll);
-//        $goodsLamp[] = self::profitMargin($bedroomLampAll);
-//        $goodsLamp[] = self::profitMargin($kitchenLampAll);
 
 
         $style = self::style($goodsLamp);
