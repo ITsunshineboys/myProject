@@ -1591,7 +1591,7 @@ class BasisDecorationService
                 $bedroomLamp[] = [];
             }
         }
-
+echo  22222222;die;
 
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
