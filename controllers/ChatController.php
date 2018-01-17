@@ -395,7 +395,13 @@ class ChatController extends Controller
 
         $to_uid=(int)\Yii::$app->request->post('to_uid');
         $to_role_id=(int)\Yii::$app->request->post('to_role_id');
-
+        if(!$to_uid || !$to_role_id){
+            $code=1000;
+            return Json::encode([
+                'code'=>$code,
+                'msg'=>\Yii::$app->params['errorCodes'][$code]
+            ]);
+        }
         $data=\Yii::$app->db->createCommand("SELECT * from chat_record where ((send_uid=$uid and to_uid=$to_uid) or (send_uid=$to_uid and to_uid=$uid)) and ((send_role_id=$to_role_id and to_role_id=$role_id) or (send_role_id=$role_id and to_role_id=$to_role_id))")->queryAll();
         foreach ($data as &$v) {
             $chat = ChatRecord::find()->where(['id' => $v['id']])->one();
