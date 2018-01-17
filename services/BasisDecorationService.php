@@ -1592,6 +1592,7 @@ class BasisDecorationService
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
         $goodsLamp[] = self::profitMargin($kitchenLamp);
+        var_dump($goodsLamp);die;
 
         $goodsMaterial = [];
         foreach ($goodsLamp as $one){
