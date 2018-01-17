@@ -139,7 +139,9 @@
         this.isShowAlert = bool
       },
       getStoreData () {
-        this.axios.get('/supplier/index',)
+        this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
+          console.log(res)
+        })
       }
     }
   }
