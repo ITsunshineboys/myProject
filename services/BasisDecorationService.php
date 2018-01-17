@@ -1565,6 +1565,7 @@ class BasisDecorationService
             $lamp['procurement'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
             unset($lamp[0]);
         }
+
         var_dump($hallLamp);
         die;
         foreach ($bedroomLamp as &$bedroom){
