@@ -18,7 +18,6 @@ import Agreement from '@/views/agreement/index'             // 商城购买协�
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
