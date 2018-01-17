@@ -154,7 +154,6 @@
 
 <style lang="less">
   .invoice-header-box{
-    margin-top: 10px;
     padding: 15px;
   }
   .invoice-type{

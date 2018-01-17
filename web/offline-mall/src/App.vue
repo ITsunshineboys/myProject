@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition>
+    <transition  enter-active-class="animated fadeIn">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -16,7 +16,6 @@
 
 <style lang="less">
   @import '~vux/src/styles/reset.less';
-
   body {
     background-color: #f6f6f6;
   }
