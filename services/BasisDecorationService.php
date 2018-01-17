@@ -782,7 +782,7 @@ class BasisDecorationService
                 if (count($goods) == count($goods, 1)) {
                     return $goods;
                 } elseif ($goods == null){
-                    return [];
+                    return new \stdClass;
                 } else {
                     $max =[];
                     $len = count($goods);
@@ -1602,7 +1602,7 @@ class BasisDecorationService
 
 //        $goodsLamp[] = self::profitMargin($hallLamp);
 //        $goodsLamp[] = self::profitMargin($bedroomLamp);
-        $goodsLamp[] = self::profitMargin($toiletLamp);
+        $goodsLamp[] = self::profitMargin($toiletLampAll);
         var_dump($goodsLamp);die;
 //        $goodsLamp[] = self::profitMargin($kitchenLamp);
 
