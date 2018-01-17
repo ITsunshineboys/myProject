@@ -64,7 +64,7 @@ export default new Router({
       name: 'GoodsList',
       component: GoodsList
     }, {
-      path: '/store',
+      path: '/store/:id',
       name: 'Store',
       component: StoreHome
     }, {

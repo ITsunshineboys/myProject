@@ -132,11 +132,14 @@
       },
       /**
        * 线下体验店弹窗
-       * 传值给父级，告知知否隐藏
+       * 传值给父级，告知是否隐藏
        * @param bool
        */
       isShow (bool) {
         this.isShowAlert = bool
+      },
+      getStoreData () {
+        this.axios.get('/supplier/index',)
       }
     }
   }
