@@ -30,8 +30,8 @@ class BasisDecorationService
     const GOODS_PRICE_UNITS = 100;
 
     const DEFAULT_VALUE = [
-      'value1' => 0,
-      'value2' => 1,
+        'value1' => 0,
+        'value2' => 1,
     ];
 
     private static $_goodsNames;
@@ -206,14 +206,14 @@ class BasisDecorationService
     ];
 
     const CARPENTRY_DETAILS =[
-      'keel_sculpt'=>'龙骨做造型长度',
-      'screw_rod_sculpt'=>'丝杆做造型长度',
-      'plasterboard_sculpt'=>'石膏板造型长度',
-      'plasterboard_area'=>'石膏板平顶面积',
-      'tv_day'=>'电视墙需要天数',
-      'tv_plasterboard'=>'电视墙所需石膏板',
-      'keel_area'=>'龙骨做平顶面积',
-      'screw_rod_area'=>'丝杆做平顶面积',
+        'keel_sculpt'=>'龙骨做造型长度',
+        'screw_rod_sculpt'=>'丝杆做造型长度',
+        'plasterboard_sculpt'=>'石膏板造型长度',
+        'plasterboard_area'=>'石膏板平顶面积',
+        'tv_day'=>'电视墙需要天数',
+        'tv_plasterboard'=>'电视墙所需石膏板',
+        'keel_area'=>'龙骨做平顶面积',
+        'screw_rod_area'=>'丝杆做平顶面积',
     ];
 
     /**
@@ -252,9 +252,9 @@ class BasisDecorationService
      * @return array
      */
     public static function DetailsId2Title(){
-       $titles = [];
+        $titles = [];
         foreach (self::CARPENTRY_DETAILS_IDS as $k=> &$v){
-           $title = EngineeringStandardCraft::CraftsAllbyId($v);
+            $title = EngineeringStandardCraft::CraftsAllbyId($v);
             if ($title) {
                 $titles[$k] = $title['project_details'];
             } else {
@@ -292,7 +292,7 @@ class BasisDecorationService
             $idTitles = GoodsCategory::find()
                 ->select(['id', 'title'])
 //                ->where(['deleted' => 0, 'level' => GoodsCategory::LEVEL3])
-                    // TODO   不需要下架状态  Wch
+                // TODO   不需要下架状态  Wch
                 ->where(['level' => GoodsCategory::LEVEL3])
                 ->andWhere(['in', 'id', self::GOODS_IDS])
                 ->asArray()
@@ -570,7 +570,7 @@ class BasisDecorationService
      */
     public  static function paintedPerimeter($area,$value,$wall = 4)
     {
-  //      （卧室地面积÷卧室个数）开平方×4×卧室个数
+        //      （卧室地面积÷卧室个数）开平方×4×卧室个数
         $sqrt = sqrt(self::algorithm(6,$area,$value));
         $v = self::algorithm(10,$sqrt,$wall,$value);
 
@@ -818,7 +818,7 @@ class BasisDecorationService
         foreach ($goods as $one_goods) {
             switch ($one_goods) {
                 case $one_goods['title'] == self::goodsNames()['wood_floor'] && $one_goods['series_id'] == $post['series']: // 木地板
-                //木地板面积=卧室地面积    卧室地面积=【z】%×（房屋面积） 木地板费用：个数×抓取的商品价格 个数：（木地板面积÷抓取木地板面积）
+                    //木地板面积=卧室地面积    卧室地面积=【z】%×（房屋面积） 木地板费用：个数×抓取的商品价格 个数：（木地板面积÷抓取木地板面积）
                     $goods_area = GoodsAttr::findByGoodsIdUnits($one_goods['id'],'');
                     foreach ($goods_area as $one_goods_area) {
                         if ($one_goods_area['name'] == self::UNITS['length']) {
@@ -954,7 +954,7 @@ class BasisDecorationService
                     $shower_partition[] = $one_goods;
                     break;
             }
-            }
+        }
 
         $wf = isset($wood_floor) ? $wood_floor :[];
         $ma = isset($marble) ? $marble :[];
@@ -1269,9 +1269,9 @@ class BasisDecorationService
 
         foreach ($judge as $value)
         {
-           if ($value == $category){
+            if ($value == $category){
                 return true;
-           }
+            }
         }
         return false;
     }
@@ -1412,8 +1412,8 @@ class BasisDecorationService
                 foreach ($style as $one_style){
                     $style_[] = $one_style['style'];
                 }
-            $one_goods['style_name'] = implode('、',$style_);
-            unset($one_goods['style_id']);
+                $one_goods['style_name'] = implode('、',$style_);
+                unset($one_goods['style_id']);
             }else{
                 $one_goods['style_name'] = '';
                 unset($one_goods['style_id']);
@@ -1464,6 +1464,7 @@ class BasisDecorationService
                 $wire = $one_value['material'];
             }
         }
+
         $craft_ = WorkerType::craft(OwnerController::CRAFT_NAME['tiler'],$get['city']);
         foreach ($craft_ as $oneValue){
             // 自流平用量
@@ -1539,4 +1540,11 @@ class BasisDecorationService
         return $value;
     }
 
+
+    public static function lamp($goods)
+    {
+        foreach ($goods as $oneGoods){
+
+        }
+    }
 }
