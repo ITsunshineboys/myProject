@@ -4,10 +4,10 @@
     <div class="store" flex="main:justify cross:center">
       <div flex>
         <div class="store-img">
-          <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
+          <img :src="storeData.icon">
         </div>
         <div class="store-name">
-          <p>森达地板自营店</p>
+          <p>{{storeData.shop_name}}</p>
           <p class="experience-shop" @click="isShowAlert = true">线下体验店</p>
         </div>
       </div>
@@ -18,13 +18,13 @@
         </div>
         <div class="split-line"></div>
         <div class="fans" flex="dir:top main:justify">
-          <span>12k</span>
+          <span>{{storeData.follower_number}}</span>
           <span>粉丝数</span>
         </div>
       </div>
     </div>
     <div :style="{minHeight: tabHeight + 'px'}" style="min-height: 44px;">
-      <sticky :offset="46" :check-sticky-support="false">
+      <sticky :offset="40" :check-sticky-support="false">
         <tab class="tab" active-color="#222" bar-active-color="#222" defaultColor="#999" custom-bar-width="50px">
           <tab-item @on-item-click="onClickTab" selected>店铺首页</tab-item>
           <tab-item @on-item-click="onClickTab">全部商品</tab-item>
@@ -47,14 +47,14 @@
       </sticky>
     </div>
     <div class="store-home" v-if="tabActive == 0">
-      <swiper :list="baseList" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
+      <swiper :list="carousel" :show-desc-mask="false" dots-position="center" dots-class="dots" :loop="true" :auto="true" height="145px"></swiper>
       <div class="store-goods-list" flex>
-        <div class="store-goods-item" v-for="obj in 7">
-          <img src="http://service.cdlhzz.cn/static/image/2017/12/18/1513588491053.jpg">
-          <p class="store-goods-title">本象联合木质椅</p>
-          <p class="store-goods-desc">无尽创意 无畏表达</p>
-          <p class="store-goods-price">￥3000</p>
-        </div>
+        <router-link class="store-goods-item" v-for="obj in recommendGoods" :to="'/good-detail/' + obj.url" tag="div">
+          <img :src="obj.image">
+          <p class="store-goods-title">{{obj.title}}</p>
+          <p class="store-goods-desc">{{obj.description}}</p>
+          <p class="store-goods-price">￥{{obj.show_price}}</p>
+        </router-link>
       </div>
     </div>
 
@@ -63,7 +63,7 @@
     </div>
 
     <div class="btn-group" flex>
-      <router-link :to="{path: 'shop-intro'}" tag="button" type="button">
+      <router-link :to="{path: '/shop-intro'}" tag="button" type="button">
         店铺介绍
       </router-link>
       <button class="" type="button">联系商家</button>
@@ -80,21 +80,6 @@
   import GoodsList from '@/components/GoodsList'
   import OfflineAlert from '@/components/OfflineAlert'
 
-  const baseList = [{
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/1.jpg',
-    title: '送你一朵fua'
-  }, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/2.jpg',
-    title: '送你一辆车'
-  }, {
-    url: 'javascript:',
-    img: 'https://static.vux.li/demo/5.jpg',
-    title: '送你一次旅行',
-    fallbackImg: 'https://static.vux.li/demo/3.jpg'
-  }]
-
   export default {
     components: {
       Tab,
@@ -107,17 +92,38 @@
     },
     data () {
       return {
-        isAttention: false, // 关注图标默认未关注
-        tabActive: 0,        // 默认选中店铺首页
-        tabHeight: 44,       // tab 默认最小高度为 44 像素
-        isShowAlert: false, // 是否显示线下体验店弹窗
-        baseList: baseList,
+        isAttention: false,   // 关注图标默认未关注
+        tabActive: 0,         // 默认选中店铺首页
+        tabHeight: 44,        // tab 默认最小高度为 44 像素
+        isShowAlert: false,  // 是否显示线下体验店弹窗
+        carousel: [],         // 店铺首页轮播
+        storeData: {},        // 店铺信息
+        recommendGoods: [],   // 推荐商品列表
         offlineInfo: {
           address: '成都市金牛区就老是卡死了老是看见',
           phone: '15932121321',
           desc: '就是实体店啦傻逼，这也要看一下 ——鲁迅'
         }
       }
+    },
+    activated () {
+      // 请求店铺数据
+      this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
+        console.log(res, '店铺首页数据')
+        let data = res.data.index
+        this.storeData = data
+        this.carousel = data.carousel.map(item => {
+          return {
+            url: '/good-detail/' + item.url,
+            img: item.image
+          }
+        })
+      })
+      this.axios.get('supplier/recommend-second', {supplier_id: this.$route.params.id}, res => {
+        console.log(res, '店铺推荐商品')
+        let data = res.data.recommend_second
+        this.recommendGoods = data
+      })
     },
     methods: {
       onClickTab (index) {
@@ -137,11 +143,6 @@
        */
       isShow (bool) {
         this.isShowAlert = bool
-      },
-      getStoreData () {
-        this.axios.get('/supplier/index', {supplier_id: this.$route.params.id}, res => {
-          console.log(res)
-        })
       }
     }
   }
