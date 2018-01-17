@@ -1795,6 +1795,15 @@ class MallController extends Controller
      */
     public function actionBrandEdit()
     {
+        $code = 500;
+        $operator = Yii::$app->user->identity;
+        if (!$operator) {
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
+
         $code = 1000;
 
         $id = (int)Yii::$app->request->post('id', 0);
@@ -1839,27 +1848,8 @@ class MallController extends Controller
         }
 
         $transaction = Yii::$app->db->beginTransaction();
-
-        if (!$brand->save()) {
-            $transaction->rollBack();
-
-            $code = 500;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code],
-            ]);
-        }
-
-        $categoryIdsArr = explode(',', $categoryIds);
-        $categoryIdsArrOld = BrandCategory::categoryIdsByBrandId($brand->id);
-        if (!StringService::checkArrayIdentity($categoryIdsArrOld, $categoryIdsArr)) {
-            $deletedNum = BrandCategory::deleteAll(
-                [
-                    'brand_id' => $brand->id,
-                ]
-            );
-
-            if ($deletedNum == 0) {
+        try {
+            if (!$brand->save()) {
                 $transaction->rollBack();
 
                 $code = 500;
@@ -1869,9 +1859,16 @@ class MallController extends Controller
                 ]);
             }
 
-            foreach ($categoryIdsArr as $categoryId) {
-                $category = GoodsCategory::findOne($categoryId);
-                if (!$category || $category->level != GoodsCategory::LEVEL3) {
+            $categoryIdsArr = explode(',', $categoryIds);
+            $categoryIdsArrOld = BrandCategory::categoryIdsByBrandId($brand->id);
+            if (!StringService::checkArrayIdentity($categoryIdsArrOld, $categoryIdsArr)) {
+                $deletedNum = BrandCategory::deleteAll(
+                    [
+                        'brand_id' => $brand->id,
+                    ]
+                );
+
+                if ($deletedNum == 0) {
                     $transaction->rollBack();
 
                     $code = 500;
@@ -1881,36 +1878,63 @@ class MallController extends Controller
                     ]);
                 }
 
-                $brandCategory = new BrandCategory;
-                $brandCategory->brand_id = $brand->id;
-                $brandCategory->category_id = $categoryId;
-                list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
-                $brandCategory->category_id_level1 = $rootCategoryId;
-                $brandCategory->category_id_level2 = $parentCategoryId;
+                foreach ($categoryIdsArr as $categoryId) {
+                    $category = GoodsCategory::findOne($categoryId);
+                    if (!$category || $category->level != GoodsCategory::LEVEL3) {
+                        $transaction->rollBack();
 
-                $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
-                if (!$brandCategory->validate()) {
-                    $transaction->rollBack();
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
 
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
-                }
+                    $brandCategory = new BrandCategory;
+                    $brandCategory->brand_id = $brand->id;
+                    $brandCategory->category_id = $categoryId;
+                    list($rootCategoryId, $parentCategoryId, $categoryId) = explode(',', $category->path);
+                    $brandCategory->category_id_level1 = $rootCategoryId;
+                    $brandCategory->category_id_level2 = $parentCategoryId;
 
-                if (!$brandCategory->save()) {
-                    $transaction->rollBack();
+                    $brandCategory->scenario = BrandCategory::SCENARIO_ADD;
+                    if (!$brandCategory->validate()) {
+                        $transaction->rollBack();
 
-                    $code = 500;
-                    return Json::encode([
-                        'code' => $code,
-                        'msg' => Yii::$app->params['errorCodes'][$code],
-                    ]);
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
+
+                    if (!$brandCategory->save()) {
+                        $transaction->rollBack();
+
+                        $code = 500;
+                        return Json::encode([
+                            'code' => $code,
+                            'msg' => Yii::$app->params['errorCodes'][$code],
+                        ]);
+                    }
                 }
             }
-        }
 
-        $transaction->commit();
+            foreach (array_diff($categoryIdsArrOld, $categoryIdsArr) as $cateId) {
+                if (!BrandCategory::cateHasBrand($cateId)) {
+                    Goods::disableGoodsByCategoryId($cateId, $operator);
+                }
+            }
+
+            $transaction->commit();
+        } catch (\Exception $e) {
+            $transaction->rollBack();
+
+            $code = 500;
+            return Json::encode([
+                'code' => $code,
+                'msg' => Yii::$app->params['errorCodes'][$code],
+            ]);
+        }
 
         return Json::encode([
             'code' => 200,
