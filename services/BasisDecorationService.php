@@ -1551,17 +1551,15 @@ class BasisDecorationService
     public static function lamp($goods,$get)
     {
 
-        foreach ($goods as &$oneGoods){
-
+        foreach ($goods as $oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $hallLamp [] = $oneGoods[0];
-                var_dump($hallLamp);echo 111;
+                var_dump($hallLamp); echo 11;
             }
 
-//
 //            if(strpos($oneGoods[1]['value'],'卧室') !== false) {
 //                $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
 //                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
