@@ -61,7 +61,9 @@ export default {
       }
     }).then(
       (res) => {
-        return checkCode(res.data, callback)
+        if (res.data !== undefined) {
+          return checkCode(res.data, callback)
+        }
       }
     )
   },
@@ -77,7 +79,9 @@ export default {
       }
     }).then(
       (res) => {
-        return checkCode(res.data, callback)
+        if (res.data !== undefined) {
+          return checkCode(res.data, callback)
+        }
       }
     )
   }

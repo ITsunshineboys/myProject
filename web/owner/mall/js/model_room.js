@@ -498,6 +498,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     }
     //初始化
     $scope.special_request = ''
+    $scope.roomPic = ''
     //一级、二级分类数据请求
     _ajax.post('/owner/classify', {}, function (res) {
         console.log('分类');
@@ -545,76 +546,56 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     })
     //获取案例材料和价格数据
     $scope.getMaterials = function (obj,item,result) {
-        let effect_image = obj.case_picture
         if(item!=undefined){
             $scope.params[item] = result
         }else{
             let index = $scope.stairs.findIndex(function (item) {
-               return item.id == obj.stair_id
+                return item.id == obj.stair_id
             })
-            let index1 = $scope.series.findIndex(function (item) {
-               return item.id == effect_image[0].series_id
-            })
-            let index2 = $scope.style.findIndex(function (item) {
-               return item.id == effect_image[0].style_id
-            })
-            $scope.params = {
-                stair:index==-1?0:$scope.stairs[index],
-                series:index1==-1?0:$scope.series[index1],
-                style:index2==-1?0:$scope.style[index2]
+            if(obj.type == 1){
+                let effect_image = obj.case_picture
+                let index1 = $scope.series.findIndex(function (item) {
+                    return item.id == effect_image[0].series_id
+                })
+                let index2 = $scope.style.findIndex(function (item) {
+                    return item.id == effect_image[0].style_id
+                })
+                $scope.params = {
+                    stair:index==-1?0:$scope.stairs[index],
+                    series:index1==-1?0:$scope.series[index1],
+                    style:index2==-1?0:$scope.style[index2]
+                }
+            }else{
+                $scope.params = {
+                    stair:index==-1?0:$scope.stairs[index],
+                    series:$scope.series[0],
+                    style:$scope.style[0]
+                }
             }
         }
-        // if(item!=undefined){
-        //     $scope.params[item] = result
-        // }else{
-        //     $scope.active_case = obj
-        //     console.log(obj.type);
-        //     //风格、系列以及楼梯选择
-        //     let stair_index = $scope.stairs.findIndex(function (item) {
-        //         return item.id == $scope.active_case.stair_id
-        //     })
-        //     if($scope.active_case.type == 1){
-        //         let style_index = $scope.style.findIndex(function (item) {
-        //             return item.id == $scope.active_case.case_picture[0].style_id
-        //         })
-        //         let series_index = $scope.series.findIndex(function (item) {
-        //             return item.id == $scope.active_case.case_picture[0].series_id
-        //         })
-        //         $scope.params = {
-        //             style:$scope.style[style_index].id,
-        //             series:$scope.series[series_index],
-        //             stair:stair_index == -1?0:$scope.stairs[stair_index].id
-        //         }
-        //     }else{
-        //         $scope.params = {
-        //             stair:stair_index == -1?0:$scope.stairs[stair_index].id
-        //         }
-        //     }
-        // }
-        //获取案例商品数据
-        let index = effect_image.findIndex(function (item) {
-            return item.series_id == $scope.params.series.id &&
-                item.style_id == $scope.params.style.id &&
-                obj.stair_id == $scope.params.stair.id
-        })
-        if(index!=-1){
-            $scope.first_params = effect_image[index]
-            if(obj.type == 1){
-                //分类商品初始化
-                $scope.materials = angular.copy($scope.first_level)
-                for (let [key, value] of $scope.materials.entries()) {
-                    value.id = +value.id
-                    value['cost'] = 0
-                    value['count'] = 0
-                    value['second_level'] = []
-                    value['procurement'] = 0
-                }
-                if(sessionStorage.getItem('quotation_materials') == null||(sessionStorage.getItem('quotation_materials') != null&&$scope.active_case.id!=$stateParams.effect_id)){
-                    _ajax.get('/owner/particulars',{
-                        id:obj.id
-                    },function (res) {
-                        console.log('案例详情');
-                        console.log(res);
+        //样板间则获取商品、工人等数据,有资料则获取样板间实图
+        if(sessionStorage.getItem('quotation_materials') == null||(sessionStorage.getItem('quotation_materials') != null&&$scope.active_case.id!=$stateParams.effect_id)){
+            _ajax.get('/owner/particulars',{
+                id:obj.id
+            },function (res) {
+                console.log('案例详情');
+                console.log(res);
+                if(res.effect.type == 0){
+                    let index = res.effect.case_picture.findIndex(function (item) {
+                        return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
+                    })
+                    if(index!=-1){
+                        $scope.roomPic = res.effect.case_picture[index]
+                    }else{
+                        $scope.roomPic = ''
+                    }
+                    $scope.materials = []
+                }else{
+                    let index = res.effect.case_picture.findIndex(function (item) {
+                        return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
+                    })
+                    if(index!=-1){
+                        $scope.roomPic = res.effect.case_picture[index]
                         //整合二级
                         for (let [key, value] of res.goods.entries()) {
                             for (let [key1, value1] of $scope.materials.entries()) {
@@ -663,23 +644,16 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                         }
                         $scope.worker_list = res.worker_cost
                         getPrice()
-                    })
-                }else{
-                    $scope.materials = JSON.parse(sessionStorage.getItem('quotation_materials'))
-                    $scope.worker_list = JSON.parse(sessionStorage.getItem('worker_list'))
-                    getPrice()
+                    }else {
+                        $scope.roomPic = ''
+                        $scope.materials = []
+                    }
                 }
-            }else{
-                _ajax.get('/owner/particulars',{
-                    id:obj.id
-                },function (res) {
-                    console.log('普通户型');
-                    console.log(res);
-                })
-                $scope.materials = []
-            }
+            })
         }else{
-            $scope.materials = []
+            $scope.materials = JSON.parse(sessionStorage.getItem('quotation_materials'))
+            $scope.worker_list = JSON.parse(sessionStorage.getItem('worker_list'))
+            getPrice()
         }
     }
     //计算总价和折后价
@@ -884,6 +858,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                window.AndroidWebView.skipZhuangXiu()
                 // $uibModalInstance.close()
             }
         }
@@ -968,6 +943,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 $uibModalInstance.close()
             }
             $scope.viewDetails = function () {
+                window.AndroidWebView.skipZhuangXiu()
                 // $uibModalInstance.close()
             }
         }

@@ -2,7 +2,7 @@
   <div class="home">
     <flexbox class="search_header">
       <flexbox-item class="location" :span="4/25">
-        <router-link :to="{path:'/choose_city',query:{cur_city:cur_city}}">
+        <router-link :to="{path:'/choose-city',query:{cur_city:cur_city}}">
           <p><i class="iconfont icon-white"></i>{{city}}</p>
         </router-link>
       </flexbox-item>
