@@ -1630,7 +1630,7 @@ class OwnerController extends Controller
         $id = (int)Yii::$app->request->get('id','');
         $effect = Effect::find()->asArray()->select('id,bedroom,sittingRoom_diningRoom as hall,toilet,kitchen,window,area,high,province,city,district,toponymy,street,particulars,stairway,stair_id,house_image,type,city_code')->where(['id'=>$id])->one();
         $effect['street'] = $effect['province'].$effect['city'].$effect['district'].$effect['street'];
-        $effect['case_picture'] = EffectPicture::find()->asArray->where(['effect_id'=>$id])->all();
+        $effect['case_picture'] = EffectPicture::find()->asArray()->where(['effect_id'=>$id])->all();
         if ($effect['type'] == 0){
             return Json::encode([
                'code' => 200,
