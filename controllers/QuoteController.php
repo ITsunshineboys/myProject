@@ -1049,25 +1049,26 @@ class QuoteController extends Controller
                         }
 
                         if (!empty($house['drawing_list'])) {
-                            foreach ($house['drawing_list'] as $images) {
-                                if(empty($images['id'])){
-                                    $effect_images  = $images['all_drawing'];
-                                    $series_id      = $images['series'];
-                                    $style_id       = $images['style'];
-                                    $images_user    = $images['drawing_name'];
+                            if(empty($images['id'])) {
+                                foreach ($house['drawing_list'] as $images) {
+                                    $effect_images = $images['all_drawing'];
+                                    $series_id = $images['series'];
+                                    $style_id = $images['style'];
+                                    $images_user = $images['drawing_name'];
                                     $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
-                                }else{
-                                    foreach ($house['drawing_list'] as $image) {
-                                        $images_id     = $image['id'];
-                                        $effect_images = $image['all_drawing'];
-                                        $series_id     = $image['series'];
-                                        $style_id      = $image['style'];
-                                        $images_user   = $image['drawing_name'];
-                                        $effect_picture  = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-                                    }
                                 }
-
+                            }else{
+                                foreach ($house['drawing_list'] as $image) {
+                                    $images_id     = $image['id'];
+                                    $effect_images = $image['all_drawing'];
+                                    $series_id     = $image['series'];
+                                    $style_id      = $image['style'];
+                                    $images_user   = $image['drawing_name'];
+                                    $effect_picture  = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                }
                             }
+
+
                             if (!$effect_picture) {
                                 $transaction->rollBack();
                                 return 500;
@@ -1249,23 +1250,23 @@ class QuoteController extends Controller
 
                         if (!empty($house['drawing_list'])) {
                             if (!empty($images['id'])) {
-                            foreach ($house['drawing_list'] as $images) {
-                                $images_id = $images['id'];
-                                $effect_images = $images['all_drawing'];
-                                $series_id = $images['series'];
-                                $style_id = $images['style'];
-                                $images_user = $images['drawing_name'];
-                                (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-                            }
-                                }else{
-                                    foreach ($house['drawing_list'] as $image) {
-                                        $effect_images = $image['all_drawing'];
-                                        $series_id = $image['series'];
-                                        $style_id = $image['style'];
-                                        $images_user = $image['drawing_name'];
-                                        $effect_picture = (new EffectPicture())->plotAdd($house_id, $effect_images, $series_id, $style_id, $images_user);
-                                    }
+                                foreach ($house['drawing_list'] as $images) {
+                                    $images_id = $images['id'];
+                                    $effect_images = $images['all_drawing'];
+                                    $series_id = $images['series'];
+                                    $style_id = $images['style'];
+                                    $images_user = $images['drawing_name'];
+                                    (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                                 }
+                            }else{
+                                foreach ($house['drawing_list'] as $image) {
+                                    $effect_images = $image['all_drawing'];
+                                    $series_id = $image['series'];
+                                    $style_id = $image['style'];
+                                    $images_user = $image['drawing_name'];
+                                    $effect_picture = (new EffectPicture())->plotAdd($house_id, $effect_images, $series_id, $style_id, $images_user);
+                                }
+                            }
 
                         }
                     }
