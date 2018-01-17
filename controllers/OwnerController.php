@@ -1443,7 +1443,7 @@ class OwnerController extends Controller
                $lamp [] = $attr;
             }
         }
-        var_dump($lamp);die;
+
         $material[] = BasisDecorationService::lamp($lamp,$get);
         var_dump($material);die;
 
