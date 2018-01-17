@@ -1583,12 +1583,18 @@ class BasisDecorationService
                 $kitchenLamp[] = $oneGoods[0];
             }
         }
+        $hallLampAll =  array_filter($hallLamp);
+        $toiletLampAll = array_filter($toiletLamp);
+        $bedroomLampAll = array_filter($bedroomLamp);
+        $kitchenLampAll = array_filter($kitchenLamp);
 
-        $goodsLamp[] = self::profitMargin($hallLamp);
+        $goodsLamp[] = self::profitMargin($hallLampAll);
+        $goodsLamp[] = self::profitMargin($toiletLampAll);
+        $goodsLamp[] = self::profitMargin($bedroomLampAll);
+        $goodsLamp[] = self::profitMargin($kitchenLampAll);
 
 
         $style = self::style($goodsLamp);
-        var_dump($style);die;
 
         return $style;
     }
