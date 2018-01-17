@@ -1437,7 +1437,6 @@ class OwnerController extends Controller
 
         // 有资料 计算公式
         $goods = Goods::assortList(self::MATERIALS,$get['city']);
-        var_dump($goods);die;
         $material[]= BasisDecorationService::formula($goods,$get);
         var_dump($material);
         die;
