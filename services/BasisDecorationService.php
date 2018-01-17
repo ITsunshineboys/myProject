@@ -1586,7 +1586,7 @@ class BasisDecorationService
             unset($bedroom[1]);
         }
         var_dump($hallLamp);
-        echo 111;
+        echo 2222;
         die;
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
