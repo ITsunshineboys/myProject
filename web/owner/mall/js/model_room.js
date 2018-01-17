@@ -494,7 +494,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 loop: true,
                 pagination: ".swiper-pagination"
             })
-        },0)
+        },300)
     }
     //初始化
     $scope.special_request = ''
