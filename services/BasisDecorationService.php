@@ -1551,7 +1551,7 @@ class BasisDecorationService
     public static function lamp($goods,$get)
     {
 
-        foreach ($goods as $oneGoods){
+        foreach ($goods as &$oneGoods){
 
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
