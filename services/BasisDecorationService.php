@@ -1559,16 +1559,15 @@ class BasisDecorationService
         }
 
 
-        var_dump($hallLamp);die;
         foreach ($hallLamp as &$lamp){
             $lamp[0]['quantity'] = (int)ceil($get['hall']);
-            $lamp[0]['cost'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['platform_price']),2);
-            $lamp[0]['procurement'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
+            $lamp[0]['cost'] = round(self::algorithm(1,$lamp[0]['quantity'],$lamp[0]['platform_price']),2);
+            $lamp[0]['procurement'] = round(self::algorithm(1,$lamp[0]['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
 //            unset($lamp[1]);
         }
 
 
-        var_dump($hallLamp);
+        var_dump($hallLamp);echo 111;
         die;
         foreach ($bedroomLamp as &$bedroom){
             $bedroom['quantity'] = (int)ceil($get['bedroom']);
