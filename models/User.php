@@ -1828,7 +1828,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function view()
     {
-        $modelData = ModelService::selectModelFields($this, self::FIELDS_USER_CENTER_MODEL);
+        $modelData = ModelService::selectModelFields($this, array_merge(self::FIELDS_USER_CENTER_MODEL, self::FIELDS_VIEW_IDENTITY));
         $viewData = $modelData
             ? array_merge($modelData, $this->_extraData(self::FIELDS_USER_CENTER_EXTRA))
             : $modelData;
