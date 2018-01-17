@@ -1056,15 +1056,6 @@ class QuoteController extends Controller
                                     $style_id       = $images['style'];
                                     $images_user    = $images['drawing_name'];
                                     $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
-                                }else{
-                                    foreach ($house['drawing_list'] as $image) {
-                                        $images_id     = $image['id'];
-                                        $effect_images = $image['all_drawing'];
-                                        $series_id     = $image['series'];
-                                        $style_id      = $image['style'];
-                                        $images_user   = $image['drawing_name'];
-                                        $effect_picture  = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
-                                    }
                                 }
 
                             }
@@ -1248,15 +1239,15 @@ class QuoteController extends Controller
                         (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
 
                         if (!empty($house['drawing_list'])) {
-                            var_dump($house['drawing_list']);die;
+                            if (!empty($images['id'])) {
                             foreach ($house['drawing_list'] as $images) {
-                                if (!empty($images['id'])) {
-                                    $images_id     = $images['id'];
-                                    $effect_images = $images['all_drawing'];
-                                    $series_id     = $images['series'];
-                                    $style_id      = $images['style'];
-                                    $images_user   = $images['drawing_name'];
-                                    (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                $images_id = $images['id'];
+                                $effect_images = $images['all_drawing'];
+                                $series_id = $images['series'];
+                                $style_id = $images['style'];
+                                $images_user = $images['drawing_name'];
+                                (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                            }
                                 }else{
                                     foreach ($house['drawing_list'] as $image) {
                                         $effect_images = $image['all_drawing'];
@@ -1266,7 +1257,7 @@ class QuoteController extends Controller
                                         $effect_picture = (new EffectPicture())->plotAdd($house_id, $effect_images, $series_id, $style_id, $images_user);
                                     }
                                 }
-                            }
+
                         }
                     }
 
