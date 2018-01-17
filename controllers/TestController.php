@@ -29,6 +29,7 @@ use app\models\Supplier;
 use app\models\User;
 use app\models\UserAddress;
 use app\models\UserRole;
+use app\services\BasisDecorationService;
 use app\services\ExceptionHandleService;
 use app\services\SmValidationService;
 use app\services\StringService;
@@ -719,34 +720,20 @@ class TestController extends Controller
 
     public  static  function  actionTest()
     {
-        echo 1;die;
-        $user = Yii::$app->user->identity;
-        if (!$user){
-            $code=1052;
-            return Json::encode([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
-            ]);
-        }
-        $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-        $data = (new Query())
-            ->select("(SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.supplier_id={$supplier->id}) as all_order ,
-            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.supplier_id={$supplier->id}) as unpaid" )
-            ->one();
+        $get = Yii::$app->request->get();
 
-        //            $data = (new Query())
-//                ->select((new Query())
-//                    ->from(GoodsOrder::tableName().' as g')
-//                    ->select('g.id')
-//                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-//                    ->where(" g.supplier_id={$supplier->id} ")
-//                    ->count().' as all,'.(new Query())
-//                        ->from(GoodsOrder::tableName().' as g')
-//                        ->select('g.id')
-//                        ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-//                        ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
-//                        ->count().' as unpaid')
-//                ->one();
+        // 有资料 计算公式
+        $goods = Goods::assortList([17,52,35,80,61,62,63,75,121,123,106,108,117,119,130,170,144,140,146,152],$get['city']);
+        $lamp = [];
+        foreach ($goods as $oneLamp){
+            if ($oneLamp['title'] == BasisDecorationService::goodsNames()['lamp'] && $oneLamp['series_id'] == $get['series'] && $oneLamp['style_id'] == $get['style']){
+                $attr = BasisDecorationService::goodsAttr($oneLamp,BasisDecorationService::goodsNames()['lamp'],'适用处',1);
+                $lamp [] = $attr;
+            }
+        }
+
+        $material[] = BasisDecorationService::lamp($lamp,$get);
+        var_dump($material);echo 123;die;
         return Json::encode($data);
 
     }
