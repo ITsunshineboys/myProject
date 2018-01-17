@@ -3620,11 +3620,11 @@ class OrderController extends Controller
                 $orders=explode(',',urldecode($post['passback_params']));
                 $total_amount=$post['total_amount'];
                 $orderAmount=GoodsOrder::CalculationCost($orders);
-//                    if (!$total_amount*100==$orderAmount)
-//                    {
-//                        echo 'fail';
-//                        exit;
-//                    }
+                    if (!$total_amount*100==$orderAmount)
+                    {
+                        echo 'fail';
+                        exit;
+                    }
                 $tran = Yii::$app->db->beginTransaction();
                 try{
                     $Ord= GoodsOrder::find()
@@ -3746,9 +3746,9 @@ class OrderController extends Controller
            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier_id} )  as customer_service
             ")
             ->one();
-        $code=200;
-        return Json::encode([
-            'code' => $code,
+        return Json::encode
+        ([
+            'code' => 200,
             'msg' =>'ok',
             'data'=>[
                 'all'=>$data['all_order'],
