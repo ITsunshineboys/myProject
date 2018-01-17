@@ -1543,6 +1543,7 @@ class BasisDecorationService
 
     public static function lamp($goods,$get)
     {
+        echo 1;die;
         var_dump($goods);die;
         foreach ($goods as $oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
