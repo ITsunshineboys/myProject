@@ -919,8 +919,7 @@ class BasisDecorationService
                 case $one_goods['title'] == self::goodsNames()['lamp'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'] : //灯具
 
                     $attr = self::goodsAttr($one_goods, self::goodsNames()['lamp'], '', 2);
-                    var_dump($attr);
-                    die;
+                    var_dump($attr);die;
 //                    $one_goods['quantity'] = (int)$post['bedroom'];
 //                    $one_goods['cost'] = round($one_goods['platform_price'] * $one_goods['quantity'],2);
 //                    $one_goods['procurement'] = round($one_goods['purchase_price_decoration_company'] * $one_goods['quantity'],2);
