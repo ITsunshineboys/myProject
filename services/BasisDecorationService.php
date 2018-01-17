@@ -1543,7 +1543,6 @@ class BasisDecorationService
 
     public static function lamp($goods,$get)
     {
-
         foreach ($goods as $oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $hallLamp[] = $oneGoods;
@@ -1566,7 +1565,7 @@ class BasisDecorationService
             $lamp[0]['procurement'] = round(self::algorithm(1,$lamp[0]['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
             unset($lamp[1]);
         }
-
+        var_dump($hallLamp);echo 111;
 
         foreach ($bedroomLamp as &$bedroom){
             $bedroom[0]['quantity'] = (int)ceil($get['bedroom']);
@@ -1574,26 +1573,28 @@ class BasisDecorationService
             $bedroom[0]['procurement'] = round(self::algorithm(1,$bedroom[0]['quantity'],$bedroom[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
+        var_dump($bedroom);echo 222;
         foreach ($toiletLamp as &$toilet){
             $toilet[0]['quantity'] = (int)ceil($get['toilet']);
             $toilet[0]['cost'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['platform_price']),2);
             $toilet[0]['procurement'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
+        var_dump($bedroom);echo 3333;
         foreach ($kitchenLamp as &$kitchen){
             $kitchen[0]['quantity'] = (int)ceil($get['kitchen']);
             $kitchen[0]['cost'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['platform_price']),2);
             $kitchen[0]['procurement'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
-
+        var_dump($bedroom);echo 4444;die;
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
         $goodsLamp[] = self::profitMargin($kitchenLamp);
 
         $style = self::style($goodsLamp);
-        echo 111;die;
+
         return $style;
     }
 }
