@@ -1057,12 +1057,13 @@ class QuoteController extends Controller
                                     $images_user    = $images['drawing_name'];
                                     $effect_picture = (new EffectPicture())->plotAdd($effect_id, $effect_images, $series_id, $style_id, $images_user);
                                 }else{
-                                    $images_id     = $images['id'];
-                                    $effect_images = $images['all_drawing'];
-                                    $series_id     = $images['series'];
-                                    $style_id      = $images['style'];
-                                    $images_user   = $images['drawing_name'];
-                                    $effect_picture= (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                    foreach ($house['drawing_list'] as $image) {
+                                        $effect_images = $image['all_drawing'];
+                                        $series_id = $image['series'];
+                                        $style_id = $image['style'];
+                                        $images_user = $image['drawing_name'];
+                                        $effect_picture = (new EffectPicture())->plotAdd($house_id, $effect_images, $series_id, $style_id, $images_user);
+                                    }
                                 }
 
                             }
