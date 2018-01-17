@@ -1556,8 +1556,6 @@ class BasisDecorationService
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $hallLamp [] = $oneGoods[0];
-            }else{
-                $hallLamp [] = [];
             }
 
 
@@ -1566,8 +1564,6 @@ class BasisDecorationService
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $bedroomLamp[] = $oneGoods[0];
-            }else{
-                $bedroomLamp[] = [];
             }
 
 
@@ -1577,8 +1573,6 @@ class BasisDecorationService
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $toiletLamp[] = $oneGoods[0];
-            }else{
-                $toiletLamp[] = [];
             }
 
 
@@ -1588,17 +1582,15 @@ class BasisDecorationService
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $kitchenLamp[] = $oneGoods[0];
-            }else{
-                $kitchenLamp[] = [];
             }
         }
 
 
-        $hallLampAll =  array_filter($hallLamp);
-        $toiletLampAll = array_filter($toiletLamp);
-        $bedroomLampAll= array_filter($bedroomLamp);
-        $kitchenLampAll= array_filter($kitchenLamp);
 
+        $hallLampAll = isset($hallLamp) ? $hallLamp :[];
+        $bedroomLampAll = isset($bedroomLamp) ? $bedroomLamp :[];
+        $toiletLampAll = isset($toiletLamp) ? $toiletLamp :[];
+        $kitchenLampAll = isset($kitchenLamp) ? $kitchenLamp :[];
 
         $goodsLamp[] = self::profitMargin($hallLampAll);
         $goodsLamp[] = self::profitMargin($bedroomLampAll);
