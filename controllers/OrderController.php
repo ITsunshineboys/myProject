@@ -5363,7 +5363,7 @@ class OrderController extends Controller
                }
            }
         }
-        if (!$Goods)
+        if (!isset($Goods))
         {
             $code=1000;
             return Json::encode
