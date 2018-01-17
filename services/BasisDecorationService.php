@@ -1547,6 +1547,7 @@ class BasisDecorationService
         foreach ($goods as $oneGoods){
 
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
+                echo 111;
                 $oneGoods[0]['quantity'] = (int)ceil($get['hall']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
@@ -1555,6 +1556,7 @@ class BasisDecorationService
 
 
             if(strpos($oneGoods[1]['value'],'卧室') !== false) {
+                echo 222;
                 $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
@@ -1563,6 +1565,7 @@ class BasisDecorationService
 
 
             if(strpos($oneGoods[1]['value'],'卫生间') !== false) {
+                echo 333;
                 $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
@@ -1571,13 +1574,14 @@ class BasisDecorationService
 
 
             if(strpos($oneGoods[1]['value'],'厨房') !== false) {
+                echo 4444;
                 $oneGoods[0]['quantity'] = (int)ceil($get['kitchen']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $kitchenLamp[] = $oneGoods[0];
             }
         }
-
+die;
 var_dump($hallLamp);
 var_dump($bedroomLamp);
 var_dump($toiletLamp);
