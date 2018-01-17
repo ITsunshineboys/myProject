@@ -1563,7 +1563,7 @@ class BasisDecorationService
             $lamp['quantity'] = (int)ceil($get['hall']);
             $lamp['cost'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['platform_price']),2);
             $lamp['procurement'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
-            unset($lamp[0]);
+            unset($lamp[1]);
         }
 
         var_dump($hallLamp);
