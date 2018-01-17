@@ -1541,9 +1541,14 @@ class BasisDecorationService
     }
 
 
+    /**
+     * 灯具 计算
+     * @param $goods
+     * @param $get
+     * @return mixed
+     */
     public static function lamp($goods,$get)
     {
-
 
         foreach ($goods as $oneGoods){
 
