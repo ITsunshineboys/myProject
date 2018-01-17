@@ -3734,63 +3734,30 @@ class OrderController extends Controller
               ->where(['uid'=>$user->id])
               ->one()
               ->id;
-
         }
-        $all=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where(" g.supplier_id={$supplier_id} ")
-            ->count();
-        //Get 待付款订单  and g.role_id={$role_id}
-        $unpaid=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $unshipped=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $unreceiveed=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier_id} ")
-            ->count();
-        $completed=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier_id} and o.customer_service=0 ")
-            ->count();
-        $canceled=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("o.order_status=2 and o.customer_service=0  and g.supplier_id={$supplier_id}")
-            ->count();
-        $customer_service=(new Query())
-            ->from(GoodsOrder::tableName().' as g')
-            ->select('g.id')
-            ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-            ->where("o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier_id}")
-            ->count();
+        $data=(new Query())
+            ->select("
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.supplier_id={$supplier_id} ) as all_order,
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier_id} ) as unpaid,
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier_id})  as unshipped,
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier_id})   as unreceiveed,
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier_id} and o.customer_service=0 )  as completed,
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=2 and o.customer_service=0  and g.supplier_id={$supplier_id} )  as canceled,
+           (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier_id} )  as customer_service
+            ")
+            ->one();
         $code=200;
         return Json::encode([
             'code' => $code,
             'msg' =>'ok',
             'data'=>[
-                'all'=>$all,
-                'unpaid'=>$unpaid,
-                'unshipped'=>$unshipped,
-                'unreceiveed'=>$unreceiveed,
-                'completed'=>$completed,
-                'canceled'=>$canceled,
-                'customer_service'=>$customer_service
+                'all'=>$data['all_order'],
+                'unpaid'=>$data['unpaid'],
+                'unshipped'=>$data['unshipped'],
+                'unreceiveed'=>$data['unreceiveed'],
+                'completed'=>$data['completed'],
+                'canceled'=>$data['canceled'],
+                'customer_service'=>$data['customer_service']
             ]
         ]);
     }

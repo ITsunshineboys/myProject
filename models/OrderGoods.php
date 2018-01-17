@@ -456,7 +456,7 @@ class OrderGoods extends ActiveRecord
      */
     public  static  function  FindOrderNumBer($user)
     {
-        if ($user->last_role_id_app==6)
+        if ($user->last_role_id_app==Yii::$app->params['supplierRoleId'])
         {
             $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
             $data = (new Query())
