@@ -1544,7 +1544,7 @@ class BasisDecorationService
     public static function lamp($goods,$get)
     {
 
-        echo 1;
+        echo 233;die;
         foreach ($goods as $oneGoods){
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $hallLamp[] = $oneGoods;
@@ -1560,7 +1560,6 @@ class BasisDecorationService
             }
         }
 
-        echo 2;
 
         foreach ($hallLamp as &$lamp){
             $lamp[0]['quantity'] = (int)ceil($get['hall']);
@@ -1569,7 +1568,6 @@ class BasisDecorationService
             unset($lamp[1]);
         }
 
-        echo 3;
 
         foreach ($bedroomLamp as &$bedroom){
             $bedroom[0]['quantity'] = (int)ceil($get['bedroom']);
@@ -1577,15 +1575,12 @@ class BasisDecorationService
             $bedroom[0]['procurement'] = round(self::algorithm(1,$bedroom[0]['quantity'],$bedroom[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
-
-        echo 4;
         foreach ($toiletLamp as &$toilet){
             $toilet[0]['quantity'] = (int)ceil($get['toilet']);
             $toilet[0]['cost'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['platform_price']),2);
             $toilet[0]['procurement'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
-        echo 5;
         foreach ($kitchenLamp as &$kitchen){
             $kitchen[0]['quantity'] = (int)ceil($get['kitchen']);
             $kitchen[0]['cost'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['platform_price']),2);
@@ -1593,7 +1588,6 @@ class BasisDecorationService
             unset($bedroom[1]);
         }
 
-        echo 6;
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
