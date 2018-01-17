@@ -1543,9 +1543,23 @@ class BasisDecorationService
 
     public static function lamp($goods)
     {
-        var_dump($goods);die;
         foreach ($goods as $oneGoods){
-
+//            if ($oneGoods[1]['value'] == '客厅'){
+//                $hall_lamp[] = $oneGoods;
+//            }
+//            if ($oneGoods[1]['value'] == '卧室'){
+//                $hall_lamp[] = $oneGoods;
+//            }
+//            if ($oneGoods[1]['value'] == '卫生间'){
+//                $hall_lamp[] = $oneGoods;
+//            }
+//            if ($oneGoods[1]['value'] == '厨房'){
+//                $hall_lamp[] = $oneGoods;
+//            }
+            if(strpos($oneGoods[1]['value'],'客厅') !== false) {
+                $hallLamp[] = $oneGoods;
+            }
         }
+        var_dump($hallLamp);die;
     }
 }
