@@ -1560,12 +1560,14 @@ class BasisDecorationService
                 $hallLamp [] = $oneGoods[0];
             }
 
+
             if(strpos($oneGoods[1]['value'],'卧室') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $bedroomLamp[] = $oneGoods[0];
             }
+
 
 
             if(strpos($oneGoods[1]['value'],'卫生间') !== false) {
@@ -1576,6 +1578,7 @@ class BasisDecorationService
             }
 
 
+
             if(strpos($oneGoods[1]['value'],'厨房') !== false) {
                 $oneGoods[0]['quantity'] = (int)ceil($get['kitchen']);
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
@@ -1583,6 +1586,8 @@ class BasisDecorationService
                 $kitchenLamp[] = $oneGoods[0];
             }
         }
+
+
         $hallLampAll =  array_filter($hallLamp);
         $toiletLampAll = array_filter($toiletLamp);
         $bedroomLampAll = array_filter($bedroomLamp);
@@ -1595,7 +1600,7 @@ class BasisDecorationService
 
 
         $style = self::style($goodsLamp);
-
+var_dump($style);die;
         return $style;
     }
 }
