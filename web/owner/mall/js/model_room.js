@@ -733,45 +733,179 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
         }
     }
     //跳转申请样板间
-    $scope.applyCase = function () {
+    // $scope.applyCase = function () {
+    //     let materials = []
+    //     let status = false
+    //     let obj = {
+    //         province_code:510100,
+    //         city_code:$scope.active_case.city_code,
+    //         district_code:$scope.active_case.district_code,
+    //         street:$scope.active_case.detailed_address,
+    //         toponymy:$scope.active_case.toponymy,
+    //         sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
+    //         window:$scope.active_case.window,
+    //         bedroom:$scope.active_case.bedroom,
+    //         area:$scope.active_case.area,
+    //         high:$scope.active_case.high,
+    //         toilet:$scope.active_case.toilet,
+    //         kitchen:$scope.active_case.kitchen,
+    //         stair_id:$scope.params.stair,
+    //         stairway:$scope.active_case.stairway,
+    //         series:$scope.params.series.id,
+    //         style:$scope.params.style,
+    //         type:0,
+    //         requirement:$scope.special_request,
+    //         original_price:$scope.total_prices,
+    //         sale_price:$scope.special_offer
+    //     }
+    //     if($scope.materials.length!=0){
+    //         for(let [key,value] of $scope.materials.entries()){
+    //             for(let [key1,value1] of value.second_level.entries()){
+    //                 for(let [key2,value2] of value1.goods.entries()){
+    //                     materials.push({
+    //                         goods_id:value2.id,
+    //                         price:value2.cost,
+    //                         count:value2.quantity,
+    //                         first_cate_id:value.id
+    //                     })
+    //                 }
+    //             }
+    //         }
+    //         obj.materials = materials
+    //     }
+    //     //遍历是否存在下架商品
+    //     for(let [key,value] of $scope.materials.entries()){
+    //         let index = value.second_level.findIndex(function (item) {
+    //             return item.status == 0
+    //         })
+    //         if(index == -1){
+    //             status = false
+    //         }else{
+    //             status = true
+    //             break
+    //         }
+    //     }
+    //     //模态框配置
+    //     let all_modal = function ($scope, $uibModalInstance) {
+    //         $scope.common_house = function () {
+    //             $uibModalInstance.close()
+    //         }
+    //     }
+    //     all_modal.$inject = ['$scope', '$uibModalInstance']
+    //     if(status){
+    //         $uibModal.open({
+    //             templateUrl: 'cur_model.html',
+    //             controller: all_modal,
+    //             windowClass:'cur_modal',
+    //             backdrop:'static'
+    //         })
+    //     }else{
+    //         sessionStorage.setItem('payParams',JSON.stringify(obj))
+    //         $state.go('deposit')
+    //     }
+    // }
+
+    //保存方案
+    $scope.saveProgramme = function () {
         let materials = []
-        let status = false
+        //整合申请样板间所需传值
         let obj = {
-            province_code:510100,
-            city_code:$scope.active_case.city_code,
-            district_code:$scope.active_case.district_code,
-            street:$scope.active_case.detailed_address,
-            toponymy:$scope.active_case.toponymy,
-            sittingRoom_diningRoom:$scope.active_case.sittingRoom_diningRoom,
-            window:$scope.active_case.window,
-            bedroom:$scope.active_case.bedroom,
-            area:$scope.active_case.area,
-            high:$scope.active_case.high,
-            toilet:$scope.active_case.toilet,
-            kitchen:$scope.active_case.kitchen,
-            stair_id:$scope.params.stair,
-            stairway:$scope.active_case.stairway,
-            series:$scope.params.series.id,
+            province_code:$scope.params.province,
+            city_code:$scope.params.city,
+            street:$scope.toponymy.address,
+            toponymy:$scope.toponymy.name,
+            sittingRoom_diningRoom:$scope.params.hall,
+            window:$scope.params.window,
+            bedroom:$scope.params.bedroom,
+            area:$scope.params.area,
+            high:$scope.params.high,
+            toilet:$scope.params.toilet,
+            kitchen:$scope.params.kitchen,
+            stair_id:$scope.params.stairway_id,
+            stairway:$scope.params.stairway,
+            series:$scope.params.series,
+            style:$scope.params.style,
+            type:1,
+            requirement:$scope.special_request,
+            original_price:$scope.total_prices,
+            sale_price:$scope.special_offer
+        }
+        for(let [key,value] of $scope.materials.entries()){
+            for(let [key1,value1] of value.second_level.entries()){
+                for(let [key2,value2] of value1.goods.entries()){
+                    materials.push({
+                        goods_id:value2.id,
+                        price:value2.cost,
+                        count:value2.quantity,
+                        first_cate_id:value.id
+                    })
+                }
+            }
+        }
+        obj.materials = materials
+        /*保存成功模态框*/
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.tips = '方案保存成功'
+            $scope.save_status = true
+            $scope.return = function () {
+                $uibModalInstance.close()
+            }
+            $scope.viewDetails = function () {
+                // $uibModalInstance.close()
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        _ajax.post('/effect/app-apply-effect',obj,function (res) {
+            console.log(res);
+            if(res.code == 403){
+                window.AndroidWebView.skipIntent()
+            }else{
+                $uibModal.open({
+                    templateUrl: 'cur_model.html',
+                    controller: all_modal,
+                    windowClass:'cur_modal',
+                    backdrop:'static'
+                })
+            }
+        })
+    }
+    //去装修
+    $scope.applyCase = function () {
+        let materials = []//申请材料项
+        let status = false//材料是否存在下架
+        //整合申请样板间所需传值
+        let obj = {
+            province_code:$scope.params.province,
+            city_code:$scope.params.city,
+            street:$scope.toponymy.address,
+            toponymy:$scope.toponymy.name,
+            sittingRoom_diningRoom:$scope.params.hall,
+            window:$scope.params.window,
+            bedroom:$scope.params.bedroom,
+            area:$scope.params.area,
+            high:$scope.params.high,
+            toilet:$scope.params.toilet,
+            kitchen:$scope.params.kitchen,
+            stair_id:$scope.params.stairway_id,
+            stairway:$scope.params.stairway,
+            series:$scope.params.series,
             style:$scope.params.style,
             type:0,
             requirement:$scope.special_request,
             original_price:$scope.total_prices,
             sale_price:$scope.special_offer
         }
-        if($scope.materials.length!=0){
-            for(let [key,value] of $scope.materials.entries()){
-                for(let [key1,value1] of value.second_level.entries()){
-                    for(let [key2,value2] of value1.goods.entries()){
-                        materials.push({
-                            goods_id:value2.id,
-                            price:value2.cost,
-                            count:value2.quantity,
-                            first_cate_id:value.id
-                        })
-                    }
+        for(let [key,value] of $scope.materials.entries()){
+            for(let [key1,value1] of value.second_level.entries()){
+                for(let [key2,value2] of value1.goods.entries()){
+                    materials.push({
+                        goods_id:value2.id,
+                        price:value2.cost,
+                        count:value2.quantity,
+                        first_cate_id:value.id
+                    })
                 }
             }
-            obj.materials = materials
         }
         //遍历是否存在下架商品
         for(let [key,value] of $scope.materials.entries()){
@@ -786,12 +920,26 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
             }
         }
         //模态框配置
+        /*下架商品模态框*/
         let all_modal = function ($scope, $uibModalInstance) {
             $scope.common_house = function () {
                 $uibModalInstance.close()
             }
         }
         all_modal.$inject = ['$scope', '$uibModalInstance']
+        /*保存成功模态框*/
+        let all_modal1 = function ($scope, $uibModalInstance) {
+            $scope.tips = '申请成功，我们会在3天内和你联系'
+            $scope.save_status = true
+            $scope.return = function () {
+                $uibModalInstance.close()
+            }
+            $scope.viewDetails = function () {
+                // $uibModalInstance.close()
+            }
+        }
+        all_modal1.$inject = ['$scope', '$uibModalInstance']
+        //判断是否登录
         if(status){
             $uibModal.open({
                 templateUrl: 'cur_model.html',
@@ -800,8 +948,24 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                 backdrop:'static'
             })
         }else{
-            sessionStorage.setItem('payParams',JSON.stringify(obj))
-            $state.go('deposit')
+            _ajax.get('/site/check-is-login',{},function (res) {
+                if(res.code == 403){
+                    obj.materials = materials
+                    sessionStorage.setItem('payParams',JSON.stringify(obj))
+                    $state.go('deposit')
+                }else if(res.code == 200){
+                    _ajax.post('/effect/app-apply-effect',obj,function (res) {
+                        if(res.code == 200){
+                            $uibModal.open({
+                                templateUrl: 'cur_model.html',
+                                controller: all_modal1,
+                                windowClass:'cur_modal',
+                                backdrop:'static'
+                            })
+                        }
+                    })
+                }
+            })
         }
     }
 }]);

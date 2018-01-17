@@ -706,73 +706,6 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
             $state.go('other_materials', {index: index})
         }
     }
-    function showInfo() {
-        alert('1111')
-    }
-    //保存方案
-    $scope.saveProgramme = function () {
-        let materials = []
-        //整合申请样板间所需传值
-        let obj = {
-            province_code:$scope.params.province,
-            city_code:$scope.params.city,
-            street:$scope.toponymy.address,
-            toponymy:$scope.toponymy.name,
-            sittingRoom_diningRoom:$scope.params.hall,
-            window:$scope.params.window,
-            bedroom:$scope.params.bedroom,
-            area:$scope.params.area,
-            high:$scope.params.high,
-            toilet:$scope.params.toilet,
-            kitchen:$scope.params.kitchen,
-            stair_id:$scope.params.stairway_id,
-            stairway:$scope.params.stairway,
-            series:$scope.params.series,
-            style:$scope.params.style,
-            type:1,
-            requirement:$scope.special_request,
-            original_price:$scope.total_prices,
-            sale_price:$scope.special_offer
-        }
-        for(let [key,value] of $scope.materials.entries()){
-            for(let [key1,value1] of value.second_level.entries()){
-                for(let [key2,value2] of value1.goods.entries()){
-                    materials.push({
-                        goods_id:value2.id,
-                        price:value2.cost,
-                        count:value2.quantity,
-                        first_cate_id:value.id
-                    })
-                }
-            }
-        }
-        obj.materials = materials
-        /*保存成功模态框*/
-        let all_modal = function ($scope, $uibModalInstance) {
-            $scope.tips = '方案保存成功'
-            $scope.save_status = true
-            $scope.return = function () {
-                $uibModalInstance.close()
-            }
-            $scope.viewDetails = function () {
-                // $uibModalInstance.close()
-            }
-        }
-        all_modal.$inject = ['$scope', '$uibModalInstance']
-        _ajax.post('/effect/app-apply-effect',obj,function (res) {
-            console.log(res);
-            if(res.code == 403){
-                window.AndroidWebView.skipIntent()
-            }else{
-                $uibModal.open({
-                    templateUrl: 'cur_model.html',
-                    controller: all_modal,
-                    windowClass:'cur_modal',
-                    backdrop:'static'
-                })
-            }
-        })
-    }
     //跳转申请样板间
     // $scope.applyCase = function () {
     //     let materials = []//申请材料项
@@ -845,7 +778,72 @@ app.controller('nodata_ctrl', function ($timeout,$uibModal,$http, _ajax, $state,
     //         $state.go('deposit')
     //     }
     // }
-    //跳转申请样板间
+
+    //保存方案
+    $scope.saveProgramme = function () {
+        let materials = []
+        //整合申请样板间所需传值
+        let obj = {
+            province_code:$scope.params.province,
+            city_code:$scope.params.city,
+            street:$scope.toponymy.address,
+            toponymy:$scope.toponymy.name,
+            sittingRoom_diningRoom:$scope.params.hall,
+            window:$scope.params.window,
+            bedroom:$scope.params.bedroom,
+            area:$scope.params.area,
+            high:$scope.params.high,
+            toilet:$scope.params.toilet,
+            kitchen:$scope.params.kitchen,
+            stair_id:$scope.params.stairway_id,
+            stairway:$scope.params.stairway,
+            series:$scope.params.series,
+            style:$scope.params.style,
+            type:1,
+            requirement:$scope.special_request,
+            original_price:$scope.total_prices,
+            sale_price:$scope.special_offer
+        }
+        for(let [key,value] of $scope.materials.entries()){
+            for(let [key1,value1] of value.second_level.entries()){
+                for(let [key2,value2] of value1.goods.entries()){
+                    materials.push({
+                        goods_id:value2.id,
+                        price:value2.cost,
+                        count:value2.quantity,
+                        first_cate_id:value.id
+                    })
+                }
+            }
+        }
+        obj.materials = materials
+        /*保存成功模态框*/
+        let all_modal = function ($scope, $uibModalInstance) {
+            $scope.tips = '方案保存成功'
+            $scope.save_status = true
+            $scope.return = function () {
+                $uibModalInstance.close()
+            }
+            $scope.viewDetails = function () {
+                // $uibModalInstance.close()
+            }
+        }
+        all_modal.$inject = ['$scope', '$uibModalInstance']
+        _ajax.post('/effect/app-apply-effect',obj,function (res) {
+            console.log(res);
+            if(res.code == 403){
+                window.AndroidWebView.skipIntent()
+            }else{
+                $uibModal.open({
+                    templateUrl: 'cur_model.html',
+                    controller: all_modal,
+                    windowClass:'cur_modal',
+                    backdrop:'static'
+                })
+            }
+        })
+    }
+    //去装修
     $scope.applyCase = function () {
         let materials = []//申请材料项
         let status = false//材料是否存在下架
