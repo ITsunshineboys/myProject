@@ -1575,13 +1575,16 @@ class BasisDecorationService
             unset($bedroom[1]);
         }
 
-        var_dump($bedroom);die;
+
         foreach ($toiletLamp as &$toilet){
             $toilet[0]['quantity'] = (int)ceil($get['toilet']);
             $toilet[0]['cost'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['platform_price']),2);
             $toilet[0]['procurement'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
+
+
+        var_dump($toiletLamp);echo 222;die;
         foreach ($kitchenLamp as &$kitchen){
             $kitchen[0]['quantity'] = (int)ceil($get['kitchen']);
             $kitchen[0]['cost'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['platform_price']),2);
