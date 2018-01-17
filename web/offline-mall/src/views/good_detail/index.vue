@@ -14,7 +14,7 @@
           <span class="iconfont icon-home"></span>
           <span class="pop-text">商城首页</span>
         </router-link>
-        <li>
+        <li @click="skipMessageCenter">
           <span class="iconfont icon-news-circle"></span>
           <span class="pop-text">消息</span>
           <span class="pop-dot"></span>
@@ -38,12 +38,6 @@
       <group>
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
-
-
-
-
-
-
 
 
         </cell-box>
@@ -87,38 +81,26 @@
         </flexbox>
         <flexbox slot="content" justify="space-between" class="shop-intro">
           <div>
-            <span>{{good_detail.supplier.goods_number}}</span>
-            <br/>
-            商品数
-
-
+            <span>{{good_detail.supplier.goods_number}}</span><br/>商品数
 
 
           </div>
           <span></span>
           <div>
-            <span>{{good_detail.supplier.follower_number}}</span>
-            <br/>
-            粉丝数
-
-
+            <span>{{good_detail.supplier.follower_number}}</span><br/>粉丝数
 
 
           </div>
           <span></span>
           <div>
-            <span>{{good_detail.supplier.comprehensive_score}}</span>
-            <br/>
-            综合评分
-
-
+            <span>{{good_detail.supplier.comprehensive_score}}</span><br/>综合评分
 
 
           </div>
         </flexbox>
         <flexbox slot="footer" justify="center" class="view-shop-btn">
           <router-link :to="'/store/' + good_detail.supplier.id">
-             <button type="button">进店逛逛</button>
+            <button type="button">进店逛逛</button>
           </router-link>
         </flexbox>
       </card>
@@ -173,8 +155,20 @@
       </div>
 
       <!--底部按钮-->
+      <flexbox>
+        <flexbox-item>
+
+        </flexbox-item>
+        <flexbox-item>
+
+        </flexbox-item>
+        <flexbox-item>
+
+        </flexbox-item>
+      </flexbox>
+
       <div class="bottom-tabbar">
-        <div><i class="iconfont icon-service"></i><br/>联系商家</div>
+        <div @click="contactStore"><i class="iconfont icon-service"></i><br/>联系商家</div>
         <div @click="showCount('cart')">加入购物车</div>
         <div @click="showCount('now')">立即购买</div>
       </div>
@@ -203,33 +197,9 @@
         <flexbox class="count-bottom-btn">
           <flexbox-item alt="cart" v-if="count_cart||default_count" @click.native="addCart">
             加入购物车
-
-
-
-
-
-
-
-
-
-
-
-
           </flexbox-item>
-          <flexbox-item alt="now" v-if="count_now||default_count">
+          <flexbox-item alt="now" v-if="count_now||default_count" @click.native="buyNow">
             立即购买
-
-
-
-
-
-
-
-
-
-
-
-
           </flexbox-item>
         </flexbox>
       </div>
@@ -266,14 +236,14 @@
 
     <!-- 分享弹窗 -->
     <!--<popup v-model="show_share" class="show_share">-->
-      <!--<div>分享</div>-->
-      <!--<div class="share-icon">-->
-        <!--<div v-for="item in share_content">-->
-          <!--<img :src="item.image" alt=""><br/>-->
-          <!--<span>{{item.title}}</span>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div @click="show_share = false">取消</div>-->
+    <!--<div>分享</div>-->
+    <!--<div class="share-icon">-->
+    <!--<div v-for="item in share_content">-->
+    <!--<img :src="item.image" alt=""><br/>-->
+    <!--<span>{{item.title}}</span>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div @click="show_share = false">取消</div>-->
     <!--</popup>-->
 
     <!--线下商品介绍弹窗-->
@@ -317,6 +287,7 @@
     data () {
       return {
         good_id: '', // 商品id
+        role_id: 6, // 角色id
         isShow: false,  // 右上角弹窗
         show: false,    // 线下商品简介
         cart_success: false, // 添加购物车成功toast
@@ -367,7 +338,7 @@
       }
     },
     activated () {
-      this.good_id = this.$route.params.id
+      this.good_id = this.$route.params.id // 商品id
       this.isShow = false
       this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
         this.good_detail = res.data.goods_view
@@ -421,7 +392,7 @@
       // 添加购物车
       addCart () {
         this.axios.post('/order/add-shipping-cart', {
-          goods_id: 332,
+          goods_id: this.good_id,
           goods_num: this.count
         }, (res) => {
           if (res.code === 200) {
@@ -433,14 +404,26 @@
       },
       // 立即购买
       buyNow () {
-          /*
-          * 商品id 购买数量
-          * */
+        /* params
+         * 商品id 购买数量
+         * */
+        this.show_count = false
         window.AndroidWebView.skipIntent(this.good_id, this.count)
       },
       // 分享
       androidShare () {
-        window.AndroidWebView.share()
+        window.AndroidWebView.share('我在【艾特生活】分享了一款好物给你，点击链接查看详情【' + this.good_detail.title + '　　' + this.good_detail.subtitle + '】' + location.href)
+      },
+      // 联系商家
+      contactStore () {
+        /* params
+         * 商家对应用户ID 角色ID
+         * */
+        window.AndroidWebView.ConnetionStore(this.good_detail.supplier.uid, this.role_id)
+      },
+      // 跳转消息中心
+      skipMessageCenter () {
+        window.AndroidWebView.skipMessageCenter()
       }
     }
   }
@@ -757,6 +740,7 @@
     margin-bottom: 50px;
   }
 
+  /*底部选项卡*/
   .good-container .bottom-tabbar {
     text-align: center;
     height: 48px;

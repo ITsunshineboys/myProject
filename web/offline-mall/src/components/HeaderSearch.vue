@@ -17,7 +17,7 @@
           <span class="iconfont icon-home"></span>
           <span class="pop-text">商城首页</span>
         </router-link>
-        <li>
+        <li @click="skipMessageCenter">
           <span class="iconfont icon-news-circle"></span>
           <span class="pop-text">消息</span>
           <span class="pop-dot"></span>
@@ -68,6 +68,10 @@
         this.isShow = !this.isShow
         // 向上传递 isShow 值，为判断弹框是否显示
         this.$emit('show', this.isShow)
+      },
+      // 跳转消息中心
+      skipMessageCenter () {
+        window.AndroidWebView.skipMessageCenter()
       }
     }
   }
