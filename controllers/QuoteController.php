@@ -1050,7 +1050,7 @@ class QuoteController extends Controller
 
                         if (!empty($house['drawing_list'])) {
                             foreach ($house['drawing_list'] as $images) {
-                                if(!isset($images['id'])){
+                                if(empty($images['id'])){
                                     $effect_images  = $images['all_drawing'];
                                     $series_id      = $images['series'];
                                     $style_id       = $images['style'];
@@ -1063,7 +1063,7 @@ class QuoteController extends Controller
                                         $series_id     = $image['series'];
                                         $style_id      = $image['style'];
                                         $images_user   = $image['drawing_name'];
-                                        (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                        $effect_picture  = (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                                     }
                                 }
 
