@@ -5032,6 +5032,16 @@ class OrderController extends Controller
                 ]
             );
         }
+        if ($goods_num>$Goods->left_number)
+        {
+            $code=1085;
+            return Json::encode(
+                [
+                    'code'=>$code,
+                    'msg'=>Yii::$app->params['errorCodes'][$code]
+                ]
+            );
+        }
         $supplier=Supplier::findOne($Goods->supplier_id);
         if (!$supplier)
         {

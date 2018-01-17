@@ -3467,21 +3467,21 @@ class GoodsOrder extends ActiveRecord
                 }
                 foreach ($supplier['goods'] as &$goods)
                 {
-//                    $shoppingCart= ShippingCart::find()
-//                        ->where(['uid'=>$user->id])
-//                        ->andWhere(['role_id'=>$user->last_role_id_app])
-//                        ->andWhere(['goods_id'=>$goods['goods_id']])
-//                        ->one();
-//                    if ($shoppingCart)
-//                    {
-//                        $resS=$shoppingCart->delete();
-//                        if (!$resS)
-//                        {
-//                            $tran->rollBack();
-//                            $code=500;
-//                            return $code;
-//                        }
-//                    }
+                    $shoppingCart= ShippingCart::find()
+                        ->where(['uid'=>$user->id])
+                        ->andWhere(['role_id'=>$user->last_role_id_app])
+                        ->andWhere(['goods_id'=>$goods['goods_id']])
+                        ->one();
+                    if ($shoppingCart)
+                    {
+                        $resS=$shoppingCart->delete();
+                        if (!$resS)
+                        {
+                            $tran->rollBack();
+                            $code=500;
+                            return $code;
+                        }
+                    }
                     $time=time();
 
                     if ($supplier_number==0)
