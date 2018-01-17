@@ -1439,7 +1439,6 @@ class Goods extends ActiveRecord
         }
         return [
             'id' => $this->id,
-            'uid'=>$this->uid,
             'logistics_template_id' => $this->logistics_template_id,
             'category_title' => $categoryTitle,
             'title' => $this->title,
@@ -1509,6 +1508,7 @@ class Goods extends ActiveRecord
             'category_path' => $cate ? $cate->path : '',
             'supplier' => [
                 'id' => $supplier->id,
+                'uid'=>$supplier->uid,
                 'shop_name' => $supplier->shop_name,
                 'icon' => $supplier->icon,
                 'goods_number' => self::find()
