@@ -1592,14 +1592,14 @@ class BasisDecorationService
             }
         }
 
-var_dump($bedroomLamp);
+var_dump(array_filter($bedroomLamp));die;
+
 //        $goodsLamp[] = self::profitMargin($hallLamp);
 //        $goodsLamp[] = self::profitMargin($bedroomLamp);
 //        $goodsLamp[] = self::profitMargin($toiletLamp);
         $goodsLamp[] = self::profitMargin($kitchenLamp);
-        var_dump($goodsLamp);die;
 
-echo 111;die;
+
         $goodsMaterial = [];
         foreach ($goodsLamp as $one){
             if($one != null){
