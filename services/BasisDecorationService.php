@@ -1567,25 +1567,23 @@ class BasisDecorationService
         }
 
 
-        var_dump($hallLamp);echo 111;
-        die;
         foreach ($bedroomLamp as &$bedroom){
-            $bedroom['quantity'] = (int)ceil($get['bedroom']);
-            $bedroom['cost'] = round(self::algorithm(1,$bedroom['quantity'],$bedroom[0]['platform_price']),2);
-            $bedroom['procurement'] = round(self::algorithm(1,$bedroom['quantity'],$bedroom[0]['purchase_price_decoration_company']),2);
-            unset($bedroom[0]);
+            $bedroom[0]['quantity'] = (int)ceil($get['bedroom']);
+            $bedroom[0]['cost'] = round(self::algorithm(1,$bedroom[0]['quantity'],$bedroom[0]['platform_price']),2);
+            $bedroom[0]['procurement'] = round(self::algorithm(1,$bedroom[0]['quantity'],$bedroom[0]['purchase_price_decoration_company']),2);
+            unset($bedroom[1]);
         }
         foreach ($toiletLamp as &$toilet){
-            $toilet['quantity'] = (int)ceil($get['toilet']);
-            $toilet['cost'] = round(self::algorithm(1,$toilet['quantity'],$toilet[0]['platform_price']),2);
-            $toilet['procurement'] = round(self::algorithm(1,$toilet['quantity'],$toilet[0]['purchase_price_decoration_company']),2);
-            unset($bedroom[0]);
+            $toilet[0]['quantity'] = (int)ceil($get['toilet']);
+            $toilet[0]['cost'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['platform_price']),2);
+            $toilet[0]['procurement'] = round(self::algorithm(1,$toilet[0]['quantity'],$toilet[0]['purchase_price_decoration_company']),2);
+            unset($bedroom[1]);
         }
         foreach ($kitchenLamp as &$kitchen){
-            $kitchen['quantity'] = (int)ceil($get['kitchen']);
-            $kitchen['cost'] = round(self::algorithm(1,$kitchen['quantity'],$kitchen[0]['platform_price']),2);
-            $kitchen['procurement'] = round(self::algorithm(1,$kitchen['quantity'],$kitchen[0]['purchase_price_decoration_company']),2);
-            unset($bedroom[0]);
+            $kitchen[0]['quantity'] = (int)ceil($get['kitchen']);
+            $kitchen[0]['cost'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['platform_price']),2);
+            $kitchen[0]['procurement'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['purchase_price_decoration_company']),2);
+            unset($bedroom[1]);
         }
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
@@ -1594,7 +1592,6 @@ class BasisDecorationService
 
         $style = self::style($goodsLamp);
         var_dump($style);
-        echo 111;
         die;
 
         return $style;
