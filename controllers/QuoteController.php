@@ -1062,7 +1062,7 @@ class QuoteController extends Controller
                                     $series_id     = $images['series'];
                                     $style_id      = $images['style'];
                                     $images_user   = $images['drawing_name'];
-                                    (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
+                                    $effect_picture= (new EffectPicture())->plotEdit($images_id, $effect_images, $series_id, $style_id, $images_user);
                                 }
 
                             }
