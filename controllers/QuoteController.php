@@ -2467,19 +2467,9 @@ class QuoteController extends Controller
             $where.=" and gc.title like '%{$keyword}%'";
         }
 
-//
         $select = 'da.id,da.c_id,da.add_time,da.correlation_message,da.sku,gc.title';
         $decoration_add = DecorationAdd::pagination($where,$select,$page,$size);
 
-//        foreach ($decoration_add['details'] as &$one){
-//            $category_name = GoodsCategory::find()
-//                ->asArray()
-//                ->select('title')
-//                ->where(['id'=>$one['c_id']])
-//                ->one();
-//            $one['three_materials'] = $category_name['title'];
-//            unset($one['c_id']);
-//        }
 
         return Json::encode([
             'code' => 200,
@@ -2495,10 +2485,7 @@ class QuoteController extends Controller
     public function actionDecorationAddClassify()
     {
         $category_id = (int)trim(\Yii::$app->request->get('category_id',''));
-//        $select = "goods.id,goods.title,sku,supplier_price,platform_price,market_price,left_number,";
-        //TODO 修改
-//        $one_goods_id = GoodsCategory::find()->select('id')->asArray()->where(['id'=>$category_id])->one();
-        // TODO 增加查询 decorationAdd表 如果有数据就提示  yr
+
         $d_add = DecorationAdd::find()->where(['c_id'=>$category_id])->one();
         if ($d_add){
             $code=1087;
@@ -2513,7 +2500,6 @@ class QuoteController extends Controller
             $max        = BasisDecorationService::profitMargin($goods);
             $goods_attr = GoodsAttr::frontDetailsByGoodsId($max['id']);
         } else {
-            //TODO 新增错误码 详情 params
             $code=1080;
             return Json::encode([
                 'code' => $code,
@@ -2723,36 +2709,6 @@ class QuoteController extends Controller
                 'msg' => \Yii::$app->params['errorCodes'][$code],
             ]);
         }
-//        foreach ($post['add'] as $one_post){
-//            switch ($one_post){
-//                case $one_post['id']:
-//                    $dm = DecorationMessage::findByUpdate($one_post['quantity'],$one_post['id']);
-//                    break;
-//                case isset($one_post['series']) != null:
-//                    $dm = \Yii::$app->db->createCommand()
-//                        ->update(DecorationMessage::tableName(), [
-//                            'series_id' => $one_post['series'],
-//                            'quantity' => $one_post['quantity'],
-//                        ],['id'=>$one_post['id']])->execute();
-//                    break;
-//                case isset($one_post['style']) != null:
-//                    $dm = \Yii::$app->db->createCommand()
-//                        ->update(DecorationMessage::tableName(), [
-//                            'style_id' => $one_post['style'],
-//                            'quantity' => $one_post['quantity'],
-//                        ],['id'=>$one_post['id']])->execute();
-//                    break;
-//                case isset($one_post['min_area']) != null:
-//                    $dm = \Yii::$app->db->createCommand()
-//                        ->update(DecorationMessage::tableName(), [
-//                            'min_area' => $one_post['min_area'],
-//                            'max_area' => $one_post['max_area'],
-//                            'quantity' => $one_post['quantity'],
-//                        ],['id'=>$one_post['id']])->execute();
-//                    break;
-//            }
-//        }
-
         foreach ($post['add'] as $one_post) {
             if (isset($one_post['id'])) {
                 $rows=DecorationMessage::find()->where(['id'=>$one_post['id']])->one();

@@ -1594,9 +1594,9 @@ class OwnerController extends Controller
         }
         foreach ($effect as &$one_effect){
             $one_effect['detailed_address'] = $one_effect['province'] . $one_effect['city'] . $one_effect['district'] .  $one_effect['street'];
-//            if ($one_effect['type'] == 1){
+            if ($one_effect['type'] == 1){
                 $one_effect['case_picture'] = EffectPicture::findById( $one_effect['id']);
-//            }
+            }
         }
         return Json::encode([
             'code' => 200,
