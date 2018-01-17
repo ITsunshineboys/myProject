@@ -749,8 +749,8 @@ class GoodsOrder extends ActiveRecord
             unset($arr[$k]['order_id']);
             unset($arr[$k]['return_insurance']);
             unset($arr[$k]['consignee']);
-            unset($arr[$k]['send_time']);;
-            unset($arr[$k]['complete_time']);;
+            unset($arr[$k]['send_time']);
+            unset($arr[$k]['complete_time']);
             unset($arr[$k]['RemainingTime']);
             unset($arr[$k]['pay_term']);
             $amount_order[$k]  = $arr[$k]['amount_order'];
@@ -3451,12 +3451,6 @@ class GoodsOrder extends ActiveRecord
                 }
                 $order_no=GoodsOrder::SetOrderNo();
                 $money=0;
-//                $count=count($supplier['goods']);
-//                if ($count==0)
-//                {
-//                    $count=1;
-//                }
-//                $freight=($supplier['freight']/$count)*100;
                 $supplier_number=0;
                 foreach ($supplier['goods'] as &$goods)
                 {
@@ -3473,7 +3467,6 @@ class GoodsOrder extends ActiveRecord
                 }
                 foreach ($supplier['goods'] as &$goods)
                 {
-
 //                    $shoppingCart= ShippingCart::find()
 //                        ->where(['uid'=>$user->id])
 //                        ->andWhere(['role_id'=>$user->last_role_id_app])
