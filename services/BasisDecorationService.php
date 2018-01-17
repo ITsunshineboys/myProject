@@ -1587,7 +1587,11 @@ class BasisDecorationService
             }
         }
 
-
+var_dump($hallLamp);
+var_dump($bedroomLamp);
+var_dump($toiletLamp);
+var_dump($kitchenLamp);
+die;
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
