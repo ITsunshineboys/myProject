@@ -591,6 +591,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                         $scope.roomPic = ''
                     }
                     $scope.materials = []
+                    console.log($scope.roomPic);
                 }else{
                     let index = res.effect.case_picture.findIndex(function (item) {
                         return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
@@ -654,6 +655,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                         }
                         $scope.worker_list = res.worker_cost
                         getPrice()
+                        console.log($scope.roomPic);
                     }else {
                         $scope.roomPic = ''
                         $scope.materials = []
