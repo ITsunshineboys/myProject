@@ -1446,7 +1446,7 @@ class OwnerController extends Controller
         }
 
         $material[] = BasisDecorationService::lamp($lamp,$get);
-        var_dump($material);echo 123;die;
+
 
         $material[]= BasisDecorationService::formula($goods,$get);
 
