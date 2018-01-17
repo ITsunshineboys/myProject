@@ -2,7 +2,7 @@
   <div class="good-container">
     <!-- 顶部icon -->
     <div class="guide-icon">
-      <i class="iconfont icon-return"></i>
+      <i class="iconfont icon-return" @click="$router.go(-1)"></i>
       <i class="iconfont icon-share" @click="show_share = true"></i>
       <i class="iconfont icon-more" @click="isShow=!isShow"></i>
     </div>
@@ -39,6 +39,13 @@
         <cell-box is-link class="choose-count" @click.native="showCount('count')">
           选择数量
 
+
+
+
+
+
+
+
         </cell-box>
         <cell-box is-link @click.native="show_after_service = true">
           <div class="service" v-for="item in after_sale_services">
@@ -49,14 +56,18 @@
       </group>
       <divider></divider>
       <!--评价-->
-      <div v-if="good_detail.comments.total">
-        <flexbox justify="flex-start" class="comment-count">
-          <span class="sum-comment">评价</span>
-          <span>({{good_detail.comments.total}})</span>
-        </flexbox>
-        <comment :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
-                 :commentDate="good_detail.comments.latest.create_time"
-                 :content="good_detail.comments.latest.content"></comment>
+      <div v-if="!good_detail.comments.total?true:false">
+        <router-link to="/all-comment">
+          <flexbox justify="flex-start" class="comment-count">
+            <span class="sum-comment">评价</span>
+            <span>({{good_detail.comments.total}})</span>
+          </flexbox>
+        </router-link>
+        <router-link to="/all-comment">
+          <comment :userName="user_name" :userIcon="good_detail.comments.latest.icon || user_icon"
+                   :commentDate="good_detail.comments.latest.create_time"
+                   :content="good_detail.comments.latest.content"></comment>
+        </router-link>
         <flexbox justify="center" class="view-all">
           <router-link to="/all-comment">
            <span>
@@ -81,6 +92,8 @@
             商品数
 
 
+
+
           </div>
           <span></span>
           <div>
@@ -88,12 +101,18 @@
             <br/>
             粉丝数
 
+
+
+
           </div>
           <span></span>
           <div>
             <span>{{good_detail.supplier.comprehensive_score}}</span>
             <br/>
             综合评分
+
+
+
 
           </div>
         </flexbox>
@@ -187,9 +206,23 @@
 
 
 
+
+
+
+
+
+
+
           </flexbox-item>
           <flexbox-item alt="now" v-if="count_now||default_count">
             立即购买
+
+
+
+
+
+
+
 
 
 
@@ -281,6 +314,7 @@
     },
     data () {
       return {
+        good_id: '', // 商品id
         isShow: false,  // 右上角弹窗
         show: false,    // 线下商品简介
         cart_success: false, // 添加购物车成功toast
@@ -330,11 +364,14 @@
 
       }
     },
-    created () {
-      this.axios.get('/mall/goods-view', {id: 332}, (res) => {
+    activated () {
+      this.good_id = this.$route.params.id
+      this.axios.get('/mall/goods-view', {id: this.good_id}, (res) => {
         this.good_detail = res.data.goods_view
         // 用户名处理
-        this.user_name = this.good_detail.comments.latest.name.substr(0, 6) + '...'
+        if (this.good_detail.comments.total !== '0') {
+          this.user_name = this.good_detail.comments.latest.name.substr(0, 6) + '...'
+        }
         // 售后弹窗显示处理
         this.all_after_sale_services = this.good_detail.after_sale_services
         this.after_sale_services = this.good_detail.after_sale_services.slice(0, 3) // 页面售后显示内容

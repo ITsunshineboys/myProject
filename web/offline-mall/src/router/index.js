@@ -32,7 +32,7 @@ export default new Router({
       name: 'city',
       component: City
     }, {
-      path: '/good-detail',
+      path: '/good-detail/:id',
       name: 'GoodDetail',
       component: GoodDetail
     }, {

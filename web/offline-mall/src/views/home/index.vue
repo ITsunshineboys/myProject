@@ -17,7 +17,8 @@
     </flexbox>
     <swiper dots-position="center" :list="banner_list" loop auto height="171px" :aspect-ratio="375/171"></swiper>
     <flexbox :gutter="0" class="category" wrap="wrap">
-      <flexbox-item style="text-align: center;padding: 12px 0;" :span="1/4" v-for="(item,index) in category_list" :key="index">
+      <flexbox-item style="text-align: center;padding: 12px 0;" :span="1/4" v-for="(item,index) in category_list"
+                    :key="index">
         <router-link :to="'/class/' + item.id">
           <img width="32px" height="32px" :src="item.icon">
           <p style="font-size: 14px;color: #999;line-height: 20px;">{{item.title}}</p>
@@ -26,25 +27,28 @@
     </flexbox>
     <card :header="{title:'推荐'}" class="command">
       <flexbox justify="space-around" align="flex-start" :gutter="0" slot="content" wrap="wrap">
-        <flexbox-item :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
-                      v-for="(item,index) in recommended_list" :key="index">
-          <img width="168px" height="160px" :src="item.image" alt="">
-          <p class="command_title nowrap">{{item.title}}</p>
-          <p class="command_description nowrap">{{item.description}}</p>
-          <p class="command_price">￥{{item.platform_price}}</p>
-        </flexbox-item>
+
+          <flexbox-item :span="56/125" class="command_list" :class="{odd_col:index%2==0,even_col:index%2==1}"
+                        v-for="(item,index) in recommended_list" :key="index">
+            <router-link :to="'/good-detail/' + item.id">
+            <img width="168px" height="160px" :src="item.image" alt="">
+            <p class="command_title nowrap">{{item.title}}</p>
+            <p class="command_description nowrap">{{item.description}}</p>
+            <p class="command_price">￥{{item.platform_price}}</p>
+            </router-link>
+          </flexbox-item>
       </flexbox>
     </card>
     <!--<div class="shopcart">-->
-      <!--<p><i class="iconfont icon-home-shoppingcart"></i></p>-->
-      <!--<p style="font-size: 12px;color: #999;">购物车</p>-->
+    <!--<p><i class="iconfont icon-home-shoppingcart"></i></p>-->
+    <!--<p style="font-size: 12px;color: #999;">购物车</p>-->
     <!--</div>-->
     <!--<div style="height: 64px;"></div>-->
     <!--<flexbox class="nav" wrap="wrap">-->
-      <!--<flexbox-item style="text-align: center;margin: 0;" :span="1/4" v-for="(item,index) in nav_list" :key="index">-->
-        <!--<img width="23px" height="23px" :src="item.image">-->
-        <!--<p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>-->
-      <!--</flexbox-item>-->
+    <!--<flexbox-item style="text-align: center;margin: 0;" :span="1/4" v-for="(item,index) in nav_list" :key="index">-->
+    <!--<img width="23px" height="23px" :src="item.image">-->
+    <!--<p :style="{color:index==1?'#D9AD65':'#999'}" style="font-size: 12px;">{{item.title}}</p>-->
+    <!--</flexbox-item>-->
     <!--</flexbox>-->
   </div>
 </template>
@@ -200,11 +204,12 @@
   /*.even_col{!*推荐偶数项*!*/
   /*padding-left: 7.5px;*/
   /*}*/
-  .nowrap{
+  .nowrap {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
   }
+
   .command {
     margin-bottom: 10px;
   }
@@ -237,27 +242,27 @@
 
   /*底部导航*/
   /*.nav {*/
-    /*background-color: #fff;*/
-    /*padding: 8px 0;*/
-    /*position: fixed;*/
-    /*bottom: 0;*/
+  /*background-color: #fff;*/
+  /*padding: 8px 0;*/
+  /*position: fixed;*/
+  /*bottom: 0;*/
   /*}*/
 
   /*购物车*/
   /*.shopcart {*/
-    /*background-color: #fff;*/
-    /*text-align: center;*/
-    /*height: 60px;*/
-    /*width: 60px;*/
-    /*border-radius: 60px;*/
-    /*border: 1px solid #222;*/
-    /*position: fixed;*/
-    /*top: calc(50% - 30px);*/
-    /*right: 30px;*/
+  /*background-color: #fff;*/
+  /*text-align: center;*/
+  /*height: 60px;*/
+  /*width: 60px;*/
+  /*border-radius: 60px;*/
+  /*border: 1px solid #222;*/
+  /*position: fixed;*/
+  /*top: calc(50% - 30px);*/
+  /*right: 30px;*/
   /*}*/
 
   /*.shopcart i {*/
-    /*font-size: 24px;*/
-    /*color: #222;*/
+  /*font-size: 24px;*/
+  /*color: #222;*/
   /*}*/
 </style>
