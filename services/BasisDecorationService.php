@@ -917,6 +917,7 @@ class BasisDecorationService
 //                    $hang_air_conditioner[] = $one_goods;
 //                    break;
                 case $one_goods['title'] == self::goodsNames()['lamp'] && $one_goods['series_id'] == $post['series'] && $one_goods['style_id'] == $post['style'] : //灯具
+                    echo 11;
                     $attr = self::goodsAttr($one_goods, self::goodsNames()['lamp'], '', 2);
                     var_dump($attr);die;
 //                    $one_goods['quantity'] = (int)$post['bedroom'];
