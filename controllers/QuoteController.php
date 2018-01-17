@@ -3107,7 +3107,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       echo strtotime("-2 week");
+       echo EffectPicture::find()->where(['effect_id'=>252])->asArray()->all();
 
     }
 }
