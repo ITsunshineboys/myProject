@@ -102,6 +102,40 @@ class BrandCategory extends ActiveRecord
     }
 
     /**
+     * Check if the category has any brand by category id
+     *
+     * @param  int $categoryId category id
+     * @return bool
+     */
+    public static function cateHasBrand($categoryId)
+    {
+        $categoryId = (int)$categoryId;
+        if ($categoryId <= 0) {
+            return false;
+        }
+
+        $sql = "select 1";
+        $from = " from {{%" . self::tableName() . "}} bc
+            ,{{%" . GoodsBrand::tableName() . "}} b
+            ,{{%" . GoodsCategory::tableName() . "}} c
+            ,{{%" . BrandApplication::tableName() . "}} ba";
+        $sql .= $from;
+
+        $where = " where bc.brand_id = b.id 
+            and bc.category_id = c.id 
+            and b.status = " . GoodsBrand::STATUS_ONLINE . " 
+            and c.deleted = 0
+            and bc.category_id = {$categoryId}
+            and ba.brand_id = b.id and ba.review_status = " . ModelService::REVIEW_STATUS_APPROVE;
+
+        $sql .= $where;
+
+        return !empty(Yii::$app->db
+            ->createCommand($sql)
+            ->queryScalar());
+    }
+
+    /**
      * Get brands by category id
      *
      * @param  int $categoryId category id
