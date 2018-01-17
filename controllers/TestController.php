@@ -729,18 +729,23 @@ class TestController extends Controller
         }
         $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
         $data = (new Query())
-            ->select((new Query())
-                    ->from(GoodsOrder::tableName().' as g')
-                    ->select('g.id')
-                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                    ->where(" g.supplier_id={$supplier->id} ")
-                    ->count().' as all,'.(new Query())
-                    ->from(GoodsOrder::tableName().' as g')
-                    ->select('g.id')
-                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                    ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
-                    ->count().' as unpaid')
+            ->select("(SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.supplier_id={$supplier->id}) as all_order ,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.supplier_id={$supplier->id}) as unpaid" )
             ->one();
+
+        //            $data = (new Query())
+//                ->select((new Query())
+//                    ->from(GoodsOrder::tableName().' as g')
+//                    ->select('g.id')
+//                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+//                    ->where(" g.supplier_id={$supplier->id} ")
+//                    ->count().' as all,'.(new Query())
+//                        ->from(GoodsOrder::tableName().' as g')
+//                        ->select('g.id')
+//                        ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
+//                        ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
+//                        ->count().' as unpaid')
+//                ->one();
         return Json::encode($data);
 
     }

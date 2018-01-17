@@ -459,121 +459,27 @@ class OrderGoods extends ActiveRecord
         if ($user->last_role_id_app==6)
         {
             $supplier=Supplier::find()->where(['uid'=>$user->id])->one();
-            $all=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where(" g.supplier_id={$supplier->id} ")
-                ->count();
-//            $data = (new Query())
-//                ->select((new Query())
-//                    ->from(GoodsOrder::tableName().' as g')
-//                    ->select('g.id')
-//                    ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-//                    ->where(" g.supplier_id={$supplier->id} ")
-//                    ->count().' as all,'.(new Query())
-//                        ->from(GoodsOrder::tableName().' as g')
-//                        ->select('g.id')
-//                        ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-//                        ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
-//                        ->count().' as unpaid')
-//                ->one();
-//        $role_id=$user->last_role_id_app;
-            //Get 待付款订单  and g.role_id={$role_id}
-            $unpaid=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id} ")
-                ->count();
-            $unshipped=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier->id} ")
-                ->count();
-            $unreceiveed=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier->id} ")
-                ->count();
-            $completed=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0 ")
-                ->count();
-            $uncomment=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0 and o.comment_id=0 ")
-                ->count();
-            $canceled=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("o.order_status=2 and o.customer_service=0  and g.supplier_id={$supplier->id}")
-                ->count();
-            $customer_service=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier->id}")
-                ->count();
+            $data = (new Query())
+                ->select("(SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.supplier_id={$supplier->id}) as all_order ,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=0 and o.order_status=0  and g.supplier_id={$supplier->id}) as unpaid,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=0 and shipping_status=0  and g.supplier_id={$supplier->id}) as unshipped,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=0 and shipping_status=1  and g.supplier_id={$supplier->id}) as unreceived,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0)  as completed,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.supplier_id={$supplier->id} and o.customer_service=0 and o.comment_id=0 )  as uncomment,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=2 and o.customer_service=0  and g.supplier_id={$supplier->id}   )as canceled,
+            (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=1  and  o.customer_service!=0  and g.supplier_id={$supplier->id} )  as customer_service" )
+                ->one();
         }else
         {
-            $all=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where(" g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
-                ->count();
-//        $role_id=$user->last_role_id_app;
-            //Get 待付款订单  and g.role_id={$role_id}
-            $unpaid=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=0 and o.order_status=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
-                ->count();
-            $unshipped=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} ")
-                ->count();
-            $unreceiveed=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=0 and shipping_status=1  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} ")
-                ->count();
-            $completed=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0 ")
-                ->count();
-            $uncomment=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0 and o.comment_id=0 ")
-                ->count();
-            $canceled=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("o.order_status=2 and o.customer_service=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
-                ->count();
-            $customer_service=(new Query())
-                ->from(GoodsOrder::tableName().' as g')
-                ->select('g.id')
-                ->leftJoin(OrderGoods::tableName().' as o','g.order_no=o.order_no')
-                ->where("o.order_status=1  and  o.customer_service!=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}")
-                ->count();
+            $data=(new Query())->select("
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}) as all_order ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=0 and o.order_status=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app}) as unpaid ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=0 and shipping_status=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app})  as unshipped ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=0 and shipping_status=1  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app})  as unreceived ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=1 and shipping_status=2  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0)  as completed ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where g.pay_status=1 and o.order_status=1 and shipping_status=2  and g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} and o.customer_service=0 and o.comment_id=0)   as uncomment ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=2 and o.customer_service=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app} ) as canceled ,
+               (SELECT count(*)  FROM  " .GoodsOrder::tableName()." as g "." LEFT JOIN  ".OrderGoods::tableName()." as o on g.order_no=o.order_no where o.order_status=1  and  o.customer_service!=0  and  g.user_id={$user->id} and g.role_id = {$user->last_role_id_app})  as customer_service ")->one();
         }
 
         $userNews=UserNewsRecord::find()
@@ -583,15 +489,15 @@ class OrderGoods extends ActiveRecord
             ->count();
 
         return [
-                'all'=>$all>99?99:$all,
-                'unpaid'=>$unpaid>99?99:$unpaid,
-                'unshipped'=>$unshipped>99?99:$unshipped,
-                'unreceiveed'=>$unreceiveed>99?99:$unreceiveed,
-                'completed'=>$completed>99?99:$completed,
-                'canceled'=>$canceled>99?99:$canceled,
-                'customer_service'=>$customer_service>99?99:$customer_service,
+                'all'=>$data['all_order']>99?99:$data['all_order'],
+                'unpaid'=>$data['unpaid']>99?99:$data['unpaid'],
+                'unshipped'=>$data['unshipped']>99?99:$data['unshipped'],
+                'unreceiveed'=>$data['unreceived']>99?99:$data['unreceived'],
+                'completed'=>$data['completed']>99?99:$data['completed'],
+                'canceled'=>$data['canceled']>99?99:$data['canceled'],
+                'customer_service'=>$data['customer_service']>99?99:$data['customer_service'],
                 'have_read_news'=>$userNews>0?1:2,
-                'uncomment'=>$uncomment>99?99:$uncomment
+                'uncomment'=>$data['uncomment']>99?99:$data['uncomment']
             ];
     }
 
