@@ -38,8 +38,22 @@ app.controller('add_material_ctrl',function ($rootScope,$scope,$stateParams,$sta
         })
     };
     $scope.params = {
-        city:obj.city
+        city:obj.city,
+        keyword:''
     };
+    //关键词搜索
+    $scope.$watch('params.keyword',function (newVal,oldVal) {
+        if(oldVal!==''&&newVal === ''){
+            $scope.Config.currentPage = 1
+            tablePages()
+        }
+    })
+    $scope.getKeywordMaterialsList = function () {
+        if($scope.params.keyword!==''){
+            $scope.Config.currentPage = 1
+            tablePages()
+        }
+    }
     //删除项
     $scope.deleteMaterial = function (item) {
         let all_modal = function ($scope, $uibModalInstance) {
