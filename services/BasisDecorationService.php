@@ -1578,7 +1578,7 @@ class BasisDecorationService
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $toiletLamp[] = $oneGoods[0];
             }else{
-                $bedroomLamp[] = [];
+                $toiletLamp[] = [];
             }
 
 
@@ -1588,26 +1588,23 @@ class BasisDecorationService
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $kitchenLamp[] = $oneGoods[0];
             }else{
-                $bedroomLamp[] = [];
+                $kitchenLamp[] = [];
             }
         }
 
-        $hallLampAll[] = array_filter($bedroomLamp);
-        var_dump($hallLampAll);die;
-//        $goodsLamp[] = self::profitMargin($hallLamp);
-//        $goodsLamp[] = self::profitMargin($bedroomLamp);
-//        $goodsLamp[] = self::profitMargin($toiletLamp);
-        $goodsLamp[] = self::profitMargin($kitchenLamp);
+        $hallLampAll = array_filter($hallLamp);
+        $toiletLampAll = array_filter($toiletLamp);
+        $bedroomLampAll = array_filter($bedroomLamp);
+        $kitchenLampAll = array_filter($kitchenLamp);
+
+        $goodsLamp[] = self::profitMargin($hallLampAll);
+        $goodsLamp[] = self::profitMargin($toiletLampAll);
+        $goodsLamp[] = self::profitMargin($bedroomLampAll);
+        $goodsLamp[] = self::profitMargin($kitchenLampAll);
 
 
-        $goodsMaterial = [];
-        foreach ($goodsLamp as $one){
-            if($one != null){
-                $goods_material[] =   $one;
-            }
-        }
-
-        $style = self::style($goodsMaterial);
+        $style = self::style($goodsLamp);
+        var_dump($style);die;
 
         return $style;
     }
