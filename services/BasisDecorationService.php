@@ -1543,7 +1543,8 @@ class BasisDecorationService
 
     public static function lamp($goods,$get)
     {
-        var_dump($goods);die;
+        var_dump($goods);
+        die;
 
         foreach ($goods as $oneGoods){
 
