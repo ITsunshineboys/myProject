@@ -1592,7 +1592,6 @@ class BasisDecorationService
 
         $style = self::style($goodsLamp);
         var_dump($style);
-
         die;
 
         return $style;
