@@ -546,6 +546,7 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     })
     //获取案例材料和价格数据
     $scope.getMaterials = function (obj,item,result) {
+        $scope.active_case = obj
         if(item!=undefined){
             $scope.params[item] = result
         }else{
@@ -595,6 +596,15 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
                         return item.series_id == $scope.params.series.id && item.style_id == $scope.params.style.id
                     })
                     if(index!=-1){
+                        //整合分类
+                        $scope.materials = angular.copy($scope.first_level)
+                        for (let [key, value] of $scope.materials.entries()) {
+                            value.id = +value.id
+                            value['cost'] = 0
+                            value['count'] = 0
+                            value['second_level'] = []
+                            value['procurement'] = 0
+                        }
                         $scope.roomPic = res.effect.case_picture[index]
                         //整合二级
                         for (let [key, value] of res.goods.entries()) {
