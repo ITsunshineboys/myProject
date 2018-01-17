@@ -1248,6 +1248,7 @@ class QuoteController extends Controller
                         (new DecorationParticulars())->plotEdit($other_id, $hall_area, $hall_perimeter, $bedroom_area, $bedroom_perimeter, $toilet_area, $toilet_perimeter, $kitchen_area, $kitchen_perimeter, $modelling_length, $flat_area, $balcony_area);
 
                         if (!empty($house['drawing_list'])) {
+                            var_dump($house['drawing_list']);die;
                             foreach ($house['drawing_list'] as $images) {
                                 if (!empty($images['id'])) {
                                     $images_id     = $images['id'];
