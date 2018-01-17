@@ -1562,35 +1562,35 @@ class BasisDecorationService
                 $hallLamp[] = [];
             }
 
-
-            if(strpos($oneGoods[1]['value'],'卧室') !== false) {
-                $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
-                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
-                $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                $bedroomLamp[] = $oneGoods[0];
-            }else{
-                $bedroomLamp[] = [];
-            }
-
-
-            if(strpos($oneGoods[1]['value'],'卫生间') !== false) {
-                $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
-                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
-                $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                $toiletLamp[] = $oneGoods[0];
-            }else{
-                $toiletLamp[] = [];
-            }
-
-
-            if(strpos($oneGoods[1]['value'],'厨房') !== false) {
-                $oneGoods[0]['quantity'] = (int)ceil($get['kitchen']);
-                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
-                $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
-                $kitchenLamp[] = $oneGoods[0];
-            }else{
-                $kitchenLamp[] = [];
-            }
+//
+//            if(strpos($oneGoods[1]['value'],'卧室') !== false) {
+//                $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
+//                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
+//                $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
+//                $bedroomLamp[] = $oneGoods[0];
+//            }else{
+//                $bedroomLamp[] = [];
+//            }
+//
+//
+//            if(strpos($oneGoods[1]['value'],'卫生间') !== false) {
+//                $oneGoods[0]['quantity'] = (int)ceil($get['bedroom']);
+//                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
+//                $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
+//                $toiletLamp[] = $oneGoods[0];
+//            }else{
+//                $toiletLamp[] = [];
+//            }
+//
+//
+//            if(strpos($oneGoods[1]['value'],'厨房') !== false) {
+//                $oneGoods[0]['quantity'] = (int)ceil($get['kitchen']);
+//                $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
+//                $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
+//                $kitchenLamp[] = $oneGoods[0];
+//            }else{
+//                $kitchenLamp[] = [];
+//            }
         }
 
         $hallLampAll = array_filter($hallLamp);
