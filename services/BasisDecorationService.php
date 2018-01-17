@@ -1599,7 +1599,7 @@ class BasisDecorationService
 
 
         $goods_material = array_filter($goodsLamp);
-        $style = self::style($goods_material);
+        $style = array_values(self::style($goods_material));
 
         return $style;
     }
