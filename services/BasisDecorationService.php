@@ -1591,7 +1591,7 @@ class BasisDecorationService
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
         $goodsLamp[] = self::profitMargin($kitchenLamp);
-
+        echo 111;die;
         $style = self::style($goodsLamp);
         echo 111;die;
         return $style;
