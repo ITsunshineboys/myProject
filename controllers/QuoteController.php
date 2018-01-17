@@ -3107,7 +3107,7 @@ class QuoteController extends Controller
      */
     public function actionTest()
     {
-       echo EffectPicture::find()->where(['effect_id'=>252])->asArray()->all();
+       echo EffectPicture::find()->where(['effect_id'=>252])->all();
 
     }
 }
