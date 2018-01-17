@@ -1541,25 +1541,55 @@ class BasisDecorationService
     }
 
 
-    public static function lamp($goods)
+    public static function lamp($goods,$get)
     {
         foreach ($goods as $oneGoods){
-//            if ($oneGoods[1]['value'] == '客厅'){
-//                $hall_lamp[] = $oneGoods;
-//            }
-//            if ($oneGoods[1]['value'] == '卧室'){
-//                $hall_lamp[] = $oneGoods;
-//            }
-//            if ($oneGoods[1]['value'] == '卫生间'){
-//                $hall_lamp[] = $oneGoods;
-//            }
-//            if ($oneGoods[1]['value'] == '厨房'){
-//                $hall_lamp[] = $oneGoods;
-//            }
             if(strpos($oneGoods[1]['value'],'客厅') !== false) {
                 $hallLamp[] = $oneGoods;
             }
+            if(strpos($oneGoods[1]['value'],'卧室') !== false) {
+                $bedroomLamp[] = $oneGoods;
+            }
+            if(strpos($oneGoods[1]['value'],'卫生间') !== false) {
+                $toiletLamp[] = $oneGoods;
+            }
+            if(strpos($oneGoods[1]['value'],'厨房') !== false) {
+                $kitchenLamp[] = $oneGoods;
+            }
         }
-        var_dump($hallLamp);die;
+
+
+        foreach ($hallLamp as &$lamp){
+            $lamp['quantity'] = (int)ceil($get['hall']);
+            $lamp['cost'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['platform_price']),2);
+            $lamp['procurement'] = round(self::algorithm(1,$lamp['quantity'],$lamp[0]['purchase_price_decoration_company']),2);
+            unset($lamp[0]);
+        }
+        foreach ($bedroomLamp as &$bedroom){
+            $bedroom['quantity'] = (int)ceil($get['bedroom']);
+            $bedroom['cost'] = round(self::algorithm(1,$bedroom['quantity'],$bedroom[0]['platform_price']),2);
+            $bedroom['procurement'] = round(self::algorithm(1,$bedroom['quantity'],$bedroom[0]['purchase_price_decoration_company']),2);
+            unset($bedroom[0]);
+        }
+        foreach ($toiletLamp as &$toilet){
+            $toilet['quantity'] = (int)ceil($get['toilet']);
+            $toilet['cost'] = round(self::algorithm(1,$toilet['quantity'],$toilet[0]['platform_price']),2);
+            $toilet['procurement'] = round(self::algorithm(1,$toilet['quantity'],$toilet[0]['purchase_price_decoration_company']),2);
+            unset($bedroom[0]);
+        }
+        foreach ($kitchenLamp as &$kitchen){
+            $kitchen['quantity'] = (int)ceil($get['kitchen']);
+            $kitchen['cost'] = round(self::algorithm(1,$kitchen['quantity'],$kitchen[0]['platform_price']),2);
+            $kitchen['procurement'] = round(self::algorithm(1,$kitchen['quantity'],$kitchen[0]['purchase_price_decoration_company']),2);
+            unset($bedroom[0]);
+        }
+        $goodsLamp[] = self::profitMargin($hallLamp);
+        $goodsLamp[] = self::profitMargin($bedroomLamp);
+        $goodsLamp[] = self::profitMargin($toiletLamp);
+        $goodsLamp[] = self::profitMargin($kitchenLamp);
+
+        $style = self::style($goodsLamp);
+
+        return $style;
     }
 }
