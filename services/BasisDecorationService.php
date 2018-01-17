@@ -1593,6 +1593,7 @@ class BasisDecorationService
         }
 
         $hallLampAll = array_filter($hallLamp);
+        var_dump($hallLampAll);die;
         $toiletLampAll = array_filter($toiletLamp);
         $bedroomLampAll = array_filter($bedroomLamp);
         $kitchenLampAll = array_filter($kitchenLamp);
