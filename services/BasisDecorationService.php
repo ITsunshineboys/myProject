@@ -1585,9 +1585,7 @@ class BasisDecorationService
             $kitchen[0]['procurement'] = round(self::algorithm(1,$kitchen[0]['quantity'],$kitchen[0]['purchase_price_decoration_company']),2);
             unset($bedroom[1]);
         }
-        var_dump($hallLamp);
-        echo 2222;
-        die;
+
         $goodsLamp[] = self::profitMargin($hallLamp);
         $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
