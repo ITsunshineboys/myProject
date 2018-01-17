@@ -1594,16 +1594,17 @@ class BasisDecorationService
         }
 
 
-        $hallLampAll =  array_filter($hallLamp);
+//        $hallLampAll =  array_filter($hallLamp);
         $toiletLampAll = array_filter($toiletLamp);
-        $bedroomLampAll= array_filter($bedroomLamp);
-        $kitchenLampAll= array_filter($kitchenLamp);
-        var_dump($toiletLampAll);die;
+//        $bedroomLampAll= array_filter($bedroomLamp);
+//        $kitchenLampAll= array_filter($kitchenLamp);
+        var_dump($toiletLampAll);
 
-        $goodsLamp[] = self::profitMargin($hallLamp);
-        $goodsLamp[] = self::profitMargin($bedroomLamp);
+//        $goodsLamp[] = self::profitMargin($hallLamp);
+//        $goodsLamp[] = self::profitMargin($bedroomLamp);
         $goodsLamp[] = self::profitMargin($toiletLamp);
-        $goodsLamp[] = self::profitMargin($kitchenLamp);
+        var_dump($goodsLamp);die;
+//        $goodsLamp[] = self::profitMargin($kitchenLamp);
 
 
         $style = self::style($goodsLamp);
