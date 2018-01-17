@@ -5365,11 +5365,10 @@ class OrderController extends Controller
         }
         if (!isset($Goods))
         {
-            $code=1000;
             return Json::encode
             ([
-                'code' => $code,
-                'msg' => Yii::$app->params['errorCodes'][$code]
+                'code' => 200,
+                'msg' => 'ok'
             ]);
 
         }
