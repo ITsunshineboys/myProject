@@ -1558,6 +1558,7 @@ class BasisDecorationService
                 $oneGoods[0]['cost'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['platform_price']),2);
                 $oneGoods[0]['procurement'] = round(self::algorithm(1,$oneGoods[0]['quantity'],$oneGoods[0]['purchase_price_decoration_company']),2);
                 $hallLamp [] = $oneGoods[0];
+                var_dump($hallLamp);
             }
 
 //
@@ -1591,18 +1592,11 @@ class BasisDecorationService
 //            }
         }
 
-        var_dump($hallLamp);die;
-
-//        $toiletLampAll = array_filter($toiletLamp);
-//        $bedroomLampAll = array_filter($bedroomLamp);
-//        $kitchenLampAll = array_filter($kitchenLamp);
-
-        $goodsLamp[] = self::profitMargin($hallLampAll);
-        var_dump($goodsLamp); echo 111;
         die;
-        $goodsLamp[] = self::profitMargin($toiletLampAll);
-        $goodsLamp[] = self::profitMargin($bedroomLampAll);
-        $goodsLamp[] = self::profitMargin($kitchenLampAll);
+//        $goodsLamp[] = self::profitMargin($hallLampAll);
+//        $goodsLamp[] = self::profitMargin($toiletLampAll);
+//        $goodsLamp[] = self::profitMargin($bedroomLampAll);
+//        $goodsLamp[] = self::profitMargin($kitchenLampAll);
 
 
         $style = self::style($goodsLamp);
