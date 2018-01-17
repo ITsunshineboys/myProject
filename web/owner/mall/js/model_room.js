@@ -545,113 +545,140 @@ app.controller("modelRoomCtrl", ["$uibModal","$q","$scope", "$timeout", "$locati
     })
     //获取案例材料和价格数据
     $scope.getMaterials = function (obj,item,result) {
+        let effect_image = obj.case_picture
         if(item!=undefined){
             $scope.params[item] = result
         }else{
-            $scope.active_case = obj
-            console.log(obj.type);
-            //风格、系列以及楼梯选择
-            let stair_index = $scope.stairs.findIndex(function (item) {
-                return item.id == $scope.active_case.stair_id
+            let index = $scope.stairs.findIndex(function (item) {
+               return item.id == obj.stair_id
             })
-            if($scope.active_case.type == 1){
-                let style_index = $scope.style.findIndex(function (item) {
-                    return item.id == $scope.active_case.case_picture[0].style_id
-                })
-                let series_index = $scope.series.findIndex(function (item) {
-                    return item.id == $scope.active_case.case_picture[0].series_id
-                })
-                $scope.params = {
-                    style:$scope.style[style_index].id,
-                    series:$scope.series[series_index],
-                    stair:stair_index == -1?0:$scope.stairs[stair_index].id
-                }
-            }else{
-                $scope.params = {
-                    stair:stair_index == -1?0:$scope.stairs[stair_index].id
-                }
+            let index1 = $scope.series.findIndex(function (item) {
+               return item.id == effect_image[0].series_id
+            })
+            let index2 = $scope.style.findIndex(function (item) {
+               return item.id == effect_image[0].style_id
+            })
+            $scope.params = {
+                stair:index==-1?0:$scope.stairs[index],
+                series:index1==-1?0:$scope.series[index1],
+                style:index2==-1?0:$scope.style[index2]
             }
         }
+        // if(item!=undefined){
+        //     $scope.params[item] = result
+        // }else{
+        //     $scope.active_case = obj
+        //     console.log(obj.type);
+        //     //风格、系列以及楼梯选择
+        //     let stair_index = $scope.stairs.findIndex(function (item) {
+        //         return item.id == $scope.active_case.stair_id
+        //     })
+        //     if($scope.active_case.type == 1){
+        //         let style_index = $scope.style.findIndex(function (item) {
+        //             return item.id == $scope.active_case.case_picture[0].style_id
+        //         })
+        //         let series_index = $scope.series.findIndex(function (item) {
+        //             return item.id == $scope.active_case.case_picture[0].series_id
+        //         })
+        //         $scope.params = {
+        //             style:$scope.style[style_index].id,
+        //             series:$scope.series[series_index],
+        //             stair:stair_index == -1?0:$scope.stairs[stair_index].id
+        //         }
+        //     }else{
+        //         $scope.params = {
+        //             stair:stair_index == -1?0:$scope.stairs[stair_index].id
+        //         }
+        //     }
+        // }
         //获取案例商品数据
-        if(obj.type == 1&&$scope.params.series.id == obj.case_picture[0].series_id&&
-            $scope.params.style == obj.case_picture[0].style_id&&
-            $scope.params.stair == obj.stair_id){
-            //分类商品初始化
-            $scope.materials = angular.copy($scope.first_level)
-            for (let [key, value] of $scope.materials.entries()) {
-                value.id = +value.id
-                value['cost'] = 0
-                value['count'] = 0
-                value['second_level'] = []
-                value['procurement'] = 0
-            }
-            if(sessionStorage.getItem('quotation_materials') == null||(sessionStorage.getItem('quotation_materials') != null&&$scope.active_case.id!=$stateParams.effect_id)){
-            _ajax.get('/owner/particulars',{
-                id:obj.id
-            },function (res) {
-                console.log('案例详情');
-                console.log(res);
-                //整合二级
-                for (let [key, value] of res.goods.entries()) {
-                    for (let [key1, value1] of $scope.materials.entries()) {
-                        if (value1.id == value.path.split(',')[0]) {
-                            let index = value1.second_level.findIndex(function (item) {
-                                return item.id == value.path.split(',')[1]
-                            })
-                            let index1 = $scope.second_level.findIndex(function (item) {
-                                return item.id == value.path.split(',')[1]
-                            })
-                            if (index == -1) {
-                                value1.second_level.push({
-                                    id: +$scope.second_level[index1].id,
-                                    title: $scope.second_level[index1].title,
-                                    cost: 0,
-                                    procurement: 0,
-                                    goods: []
-                                })
-                            }
-                        }
-                    }
+        let index = effect_image.findIndex(function (item) {
+            return item.series_id == $scope.params.series.id &&
+                item.style_id == $scope.params.style.id &&
+                obj.stair_id == $scope.params.stair.id
+        })
+        if(index!=-1){
+            $scope.first_params = effect_image[index]
+            if(obj.type == 1){
+                //分类商品初始化
+                $scope.materials = angular.copy($scope.first_level)
+                for (let [key, value] of $scope.materials.entries()) {
+                    value.id = +value.id
+                    value['cost'] = 0
+                    value['count'] = 0
+                    value['second_level'] = []
+                    value['procurement'] = 0
                 }
-                //整合商品
-                for (let [key, value] of res.goods.entries()) {
-                    for (let [key1, value1] of $scope.materials.entries()) {
-                        for (let [key2, value2] of value1.second_level.entries()) {
-                            if (value2.id == value.path.split(',')[1]) {
-                                let index = value2.goods.findIndex(function (item) {
-                                    return item.id == value.id
-                                })
-                                value1.cost += value.cost
-                                value1.procurement += value.procurement
-                                value2.cost += value.cost
-                                value2.procurement += value.procurement
-                                if (index == -1) {
-                                    value2.goods.push(value)
-                                    value1.count++
-                                } else {
-                                    value2.goods[index].quantity += value.quantity
-                                    value2.goods[index].cost += value.cost
-                                    value2.goods[index].procurement += value.procurement
+                if(sessionStorage.getItem('quotation_materials') == null||(sessionStorage.getItem('quotation_materials') != null&&$scope.active_case.id!=$stateParams.effect_id)){
+                    _ajax.get('/owner/particulars',{
+                        id:obj.id
+                    },function (res) {
+                        console.log('案例详情');
+                        console.log(res);
+                        //整合二级
+                        for (let [key, value] of res.goods.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                if (value1.id == value.path.split(',')[0]) {
+                                    let index = value1.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    let index1 = $scope.second_level.findIndex(function (item) {
+                                        return item.id == value.path.split(',')[1]
+                                    })
+                                    if (index == -1) {
+                                        value1.second_level.push({
+                                            id: +$scope.second_level[index1].id,
+                                            title: $scope.second_level[index1].title,
+                                            cost: 0,
+                                            procurement: 0,
+                                            goods: []
+                                        })
+                                    }
                                 }
                             }
                         }
-                    }
+                        //整合商品
+                        for (let [key, value] of res.goods.entries()) {
+                            for (let [key1, value1] of $scope.materials.entries()) {
+                                for (let [key2, value2] of value1.second_level.entries()) {
+                                    if (value2.id == value.path.split(',')[1]) {
+                                        let index = value2.goods.findIndex(function (item) {
+                                            return item.id == value.id
+                                        })
+                                        value1.cost += value.cost
+                                        value1.procurement += value.procurement
+                                        value2.cost += value.cost
+                                        value2.procurement += value.procurement
+                                        if (index == -1) {
+                                            value2.goods.push(value)
+                                            value1.count++
+                                        } else {
+                                            value2.goods[index].quantity += value.quantity
+                                            value2.goods[index].cost += value.cost
+                                            value2.goods[index].procurement += value.procurement
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $scope.worker_list = res.worker_cost
+                        getPrice()
+                    })
+                }else{
+                    $scope.materials = JSON.parse(sessionStorage.getItem('quotation_materials'))
+                    $scope.worker_list = JSON.parse(sessionStorage.getItem('worker_list'))
+                    getPrice()
                 }
-                $scope.worker_list = res.worker_cost
-                getPrice()
-            })
             }else{
-                $scope.materials = JSON.parse(sessionStorage.getItem('quotation_materials'))
-                $scope.worker_list = JSON.parse(sessionStorage.getItem('worker_list'))
-                getPrice()
+                _ajax.get('/owner/particulars',{
+                    id:obj.id
+                },function (res) {
+                    console.log('普通户型');
+                    console.log(res);
+                })
+                $scope.materials = []
             }
         }else{
-            _ajax.get('/owner/particulars',{
-                id:obj.id
-            },function (res) {
-                console.log('普通户型');
-                console.log(res);
-            })
             $scope.materials = []
         }
     }

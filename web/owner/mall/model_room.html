@@ -69,10 +69,10 @@
             <ul>
                 <li ng-repeat="item in stairs">
                     <label>
-                        <input type="radio" name="stairs" ng-checked="params.stair == item.id" ng-value="item.id"
-                               ng-click="getMaterials(active_case,'stair',item.id)"/>
-                        <span ng-show="params.stair != item.id" class="check_img"></span>
-                        <img class="checked-active" src="images/mall_list_radio.png" ng-show="params.stair == item.id"/>
+                        <input type="radio" name="stairs" ng-checked="params.stair.id == item.id" ng-value="item.id"
+                               ng-click="getMaterials(active_case,'stair',item)"/>
+                        <span ng-show="params.stair.id != item.id" class="check_img"></span>
+                        <img class="checked-active" src="images/mall_list_radio.png" ng-show="params.stair.id == item.id"/>
                         <span>{{item.attribute}}</span>
                     </label>
                 </li>
@@ -114,8 +114,8 @@
             <div class="title">风格选择</div>
             <ul>
                 <li ng-repeat="item in style">
-                    <button type="button" ng-class="{'btn_checked':(item.id == params.style)}"
-                            ng-click="getMaterials(active_case,'style',item.id)">{{item.style}}</button>
+                    <button type="button" ng-class="{'btn_checked':(item.id == params.style.id)}"
+                            ng-click="getMaterials(active_case,'style',item)">{{item.style}}</button>
                 </li>
             </ul>
         </div>
@@ -129,7 +129,7 @@
                 <div id="swiperList" class="swiper-container">
                     <div class="swiper-wrapper">
                         <div repeat-done="showAll()" class="swiper-slide" style="height: 16rem;"
-                             ng-repeat="item in active_case.case_picture[0].effect_images.split(',')">
+                             ng-repeat="item in first_params.effect_images.split(',') track by $index">
                             <img ng-src="{{item}}">
                         </div>
                     </div>
